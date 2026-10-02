@@ -96,6 +96,28 @@ export interface ScriptFontsOptions {
 export declare function createScriptFonts(profile?: ScriptFontProfile, measurement?: TextMeasurement, options?: ScriptFontsOptions): ScriptFonts;
 /** Designated open families a preview tries, in order, for a character its face lacks (own script, deck script, Noto Sans, other CJK, other Noto scripts). */
 export declare function glyphFallbackFamilies(character: string, profile?: ScriptFontProfile, serif?: boolean): string[];
+
+/** Symbol-encoded families (FF-45): Symbol, Wingdings, Wingdings 2, Wingdings 3 and Webdings preview through code-to-Unicode tables. */
+export type SymbolFontFamily = "Symbol" | "Wingdings" | "Wingdings 2" | "Wingdings 3" | "Webdings";
+/** The script key the open symbol faces load under (`scripts: ['Zsym']`). */
+export declare const SYMBOL_SCRIPT: "Zsym";
+/** Drawn for a code with no Unicode equivalent, or whose equivalent no loaded face has (U+25A1). */
+export declare const SYMBOL_PLACEHOLDER: string;
+/** The open faces that preview each symbol-encoded family, in the order a code tries them. */
+export declare const SYMBOL_PREVIEW_FACES: Readonly<Record<SymbolFontFamily, readonly string[]>>;
+/** Every open face a symbol preview may draw with. */
+export declare const SYMBOL_FACE_FAMILIES: readonly string[];
+/** Per family: the verified font version and, for codes 0x20..0xFF in order, `[unicode, advance, reason?]` (hex code points joined with '+', font units). */
+export declare const SYMBOL_ENCODINGS: readonly Readonly<{ family: SymbolFontFamily; version: string; unitsPerEm: number; mapped: number; codes: readonly (readonly [string | null, number | null, string?])[] }>[];
+/** Which core table (spec/reference/symbol-font-encodings.json) the snapshot came from. */
+export declare const SYMBOL_ENCODINGS_SOURCE: Readonly<{ version: number; path: string; sha256: string }>;
+export declare function isSymbolEncodedFamily(family: string): boolean;
+export declare function symbolEncodingFor(family: string): (typeof SYMBOL_ENCODINGS)[number] | undefined;
+export declare function symbolPreviewFaces(family: string): readonly string[];
+/** The symbol code (0x20..0xFF) of one character: a private-use U+F0xx, an ASCII or Latin-1 character, or a Windows-1252 character at 0x80..0x9F; null for anything else. */
+export declare function symbolCodeOf(character: string): number | null;
+/** Normalise text in a symbol-encoded family: per character its code (null when not a code), the Unicode equivalent to draw (or null with a reason) and the verified font's advance in em. */
+export declare function mapSymbolText(family: string, text: string): { source: string; code: number | null; unicode: string | null; advance: number | null; reason?: string }[];
 /** Wrap a measurement so pagination, the renderer and the editor itemize script runs identically. */
 export declare function createScriptTextMeasurement(measurement: TextMeasurement, profile: ScriptFontProfile, options?: ScriptFontsOptions): TextMeasurement;
 export declare function openTypeLanguage(tag: string | undefined): string | undefined;

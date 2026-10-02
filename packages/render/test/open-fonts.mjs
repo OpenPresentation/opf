@@ -222,7 +222,9 @@ const hashes = new Map();
 for (const family of [...SCHEME_FAMILIES, 'Red Hat Display', 'Red Hat Text', ...NEW_FAMILIES]) {
   const svg = renderSvg(schemeDocument(family), defaults.options);
   const drawnFamily = family === 'Source Sans Pro' ? 'Source Sans 3' : family;
-  assert.ok(svg.includes(`font-family="${drawnFamily}, sans-serif"`), `${drawnFamily} is named in the SVG`);
+  // FF-45: a name with a digit-leading word (Source Sans 3) is single-quoted; unquoted it is invalid CSS that a browser drops.
+  const cssName = /^[A-Za-z_][\w-]*( [A-Za-z_][\w-]*)*$/.test(drawnFamily) ? drawnFamily : `'${drawnFamily}'`;
+  assert.ok(svg.includes(`font-family="${cssName}, sans-serif"`), `${drawnFamily} is named in the SVG`);
   const png = await svgToPng(svg, {...defaults.options, scale: 0.5});
   const fallback = await svgToPng(svg, {fontFiles: [], useBundledFonts: false, loadSystemFonts: false, scale: 0.5});
   const digest = sha(png);

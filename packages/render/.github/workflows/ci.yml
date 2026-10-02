@@ -118,6 +118,7 @@ jobs:
       - run: npm run test:script-fonts-browser
       - run: npm run test:script-fonts-auto-browser
       - run: npm run test:script-corpora-browser
+      - run: npm run test:symbol-fonts-browser
       - run: npm run test:plain-whitespace-browser
       - id: rich-flow
         run: npm run test:rich-flow-browser

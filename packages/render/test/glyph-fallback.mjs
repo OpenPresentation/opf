@@ -121,7 +121,10 @@ for (const [scheme, language] of [['calibri', 'russian'], ['calibri', 'greek'], 
   assert.deepEqual(chain('収', latin).slice(0, 3), ['Noto Sans', 'Noto Sans JP', 'Noto Serif JP'], 'Han in a Latin deck: Noto Sans, then every CJK face');
   assert.deepEqual(chain('ก', latin).slice(0, 2), ['Noto Sans Thai', 'Noto Serif Thai'], 'a script character: its own script face first');
   assert.deepEqual(glyphFallbackFamilies('ρ', latin, true).slice(0, 1), ['Noto Sans']);
-  for (const family of chain('ρ', latin)) assert.ok(designatedFamiliesAll().includes(family), `${family} is a designated family`);
+  // FF-45: the open symbol faces end the chain (mathematical operators, arrows, dingbats) after every designated script face.
+  const symbolFaces = ['Noto Sans Symbols 2', 'Noto Sans Symbols', 'Noto Sans Math'];
+  assert.deepEqual(chain('ρ', latin).slice(-3), symbolFaces, 'the symbol faces are last');
+  for (const family of chain('ρ', latin)) assert.ok(designatedFamiliesAll().includes(family) || symbolFaces.includes(family), `${family} is a designated family`);
   assert.deepEqual(chain('ρ', latin), chain('ρ', latin), 'deterministic');
 }
 function designatedFamiliesAll() {

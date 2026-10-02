@@ -569,18 +569,26 @@ function reportLanguageDiagnostic(context, diagnostic) {
  */
 function reportGlyphFallback(context, note) {
   context.glyphFallbackDiagnostics ??= new Set();
-  const key = `${note.fontFamily}\u0000${note.fallbackFamily}\u0000${note.path ?? ""}`;
+  const key = `${note.fontFamily}\u0000${note.fallbackFamily}\u0000${note.placeholder ?? ""}\u0000${note.path ?? ""}`;
   if (context.glyphFallbackDiagnostics.has(key)) return;
   context.glyphFallbackDiagnostics.add(key);
+  // FF-45: a symbol-encoded family's note lists the codes drawn as their Unicode equivalents, or as the placeholder.
+  const symbol = Array.isArray(note.codes);
+  const codes = symbol ? note.codes.slice(0, 8).map(code => `0x${code}`).join(", ") : "";
   context.options.onDiagnostic?.({
     code: "font-glyph-fallback",
     ...(note.path ? { path: note.path } : {}),
     // The note is reported once per family pair and path: it names characters the face lacks, such as these, not every one.
-    message: `'${note.fontFamily}' lacks glyphs for characters such as ${note.characters.slice(0, 8).map(character => `U+${character.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}`).join(", ")}; the preview draws those with '${note.fallbackFamily}'. The PPTX keeps the chosen font.`,
+    message: symbol
+      ? (note.placeholder
+        ? `'${note.fontFamily}' is symbol-encoded; codes such as ${codes} have no Unicode equivalent that a loaded face draws, so the preview draws the placeholder '${note.placeholder}' with '${note.fallbackFamily}'. The PPTX keeps the chosen font and the original codes.`
+        : `'${note.fontFamily}' is symbol-encoded and not bundled; the preview draws codes such as ${codes} as their Unicode equivalents with '${note.fallbackFamily}'. The PPTX keeps the chosen font and the original codes.`)
+      : `'${note.fontFamily}' lacks glyphs for characters such as ${note.characters.slice(0, 8).map(character => `U+${character.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}`).join(", ")}; the preview draws those with '${note.fallbackFamily}'. The PPTX keeps the chosen font.`,
     fontFamily: note.fontFamily,
     fallbackFamily: note.fallbackFamily,
     scripts: [...note.scripts],
-    characters: [...note.characters]
+    characters: [...note.characters],
+    ...(symbol ? { codes: [...note.codes], ...(note.placeholder ? { placeholder: note.placeholder } : {}) } : {})
   });
 }
 
@@ -1491,9 +1499,14 @@ function renderBranding(bound,presentation,width,height,options) {
   return pieces.join('');
 }
 
+// A family name is written unquoted only when it is a valid sequence of CSS identifiers; a word that starts with a digit
+// ("Source Sans 3", "Noto Sans Symbols 2") or any other non-identifier character makes an unquoted name invalid CSS, which
+// drops the whole font-family in a browser (FF-45). Such names are single-quoted (the attribute is double-quoted).
+const cssIdentifierSequence = /^(?:-?(?:[A-Za-z_ -￿]|\\.)(?:[\w -￿-]|\\.)*)(?: (?:-?(?:[A-Za-z_ -￿]|\\.)(?:[\w -￿-]|\\.)*))*$/;
+const cssFamily = name => cssIdentifierSequence.test(name) && !/^(?:inherit|initial|unset|default|serif|sans-serif|monospace|cursive|fantasy|system-ui)$/i.test(name) ? name : `'${name.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
 function fontStack(family, type) {
   const fallback = type === "serif" ? "serif" : type === "monospace" ? "monospace" : "sans-serif";
-  return `${[family].flat().join(", ")}, ${fallback}`;
+  return `${[family].flat().map(cssFamily).join(", ")}, ${fallback}`;
 }
 
 // Unicode directional isolates (FF-19): each paragraph (text between hard line
@@ -1539,25 +1552,31 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, trace } 
   rtl = rtl && value !== "";
   const isolate = content => rtl ? `${RIGHT_TO_LEFT_ISOLATE}${content}${POP_DIRECTIONAL_ISOLATE}` : content;
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
-  if (runs.length === 1) {
+  // FF-45: symbol runs (Wingdings, Symbol, Webdings codes drawn as their Unicode equivalents) are always positioned when the
+  // line is placed, one tspan per glyph at the verified symbol font's advance, so a single mapped glyph is never stretched to it.
+  const symbols = runs.some(run => run.symbol);
+  if (runs.length === 1 && !(symbols && placement && placement.width > 0)) {
     const [run] = runs;
-    return { content: isolate(escapeText(value)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type) };
+    return { content: isolate(escapeText(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type) };
   }
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
     return { content: isolate(runs.map(run => run.own ? escapeText(run.text)
       : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), style: nestedReset(style, run) }, escapeText(run.text))).join("")) };
   }
+  const natural = symbols ? scripts.runWidths(runs, placement.fontSize, style, { natural: true }) : undefined;
   const total = widths.reduce((sum, width) => sum + width, 0), factor = total > 0 ? placement.width / total : 1;
   let advance = 0, offset = 0;
   const content = runs.map((run, index) => {
     const width = widths[index] * factor, left = rtl ? placement.width - advance - width : advance;
     advance += width;
     const start = offset;
-    offset += run.text.length;
+    offset += run.symbol ? run.symbol.source.length : run.text.length;
+    // A symbol glyph keeps the open face's shape: it is compressed to its code's advance only when wider, never stretched.
+    const pinned = run.symbol ? natural[index] > width + 1e-6 : width > 0;
     return tag("tspan", {
       x: stableNumber(placement.x + left),
-      textLength: width > 0 ? stableNumber(width) : undefined, lengthAdjust: width > 0 ? "spacingAndGlyphs" : undefined,
+      textLength: pinned ? stableNumber(width) : undefined, lengthAdjust: pinned ? "spacingAndGlyphs" : undefined,
       "font-family": run.own ? undefined : fontStack(run.family, type),
       style: run.own ? undefined : nestedReset(style, run),
       ...(trace ? trace(start, offset) : {})
@@ -1851,7 +1870,7 @@ const NO_POLICY_FEATURES = Symbol("noPolicyFeatures");
 const RESET_POLICY_FEATURES = "font-variant-ligatures:normal;font-feature-settings:normal";
 function withPolicyFeatures(name, attrs) {
   if (attrs[NO_POLICY_FEATURES]) return attrs;
-  const family = (name === "text" || name === "tspan") && typeof attrs["font-family"] === "string" ? attrs["font-family"].split(",")[0].trim() : undefined;
+  const family = (name === "text" || name === "tspan") && typeof attrs["font-family"] === "string" ? attrs["font-family"].split(",")[0].trim().replace(/^'(.*)'$/, "$1") : undefined;
   const features = family && disabledFeaturesStyle(family);
   return features ? { ...attrs, style: attrs.style ? `${attrs.style};${features}` : features } : attrs;
 }

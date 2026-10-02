@@ -8,6 +8,7 @@ import { scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
 // Optional core exports are read from the namespace so an older published core still loads.
 import * as opfCore from "@openpresentation/opf";
 import { presentationFamilies } from "./lazy-fonts.js";
+import { SYMBOL_SCRIPT, isSymbolEncodedFamily } from "./symbol-fonts.js";
 
 const SCRIPT_ALIASES = Object.freeze({Hira: "Jpan", Kana: "Jpan", Hrkt: "Jpan", Hang: "Kore", Hani: "Hans", Zyyy: "Latn"});
 
@@ -107,10 +108,14 @@ const cjkCharacters = new Set(["Hani", "Hira", "Kana", "Hang", "Bopo"]);
 /** True when the renderer has per-character glyph fallback (FF-19 glyphFallbackFamilies). */
 const hasGlyphFallback = () => typeof scriptFontModule.glyphFallbackFamilies === "function";
 
-/** ISO 15924 script whose pinned face a family resolves to: a proprietary script font (Yu Gothic: Jpan) or a pinned face itself (Noto Sans JP: Jpan). */
+/**
+ * ISO 15924 script whose pinned face a family resolves to: a proprietary script font (Yu Gothic: Jpan), a pinned face itself
+ * (Noto Sans JP: Jpan), or a symbol-encoded family (Wingdings: Zsym, whose codes draw with the pinned symbol faces, FF-45).
+ */
 function scriptOfFamily(family) {
   const name = String(family ?? "").toLowerCase();
   if (!name) return undefined;
+  if (isSymbolEncodedFamily(name)) return SYMBOL_SCRIPT;
   const rule = scriptFontModule.SCRIPT_FONT_REPLACEMENTS.find(item => item.requestedFamily.toLowerCase() === name);
   if (rule) return rule.script;
   return BUNDLED_FONT_MANIFEST.packages.find(item => item.pack === "scripts" && item.faces.some(face => face.family.toLowerCase() === name))?.scripts[0];
@@ -148,7 +153,20 @@ function designScripts(presentation, profile, renderOptions) {
   if (renderOptions?.catalogs) {
     for (const family of presentationFamilies(presentation, renderOptions)) note({ heading: { latin: family }, body: { latin: family } });
   }
+  // FF-45: a run or design that names a symbol-encoded family (a Wingdings bullet run, a Symbol heading) needs the symbol faces.
+  for (const family of namedFontFamilies(presentation)) if (isSymbolEncodedFamily(family)) scripts.add(SYMBOL_SCRIPT);
   return { scripts: [...scripts].sort(), han };
+}
+
+/** Every `fontFamily` string and `design.fonts` role family named anywhere in the document (runs, table cells, slide designs). */
+function* namedFontFamilies(value, key) {
+  if (typeof value === "string") { if (key === "fontFamily") yield value; return; }
+  if (Array.isArray(value)) { for (const child of value) yield* namedFontFamilies(child, key); return; }
+  if (!value || typeof value !== "object") return;
+  for (const [childKey, child] of Object.entries(value)) {
+    if (childKey === "fonts" && child && typeof child === "object" && !Array.isArray(child)) { for (const family of Object.values(child)) if (typeof family === "string") yield family; continue; }
+    yield* namedFontFamilies(child, childKey);
+  }
 }
 
 /**

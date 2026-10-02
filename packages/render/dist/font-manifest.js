@@ -2595,6 +2595,85 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "sha256": "7e34616e092593c340449baf9a259075a054c6419511ccf21ff0d83a1c9dd0d0"
         }
       ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-symbols-2",
+      "version": "0.4.1",
+      "pack": "scripts",
+      "scripts": [
+        "Zsym"
+      ],
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-symbols-2/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/symbols",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/symbols)",
+      "faces": [
+        {
+          "file": "400Regular/NotoSansSymbols2_400Regular.ttf",
+          "family": "Noto Sans Symbols 2",
+          "weight": 400,
+          "italic": false,
+          "sha256": "f67f40c65f929f029827ab37cfdc4897dfd9ae3c28d9e98ba46e0d52e39eb97e"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-symbols",
+      "version": "0.4.1",
+      "pack": "scripts",
+      "scripts": [
+        "Zsym"
+      ],
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-symbols/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/symbols",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/symbols)",
+      "faces": [
+        {
+          "file": "400Regular/NotoSansSymbols_400Regular.ttf",
+          "family": "Noto Sans Symbols",
+          "weight": 400,
+          "italic": false,
+          "sha256": "aedeec1cd0514930aeeafc4a88a6deff83cda1e6b58086f0b9bb9c7dd0157578"
+        },
+        {
+          "file": "700Bold/NotoSansSymbols_700Bold.ttf",
+          "family": "Noto Sans Symbols",
+          "weight": 700,
+          "italic": false,
+          "sha256": "5682f6c88d6199623edf026f67a8722697e8c5f409e5249477594e409d657eb0"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-math",
+      "version": "0.4.2",
+      "pack": "scripts",
+      "scripts": [
+        "Zsym"
+      ],
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-math/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/math",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/math)",
+      "faces": [
+        {
+          "file": "400Regular/NotoSansMath_400Regular.ttf",
+          "family": "Noto Sans Math",
+          "weight": 400,
+          "italic": false,
+          "sha256": "b4a1dfdbfa13b4755e5eac20cb25c1d17ed5a745ceb89639595e8cf45a2b1e07"
+        }
+      ]
     }
   ]
 });

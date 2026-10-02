@@ -16,6 +16,8 @@
 // is reported as a note. `glyphFallback: "none"` (strict mode) keeps the exact
 // faces and lets a missing glyph raise `missing-glyph`.
 
+import { SYMBOL_PLACEHOLDER, SYMBOL_SCRIPT, mapSymbolText, symbolEncodingFor, symbolPreviewFaces } from "./symbol-fonts.js";
+
 const freeze = value => { if (value && typeof value === "object") { for (const child of Object.values(value)) freeze(child); Object.freeze(value); } return value; };
 
 /** Designated open replacement families per ISO 15924 script, by style. */
@@ -268,8 +270,11 @@ export function glyphFallbackFamilies(character, profile = {}, serif = profile?.
   // otherwise every CJK face is tried in turn (Japanese, Simplified, Traditional, Korean).
   const own = script === "Hani" ? (hanKeys.includes(language) ? language : "Zzzz") : fontKey(script, character, profile);
   const keys = [own, language, "Latn", ...hanKeys, ...Object.keys(SCRIPT_FONT_FAMILIES)];
-  return [...new Set([...new Set(keys)].flatMap(key => designatedFamilies(key, serif)))];
+  // 6. the open symbol faces (FF-45), when a host loaded them: mathematical operators, arrows, dingbats and pictographs.
+  return [...new Set([...new Set(keys)].flatMap(key => designatedFamilies(key, serif)).concat(SYMBOL_FALLBACK_FACES))];
 }
+/** The symbol faces at the end of the glyph fallback chain, in order: pictographs, then the mathematical operators. */
+const SYMBOL_FALLBACK_FACES = ["Noto Sans Symbols 2", "Noto Sans Symbols", "Noto Sans Math"];
 
 /**
  * Aliases from proprietary script fonts to the first loaded designated
@@ -439,9 +444,73 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     return [...new Set(list.filter(Boolean))];
   };
 
+  /**
+   * FF-45: runs for text in a symbol-encoded family (Symbol, Wingdings, Wingdings 2, Wingdings 3, Webdings). Each
+   * character's code (U+F0xx private use or its Windows-1252 character) maps to its Unicode equivalent, drawn with the
+   * first loaded face of the family's preview chain that has it (`symbolPreviewFaces`), one run per glyph so the
+   * preview can place each at the verified font's advance (`run.symbol.advance`, em). A code with no equivalent, or
+   * whose equivalent no loaded face has, draws the placeholder U+25A1 and says so (`run.symbol.placeholder`, the
+   * fallback note carries `codes`). Characters that are not codes (a CJK letter, an emoji) are planned as ordinary text.
+   * Without a measurement provider every symbol run names the whole chain as its stack.
+   */
+  const planSymbols = (text, style, encoding) => {
+    const cacheKey = `${SYMBOL_SCRIPT}\u0000${encoding}\u0000${style.fontFamily}\u0000${style.fontWeight ?? 400}\u0000${!!style.italic}\u0000${textRole(style) ?? ""}\u0000${style.path ?? ""}\u0000${text}`;
+    const cached = plans.get(cacheKey);
+    if (cached) return cached;
+    const chain = symbolPreviewFaces(encoding);
+    const resolvedChain = measured ? chain.map(name => resolveName(name, style)).filter((name, index, all) => name && all.indexOf(name) === index) : chain;
+    const out = [], notes = new Map();
+    let foreign = "";
+    const flushForeign = () => {
+      if (!foreign) return;
+      for (const run of plan(foreign, {...style, symbolEncoding: null})) out.push(run);
+      foreign = "";
+    };
+    const note = (family, item, drawn, placeholder) => {
+      const key = `${family}\u0000${placeholder ? "placeholder" : "glyph"}`;
+      let entry = notes.get(key);
+      if (!entry) notes.set(key, entry = {fontFamily: encoding, fallbackFamily: family, scripts: [SYMBOL_SCRIPT], characters: [], codes: [], ...(placeholder ? {placeholder: drawn || "none"} : {}), ...(style.path ? {path: style.path} : {})});
+      const hex = item.code.toString(16).toUpperCase().padStart(2, "0");
+      if (!entry.codes.includes(hex) && entry.codes.length < 32) { entry.codes.push(hex); if (entry.characters.length < 16) entry.characters.push(item.source); }
+    };
+    for (const item of mapSymbolText(encoding, text)) {
+      if (item.code === null) { foreign += item.source; continue; }
+      flushForeign();
+      let drawn = item.unicode, family = null, placeholder = false;
+      if (!measured) { out.push({text: drawn ?? SYMBOL_PLACEHOLDER, family: chain[0], own: false, stack: chain, symbol: {family: encoding, code: item.code, source: item.source, advance: item.advance, ...(drawn === null ? {placeholder: true, reason: item.reason} : {})}}); continue; }
+      if (drawn !== null) family = resolvedChain.find(name => covers(name, drawn, style)) ?? null;
+      if (family === null) {
+        placeholder = true;
+        const reason = drawn === null ? item.reason : `no loaded face has U+${drawn.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}; load the symbol faces (scripts: ['${SYMBOL_SCRIPT}'])`;
+        // The placeholder is U+25A1 WHITE SQUARE from a loaded symbol face; without one, U+FFFD from the style's face (Noto Sans,
+        // Roboto and the office faces have it); a registry with neither draws nothing at the code's advance.
+        const own = resolveName(style.fontFamily, style) ?? style.fontFamily;
+        const choice = [[SYMBOL_PLACEHOLDER, resolvedChain.find(name => covers(name, SYMBOL_PLACEHOLDER, style))], ["�", [own, ...resolvedChain].find(name => covers(name, "�", style))]].find(([, name]) => name);
+        drawn = choice ? choice[0] : "";
+        family = choice ? choice[1] : own;
+        out.push({text: drawn, family, own: false, symbol: {family: encoding, code: item.code, source: item.source, advance: item.advance, placeholder: true, reason}});
+      } else out.push({text: drawn, family, own: false, symbol: {family: encoding, code: item.code, source: item.source, advance: item.advance}});
+      note(family, item, drawn, placeholder);
+    }
+    flushForeign();
+    for (const entry of notes.values()) {
+      const key = `${entry.fontFamily}\u0000${entry.fallbackFamily}\u0000${entry.placeholder ?? ""}\u0000${style.path ?? ""}`;
+      if (fallbackNotes.has(key)) continue;
+      fallbackNotes.set(key, entry);
+      options.onFallback?.(entry);
+    }
+    if (plans.size >= 4096) plans.delete(plans.keys().next().value);
+    plans.set(cacheKey, out);
+    return out;
+  };
+
   /** Font runs for text drawn in `style` (the resolved latin style). `own` runs use the style's family. */
   const plan = (text, style) => {
     text = String(text ?? "");
+    // A symbol-encoded family (resolved styles carry `symbolEncoding`; an unresolved style names the family itself) is mapped code by
+    // code; `symbolEncoding: null` is the planner's own request for ordinary runs (characters that are not codes).
+    const encoding = style.symbolEncoding === null ? undefined : style.symbolEncoding ?? symbolEncodingFor(style.fontFamily)?.family;
+    if (encoding) return text ? planSymbols(text, style, encoding) : [{text, family: style.fontFamily, own: true}];
     if (latinOnly.test(text) && !(eastAsianText && eastAsianAmbiguous.test(text))) {
       // Latin-group text is one run in the latin slot's face, unless that face lacks a character
       // (Cyrillic or Greek beyond a Latin replacement): then it is planned per character below.
@@ -517,9 +586,16 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     return out;
   };
 
-  const styleFor = (run, style) => styled(run.own ? style : {...style, fontFamily: run.family});
-  /** Measured advance of each planned run, in order; undefined without a measurement provider. */
-  const runWidths = (runs, size, style) => measured ? runs.map(run => inner.measure(run.text, size, styleFor(run, style))) : undefined;
+  // A run drawn for another family drops the encoding: the open face's own glyphs are measured.
+  const styleFor = (run, style) => styled(run.own ? style : {...style, fontFamily: run.family, symbolEncoding: null});
+  /**
+   * The advance a planned run occupies: the open face's measured advance, except that a symbol run (FF-45) occupies the
+   * verified symbol font's advance for its code, so lines break and bullets sit where PowerPoint puts them; `natural`
+   * asks for the open face's advance of that run instead (the SVG compresses a wider glyph to fit, never stretches one).
+   */
+  const runWidth = (run, size, style, natural = false) => run.symbol && !natural && run.symbol.advance !== null ? run.symbol.advance * size : inner.measure(run.text, size, styleFor(run, style));
+  /** Advance of each planned run, in order (see `runWidth`); undefined without a measurement provider. */
+  const runWidths = (runs, size, style, {natural = false} = {}) => measured ? runs.map(run => runWidth(run, size, style, natural)) : undefined;
   let textMeasurement;
   if (measured) {
     textMeasurement = {
@@ -527,7 +603,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       measure(text, size, style) {
         const runs = plan(text, style);
         if (runs.length === 1 && runs[0].own) return inner.measure(text, size, styled(style));
-        return runs.reduce((total, run) => total + inner.measure(run.text, size, styleFor(run, style)), 0);
+        return runs.reduce((total, run) => total + runWidth(run, size, style), 0);
       },
       [scriptMeasurement]: {inner, profile, options},
     };
@@ -542,7 +618,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
             const left = x + bounds.x, top = bounds.y, right = left + bounds.width, bottom = top + bounds.height;
             box = box ? {left: Math.min(box.left, left), top: Math.min(box.top, top), right: Math.max(box.right, right), bottom: Math.max(box.bottom, bottom)} : {left, top, right, bottom};
           }
-          x += inner.measure(run.text, size, runStyle);
+          x += runWidth(run, size, style);
         }
         return box && {x: box.left, y: box.top, width: box.right - box.left, height: box.bottom - box.top};
       };

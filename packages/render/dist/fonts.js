@@ -3,6 +3,8 @@ import { FONT_COMPATIBILITY, disabledFeaturesFor } from "./font-compatibility.js
 import { openTypeLanguage, scriptFontAliases } from "./script-fonts.js";
 import { fontPolicyFor } from "./font-policy.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
+import { SYMBOL_SCRIPT, isSymbolEncodedFamily, symbolEncodingFor, symbolPreviewFaces } from "./symbol-fonts.js";
+export { SYMBOL_SCRIPT, SYMBOL_PLACEHOLDER, SYMBOL_PREVIEW_FACES, SYMBOL_FACE_FAMILIES, SYMBOL_ENCODINGS, SYMBOL_ENCODINGS_SOURCE, isSymbolEncodedFamily, symbolEncodingFor, symbolPreviewFaces, symbolCodeOf, mapSymbolText } from "./symbol-fonts.js";
 export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES, disabledFeaturesFor } from "./font-compatibility.js";
 export { FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor } from "./font-policy.js";
 export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, glyphFallbackFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
@@ -75,9 +77,17 @@ export function skipUndecodableLookups(font) {
 export function pickFace(faces, family, style, {policy = "none", aliases = new Map(), fallbackFamily} = {}) {
   const findFamily = name => faces.filter(face=>face.family.toLowerCase()===name.toLowerCase() || face.familyGroup.toLowerCase()===name.toLowerCase());
   const weight = style.fontWeight ?? 400;
-  let matching = findFamily(family), compatibility = "exact", rule, targetWeight = weight, styleFallback = false, via = "family";
-  const encodedSymbol = /^(wingdings(?: [23])?|webdings|symbol)$/i.test(family);
-  if (!matching.length && encodedSymbol) throw new OPFFontError("font-encoding-required", `Font '${family}' requires character mapping before substitution.`, {path:style.path,fontFamily:family});
+  let matching = findFamily(family), compatibility = "exact", rule, targetWeight = weight, styleFallback = false, via = "family", encoding;
+  // FF-45: a symbol-encoded family (Symbol, Wingdings, Wingdings 2, Wingdings 3, Webdings) whose own face is not loaded
+  // draws the Unicode equivalent of each code with the first loaded open symbol face (symbol-fonts.js: Noto Sans Symbols 2,
+  // Noto Sans Symbols, Noto Sans Math, or the office pack's Noto Sans). The resolved style carries the encoding so the
+  // planner maps every character; the PPTX keeps the family and the original codes. Without any such face the caller's
+  // fallback family applies, else the request fails as before (font-encoding-required) and names the pack to load.
+  if (!matching.length && isSymbolEncodedFamily(family)) {
+    for (const candidate of symbolPreviewFaces(family)) { const pool = findFamily(candidate); if (pool.length) { matching = pool; break; } }
+    if (matching.length) { compatibility = "visual"; via = "encoding"; encoding = symbolEncodingFor(family).family; }
+    else if (!fallbackFamily) throw new OPFFontError("font-encoding-required", `Font '${family}' is symbol-encoded and no open symbol face is loaded: load the symbol faces (prepareNodeFonts or loadBrowserFontRegistry with scripts: ['${SYMBOL_SCRIPT}'], or scripts: 'auto' with the presentation) or supply '${family}' itself.`, {path:style.path,fontFamily:family,scripts:[SYMBOL_SCRIPT],faces:[...symbolPreviewFaces(family)]});
+  }
   if (!matching.length && aliases.has(family.toLowerCase())) {
     matching = findFamily(aliases.get(family.toLowerCase())); compatibility = "visual"; via = "alias";
   }
@@ -119,7 +129,7 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
   matching.sort((a,b)=>Math.abs(a.weight-targetWeight)-Math.abs(b.weight-targetWeight) || a.weight-b.weight);
   const face = matching[0];
   if ((face.weight!==targetWeight || styleFallback) && compatibility!=="generic") compatibility="visual";
-  return {face, compatibility, rule, styleFallback, via};
+  return {face, compatibility, rule, styleFallback, via, ...(encoding ? {encoding} : {})};
 }
 
 export function createFontRegistry(entries, options = {}) {
@@ -193,21 +203,24 @@ export function createFontRegistry(entries, options = {}) {
     const family = themeKey ? options.themeFonts?.[themeKey] : requested;
     if (!family || family.startsWith("+")) throw new OPFFontError("unresolved-theme-font", `Supply a concrete theme family for '${requested}'.`, {path:style.path});
     validFamily(family);
-    const {face, compatibility, rule, styleFallback, via} = pickFace(faces, family, style, {policy, aliases, fallbackFamily:options.fallbackFamily});
+    const {face, compatibility, rule, styleFallback, via, encoding} = pickFace(faces, family, style, {policy, aliases, fallbackFamily:options.fallbackFamily});
     // FF-31: `substitute` is true whenever the face is not the chosen family itself (policy
     // replacement, alias, script replacement or fallback). Exporters keep writing sourceFamily.
     const substitute = via!=="family", policyRow = substitute ? fontPolicyFor(family) : undefined;
     const measured = rule?.measured && rule.substituteIndex===0 ? rule.measured : undefined;
-    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,substitute,...(styleFallback?{styleFallback:true}:{}),...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note,...(rule.decision?{decision:rule.decision}:{})}:{}),...(measured?{measured:{...measured}}:{}),...(policyRow?{licenseClass:policyRow.licenseClass,availability:[...policyRow.availability]}:{})};
+    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,substitute,...(styleFallback?{styleFallback:true}:{}),...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note,...(rule.decision?{decision:rule.decision}:{})}:{}),...(measured?{measured:{...measured}}:{}),...(policyRow?{licenseClass:policyRow.licenseClass,availability:[...policyRow.availability]}:{}),...(encoding?{symbolEncoding:encoding}:{})};
     if (face.family.toLowerCase()!==family.toLowerCase() || face.weight!==weight || face.italic!==!!style.italic) substitutions.set(JSON.stringify([requested,weight,!!style.italic,style.path]),resolution);
     return {face,resolution};
   };
   const resolveFace = style => resolve(style).face;
   const resolveStyle = style => {
-    const face=resolveFace(style),resolved={...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic};
+    const {face,resolution}=resolve(style),resolved={...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic};
     // Never carry a stale selection from a previously resolved style.
     delete resolved.fontFace;
+    delete resolved.symbolEncoding;
     if(face.fontFace) resolved.fontFace={...face.fontFace};
+    // FF-45: the planner maps a symbol-encoded family's codes (symbol-fonts.js); the face only lends its glyphs.
+    if(resolution.symbolEncoding) resolved.symbolEncoding=resolution.symbolEncoding;
     return resolved;
   };
   const metrics = (text,size,style,includeOutline=false) => {
