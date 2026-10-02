@@ -63,3 +63,4 @@ jobs:
       - run: node scripts/test-ecosystem-links.mjs
       - run: pnpm test:cli
       - run: pnpm test:cli:packed
+      - run: pnpm test:cli:packed:peers

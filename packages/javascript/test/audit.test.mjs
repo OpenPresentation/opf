@@ -238,10 +238,11 @@ test('audit/missing-slide-title and audit/duplicate-slide-title', () => {
 
 // ------------------------------------------------------------ reading order
 
-test('audit/reading-order: promoted regions are composed alphabetically, blocks in order', () => {
-	const regions = only(deck([{ title: 'T', left: { text: 'L' }, center: { text: 'C' }, right: { text: 'R' } }]), 'reading-order');
-	assert.equal(regions.length, 1);
-	assert.match(regions[0].message, /center\.text.*left\.text.*right\.text/);
+test('audit/reading-order: promoted regions are composed in visual order, blocks in order', () => {
+	// composeSlide used to compose region keys alphabetically (center, left, right); it now follows the layout (RR-29)
+	assert.ok(!has(deck([{ title: 'T', left: { text: 'L' }, center: { text: 'C' }, right: { text: 'R' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', top: { text: 'T' }, middle: { text: 'M' }, bottom: { text: 'B' } }]), 'reading-order'));
+	assert.ok(!has(deck([{ title: 'T', 'top:left': { text: 'A' }, 'top:center+right': { text: 'B' }, 'middle+bottom:left': { text: 'C' }, 'middle+bottom:center+right': { text: 'D' } }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', composition: { mode: 'row' }, blocks: [{ text: 'L' }, { text: 'C' }, { text: 'R' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', blocks: [{ text: 'A' }, { text: 'B' }, { text: 'C' }, { text: 'D' }] }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', left: { text: 'L' }, right: { text: 'R' } }]), 'reading-order'));

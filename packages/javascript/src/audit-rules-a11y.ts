@@ -1,5 +1,6 @@
-import { chartColorForFill } from './color.js';
+import { chartPaletteForFill } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
+import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
 import type { AuditDiagnostic, AuditFix } from './audit-types.js';
 import { type AuditContext, type AuditRule, type SlideContext, rule } from './audit-context.js';
@@ -446,21 +447,10 @@ const readingOrderRules: AuditRule[] = [
 ];
 
 function visualOrder(items: readonly { path: string; box: { x: number; y: number; width: number; height: number } }[], rtl: boolean): string[] {
-	const sorted = [...items].sort((a, b) => a.box.y - b.box.y || a.box.x - b.box.x);
-	const rows: (typeof sorted)[] = [];
-	for (const item of sorted) {
-		const centre = item.box.y + item.box.height / 2;
-		const row = rows.find((candidate) => {
-			const top = Math.min(...candidate.map((c) => c.box.y)),
-				bottom = Math.max(...candidate.map((c) => c.box.y + c.box.height));
-			return centre >= top && centre <= bottom;
-		});
-		if (row) row.push(item);
-		else rows.push([item]);
-	}
-	rows.sort((a, b) => Math.min(...a.map((c) => c.box.y)) - Math.min(...b.map((c) => c.box.y)));
-	// Within a row a left-to-right deck reads by x. A right-to-left deck's geometry is not assumed to be mirrored, so only the row order is checked there.
-	return rows.flatMap((row) => row.sort((a, b) => (rtl ? items.indexOf(a) - items.indexOf(b) : a.box.x - b.box.x)).map((c) => c.path));
+	// The same ordering composeSlide uses for promoted regions. A right-to-left deck's boxes may be mirrored (or, before the
+	// mirroring lands, not), so only the row order is checked there: each row keeps its composed order.
+	if (rtl) return readingRows(items).flatMap((row) => row.map((item) => item.path));
+	return visualReadingOrder(items).map((item) => item.path);
 }
 const shortField = (path: string) => path.replace(/^slides\.\d+\./, '');
 const ordinal = (index: number) => `position ${index + 1}`;
@@ -550,7 +540,7 @@ const chartRules: AuditRule[] = [
 					const count = slices ? data.rows.length : data.columns.length - 1;
 					if (count < 2) continue;
 					const surface = slide.design.colors.surface;
-					const palette = context.chartPalette.map((color) => chartColorForFill(surface, color));
+					const palette = chartPaletteForFill(surface, context.chartPalette);
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];
