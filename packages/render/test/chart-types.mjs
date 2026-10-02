@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {CHART_TYPES,DEPRECATED_CHART_TYPES,CHART_SERIES_COLORS,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
-import {chartColorForFill} from '@openpresentation/opf/composition';
+import {CHART_TYPES,DEPRECATED_CHART_TYPES,CHART_SERIES_COLORS,chartSeriesPalette,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
 
 // FF-22: every kept catalog chart type previews its native construct.
 const CLASSIC=['column','stacked-column-3x','100pct-stacked-column-3x','bar','stacked-bar-3x','100pct-stacked-bar-3x','line','line-with-markers','stacked-line-3x','stacked-line-with-markers-3x','area','stacked-area-3x','100pct-stacked-area-3x','pie','doughnut','scatter','radar','radar-with-markers','filled-radar'];
@@ -22,7 +21,7 @@ const marks=(svg,name,pattern)=>elements(svg,name).filter(a=>pattern.test(a['dat
 const texts=svg=>[...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([,t])=>t.replace(/<[^>]+>/g,''));
 const point=/^slides\.0\.chart\.data\.rows\.\d+\.\d+$/,series=/^slides\.0\.chart\.data\.columns\.\d+$/;
 const bound=resolvePresentation({slides:[{chart:{type:'column',data:categoryData}}]}).slides[0];
-const palette=CHART_SERIES_COLORS.map(color=>chartColorForFill(bound.design.colors.surface,color));
+const palette=chartSeriesPalette(bound.design.colors.surface);
 let checks=0;
 
 // Every classic id takes the catalog path, never the legacy single-series fallback.

@@ -8,13 +8,23 @@
 // for the exported chart; deprecated ids render exactly like their replacement;
 // any other id returns null so the caller keeps its legacy single-series preview.
 import { chartColorForFill, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+// chartPaletteForFill ships with core RR-29 (opf#270); an older published core still loads and clamps each colour on its own.
+import * as opfComposition from "@openpresentation/opf/composition";
 
 // Ordered series palette written by opf-pptx (`CHART_COLORS`), before the same
-// per-surface contrast adjustment (`chartColorForFill`).
+// per-surface adjustment (`chartPaletteForFill`: contrast against the card, without letting two series merge).
 export const CHART_SERIES_COLORS = Object.freeze([
   "#2874A6", "#1B4F72", "#5499C7", "#7BDBB2", "#3AC67A", "#24A89E",
   "#F59E0B", "#EF4444", "#8B5CF6", "#14B8A6", "#0F172A", "#64748B"
 ]);
+
+// The series colours for a chart panel: core's `chartPaletteForFill` (contrast against the panel without letting two series merge)
+// when the installed core has it, else each colour clamped on its own.
+export function chartSeriesPalette(surface) {
+  return typeof opfComposition.chartPaletteForFill === "function"
+    ? opfComposition.chartPaletteForFill(surface, CHART_SERIES_COLORS)
+    : CHART_SERIES_COLORS.map((color) => chartColorForFill(surface, color));
+}
 
 const bar = (dir, grouping) => ({ kind: "bar", dir, grouping });
 const line = (grouping, markers) => ({ kind: "line", grouping, markers });
@@ -160,7 +170,7 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
     // clear space kept between neighbouring category labels.
     textHeight: fontPx * 1.22,
     labelGap: fontPx * 0.1,
-    colors: CHART_SERIES_COLORS.map((color) => chartColorForFill(surface, color)),
+    colors: chartSeriesPalette(surface),
     gridColor: bound.design.colors.border,
     axisColor: "#888888",
     number: chartNumber,
