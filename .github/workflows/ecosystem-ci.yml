@@ -27,8 +27,15 @@ jobs:
           path: opf
           fetch-depth: 0
           persist-credentials: false
+      # RR-40: a pull request that only changes docs/programs or docs/evidence (no evidence decks) skips the
+      # checks below and reports success; scripts/ecosystem-scope.mjs lists the rule. Pushes to main always run.
+      - name: Decide whether this change needs the ecosystem checks
+        id: scope
+        working-directory: opf
+        run: node --test scripts/ecosystem-scope.test.mjs && node scripts/ecosystem-scope.mjs
       # These commits are the coordinated checkpoint, not mutable default branches.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-render
           ref: ${{ env.OPF_RENDER_REF }}
@@ -36,6 +43,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-editor
           ref: ${{ env.OPF_EDITOR_REF }}
@@ -43,6 +51,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-pptx
           ref: ${{ env.OPF_PPTX_REF }}
@@ -50,31 +59,37 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.scope.outputs.run == 'true'
         with:
           version: 10.33.2
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.scope.outputs.run == 'true'
         with:
           node-version: 24
           cache: pnpm
           cache-dependency-path: opf/pnpm-lock.yaml
       - name: Bind the installed candidate source graph
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: >-
           node --input-type=module -e "import {execFileSync} from 'node:child_process'; import {mkdirSync,writeFileSync} from 'node:fs';
           const repos=['opf','opf-render','opf-editor','opf-pptx'].map(name=>({name,head:execFileSync('git',['-C','../'+name,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),tree:execFileSync('git',['-C','../'+name,'rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim()}));
           mkdirSync('artifacts/portability',{recursive:true}); writeFileSync('artifacts/portability/source.json',JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,repos},null,2)+'\n');"
       - name: Install locked dependencies
+        if: steps.scope.outputs.run == 'true'
         run: |
           pnpm --dir opf install --frozen-lockfile
           for repo in opf-render opf-editor opf-pptx; do
             npm ci --prefix "$repo"
           done
       - name: Build and link coordinated sources
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: |
           pnpm build
           node scripts/link-ecosystem.mjs --packages-only
       - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
           # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
@@ -82,9 +97,11 @@ jobs:
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
         run: pnpm test:packages
       - name: Verify installed type failure propagation
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
       - name: Execute installed tarball browser interactions
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: |
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
@@ -99,15 +116,19 @@ jobs:
           node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - name: Check scalar source whitespace and accepted browser advances
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf-render
         run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
       - name: Check physical font selections in an offline browser
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf-render
         run: npm run test:font-variants-browser
       - name: Check accepted metric outlines and actual offline SVG ink
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
       - name: Verify exact published registry packages and fidelity fixtures
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: |
           pnpm test:registry-ecosystem
@@ -120,18 +141,20 @@ jobs:
           node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
       - name: Measure current checkout code internals with registry fonts
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: |
           node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
           node scripts/test-code-layout-browser.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json artifacts/code-layout-browser.json
       - name: Measure current checkout metric internals with registry fonts
+        if: steps.scope.outputs.run == 'true'
         working-directory: opf
         run: |
           node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
           node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
       - name: Preserve installed-browser evidence
-        if: always()
+        if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: installed-browser-node24
@@ -176,7 +199,7 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary
-        if: always()
+        if: always() && steps.scope.outputs.run == 'true'
         run: |
           echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
 
@@ -197,52 +220,76 @@ jobs:
           path: opf
           fetch-depth: 0
           persist-credentials: false
+      # RR-40: a pull request that only changes docs/programs or docs/evidence (no evidence decks) skips the
+      # checks below and reports success; scripts/ecosystem-scope.mjs lists the rule. Pushes to main always run.
+      - name: Decide whether this change needs the ecosystem checks
+        id: scope
+        run: node scripts/ecosystem-scope.mjs
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-render
           ref: ${{ env.OPF_RENDER_REF }}
           path: opf-render
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-editor
           ref: ${{ env.OPF_EDITOR_REF }}
           path: opf-editor
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-pptx
           ref: ${{ env.OPF_PPTX_REF }}
           path: opf-pptx
           persist-credentials: false
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.scope.outputs.run == 'true'
         with:
           version: 10.33.2
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.scope.outputs.run == 'true'
         with:
           node-version: 24
           cache: pnpm
           cache-dependency-path: opf/pnpm-lock.yaml
       - name: Bind the installed candidate source graph
+        if: steps.scope.outputs.run == 'true'
         run: >-
           node --input-type=module -e "import {execFileSync} from 'node:child_process'; import {mkdirSync,writeFileSync} from 'node:fs';
           const repos=['opf','opf-render','opf-editor','opf-pptx'].map(name=>({name,head:execFileSync('git',['-C','../'+name,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),tree:execFileSync('git',['-C','../'+name,'rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim()}));
           mkdirSync('artifacts/portability',{recursive:true}); writeFileSync('artifacts/portability/source.json',JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,repos},null,2)+'\n');"
       - run: pnpm install --frozen-lockfile
+        if: steps.scope.outputs.run == 'true'
       - run: npm ci --prefix ../opf-render
+        if: steps.scope.outputs.run == 'true'
       - run: npm ci --prefix ../opf-editor
+        if: steps.scope.outputs.run == 'true'
       - run: npm ci --prefix ../opf-pptx
+        if: steps.scope.outputs.run == 'true'
       - run: pnpm build
+        if: steps.scope.outputs.run == 'true'
       - run: node scripts/link-ecosystem.mjs --packages-only
+        if: steps.scope.outputs.run == 'true'
       - run: node scripts/pack-ecosystem.mjs
+        if: steps.scope.outputs.run == 'true'
       - run: node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Review the pinned browser toolchain.');"
+        if: steps.scope.outputs.run == 'true'
       - run: node ../opf-render/node_modules/playwright/cli.js install chromium
+        if: steps.scope.outputs.run == 'true'
       - run: node scripts/test-packed-ecosystem.mjs
+        if: steps.scope.outputs.run == 'true'
       - run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
+        if: steps.scope.outputs.run == 'true'
       - run: node scripts/test-packed-browser.mjs
+        if: steps.scope.outputs.run == 'true'
       - run: node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
+        if: steps.scope.outputs.run == 'true'
       - name: Preserve installed portability evidence
-        if: always()
+        if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: installed-portability-node24-${{ matrix.os }}

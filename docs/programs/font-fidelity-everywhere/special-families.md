@@ -119,8 +119,10 @@ face's advances.
 ## Decisions (owner-vetoable)
 
 - No text replacement row: the policy rows for Symbol, Wingdings and Webdings keep `replacement: null` and describe
-  the encoding path in their note; the tracker keeps them in the `special` class (`needs-special-path` status) with
-  the new evidence and next actions, since the status model has no "mapped" state and native verification is open.
+  the encoding path in their note; the tracker keeps them in the `special` class. Since 2026-10-02 it records the route
+  as kind `code-table` (the chain pinned in `font-tracker.symbol-fonts.json`) with status `code-table`: bundled and verified in
+  opf-render's node, browser and raster tests, native verification still open and not claimed. `needs-special-path` is kept
+  for a special family with no bundled code-table route.
 - Wingdings 2 and Wingdings 3 are included (same pipeline, same cost) and share the Wingdings policy row.
 - Placeholder for a code with no equivalent or no loaded glyph: U+25A1 WHITE SQUARE from a loaded symbol face, else
   U+FFFD from the style's face, else nothing, always at the code's advance, always reported (`font-glyph-fallback`
