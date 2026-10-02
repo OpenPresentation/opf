@@ -22,6 +22,10 @@ When the project's CLI is installed, use `opf create deck.opf.json --title "Deci
 
 Use `opf import-data source.csv --as table` or `--as chart` to ingest local CSV/TSV/JSON into valid inline content. The package API is `createDataContent(input, options)` from `@openpresentation/opf/data`. Select category/series explicitly when needed. Preserve identifiers as strings in tables; do not invent values for missing chart measures. Import embeds a snapshot; it does not establish live source refresh. Check installed command/API availability.
 
+## Markdown and outlines
+
+When the source is Markdown, an outline or speaker notes, convert it deterministically with `opf from-md` (or `markdownToOpf` from `@openpresentation/opf/markdown`) instead of retyping it, and write a deck back as text with `opf to-md`. Read the [Markdown reference](references/markdown.md) for the dialect, the diagnostics and the rules; check `opf --help` for the commands first.
+
 ## Templates and variables
 
 A template is an incomplete OPF file: root `"template": true`, a `variables` map, and content that references the variables. Declare each variable once (`{"type":"text|number|date|image|url|list|color", "label", "example", "required", "format"}`; a `value` fills it; a hex string is color shorthand), insert it as `{{id}}` inside any string (`\{{` writes a literal `{{`), or reference it whole as `"var:id"` where a typed value belongs (a chart number, an `image`, a `bullets` list that splices). Put a token inside a run to style it (`{"text":"{{client}}","bold":true}`). Give every required slot an `example` so the template previews. `validatePresentation` accepts a template and lists `unfilledVariables`; the same deck without `template` fails while a required variable has no value. Fill with `resolveVariables(doc, values)` or `opf fill template.opf.json --data rows.csv --out-dir decks`, which returns an ordinary deck. Never invent values for unfilled variables; ask for the data or leave the template incomplete. Details and decisions: `docs/templates-and-variables.md` in the repository, or the package `docs` export. Check that the installed package version includes variables (core after 0.11.4); an older one rejects the new variable kinds.
@@ -29,6 +33,7 @@ A template is an incomplete OPF file: root `"template": true`, a `variables` map
 ## Authoring decisions
 
 - Put visible copy in slide `title`, `subtitle`, `tag`, and content fields. Presentation `name`, `description`, `takeaway`, `audience`, `purpose`, `tone`, and `narrative` express identity or intent; they do not automatically create slide content.
+- Number a list with `numbering` on its `items` or `bullets` payload instead of typing "1." into the text; it exports as a native PowerPoint numbered list. The geometry and counting rules are in the core repository's docs/numbered-lists.md.
 - Choose simple root content for a single payload, `blocks` for content that should flow, and nonoverlapping promoted regions for meaningful relative placement. Groups can nest using `blocks` and their own `composition`. Do not mix group children with leaf payloads or mix promoted regions with root content.
 - Prefer a clear assertion in each title and enough evidence to support it. Preserve uncertainty and citations; never fill example metrics with invented business results.
 - Cite sources with run `cite` ids into a top-level `references` list and add inline notes with run `footnote`; caption images, charts, tables and videos with `caption`. Markers and the slide's footnote area are drawn by every engine; a cited id must exist. See the [content guide](references/content.md#citations-footnotes-and-captions).

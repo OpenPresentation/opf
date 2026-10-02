@@ -3,6 +3,7 @@ import { catalogs } from "./catalogs.js";
 import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference, type FontSchemeDiagnostic, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValidPresentation } from './validator.js';
+import { sliceNumberedItems } from './numbering.js';
 
 export interface PaginationOptions extends ComposeSlideOptions {
   /** Readability floor used while choosing page breaks. Default 24 reference pixels. */
@@ -166,7 +167,10 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
         if (leafPaths.has(childPath)) {
           const portion = portions.get(childPath);
           if (portion) {
-            result[key] = clone(portion.value); hasContent = true;
+            // A continuation of a numbered list keeps the numbers of the whole list.
+            result[key] = clone(portion.leaf.unit === 'items' && portion.start > 0 && (key === 'items' || key === 'bullets') && node.numbering !== undefined
+              ? sliceNumberedItems(portion.leaf.value, node.numbering, portion.start, portion.end) : portion.value);
+            hasContent = true;
             mappings.push({sourcePath:childPath,outputPath,...(portion.leaf.unit ? {range:{unit:portion.leaf.unit,start:portion.start,end:portion.end}} : {})});
           }
         } else if (key === 'blocks' && Array.isArray(value)) {

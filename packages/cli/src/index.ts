@@ -2,8 +2,13 @@ import { readFile, writeFile, lstat, link, rename, unlink, mkdir } from "node:fs
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
-import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
+import { applyPatch, getAtPointer, parsePointer, PatchError } from "@openpresentation/opf/patch";
+import { diffCommand } from "./diff.js";
+import { mergeCommand } from "./merge.js";
+import { formatCommand } from "./format.js";
+import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
+import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
 import {runAudit} from './audit.js';
@@ -20,6 +25,11 @@ const usage = `OPF — local presentation files for agents (Node 24)
            (design and accessibility checks; opf audit --help, --list-rules)
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
            [--dry-run] [--expect-sha256 <hash>] [--force] [--strict]
+  opf diff <a|-> <b|-> [--format <text|json|patch>] [--exit-code] [--threshold <0-1>]
+  opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer <ours|theirs>]
+           [--report <file>] [--dry-run] [--threshold <0-1>] [--strict]
+  opf format <file|->... [--check | --in-place | --output <file|->]
+           [--indent <0-8>] [--eol <lf|crlf|preserve>]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
@@ -30,6 +40,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
            | --combine --output <file|->] [--partial] [--examples] [--force] [--strict]
   opf paginate <input|-> <output|-> [--force] [--strict]
   opf bundle <input|-> <output|-> [--force] [--strict]
+${MARKDOWN_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
            [--paginate] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
   opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
@@ -51,6 +62,12 @@ Edits apply JSON Patch (add/remove/replace/move/copy/test), validate the whole
 result, and save atomically. --dry-run emits the result without saving.
 Exit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.
 Validation checks structure and references, not visual fidelity.
+Diff matches slides by id, then content, and reports adds, removes, moves and
+field/design/metadata changes plus a JSON Patch from A to B (--exit-code exits 1
+when they differ). Merge combines two edits of a base; non-overlapping changes
+merge, conflicts are listed (exit 1, nothing written) unless --prefer picks a
+side. Format rewrites a file with canonical key order and layout; --check
+exits 1 if any file would change.
 Bundle inlines the bundled catalog records a document references (kinds with a
 custom source are left untouched) so the file resolves every catalog reference
 offline. Remote media and data assets are not inlined.
@@ -70,6 +87,8 @@ when there are warnings. Existing outputs require --force.
 Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
 fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
 
+${MARKDOWN_HELP}
+
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
 Skills copy locally without symlinks, paid services or telemetry. Updates refuse
@@ -82,6 +101,7 @@ const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory", "config", "data", "out-dir", "name"]);
+const extraValueOptions = new Set(["prefer", "threshold", "report", "indent", "eol"]);
 function parse(args: string[], allowed: string[]) {
   const positional: string[] = [], options: Record<string, string | boolean> = Object.create(null);
   let literal = false;
@@ -91,7 +111,7 @@ function parse(args: string[], allowed: string[]) {
     if (!literal && arg.startsWith("--")) {
       const key = arg.slice(2);
       if (!allowed.includes(key) || key in options) throw new CliError(`Unknown or duplicate option: ${arg}`);
-      if (valueOptions.has(key)) {
+      if (valueOptions.has(key) || extraValueOptions.has(key)) {
         const value = args[++i];
         if (value === undefined || value.startsWith("--")) throw new CliError(`${arg} needs a value.`);
         options[key] = value;
@@ -118,7 +138,8 @@ function checked(value: unknown, strict = false) {
   if (!result.valid || (strict && result.warnings.length)) throw new CliError("Document validation failed.", 1, result);
   return result;
 }
-async function save(file: string, document: unknown, overwrite: boolean, original?: { file: string; raw: string }) {
+async function save(file: string, document: unknown, overwrite: boolean, original?: { file: string; raw: string }) { await saveText(file, json(document), overwrite, original); }
+async function saveText(file: string, text: string, overwrite: boolean, original?: { file: string; raw: string }) {
   const output = path.resolve(file), temporary = path.join(path.dirname(output), `.${path.basename(output)}.${randomUUID()}.tmp`);
   let mode: number | undefined;
   try {
@@ -128,7 +149,7 @@ async function save(file: string, document: unknown, overwrite: boolean, origina
     mode = stat.mode;
   } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
   try {
-    await writeFile(temporary, json(document), { flag: "wx", mode });
+    await writeFile(temporary, text, { flag: "wx", mode });
     if (original && await readFile(original.file, "utf8") !== original.raw) throw new CliError("Input changed while editing; reread it and retry.", 1);
     if (overwrite) await rename(temporary, output);
     else {
@@ -148,12 +169,14 @@ async function emit(document: unknown, output: string, options: Record<string, s
     print({ valid: true, output: path.resolve(output), sha256: hash(json(document)), warnings: validation.warnings, ...extra });
   }
 }
+const cli: CliContext = { parse, arity, readJson, stdin, emit, saveText, print, hash, json, fail: (message, code = 2, details) => new CliError(message, code, details) };
 async function main(argv: string[]) {
   if (!argv.length || (argv.length === 1 && ["help", "--help", "-h"].includes(argv[0]))) { console.log(usage); return; }
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
   if (command === 'audit') { await runAudit(args); return; }
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
+  if (command === 'from-md' || command === 'to-md') { await markdownCommand(command, args); return; }
   if (command === 'skills') {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
     print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;
@@ -208,6 +231,9 @@ async function main(argv: string[]) {
     const sameFile = input !== "-" && output !== "-" && path.resolve(input) === path.resolve(output);
     await emit(document, output, options, sameFile ? { file: input, raw: source.raw } : undefined); return;
   }
+  if (command === "diff") { await diffCommand(args, cli); return; }
+  if (command === "merge") { await mergeCommand(args, cli); return; }
+  if (command === "format") { await formatCommand(args, cli); return; }
   if (command === "import-data") {
     const { positional, options } = parse(args, ["as", "format", "into", "path", "output", "in-place", "category", "series", "columns", "chart-type", "no-header", "delimiter", "title", "force", "strict"]); arity(positional, 1);
     if (options.as !== 'table' && options.as !== 'chart') throw new CliError('import-data requires --as table or --as chart.');
@@ -228,7 +254,7 @@ async function main(argv: string[]) {
     let document: unknown;
     if (source) {
       if (options.path) {
-        const parts = tokens(options.path);
+        const parts = parsePointer(options.path);
         if (parts.at(-1) !== options.as) throw new CliError('--path must end in /table or /chart matching --as.');
         document = applyPatch(source.value, [{op:'add',path:options.path,value:'table' in content ? content.table : content.chart}]);
       } else document = applyPatch(source.value, [{op:'add',path:'/slides/-',value:{id:`data-${randomUUID()}`,title:options.title ?? 'Imported data',...content}}]);
@@ -294,7 +320,7 @@ async function main(argv: string[]) {
   if (command === "schema") {
     arity(args, 0, 2); const entry = schemaEntries.find(entry => entry.name === (args[0] ?? "presentation"));
     if (!entry) throw new CliError("Unknown schema. Run opf schemas.");
-    print(lookup(entry.schema, tokens(args[1] ?? ""))); return;
+    print(getAtPointer(entry.schema, args[1] ?? "")); return;
   }
   if (command === "catalog") {
     const { positional, options } = parse(args, ["all"]); arity(positional, 1, 2);

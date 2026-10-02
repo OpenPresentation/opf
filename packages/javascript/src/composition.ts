@@ -2,6 +2,8 @@ import {tableGrid,type TableCellStyle} from './table.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {visualReadingOrder} from './reading-order.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
+import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
@@ -22,7 +24,7 @@ export interface Composition {
 export const MAX_COMPOSITION_DEPTH = 32;
 export interface LayoutBox { x: number; y: number; width: number; height: number }
 export interface LayoutDiagnostic {
-  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment";
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted";
   path: string;
   message: string;
 }
@@ -638,7 +640,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   // did not contain actual Linux SVG paint for Roboto's rasterized `t`; reserve two
   // in the shared geometry so SVG and PPTX consume the same accepted clearance.
   // Explicit host padding (including zero) remains authoritative.
-  const minimum=(settings.minFontSize??16)*scale,size=Math.max(13*scale,minimum),padding=(options.textRasterPadding??2)*scale;
+  const minimum=snapFontSizeUp((settings.minFontSize??16)*scale),size=gridFontSize(13*scale,minimum),padding=(options.textRasterPadding??2)*scale;
   if(![width,height,scale,minimum,padding].every(Number.isFinite)||width<=0||height<=0||minimum<=0||padding<0)throw new RangeError('Furniture requires finite positive dimensions and nonnegative raster padding.');
   const number=options.slideNumber??(options.slideIndex??0)+1;
   if(!Number.isSafeInteger(number)||number<1)throw new RangeError('Displayed slide number must be a positive safe integer.');
@@ -679,7 +681,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
         if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
         const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,zone,padding):undefined;
         const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
-        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:13*scale,minFontSize:minimum,box,alignment:zone,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
+        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:size,minFontSize:minimum,box,alignment:zone,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
@@ -753,7 +755,7 @@ export function measureText(text: string, fontSize: number): number {
   return units * fontSize;
 }
 export function wrapText(text: string, width: number, fontSize: number, measure: MeasureTextWidth = measureText): string[] {
-  return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true).lines;
+  return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true,false).lines;
 }
 export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFontSize = 16, measure: MeasureTextWidth = measureText): SourceTextFit {
   if (![box.width, box.height, requestedSize, minFontSize].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || requestedSize <= 0 || minFontSize <= 0) {
@@ -762,13 +764,29 @@ export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFon
   return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true);
 }
 
-/** At most 65 layout trials, including the floor even for unusually large requests. */
-function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,requested:number,minimum:number,step=1):T {
+/**
+ * PowerPoint stores a run size (`sz`) in hundredths of a point, and composition pixels are CSS pixels (96 per
+ * inch, so a point is 4/3 px). Every composed font size is therefore a whole multiple of 0.01 pt, which is
+ * 1/75 px: the preview then measures, breaks and draws exactly the size the export writes (RR-16).
+ * The tolerance absorbs binary rounding noise (a size already on the grid must not drop a step).
+ */
+export const FONT_SIZE_GRID_PER_PX=75;
+const FONT_GRID_EPSILON=1e-6;
+/** Largest grid size not above `px`. Rounding down keeps a size that fit before snapping fitting. */
+export function snapFontSizeDown(px:number):number { return Math.max(px>0?1:-Infinity,Math.floor(px*FONT_SIZE_GRID_PER_PX+FONT_GRID_EPSILON))/FONT_SIZE_GRID_PER_PX; }
+/** Smallest grid size not below `px`. Used for readability floors, so a floor is never undercut. */
+export function snapFontSizeUp(px:number):number { return Math.max(px>0?1:-Infinity,Math.ceil(px*FONT_SIZE_GRID_PER_PX-FONT_GRID_EPSILON))/FONT_SIZE_GRID_PER_PX; }
+/** The composed size for an unsnapped request: on the 0.01 pt grid and never below the (grid-rounded) floor. */
+function gridFontSize(raw:number,minimum:number):number { return Math.max(snapFontSizeUp(minimum),snapFontSizeDown(raw)); }
+/** At most 65 layout trials, including the floor even for unusually large requests. Trial sizes stay anchored to
+ * the unsnapped request (no accumulated drift), are snapped down to the 0.01 pt grid and are clamped to the floor. */
+function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,requested:number,minimum:number,step=1,snap=true):T {
   const start=Math.max(requested,minimum);
   if(![start,minimum,step].every(value=>Number.isFinite(value)&&value>0))throw new RangeError('Readable font sizes and fitting steps must be finite and positive.');
   for(let trial=0;trial<=64;trial++) {
-    const size=trial===64?minimum:Math.max(minimum,start-trial*step),result=layout(size);
-    if(!result.overflow||size===minimum)return result;
+    const raw=start-trial*step,last=trial===64||raw<=minimum;
+    const size=!snap?(last?minimum:Math.max(minimum,raw)):last?snapFontSizeUp(minimum):gridFontSize(raw,minimum),result=layout(size);
+    if(!result.overflow||last)return result;
   }
   throw new Error('Text fitting did not evaluate its bounded floor trial.');
 }
@@ -827,7 +845,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     [quote.attribution, quote.source].some(field => field !== undefined && typeof field !== 'string')) {
     throw new TypeError('Quote content must be a string or a text object with optional string attribution/source.');
   }
-  const scale = options.scale ?? 1, minimum = (options.minFontSize ?? 16) * scale;
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) ||
     box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) {
     throw new RangeError('Quote dimensions, scale and minimum font size must be finite and positive.');
@@ -843,7 +861,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath};
     const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
     // An explicit readability floor can raise the nominal size.
-    const requestedFontSize = Math.max(fontSize * scale, minimum);
+    const requestedFontSize = gridFontSize(fontSize * scale, minimum);
     const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style};
     parts.push(part);
     return part;
@@ -987,7 +1005,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       metric.trend!==undefined&&!['up','down','flat'].includes(metric.trend)) {
     throw new TypeError('Metric content requires a finite numeric or string value and schema-valid display metadata.');
   }
-  const scale=options.scale??1,minimum=(options.minFontSize??16)*scale;
+  const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale);
   const rasterPadding=(options.textRasterPadding??1)*scale,hasOutlines=options.textMeasurement?.outlineBounds!==undefined;
   if (![box.x,box.y,box.width,box.height,box.x+box.width,box.y+box.height,scale,minimum,Math.max(76*scale,minimum)*1.22].every(Number.isFinite) ||
       box.width<=0||box.height<=0||scale<=0||minimum<=0) {
@@ -1005,7 +1023,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const nominal=role==='value'?Math.min(76*scale,box.height*.28):(role==='description'?20:role==='trend'?18:23)*scale;
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fonts?.heading:options.fonts?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
-      box:{...box,height:0},requestedFontSize:Math.max(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
+      box:{...box,height:0},requestedFontSize:gridFontSize(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
     parts.push(part);
   }
@@ -1055,7 +1073,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     // Derive sizes from the requested size: repeated subtraction accumulates rounding
     // error and can add an extra trial at very small floors.
     for (let step=0;step<=76;step++) {
-      const size=Math.max(minimum,primary.requestedFontSize-step*scale);
+      const size=gridFontSize(primary.requestedFontSize-step*scale,minimum);
       const natural=measure(primary,size,area.width);
       const fit={...natural,overflow:!!natural.placement?.overflow||singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
       if (!fit.overflow||size===minimum) return fit;
@@ -1066,7 +1084,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   let selected:Candidate|undefined,attempts=0;
   const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-minimum)/scale))));
   for (let reduction=0;reduction<=reductions;reduction++) {
-    const measured=new Map(metadata.map(part=>[part,measure(part,Math.max(minimum,part.requestedFontSize-reduction*scale),box.width)]));
+    const measured=new Map(metadata.map(part=>[part,measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),box.width)]));
     const measuredUnit=unit?measured.get(unit):undefined;
     const unitWidth=unit&&measuredUnit?naturalWidth(unit,measuredUnit):0;
     const unitFit=unit&&measuredUnit&&unitWidth>0?place(unit,measuredUnit,unitWidth):measuredUnit;
@@ -1180,7 +1198,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     timeline.events.some(event=>!event||typeof event.what!=='string'||[event.when,event.description].some(field=>field!==undefined&&typeof field!=='string'))) {
     throw new TypeError('Timeline content requires ordered events with string labels and optional string metadata.');
   }
-  const scale=options.scale??1,minimum=(options.minFontSize??16)*scale,padding=(options.textRasterPadding??1)*scale;
+  const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale;
   if(![box.x,box.y,box.width,box.height,scale,minimum,padding].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding.');
   if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
   const outlines=options.textMeasurement?.outlineBounds!==undefined;
@@ -1190,7 +1208,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,size:number,weight:number,eventIndex?:number)=>{
     if(text===undefined)return;
     const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:weight,italic:false,path:partPath};
-    source.push({role,eventIndex,path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:Math.max(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
+    source.push({role,eventIndex,path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
   timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,16,500,index);add('what',event.what,`${eventPath(index)}.what`,16,500,index);add('event-description',event.description,`${eventPath(index)}.description`,16,500,index);});
@@ -1226,7 +1244,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       let score=0;
       const report=(part:TimelineTextPart,reason:TimelineLayoutDiagnostic['reason'],message:string,excess=1)=>{diagnostics.push({code:'text-overflow',reason,path:part.path,message});score+=Math.max(1,excess);};
       const place=(part:TimelineTextPart,x:number,y:number,width:number,alignment:TimelineTextPart['alignment'])=>{
-        const measured=measure(part,Math.max(minimum,part.requestedFontSize-reduction*scale),Math.max(scale,width),alignment);
+        const measured=measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),Math.max(scale,width),alignment);
         const area={x,y,width:Math.max(scale,width),height:Math.max(scale,measured.height)},placement=outlines?placeTextLines(measured.ink,area,alignment,padding):undefined;
         const fit={...measured.fit,...(placement?{placement}:{}),overflow:measured.fit.overflow||!!placement?.overflow};
         const accepted={...part,box:area,alignment,fit};parts.push(accepted);
@@ -1329,7 +1347,7 @@ function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:n
 }
 
 /** Retain exact source ranges and position tabs without passing control characters to a font shaper. */
-function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false):SourceTextFit {
+function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true):SourceTextFit {
   const layout=(fontSize:number):CodeTextFit=>{
     const tabWidth=measure(' ',fontSize)*4;
     if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Text tabs require a positive finite measured space advance.');
@@ -1381,7 +1399,7 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
     return {lines:sourceLines.map(line=>text.slice(line.start,line.end)),sourceLines,fontSize,lineHeight,tabSize:4,tabWidth,
       overflow:sourceLines.length*lineHeight>box.height+.01||sourceLines.some(line=>line.width>box.width+.01)};
   };
-  return fitAtSizes(layout,size,minimum,step);
+  return fitAtSizes(layout,size,minimum,step,snap);
 }
 
 /** Shared filename/language/body allocation. Consumers must reuse the accepted fits and styles. */
@@ -1390,7 +1408,7 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   if (!code||Array.isArray(code)||typeof code.source!=='string'||[code.language,code.filename].some(field=>field!==undefined&&typeof field!=='string')) {
     throw new TypeError('Code content must be a string or source object with optional string language/filename.');
   }
-  const scale=options.scale??1,minimum=(options.minFontSize??16)*scale;
+  const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale);
   if (![box.x,box.y,box.width,box.height,box.x+box.width,box.y+box.height,scale,minimum,Math.max(18*scale,minimum)*1.22].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0) {
     throw new RangeError('Code dimensions, scale and minimum font size must be finite and positive.');
   }
@@ -1400,7 +1418,7 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   const add=(role:CodeTextPart['role'],text:string,partPath:string,generated=false)=>{
     const requestedStyle:TextStyle={fontFamily:options.fonts?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
     const part:CodeTextPart={role,path:partPath,text,sources:generated?[]:[{path:partPath,start:0,end:text.length}],generated,box:{...inner},
-      requestedFontSize:Math.max((role==='body'?18:14)*scale,minimum),minFontSize:minimum,requestedStyle,
+      requestedFontSize:gridFontSize((role==='body'?18:14)*scale,minimum),minFontSize:minimum,requestedStyle,
       style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     parts.push(part);return part;
   };
@@ -1490,7 +1508,7 @@ export interface RichTextOptions {
 /** Fit mixed styles without flattening font metrics. Run fontSize is in points. */
 export function fitRichText(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize = 25, minFontSize = 16, options: RichTextOptions = {style:{fontFamily:'sans-serif',fontWeight:400}}): RichTextFit {
   if (![box.width,box.height,requestedSize,minFontSize].every(value=>Number.isFinite(value)&&value>0)) throw new RangeError('Rich text dimensions and font sizes must be finite and positive.');
-  const layout=richTextLayouter(input,box,requestedSize,options);
+  const layout=richTextLayouter(input,box,requestedSize,options,minFontSize);
   return fitAtSizes(layout,requestedSize,richMinimum(input,requestedSize,minFontSize));
 }
 /** Retain the existing relative shrink limit and enforce the floor on painted glyph sizes. */
@@ -1504,7 +1522,7 @@ function richMinimum(input:readonly (string|RichTextRun)[],requested:number,mini
   }
   return visible?floor:minimum;
 }
-function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize: number, options: RichTextOptions): (fontSize:number)=>RichTextFit {
+function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize: number, options: RichTextOptions, minimum=0): (fontSize:number)=>RichTextFit {
   let offset=0;
   const source=input.map((value,runIndex)=>{
     const run:RichTextRun=typeof value==='string'?{text:value}:value;
@@ -1516,15 +1534,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
   });
   const whole=source.map(entry=>entry.run.text).join('');
-  const layout=(fontSize:number):RichTextFit=>{
-    const ratio=fontSize/requestedSize;
+  // Every painted size (the base size and each run's, scripts included) is on the 0.01 pt grid; a size at or above the floor never drops below it.
+  const paint=(raw:number)=>raw>=minimum-1e-6?gridFontSize(raw,minimum):snapFontSizeDown(raw);
+  const layout=(rawFontSize:number):RichTextFit=>{
+    // The authored size ratios follow the unsnapped request; only the painted result is snapped.
+    const fontSize=paint(rawFontSize),ratio=rawFontSize/requestedSize;
     const fragments=(start:number,end:number):RichTextFragment[]=>{
       let x=0;const result:RichTextFragment[]=[];
       for(const entry of source){
         const a=Math.max(start,entry.start),b=Math.min(end,entry.end);if(b<=a)continue;
-        const text=whole.slice(a,b),normalSize=(entry.run.fontSize!==undefined?entry.run.fontSize*4/3:requestedSize)*ratio;
+        const text=whole.slice(a,b),normalSize=entry.run.fontSize!==undefined?entry.run.fontSize*4/3*ratio:fontSize;
         const script=entry.run.superscript||entry.run.subscript;
-        const size=normalSize*(script?0.7:1),baselineShift=entry.run.superscript?-normalSize*.35:entry.run.subscript?normalSize*.2:0;
+        const size=script?paint(normalSize*0.7):paint(normalSize),baselineShift=entry.run.superscript?-normalSize*.35:entry.run.subscript?normalSize*.2:0;
         const measure=textWidthMeasurer(entry.style,options.textMeasurement);
         let cursor=0;
         for(const [index,segment] of text.split('\t').entries()) {
@@ -1589,13 +1610,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
 }
 
 export type ListText = string | readonly (string | RichTextRun)[];
-export type ListValue = ListText | {text:ListText; description?:ListText; level?:number};
+export type ListValue = ListText | {text:ListText; description?:ListText; level?:number; start?:number};
 export interface ListEntryLayout {
   index:number; level:number; textPath?:string; descriptionPath?:string;
   value:ListText; descriptionValue?:ListText;
   text:RichTextFit; description?:RichTextFit;
   textBox:LayoutBox; descriptionBox?:LayoutBox;
-  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number};
+  /**
+   * The entry marker: the bullet glyph, or for a numbered list (`numbering`) the formatted number such as `iv.`.
+   * A numbered marker also carries `number` and its measured `width`; its `style` is the list style with the weight and
+   * slant of the entry's first run, as PowerPoint draws an auto-number in the first run's character formatting.
+   */
+  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number};
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
   bulletImage?:ListBulletImage;
   /**
@@ -1614,6 +1640,11 @@ export interface ListEntryLayout {
 export const PICTURE_BULLET_SCALE=0.65;
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number }
 export interface ListFitOptions extends RichTextOptions {
+  /**
+   * Number the entries instead of bulleting them (the payload's `numbering` field). The hanging indent becomes the larger of
+   * 1.1 em and the widest marker plus 0.3 em, so wide markers never touch their text; unnumbered lists are unchanged.
+   */
+  numbering?:NumberingInput;
   /** Picture bullet for every entry (effective `design.listBullet: "image"` with a resolved icon logo). */
   bulletImage?:ListBulletImage;
 }
@@ -1630,25 +1661,36 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
     const base=options.style.path?`${options.style.path}.${index}`:undefined;
     return {index,level,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
+  const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
+  // A native auto-number takes the weight and slant of the paragraph's first run.
+  const markerStyleFor=(item:typeof source[number]):TextStyle=>{
+    const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
+    return {...options.style,path:item.textPath,fontWeight:first?.bold===undefined?options.style.fontWeight:first.bold?700:400,italic:first?.italic??options.style.italic};
+  };
   const layout=(fontSize:number):ListFit=>{
     let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[];
+    // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
+    const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
+    const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
+    const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
-      const indent=fontSize*1.1,offset=Math.min(box.width,item.level*indent),x=box.x+offset+indent,width=Math.max(1,box.x+box.width-x);
+      const indent=hanging,offset=Math.min(box.width,item.level*indent),x=box.x+offset+indent,width=Math.max(1,box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
-      const text=richTextLayouter(item.runs,textBox,requestedSize,{...options,style})(fontSize);
+      const text=richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
       textBox.height=text.height;lines.push(...text.lines);y+=text.height;
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
         y+=fontSize*.12;descriptionBox={x,y,width,height:box.height};
-        description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*.82,{...options,style:{...options.style,path:item.descriptionPath}})(fontSize*.82);
+        description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*.82,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*.82);
         descriptionBox.height=description.height;lines.push(...description.lines);y+=description.height;
       }
       overflow ||= text.overflow||!!description?.overflow;
-      const marker={text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:resolveTextStyle(style,options.textMeasurement),indent},side=fontSize*PICTURE_BULLET_SCALE;
+      const number=numbers?.[item.index];
+      const marker={text:number?number.text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,
-        ...(options.bulletImage?{bulletImage:options.bulletImage,bulletBox:{x:marker.x,y:marker.y-side,width:side,height:side}}:{})});
+        ...(options.bulletImage&&!number?{bulletImage:options.bulletImage,bulletBox:{x:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
     }
     const height=y-box.y;
@@ -1702,7 +1744,7 @@ export interface TableLayout { rows: TableRowLayout[]; columnCount: number; heig
  * All dimensions are canvas pixels; minFontSize is an unscaled canvas size.
  */
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
-  const scale = options.scale ?? 1, minimum = (options.minFontSize ?? 16) * scale, requested = Math.max(15 * scale,minimum);
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(15 * scale,minimum);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
   const grid = tableGrid(value,options.path ?? 'table');
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
@@ -1722,10 +1764,10 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
   const required=(cell:typeof cells[number],natural:boolean)=>{
-    const floor=cellMinimum(cell),size=natural?Math.max(requested,floor):floor;
+    const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(requested,floor):floor,floor);
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:scale};
     const fit=Array.isArray(cell.value)
-      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true})(size)
+      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
       :fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
     return textHeight(fit)+(cell.padding.top+cell.padding.bottom)*scale;
   };
@@ -1829,7 +1871,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   assertComposition(composition);
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
   const gap = (composition.gap ?? 1 / 30) * Math.min(width, height);
-  const minSize = (composition.minFontSize ?? 16) * scale;
+  const minSize = snapFontSizeUp((composition.minFontSize ?? 16) * scale);
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   // One alignment resolution for placement, internal payload layouts and consumers.
@@ -1864,12 +1906,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
     const alignment=explicitAlignment??alignmentFor(field);
-    const richLayout=rich?richTextLayouter(value,box,size,richOptions(style)):undefined;
-    const measure=textWidthMeasurer(style,options.textMeasurement),floor=rich?richMinimum(value,size,minimum):minimum,start=Math.max(size,floor);
+    const richLayout=rich?richTextLayouter(value,box,size,richOptions(style),minimum):undefined;
+    const measure=textWidthMeasurer(style,options.textMeasurement),floor=snapFontSizeUp(rich?richMinimum(value,size,minimum):minimum),start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
     // last trial always evaluates the explicit floor even with unusual callers.
     for(let trial=0;trial<=64;trial++) {
-      const fontSize=trial===64?floor:Math.max(floor,start-trial*scale);
+      const raw=start-trial*scale,last=trial===64||raw<=floor,fontSize=last?floor:gridFontSize(raw,floor);
       const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure);
       const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
@@ -1894,13 +1936,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         return {width:line.width,y:index*fit.lineHeight,baseline:fontSize+index*fit.lineHeight,height:fit.lineHeight,outline};
       });
       const placement=placeTextLines(lines,box,alignment,rasterPadding),result={...fit,placement,overflow:fit.overflow||placement.overflow};
-      if(!result.overflow||fontSize===floor)return result;
+      if(!result.overflow||last)return result;
     }
     throw new Error('Text placement did not evaluate its bounded floor trial.');
   };
-  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string) => field === 'text'
+  // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
+  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(bulletImage?{bulletImage}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path));
   const path = `slides.${options.slideIndex ?? 0}`;
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
@@ -1994,7 +2037,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field] },
+    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field], ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -2055,8 +2098,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
     } else if (text) {
-      const fit = fitContent(node.field,node.value,text,box,25*scale,(settings.minFontSize??16)*scale,node.path);
-      const reduction = Math.max(0,25 * scale - fit.fontSize) / scale;
+      const fit = fitContent(node.field,node.value,text,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
+      const reduction = Math.max(0,snapFontSizeDown(25 * scale) - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
     }
@@ -2128,11 +2171,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
         const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
         const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
-        const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,(settings.minFontSize??16)*scale,node.path) : undefined;
+        const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
           text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
-          ...(bulletImage && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}) });
+          ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -2165,10 +2208,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const container: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
     arrange(chartPrimary === 'left' || chartPrimary === 'top' ? [primary, container] : [container, primary], contentBox, rootSettings, 0);
   } else arrange(pending, contentBox, rootSettings, composition.mode ? 0 : placeholders.length);
-  if (listBullet?.value === 'image' && !bulletImage && items.some(item => item.field === 'items' || item.field === 'bullets')) {
+  if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need design.logo or a primary organization logo; the marker glyph is drawn instead.' });
   }
 
+  // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
+  const numberingDiagnostics: LayoutDiagnostic[] = [];
   for (const item of items) {
     for (const key of ["x", "y", "width", "height"] as const) item.box[key] = round(item.box[key]);
     if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
@@ -2177,6 +2222,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.timelineLayout) diagnostics.push(...item.timelineLayout.diagnostics);
     else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
+    for (const entry of (item.text as ListFit | undefined)?.listEntries ?? []) {
+      if (entry.marker.number?.adapted) numberingDiagnostics.push({ code: "numbering-adapted", path: entry.textPath ?? item.path, message: `Roman numerals stop at 3999; this entry is numbered ${entry.marker.number.value} in arabic, as PowerPoint draws it.` });
+    }
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
@@ -2196,7 +2244,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  diagnostics.push(...slideImageDiagnostics);
+  diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
   return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 

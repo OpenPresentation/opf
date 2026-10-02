@@ -7,6 +7,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Plain text | `{"text":"A useful assertion"}` |
 | Rich text | `{"text":[{"text":"Important","bold":true}," detail"]}` |
 | List | `{"items":["First point","Second point"]}` |
+| Numbered list | `{"items":["First step","Second step"],"numbering":"arabic"}` (also `roman-upper`, `roman-lower`, `alpha-upper`, `alpha-lower`; `{"style":"alpha-lower","start":3,"suffix":"paren"}`; an array is one entry per level; works on `bullets` too) |
 | Image | `{"image":{"src":"asset:diagram","alt":"Description of the diagram"}}` |
 | Video | `{"video":{"src":"asset:demo","title":"Demo"}}` |
 | Table | `{"table":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}` |

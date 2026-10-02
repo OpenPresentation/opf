@@ -83,6 +83,22 @@ opf edit decision.opf.json --patch changes.json --in-place --expect-sha256 "$EXP
 
 The digest compares the exact input bytes, including whitespace. The CLI also rechecks the input before replacing that same path. Writes use a temporary sibling file and atomic publication. Existing destinations require `--force`; `--in-place` explicitly authorizes replacing the input. Symlink and non-regular destinations are rejected. Coordinate concurrent writers externally: the hash check and rename are not a filesystem compare-and-swap or a collaboration lock. There is no persistent undo history; use version control or save a separate output when needed.
 
+## Diff, merge and format
+
+Source on `main` (RR-31), not in CLI 0.9.2: check `opf --help`. These commands are local and deterministic. See [patch, diff, merge and format](../../docs/patch-diff-merge-format.md) for the matching rules, conflict objects and key order.
+
+```sh
+opf diff before.opf.json after.opf.json                 # readable report
+opf diff before.opf.json after.opf.json --format patch  # JSON Patch from before to after
+opf diff a.opf.json b.opf.json --exit-code              # exit 1 when they differ
+opf merge base.opf.json ours.opf.json theirs.opf.json --output merged.opf.json
+opf merge base.opf.json ours.opf.json theirs.opf.json --prefer theirs --report conflicts.json --output merged.opf.json
+opf format deck.opf.json --in-place
+opf format decks/*.opf.json --check                     # CI: exit 1 if any file would change (the shell expands the glob)
+```
+
+`diff` matches slides by `id`, then identical content, then content similarity, and reports additions, removals, moves and field, block, design and metadata changes; `--format json` adds the structured changes and `--format patch` prints only the patch, which `opf edit --patch` applies. `merge` combines two edits of a base: changes in different places merge, and conflicts are listed with the base, our and their values and **block the write** (exit 1, report on stderr) unless `--prefer ours|theirs` picks a side, in which case every conflict is still reported. The merged document is validated before it is written. `format` rewrites a file with canonical key order (the schema's property order), two-space indentation, LF endings (`--eol crlf|preserve`) and one trailing newline; it is idempotent and does not validate. `opf edit`, `diff` and `merge` share one RFC 6902 implementation with the editor.
+
 ## Import CSV and JSON data
 
 ```sh
@@ -140,6 +156,9 @@ Bundle inlines every bundled catalog record the document references — includin
 - File-writing commands accept `--strict`. Use `--` before positional filenames that start with `--`.
 - No telemetry, automatic uploads, or execution of instructions inside document text.
 
+## Markdown and outlines
+
+`opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--strict]` converts Markdown in the OPF dialect (YAML front matter, `---` between slides, `#` title, lists, quotes, tables, `chart`, `metric` and `timeline` fences, `Note:` notes, `<!-- slide: ... -->` options) to a validated deck, and `opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]` writes a deck as that Markdown, which `from-md` reads back unchanged. Both print JSON reports and follow the exit codes above; Markdown errors carry `line` and `column`. Not in releases before the one that lists it in the changelog. See the [Markdown guide](../../docs/markdown.md).
 ## Render, export and import
 
 ```sh
