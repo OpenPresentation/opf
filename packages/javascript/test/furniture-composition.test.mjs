@@ -4,7 +4,8 @@ import {composeSlide,layoutFurniture,OPFCompositionError} from '../dist/composit
 import {paginateSlide,paginatePresentation,OPFPaginationError} from '../dist/pagination.js';
 
 const measure=(text,size)=>{assert.ok(!/[\r\n\t]/u.test(text));return [...text].length*size/2;};
-const outlined={measure,outlineBounds:(text,size)=>text.trim()?{x:-2,y:-size,width:measure(text,size)+4,height:size+3}:null};
+// Ink excludes trailing spaces (a space that does not fit hangs at the end of its line, RR-17).
+const outlined={measure,outlineBounds:(text,size)=>text.trim()?{x:-2,y:-size,width:measure(text.trimEnd(),size)+4,height:size+3}:null};
 function sourceRanges(part) {
   let cursor=0,rebuilt='';
   for(const line of part.fit.sourceLines){
