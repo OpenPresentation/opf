@@ -192,7 +192,7 @@ headline.
 
 Any session (supervisor or subagent) resuming this program:
 
-1. Read this file and [burndown.md](burndown.md). The progress log at the end
+1. Read this file, [HANDOFF.md](HANDOFF.md) (the latest supervisor handoff: work in flight, draft PRs with Resume sections, owner actions) and [burndown.md](burndown.md). The progress log at the end
    of the burndown is the latest state, and its Now table says who works on what. Run
    `pnpm report:release -- --live`.
 2. `git fetch` every repository in scope. Work only from fresh `origin/main`
