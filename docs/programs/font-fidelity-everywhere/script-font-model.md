@@ -174,7 +174,7 @@ The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
 | `heading.*` / `body.*` | explicit run `a:rPr` `a:latin` / `a:ea` / `a:cs` for title and body text |
 | `lang` | run `a:rPr@lang` and `a:endParaRPr@lang`, instead of a fixed `en-US`. It is always the curated OOXML tag or an authored region tag, never a bare `zsm` or `no`. |
 | `altLang` | omitted. It names the editing-UI language, which OPF does not model. Readers use `lang` when it is absent. |
-| `rtl` + `paragraphDirection(text, direction)` | paragraph `a:pPr@rtl="1"` only for paragraphs that `paragraphDirection()` makes right-to-left, and master default levels only when the deck is right-to-left. Alignment stays the composed absolute alignment (FF-07). |
+| `rtl` + `paragraphDirection(text, direction)` | paragraph `a:pPr@rtl="1"` only for paragraphs that `paragraphDirection()` makes right-to-left, and master default levels only when the deck is right-to-left. Alignment is logical for right-to-left text: `algn="r"` for the authored `left` (RR-05, [Layout direction](#layout-direction-rr-05)). |
 
 **Latin-only decks.** The resolver reports the chosen heading/body family for `ea` and
 `cs` (`sources` is `"latin"`), so run-level `a:ea`/`a:cs` and the preview have a face
@@ -204,7 +204,8 @@ four things, and no others:
 2. **Direction.** `rtl` for right-to-left scripts (Arabic, Hebrew, Syriac,
    Thaana and the other scripts listed under [Direction](#model)): PPTX
    paragraph `rtl="1"` by `paragraphDirection()`, master default levels, and
-   the preview's `direction`/`dir`.
+   the preview's `direction`/`dir`. The same value mirrors the layout: see
+   [Layout direction](#layout-direction-rr-05).
 3. **The script font slots.** The slot the language's script uses (`ea` for
    CJK, `cs` for Arabic, Hebrew, Indic, Thai and the other complex scripts)
    takes the language's script font from its catalog record (`fontScheme`, or
@@ -333,6 +334,25 @@ that is empty or different (`theme-script-slot`).
 - Strong characters follow UAX #9 rule P2: text inside directional isolates is skipped, and LRM/RLM/ALM count. Letters are strong; letters of right-to-left scripts (Bidi_Class R/AL) are right-to-left. No locale data is used, only the JavaScript engine's Unicode tables.
 
 The PPTX exporter writes `rtl="1"` on exactly those paragraphs. The renderer sets the SVG/HTML `direction` of each paragraph from the same function.
+
+Since RR-05 composition computes this once per paragraph, not per line: `TextFit.directions` (and `ListEntryLayout.direction`, `TableCellLayout.direction`) carry the direction of the paragraph each displayed line belongs to, using `paragraphDirectionAt(text, direction)`, which maps a source offset to its paragraph (the text between hard line breaks). A wrapped Arabic paragraph whose last line holds only Latin words, or an English paragraph whose last line holds only digits, therefore keeps its paragraph's direction on every line, in the preview and in the PPTX.
+
+## Layout direction (RR-05)
+
+The deck direction is the direction of the presentation `language`'s script (`resolveScriptFonts().direction`, also `resolveSlideDirection(presentation, slideIndex)`); `composeSlide` reads it from `options.presentation` or from an explicit `options.direction`. It is **deck level**: a left-to-right deck that holds Arabic phrases (`scripts-inside-latin`) is not mirrored, and a right-to-left deck mirrors even when one slide holds only English. A left-to-right deck composes exactly as before RR-05 (no `direction`, no `directions`).
+
+In a right-to-left deck:
+
+- **Alignment is logical.** The authored or default `left` alignment means *start*, `right` means *end*, `center` is unchanged. A right-to-left paragraph aligned `left` is drawn against the right edge; a left-to-right paragraph (an English quote, code) keeps the left edge. The decision is per paragraph (`physicalAlignment(alignment, direction)`). `item.alignment` stays the logical authored value and `placement.lines[i].alignment` records the physical edge.
+- **The arrangement mirrors.** Grid columns, the `left`/`center`/`right` region names, a banded slide image, the cover logo and the header/footer zones swap sides inside their container. Track sizes, weights and the scoring are unchanged; only each box moves to its mirrored place, at every nesting level. Header/footer zones keep their authored name (`zone`) and carry the physical edge in `alignment`.
+- **Lists.** An entry whose own paragraph is right-to-left puts its marker at the right (`marker.anchor: "end"`, `marker.x` is the right edge), its text column to the left of the marker, and nested levels step in from the right. A Latin entry keeps the left-to-right list shape.
+- **Tables** lay the columns out from the right (the first column is the rightmost; indices stay logical) and each cell reports its own paragraph direction. The PPTX writes `a:tblPr rtl="1"`.
+- **Metric** blocks align per their own text direction; **timelines** run right to left (the first event at the right; a vertical rail runs at the right).
+- **Charts**: column, line and area charts reverse their category axis (`c:catAx` orientation `maxMin`), which puts the value axis at the right, as PowerPoint draws a chart with reversed categories. Bar charts keep their vertical category axis.
+
+Why the composition mirrors, not only the text: an Arabic or Hebrew author reads a slide from the right, so a two-column slide's first column, a table's first column and a list's markers belong at the right. PowerPoint does not mirror a slide when a paragraph is set right to left (the paragraph flips its bullet side and its start edge only, and `a:tblPr rtl` is the one structural switch), so OPF applies the rule to the whole composition from the language, and the preview and the export read the same geometry.
+
+PPTX mapping (native evidence of 2026-10-01 and the follow-up set, see [rr-05-rtl-layout.md](../release-readiness/rr-05-rtl-layout.md)): `a:pPr@algn` is physical (`rtl="1"` with `algn="l"` hugs the left edge with the bullet at the right of the text, which is what the earlier export drew); `marL` and `indent` are the start-side margin and hanging indent, so `rtl="1" algn="r" marL=m indent=-m` hangs the bullet at the right; PowerPoint orders a Latin phrase inside a run tagged with a right-to-left `lang` as separate items (`v2.0` read `2.0v`), so the exporter writes each Latin phrase (letters, joining spaces and word punctuation, and the digits of the phrase) as its own `en-US` run and keeps digits that touch Arabic words in the Arabic run.
 
 ## Renderer (FF-19)
 

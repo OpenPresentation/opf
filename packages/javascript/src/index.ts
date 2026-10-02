@@ -152,7 +152,8 @@ export {
   textColorForFill,
 } from './color.js';
 export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
-export { paragraphDirection, resolveScriptFonts, scriptFontRole } from './script-fonts.js';
+export { paragraphDirection, resolveScriptFonts, resolveSlideDirection, scriptFontRole } from './script-fonts.js';
+export { paragraphDirectionAt, physicalAlignment, type PhysicalAlignment } from './direction.js';
 export type {
   ResolveScriptFontsOptions,
   ResolvedScriptFonts,

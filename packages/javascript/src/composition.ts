@@ -2,6 +2,9 @@ import {tableGrid,type TableCellStyle} from './table.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {visualReadingOrder} from './reading-order.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
+import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
+import {resolveSlideDirection} from './script-fonts.js';
+export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {listNumbers,type ListNumber,type NumberingInput} from './numbering.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
@@ -117,7 +120,11 @@ export function measureTextOutline(text: string, fontSize: number, style: TextSt
   return {x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height};
 }
 export interface TextLineInk { width: number; y: number; baseline: number; height: number; outline: LayoutBox | null }
-export interface TextPlacementLine { x: number; y: number; baseline: number; height: number; width: number; outline: LayoutBox | null }
+export interface TextPlacementLine {
+  x: number; y: number; baseline: number; height: number; width: number; outline: LayoutBox | null;
+  /** Physical alignment this line was placed with. Present only in a right-to-left deck, where `left` and `right` are logical start and end. */
+  alignment?: PhysicalAlignment;
+}
 export interface TextPlacement {
   alignment: 'left' | 'center' | 'right';
   /** Reference-pixel clearance around vector outlines; not a universal raster guarantee. */
@@ -126,14 +133,23 @@ export interface TextPlacement {
   height: number;
   overflow: boolean;
 }
-export interface TextFit { lines: string[]; fontSize: number; lineHeight: number; overflow: boolean; placement?: TextPlacement }
+export interface TextFit {
+  lines: string[]; fontSize: number; lineHeight: number; overflow: boolean; placement?: TextPlacement;
+  /**
+   * Base direction of the paragraph each line belongs to, in line order. Present only when the fit was
+   * made for a right-to-left deck; every wrapped line shares its paragraph's direction (RR-05).
+   */
+  directions?: TextDirection[];
+}
 /** Place complete measured lines, preserving alignment where it leaves room for ink.
  * Move following baselines together when outlines need more vertical separation. */
-export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, alignment: TextPlacement['alignment']='left', rasterPadding=0): TextPlacement {
+export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, alignment: TextPlacement['alignment']='left', rasterPadding=0, directions?: readonly TextDirection[]): TextPlacement {
   if (!Array.isArray(lines)||!box||![box.x,box.y,box.width,box.height,rasterPadding].every(Number.isFinite)||box.width<=0||box.height<=0||rasterPadding<0||!['left','center','right'].includes(alignment)) throw new RangeError('Text placement requires lines, finite positive dimensions, nonnegative padding and a valid alignment.');
-  const factor=alignment==='right'?1:alignment==='center'?.5:0,placed:TextPlacementLine[]=[];
+  const placed:TextPlacementLine[]=[];
   let shift=0,bottom=box.y,height=0,overflow=false;
-  for(const line of lines) {
+  for(const [lineIndex,line] of lines.entries()) {
+    // Logical alignment: a right-to-left line starts at the right edge (RR-05).
+    const lineAlignment=physicalAlignment(alignment,directions?.[lineIndex]),factor=lineAlignment==='right'?1:lineAlignment==='center'?.5:0;
     if(!line||![line.width,line.y,line.baseline,line.height].every(Number.isFinite)||line.width<0||line.height<=0||line.y<0||line.baseline<line.y) throw new RangeError('Text lines require finite coordinates, nonnegative advances and a baseline at or below their top.');
     const ink=line.outline;
     if(ink!==null&&(!ink||![ink.x,ink.y,ink.width,ink.height].every(Number.isFinite)||ink.width<0||ink.height<0)) throw new RangeError('Text outlines must be null or finite coordinates with nonnegative dimensions.');
@@ -148,7 +164,7 @@ export function placeTextLines(lines: readonly TextLineInk[], box: LayoutBox, al
     if(outline)bottom=outline.y+outline.height+rasterPadding;
     height=Math.max(height,y+line.height-box.y,outline?bottom-box.y:0);
     if(line.width>box.width+.01||height>box.height+.01)overflow=true;
-    placed.push({x,y,baseline,height:line.height,width:line.width,outline});
+    placed.push({x,y,baseline,height:line.height,width:line.width,outline,...(directions?{alignment:lineAlignment}:{})});
   }
   return {alignment,rasterPadding,lines:placed,height,overflow};
 }
@@ -258,7 +274,7 @@ export interface ResolvedLogo { source: unknown; path: string; variant: string; 
  * centered heading group. Consumers fit the image inside `box` preserving its aspect ratio,
  * anchored left and vertically centered; content slides never carry one.
  */
-export interface ComposedLogo { box: LayoutBox; slot: 'lockup'; path: string; source: unknown; variant: string; anchor: 'left' }
+export interface ComposedLogo { box: LayoutBox; slot: 'lockup'; path: string; source: unknown; variant: string; anchor: 'left' | 'right' }
 /** Picture bullet source for list markers: the deck's icon logo and the OPF path it was read from. */
 export interface ListBulletImage { source: unknown; path: string }
 export interface ComposedGroup { path: string; box: LayoutBox; contentBox: LayoutBox; composition: Composition }
@@ -330,11 +346,13 @@ export interface SlideComposition {
    * footer band, the content area is shrunk by exactly its height. Absent on slides without markers.
    */
   footnotes?: ComposedFootnotes;
+  /** `rtl` when the slide was composed for a right-to-left deck (mirrored arrangement); absent for left-to-right decks. */
+  direction?: 'rtl';
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
@@ -357,6 +375,13 @@ export interface ComposeSlideOptions {
    */
   date?: string;
   fonts?: Partial<FontFamilies>;
+  /**
+   * Deck base direction (RR-05). Defaults to the direction of the presentation language's script. In a right-to-left deck
+   * composition mirrors the arrangement (the first column or `left` region is drawn at the right, slide images, logos and
+   * header/footer zones swap sides, tables run right to left), lists put their markers at the right, and every text fit
+   * reports each paragraph's direction. Alignment stays logical: `left` is the start edge.
+   */
+  direction?: TextDirection;
   /** Host-resolved alignment for shared content; slide design can override it. */
   contentAlignment?: 'left' | 'center' | 'right';
   titleAlignment?: 'left' | 'center' | 'right';
@@ -423,15 +448,18 @@ export function slideImageShape(kind: SlideImageShape['kind'], box: LayoutBox, c
   return { kind: 'rectangle', preset: 'rect', adjust: {}, path: rect };
 }
 
-function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[]): ComposedSlideImage | undefined {
+function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[], rtl = false): ComposedSlideImage | undefined {
   const own = record(slide.design), deck = record(record(presentation).design);
   const local = own.slideImage !== undefined;
   const configured: unknown = local ? own.slideImage : deck.slideImage;
   if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
   const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
   const alignment = typeof layout.slideImageAlignment === 'string' ? layout.slideImageAlignment.toLowerCase() : undefined;
-  const position = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
-  if (!SLIDE_IMAGE_POSITIONS.includes(position)) return undefined;
+  const authoredPosition = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
+  if (!SLIDE_IMAGE_POSITIONS.includes(authoredPosition)) return undefined;
+  // A right-to-left deck mirrors a banded image: `left` is the start side, drawn at the right.
+  const mirrorSide = <T extends string>(side: T): T => !rtl ? side : side === 'left' ? 'right' as T : side === 'right' ? 'left' as T : side;
+  const position = mirrorSide(authoredPosition);
   const designSource = treatment ? treatment.src : configured;
   // A root image with the same source (or one a source-less treatment places) is the slide image, not content.
   const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
@@ -471,7 +499,7 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   else if (record(t.recolor).dark !== undefined && record(t.recolor).light !== undefined) result.recolor = { type: 'duotone', dark: t.recolor.dark, light: t.recolor.light };
   const overlay = record(t.overlay), overlayOpacity = finite(overlay.opacity, 0, 1);
   if (overlay.color !== undefined && overlayOpacity !== undefined) {
-    const edge = ['top', 'bottom', 'left', 'right'].includes(overlay.edge) ? overlay.edge as string : undefined;
+    const edge = ['top', 'bottom', 'left', 'right'].includes(overlay.edge) ? mirrorSide(overlay.edge as string) : undefined;
     if (edge && kind !== 'rectangle') diagnostics.push({ code: 'unsupported-image-treatment', path: `${designPath}.overlay.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow a rounded, circular or hexagonal mask as one native shape. Remove edge or use shape rectangle.' });
     else {
       const part = finite(overlay.size, 0.05, 1) ?? 0.3;
@@ -636,6 +664,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const slide=record(input),width=options.width??1280,height=options.height??720,scale=Math.min(width,height)/720;
   const settings:Composition={...record(record(options.layout).composition),...record(slide.composition)};
   assertComposition(settings);
+  const furnitureRtl=(options.direction??resolveSlideDirection(options.presentation,options.slideIndex))==='rtl';
   // Standalone furniture can sit directly at a field edge. One reference pixel
   // did not contain actual Linux SVG paint for Roboto's rasterized `t`; reserve two
   // in the shared geometry so SVG and PPTX consume the same accepted clearance.
@@ -662,7 +691,10 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     configured=true;
     const zones:FurniturePart[][]=[];
     for(const [index,zone]of (['left','center','right'] as const).entries()){
-      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+index*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
+      // Right to left: the authored `left` zone is drawn at the right and `right` at the left; `zone` keeps the authored name.
+      // `alignment` is the physical edge the zone's text sits on (never flipped again by line direction).
+      const side=furnitureRtl&&zone!=='center'?(zone==='left'?'right':'left'):zone;
+      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+(furnitureRtl?2-index:index)*.3),zoneWidth=width*.26,zoneParts:FurniturePart[]=[];let y=0;
       const add=(field:FurniturePartBase['field'],text:unknown,generated=false,sourcePath?:string,extras:FurnitureTextExtras={})=>{
         if(text===undefined)return;
         if(typeof text!=='string')throw new TypeError(`Furniture field ${path}.${field} requires string content.`);
@@ -676,12 +708,12 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
           }
           return {width:line.width,y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline};
         });
-        const natural=outlines?placeTextLines(ink,{x,y,width:zoneWidth,height:Number.MAX_VALUE},zone,padding):undefined;
+        const natural=outlines?placeTextLines(ink,{x,y,width:zoneWidth,height:Number.MAX_VALUE},side,padding):undefined;
         const partHeight=natural?.height??fit.sourceLines.length*fit.lineHeight;
         if(!Number.isFinite(partHeight))throw new RangeError('Furniture exceeds finite layout coordinates.');
-        const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,zone,padding):undefined;
+        const box={x,y,width:zoneWidth,height:Math.max(scale,partHeight)},placement=outlines?placeTextLines(ink,box,side,padding):undefined;
         const accepted={...fit,...(placement?{placement}:{}),overflow:fit.overflow||!!placement?.overflow};
-        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:size,minFontSize:minimum,box,alignment:zone,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
+        zoneParts.push({type:'text',kind,zone,field,path:partPath,sourcePath:sourcePath??(!generated?partPath:undefined),generated,text,style,requestedFontSize:size,minFontSize:minimum,box,alignment:side,fit:accepted,...(extras.fields?.length?{fields:extras.fields}:{}),...(extras.links?.length?{links:extras.links}:{})});
         if(accepted.overflow)error(partPath,'Repeated text exceeds its zone at the selected readability floor; change the furniture or slide design.');
         y+=box.height;
       };
@@ -690,17 +722,17 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       // its left edge, center zone centered, right zone to its right edge. Consumers fit the image inside this box.
       const imageBox=(source:unknown)=>{
         const imageHeight=Math.max(32*scale,Math.min(height*.05,72*scale)),imageWidth=Math.min(zoneWidth,imageHeight*(intrinsicImageAspect(source,record(options.presentation).assets)??1));
-        return {x:zone==='left'?x:zone==='center'?x+(zoneWidth-imageWidth)/2:x+zoneWidth-imageWidth,y,width:imageWidth,height:imageHeight};
+        return {x:side==='left'?x:side==='center'?x+(zoneWidth-imageWidth)/2:x+zoneWidth-imageWidth,y,width:imageWidth,height:imageHeight};
       };
       if(content.logo===true){
         // The deck's icon logo (slide design, deck design, then the primary organization), as a generated image part.
         const resolved=resolveLogo(options.presentation,slide,{slot:'icon',onDark:options.darkBackground,slideIndex:options.slideIndex});
-        if(resolved){const box=imageBox(resolved.source);zoneParts.push({type:'image',kind,zone,field:'logo',path:`${path}.logo`,sourcePath:resolved.path,generated:true,image:resolved.source,box,alignment:zone});y+=box.height;}
+        if(resolved){const box=imageBox(resolved.source);zoneParts.push({type:'image',kind,zone,field:'logo',path:`${path}.logo`,sourcePath:resolved.path,generated:true,image:resolved.source,box,alignment:side});y+=box.height;}
         else error(`${path}.logo`,'Generated logo needs design.logo or a primary organization logo.','unresolved-content');
       }
       if(content.image!==undefined){
         const box=imageBox(content.image);
-        zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:zone});y+=box.height;
+        zoneParts.push({type:'image',kind,zone,field:'image',path:`${path}.image`,sourcePath:`${path}.image`,generated:false,image:content.image,box,alignment:side});y+=box.height;
       }
       add('text',content.text);
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
@@ -761,11 +793,11 @@ export function measureText(text: string, fontSize: number): number {
 export function wrapText(text: string, width: number, fontSize: number, measure: MeasureTextWidth = measureText): string[] {
   return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true,false).lines;
 }
-export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFontSize = 16, measure: MeasureTextWidth = measureText): SourceTextFit {
+export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFontSize = 16, measure: MeasureTextWidth = measureText, direction?: TextDirection): SourceTextFit {
   if (![box.width, box.height, requestedSize, minFontSize].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || requestedSize <= 0 || minFontSize <= 0) {
     throw new RangeError("Text dimensions and font sizes must be finite and positive.");
   }
-  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true);
+  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true,true,direction);
 }
 
 /**
@@ -837,6 +869,8 @@ export interface QuoteLayoutOptions {
   overflow?: Composition['overflow'];
   path?: string;
   textMeasurement?: TextMeasurement;
+  /** Deck direction; in a right-to-left deck every part fit reports its paragraphs' directions (RR-05). */
+  direction?: TextDirection;
 }
 /**
  * Allocate and measure quote body/footer space for composition, rendering and export. Callers must
@@ -888,7 +922,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     17,options.fonts?.body??'sans-serif',500,path) : undefined;
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
   const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum) => usable(area)
-    ? fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement)) : undefined;
+    ? fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction) : undefined;
   const inner = {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
   if (!attribution) body.fit=fit(body,body.box);
   else if (usable(inner) && inner.height>18) {
@@ -1018,8 +1052,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
-  const alignment=options.align??'left';
-  if (!['left','center','right'].includes(alignment)) throw new RangeError('Invalid metric alignment.');
+  const requestedAlignment=options.align??'left';
+  if (!['left','center','right'].includes(requestedAlignment)) throw new RangeError('Invalid metric alignment.');
   const sourcePath=options.path??'metric',parts:MetricTextPart[]=[],diagnostics:MetricLayoutDiagnostic[]=[];
   for (const role of ['value','unit','label','description','delta','trend'] as const) {
     const sourceValue=metric[role];
@@ -1033,6 +1067,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     parts.push(part);
   }
   const primary=parts[0]!,metadata=parts.filter(part=>part!==primary&&part.visible),unit=metadata.find(part=>part.role==='unit');
+  // Logical alignment (RR-05): in a right-to-left deck a metric whose own text is right-to-left starts at the right edge.
+  const metricDirection:TextDirection|undefined=options.direction==='rtl'?paragraphDirection((['label','description','unit'] as const).map(role=>parts.find(part=>part.role===role)?.text).find(Boolean)??primary.text,'rtl'):undefined;
+  const alignment=physicalAlignment(requestedAlignment,metricDirection);
   const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height,area.x+area.width,area.y+area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
   const occupied=(fit:CodeTextFit)=>fit.placement?.height??fit.lines.length*fit.lineHeight;
   const gap=8*scale,primaryGap=12*scale;
@@ -1066,7 +1103,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const key=JSON.stringify([part.role,size,width]);
     let fit=cache.get(key);
     if (!fit) {
-      fit=fitCodeText(part.text,{...box,width:hasOutlines?Math.max(Number.MIN_VALUE,width-2*rasterPadding):width},size,size,scale,textWidthMeasurer(part.style,options.textMeasurement));
+      fit=fitCodeText(part.text,{...box,width:hasOutlines?Math.max(Number.MIN_VALUE,width-2*rasterPadding):width},size,size,scale,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
       fit=place(part,fit,width);
       if (!Number.isFinite(occupied(fit))) throw new RangeError('Metric text layout exceeds finite coordinates.');
       cache.set(key,fit);
@@ -1171,6 +1208,7 @@ export interface TimelineTextPart {
   text: string;
   sources: {path:string;start:number;end:number}[];
   box: LayoutBox;
+  /** Logical alignment: `left` is the start edge, which a right-to-left line draws at the right (see `fit.directions`). */
   alignment: 'left' | 'center';
   requestedFontSize: number;
   minFontSize: number;
@@ -1206,7 +1244,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale;
   if(![box.x,box.y,box.width,box.height,scale,minimum,padding].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding.');
   if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
-  const outlines=options.textMeasurement?.outlineBounds!==undefined;
+  const outlines=options.textMeasurement?.outlineBounds!==undefined,rtl=options.direction==='rtl';
   if(outlines&&typeof options.textMeasurement?.outlineBounds!=='function')throw new TypeError('Text outline provider must be a function.');
   const path=options.path??'timeline',eventPath=(index:number)=>shorthand?`${path}.${index}`:`${path}.events.${index}`;
   const fonts=resolveFontFamilies(options.fonts),source:TimelineTextPart[]=[];
@@ -1223,7 +1261,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const measure=(part:TimelineTextPart,size:number,width:number,alignment:TimelineTextPart['alignment'])=>{
     const key=JSON.stringify([part.path,size,width,alignment]);let measured=cache.get(key);
     if(measured)return measured;
-    const fit=fitText(part.text,{x:0,y:0,width:Math.max(Number.MIN_VALUE,width-(outlines?2*padding:0)),height:Number.MAX_VALUE},size,size,textWidthMeasurer(part.style,options.textMeasurement));
+    const fit=fitText(part.text,{x:0,y:0,width:Math.max(Number.MIN_VALUE,width-(outlines?2*padding:0)),height:Number.MAX_VALUE},size,size,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
     const ink:TextLineInk[]=fit.sourceLines.map((line,index)=>{
       let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity,hasInk=false;
       if(outlines)for(const segment of line.segments)if(segment.kind==='text'){
@@ -1232,7 +1270,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       }
       return {width:line.width,y:index*fit.lineHeight,baseline:size+index*fit.lineHeight,height:fit.lineHeight,outline:hasInk?{x:left,y:top,width:right-left,height:bottom-top}:null};
     });
-    const placement=outlines?placeTextLines(ink,{x:0,y:0,width,height:Number.MAX_VALUE},alignment,padding):undefined;
+    const placement=outlines?placeTextLines(ink,{x:0,y:0,width,height:Number.MAX_VALUE},alignment,padding,fit.directions):undefined;
     const height=placement?.height??fit.sourceLines.length*fit.lineHeight;
     if(!Number.isFinite(height))throw new RangeError('Timeline text exceeds finite layout coordinates.');
     measured={fit,ink,height};cache.set(key,measured);return measured;
@@ -1250,7 +1288,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       const report=(part:TimelineTextPart,reason:TimelineLayoutDiagnostic['reason'],message:string,excess=1)=>{diagnostics.push({code:'text-overflow',reason,path:part.path,message});score+=Math.max(1,excess);};
       const place=(part:TimelineTextPart,x:number,y:number,width:number,alignment:TimelineTextPart['alignment'])=>{
         const measured=measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),Math.max(scale,width),alignment);
-        const area={x,y,width:Math.max(scale,width),height:Math.max(scale,measured.height)},placement=outlines?placeTextLines(measured.ink,area,alignment,padding):undefined;
+        const area={x,y,width:Math.max(scale,width),height:Math.max(scale,measured.height)},placement=outlines?placeTextLines(measured.ink,area,alignment,padding,measured.fit.directions):undefined;
         const fit={...measured.fit,...(placement?{placement}:{}),overflow:measured.fit.overflow||!!placement?.overflow};
         const accepted={...part,box:area,alignment,fit};parts.push(accepted);
         if(fit.overflow)report(accepted,'text-fit','Timeline field exceeds its readable width; increase its space or split the timeline.');
@@ -1264,12 +1302,13 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
         const lineY=y+Math.max(scale,available)*.46;
         events.forEach((fields,index)=>{
-          const x=start+index*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
+          const x=start+(rtl?count-1-index:index)*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
           markers.push({path:eventPath(index),eventIndex:index,x,y:lineY,radius});let cursor=top;
           for(const part of fields){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);}
         });
       }else{
-        const x=box.x+radius,textX=box.x+24*scale,width=box.width-24*scale;
+        // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
+        const x=rtl?box.x+box.width-radius:box.x+radius,textX=rtl?box.x:box.x+24*scale,width=box.width-24*scale;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;
           for(const part of fields){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;}
@@ -1278,7 +1317,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         });
       }
       for(const marker of markers)if(marker.x-marker.radius<box.x-.01||marker.y-marker.radius<box.y-.01||marker.x+marker.radius>box.x+box.width+.01||marker.y+marker.radius>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}
-      const first=markers[0]!,last=markers.at(-1)!,connector={x1:first.x,y1:first.y,x2:last.x,y2:last.y};
+      const first=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(first.x,last.x),y1:first.y,x2:Math.max(first.x,last.x),y2:last.y}:{x1:first.x,y1:first.y,x2:last.x,y2:last.y};
       const candidate={arrangement,parts,markers,connector,diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
       if(!diagnostics.length)break;
@@ -1347,12 +1386,13 @@ export interface CodeLayout {
 export interface CodeLayoutOptions extends QuoteLayoutOptions {}
 
 /** Fit code without using prose whitespace normalization. The source remains reconstructable. */
-function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth):CodeTextFit {
-  return fitSourceText(text,box,size,minimum,step,measure);
+function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,direction?:TextDirection):CodeTextFit {
+  return fitSourceText(text,box,size,minimum,step,measure,false,true,direction);
 }
 
 /** Retain exact source ranges and position tabs without passing control characters to a font shaper. */
-function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true):SourceTextFit {
+function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection):SourceTextFit {
+  const directionAt=direction==='rtl'?paragraphDirectionAt(text,'rtl'):undefined;
   const layout=(fontSize:number):CodeTextFit=>{
     const tabWidth=measure(' ',fontSize)*4;
     if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Text tabs require a positive finite measured space advance.');
@@ -1408,6 +1448,7 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
     push(end,end,'end');
     const lineHeight=fontSize*1.22;
     return {lines:sourceLines.map(line=>text.slice(line.start,line.end)),sourceLines,fontSize,lineHeight,tabSize:4,tabWidth,
+      ...(directionAt?{directions:sourceLines.map(line=>directionAt(line.start))}:{}),
       overflow:sourceLines.length*lineHeight>box.height+.01||sourceLines.some(line=>line.width>box.width+.01)};
   };
   return fitAtSizes(layout,size,minimum,step,snap);
@@ -1511,6 +1552,8 @@ export interface RichTextOptions {
   textMeasurement?: TextMeasurement;
   /** Use one measured line advance for every line, as native table cells do. */
   uniformLineHeight?: boolean;
+  /** Deck direction. In a right-to-left deck every line reports its paragraph's direction in `directions`. */
+  direction?: TextDirection;
   /**
    * Marker text (`1`, `1,2`) for a run by its dotted path (`${style.path}.${runIndex}`), or undefined.
    * composeSlide supplies the deck numbering from `slideCitations`; a marker fragment is emitted after the run.
@@ -1549,6 +1592,7 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
   const whole=source.map(entry=>entry.run.text).join('');
   // Every painted size (the base size and each run's, scripts included) is on the 0.01 pt grid; a size at or above the floor never drops below it.
   const paint=(raw:number)=>raw>=minimum-1e-6?gridFontSize(raw,minimum):snapFontSizeDown(raw);
+  const directionAt=options.direction==='rtl'?paragraphDirectionAt(whole,'rtl'):undefined;
   const layout=(rawFontSize:number):RichTextFit=>{
     // The authored size ratios follow the unsnapped request; only the painted result is snapped.
     const fontSize=paint(rawFontSize),ratio=rawFontSize/requestedSize;
@@ -1620,7 +1664,8 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         y += height;
       }
     }
-    return {lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01)};
+    return {lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01),
+      ...(directionAt?{directions:ranges.map(range=>directionAt(range.start))}:{})};
   };
   return layout;
 }
@@ -1633,16 +1678,21 @@ export interface ListEntryLayout {
   text:RichTextFit; description?:RichTextFit;
   textBox:LayoutBox; descriptionBox?:LayoutBox;
   /**
+   * `x` is the marker's left edge, or its right edge when `anchor` is `end` (a right-to-left entry, whose marker sits at the right and
+   * whose text box is the column to its left).
    * The entry marker: the bullet glyph, or for a numbered list (`numbering`) the formatted number such as `iv.`.
    * A numbered marker also carries `number` and its measured `width`; its `style` is the list style with the weight and
    * slant of the entry's first run, as PowerPoint draws an auto-number in the first run's character formatting.
    */
-  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number};
+  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end'};
+  /** Paragraph direction of this entry. Present only when the list was fitted for a right-to-left deck. */
+  direction?:TextDirection;
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
   bulletImage?:ListBulletImage;
   /**
    * Where the picture bullet draws: a square of side `marker.fontSize * PICTURE_BULLET_SCALE` whose
-   * bottom sits on the marker baseline (`marker.y`) and whose left edge is `marker.x`. Present with `bulletImage`.
+   * bottom sits on the marker baseline (`marker.y`) and whose left edge is `marker.x` (right edge when `marker.anchor` is `end`).
+   * Present with `bulletImage`.
    */
   bulletBox?:LayoutBox;
 }
@@ -1675,7 +1725,10 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
     const runs=(value:ListText)=>typeof value==='string'?[value]:value;
     if(!Array.isArray(runs(text))||(description!==undefined&&!Array.isArray(runs(description))))throw new TypeError('List text and descriptions must be strings or text runs.');
     const base=options.style.path?`${options.style.path}.${index}`:undefined;
-    return {index,level,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
+    const plain=(value:ListText)=>typeof value==='string'?value:value.map(run=>typeof run==='string'?run:run.text).join('');
+    // A right-to-left deck mirrors the entries whose own paragraph is right-to-left (RR-05).
+    const direction:TextDirection|undefined=options.direction==='rtl'?paragraphDirection(plain(text),'rtl'):undefined;
+    return {index,level,direction,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
   // A native auto-number takes the weight and slant of the paragraph's first run.
@@ -1684,33 +1737,35 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=2
     return {...options.style,path:item.textPath,fontWeight:first?.bold===undefined?options.style.fontWeight:first.bold?700:400,italic:first?.italic??options.style.italic};
   };
   const layout=(fontSize:number):ListFit=>{
-    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[];
+    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[];
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
     const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
-      const indent=hanging,offset=Math.min(box.width,item.level*indent),x=box.x+offset+indent,width=Math.max(1,box.x+box.width-x);
+      const rtl=item.direction==='rtl';
+      const indent=hanging,offset=Math.min(box.width,item.level*indent),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
       const text=richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
-      textBox.height=text.height;lines.push(...text.lines);y+=text.height;
+      textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
         y+=fontSize*.12;descriptionBox={x,y,width,height:box.height};
         description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*.82,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*.82);
-        descriptionBox.height=description.height;lines.push(...description.lines);y+=description.height;
+        descriptionBox.height=description.height;lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));y+=description.height;
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      const marker={text:number?number.text:['•','◦','▪'][item.level%3]!,x:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{})},side=fontSize*PICTURE_BULLET_SCALE;
+      const marker={text:number?number.text:['•','◦','▪'][item.level%3]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,
-        ...(options.bulletImage&&!number?{bulletImage:options.bulletImage,bulletBox:{x:marker.x,y:marker.y-side,width:side,height:side}}:{})});
+        ...(item.direction?{direction:item.direction}:{}),
+        ...(options.bulletImage&&!number?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
     }
     const height=y-box.y;
-    return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01};
+    return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(options.direction==='rtl'?{directions}:{})};
   };
   let minimum=minFontSize;
   for(const item of source) {
@@ -1736,6 +1791,11 @@ export interface TableLayoutOptions {
   fontFamily?: string;
   textMeasurement?: TextMeasurement;
   path?: string;
+  /**
+   * Deck direction. A right-to-left deck lays the columns out right to left: the first column is the rightmost
+   * and each cell's text reports its paragraph direction (RR-05).
+   */
+  direction?: TextDirection;
 }
 export interface TableCellLayout {
   value: unknown;
@@ -1750,6 +1810,8 @@ export interface TableCellLayout {
   textBox: LayoutBox;
   textStyle: TextStyle;
   fit: TextFit | RichTextFit;
+  /** Paragraph direction of the cell text; present only in a right-to-left deck. */
+  direction?: TextDirection;
 }
 export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
 export interface TableLayout { rows: TableRowLayout[]; columnCount: number; height: number; overflow: boolean }
@@ -1775,8 +1837,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
     return Array.isArray(cell.value)
-      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true})
-      : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
+      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
+      : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
   const required=(cell:typeof cells[number],natural:boolean)=>{
@@ -1809,13 +1871,13 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   let overflow=false;
   const rows:TableRowLayout[]=heights.map((height,r)=>({box:{x:box.x,y:ys[r]!,width:box.width,height},cells:[]}));
   for(const cell of cells){
-    const cellBox={x:box.x+cell.column*cellWidth,y:ys[cell.row]!,width:cell.colSpan*cellWidth,height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
+    const cellBox={x:box.x+(options.direction==='rtl'?columnCount-cell.column-cell.colSpan:cell.column)*cellWidth,y:ys[cell.row]!,width:cell.colSpan*cellWidth,height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
     const available=cellBox.height-(cell.padding.top+cell.padding.bottom)*scale;
     const fit=fitCell(cell,available,minimum),height=textHeight(fit);
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
   return {rows,columnCount,height:sum(heights),overflow};
 }
@@ -1882,6 +1944,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
+  const deckDirection: TextDirection = options.direction ?? resolveSlideDirection(options.presentation, options.slideIndex);
+  const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
   const hasCards = record(slide.design).contentBox ?? options.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
@@ -1917,10 +1981,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // whose runs cite or carry footnotes get a marker resolver and a footnote area; others are unchanged.
   const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
-  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(citationMarker?{citationMarker}:{})});
+  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
-    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement));
+    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
     const alignment=explicitAlignment??alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,richOptions(style),minimum):undefined;
     const measure=textWidthMeasurer(style,options.textMeasurement),floor=snapFontSizeUp(rich?richMinimum(value,size,minimum):minimum),start=Math.max(size,floor);
@@ -1928,7 +1992,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // last trial always evaluates the explicit floor even with unusual callers.
     for(let trial=0;trial<=64;trial++) {
       const raw=start-trial*scale,last=trial===64||raw<=floor,fontSize=last?floor:gridFontSize(raw,floor);
-      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure);
+      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure,textDirection);
       const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
         let outline:LayoutBox|null=null;
@@ -1951,7 +2015,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         }
         return {width:line.width,y:index*fit.lineHeight,baseline:fontSize+index*fit.lineHeight,height:fit.lineHeight,outline};
       });
-      const placement=placeTextLines(lines,box,alignment,rasterPadding),result={...fit,placement,overflow:fit.overflow||placement.overflow};
+      const placement=placeTextLines(lines,box,alignment,rasterPadding,fit.directions),result={...fit,placement,overflow:fit.overflow||placement.overflow};
       if(!result.overflow||last)return result;
     }
     throw new Error('Text placement did not evaluate its bounded floor trial.');
@@ -1960,14 +2024,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:{})})
-    : fitText(text,box,size,minimum,widthFor(field,path));
+    : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
   const annotationFit = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, fitPath: string, alignment: 'left'|'center'|'right') =>
     fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
   const annotationOptions = { scale, minFontSize: minSize, fit: annotationFit, textStyle: (fitPath: string) => styleFor('text', fitPath) };
   const slideImageDiagnostics: LayoutDiagnostic[] = [];
-  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics);
+  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics, rtl);
   // Free area for headings and content: the whole slide unless a banded slide image takes one side.
   const area = { left: 0, top: 0, right: width, bottom: height };
   if (slideImage?.position === 'left') area.left = slideImage.region.width;
@@ -2008,8 +2072,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const resolved = resolveLogo(options.presentation, slide, { slot: 'lockup', onDark: options.darkBackground, slideIndex: options.slideIndex });
     if (resolved) {
       const logoHeight = 56 * scale;
-      const box = { x: round(area.left + padding), y: round(headingTop), width: round(Math.max(scale, Math.min(4 * logoHeight, area.right - area.left - 2 * padding))), height: round(logoHeight) };
-      logo = { box, slot: 'lockup', path: resolved.path, source: resolved.source, variant: resolved.variant, anchor: 'left' };
+      const logoWidth = Math.max(scale, Math.min(4 * logoHeight, area.right - area.left - 2 * padding));
+      const box = { x: round(rtl ? area.right - padding - logoWidth : area.left + padding), y: round(headingTop), width: round(logoWidth), height: round(logoHeight) };
+      logo = { box, slot: 'lockup', path: resolved.path, source: resolved.source, variant: resolved.variant, anchor: rtl ? 'right' : 'left' };
     }
   }
   let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
@@ -2086,7 +2151,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
   };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
-    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
@@ -2094,10 +2159,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
     textRasterPadding:options.textRasterPadding,
-    align:alignmentFor('metric'),
+    align:alignmentFor('metric'),direction:textDirection,
   });
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
-    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,
+    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
   });
   // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
   const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, annotationOptions) : undefined;
@@ -2168,10 +2233,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
     const grid = gridGeometry(count, area, cols, actualGap, settings.weights ?? [], mode === "column");
-    const boxes = grid.boxes;
-    if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
+    // Right to left: the first column and the `left` region sit at the right of their container (RR-05). Track sizes,
+    // weights and the scoring above are unchanged; only each box moves to its mirrored place within the container.
+    const mirrored = (box: LayoutBox): LayoutBox => rtl ? { ...box, x: area.x + area.width - (box.x - area.x) - box.width } : box;
+    const boxes = grid.boxes.map(mirrored);
+    if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: rtl ? grid.columns.map(track => ({offset: area.width - track.offset - track.size, size: track.size})) : grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
     nodes.forEach((node, index) => {
-      let box = node.region ? regionBox(node.region, area, actualGap) : boxes[index]!;
+      let box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
       if (node.children) {
         const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
         if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
@@ -2261,7 +2329,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
