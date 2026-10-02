@@ -166,6 +166,11 @@
       "required": [
         "measured"
       ],
+      "dependentRequired": {
+        "sizeAdjust": [
+          "sizeAdjustBasis"
+        ]
+      },
       "properties": {
         "family": {
           "$ref": "#/$defs/family"
@@ -191,6 +196,17 @@
             "type": "string",
             "pattern": "^[A-Za-z0-9 ]{4}$"
           }
+        },
+        "sizeAdjust": {
+          "description": "Preview-only font-size multiplier (RR-38). A renderer scales the replacement's font size by this factor when it measures and draws it, so its advances (and, roughly, its glyph size) match the real font's. It applies only when the face drawn is this row's `family`, and never reaches a PPTX or the geometry core composes. Measured as the sum of the real font's shaped advances over the sum of the replacement's, on the script corpus, regular style; `sizeAdjustBasis` records how. Absent means 1.",
+          "type": "number",
+          "minimum": 0.25,
+          "maximum": 2
+        },
+        "sizeAdjustBasis": {
+          "description": "How `sizeAdjust` was measured: the corpus, the reference font version, the advance ratio it is rounded from and the ink-height ratio for comparison. Required with `sizeAdjust`.",
+          "type": "string",
+          "minLength": 1
         },
         "measured": {
           "oneOf": [

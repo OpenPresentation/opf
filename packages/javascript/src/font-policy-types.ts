@@ -57,6 +57,13 @@ export interface FontReplacement {
    * draws this replacement. `measured` is taken with them off, and a metric claim holds only with them
    * off (Georgia -> Gelasio: Gelasio ligates fi/fl where Georgia does not). */
   disabledFeatures?: string[];
+  /** Preview-only font-size multiplier (RR-38). A renderer scales the replacement's font size by this factor when it
+   * measures and draws it, so its advances approximate the real font's (Arabic Typesetting is 0.64 of Noto Naskh Arabic's
+   * width at the same size). It applies only when the face drawn is `family`, and never reaches a PPTX or the geometry core
+   * composes. Absent means 1. */
+  sizeAdjust?: number;
+  /** How `sizeAdjust` was measured (corpus, reference font version, advance and ink ratios). Present with `sizeAdjust`. */
+  sizeAdjustBasis?: string;
   /** Null when the reference font was not available to the measuring host. */
   measured: FontReplacementMeasurement | null;
   /** Upstream statement of compatibility, when one exists. */
