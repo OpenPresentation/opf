@@ -90,6 +90,22 @@ function contentEastAsianFonts(presentation, deck, report) {
   }
 }
 
+// RR-17 (RR-42 native run, 2026-10-02): Office's theme carries per-language script entries that core's script model does
+// not name, because the language is written in a script core treats as Latin or as the plain complex-script slot:
+// `Viet` (Vietnamese, `vi`) and `Uigh` (Uyghur, `ug`). PowerPoint applies the entry to runs in that language and lists its
+// family in Presentation.Fonts, so the Office default (Viet: Times New Roman / Arial) named a font the deck never uses.
+// The deck's own language entry names the family the deck uses for its text: the theme latin family (major latin in
+// majorFont, minor latin in minorFont); for Uyghur, the complex-script family when the deck selects one. Entries for
+// other languages stay as vendored.
+const LANGUAGE_SCRIPT_SUPPLEMENTS = [[/^vi(?:-|$)/i, "Viet"], [/^ug(?:-|$)/i, "Uigh"]];
+function languageScriptSupplement(deck) {
+  const match = LANGUAGE_SCRIPT_SUPPLEMENTS.find(([tag]) => tag.test(String(deck.lang ?? "")));
+  if (!match) return undefined;
+  const script = match[1];
+  const role = script === "Uigh" && deck.sources?.complexScript && deck.sources.complexScript !== "latin" ? "complexScript" : "latin";
+  return {script, heading: deck.heading?.[role], body: deck.body?.[role]};
+}
+
 const escapeAttribute = value => String(value).replace(/[&<>"']/g, char => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&apos;"}[char]));
 
 /**
@@ -108,8 +124,10 @@ const escapeAttribute = value => String(value).replace(/[&<>"']/g, char => ({"&"
  * Japanese deck writes `ea` only.
  */
 export function themeScriptFonts(xml, plan) {
-  const {heading, body, supplement} = plan.deck;
-  for (const [tag, slots, family] of [["majorFont", heading, supplement?.heading], ["minorFont", body, supplement?.body]]) {
+  const {heading, body} = plan.deck;
+  // Core's supplement (the language's script entry, such as Arab for Uyghur) and the language's own entry (Viet, Uigh).
+  const supplements = [plan.deck.supplement, languageScriptSupplement(plan.deck)].filter((entry, index, all) => entry && all.findIndex(other => other?.script === entry.script) === index);
+  for (const [tag, slots, role] of [["majorFont", heading, "heading"], ["minorFont", body, "body"]]) {
     xml = xml.replace(new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`), block => {
       for (const [element, slot] of SCRIPT_SLOTS) {
         // FF-05: the East Asian slot always names a font (a script font, a font for the East Asian text, else the latin
@@ -120,7 +138,9 @@ export function themeScriptFonts(xml, plan) {
         const face = escapeAttribute(content ?? slots[slot]);
         block = block.replace(new RegExp(`<a:${element}\\b[^>]*/>`), `<a:${element} typeface="${face}"/>`);
       }
-      if (supplement && family) {
+      for (const supplement of supplements) {
+        const family = supplement[role];
+        if (!family) continue;
         const entry = `<a:font script="${supplement.script}" typeface="${escapeAttribute(family)}"/>`;
         const existing = new RegExp(`<a:font script="${supplement.script}" typeface="[^"]*"/>`);
         block = existing.test(block) ? block.replace(existing, entry) : block.replace(`</a:${tag}>`, `${entry}</a:${tag}>`);

@@ -294,6 +294,52 @@ for (const expected of cases) {
   assert.ok(rtl.includes('rtl-language-mismatch'));
 }
 
+// RR-17 (RR-42 native run): the deck language's own Office script entry names the deck's font. Vietnamese is a Latin-script
+// language with its own `Viet` entry (Office default: Times New Roman / Arial), which PowerPoint applies to vi-VN runs and
+// lists in Presentation.Fonts; it now takes the theme latin family, major in majorFont and minor in minorFont, and every
+// other vendored entry is unchanged. Uyghur (`Uigh`) follows the same rule, taking the complex-script family when the deck
+// selects one. Other languages keep the vendored Viet and Uigh entries.
+{
+  const vietnamese = deck('vietnamese-quoc-ngu', {}, 'Tiếng Việt: Quốc Ngữ');
+  const resolved = resolveScriptFonts(vietnamese);
+  assert.equal(resolved.lang, 'vi-VN');
+  assert.equal(resolved.supplement, undefined, 'core names no supplement for a Latin-script language');
+  const {xml} = await read(vietnamese);
+  const vendored = (await read(deck(undefined))).xml;
+  for (const tag of ['majorFont', 'minorFont']) {
+    const ours = themeFonts(xml, tag), theirs = themeFonts(vendored, tag);
+    assert.equal(ours.script('Viet'), ours.latin, `vietnamese ${tag} Viet names the theme latin family`);
+    assert.equal(ours.script('Viet'), tag === 'majorFont' ? resolved.heading.latin : resolved.body.latin);
+    assert.notEqual(theirs.script('Viet'), ours.latin, `a deck without the language keeps the vendored ${tag} Viet entry`);
+    const strip = block => block.replace(/<a:font script="Viet" typeface="[^"]*"\/>/, '').replace(/<a:(?:latin|ea|cs) typeface="[^"]*"\/>/g, '');
+    assert.equal(strip(ours.block), strip(theirs.block), `vietnamese ${tag}: the other per-script entries are unchanged`);
+  }
+  // Every theme part (the slide master's and the notes master's own theme) carries the rule.
+  for (const [name, part] of Object.entries(xml).filter(([name]) => /^ppt\/theme\/theme\d+\.xml$/.test(name))) {
+    assert.ok(!/<a:font script="Viet" typeface="(?:Arial|Times New Roman)"\/>/.test(part), `${name} keeps no Office Viet default`);
+  }
+  // A Latin deck in another language is unchanged.
+  assert.equal(themeFonts((await read(deck('french'))).xml, 'minorFont').script('Viet'), themeFonts(vendored, 'minorFont').script('Viet'));
+  // Uyghur (no bundled record; an inline language record): Arabic script, so core names the Arab supplement when the deck
+  // selects a complex-script font, and the Uigh entry PowerPoint applies to ug-CN runs takes that same family; with no
+  // complex-script font selected, Uigh takes the latin family. Arab follows core's rule as before.
+  const uyghur = fontScheme => ({language: 'uyghur', catalogs: {languages: {records: [{id: 'uyghur', name: 'Uyghur', code: 'UIG', bcp47: 'ug-Arab', ooxmlLang: 'ug-CN', script: 'Arab', direction: 'rtl', ...(fontScheme ? {fontScheme} : {})}]}}, name: 'Uyghur', slides: [{title: 'ئۇيغۇرچە', text: 'Uyghur'}]});
+  for (const [fontScheme, expect] of [['arabic-typesetting', {major: 'Arabic Typesetting', minor: 'Arabic Typesetting', arab: true}], [undefined, {major: 'Aptos Display', minor: 'Aptos', arab: false}]]) {
+    const presentation = uyghur(fontScheme), resolved = resolveScriptFonts(presentation);
+    assert.equal(resolved.lang, 'ug-CN');
+    const {xml: ug} = await read(presentation);
+    const [major, minor] = [themeFonts(ug, 'majorFont'), themeFonts(ug, 'minorFont')];
+    assert.deepEqual([major.script('Uigh'), minor.script('Uigh')], [expect.major, expect.minor], `uyghur (${fontScheme ?? 'no script font'}) Uigh`);
+    if (expect.arab) assert.deepEqual([major.script('Arab'), minor.script('Arab')], [expect.major, expect.minor], 'uyghur keeps core\'s Arab supplement');
+    else assert.deepEqual([major.script('Arab'), minor.script('Arab')], [themeFonts(vendored, 'majorFont').script('Arab'), themeFonts(vendored, 'minorFont').script('Arab')], 'uyghur without a script font keeps the vendored Arab entry');
+  }
+  // Every other language keeps the vendored Viet and Uigh entries (Arabic changes only its own Arab entry).
+  for (const id of ['english-us', 'french', 'arabic', 'japanese']) {
+    const {xml: other} = await read(deck(id));
+    for (const tag of ['majorFont', 'minorFont']) for (const script of ['Viet', 'Uigh']) assert.equal(themeFonts(other, tag).script(script), themeFonts(vendored, tag).script(script), `${id} ${tag} ${script} stays vendored`);
+  }
+}
+
 // Deterministic: the same document exports the same bytes.
 assert.deepEqual((await read(deck('japanese'))).bytes, (await read(deck('japanese'))).bytes);
 

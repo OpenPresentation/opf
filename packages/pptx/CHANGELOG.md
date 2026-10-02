@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- RR-17 (output-changing for Vietnamese and Uyghur decks only; every other language is byte-identical): the theme's per-language script entry for the deck's own language names the deck's font. The RR-42 native run (PowerPoint 365, 2026-10-02) found `Arial` in `Presentation.Fonts` of a Vietnamese deck whose runs and theme slots name only Aptos. The theme kept Office's `<a:font script="Viet" typeface="Times New Roman"/>` (major) and `typeface="Arial"` (minor), which PowerPoint applies to `vi-VN` runs. `Viet` (language `vi`) now takes the theme latin family, the major latin in `a:majorFont` and the minor latin in `a:minorFont`. `Uigh` (language `ug`, Arabic script) takes the complex-script family when the deck selects one, else the latin family; core's own supplement for the script (`Arab` for Uyghur) is still written beside it. The existing complex-script and East Asian entries (core's `resolveScriptFonts` supplement) are unchanged, and so are the entries for other languages. Parts changed for a Vietnamese deck against 0.12.1: `ppt/theme/theme1.xml` and `ppt/theme/theme2.xml` (the two `Viet` entries); English, Arabic and Japanese decks are byte-identical. No fixture changes. Test: `test/script-fonts.mjs` (Vietnamese, Uyghur from an inline language record with and without a complex-script font, and four languages that keep the vendored entries).
+
 ## 0.12.1 (2026-10-02)
 
 Patch release: PowerPoint lists only the deck's fonts (FF-05).
