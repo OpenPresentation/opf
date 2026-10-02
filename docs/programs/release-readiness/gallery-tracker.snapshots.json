@@ -3,7 +3,7 @@
   "gallery": {
     "source": {
       "repository": "Data-Advantage/pptx-gallery",
-      "commit": "5af1c5f8681b1dea4ff6aad54315f47febcdcc4d",
+      "commit": "388139b2e271cd24a7e6553519a34745cfe2ede8",
       "capturedAt": "2026-10-02"
     },
     "kinds": {
@@ -23,7 +23,9 @@
           "media",
           "partner",
           "regulatory",
-          "all-hands"
+          "all-hands",
+          "candidates",
+          "engineering-team"
         ],
         "legacyItems": [],
         "deprecated": [],
@@ -923,7 +925,45 @@
           "sparkline",
           "data-story",
           "change-story",
-          "vision-roadmap"
+          "vision-roadmap",
+          "scqa",
+          "strategic-narrative",
+          "golden-circle",
+          "conference-talk",
+          "transformation-arc",
+          "pitch-deck",
+          "early-startup-pitch",
+          "venture-pitch",
+          "persuasive-sales",
+          "company-intro",
+          "marketing-strategy",
+          "product-launch",
+          "strategic-advisory",
+          "challenge-resolution",
+          "project-proposal",
+          "failure-analysis",
+          "classic-story",
+          "business-narrative",
+          "rags-to-riches",
+          "underdog-victory",
+          "survival-story",
+          "educate",
+          "persuade",
+          "reveal",
+          "justice",
+          "innovation",
+          "focus",
+          "qbr",
+          "business-review",
+          "board-meeting",
+          "weekly-progress",
+          "status-update",
+          "performance-review",
+          "survey-analysis",
+          "trend-analysis",
+          "employee-review",
+          "performance-improvement-plan",
+          "capacity-planning"
         ],
         "legacyItems": [],
         "deprecated": [],
@@ -931,7 +971,7 @@
         "previewAssetsMissing": []
       },
       "purposes": {
-        "page": false,
+        "page": true,
         "items": [
           "inform",
           "decide",
@@ -1882,10 +1922,6 @@
       {
         "title": "Transitions & motion",
         "description": "Per-slide transitions and element-level animation tokens."
-      },
-      {
-        "title": "Aspect ratios",
-        "description": "16:9, 4:3, A4, Letter, and custom canvas profiles."
       }
     ]
   },

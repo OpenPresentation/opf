@@ -142,6 +142,11 @@ dated 2026-10-02 for earlier work are the date they were recorded in [HANDOFF.md
 - 2026-10-02: Mac and Keynote compatibility checks run on the Mac mini; Keynote is opened read-only, never saved, and only by the supervisor (owner request).
 - 2026-10-02: RR-14 stays in-progress until the owner provides the gateway key, decides budget and ZDR and turns the flags on.
 - 2026-10-02: opf-pptx 0.12.2 is released as a patch that carries [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154) only.
+- 2026-10-02: pptx-gallery's no-public-status guard is narrowed from `/\bpipeline:/` to `/(?<!\bsales )\bpipeline:/`, because core's business-review narrative beat says "sales pipeline:" verbatim in `/api/narratives.json`; bare "pipeline:" labels stay forbidden (a gate change, a narrow false-positive fix; supervisor-accepted).
+- 2026-10-02: The 38 gallery narrative pages show only core-provided fields; no presentation text is authored for them (supervisor-accepted).
+- 2026-10-02: The "Aspect ratios" coming-soon cell is removed from the gallery home grid, for a layout reason; the slide-size page is still tracked by [opf#293](https://github.com/OpenPresentation/opf/issues/293) (supervisor-accepted).
+- 2026-10-02: The gallery recommendation fields (density, colours, layouts, slide counts, principles, industries) were authored for the `candidates` and `engineering-team` audiences (supervisor-accepted).
+- 2026-10-02: Open question for the owner: the existing `x-gallery.status` "reconciled" field in pptx.gallery's public catalog index files may count as progress-style metadata under the no-public-status invariant.
 - 2026-10-02: Tracker refresh (RR-00, tracker agent): RR-05 and FF-12 are not closed on the CJK run alone, because it records a `Presentation.Fonts` failure on `lang-ja-meiryo`; FF-41 to FF-45 stay at review or in-progress in the font burndown, because the per-family acceptance is open; FF-27 stays in review for lack of a native renumber observation.
 
 ## Invariants
