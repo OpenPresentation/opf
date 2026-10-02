@@ -120,7 +120,7 @@ const pptx = await toPptx(presentation, options);
 ```
 
 `renderSvg` / `renderSvgDeck` are the local preview. PNG rasterizes that SVG.
-PDF (renderer releases after 0.11.9) converts the same SVG to **vector paths with
+PDF (opf-render 0.12.0 and later) converts the same SVG to **vector paths with
 selectable, searchable text** in embedded font subsets, with no second layout pass;
 pass `{ mode: 'raster' }` for the image-per-slide output that renderers up to 0.11.9
 always wrote. Supply the same font files as for PNG (`fontFiles`); vector PDF never
