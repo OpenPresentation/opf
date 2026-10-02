@@ -15,7 +15,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | layouts | 485 | done 100, descoped 385 | 485 | 0 |
 | color-schemes | 14 | done 14 | 14 | 0 |
 | font-schemes | 93 | done 11, descoped 3, parity-near 19, font-gap 60 | 93 | 0 |
-| languages | 93 | done 65, parity-near 2, font-gap 25, native-mismatch 1 | 93 | 0 |
+| languages | 93 | done 66, parity-near 2, font-gap 25 | 93 | 0 |
 | backgrounds | 6 | done 6 | 6 | 0 |
 | narratives | 48 | done 10, descoped 38 | 48 | 0 |
 | charts | 76 | done 10, deprecated 50, descoped 1, parity-near 15 | 76 | 0 |
@@ -33,7 +33,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 380 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 381 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 50 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
 | `descoped` | 453 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
@@ -44,7 +44,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | `missing-spec` | 0 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
-| `native-mismatch` | 1 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
+| `native-mismatch` | 0 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
 | `missing-export` | 0 | 4 | The PPTX export fails, is not native, or does not re-import to the same value. |
 | `missing-preview` | 0 | 4 | The preview fails or does not change for this value. |
 | `broken` | 0 | 5 | The value does not validate or compose in core. |
@@ -73,7 +73,6 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | Type | Gap | Records | Ids | Detail | Next action | Link |
 | --- | --- | ---: | --- | --- | --- | --- |
 | charts | `missing-export` (descoped) | 1 | `world` | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-impo... | Parked for post-v1 by the owner (2026-10-01): the export stays on the clustered column fallback with a chart-data-adapted diagnostic; an offline native map export is the future work. | [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) |
-| languages | `native-mismatch` | 1 | `vietnamese-quoc-ngu` | presentationFonts: {"extras":["Arial"]} | FF-05 class (RR-17): the exported theme keeps the Office Viet supplement (major Times New Roman, minor Arial), so PowerPoint lists Arial for the vi-VN runs although they draw in Aptos. Fix in opf-pptx: the supplemental entry for the deck language's own script names the family the deck uses for it, in majorFont and minorFont; Viet (and Uigh) takes the theme a:latin family, as the non-Latin entries already take a:cs or a:ea. Then re-run the deck natively. | [RR-17](burndown.md) (in-progress) |
 | purposes | `missing-editor` (descoped) | 9 | `align`, `decide`, `educate`, `inform`, `persuade`, `pitch`, `plan`, `report`, `sell` | opf-editor 0.11.0 has no purposes switch (SWITCH_DIMENSIONS) | Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh). | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | slide-sizes | `missing-editor` (descoped) | 7 | `16:9`, `4:3`, `16:10`, `letter`, `a4`, `widescreen`, `standard` | opf-editor 0.11.0 has no slide-size switch (SWITCH_DIMENSIONS); a theme switch carries its dimensions | Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh). | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | audiences | `missing-gallery` (descoped) | 8 | `candidates`, `customers`, `engineering-team`, `executives`, `investors`, `marketing-team`, `regulators`, `sales-team` | served as catalog JSON only; the gallery has no page for this id | Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead. | [opf#291](https://github.com/OpenPresentation/opf/issues/291) |
@@ -108,5 +107,6 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | Fonts | `docs/programs/font-fidelity-everywhere/font-tracker.json` (168 families, as of 2026-10-02) |
 | Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
 | Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
-| Links | `docs/programs/release-readiness/burndown.md` (53 items) and 11 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
+| Native run (RR-42) | `docs/evidence/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
+| Links | `docs/programs/release-readiness/burndown.md` (53 items) and 10 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
 

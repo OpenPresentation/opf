@@ -17,7 +17,8 @@
     "fontTracker": "docs/programs/font-fidelity-everywhere/font-tracker.json",
     "evidence": "docs/evidence",
     "nativeRuns": [
-      "docs/evidence/rr-42-native-20261002/values.json"
+      "docs/evidence/rr-42-native-20261002/values.json",
+      "docs/evidence/rr-17-viet-supplement-native-20261002/values.json"
     ],
     "burndown": "docs/programs/release-readiness/burndown.md"
   },
@@ -151,18 +152,6 @@
       "link": "https://github.com/OpenPresentation/opf/issues/250",
       "descoped": true,
       "next": "Navigation and motion are deferred out of v1 by the owner (2026-10-01)."
-    },
-    {
-      "id": "native-viet-supplement",
-      "gap": "native-mismatch",
-      "types": [
-        "languages"
-      ],
-      "ids": [
-        "vietnamese-quoc-ngu"
-      ],
-      "link": "RR-17",
-      "next": "FF-05 class (RR-17): the exported theme keeps the Office Viet supplement (major Times New Roman, minor Arial), so PowerPoint lists Arial for the vi-VN runs although they draw in Aptos. Fix in opf-pptx: the supplemental entry for the deck language's own script names the family the deck uses for it, in majorFont and minorFont; Viet (and Uigh) takes the theme a:latin family, as the non-Latin entries already take a:cs or a:ea. Then re-run the deck natively."
     }
   ]
 }

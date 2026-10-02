@@ -1,0 +1,571 @@
+{
+ "schema": "rr-42-native-compare/1",
+ "colorsDir": null,
+ "sets": [
+  "viet-fix"
+ ],
+ "manifests": [
+  "viet-fix/manifest.json"
+ ],
+ "nativeDir": "viet-fix/native",
+ "bands": {
+  "closeInkIoU": 0.65,
+  "reviewInkIoU": 0.4,
+  "closeContentSsim": 0.75,
+  "reviewContentSsim": 0.5
+ },
+ "geometryTolerancePt": 0.05,
+ "gated": [
+  "opened",
+  "complete",
+  "fonts",
+  "themeSlots",
+  "presentationFonts",
+  "themeColors",
+  "shapeCount",
+  "geometry",
+  "background",
+  "pictures",
+  "placeholders",
+  "fields",
+  "charts",
+  "notes",
+  "tags"
+ ],
+ "decks": [
+  {
+   "id": "viet-fix-01-english-us",
+   "set": "viet-fix",
+   "run": "completed",
+   "opened": true,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 1,
+   "slidesRead": 1,
+   "verdict": {
+    "shapeCount": true,
+    "geometry": true,
+    "themeColors": true,
+    "background": true,
+    "pictures": null,
+    "placeholders": null,
+    "tags": true,
+    "opened": true,
+    "fonts": true,
+    "direction": true,
+    "charts": true,
+    "fields": true,
+    "notes": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "slideFamilies": null,
+    "stylesReported": "2/2",
+    "alignmentReported": "2/2",
+    "bulletsReported": "2/2",
+    "languageIdsReported": "2/2",
+    "tableOrderReported": null,
+    "images": {
+     "close": 0,
+     "review": 0,
+     "far": 1,
+     "size-mismatch": 0
+    }
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingFromNative": [],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "fonts": {
+     "shapes": 2,
+     "ok": 2
+    },
+    "direction": {
+     "paragraphs": 2,
+     "ok": 2
+    },
+    "alignment": {
+     "paragraphs": 2,
+     "ok": 2
+    },
+    "bullets": {
+     "paragraphs": 2,
+     "ok": 2
+    },
+    "charts": {
+     "total": 0,
+     "ok": 0
+    },
+    "fields": {
+     "total": 0,
+     "ok": 0
+    },
+    "notes": {
+     "total": 0,
+     "ok": 0
+    },
+    "language": {
+     "runs": 2,
+     "ok": 2
+    },
+    "geometry": {
+     "shapes": 2,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "tableOrder": {
+     "tables": 0,
+     "ok": 0
+    },
+    "slideFamilies": {
+     "slides": 0,
+     "ok": 0
+    },
+    "styles": {
+     "shapes": 2,
+     "ok": 2
+    },
+    "shapesMissing": 0,
+    "shapeCount": {
+     "slides": 1,
+     "ok": 1
+    },
+    "geometryGate": {
+     "shapes": 2,
+     "ok": 2,
+     "maxDeltaPt": 0
+    },
+    "themeColors": {
+     "ok": true,
+     "slots": [
+      {
+       "slot": "dk1",
+       "expected": "000000",
+       "native": "000000",
+       "ok": true
+      },
+      {
+       "slot": "lt1",
+       "expected": "FFFFFF",
+       "native": "FFFFFF",
+       "ok": true
+      },
+      {
+       "slot": "dk2",
+       "expected": "011842",
+       "native": "011842",
+       "ok": true
+      },
+      {
+       "slot": "lt2",
+       "expected": "F0F0F0",
+       "native": "F0F0F0",
+       "ok": true
+      },
+      {
+       "slot": "accent1",
+       "expected": "2874A6",
+       "native": "2874A6",
+       "ok": true
+      },
+      {
+       "slot": "accent2",
+       "expected": "1B4F72",
+       "native": "1B4F72",
+       "ok": true
+      },
+      {
+       "slot": "accent3",
+       "expected": "5499C7",
+       "native": "5499C7",
+       "ok": true
+      },
+      {
+       "slot": "accent4",
+       "expected": "7BDBB2",
+       "native": "7BDBB2",
+       "ok": true
+      },
+      {
+       "slot": "accent5",
+       "expected": "3AC67A",
+       "native": "3AC67A",
+       "ok": true
+      },
+      {
+       "slot": "accent6",
+       "expected": "24A89E",
+       "native": "24A89E",
+       "ok": true
+      },
+      {
+       "slot": "hlink",
+       "expected": "0000EE",
+       "native": "0000EE",
+       "ok": true
+      },
+      {
+       "slot": "folHlink",
+       "expected": "551A8B",
+       "native": "551A8B",
+       "ok": true
+      }
+     ]
+    },
+    "background": {
+     "slides": 1,
+     "ok": 1
+    },
+    "pictures": {
+     "total": 0,
+     "ok": 0
+    },
+    "placeholders": {
+     "total": 0,
+     "ok": 0
+    },
+    "tags": {
+     "total": 2,
+     "ok": 2
+    }
+   },
+   "mismatches": []
+  },
+  {
+   "id": "viet-fix-02-vietnamese-quoc-ngu",
+   "set": "viet-fix",
+   "run": "completed",
+   "opened": true,
+   "truncated": false,
+   "readErrors": 0,
+   "slidesExpected": 1,
+   "slidesRead": 1,
+   "verdict": {
+    "shapeCount": true,
+    "geometry": true,
+    "themeColors": true,
+    "background": true,
+    "pictures": null,
+    "placeholders": null,
+    "tags": true,
+    "opened": true,
+    "fonts": true,
+    "direction": true,
+    "charts": true,
+    "fields": true,
+    "notes": true,
+    "presentationFonts": true,
+    "presentationFontsEmptyNameEntries": 0,
+    "themeSlots": true,
+    "slideFamilies": null,
+    "stylesReported": "2/2",
+    "alignmentReported": "2/2",
+    "bulletsReported": "2/2",
+    "languageIdsReported": null,
+    "tableOrderReported": null,
+    "images": {
+     "close": 0,
+     "review": 0,
+     "far": 1,
+     "size-mismatch": 0
+    }
+   },
+   "checks": {
+    "presentationFonts": {
+     "ok": true,
+     "native": [
+      "Aptos Display",
+      "Aptos"
+     ],
+     "expected": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "required": [
+      "Aptos",
+      "Aptos Display"
+     ],
+     "extras": [],
+     "missingRequired": [],
+     "missingFromNative": [],
+     "emptyNameEntries": 0
+    },
+    "themeSlots": {
+     "ok": true,
+     "slots": [
+      {
+       "slot": "major.latin",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "slot": "major.ea",
+       "expected": "Aptos Display",
+       "native": "Aptos Display",
+       "ok": true
+      },
+      {
+       "slot": "major.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      },
+      {
+       "slot": "minor.latin",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "slot": "minor.ea",
+       "expected": "Aptos",
+       "native": "Aptos",
+       "ok": true
+      },
+      {
+       "slot": "minor.cs",
+       "expected": "",
+       "native": "",
+       "ok": true
+      }
+     ]
+    },
+    "fonts": {
+     "shapes": 2,
+     "ok": 2
+    },
+    "direction": {
+     "paragraphs": 2,
+     "ok": 2
+    },
+    "alignment": {
+     "paragraphs": 2,
+     "ok": 2
+    },
+    "bullets": {
+     "paragraphs": 2,
+     "ok": 2
+    },
+    "charts": {
+     "total": 0,
+     "ok": 0
+    },
+    "fields": {
+     "total": 0,
+     "ok": 0
+    },
+    "notes": {
+     "total": 0,
+     "ok": 0
+    },
+    "language": {
+     "runs": 0,
+     "ok": 0
+    },
+    "geometry": {
+     "shapes": 2,
+     "maxDeltaPt": 0,
+     "over1pt": 0
+    },
+    "tableOrder": {
+     "tables": 0,
+     "ok": 0
+    },
+    "slideFamilies": {
+     "slides": 0,
+     "ok": 0
+    },
+    "styles": {
+     "shapes": 2,
+     "ok": 2
+    },
+    "shapesMissing": 0,
+    "shapeCount": {
+     "slides": 1,
+     "ok": 1
+    },
+    "geometryGate": {
+     "shapes": 2,
+     "ok": 2,
+     "maxDeltaPt": 0
+    },
+    "themeColors": {
+     "ok": true,
+     "slots": [
+      {
+       "slot": "dk1",
+       "expected": "000000",
+       "native": "000000",
+       "ok": true
+      },
+      {
+       "slot": "lt1",
+       "expected": "FFFFFF",
+       "native": "FFFFFF",
+       "ok": true
+      },
+      {
+       "slot": "dk2",
+       "expected": "011842",
+       "native": "011842",
+       "ok": true
+      },
+      {
+       "slot": "lt2",
+       "expected": "F0F0F0",
+       "native": "F0F0F0",
+       "ok": true
+      },
+      {
+       "slot": "accent1",
+       "expected": "2874A6",
+       "native": "2874A6",
+       "ok": true
+      },
+      {
+       "slot": "accent2",
+       "expected": "1B4F72",
+       "native": "1B4F72",
+       "ok": true
+      },
+      {
+       "slot": "accent3",
+       "expected": "5499C7",
+       "native": "5499C7",
+       "ok": true
+      },
+      {
+       "slot": "accent4",
+       "expected": "7BDBB2",
+       "native": "7BDBB2",
+       "ok": true
+      },
+      {
+       "slot": "accent5",
+       "expected": "3AC67A",
+       "native": "3AC67A",
+       "ok": true
+      },
+      {
+       "slot": "accent6",
+       "expected": "24A89E",
+       "native": "24A89E",
+       "ok": true
+      },
+      {
+       "slot": "hlink",
+       "expected": "0000EE",
+       "native": "0000EE",
+       "ok": true
+      },
+      {
+       "slot": "folHlink",
+       "expected": "551A8B",
+       "native": "551A8B",
+       "ok": true
+      }
+     ]
+    },
+    "background": {
+     "slides": 1,
+     "ok": 1
+    },
+    "pictures": {
+     "total": 0,
+     "ok": 0
+    },
+    "placeholders": {
+     "total": 0,
+     "ok": 0
+    },
+    "tags": {
+     "total": 2,
+     "ok": 2
+    }
+   },
+   "mismatches": []
+  }
+ ],
+ "packages": {
+  "@openpresentation/opf": "0.12.0",
+  "@openpresentation/opf-render": "0.12.0",
+  "@openpresentation/opf-pptx": "branch codex/rr-17-viet-supplement 7f51edcfe5 (opf-pptx#154)"
+ },
+ "gallery": {
+  "repository": "Data-Advantage/pptx-gallery",
+  "commit": "34e6656854216c0fdbfd79fddcc55686cd6df7c7"
+ },
+ "summary": {
+  "decks": 2,
+  "decksNotRun": 0,
+  "values": 2,
+  "valuesPass": 2,
+  "valuesFail": 0,
+  "byType": {
+   "languages": {
+    "values": 2,
+    "pass": 2,
+    "fail": 0,
+    "checks": {}
+   }
+  }
+ }
+}
