@@ -57,6 +57,8 @@ Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits pr
 - Optional DOM controls plus React and Svelte bindings in separate embeddable entry points
 - Dimension switches, safe block conversion and content actions (list levels, grouping, regions, images to design, slide split and merge), design-level options, table style and cell merge as headless APIs (`/switches`, `/block-convert`, `/content-actions`, `/design-options`, `/tables`, `/assets`, `/backgrounds`) and one accessible DOM panel (`/design-controls`)
 
+- Dimension switches, safe block conversion, design-level options, table style and cell merge, captions, references, citations and footnotes as headless APIs (`/switches`, `/block-convert`, `/design-options`, `/tables`, `/assets`, `/backgrounds`, `/annotations`) and one accessible DOM panel (`/design-controls`)
+
 ## Live browser canvas
 
 The new `@openpresentation/opf-editor/canvas` entry provides a framework-independent SVG canvas with inline text/table-cell editing, live validated drafts, undo/redo, cancellation, and structured property forms for charts, lists, metrics, quotes, code, timelines and images. Mount it in a DOM container:
@@ -323,6 +325,23 @@ change.assetId; // "acme-logo": the document now has assets["acme-logo"] = { src
 ### Backgrounds (RR-06)
 
 `@openpresentation/opf-editor/backgrounds` covers every background form the schema has: a theme slot, a solid color, a linear gradient, an image (`cover`, `contain` or `tile`) and a pattern, each with an optional opacity. Colors are ColorRefs: hex, a scheme slot or role (`accent1`, `surface`, ...) or `var:<id>`. `normalizeBackground` validates with sentences a person can act on (at least two stops, positions 0 to 1, a color that is none of the above), `setBackground(editor, spec, { slideIndex })` is one undoable patch through the `backgrounds` switch, `null` removes the background so the theme's (or the deck's) shows again, and `readBackground` flattens the current one for a form. `PATTERN_PRESETS` is the 54 DrawingML presets (`PATTERN_GROUPS` groups them in five families); PPTX export writes them as native pattern fills and import returns the same name. Radial gradients are not part of the OPF schema (a gradient has an angle and stops), so there is no radial control.
+
+## Footnotes, citations and captions (RR-34)
+
+`@openpresentation/opf-editor/annotations` edits the core RR-34 fields as validated, undoable session edits (a `test` guard on the edited container, then one replace), so the canvas redraws the caption band, the superscript markers and the slide's footnote area, and Undo restores the document:
+
+```js
+import { setCaption, addReference, citeRun, setFootnote, listCitations, referencesSlideFor } from "@openpresentation/opf-editor/annotations";
+
+setCaption(editor, "slides.1.blocks.0", { text: "Figure 1. Adoption by year", align: "center" }); // image, chart, table or video block
+addReference(editor, { id: "gartner-2026", text: "Gartner, Market Guide, 2026", url: "https://www.gartner.com" });
+citeRun(editor, "slides.0.text.0", "gartner-2026"); // the run shows a superscript marker; the slide lists the reference
+setFootnote(editor, "slides.0.text.1", "Internal forecast, not audited.");
+listCitations(editor.document); // the numbering every engine draws: notes, references, per-slide markers, unused ids
+referencesSlideFor(editor.document, { title: "Sources" }); // an ordinary list slide to insert
+```
+
+`captionTargets`, `readCaption`, `listReferences`, `updateReference`, `removeReference` (refuses while a run cites the id unless `force`, which also removes those cites), `unciteRun` and `runAt` complete the set; every `prepare*` variant returns the patches and the validated candidate without applying them. A string run becomes an object run when it gains a cite or footnote and returns to a string when nothing is left. The module needs the core that ships the fields; on an older core `listCitations` and `referencesSlideFor` throw `annotations-unavailable`.
 
 ## Table style and cell merge (RR-06)
 

@@ -31,21 +31,21 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 7f866dded9a99bc8af00284e38947fa0eb905a8f # RR-35 core main / PR heads: core
+          ref: c45baaec2d6aa9a2f655c4f987a0e8492d34ec56 # RR-34 core main / PR heads: core
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 7f776d3489e22961bc2fafe0c33bf4509c42034c # RR-35 core main / PR heads: opf-render
+          ref: c2eb7efab230f1e1ca835e24a1bb5c6bd965edcd # RR-34 core main / PR heads: opf-render
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: c456e902afe48679792958950590834786bb5e7d # RR-35 core main / PR heads: opf-pptx
+          ref: f299ab7a680cc058a5fc579d2d4eadda83d13cba # RR-34 core main / PR heads: opf-pptx
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
