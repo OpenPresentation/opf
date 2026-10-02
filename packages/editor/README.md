@@ -318,6 +318,38 @@ setTableCellStyle(editor, "slides.4.blocks.1.table", [{ section: "header", colum
 
 Styles use scheme roles, so they follow the color scheme, and the renderers keep the text readable on any fill. A style sets the header fill (`theme`, `plain`, `accent`), banded rows and borders (`theme`, `none`, `horizontal`, `grid`); named presets are `theme`, `banded`, `grid`, `minimal` and `open`, and `theme` removes a previous style. A style owns only the fill and border fields of a cell: text color, alignment, padding, values and merges are kept. Merging never hides text: covered cells that hold text refuse with `merge-would-lose-content` unless you pass `join: true`, which joins the words into the anchor with a space and keeps run formatting. Other refusals are `merge-overlap` (the region crosses another merge), `invalid-table-span` (outside the table, or a header cell spanning into the body) and `table-cell-covered`. Splitting leaves the formerly covered cells as empty text. `parseTableCellPath` maps a canvas selection to a table and cell, and `describeTableCell` and `readTableStyle` read the current state.
 
+## Slide management (RR-21)
+
+`@openpresentation/opf-editor/slides` adds, duplicates, deletes, reorders, hides and sections slides. Every function has a `prepare…` form that returns the JSON Patch for a document without touching a session (`{ document, patches, changed, selection }`), and an apply form that commits it as ONE validated, undoable change, so a single Undo restores the deck exactly and the preview, thumbnails and PPTX export follow from the document. An operation that changes nothing commits nothing (`changed: false`).
+
+```js
+import { addSlide, duplicateSlides, removeSlides, moveSlides, moveSlidesBy, setHidden, addSection, renameSection, removeSection, moveSection, setSection, listSections } from "@openpresentation/opf-editor/slides";
+
+addSlide(editor, { at: 2, layout: "list-2x" });   // the layout's placeholders become empty slots, as when switching a slide's layout
+duplicateSlides(editor, [1, 3]);                  // copies follow the last selected slide, with fresh ids (also for content ids)
+removeSlides(editor, [4]);                        // a deck keeps at least one slide: cannot-remove-all-slides
+moveSlides(editor, [0, 1], 5);                    // `to` is the drop gap in the original order (0 to the slide count)
+moveSlidesBy(editor, [2], -1);                    // Alt+Up: a block moves together, a scattered selection one place each
+setHidden(editor, [3], true);                     // OPF `hidden: true`; showing removes the field. Omit the flag to toggle.
+addSection(editor, 3, "Details");                 // a section starts at slide 3 and runs to the end of its current section
+```
+
+Sections are OPF's `section` label on each slide: consecutive slides with the same label form a section, slides without a label form an unnamed run (`listSections` returns `{ index, name, start, count, unnamed }`). Moving slides takes a section decision, `section: "adopt"` (default: the slides join the section of the slide just before them, or after them at the start), `"keep"`, a name, or `null`; drag and drop passes the section of the slide you drop beside, and dropping on a section header starts that section. `renameSection`, `removeSection` (its slides join the section before; `deleteSlides: true` deletes them too) and `moveSection` take an index from `listSections`. Collapsing a section in the list is view state, not part of the document.
+
+`@openpresentation/opf-editor/slide-manager` mounts the slide list as the navigator or, with `variant: "sorter"`, as a thumbnail grid. It selects (click, Ctrl/Cmd+click, Shift+click, Shift+arrows, Ctrl+A), reorders by drag and drop and by keyboard (Alt+arrows; Alt+Left and Right in the sorter), duplicates (Ctrl/Cmd+D), deletes (Delete), and has a toolbar and a context menu (the context menu key, Shift+F10 or a right click) with hide, sections, move to start or end, add with layout and, when the host passes the RR-26 split and merge functions as `contentActions`, split and merge. Every result is announced in a polite live region; the roving tab stop is the current slide; the card names say position, title and whether the slide is hidden or selected.
+
+```js
+import { createSlideManager } from "@openpresentation/opf-editor/slide-manager";
+const manager = createSlideManager(document.querySelector("#slide-list"), {
+  editor, getSlideIndex: () => current, setSlideIndex: (index) => { current = index; redraw(); },
+  renderThumbnail: (deck, index) => renderSvg(deck, { slideIndex: index, trace: false }), toolbar: document.querySelector("#slide-toolbar"),
+  contentActions, // optional: { splitSlideByBlocks, mergeSlides } from "@openpresentation/opf-editor/content-actions"
+});
+editor.subscribe(() => manager.render());
+```
+
+`@openpresentation/opf-editor/outline` and `/outline-view` edit the deck as an outline: a row per slide title, subtitle, text paragraph and list item, and a read-only row for content that is not text (a chart, a table, an image) or text that carries formatting, so nothing is flattened away. Typing commits as one change when the row loses focus or on Enter. Enter adds a line (after a title: a slide), Alt+Up and Alt+Down move a bullet with the bullets nested under it, or a slide with its text, Alt+Shift+Right demotes and Alt+Shift+Left promotes. Demoting a bullet nests it (`level`); promoting a top-level bullet turns it into a new slide that takes the bullets after it; demoting a plain slide makes it a bullet of the slide before it (refused, with the reason, when that would drop content such as notes, blocks or a design). Backspace on an empty line removes it. Tab keeps moving focus, so the outline is no keyboard trap.
+
 ## Data grid (RR-24)
 
 `@openpresentation/opf-editor/data-grid` mounts a spreadsheet-like grid for a chart's inline data (the first column is the categories, each further column a series; an empty cell is a gap, never 0) and for tables (rich and styled cells, merged cells drawn with their spans). Cells edit from the keyboard (arrows, Enter, F2, Tab), paste TSV or CSV from Excel and Sheets, copy out as TSV, and rows and columns insert, delete and move, sort (stable and typed) and, for charts, swap. Numbers are read in one stated number format, never guessed; text that is not a number is refused inline with the reason. Every edit is one undoable patch, so the preview redraws from the session events.
