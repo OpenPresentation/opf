@@ -16,6 +16,7 @@
 // is reported as a note. `glyphFallback: "none"` (strict mode) keeps the exact
 // faces and lets a missing glyph raise `missing-glyph`.
 
+import { fontPolicyFor } from "./font-policy.js";
 import { SYMBOL_PLACEHOLDER, SYMBOL_SCRIPT, mapSymbolText, symbolEncodingFor, symbolPreviewFaces } from "./symbol-fonts.js";
 
 const freeze = value => { if (value && typeof value === "object") { for (const child of Object.values(value)) freeze(child); Object.freeze(value); } return value; };
@@ -118,6 +119,53 @@ export const SCRIPT_FONT_REPLACEMENTS = freeze([
   ...replacement("Zsye", ["Noto Color Emoji", "Noto Emoji"], ["Segoe UI Emoji"]),
   ...replacement("Zmth", ["STIX Two Math", "Noto Sans Math"], ["Cambria Math"]),
 ]);
+
+/**
+ * RR-38: the preview size multiplier of a policy row (`replacement.sizeAdjust`) when `drawnFamily` is its replacement, the face the
+ * multiplier was measured on; otherwise undefined. `row` is a policy row, or the requested family name. A renderer scales the
+ * replacement's font size by it in measurement and drawing alike, so a replacement much wider than the real font (Noto Naskh Arabic
+ * for Arabic Typesetting: 1/0.64) draws lines of the length PowerPoint draws. The exported size and core's geometry never change.
+ */
+export function sizeAdjustFor(row, drawnFamily) {
+  const policy = typeof row === "string" ? fontPolicyFor(row) : row;
+  const replacement = policy?.replacement, adjust = replacement?.sizeAdjust;
+  return typeof adjust === "number" && adjust !== 1 && typeof replacement.family === "string" && replacement.family.toLowerCase() === String(drawnFamily).toLowerCase() ? adjust : undefined;
+}
+
+/**
+ * RR-38: where PowerPoint puts the baseline of a line below its top, in em, for the policy row's replacement drawn as `drawnFamily`
+ * (`{lineAscent, lineAscentMixed}`: a line in the real font alone, and a line that also holds other fonts), or undefined. Measured in
+ * a native PowerPoint probe (Arabic Typesetting 0.70 and 0.78); core places baselines one em below the line top.
+ */
+export function lineAscentFor(row, drawnFamily) {
+  const policy = typeof row === "string" ? fontPolicyFor(row) : row;
+  const replacement = policy?.replacement;
+  if (!sizeAdjustFor(policy, drawnFamily) || typeof replacement.lineAscent !== "number") return undefined;
+  return {lineAscent: replacement.lineAscent, lineAscentMixed: typeof replacement.lineAscentMixed === "number" ? replacement.lineAscentMixed : replacement.lineAscent};
+}
+
+/**
+ * RR-38: how far (em of the composed font size) the baseline of a line moves up so runs drawn in a policy replacement sit where PowerPoint
+ * puts the real font's baseline. `lines` is the planned runs of one line (one array per fragment). A line whose runs all carry a
+ * `lineAscent` takes it; a line that also holds other runs takes `lineAscentMixed`; a line with none is untouched (0).
+ */
+export function baselineShift(...lines) {
+  const runs = lines.flat().filter(run => run.text !== "");
+  const adjusted = runs.filter(run => typeof run.lineAscent === "number");
+  if (!adjusted.length) return 0;
+  const ascent = adjusted.length === runs.length ? Math.min(...adjusted.map(run => run.lineAscent)) : Math.min(...adjusted.map(run => run.lineAscentMixed ?? run.lineAscent));
+  return Math.max(0, 1 - ascent);
+}
+
+/**
+ * RR-38: the font size a run with a policy size multiplier is measured and drawn at: `size x adjust` on a quarter-pixel grid. Chromium on
+ * Linux quantizes a fractional font size (a scan of Noto Naskh Arabic against fontkit: every multiple of 0.25 px within 0.09 px over
+ * 340 px lines, other fractions up to 0.27 px), so a size off that grid would break the 0.1 px browser-versus-measured advance gate.
+ * Measurement and drawing both go through this function, so they agree on the size whatever the grid.
+ */
+export function adjustedFontSize(size, adjust) {
+  return typeof adjust === "number" && adjust > 0 ? Math.max(0.25, Math.round(size * adjust * 4) / 4) : size;
+}
 
 /** The emoji faces (FF-45): they draw emoji-presentation clusters only, never a run's Latin text or digits. */
 export const EMOJI_FONT_FAMILIES = SCRIPT_FONT_REPLACEMENTS.find(rule => rule.script === "Zsye").substitutes;
@@ -475,6 +523,12 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
   const candidatesFor = (run, slots) => {
     const list = [run.role === "eastAsian" ? slots.eastAsian : run.role === "complexScript" ? slots.complexScript : slots.latin];
     if (run.script !== "Latn") {
+      // RR-38: a slot family whose policy replacement carries a size multiplier (Arabic Typesetting -> Noto Naskh Arabic, 0.64) names that
+      // replacement next: the multiplier was measured on it, and it is the face a registry resolves the family to, so a preview without a
+      // measurement provider draws the same face and size as a measured one (it drew the sans face, Noto Sans Arabic, at full size). Other
+      // proprietary script families keep the designated order below until they carry a measured multiplier of their own.
+      const scriptRule = list[0] ? SCRIPT_FONT_REPLACEMENTS.find(rule => rule.script === run.script && rule.requestedFamily.toLowerCase() === String(list[0]).toLowerCase()) : undefined;
+      if (scriptRule && sizeAdjustFor(list[0], scriptRule.substitutes[0])) list.push(scriptRule.substitutes[0]);
       if (slots.supplement && slots.supplement.script === run.script) list.push(slots.supplement.family);
       list.push(...designatedFamilies(run.script, serif));
     }
@@ -567,14 +621,23 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     const global = [...new Set([...runs.flatMap(run => run.candidates), ...designatedFamilies(fontKey(profile.script ?? "Zzzz", text, profile), serif), ...designatedFamilies("Latn", serif)])];
     const unique = names => names.map(name => resolveName(name, style)).filter((name, index, all) => name && all.indexOf(name) === index);
     const out = [];
-    const push = (text, family, stack) => {
+    const push = (text, family, stack, sizeAdjust, ascent) => {
       const own = family === style.fontFamily && (!stack || stack.length === 1);
       const last = out.at(-1);
-      if (last && last.family === family && JSON.stringify(last.stack) === JSON.stringify(stack)) last.text += text;
-      else out.push({text, family, own, ...(stack && !own ? {stack} : {})});
+      if (last && last.family === family && last.sizeAdjust === sizeAdjust && last.lineAscent === ascent?.lineAscent && JSON.stringify(last.stack) === JSON.stringify(stack)) last.text += text;
+      else out.push({text, family, own, ...(stack && !own ? {stack} : {}), ...(sizeAdjust ? {sizeAdjust} : {}), ...(ascent ?? {})});
     };
     for (const run of runs) {
-      if (!measured) { push(run.text, run.candidates[0], run.candidates); continue; }
+      // RR-38: the slot family's replacement draws at the policy's size multiplier. Unmeasured, the replacement is the first face
+      // the stack names after the requested family; the requested name leaves the stack so a host that has the real font installed
+      // (a browser on Windows) cannot draw it at the reduced size.
+      const adjustOf = family => sizeAdjustFor(run.candidates[0], family);
+      const ascentOf = family => lineAscentFor(run.candidates[0], family);
+      if (!measured) {
+        const adjust = adjustOf(run.candidates[1]);
+        push(run.text, adjust ? run.candidates[1] : run.candidates[0], adjust ? run.candidates.slice(1) : run.candidates, adjust, ascentOf(run.candidates[1]));
+        continue;
+      }
       const chosen = resolveName(run.candidates[0], style);
       // FF-45: a run with an emoji-presentation cluster, or whose face is an emoji face, is always planned per cluster: VS16 and
       // emoji-default clusters take the emoji face even when the text face has a monochrome glyph for the base character, and the
@@ -583,7 +646,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       const whole = emojiRun ? undefined : run.candidates.map(family => resolveName(family, style)).find(name => name && covers(name, run.text, style));
       if (whole) {
         if (whole !== chosen) noteFallback(pending, chosen, whole, [...run.text].filter(character => !covers(chosen ?? whole, character, style)));
-        push(run.text, whole);
+        push(run.text, whole, undefined, adjustOf(whole), ascentOf(whole));
         continue;
       }
       // No single candidate covers the run. Split it into grapheme clusters (a base character with
@@ -627,7 +690,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
           const family = !emoji && face && covers(face, cluster.text, style) ? face : choose(cluster.text, cluster.base, emoji) ?? choose(cluster.base, cluster.base, emoji) ?? primary;
           if (family !== primary && family !== chosen) sticky = family;
           if (chosen !== null && family !== chosen && covers(family, cluster.text, style)) noteFallback(pending, chosen, family, missingFrom(chosen, cluster.text));
-          push(cluster.text, family);
+          push(cluster.text, family, undefined, adjustOf(family), ascentOf(family));
         }
       }
     }
@@ -644,7 +707,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
    * verified symbol font's advance for its code, so lines break and bullets sit where PowerPoint puts them; `natural`
    * asks for the open face's advance of that run instead (the SVG compresses a wider glyph to fit, never stretches one).
    */
-  const runWidth = (run, size, style, natural = false) => run.symbol && !natural && run.symbol.advance !== null ? run.symbol.advance * size : inner.measure(run.text, size, styleFor(run, style));
+  const runWidth = (run, size, style, natural = false) => run.symbol && !natural && run.symbol.advance !== null ? run.symbol.advance * size : inner.measure(run.text, adjustedFontSize(size, run.sizeAdjust), styleFor(run, style));
   /** Advance of each planned run, in order (see `runWidth`); undefined without a measurement provider. */
   const runWidths = (runs, size, style, {natural = false} = {}) => measured ? runs.map(run => runWidth(run, size, style, natural)) : undefined;
   let textMeasurement;
@@ -653,7 +716,8 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       ...inner,
       measure(text, size, style) {
         const runs = plan(text, style);
-        if (runs.length === 1 && runs[0].own) return inner.measure(text, size, styled(style));
+        // RR-38: a run drawn at the policy's size multiplier is not the style's own face at its own size: it takes the run path below.
+        if (runs.length === 1 && runs[0].own && !runs[0].sizeAdjust) return inner.measure(text, size, styled(style));
         return runs.reduce((total, run) => total + runWidth(run, size, style), 0);
       },
       [scriptMeasurement]: {inner, profile, options},
@@ -661,10 +725,10 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     if (typeof inner.outlineBounds === "function") {
       textMeasurement.outlineBounds = (text, size, style) => {
         const runs = plan(text, style);
-        if (runs.length === 1 && runs[0].own) return inner.outlineBounds(text, size, styled(style));
+        if (runs.length === 1 && runs[0].own && !runs[0].sizeAdjust) return inner.outlineBounds(text, size, styled(style));
         let x = 0, box = null;
         for (const run of runs) {
-          const runStyle = styleFor(run, style), bounds = inner.outlineBounds(run.text, size, runStyle);
+          const runStyle = styleFor(run, style), bounds = inner.outlineBounds(run.text, adjustedFontSize(size, run.sizeAdjust), runStyle);
           if (bounds) {
             const left = x + bounds.x, top = bounds.y, right = left + bounds.width, bottom = top + bounds.height;
             box = box ? {left: Math.min(box.left, left), top: Math.min(box.top, top), right: Math.max(box.right, right), bottom: Math.max(box.bottom, bottom)} : {left, top, right, bottom};

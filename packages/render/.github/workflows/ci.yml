@@ -20,6 +20,7 @@ jobs:
     env:
       OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
     steps:
+      # RR-38 pins core main 717b58e (opf#275 sizeAdjust and opf#279 lineAscent merged, on top of RR-05 opf#259 and RR-17 opf#276).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -44,7 +45,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 293b5d39db9a5f30dca3e74c9a8e6c9fc0d21e9f
+          ref: 717b58ec4898398ca41e69ffe9ec46b6710bb64f
           path: opf
           fetch-depth: 0
           persist-credentials: false

@@ -53,7 +53,8 @@ try{
   },[...served].map(([url,face])=>[url,{family:face.family,weight:face.weight,italic:face.italic}]));
   const observed=await page.evaluate(cases=>cases.map(value=>{
     const host=document.querySelector('main');host.innerHTML=value.svg;
-    const title=[...host.querySelectorAll('text')].find(text=>text.getAttribute('font-size')==='54');
+    // RR-38: an Arabic Typesetting title is drawn at 0.64 of the composed size (54 px), so its advance is checked at 34.5.
+    const title=[...host.querySelectorAll('text')].find(text=>['54','34.5'].includes(text.getAttribute('font-size')));
     const spans=[...title.querySelectorAll('tspan[textLength]')];
     const elements=spans.length?spans:[title];
     const runs=elements.map(element=>{

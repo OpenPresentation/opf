@@ -23,7 +23,7 @@ const SNAPSHOT=freeze({
  },
  "source": {
   "path": "spec/reference/font-policy.json",
-  "sha256": "25edd9ee7f9fd874b5f8750d0f205c0dcdf7a64b74a85bcfda5a0771a402c361"
+  "sha256": "7c7699c6184318099cd7acb75d541654bd18d69be4468fcf518343dfa48e2636"
  },
  "families": [
   {
@@ -210,6 +210,11 @@ const SNAPSHOT=freeze({
    "replacement": {
     "family": "Noto Naskh Arabic",
     "compatibility": "visual",
+    "sizeAdjust": 0.64,
+    "lineAscent": 0.7,
+    "lineAscentMixed": 0.78,
+    "lineAscentBasis": "RR-38 native PowerPoint 365 probe (probe-arabic.pptx, 18, 24 and 32 pt, 100 percent line spacing, zero insets, top anchor, rtl paragraph): the baseline of an Arabic Typesetting-only line (the most common ink-bottom row of the line) sits 0.68, 0.71 and 0.72 em below the box top (regular) and 0.68, 0.72 and 0.73 em (bold), against Arabic Typesetting's hhea ascent of 0.701 em; a line that also holds an Aptos run (Arabic, 'PowerPoint 365', Arabic) sits 0.77, 0.78 and 0.78 em below it. Core places the baseline one em below the line top, so the preview drew Arabic lines 0.22 to 0.30 em lower.",
+    "sizeAdjustBasis": "RR-38: sum of Arabic Typesetting 6.85 advances over sum of Noto Naskh Arabic 400 advances (fontkit, each sample's OpenType language). 0.643 on the 12 Arabic-script corpus samples of opf-render test/fixtures/script-corpora.json (per-sample range 0.57 to 0.86); 0.598 on 29 Arabic strings of the RR-05b native deck (running Arabic text); 0.614 pooled; Noto Naskh Arabic 700 gives 0.62, 0.58 and 0.59, so bold runs draw about 3 percent long. Ink height of alef, lam, meem and heh is 0.71 of Noto Naskh Arabic's. 0.64 balances the two: lines come out about 4 percent longer than PowerPoint's and glyphs about 10 percent smaller. Native check (RR-38 probe): PowerPoint's BoundWidth of the 45-character probe line is 216.9, 289.0 and 386.1 pt at 18, 24 and 32 pt, 1.8 to 2.0 percent above the fontkit advance of the installed font (213.0, 284.0, 378.7).",
     "measured": {
      "replacement": "Noto Naskh Arabic",
      "meanAbsWidthDelta": 0.6632,

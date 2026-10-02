@@ -71,7 +71,9 @@ for (const designId of ['aptos', 'calibri', 'georgia', 'meiryo', 'arabic-typeset
 const families = svg => [...new Set([...svg.matchAll(/font-family="([^"]*)"/g)].map(match => match[1]))];
 const chain = (designId, languageId, text) => families(renderSvg(doc(designId, languageId, text)));
 assert.ok(chain('aptos', 'japanese', '日本語のテキスト').includes('Meiryo, Noto Sans JP, Noto Serif JP, sans-serif'), 'Japanese text: Meiryo, then the open replacement');
-assert.ok(chain('aptos', 'arabic', 'مرحبا بالعالم').includes('Arabic Typesetting, Noto Sans Arabic, Noto Naskh Arabic, sans-serif'), 'Arabic text: Arabic Typesetting, then the open replacement');
+// RR-38: Arabic Typesetting carries a preview size multiplier measured on its replacement, so the run names that replacement first (the face a
+// registry resolves it to) and not the selected name: a host with the real font installed would otherwise draw it at the reduced size.
+assert.ok(chain('aptos', 'arabic', 'مرحبا بالعالم').includes('Noto Naskh Arabic, Noto Sans Arabic, sans-serif'), 'Arabic text: the multiplier-measured replacement, then the designated faces');
 assert.ok(chain('calibri', 'hebrew', 'שלום עולם').includes('David, Noto Sans Hebrew, Noto Serif Hebrew, sans-serif'), 'Hebrew text: David, then the open replacement');
 assert.ok(chain('aptos', 'hindi', 'नमस्ते दुनिया').includes('Mangal, Noto Sans Devanagari, Noto Serif Devanagari, sans-serif'), 'Hindi text: Mangal, then the open replacement');
 // Japanese text in a Latin-language deck: the ea slot repeats the latin family, then the script fallback.

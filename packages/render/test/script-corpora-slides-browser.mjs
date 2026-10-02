@@ -46,7 +46,8 @@ try {
     host.innerHTML = item.svg;
     const runs = [];
     for (const text of host.querySelectorAll('text')) {
-      if (text.getAttribute('font-size') !== '54') continue; // the title lines
+      // the title lines (RR-38: an Arabic Typesetting title is drawn at 0.64 of its 54 px composed size)
+      if (!['54', '34.5'].includes(text.getAttribute('font-size'))) continue;
       const spans = [...text.querySelectorAll('tspan[textLength]')];
       const pinned = text.hasAttribute('textLength') ? [text] : spans;
       for (const element of pinned) {
@@ -60,7 +61,7 @@ try {
     // Painted order of each title line: the first letter against the last (the isolate marks of right-to-left lines are skipped).
     const orders = [];
     for (const text of host.querySelectorAll('text')) {
-      if (text.getAttribute('font-size') !== '54') continue;
+      if (!['54', '34.5'].includes(text.getAttribute('font-size'))) continue;
       const content = text.textContent, letters = [...content].map((character, index) => [character, index]).filter(([character]) => !/[⁦-⁩s]/.test(character));
       if (letters.length < 2) continue;
       const first = letters[0][1], last = letters.at(-1)[1];

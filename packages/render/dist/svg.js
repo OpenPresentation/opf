@@ -7,7 +7,7 @@ import {
 // Optional core exports are read from the namespace so an older published core
 // still loads; resolveScriptFonts ships with core FF-18.
 import * as opfCore from "@openpresentation/opf";
-import { createScriptFonts } from "./script-fonts.js";
+import { adjustedFontSize, baselineShift, createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { fontPolicyFor } from "./font-policy.js";
 import { renderCatalogChart } from "./charts.js";
@@ -1336,7 +1336,7 @@ function renderCode(item, box, bound, options) {
       ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
       ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
       // Code stays left to right; script runs still take their slot fonts.
-    },segment,part.text.slice(segment.start,segment.end),part.style,bound,'monospace',{rtl:false},part.role==='body'?syntax:undefined)).join('')));
+    },segment,part.text.slice(segment.start,segment.end),part.style,bound,'monospace',{rtl:false,fontSize:part.fit.fontSize},part.role==='body'?syntax:undefined)).join('')));
     children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-code-role':part.role,'data-opf-generated':part.generated?'true':undefined,
       'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
       ...(part.fit.overflow?{'data-opf-overflow':'true'}:{})},lines.join('\n')));
@@ -1371,7 +1371,7 @@ function renderMetric(item, box, bound, options) {
           'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
       },line.segments.map(segment=>segmentSpan({
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
-      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start)})).join(''));
+      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
       return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
         'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
@@ -1381,7 +1381,7 @@ function renderMetric(item, box, bound, options) {
       },line.segments.map(segment=>segmentSpan({x:stableNumber(origin.x+segment.x),
         ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
-      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start)})).join(''));
+      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
     });
     children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,
       'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
@@ -1692,23 +1692,28 @@ function nestedReset(style, run) {
   return parent && !disabledFeaturesStyle([run.stack ?? run.family].flat()[0]) ? RESET_POLICY_FEATURES : undefined;
 }
 
-function scriptLine(text, style, bound, type, { rtl = false, placement, trace } = {}) {
+function scriptLine(text, style, bound, type, { rtl = false, placement, trace, fontSize } = {}) {
   const value = String(text ?? "");
   const scripts = bound.scriptFonts;
   rtl = rtl && value !== "";
   const isolate = content => rtl ? `${RIGHT_TO_LEFT_ISOLATE}${content}${POP_DIRECTIONAL_ISOLATE}` : content;
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
+  // RR-38: PowerPoint's baseline of a line in Arabic Typesetting sits above core's (one em below the line top): the caller moves it up by `baselineShift` em.
+  const shiftOf = list => { const shift = baselineShift(list); return shift ? { baselineShift: shift } : {}; };
   // FF-45: symbol runs (Wingdings, Symbol, Webdings codes drawn as their Unicode equivalents) are always positioned when the
   // line is placed, one tspan per glyph at the verified symbol font's advance, so a single mapped glyph is never stretched to it.
   const symbols = runs.some(run => run.symbol);
   if (runs.length === 1 && !(symbols && placement && placement.width > 0)) {
     const [run] = runs;
-    return { content: isolate(escapeText(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type) };
+    // RR-38: a replacement the policy scales (Arabic Typesetting -> Noto Naskh Arabic, 0.64) is drawn at the scaled size; the caller applies it.
+    return { content: isolate(escapeText(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
   }
+  const baseSize = placement?.fontSize ?? fontSize;
+  const adjusted = run => run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
     return { content: isolate(runs.map(run => run.own ? escapeText(run.text)
-      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), style: nestedReset(style, run) }, escapeText(run.text))).join("")) };
+      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), "font-size": adjusted(run), style: nestedReset(style, run) }, escapeText(run.text))).join("")), ...shiftOf(runs) };
   }
   const natural = symbols ? scripts.runWidths(runs, placement.fontSize, style, { natural: true }) : undefined;
   const total = widths.reduce((sum, width) => sum + width, 0), factor = total > 0 ? placement.width / total : 1;
@@ -1724,11 +1729,12 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, trace } 
       x: stableNumber(placement.x + left),
       textLength: pinned ? stableNumber(width) : undefined, lengthAdjust: pinned ? "spacingAndGlyphs" : undefined,
       "font-family": run.own ? undefined : fontStack(run.family, type),
+      "font-size": adjusted(run),
       style: run.own ? undefined : nestedReset(style, run),
       ...(trace ? trace(start, offset) : {})
     }, isolate(escapeText(run.text)));
   }).join("");
-  return { content, positioned: true };
+  return { content, positioned: true, ...shiftOf(runs) };
 }
 
 /** One positioned code/metric segment tspan; its script runs flow inside it (no textLength). */
@@ -1740,14 +1746,15 @@ function segmentSpan(attrs, segment, text, style, bound, type, options, syntax) 
   const runs = syntax && segment.kind !== "tab" ? opfCore.codeLineRuns(syntax.tokens, segment.start, segment.end) : undefined;
   if (runs?.some(run => run.kind)) {
     return runs.map((run, index) => {
+      const sizeOf = line => line.sizeAdjust && options?.fontSize > 0 ? stableNumber(adjustedFontSize(options.fontSize, line.sizeAdjust)) : undefined;
       const piece = scriptLine(text.slice(run.start - segment.start, run.end - segment.start), style, bound, type, options);
       const own = { ...attrs };
       if (index > 0) delete own.x;
       if (own["data-opf-text-start"] !== undefined) { own["data-opf-text-start"] = run.start; own["data-opf-text-end"] = run.end; }
-      return tag("tspan", { ...own, fill: run.kind ? syntax.palette[run.kind] : undefined, "font-family": piece.family }, piece.content);
+      return tag("tspan", { ...own, fill: run.kind ? syntax.palette[run.kind] : undefined, "font-family": piece.family, "font-size": sizeOf(piece) }, piece.content);
     }).join("");
   }
-  return tag("tspan", { ...attrs, "font-family": scripted.family }, scripted.content);
+  return tag("tspan", { ...attrs, "font-family": scripted.family, "font-size": scripted.sizeAdjust && options?.fontSize > 0 ? stableNumber(adjustedFontSize(options.fontSize, scripted.sizeAdjust)) : undefined }, scripted.content);
 }
 
 // Token ranges of the code body and the palette to paint them with; undefined for plain code (an unknown language,
@@ -1864,7 +1871,10 @@ function renderRichLines(value,fit,box,bound,config) {
     const flow=naturalFlow&&!lineHasTab;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
     const placed=fit.placement?.lines[lineIndex];
-    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset,baseline=placed?.baseline??box.y+line.baseline;
+    // RR-38: a line with runs in a policy replacement (Arabic Typesetting) takes PowerPoint's baseline of the real font, above core's.
+    const lineShift=bound.scriptFonts?baselineShift(...line.fragments.filter(fragment=>fragment.kind!=='tab'&&fragment.text).map(fragment=>bound.scriptFonts.plan(fragment.text,fragment.style))):0;
+    const shiftPx=lineShift*Math.max(fit.fontSize,...line.fragments.map(fragment=>fragment.fontSize));
+    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset,baseline=(placed?.baseline??box.y+line.baseline)-shiftPx;
     const firstFragment=line.fragments[0];
     const renderFragment=(fragment,asFlow,edges={})=>{
     const run=fragment.run;
@@ -1880,13 +1890,13 @@ function renderRichLines(value,fit,box,bound,config) {
       : resolveColorRef(run.color, bound, config.fill);
     let fixedAdvance=(fragment.kind==='tab'||placed)&&fragment.width>0;
     const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(fragment.text,fragment.style,bound,bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
-      placement:fixedAdvance&&!asFlow?{x:originX+fragmentX,width:fragment.width,fontSize:fragment.fontSize}:undefined});
+      placement:fixedAdvance&&!asFlow?{x:originX+fragmentX,width:fragment.width,fontSize:fragment.fontSize}:undefined,fontSize:fragment.fontSize});
     if(scripted.positioned)fixedAdvance=false;
     const content=`${edges.first?RIGHT_TO_LEFT_ISOLATE:''}${scripted.content}${edges.last?POP_DIRECTIONAL_ISOLATE:''}`;
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    const rendered=tag(asFlow?'tspan':'text',{...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
     if(!marker&&run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };
@@ -1904,7 +1914,7 @@ function renderRichLines(value,fit,box,bound,config) {
     if(!flow)return fragments.join('\n');
     const x=alignment==='right'?box.x+box.width:alignment==='center'?box.x+box.width/2:box.x;
     const first=line.fragments[0];
-    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
+    return tag('text',{x:stableNumber(x),y:stableNumber(box.y+line.baseline-shiftPx),'text-anchor':alignment==='right'?'end':alignment==='center'?'middle':'start','xml:space':'preserve','font-family':fontStack(first?.style.fontFamily??config.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(first?.fontSize??fit.fontSize),'font-weight':first?.style.fontWeight??config.fontWeight??400,'font-style':first?.style.italic?'italic':undefined,[NO_POLICY_FEATURES]:true},fragments.join(''));
   });
   let cursor=0;
   const whole=value.map(run=>typeof run==='string'?run:run.text).join('');
@@ -1953,17 +1963,17 @@ function renderTextBox(text, box, bound, config) {
     const rtl=fit.directions?fit.directions[index]==='rtl':boxRtl(lineStart);
     const origin=placed?.x??x-(sourceLine?.width??0)*factor;
     const tabs=sourceLine?.segments.some(segment=>segment.kind==='tab');
-    let content,family,positioned=false,trimWidth=0;
+    let content,family,positioned=false,trimWidth=0,sizeAdjust,shift=0;
     if(tabs) content=sourceLine.segments.map(segment=>{
       const segmentText=line.slice(segment.start-sourceLine.start,segment.end-sourceLine.start),fixed=segment.kind==='tab'||placed;
       const traced=(start,end)=>config.options.trace?{'data-opf-source-start':start,'data-opf-source-end':end,'data-opf-segment':segment.kind}:{};
       const scripted=segment.kind==='tab'?{content:escapeText(segmentText)}:scriptLine(segmentText,style,bound,type,{rtl,
-        placement:placed?{x:origin+segment.x,width:segment.width,fontSize:size}:undefined,
+        placement:placed?{x:origin+segment.x,width:segment.width,fontSize:size}:undefined,fontSize:size,
         trace:config.options.trace?(start,end)=>traced(segment.start+start,segment.start+end):undefined});
       if(scripted.positioned)return scripted.content;
       return tag('tspan',{
         x:stableNumber(origin+segment.x),textLength:fixed?stableNumber(segment.width):undefined,
-        lengthAdjust:fixed?'spacingAndGlyphs':undefined,'font-family':scripted.family,
+        lengthAdjust:fixed?'spacingAndGlyphs':undefined,'font-family':scripted.family,'font-size':scripted.sizeAdjust?stableNumber(adjustedFontSize(size,scripted.sizeAdjust)):undefined,
         ...traced(segment.start,segment.end),
       },scripted.content);
     }).join('');
@@ -1972,14 +1982,14 @@ function renderTextBox(text, box, bound, config) {
       // 2026-10-02), so a soft-wrapped line that keeps its trailing space, or a leading space, draws without it (RR-05).
       const edge=rtl&&alignment==='right'?/^(\s*)([\s\S]*?)(\s*)$/.exec(line):null,trimmed=edge&&edge[2]&&(edge[1]||edge[3])?edge:null;
       if(trimmed){const measureEdge=textWidthMeasurer(style,config.options.textMeasurement);trimWidth=measureEdge(trimmed[1],size)+measureEdge(trimmed[3],size);}
-      ({content,family,positioned=false}=scriptLine(trimmed?trimmed[2]:line,style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x+trimWidth,width:placed.width-trimWidth,fontSize:size}:undefined}));
+      ({content,family,positioned=false,sizeAdjust,baselineShift:shift=0}=scriptLine(trimmed?trimmed[2]:line,style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x+trimWidth,width:placed.width-trimWidth,fontSize:size}:undefined,fontSize:size}));
     }
     // Positioned script runs carry their own x and textLength (FF-19).
     const start=tabs||positioned;
     return tag("text", {
-    x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber(placed?.baseline??startY + index * fit.lineHeight),
+    x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
-    "font-size": stableNumber(size), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
+    "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
     textLength:!start&&placed?.width>0?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),

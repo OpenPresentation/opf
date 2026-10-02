@@ -1,13 +1,13 @@
 import { create } from "fontkit";
 import { FONT_COMPATIBILITY, disabledFeaturesFor } from "./font-compatibility.js";
-import { openTypeLanguage, scriptFontAliases } from "./script-fonts.js";
+import { adjustedFontSize, openTypeLanguage, scriptFontAliases, sizeAdjustFor } from "./script-fonts.js";
 import { fontPolicyFor } from "./font-policy.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily, symbolEncodingFor, symbolPreviewFaces } from "./symbol-fonts.js";
 export { SYMBOL_SCRIPT, SYMBOL_PLACEHOLDER, SYMBOL_PREVIEW_FACES, SYMBOL_FACE_FAMILIES, SYMBOL_ENCODINGS, SYMBOL_ENCODINGS_SOURCE, isSymbolEncodedFamily, symbolEncodingFor, symbolPreviewFaces, symbolCodeOf, mapSymbolText } from "./symbol-fonts.js";
 export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES, disabledFeaturesFor } from "./font-compatibility.js";
 export { FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor } from "./font-policy.js";
-export { EMOJI_FONT_FAMILIES, SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, glyphFallbackFamilies, detectScripts, hasEmojiPresentation, hasMathNotation, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
+export { EMOJI_FONT_FAMILIES, SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, glyphFallbackFamilies, detectScripts, hasEmojiPresentation, hasMathNotation, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, sizeAdjustFor, adjustedFontSize, lineAscentFor, baselineShift, scriptOfCharacter, textRole } from "./script-fonts.js";
 export { COLOR_FONT_FACES } from "./color-fonts.js";
 
 export class OPFFontError extends Error {
@@ -211,8 +211,11 @@ export function createFontRegistry(entries, options = {}) {
     // FF-31: `substitute` is true whenever the face is not the chosen family itself (policy
     // replacement, alias, script replacement or fallback). Exporters keep writing sourceFamily.
     const substitute = via!=="family", policyRow = substitute ? fontPolicyFor(family) : undefined;
+    // RR-38: a policy row can scale its replacement's size (Arabic Typesetting -> Noto Naskh Arabic: 0.64) so measured and drawn
+    // advances approximate the real font's. It holds only for the face the multiplier was measured on.
+    const sizeAdjust = sizeAdjustFor(policyRow, face.family);
     const measured = rule?.measured && rule.substituteIndex===0 ? rule.measured : undefined;
-    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,substitute,...(styleFallback?{styleFallback:true}:{}),...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note,...(rule.decision?{decision:rule.decision}:{})}:{}),...(measured?{measured:{...measured}}:{}),...(policyRow?{licenseClass:policyRow.licenseClass,availability:[...policyRow.availability]}:{}),...(encoding?{symbolEncoding:encoding}:{})};
+    const resolution={requestedFamily:requested,sourceFamily:family,resolvedFamily:face.family,requestedWeight:weight,resolvedWeight:face.weight,italic:face.italic,compatibility,substitute,...(styleFallback?{styleFallback:true}:{}),...(face.fontFace?{fontFace:{...face.fontFace}}:{}),...(style.path?{path:style.path}:{}),...(rule?{source:rule.source,note:rule.note,...(rule.decision?{decision:rule.decision}:{})}:{}),...(measured?{measured:{...measured}}:{}),...(policyRow?{licenseClass:policyRow.licenseClass,availability:[...policyRow.availability]}:{}),...(sizeAdjust?{sizeAdjust}:{}),...(encoding?{symbolEncoding:encoding}:{})};
     if (face.family.toLowerCase()!==family.toLowerCase() || face.weight!==weight || face.italic!==!!style.italic) substitutions.set(JSON.stringify([requested,weight,!!style.italic,style.path]),resolution);
     return {face,resolution};
   };
@@ -229,7 +232,7 @@ export function createFontRegistry(entries, options = {}) {
   };
   const metrics = (text,size,style,includeOutline=false) => {
     if (typeof text!=='string'||!Number.isFinite(size)||size<=0) throw new OPFFontError('invalid-text-measurement','Text measurement requires a string and a positive finite font size.');
-    const face=resolveFace(style);
+    const {face,resolution}=resolve(style);
     // A BCP-47 `lang` selects the font's OpenType language system, as a browser
     // does for an element's lang (FF-19). Without it, shaping is unchanged.
     const language=openTypeLanguage(style.lang),key=language?`${language}\u0000${text}`:text;
@@ -279,12 +282,13 @@ export function createFontRegistry(entries, options = {}) {
         face.cache.set(key,value);
       }
     }
-    return value;
+    // RR-38: the replacement is measured at its adjusted size, the one the SVG draws it at.
+    return {value,scale:resolution.sizeAdjust??1};
   };
-  const measure=(text,size,style)=>metrics(text,size,style).width*size;
+  const measure=(text,size,style)=>{const {value,scale}=metrics(text,size,style);return value.width*adjustedFontSize(size,scale===1?undefined:scale);};
   const outlineBounds=(text,size,style)=>{
-    const bounds=metrics(text,size,style,true).outline;
-    return bounds===null?null:{x:bounds.x*size,y:bounds.y*size,width:bounds.width*size,height:bounds.height*size};
+    const {value,scale}=metrics(text,size,style,true),bounds=value.outline,drawn=adjustedFontSize(size,scale===1?undefined:scale);
+    return bounds===null?null:{x:bounds.x*drawn,y:bounds.y*drawn,width:bounds.width*drawn,height:bounds.height*drawn};
   };
   return {
     // resolveFont lets exporters tell a substitute from the chosen family (FF-31).
