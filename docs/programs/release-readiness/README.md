@@ -119,7 +119,7 @@ Questions only the owner can settle. Each is also recorded in the font burndown 
 
 Settled 2026-10-01 (owner): the `world` region map (FF-58) is parked for post-v1, tracked as [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) (label `parked`). The works denominator is 818 and FF-58 is done. RR-20 does not ask the question again.
 
-1. **FF-37, the catalog drift check in CI.** The `catalog-snapshot` job compares `spec/catalogs` with the private pptx-gallery at the pinned commit only when the repository secret `PPTX_GALLERY_READ_TOKEN` exists. The owner has to add a read-only token to OpenPresentation/opf (agents cannot create secrets); until then the job only warns and the offline manifest hash check is the only enforcement. A local run on 2026-10-01 matched the pinned commit `2c7cc73`.
+1. **FF-37, the catalog drift check in CI.** Settled 2026-10-02 (owner): no token. The direction is inverted: core is the source of truth and `@openpresentation/opf` ships `spec/catalogs`, so pptx-gallery's CI verifies its published `public/<kind>/` files against the catalogs of the core version in its lockfile ([pptx-gallery#84](https://github.com/Data-Advantage/pptx-gallery/pull/84), `pnpm check:core-catalog`). The token-gated `catalog-snapshot` job is removed from opf-ci.yml; the offline manifest hash check stays in `pnpm test`. No secret is needed and nothing is left for the owner.
 
 ## Invariants
 
