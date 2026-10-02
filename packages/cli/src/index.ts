@@ -6,6 +6,7 @@ import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
+import {runAudit} from './audit.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
 
 declare const CLI_VERSION: string;
@@ -15,6 +16,8 @@ const usage = `OPF — local presentation files for agents (Node 24)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]
   opf validate <file|-> [--strict]
   opf lint <file|-> [--config <local-json-file>] [--strict]
+  opf audit <file|-> [--json] [--rule <id>] [--ignore <id>] [--fail-on <error|warning|info|never>] [--config <file>]
+           (design and accessibility checks; opf audit --help, --list-rules)
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
            [--dry-run] [--expect-sha256 <hash>] [--force] [--strict]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
@@ -64,6 +67,8 @@ and @openpresentation/opf-pptx (install them next to the CLI; the error names th
 They lint the document first, print the lint report shape (diagnostics, counts) plus the written
 files with SHA-256 digests, never load system fonts and never fetch URLs; --strict writes nothing
 when there are warnings. Existing outputs require --force.
+Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
+fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
 
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
@@ -147,6 +152,7 @@ async function main(argv: string[]) {
   if (!argv.length || (argv.length === 1 && ["help", "--help", "-h"].includes(argv[0]))) { console.log(usage); return; }
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
+  if (command === 'audit') { await runAudit(args); return; }
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
   if (command === 'skills') {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);

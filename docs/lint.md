@@ -25,6 +25,8 @@ Language string shorthands with [BCP-47 syntax](https://www.rfc-editor.org/rfc/r
 
 `valid` means no lint errors. `schemaValid` separately reports structural validation, and is `null` when malformed JSON prevented validation. Exit code 0 means no lint errors; 1 means lint errors, or warnings with `--strict`; 2 means a usage, configuration or I/O failure. The existing `opf validate` command retains its existing report and exit behavior.
 
+Lint stops at syntax, schema, catalogs, assets and host contracts. For contrast, overflow, alt text, reading order, fonts and the rest of the design and accessibility checks, use `opf audit` ([audit guide](audit.md)).
+
 ## Catalog context and design contracts
 
 An explicit local JSON file may contain `catalogs` and `contracts`. It is host configuration, separate from the OPF document. Fields under document `extensions` are data and cannot install lint policy.

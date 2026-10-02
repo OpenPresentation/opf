@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add `opf render`, `opf export` and `opf import` (RR-27): per-slide SVG and PNG; PPTX, PDF (vector or raster, from the renderer that has it), PNG and SVG (directory or zip); PPTX to OPF with optional raw import signals (opf-pptx 0.11.9 and later). They print the `opf lint` report plus the written files, support `--strict`, `--force`, `--slides`, `--font-dir`, `--asset-dir` and `--date`, never load system fonts, never fetch URLs and read images only from the document folder. `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are **optional peer dependencies** loaded on first use with an install hint; the package still has no runtime dependencies. See `docs/cli.md`.
+- RR-29: `opf audit <file|-> [--json] [--rule <id>]... [--ignore <id>]... [--fail-on <error|warning|info|never>] [--severity <id>=<level>] [--threshold <name>=<n>] [--config <file>]`, `opf audit --list-rules` and `opf audit --explain <id>`: design and accessibility checks (contrast, overflow, type size, alt text, reading order, fonts, links, charts, placeholders) with stable rule ids, a human reporter and lint's JSON shape. Exit 0 for no finding at or above `--fail-on` (default `error`), 1 otherwise, 2 for usage or I/O errors. Read-only; fetches nothing. See [the audit guide](../../docs/audit.md).
 
 ## 0.9.2
 

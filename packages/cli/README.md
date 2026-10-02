@@ -159,6 +159,17 @@ opf-render and opf-pptx are **optional peer dependencies**, loaded the first tim
 
 `pnpm test:cli` runs command-level regression checks, including `test/files.mjs` for render, export and import against the workspace's pinned opf-render and opf-pptx (set `UPDATE_GOLDEN=1` to refresh the pinned SVG digests after a renderer or core bump). `pnpm test:cli:packed:peers` installs the packed CLI with both peers from the npm registry and repeats those checks against the installed binary and through `npm exec`. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
 
+## Audit design and accessibility
+
+```sh
+opf audit deck.opf.json
+opf audit deck.opf.json --json --fail-on warning
+opf audit deck.opf.json --rule text-contrast --rule missing-alt-text
+opf audit --list-rules
+```
+
+`opf audit` checks what a schema cannot: text contrast against the resolved background (WCAG 2.x AA, gradients and patterns included), overflow and minimum type size from the shared composition, missing alt text, slide titles, reading order, link text, fonts outside the scheme, placeholder text, low-resolution embedded images and more. Findings use lint's report shape with stable `audit/<rule>` ids, source ranges and suggested fixes; `--json` prints the report, otherwise one readable line per finding. It exits 0 when nothing is at or above `--fail-on` (default `error`), 1 otherwise and 2 for usage errors. It is read-only and fetches nothing. See [the audit guide](../../docs/audit.md).
+
 ## OPF lint
 
 CLI 0.8.0 added `opf lint <file|-> [--config <local-json-file>] [--strict]`; CLI **0.9.2** still includes it and bundles core 0.11.4. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Earlier CLI versions than 0.8.0 do not include this command. See [the lint guide](../../docs/lint.md).
