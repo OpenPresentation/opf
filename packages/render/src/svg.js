@@ -11,6 +11,7 @@ import { createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { fontPolicyFor } from "./font-policy.js";
 import { renderCatalogChart } from "./charts.js";
+import { renderCaption, renderFootnotes } from "./annotations.js";
 
 export const packageName = "@openpresentation/opf-render";
 
@@ -797,6 +798,8 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderSlideImage(bound, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     ...renderSlideContent(bound, width, height, options),
+    // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
+    renderFootnotes(bound, options, drawHelpers),
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
     renderFurniture(bound, resolved.presentation, width, height, options, "footer")
   ].filter(Boolean);
@@ -947,9 +950,12 @@ function renderSlideContent(bound, width, height, options) {
   return bound.geometry.items.map(item => {
     const frame=item.frameBox;
     const surface=frame ? tag('rect',{x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
-    return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options);
+    // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
+    return surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
   });
 }
+// Draw helpers injected into src/annotations.js (captions and footnote areas).
+const drawHelpers = { tag, renderTextBox, renderRichLines };
 
 function reportDiagnostic(diagnostic, options) {
   const key = `${diagnostic.code}:${diagnostic.path}:${diagnostic.reason ?? ''}`;
@@ -1806,8 +1812,11 @@ function renderRichLines(value,fit,box,bound,config) {
       placement:fixedAdvance&&!asFlow?{x:originX+fragmentX,width:fragment.width,fontSize:fragment.fontSize}:undefined});
     if(scripted.positioned)fixedAdvance=false;
     const content=`${edges.first?RIGHT_TO_LEFT_ISOLATE:''}${scripted.content}${edges.last?POP_DIRECTIONAL_ISOLATE:''}`;
-    const rendered=tag(asFlow?'tspan':'text',{...(config.options.trace?{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
-    if(run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
+    // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
+    // segment without text offsets, so editors never read it as part of the run, and it is not linked.
+    const marker=fragment.kind==='marker';
+    const rendered=tag(asFlow?'tspan':'text',{...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(fragment.fontSize),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    if(!marker&&run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };
     if(naturalFlow&&lineHasTab) {

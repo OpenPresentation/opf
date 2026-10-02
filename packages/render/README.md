@@ -22,6 +22,8 @@ In version 0.8.0, `design.contentBox` uses core's shared padded geometry. The ca
 
 Version 0.8.0 paints plain and rich text, titles, subtitles and tags using composition's accepted fits and resolved styles. Painting does not measure those payloads again. Supply a font registry during composition: reusing an estimated fit cannot correct spacing when the actual drawing font has different advances.
 
+Citations, footnotes and captions (core RR-34 fields `cite`, `footnote`, `references` and `caption`) draw from the same composed geometry: a marker is a superscript segment after its run (traced as `data-opf-segment="marker"` without source offsets), the slide's footnote area is a rule and `<n> <text>` lines in the muted colour above the footer band, and a caption is a band inside its block's region. Decks without those fields render as before.
+
 Version 0.8.0 includes `prepareNodeFonts` in `/fonts-node`. It verifies all selected font files and license notices against the versioned `BUNDLED_FONT_MANIFEST`, including exact npm versions and SHA-256 hashes. Carlito is not an npm dependency: the package ships the unmodified google/fonts Carlito files and their OFL notice in `fonts/carlito`, pinned to a google/fonts commit and verified by the same hashes. The returned options configure layout, SVG, editing, PPTX, and Node raster output with the same font inputs:
 
 ```js
