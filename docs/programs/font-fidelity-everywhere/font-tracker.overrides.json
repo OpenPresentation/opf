@@ -59,7 +59,8 @@
     "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
     "The seven shipped script-font dependencies that were once missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) have policy rows since RR-17 (FF-44), so no record is a policy-gap and `extras` is empty.",
     "FF-43 (open replacement faces, opf-render branch claude/ff-43-bundle-open-candidates with this companion change): Barlow and Anton (google/fonts statics, byte-identical at commit 23e54b51ddff), Figtree, Work Sans, EB Garamond, Archivo Narrow, Libre Caslon Text and Bitter (npm-derived @expo-google-fonts statics, exact versions; no Reserved Font Name except Bitter, whose reserved name \"Bitter Pro\" is in no face name) are bundled with only the styles the policy needs, lazy in browser hosts; the eager list stays 33 faces. Red Hat Display now ships 300, 400, 600 and 700 with italics and Red Hat Text 400 and 700 with italics: the RedHatFont repository statics were unusable (the Regular, Light and SemiBold italics (and Red Hat Text Italic) do not set the OS/2 italic bit (only the Bold Italic files do), Red Hat Display SemiBold declares weight 707 and Bold 799 (Red Hat Text Bold declares 700), so a 600 request paints as Bold and the regular and bold italics as one face in resvg, probed), and Red Hat has no Reserved Font Name, so the correctly labelled @expo-google-fonts instances replace them. Libre Caslon Text has no bold italic upstream (explicit gap). The 19 rows whose route face was measured are re-measured (Rockwell on Bitter: 1.1% to 4.4% mean, up to 8.5% max) on 2026-09-29 against the installed Windows originals; the widths are unchanged (except Corbel and Gill Sans MT, which now follow the vendored Source Sans 3) and every row stays visual: none meets the metric bar. Grandview, Grandview Display, Tenorite and Tenorite Display are not installed on the measuring host and stay unmeasured. Trade-off: the shipped Red Hat Display Bold is about 2.5% narrower than the RedHatFont Bold it replaces (Segoe UI Bold preview mean width +0.6% to -1.8%, mean absolute 0.95% to 1.86%).",
-    "RR-17 follow-up (2026-10-02): the tracker answers the owner's four questions in `summary.licensing` (how many fonts, how many open, how many need a replacement, how many have one, and the licence of the bundled faces). Symbol, Wingdings and Webdings now carry the code-table route that opf-render#94 (FF-45) added: previewRoute kind `code-table` through the chain pinned in font-tracker.symbol-fonts.json, status `code-table`, node and browser verified, native unverified. Native PowerPoint evidence is read from the committed comparison output of the RR-05 runs (`overrides.nativeEvidence`): a family is native verified only when a deck that names it passes per-run fonts, theme slots and Presentation.Fonts. The style rule now takes a proprietary family's declared styles as the real font's (Cambria Math and Segoe UI Emoji ship one face, so their four-style requirement was an assumption, not a gap)."
+    "RR-17 follow-up (2026-10-02): the tracker answers the owner's four questions in `summary.licensing` (how many fonts, how many open, how many need a replacement, how many have one, and the licence of the bundled faces). Symbol, Wingdings and Webdings now carry the code-table route that opf-render#94 (FF-45) added: previewRoute kind `code-table` through the chain pinned in font-tracker.symbol-fonts.json, status `code-table`, node and browser verified, native unverified. Native PowerPoint evidence is read from the committed comparison output of the RR-05 runs (`overrides.nativeEvidence`): a family is native verified only when a deck that names it passes per-run fonts, theme slots and Presentation.Fonts. The style rule now takes a proprietary family's declared styles as the real font's (Cambria Math and Segoe UI Emoji ship one face, so their four-style requirement was an assumption, not a gap).",
+    "FF-46 (2026-10-02): the supervisor ran 43 decks (225 slides, every family named by at least one deck) in PowerPoint 365 on the 0.12.0 train (opf 0.12.0, opf-render 0.12.0, opf-pptx main with FF-05) and the comparison output is committed in docs/evidence/ff-46-native-0.12-20261002: every deck passes per-run fonts, theme slots and Presentation.Fonts (no extra and no missing names), so all 168 families are native name verified. That is a name read-back only: the check says nothing about the look or metrics of the preview face against the real font, and a family that is not installed on the host is still read by its selected name. A deck has one theme, so only the first family of a multi-family deck is read through its own theme slot; every family is read through per-run names and Presentation.Fonts."
   ],
   "statusDefs": {
     "loading-gap": {
@@ -2223,7 +2224,7 @@
       ]
     },
     "Symbol": {
-      "nextAction": "Code-table route (FF-45): 189 of 224 codes map to Unicode (Adobe and Apple tables, verified against Windows Symbol 5.01) and draw with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols at the verified advances; Apple differences recorded per code. Verified in opf-render's node, browser and raster tests. Open: native PowerPoint check of exported Symbol runs (FF-46; none is recorded) and the appearance delta of the open glyphs.",
+      "nextAction": "Code-table route (FF-45): 189 of 224 codes map to Unicode (Adobe and Apple tables, verified against Windows Symbol 5.01) and draw with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols at the verified advances; Apple differences recorded per code. Verified in opf-render's node, browser and raster tests. Native PowerPoint (FF-46, 2026-10-02): the exported runs read back the family name, and the native slide PNGs (read by the agent; the comparison does not check glyph shapes) show PowerPoint drawing the real glyphs for the forms checked with no a:sym element (plain letters drawn as Greek). Open: the appearance delta of the open glyphs.",
       "evidence": [
         "licensing",
         "symbolEncodings",
@@ -2231,7 +2232,7 @@
       ]
     },
     "Webdings": {
-      "nextAction": "Code-table route (FF-45): 223 of 224 codes map to Unicode (Unicode 7.0 repertoire, verified against Windows Webdings 5.01) and draw with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math; exhaustive code, advance, bounds, browser and raster tests in opf-render. Open: native PowerPoint check of exported Webdings runs (FF-46; none is recorded).",
+      "nextAction": "Code-table route (FF-45): 223 of 224 codes map to Unicode (Unicode 7.0 repertoire, verified against Windows Webdings 5.01) and draw with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math; exhaustive code, advance, bounds, browser and raster tests in opf-render. Native PowerPoint (FF-46, 2026-10-02): the exported runs read back the family name, and the native slide PNGs (read by the agent; the comparison does not check glyph shapes) show PowerPoint drawing the real glyphs for the forms checked with no a:sym element (private-use codes drawn as the Webdings pictures).",
       "evidence": [
         "licensing",
         "symbolEncodings",
@@ -2239,7 +2240,7 @@
       ]
     },
     "Wingdings": {
-      "nextAction": "Code-table route (FF-45): 222 of 224 codes map to Unicode (Unicode 7.0 repertoire, verified against Windows Wingdings 5.01; Wingdings 2 and 3 share this row: 217 and 208 of 224) and draw with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder. The PPTX keeps the family and codes. Verified in opf-render's node, browser and raster tests. Open: native PowerPoint check of exported Wingdings runs, including whether PowerPoint needs an a:sym element beside a:latin (FF-46; none is recorded).",
+      "nextAction": "Code-table route (FF-45): 222 of 224 codes map to Unicode (Unicode 7.0 repertoire, verified against Windows Wingdings 5.01; Wingdings 2 and 3 share this row: 217 and 208 of 224) and draw with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder. The PPTX keeps the family and codes. Verified in opf-render's node, browser and raster tests. Native PowerPoint (FF-46, 2026-10-02): the exported runs read back the family name, and the native slide PNGs (read by the agent; the comparison does not check glyph shapes) show PowerPoint drawing the real glyphs for the forms checked with no a:sym element (both the private-use and the plain code forms draw the check mark, circle and arrow), so a:sym is not needed for these runs.",
       "evidence": [
         "licensing",
         "symbolEncodings",
@@ -3259,6 +3260,14 @@
       "label": "RR-05 native run: CJK, Thai and Hindi decks (2026-10-02)",
       "file": "docs/evidence/rr-05-cjk-native-20261002/compare.json",
       "readme": "docs/evidence/rr-05-cjk-native-20261002/README.md",
+      "date": "2026-10-02",
+      "host": "PowerPoint 365, Windows"
+    },
+    {
+      "id": "ff-46-native-0.12-20261002",
+      "label": "FF-46 native run: every family on the 0.12.0 train (2026-10-02)",
+      "file": "docs/evidence/ff-46-native-0.12-20261002/compare.json",
+      "readme": "docs/evidence/ff-46-native-0.12-20261002/README.md",
       "date": "2026-10-02",
       "host": "PowerPoint 365, Windows"
     }

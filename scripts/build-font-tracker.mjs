@@ -653,7 +653,7 @@ export function buildTracker({ root = ROOT } = {}) {
     const codeTable = route.kind === "code-table" ? symbolEncodings.get(family) : null;
     if (cls === "special" && route.kind === "code-table" && target.yes) {
       status = "code-table";
-      statusReason = `code-table preview (FF-45): ${codeTable ? `${codeTable.mapped} of ${codeTable.codes} codes map to Unicode (${codeTable.verifiedAgainst}); ` : ""}each code draws with the first loaded of ${route.chain.join(", ")} at the verified font's advance; verified in opf-render's node, browser and raster tests; no native PowerPoint check is recorded`;
+      statusReason = `code-table preview (FF-45): ${codeTable ? `${codeTable.mapped} of ${codeTable.codes} codes map to Unicode (${codeTable.verifiedAgainst}); ` : ""}each code draws with the first loaded of ${route.chain.join(", ")} at the verified font's advance; verified in opf-render's node, browser and raster tests; ${nativeEvidence.byFamily.get(family.toLowerCase())?.status === "verified" ? "the native PowerPoint name read-back passed (see nativeVerification; the comparison does not check glyph shapes)" : "no native PowerPoint check is recorded"}`;
     } else if (cls === "special") {
       status = "needs-special-path";
       statusReason = route.kind === "code-table" ? `code-table route faces (${route.chain.filter((name) => !index.has(name)).join(", ")}) are not in the pinned opf-render manifest` : "no look-alike route in the policy; dedicated path required";
@@ -791,7 +791,7 @@ export function buildTracker({ root = ROOT } = {}) {
     const appearance = appearanceOf(overrides.appearance?.[family]);
     const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, acceptRules);
     if (!baseAction) throw new Error(`no nextAction for ${family}`);
-    const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}); acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
+    const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
     const nextAction = `${baseAction}${nativeSentence}`;
     const candidates = overrides.candidates[family] ?? [];
 
