@@ -170,13 +170,13 @@ layouts, and the rest stay gallery-only.
   that every kind's records still hash to the value in its index and the
   manifest. A hand edit to `spec/catalogs/` fails here. Change the gallery and
   sync instead.
-- The **Default catalog snapshot** job in `.github/workflows/opf-ci.yml` checks
-  out pptx-gallery at the manifest's pinned commit and runs
-  `sync-gallery-catalog.mjs --check`. It compares against the gallery's committed
-  published files, not the live site. The gallery repository is private, so the
-  job needs a `PPTX_GALLERY_READ_TOKEN` secret with read access. Without it the
-  job reports a warning and skips the comparison; the offline hash check still
-  runs.
+- Drift between the gallery and this snapshot is checked on the gallery side
+  (FF-37): pptx-gallery's `pnpm check:core-catalog` ([pptx-gallery#84](https://github.com/Data-Advantage/pptx-gallery/pull/84)) compares its
+  published `public/<kind>/` files with `spec/catalogs` of the
+  `@openpresentation/opf` release it depends on, in its own CI. Core is the source
+  of truth and the package is public, so no secret is needed. The core CI no longer
+  reads the private gallery. `sync-gallery-catalog.mjs --check` still compares a
+  local gallery checkout when you sync.
 
 ## Reconciliation status
 
