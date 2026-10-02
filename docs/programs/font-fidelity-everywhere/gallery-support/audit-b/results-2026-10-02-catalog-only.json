@@ -1,0 +1,3401 @@
+{
+ "generated": "2026-10-02T20:36:34.150Z",
+ "fontHost": "gallery",
+ "heads": {
+  "pptx-gallery": "34e6656",
+  "opf": "5e1dda7",
+  "opf-render": "3b300a3",
+  "opf-pptx": "1f50912",
+  "node": "26.4.0",
+  "packages": "published 0.12.0"
+ },
+ "sharedExportGaps": [
+  "theme major/minor ea or cs typeface=\"\" (62/62 exports)",
+  "every run lang=\"en-US\" (62/62 exports)",
+  "re-import emits heading-import-reflow (62/62 exports)"
+ ],
+ "results": [
+  {
+   "dimension": "narratives",
+   "id": "scqa",
+   "name": "SCQA (Situation–Complication–Question–Answer)",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "scqa"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "strategic-narrative",
+   "name": "Strategic Narrative",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "strategic-narrative"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "golden-circle",
+   "name": "Golden Circle (Why / How / What)",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "golden-circle"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "conference-talk",
+   "name": "Conference Talk",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "conference-talk"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "transformation-arc",
+   "name": "Transformation Arc (Before / After / Bridge)",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "transformation-arc"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "pitch-deck",
+   "name": "Startup Pitch Deck",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "pitch-deck"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "early-startup-pitch",
+   "name": "Early-Stage Startup Pitch",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "early-startup-pitch"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "venture-pitch",
+   "name": "Venture Pitch",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "venture-pitch"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "persuasive-sales",
+   "name": "Persuasive Sales",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "persuasive-sales"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "company-intro",
+   "name": "Company Intro",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "company-intro"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "marketing-strategy",
+   "name": "Marketing Strategy",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "marketing-strategy"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "product-launch",
+   "name": "Product Launch",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "product-launch"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "strategic-advisory",
+   "name": "Strategic Advisory",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "strategic-advisory"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "challenge-resolution",
+   "name": "Challenge → Resolution",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "challenge-resolution"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "project-proposal",
+   "name": "Project Proposal",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "project-proposal"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "failure-analysis",
+   "name": "Failure Analysis",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "failure-analysis"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "classic-story",
+   "name": "Classic Story",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "classic-story"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "business-narrative",
+   "name": "Business Narrative",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "business-narrative"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "rags-to-riches",
+   "name": "Rags to Riches",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "rags-to-riches"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "underdog-victory",
+   "name": "Underdog Victory",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "underdog-victory"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "survival-story",
+   "name": "Survival Story",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "survival-story"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "educate",
+   "name": "Educate",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "educate"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "persuade",
+   "name": "Persuade",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "persuade"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "reveal",
+   "name": "Reveal",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "reveal"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "justice",
+   "name": "Justice",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "justice"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "innovation",
+   "name": "Innovation",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "innovation"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "focus",
+   "name": "Focus",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "focus"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "qbr",
+   "name": "Quarterly Business Review",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "qbr"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "business-review",
+   "name": "Business Review",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "business-review"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "board-meeting",
+   "name": "Board Meeting",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "board-meeting"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "weekly-progress",
+   "name": "Weekly Progress",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "weekly-progress"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "status-update",
+   "name": "Status Update",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "status-update"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "performance-review",
+   "name": "Performance Review",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "performance-review"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "survey-analysis",
+   "name": "Survey Analysis",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "survey-analysis"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "trend-analysis",
+   "name": "Trend Analysis",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "trend-analysis"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "employee-review",
+   "name": "Employee Review",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "employee-review"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "performance-improvement-plan",
+   "name": "Performance Improvement Plan",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "performance-improvement-plan"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "narratives",
+   "id": "capacity-planning",
+   "name": "Capacity Planning",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "narrative"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "capacity-planning"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "executives",
+   "name": "Executives",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "executives"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "engineering-team",
+   "name": "Engineering Team",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "engineering-team"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "investors",
+   "name": "Investors",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "investors"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "customers",
+   "name": "Customers",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "customers"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "sales-team",
+   "name": "Sales Team",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "sales-team"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "marketing-team",
+   "name": "Marketing Team",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "marketing-team"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "candidates",
+   "name": "Candidates",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "candidates"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "audiences",
+   "id": "regulators",
+   "name": "Regulators",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "colorScheme": "slate-gray",
+    "previewSchemeColorsUsed": [
+     "dark2",
+     "light1"
+    ],
+    "exportColorUses": {
+     "total": 4,
+     "literal": 0,
+     "scheme": 4,
+     "transformed": [],
+     "unresolved": []
+    },
+    "exportSchemeColorsInSlides": [
+     "dark2",
+     "light1"
+    ],
+    "exportThemeClrScheme": {
+     "matched": 12,
+     "of": 12,
+     "officeDefaultAccent1": false
+    },
+    "exportClrMap": {
+     "masters": 1,
+     "layoutOverrides": 0,
+     "slideOverrides": 0,
+     "themeParts": [
+      "ppt/theme/theme1.xml"
+     ],
+     "masterParts": [
+      "ppt/slideMasters/slideMaster1.xml"
+     ]
+    },
+    "previewVsExportColorDiff": {
+     "previewOnly": [],
+     "exportOnly": []
+    },
+    "previewSlides": 1,
+    "exportSlides": 1,
+    "colorBySlide": [],
+    "literalSchemeHexes": [],
+    "literalSchemeUses": 0,
+    "reimportColorScheme": "slate-gray",
+    "consumption": {
+     "stripped": [
+      "audience"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": [
+     "regulators"
+    ]
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "inform",
+   "name": "Inform",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "inform"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "decide",
+   "name": "Drive a Decision",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "decide"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "align",
+   "name": "Align",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "align"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "persuade",
+   "name": "Persuade",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "persuade"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "educate",
+   "name": "Educate",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "educate"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "report",
+   "name": "Report",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "report"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "pitch",
+   "name": "Pitch",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "pitch"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "sell",
+   "name": "Sell",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "sell"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "purposes",
+   "id": "plan",
+   "name": "Plan",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "colorScheme",
+     "dimensions"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "purpose"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "reimportValue": "plan"
+   },
+   "classification": "works",
+   "engineSummary": "removing the field changes preview=false, export parts: ppt/tags/opfDocument.xml",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "16:9",
+   "name": "16:9",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "slideSize": {
+     "preset": "16:9",
+     "expectedPx": {
+      "width": 1280,
+      "height": 720
+     },
+     "expectedEmu": {
+      "cx": 12192000,
+      "cy": 6858000
+     },
+     "previewPx": {
+      "width": 1280,
+      "height": 720
+     },
+     "exportEmu": {
+      "cx": 12192000,
+      "cy": 6858000
+     },
+     "reimportPx": {
+      "width": 1280,
+      "height": 720
+     }
+    },
+    "reimportValue": "16:9"
+   },
+   "classification": "works",
+   "engineSummary": "preset 16:9: expected 1280x720 px (12192000x6858000 EMU); preview 1280x720; export 12192000x6858000; re-import \"16:9\"",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "4:3",
+   "name": "4:3",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": false,
+     "exportIdentical": {
+      "equal": false,
+      "diff": "part-list"
+     }
+    },
+    "slideSize": {
+     "preset": "4:3",
+     "expectedPx": {
+      "width": 960,
+      "height": 720
+     },
+     "expectedEmu": {
+      "cx": 9144000,
+      "cy": 6858000
+     },
+     "previewPx": {
+      "width": 960,
+      "height": 720
+     },
+     "exportEmu": {
+      "cx": 9144000,
+      "cy": 6858000
+     },
+     "reimportPx": {
+      "width": 960,
+      "height": 720
+     }
+    },
+    "reimportValue": "4:3"
+   },
+   "classification": "works",
+   "engineSummary": "preset 4:3: expected 960x720 px (9144000x6858000 EMU); preview 960x720; export 9144000x6858000; re-import \"4:3\"",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "16:10",
+   "name": "16:10",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": false,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/presentation.xml",
+       "ppt/slideMasters/slideMaster1.xml",
+       "ppt/slides/slide1.xml",
+       "ppt/tags/opfDocument.xml",
+       "ppt/tags/opfSlide1.xml"
+      ]
+     }
+    },
+    "slideSize": {
+     "preset": "16:10",
+     "expectedPx": {
+      "width": 960,
+      "height": 600
+     },
+     "expectedEmu": {
+      "cx": 9144000,
+      "cy": 5715000
+     },
+     "previewPx": {
+      "width": 960,
+      "height": 600
+     },
+     "exportEmu": {
+      "cx": 9144000,
+      "cy": 5715000
+     },
+     "reimportPx": {
+      "width": 960,
+      "height": 600
+     }
+    },
+    "reimportValue": "16:10"
+   },
+   "classification": "works",
+   "engineSummary": "preset 16:10: expected 960x600 px (9144000x5715000 EMU); preview 960x600; export 9144000x5715000; re-import \"16:10\"",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "letter",
+   "name": "letter",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": false,
+     "exportIdentical": {
+      "equal": false,
+      "diff": "part-list"
+     }
+    },
+    "slideSize": {
+     "preset": "letter",
+     "expectedPx": {
+      "width": 1056,
+      "height": 816
+     },
+     "expectedEmu": {
+      "cx": 10058400,
+      "cy": 7772400
+     },
+     "previewPx": {
+      "width": 1056,
+      "height": 816
+     },
+     "exportEmu": {
+      "cx": 10058400,
+      "cy": 7772400
+     },
+     "reimportPx": {
+      "width": 1056,
+      "height": 816
+     }
+    },
+    "reimportValue": "letter"
+   },
+   "classification": "works",
+   "engineSummary": "preset letter: expected 1056x816 px (10058400x7772400 EMU); preview 1056x816; export 10058400x7772400; re-import \"letter\"",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "a4",
+   "name": "a4",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": false,
+     "exportIdentical": {
+      "equal": false,
+      "diff": "part-list"
+     }
+    },
+    "slideSize": {
+     "preset": "a4",
+     "expectedPx": {
+      "width": 1122.24,
+      "height": 793.92
+     },
+     "expectedEmu": {
+      "cx": 10689336,
+      "cy": 7562088
+     },
+     "previewPx": {
+      "width": 1122.24,
+      "height": 793.92
+     },
+     "exportEmu": {
+      "cx": 10689336,
+      "cy": 7562088
+     },
+     "reimportPx": {
+      "width": 1122.24,
+      "height": 793.92
+     }
+    },
+    "reimportValue": "a4"
+   },
+   "classification": "works",
+   "engineSummary": "preset a4: expected 1122.24x793.92 px (10689336x7562088 EMU); preview 1122.24x793.92; export 10689336x7562088; re-import \"a4\"",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "widescreen",
+   "name": "widescreen",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": true,
+     "exportIdentical": {
+      "equal": false,
+      "diffParts": [
+       "ppt/tags/opfDocument.xml"
+      ]
+     }
+    },
+    "slideSize": {
+     "preset": "widescreen",
+     "expectedPx": {
+      "width": 1280,
+      "height": 720
+     },
+     "expectedEmu": {
+      "cx": 12192000,
+      "cy": 6858000
+     },
+     "previewPx": {
+      "width": 1280,
+      "height": 720
+     },
+     "exportEmu": {
+      "cx": 12192000,
+      "cy": 6858000
+     },
+     "reimportPx": {
+      "width": 1280,
+      "height": 720
+     }
+    },
+    "reimportValue": "widescreen"
+   },
+   "classification": "works",
+   "engineSummary": "preset widescreen: expected 1280x720 px (12192000x6858000 EMU); preview 1280x720; export 12192000x6858000; re-import \"widescreen\"",
+   "reasons": []
+  },
+  {
+   "dimension": "slide-sizes",
+   "id": "standard",
+   "name": "standard",
+   "schemaValid": true,
+   "catalogResolves": true,
+   "validatorWarnings": [],
+   "lintWarnings": [],
+   "preview": {
+    "hostFonts": true,
+    "bundledBase": "font-unavailable:Aptos Display",
+    "officePackVisual": true
+   },
+   "export": {
+    "default": true,
+    "withBundledRegistry": "font-unavailable"
+   },
+   "hostPreview": null,
+   "reimport": {
+    "retainedDesignKeys": [
+     "theme",
+     "colorScheme",
+     "dimensions",
+     "fontScheme",
+     "background"
+    ],
+    "diagnostics": [
+     "heading-import-reflow"
+    ]
+   },
+   "measure": {
+    "consumption": {
+     "stripped": [
+      "design.dimensions"
+     ],
+     "previewIdentical": false,
+     "exportIdentical": {
+      "equal": false,
+      "diff": "part-list"
+     }
+    },
+    "slideSize": {
+     "preset": "standard",
+     "expectedPx": {
+      "width": 960,
+      "height": 720
+     },
+     "expectedEmu": {
+      "cx": 9144000,
+      "cy": 6858000
+     },
+     "previewPx": {
+      "width": 960,
+      "height": 720
+     },
+     "exportEmu": {
+      "cx": 9144000,
+      "cy": 6858000
+     },
+     "reimportPx": {
+      "width": 960,
+      "height": 720
+     }
+    },
+    "reimportValue": "standard"
+   },
+   "classification": "works",
+   "engineSummary": "preset standard: expected 960x720 px (9144000x6858000 EMU); preview 960x720; export 9144000x6858000; re-import \"standard\"",
+   "reasons": []
+  }
+ ]
+}
