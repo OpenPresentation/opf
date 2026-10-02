@@ -1,15 +1,16 @@
 // FF-44 (RR-17): the script corpora through the raster path (resvg-js, which draws PNG and the PDF built from it).
 // Each regular-weight sample is drawn twice with resvg from the same pinned face and compared:
 //   - reference: HarfBuzz (harfbuzzjs) shapes the text with the sample's language and every glyph is drawn as an SVG path;
-//   - resvg: the same text as an ordinary SVG <text> element, which resvg shapes itself.
-// Ink width and the mean absolute pixel difference of the two ink boxes say whether resvg's shaping equals HarfBuzz's.
-//   - Latin, Cyrillic, Greek, CJK (apart from Korean, whose lang resvg ignores), Arabic and Hebrew letter samples, Armenian, Georgian, Ethiopic,
-//     Mongolian, Tibetan, Thaana and Syriac agree (ink width within 2 percent; the largest differences are mark positions in Hebrew niqqud
-//     and Nastaliq Pashto letters, 0.6 and 1.6 percent);
-//   - resvg-js 2.6.2 (and 2.7.0-alpha.2) mis-shapes the scripts listed in the fixture's `rasterLimits`: a spacing vowel sign or a space after a
-//     cluster loses its advance, so letters overlap and words run together. This test records that limit instead of hiding it: each listed
-//     script must still deviate (when a resvg release fixes it the test fails and the fixture and docs are updated), and every other script
-//     must agree. Browsers draw all of them correctly (test/script-corpora-browser.mjs); the SVG is not affected.
+//   - drawn: the same text as an ordinary SVG <text> element through svgToPng, which rewrites complex-script text cluster by cluster
+//     before resvg shapes it (src/raster-text.js).
+// Ink width and the mean absolute pixel difference of the two ink boxes say whether the raster equals HarfBuzz's shaping. Every script
+// must agree (ink width within 2 percent, mean pixel difference at most 40), except the fixture's `rasterLimits`:
+//   - `scripts` lists scripts resvg still mis-shapes (none since the per-cluster rewrite; a listed script must still deviate so that a
+//     resvg release that fixes it is noticed);
+//   - `languageDependent` lists Korean: resvg ignores the SVG lang, so the rewrite places Hangul clusters at the KOR advances (ink width
+//     equal to HarfBuzz's within 0.5 percent) while the KOR punctuation forms stay resvg's default forms (bounded pixel difference, and at
+//     least one sample must still show it).
+// Browsers draw all of them correctly (test/script-corpora-browser.mjs); the emitted SVG is not affected.
 // Right-to-left samples with Latin, digits or punctuation are skipped: HarfBuzz shapes one directional run, not a bidirectional paragraph.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
@@ -71,19 +72,23 @@ const output = process.argv[2];
 if (output) { await mkdir(path.dirname(output), {recursive: true}); await writeFile(output, `${JSON.stringify({rows}, null, 2)}\n`); }
 
 let agreeing = 0, deviating = 0;
+const summary = [];
 for (const script of new Set(rows.map(row => row.script))) {
   const group = rows.filter(row => row.script === script);
   const bad = group.filter(row => Math.abs(row.ratio - 1) > 0.02 || row.meanDiff > 40);
+  summary.push(`${script} ${group.length} samples, ink width within ${(Math.max(...group.map(row => Math.abs(row.ratio - 1))) * 100).toFixed(2)}%, mean pixel difference at most ${Math.max(...group.map(row => row.meanDiff))}`);
   if (limited.has(script)) {
-    assert.ok(bad.length > 0, `${script}: resvg now agrees with HarfBuzz; remove it from rasterLimits.scripts and update the docs`);
-    assert.ok(bad.some(row => row.ratio < 0.99), `${script}: the recorded resvg limit (narrower, lost advances) no longer shows`);
+    assert.ok(bad.length > 0, `${script}: the raster now agrees with HarfBuzz; remove it from rasterLimits.scripts and update the docs`);
     deviating += bad.length;
   } else if (languageDependent.has(script)) {
-    assert.ok(group.every(row => row.ratio < 0.999 && row.ratio > 0.97), `${script}: resvg ignores lang, so its Korean advances are slightly narrower`);
-    deviating += group.length;
+    assert.ok(group.every(row => Math.abs(row.ratio - 1) <= 0.005 && row.meanDiff <= 60), `${script}: clusters are placed at the language-system advances and only the punctuation forms differ: ${JSON.stringify(group)}`);
+    assert.ok(group.some(row => row.meanDiff > 20), `${script}: the recorded resvg lang limit (default punctuation forms) no longer shows; remove it from rasterLimits.languageDependent`);
+    deviating += group.filter(row => row.meanDiff > 20).length;
+    agreeing += group.filter(row => row.meanDiff <= 20).length;
   } else {
-    assert.deepEqual(bad, [], `${script}: resvg disagrees with HarfBuzz where it was expected to agree`);
+    assert.deepEqual(bad, [], `${script}: the raster disagrees with HarfBuzz where it was expected to agree`);
     agreeing += group.length;
   }
 }
-console.log(`Script corpora raster: ${rows.length} regular-weight samples through resvg; ${agreeing} agree with HarfBuzz (ink width within 2 percent, no glyph out of place), ${deviating} deviate as recorded (${[...limited].join(', ')} shaping; ${[...languageDependent].join(', ')} lang).`);
+console.log(summary.join('\n'));
+console.log(`Script corpora raster: ${rows.length} regular-weight samples through svgToPng; ${agreeing} agree with HarfBuzz (ink width within 2 percent, no glyph out of place), ${deviating} deviate as recorded (${[...limited].join(', ') || 'no script'} shaping; ${[...languageDependent].join(', ')} lang: punctuation forms).`);

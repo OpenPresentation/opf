@@ -1200,28 +1200,13 @@
     }
   ],
   "rasterLimits": {
-    "description": "resvg-js 2.6.2 (and 2.7.0-alpha.2) draws these scripts with a different shaping than HarfBuzz, Chromium and fontkit: a spacing vowel sign or a space that follows a cluster loses its advance, so letters overlap and words run together. SVG shown in a browser is correct; PNG and the PDF the renderer builds from PNG are not.",
-    "scripts": [
-      "Deva",
-      "Beng",
-      "Guru",
-      "Gujr",
-      "Orya",
-      "Taml",
-      "Telu",
-      "Knda",
-      "Mlym",
-      "Sinh",
-      "Thai",
-      "Laoo",
-      "Khmr",
-      "Mymr"
-    ],
+    "description": "resvg-js 2.6.2 (and 2.7.0-alpha.2) draws a HarfBuzz cluster with the advance of its widest glyph instead of the sum of its glyphs (usvg outline_cluster), so a spacing vowel sign, a split vowel or a decomposed sara am that shares a cluster with its consonant loses its advance, and rustybuzz breaks a ligature conjunct under a pre-base vowel sign and ignores the SVG lang. The raster path works around all of it (src/raster-text.js): every <text> with Indic, Thai, Lao, Khmer or Myanmar characters, or Hangul in a KOR-language text, is drawn cluster by cluster at fontkit's positions, as fontkit glyph outlines for the scripts whose fontkit runs equal HarfBuzz's (Devanagari, Gujarati, Oriya, Tamil, Kannada, Sinhala) and as resvg-shaped single clusters for the others. The scripts below are the ones that still deviate from the HarfBuzz reference.",
+    "scripts": [],
     "languageDependent": {
       "scripts": [
         "Kore"
       ],
-      "reason": "resvg does not read the SVG lang, so Korean text is shaped without the KOR language system lookups (about 1.5 percent narrower)."
+      "reason": "resvg does not read the SVG lang. Korean clusters are now placed at the KOR language-system advances (ink width equal to HarfBuzz's), but the KOR forms of the punctuation the locl feature substitutes (parentheses, colon, period: composite glyphs shifted for Hangul) are drawn as resvg's default forms, and fontkit's outlines of those composites do not carry the shift either, so samples with such punctuation differ from the reference by a few pixels per glyph."
     }
   }
 }
