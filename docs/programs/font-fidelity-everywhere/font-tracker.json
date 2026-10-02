@@ -228,19 +228,19 @@
       "style-gap": 0,
       "policy-gap": 0,
       "needs-special-path": 3,
-      "visual-gap": 7,
+      "visual-gap": 1,
       "script-gap": 41,
       "baseline-needed": 34,
       "metric-measured": 0,
-      "documented-visual": 36,
+      "documented-visual": 42,
       "qualified": 41
     },
     "byPhase": {
       "1": 34,
       "2": 6,
       "3": 0,
-      "4": 51,
-      "5": 77
+      "4": 45,
+      "5": 83
     },
     "hostVerification": {
       "node": {
@@ -847,7 +847,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 22
+        "rank": 21
       }
     },
     {
@@ -4344,7 +4344,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 23
+        "rank": 22
       }
     },
     {
@@ -4532,7 +4532,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 24
+        "rank": 23
       }
     },
     {
@@ -5644,7 +5644,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 63
+        "rank": 61
       }
     },
     {
@@ -6697,7 +6697,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 43
+        "rank": 39
       }
     },
     {
@@ -7645,7 +7645,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 64
+        "rank": 62
       }
     },
     {
@@ -7903,7 +7903,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 65
+        "rank": 63
       }
     },
     {
@@ -8168,7 +8168,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 66
+        "rank": 64
       }
     },
     {
@@ -9395,7 +9395,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 56
+        "rank": 51
       }
     },
     {
@@ -9624,7 +9624,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 25
+        "rank": 24
       }
     },
     {
@@ -10037,7 +10037,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 57
+        "rank": 52
       }
     },
     {
@@ -10225,7 +10225,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 26
+        "rank": 25
       }
     },
     {
@@ -11138,7 +11138,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 67
+        "rank": 65
       }
     },
     {
@@ -12204,7 +12204,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 27
+        "rank": 26
       }
     },
     {
@@ -12294,7 +12294,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Barlow",
+        "reference": "Grandview 1.04;O365",
+        "meanAbsWidthDelta": 0.0467,
+        "meanWidthDelta": -0.0467,
+        "maxAbsWidthDelta": 0.0976,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -12315,20 +12336,56 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 4.67% and maximum 9.76% in 4 measured styles, 4.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.018x, cap-height 0.986x of the original; 44 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0467,
+        "maxAbsWidthDelta": 0.0976,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.048,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.018,
+        "capHeightRatio": 0.986,
+        "ascentRatio": 1.006,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 44
       },
       "appearance": {
-        "description": "Grandview: Microsoft 365 cloud sans (no reference on this host). Barlow: a slightly condensed grotesque.",
-        "caveat": "Unmeasured: Grandview is not cached on this host."
+        "description": "Grandview: Microsoft 365 cloud sans. Barlow: a slightly condensed grotesque.",
+        "caveat": "About 5% off on average (up to 10%) with glyph-size differences: expect different wrapping."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -12354,10 +12411,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Grandview is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
@@ -12373,12 +12430,12 @@
         }
       ],
       "priority": {
-        "score": 4.5,
-        "severity": 2,
+        "score": 2.3,
+        "severity": 1,
         "valuesAffected": 5,
         "valuesOpen": 5,
         "hostFactor": 0.25,
-        "rank": 21
+        "rank": 50
       }
     },
     {
@@ -12468,7 +12525,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Barlow",
+        "reference": "Grandview Display 0.90;O365",
+        "meanAbsWidthDelta": 0.0249,
+        "meanWidthDelta": -0.0242,
+        "maxAbsWidthDelta": 0.0599,
+        "stylesMeasured": 2,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -12489,20 +12567,55 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 2.49% and maximum 5.99% in 2 measured styles, 26% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.082x, cap-height 0.986x of the original; 44 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 2,
+        "meanAbsWidthDelta": 0.0249,
+        "maxAbsWidthDelta": 0.0599,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.26,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.082,
+        "capHeightRatio": 0.986,
+        "ascentRatio": 1.006,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 44
       },
       "appearance": {
-        "description": "Grandview Display: the display cut (no reference on this host). Barlow: a slightly condensed grotesque.",
-        "caveat": "Unmeasured."
+        "description": "Grandview Display: the display cut. Barlow: a slightly condensed grotesque."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -12527,10 +12640,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Grandview Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
@@ -12546,12 +12659,12 @@
         }
       ],
       "priority": {
-        "score": 3.5,
-        "severity": 2,
+        "score": 1.8,
+        "severity": 1,
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 40
+        "rank": 55
       }
     },
     {
@@ -12739,7 +12852,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 28
+        "rank": 27
       }
     },
     {
@@ -12927,7 +13040,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 29
+        "rank": 28
       }
     },
     {
@@ -13142,7 +13255,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 60
+        "rank": 56
       }
     },
     {
@@ -14495,7 +14608,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 30
+        "rank": 29
       }
     },
     {
@@ -17985,7 +18098,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 31
+        "rank": 30
       }
     },
     {
@@ -18162,7 +18275,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 32
+        "rank": 31
       }
     },
     {
@@ -18583,7 +18696,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 58
+        "rank": 53
       }
     },
     {
@@ -18771,7 +18884,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 33
+        "rank": 32
       }
     },
     {
@@ -19009,7 +19122,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 34
+        "rank": 33
       }
     },
     {
@@ -19133,7 +19246,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 44
+        "rank": 40
       }
     },
     {
@@ -19241,7 +19354,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 45
+        "rank": 41
       }
     },
     {
@@ -22540,7 +22653,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 46
+        "rank": 42
       }
     },
     {
@@ -25780,7 +25893,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 35
+        "rank": 34
       }
     },
     {
@@ -27590,7 +27703,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 68
+        "rank": 66
       }
     },
     {
@@ -27832,7 +27945,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 36
+        "rank": 35
       }
     },
     {
@@ -27924,7 +28037,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Source Sans 3",
+        "reference": "Seaford 1.04;O365",
+        "meanAbsWidthDelta": 0.0483,
+        "meanWidthDelta": -0.0483,
+        "maxAbsWidthDelta": 0.0965,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -27945,20 +28079,55 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 4.83% and maximum 9.65% in 4 measured styles, 12.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.016x, cap-height 0.982x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0483,
+        "maxAbsWidthDelta": 0.0965,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.128,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.016,
+        "capHeightRatio": 0.982,
+        "ascentRatio": 0.976,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Seaford: Microsoft 365 cloud sans (no reference on this host). Source Sans 3: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Seaford: Microsoft 365 cloud sans. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -27983,10 +28152,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Seaford is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -28002,12 +28171,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 2,
+        "score": 1.5,
+        "severity": 1,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 41
+        "rank": 57
       }
     },
     {
@@ -28099,7 +28268,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Source Sans 3",
+        "reference": "Seaford Display 1.04;O365",
+        "meanAbsWidthDelta": 0.0389,
+        "meanWidthDelta": 0.0388,
+        "maxAbsWidthDelta": 0.0667,
+        "stylesMeasured": 2,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -28120,20 +28310,55 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 3.89% and maximum 6.67% in 2 measured styles, 24.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.059x, cap-height 0.982x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 2,
+        "meanAbsWidthDelta": 0.0389,
+        "maxAbsWidthDelta": 0.0667,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.248,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.059,
+        "capHeightRatio": 0.982,
+        "ascentRatio": 0.976,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Seaford Display: the display cut (no reference on this host). Source Sans 3: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Seaford Display: the display cut. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -28158,10 +28383,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Seaford Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -28177,12 +28402,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 2,
+        "score": 1.5,
+        "severity": 1,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 42
+        "rank": 58
       }
     },
     {
@@ -28527,7 +28752,7 @@
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 0.25,
-        "rank": 52
+        "rank": 48
       }
     },
     {
@@ -28661,7 +28886,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 47
+        "rank": 43
       }
     },
     {
@@ -28955,7 +29180,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 69
+        "rank": 67
       }
     },
     {
@@ -29250,7 +29475,7 @@
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 0.25,
-        "rank": 53
+        "rank": 49
       }
     },
     {
@@ -29543,7 +29768,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 70
+        "rank": 68
       }
     },
     {
@@ -30077,7 +30302,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 59
+        "rank": 54
       }
     },
     {
@@ -30307,7 +30532,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 37
+        "rank": 36
       }
     },
     {
@@ -30397,7 +30622,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Open Sans",
+        "reference": "Skeena 1.04;O365",
+        "meanAbsWidthDelta": 0.0926,
+        "meanWidthDelta": 0.0926,
+        "maxAbsWidthDelta": 0.1593,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -30418,20 +30664,56 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 9.26% and maximum 15.93% in 4 measured styles, 0.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.159x, cap-height 1.113x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0926,
+        "maxAbsWidthDelta": 0.1593,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.008,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.159,
+        "capHeightRatio": 1.113,
+        "ascentRatio": 1.383,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Skeena: Microsoft 365 cloud sans (no reference on this host). Open Sans: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Skeena: Microsoft 365 cloud sans. Open Sans: a humanist sans.",
+        "caveat": "About 9% off on average (up to 16%): expect different wrapping."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -30455,10 +30737,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Skeena is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -30474,12 +30756,12 @@
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2,
+        "score": 1.3,
+        "severity": 1,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 54
+        "rank": 69
       }
     },
     {
@@ -30569,7 +30851,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Open Sans",
+        "reference": "Skeena Display 1.04;O365",
+        "meanAbsWidthDelta": 0.1306,
+        "meanWidthDelta": 0.1306,
+        "maxAbsWidthDelta": 0.2001,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -30590,20 +30893,56 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 13.06% and maximum 20.01% in 4 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.159x, cap-height 1.113x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.1306,
+        "maxAbsWidthDelta": 0.2001,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.159,
+        "capHeightRatio": 1.113,
+        "ascentRatio": 1.383,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Skeena Display: the display cut (no reference on this host). Open Sans: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Skeena Display: the display cut. Open Sans: a humanist sans.",
+        "caveat": "About 13% off on average (up to 20%): expect different wrapping."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -30627,10 +30966,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Skeena Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -30646,12 +30985,12 @@
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2,
+        "score": 1.3,
+        "severity": 1,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 55
+        "rank": 70
       }
     },
     {
@@ -31195,7 +31534,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 48
+        "rank": 44
       }
     },
     {
@@ -31556,7 +31895,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 49
+        "rank": 45
       }
     },
     {
@@ -31965,17 +32304,17 @@
             "url": "https://github.com/OpenPresentation/opf/pull/249"
           }
         ],
-        "note": "Documented look-alike (tier visual): width mean 4.2% and maximum 8.36% in 1 measured styles, 24.4% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
+        "note": "Documented look-alike (tier visual): width mean 5.53% and maximum 11.15% in 4 measured styles, 9.2% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
         "referenceAvailable": true,
-        "stylesMeasured": 1,
-        "meanAbsWidthDelta": 0.042,
-        "maxAbsWidthDelta": 0.0836,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0553,
+        "maxAbsWidthDelta": 0.1115,
         "widthBarMet": false,
-        "lineBreaksIdenticalFraction": 0.244,
+        "lineBreaksIdenticalFraction": 0.092,
         "verticalMetricsEqual": false,
         "xHeightRatio": 1.105,
         "capHeightRatio": 1.17,
@@ -32034,7 +32373,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 61
+        "rank": 59
       }
     },
     {
@@ -32195,15 +32534,15 @@
             "url": "https://github.com/OpenPresentation/opf/pull/249"
           }
         ],
-        "note": "Documented look-alike (tier visual): width mean 14.76% and maximum 19.75% in 2 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
+        "note": "Documented look-alike (tier visual): width mean 15.22% and maximum 20.23% in 4 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
         "referenceAvailable": true,
-        "stylesMeasured": 2,
-        "meanAbsWidthDelta": 0.1476,
-        "maxAbsWidthDelta": 0.1975,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.1522,
+        "maxAbsWidthDelta": 0.2023,
         "widthBarMet": false,
         "lineBreaksIdenticalFraction": 0,
         "verticalMetricsEqual": false,
@@ -32264,7 +32603,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 62
+        "rank": 60
       }
     },
     {
@@ -32946,7 +33285,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 38
+        "rank": 37
       }
     },
     {
@@ -33937,7 +34276,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 50
+        "rank": 46
       }
     },
     {
@@ -34044,7 +34383,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 51
+        "rank": 47
       }
     },
     {
@@ -34491,7 +34830,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 39
+        "rank": 38
       }
     }
   ]
