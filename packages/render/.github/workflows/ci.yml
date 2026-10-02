@@ -37,12 +37,13 @@ jobs:
       # Release 0.11.8 pins core core main 3ae62f9 (records the 0.11.8 lazy font count, opf#219), opf-pptx main b5ed201 and opf-editor main 159c08b.
       # FF-43 pins core PR opf#178 (font policy measured values for the vendored Source Sans 3 rows, the measurement tools and the tracker); merged as 72d337bf5778cc7d9048d236debc10ba0d37fb4c.
       # Release 0.11.9 pins core main 07cd9d4 (design fields and preview fixes opf#229 to #232, the 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235), opf-pptx main e6c0391 (after opf-pptx#124) and opf-editor main dea8a79.
+      # RR-17 repins to core main 395e4c1 (opf#247 RR-16 merged, with opf#270 RR-29 and the font policy rows of opf#255 and opf#261), which contains opf#249, #253, #254 and #256 (the policy rows this branch snapshots); repin to core main once opf#247 merges. Earlier pins follow.
       # RR-32 pins core PR opf#256 (template variables, resolveVariables) and RR-16 pins core PR opf#247 (composed font sizes on PowerPoint's 0.01 pt grid; 316 golden slides move, selected through OPF_GOLDEN_BASELINE). Both are unmerged, so the pin is the throwaway branch codex/rr-16-combined-rr-32-b (8c2bfd9: opf#247 commit 448c47f merged with the opf#256 commit render main pins, ba727c7; it carries no other core change, so the font policy snapshot stays valid). Repin to the core merge commit once both merge (never leave it on an unmerged head).
       # RR-29 pins core PR opf#270 (promoted regions in reading order, chartPaletteForFill) on top of that combined branch: the throwaway branch codex/rr-29-combined-ci-pin (f1c1a0d: 8c2bfd9 plus the opf#270 commit 987f61b without the audit, which this repository does not use; it changes no font policy). Repin to the core merge commit once opf#270 merges (never leave it on an unmerged head).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: f1c1a0d2b518819f6d66977c6e98c23c96727abe
+          ref: 395e4c11aee82e3a3ebac1a70e2e112ec7e5143c
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -118,6 +119,7 @@ jobs:
       - run: npm run test:aptos-preview-browser
       - run: npm run test:lazy-fonts-browser
       - run: npm run test:extra-lazy-fonts-browser
+      - run: npm run test:latin-family-hosts-browser
       - run: npm run test:lazy-face-fallback-browser
       - run: npm run test:script-fonts-browser
       - run: npm run test:script-fonts-auto-browser

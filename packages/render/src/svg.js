@@ -9,6 +9,7 @@ import {
 import * as opfCore from "@openpresentation/opf";
 import { createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
+import { fontPolicyFor } from "./font-policy.js";
 import { renderCatalogChart } from "./charts.js";
 
 export const packageName = "@openpresentation/opf-render";
@@ -722,7 +723,13 @@ function bindSlide(presentation, slide, layout, index, context) {
   });
   const textMeasurement = scriptFonts.textMeasurement ?? context.options.textMeasurement;
   // fontScheme.accent (the tag and quote text) exists only with a core that resolves it; it takes the same look-alike policy.
-  for (const role of ["heading","body","code","accent"]) if (design.fonts[role] !== undefined) design.fonts[role] =resolveTextStyle({fontFamily:design.fonts[role],fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
+  // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
+  // resolves it again and draws the replacement's encoded weight (Montserrat 900, Red Hat Display 600 and 300); resolving the role to the
+  // replacement family first would draw every run at 400 or 700 and measure it that way. Every other family resolves once, here.
+  for (const role of ["heading","body","code","accent"]) if (design.fonts[role] !== undefined) {
+    const named = design.fonts[role], resolved = resolveTextStyle({fontFamily:named,fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
+    design.fonts[role] = fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
+  }
   const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, darkBackground: design.darkBackground, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
   return {
     scriptFonts,

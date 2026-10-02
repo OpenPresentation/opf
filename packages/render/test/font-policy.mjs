@@ -107,8 +107,12 @@ assert.equal(strict.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 700
 assert.equal(strict.registry.resolveFont({fontFamily: 'Cambria', fontWeight: 400}).compatibility, 'visual');
 assert.equal(strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 400}).compatibility, 'metric');
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 500}), {code: 'font-unavailable'});
-// An open family that no pack ships yet (Liberation Sans: not bundled) says so; one the office pack ships (Montserrat, FF-31; Raleway and Playfair Display, FF-43) points at that pack when only the base pack is loaded.
-assert.throws(() => strict.registry.resolveFont({fontFamily: 'Liberation Sans', fontWeight: 400}), error => error.details.licenseClass === 'open' && /no pinned renderer pack ships it yet/.test(error.message));
+// Liberation Sans, Serif and Mono are not shipped (Reserved Font Name Liberation, about 4.4 MB): RR-17 routes them to the Croscore faces Liberation 2 is built from (Arimo, Tinos, Cousine), metric in all four styles, so a document that names them previews with faces that have their advances and glyph boxes.
+for (const [family, replacement] of [['Liberation Sans', 'Arimo'], ['Liberation Serif', 'Tinos'], ['Liberation Mono', 'Cousine']]) for (const [fontWeight, italic] of [[400, false], [700, false], [400, true], [700, true]]) {
+  const r = strict.registry.resolveFont({fontFamily: family, fontWeight, italic});
+  assert.deepEqual([r.resolvedFamily, r.resolvedWeight, r.italic, r.compatibility, r.substitute], [replacement, fontWeight, italic, 'metric', true], `${family} ${fontWeight} ${italic}`);
+}
+// An open family the office pack ships (Montserrat, FF-31; Raleway and Playfair Display, FF-43) points at that pack when only the base pack is loaded.
 assert.equal(strict.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}).compatibility, 'exact');
 for (const family of ['Raleway', 'Playfair Display']) assert.equal(strict.registry.resolveFont({fontFamily: family, fontWeight: 700, italic: true}).compatibility, 'exact', family);
 const baseOnly = await prepareNodeFonts({pack: 'base'});

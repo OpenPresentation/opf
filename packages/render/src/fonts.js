@@ -122,8 +122,11 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
   if (!matching.length && fallbackFamily) { matching=findFamily(fallbackFamily); compatibility="generic"; via="fallback"; }
   if (!matching.length) throw unavailableFontError(family, style, policy);
   const styled = styleFallback ? matching : matching.filter(face=>face.italic===!!style.italic);
-  // Script replacement faces have no italics; use upright glyphs and advances.
-  if (!styled.length && style.italic && matching.length && matching.every(face=>face.scripts)) { if (compatibility!=="generic") compatibility="visual"; }
+  // Script replacement faces have no italics; use upright glyphs and advances. RR-17 (FF-41): so does a visual preview of a
+  // single-style display face (Anton, Bebas Neue: the families Impact and the open font schemes name), reported visual; PowerPoint
+  // synthesizes the slant of such a face too, so the advances agree and the preview no longer refuses the deck. A strict registry
+  // (policy none) still reports font-style-unavailable.
+  if (!styled.length && style.italic && matching.length && (matching.every(face=>face.scripts) || policy==="visual" && matching.every(face=>!face.italic))) { if (compatibility!=="generic") compatibility="visual"; }
   else matching = styled;
   if (!matching.length) throw new OPFFontError("font-style-unavailable", `No ${style.italic ? "italic" : "upright"} face for '${family}'.`, {path:style.path});
   matching.sort((a,b)=>Math.abs(a.weight-targetWeight)-Math.abs(b.weight-targetWeight) || a.weight-b.weight);
