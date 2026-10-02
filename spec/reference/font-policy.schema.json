@@ -169,6 +169,13 @@
       "dependentRequired": {
         "sizeAdjust": [
           "sizeAdjustBasis"
+        ],
+        "lineAscent": [
+          "sizeAdjust",
+          "lineAscentBasis"
+        ],
+        "lineAscentMixed": [
+          "lineAscent"
         ]
       },
       "properties": {
@@ -202,6 +209,23 @@
           "type": "number",
           "minimum": 0.25,
           "maximum": 2
+        },
+        "lineAscent": {
+          "description": "Preview-only baseline offset (RR-38). Em of the font size from the top of a line box to the baseline in PowerPoint (100 percent line spacing, zero insets, top anchor) when every run of the line is drawn in the real font. A renderer that places baselines one em below the line top (core's convention) moves the replacement's runs up by 1 - lineAscent em. Applies with sizeAdjust, to the face drawn as the row's replacement only.",
+          "type": "number",
+          "minimum": 0.3,
+          "maximum": 1.2
+        },
+        "lineAscentMixed": {
+          "description": "Like lineAscent, for a line that also holds runs in other fonts (a Latin run in a right-to-left line). Absent means lineAscent.",
+          "type": "number",
+          "minimum": 0.3,
+          "maximum": 1.2
+        },
+        "lineAscentBasis": {
+          "description": "How lineAscent was measured (probe, font versions, sizes, the hhea ascent for comparison). Required with lineAscent.",
+          "type": "string",
+          "minLength": 1
         },
         "sizeAdjustBasis": {
           "description": "How `sizeAdjust` was measured: the corpus, the reference font version, the advance ratio it is rounded from and the ink-height ratio for comparison. Required with `sizeAdjust`.",

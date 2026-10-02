@@ -62,6 +62,14 @@ export interface FontReplacement {
    * width at the same size). It applies only when the face drawn is `family`, and never reaches a PPTX or the geometry core
    * composes. Absent means 1. */
   sizeAdjust?: number;
+  /** Preview-only baseline offset (RR-38): em of the font size from the top of a line box to the baseline in PowerPoint (100 percent
+   * line spacing, zero insets) when every run of the line is drawn in the real font. A renderer that places baselines one em below
+   * the line top moves the replacement's runs up by `1 - lineAscent` em. Requires `sizeAdjust`. */
+  lineAscent?: number;
+  /** `lineAscent` for a line that also holds runs in other fonts; `lineAscent` when absent. */
+  lineAscentMixed?: number;
+  /** How `lineAscent` was measured. Present with `lineAscent`. */
+  lineAscentBasis?: string;
   /** How `sizeAdjust` was measured (corpus, reference font version, advance and ink ratios). Present with `sizeAdjust`. */
   sizeAdjustBasis?: string;
   /** Null when the reference font was not available to the measuring host. */
