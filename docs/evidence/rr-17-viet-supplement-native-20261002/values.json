@@ -27,7 +27,9 @@
   "pullRequest": "https://github.com/OpenPresentation/opf-pptx/pull/154",
   "identicalAt": [
    "29ac0a7abccbb6f5f86f7db09ab80690efef5198"
-  ]
+  ],
+  "mergeCommit": "b990d5dbddacca606f83d2774e586c59bd41ef52",
+  "merged": "2026-10-02"
  },
  "gallery": {
   "repository": "Data-Advantage/pptx-gallery",

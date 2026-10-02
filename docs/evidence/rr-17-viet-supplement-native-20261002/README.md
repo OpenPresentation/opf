@@ -3,7 +3,7 @@
 This re-runs the one value that failed the [RR-42 native run](../rr-42-native-20261002/README.md): `languages/vietnamese-quoc-ngu`.
 
 - **The RR-42 finding:** `Presentation.Fonts` listed Arial. The exported theme kept Office's `<a:font script="Viet" typeface="Times New Roman"/>` (major) and `typeface="Arial"` (minor), which PowerPoint applies to `vi-VN` runs.
-- **The fix:** [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154) (branch `codex/rr-17-viet-supplement`, `7f51edc`). The deck language's own script entry now names the deck's font:
+- **The fix:** [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154), merged 2026-10-02 as `b990d5d` (branch `codex/rr-17-viet-supplement`; the decks were built at `7f51edc`). The deck language's own script entry now names the deck's font:
   - `Viet` takes the theme latin family;
   - `Uigh` takes the complex-script family when the deck selects one, else the latin family.
 
