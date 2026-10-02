@@ -60,6 +60,12 @@ for (const [entry, file] of [["./chart-options", "chart-options"], ["./chart-opt
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
 }
 
+for (const [entry, file] of [["./numbering", "numbering"], ["./numbering-panel", "numbering-panel"]]) {
+  assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (RR-33).`);
+  assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
+  assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
+}
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

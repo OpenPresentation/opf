@@ -113,6 +113,10 @@ Plain-text carets are resolved from the rendered SVG glyphs: each line carries i
 
 The canvas retains canonical SVG glyphs while a transparent native input supplies the caret. Advanced shaping, freeform object positioning, all chart/media treatments, and cross-engine pixel identity remain work in progress. The Source dialog in the playground now provides a live JSON preview; changes are validated before committing.
 
+## List numbering (RR-33)
+
+`@openpresentation/opf-editor/numbering` is the headless model and `/numbering-panel` the DOM control for the `numbering` field of `items` and `bullets` payloads (a style name, a `{ style, start, suffix }` object, or an array per list level). `setNumbering(editor, path, value)` numbers the list a path points at or into (`undefined` turns numbering off and drops the entry `start` values), `setEntryStart(editor, itemPath, start)` restarts the count at an entry, `numberingValue(levels)` writes the shortest form, `numberingState(document, path)` reads the settings and the markers the list draws, and `findNumberableLists(document, slideIndex)` lists a slide's lists. Each write is one validated, undoable session edit. `createNumberingPanel(container, { editor, getTarget, getSlideIndex, onStatus })` mounts the control: number this list, style, start and suffix, different numbering per level, the markers it will draw, and a restart at the selected entry. The playground opens it from **List numbering**. Needs a core release that ships `numbering`; see core's [numbered lists](https://github.com/OpenPresentation/opf/blob/main/docs/numbered-lists.md).
+
 ## Runtime Policy
 
 The package runtime must stay local and deterministic:

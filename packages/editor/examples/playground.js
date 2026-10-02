@@ -1,6 +1,7 @@
 import {installDataControls} from './data-controls.js';
 import {installReviewControls} from './review-controls.js';
 import {installChartControls} from './chart-controls.js';
+import {installNumberingControls} from './numbering-controls.js';
 import {createSchemaInspector} from '../src/schema-inspector.js';
 import {installTemplateControls} from './template-controls.js';
 import {installFindControls} from './find-controls.js';
@@ -446,3 +447,4 @@ const openPropertiesAt = pointer => { element('open-properties').click(); proper
 review = installReviewControls({editor,getSlideIndex:()=>slideIndex,goTo:(index,path)=>{slideIndex=index;selectedPath=path;refresh();},openProperties:openPropertiesAt,focusContentField:()=>{pendingContentFocus=true;refresh();},status,measurementFor:(deck,index)=>layoutFor(deck,index).textMeasurement});
 review?.refresh();
 installChartControls({editor,getSelectedPath:()=>selectedPath,status});
+installNumberingControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,status});
