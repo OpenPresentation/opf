@@ -1,0 +1,4484 @@
+{
+ "schema": "rr-42-native-decks/1",
+ "note": "The decks themselves are not committed; each is rebuilt by the RR-42 generator from the gallery snippets at the recorded commit with the recorded packages and export options (seed 1, date 2026-10-02), and its sha256 identifies it.",
+ "exportOptions": {
+  "seed": 1,
+  "date": "2026-10-02",
+  "timestamp": "2026-10-02T00:00:00Z",
+  "zipDate": "2026-10-02T00:00:00Z"
+ },
+ "decks": [
+  {
+   "id": "layouts-01-title-slide",
+   "set": "layouts",
+   "sha256": "487cab4419e30d3c761808f43d716d0a75c57bc87384297fa17b1a245eb170b2",
+   "bytes": 91804,
+   "slides": 15,
+   "covers": [
+    "layouts/title-slide",
+    "layouts/two-column",
+    "layouts/image-focus",
+    "layouts/data-visualization",
+    "layouts/quote-highlight",
+    "layouts/section-divider",
+    "layouts/agenda",
+    "layouts/thank-you-cta",
+    "layouts/bullet-list",
+    "layouts/three-column",
+    "layouts/icon-grid",
+    "layouts/faq",
+    "layouts/stats-metrics",
+    "layouts/comparison",
+    "layouts/swot-analysis"
+   ]
+  },
+  {
+   "id": "layouts-02-matrix-quadrant",
+   "set": "layouts",
+   "sha256": "9313641cf6a6564fa338d8f052d3908804d4a1ed148409367618ae675696778d",
+   "bytes": 103050,
+   "slides": 15,
+   "covers": [
+    "layouts/matrix-quadrant",
+    "layouts/funnel-pyramid",
+    "layouts/timeline",
+    "layouts/process-flow",
+    "layouts/photo-grid",
+    "layouts/before-after",
+    "layouts/testimonial-grid",
+    "layouts/team-bio",
+    "layouts/pricing-table",
+    "layouts/roadmap",
+    "layouts/product-feature",
+    "layouts/executive-summary",
+    "layouts/key-takeaway",
+    "layouts/chapter-recap",
+    "layouts/qa-discussion"
+   ]
+  },
+  {
+   "id": "layouts-03-single-message-statement",
+   "set": "layouts",
+   "sha256": "54d54ad7c5b3186cabba9226338a75f611c8402f39ab031f5a7d153520b955f0",
+   "bytes": 128179,
+   "slides": 15,
+   "covers": [
+    "layouts/single-message-statement",
+    "layouts/one-column-explainer",
+    "layouts/case-study",
+    "layouts/pros-cons",
+    "layouts/feature-comparison-matrix",
+    "layouts/venn-overlap",
+    "layouts/decision-tree",
+    "layouts/kpi-scorecard",
+    "layouts/dashboard",
+    "layouts/waterfall-bridge",
+    "layouts/benchmark-target-table",
+    "layouts/heatmap-cohort",
+    "layouts/risk-heatmap",
+    "layouts/forecast-scenario",
+    "layouts/swimlane-process"
+   ]
+  },
+  {
+   "id": "layouts-04-gantt-project-plan",
+   "set": "layouts",
+   "sha256": "cc5dbb52ff331f5a8c8e8bac97a742bc6fa3dfd27fd1cea1149e0b5418d2f598",
+   "bytes": 113904,
+   "slides": 15,
+   "covers": [
+    "layouts/gantt-project-plan",
+    "layouts/circular-lifecycle",
+    "layouts/customer-journey",
+    "layouts/org-chart",
+    "layouts/capability-map",
+    "layouts/logic-tree",
+    "layouts/hub-and-spoke",
+    "layouts/architecture-stack",
+    "layouts/ecosystem-map",
+    "layouts/network-dependency-map",
+    "layouts/wheel-radial",
+    "layouts/geographic-map",
+    "layouts/screenshot-walkthrough",
+    "layouts/market-size",
+    "layouts/persona-grid"
+   ]
+  },
+  {
+   "id": "layouts-05-competitive-landscape",
+   "set": "layouts",
+   "sha256": "ef076f0a12bf54e64a086a2650f7a9e231e033dd2f12ebc6066376635641ed55",
+   "bytes": 141549,
+   "slides": 15,
+   "covers": [
+    "layouts/competitive-landscape",
+    "layouts/business-model-canvas",
+    "layouts/customer-logos",
+    "layouts/executive-decision",
+    "layouts/status-rag",
+    "layouts/raci-matrix",
+    "layouts/action-plan",
+    "layouts/assumptions-dependencies",
+    "layouts/appendix-index",
+    "layouts/detailed-data-table",
+    "layouts/chart-1x",
+    "layouts/chart-1x-slideimage",
+    "layouts/chart-1x-title-center",
+    "layouts/chart-1x-title-center-slideimage",
+    "layouts/chart-1x-title-left"
+   ]
+  },
+  {
+   "id": "layouts-06-chart-1x-title-left-slideimage",
+   "set": "layouts",
+   "sha256": "23894476d4a84d49632ccf64cb75c31c899b097c37f5ec2d3c4c362e5c60de89",
+   "bytes": 353486,
+   "slides": 15,
+   "covers": [
+    "layouts/chart-1x-title-left-slideimage",
+    "layouts/chart-2x",
+    "layouts/chart-2x-slideimage",
+    "layouts/chart-2x-title-center",
+    "layouts/chart-2x-title-center-slideimage",
+    "layouts/chart-2x-vertical-title-left",
+    "layouts/chart-2x-vertical-title-left-slideimage",
+    "layouts/chart-3x",
+    "layouts/chart-3x-bottom-vertical-title-left",
+    "layouts/chart-3x-bottom-vertical-title-left-slideimage",
+    "layouts/chart-3x-left",
+    "layouts/chart-3x-left-slideimage",
+    "layouts/chart-3x-left-title-center",
+    "layouts/chart-3x-left-title-center-slideimage",
+    "layouts/chart-3x-right"
+   ]
+  },
+  {
+   "id": "layouts-07-chart-3x-right-slideimage",
+   "set": "layouts",
+   "sha256": "c03aa06441db2a4c697e428ac749aff0f07750f3a1200568cd98e2af267d4edf",
+   "bytes": 259384,
+   "slides": 15,
+   "covers": [
+    "layouts/chart-3x-right-slideimage",
+    "layouts/chart-3x-right-title-center",
+    "layouts/chart-3x-right-title-center-slideimage",
+    "layouts/chart-3x-slideimage",
+    "layouts/chart-3x-title-center",
+    "layouts/chart-3x-title-center-slideimage",
+    "layouts/chart-3x-top-vertical-title-left",
+    "layouts/chart-3x-top-vertical-title-left-slideimage",
+    "layouts/image-1x-crop",
+    "layouts/image-1x-crop-slideimage",
+    "layouts/image-1x-crop-title-center",
+    "layouts/image-1x-crop-title-center-slideimage",
+    "layouts/image-1x-crop-title-left",
+    "layouts/image-1x-crop-title-left-slideimage",
+    "layouts/image-1x-fit"
+   ]
+  },
+  {
+   "id": "layouts-08-image-1x-fit-slideimage",
+   "set": "layouts",
+   "sha256": "134f79ce9c1400a9889e188d9bfad733e2d30f93648015a8085dffd3c093b4e8",
+   "bytes": 86447,
+   "slides": 15,
+   "covers": [
+    "layouts/image-1x-fit-slideimage",
+    "layouts/image-1x-fit-title-center",
+    "layouts/image-1x-fit-title-center-slideimage",
+    "layouts/image-1x-fit-title-left",
+    "layouts/image-1x-fit-title-left-slideimage",
+    "layouts/image-2x-crop",
+    "layouts/image-2x-crop-slideimage",
+    "layouts/image-2x-crop-title-center",
+    "layouts/image-2x-crop-title-center-slideimage",
+    "layouts/image-2x-crop-vertical",
+    "layouts/image-2x-crop-vertical-slideimage",
+    "layouts/image-2x-crop-vertical-title-left",
+    "layouts/image-2x-crop-vertical-title-left-slideimage",
+    "layouts/image-2x-fit",
+    "layouts/image-2x-fit-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-09-image-2x-fit-title-center",
+   "set": "layouts",
+   "sha256": "9f855fa3568f2a9cbc1152f9995db0e5bc9400a531eac724c1489627a61cee15",
+   "bytes": 87231,
+   "slides": 15,
+   "covers": [
+    "layouts/image-2x-fit-title-center",
+    "layouts/image-2x-fit-title-center-slideimage",
+    "layouts/image-2x-fit-vertical",
+    "layouts/image-2x-fit-vertical-slideimage",
+    "layouts/image-2x-fit-vertical-title-left",
+    "layouts/image-2x-fit-vertical-title-left-slideimage",
+    "layouts/image-3x-crop",
+    "layouts/image-3x-crop-slideimage",
+    "layouts/image-3x-crop-title-center",
+    "layouts/image-3x-crop-title-center-slideimage",
+    "layouts/image-3x-crop-vertical",
+    "layouts/image-3x-crop-vertical-slideimage",
+    "layouts/image-3x-crop-vertical-title-left",
+    "layouts/image-3x-crop-vertical-title-left-slideimage",
+    "layouts/image-3x-fit"
+   ]
+  },
+  {
+   "id": "layouts-10-image-3x-fit-slideimage",
+   "set": "layouts",
+   "sha256": "536b6dd8e2cd3ace6cd0b4b5536f43582f9813062046cb7d675a26a306c77ad9",
+   "bytes": 86844,
+   "slides": 15,
+   "covers": [
+    "layouts/image-3x-fit-slideimage",
+    "layouts/image-3x-fit-title-center",
+    "layouts/image-3x-fit-title-center-slideimage",
+    "layouts/image-3x-fit-vertical",
+    "layouts/image-3x-fit-vertical-slideimage",
+    "layouts/image-3x-fit-vertical-title-left",
+    "layouts/image-3x-fit-vertical-title-left-slideimage",
+    "layouts/image-only-1x-crop",
+    "layouts/image-only-1x-crop-slideimage",
+    "layouts/image-only-1x-crop-title-center",
+    "layouts/image-only-1x-crop-title-center-slideimage",
+    "layouts/image-only-1x-crop-title-left",
+    "layouts/image-only-1x-crop-title-left-slideimage",
+    "layouts/image-only-1x-fit",
+    "layouts/image-only-1x-fit-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-11-image-only-1x-fit-title-center",
+   "set": "layouts",
+   "sha256": "7bcd1f6110b5b159c6b7a21dacca970d381d069d6d4031e7732ff7d0ce2fbfa0",
+   "bytes": 87157,
+   "slides": 15,
+   "covers": [
+    "layouts/image-only-1x-fit-title-center",
+    "layouts/image-only-1x-fit-title-center-slideimage",
+    "layouts/image-only-1x-fit-title-left",
+    "layouts/image-only-1x-fit-title-left-slideimage",
+    "layouts/image-only-2x-crop",
+    "layouts/image-only-2x-crop-slideimage",
+    "layouts/image-only-2x-crop-title-center",
+    "layouts/image-only-2x-crop-title-center-slideimage",
+    "layouts/image-only-2x-crop-vertical",
+    "layouts/image-only-2x-crop-vertical-slideimage",
+    "layouts/image-only-2x-crop-vertical-title-left",
+    "layouts/image-only-2x-crop-vertical-title-left-slideimage",
+    "layouts/image-only-2x-fit",
+    "layouts/image-only-2x-fit-slideimage",
+    "layouts/image-only-2x-fit-title-center"
+   ]
+  },
+  {
+   "id": "layouts-12-image-only-2x-fit-title-center-slideimage",
+   "set": "layouts",
+   "sha256": "b1e0b1dad213bc90784ca61975dbf03e64c2f34a98f1f970cff43e5fa570cb9e",
+   "bytes": 87338,
+   "slides": 15,
+   "covers": [
+    "layouts/image-only-2x-fit-title-center-slideimage",
+    "layouts/image-only-2x-fit-vertical",
+    "layouts/image-only-2x-fit-vertical-slideimage",
+    "layouts/image-only-2x-fit-vertical-title-left",
+    "layouts/image-only-2x-fit-vertical-title-left-slideimage",
+    "layouts/image-only-3x-crop",
+    "layouts/image-only-3x-crop-slideimage",
+    "layouts/image-only-3x-crop-title-center",
+    "layouts/image-only-3x-crop-title-center-slideimage",
+    "layouts/image-only-3x-crop-vertical",
+    "layouts/image-only-3x-crop-vertical-slideimage",
+    "layouts/image-only-3x-crop-vertical-title-left",
+    "layouts/image-only-3x-crop-vertical-title-left-slideimage",
+    "layouts/image-only-3x-fit",
+    "layouts/image-only-3x-fit-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-13-image-only-3x-fit-title-center",
+   "set": "layouts",
+   "sha256": "e7fe1e967f3eee43660f2e4c4f5a36298cc7239a26190cf0e8614616e6b54768",
+   "bytes": 93198,
+   "slides": 15,
+   "covers": [
+    "layouts/image-only-3x-fit-title-center",
+    "layouts/image-only-3x-fit-title-center-slideimage",
+    "layouts/image-only-3x-fit-vertical",
+    "layouts/image-only-3x-fit-vertical-slideimage",
+    "layouts/image-only-3x-fit-vertical-title-left",
+    "layouts/image-only-3x-fit-vertical-title-left-slideimage",
+    "layouts/list-1x",
+    "layouts/list-1x-box",
+    "layouts/list-1x-box-slideimage",
+    "layouts/list-1x-box-title-center",
+    "layouts/list-1x-box-title-center-slideimage",
+    "layouts/list-1x-box-vertical",
+    "layouts/list-1x-box-vertical-slideimage",
+    "layouts/list-1x-box-vertical-title-center",
+    "layouts/list-1x-box-vertical-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-14-list-1x-box-vertical-title-left",
+   "set": "layouts",
+   "sha256": "19093779c61618346806c47bcfee667cdf166d4663f2b714598594a67b969112",
+   "bytes": 94059,
+   "slides": 15,
+   "covers": [
+    "layouts/list-1x-box-vertical-title-left",
+    "layouts/list-1x-box-vertical-title-left-slideimage",
+    "layouts/list-1x-itemimage",
+    "layouts/list-1x-itemimage-slideimage",
+    "layouts/list-1x-itemimage-title-center",
+    "layouts/list-1x-itemimage-title-center-slideimage",
+    "layouts/list-1x-itemimage-vertical",
+    "layouts/list-1x-itemimage-vertical-slideimage",
+    "layouts/list-1x-itemimage-vertical-title-center",
+    "layouts/list-1x-itemimage-vertical-title-center-slideimage",
+    "layouts/list-1x-itemimage-vertical-title-left",
+    "layouts/list-1x-itemimage-vertical-title-left-slideimage",
+    "layouts/list-1x-slideimage",
+    "layouts/list-1x-title-center",
+    "layouts/list-1x-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-15-list-1x-vertical",
+   "set": "layouts",
+   "sha256": "4c8e24e92979cb744a7d9dc92a33be3980876cefc8b998569c8512ac0d9592fa",
+   "bytes": 99268,
+   "slides": 15,
+   "covers": [
+    "layouts/list-1x-vertical",
+    "layouts/list-1x-vertical-slideimage",
+    "layouts/list-1x-vertical-title-center",
+    "layouts/list-1x-vertical-title-center-slideimage",
+    "layouts/list-1x-vertical-title-left",
+    "layouts/list-1x-vertical-title-left-slideimage",
+    "layouts/list-2x",
+    "layouts/list-2x-box",
+    "layouts/list-2x-box-slideimage",
+    "layouts/list-2x-box-title-center",
+    "layouts/list-2x-box-title-center-slideimage",
+    "layouts/list-2x-box-vertical",
+    "layouts/list-2x-box-vertical-slideimage",
+    "layouts/list-2x-box-vertical-title-center",
+    "layouts/list-2x-box-vertical-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-16-list-2x-box-vertical-title-left",
+   "set": "layouts",
+   "sha256": "fa9d7d58b9973497718c6f379dbfc5c6c3d784db000d7910e757d9d7981bd1ee",
+   "bytes": 97173,
+   "slides": 15,
+   "covers": [
+    "layouts/list-2x-box-vertical-title-left",
+    "layouts/list-2x-box-vertical-title-left-slideimage",
+    "layouts/list-2x-itemimage",
+    "layouts/list-2x-itemimage-slideimage",
+    "layouts/list-2x-itemimage-title-center",
+    "layouts/list-2x-itemimage-title-center-slideimage",
+    "layouts/list-2x-itemimage-vertical",
+    "layouts/list-2x-itemimage-vertical-slideimage",
+    "layouts/list-2x-itemimage-vertical-title-center",
+    "layouts/list-2x-itemimage-vertical-title-center-slideimage",
+    "layouts/list-2x-itemimage-vertical-title-left",
+    "layouts/list-2x-itemimage-vertical-title-left-slideimage",
+    "layouts/list-2x-slideimage",
+    "layouts/list-2x-title-center",
+    "layouts/list-2x-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-17-list-2x-vertical",
+   "set": "layouts",
+   "sha256": "45817980807e327e271acaf95bfc4fa782f63265e7aaeb94e088bc0e0a13e710",
+   "bytes": 105270,
+   "slides": 15,
+   "covers": [
+    "layouts/list-2x-vertical",
+    "layouts/list-2x-vertical-slideimage",
+    "layouts/list-2x-vertical-title-center",
+    "layouts/list-2x-vertical-title-center-slideimage",
+    "layouts/list-2x-vertical-title-left",
+    "layouts/list-2x-vertical-title-left-slideimage",
+    "layouts/list-3x",
+    "layouts/list-3x-box",
+    "layouts/list-3x-box-slideimage",
+    "layouts/list-3x-box-title-center",
+    "layouts/list-3x-box-title-center-slideimage",
+    "layouts/list-3x-box-vertical",
+    "layouts/list-3x-box-vertical-slideimage",
+    "layouts/list-3x-box-vertical-title-center",
+    "layouts/list-3x-box-vertical-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-18-list-3x-box-vertical-title-left",
+   "set": "layouts",
+   "sha256": "59c21fce9f3820ad622de5dc672e76c659b8ba1d1340f83168b50f62f1403caf",
+   "bytes": 99350,
+   "slides": 15,
+   "covers": [
+    "layouts/list-3x-box-vertical-title-left",
+    "layouts/list-3x-box-vertical-title-left-slideimage",
+    "layouts/list-3x-itemimage",
+    "layouts/list-3x-itemimage-slideimage",
+    "layouts/list-3x-itemimage-title-center",
+    "layouts/list-3x-itemimage-title-center-slideimage",
+    "layouts/list-3x-itemimage-vertical",
+    "layouts/list-3x-itemimage-vertical-slideimage",
+    "layouts/list-3x-itemimage-vertical-title-center",
+    "layouts/list-3x-itemimage-vertical-title-center-slideimage",
+    "layouts/list-3x-itemimage-vertical-title-left",
+    "layouts/list-3x-itemimage-vertical-title-left-slideimage",
+    "layouts/list-3x-slideimage",
+    "layouts/list-3x-title-center",
+    "layouts/list-3x-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-19-list-3x-vertical",
+   "set": "layouts",
+   "sha256": "524cfe6116a1605e9979a8f74793cac46ca382434894df38b60c6e1c58e7a923",
+   "bytes": 111299,
+   "slides": 15,
+   "covers": [
+    "layouts/list-3x-vertical",
+    "layouts/list-3x-vertical-slideimage",
+    "layouts/list-3x-vertical-title-center",
+    "layouts/list-3x-vertical-title-center-slideimage",
+    "layouts/list-3x-vertical-title-left",
+    "layouts/list-3x-vertical-title-left-slideimage",
+    "layouts/list-4x",
+    "layouts/list-4x-box",
+    "layouts/list-4x-box-slideimage",
+    "layouts/list-4x-box-title-center",
+    "layouts/list-4x-box-title-center-slideimage",
+    "layouts/list-4x-box-vertical",
+    "layouts/list-4x-box-vertical-slideimage",
+    "layouts/list-4x-box-vertical-title-center",
+    "layouts/list-4x-box-vertical-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-20-list-4x-box-vertical-title-left",
+   "set": "layouts",
+   "sha256": "0d7cbb649de061c73ccee45e99877681d516bd134e79d5e128662d91b716158d",
+   "bytes": 102064,
+   "slides": 15,
+   "covers": [
+    "layouts/list-4x-box-vertical-title-left",
+    "layouts/list-4x-box-vertical-title-left-slideimage",
+    "layouts/list-4x-itemimage",
+    "layouts/list-4x-itemimage-slideimage",
+    "layouts/list-4x-itemimage-title-center",
+    "layouts/list-4x-itemimage-title-center-slideimage",
+    "layouts/list-4x-itemimage-vertical",
+    "layouts/list-4x-itemimage-vertical-slideimage",
+    "layouts/list-4x-itemimage-vertical-title-center",
+    "layouts/list-4x-itemimage-vertical-title-center-slideimage",
+    "layouts/list-4x-itemimage-vertical-title-left",
+    "layouts/list-4x-itemimage-vertical-title-left-slideimage",
+    "layouts/list-4x-slideimage",
+    "layouts/list-4x-title-center",
+    "layouts/list-4x-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-21-list-4x-vertical",
+   "set": "layouts",
+   "sha256": "68c1d6b7d57acc88af6be0a2e066b3ccab9ba2d9faace434ded98ed8ce8d56a0",
+   "bytes": 116608,
+   "slides": 15,
+   "covers": [
+    "layouts/list-4x-vertical",
+    "layouts/list-4x-vertical-slideimage",
+    "layouts/list-4x-vertical-title-center",
+    "layouts/list-4x-vertical-title-center-slideimage",
+    "layouts/list-4x-vertical-title-left",
+    "layouts/list-4x-vertical-title-left-slideimage",
+    "layouts/list-5x",
+    "layouts/list-5x-box",
+    "layouts/list-5x-box-slideimage",
+    "layouts/list-5x-box-title-center",
+    "layouts/list-5x-box-title-center-slideimage",
+    "layouts/list-5x-box-vertical",
+    "layouts/list-5x-box-vertical-slideimage",
+    "layouts/list-5x-box-vertical-title-center",
+    "layouts/list-5x-box-vertical-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-22-list-5x-box-vertical-title-left",
+   "set": "layouts",
+   "sha256": "8b88760e4d06c0770a38a6ad42f497e12f3e1f689355a98261d79cc13fc4612d",
+   "bytes": 102231,
+   "slides": 15,
+   "covers": [
+    "layouts/list-5x-box-vertical-title-left",
+    "layouts/list-5x-box-vertical-title-left-slideimage",
+    "layouts/list-5x-itemimage",
+    "layouts/list-5x-itemimage-slideimage",
+    "layouts/list-5x-itemimage-title-center",
+    "layouts/list-5x-itemimage-title-center-slideimage",
+    "layouts/list-5x-itemimage-vertical",
+    "layouts/list-5x-itemimage-vertical-slideimage",
+    "layouts/list-5x-itemimage-vertical-title-center",
+    "layouts/list-5x-itemimage-vertical-title-center-slideimage",
+    "layouts/list-5x-itemimage-vertical-title-left",
+    "layouts/list-5x-itemimage-vertical-title-left-slideimage",
+    "layouts/list-5x-slideimage",
+    "layouts/list-5x-title-center",
+    "layouts/list-5x-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-23-list-5x-vertical",
+   "set": "layouts",
+   "sha256": "64b3efde4665f5db0d4ce4469d34abb58281ed59441e33486f4839d9b76e88a5",
+   "bytes": 121652,
+   "slides": 15,
+   "covers": [
+    "layouts/list-5x-vertical",
+    "layouts/list-5x-vertical-slideimage",
+    "layouts/list-5x-vertical-title-center",
+    "layouts/list-5x-vertical-title-center-slideimage",
+    "layouts/list-5x-vertical-title-left",
+    "layouts/list-5x-vertical-title-left-slideimage",
+    "layouts/list-6x",
+    "layouts/list-6x-box",
+    "layouts/list-6x-box-slideimage",
+    "layouts/list-6x-box-title-center",
+    "layouts/list-6x-box-title-center-slideimage",
+    "layouts/list-6x-box-vertical",
+    "layouts/list-6x-box-vertical-slideimage",
+    "layouts/list-6x-box-vertical-title-center",
+    "layouts/list-6x-box-vertical-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-24-list-6x-box-vertical-title-left",
+   "set": "layouts",
+   "sha256": "b3585ba6faa9086b4528f5a7537569d9863a3b4e1e5c5c7dbe7e5126873d8fee",
+   "bytes": 105180,
+   "slides": 15,
+   "covers": [
+    "layouts/list-6x-box-vertical-title-left",
+    "layouts/list-6x-box-vertical-title-left-slideimage",
+    "layouts/list-6x-heading-title-center",
+    "layouts/list-6x-heading-title-center-slideimage",
+    "layouts/list-6x-itemimage",
+    "layouts/list-6x-itemimage-slideimage",
+    "layouts/list-6x-itemimage-title-center",
+    "layouts/list-6x-itemimage-title-center-slideimage",
+    "layouts/list-6x-itemimage-vertical",
+    "layouts/list-6x-itemimage-vertical-slideimage",
+    "layouts/list-6x-itemimage-vertical-title-center",
+    "layouts/list-6x-itemimage-vertical-title-center-slideimage",
+    "layouts/list-6x-itemimage-vertical-title-left",
+    "layouts/list-6x-itemimage-vertical-title-left-slideimage",
+    "layouts/list-6x-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-25-list-6x-title-center",
+   "set": "layouts",
+   "sha256": "9014525da49f94fca74838565cc6ae591248a577817a9879f7b13ce9f9806c75",
+   "bytes": 97908,
+   "slides": 15,
+   "covers": [
+    "layouts/list-6x-title-center",
+    "layouts/list-6x-title-center-slideimage",
+    "layouts/list-6x-vertical",
+    "layouts/list-6x-vertical-slideimage",
+    "layouts/list-6x-vertical-title-center",
+    "layouts/list-6x-vertical-title-center-slideimage",
+    "layouts/list-6x-vertical-title-left",
+    "layouts/list-6x-vertical-title-left-slideimage",
+    "layouts/number-1x",
+    "layouts/number-1x-box",
+    "layouts/number-1x-box-slideimage",
+    "layouts/number-1x-box-title-center",
+    "layouts/number-1x-box-title-center-slideimage",
+    "layouts/number-1x-title-center",
+    "layouts/number-2x"
+   ]
+  },
+  {
+   "id": "layouts-26-number-2x-box",
+   "set": "layouts",
+   "sha256": "b5dc107c0045a226b401c18ebb8dbb2c3f0aa40439f7587fd71a37ecfc3ae275",
+   "bytes": 143092,
+   "slides": 15,
+   "covers": [
+    "layouts/number-2x-box",
+    "layouts/number-2x-box-slideimage",
+    "layouts/number-2x-box-title-center",
+    "layouts/number-2x-box-title-center-slideimage",
+    "layouts/number-2x-title-center",
+    "layouts/number-3x",
+    "layouts/number-3x-box",
+    "layouts/number-3x-box-slideimage",
+    "layouts/number-3x-box-title-center",
+    "layouts/number-3x-box-title-center-slideimage",
+    "layouts/number-3x-title-center",
+    "layouts/number-4x",
+    "layouts/number-4x-box",
+    "layouts/number-4x-box-slideimage",
+    "layouts/number-4x-box-title-center"
+   ]
+  },
+  {
+   "id": "layouts-27-number-4x-box-title-center-slideimage",
+   "set": "layouts",
+   "sha256": "c66bbfd4afe17d5a2d4532064b6bda2e60917997eb4e97ef3083d2a3e0c387f7",
+   "bytes": 181916,
+   "slides": 15,
+   "covers": [
+    "layouts/number-4x-box-title-center-slideimage",
+    "layouts/number-4x-title-center",
+    "layouts/number-5x",
+    "layouts/number-5x-box",
+    "layouts/number-5x-box-slideimage",
+    "layouts/number-5x-box-title-center",
+    "layouts/number-5x-box-title-center-slideimage",
+    "layouts/number-5x-title-center",
+    "layouts/number-6x",
+    "layouts/number-6x-box",
+    "layouts/number-6x-box-slideimage",
+    "layouts/number-6x-box-title-center",
+    "layouts/number-6x-box-title-center-slideimage",
+    "layouts/number-6x-title-center",
+    "layouts/text-1x-box-title-center"
+   ]
+  },
+  {
+   "id": "layouts-28-text-1x-box-title-left",
+   "set": "layouts",
+   "sha256": "179e3e7add62770990e6e7fb79e571f6fdd500dbdb02676c9ca446e5d8fd13a3",
+   "bytes": 92221,
+   "slides": 15,
+   "covers": [
+    "layouts/text-1x-box-title-left",
+    "layouts/text-1x-center",
+    "layouts/text-1x-center-box",
+    "layouts/text-1x-center-box-title-center",
+    "layouts/text-1x-center-box-title-left",
+    "layouts/text-1x-center-slideimage",
+    "layouts/text-1x-center-title-center",
+    "layouts/text-1x-center-title-center-slideimage",
+    "layouts/text-1x-center-title-left",
+    "layouts/text-1x-center-title-left-slideimage",
+    "layouts/text-1x-left",
+    "layouts/text-1x-left-box",
+    "layouts/text-1x-left-slideimage",
+    "layouts/text-1x-title-center",
+    "layouts/text-1x-title-center-slideimage"
+   ]
+  },
+  {
+   "id": "layouts-29-text-1x-title-left",
+   "set": "layouts",
+   "sha256": "671281bac80dba0c069d00f37c34a9ed74a5a942195f220475dc6c604555b88c",
+   "bytes": 104465,
+   "slides": 15,
+   "covers": [
+    "layouts/text-1x-title-left",
+    "layouts/text-1x-title-left-slideimage",
+    "layouts/text-2x-box-title-center",
+    "layouts/text-2x-box-vertical-title-left",
+    "layouts/text-2x-center",
+    "layouts/text-2x-center-box",
+    "layouts/text-2x-center-box-title-center",
+    "layouts/text-2x-center-box-vertical-title-left",
+    "layouts/text-2x-center-slideimage",
+    "layouts/text-2x-center-title-center",
+    "layouts/text-2x-center-title-center-slideimage",
+    "layouts/text-2x-center-vertical-title-left",
+    "layouts/text-2x-center-vertical-title-left-slideimage",
+    "layouts/text-2x-left",
+    "layouts/text-2x-left-box"
+   ]
+  },
+  {
+   "id": "layouts-30-text-2x-left-slideimage",
+   "set": "layouts",
+   "sha256": "382585bc46bb75af75d8ad906f4da3c0044754b3d0d75094fd3386aee5f4801c",
+   "bytes": 112089,
+   "slides": 15,
+   "covers": [
+    "layouts/text-2x-left-slideimage",
+    "layouts/text-2x-title-center",
+    "layouts/text-2x-title-center-slideimage",
+    "layouts/text-2x-vertical-title-left",
+    "layouts/text-2x-vertical-title-left-slideimage",
+    "layouts/text-3x-box-title-center",
+    "layouts/text-3x-box-vertical-title-left",
+    "layouts/text-3x-center",
+    "layouts/text-3x-center-box",
+    "layouts/text-3x-center-box-title-center",
+    "layouts/text-3x-center-box-vertical-title-left",
+    "layouts/text-3x-center-slideimage",
+    "layouts/text-3x-center-title-center",
+    "layouts/text-3x-center-title-center-slideimage",
+    "layouts/text-3x-center-vertical-title-left"
+   ]
+  },
+  {
+   "id": "layouts-31-text-3x-center-vertical-title-left-slideimage",
+   "set": "layouts",
+   "sha256": "b4220d0b86a5a96ec6bdbb93c780fbf22fa0aed77edd06e615acab2776ea3a0d",
+   "bytes": 101982,
+   "slides": 15,
+   "covers": [
+    "layouts/text-3x-center-vertical-title-left-slideimage",
+    "layouts/text-3x-left",
+    "layouts/text-3x-left-box",
+    "layouts/text-3x-left-slideimage",
+    "layouts/text-3x-title-center",
+    "layouts/text-3x-title-center-slideimage",
+    "layouts/text-3x-vertical-title-left",
+    "layouts/text-3x-vertical-title-left-slideimage",
+    "layouts/title-center",
+    "layouts/title-center-box",
+    "layouts/title-center-slideimage",
+    "layouts/title-center-slideimage-bottom",
+    "layouts/title-center-slideimage-top",
+    "layouts/title-left",
+    "layouts/title-left-box"
+   ]
+  },
+  {
+   "id": "layouts-32-title-left-slideimage",
+   "set": "layouts",
+   "sha256": "636859f0268bf81de2f94e0a01ba24cebad9772eb602a03be62bd05c156ae799",
+   "bytes": 89685,
+   "slides": 15,
+   "covers": [
+    "layouts/title-left-slideimage",
+    "layouts/title-left-slideimage-bottom",
+    "layouts/title-left-slideimage-left",
+    "layouts/title-left-slideimage-right",
+    "layouts/title-left-slideimage-top",
+    "layouts/blank",
+    "layouts/code-1x",
+    "layouts/image-1x",
+    "layouts/image-2x",
+    "layouts/image-3x",
+    "layouts/image-bleed",
+    "layouts/media-1x",
+    "layouts/quote-1x",
+    "layouts/table-1x",
+    "layouts/text-1x"
+   ]
+  },
+  {
+   "id": "layouts-33-text-2x",
+   "set": "layouts",
+   "sha256": "adf8b0fc5b6c9d08e6c591b44fb51d4078e126a19bfd3327f7ad9f13b9ac6c6d",
+   "bytes": 39464,
+   "slides": 5,
+   "covers": [
+    "layouts/text-2x",
+    "layouts/text-3x",
+    "layouts/timeline-1x",
+    "layouts/title",
+    "layouts/title-subtitle"
+   ]
+  },
+  {
+   "id": "charts-01-column",
+   "set": "charts",
+   "sha256": "54099168e88222fd3e4cdc84912fc5b511ea51a35f02af7c8cc262a92921ffef",
+   "bytes": 165922,
+   "slides": 13,
+   "covers": [
+    "charts/column",
+    "charts/stacked-column-3x",
+    "charts/100pct-stacked-column-3x",
+    "charts/line",
+    "charts/line-with-markers",
+    "charts/stacked-line-3x",
+    "charts/stacked-line-with-markers-3x",
+    "charts/pie",
+    "charts/doughnut",
+    "charts/bar",
+    "charts/stacked-bar-3x",
+    "charts/100pct-stacked-bar-3x",
+    "charts/area"
+   ]
+  },
+  {
+   "id": "charts-02-stacked-area-3x",
+   "set": "charts",
+   "sha256": "034c3487bdee3ff9cd9dc99d895aabed6f788e5760634f1290713e0179d675a9",
+   "bytes": 185267,
+   "slides": 13,
+   "covers": [
+    "charts/stacked-area-3x",
+    "charts/100pct-stacked-area-3x",
+    "charts/scatter",
+    "charts/radar",
+    "charts/radar-with-markers",
+    "charts/filled-radar",
+    "charts/treemap",
+    "charts/histogram",
+    "charts/pareto",
+    "charts/world",
+    "charts/box-and-whisker",
+    "charts/waterfall",
+    "charts/funnel"
+   ]
+  },
+  {
+   "id": "design-cs-01-black-and-white",
+   "set": "design",
+   "sha256": "0c5242efaccaa8c448cd73ea947242228072640367c6d0d7552d32199ed42461",
+   "bytes": 30713,
+   "slides": 4,
+   "covers": [
+    "color-schemes/black-and-white"
+   ]
+  },
+  {
+   "id": "design-cs-02-bold-red",
+   "set": "design",
+   "sha256": "89d4424a6f06cab56ddafae45e31eda77457ce9d3f63294efa615f0c7bd98696",
+   "bytes": 30710,
+   "slides": 4,
+   "covers": [
+    "color-schemes/bold-red"
+   ]
+  },
+  {
+   "id": "design-cs-03-boost",
+   "set": "design",
+   "sha256": "8fe555d6dbfe56729e17bafba9cea6c884b34df3b51eff95bc9097b4b0563c3b",
+   "bytes": 30729,
+   "slides": 4,
+   "covers": [
+    "color-schemes/boost"
+   ]
+  },
+  {
+   "id": "design-cs-04-burnt-orange",
+   "set": "design",
+   "sha256": "dfe1e4562a0ab1107ee5149d3f339ad0bdac673ccebfbb5ee5d1c5b9521d65c9",
+   "bytes": 30752,
+   "slides": 4,
+   "covers": [
+    "color-schemes/burnt-orange"
+   ]
+  },
+  {
+   "id": "design-cs-05-cool-horizon",
+   "set": "design",
+   "sha256": "ada7649887599e31351a2e55a28af7b9b302164c26fd660ace39464e54e7fa87",
+   "bytes": 30780,
+   "slides": 4,
+   "covers": [
+    "color-schemes/cool-horizon"
+   ]
+  },
+  {
+   "id": "design-cs-06-corporate-blue",
+   "set": "design",
+   "sha256": "e7ad7eb81e74f60a3b2c25cd01aacd39bbfbad586e77325f6d10c2b613b0bdc4",
+   "bytes": 30786,
+   "slides": 4,
+   "covers": [
+    "color-schemes/corporate-blue"
+   ]
+  },
+  {
+   "id": "design-cs-07-deep-purple",
+   "set": "design",
+   "sha256": "03aa075096e139c52945b3eacfa6e17fc02d044f0b7870dbcb73c122d13fcc0c",
+   "bytes": 30753,
+   "slides": 4,
+   "covers": [
+    "color-schemes/deep-purple"
+   ]
+  },
+  {
+   "id": "design-cs-08-forest-green",
+   "set": "design",
+   "sha256": "ae808a56fcd0c2a47c4ea89623e27d70ab0eb4779c71dc5fe1710efa2bfd73ba",
+   "bytes": 30753,
+   "slides": 4,
+   "covers": [
+    "color-schemes/forest-green"
+   ]
+  },
+  {
+   "id": "design-cs-09-golden-yellow",
+   "set": "design",
+   "sha256": "1bed91d75953e5e73dc2f4ee70176a16e62232f475f0b539b786fada5fe27b2b",
+   "bytes": 30766,
+   "slides": 4,
+   "covers": [
+    "color-schemes/golden-yellow"
+   ]
+  },
+  {
+   "id": "design-cs-10-luxury",
+   "set": "design",
+   "sha256": "7df72e2e06cc1da59984f3ca8495dacfb6e4031eb98bf0d804958bba6fb2d56d",
+   "bytes": 30737,
+   "slides": 4,
+   "covers": [
+    "color-schemes/luxury"
+   ]
+  },
+  {
+   "id": "design-cs-11-pastel-red",
+   "set": "design",
+   "sha256": "a002e5185f3424a41f71298519ecd6183f6e0f4e0fc2ed10ff2a328827bbc939",
+   "bytes": 30749,
+   "slides": 4,
+   "covers": [
+    "color-schemes/pastel-red"
+   ]
+  },
+  {
+   "id": "design-cs-12-slate-gray",
+   "set": "design",
+   "sha256": "23bd358bddfe77a04d67d702588bfbf2e7526317ed453be37ed970bbd0f456ca",
+   "bytes": 30677,
+   "slides": 4,
+   "covers": [
+    "color-schemes/slate-gray"
+   ]
+  },
+  {
+   "id": "design-cs-13-steel-blue",
+   "set": "design",
+   "sha256": "fb32ed8480925d74e4af3ea94639eb3f2b547dc2af6634409017d2a11e902e43",
+   "bytes": 30776,
+   "slides": 4,
+   "covers": [
+    "color-schemes/steel-blue"
+   ]
+  },
+  {
+   "id": "design-cs-14-vibes",
+   "set": "design",
+   "sha256": "66558c4c8efb876fa81338ac9feac4bd3983c402f5a8612bfd7a46b2442bc4e5",
+   "bytes": 30706,
+   "slides": 4,
+   "covers": [
+    "color-schemes/vibes"
+   ]
+  },
+  {
+   "id": "design-th-01-minimal",
+   "set": "design",
+   "sha256": "82b3de1564462c7e539295eaf9384d88bcfa6088aa83299718791ab93493d486",
+   "bytes": 19497,
+   "slides": 1,
+   "covers": [
+    "themes/minimal"
+   ]
+  },
+  {
+   "id": "design-th-02-classic",
+   "set": "design",
+   "sha256": "094e89c3a1f0ac8138392aab50b591e5c87b6ff10edba4f3e7129623297de45b",
+   "bytes": 19511,
+   "slides": 1,
+   "covers": [
+    "themes/classic"
+   ]
+  },
+  {
+   "id": "design-th-03-dark",
+   "set": "design",
+   "sha256": "beadcf486ccb2c090c22201da107083ea471c5f74142c5a057639302ffd3c838",
+   "bytes": 23273,
+   "slides": 1,
+   "covers": [
+    "themes/dark"
+   ]
+  },
+  {
+   "id": "design-th-04-bold",
+   "set": "design",
+   "sha256": "9c0667c2c29b61fc6c69ed87ae778109c497f25582aea87b96c054d6caa0c380",
+   "bytes": 19430,
+   "slides": 1,
+   "covers": [
+    "themes/bold"
+   ]
+  },
+  {
+   "id": "design-bg-01-solid-color",
+   "set": "design",
+   "sha256": "2a9f9cf5500d21a692dc4d4c1911d53fca318b7e1f7b2c60b8a7666e03715a95",
+   "bytes": 19417,
+   "slides": 1,
+   "covers": [
+    "backgrounds/solid-color"
+   ]
+  },
+  {
+   "id": "design-bg-02-subtle-gradient",
+   "set": "design",
+   "sha256": "debacaf7f2250edb4d1dd45201c045452671b3479080853799a2e17b4fbc2e94",
+   "bytes": 19549,
+   "slides": 1,
+   "covers": [
+    "backgrounds/subtle-gradient"
+   ]
+  },
+  {
+   "id": "design-bg-03-geometric-pattern",
+   "set": "design",
+   "sha256": "a304f73b0b01f054a205d17768c166ccf6e918edacd0e0998ec31e668cdfbe93",
+   "bytes": 19519,
+   "slides": 1,
+   "covers": [
+    "backgrounds/geometric-pattern"
+   ]
+  },
+  {
+   "id": "design-bg-04-photography",
+   "set": "design",
+   "sha256": "be75d7e985b6d2c47754c2f16a6acabf95298914d813208c30671cb8c5fc16a3",
+   "bytes": 22754,
+   "slides": 1,
+   "covers": [
+    "backgrounds/photography"
+   ]
+  },
+  {
+   "id": "design-bg-05-abstract-shapes",
+   "set": "design",
+   "sha256": "56af4533243a906de7020c6d549e1e6c928e94e11ecfd7176ae308af61476373",
+   "bytes": 19510,
+   "slides": 1,
+   "covers": [
+    "backgrounds/abstract-shapes"
+   ]
+  },
+  {
+   "id": "design-bg-06-minimal-texture",
+   "set": "design",
+   "sha256": "8803c81aa44995fbd5b744f88980bae67c4c334291d77babb4eed0a787446f3c",
+   "bytes": 19509,
+   "slides": 1,
+   "covers": [
+    "backgrounds/minimal-texture"
+   ]
+  },
+  {
+   "id": "design-it-01-full-bleed",
+   "set": "design",
+   "sha256": "6c83830e77d24fbc3544c7de84ca2736f396f5e5d9ceee0ab3881ba8e046c1f4",
+   "bytes": 52853,
+   "slides": 6,
+   "covers": [
+    "image-treatments/full-bleed",
+    "image-treatments/side-by-side",
+    "image-treatments/masked-shape",
+    "image-treatments/circular-crop",
+    "image-treatments/image-strip",
+    "image-treatments/collage-grid"
+   ]
+  },
+  {
+   "id": "design-it-02-text-overlay",
+   "set": "design",
+   "sha256": "ea7594633d87d869e69790797ca6dea5257f5ecdc727a3b65cc17510ae2b8c95",
+   "bytes": 33884,
+   "slides": 2,
+   "covers": [
+    "image-treatments/text-overlay",
+    "image-treatments/caption-overlay"
+   ]
+  },
+  {
+   "id": "design-it-03-rounded-card",
+   "set": "design",
+   "sha256": "a7a22f02848cab9d5b149715641f596a5475a81d25dbb3c6d2ae68487c8f79e7",
+   "bytes": 34502,
+   "slides": 1,
+   "covers": [
+    "image-treatments/rounded-card"
+   ]
+  },
+  {
+   "id": "design-it-04-duotone",
+   "set": "design",
+   "sha256": "65869db023726ee1057b8a19bffb1e203972e34b434653feaa8407eb897bc00a",
+   "bytes": 30843,
+   "slides": 1,
+   "covers": [
+    "image-treatments/duotone"
+   ]
+  },
+  {
+   "id": "design-it-05-background-blur",
+   "set": "design",
+   "sha256": "0b0d529e049dd719ecde36e3a55e96b0c6682b1f6f80063518d368d1ed45de1a",
+   "bytes": 31749,
+   "slides": 1,
+   "covers": [
+    "image-treatments/background-blur"
+   ]
+  },
+  {
+   "id": "design-it-06-device-frame",
+   "set": "design",
+   "sha256": "a6c367de44367c938d09b5565d2d5adc2c55ff9c916f9cb16e7169f95a59d449",
+   "bytes": 34542,
+   "slides": 1,
+   "covers": [
+    "image-treatments/device-frame"
+   ]
+  },
+  {
+   "id": "design-it-07-cutout-subject",
+   "set": "design",
+   "sha256": "61e46174d9163af29a49fb10291d033b99bd0451c2444d2da244e7b378058a39",
+   "bytes": 24085,
+   "slides": 1,
+   "covers": [
+    "image-treatments/cutout-subject"
+   ]
+  },
+  {
+   "id": "design-it-08-watermark",
+   "set": "design",
+   "sha256": "d653b9acb6ddbde4455223482681c203a951c5a0c289fe265404268f6a93c0b2",
+   "bytes": 32342,
+   "slides": 1,
+   "covers": [
+    "image-treatments/watermark"
+   ]
+  },
+  {
+   "id": "design-it-09-cinematic-crop",
+   "set": "design",
+   "sha256": "6fa7761457eb45a6e803aa59b4558ac53224d10b017d2ac26d8f2c2c10c42355",
+   "bytes": 31424,
+   "slides": 1,
+   "covers": [
+    "image-treatments/cinematic-crop"
+   ]
+  },
+  {
+   "id": "furniture-hf-01-slide-number-only",
+   "set": "furniture",
+   "sha256": "ee43b252b95915593c8e9835a9ea31b1fa3633754f36bcbfb1e533ba4e26f8f5",
+   "bytes": 23885,
+   "slides": 2,
+   "covers": [
+    "headers-footers/slide-number-only"
+   ]
+  },
+  {
+   "id": "furniture-hf-02-slide-number-progress",
+   "set": "furniture",
+   "sha256": "714bea94524a866bd624b3b695a7e20c5389131d112820b5cb334efb87572695",
+   "bytes": 23952,
+   "slides": 2,
+   "covers": [
+    "headers-footers/slide-number-progress"
+   ]
+  },
+  {
+   "id": "furniture-hf-03-section-marker-header",
+   "set": "furniture",
+   "sha256": "153da28396cfe704254ab01cffa06f0551f32a66feee9c4e5a5ce1a293177263",
+   "bytes": 24619,
+   "slides": 2,
+   "covers": [
+    "headers-footers/section-marker-header"
+   ]
+  },
+  {
+   "id": "furniture-hf-04-dated-footer",
+   "set": "furniture",
+   "sha256": "a2dc9cae5b59a1a71714f31d9988a4b221e16980c4f4dff1a73570efa4296e06",
+   "bytes": 24373,
+   "slides": 2,
+   "covers": [
+    "headers-footers/dated-footer"
+   ]
+  },
+  {
+   "id": "furniture-hf-05-brand-logo-footer",
+   "set": "furniture",
+   "sha256": "1ab0f046731b3a22c8afea21e404c49b4a3fc602781d2c06335a9f52575fd056",
+   "bytes": 25365,
+   "slides": 2,
+   "covers": [
+    "headers-footers/brand-logo-footer"
+   ]
+  },
+  {
+   "id": "furniture-hf-06-client-delivery-footer",
+   "set": "furniture",
+   "sha256": "58447b14edcb91ee4ce6b3cb6b80521c5efa2beb8d98b475e33ddebbcd2bc1ba",
+   "bytes": 26460,
+   "slides": 2,
+   "covers": [
+    "headers-footers/client-delivery-footer"
+   ]
+  },
+  {
+   "id": "furniture-hf-07-confidential-legal-footer",
+   "set": "furniture",
+   "sha256": "8d451dc8ded057e36bd33d5c786a4c5f1945fec3a0c54df4a6be680eb1a716de",
+   "bytes": 25473,
+   "slides": 2,
+   "covers": [
+    "headers-footers/confidential-legal-footer"
+   ]
+  },
+  {
+   "id": "furniture-hf-08-classification-banner",
+   "set": "furniture",
+   "sha256": "ff9dfd0b61613576c29a8de439dbc65051c4fc58eb2a663aed4cb2bd03be6c8a",
+   "bytes": 26425,
+   "slides": 2,
+   "covers": [
+    "headers-footers/classification-banner"
+   ]
+  },
+  {
+   "id": "furniture-hf-09-version-control-footer",
+   "set": "furniture",
+   "sha256": "24f1f8d5ab3f30fb4d908133d916bae3efb1761e15c77de7755c33f178c2a219",
+   "bytes": 26427,
+   "slides": 2,
+   "covers": [
+    "headers-footers/version-control-footer"
+   ]
+  },
+  {
+   "id": "furniture-hf-10-appendix-numbering",
+   "set": "furniture",
+   "sha256": "0fad3aa1e04b1592d21b29ae56e5989d6588da696b2cf35bffc41f439c8f3fc4",
+   "bytes": 24415,
+   "slides": 2,
+   "covers": [
+    "headers-footers/appendix-numbering"
+   ]
+  },
+  {
+   "id": "furniture-so-01-linkedin",
+   "set": "furniture",
+   "sha256": "eef4cd8912fd2044bf1ea0e0e888d15a64fb977f164bc1c874ae87a8871eea6b",
+   "bytes": 20959,
+   "slides": 1,
+   "covers": [
+    "socials/linkedin"
+   ]
+  },
+  {
+   "id": "furniture-so-02-x",
+   "set": "furniture",
+   "sha256": "f6213b8e2a27c53cff7ca065351317c95c600215b959ab3e71d0c8e1eab9499d",
+   "bytes": 20917,
+   "slides": 1,
+   "covers": [
+    "socials/x"
+   ]
+  },
+  {
+   "id": "furniture-so-03-github",
+   "set": "furniture",
+   "sha256": "f6587151b1168d0541d2cd584948eeeefc50543bae80c4acb8530b4dfe6efada",
+   "bytes": 20946,
+   "slides": 1,
+   "covers": [
+    "socials/github"
+   ]
+  },
+  {
+   "id": "furniture-so-04-youtube",
+   "set": "furniture",
+   "sha256": "e5f44c325809d2b3c6028d6cbe8e4fda7dbc457bb5c4f8a43e0084febf09e228",
+   "bytes": 20946,
+   "slides": 1,
+   "covers": [
+    "socials/youtube"
+   ]
+  },
+  {
+   "id": "furniture-so-05-instagram",
+   "set": "furniture",
+   "sha256": "b537458c96e782f40645c27c1cd142309d98cb6b0d898091819046a5cd6ebd5c",
+   "bytes": 20945,
+   "slides": 1,
+   "covers": [
+    "socials/instagram"
+   ]
+  },
+  {
+   "id": "furniture-so-06-facebook",
+   "set": "furniture",
+   "sha256": "36c6c202d470646f855c6ae9cc2340c36c8c1d3527001d0b25b892713c02b2b9",
+   "bytes": 20944,
+   "slides": 1,
+   "covers": [
+    "socials/facebook"
+   ]
+  },
+  {
+   "id": "furniture-so-07-tiktok",
+   "set": "furniture",
+   "sha256": "56c634b43a7b909935a129cb9b6621e9b9c9761a71748284a1385f6853f3f492",
+   "bytes": 20939,
+   "slides": 1,
+   "covers": [
+    "socials/tiktok"
+   ]
+  },
+  {
+   "id": "furniture-so-08-threads",
+   "set": "furniture",
+   "sha256": "13287496184ef9e6f3a88e3115e40c3a3af613c54b548d1ca97fa6d820df002b",
+   "bytes": 20946,
+   "slides": 1,
+   "covers": [
+    "socials/threads"
+   ]
+  },
+  {
+   "id": "furniture-so-09-mastodon",
+   "set": "furniture",
+   "sha256": "5041eda08c530cb7aa0639dcd84f88d65b30fe5e585d2100620a92354ff9f3f4",
+   "bytes": 20980,
+   "slides": 1,
+   "covers": [
+    "socials/mastodon"
+   ]
+  },
+  {
+   "id": "furniture-so-10-bluesky",
+   "set": "furniture",
+   "sha256": "7c3d93f71ae505e9d9af6eb6db2c6bdb56f6ba4c0be156f228617a5cd09406b6",
+   "bytes": 20967,
+   "slides": 1,
+   "covers": [
+    "socials/bluesky"
+   ]
+  },
+  {
+   "id": "blocks-01-pitch-deck-intro",
+   "set": "blocks",
+   "sha256": "4bb375886bebc03d39ad533a8d6b73f6e1b49464ebf5480d3ff35c3d0a41ca95",
+   "bytes": 20263,
+   "slides": 1,
+   "covers": [
+    "blocks/pitch-deck-intro"
+   ]
+  },
+  {
+   "id": "blocks-02-agenda-overview",
+   "set": "blocks",
+   "sha256": "2cb7be599193b228863c123ebdf7db9d9090dd30fd21302216cb9e92bc2c0937",
+   "bytes": 19703,
+   "slides": 1,
+   "covers": [
+    "blocks/agenda-overview"
+   ]
+  },
+  {
+   "id": "blocks-03-section-break",
+   "set": "blocks",
+   "sha256": "949de090cd3f303c085f304c0b08aeccabace7d8a56d610532627f2e0d1aae40",
+   "bytes": 19998,
+   "slides": 1,
+   "covers": [
+    "blocks/section-break"
+   ]
+  },
+  {
+   "id": "blocks-04-executive-summary",
+   "set": "blocks",
+   "sha256": "cc6c76523a59d75276d0a37c6f22ea8e645b68793016d1ec046654ade5bc0c98",
+   "bytes": 19846,
+   "slides": 1,
+   "covers": [
+    "blocks/executive-summary"
+   ]
+  },
+  {
+   "id": "blocks-05-problem-statement",
+   "set": "blocks",
+   "sha256": "ce985f51f44c67e35d5cc960257ba9faf422e0753c94497f4e0f3a34bafd3fb2",
+   "bytes": 19725,
+   "slides": 1,
+   "covers": [
+    "blocks/problem-statement"
+   ]
+  },
+  {
+   "id": "blocks-06-solution-overview",
+   "set": "blocks",
+   "sha256": "060cd033dbaddafe8cdceab3ec0d70edc15d3d363d13319da87a291c9d20431f",
+   "bytes": 23650,
+   "slides": 1,
+   "covers": [
+    "blocks/solution-overview"
+   ]
+  },
+  {
+   "id": "blocks-07-market-opportunity",
+   "set": "blocks",
+   "sha256": "34deeef3d3616c0463b4a756fd19c5ec1e3c493e1e553709747f75fcf1e1d0cb",
+   "bytes": 22372,
+   "slides": 1,
+   "covers": [
+    "blocks/market-opportunity"
+   ]
+  },
+  {
+   "id": "blocks-08-value-proposition",
+   "set": "blocks",
+   "sha256": "f727ab943229bb262944855a60a4f3204eb68f8e60a69495d72c90fe1a2cfd6e",
+   "bytes": 23673,
+   "slides": 1,
+   "covers": [
+    "blocks/value-proposition"
+   ]
+  },
+  {
+   "id": "blocks-09-business-model",
+   "set": "blocks",
+   "sha256": "39b773f339e52f84fd909758bc4a8a7f847e0bb007a7b342ad82758e99c38049",
+   "bytes": 20524,
+   "slides": 1,
+   "covers": [
+    "blocks/business-model"
+   ]
+  },
+  {
+   "id": "blocks-10-decision-brief",
+   "set": "blocks",
+   "sha256": "7fa13fd5f9d75b904206d15f24a2ddeac67baa0aa1096c16bd23d33ecea45317",
+   "bytes": 20504,
+   "slides": 1,
+   "covers": [
+    "blocks/decision-brief"
+   ]
+  },
+  {
+   "id": "blocks-11-kpi-dashboard",
+   "set": "blocks",
+   "sha256": "b3d41b2f47aa79e6c65ff9023e3976c6a0fd6cc5a788eb7d303b7e4b51265058",
+   "bytes": 23158,
+   "slides": 1,
+   "covers": [
+    "blocks/kpi-dashboard"
+   ]
+  },
+  {
+   "id": "blocks-12-financial-snapshot",
+   "set": "blocks",
+   "sha256": "ce55d8d49734ba8dec61f178ac58f71761adca704ca9721f37b192f8ae15de60",
+   "bytes": 30666,
+   "slides": 1,
+   "covers": [
+    "blocks/financial-snapshot"
+   ]
+  },
+  {
+   "id": "blocks-13-traction-metrics",
+   "set": "blocks",
+   "sha256": "6cf1cdd34af95705642e624b9fc48b6ce1cc39a6cc9904d75d23b077ed473fc3",
+   "bytes": 23320,
+   "slides": 1,
+   "covers": [
+    "blocks/traction-metrics"
+   ]
+  },
+  {
+   "id": "blocks-14-data-story-insight",
+   "set": "blocks",
+   "sha256": "3e2977f59f64e00ad0da4fdf7b2fdbdfa9fb967c28945a1d1943c54fccebfc58",
+   "bytes": 27063,
+   "slides": 1,
+   "covers": [
+    "blocks/data-story-insight"
+   ]
+  },
+  {
+   "id": "blocks-15-comparison-table",
+   "set": "blocks",
+   "sha256": "6842cf9b6b72c8ec8a270d3ac597f9907ce486d48b15c4f2253343aae0de3418",
+   "bytes": 20333,
+   "slides": 1,
+   "covers": [
+    "blocks/comparison-table"
+   ]
+  },
+  {
+   "id": "blocks-16-before-after-story",
+   "set": "blocks",
+   "sha256": "ebf70e8f4c1a528124263c97df9dfc459ce030e4c29b393dfff69862dda7f51a",
+   "bytes": 20571,
+   "slides": 1,
+   "covers": [
+    "blocks/before-after-story"
+   ]
+  },
+  {
+   "id": "blocks-17-swot-snapshot",
+   "set": "blocks",
+   "sha256": "23ddb595e0ee4ffd19e6c47ddc0f3f4237d9e9d5642e38ba4af8a526072996e7",
+   "bytes": 20531,
+   "slides": 1,
+   "covers": [
+    "blocks/swot-snapshot"
+   ]
+  },
+  {
+   "id": "blocks-18-pricing-options",
+   "set": "blocks",
+   "sha256": "90dc5310612f69ba8d41dfe4b2920343c521576952888c3fb14ac574ebc28af0",
+   "bytes": 20982,
+   "slides": 1,
+   "covers": [
+    "blocks/pricing-options"
+   ]
+  },
+  {
+   "id": "blocks-19-roadmap-timeline",
+   "set": "blocks",
+   "sha256": "aabc8fe59878e274e04baf3e2991d733c891410ff9f107d857cdb409d2b9a463",
+   "bytes": 23419,
+   "slides": 1,
+   "covers": [
+    "blocks/roadmap-timeline"
+   ]
+  },
+  {
+   "id": "blocks-20-milestone-timeline",
+   "set": "blocks",
+   "sha256": "17eaf343a2240332af8a3cc1cedaa2d1328709a8528323d76c2d83f457c1844e",
+   "bytes": 22728,
+   "slides": 1,
+   "covers": [
+    "blocks/milestone-timeline"
+   ]
+  },
+  {
+   "id": "blocks-21-process-overview",
+   "set": "blocks",
+   "sha256": "a2aa150dc63e8b46eb111f4abd1d5f01e23e264bba73cdcaa241d71ac5188e80",
+   "bytes": 24082,
+   "slides": 1,
+   "covers": [
+    "blocks/process-overview"
+   ]
+  },
+  {
+   "id": "blocks-22-customer-journey",
+   "set": "blocks",
+   "sha256": "f9c00722a91566654c4e27f26c26cac624c4ee65b1715b1d730945ad205a0ec5",
+   "bytes": 24155,
+   "slides": 1,
+   "covers": [
+    "blocks/customer-journey"
+   ]
+  },
+  {
+   "id": "blocks-23-implementation-plan",
+   "set": "blocks",
+   "sha256": "df24319d467c153efd01d28a70eeafe44171e5dcbc348bb42a104675210df86c",
+   "bytes": 19730,
+   "slides": 1,
+   "covers": [
+    "blocks/implementation-plan"
+   ]
+  },
+  {
+   "id": "blocks-24-team-grid",
+   "set": "blocks",
+   "sha256": "0aaf32d83f82e128b3e0848b3447c1ad590f788b3a09a1183b71d3e85f461b26",
+   "bytes": 23626,
+   "slides": 1,
+   "covers": [
+    "blocks/team-grid"
+   ]
+  },
+  {
+   "id": "blocks-25-quote-slide",
+   "set": "blocks",
+   "sha256": "e28b538e85ad8069f009ec237dcf0424bf6e0313b6980a5204801ce5bdbe8b7d",
+   "bytes": 20610,
+   "slides": 1,
+   "covers": [
+    "blocks/quote-slide"
+   ]
+  },
+  {
+   "id": "blocks-26-testimonial-wall",
+   "set": "blocks",
+   "sha256": "1ce8c2fce15e40e966e1356d2d4a4b115e08fbf393f030f7f1154ba5295edf92",
+   "bytes": 20402,
+   "slides": 1,
+   "covers": [
+    "blocks/testimonial-wall"
+   ]
+  },
+  {
+   "id": "blocks-27-customer-logo-proof",
+   "set": "blocks",
+   "sha256": "31d17030efac31c9c2db9a9e4cd736b4153de3cf4b2ec0f1612cc05ec42684f5",
+   "bytes": 23555,
+   "slides": 1,
+   "covers": [
+    "blocks/customer-logo-proof"
+   ]
+  },
+  {
+   "id": "blocks-28-case-study-snapshot",
+   "set": "blocks",
+   "sha256": "ec5e0b602bd97d8a36fadb975825cbf5c79349e1a50176ea1cf9cbb228531bb1",
+   "bytes": 19828,
+   "slides": 1,
+   "covers": [
+    "blocks/case-study-snapshot"
+   ]
+  },
+  {
+   "id": "blocks-29-closing-cta",
+   "set": "blocks",
+   "sha256": "2326973e820d96bb60081daf0a61c91eff58cca165f1e6a4cea4cc56bf2a95df",
+   "bytes": 20261,
+   "slides": 1,
+   "covers": [
+    "blocks/closing-cta"
+   ]
+  },
+  {
+   "id": "blocks-30-qa-discussion",
+   "set": "blocks",
+   "sha256": "05a47ca901d7304102d4114fc1a165f19f68392cda4bbc21f53ecf279d2e31ea",
+   "bytes": 20417,
+   "slides": 1,
+   "covers": [
+    "blocks/qa-discussion"
+   ]
+  },
+  {
+   "id": "blocks-31-recap-takeaways",
+   "set": "blocks",
+   "sha256": "53c6f46c26199f5eafe9f68a16b18a5dab76afcc94cf9e25fb11d7e648e29f46",
+   "bytes": 19808,
+   "slides": 1,
+   "covers": [
+    "blocks/recap-takeaways"
+   ]
+  },
+  {
+   "id": "blocks-32-appendix-index",
+   "set": "blocks",
+   "sha256": "ea5730378aefa5ba569396da47f7f0e4a6eebf74b49567c8fe85a41f96eb5afe",
+   "bytes": 19713,
+   "slides": 1,
+   "covers": [
+    "blocks/appendix-index"
+   ]
+  },
+  {
+   "id": "metadata-01-narratives-problem-solution",
+   "set": "metadata",
+   "sha256": "569124131e832f2962c002d4a37bb54378b442eb669ece932d287772c17400f3",
+   "bytes": 19412,
+   "slides": 1,
+   "covers": [
+    "narratives/problem-solution"
+   ]
+  },
+  {
+   "id": "metadata-02-narratives-heros-journey",
+   "set": "metadata",
+   "sha256": "0cefcd83f4d95963ceb8b5d8ecd1b7ba8f868acad4dc50673bde838560f8abfa",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "narratives/heros-journey"
+   ]
+  },
+  {
+   "id": "metadata-03-narratives-what-so-what-now-what",
+   "set": "metadata",
+   "sha256": "69af8664f6dde0970bfb1935a9d9b24152bac4df9e243c8e9b65791ccae77b0d",
+   "bytes": 19411,
+   "slides": 1,
+   "covers": [
+    "narratives/what-so-what-now-what"
+   ]
+  },
+  {
+   "id": "metadata-04-narratives-situation-complication-resolution",
+   "set": "metadata",
+   "sha256": "7ae656eb0e543165cd64cbe509b776ca147e22f942aec960d1e07d2d4b0c07be",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "narratives/situation-complication-resolution"
+   ]
+  },
+  {
+   "id": "metadata-05-narratives-star-method",
+   "set": "metadata",
+   "sha256": "e0e5d35633bb9e85b7aee3f2a6011908c54e0350fb3fad3a7d5eb7a87b68dcce",
+   "bytes": 19394,
+   "slides": 1,
+   "covers": [
+    "narratives/star-method"
+   ]
+  },
+  {
+   "id": "metadata-06-narratives-pyramid-principle",
+   "set": "metadata",
+   "sha256": "9ee93f76d16570ed7bfb9b1d7c0223413b88b313b33d151a33df5d151ca9fefb",
+   "bytes": 19413,
+   "slides": 1,
+   "covers": [
+    "narratives/pyramid-principle"
+   ]
+  },
+  {
+   "id": "metadata-07-narratives-sparkline",
+   "set": "metadata",
+   "sha256": "a6d588232790c7e2798775b8c127c0dc56bc907b7825a6315d471a2bfa4faa58",
+   "bytes": 19386,
+   "slides": 1,
+   "covers": [
+    "narratives/sparkline"
+   ]
+  },
+  {
+   "id": "metadata-08-narratives-data-story",
+   "set": "metadata",
+   "sha256": "7256e02edece7b3f1f080446c4b3d7d696401e590fd0c3bedbfa783cee67253e",
+   "bytes": 19386,
+   "slides": 1,
+   "covers": [
+    "narratives/data-story"
+   ]
+  },
+  {
+   "id": "metadata-09-narratives-change-story",
+   "set": "metadata",
+   "sha256": "81ac5121d0265104cb2f7e31a3a004e55e3af13cf134193cc3aff2a6d9228478",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "narratives/change-story"
+   ]
+  },
+  {
+   "id": "metadata-10-narratives-vision-roadmap",
+   "set": "metadata",
+   "sha256": "7a99beb60c4992476eaa475d4c7d061aae31d98abc73d736db22024bc0b957af",
+   "bytes": 19402,
+   "slides": 1,
+   "covers": [
+    "narratives/vision-roadmap"
+   ]
+  },
+  {
+   "id": "metadata-11-narratives-scqa",
+   "set": "metadata",
+   "sha256": "b2816443370b90380cec968fbea40e165f27708b291b7c4eb554f8461e434b1e",
+   "bytes": 19380,
+   "slides": 1,
+   "covers": [
+    "narratives/scqa"
+   ]
+  },
+  {
+   "id": "metadata-12-narratives-strategic-narrative",
+   "set": "metadata",
+   "sha256": "627e44b44f2c917fcb4c7b0147654c52c73a17638b3e8cec3a2de52d962fbb0e",
+   "bytes": 19400,
+   "slides": 1,
+   "covers": [
+    "narratives/strategic-narrative"
+   ]
+  },
+  {
+   "id": "metadata-13-narratives-golden-circle",
+   "set": "metadata",
+   "sha256": "b0e785508c1d44bd6213acefe1cdd71b95d73ff44744e99a3f0035ba6f900040",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "narratives/golden-circle"
+   ]
+  },
+  {
+   "id": "metadata-14-narratives-conference-talk",
+   "set": "metadata",
+   "sha256": "8373d20e817e9222e431c01f3f8711faab3430ee39431dc6eb5485c7411cdf92",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "narratives/conference-talk"
+   ]
+  },
+  {
+   "id": "metadata-15-narratives-transformation-arc",
+   "set": "metadata",
+   "sha256": "c9d7e7afccaf2c4af492e5ca77804f112411791343afbd7e41cf883b7fd367fe",
+   "bytes": 19414,
+   "slides": 1,
+   "covers": [
+    "narratives/transformation-arc"
+   ]
+  },
+  {
+   "id": "metadata-16-narratives-pitch-deck",
+   "set": "metadata",
+   "sha256": "e4e3d83b6477316217c71086df572b8f1aa53f2f7088bcdba270b309e6dc3d30",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "narratives/pitch-deck"
+   ]
+  },
+  {
+   "id": "metadata-17-narratives-early-startup-pitch",
+   "set": "metadata",
+   "sha256": "190b1299371e4a4125981fec8858b51c297900a55ec2655f55dab90f276a42b5",
+   "bytes": 19424,
+   "slides": 1,
+   "covers": [
+    "narratives/early-startup-pitch"
+   ]
+  },
+  {
+   "id": "metadata-18-narratives-venture-pitch",
+   "set": "metadata",
+   "sha256": "733a96bbf6ecc4801e13c50d893077ccf2e05c068631ea62dabc19b1b497e38d",
+   "bytes": 19403,
+   "slides": 1,
+   "covers": [
+    "narratives/venture-pitch"
+   ]
+  },
+  {
+   "id": "metadata-19-narratives-persuasive-sales",
+   "set": "metadata",
+   "sha256": "2b32284b243bb0d5c445cd90bd4542e9eb993265de090b0fbbb0987a1bc900c0",
+   "bytes": 19404,
+   "slides": 1,
+   "covers": [
+    "narratives/persuasive-sales"
+   ]
+  },
+  {
+   "id": "metadata-20-narratives-company-intro",
+   "set": "metadata",
+   "sha256": "5a92177499ddc35a80779ff1d847e2f04dbb2ac889d5b8a3768f2d91bdf46c0c",
+   "bytes": 19407,
+   "slides": 1,
+   "covers": [
+    "narratives/company-intro"
+   ]
+  },
+  {
+   "id": "metadata-21-narratives-marketing-strategy",
+   "set": "metadata",
+   "sha256": "89d417df78d4c787259c16b73f5e9af1ca3ac257fe9d1337327d3c42fc4141de",
+   "bytes": 19416,
+   "slides": 1,
+   "covers": [
+    "narratives/marketing-strategy"
+   ]
+  },
+  {
+   "id": "metadata-22-narratives-product-launch",
+   "set": "metadata",
+   "sha256": "7e23337b9d1e793d2a9c2ba2963b15838254b52d22373dcf6cd9244623aace3b",
+   "bytes": 19412,
+   "slides": 1,
+   "covers": [
+    "narratives/product-launch"
+   ]
+  },
+  {
+   "id": "metadata-23-narratives-strategic-advisory",
+   "set": "metadata",
+   "sha256": "7d51060ab58d48865ec6514f09fe7a73b0c6b733091cd601a2c7d907bf18ff9a",
+   "bytes": 19410,
+   "slides": 1,
+   "covers": [
+    "narratives/strategic-advisory"
+   ]
+  },
+  {
+   "id": "metadata-24-narratives-challenge-resolution",
+   "set": "metadata",
+   "sha256": "5ec87662663cf770830cf47e421db79dc7fffa7d552f50af3789b9d35aa0bd05",
+   "bytes": 19420,
+   "slides": 1,
+   "covers": [
+    "narratives/challenge-resolution"
+   ]
+  },
+  {
+   "id": "metadata-25-narratives-project-proposal",
+   "set": "metadata",
+   "sha256": "d2893604917e588908be9dcd81726ba32d97365d4af7d1f1c123d20fd56b7546",
+   "bytes": 19409,
+   "slides": 1,
+   "covers": [
+    "narratives/project-proposal"
+   ]
+  },
+  {
+   "id": "metadata-26-narratives-failure-analysis",
+   "set": "metadata",
+   "sha256": "be4cd1d590ab55a02a1225a653a1475ced34fc6d269e73a36d70fb07a740f32c",
+   "bytes": 19407,
+   "slides": 1,
+   "covers": [
+    "narratives/failure-analysis"
+   ]
+  },
+  {
+   "id": "metadata-27-narratives-classic-story",
+   "set": "metadata",
+   "sha256": "acf2b9ca6e5f1912fbaa2feb46706c2c5ad3ceddf8c596b7b0578c4a6c8960fb",
+   "bytes": 19403,
+   "slides": 1,
+   "covers": [
+    "narratives/classic-story"
+   ]
+  },
+  {
+   "id": "metadata-28-narratives-business-narrative",
+   "set": "metadata",
+   "sha256": "31d75b6c272f1a1ec56d879f473c6f19780f37256747c920bed3fbaf81595860",
+   "bytes": 19402,
+   "slides": 1,
+   "covers": [
+    "narratives/business-narrative"
+   ]
+  },
+  {
+   "id": "metadata-29-narratives-rags-to-riches",
+   "set": "metadata",
+   "sha256": "3d5dd42bf1aa7a5f3cfe27a701a90aa563bd7b0fb9f66d63a01ba7424522053a",
+   "bytes": 19406,
+   "slides": 1,
+   "covers": [
+    "narratives/rags-to-riches"
+   ]
+  },
+  {
+   "id": "metadata-30-narratives-underdog-victory",
+   "set": "metadata",
+   "sha256": "ea3e9b32076e21ea10e28efeb26a1ce67541edc62a1d38b5fde62b0f6fe158d6",
+   "bytes": 19409,
+   "slides": 1,
+   "covers": [
+    "narratives/underdog-victory"
+   ]
+  },
+  {
+   "id": "metadata-31-narratives-survival-story",
+   "set": "metadata",
+   "sha256": "829d8467a42cc8718735ca28658ab2e68aa94306423e20463982061c6a0a79bf",
+   "bytes": 19402,
+   "slides": 1,
+   "covers": [
+    "narratives/survival-story"
+   ]
+  },
+  {
+   "id": "metadata-32-narratives-educate",
+   "set": "metadata",
+   "sha256": "e44cae716294905e1f38cb29eb9ecbe5c18fe00e30a669859298cbd2dd736526",
+   "bytes": 19390,
+   "slides": 1,
+   "covers": [
+    "narratives/educate"
+   ]
+  },
+  {
+   "id": "metadata-33-narratives-persuade",
+   "set": "metadata",
+   "sha256": "ac1801049c0e1940f3dca13ff33ccf3944f65e0abbf1ec588dbf39602ce1794a",
+   "bytes": 19386,
+   "slides": 1,
+   "covers": [
+    "narratives/persuade"
+   ]
+  },
+  {
+   "id": "metadata-34-narratives-reveal",
+   "set": "metadata",
+   "sha256": "23a4e6b66ef3280d787a88d4d2172c235d015681e12f888207a1780462b0b40a",
+   "bytes": 19381,
+   "slides": 1,
+   "covers": [
+    "narratives/reveal"
+   ]
+  },
+  {
+   "id": "metadata-35-narratives-justice",
+   "set": "metadata",
+   "sha256": "05cb0eb178024a7c64e39a035bd1789c7c10df744f4f703059d51435f414539f",
+   "bytes": 19389,
+   "slides": 1,
+   "covers": [
+    "narratives/justice"
+   ]
+  },
+  {
+   "id": "metadata-36-narratives-innovation",
+   "set": "metadata",
+   "sha256": "7238cc15a7015c667216599ce80d20f00717cc922f5e602bb45d1ffcb1f02a00",
+   "bytes": 19394,
+   "slides": 1,
+   "covers": [
+    "narratives/innovation"
+   ]
+  },
+  {
+   "id": "metadata-37-narratives-focus",
+   "set": "metadata",
+   "sha256": "d48befcf80d221b66d2e0faab304ba9a4be0c3d54fae953c4030cfe0460c9919",
+   "bytes": 19387,
+   "slides": 1,
+   "covers": [
+    "narratives/focus"
+   ]
+  },
+  {
+   "id": "metadata-38-narratives-qbr",
+   "set": "metadata",
+   "sha256": "1d4f10afd728647e61bf646413d405320d62bc9030745508075851e11d64c342",
+   "bytes": 19379,
+   "slides": 1,
+   "covers": [
+    "narratives/qbr"
+   ]
+  },
+  {
+   "id": "metadata-39-narratives-business-review",
+   "set": "metadata",
+   "sha256": "9b8ee5400b5b09ccc58cdb0298c1cefd01aa2fe868d89fba7960f86387cad9ae",
+   "bytes": 19403,
+   "slides": 1,
+   "covers": [
+    "narratives/business-review"
+   ]
+  },
+  {
+   "id": "metadata-40-narratives-board-meeting",
+   "set": "metadata",
+   "sha256": "2cab5666d18c20760a6800ee7db314bb48adb7ff3c43121c4ec24dc811eda697",
+   "bytes": 19403,
+   "slides": 1,
+   "covers": [
+    "narratives/board-meeting"
+   ]
+  },
+  {
+   "id": "metadata-41-narratives-weekly-progress",
+   "set": "metadata",
+   "sha256": "592c1f724d81a59a83d72261cd288418ceba3cc4b0f722f96ff8d4a1738da0a9",
+   "bytes": 19408,
+   "slides": 1,
+   "covers": [
+    "narratives/weekly-progress"
+   ]
+  },
+  {
+   "id": "metadata-42-narratives-status-update",
+   "set": "metadata",
+   "sha256": "34f896fc1697e7488ee6f6156dc12f644f297beba2e1067eec760d16c4c776a3",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "narratives/status-update"
+   ]
+  },
+  {
+   "id": "metadata-43-narratives-performance-review",
+   "set": "metadata",
+   "sha256": "c4d78fed3078abbc4a61862f19a5bc0c18f6b3c117e5a80115f6563c7f928161",
+   "bytes": 19411,
+   "slides": 1,
+   "covers": [
+    "narratives/performance-review"
+   ]
+  },
+  {
+   "id": "metadata-44-narratives-survey-analysis",
+   "set": "metadata",
+   "sha256": "e2b0da2e21cb87d6331280a24d9e6daad79cfe8edb74a9f907cb80b740cb3287",
+   "bytes": 19402,
+   "slides": 1,
+   "covers": [
+    "narratives/survey-analysis"
+   ]
+  },
+  {
+   "id": "metadata-45-narratives-trend-analysis",
+   "set": "metadata",
+   "sha256": "aa8b00232e7565a9cd307c550515665e2b8cb980220278c7d6adef400de68c69",
+   "bytes": 19403,
+   "slides": 1,
+   "covers": [
+    "narratives/trend-analysis"
+   ]
+  },
+  {
+   "id": "metadata-46-narratives-employee-review",
+   "set": "metadata",
+   "sha256": "0d862ea053d687efde2f76ba6fd8f4be4058f9939b47184b55307cd5ae20f021",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "narratives/employee-review"
+   ]
+  },
+  {
+   "id": "metadata-47-narratives-performance-improvement-plan",
+   "set": "metadata",
+   "sha256": "b5ca43dd19aa925babf6285515d2b97e59f1a1236be405bc2cb2508c1258a4aa",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "narratives/performance-improvement-plan"
+   ]
+  },
+  {
+   "id": "metadata-48-narratives-capacity-planning",
+   "set": "metadata",
+   "sha256": "7a66f3d3ce24d2d14c790804276d281df59d62607ac89cea12e28ad5f21f5083",
+   "bytes": 19417,
+   "slides": 1,
+   "covers": [
+    "narratives/capacity-planning"
+   ]
+  },
+  {
+   "id": "metadata-49-audiences-executive",
+   "set": "metadata",
+   "sha256": "e402cf20e0c6f6ba6e3a164319afe5aae9a83ec7c096cbd7cfd739473658987b",
+   "bytes": 19983,
+   "slides": 1,
+   "covers": [
+    "audiences/executive"
+   ]
+  },
+  {
+   "id": "metadata-50-audiences-investor",
+   "set": "metadata",
+   "sha256": "4672729137861bbf08db5ee5fe498f52acdf8ce25a4deceec59760bebc31da4c",
+   "bytes": 20001,
+   "slides": 1,
+   "covers": [
+    "audiences/investor"
+   ]
+  },
+  {
+   "id": "metadata-51-audiences-board",
+   "set": "metadata",
+   "sha256": "8af497d7e0c5646950d90c14decc60e990d9150e3bcd8acac5a6c61ca4145363",
+   "bytes": 19944,
+   "slides": 1,
+   "covers": [
+    "audiences/board"
+   ]
+  },
+  {
+   "id": "metadata-52-audiences-technical",
+   "set": "metadata",
+   "sha256": "821d856e31ca4e66863c0b1e8cd1b94d1d3519e152baabe3c371d2d3b62b0286",
+   "bytes": 20059,
+   "slides": 1,
+   "covers": [
+    "audiences/technical"
+   ]
+  },
+  {
+   "id": "metadata-53-audiences-sales",
+   "set": "metadata",
+   "sha256": "68892969bfffa0e9a4ac2002ec51e288b5be8467f2bd394a8d1b7353c0837d49",
+   "bytes": 23825,
+   "slides": 1,
+   "covers": [
+    "audiences/sales"
+   ]
+  },
+  {
+   "id": "metadata-54-audiences-marketing",
+   "set": "metadata",
+   "sha256": "62b778dde160a3701afa6bae77022fdf497f02fdf54ff6211333b64707f08ae7",
+   "bytes": 19962,
+   "slides": 1,
+   "covers": [
+    "audiences/marketing"
+   ]
+  },
+  {
+   "id": "metadata-55-audiences-academic",
+   "set": "metadata",
+   "sha256": "b24ca8bba0aaef609d476317c8d8945aa171673f181696065e59ef96002b045e",
+   "bytes": 19951,
+   "slides": 1,
+   "covers": [
+    "audiences/academic"
+   ]
+  },
+  {
+   "id": "metadata-56-audiences-internal-team",
+   "set": "metadata",
+   "sha256": "f2abde354dd169e654f46cf1488a72ba6f86b2e943030d4d01f56783c6f6b299",
+   "bytes": 20047,
+   "slides": 1,
+   "covers": [
+    "audiences/internal-team"
+   ]
+  },
+  {
+   "id": "metadata-57-audiences-customer",
+   "set": "metadata",
+   "sha256": "842925cbbbff54bff9a907de6ed7c01d81344e7971b4353aa3743f6de23a857e",
+   "bytes": 23347,
+   "slides": 1,
+   "covers": [
+    "audiences/customer"
+   ]
+  },
+  {
+   "id": "metadata-58-audiences-general-public",
+   "set": "metadata",
+   "sha256": "3d74db01f494366df7df54e2d7c97759c502a19dd690969614b51fe0343649e9",
+   "bytes": 19510,
+   "slides": 1,
+   "covers": [
+    "audiences/general-public"
+   ]
+  },
+  {
+   "id": "metadata-59-audiences-media",
+   "set": "metadata",
+   "sha256": "5165b6f77ec107f7178ee989193fe129e3cc2084ddf64212821d8b9c8585423f",
+   "bytes": 19932,
+   "slides": 1,
+   "covers": [
+    "audiences/media"
+   ]
+  },
+  {
+   "id": "metadata-60-audiences-partner",
+   "set": "metadata",
+   "sha256": "c0e2dff9f135a9ba4ec4ab6de7bad736e6f4f6cd8ff04b879585696357570e7b",
+   "bytes": 23828,
+   "slides": 1,
+   "covers": [
+    "audiences/partner"
+   ]
+  },
+  {
+   "id": "metadata-61-audiences-regulatory",
+   "set": "metadata",
+   "sha256": "b31c9b3fe5c41c797144c74bf9e48810655d3f6d05a317e29e92d61019a56a6a",
+   "bytes": 19954,
+   "slides": 1,
+   "covers": [
+    "audiences/regulatory"
+   ]
+  },
+  {
+   "id": "metadata-62-audiences-all-hands",
+   "set": "metadata",
+   "sha256": "daf2c95ad46da3160ca45bc00608ee173b600674147ee221827c8400e95ad370",
+   "bytes": 19996,
+   "slides": 1,
+   "covers": [
+    "audiences/all-hands"
+   ]
+  },
+  {
+   "id": "metadata-63-audiences-executives",
+   "set": "metadata",
+   "sha256": "b0b86578cfaed7621235a2e35347f2c25500247e0357ca20f5a96ad3f9e51dc4",
+   "bytes": 19985,
+   "slides": 1,
+   "covers": [
+    "audiences/executives"
+   ]
+  },
+  {
+   "id": "metadata-64-audiences-engineering-team",
+   "set": "metadata",
+   "sha256": "f4078a474bc801d67785c56428a0fe2f44172e62f43d4729c6f193e0c6cba580",
+   "bytes": 20000,
+   "slides": 1,
+   "covers": [
+    "audiences/engineering-team"
+   ]
+  },
+  {
+   "id": "metadata-65-audiences-investors",
+   "set": "metadata",
+   "sha256": "4698bf6dc13004381b1716f290a116e5367a57628eabb6b735297f5b4c72d1d4",
+   "bytes": 19989,
+   "slides": 1,
+   "covers": [
+    "audiences/investors"
+   ]
+  },
+  {
+   "id": "metadata-66-audiences-customers",
+   "set": "metadata",
+   "sha256": "812e199c924202945c39c4963e1215ff5fc9ee33d1ea36bcac2c524759f08ec0",
+   "bytes": 19989,
+   "slides": 1,
+   "covers": [
+    "audiences/customers"
+   ]
+  },
+  {
+   "id": "metadata-67-audiences-sales-team",
+   "set": "metadata",
+   "sha256": "a2cb0354074529e0339d208fbb9da4c3e47512ce75edb270940480ae2824bb2c",
+   "bytes": 19987,
+   "slides": 1,
+   "covers": [
+    "audiences/sales-team"
+   ]
+  },
+  {
+   "id": "metadata-68-audiences-marketing-team",
+   "set": "metadata",
+   "sha256": "ed9ea105022205b61f96c5c47f161958502bdfd0d797d5ba57af20233355be4e",
+   "bytes": 20004,
+   "slides": 1,
+   "covers": [
+    "audiences/marketing-team"
+   ]
+  },
+  {
+   "id": "metadata-69-audiences-candidates",
+   "set": "metadata",
+   "sha256": "7d7e6d3784309ac84878c2b658620ec4053ecb503b1ca40c6ba25591591de4a8",
+   "bytes": 19992,
+   "slides": 1,
+   "covers": [
+    "audiences/candidates"
+   ]
+  },
+  {
+   "id": "metadata-70-audiences-regulators",
+   "set": "metadata",
+   "sha256": "bdfcc48391926b508a4fff2284e37276af39b725eab0b9057ea75120516fdbf7",
+   "bytes": 19991,
+   "slides": 1,
+   "covers": [
+    "audiences/regulators"
+   ]
+  },
+  {
+   "id": "metadata-71-tones-formal",
+   "set": "metadata",
+   "sha256": "fef3901999738b5bfe638918be17c954cce3baba9d1d234711f53545100e76c1",
+   "bytes": 19364,
+   "slides": 1,
+   "covers": [
+    "tones/formal"
+   ]
+  },
+  {
+   "id": "metadata-72-tones-casual",
+   "set": "metadata",
+   "sha256": "2e8d7279b94969cfe1f91dba52151f9d36c35bd8e94ec5db191287f0c13ce3ad",
+   "bytes": 19363,
+   "slides": 1,
+   "covers": [
+    "tones/casual"
+   ]
+  },
+  {
+   "id": "metadata-73-tones-inspirational",
+   "set": "metadata",
+   "sha256": "1b4833973bded584cb6bd3c249d4ccffc40decef964c3da8c2e8916ea9c6c715",
+   "bytes": 19384,
+   "slides": 1,
+   "covers": [
+    "tones/inspirational"
+   ]
+  },
+  {
+   "id": "metadata-74-tones-technical",
+   "set": "metadata",
+   "sha256": "99f2eb556965d292b170b1a995d1b4acc966203f54e37fa9834230a3dd323bbd",
+   "bytes": 19373,
+   "slides": 1,
+   "covers": [
+    "tones/technical"
+   ]
+  },
+  {
+   "id": "metadata-75-tones-persuasive",
+   "set": "metadata",
+   "sha256": "781dec8a756e7ab5a98c5871061a6e7c7e8ca84904849769f0b75d4f87bf180c",
+   "bytes": 19368,
+   "slides": 1,
+   "covers": [
+    "tones/persuasive"
+   ]
+  },
+  {
+   "id": "metadata-76-tones-authoritative",
+   "set": "metadata",
+   "sha256": "892a368520734ec956480ffba8beccd247bd4e84c4ebe270461e3170266422e2",
+   "bytes": 19380,
+   "slides": 1,
+   "covers": [
+    "tones/authoritative"
+   ]
+  },
+  {
+   "id": "metadata-77-tones-conversational",
+   "set": "metadata",
+   "sha256": "3f6f5bb51b3cc3a9f75db91b14a7885b98df1dca625cdec24a0ae5b22d6cfe65",
+   "bytes": 19376,
+   "slides": 1,
+   "covers": [
+    "tones/conversational"
+   ]
+  },
+  {
+   "id": "metadata-78-purposes-inform",
+   "set": "metadata",
+   "sha256": "828245b144a5193b0d272948f5b006a25034b69c1a4c8ec26d7faf2d6af9d013",
+   "bytes": 19369,
+   "slides": 1,
+   "covers": [
+    "purposes/inform"
+   ]
+  },
+  {
+   "id": "metadata-79-purposes-decide",
+   "set": "metadata",
+   "sha256": "33b334e52fed12d26e5aa0e6531be2b125fed1761a98089b16fbdf71d3622df6",
+   "bytes": 19369,
+   "slides": 1,
+   "covers": [
+    "purposes/decide"
+   ]
+  },
+  {
+   "id": "metadata-80-purposes-align",
+   "set": "metadata",
+   "sha256": "51734928c8cdea5c673e55116874991b32318e1ce72f59c14968e9f8800899ab",
+   "bytes": 19366,
+   "slides": 1,
+   "covers": [
+    "purposes/align"
+   ]
+  },
+  {
+   "id": "metadata-81-purposes-persuade",
+   "set": "metadata",
+   "sha256": "7a4c40c4b0cfbd5a1a37bfcdf1b15710d8efc2f36942438f35c2951d33ac06d5",
+   "bytes": 19368,
+   "slides": 1,
+   "covers": [
+    "purposes/persuade"
+   ]
+  },
+  {
+   "id": "metadata-82-purposes-educate",
+   "set": "metadata",
+   "sha256": "eeebfda16cda752c40d0c433977e512b36707e628f80fcdd601054ea03344da9",
+   "bytes": 19372,
+   "slides": 1,
+   "covers": [
+    "purposes/educate"
+   ]
+  },
+  {
+   "id": "metadata-83-purposes-report",
+   "set": "metadata",
+   "sha256": "801f6b94b89ed5d63caf550f21b582178d25a2b24f997eac2410fb4098385bbe",
+   "bytes": 19368,
+   "slides": 1,
+   "covers": [
+    "purposes/report"
+   ]
+  },
+  {
+   "id": "metadata-84-purposes-pitch",
+   "set": "metadata",
+   "sha256": "a5fc38eaa0e699ed7a99f1d8eca4f2b6fb3ad613e526dd64cd99c2d35e7a64e1",
+   "bytes": 19369,
+   "slides": 1,
+   "covers": [
+    "purposes/pitch"
+   ]
+  },
+  {
+   "id": "metadata-85-purposes-sell",
+   "set": "metadata",
+   "sha256": "48fa53062a13a5f9acbfc707a15b3d77a722577e0d5cf4c4c465a0de1183820d",
+   "bytes": 19360,
+   "slides": 1,
+   "covers": [
+    "purposes/sell"
+   ]
+  },
+  {
+   "id": "metadata-86-purposes-plan",
+   "set": "metadata",
+   "sha256": "f6961071b61846fd6edffa5d1279e4a2604425f269ba380cbb0115ef0523c2ba",
+   "bytes": 19366,
+   "slides": 1,
+   "covers": [
+    "purposes/plan"
+   ]
+  },
+  {
+   "id": "languages-01-afrikaans",
+   "set": "languages",
+   "sha256": "8d2285ae60f5a70a624ce49f702936ad7351bd20046016592ee33c7cc2d6c7a1",
+   "bytes": 19457,
+   "slides": 1,
+   "covers": [
+    "languages/afrikaans"
+   ]
+  },
+  {
+   "id": "languages-02-albanian",
+   "set": "languages",
+   "sha256": "debe5ab3399018db4e22f3d9f0508ab20b434235000863ee8d0184670e67df8e",
+   "bytes": 19446,
+   "slides": 1,
+   "covers": [
+    "languages/albanian"
+   ]
+  },
+  {
+   "id": "languages-03-amharic",
+   "set": "languages",
+   "sha256": "0bdd0ce15d2bedcb84437ff656977b6899e970cacd603ccb57bc2b13b98fcb50",
+   "bytes": 19381,
+   "slides": 1,
+   "covers": [
+    "languages/amharic"
+   ]
+  },
+  {
+   "id": "languages-04-arabic",
+   "set": "languages",
+   "sha256": "44d684fed26f53e84bf43f9fb70a66d4753e9f388a13b0a3e1069b5dc9383f00",
+   "bytes": 19431,
+   "slides": 1,
+   "covers": [
+    "languages/arabic"
+   ]
+  },
+  {
+   "id": "languages-05-armenian",
+   "set": "languages",
+   "sha256": "fdb9edb312b8683efba9bb8df5f5895e864b9094d9deeb58b82563f557df51c4",
+   "bytes": 19388,
+   "slides": 1,
+   "covers": [
+    "languages/armenian"
+   ]
+  },
+  {
+   "id": "languages-06-aymara",
+   "set": "languages",
+   "sha256": "53d2565f5d232890efc37bded6627230e0e044471064b8f7b42fb4b58333c054",
+   "bytes": 19435,
+   "slides": 1,
+   "covers": [
+    "languages/aymara"
+   ]
+  },
+  {
+   "id": "languages-07-azerbaijani",
+   "set": "languages",
+   "sha256": "d5eb5c2adb799f7b6460b091c62cb1b411640d09d3c14b8ca052eee14e8a757d",
+   "bytes": 19489,
+   "slides": 1,
+   "covers": [
+    "languages/azerbaijani"
+   ]
+  },
+  {
+   "id": "languages-08-bengali",
+   "set": "languages",
+   "sha256": "fde28eb06ff32c2a933155b60131f1c082427eb844577d0ce644b1936ac04643",
+   "bytes": 19412,
+   "slides": 1,
+   "covers": [
+    "languages/bengali"
+   ]
+  },
+  {
+   "id": "languages-09-berber-latin",
+   "set": "languages",
+   "sha256": "021fefc17ad999cd74d18a2f3c27d48935874930767a89ec388dbcbe4eec5f52",
+   "bytes": 19485,
+   "slides": 1,
+   "covers": [
+    "languages/berber-latin"
+   ]
+  },
+  {
+   "id": "languages-10-bosnian-latin",
+   "set": "languages",
+   "sha256": "16641ca7b309cbbb4174e1394cd2dbf31c740714e30838b3877e4ff055cf2d22",
+   "bytes": 19477,
+   "slides": 1,
+   "covers": [
+    "languages/bosnian-latin"
+   ]
+  },
+  {
+   "id": "languages-11-bulgarian",
+   "set": "languages",
+   "sha256": "3e493b6d2d34689e4e907bdc8192cccdbff7a50c41a02c1a29d938ef9b3b6e61",
+   "bytes": 19450,
+   "slides": 1,
+   "covers": [
+    "languages/bulgarian"
+   ]
+  },
+  {
+   "id": "languages-12-catalan",
+   "set": "languages",
+   "sha256": "d69902631d2b600124e42346bd2b8347307c02aac914c95e0a290b1cfb04d514",
+   "bytes": 19436,
+   "slides": 1,
+   "covers": [
+    "languages/catalan"
+   ]
+  },
+  {
+   "id": "languages-13-cebuano",
+   "set": "languages",
+   "sha256": "ad44ee863e7a0c0fe814677a41f8cd01ab6f0cee2371fbddf76bec525d072954",
+   "bytes": 19451,
+   "slides": 1,
+   "covers": [
+    "languages/cebuano"
+   ]
+  },
+  {
+   "id": "languages-14-chinese-simplified",
+   "set": "languages",
+   "sha256": "9c3894c8916846c47dce5bb54c4582cb9303f30ec73824728bf69e56b3ab5cc7",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "languages/chinese-simplified"
+   ]
+  },
+  {
+   "id": "languages-15-chinese-traditional",
+   "set": "languages",
+   "sha256": "a03012bb17ff9638d4ce6013e720ec8da9266ae2769390a2f2e8e513e682995c",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/chinese-traditional"
+   ]
+  },
+  {
+   "id": "languages-16-chittagonian",
+   "set": "languages",
+   "sha256": "f7c9155fcd2fb31f2428fe2610a24b039ef7a7c3cfccd0209d51b80edc879a59",
+   "bytes": 19399,
+   "slides": 1,
+   "covers": [
+    "languages/chittagonian"
+   ]
+  },
+  {
+   "id": "languages-17-croatian",
+   "set": "languages",
+   "sha256": "5bdb217945485e7637c64bf02e5e01d785ddc26c6f25987ac4a3e419332f1050",
+   "bytes": 19447,
+   "slides": 1,
+   "covers": [
+    "languages/croatian"
+   ]
+  },
+  {
+   "id": "languages-18-czech",
+   "set": "languages",
+   "sha256": "b281cebe18fc335d8cd16b61660f0b8e3e199a0b0e1a3f89a1df2bd71eed19cb",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/czech"
+   ]
+  },
+  {
+   "id": "languages-19-danish",
+   "set": "languages",
+   "sha256": "8469a39fa6fbc0dc28d64eb66ea2c112e42a3170185e1fb92e58836fb935f31f",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/danish"
+   ]
+  },
+  {
+   "id": "languages-20-dutch",
+   "set": "languages",
+   "sha256": "e829e67df3427a76a154e59b4b51593a79cdef889b5f9aee72ae077c9c6a71da",
+   "bytes": 19432,
+   "slides": 1,
+   "covers": [
+    "languages/dutch"
+   ]
+  },
+  {
+   "id": "languages-21-english",
+   "set": "languages",
+   "sha256": "79528832036fdb075c463f25b9ede3d89728e1d0d4807a77251b1ba8b3548f3d",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/english"
+   ]
+  },
+  {
+   "id": "languages-22-english-au",
+   "set": "languages",
+   "sha256": "0e2a6659d5ddc4171eef40befa751417191fd2bcaefb67d66c3a42676911fa12",
+   "bytes": 19464,
+   "slides": 1,
+   "covers": [
+    "languages/english-au"
+   ]
+  },
+  {
+   "id": "languages-23-english-ca",
+   "set": "languages",
+   "sha256": "1ec7b8831e2b4b6183a5bcf1885f15c61bb2aac78132df84bdb5ea33225d20c2",
+   "bytes": 19461,
+   "slides": 1,
+   "covers": [
+    "languages/english-ca"
+   ]
+  },
+  {
+   "id": "languages-24-english-gb",
+   "set": "languages",
+   "sha256": "0bd9ac2709d7c3e633cc1f452f5f5c8d0b8d1275bdba922fabef4a0691023279",
+   "bytes": 19468,
+   "slides": 1,
+   "covers": [
+    "languages/english-gb"
+   ]
+  },
+  {
+   "id": "languages-25-english-in",
+   "set": "languages",
+   "sha256": "04320dc0ee011b5b89722afbafb58e782410824eafa50cadd1ec59abed7bd382",
+   "bytes": 19456,
+   "slides": 1,
+   "covers": [
+    "languages/english-in"
+   ]
+  },
+  {
+   "id": "languages-26-english-us",
+   "set": "languages",
+   "sha256": "ac748c77a2693c9ea3ce73bb16a058f7ad3a708888f79172d983769631403735",
+   "bytes": 19466,
+   "slides": 1,
+   "covers": [
+    "languages/english-us"
+   ]
+  },
+  {
+   "id": "languages-27-estonian",
+   "set": "languages",
+   "sha256": "8e049dd013ba8dbc3999b7dd391e138aa50ab0c837084f26ac8b8be5e21f1edf",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/estonian"
+   ]
+  },
+  {
+   "id": "languages-28-filipino",
+   "set": "languages",
+   "sha256": "58519448179fd4c524ca03c3f35fdcbea2835a3de6abf8f45d5e0e8b4cb3e92f",
+   "bytes": 19455,
+   "slides": 1,
+   "covers": [
+    "languages/filipino"
+   ]
+  },
+  {
+   "id": "languages-29-finnish",
+   "set": "languages",
+   "sha256": "2b93f08dae50a7ff046b0e99d45fee3cbeb69e066727de6effe0c99c9354adb0",
+   "bytes": 19445,
+   "slides": 1,
+   "covers": [
+    "languages/finnish"
+   ]
+  },
+  {
+   "id": "languages-30-french",
+   "set": "languages",
+   "sha256": "89808235a06d8781f14c2356e60cb9cd837c1b31b260ffa600178db9da5f72ec",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "languages/french"
+   ]
+  },
+  {
+   "id": "languages-31-fulfulde",
+   "set": "languages",
+   "sha256": "85e807f952943c4358f144fd6f43e76a34a700d8548aa0078e85abba2a19353b",
+   "bytes": 19465,
+   "slides": 1,
+   "covers": [
+    "languages/fulfulde"
+   ]
+  },
+  {
+   "id": "languages-32-galician",
+   "set": "languages",
+   "sha256": "ce8496bb720475ed6807ec563207005624564b9085fe56bcb778c949ccca4081",
+   "bytes": 19441,
+   "slides": 1,
+   "covers": [
+    "languages/galician"
+   ]
+  },
+  {
+   "id": "languages-33-georgian",
+   "set": "languages",
+   "sha256": "98c7121052d9f789390f52028efe2de0d3d5eaab29061657ad32dfa004b9fdd7",
+   "bytes": 19391,
+   "slides": 1,
+   "covers": [
+    "languages/georgian"
+   ]
+  },
+  {
+   "id": "languages-34-german",
+   "set": "languages",
+   "sha256": "cc2faa3ce9e21933bace4720d53db0c6b230e3e5f6e3811164b4bbc0ae574c0f",
+   "bytes": 19435,
+   "slides": 1,
+   "covers": [
+    "languages/german"
+   ]
+  },
+  {
+   "id": "languages-35-greek",
+   "set": "languages",
+   "sha256": "3ef7b12f3899baf468d636492cd3a6f53f6805228544d8ba5950a2a6b68544ef",
+   "bytes": 19439,
+   "slides": 1,
+   "covers": [
+    "languages/greek"
+   ]
+  },
+  {
+   "id": "languages-36-gujarati",
+   "set": "languages",
+   "sha256": "9fc2e07f918a05c2ca2d24d8d50c5de2e0799f033c7937330b3aa25469ae76d1",
+   "bytes": 19383,
+   "slides": 1,
+   "covers": [
+    "languages/gujarati"
+   ]
+  },
+  {
+   "id": "languages-37-hausa",
+   "set": "languages",
+   "sha256": "c0ca2be19a1150e1dd13bcad4620407c9c5c321476440e815768b46ed2e496b1",
+   "bytes": 19456,
+   "slides": 1,
+   "covers": [
+    "languages/hausa"
+   ]
+  },
+  {
+   "id": "languages-38-hebrew",
+   "set": "languages",
+   "sha256": "4d83c969227c1e6bece51e626b751ff439fbeda8d067598e8dce0da8ada086a3",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "languages/hebrew"
+   ]
+  },
+  {
+   "id": "languages-39-hindi",
+   "set": "languages",
+   "sha256": "f779ee662f967570ab4fec4bc6d6006b2a1b23b59be18d78d273cbb784e2b923",
+   "bytes": 19377,
+   "slides": 1,
+   "covers": [
+    "languages/hindi"
+   ]
+  },
+  {
+   "id": "languages-40-hungarian",
+   "set": "languages",
+   "sha256": "cd2cba7f0bdd8e2a9daa7740c6a24ac37699a19462906ecbc12a4ecbebb3c3fc",
+   "bytes": 19451,
+   "slides": 1,
+   "covers": [
+    "languages/hungarian"
+   ]
+  },
+  {
+   "id": "languages-41-igbo",
+   "set": "languages",
+   "sha256": "ee5a2644b10c27d60d5d9a54300d4c29e6adf9b924ef97643172254b1e9ed4e1",
+   "bytes": 19437,
+   "slides": 1,
+   "covers": [
+    "languages/igbo"
+   ]
+  },
+  {
+   "id": "languages-42-indonesian",
+   "set": "languages",
+   "sha256": "76c67999fdc1ac579a63d0144badd9a0cf4fcf2af20b083fd22611283983d461",
+   "bytes": 19450,
+   "slides": 1,
+   "covers": [
+    "languages/indonesian"
+   ]
+  },
+  {
+   "id": "languages-43-italian",
+   "set": "languages",
+   "sha256": "3ec9f0dda1e2715af9fb5b38980c71b6317d3f0c97183b4cc9de1d59421fa5fc",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "languages/italian"
+   ]
+  },
+  {
+   "id": "languages-44-japanese",
+   "set": "languages",
+   "sha256": "406647580123b7e4ee32751c7511ea1e16d0f6e27d4c4c7881b94298d700a28e",
+   "bytes": 19349,
+   "slides": 1,
+   "covers": [
+    "languages/japanese"
+   ]
+  },
+  {
+   "id": "languages-45-kannada",
+   "set": "languages",
+   "sha256": "573150ef8930ae1cedb62f2b1becf199ee88bd9f8db21804837e3a0b65e7a519",
+   "bytes": 19390,
+   "slides": 1,
+   "covers": [
+    "languages/kannada"
+   ]
+  },
+  {
+   "id": "languages-46-kazakh",
+   "set": "languages",
+   "sha256": "234c2fdde4881f5ba3c0b2a7708aa4a16707462ddee60f987cccc0def876174c",
+   "bytes": 19457,
+   "slides": 1,
+   "covers": [
+    "languages/kazakh"
+   ]
+  },
+  {
+   "id": "languages-47-khmer",
+   "set": "languages",
+   "sha256": "98798e193ab547cf21713ad880cde6da47097c88208b8b63617780293323bce8",
+   "bytes": 19384,
+   "slides": 1,
+   "covers": [
+    "languages/khmer"
+   ]
+  },
+  {
+   "id": "languages-48-kinyarwanda",
+   "set": "languages",
+   "sha256": "73cdac56e3400459b97cc354b6ca816ad0a9c84e5d18ba35ff94dbd4ea94ca2a",
+   "bytes": 19463,
+   "slides": 1,
+   "covers": [
+    "languages/kinyarwanda"
+   ]
+  },
+  {
+   "id": "languages-49-korean",
+   "set": "languages",
+   "sha256": "a58727d4d68748fac656d9472eaf03bf7f2effb680c65ba6ef7adb95f7111c38",
+   "bytes": 19389,
+   "slides": 1,
+   "covers": [
+    "languages/korean"
+   ]
+  },
+  {
+   "id": "languages-50-kurmanji",
+   "set": "languages",
+   "sha256": "bc1e1e425ceb93944f4952da10ae470c82bc43f06a8cbab5ca31415b8381edc1",
+   "bytes": 19454,
+   "slides": 1,
+   "covers": [
+    "languages/kurmanji"
+   ]
+  },
+  {
+   "id": "languages-51-latvian",
+   "set": "languages",
+   "sha256": "71493c6861d369b7884dafce0a77ba882b809e4ff7eeeac63d1807f3078bec03",
+   "bytes": 19441,
+   "slides": 1,
+   "covers": [
+    "languages/latvian"
+   ]
+  },
+  {
+   "id": "languages-52-lithuanian",
+   "set": "languages",
+   "sha256": "1381a087d558d3e642fad5acec21cf6e09deda08e2d2a760eeb045195d0bd8bf",
+   "bytes": 19445,
+   "slides": 1,
+   "covers": [
+    "languages/lithuanian"
+   ]
+  },
+  {
+   "id": "languages-53-macedonian",
+   "set": "languages",
+   "sha256": "6937eca4326903d19b6cb46299971cfd4d3ec3631d6ba8dd2a420b9af37720f9",
+   "bytes": 19456,
+   "slides": 1,
+   "covers": [
+    "languages/macedonian"
+   ]
+  },
+  {
+   "id": "languages-54-malagasy",
+   "set": "languages",
+   "sha256": "509a3b9c75c33a9c820650c0eb30b7c608fd912f5a31f380d51c542ea18a7f6b",
+   "bytes": 19448,
+   "slides": 1,
+   "covers": [
+    "languages/malagasy"
+   ]
+  },
+  {
+   "id": "languages-55-malay",
+   "set": "languages",
+   "sha256": "17d1eed48359e233f09e892feec9ab913a844d5304d81e132c2d61112b31cf89",
+   "bytes": 19438,
+   "slides": 1,
+   "covers": [
+    "languages/malay"
+   ]
+  },
+  {
+   "id": "languages-56-malayalam",
+   "set": "languages",
+   "sha256": "7609a17827bd334241a9a502b22714cd7adf333bf343c10238ac0bf6717ef475",
+   "bytes": 19392,
+   "slides": 1,
+   "covers": [
+    "languages/malayalam"
+   ]
+  },
+  {
+   "id": "languages-57-maori",
+   "set": "languages",
+   "sha256": "6e498f78df0d8b74836687a9ef5d70fda99ec338125600a2596957871ac72993",
+   "bytes": 19447,
+   "slides": 1,
+   "covers": [
+    "languages/maori"
+   ]
+  },
+  {
+   "id": "languages-58-marathi",
+   "set": "languages",
+   "sha256": "9443497a11bcfa786fdd09a83bc9fe0c8572a811650c928319bc4ccf7f988ffe",
+   "bytes": 19381,
+   "slides": 1,
+   "covers": [
+    "languages/marathi"
+   ]
+  },
+  {
+   "id": "languages-59-mongolian",
+   "set": "languages",
+   "sha256": "97550150e5b7a8ffbcc1598166fd45cff9601e9e2ee5476460a5fda8ba8a5621",
+   "bytes": 19449,
+   "slides": 1,
+   "covers": [
+    "languages/mongolian"
+   ]
+  },
+  {
+   "id": "languages-60-nepali",
+   "set": "languages",
+   "sha256": "259a84f0f18a7a46a2af23250e21a7dc3c2c9a1bbf5b00a49f2f8a280526066a",
+   "bytes": 19379,
+   "slides": 1,
+   "covers": [
+    "languages/nepali"
+   ]
+  },
+  {
+   "id": "languages-61-norwegian",
+   "set": "languages",
+   "sha256": "fb6f93de1691f931ed0811d3c4fc09abc2f0c6a886e0540e5e442c87f0200faa",
+   "bytes": 19449,
+   "slides": 1,
+   "covers": [
+    "languages/norwegian"
+   ]
+  },
+  {
+   "id": "languages-62-odia",
+   "set": "languages",
+   "sha256": "a89c23aea049f6a332fbff916e3c74c62e1ec6d71d7c256005d3cac8b73985f8",
+   "bytes": 19376,
+   "slides": 1,
+   "covers": [
+    "languages/odia"
+   ]
+  },
+  {
+   "id": "languages-63-oromo",
+   "set": "languages",
+   "sha256": "3622f7d274822fe8f3fb235719dc6d86798c60e8d3f4ee968dc57da044130671",
+   "bytes": 19433,
+   "slides": 1,
+   "covers": [
+    "languages/oromo"
+   ]
+  },
+  {
+   "id": "languages-64-pashto",
+   "set": "languages",
+   "sha256": "baa91494ed2bb1d1a0f253395fd461d71691face9871f7e05c58fb2b81938f4e",
+   "bytes": 19450,
+   "slides": 1,
+   "covers": [
+    "languages/pashto"
+   ]
+  },
+  {
+   "id": "languages-65-persian",
+   "set": "languages",
+   "sha256": "2dfe4ca0b2eb5286ced84fe58ad369b02f5dfcc70ead4b389c8368e7c9ecd58a",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "languages/persian"
+   ]
+  },
+  {
+   "id": "languages-66-polish",
+   "set": "languages",
+   "sha256": "618323f287c66bb821034635a3b042f58075df569c52931b21c663c31f338012",
+   "bytes": 19437,
+   "slides": 1,
+   "covers": [
+    "languages/polish"
+   ]
+  },
+  {
+   "id": "languages-67-portuguese",
+   "set": "languages",
+   "sha256": "8eaa39393afc97dec3356406be64bb2f3a3244aa75014b9a89a8949d260f8cce",
+   "bytes": 19452,
+   "slides": 1,
+   "covers": [
+    "languages/portuguese"
+   ]
+  },
+  {
+   "id": "languages-68-punjabi-gurmukhi",
+   "set": "languages",
+   "sha256": "91eec0e3dd11a3043716ad0ffac54152404b41e3755ea343c83bb68bd614e677",
+   "bytes": 19413,
+   "slides": 1,
+   "covers": [
+    "languages/punjabi-gurmukhi"
+   ]
+  },
+  {
+   "id": "languages-69-punjabi-shahmukhi",
+   "set": "languages",
+   "sha256": "b19dfa10b370a753952eee9536b69bb965f09f023612319ef0717c22a24fa4b9",
+   "bytes": 19526,
+   "slides": 1,
+   "covers": [
+    "languages/punjabi-shahmukhi"
+   ]
+  },
+  {
+   "id": "languages-70-romanian",
+   "set": "languages",
+   "sha256": "d8e6afd24a54f714b7bb0dd7acba1893dae9aa3575afae5fe0c745a80b11d94d",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/romanian"
+   ]
+  },
+  {
+   "id": "languages-71-russian",
+   "set": "languages",
+   "sha256": "8a39349e09527782e83804228a651d9eeef704ea5d09280e30202d94129ee1a7",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "languages/russian"
+   ]
+  },
+  {
+   "id": "languages-72-serbian-cyrillic",
+   "set": "languages",
+   "sha256": "518b12ee95b75561ef38b06755413594c13afcb58e6ec21991296705fb2de671",
+   "bytes": 19497,
+   "slides": 1,
+   "covers": [
+    "languages/serbian-cyrillic"
+   ]
+  },
+  {
+   "id": "languages-73-serbian-latin",
+   "set": "languages",
+   "sha256": "664397108d831105731a182c1efd8862f647cd8320953992fd192e6d33cd1255",
+   "bytes": 19476,
+   "slides": 1,
+   "covers": [
+    "languages/serbian-latin"
+   ]
+  },
+  {
+   "id": "languages-74-shona",
+   "set": "languages",
+   "sha256": "20a305c71fbc67ae18157feaa15c289015bcb83d910cbc92d4dc9ad1f150ad86",
+   "bytes": 19467,
+   "slides": 1,
+   "covers": [
+    "languages/shona"
+   ]
+  },
+  {
+   "id": "languages-75-slovak",
+   "set": "languages",
+   "sha256": "e58abe8d995347693bf4d5d18050d33c1c326dc19eed372fd9d7eb85c7621595",
+   "bytes": 19441,
+   "slides": 1,
+   "covers": [
+    "languages/slovak"
+   ]
+  },
+  {
+   "id": "languages-76-slovenian",
+   "set": "languages",
+   "sha256": "175f2314c1562206c7ee3329b88cada846e10ccc790092b7aff1234fcf4be41c",
+   "bytes": 19440,
+   "slides": 1,
+   "covers": [
+    "languages/slovenian"
+   ]
+  },
+  {
+   "id": "languages-77-somali",
+   "set": "languages",
+   "sha256": "571d3887c01531b66914d15e6a707792dfb5d06c05f77971cc7dac18e6788161",
+   "bytes": 19431,
+   "slides": 1,
+   "covers": [
+    "languages/somali"
+   ]
+  },
+  {
+   "id": "languages-78-spanish",
+   "set": "languages",
+   "sha256": "7d7d2289da7733b11b1f8b3871e6c9e073fec1b765bc2021e59fda4ddc81141f",
+   "bytes": 19441,
+   "slides": 1,
+   "covers": [
+    "languages/spanish"
+   ]
+  },
+  {
+   "id": "languages-79-swahili",
+   "set": "languages",
+   "sha256": "db4ea5aaff393dfa01c8f62d9f5814db10156c0f45a104bfa6d560805d4b626a",
+   "bytes": 19444,
+   "slides": 1,
+   "covers": [
+    "languages/swahili"
+   ]
+  },
+  {
+   "id": "languages-80-swedish",
+   "set": "languages",
+   "sha256": "3d36411a6a284f770f634469845bd5c68593b276d0c27a9b24f31a718eb2c394",
+   "bytes": 19441,
+   "slides": 1,
+   "covers": [
+    "languages/swedish"
+   ]
+  },
+  {
+   "id": "languages-81-tagalog",
+   "set": "languages",
+   "sha256": "57126f6f23f8df0c12c971947cefa07122167b4056da648d9d933d59be7eb516",
+   "bytes": 19443,
+   "slides": 1,
+   "covers": [
+    "languages/tagalog"
+   ]
+  },
+  {
+   "id": "languages-82-tajik",
+   "set": "languages",
+   "sha256": "63e111893321af1af708f0a7fcea55c7fc77c6fa101938c9a7c1700c62bf7f7d",
+   "bytes": 19462,
+   "slides": 1,
+   "covers": [
+    "languages/tajik"
+   ]
+  },
+  {
+   "id": "languages-83-tamil",
+   "set": "languages",
+   "sha256": "f4d5b4278836ab12cd135edec788e59e44b1a5d7e55dc2a421c2bf05fcabaaf7",
+   "bytes": 19371,
+   "slides": 1,
+   "covers": [
+    "languages/tamil"
+   ]
+  },
+  {
+   "id": "languages-84-telugu",
+   "set": "languages",
+   "sha256": "a2d4c0c34256b6e5c817e3e6cb2ad41c8da9ec5ba07f4923836571e19030675d",
+   "bytes": 19384,
+   "slides": 1,
+   "covers": [
+    "languages/telugu"
+   ]
+  },
+  {
+   "id": "languages-85-thai",
+   "set": "languages",
+   "sha256": "8f1c4b61358e52085f63f0c252421dd4779b43d13206820adc471441a915a1c1",
+   "bytes": 19385,
+   "slides": 1,
+   "covers": [
+    "languages/thai"
+   ]
+  },
+  {
+   "id": "languages-86-turkish",
+   "set": "languages",
+   "sha256": "914cf66f3a2383c04df4af4892e74b86399e08c0b1578e0b9ffa5e0c885551ab",
+   "bytes": 19444,
+   "slides": 1,
+   "covers": [
+    "languages/turkish"
+   ]
+  },
+  {
+   "id": "languages-87-ukrainian",
+   "set": "languages",
+   "sha256": "629c08f22487868b757ec167f58cfeedafa8ea895410f4d6235b976441674be6",
+   "bytes": 19455,
+   "slides": 1,
+   "covers": [
+    "languages/ukrainian"
+   ]
+  },
+  {
+   "id": "languages-88-urdu",
+   "set": "languages",
+   "sha256": "82451a7c9dc48709b677c185167820d8d15d14e25dc5a93acea27606ad6ac493",
+   "bytes": 19438,
+   "slides": 1,
+   "covers": [
+    "languages/urdu"
+   ]
+  },
+  {
+   "id": "languages-89-uzbek-latin",
+   "set": "languages",
+   "sha256": "7c75fb3ba44db8ad2b29f19468ab0d64879f0fafa8dd5c4f388c39e4c5e73765",
+   "bytes": 19489,
+   "slides": 1,
+   "covers": [
+    "languages/uzbek-latin"
+   ]
+  },
+  {
+   "id": "languages-90-vietnamese-quoc-ngu",
+   "set": "languages",
+   "sha256": "83458abecabad21b4441b6a9fa4e5dbefd5eb638db1516a6693998aba8d0bb7e",
+   "bytes": 19503,
+   "slides": 1,
+   "covers": [
+    "languages/vietnamese-quoc-ngu"
+   ]
+  },
+  {
+   "id": "languages-91-xhosa",
+   "set": "languages",
+   "sha256": "15bc2ffd5e9447599e7699dc28876230b61bef34ed44fbca1970e54c4cc5c367",
+   "bytes": 19445,
+   "slides": 1,
+   "covers": [
+    "languages/xhosa"
+   ]
+  },
+  {
+   "id": "languages-92-yoruba",
+   "set": "languages",
+   "sha256": "79a84db9fac6f4cddcb8cd5e07c696a998972a701d73440fe8a47f449681c80e",
+   "bytes": 19439,
+   "slides": 1,
+   "covers": [
+    "languages/yoruba"
+   ]
+  },
+  {
+   "id": "languages-93-zulu",
+   "set": "languages",
+   "sha256": "adb1ab63b5411ff904512051f69aee835ca5e105c75187485ba5c19267d75c65",
+   "bytes": 19446,
+   "slides": 1,
+   "covers": [
+    "languages/zulu"
+   ]
+  },
+  {
+   "id": "font-schemes-01-consolas",
+   "set": "font-schemes",
+   "sha256": "630b4c29904929062c8d368a874601ad6241cb854139098351ecfc14abbbe0b0",
+   "bytes": 19332,
+   "slides": 1,
+   "covers": [
+    "font-schemes/consolas"
+   ]
+  },
+  {
+   "id": "font-schemes-02-courier-new",
+   "set": "font-schemes",
+   "sha256": "64f77d623e81e27567e2e4cac7aa95703befa0898293be59af86ed9daff81cd0",
+   "bytes": 19365,
+   "slides": 1,
+   "covers": [
+    "font-schemes/courier-new"
+   ]
+  },
+  {
+   "id": "font-schemes-03-arial",
+   "set": "font-schemes",
+   "sha256": "6fb1ac290620fb6777d125ae61b05963133f5ddf0c02737241919b0cd67815b5",
+   "bytes": 19371,
+   "slides": 1,
+   "covers": [
+    "font-schemes/arial"
+   ]
+  },
+  {
+   "id": "font-schemes-04-calibri",
+   "set": "font-schemes",
+   "sha256": "20092715aef31b18a0ecddb2cff65ebd83992f7df6696b033ce0af6c680cf506",
+   "bytes": 19334,
+   "slides": 1,
+   "covers": [
+    "font-schemes/calibri"
+   ]
+  },
+  {
+   "id": "font-schemes-05-impact",
+   "set": "font-schemes",
+   "sha256": "0868d3085d89cc797679f81386182a5d3cf042cec5325781cc23639084287a1f",
+   "bytes": 19400,
+   "slides": 1,
+   "covers": [
+    "font-schemes/impact"
+   ]
+  },
+  {
+   "id": "font-schemes-06-lucida-sans",
+   "set": "font-schemes",
+   "sha256": "6603a9a52630388315cc74c22a12e0f603a33a144f9226317e63724e146bdb34",
+   "bytes": 19362,
+   "slides": 1,
+   "covers": [
+    "font-schemes/lucida-sans"
+   ]
+  },
+  {
+   "id": "font-schemes-07-segoe-ui",
+   "set": "font-schemes",
+   "sha256": "5d36bf4eda8c28be05f12010d88f2c7bc325526ba861f0840d51832f5b2bac5f",
+   "bytes": 19398,
+   "slides": 1,
+   "covers": [
+    "font-schemes/segoe-ui"
+   ]
+  },
+  {
+   "id": "font-schemes-08-segoe-ui-light",
+   "set": "font-schemes",
+   "sha256": "0ac01ca0ba1441ec70e1e3df0518ca8268f1b8322c9e450c3ddbcc3330538a85",
+   "bytes": 19433,
+   "slides": 1,
+   "covers": [
+    "font-schemes/segoe-ui-light"
+   ]
+  },
+  {
+   "id": "font-schemes-09-tahoma",
+   "set": "font-schemes",
+   "sha256": "6c507b662c84e652ccc32f9b3aff52155e31866c33090ff430077ff52c2c0c86",
+   "bytes": 19325,
+   "slides": 1,
+   "covers": [
+    "font-schemes/tahoma"
+   ]
+  },
+  {
+   "id": "font-schemes-10-trebuchet-ms",
+   "set": "font-schemes",
+   "sha256": "babbdff4bfc9e77cbccedf77a29b53d802e20d48161dbd571f66998f9ec810d5",
+   "bytes": 19376,
+   "slides": 1,
+   "covers": [
+    "font-schemes/trebuchet-ms"
+   ]
+  },
+  {
+   "id": "font-schemes-11-verdana",
+   "set": "font-schemes",
+   "sha256": "d763e6f63056252184f42076fcf1acfda696a268f8a6fec8c0213dbd6f5b35c0",
+   "bytes": 19328,
+   "slides": 1,
+   "covers": [
+    "font-schemes/verdana"
+   ]
+  },
+  {
+   "id": "font-schemes-12-bookman",
+   "set": "font-schemes",
+   "sha256": "94f8551905878614753137454bf75592aef4cfdc2bdc7412ccb4a96179245a34",
+   "bytes": 19378,
+   "slides": 1,
+   "covers": [
+    "font-schemes/bookman"
+   ]
+  },
+  {
+   "id": "font-schemes-13-century-schoolbook",
+   "set": "font-schemes",
+   "sha256": "0e8ff7848ffff958ef2aa83c0858852cf7c8a9fa1b684e7083d512ba2649ab6e",
+   "bytes": 19402,
+   "slides": 1,
+   "covers": [
+    "font-schemes/century-schoolbook"
+   ]
+  },
+  {
+   "id": "font-schemes-14-constantia",
+   "set": "font-schemes",
+   "sha256": "522d6eead7ab31b3e20cada0d1b9040205c8b7462a87211471913f5911d7d193",
+   "bytes": 19341,
+   "slides": 1,
+   "covers": [
+    "font-schemes/constantia"
+   ]
+  },
+  {
+   "id": "font-schemes-15-garamond",
+   "set": "font-schemes",
+   "sha256": "b7fdf8704f5731fe46ccbe43b371ebea8c5b9678fff0f1bfbc11af35a319e48f",
+   "bytes": 19338,
+   "slides": 1,
+   "covers": [
+    "font-schemes/garamond"
+   ]
+  },
+  {
+   "id": "font-schemes-16-rockwell",
+   "set": "font-schemes",
+   "sha256": "24b7f81781105d5df1aa54d2efcce11d6fbbfe3f96816e2628fe212a62b0dd17",
+   "bytes": 19345,
+   "slides": 1,
+   "covers": [
+    "font-schemes/rockwell"
+   ]
+  },
+  {
+   "id": "font-schemes-17-times-new-roman",
+   "set": "font-schemes",
+   "sha256": "903a12158ba8e6b90d42b0363bdbde094351d84dd4edcc6c3c02a4e098fe0c7c",
+   "bytes": 19367,
+   "slides": 1,
+   "covers": [
+    "font-schemes/times-new-roman"
+   ]
+  },
+  {
+   "id": "font-schemes-18-aptos",
+   "set": "font-schemes",
+   "sha256": "009ecdda465ed8c64278414dd1233f9a6f21fe574092efde6a67ae3c9a10f9a7",
+   "bytes": 19374,
+   "slides": 1,
+   "covers": [
+    "font-schemes/aptos"
+   ]
+  },
+  {
+   "id": "font-schemes-19-grandview",
+   "set": "font-schemes",
+   "sha256": "a65ff67d49a18cd278eb475c73cd662a68ce0edf42990801b95e759e693d4123",
+   "bytes": 19402,
+   "slides": 1,
+   "covers": [
+    "font-schemes/grandview"
+   ]
+  },
+  {
+   "id": "font-schemes-20-seaford",
+   "set": "font-schemes",
+   "sha256": "7b9342f361a953e3f7d461fa21eea4bb92a57c76fd999cc18871561454468764",
+   "bytes": 19379,
+   "slides": 1,
+   "covers": [
+    "font-schemes/seaford"
+   ]
+  },
+  {
+   "id": "font-schemes-21-skeena",
+   "set": "font-schemes",
+   "sha256": "03761e6c563457b32f445ece10764746e8b287d180e224636ca48ab51b1bada4",
+   "bytes": 19375,
+   "slides": 1,
+   "covers": [
+    "font-schemes/skeena"
+   ]
+  },
+  {
+   "id": "font-schemes-22-tenorite",
+   "set": "font-schemes",
+   "sha256": "64070e76eeb1f5c35183a6f893ca4b54b7f3f55da28744fc284193ffca34aae1",
+   "bytes": 19389,
+   "slides": 1,
+   "covers": [
+    "font-schemes/tenorite"
+   ]
+  },
+  {
+   "id": "font-schemes-23-georgia",
+   "set": "font-schemes",
+   "sha256": "b11845b1c43f60df8c5bd08361b2e42f636394996a5b284222670f3468487928",
+   "bytes": 19331,
+   "slides": 1,
+   "covers": [
+    "font-schemes/georgia"
+   ]
+  },
+  {
+   "id": "font-schemes-24-microsoft-yahei",
+   "set": "font-schemes",
+   "sha256": "6fada42542cf6a7bf41bed78d28eeca37890cdac2c0a333c959fc7a418e47c91",
+   "bytes": 19384,
+   "slides": 1,
+   "covers": [
+    "font-schemes/microsoft-yahei"
+   ]
+  },
+  {
+   "id": "font-schemes-25-simsun",
+   "set": "font-schemes",
+   "sha256": "64b8af352ab02d127a52e706bbccca3e635871b31a8ab6fe9d090e4e01e3f331",
+   "bytes": 19336,
+   "slides": 1,
+   "covers": [
+    "font-schemes/simsun"
+   ]
+  },
+  {
+   "id": "font-schemes-26-fangsong",
+   "set": "font-schemes",
+   "sha256": "0caaf785a79946428d9d5b9cd01d6a528d28f4e08a0054ab6a299729eeb91801",
+   "bytes": 19344,
+   "slides": 1,
+   "covers": [
+    "font-schemes/fangsong"
+   ]
+  },
+  {
+   "id": "font-schemes-27-yu-gothic",
+   "set": "font-schemes",
+   "sha256": "43d3b9ef6cee083a979075e21a21c51d898b1507fcdf2b6cb59fe8efd6f6478d",
+   "bytes": 19353,
+   "slides": 1,
+   "covers": [
+    "font-schemes/yu-gothic"
+   ]
+  },
+  {
+   "id": "font-schemes-28-pmingliu",
+   "set": "font-schemes",
+   "sha256": "d2054649a6a610f277610d1b88b6169561cf3c6b083b0b2150e6b9cf5501dc7d",
+   "bytes": 19345,
+   "slides": 1,
+   "covers": [
+    "font-schemes/pmingliu"
+   ]
+  },
+  {
+   "id": "font-schemes-29-mingliu",
+   "set": "font-schemes",
+   "sha256": "49bbf64f37e11bb62ad1d89c3542bb4a4181680a68170284f832a50ebb4813b1",
+   "bytes": 19336,
+   "slides": 1,
+   "covers": [
+    "font-schemes/mingliu"
+   ]
+  },
+  {
+   "id": "font-schemes-30-ms-mincho",
+   "set": "font-schemes",
+   "sha256": "cae1f082e19c75df84c16ddb5f849aeb965b09747cb5a55aa47fc81a6daaf217",
+   "bytes": 19354,
+   "slides": 1,
+   "covers": [
+    "font-schemes/ms-mincho"
+   ]
+  },
+  {
+   "id": "font-schemes-31-malgun-gothic",
+   "set": "font-schemes",
+   "sha256": "fc83b977a4f389ec00801e878955e2e11d95b2360f8d31fc793544a8a5ed0fc0",
+   "bytes": 19380,
+   "slides": 1,
+   "covers": [
+    "font-schemes/malgun-gothic"
+   ]
+  },
+  {
+   "id": "font-schemes-32-batang",
+   "set": "font-schemes",
+   "sha256": "6aff304dc9bae3a00abbf0d11f95db227fdeb747494e59d95999925ae34cc1ca",
+   "bytes": 19367,
+   "slides": 1,
+   "covers": [
+    "font-schemes/batang"
+   ]
+  },
+  {
+   "id": "font-schemes-33-gungsuh",
+   "set": "font-schemes",
+   "sha256": "a2093efbdc38ac99a2987942604cadae1d46311c2c05edf5040114f8a90cabde",
+   "bytes": 19376,
+   "slides": 1,
+   "covers": [
+    "font-schemes/gungsuh"
+   ]
+  },
+  {
+   "id": "font-schemes-34-mangal",
+   "set": "font-schemes",
+   "sha256": "45d07329ef18d90b5dfca536490071d529ec2f70638a99b70e444b6ba5cc6a6c",
+   "bytes": 19323,
+   "slides": 1,
+   "covers": [
+    "font-schemes/mangal"
+   ]
+  },
+  {
+   "id": "font-schemes-35-nirmala-ui",
+   "set": "font-schemes",
+   "sha256": "76d7662a8dcc538cda5fdb8b1f179134c5d66d1c531123f091a7d5f4404f89ef",
+   "bytes": 19355,
+   "slides": 1,
+   "covers": [
+    "font-schemes/nirmala-ui"
+   ]
+  },
+  {
+   "id": "font-schemes-36-latha",
+   "set": "font-schemes",
+   "sha256": "2332a3072109b10c7fcf392d189f2f8d657ad3c5fa848e6821b5e009b8ae5036",
+   "bytes": 19322,
+   "slides": 1,
+   "covers": [
+    "font-schemes/latha"
+   ]
+  },
+  {
+   "id": "font-schemes-37-david",
+   "set": "font-schemes",
+   "sha256": "3ccabb7a5b255177464108a8676d8683f9129f966dd736be54ada4ed59a040ac",
+   "bytes": 19323,
+   "slides": 1,
+   "covers": [
+    "font-schemes/david"
+   ]
+  },
+  {
+   "id": "font-schemes-38-miriam",
+   "set": "font-schemes",
+   "sha256": "a9eef36c35f5dd4f49a0515d1b69ad711181cd8b7f182bc7f19f4afa2b72c0cc",
+   "bytes": 19326,
+   "slides": 1,
+   "covers": [
+    "font-schemes/miriam"
+   ]
+  },
+  {
+   "id": "font-schemes-39-gisha",
+   "set": "font-schemes",
+   "sha256": "2f6c7749f1683923f734a507b3144e3285d965c532ae8a3bf74253f612ab96e2",
+   "bytes": 19326,
+   "slides": 1,
+   "covers": [
+    "font-schemes/gisha"
+   ]
+  },
+  {
+   "id": "font-schemes-40-vrinda",
+   "set": "font-schemes",
+   "sha256": "79ce7da7da1cf2b0823db61bda60f435a7a810bcb012c58230e7214993f1cc76",
+   "bytes": 19326,
+   "slides": 1,
+   "covers": [
+    "font-schemes/vrinda"
+   ]
+  },
+  {
+   "id": "font-schemes-41-shruti",
+   "set": "font-schemes",
+   "sha256": "f27ab6e7803f06144d93bdda44066b4baf61866382321d06b04c703132d090d9",
+   "bytes": 19318,
+   "slides": 1,
+   "covers": [
+    "font-schemes/shruti"
+   ]
+  },
+  {
+   "id": "font-schemes-42-tunga",
+   "set": "font-schemes",
+   "sha256": "a40a058ac5cb283b84c6faf564d6d8897419a126199e04b8441076fcae50c3bc",
+   "bytes": 19321,
+   "slides": 1,
+   "covers": [
+    "font-schemes/tunga"
+   ]
+  },
+  {
+   "id": "font-schemes-43-kartika",
+   "set": "font-schemes",
+   "sha256": "b3b8c3107ddfc8a941f9a977b6f3e0110b143d60d6051dc67fb54ad06a0dbecb",
+   "bytes": 19330,
+   "slides": 1,
+   "covers": [
+    "font-schemes/kartika"
+   ]
+  },
+  {
+   "id": "font-schemes-44-kalinga",
+   "set": "font-schemes",
+   "sha256": "f2528d5c3235940870107d667044e5461409f684b5f33b03c9e9ec018b48e70f",
+   "bytes": 19329,
+   "slides": 1,
+   "covers": [
+    "font-schemes/kalinga"
+   ]
+  },
+  {
+   "id": "font-schemes-45-raavi",
+   "set": "font-schemes",
+   "sha256": "b341e7a02b6569d9446bced055169ce7e34df0480691c14d216009f83c4eed1a",
+   "bytes": 19316,
+   "slides": 1,
+   "covers": [
+    "font-schemes/raavi"
+   ]
+  },
+  {
+   "id": "font-schemes-46-gautami",
+   "set": "font-schemes",
+   "sha256": "d610e7de62caf182e202da994fa2e3af554c43103342c4eac30cba70f0e4489b",
+   "bytes": 19329,
+   "slides": 1,
+   "covers": [
+    "font-schemes/gautami"
+   ]
+  },
+  {
+   "id": "font-schemes-47-arabic-typesetting",
+   "set": "font-schemes",
+   "sha256": "95053da5e6dc8542c3afad06fb2bf38881a92fe6faa255bcb43b811ae4932a96",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "font-schemes/arabic-typesetting"
+   ]
+  },
+  {
+   "id": "font-schemes-48-microsoft-jhenghei",
+   "set": "font-schemes",
+   "sha256": "fb733b1be5bc5f33a19f713896d50732a840e5fd8a7e82772d2e6eba25859566",
+   "bytes": 19391,
+   "slides": 1,
+   "covers": [
+    "font-schemes/microsoft-jhenghei"
+   ]
+  },
+  {
+   "id": "font-schemes-49-meiryo",
+   "set": "font-schemes",
+   "sha256": "8fc2c16d64dbfc0ee6f3cfce481b5d4ef6bc2481c832d4d74dab0bf72803b947",
+   "bytes": 19326,
+   "slides": 1,
+   "covers": [
+    "font-schemes/meiryo"
+   ]
+  },
+  {
+   "id": "font-schemes-50-angsana-new",
+   "set": "font-schemes",
+   "sha256": "4800ba59ebbc3e5c0b1dcd4ea41c02eca6560ecba761f30578690d500af0b9cb",
+   "bytes": 19355,
+   "slides": 1,
+   "covers": [
+    "font-schemes/angsana-new"
+   ]
+  },
+  {
+   "id": "font-schemes-51-aparajita",
+   "set": "font-schemes",
+   "sha256": "b2dc0e55fc4a03c04bff715ea850d7e0366ff7b7b24199377c047347f0fbba77",
+   "bytes": 19347,
+   "slides": 1,
+   "covers": [
+    "font-schemes/aparajita"
+   ]
+  },
+  {
+   "id": "font-schemes-52-dilleniaupc",
+   "set": "font-schemes",
+   "sha256": "7aed4104ae72420cdde3850eda84e212087ef2d54c9e5a74096722806d8d6f44",
+   "bytes": 19365,
+   "slides": 1,
+   "covers": [
+    "font-schemes/dilleniaupc"
+   ]
+  },
+  {
+   "id": "font-schemes-53-sakkal-majalla",
+   "set": "font-schemes",
+   "sha256": "4c7d6b3123ecb63ee0091562018d142fe0e63e64f84a5553fa9b54cf10e98384",
+   "bytes": 19378,
+   "slides": 1,
+   "covers": [
+    "font-schemes/sakkal-majalla"
+   ]
+  },
+  {
+   "id": "font-schemes-54-shonar-bangla",
+   "set": "font-schemes",
+   "sha256": "f5571ce217bd5cc275892547ca3ab985eb37cbfe6f63dc5eca676d6130c4a772",
+   "bytes": 19373,
+   "slides": 1,
+   "covers": [
+    "font-schemes/shonar-bangla"
+   ]
+  },
+  {
+   "id": "font-schemes-55-sylfaen",
+   "set": "font-schemes",
+   "sha256": "6fc93f7d3337ae09586a49cc37977334d68e9717c6f4eb34d73990f959f5ecea",
+   "bytes": 19322,
+   "slides": 1,
+   "covers": [
+    "font-schemes/sylfaen"
+   ]
+  },
+  {
+   "id": "font-schemes-56-traditional-arabic",
+   "set": "font-schemes",
+   "sha256": "bcef33a9e4a3edb8d777817c51660c512c8d1483f37fb80f0b008c91d5368dcb",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "font-schemes/traditional-arabic"
+   ]
+  },
+  {
+   "id": "font-schemes-57-montserrat",
+   "set": "font-schemes",
+   "sha256": "76d47fc851ce6e8ffbdc41170106173c592781d71e550d9120f08060f6279e90",
+   "bytes": 19348,
+   "slides": 1,
+   "covers": [
+    "font-schemes/montserrat"
+   ]
+  },
+  {
+   "id": "font-schemes-58-open-sans",
+   "set": "font-schemes",
+   "sha256": "78b55eabb1b2117c58a1684734c60bfbe5404ff288a47bb964d12e2c319397be",
+   "bytes": 19340,
+   "slides": 1,
+   "covers": [
+    "font-schemes/open-sans"
+   ]
+  },
+  {
+   "id": "font-schemes-59-poppins",
+   "set": "font-schemes",
+   "sha256": "7d3302f40c7e045eaf383bffb05504e624a0b32b73ce69267352e03e66901700",
+   "bytes": 19327,
+   "slides": 1,
+   "covers": [
+    "font-schemes/poppins"
+   ]
+  },
+  {
+   "id": "font-schemes-60-pt-serif",
+   "set": "font-schemes",
+   "sha256": "8d36f30d59d9c69dba7fe5f742d518015741edcced26e927c4ffc77b3b47a3cd",
+   "bytes": 19344,
+   "slides": 1,
+   "covers": [
+    "font-schemes/pt-serif"
+   ]
+  },
+  {
+   "id": "font-schemes-61-raleway",
+   "set": "font-schemes",
+   "sha256": "32fb69ded62217b6440438acab59184bf7a393b4f4b9d28b73426410e7472d49",
+   "bytes": 19328,
+   "slides": 1,
+   "covers": [
+    "font-schemes/raleway"
+   ]
+  },
+  {
+   "id": "font-schemes-62-roboto",
+   "set": "font-schemes",
+   "sha256": "c4a0034a83b364a5767df1eb3cf1f80a2076d0b7966438b8232e61accffe804c",
+   "bytes": 19323,
+   "slides": 1,
+   "covers": [
+    "font-schemes/roboto"
+   ]
+  },
+  {
+   "id": "font-schemes-63-noto-sans-arabic",
+   "set": "font-schemes",
+   "sha256": "816aaf9adfd28d8f3e70d2957367bc579a2560e486b675a764c7b704bdda5a9e",
+   "bytes": 19404,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-arabic"
+   ]
+  },
+  {
+   "id": "font-schemes-64-noto-sans-armenian",
+   "set": "font-schemes",
+   "sha256": "13f596ebb250f6ceaa9dc1338d315ffb90a25f83225f3ae58e6d14771e2d3438",
+   "bytes": 19403,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-armenian"
+   ]
+  },
+  {
+   "id": "font-schemes-65-noto-sans-bengali",
+   "set": "font-schemes",
+   "sha256": "e50134ec0635effb5363b6229ca2ee05b1e45d6d5fb895bc044d70898f91db94",
+   "bytes": 19406,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-bengali"
+   ]
+  },
+  {
+   "id": "font-schemes-66-noto-sans-devangari",
+   "set": "font-schemes",
+   "sha256": "c88ac7d4772e05c7672f2014b744b7f8031aa44cd51c52232118d7b63056b4e1",
+   "bytes": 19425,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-devangari"
+   ]
+  },
+  {
+   "id": "font-schemes-67-noto-sans-georgian",
+   "set": "font-schemes",
+   "sha256": "9745c13bc68269eb1a677fe6584d45f06b17376d0d08fc76de4eb9cefd9338c0",
+   "bytes": 19409,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-georgian"
+   ]
+  },
+  {
+   "id": "font-schemes-68-noto-sans-gujarati",
+   "set": "font-schemes",
+   "sha256": "5cf548fcadcbd11a4ea1004f13be99196c1c61da337ae68cb1bd8a45eca446b2",
+   "bytes": 19411,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-gujarati"
+   ]
+  },
+  {
+   "id": "font-schemes-69-noto-sans-gurmukhi",
+   "set": "font-schemes",
+   "sha256": "01976f707536b03808ec7f747cd9de150cc379292de673522e880dda80647cf4",
+   "bytes": 19419,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-gurmukhi"
+   ]
+  },
+  {
+   "id": "font-schemes-70-noto-sans-hebrew",
+   "set": "font-schemes",
+   "sha256": "d9fd313b15d56b0418dcb8ea829e1eef52def85905119eb6f0141a55a431c328",
+   "bytes": 19398,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-hebrew"
+   ]
+  },
+  {
+   "id": "font-schemes-71-noto-sans-jp",
+   "set": "font-schemes",
+   "sha256": "b986b7d66ecb962f61706217da1f9d57db5ee5e91ac517b832a42789bda6c0f6",
+   "bytes": 19375,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-jp"
+   ]
+  },
+  {
+   "id": "font-schemes-72-noto-sans-kannada",
+   "set": "font-schemes",
+   "sha256": "258a6f2da733ecafb43116e4eed24bb3cb5966b9d27ad0a8975e7f83e42ddff7",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-kannada"
+   ]
+  },
+  {
+   "id": "font-schemes-73-noto-sans-kr",
+   "set": "font-schemes",
+   "sha256": "e592a3326b3f59957786061a6c4353f3b24ffcb2413722a6bff6b8110cb6c7cc",
+   "bytes": 19379,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-kr"
+   ]
+  },
+  {
+   "id": "font-schemes-74-noto-sans-malayalam",
+   "set": "font-schemes",
+   "sha256": "58c874aa47a5ffbc96263de9ee529e8a16835c11d768b2b86ac28770541f1815",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-malayalam"
+   ]
+  },
+  {
+   "id": "font-schemes-75-noto-sans-mongolian",
+   "set": "font-schemes",
+   "sha256": "c6fab0873f7ce1d658c2cb639bc784e54a335b8016ee05a6b85f89cebc692c22",
+   "bytes": 19408,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-mongolian"
+   ]
+  },
+  {
+   "id": "font-schemes-76-noto-sans-oriya",
+   "set": "font-schemes",
+   "sha256": "ba842db4ec06f14ea40cd31f585f436c4e3a6be7617086e90cd47d4a5b14baba",
+   "bytes": 19394,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-oriya"
+   ]
+  },
+  {
+   "id": "font-schemes-77-noto-sans-sc",
+   "set": "font-schemes",
+   "sha256": "6d5d298ae1167d272e0b6ad4fea6d1041e6e0e9a8aa504323491525ed146f32e",
+   "bytes": 19373,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-sc"
+   ]
+  },
+  {
+   "id": "font-schemes-78-noto-sans-tamil",
+   "set": "font-schemes",
+   "sha256": "edd6bc4aacc91d3d5825c4c8bca225fbc965357bbb3867e9b5555d7f0aad3338",
+   "bytes": 19391,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-tamil"
+   ]
+  },
+  {
+   "id": "font-schemes-79-noto-sans-tc",
+   "set": "font-schemes",
+   "sha256": "d8c1a770223fdebc308e0abc352cc5cdb1e91360b37aab169745fe0e469af5e5",
+   "bytes": 19375,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-tc"
+   ]
+  },
+  {
+   "id": "font-schemes-80-noto-sans-telugu",
+   "set": "font-schemes",
+   "sha256": "3be769abbc55a714953506b71199161661d15a5fadc13f7c456a5d3b0e80efef",
+   "bytes": 19401,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-telugu"
+   ]
+  },
+  {
+   "id": "font-schemes-81-noto-sans",
+   "set": "font-schemes",
+   "sha256": "522d43df09fa24fc15f2e55af443ebd6554ca267365c2abc037ddbb16ab0ddc8",
+   "bytes": 19353,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans"
+   ]
+  },
+  {
+   "id": "font-schemes-82-noto-sans-thai",
+   "set": "font-schemes",
+   "sha256": "62be6da43f050f1087c6b7040c6dc08462792e663204de3da27adc25ef295acb",
+   "bytes": 19390,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-thai"
+   ]
+  },
+  {
+   "id": "font-schemes-83-noto-nastaliq-urdu",
+   "set": "font-schemes",
+   "sha256": "1ee2ddfa180d9a5ac4be7aa8d28fd6ccf80e08e69f6514a2e2d63401e4d97ce0",
+   "bytes": 19411,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-nastaliq-urdu"
+   ]
+  },
+  {
+   "id": "font-schemes-84-noto-naksh-arabic",
+   "set": "font-schemes",
+   "sha256": "a7a843affbc64d0bdc0d8d8ab4e457d0c3464a82a1297f6a9a5acdc1ecb7a13b",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-naksh-arabic"
+   ]
+  },
+  {
+   "id": "font-schemes-85-noto-sans-ethiopic",
+   "set": "font-schemes",
+   "sha256": "193f25b7e70fd84a86e73138d2f484ffac49f904726361df9ee26a6378687e22",
+   "bytes": 19405,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-ethiopic"
+   ]
+  },
+  {
+   "id": "font-schemes-86-noto-sans-khmer",
+   "set": "font-schemes",
+   "sha256": "c14a9bdfb7dd8440ab8cd6e6acfe8906fb73f0e7c5685be62eaf4bf2a742ca66",
+   "bytes": 19397,
+   "slides": 1,
+   "covers": [
+    "font-schemes/noto-sans-khmer"
+   ]
+  },
+  {
+   "id": "font-schemes-87-nyala",
+   "set": "font-schemes",
+   "sha256": "7d36393da5d0c65471808f0011afa082de062055cebc03e4d2466c5c4745fd56",
+   "bytes": 19319,
+   "slides": 1,
+   "covers": [
+    "font-schemes/nyala"
+   ]
+  },
+  {
+   "id": "font-schemes-88-daunpenh",
+   "set": "font-schemes",
+   "sha256": "ec70397b4baff253a8394ee507877b7471e9f37dfe8d52362006dce52112ddb6",
+   "bytes": 19339,
+   "slides": 1,
+   "covers": [
+    "font-schemes/daunpenh"
+   ]
+  },
+  {
+   "id": "font-schemes-89-khmer-ui",
+   "set": "font-schemes",
+   "sha256": "a3eb210eb0cfb90493033d2396bf74d7daffa971bd0b5ce2bffac3210705c35c",
+   "bytes": 19348,
+   "slides": 1,
+   "covers": [
+    "font-schemes/khmer-ui"
+   ]
+  },
+  {
+   "id": "font-schemes-90-classic-editorial",
+   "set": "font-schemes",
+   "sha256": "358ed8685250d18aeced0064e8c805c3367b28e6be6d98c63399c6e739558ef0",
+   "bytes": 19592,
+   "slides": 1,
+   "covers": [
+    "font-schemes/classic-editorial"
+   ]
+  },
+  {
+   "id": "font-schemes-91-modern-professional",
+   "set": "font-schemes",
+   "sha256": "c129a45eb9671db41b1bd28f09b170adb5310d073f0aa47ddb85d22b22b6e208",
+   "bytes": 19556,
+   "slides": 1,
+   "covers": [
+    "font-schemes/modern-professional"
+   ]
+  },
+  {
+   "id": "font-schemes-92-bold-impact",
+   "set": "font-schemes",
+   "sha256": "e6c9969254909081582a789a51647a9817904f7411038982bbdd93568ca9a144",
+   "bytes": 19534,
+   "slides": 1,
+   "covers": [
+    "font-schemes/bold-impact"
+   ]
+  },
+  {
+   "id": "font-schemes-93-warm-storytelling",
+   "set": "font-schemes",
+   "sha256": "061d1b3cf456f0152a298c7b0236883a3fac83b38bd158bcdc26a389a9227284",
+   "bytes": 19566,
+   "slides": 1,
+   "covers": [
+    "font-schemes/warm-storytelling"
+   ]
+  },
+  {
+   "id": "slide-sizes-01-16-9",
+   "set": "slide-sizes",
+   "sha256": "4deda3053b6e915780a9688465b019820274b2b611bee5c68085f660e2f192db",
+   "bytes": 19484,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/16:9"
+   ]
+  },
+  {
+   "id": "slide-sizes-02-4-3",
+   "set": "slide-sizes",
+   "sha256": "684cd7c952b4b9cc1dbefbbc221144f40186c49408f35b5f7e01d8e3f881292a",
+   "bytes": 19918,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/4:3"
+   ]
+  },
+  {
+   "id": "slide-sizes-03-16-10",
+   "set": "slide-sizes",
+   "sha256": "f58dd9a3fd18d9d735937e802958a0c9e25a7198ac4121e53e6ae6982ce0f446",
+   "bytes": 19487,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/16:10"
+   ]
+  },
+  {
+   "id": "slide-sizes-04-letter",
+   "set": "slide-sizes",
+   "sha256": "f7d50dba8ee030beac53d40dcf652a123084fb3661ebeea16261ebfd41c717ae",
+   "bytes": 19935,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/letter"
+   ]
+  },
+  {
+   "id": "slide-sizes-05-a4",
+   "set": "slide-sizes",
+   "sha256": "4cc08de4871a4f430b401e5b545ddecb6435663444339040b27926f9419328dd",
+   "bytes": 19930,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/a4"
+   ]
+  },
+  {
+   "id": "slide-sizes-06-widescreen",
+   "set": "slide-sizes",
+   "sha256": "27ac2ec846c77283e7865e80f30a9d8e8410b713a42c32a1bd7c0f591fb7c226",
+   "bytes": 19495,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/widescreen"
+   ]
+  },
+  {
+   "id": "slide-sizes-07-standard",
+   "set": "slide-sizes",
+   "sha256": "d5631d5dd7dc34dfe35e1fbd7ae129f0e4a36c72de8869d49ff808d54d693708",
+   "bytes": 19926,
+   "slides": 1,
+   "covers": [
+    "slide-sizes/standard"
+   ]
+  }
+ ]
+}

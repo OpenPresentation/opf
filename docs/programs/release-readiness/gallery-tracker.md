@@ -12,31 +12,31 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
-| layouts | 485 | done 1, works-unverified 484 | 485 | 0 |
-| color-schemes | 14 | works-unverified 14 | 14 | 0 |
-| font-schemes | 93 | done 2, works-unverified 12, parity-near 19, font-gap 60 | 93 | 0 |
-| languages | 93 | done 1, works-unverified 65, parity-near 2, font-gap 25 | 93 | 0 |
-| backgrounds | 6 | works-unverified 6 | 6 | 0 |
-| narratives | 48 | works-unverified 48 | 48 | 0 |
+| layouts | 485 | done 100, descoped 385 | 485 | 0 |
+| color-schemes | 14 | done 14 | 14 | 0 |
+| font-schemes | 93 | done 11, descoped 3, parity-near 19, font-gap 60 | 93 | 0 |
+| languages | 93 | done 65, parity-near 2, font-gap 25, native-mismatch 1 | 93 | 0 |
+| backgrounds | 6 | done 6 | 6 | 0 |
+| narratives | 48 | done 10, descoped 38 | 48 | 0 |
 | charts | 76 | done 10, deprecated 50, descoped 1, parity-near 15 | 76 | 0 |
-| themes | 4 | works-unverified 1, parity-near 3 | 4 | 0 |
-| audiences | 22 | works-unverified 22 | 22 | 0 |
-| tones | 7 | works-unverified 7 | 7 | 0 |
-| socials | 10 | works-unverified 10 | 10 | 0 |
-| headers-footers | 10 | works-unverified 10 | 10 | 0 |
-| blocks | 32 | works-unverified 24, parity-near 8 | 32 | 0 |
-| image-treatments | 15 | works-unverified 15 | 15 | 0 |
-| purposes | 9 | works-unverified 9 | 9 | 0 |
+| themes | 4 | done 1, parity-near 3 | 4 | 0 |
+| audiences | 22 | done 14, descoped 8 | 22 | 0 |
+| tones | 7 | done 7 | 7 | 0 |
+| socials | 10 | done 10 | 10 | 0 |
+| headers-footers | 10 | done 10 | 10 | 0 |
+| blocks | 32 | done 24, parity-near 8 | 32 | 0 |
+| image-treatments | 15 | done 15 | 15 | 0 |
+| purposes | 9 | descoped 9 | 9 | 0 |
 | fonts | 168 | done 83, font-gap 85 | 168 | 0 |
-| slide-sizes | 7 | works-unverified 7 | 7 | 0 |
+| slide-sizes | 7 | descoped 7 | 7 | 0 |
 | gallery-teasers | 2 | descoped 2 | 2 | 0 |
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 97 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 380 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 50 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
-| `descoped` | 3 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
-| `works-unverified` | 734 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
+| `descoped` | 453 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
+| `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
 | `unknown` | 0 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 47 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
 | `font-gap` | 170 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
@@ -44,6 +44,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | `missing-spec` | 0 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
+| `native-mismatch` | 1 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
 | `missing-export` | 0 | 4 | The PPTX export fails, is not native, or does not re-import to the same value. |
 | `missing-preview` | 0 | 4 | The preview fails or does not change for this value. |
 | `broken` | 0 | 5 | The value does not validate or compose in core. |
@@ -60,7 +61,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | parity | perfect, near or mismatch: the worst variant of the value in the latest parity run (inputs.parity); unmeasured when the run has no config for it. The catalog-only records and the slide-size presets come from the later run in inputs.parityExtra (RR-43). |
 | editor | switch when opf-editor's switch operation covers the dimension (SWITCH_DIMENSIONS, FF-16 and RR-06; one tested case per dimension in test/switches.mjs, values offered from the bundled catalog); none otherwise. |
 | gallery | shown (page and card), shown-no-preview, json-only (served only as catalog JSON), not-shown, not-shown-deprecated, coming (pptx.gallery home teaser). |
-| native | exercised when a committed native PowerPoint evidence run names the value (inputs.evidence, rule in inputs.nativeEvidence); unverified otherwise. For fonts: the font tracker's native verification. |
+| native | verified or failed when the RR-42 native run (inputs.nativeRuns: per-value verdicts of the gated checks) covers the value; else exercised when a committed native PowerPoint evidence run names the value (inputs.evidence, rule in inputs.nativeEvidence), or unverified. For fonts: the font tracker native verification. |
 | fonts | accepted when every family the value draws (its parity fontResolution families, else its catalog font scheme) is qualified or documented-visual in the font tracker; gap otherwise; n/a when it draws no chosen family. For fonts: the font tracker status. |
 
 ## Unaddressed gaps
@@ -72,6 +73,7 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | Type | Gap | Records | Ids | Detail | Next action | Link |
 | --- | --- | ---: | --- | --- | --- | --- |
 | charts | `missing-export` (descoped) | 1 | `world` | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-impo... | Parked for post-v1 by the owner (2026-10-01): the export stays on the clustered column fallback with a chart-data-adapted diagnostic; an offline native map export is the future work. | [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) |
+| languages | `native-mismatch` | 1 | `vietnamese-quoc-ngu` | presentationFonts: {"extras":["Arial"]} | The FF-05 class: PowerPoint lists Arial in Presentation.Fonts for a Vietnamese deck whose runs and theme slots name only Aptos, because the exported theme carries the Office script supplement <a:font script="Viet" typeface="Arial"/> (minor; Times New Roman in major) and the runs are vi-VN. The text draws in Aptos (native PNG). Fix in opf-pptx: drop or follow the chosen family in the Viet supplement (as for the ea slot in FF-05), then re-run the deck natively. | [RR-17](burndown.md) (in-progress) |
 | purposes | `missing-editor` (descoped) | 9 | `align`, `decide`, `educate`, `inform`, `persuade`, `pitch`, `plan`, `report`, `sell` | opf-editor 0.11.0 has no purposes switch (SWITCH_DIMENSIONS) | Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh). | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | slide-sizes | `missing-editor` (descoped) | 7 | `16:9`, `4:3`, `16:10`, `letter`, `a4`, `widescreen`, `standard` | opf-editor 0.11.0 has no slide-size switch (SWITCH_DIMENSIONS); a theme switch carries its dimensions | Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh). | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | audiences | `missing-gallery` (descoped) | 8 | `candidates`, `customers`, `engineering-team`, `executives`, `investors`, `marketing-team`, `regulators`, `sales-team` | served as catalog JSON only; the gallery has no page for this id | Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead. | [opf#291](https://github.com/OpenPresentation/opf/issues/291) |
@@ -91,21 +93,6 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | purposes | `missing-gallery` (descoped) | 9 | `align`, `decide`, `educate`, `inform`, `persuade`, `pitch`, `plan`, `report`, `sell` | served as catalog JSON only; the gallery has no purposes pages | Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead. | [opf#291](https://github.com/OpenPresentation/opf/issues/291) |
 | slide-sizes | `missing-gallery` (descoped) | 7 | `16:9`, `4:3`, `16:10`, `letter`, `a4`, `widescreen`, `standard` | pptx.gallery has no slide-size pages | A pptx.gallery aspect-ratio page with a card per preset. | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | themes | `parity-near` | 3 | `bold`, `classic`, `dark` | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Impact): Impact -> Anton; fontResolution: visual-only replac... (and 2 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
-| audiences | `works-unverified` | 22 | `academic`, `all-hands`, `board`, `candidates`, `customer`, `customers`, `engineering-team`, `executive`, `executives`, `general-public`, `internal-team`, `investor` and 10 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| backgrounds | `works-unverified` | 6 | `abstract-shapes`, `geometric-pattern`, `minimal-texture`, `photography`, `solid-color`, `subtle-gradient` | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| blocks | `works-unverified` | 32 | `agenda-overview`, `appendix-index`, `before-after-story`, `business-model`, `case-study-snapshot`, `closing-cta`, `comparison-table`, `customer-journey`, `customer-logo-proof`, `data-story-insight`, `decision-brief`, `executive-summary` and 20 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| color-schemes | `works-unverified` | 14 | `black-and-white`, `bold-red`, `boost`, `burnt-orange`, `cool-horizon`, `corporate-blue`, `deep-purple`, `forest-green`, `golden-yellow`, `luxury`, `pastel-red`, `slate-gray` and 2 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| font-schemes | `works-unverified` | 91 | `angsana-new`, `aparajita`, `aptos`, `arabic-typesetting`, `arial`, `batang`, `bold-impact`, `bookman`, `century-schoolbook`, `classic-editorial`, `consolas`, `constantia` and 79 more | no committed native PowerPoint evidence names this value | Native verification (FF-46) in the RR-17 native check decks; commit the deck sources under a native evidence folder so this tracker indexes the family and the scheme. | [RR-17](burndown.md) (in-progress) |
-| headers-footers | `works-unverified` | 10 | `appendix-numbering`, `brand-logo-footer`, `classification-banner`, `client-delivery-footer`, `confidential-legal-footer`, `dated-footer`, `section-marker-header`, `slide-number-only`, `slide-number-progress`, `version-control-footer` | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| image-treatments | `works-unverified` | 15 | `background-blur`, `caption-overlay`, `cinematic-crop`, `circular-crop`, `collage-grid`, `cutout-subject`, `device-frame`, `duotone`, `full-bleed`, `image-strip`, `masked-shape`, `rounded-card` and 3 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| languages | `works-unverified` | 84 | `afrikaans`, `albanian`, `amharic`, `armenian`, `aymara`, `azerbaijani`, `bengali`, `berber-latin`, `bosnian-latin`, `bulgarian`, `catalan`, `cebuano` and 72 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| layouts | `works-unverified` | 484 | `action-plan`, `agenda`, `appendix-index`, `architecture-stack`, `assumptions-dependencies`, `before-after`, `benchmark-target-table`, `bullet-list`, `business-model-canvas`, `capability-map`, `case-study`, `chapter-recap` and 472 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| narratives | `works-unverified` | 48 | `board-meeting`, `business-narrative`, `business-review`, `capacity-planning`, `challenge-resolution`, `change-story`, `classic-story`, `company-intro`, `conference-talk`, `data-story`, `early-startup-pitch`, `educate` and 36 more | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| purposes | `works-unverified` | 9 | `align`, `decide`, `educate`, `inform`, `persuade`, `pitch`, `plan`, `report`, `sell` | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| slide-sizes | `works-unverified` | 7 | `16:9`, `4:3`, `16:10`, `letter`, `a4`, `widescreen`, `standard` | no committed native PowerPoint evidence names this preset | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| socials | `works-unverified` | 10 | `bluesky`, `facebook`, `github`, `instagram`, `linkedin`, `mastodon`, `threads`, `tiktok`, `x`, `youtube` | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| themes | `works-unverified` | 3 | `bold`, `dark`, `minimal` | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
-| tones | `works-unverified` | 7 | `authoritative`, `casual`, `conversational`, `formal`, `inspirational`, `persuasive`, `technical` | no committed native PowerPoint evidence names this value | Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder. | [RR-42](burndown.md) (in-progress) |
 
 ## Inputs
 
@@ -120,5 +107,6 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | Parity, later run | `docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-catalog-only.json` (62 values, 2026-10-02T20:36:53.259Z; opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `1f50912`, pptx-gallery `34e6656`) |
 | Fonts | `docs/programs/font-fidelity-everywhere/font-tracker.json` (168 families, as of 2026-10-02) |
 | Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
-| Links | `docs/programs/release-readiness/burndown.md` (44 items) and 12 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
+| Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
+| Links | `docs/programs/release-readiness/burndown.md` (44 items) and 11 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
 
