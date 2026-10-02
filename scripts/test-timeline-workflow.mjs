@@ -52,12 +52,14 @@ try {
     return {path:part.path,lines:[...group.querySelectorAll('text')].map(node=>{
      const box=node.getBBox(),style=getComputedStyle(node),segments=node.children.length?[...node.children]:[node];
      context.font=`${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+     // Chromium on Windows reports actualBoundingBox values rounded to whole pixels (a glyph with a 0.1 px left bearing reports 0), Linux and macOS report fractions. Detect that on a probe string in this font so the ink check below widens only by that rounding.
+     const probe=context.measureText('KT'),quantum=Number.isInteger(probe.actualBoundingBoxLeft)&&Number.isInteger(probe.actualBoundingBoxAscent)?.5:0;
      const ink=segments.filter(segment=>segment.textContent.trim()).map(segment=>{
       const metrics=context.measureText(segment.textContent),width=segment.hasAttribute('textLength')?Number(segment.getAttribute('textLength')):metrics.width,ratio=metrics.width?width/metrics.width:1;
       const anchor=node.getAttribute('text-anchor'),factor=anchor==='middle'?.5:anchor==='end'?1:0,x=Number(segment.getAttribute('x'))-width*factor,baseline=Number(node.getAttribute('y'));
       return {x:x-metrics.actualBoundingBoxLeft*ratio,y:baseline-metrics.actualBoundingBoxAscent,width:(metrics.actualBoundingBoxLeft+metrics.actualBoundingBoxRight)*ratio,height:metrics.actualBoundingBoxAscent+metrics.actualBoundingBoxDescent};
      });
-     return {text:node.textContent,size:parseFloat(style.fontSize),x:box.x,y:box.y,width:box.width,height:box.height,ink,start:Number(node.getAttribute('data-opf-source-start')),end:Number(node.getAttribute('data-opf-source-end'))};
+     return {quantum,text:node.textContent,size:parseFloat(style.fontSize),x:box.x,y:box.y,width:box.width,height:box.height,ink,start:Number(node.getAttribute('data-opf-source-start')),end:Number(node.getAttribute('data-opf-source-end'))};
     })};
    })}));
   });
@@ -69,7 +71,7 @@ try {
      // SVG getBBox includes font line extents beyond painted glyphs. Independently
      // check browser actual glyph metrics with SVG positions/length adjustments;
      // this is neither a raster comparison nor proof of native font identity.
-     if(measured)for(const ink of line.ink){const b=part.box;assert.ok(ink.x>=b.x-.05&&ink.y>=b.y-.05&&ink.x+ink.width<=b.x+b.width+.05&&ink.y+ink.height<=b.y+b.height+.05,JSON.stringify({measured,width,height,fixture,path:part.path,line,box:b}));}
+     if(measured)for(const ink of line.ink){const b=part.box,slack=.05+line.quantum;assert.ok(ink.x>=b.x-slack&&ink.y>=b.y-slack&&ink.x+ink.width<=b.x+b.width+slack&&ink.y+ink.height<=b.y+b.height+slack,JSON.stringify({measured,width,height,fixture,path:part.path,line,box:b}));}
     }
    }
   }
