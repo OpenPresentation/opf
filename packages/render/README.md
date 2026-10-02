@@ -55,6 +55,7 @@ Code strings that [XML 1.0 cannot represent](https://www.w3.org/TR/xml/#charsets
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
 - Public API: `renderSvg(opf, opts)`, `renderSvgDeck(opf, opts)`, `resolvePresentation(opf, opts)`, `svgToPng(svg, opts)`, and `svgToPdf(svgs, opts)`
+- Player and embedding (RR-28): `<opf-deck>` and a slideshow with a speaker view, see [Player and `<opf-deck>`](#player-and-opf-deck-rr-28)
 
 `renderSvg` renders a single slide selected by `opts.slideIndex` (default `0`). `renderSvgDeck` returns one SVG string per slide. Both validate OPF at the boundary via `@openpresentation/opf`, resolve inline and bundled catalogs locally, and emit byte-stable SVG for the same input. A catalog `source` may be one string or an ordered array (first match wins, the bundled default is appended); the renderer never fetches, so non-bundled sources resolve only from `catalogSources`. Slide background colours (solid, gradient stops, pattern colours) accept the same colour references as text and table colours: a hex value, a `var:` variable, or a colour scheme slot or role such as `accent2` or `primary`.
 
@@ -160,6 +161,68 @@ container.innerHTML = renderSvg(presentation, {
 ```
 
 Each entry contains `url` or `data: Uint8Array`, with optional `family`, `weight`, `italic` and `license`. The loader registers browser FontFaces using the same bytes used for measurement. It fetches only URLs supplied by the host, supports an AbortSignal and custom fetch, and awaits font loading. Use pinned static faces and retain their licenses. For standalone SVG export also pass `embeddedFonts: fonts.embeddedFonts`; embedding is unnecessary for each live draft after browser fonts are loaded.
+
+## Player and `<opf-deck>` (RR-28)
+
+A slideshow player and an embeddable web component, both built on `renderSvg`: the slide a page shows is the slide the preview, the editor and the PDF show, with no second layout engine. They are plain ES modules, typed, framework-free and tree-shakeable, and importing them touches no DOM, so they are safe in Next.js and other server renderers.
+
+```html
+<script type="module">
+  import '@openpresentation/opf-render/element/define';   // registers <opf-deck>
+</script>
+<opf-deck src="/deck.opf.json" fonts="/opf-fonts/" thumbnails present></opf-deck>
+```
+
+```js
+// A framework page: register on the client, when you choose.
+import { defineOpfDeck } from '@openpresentation/opf-render/element';
+useEffect(() => { defineOpfDeck(); }, []);
+// ...and render <opf-deck src="/deck.opf.json" fonts="/opf-fonts/" />.
+```
+
+Entry points (package `exports`): `/element` (`defineOpfDeck`, `getOpfDeckElement`, `renderDeckHtml`, `loadPreviewFonts`), `/element/define` (importing it registers the tag; the only file with a side effect), `/player` (`present`), `/preview-fonts` (the font root layout and `loadPreviewFonts`) and `/preview-fonts-node` (`copyPreviewFonts`, also the `opf-preview-fonts` command). The element loads the player on first use, so a page that only embeds decks does not carry slideshow code.
+
+### Fonts: one self-hosted directory
+
+Layout is estimated and text uses the visitor's system sans-serif until you give the element a font root, a directory you serve from your own origin. Nothing is ever requested from a font CDN, and the only requests an `<opf-deck>` makes are its `src` and the font files below.
+
+```sh
+npx opf-preview-fonts public/opf-fonts                  # base and vendored faces (about 34 MiB), every SHA-256 verified
+npx opf-preview-fonts public/opf-fonts --scripts Jpan,Arab   # plus Noto script faces (large; `all` for every script)
+```
+
+```
+<root>/base/<package>/<file>       the eager Office and base faces (Roboto Regular loads at startup, the rest on demand)
+<root>/lazy/fonts/<family>/<file>  the vendored faces (Intos for the default Aptos scheme, the open families)
+<root>/scripts/<package>/<file>    the Noto script faces
+<root>/LICENSES.txt                every license notice
+```
+
+It is the layout the editor playground and the OpenPresentation sites serve, and `fonts="/opf-fonts/"` (or `fontRegistry`, a registry the page already has) loads faces on demand like the renderer's browser host: face level (a plain Aptos deck fetches Roboto Regular, Intos Display Bold and Intos Regular, about 1.5 MB), hash-verified, and one registry per root on a page. If the font root cannot be read the deck still draws, with estimated layout, and the element fires a non-fatal `error` event. A face that is not in the root (a script you did not copy) falls back to a system font.
+
+### `<opf-deck>`
+
+Attributes: `src` (OPF JSON; the other request the element makes), `slide` (1-based; counts the slides that play), `fonts`, `thumbnails` (a strip of slide thumbnails), `controls="none"`, `present` (a Present button), `include-hidden`, `label`, `keyboard="off"`. Instead of `src` set the `document` property (an object or JSON text), or put the document in a child `<script type="application/opf+json">`. Properties and methods: `document`, `slide`, `total`, `fontRegistry`, `renderOptions` (extra `renderSvg` options such as `catalogs` and `imageResolver`), `currentSlide` (`{ slide, total, index, id, title, notes, section }`; `notes` is plain text), `ready`, `next()`, `previous()`, `first()`, `last()`, `goto(n)`, `reload()` and `present(options)`.
+
+Events: `ready`, `slidechange` (the same detail as `currentSlide`; bubbles and is composed), `error` (`{ code, message, fatal }`, not bubbling), `presentstart` and `presentend`. Style it with custom properties (`--opf-deck-fg`, `--opf-deck-border`, `--opf-deck-radius`, `--opf-deck-focus`, `--opf-deck-accent`, `--opf-deck-stage`) and the parts `deck`, `viewport`, `slide`, `bar`, `button`, `previous`, `next`, `present`, `counter`, `thumbnails` and `thumbnail`.
+
+Hidden slides (`hidden: true`) are skipped everywhere, so the counter, the `slide` attribute and the player's number-then-Enter all count the sequence that plays; `include-hidden` plays them all. Navigation: the buttons, ArrowLeft, ArrowRight, Page Up, Page Down, Home and End while the slide has focus (Up, Down and Space are left to the page), a horizontal swipe on touch, and the thumbnails. A deck whose `language` is right to left (and a page that sets `dir` or CSS `direction`) turns the controls and the Left and Right keys around.
+
+Accessibility: the element is a labelled region (the deck name) holding a focusable group named `Slide 3 of 8: Revenue grew`; slide text is live SVG text in the order the renderer paints it (title, then content, then furniture), not an image, so a screen reader reads it; slide changes made by keyboard or thumbnail are announced through a polite live region; thumbnails are a list of buttons (one tab stop, arrow keys inside, `aria-current`) whose drawings are hidden from assistive technology; the buttons keep their focus ring and `forced-colors` support; and animation is limited to a hover colour that `prefers-reduced-motion: reduce` removes. The test suite runs axe-core (WCAG 2.0 to 2.2 A and AA plus best practice) over the element, the player and the speaker view with no violations. There are no transitions or builds (deferred, opf#250).
+
+### Server markup
+
+`renderDeckHtml(deck, options)` returns the tag with the deck's slides as inline SVG inside it. A visitor without JavaScript, a crawler or a reader sees the slides; when the element upgrades its shadow DOM replaces them. `slides: 'first'` (default: the first slide and a list of titles), `'all'` or slide numbers; `embed: true` adds the document as an `application/opf+json` child so the upgrade needs no request (it includes hidden slides and notes, as the `src` file does); `renderOptions` takes a `textMeasurement` for exact widths. In Next.js, render the string from a server component with `dangerouslySetInnerHTML` and call `defineOpfDeck()` from a client component. A strict `style-src` Content-Security-Policy needs `style-src-attr 'unsafe-inline'` for the renderer's `style="white-space:pre"` attributes; the element's own styles use constructable stylesheets.
+
+### The slideshow
+
+`present(source, options)` takes an OPF document, its URL or an `<opf-deck>` element and covers the page with a full-screen player (call it from a click or key handler; full screen and the speaker view need a user gesture). It resolves with a `PlayerSession` (`slide`, `total`, `next()`, `previous()`, `first()`, `last()`, `goto(n)`, `blank('black' | 'white' | 'none')`, `openPresenterView()`, `close()`; events `slidechange`, `blank`, `presenterview`, `close`). One show per document: a second call returns the running one.
+
+Keys: Right, Down, Page Down, Space, Enter and `N` are next; Left, Up, Page Up, Backspace, Shift+Space and `P` are previous; Home and End; a slide number then Enter (Escape clears it); `B` and `W` toggle a black or white screen (any navigation key brings the slide back first); `S` opens the speaker view; `F` toggles full screen; Escape leaves (leaving full screen any other way ends the show too). Click or tap advances (the left third goes back) and a horizontal swipe navigates. The player is a modal dialog: the rest of the page is inert, focus stays inside it and returns to where it was when the show ends, and an element that started it follows the show and fires `slidechange`.
+
+The speaker view opens in a second window (`S`, the button, or `presenterView: true`): the current and next slide (the last slide says so), the speaker notes, the section, a timer (against the deck's `duration` in minutes, with pause and reset) and the clock, previous, next and blank buttons, the same keys, and a notes size control. Notes are the OPF `notes` string and are shown as plain text only (rich notes are deferred, opf#251). The windows follow each other over a `BroadcastChannel` named from the deck, so any number of windows of one deck on one origin stay in step (a logical clock settles two changes that cross), and `present(deck, { role: 'presenter' })` makes a second tab or window the speaker view. Pass `channel` to name the channel yourself or `false` for none. The audience window and the popup are driven by this page, so closing or navigating the page ends both.
+
+Not in v1: transitions and builds, links between slides, rich notes, translated interface strings (the controls are English) and a Window Management (multi-screen) placement of the two windows.
 
 ## Open font-scheme families (FF-31)
 

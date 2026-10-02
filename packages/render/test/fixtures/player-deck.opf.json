@@ -1,0 +1,14 @@
+{
+  "name": "Quarterly review",
+  "language": "en",
+  "duration": 10,
+  "design": { "colorScheme": "cool-horizon" },
+  "slides": [
+    { "id": "cover", "title": "Quarterly review", "subtitle": "Q3 operating results", "notes": "Welcome everyone.\nThank the team before starting.", "section": "Opening" },
+    { "id": "agenda", "title": "Agenda", "items": ["Results", "Risks", "Decisions"], "notes": "Keep this under one minute.", "section": "Opening" },
+    { "id": "secret", "title": "Internal numbers", "text": "Not for the audience.", "hidden": true, "notes": "Hidden slide: never shown in the slideshow." },
+    { "id": "results", "title": "Revenue grew 18 percent", "text": "Growth came from enterprise accounts and from renewals in every region.", "notes": "Point at the enterprise bar.", "section": "Results" },
+    { "id": "quote", "title": "What customers say", "quote": { "text": "It paid for itself in a quarter.", "attribution": "A customer" } },
+    { "id": "close", "title": "Decisions needed", "items": ["Approve the hiring plan", "Fund the pilot"], "notes": "Ask for the decision explicitly.", "section": "Close" }
+  ]
+}

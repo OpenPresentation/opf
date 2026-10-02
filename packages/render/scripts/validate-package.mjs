@@ -38,6 +38,15 @@ assert.equal(typeof browserExport.svgToPng, "function");
 assert.equal(api.runtimePolicy.requiredNetworkCalls, false);
 assert.equal(api.runtimePolicy.deterministicLocalExecution, true);
 
+// RR-28: the player and the <opf-deck> element are public entry points; importing them on a server defines nothing.
+for (const key of ["./player", "./element", "./element/define", "./preview-fonts", "./preview-fonts-node"]) assert.ok(pkg.exports[key], `Missing export ${key}`);
+assert.deepEqual(pkg.sideEffects, ["./dist/element-define.js"], "Only the tag registration file may have side effects");
+const element = await import(new URL("../dist/element.js", import.meta.url));
+assert.equal(typeof element.defineOpfDeck, "function");
+assert.equal(typeof element.renderDeckHtml, "function");
+assert.equal(element.defineOpfDeck(), undefined);
+assert.equal(typeof (await import(new URL("../dist/player.js", import.meta.url))).present, "function");
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

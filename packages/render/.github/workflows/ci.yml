@@ -106,6 +106,8 @@ jobs:
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
       - run: npm run test:browser
+      # RR-28: <opf-deck> and the slideshow player in the pinned browser, offline (axe-core, speaker view, BroadcastChannel sync).
+      - run: npm run test:player-browser
       - run: npm run test:export-browser
       - run: npm run test:code-browser
       - run: npm run test:font-preparation-browser

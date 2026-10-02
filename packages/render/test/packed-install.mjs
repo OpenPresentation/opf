@@ -26,7 +26,7 @@ try{
     assert.equal(hash(bytes),hash(await readFile(path.join(root,file))),`Installed package file differs: ${file}`);
     files[file]=hash(bytes);
   }
-  for(const entry of ['dist/index.js','dist/svg.js','dist/fonts-node.js','dist/fonts-browser.js','dist/svg.d.ts','LICENSE'])assert.ok(files[entry],`Missing public entry: ${entry}`);
+  for(const entry of ['dist/index.js','dist/svg.js','dist/fonts-node.js','dist/fonts-browser.js','dist/svg.d.ts','dist/element.js','dist/element.d.ts','dist/element-define.js','dist/player.js','dist/player.d.ts','dist/deck-runtime.js','dist/preview-fonts.js','dist/preview-fonts-node.js','dist/preview-fonts-cli.js','LICENSE'])assert.ok(files[entry],`Missing public entry: ${entry}`);
   // FF-31: vendored upstream fonts (fonts/carlito) ship in the tarball and load from the installed package.
   const {BUNDLED_FONT_MANIFEST}=await import(pathToFileURL(path.join(root,'dist/font-manifest.js')));
   const vendored=BUNDLED_FONT_MANIFEST.packages.filter(pkg=>pkg.vendored);
@@ -53,6 +53,42 @@ assert.equal(registry.resolveFont({fontFamily:'Calibri',fontWeight:400}).resolve
 console.log('Vendored fonts load from the installed package.');
 `);
   process.stdout.write(execFileSync(process.execPath,['vendored-fonts.mjs'],{cwd:consumer,encoding:'utf8'}));
+  // RR-28: the player and <opf-deck> entry points resolve from the installed package, are safe to import on a server, and the font root
+  // copies from the installed package (its vendored faces and the installed @expo-google-fonts packages).
+  await writeFile(path.join(consumer,'player-entries.mjs'),`import assert from 'node:assert/strict';
+import {mkdtemp,rm,readFile} from 'node:fs/promises';
+import {existsSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {defineOpfDeck,renderDeckHtml} from '@openpresentation/opf-render/element';
+import {present} from '@openpresentation/opf-render/player';
+import '@openpresentation/opf-render/element/define';
+import {previewFontLayout} from '@openpresentation/opf-render/preview-fonts';
+import {copyPreviewFonts} from '@openpresentation/opf-render/preview-fonts-node';
+assert.equal(defineOpfDeck(),undefined,'importing the element on a server defines nothing and throws nothing');
+await assert.rejects(present({slides:[{title:'x'}]}),error=>error.code==='no-dom');
+const html=renderDeckHtml({name:'Packed',slides:[{title:'One'},{title:'Two',hidden:true}]},{slides:'all'});
+assert.match(html,/^<opf-deck><figure /);assert.equal((html.match(/<figure /g)??[]).length,1);
+assert.ok(previewFontLayout().length>40);
+const out=await mkdtemp(path.join(tmpdir(),'opf-packed-fonts-'));
+try{
+  const result=copyPreviewFonts({outDir:out});
+  assert.ok(result.copied>100&&result.missing.length===0);
+  assert.ok(existsSync(path.join(out,'base/roboto/400Regular/Roboto_400Regular.ttf')));
+  assert.ok(existsSync(path.join(out,'lazy/fonts/intos/Intos-Regular.ttf')));
+  assert.match(await readFile(path.join(out,'LICENSES.txt'),'utf8'),/SIL OPEN FONT LICENSE/);
+  const second=await mkdtemp(path.join(tmpdir(),'opf-packed-fonts-cli-'));
+  try{
+    const bin=path.resolve('node_modules/.bin',process.platform==='win32'?'opf-preview-fonts.cmd':'opf-preview-fonts');
+    const output=process.platform==='win32'?execFileSync('cmd.exe',['/c',bin,second],{encoding:'utf8'}):execFileSync(bin,[second],{encoding:'utf8'});
+    assert.match(output,/all SHA-256 verified/);
+    assert.ok(existsSync(path.join(second,'lazy/fonts/intos/IntosDisplay-Bold.ttf')));
+  }finally{await rm(second,{recursive:true,force:true});}
+}finally{await rm(out,{recursive:true,force:true});}
+console.log('Player and <opf-deck> entry points load from the installed package.');
+`);
+  process.stdout.write(execFileSync(process.execPath,['player-entries.mjs'],{cwd:consumer,encoding:'utf8'}));
   const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
   const core=lock.packages['node_modules/@openpresentation/opf'];
   assert.ok(core.resolved.startsWith('https://registry.npmjs.org/')&&core.integrity.startsWith('sha512-')&&!core.link);
