@@ -3,6 +3,10 @@
 The September 22 research below was read-only and started no Office or COM.
 **F** = sourced or locally observed fact. **I** = inference or hypothesis.
 
+## October 2 root cause (native)
+
+The cause is determined; see the [probe record](../../evidence/ff-05-native-20261002/README.md). `Aptos` was PowerPoint's default notes master: the exporter wrote `p:notesMasterIdLst` after `p:sldIdLst` (out of schema order), PowerPoint ignored it and synthesised its own. Putting the list in schema order makes PowerPoint read the exporter's notes master, which must then own its theme part (it shared `theme1.xml`; the package is unreadable that way). The empty name had two sources: explicit run-level `a:ea`/`a:cs` typefaces, and an empty theme `ea` slot read through every `a:endParaRPr`. H1 (temporary registration), the Calibri and explicit-slot controls (E6, E7) and the E8 query-order control all ran with these defects present, which is why filling the theme slots alone changed nothing. The fix is [opf-pptx#152](https://github.com/OpenPresentation/opf-pptx/pull/152); the text below is the history that led to it.
+
 ## September 29 native evidence update
 
 The [FF-04 inventory bundle](../../evidence/windows-native-font-inventory-20260929/README.md)

@@ -12,7 +12,8 @@ concurrency:
 env:
   OPF_RENDER_REF: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce
   OPF_EDITOR_REF: 9c38a1e67943240857ba1c432d27a3d85ab1db8d
-  OPF_PPTX_REF: 1f509129723e2fb09f5cf5d040fa0b6a12ca774a
+  # FF-05: opf-pptx main a0ee3e5, the merge of opf-pptx#152 (schema-order presentation.xml, own notes theme, no run ea/cs, theme ea never empty).
+  OPF_PPTX_REF: a0ee3e528a64e5e17c3f84149a5176fca67a16ac
 jobs:
   packages:
     runs-on: ubuntu-latest

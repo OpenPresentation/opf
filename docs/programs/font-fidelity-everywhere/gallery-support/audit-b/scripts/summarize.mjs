@@ -83,6 +83,9 @@ const hostProbeReason = (what, h) => `${what}: the modelled host cannot draw it:
 // script font for it (the core resolver's source for that slot is not "latin") and the export wrote nothing or another
 // name (including a replacement). `expectedThemeEaCs` is the selected family per slot, '' when nothing was selected;
 // results measured before it existed carry no expectation, so they report no theme-slot gap.
+// FF-05 (2026-10-02) amends this for ea only: the exporter writes the latin family (or a font for East Asian text in the deck) in the theme ea when
+// nothing was selected, because an empty ea is listed by PowerPoint as an empty-name font. That is not a gap, and the expectation below stays the
+// selected script font only, so a repeated latin family never counts as a different name.
 const themeScriptGaps = m => {
   const want = m.expectedThemeEaCs, got = m.exportThemeEaCs;
   if (!want || !got) return [];
