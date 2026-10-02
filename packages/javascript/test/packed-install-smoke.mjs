@@ -222,6 +222,19 @@ assert.equal(formatPresentation('{"slides":[],"name":"N"}'),'{\\n  "name": "N",\
 console.log('Installed patch, diff, merge and format entrypoints pass offline.');
 `);
     const pdf=await run(process.execPath,['patch-diff-format.mjs'],{cwd:projectDir});process.stdout.write(pdf.stdout);
+    assertTarIncludes(files,'package/dist/convert.js');assertTarIncludes(files,'package/dist/convert.d.ts');
+    await writeFile(path.join(projectDir,'convert.mjs'),`
+import assert from 'node:assert/strict';
+import {convertContent,contentConversionTargets,mergeSlides,OPFConversionError} from '@openpresentation/opf/convert';
+globalThis.fetch=()=>{throw new Error('Offline conversions must not fetch');};
+const converted=convertContent({items:['a',{text:'b',description:'bd'}]},'table');
+assert.deepEqual(converted.payload,{table:{rows:[['a',null],['b','bd']]}});assert.equal(converted.lossless,true);
+assert.deepEqual(contentConversionTargets({text:'a'}).map(target=>target.kind),['list','quote','metric','code','timeline','table']);
+assert.throws(()=>convertContent({image:'a.png'},'text'),OPFConversionError);
+assert.equal(mergeSlides({slides:[{text:'a'},{text:'b'}]},0).slides[0].blocks.length,2);
+console.log('Installed conversions: pure converters, loss reports and refusals work offline.');
+`);
+    const conversions=await run(process.execPath,['convert.mjs'],{cwd:projectDir});process.stdout.write(conversions.stdout);
     assertTarIncludes(files,'package/dist/audit.js');assertTarIncludes(files,'package/dist/audit.d.ts');
     await writeFile(path.join(projectDir,'audit.mjs'),`
 import assert from 'node:assert/strict';

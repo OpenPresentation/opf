@@ -6,6 +6,7 @@ export default defineConfig({
     patch: "src/patch.ts",
     diff: "src/diff.ts",
     format: "src/format.ts",
+    convert: "src/convert.ts",
     audit: "src/audit.ts",
     "font-policy": "src/font-policy.ts",
     "symbol-font-encodings": "src/symbol-font-encodings.ts",

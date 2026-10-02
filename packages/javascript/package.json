@@ -108,6 +108,10 @@
       "types": "./dist/format.d.ts",
       "import": "./dist/format.js"
     },
+    "./convert": {
+      "types": "./dist/convert.d.ts",
+      "import": "./dist/convert.js"
+    },
     "./audit": {
       "types": "./dist/audit.d.ts",
       "import": "./dist/audit.js"
