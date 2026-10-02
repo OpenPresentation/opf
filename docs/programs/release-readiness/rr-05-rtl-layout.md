@@ -89,3 +89,16 @@ variants (bidi runs, bullet side and indent semantics, trailing space, table dir
 check (`tableOrderReported`). The evidence is merged under `docs/evidence/` by the supervisor; open questions the probes answer: whether
 `en-US` phrase runs are enough (else which variant), whether `marL` is the start margin (`marR` variant), whether a trailing space moves a
 right-aligned line, and whether `a:tblPr rtl="1"` puts column 1 at the right.
+
+## Native results (2026-10-02, PowerPoint 365 on Windows, `rr-05b-native` run 3)
+
+`compare.mjs` passes every check for `lang-ar`, `lang-he`, `rtl-structures-ar` and `rtl-structures-he` (alignment 35/35, 33/33, 27/27; bullets the same). Text and bullets sit at the right edge, nested levels step in from the right, table column 1 is at the right, and a chart's first category and value axis are at the right. `v2.0` and `PowerPoint 365` read correctly.
+
+Probes:
+
+- **Bidi runs.** Variant 2 (each Latin phrase an `en-US` run, the export) is correct; variants 4 (LRM marks) and 6 (`<a:rtl val="0"/>`) also work; variants 1 (one `ar-SA` run) and 3 (split runs that keep `ar-SA`) reproduce the bug, so the language tag of the Latin run is what fixes it. Variant 5 (LRI/PDI isolates) draws the controls as visible boxes and reverses `PowerPoint`: **never use isolates in exported text**.
+- **Bullets.** `marL` with `indent=-marL` (the export) is correct; `marR` draws identically.
+- **Trailing space.** One or three trailing spaces and one leading space leave the right edge of the glyphs unchanged: PowerPoint ignores whitespace at the edges of a right-aligned right-to-left line. The preview used to move the glyphs left by the whitespace width (7 px per space at 25 px); opf-render now draws such lines without edge whitespace (plain and rich lines, measured and estimated). The export keeps the whitespace in the text (it is part of the authored paragraph and of the provenance).
+- **Table.** `a:tblPr rtl="1"` with the columns in logical order puts column A at the right.
+
+Arabic Typesetting: the `cs` face of `lang-ar` is the **language default**, not the deck's choice. The `arabic` language record names the `arabic-typesetting` font scheme (`fontScheme`; `googleFontScheme` is Noto Sans Arabic), and `resolveScriptFonts` fills the complex-script slot from it (source `language`) because the deck sets no `design.fontScheme`. PowerPoint draws that face's Arabic glyphs smaller than the preview's Noto substitute, so the Arabic text measures about 70 % of the preview's size; that is a preview font-substitution metric question (the look-alike has a larger Arabic x-height), tracked separately.
