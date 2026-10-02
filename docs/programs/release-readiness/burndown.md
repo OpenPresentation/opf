@@ -2,12 +2,35 @@
 
 Goal, invariants, owner decisions and resume protocol: [README.md](README.md).
 Predecessor: [font fidelity everywhere burndown](../font-fidelity-everywhere/burndown.md).
-Counts and open items: `pnpm report:release`.
+Counts, open items and the work queue: `pnpm report:release` (`-- --now` for the queue only, `-- --live` with
+the live state of the linked pull requests).
 
 Status values: `todo`, `in-progress`, `review` (PR open), `done` (merged and
 evidence linked), `descoped` (owner decision, issue linked). Dates are UTC. The
 table is parsed by [report.mjs](report.mjs); keep one row per item, the six
 columns below, and a status from the list.
+
+## Now
+
+The work queue: one row per open item, saying who works on it, what blocks it and the next action. Update the
+row whenever an item changes hands or state, and delete it when the item closes (the report flags closed items left
+here). Parsed by [report.mjs](report.mjs): `pnpm report:release -- --now`, or `--live` for the live state of every
+linked pull request. Last updated 2026-10-02.
+
+| ID | Owner | Working on | Blocked by | Next action |
+| --- | --- | --- | --- | --- |
+| RR-20 | supervisor | post-release docs: [opf#283](https://github.com/OpenPresentation/opf/pull/283) (release plan, compatibility matrix, quickstart), [opf#257](https://github.com/OpenPresentation/opf/pull/257) (vector PDF docs), [opf#284](https://github.com/OpenPresentation/opf/pull/284) (burndown, release-readiness note) | [opf#283](https://github.com/OpenPresentation/opf/pull/283) fails the ecosystem packages job (demo:editor cannot resolve the renderer svg.js); an agent is fixing it | merge the three PRs; re-run the audits on the published 0.12.0 set; the owner reviews the release-readiness note |
+| RR-22 | agent: sites | autosave adoption: [pptx-gallery#83](https://github.com/Data-Advantage/pptx-gallery/pull/83); openpresentation-site and pptx-dev adoption | the Vercel preview of each site PR (Linux build) is checked before merging | the supervisor merges each PR after checking its preview |
+| RR-23 | agent: sites | PDF, PNG and SVG downloads on the sites: [pptx-dev#70](https://github.com/Data-Advantage/pptx-dev/pull/70) | the Vercel preview check | the supervisor merges after checking the preview |
+| RR-28 | agent: sites | the `<opf-deck>` player on the openpresentation.org example pages: [openpresentation-site#61](https://github.com/Data-Advantage/openpresentation-site/pull/61) | the Vercel preview check | the supervisor merges after checking the preview |
+| RR-17 | supervisor | FF-05, FF-13 and FF-46 (font tracker); the gallery Latin adoption [pptx-gallery#80](https://github.com/Data-Advantage/pptx-gallery/pull/80) (agent: sites) | FF-05 needs a native PowerPoint root cause | merge [pptx-gallery#80](https://github.com/Data-Advantage/pptx-gallery/pull/80) after the preview; native FF-05 check on 0.12.0 |
+| RR-05 | supervisor | FF-12 native sample: right-to-left verified 2026-10-02 (docs/evidence/rr-05b-native-20261002) | the CJK and Thai part of the native sample is not run yet | native PowerPoint run of the CJK and Thai decks on 0.12.0 |
+| RR-03 | owner and supervisor | FF-08, FF-27 and FF-37 in review | FF-37 needs the owner to add the PPTX_GALLERY_READ_TOKEN secret; FF-08 waits on the FF-05 root cause (RR-17) | owner: add the secret; supervisor: FF-05 native check |
+| RR-04 | owner | FF-10: the published-package matrix runs on ubuntu, windows and macos | making the published-matrix workflow a required status check is a repository setting | owner: enable the required check; then the installed FF-38 parity audit per OS |
+| RR-02 | supervisor | pptx.dev master CI stability after [pptx-dev#71](https://github.com/Data-Advantage/pptx-dev/pull/71) (Inspector recovery test barrier) | stability needs more consecutive green master runs | watch the next three master runs; close the item if all are green |
+| RR-14 | owner | pptx.dev "Understand this deck" behind its default-off flags | owner decisions: gateway model slug, budget, privacy, the .env.example key fragment | owner answers; then bump opf-pptx to 0.12.0 in pptx-dev and record live model fixtures |
+| RR-18 | supervisor | roadmap issues opf#87 and #88 refreshed 2026-10-02; every descoped item has an issue | the site adoption PRs | refresh #87 and #88 once the sites are on 0.12.0, then close the item |
+| RR-19 | supervisor | scratch worktrees and merged branches from the 2026-10-01/02 work | the open site and docs PRs still use their worktrees | after those merge: remove the scratch worktrees registered in the repos and delete merged branches |
 
 ## Items
 

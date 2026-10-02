@@ -165,18 +165,23 @@ Settled 2026-10-01 (owner): the `world` region map (FF-58) is parked for post-v1
 ## Progress reporting
 
 `pnpm report:release` (or `node docs/programs/release-readiness/report.mjs`)
-parses the burndown table and prints counts by status and the open items.
-`--json` prints the same numbers as JSON; `--file <path>` reads another
-burndown. `pnpm check:release-report` runs its unit tests and fails if the
-burndown table cannot be parsed or uses an unknown status. This is internal;
-it is never shown on a site.
+parses the burndown and prints counts by status, the open items and the work
+queue: the burndown's **Now** table, one row per open item with its owner (supervisor, a named agent or the owner),
+what is being worked on, what blocks it and the next action. `-- --now` prints only the queue; `-- --live` adds the
+live state of every pull request a Now row links (merged, or open with its mergeable state and check counts, through
+the `gh` CLI; the only mode that uses the network). `--json` prints the same data as JSON; `--file <path>` reads
+another burndown. `pnpm check:release-report` runs its unit tests and fails if a table cannot be parsed, uses an
+unknown status, names an unknown item, or leaves a closed item in the work queue. Keep the Now table current: update
+the row when an item changes hands or state, and delete it when the item closes. This is internal; it is never shown
+on a site.
 
 ## Resume protocol
 
 Any session (supervisor or subagent) resuming this program:
 
 1. Read this file and [burndown.md](burndown.md). The progress log at the end
-   of the burndown is the latest state. Run `pnpm report:release`.
+   of the burndown is the latest state, and its Now table says who works on what. Run
+   `pnpm report:release -- --live`.
 2. `git fetch` every repository in scope. Work only from fresh `origin/main`
    worktrees (never switch or clean the user's checkouts; never resume a
    squash-merged branch).
