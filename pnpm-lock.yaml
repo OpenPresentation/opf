@@ -25,11 +25,11 @@ importers:
         specifier: workspace:*
         version: link:../javascript
       '@openpresentation/opf-pptx':
-        specifier: 0.11.9
-        version: 0.11.9(@openpresentation/opf-render@0.11.9(@types/node@24.13.6))(@types/node@24.13.6)
+        specifier: 0.12.0
+        version: 0.12.0(@openpresentation/opf-render@0.12.0(@types/node@24.13.6))(@types/node@24.13.6)
       '@openpresentation/opf-render':
-        specifier: 0.11.9
-        version: 0.11.9(@types/node@24.13.6)
+        specifier: 0.12.0
+        version: 0.12.0(@types/node@24.13.6)
       '@types/node':
         specifier: ^24.13.4
         version: 24.13.6
@@ -495,19 +495,22 @@ packages:
   '@nodable/entities@3.1.0':
     resolution: {integrity: sha512-LsS/DjHr+uDM647Gru/cA8+J3a3HfhttwCKLyuoyN7yXTFCxKBtSgMQBvrW9yNPa2/zDRUNuGPaH5QUFoa4arQ==}
 
-  '@openpresentation/opf-pptx@0.11.9':
-    resolution: {integrity: sha512-09HYjVKXF/nSPg2NgKB9hu/fGAJRPkmh5RZ5pF0LD89InDRgnqcTt+EP0e26ls+XJO4gMy0KhGOh2yjc/opHPg==}
+  '@openpresentation/opf-pptx@0.12.0':
+    resolution: {integrity: sha512-eXhUVOJ0g+w92M8x1BUEl0Vocb3NIVWjm1tJ0hTNdbmuSij4Yofx90co4AL1m7CIO19pJlnf9fJUI5KyhggN/Q==}
     engines: {node: 24.x}
     peerDependencies:
-      '@openpresentation/opf-render': ^0.11.0
+      '@openpresentation/opf-render': ^0.12.0
     peerDependenciesMeta:
       '@openpresentation/opf-render':
         optional: true
 
-  '@openpresentation/opf-render@0.11.9':
-    resolution: {integrity: sha512-wkdnmBw/fv3sngnqjdxdn3z9Faj5VvE7DJM4QmqeWygjjVIlHxidl/qAGG78qHNkY4jlbcAceWJxp/P6373PhQ==}
+  '@openpresentation/opf-render@0.12.0':
+    resolution: {integrity: sha512-oQgA4xeiiGsZoXkzPX2Ix9JxI/aBBOP8iZRC9jzgfhNHzkKpLMDxFb+bnCEqKK9BYkuAiNvixwWGyikV5F4rRQ==}
     engines: {node: 24.x}
+    hasBin: true
     peerDependencies:
+      '@expo-google-fonts/noto-color-emoji': 0.4.6
+      '@expo-google-fonts/noto-emoji': 0.4.7
       '@expo-google-fonts/noto-naskh-arabic': 0.4.5
       '@expo-google-fonts/noto-nastaliq-urdu': 0.4.2
       '@expo-google-fonts/noto-sans-arabic': 0.4.3
@@ -525,11 +528,14 @@ packages:
       '@expo-google-fonts/noto-sans-kr': 0.4.3
       '@expo-google-fonts/noto-sans-lao': 0.4.2
       '@expo-google-fonts/noto-sans-malayalam': 0.4.2
+      '@expo-google-fonts/noto-sans-math': 0.4.2
       '@expo-google-fonts/noto-sans-mongolian': 0.4.1
       '@expo-google-fonts/noto-sans-myanmar': 0.4.2
       '@expo-google-fonts/noto-sans-oriya': 0.4.2
       '@expo-google-fonts/noto-sans-sc': 0.4.3
       '@expo-google-fonts/noto-sans-sinhala': 0.4.2
+      '@expo-google-fonts/noto-sans-symbols': 0.4.1
+      '@expo-google-fonts/noto-sans-symbols-2': 0.4.1
       '@expo-google-fonts/noto-sans-syriac': 0.4.2
       '@expo-google-fonts/noto-sans-tamil': 0.4.3
       '@expo-google-fonts/noto-sans-tc': 0.4.3
@@ -538,7 +544,12 @@ packages:
       '@expo-google-fonts/noto-sans-thai': 0.4.2
       '@expo-google-fonts/noto-serif-hebrew': 0.4.2
       '@expo-google-fonts/noto-serif-tibetan': 0.4.2
+      '@expo-google-fonts/stix-two-math': 0.4.0
     peerDependenciesMeta:
+      '@expo-google-fonts/noto-color-emoji':
+        optional: true
+      '@expo-google-fonts/noto-emoji':
+        optional: true
       '@expo-google-fonts/noto-naskh-arabic':
         optional: true
       '@expo-google-fonts/noto-nastaliq-urdu':
@@ -573,6 +584,8 @@ packages:
         optional: true
       '@expo-google-fonts/noto-sans-malayalam':
         optional: true
+      '@expo-google-fonts/noto-sans-math':
+        optional: true
       '@expo-google-fonts/noto-sans-mongolian':
         optional: true
       '@expo-google-fonts/noto-sans-myanmar':
@@ -582,6 +595,10 @@ packages:
       '@expo-google-fonts/noto-sans-sc':
         optional: true
       '@expo-google-fonts/noto-sans-sinhala':
+        optional: true
+      '@expo-google-fonts/noto-sans-symbols':
+        optional: true
+      '@expo-google-fonts/noto-sans-symbols-2':
         optional: true
       '@expo-google-fonts/noto-sans-syriac':
         optional: true
@@ -599,9 +616,11 @@ packages:
         optional: true
       '@expo-google-fonts/noto-serif-tibetan':
         optional: true
+      '@expo-google-fonts/stix-two-math':
+        optional: true
 
-  '@openpresentation/opf@0.11.4':
-    resolution: {integrity: sha512-oy9CevLXv8kpAfrzottpTiFnC8yC2uB/km1rcCPRuW5rvJ5aQEmgvXABu0p2OeBbV6cUMKZaGzFo5/jnYjPiZg==}
+  '@openpresentation/opf@0.12.0':
+    resolution: {integrity: sha512-NYcyazHoDgnDitd3rn5hRhqCdkItaCkGbln29S8gM7s22bQTX6b3UB3mJ1wVy8A4WPwR89tZUf18o1j5f/coeA==}
     engines: {node: 24.x}
 
   '@pdf-lib/standard-fonts@1.0.0':
@@ -990,6 +1009,9 @@ packages:
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+
+  bidi-js@1.1.0:
+    resolution: {integrity: sha512-fX1Onk0tdVPC7obPWB5EbJ1z7NVhLq4m2xZLq2YXBkxzMXIGRpNMU88n0EPgWseKl12J7zXs7qrDxPK4sRs2fg==}
 
   brotli@1.3.3:
     resolution: {integrity: sha512-oTKjJdShmDuGW94SyyaoQvAjf30dZaHnjJ8uAF+u2/vGJkJbJPJAT1gDiOJP5v1Zb6f9KEyW/1HpuaWIXtGHPg==}
@@ -1624,19 +1646,19 @@ snapshots:
 
   '@nodable/entities@3.1.0': {}
 
-  '@openpresentation/opf-pptx@0.11.9(@openpresentation/opf-render@0.11.9(@types/node@24.13.6))(@types/node@24.13.6)':
+  '@openpresentation/opf-pptx@0.12.0(@openpresentation/opf-render@0.12.0(@types/node@24.13.6))(@types/node@24.13.6)':
     dependencies:
-      '@openpresentation/opf': 0.11.4
+      '@openpresentation/opf': 0.12.0
       fast-xml-parser: 5.11.2
       fflate: 0.8.3
       jszip: 3.10.2
       sharp: 0.35.4(@types/node@24.13.6)
     optionalDependencies:
-      '@openpresentation/opf-render': 0.11.9(@types/node@24.13.6)
+      '@openpresentation/opf-render': 0.12.0(@types/node@24.13.6)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@openpresentation/opf-render@0.11.9(@types/node@24.13.6)':
+  '@openpresentation/opf-render@0.12.0(@types/node@24.13.6)':
     dependencies:
       '@expo-google-fonts/arimo': 0.4.3
       '@expo-google-fonts/caladea': 0.4.2
@@ -1646,19 +1668,22 @@ snapshots:
       '@expo-google-fonts/roboto': 0.4.3
       '@expo-google-fonts/roboto-mono': 0.4.2
       '@expo-google-fonts/tinos': 0.4.2
-      '@openpresentation/opf': 0.11.4
+      '@openpresentation/opf': 0.12.0
       '@resvg/resvg-js': 2.6.2
+      bidi-js: 1.1.0
       fontkit: 2.0.4
+      pako: 1.0.11
       pdf-lib: 1.17.1
       sharp: 0.35.4(@types/node@24.13.6)
     transitivePeerDependencies:
       - '@types/node'
 
-  '@openpresentation/opf@0.11.4':
+  '@openpresentation/opf@0.12.0':
     dependencies:
       ajv: 8.20.0
       ajv-formats: 3.0.1(ajv@8.20.0)
       jsonc-parser: 3.3.1
+      yaml: 2.9.1
 
   '@pdf-lib/standard-fonts@1.0.0':
     dependencies:
@@ -1888,6 +1913,10 @@ snapshots:
   argparse@2.0.1: {}
 
   base64-js@1.5.1: {}
+
+  bidi-js@1.1.0:
+    dependencies:
+      require-from-string: 2.0.2
 
   brotli@1.3.3:
     dependencies:
