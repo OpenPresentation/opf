@@ -121,6 +121,29 @@ Settled 2026-10-01 (owner): the `world` region map (FF-58) is parked for post-v1
 
 1. **FF-37, the catalog drift check in CI.** Settled 2026-10-02 (owner): no token. The direction is inverted: core is the source of truth and `@openpresentation/opf` ships `spec/catalogs`, so pptx-gallery's CI verifies its published `public/<kind>/` files against the catalogs of the core version in its lockfile ([pptx-gallery#84](https://github.com/Data-Advantage/pptx-gallery/pull/84), `pnpm check:core-catalog`). The token-gated `catalog-snapshot` job is removed from opf-ci.yml; the offline manifest hash check stays in `pnpm test`. No secret is needed and nothing is left for the owner.
 
+## Decision log (supervisor, vetoable)
+
+Decisions the supervisor took on the owner's behalf. Each is one dated line; the owner can veto any of them. Entries
+dated 2026-10-02 for earlier work are the date they were recorded in [HANDOFF.md](HANDOFF.md).
+
+- 2026-10-02: The `arabic` language default stays Arabic Typesetting, fixed in the preview with `sizeAdjust` 0.64 and `lineAscent` 0.70 / 0.78 (RR-38), not replaced.
+- 2026-10-02: CJK and Thai line breaking (dictionary word breaking, kinsoku) is descoped from the first release (RR-39, [opf#278](https://github.com/OpenPresentation/opf/issues/278)).
+- 2026-10-02: Single-series bar and column charts export in one colour (RR-36).
+- 2026-10-02: The editor's image crop is baked into a new asset (RR-25).
+- 2026-10-02: The timeline workflow test allows Windows Chromium's whole-pixel ink rounding ([opf#276](https://github.com/OpenPresentation/opf/pull/276)); no other tolerance changed.
+- 2026-10-02: The core `packages` job timeout is 40 minutes.
+- 2026-10-02: Core `main` requires the per-PR cross-platform checks (ruleset 24382980: `packages`, `Installed candidates` on windows and macos, `Verify OPF packages`); owner-approved.
+- 2026-10-02: The FF-37 catalog drift check runs in pptx-gallery against the published `@openpresentation/opf`; no secret is needed.
+- 2026-10-02: pptx-dev uses Claude Sonnet 5.5 (`anthropic/claude-sonnet-5-5`, owner decision) with budget guards (10 reconstructions per hour, 60 slides / 20 MB, 16k output tokens) and a privacy notice (RR-14).
+- 2026-10-02: pptx-dev's Windows CI leg runs on master, weekly and on Windows-sensitive paths or the `windows` label (RR-40).
+- 2026-10-02: FF-05: the theme `ea` is never empty, run-level `ea` / `cs` are not written, `endParaRPr` is kept.
+- 2026-10-02: RR-42: native evidence for every gallery value.
+- 2026-10-02: Windows PowerPoint native runs are deferred while the supervisor works on the Mac mini (owner): FF-13, the FF-46 Windows measurements and any re-run of the FF-12 sample wait for the Windows host.
+- 2026-10-02: Mac and Keynote compatibility checks run on the Mac mini; Keynote is opened read-only, never saved, and only by the supervisor (owner request).
+- 2026-10-02: RR-14 stays in-progress until the owner provides the gateway key, decides budget and ZDR and turns the flags on.
+- 2026-10-02: opf-pptx 0.12.2 is released as a patch that carries [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154) only.
+- 2026-10-02: Tracker refresh (RR-00, tracker agent): RR-05 and FF-12 are not closed on the CJK run alone, because it records a `Presentation.Fonts` failure on `lang-ja-meiryo`; FF-41 to FF-45 stay at review or in-progress in the font burndown, because the per-family acceptance is open; FF-27 stays in review for lack of a native renumber observation.
+
 ## Invariants
 
 - **No public support or progress status on any site.** No badges, legends,
