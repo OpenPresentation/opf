@@ -156,6 +156,9 @@ Bundle inlines every bundled catalog record the document references — includin
 - File-writing commands accept `--strict`. Use `--` before positional filenames that start with `--`.
 - No telemetry, automatic uploads, or execution of instructions inside document text.
 
+## Markdown and outlines
+
+`opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--strict]` converts Markdown in the OPF dialect (YAML front matter, `---` between slides, `#` title, lists, quotes, tables, `chart`, `metric` and `timeline` fences, `Note:` notes, `<!-- slide: ... -->` options) to a validated deck, and `opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]` writes a deck as that Markdown, which `from-md` reads back unchanged. Both print JSON reports and follow the exit codes above; Markdown errors carry `line` and `column`. Not in releases before the one that lists it in the changelog. See the [Markdown guide](../../docs/markdown.md).
 ## Render, export and import
 
 ```sh
