@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { format, parseBurndown, parseNow, pullRequests, STATUSES, summarize } from './report.mjs';
+import { format, gallerySummary, parseBurndown, parseNow, pullRequests, STATUSES, summarize } from './report.mjs';
 
 const HEAD = '| ID | Item | Repos | Depends | Status | Evidence |\n| --- | --- | --- | --- | --- | --- |\n';
 const NOW = '| ID | Owner | Working on | Blocked by | Next action |\n| --- | --- | --- | --- | --- |\n';
@@ -55,17 +55,55 @@ test('the Now table is optional and validated', () => {
   assert.deepEqual(pullRequests('see [x](https://github.com/o/r/pull/5), https://github.com/o/r/pull/5 and [i](https://github.com/o/r/issues/6)'), ['o/r#5']);
 });
 
-// RR-01 to RR-40 without gaps, and any later item, so adding the next item does not also edit this test. IDs above
-// RR-40 may arrive out of order (an item is numbered in its own open pull request, as RR-41 is in opf#294).
-test('the committed burndown parses and covers RR-01 to RR-40 without gaps', async () => {
+// Contiguous from RR-01 to the highest item, so adding the next item does not also edit this test.
+test('the committed burndown parses and covers RR-01 to its highest item without gaps', async () => {
   const markdown = await readFile(fileURLToPath(new URL('./burndown.md', import.meta.url)), 'utf8');
   const items = parseBurndown(markdown);
-  const ids = new Set(items.map((i) => i.id));
-  const missing = Array.from({ length: 40 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`).filter((id) => !ids.has(id));
-  assert.deepEqual(missing, [], 'RR-01 to RR-40 must all be present');
+  const last = Math.max(...items.map((i) => Number(i.id.slice(3))));
+  assert.ok(last >= 53, `expected at least RR-53, found RR-${last}`);
+  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: last }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
   for (const i of items) assert.ok(STATUSES.includes(i.status));
   for (const i of items) for (const dep of i.depends.match(/RR-\d{2}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
   // the work queue only names real items, and no closed item lingers in it
   const s = summarize(items, parseNow(markdown));
   assert.deepEqual(s.stale, []);
+});
+
+const TRACKER = (byType) => ({
+  asOf: '2026-10-02',
+  summary: {
+    records: Object.values(byType).reduce((n, t) => n + t.records, 0),
+    addressed: Object.values(byType).reduce((n, t) => n + t.addressed, 0),
+    byStatus: { done: 2 },
+    byType,
+  },
+});
+
+test('the gallery tracker summary is one line with the unaddressed records by type', () => {
+  const g = gallerySummary(TRACKER({ layouts: { records: 3, addressed: 1, unaddressed: 2 }, charts: { records: 2, addressed: 2, unaddressed: 0 }, fonts: { records: 1, addressed: 0, unaddressed: 1 } }));
+  assert.equal(g.line, 'gallery tracker: 6 records in 3 item types (2 done), 3 addressed, 3 unaddressed (layouts 2, fonts 1)');
+  assert.deepEqual(g.unaddressedByType, { layouts: 2, fonts: 1 });
+  const all = gallerySummary(TRACKER({ layouts: { records: 3, addressed: 3, unaddressed: 0 } }));
+  assert.equal(all.line, 'gallery tracker: 3 records in 1 item types (2 done), 3 addressed, 0 unaddressed');
+  // the line sits under the headline, and only outside the queue-only modes
+  const s = summarize(parseBurndown(`${HEAD}| RR-01 | A | core | none | done | e |\n`));
+  assert.match(format(s, { gallery: g }).split('\n')[1], /^gallery tracker: 6 records/);
+  assert.doesNotMatch(format(s, { queueOnly: true, gallery: g }), /gallery tracker/);
+});
+
+test('a malformed gallery tracker summary is rejected', () => {
+  assert.throws(() => gallerySummary({}), /summary missing/);
+  const bad = TRACKER({ layouts: { records: 3, addressed: 3, unaddressed: 0 } });
+  bad.summary.records = 4;
+  assert.throws(() => gallerySummary(bad), /do not add up/);
+});
+
+test('the committed gallery tracker summarizes', async () => {
+  const tracker = JSON.parse(await readFile(fileURLToPath(new URL('./gallery-tracker.json', import.meta.url)), 'utf8'));
+  const g = gallerySummary(tracker);
+  assert.equal(g.records, tracker.records.length);
+  assert.equal(g.addressed, tracker.records.filter((r) => r.addressed).length);
+  // every RR item a gap links to exists in the burndown
+  const ids = new Set(parseBurndown(await readFile(fileURLToPath(new URL('./burndown.md', import.meta.url)), 'utf8')).map((i) => i.id));
+  for (const r of tracker.records) for (const gap of r.gaps) if (/^RR-/.test(gap.link ?? '')) assert.ok(ids.has(gap.link), `${r.type}/${r.id} links unknown ${gap.link}`);
 });

@@ -38,7 +38,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # RR-40: Linux is a fixed image (ubuntu-latest moves to Ubuntu 26 from 2026-10-19), so a change of Linux
+        # release is a deliberate PR here rather than a surprise in the weekly run.
+        os: [ubuntu-24.04, windows-latest, macos-latest]
     defaults:
       run:
         shell: bash
@@ -105,7 +107,7 @@ jobs:
     name: Cross-OS comparison
     needs: matrix
     if: always() && needs.matrix.result != 'cancelled'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

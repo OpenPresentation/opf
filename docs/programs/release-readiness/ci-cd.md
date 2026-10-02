@@ -586,7 +586,7 @@ The orchestrator only creates tags and PRs.
 ## Roadmap
 
 Ordered by value over effort. The savings use this week's volume. The medium
-and larger items are burndown items RR-42 to RR-50, and their owner actions
+and larger items are burndown items RR-45 to RR-53, and their owner actions
 are filed as issues.
 
 ### Quick wins, first set
@@ -601,13 +601,13 @@ are filed as issues.
 
 | ID | Change | PR | Saving, measured | Risk |
 |---|---|---|---|---|
-| QW4 | Pin the non-container Linux jobs to `ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19: OPF CI, published matrix, renderer residual compare, the three sites | [opf#295](https://github.com/OpenPresentation/opf/pull/295), [opf-render#112](https://github.com/OpenPresentation/opf-render/pull/112), [pptx-gallery#86](https://github.com/Data-Advantage/pptx-gallery/pull/86), [openpresentation-site#63](https://github.com/Data-Advantage/openpresentation-site/pull/63), [pptx-dev#76](https://github.com/Data-Advantage/pptx-dev/pull/76) | no time change (same image today); avoids a font or ICU drift incident. The publish workflows are left alone | very low |
+| QW4 | Pin the non-container Linux jobs to `ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19: OPF CI, published matrix, renderer residual compare, the three sites | [opf#295](https://github.com/OpenPresentation/opf/pull/295), merged, [opf-render#112](https://github.com/OpenPresentation/opf-render/pull/112), merged, [pptx-gallery#86](https://github.com/Data-Advantage/pptx-gallery/pull/86), [openpresentation-site#63](https://github.com/Data-Advantage/openpresentation-site/pull/63), merged, [pptx-dev#76](https://github.com/Data-Advantage/pptx-dev/pull/76), merged | no time change (same image today); avoids a font or ICU drift incident. The publish workflows are left alone | very low |
 | QW5 | Warn when an ecosystem pin is not on the sibling's `main` | [opf#296](https://github.com/OpenPresentation/opf/pull/296) | under 1 s. Replayed against the pre-opf#283 pin `1ea2292`, it warns "49 commits not in main" | none (warning) |
 | QW6 | Reuse the packed tarballs in the Installed candidates legs | **declined after measuring** | at most 36 s per leg (`pnpm build` 30 s and packing 6 s; the sibling installs are still needed for Playwright and the test scripts), on legs that finish about 20 min before `packages`, so no wall-clock gain. Packing on Windows and macOS is itself under test: those legs caught the RR-37 CRLF defect ("Installed runtime differs from the staged package"), so reusing Linux tarballs would remove coverage | not done |
-| QW7 | pptx-gallery runs the production-only checks (production smoke, Lighthouse on www.pptx.gallery, remote validate) after merge, not on PRs | [pptx-gallery#85](https://github.com/Data-Advantage/pptx-gallery/pull/85) | 51 s of a 223 s p50 PR job (23%), on billed minutes; no production-coupled PR failures | low: they still run on every push to main and on demand |
+| QW7 | pptx-gallery runs the production-only checks (production smoke, Lighthouse on www.pptx.gallery, remote validate) after merge, not on PRs | [pptx-gallery#85](https://github.com/Data-Advantage/pptx-gallery/pull/85), merged | 51 s of a 223 s p50 PR job (23%), on billed minutes; no production-coupled PR failures | low: they still run on every push to main and on demand |
 | QW8 | pptx-dev Windows leg policy: ubuntu on every PR; Windows on master, manual runs, a weekly schedule, and Windows-sensitive or `windows`-labelled PRs | [pptx-dev#78](https://github.com/Data-Advantage/pptx-dev/pull/78) | 50 of the last 60 PRs touch a Windows-sensitive path (the lockfile and `package.json` 30, `tests/e2e` 24), so about 17% of PR runs skip Windows: about 170 billed-minute equivalents a month with a weekly drift run. A nightly run would cost about 420 a month, a net loss of about 190, so the PR runs it weekly (vetoable) | low: master pushes always run Windows |
 
-Flakes recorded while measuring, the first quarantine candidates for RR-44:
+Flakes recorded while measuring, the first quarantine candidates for RR-47:
 
 - pptx-dev Windows, `tests/e2e/inspector-autosave.spec.ts:48`: it failed and
   passed on the same SHA, and failed in 2 of the last 4 Windows runs that
@@ -623,20 +623,20 @@ Flakes recorded while measuring, the first quarantine candidates for RR-44:
 
 | Item | Change | Saving | Depends on |
 |---|---|---|---|
-| RR-42 (M1) | Shard `packages` behind the `packages` aggregator (section 2) | core critical path from 25.4 to about 12 min p50 | none |
-| RR-43 (M2) | Changelog fragments and globbed script runners in all four repositories (section 8) | ends the CHANGELOG and `package.json` conflict class; fewer rebase pushes | none |
-| RR-44 (M3) | Flake measurement (scheduled repeat) and quarantine file (section 7) | numbers for flakes; 18 failures a week stop costing full runs | supervisor sign-off on the quarantine rule |
-| RR-45 (M4) | Merge queue on the four public repositories (section 4) | about 2,400 runner-min/week; every `main` commit verified; no rebase churn | owner: [opf#297](https://github.com/OpenPresentation/opf/issues/297); RR-44 first |
-| RR-46 (M5) | Vercel preview `deployment_status` checks, production checks on the Production deployment, Ignored Build Step (section 10) | site builds verified before merge without the manual rule | owner: [opf#299](https://github.com/OpenPresentation/opf/issues/299) |
+| RR-45 (M1) | Shard `packages` behind the `packages` aggregator (section 2) | core critical path from 25.4 to about 12 min p50 | none |
+| RR-46 (M2) | Changelog fragments and globbed script runners in all four repositories (section 8) | ends the CHANGELOG and `package.json` conflict class; fewer rebase pushes | none |
+| RR-47 (M3) | Flake measurement (scheduled repeat) and quarantine file (section 7) | numbers for flakes; 18 failures a week stop costing full runs | supervisor sign-off on the quarantine rule |
+| RR-48 (M4) | Merge queue on the four public repositories (section 4) | about 2,400 runner-min/week; every `main` commit verified; no rebase churn | owner: [opf#297](https://github.com/OpenPresentation/opf/issues/297); RR-47 first |
+| RR-49 (M5) | Vercel preview `deployment_status` checks, production checks on the Production deployment, Ignored Build Step (section 10) | site builds verified before merge without the manual rule | owner: [opf#299](https://github.com/OpenPresentation/opf/issues/299) |
 
 ### Larger (a week or more)
 
 | Item | Change | Saving | Depends on |
 |---|---|---|---|
-| RR-47 (L1) | Bot-owned `ecosystem.lock.json`, roller and `Depends-On:` (section 3) | no hand pins; 19% of failures gone; about 600 runner-min and hours per coordinated feature | RR-42; owner: [opf#298](https://github.com/OpenPresentation/opf/issues/298) (GitHub App) |
-| RR-48 (L2) | Release orchestrator (section 9) | 0.12.0-sized train from 4 h 20 min to about 1 h 45 min | RR-43, RR-47; owner: [opf#298](https://github.com/OpenPresentation/opf/issues/298) |
-| RR-49 (L3) | Per-deck golden files and the regeneration workflow (section 6) | no golden conflicts; no golden re-run loops | RR-47 (the lock records golden sets) |
-| RR-50 (L4) | Consumer-driven contract suites; full sibling suites only in T2 and on schedule | 15.7 runner-min from every core PR run (about 7,600 runner-min/week); with RR-42 the critical path is about 11 min | RR-45, RR-47 |
+| RR-50 (L1) | Bot-owned `ecosystem.lock.json`, roller and `Depends-On:` (section 3) | no hand pins; 19% of failures gone; about 600 runner-min and hours per coordinated feature | RR-45; owner: [opf#298](https://github.com/OpenPresentation/opf/issues/298) (GitHub App) |
+| RR-51 (L2) | Release orchestrator (section 9) | 0.12.0-sized train from 4 h 20 min to about 1 h 45 min | RR-46, RR-50; owner: [opf#298](https://github.com/OpenPresentation/opf/issues/298) |
+| RR-52 (L3) | Per-deck golden files and the regeneration workflow (section 6) | no golden conflicts; no golden re-run loops | RR-50 (the lock records golden sets) |
+| RR-53 (L4) | Consumer-driven contract suites; full sibling suites only in T2 and on schedule | 15.7 runner-min from every core PR run (about 7,600 runner-min/week); with RR-45 the critical path is about 11 min | RR-48, RR-50 |
 
 ## Risks
 
@@ -646,9 +646,9 @@ Flakes recorded while measuring, the first quarantine candidates for RR-44:
   the scan (it is described in the opf#286 description) when a new script
   starts reading `docs/`.
 - **Testing against `main` can turn core red because of a sibling.** The
-  lock (RR-47) gives T1 a last-green set; only T2 and the roller see raw `main`.
+  lock (RR-50) gives T1 a last-green set; only T2 and the roller see raw `main`.
 - **A merge queue amplifies flakes.** One flaky test ejects a batch.
-  Measurement and quarantine (RR-44) come before the merge queue (RR-45).
+  Measurement and quarantine (RR-47) come before the merge queue (RR-48).
 - **The quarantine relaxes a gate for named tests.** It is bounded by expiry,
   issue and supervisor approval, recorded in the PR. Tolerances (0.02 pt
   native, 0.1 / 0.15 reference px) are never quarantined.
@@ -668,9 +668,9 @@ Flakes recorded while measuring, the first quarantine candidates for RR-44:
    (vetoable) and implemented in
    [pptx-dev#78](https://github.com/Data-Advantage/pptx-dev/pull/78), with a
    weekly drift run instead of a nightly one, for the measured reason in QW8.
-3. **Merge queue** on the OpenPresentation `main` rulesets (RR-45,
-   [opf#297](https://github.com/OpenPresentation/opf/issues/297)), after RR-44.
-4. **A GitHub App** for cross-repository tags and PRs (RR-47, RR-48,
+3. **Merge queue** on the OpenPresentation `main` rulesets (RR-48,
+   [opf#297](https://github.com/OpenPresentation/opf/issues/297)), after RR-47.
+4. **A GitHub App** for cross-repository tags and PRs (RR-50, RR-51,
    [opf#298](https://github.com/OpenPresentation/opf/issues/298)), installed on
    the four OpenPresentation repositories with contents and pull-requests
    write.
@@ -678,5 +678,5 @@ Flakes recorded while measuring, the first quarantine candidates for RR-44:
    Restore the quota or uninstall it, so the check list shows only real
    checks.
 6. **Vercel protection-bypass secret** and the preview check as a required
-   status on the site repositories (RR-46,
+   status on the site repositories (RR-49,
    [opf#299](https://github.com/OpenPresentation/opf/issues/299)).

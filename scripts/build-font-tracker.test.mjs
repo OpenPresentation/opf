@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { CLASSES, FILES, ROOT, STATUSES, buildTracker, checkTracker, renderMarkdown, serialize } from "./build-font-tracker.mjs";
+import { CLASSES, FILES, ROOT, STATUSES, buildTracker, checkTracker, licensingSummary, renderMarkdown, serialize, snapshotFromSymbolFonts } from "./build-font-tracker.mjs";
 
 const read = (file) => JSON.parse(readFileSync(path.join(ROOT, file), "utf8"));
 const policy = read(FILES.policy);
@@ -15,7 +15,7 @@ const policyNames = policy.families.map((row) => row.family);
 // A scratch copy of the inputs, outputs and script, so drift and error cases never touch the checkout.
 function scratchCopy() {
   const dir = mkdtempSync(path.join(tmpdir(), "font-tracker-"));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
@@ -62,7 +62,8 @@ test("the reviewed families split into the owner's four classes", () => {
   const counts = Object.fromEntries(CLASSES.map((cls) => [cls, committed.records.filter((record) => record.class === cls).length]));
   assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), committed.summary.records);
   assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Symbol", "Webdings", "Wingdings"]);
-  for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, "needs-special-path");
+  // FF-45: the three special families preview through the code-table route (opf-render#94), so none still needs a special path.
+  for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, "code-table", record.family);
   for (const record of committed.records.filter((item) => item.class === "open")) assert.equal(record.licenseClass, "open");
   for (const record of committed.records.filter((item) => item.class.startsWith("proprietary"))) assert.notEqual(record.licenseClass, "open");
 });
@@ -72,7 +73,7 @@ test("every record carries the fields the owner asked for, with valid values", (
   for (const record of committed.records) {
     const where = record.family;
     assert.equal(record.selectedNamePreservedInPptx, true, where);
-    assert.ok(["metric", "visual", "real", "none"].includes(record.previewRoute.tier), where);
+    assert.ok(["metric", "visual", "real", "none", "code-table"].includes(record.previewRoute.tier), where);
     assert.ok(Array.isArray(record.previewRoute.alternates), where);
     assert.equal(typeof record.bundled.yes, "boolean", where);
     assert.ok(Array.isArray(record.stylesRequired) && Array.isArray(record.stylesMissing), where);
@@ -135,7 +136,8 @@ test("every proprietary script family and open script face carries its script-co
     if (Array.isArray(corpus.original)) for (const style of corpus.original) assert.ok(Number.isFinite(style.meanWidthDelta) && Number.isFinite(style.maxAbsWidthDelta) && style.samples > 0, record.family);
     else assert.ok(corpus.original === null || corpus.original === "not installed on the measuring host", record.family);
     assert.equal(record.acceptance.accepted, false, `${record.family}: native acceptance is not claimed`);
-    assert.equal(record.nativeVerification.status, "unverified", record.family);
+    // Native status comes only from a committed native run that names the family (see the native evidence tests); the rest stay unverified.
+    assert.equal(record.nativeVerification.status === "verified", Boolean(record.nativeVerification.runs?.length), record.family);
   }
   const compact = committed.records.find((record) => record.family === "Arabic Typesetting").scriptCorpus.original[0];
   assert.ok(compact.meanWidthDelta > 0.5, "the measured Arabic Typesetting gap is recorded");
@@ -322,7 +324,8 @@ test("gallery cards are recorded separately from the gallery editor, and Node na
   const raleway = committed.records.find((record) => record.family === "Raleway");
   assert.equal(raleway.bundled.yes, true);
   assert.equal(raleway.hostVerification.galleryEditor, "verified");
-  assert.equal(raleway.hostVerification.galleryCards, "unverified", "gallery cards are a different host");
+  const raleighCard = gallery.families.find((entry) => entry.family === "Raleway");
+  assert.equal(raleway.hostVerification.galleryCards, raleighCard.usedAs.includes("Raleway") && !raleighCard.coverageGaps ? "verified" : "unverified", "gallery cards are a different host, verified by pptx-gallery's own test");
   // Node: the default prepareNodeFonts pack is base; office faces need pack: 'office'.
   const carlito = committed.records.find((record) => record.family === "Carlito");
   assert.match(carlito.hostLoading.node, /pack: 'office'/);
@@ -343,7 +346,7 @@ test("metric routes are qualified only with four-style widths, line breaks and a
     assert.ok(record.qualification.lineBreaksIdenticalFraction >= floor, record.family);
     assert.ok(record.qualification.stylesMeasured >= 4, `${record.family}: four styles`);
     for (const host of overrides.latinAcceptance.hosts) assert.equal(record.hostVerification[host], "verified", `${record.family} ${host}`);
-    assert.notEqual(record.nativeVerification.status, "verified", `${record.family}: native verification is the supervisor's (FF-46)`);
+    if (record.nativeVerification.status === "verified") assert.ok(record.nativeVerification.runs.length > 0, `${record.family}: native verified only with a committed run`);
   }
   // Vertical metrics: only the Aptos family matches the real font's hhea, OS/2, x-height and cap-height; the established routes are recorded as differing.
   for (const name of ["Aptos", "Aptos Display", "Aptos Narrow", "Aptos Serif"]) assert.equal(committed.records.find((record) => record.family === name).measurements.verticalMetricsMatch, true, name);
@@ -450,4 +453,238 @@ test("the decisions of RR-17 are recorded: Aptos Narrow and Serif route to Intos
   assert.deepEqual([route("Aptos Mono").family, route("Aptos Mono").tier, route("Aptos Mono").alternates], ["Cousine", "visual", ["Roboto Mono"]]);
   assert.deepEqual([route("Liberation Sans").family, route("Liberation Serif").family, route("Liberation Mono").family], ["Arimo", "Tinos", "Cousine"]);
   for (const name of ["Liberation Sans", "Liberation Serif", "Liberation Mono"]) assert.equal(route(name).tier, "metric", name);
+});
+
+// ---- 2026-10-02 upgrade: licensing summary, code-table route, native evidence, style rule, gallery cards -------------------------------
+
+const record = (name) => committed.records.find((item) => item.family === name);
+
+test("the summary answers the owner's four questions from the records", () => {
+  const l = committed.summary.licensing;
+  const recomputed = licensingSummary(committed.records, read(overrides.manifestSnapshot));
+  assert.deepEqual(l, recomputed, "the committed summary is the function of the records");
+  assert.equal(l.totalFamilies, committed.summary.records);
+  assert.equal(l.openDirectlyUsable.total, committed.summary.byClass.open);
+  assert.equal(l.openDirectlyUsable.drawnAsItself + l.openDirectlyUsable.openAlias + l.openDirectlyUsable.notBundled, l.openDirectlyUsable.total);
+  assert.deepEqual(l.openDirectlyUsable.aliases, ["Liberation Mono", "Liberation Sans", "Liberation Serif", "Source Sans Pro"]);
+  assert.equal(l.needsReplacement.total, committed.summary.byClass["proprietary-latin"] + committed.summary.byClass["proprietary-script"] + committed.summary.byClass.special);
+  assert.deepEqual(l.needsReplacement.byClass, { "proprietary-latin": 53, "proprietary-script": 41, special: 3 });
+  const found = l.replacementFound;
+  assert.equal(found.metricCompatible + found.visualLookAlike + found.scriptFace + found.specialPath, found.total);
+  assert.equal(found.total + l.noRoute.total, l.needsReplacement.total);
+  assert.deepEqual([found.metricCompatible, found.visualLookAlike, found.scriptFace, found.specialPath], [9, 44, 41, 3]);
+  assert.deepEqual(l.openDirectlyUsable.byLicense, { "OFL-1.1": 71 });
+  assert.equal(l.openDirectlyUsable.drawnAsItself, 67);
+  assert.equal(l.openDirectlyUsable.openAlias, 4);
+  assert.equal(l.noRoute.total, 0);
+  // Every bundled face is under a license the policy allows; the replacement routes use only OFL-1.1.
+  const allowed = new Set(["OFL-1.1", "Apache-2.0", "MIT", "UFL-1.0"]);
+  for (const license of Object.keys(l.bundledFaceLicenses.manifestPackagesByLicense)) assert.ok(allowed.has(license), license);
+  assert.deepEqual(Object.keys(l.bundledFaceLicenses.replacementFacesByLicense), ["OFL-1.1"]);
+  assert.equal(Object.values(l.bundledFaceLicenses.replacementRecordsByLicense).reduce((sum, count) => sum + count, 0), found.total);
+  const md = renderMarkdown(committed);
+  const top = md.slice(0, md.indexOf("## Summary"));
+  assert.match(top, /How many fonts do we have\? \| 168 \|/);
+  assert.match(top, /\| 97 \| 9 metric-compatible, 44 visual look-alike \(Latin\), 41 script face, 3 special path/);
+  assert.doesNotMatch(md, /pptx\.gallery shows|support badge/i);
+});
+
+test("a proprietary family without a bundled route counts as no route, not as found", () => {
+  const records = structuredClone(committed.records);
+  const calibri = records.find((item) => item.family === "Calibri");
+  calibri.bundled.yes = false;
+  const l = licensingSummary(records, read(overrides.manifestSnapshot));
+  assert.deepEqual(l.noRoute.families, ["Calibri"]);
+  assert.equal(l.replacementFound.total, 96);
+  assert.equal(l.replacementFound.metricCompatible, 8);
+});
+
+test("Symbol, Wingdings and Webdings carry the code-table route from the pinned symbol snapshot", () => {
+  const snapshot = read(overrides.symbolFontsSnapshot);
+  assert.match(snapshot.source.commit, /^[0-9a-f]{40}$/);
+  assert.equal(snapshot.source.repository, "OpenPresentation/opf-render");
+  assert.equal(snapshot.script, "Zsym");
+  assert.equal(committed.inputs.symbolFonts.commit, snapshot.source.commit);
+  const manifest = read(overrides.manifestSnapshot);
+  const shipped = new Set(manifest.packages.flatMap((pkg) => pkg.faces.map((face) => face.family)));
+  for (const name of ["Symbol", "Wingdings", "Webdings"]) {
+    const item = record(name);
+    assert.equal(item.previewRoute.kind, "code-table", name);
+    assert.equal(item.previewRoute.tier, "code-table", name);
+    assert.equal(item.previewRoute.family, null, name);
+    assert.deepEqual(item.previewRoute.chain, snapshot.previewFaces[name], name);
+    for (const face of item.previewRoute.chain) assert.ok(shipped.has(face), `${name}: ${face} is in the pinned render manifest`);
+    assert.equal(item.bundled.yes, true, name);
+    assert.equal(item.bundled.applies, "code-table", name);
+    assert.equal(item.status, "code-table", name);
+    assert.equal(item.licenseClass, "proprietary-standard", name);
+    assert.equal(item.hostVerification.node, "verified", name);
+    assert.equal(item.hostVerification.browser, "verified", name);
+    assert.equal(item.hostVerification.editor, "unverified", name);
+    // Nothing is claimed beyond what is verified: no native PowerPoint check of symbol runs exists in docs/evidence.
+    assert.equal(item.nativeVerification.status, "unverified", name);
+    assert.equal(item.acceptance.accepted, false, name);
+    assert.match(item.statusReason, /no native PowerPoint check is recorded/, name);
+    assert.match(item.nextAction, /none is recorded/, name);
+  }
+  assert.deepEqual(snapshot.previewFaces.Wingdings, ["Noto Sans Symbols 2", "Noto Sans Symbols", "Noto Sans Math", "Noto Sans"]);
+  assert.match(renderMarkdown(committed), /## Symbol-encoded families \(FF-45\)/);
+  assert.equal(committed.summary.licensing.replacementFound.specialPath, 3);
+});
+
+test("a code-table route whose chain has an unbundled face falls back to needs-special-path", () => {
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, overrides.symbolFontsSnapshot);
+    const edited = JSON.parse(readFileSync(file, "utf8"));
+    edited.previewFaces.Webdings = ["Noto Sans Symbols 2", "Not A Bundled Face"];
+    writeFileSync(file, JSON.stringify(edited));
+    const webdings = buildTracker({ root: dir }).tracker.records.find((item) => item.family === "Webdings");
+    assert.equal(webdings.status, "needs-special-path");
+    assert.equal(webdings.bundled.yes, false);
+    assert.match(webdings.statusReason, /Not A Bundled Face/);
+    const summary = buildTracker({ root: dir }).tracker.summary.licensing;
+    assert.deepEqual(summary.noRoute.families, ["Webdings"]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("the symbol snapshot is reduced from the renderer module and refuses a bad commit", () => {
+  const snapshot = snapshotFromSymbolFonts({ SYMBOL_SCRIPT: "Zsym", SYMBOL_PLACEHOLDER: "□", SYMBOL_PREVIEW_FACES: Object.freeze({ Symbol: Object.freeze(["Noto Sans"]) }) }, { commit: "a".repeat(40), capturedAt: "2026-10-02" });
+  assert.deepEqual(snapshot.previewFaces, { Symbol: ["Noto Sans"] });
+  assert.equal(snapshot.source.path, "src/symbol-fonts.js");
+  const run = spawnSync(process.execPath, [path.join(ROOT, "scripts/build-font-tracker.mjs"), "--snapshot-symbol-fonts", "x.js", "--commit", "abc"], { encoding: "utf8" });
+  assert.equal(run.status, 1);
+  assert.match(run.stderr, /40-character/);
+});
+
+test("native verification comes from committed comparison output, and only for families the runs name", () => {
+  const verified = committed.summary.nativeVerifiedFamilies;
+  assert.deepEqual(
+    [...verified].sort(),
+    ["Angsana New", "Aptos", "Aptos Display", "Arabic Typesetting", "David", "Malgun Gothic", "Mangal", "Meiryo", "Microsoft JhengHei", "Microsoft YaHei"],
+  );
+  assert.equal(committed.summary.nativeVerification.verified, verified.length);
+  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002"]);
+  const runs = Object.fromEntries(committed.inputs.nativeEvidence.map((run) => [run.id, run]));
+  assert.equal(runs["rr-05b-native-20261002"].decks, 4);
+  assert.equal(runs["rr-05b-native-20261002"].decksPassing, 4);
+  assert.equal(runs["rr-05-cjk-native-20261002"].decks, 9);
+  assert.equal(runs["rr-05-cjk-native-20261002"].decksPassing, 8);
+  assert.deepEqual(runs["rr-05-cjk-native-20261002"].failingChecks, [{ deck: "lang-ja-meiryo", failing: ["presentationFonts"], detail: ["presentation-fonts-extra"] }]);
+  for (const name of verified) {
+    const item = record(name);
+    assert.equal(item.nativeVerification.status, "verified", name);
+    assert.ok(item.nativeVerification.runs.length > 0 && item.nativeVerification.basis.length > 0, name);
+    for (const run of item.nativeVerification.runs) {
+      assert.ok(existsSync(path.join(ROOT, run.file)) && existsSync(path.join(ROOT, run.readme)), `${name}: evidence files exist`);
+      assert.ok(run.decks.every((deck) => deck.via.length > 0), `${name}: read back by a theme slot or Presentation.Fonts`);
+    }
+    assert.ok(item.evidence.some((entry) => entry.url.startsWith("docs/evidence/rr-05")), name);
+    assert.match(item.nextAction, /Native name read-back passed/, name);
+  }
+  // Which family came from which deck.
+  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002"]);
+  assert.deepEqual(record("David").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-he", "rtl-structures-he"]);
+  assert.deepEqual(record("Mangal").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-hi"]);
+  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
+  // lang-ja-meiryo failed only the Presentation.Fonts check (FF-05); Meiryo is verified by the decks that pass and the failure is a caveat.
+  assert.deepEqual(record("Meiryo").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-ja", "size-4x3-japanese"]);
+  assert.match(record("Meiryo").nativeVerification.caveat, /lang-ja-meiryo \(presentationFonts\)/);
+  assert.match(record("Aptos").nativeVerification.caveat, /FF-05/);
+  // A family no run names stays unverified, with the reason stated.
+  for (const name of ["Calibri", "Arial", "Wingdings", "Noto Sans JP", "Aptos Narrow", "Cambria Math"]) {
+    assert.equal(record(name).nativeVerification.status === "verified", false, name);
+  }
+  assert.match(record("Arial").nativeVerification.note, /No native PowerPoint check recorded/);
+  // Evidence is committed without absolute user paths.
+  for (const run of overrides.nativeEvidence) for (const file of [run.file, path.join(path.dirname(run.file), "compare.md")]) assert.doesNotMatch(readFileSync(path.join(ROOT, file), "utf8"), /[A-Z]:\\Users|\/Users\/|micha/, file);
+});
+
+test("a deck that fails the fonts check, or a family that no deck names, gives no native verification", () => {
+  const dir = scratchCopy();
+  try {
+    const cjk = path.join(dir, "docs/evidence/rr-05-cjk-native-20261002/compare.json");
+    const report = JSON.parse(readFileSync(cjk, "utf8"));
+    const deck = (id) => report.decks.find((item) => item.id === id);
+    // Mangal: the only deck that names it fails the per-run fonts check.
+    deck("lang-hi").checks.fonts.ok -= 1;
+    // Microsoft YaHei: the fonts and theme slots match but Presentation.Fonts lists an extra family: partial, with the reason.
+    deck("lang-zh-hans").checks.presentationFonts.ok = false;
+    // Angsana New: a deck that never opened has no evidence.
+    deck("lang-th").opened = false;
+    writeFileSync(cjk, JSON.stringify(report));
+    const rebuilt = buildTracker({ root: dir }).tracker;
+    const get = (name) => rebuilt.records.find((item) => item.family === name).nativeVerification;
+    assert.equal(get("Mangal").status, "unverified");
+    assert.equal(get("Microsoft YaHei").status, "partial");
+    assert.match(get("Microsoft YaHei").note, /Presentation\.Fonts lists a family the deck does not name/);
+    assert.equal(get("Angsana New").status, "unverified");
+    assert.equal(get("Malgun Gothic").status, "verified");
+    assert.ok(!rebuilt.summary.nativeVerifiedFamilies.includes("Mangal"));
+    assert.deepEqual(rebuilt.summary.nativePartialFamilies, ["Microsoft YaHei"]);
+    // Drop the whole run: its families go back to unverified; Aptos stays verified through the other run.
+    const overridesFile = path.join(dir, FILES.overrides);
+    const edited = JSON.parse(readFileSync(overridesFile, "utf8"));
+    edited.nativeEvidence = edited.nativeEvidence.filter((run) => run.id !== "rr-05-cjk-native-20261002");
+    writeFileSync(overridesFile, JSON.stringify(edited));
+    const without = buildTracker({ root: dir }).tracker;
+    assert.equal(without.records.find((item) => item.family === "Meiryo").nativeVerification.status, "unverified");
+    assert.equal(without.records.find((item) => item.family === "Aptos").nativeVerification.status, "verified");
+    assert.equal(without.summary.nativeVerification.verified, 4, "Aptos, Aptos Display, Arabic Typesetting and David remain, from the Arabic and Hebrew run");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a family whose real font ships one face has no style gap, and the rule rejects a declared list the measurement contradicts", () => {
+  for (const name of ["Cambria Math", "Segoe UI Emoji", "STIX Two Math", "Noto Color Emoji"]) {
+    const item = record(name);
+    assert.notEqual(item.status, "style-gap", name);
+    assert.deepEqual(item.stylesRequired, ["400"], name);
+    assert.deepEqual(item.stylesMissing, [], name);
+    assert.match(item.stylesBasis, /^declared:/, name);
+  }
+  assert.deepEqual(record("Cambria Math").replacementStylesRequired, ["400"]);
+  assert.deepEqual(record("Segoe UI Emoji").replacementStylesRequired, ["400"]);
+  assert.equal(committed.summary.byStatus["style-gap"], 0);
+  assert.match(record("Cambria Math").stylesBasis, /cambria\.ttc/);
+  assert.match(record("Segoe UI Emoji").stylesBasis, /seguiemj\.ttf/);
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, FILES.overrides);
+    const edited = JSON.parse(readFileSync(file, "utf8"));
+    // Without the declaration the four-style assumption returns, and the gap with it: the rule reads the real font's styles from the data.
+    const cambria = edited.stylesRequired["Cambria Math"];
+    delete edited.stylesRequired["Cambria Math"];
+    writeFileSync(file, JSON.stringify(edited));
+    assert.equal(buildTracker({ root: dir }).tracker.records.find((item) => item.family === "Cambria Math").status, "style-gap");
+    // A declared list that disagrees with the styles measured on the real font is an error, not a silent override.
+    edited.stylesRequired["Cambria Math"] = cambria;
+    edited.stylesRequired.Calibri = { styles: ["400"], reason: "wrong" };
+    writeFileSync(file, JSON.stringify(edited));
+    assert.throws(() => buildTracker({ root: dir }), /stylesRequired for Calibri disagrees with the measured styles/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("gallery cards are verified for the families pptx-gallery's own preview-font test covers, from a current snapshot", () => {
+  const gallery = read(committed.inputs.galleryPreviewFonts.file);
+  assert.equal(committed.inputs.galleryPreviewFonts.commit, gallery.source.commit);
+  assert.ok(gallery.source.capturedAt >= "2026-10-02", "the card snapshot is refreshed, not the 2026-09-29 pin");
+  const cards = new Map(gallery.families.map((entry) => [entry.family, entry]));
+  let verified = 0;
+  for (const item of committed.records) {
+    const card = item.previewRoute.family ? cards.get(item.previewRoute.family) : null;
+    const expected = !card ? "NA" : card.usedAs.includes(item.family) && !card.coverageGaps ? "verified" : "unverified";
+    assert.equal(item.hostVerification.galleryCards, expected, item.family);
+    if (expected === "verified") verified += 1;
+  }
+  assert.equal(committed.summary.hostVerification.galleryCards.verified, verified);
+  assert.ok(verified > 0, "the host is no longer recorded as 0 verified");
+  assert.equal(record("Arial").hostVerification.galleryCards, "verified");
+  assert.equal(record("Sylfaen").hostVerification.galleryCards, "unverified", "Noto Sans has a recorded Georgian coverage gap in the cards");
+  assert.equal(record("Calibri Light").hostVerification.galleryCards, "unverified", "no font scheme uses Calibri Light");
 });

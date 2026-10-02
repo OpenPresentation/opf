@@ -513,11 +513,24 @@ function chosenFonts(presentation) {
       if (slots.includes(font)) used.add(font);
     }
   }
+  // FF-05: East Asian text in a deck whose language selects no East Asian font names a font for that text in the theme `ea`
+  // (opf-pptx exporter rule: kana is Japanese, hangul Korean, Han alone Simplified Chinese, each as resolveScriptFonts gives
+  // it for that language). It is admitted by the typeface inventory and listed in `Fonts Used`, but it is not a chosen font of
+  // the preview, so it is returned apart. Older exporters write nothing for it.
+  const contentEastAsian = new Set();
+  if (resolveScriptFonts(presentation).sources.eastAsian === 'latin') {
+    const text = textOf(presentation.slides);
+    const language = /[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(text) ? 'japanese' : /\p{Script=Hangul}/u.test(text) ? 'korean' : /\p{Script=Han}/u.test(text) ? 'chinese-simplified' : null;
+    if (language) {
+      const resolved = resolveScriptFonts({...presentation, language});
+      if (resolved.sources.eastAsian !== 'latin') for (const font of [resolved.heading.eastAsian, resolved.body.eastAsian]) contentEastAsian.add(font);
+    }
+  }
   for (const family of runFamilies(presentation.slides)) {
     chosen.add(family);
     used.add(family);
   }
-  return {chosen: [...chosen], used: [...used].sort(compareNames), monospace: [...monospace], roles};
+  return {chosen: [...chosen], used: [...used].sort(compareNames), monospace: [...monospace], roles, contentEastAsian: [...contentEastAsian]};
 }
 // The theme's major and minor latin fonts straight from the catalog record, not through the resolver, when
 // the design names a plain catalog scheme (directly or through its theme).
@@ -645,9 +658,9 @@ async function verifyState(label, presentation, {png = false} = {}) {
   }
 
   // FF-08 typeface inventory, theme fonts against the catalog literals, package structure and re-import.
-  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...selectors], monospace: fonts.monospace});
+  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...selectors, ...fonts.contentEastAsian], monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${label}: typeface inventory`);
-  assert.deepEqual(check.fontsUsed.filter((family) => !selectors.includes(family)), fonts.used, `${label}: exported fonts equal the chosen fonts`);
+  assert.deepEqual(check.fontsUsed.filter((family) => !selectors.includes(family) && !fonts.contentEastAsian.includes(family)), fonts.used, `${label}: exported fonts equal the chosen fonts`);
   const entries = unzipSync(bytes);
   const literal = catalogTheme(document);
   if (literal) {
@@ -930,7 +943,7 @@ if (FULL) {
   const audit = (edit) => {
     const entries = {...original};
     edit(entries);
-    return {check: checkPptxTypefaces(zipSync(entries), {fonts: fonts.chosen, monospace: fonts.monospace}), problems: packageProblems(entries)};
+    return {check: checkPptxTypefaces(zipSync(entries), {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}), problems: packageProblems(entries)};
   };
   const edited = (entries, part, pattern, replacement) => {
     const before = decoder.decode(entries[part]);
@@ -1001,7 +1014,7 @@ for (const failure of EXPECTED_FAILURES) {
   await expectLimitation(failure.id, 'the measured export', () => toPptx(failure.deck, measured), failure.measuredExport);
   const fonts = chosenFonts(failure.deck);
   const bytes = await toPptx(failure.deck);
-  const check = checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace});
+  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${failure.id}: an unmeasured export still names only the chosen fonts`);
 }
 // Formerly named expected failures, now positive: the preview falls back per character to a bundled face that has the
@@ -1025,7 +1038,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   assert.deepEqual(renderSvgDeck(deck, measured), svgs, `${fallback.id}: deterministic`);
   const exportBytes = await toPptx(deck, measured);
   const fonts = chosenFonts(deck);
-  assert.deepEqual(checkPptxTypefaces(exportBytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
+  assert.deepEqual(checkPptxTypefaces(exportBytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
 }
 // A one-column histogram used to lose its chart silently: no chart part, no graphic frame and no diagnostic.
 {
@@ -1046,7 +1059,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   assert.deepEqual(fallbackDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [['chart-data-adapted', 'histogram-binned', 'slides.0.chart']], `${id}: the fallback mode reports the binning`);
   assert.deepEqual(packageProblems(exported), [], `${id}: package structure, nested workbook included`);
   const fonts = chosenFonts(deck);
-  assert.deepEqual(checkPptxTypefaces(bytes, {fonts: fonts.chosen, monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
+  assert.deepEqual(checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
   assert.equal((await fromPptx(bytes)).slides.length, 1, `${id}: re-imports`);
 }
 
