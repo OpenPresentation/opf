@@ -5,6 +5,7 @@ import { createDataContent, OPFDataImportError, paginatePresentation, bundlePres
 import { applyPatch, lookup, tokens, PatchError } from "./patch.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
+import {runAudit} from './audit.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
 
 declare const CLI_VERSION: string;
@@ -14,6 +15,8 @@ const usage = `OPF — local presentation files for agents (Node 24)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]
   opf validate <file|-> [--strict]
   opf lint <file|-> [--config <local-json-file>] [--strict]
+  opf audit <file|-> [--json] [--rule <id>] [--ignore <id>] [--fail-on <error|warning|info|never>] [--config <file>]
+           (design and accessibility checks; opf audit --help, --list-rules)
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
            [--dry-run] [--expect-sha256 <hash>] [--force] [--strict]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
@@ -52,6 +55,8 @@ Blank cells use the variable's declared value. An unfilled required variable fai
 unless --partial; --examples fills unfilled variables from their example.
 Lint adds source locations, contextual suggestions and explicit host contracts.
 Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
+Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
+fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
 
 ${MARKDOWN_HELP}
 
@@ -137,6 +142,7 @@ async function main(argv: string[]) {
   if (!argv.length || (argv.length === 1 && ["help", "--help", "-h"].includes(argv[0]))) { console.log(usage); return; }
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
+  if (command === 'audit') { await runAudit(args); return; }
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
   if (command === 'from-md' || command === 'to-md') { await markdownCommand(command, args); return; }
   if (command === 'skills') {
