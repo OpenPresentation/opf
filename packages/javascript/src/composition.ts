@@ -11,6 +11,9 @@ import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitur
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE} from './color.js';
+import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
+export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
+export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
   mode?: "auto" | "grid" | "row" | "column";
@@ -205,6 +208,11 @@ export interface ComposedItem {
    * and the deck's icon logo resolves. Every entry marker in `text.listEntries` carries the same value.
    */
   bulletImage?: ListBulletImage;
+  /**
+   * Caption band of an image, chart, table or video payload that carries `caption` (RR-34). `box` is
+   * the media box after the band is reserved; `caption.box` is the band inside the same region.
+   */
+  caption?: ComposedCaption;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
   /**
@@ -333,13 +341,18 @@ export interface SlideComposition {
   slideImage?: ComposedSlideImage;
   /** Deck logo on a cover or section slide; absent on content slides and when no logo resolves. */
   logo?: ComposedLogo;
+  /**
+   * Footnote area of a slide whose runs cite references or carry footnotes (RR-34): directly above the
+   * footer band, the content area is shrunk by exactly its height. Absent on slides without markers.
+   */
+  footnotes?: ComposedFootnotes;
   /** `rtl` when the slide was composed for a right-to-left deck (mirrored arrangement); absent for left-to-right decks. */
   direction?: 'rtl';
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
-  /** Context for inherited furniture, generated organization names, social profiles, logos and layout hints. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown };
+  /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
@@ -1504,12 +1517,22 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
 export interface RichTextRun {
   text: string; bold?: boolean; italic?: boolean; underline?: boolean; strikethrough?: boolean;
   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
+  /** RR-34: reference ids this run cites (a marker follows the run; the deck's `references` list resolves them). */
+  cite?: string | string[];
+  /** RR-34: an inline footnote for this run (a marker follows the run; the note is listed in the slide's footnote area). */
+  footnote?: string | (string | RichTextRun)[];
 }
 export interface RichTextFragment {
-  /** Tabs are source-preserving layout controls with a fixed advance, not glyph text. */
-  kind?: 'tab';
+  /**
+   * Tabs are source-preserving layout controls with a fixed advance, not glyph text. A marker is the
+   * superscript citation/footnote number drawn after a run that cites or carries a footnote (RR-34): it
+   * has no source range (`start === end === run.text.length`), so run indexes and offsets never shift.
+   */
+  kind?: 'tab' | 'marker';
   text: string; runIndex: number; start: number; end: number;
   x: number; width: number; fontSize: number; baselineShift: number;
+  /** A marker only: the size the exporter writes (the marked run's size); `fontSize` is the glyph PowerPoint draws for it (2/3). */
+  nominalSize?: number;
   style: TextStyle; run: RichTextRun;
 }
 export interface RichTextLine { fragments: RichTextFragment[]; width: number; y: number; baseline: number; height: number }
@@ -1521,6 +1544,11 @@ export interface RichTextOptions {
   uniformLineHeight?: boolean;
   /** Deck direction. In a right-to-left deck every line reports its paragraph's direction in `directions`. */
   direction?: TextDirection;
+  /**
+   * Marker text (`1`, `1,2`) for a run by its dotted path (`${style.path}.${runIndex}`), or undefined.
+   * composeSlide supplies the deck numbering from `slideCitations`; a marker fragment is emitted after the run.
+   */
+  citationMarker?: (runPath: string) => string | undefined;
 }
 
 /** Fit mixed styles without flattening font metrics. Run fontSize is in points. */
@@ -1547,7 +1575,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     if(typeof run?.text!=='string'||(run.fontSize!==undefined&&(!Number.isFinite(run.fontSize)||run.fontSize<=0))) throw new RangeError('Rich text runs need text and a positive finite font size.');
     const start=offset;offset+=run.text.length;
     const style=resolveTextStyle({...options.style,fontFamily:run.fontFamily??options.style.fontFamily,fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
-    return {run,runIndex,start,end:offset,style};
+    // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
+    const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
+    return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
   });
   const whole=source.map(entry=>entry.run.text).join('');
   // Every painted size (the base size and each run's, scripts included) is on the 0.01 pt grid; a size at or above the floor never drops below it.
@@ -1578,6 +1608,13 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
             result.push({text:segment,runIndex:entry.runIndex,start:segmentStart-entry.start,end:segmentStart-entry.start+segment.length,x,width,fontSize:size,baselineShift,style:entry.style,run:entry.run});
             x+=width;cursor+=segment.length;
           }
+        }
+        // RR-34: the marker follows the run's last character, raised like a superscript (its own
+        // baseline shift is written natively as baseline="30000"). Zero source length.
+        if(entry.marker&&b===entry.end) {
+          const markerSize=Math.round(normalSize*CITATION_MARKER_SCALE*FONT_SIZE_GRID_PER_PX)/FONT_SIZE_GRID_PER_PX,width=measure(entry.marker,markerSize);
+          result.push({kind:'marker',text:entry.marker,runIndex:entry.runIndex,start:entry.run.text.length,end:entry.run.text.length,x,width,fontSize:markerSize,nominalSize:normalSize,baselineShift:-normalSize*CITATION_MARKER_RAISE,style:entry.style,run:entry.run});
+          x+=width;
         }
       }return result;
     };
@@ -1927,11 +1964,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return resolved ? { source: resolved.source, path: resolved.path } : undefined;
   })() : undefined;
   const widthFor = (field: string, path: string) => textWidthMeasurer(styleFor(field,path),options.textMeasurement);
-  const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string):TextFit|RichTextFit => {
+  // RR-34: citation/footnote markers of this slide, numbered with the deck (annotations.ts). Only slides
+  // whose runs cite or carry footnotes get a marker resolver and a footnote area; others are unchanged.
+  const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
+  const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
+  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
+  const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
-    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,{style,textMeasurement:options.textMeasurement,direction:textDirection}):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
-    const alignment=alignmentFor(field);
-    const richLayout=rich?richTextLayouter(value,box,size,{style,textMeasurement:options.textMeasurement,direction:textDirection},minimum):undefined;
+    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
+    const alignment=explicitAlignment??alignmentFor(field);
+    const richLayout=rich?richTextLayouter(value,box,size,richOptions(style),minimum):undefined;
     const measure=textWidthMeasurer(style,options.textMeasurement),floor=snapFontSizeUp(rich?richMinimum(value,size,minimum):minimum),start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
     // last trial always evaluates the explicit floor even with unusual callers.
@@ -1968,9 +2010,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{style:styleFor(field,path),textMeasurement:options.textMeasurement,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:{}),...(rtl?{direction:'rtl' as const}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
+  // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
+  const annotationFit = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, fitPath: string, alignment: 'left'|'center'|'right') =>
+    fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
+  const annotationOptions = { scale, minFontSize: minSize, fit: annotationFit, textStyle: (fitPath: string) => styleFor('text', fitPath) };
   const slideImageDiagnostics: LayoutDiagnostic[] = [];
   const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics, rtl);
   // Free area for headings and content: the whole slide unless a banded slide image takes one side.
@@ -1983,8 +2029,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measuredFurniture=layoutFurniture(slide,options);
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
   if(furniture)diagnostics.push(...furniture.diagnostics);
-  const bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
+  let bodyBottom=Math.min(area.bottom-padding,furniture&&furniture.footerTop<height?furniture.footerTop-gap*.5:height-padding);
   const headingTop = Math.max(area.top+padding,furniture?.headerBottom?furniture.headerBottom+gap*.5:padding);
+  // RR-34: the footnote area sits directly above the footer band (or the bottom padding) and takes its
+  // height from the content area, honouring the same side margins. Slides without markers skip this.
+  let footnotes: ComposedFootnotes | undefined;
+  if (citations) {
+    footnotes = layoutFootnotes(citations, { ...annotationOptions, x: area.left + padding, width: area.right - area.left - padding * 2, bottom: bodyBottom, maxHeight: Math.max(minSize * 1.22 + 2 * scale, (bodyBottom - headingTop) * FOOTNOTE_MAX_RATIO), path });
+    diagnostics.push(...footnotes.diagnostics);
+    bodyBottom = footnotes.box.y - gap * .5;
+  }
   // Cover detection reads the layout's raw placeholders and the slide payload only, so it is
   // independent of the picture-slot removal applied to the content placeholders below.
   const layoutPlaceholders: {type?: string}[] = Array.isArray(layout.placeholders) ? layout.placeholders : [];
@@ -2040,7 +2094,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   }
   const contentBox = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // A synthetic container (chartPrimary) groups the non-primary nodes without an OPF path: it records no group, flow or decision.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -2049,7 +2103,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings,
         children: host.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
     }
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field], ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) } }));
+    // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
+    const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
+    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field], ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
+      ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
   // Promoted regions are composed in visual reading order (rows top to bottom, then along the row), not in key order,
@@ -2094,11 +2151,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
   });
+  // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
+  const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, annotationOptions) : undefined;
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     box = payloadBox(box);
+    const captioned = captionOf(node, box);
+    if (captioned) box = captioned.mediaBox;
     const text = contentText(node.field, node.value);
-    let score = Math.abs(Math.log(box.width / box.height / 1.6));
-    if (penalties) penalties.cellProportions += score;
+    let score = Math.abs(Math.log(box.width / box.height / 1.6)) + (captioned?.overflow ? 1000 : 0);
+    if (penalties) { penalties.cellProportions += Math.abs(Math.log(box.width / box.height / 1.6)); if (captioned?.overflow) penalties.textOverflow += 1000; }
     if (node.field === 'quote' || node.field === 'code' || node.field === 'metric' || node.field === 'timeline') {
       const internal = node.field === 'quote' ? measureQuote(node,box,settings) : node.field === 'code' ? measureCode(node,box,settings) : node.field === 'metric' ? measureMetric(node,box,settings) : measureTimeline(node,box,settings);
       const reduction = internal.parts.reduce((sum,part)=>sum+(part.fit ? (part.requestedFontSize-part.fit.fontSize)/scale : 0),0);
@@ -2173,6 +2234,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       } else {
         const frameBox = hasCards ? acceptedBox(box) : undefined;
         box = payloadBox(box);
+        const caption = captionOf(node, box);
+        if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
         const textValue = contentText(node.field, node.value);
         const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
         const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
@@ -2183,7 +2246,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
           ...(frameBox ? {frameBox} : {}),
           text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
-          ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}) });
+          ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}) });
         if (box.width < 100 * scale || box.height < 60 * scale) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
       }
     });
@@ -2253,7 +2316,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */

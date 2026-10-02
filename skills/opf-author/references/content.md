@@ -34,3 +34,24 @@ const result = validatePresentation(document);
 if (!result.valid) throw new Error(JSON.stringify(result.errors));
 console.log(result.warnings);
 ```
+
+## Citations, footnotes and captions
+
+Cite a source from a text, bullet or list item run with `cite` (one id, or an array of ids, from the deck's top-level `references` list; unknown ids fail validation); add an inline note with `footnote`. Engines draw a superscript marker after the run and list `<n> <text>` in the slide's footnote area; markers are numbered per deck in order of first use, a reference keeps its number, every footnote takes a new one. Table cells, captions and reference texts cannot carry markers. A reference no run cites is a lint warning. `referencesSlide(presentation, {title})` from `@openpresentation/opf` builds an ordinary list slide of the cited references for the end of the deck.
+
+An `image`, `chart`, `table` or `video` payload takes a `caption` (a string, `TextRun[]`, or `{text, position: "below" | "above", align: "left" | "center" | "right"}`), composed inside the block's region; only one captionable payload per block or slide root.
+
+```json
+{
+  "references": [{ "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "url": "https://www.gartner.com" }],
+  "slides": [
+    {
+      "title": "Adoption doubled",
+      "blocks": [
+        { "text": [{ "text": "Enterprise adoption doubled in 2025", "cite": "gartner-2026" }, { "text": " and keeps growing.", "footnote": "Internal forecast, not audited." }] },
+        { "image": "https://cdn.acme.com/images/adoption.png", "caption": { "text": "Figure 1. Adoption by year", "align": "center" } }
+      ]
+    }
+  ]
+}
+```

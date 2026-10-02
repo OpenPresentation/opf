@@ -153,6 +153,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/schema-reference.md`](./docs/schema-reference.md) | Author-facing reference for top-level OPF fields and every presentation schema `$defs` object/type. |
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
+| [`docs/footnotes-citations-captions.md`](./docs/footnotes-citations-captions.md) | Citations (`cite`), inline footnotes, the deck `references` list, captions on images, charts, tables and videos, and how every engine draws them. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
 | [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |

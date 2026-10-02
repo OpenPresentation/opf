@@ -207,6 +207,12 @@
       "minItems": 1,
       "description": "Ordered array of slides that make up the presentation."
     },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Reference" },
+      "description": "Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run cites is a lint warning (opf/unused-reference). referencesSlide() turns the cited references into an ordinary list slide.",
+      "examples": [[{ "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "url": "https://www.gartner.com" }]]
+    },
     "assets": {
       "$ref": "#/$defs/Assets",
       "description": "Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings."
@@ -2204,6 +2210,10 @@
           "$ref": "#/$defs/Timeline",
           "description": "Full-slide timeline payload. An array is shorthand for { \"events\": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'."
         },
+        "caption": {
+          "$ref": "#/$defs/Caption",
+          "description": "Caption for the slide's root image, chart, table or video payload. Valid only when the slide root holds exactly one of those payloads."
+        },
         "blocks": {
           "type": "array",
           "items": { "$ref": "#/$defs/ContentPayload" },
@@ -2534,6 +2544,10 @@
               ]
             }
           ]
+        },
+        "caption": {
+          "$ref": "#/$defs/Caption",
+          "description": "Caption for an image, chart, table or video payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
         },
         "blocks": {
           "type": "array",
@@ -3089,10 +3103,87 @@
             "subscript": {
               "type": "boolean",
               "description": "Whether the run is rendered as subscript."
+            },
+            "cite": {
+              "oneOf": [
+                { "type": "string", "minLength": 1 },
+                { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+              ],
+              "description": "One or more ids from the top-level references list that this run cites. Engines draw a superscript marker ('1', or '1,2' for several ids) directly after the run and list '<n> <reference text>' in the slide's footnote area; markers are numbered per deck in order of first use, and the same id keeps its number. An id missing from references is a validation error (cite-unknown-reference). Supported in text, bullets and list item runs.",
+              "examples": ["gartner-2026", ["gartner-2026", "annual-report"]]
+            },
+            "footnote": {
+              "oneOf": [
+                { "type": "string", "minLength": 1 },
+                { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/TextRun" } }
+              ],
+              "description": "An inline note for this run, without a references entry. Engines draw a superscript marker after the run and list the note in the slide's footnote area; every footnote takes a new number in the deck's marker sequence. Supported in text, bullets and list item runs.",
+              "examples": ["Excludes the discontinued hardware line."]
             }
           }
         }
       ]
+    },
+    "Caption": {
+      "description": "A caption for an image, chart, table or video payload. A string or TextRun[] is the caption text placed below the media; object form adds the position and alignment.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "$ref": "#/$defs/TextRun" } },
+        {
+          "type": "object",
+          "required": ["text"],
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "$ref": "#/$defs/TextRun" } }
+              ],
+              "description": "Caption text: a string or TextRun[] for inline rich text."
+            },
+            "position": {
+              "type": "string",
+              "enum": ["below", "above"],
+              "description": "Where the caption band sits inside the block's region: below the media (default) or above it. Core composition reserves the band and shrinks the media by its height."
+            },
+            "align": {
+              "type": "string",
+              "enum": ["left", "center", "right"],
+              "description": "Horizontal alignment of the caption text within the block. Defaults to left."
+            }
+          }
+        }
+      ],
+      "examples": [
+        "Figure 1. Quarterly revenue by region",
+        { "text": "Source: internal reporting", "position": "above", "align": "center" }
+      ]
+    },
+    "Reference": {
+      "type": "object",
+      "description": "A source that runs cite with 'cite'. Cited references are listed in the footnote area of the slides that cite them, numbered per deck in order of first use; referencesSlide() builds an ordinary list slide of them.",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier runs cite. Unique within the references list.",
+          "examples": ["gartner-2026", "annual-report"]
+        },
+        "text": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "$ref": "#/$defs/TextRun" } }
+          ],
+          "description": "The reference as it is listed: a string or TextRun[] for inline rich text."
+        },
+        "url": {
+          "type": "string",
+          "description": "Optional link for the reference; a references slide links its entry to it.",
+          "examples": ["https://acme.com/reports/2026"]
+        }
+      }
     },
     "Chart": {
       "type": "object",

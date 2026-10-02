@@ -4,6 +4,7 @@ import addFormats from "ajv-formats";
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
+import { annotationIssues } from "./annotation-validation.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
@@ -146,6 +147,9 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     required: ["timeline"],
   },
 };
+
+// RR-34: payload kinds whose blocks may carry a caption.
+const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video"]);
 
 const columnSpans: Record<string, readonly number[]> = {
   left: [0],
@@ -300,7 +304,10 @@ function validateContentPayload(
   const explicitType = value.type;
   const payloadFields = presentFields(value, rootPayloadFields);
   const hasBlocks = hasOwn(value, "blocks");
+  // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
+  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   if (hasBlocks || explicitType === "group") {
+    if (hasOwn(value, "caption")) issues.push(captionIssue("a group cannot carry one"));
     if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
     const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
     if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
@@ -330,6 +337,7 @@ function validateContentPayload(
 
   if (!kind && inferred.length > 1) {
     if (isImplicitBlocksComposition(value, inferred, options)) {
+      if (hasOwn(value, "caption")) issues.push(captionIssue("a slide root with several payloads cannot carry one; put the caption on a block", { inferredTypes: inferred }));
       return issues;
     }
 
@@ -344,6 +352,7 @@ function validateContentPayload(
     return issues;
   }
   const spec = contentKindSpecs[resolvedKind];
+  if (hasOwn(value, "caption") && !captionableKinds.has(resolvedKind)) issues.push(captionIssue(`this payload is '${resolvedKind}'`, { type: resolvedKind }));
   const allowedFields = new Set<string>([
     "type",
     ...spec.fields,
@@ -505,6 +514,8 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
       visitContentPayloads(slide, slidePath, payloadNumberingIssues);
     }
   });
+  // RR-34: reference ids, cited ids and where cite/footnote may appear.
+  issues.push(...annotationIssues(value));
 
   return issues;
 }
