@@ -224,6 +224,8 @@ linked, and specifically:
   - The canonical statement is in [font-fidelity.md](../../font-fidelity.md#font-policy-ff-31).
     The sibling repositories link to it.
 
+- 2026-10-02 (FF-05; agent decision, the owner can veto it): the theme `ea` slot always names a font (the selected script font, a font for East Asian text found in the deck, else the latin family); `cs` stays empty unless a script font is selected; run-level `a:ea`/`a:cs` are not written; `a:endParaRPr` stays. Native evidence: [ff-05-native-20261002](../../evidence/ff-05-native-20261002/README.md). This amends the FF-49 decision below for `ea` only; the rule is in [script-font-model.md](script-font-model.md#theme-slots-ff-49-amended-by-ff-05) and the exporter change is [opf-pptx#152](https://github.com/OpenPresentation/opf-pptx/pull/152).
+
 - 2026-09-30 (FF-49, FF-50; agent decision under the owner's every-config-`works`
   goal, the owner can veto it before merge): theme script slots and the
   language contract, recorded in [script-font-model.md](script-font-model.md#language-contract-ff-50-model-c).
