@@ -42,7 +42,7 @@ jobs:
           # RR-07 pins core main c45baae (opf#246 merged plus RR-34), before the RR-17 wrap change opf#260 (d382351): with it core scripts/test-timeline-workflow.mjs fails on Windows at the pinned pptx (a timeline description wraps differently), which the RR-17 pptx work owns; repin to core main once that lands.
           # RR-17 pins core main 11bccd5 (opf#276 merged on top of 293b5d3, which has the RR-17 wrap change opf#260, plus the timeline workflow ink check that allows for Windows Chromium's whole-pixel text metrics, so scripts/test-timeline-workflow.mjs passes on Windows); repin to the core merge commit once opf#276 merges (never leave it on an unmerged head).
           # RR-05: core main 11bccd5 also carries opf#259 (right-to-left layout).
-          ref: 11bccd5efa6fe2dd11b53d5eedd671c05a7ae883
+          ref: da45b2e29812efbf67829f2fe987ef76858990f7
           path: opf
           fetch-depth: 0
           persist-credentials: false
@@ -54,7 +54,8 @@ jobs:
           # RR-10: opf-render main be9cc47 (opf-render#107 e47aba4, which makes the preview show the placeholder for every malformed or unsafe SVG that test/svg-image-degrade.mjs uses, plus the numbered-list markers of opf-render#99 that RR-33 here needs).
           # RR-35: opf-render PR #100 head (render main plus the chart options preview); repin to the render merge commit once #100 merges.
           # RR-34: opf-render PR #104 head (render main plus the footnote, caption and marker drawing); repin to the render merge commit once #104 merges.
-          ref: ab782f5202f33d9e28d6184656fc91c54d899601 # opf-render main (opf-render#98 RR-05 merged)
+          # Release 0.12.0 pins the opf-render 0.12.0 release commit 3b300a3 (tag opf-render-v0.12.0, opf-render#110).
+          ref: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
