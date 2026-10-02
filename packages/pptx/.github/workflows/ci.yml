@@ -40,7 +40,8 @@ jobs:
           # Core main 07cd9d4 (published 0.11.4 plus the renderer 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235; core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
           # RR-16 (opf#247) and RR-29 (opf#270) merged: core main 395e4c1 carries both (composed font sizes on the 0.01 pt grid, promoted regions in reading order, chartPaletteForFill).
           # RR-07 pins core main c45baae (opf#246 merged plus RR-34), before the RR-17 wrap change opf#260 (d382351): with it core scripts/test-timeline-workflow.mjs fails on Windows at the pinned pptx (a timeline description wraps differently), which the RR-17 pptx work owns; repin to core main once that lands.
-          ref: c45baaec2d6aa9a2f655c4f987a0e8492d34ec56
+          # RR-17 pins core main 11bccd5 (opf#276 merged on top of 293b5d3, which has the RR-17 wrap change opf#260, plus the timeline workflow ink check that allows for Windows Chromium's whole-pixel text metrics, so scripts/test-timeline-workflow.mjs passes on Windows); repin to the core merge commit once opf#276 merges (never leave it on an unmerged head).
+          ref: 11bccd5efa6fe2dd11b53d5eedd671c05a7ae883
           path: opf
           fetch-depth: 0
           persist-credentials: false
