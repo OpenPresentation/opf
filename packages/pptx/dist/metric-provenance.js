@@ -14,7 +14,7 @@ export function metricManifest(value,layout,group) {
   return {v:1,group,role:'anchor',part:0,line:0,value,parts:layout.parts.map(part=>({role:part.role,visible:part.visible,
     lines:part.fit?.sourceLines.map(({start,end,nextStart,boundary})=>({start,end,nextStart,boundary}))??[]}))};
 }
-export function attachMetricTags(entries,records) {return attachTextTags(entries,records,TAG,'opfMetric','metric');}
+export function attachMetricTags(entries,records,descriptions) {return attachTextTags(entries,records,TAG,'opfMetric','metric',{descriptions});}
 
 function validateManifest(manifest) {
   if (!validatePresentation({slides:[{metric:manifest.value}]}).valid) throw new Error('Invalid metric source.');
@@ -59,10 +59,13 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
     const anchors=group.filter(item=>item.data.role==='anchor');
     if (anchors.length!==1) throw new Error('Missing or duplicated metric anchor.');
     const anchor=anchors[0],manifest=anchor.data;validateManifest(manifest);
+    // RR-07: the trend arrow (role 'mark') is generated decoration: at most one, consumed with the group, never source text.
+    const marks=group.filter(item=>item.data.role==='mark'),members=group.filter(item=>item.data.role!=='mark');
+    if (marks.length>1) throw new Error('Duplicated metric trend mark.');
     const expected=manifest.parts.reduce((sum,part)=>sum+part.lines.length,0);
-    if (group.length!==expected||new Set(group.map(item=>item.shape)).size!==expected) throw new Error('Incomplete or duplicated metric shapes.');
+    if (members.length!==expected||new Set(members.map(item=>item.shape)).size!==expected) throw new Error('Incomplete or duplicated metric shapes.');
     const nativeLines=new Map();
-    for (const item of group) {
+    for (const item of members) {
       const {role,part,line}=item.data,key=`${part}:${line}`;
       if ((item!==anchor&&role!=='line')||!Number.isSafeInteger(part)||!Number.isSafeInteger(line)||!manifest.parts[part]?.lines[line]||nativeLines.has(key)) throw new Error('Ambiguous metric source line.');
       nativeLines.set(key,item.text);

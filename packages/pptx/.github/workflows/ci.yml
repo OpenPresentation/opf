@@ -39,8 +39,7 @@ jobs:
           # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
           # Core main 07cd9d4 (published 0.11.4 plus the renderer 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235; core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
           # RR-16 (opf#247) and RR-29 (opf#270) merged: core main 395e4c1 carries both (composed font sizes on the 0.01 pt grid, promoted regions in reading order, chartPaletteForFill).
-          # RR-35: core main at the opf#266 merge commit (chart options).
-          # RR-34: core main (opf#269 merged).
+          # RR-07 pins core main c45baae (opf#246 merged plus RR-34), before the RR-17 wrap change opf#260 (d382351): with it core scripts/test-timeline-workflow.mjs fails on Windows at the pinned pptx (a timeline description wraps differently), which the RR-17 pptx work owns; repin to core main once that lands.
           ref: c45baaec2d6aa9a2f655c4f987a0e8492d34ec56
           path: opf
           fetch-depth: 0
@@ -51,9 +50,8 @@ jobs:
           # opf-render 0.11.8 release commit (the tag draws in the primary colour, as opf-pptx writes it).
           # opf-render 0.11.9 release commit 2fbc0ab (opf-render#83 and #85: draws the same logos, picture bullets and accent font on the combined core).
           # RR-10: opf-render main be9cc47 (opf-render#107 e47aba4, which makes the preview show the placeholder for every malformed or unsafe SVG that test/svg-image-degrade.mjs uses, plus the numbered-list markers of opf-render#99 that RR-33 here needs).
-          # RR-35: opf-render PR #100 head (render main plus the chart options preview); repin to the render merge commit once #100 merges.
-          # RR-34: opf-render PR #104 head (render main plus the footnote, caption and marker drawing); repin to the render merge commit once #104 merges.
-          ref: c2eb7efab230f1e1ca835e24a1bb5c6bd965edcd
+          # RR-07 pins the opf-render RR-07 head (opf-render#89: render main plus the syntax colours, trend arrows and patterns the parity test compares with); repin to render main once merged.
+          ref: cba7322924cdd307498b2d8b43941014286c1b62
           path: opf-render
           fetch-depth: 0
           persist-credentials: false

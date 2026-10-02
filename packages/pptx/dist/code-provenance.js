@@ -30,7 +30,7 @@ export function attachCodeTags(entries, records) {
 
 export {unhex as decodeTextTag, hex as encodeTextTag};
 
-export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false} = {}) {
+export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, descriptions} = {}) {
   if (!records.size) return;
   let count = 0;
   const seen = new Set(), types = [];
@@ -51,6 +51,9 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
       entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${tagName}" val="${hex(records.get(name))}"/></p:tagLst>`);
       types.push(`<Override PartName="/${part}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
       rels = rels.replace('</Relationships>',`<Relationship Id="${id}" Type="${REL}" Target="../tags/${prefix}${count}.xml"/></Relationships>`);
+      // Optional alternative text (a:cNvPr descr) for generated decoration such as the metric trend arrow.
+      const descr = descriptions?.get(name);
+      if (descr !== undefined) shape = shape.replace(/<p:cNvPr\b([^>]*?)>/, (_match, attributes) => `<p:cNvPr${attributes} descr="${descr.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}">`);
       shape = shape.replace(/<p:nvPr\s*\/>/,'<p:nvPr></p:nvPr>');
       if (!shape.includes('</p:nvPr>')) throw new Error(`Generated ${kind} shape has no native application properties.`);
       return shape.replace('</p:nvPr>',`<p:custDataLst><p:tags r:id="${id}"/></p:custDataLst></p:nvPr>`);

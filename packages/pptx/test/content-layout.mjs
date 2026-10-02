@@ -53,7 +53,9 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       assert.equal(properties['a:latin'].typeface,face.family,`Physical family: ${value}`);
       const scheme = all(properties, 'a:schemeClr')[0]?.val;
       const color = scheme ? schemeHex(scheme) : all(properties, 'a:srgbClr')[0]?.val;
-      assert.equal(color?.toUpperCase(), text.fill.replace('#', '').toUpperCase(), `Color: ${value}`);
+      // A syntax-coloured code run (RR-07) carries its own fill on its tspan; the first native run follows the first tspan.
+      const firstFill = (Array.isArray(text.tspan) ? text.tspan[0] : text.tspan)?.fill ?? text.fill;
+      assert.equal(color?.toUpperCase(), firstFill.replace('#', '').toUpperCase(), `Color: ${value}`);
       const transform = all(shape, 'a:xfrm')[0], offset = transform['a:off'], extent = transform['a:ext'];
       const anchor = text['text-anchor'];
       const x = Number(offset.x) / 9525 + (anchor === 'middle' ? Number(extent.cx) / 9525 / 2 : anchor === 'end' ? Number(extent.cx) / 9525 : 0);
