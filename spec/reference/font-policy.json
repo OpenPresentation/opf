@@ -217,6 +217,9 @@
           "reference": "Aptos Narrow 2.01;O365"
         }
       },
+      "alternates": [
+        "Carlito"
+      ],
       "sources": [
         "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
         "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
@@ -224,10 +227,7 @@
         "https://support.apple.com/en-us/122869",
         "https://microsoft.design/articles/a-change-of-typeface-microsoft-s-new-default-font-has-arrived/"
       ],
-      "note": "Part of the Aptos family; cloud font list has Aptos Narrow (+Bold/Italic/Bold Italic). Intos Narrow is its metric-compatible preview replacement.",
-      "alternates": [
-        "Carlito"
-      ]
+      "note": "Part of the Aptos family; cloud font list has Aptos Narrow (+Bold/Italic/Bold Italic). Intos Narrow is its metric-compatible preview replacement."
     },
     {
       "family": "Aptos Serif",
@@ -250,16 +250,16 @@
           "reference": "Aptos Serif 2.01;240513210638;O365"
         }
       },
+      "alternates": [
+        "Tinos"
+      ],
       "sources": [
         "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
         "https://support.microsoft.com/en-us/office/cloud-fonts-in-office-f7b009fe-037f-45ed-a556-b5fe6ede6adb",
         "https://learn.microsoft.com/en-us/typography/font-list/aptos",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Part of the Aptos family; cloud list has Aptos Serif, Bold, Italic and Bold Italic. Intos Serif (Gelasio-derived outlines, Aptos Serif metrics) is its metric-compatible preview replacement. Not installed on the measuring host: measured from the files in Microsoft's Aptos Fonts download (Download Center id=106087).",
-      "alternates": [
-        "Tinos"
-      ]
+      "note": "Part of the Aptos family; cloud list has Aptos Serif, Bold, Italic and Bold Italic. Intos Serif (Gelasio-derived outlines, Aptos Serif metrics) is its metric-compatible preview replacement. Not installed on the measuring host: measured from the files in Microsoft's Aptos Fonts download (Download Center id=106087)."
     },
     {
       "family": "Arabic Typesetting",
@@ -736,7 +736,16 @@
         "office-cloud"
       ],
       "embeddableByOpf": false,
-      "replacement": null,
+      "replacement": {
+        "family": "STIX Two Math",
+        "compatibility": "visual",
+        "measured": null,
+        "source": "https://github.com/stipub/stixfonts"
+      },
+      "alternates": [
+        "Noto Sans Math",
+        "Caladea"
+      ],
       "sources": [
         "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
         "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
@@ -744,7 +753,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/cambria-math",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Math fonts need an explicit math-aware choice; renderers fail with math-font-required. In Cambria.ttc in the Windows default set."
+      "note": "FF-45: previews with STIX Two Math (OFL-1.1, Reserved Font Name \"TM Math\", which its family and file names do not carry; serif math face with a MATH table), loaded as the opf-render math pack (@expo-google-fonts/stix-two-math, optional peer). Visual: on a 32-string math corpus (Latin, digits, Greek, operators, arrows, math alphanumerics) fontkit advances differ from Cambria Math 6.99 by a mean of 5.0% (Latin 0.9%, digits 10.0%, Greek 7.8%, operators 4.8%); Noto Sans Math 8.3%; Caladea covers only the Latin half of the corpus. Not measured on the policy corpus (measured: null). OPF has no equation model and the renderer draws text runs only (no MATH-table layout); native OMML equations are not represented. The former math-font-required renderer failure is replaced by this route; without the pack the renderer reports font-unavailable naming it. In Cambria.ttc in the Windows default set."
     },
     {
       "family": "Candara",
@@ -2199,6 +2208,32 @@
       "note": "Nirmala UI covers every Indic script; Devanagari is previewed. Pick the script Noto family for other scripts. Width measurement covers Latin text only."
     },
     {
+      "family": "Noto Color Emoji",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/googlefonts/noto-emoji",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji"
+      ],
+      "note": "Colour emoji (COLRv1 and OT-SVG glyphs; the Google Fonts build, 25.1 MB). Preview face for Segoe UI Emoji (FF-45); drawn in colour by browsers, as a monochrome Noto Emoji silhouette by the resvg raster path."
+    },
+    {
+      "family": "Noto Emoji",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/googlefonts/noto-emoji",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji"
+      ],
+      "note": "Monochrome emoji. Alternate for Segoe UI Emoji and the face the raster path draws in place of Noto Color Emoji (FF-45)."
+    },
+    {
       "family": "Noto Naskh Arabic",
       "licenseClass": "open",
       "license": "OFL-1.1",
@@ -2422,6 +2457,19 @@
         "https://github.com/google/fonts/blob/main/ofl/notosansmalayalam/METADATA.pb",
         "https://support.apple.com/en-us/122869"
       ]
+    },
+    {
+      "family": "Noto Sans Math",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/notofonts/math",
+        "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-math"
+      ],
+      "note": "Sans math face with a MATH table. Alternate for Cambria Math and the designated math face of sans schemes in glyph fallback (FF-45)."
     },
     {
       "family": "Noto Sans Mongolian",
@@ -2969,7 +3017,15 @@
         "office-cloud"
       ],
       "embeddableByOpf": false,
-      "replacement": null,
+      "replacement": {
+        "family": "Noto Color Emoji",
+        "compatibility": "visual",
+        "measured": null,
+        "source": "https://github.com/googlefonts/noto-emoji"
+      },
+      "alternates": [
+        "Noto Emoji"
+      ],
       "sources": [
         "https://learn.microsoft.com/en-us/typography/fonts/windows_11_font_list",
         "https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list",
@@ -2977,7 +3033,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/segoe-ui-emoji",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Color emoji; no open replacement is shipped. Color font (COLR). The Windows 11 version is 1.33 per the list."
+      "note": "FF-45: previews with Noto Color Emoji (OFL-1.1, COLRv1 and OT-SVG colour glyphs, 25.1 MB) loaded as the opf-render emoji pack (@expo-google-fonts/noto-color-emoji, optional peer); Noto Emoji (monochrome) is the alternate and the face the resvg raster path draws, because resvg draws neither COLRv1 nor OT-SVG glyphs. Visual: every emoji sequence advances 1.2451 em in Noto Color Emoji against 1.3730 em in Segoe UI Emoji 1.33 (-9.3%); Noto Color Emoji has no Latin glyphs, so Latin text and digits of a Segoe UI Emoji run take a text face by glyph fallback. Not measured on the policy corpus (measured: null). Color font (COLRv1 in Windows 11, version 1.33 per the list)."
     },
     {
       "family": "Segoe UI Light",
@@ -3281,6 +3337,19 @@
       "note": "Predecessor name of Source Sans 3; the renamed family previews it. RR-17: measured against the upstream Source Sans Pro 2.045 (roman) and 1.095 (italic) release (adobe-fonts/source-sans, OFL-1.1, read for measurement only): regular and bold are within 0.15% of Source Sans 3 on every corpus string, the italics up to 0.41%, so the alias stays visual."
     },
     {
+      "family": "STIX Two Math",
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "availability": [],
+      "embeddableByOpf": true,
+      "replacement": null,
+      "sources": [
+        "https://github.com/stipub/stixfonts",
+        "https://www.npmjs.com/package/@expo-google-fonts/stix-two-math"
+      ],
+      "note": "Serif math face with a MATH table; Reserved Font Name \"TM Math\" (not carried by its family or file name). Preview face for Cambria Math (FF-45)."
+    },
+    {
       "family": "Sylfaen",
       "licenseClass": "proprietary-standard",
       "license": "proprietary (Microsoft)",
@@ -3332,7 +3401,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/symbol",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). macOS lists a \"Symbol\" (version 13.0d2e2), which is Apple's own build, not the Microsoft/Monotype file; the glyph mapping may differ."
+      "note": "Symbol-encoded (FF-45): no text replacement; a renderer maps each code 0x20..0xFF through spec/reference/symbol-font-encodings.json (Adobe and Apple Symbol tables, verified against Windows Symbol 5.01: 189 of 224 codes have a Unicode equivalent) and previews the equivalent with the first loaded open face of Noto Sans (Greek letters, digits, punctuation), Noto Sans Math (operators, bracket pieces), Noto Sans Symbols 2 and Noto Sans Symbols, at the verified font's advance; the PPTX keeps the family and codes. macOS lists a \"Symbol\" (version 13.0d2e2), which is Apple's own build: 0x27, 0x6D, 0xE1, 0xF1 and 0xF0 (Apple logo) differ and are recorded per code."
     },
     {
       "family": "Tahoma",
@@ -3639,7 +3708,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/webdings",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). Symbol-encoded font. It is also on the macOS Tahoe list."
+      "note": "Symbol-encoded (FF-45): no text replacement; a renderer maps each code 0x20..0xFF through spec/reference/symbol-font-encodings.json (the Unicode 7.0 Webdings repertoire, L2/11-052R and L2/11-344, verified against Windows Webdings 5.01: 223 of 224 codes have a Unicode equivalent) and previews the equivalent with the first loaded open face of Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math and Noto Sans, at the verified font's advance; the PPTX keeps the family and codes. It is also on the macOS Tahoe list."
     },
     {
       "family": "Wingdings",
@@ -3659,7 +3728,7 @@
         "https://learn.microsoft.com/en-us/typography/font-list/wingdings",
         "https://support.apple.com/en-us/122869"
       ],
-      "note": "Symbol-encoded; renderers require character mapping (font-encoding-required). Symbol-encoded font. It is also on the macOS Tahoe list (\"Wingdings Version 5.00x\")."
+      "note": "Symbol-encoded (FF-45): no text replacement; a renderer maps each code 0x20..0xFF through spec/reference/symbol-font-encodings.json (the Unicode 7.0 Wingdings repertoire, L2/11-052R and L2/11-344, verified against Windows Wingdings 5.01: 222 of 224 codes have a Unicode equivalent, 0xFF is the Windows logo; Wingdings 2 and 3 verified against 1.55 with 217 and 208) and previews the equivalent with the first loaded open face of Noto Sans Symbols 2, Noto Sans Symbols, Noto Sans Math and Noto Sans, at the verified font's advance; the PPTX keeps the family and codes. It is also on the macOS Tahoe list (\"Wingdings Version 5.00x\")."
     },
     {
       "family": "Work Sans",

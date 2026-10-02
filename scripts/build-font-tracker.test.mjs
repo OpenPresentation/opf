@@ -48,18 +48,20 @@ test("no record references a family that is neither in the policy nor a declared
 });
 
 const INTOS = ["Intos", "Intos Display", "Intos Narrow", "Intos Serif"];
+const FF45_FACES = ["Noto Color Emoji", "Noto Emoji", "STIX Two Math", "Noto Sans Math"];
 
 test("the reviewed families split into the owner's four classes", () => {
-  // 153 policy families and 7 shipped dependencies were reviewed; opf#166 added the four Intos rows.
+  // 153 policy families and 7 shipped dependencies were reviewed; opf#166 added the four Intos rows and FF-45 the four emoji and math faces
+  // (Noto Color Emoji, Noto Emoji, STIX Two Math, Noto Sans Math).
   assert.equal(committed.summary.records, policy.families.length + overrides.extras.length);
-  assert.equal(committed.summary.records - INTOS.length, 160, "the owner's 160 reviewed families plus the four Intos rows");
+  assert.equal(committed.summary.records - INTOS.length - FF45_FACES.length, 160, "the owner's 160 reviewed families plus the Intos and FF-45 rows");
   for (const name of INTOS) assert.equal(committed.records.find((record) => record.family === name)?.class, "open", name);
   // The seven shipped script-font dependencies (Noto Sans Arabic, Lao, Myanmar, Sinhala, Syriac, Thaana, Noto Serif Tibetan) got policy rows in RR-17 (FF-44).
   assert.equal(overrides.extras.length, 0);
   for (const name of ["Noto Sans Arabic", "Noto Sans Lao", "Noto Sans Myanmar", "Noto Sans Sinhala", "Noto Sans Syriac", "Noto Sans Thaana", "Noto Serif Tibetan"]) assert.equal(committed.records.find((record) => record.family === name)?.inPolicy, true, name);
   const counts = Object.fromEntries(CLASSES.map((cls) => [cls, committed.records.filter((record) => record.class === cls).length]));
   assert.equal(CLASSES.reduce((sum, cls) => sum + counts[cls], 0), committed.summary.records);
-  assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Cambria Math", "Segoe UI Emoji", "Symbol", "Webdings", "Wingdings"]);
+  assert.deepEqual(committed.records.filter((record) => record.class === "special").map((record) => record.family).sort(), ["Symbol", "Webdings", "Wingdings"]);
   for (const record of committed.records.filter((item) => item.class === "special")) assert.equal(record.status, "needs-special-path");
   for (const record of committed.records.filter((item) => item.class === "open")) assert.equal(record.licenseClass, "open");
   for (const record of committed.records.filter((item) => item.class.startsWith("proprietary"))) assert.notEqual(record.licenseClass, "open");
@@ -436,7 +438,8 @@ test("the host fixtures name the same Latin families in every host and the quali
   }
   // Every proprietary Latin family has a qualification row, measured or marked unavailable.
   const rows = new Set(qualification.results.map((row) => row.family));
-  for (const record of committed.records.filter((item) => item.class === "proprietary-latin")) assert.ok(rows.has(record.family), `${record.family} is in the qualification report`);
+  // Cambria Math and Segoe UI Emoji left the special class in FF-45 (RR-17): their qualification is the FF-45 emoji and math corpus, not the Latin report.
+  for (const record of committed.records.filter((item) => item.class === "proprietary-latin" && !["Cambria Math", "Segoe UI Emoji"].includes(item.family))) assert.ok(rows.has(record.family), `${record.family} is in the qualification report`);
   assert.deepEqual(qualification.results.filter((row) => !row.referenceAvailable).map((row) => row.family), ["Didot"]);
 });
 
