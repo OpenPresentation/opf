@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
-import {fitList,composeSlide} from '../dist/composition.js';
+import {fitList,composeSlide,snapFontSizeUp} from '../dist/composition.js';
 import {paginateSlide} from '../dist/pagination.js';
 const box={x:15,y:20,width:300,height:800};
 const options={style:{fontFamily:'Base',fontWeight:400,path:'slides.0.items'},textMeasurement:{measure:(text,size,style)=>Array.from(text).length*size*(style.fontWeight===700?.8:.5)}};
 const items=['Plain entry',[{text:'Linked emphasis',bold:true,link:'https://example.org'}],{text:['Nested ',{text:'large',fontSize:24}],description:[{text:'Detailed explanation',italic:true}],level:4}];
 const before=structuredClone(items),fit=fitList(items,box,20,20,options);
-const readableBase=20/.82;
+// RR-16: composed sizes sit on the 0.01 pt grid, so the floor 20/.82 rounds up (to 24.4px) and the description stays at or above 20px.
+const readableBase=snapFontSizeUp(20/.82);
 assert.equal(fit.fontSize,readableBase,'The description must reach the selected 20px floor');
 assert.equal(fit.listEntries.length,3);
 assert.equal(fit.listEntries[0].textPath,'slides.0.items.0');
