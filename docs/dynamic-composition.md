@@ -2,7 +2,7 @@
 
 OPF keeps authoring intent in JSON. Use `blocks` when content can reflow; use promoted regions when relative placement is meaningful. `composition` on a slide overrides fields in the resolved layout's `composition`. Existing documents remain valid.
 
-The current published Node 24 train is core 0.11.4, renderer 0.11.9, PPTX 0.11.9, editor 0.10.6 and CLI 0.9.2. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
+The current published Node 24 train is core 0.12.0, renderer 0.12.0, PPTX 0.12.0, editor 0.11.0 and CLI 0.10.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
 
 ```json
 {
