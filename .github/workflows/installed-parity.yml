@@ -1,0 +1,107 @@
+name: Installed parity audit
+# RR-04 (FF-38): the preview-versus-PPTX parity harness (docs/programs/font-fidelity-everywhere/gallery-support/parity) run on
+# ubuntu, windows and macos against the PUBLISHED packages installed from the npm registry (versions from release-plan.json),
+# then compared across the three systems: same values, same class, same outcome of every check. The harness itself is
+# unchanged; PARITY_FONT_HOST=gallery models the gallery editor's bundled font host, so no host font is read.
+# Not a required check, so the path filter below cannot leave a required status pending (docs/programs/release-readiness/ci-cd.md, section 1).
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/installed-parity.yml'
+      - 'scripts/published-matrix/installed-parity.mjs'
+      - 'scripts/published-matrix/compare-parity.mjs'
+      - 'scripts/published-matrix/fixtures/**'
+      - 'docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/**'
+      - 'release-plan.json'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/installed-parity.yml'
+      - 'scripts/published-matrix/installed-parity.mjs'
+      - 'scripts/published-matrix/compare-parity.mjs'
+      - 'scripts/published-matrix/fixtures/**'
+      - 'docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/**'
+      - 'release-plan.json'
+  schedule:
+    # Weekly, with the published matrix, to notice registry, runner image or dependency drift that no commit caused.
+    - cron: '41 5 * * 1'
+  workflow_dispatch:
+    inputs:
+      overrides:
+        description: 'Replace planned versions, e.g. "@openpresentation/opf-pptx@0.12.2" (default: release-plan.json)'
+        required: false
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: installed-parity-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  # The same Node patch release as the published matrix: identical ICU, Unicode and tz data on all three systems.
+  NODE_VERSION: 24.21.0
+  # Planned versions are release-plan.json; this replaces entries the plan does not carry yet.
+  OPF_PARITY_OVERRIDES: ${{ inputs.overrides || vars.OPF_PARITY_OVERRIDES || '' }}
+jobs:
+  parity:
+    name: Installed parity (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install the published packages and lay out the harness
+        run: node scripts/published-matrix/installed-parity.mjs prepare
+      - name: Gallery value documents (committed snapshot of the gallery's own builders)
+        run: node scripts/published-matrix/installed-parity.mjs snippets
+      - name: Parity audit (PARITY_FONT_HOST=gallery)
+        run: node scripts/published-matrix/installed-parity.mjs parity
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: installed-parity-${{ matrix.os }}
+          path: |
+            artifacts/installed-parity/out/parity-results.json
+            artifacts/installed-parity/out/PARITY.md
+            artifacts/installed-parity/out/installed.json
+          retention-days: 14
+          if-no-files-found: warn
+
+  compare:
+    name: Cross-OS comparison
+    needs: parity
+    if: always() && needs.parity.result != 'cancelled'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: installed-parity-*
+          path: compare
+      - name: Compare classes and checks across systems
+        run: node scripts/published-matrix/compare-parity.mjs compare --out compare/comparison.json --markdown compare/comparison.md
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: installed-parity-comparison
+          path: |
+            compare/comparison.json
+            compare/comparison.md
+          retention-days: 14
+          if-no-files-found: warn
