@@ -174,6 +174,19 @@ describe("font policy table", () => {
     assert.equal(validate(tooSmall), false);
     // Arabic Typesetting measured against the installed font, in place: 0.643 of Noto Naskh Arabic's advances, rounded to 0.64.
     assert.equal(fontPolicyFor("Arabic Typesetting").replacement.sizeAdjust, 0.64);
+    // RR-38 native probe: the baseline of an Arabic Typesetting line sits 0.70 em below the box top (hhea ascent 0.701), 0.78 em with a Latin run.
+    const arabic = fontPolicyFor("Arabic Typesetting").replacement;
+    assert.deepEqual([arabic.lineAscent, arabic.lineAscentMixed], [0.7, 0.78]);
+    for (const row of adjusted) {
+      const { lineAscent, lineAscentMixed, lineAscentBasis } = row.replacement;
+      assert.ok(lineAscent >= 0.3 && lineAscent <= 1.2 && lineAscentMixed >= 0.3 && lineAscentMixed <= 1.2, row.family);
+      assert.match(lineAscentBasis, /native/, row.family);
+    }
+    for (const mutate of [(r) => delete r.lineAscentBasis, (r) => delete r.sizeAdjust, (r) => { delete r.lineAscent; }, (r) => { r.lineAscent = 2; }]) {
+      const broken = structuredClone(source);
+      mutate(broken.families.find((row) => row.family === "Arabic Typesetting").replacement);
+      assert.equal(validate(broken), false);
+    }
   });
 });
 
