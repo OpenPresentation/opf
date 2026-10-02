@@ -26,9 +26,12 @@ test('rejects malformed tables', () => {
   assert.throws(() => parseBurndown(`${HEAD}| RR-01 | A | core | none | done | |\n| RR-01 | A | core | none | done | |\n`), /duplicate/);
 });
 
-test('the committed burndown parses and covers RR-01 to RR-39', async () => {
+// Contiguous from RR-01 to the highest item, so adding the next item does not also edit this test.
+test('the committed burndown parses and covers RR-01 to its highest item (at least RR-40) without gaps', async () => {
   const items = parseBurndown(await readFile(fileURLToPath(new URL('./burndown.md', import.meta.url)), 'utf8'));
-  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: 39 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
+  const last = Math.max(...items.map((i) => Number(i.id.slice(3))));
+  assert.ok(last >= 40, `expected at least RR-40, found RR-${last}`);
+  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: last }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
   for (const i of items) assert.ok(STATUSES.includes(i.status));
   for (const i of items) for (const dep of i.depends.match(/RR-\d{2}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
 });
