@@ -984,7 +984,8 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
  * share a baseline; longer values or units stack. No locale formatting, trend icons or rewritten
- * source text are invented. Consumers must reuse these accepted parts and source ranges.
+ * source text are invented here: the trend stays its word, and metricTrendMark derives the arrow
+ * beside it from these accepted parts. Consumers must reuse these accepted parts and source ranges.
  */
 export function layoutMetric(value: string | number | MetricContent, box: LayoutBox, options: MetricLayoutOptions = {}): MetricLayout {
   const scalar = typeof value === 'string' || typeof value === 'number';
