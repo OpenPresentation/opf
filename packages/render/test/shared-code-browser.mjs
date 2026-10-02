@@ -47,11 +47,14 @@ try {
           reconstructed+=node.textContent+part.text.slice(line.end,line.nextStart);
           const bbox=node.getBBox();
           if(node.textContent&& (bbox.x<item.cell.x-.1||bbox.y<item.cell.y-.1||bbox.x+bbox.width>item.cell.x+item.cell.width+.1||bbox.y+bbox.height>item.cell.y+item.cell.height+.1)) fail(`Glyphs leave code cell: ${item.id} ${part.role}`);
-          const segments=[...node.children].map((span,i)=>{
-            const expected=line.segments[i];if(span.textContent!==part.text.slice(expected.start,expected.end)) fail('Segment text differs');
-            const start=span.getStartPositionOfChar(0).x,expectedX=part.box.x+expected.x;
+          // Syntax-coloured runs (RR-07) are consecutive sibling tspans without an x that continue the text segment before them.
+          const grouped=[];for(const span of node.children){if(grouped.length&&!span.hasAttribute('x')&&span.dataset.opfSegment==='text')grouped.at(-1).push(span);else grouped.push([span]);}
+          if(grouped.length!==line.segments.length)fail('Segment count differs');
+          const segments=grouped.map((spans,i)=>{
+            const expected=line.segments[i];if(spans.map(span=>span.textContent).join('')!==part.text.slice(expected.start,expected.end)) fail('Segment text differs');
+            const start=spans[0].getStartPositionOfChar(0).x,expectedX=part.box.x+expected.x;
             if(Math.abs(start-expectedX)>.1)fail('Accepted segment start differs');
-            return {kind:expected.kind,expectedX,start,expectedWidth:expected.width,actualAdvance:span.getComputedTextLength()};
+            return {kind:expected.kind,expectedX,start,expectedWidth:expected.width,actualAdvance:spans.reduce((sum,span)=>sum+span.getComputedTextLength(),0)};
           });
           const actualAdvance=node.getComputedTextLength();
           lines.push({expectedWidth:line.width,actualAdvance,advanceDifference:actualAdvance-line.width,bbox:{x:bbox.x,y:bbox.y,width:bbox.width,height:bbox.height},segments});

@@ -40,12 +40,11 @@ jobs:
       # RR-17 repins to core main 395e4c1 (opf#247 RR-16 merged, with opf#270 RR-29 and the font policy rows of opf#255 and opf#261), which contains opf#249, #253, #254 and #256 (the policy rows this branch snapshots); repin to core main once opf#247 merges. Earlier pins follow.
       # RR-32 pins core PR opf#256 (template variables, resolveVariables) and RR-16 pins core PR opf#247 (composed font sizes on PowerPoint's 0.01 pt grid; 316 golden slides move, selected through OPF_GOLDEN_BASELINE). Both are unmerged, so the pin is the throwaway branch codex/rr-16-combined-rr-32-b (8c2bfd9: opf#247 commit 448c47f merged with the opf#256 commit render main pins, ba727c7; it carries no other core change, so the font policy snapshot stays valid). Repin to the core merge commit once both merge (never leave it on an unmerged head).
       # RR-29 pins core PR opf#270 (promoted regions in reading order, chartPaletteForFill) on top of that combined branch: the throwaway branch codex/rr-29-combined-ci-pin (f1c1a0d: 8c2bfd9 plus the opf#270 commit 987f61b without the audit, which this repository does not use; it changes no font policy). Repin to the core merge commit once opf#270 merges (never leave it on an unmerged head).
-      # RR-35: core main at the opf#266 merge commit (chart options); the treemap label golden change is reviewed in test/golden/README.md.
-      # RR-34 repins core to main with the footnote, citation and caption composition (opf#269 merged).
+      # RR-07 pins core main d382351 (opf#246 merged, then RR-34 and RR-17 wrap: the shared code syntax, metric trend and measured pattern tables, on core main after RR-16, RR-29, RR-32 and RR-33).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: c45baaec2d6aa9a2f655c4f987a0e8492d34ec56
+          ref: d3823512500d199eb45340bbc450eda6ac028750
           path: opf
           fetch-depth: 0
           persist-credentials: false

@@ -36,7 +36,14 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
       assert.equal(Number(attribute('data-opf-text-next-start')),line.nextStart);assert.equal(attribute('data-opf-line-boundary'),line.boundary);
       assert.ok(Math.abs(Number(attribute('x'))-part.box.x)<.002);assert.ok(Math.abs(Number(attribute('y'))-(part.box.y+part.fit.fontSize+lineIndex*part.fit.lineHeight))<.002);
       assert.equal(content.replace(/<\/?tspan\b[^>]*>/g,''),escape(part.text.slice(line.start,line.end)));
-      const segments=[...content.matchAll(/<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g)];assert.equal(segments.length,line.segments.length);
+      // Syntax-coloured runs (RR-07) are consecutive sibling tspans without an x: they belong to the text segment
+      // that precedes them, so the accepted layout's segments are the tspans that carry an x.
+      const segments=[];
+      for(const found of content.matchAll(/<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g)){
+        if(segments.length&&!/(?:^|\s)x="/.test(found[1])&&/data-opf-segment="text"/.test(found[1])){segments.at(-1)[2]+=found[2];continue;}
+        segments.push([...found]);
+      }
+      assert.equal(segments.length,line.segments.length);
       segments.forEach(([,attrs,text],i)=>{
         const expected=line.segments[i],attribute=name=>new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(attrs)?.[1];
         assert.equal(text,escape(part.text.slice(expected.start,expected.end)));assert.equal(attribute('data-opf-segment'),expected.kind);
