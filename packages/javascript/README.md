@@ -82,6 +82,10 @@ Version 0.10.0 adds `lintSource(source, options)` and `lintPresentation(document
 
 Earlier versions do not include these APIs. See the [lint guide](../../docs/lint.md) for configuration and the source CLI. Passing lint does not certify layout, fonts, or native export fidelity.
 
+### Patch, diff, merge and format (unreleased)
+
+On `main` and not in 0.11.4: `@openpresentation/opf/patch` is the one RFC 6902 implementation the CLI and the editor share (`applyPatch`, `applyPatchWithInverse`, `invertPatch`, strict pointer helpers, optional schema validation of the result); `@openpresentation/opf/diff` has `diffPresentations` (slide matching by id, content and similarity, moves, a readable report and a JSON Patch) and `mergePresentations` (three-way merge with conflict objects that never drop a side); `@openpresentation/opf/format` has `formatPresentation` (canonical key order and layout, idempotent). See [the guide](../../docs/patch-diff-merge-format.md).
+
 ### Layout previews
 
 `@openpresentation/opf/previews` ships pre-rendered HTML thumbnails for the
