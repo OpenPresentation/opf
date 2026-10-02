@@ -48,13 +48,23 @@ for (const fill of ['fit', 'crop']) {
   checked++;
 }
 
-// Not drawable: no namespace, no size, not SVG text, a PNG label over SVG bytes. The placeholder and a diagnostic.
-for (const source of [base64(`<svg width="10" height="10"/>`), base64(`<svg ${NS}><rect width="4" height="4"/></svg>`), base64('<html></html>'), 'data:image/svg+xml;base64,@@@', `data:image/png;base64,${Buffer.from(rect).toString('base64')}`.replace(/^data:image\/png/, 'data:image/svg+xml').slice(0, 30)]) {
+// Not drawable: not well-formed XML (an unclosed or mismatched tag, a repeated attribute, text after the root, an undeclared entity, two roots),
+// an external or markup entity (the export refuses these as svg-malformed and svg-unsafe, so the preview shows the placeholder too), no namespace, no size, not SVG text, a PNG label over SVG bytes. The placeholder and a diagnostic.
+for (const source of [base64(`<svg ${NS} width="40" height="20"><g></svg>`), base64(`<svg ${NS} width="40" height="20"><g></h></svg>`), base64(`<svg ${NS} width="4" width="5" height="4"/>`), base64(`<svg ${NS} width="4" height="4"/>tail`), base64(`<svg ${NS} width="4" height="4"><text>&nope;</text></svg>`), base64(`<svg ${NS} width="4" height="4"/><svg ${NS} width="4" height="4"/>`),
+  base64(`<!DOCTYPE svg [<!ENTITY x SYSTEM "file:///etc/passwd">]><svg ${NS} width="4" height="4"/>`), base64(`<!DOCTYPE svg [<!ENTITY x "<g/>">]><svg ${NS} width="4" height="4"/>`),
+  base64(`<svg width="10" height="10"/>`), base64(`<svg ${NS}><rect width="4" height="4"/></svg>`), base64('<html></html>'), 'data:image/svg+xml;base64,@@@', `data:image/png;base64,${Buffer.from(rect).toString('base64')}`.replace(/^data:image\/png/, 'data:image/svg+xml').slice(0, 30)]) {
   const diagnostics = [];
   const svg = renderSvg({slides: [{title: 'T', image: {src: source, alt: 'Chart'}}]}, {onDiagnostic: item => diagnostics.push(item)});
   assert.ok(svg.includes('data-opf-asset-status="unresolved"'), 'placeholder');
   assert.equal(diagnostics.filter(item => item.code === 'unresolved-asset').length, 1);
   assert.throws(() => renderSvg({slides: [{title: 'T', image: source}]}, {strictAssets: true}), {code: 'unresolved-asset'});
+  checked++;
+}
+
+// A prefixed root, a plain-text entity, CDATA and a utf-16 document with a BOM are well-formed and draw.
+for (const source of [base64(`<svg:svg xmlns:svg="http://www.w3.org/2000/svg" width="8" height="4"><svg:rect width="8" height="4"/></svg:svg>`), base64(`<!DOCTYPE svg [<!ENTITY size "8">]><svg ${NS} width="&size;" height="4"><style><![CDATA[rect{fill:red}]]></style><title>a &amp; b &#169;</title></svg>`),
+  `data:image/svg+xml;base64,${Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(rect, 'utf16le')]).toString('base64')}`]) {
+  assert.equal(images(renderSvg({slides: [{title: 'T', image: source}]})).length, 1, source.slice(0, 60));
   checked++;
 }
 

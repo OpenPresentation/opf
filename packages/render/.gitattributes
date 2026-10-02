@@ -6,3 +6,8 @@ fonts/**/PROVENANCE.json text eol=lf
 
 # The frozen vector-PDF fixture is hashed through its exported PDF: keep its bytes the same on every checkout.
 test/fixtures/pdf/*.svg text eol=lf
+
+# npm rewrites the line endings of a bin script with a shebang when it installs a package, so a Windows checkout that converts it to CRLF no longer equals the installed copy
+# (the packed-ecosystem check compares them byte for byte). Keep the bin script LF everywhere.
+src/preview-fonts-cli.js text eol=lf
+dist/preview-fonts-cli.js text eol=lf
