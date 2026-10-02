@@ -10,6 +10,7 @@
 import { chartColorForFill, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 // chartPaletteForFill ships with core RR-29 (opf#270); an older published core still loads and clamps each colour on its own.
 import * as opfComposition from "@openpresentation/opf/composition";
+import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // Ordered series palette written by opf-pptx (`CHART_COLORS`), before the same
 // per-surface adjustment (`chartPaletteForFill`: contrast against the card, without letting two series merge).
@@ -145,7 +146,18 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   if (!render || !rows.length || columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
   const c = chartContext(item, box, bound, options, svg, rows, columns);
   c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface, stroke: bound.design.colors.border, "stroke-width": 1 }, item.path);
+  // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
+  // with none of them skips this block entirely, so its output is unchanged.
+  const resolved = resolveOptions(item.value, spec);
+  if (resolved.active) {
+    reportOptionDiagnostics(c, resolved);
+    c.dataLabels = resolved.dataLabels;
+    c.dataLabelsOff = resolved.dataLabelsOff === true;
+    if (resolved.legend !== undefined) placeLegend(c, spec, resolved.legend);
+    reserveAxisTitles(c, spec, resolved.axisTitles);
+  }
   render(c, spec);
+  if (resolved.active) drawAxisTitles(c);
   return svg.tag("g", { ...svg.traceAttrs(options, item.path), "data-opf-chart": options.trace ? id : undefined }, c.children.join("\n"));
 }
 
@@ -182,11 +194,11 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
       for (const [key, value] of Object.entries(attrs)) out[key] = numericAttrs.has(key) && typeof value === "number" ? n(value) : value;
       children.push(svg.tag(name, { ...out, ...(path ? svg.traceAttrs(options, path) : {}) }));
     },
-    textElement(value, rect, path, align = "center") {
+    textElement(value, rect, path, align = "center", fill = labelColor) {
       if (!(rect.width > 0 && rect.height > 0)) return "";
       return svg.renderTextBox(String(value), rect, bound, {
         path, fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: 400,
-        fill: labelColor, options, align, verticalAlign: "middle"
+        fill, options, align, verticalAlign: "middle"
       });
     },
     text(value, rect, path, align = "center") {
@@ -302,26 +314,95 @@ export function formatTick(value, percent = false) {
   return String(clean(value));
 }
 
-function legendEntries(c, entries) {
-  // PowerPoint places the exported legend on the right (PptxGenJS legendPos r).
-  if (!entries.length) return 0;
+function legendMetrics(c, entries) {
   const swatch = c.fontPx * 0.6, gap = c.fontPx * 0.4, keyWidth = entries.some((entry) => entry.key === "line") ? c.fontPx * 1.4 : swatch;
-  const textWidth = Math.max(...entries.map((entry) => c.width(entry.name)));
-  const width = Math.min(c.box.width * 0.45, keyWidth + gap + textWidth + c.fontPx * 0.5);
+  return { swatch, gap, keyWidth, textWidth: Math.max(...entries.map((entry) => c.width(entry.name))) };
+}
+
+// One legend entry: its key at x, its name after it, in a row starting at y.
+function drawLegendEntry(c, entry, x, y, rowHeight, { swatch, gap, keyWidth }, width) {
+  const middle = y + rowHeight / 2;
+  // Legend keys follow the series format: a line (with marker) for line/radar
+  // series, a marker for scatter series, a filled square otherwise.
+  if (entry.key === "line") c.mark("polyline", { points: `${c.num(x)},${c.num(middle)} ${c.num(x + keyWidth)},${c.num(middle)}`, fill: "none", stroke: entry.color, "stroke-width": 2 * c.pt }, entry.path);
+  if (entry.key === "marker" || (entry.key === "line" && entry.marker)) c.mark("circle", { cx: x + keyWidth / 2, cy: middle, r: 3 * c.pt, fill: entry.color, stroke: entry.color, "stroke-width": 0.75 * c.pt }, entry.path);
+  if (!entry.key) c.mark("rect", { x, y: middle - swatch / 2, width: swatch, height: swatch, fill: entry.color }, entry.path);
+  c.text(entry.name, { x: x + keyWidth + gap, y, width: Math.max(1, width - keyWidth - gap), height: rowHeight }, entry.path, "left");
+}
+
+function legendEntries(c, entries) {
+  // PowerPoint places the exported legend on the right (PptxGenJS legendPos r). A chart with an explicit legend option
+  // draws it in placeLegend instead, before the plot, so the renderers draw nothing here.
+  if (!entries.length || c.legendManaged) return 0;
+  const metrics = legendMetrics(c, entries);
+  const width = Math.min(c.box.width * 0.45, metrics.keyWidth + metrics.gap + metrics.textWidth + c.fontPx * 0.5);
   const rowHeight = Math.min(c.lineHeight, (c.box.height - 2 * c.pad) / entries.length);
   const x = c.box.x + c.box.width - c.pad - width;
   let y = c.box.y + Math.max(c.pad, (c.box.height - rowHeight * entries.length) / 2);
   for (const entry of entries) {
-    const middle = y + rowHeight / 2;
-    // Legend keys follow the series format: a line (with marker) for line/radar
-    // series, a marker for scatter series, a filled square otherwise.
-    if (entry.key === "line") c.mark("polyline", { points: `${c.num(x)},${c.num(middle)} ${c.num(x + keyWidth)},${c.num(middle)}`, fill: "none", stroke: entry.color, "stroke-width": 2 * c.pt }, entry.path);
-    if (entry.key === "marker" || (entry.key === "line" && entry.marker)) c.mark("circle", { cx: x + keyWidth / 2, cy: middle, r: 3 * c.pt, fill: entry.color, stroke: entry.color, "stroke-width": 0.75 * c.pt }, entry.path);
-    if (!entry.key) c.mark("rect", { x, y: middle - swatch / 2, width: swatch, height: swatch, fill: entry.color }, entry.path);
-    c.text(entry.name, { x: x + keyWidth + gap, y, width: Math.max(1, width - keyWidth - gap), height: rowHeight }, entry.path, "left");
+    drawLegendEntry(c, entry, x, y, rowHeight, metrics, width);
     y += rowHeight;
   }
   return width + c.pad;
+}
+
+// RR-35: the legend entries of a chart whatever the series count (an explicit legend position shows a single series too).
+function legendSource(c, spec) {
+  const fromSeries = (series, key, marker = false) => series.map((s) => ({ name: s.name, color: c.colors[s.index % c.colors.length], path: `${c.path}.data.columns.${s.column}`, key, marker }));
+  switch (spec.kind) {
+    case "pie":
+    case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: c.colors[i % c.colors.length], path: `${c.path}.data.rows.${i}.0` }));
+    case "scatter": return fromSeries(scatterSeries(c.rows, c.columns).series, "marker");
+    case "line": return fromSeries(c.series(), "line", spec.markers);
+    case "radar": return fromSeries(c.series(), spec.style === "filled" ? undefined : "line", spec.markers);
+    case "box": return fromSeries(c.columns.length === 1 ? [{ name: c.label(c.columns[0]), column: 0, index: 0 }] : c.series());
+    case "bar":
+    case "area": return fromSeries(c.series());
+    default: return [];
+  }
+}
+
+// RR-35: an explicit legend position. The legend is drawn at its edge of the chart and the room it takes is carved out of
+// c.box, so the renderer lays the plot out in what is left. "none" only switches the default right legend off.
+function placeLegend(c, spec, position) {
+  c.legendManaged = true;
+  if (position === "none") return;
+  const entries = legendSource(c, spec);
+  if (!entries.length) return;
+  const metrics = legendMetrics(c, entries), outer = c.box;
+  if (position === "left" || position === "right") {
+    const width = Math.min(outer.width * 0.45, metrics.keyWidth + metrics.gap + metrics.textWidth + c.fontPx * 0.5);
+    const rowHeight = Math.min(c.lineHeight, (outer.height - 2 * c.pad) / entries.length);
+    const x = position === "right" ? outer.x + outer.width - c.pad - width : outer.x + c.pad;
+    let y = outer.y + Math.max(c.pad, (outer.height - rowHeight * entries.length) / 2);
+    for (const entry of entries) {
+      drawLegendEntry(c, entry, x, y, rowHeight, metrics, width);
+      y += rowHeight;
+    }
+    const reserve = width + c.pad;
+    c.box = { x: position === "left" ? outer.x + reserve : outer.x, y: outer.y, width: Math.max(1, outer.width - reserve), height: outer.height };
+    return;
+  }
+  // Top and bottom: entries flow left to right in rows, each row centred, wrapping when the row would pass the chart width.
+  const available = Math.max(1, outer.width - 2 * c.pad), spacing = c.fontPx * 0.8;
+  const sized = entries.map((entry) => ({ entry, width: Math.min(available, metrics.keyWidth + metrics.gap + c.width(entry.name) + spacing) }));
+  const rows = [];
+  for (const item of sized) {
+    const row = rows[rows.length - 1];
+    if (row && row.width + item.width <= available + 0.01) { row.items.push(item); row.width += item.width; } else rows.push({ items: [item], width: item.width });
+  }
+  const band = rows.length * c.lineHeight;
+  let y = position === "top" ? outer.y + c.pad : outer.y + outer.height - c.pad - band;
+  for (const row of rows) {
+    let x = outer.x + (outer.width - row.width + spacing) / 2;
+    for (const { entry, width } of row.items) {
+      drawLegendEntry(c, entry, x, y, c.lineHeight, metrics, width - spacing + c.fontPx * 0.4);
+      x += width;
+    }
+    y += c.lineHeight;
+  }
+  const reserve = band + c.pad;
+  c.box = { x: outer.x, y: position === "top" ? outer.y + reserve : outer.y, width: outer.width, height: Math.max(1, outer.height - reserve) };
 }
 
 function seriesLegend(c, series, key, marker = false) {
@@ -617,6 +698,7 @@ function renderCategoryChart(c, spec) {
     ({ plot, scale } = axis);
     drawBottomLabels(c, axis.plan, plot, entries);
   }
+  c.plotArea = plot;
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
@@ -658,6 +740,7 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale }
   // Bars grow from zero, or from the axis minimum (maximum, for all-negative data) when zero is off the axis.
   const base = (value) => Math.min(scale.max, Math.max(scale.min, value));
   const geometry = barGeometry(band, series.length, spec.grouping);
+  const labels = [];
   series.forEach((s, j) => {
     const color = c.colors[j % c.colors.length];
     stacks[j].forEach((point, i) => {
@@ -665,16 +748,22 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale }
       const slot = geometry.clustered ? j * geometry.width : 0;
       const a = at(base(point.from)), b = at(point.to);
       const path = `${c.path}.data.rows.${i}.${s.column}`;
+      let rect;
       if (horizontal) {
         // Office bar charts draw the first category and first series nearest the origin (bottom).
         const y = plot.y + plot.height - i * band - geometry.offset - slot - geometry.width;
-        c.mark("rect", { x: Math.min(a, b), y, width: Math.abs(b - a), height: geometry.width, fill: color }, path);
+        rect = { x: Math.min(a, b), y, width: Math.abs(b - a), height: geometry.width };
+        c.mark("rect", { ...rect, fill: color }, path);
       } else {
         const x = plot.x + i * band + geometry.offset + slot;
-        c.mark("rect", { x, y: Math.min(a, b), width: geometry.width, height: Math.abs(b - a), fill: color }, path);
+        rect = { x, y: Math.min(a, b), width: geometry.width, height: Math.abs(b - a) };
+        c.mark("rect", { ...rect, fill: color }, path);
       }
+      if (c.dataLabels) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i] }) });
     });
   });
+  // RR-35: data labels sit on top of every bar.
+  for (const label of labels) drawBarLabel(c, label.text, label.rect, label.direction, label.path, label.color);
 }
 
 function drawLines(c, spec, series, stacks, { plot, band, at }) {
@@ -695,6 +784,10 @@ function drawLines(c, spec, series, stacks, { plot, band, at }) {
       if (point) c.mark("circle", { cx: plot.x + (i + 0.5) * band, cy: at(point.to), r: radius, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${i}.${s.column}`);
     });
   });
+  // RR-35: data labels sit beside each point, over every line.
+  if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
+    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i] }), [plot.x + (i + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
+  }));
 }
 
 function drawAreas(c, series, stacks, { plot, band, at, crossing }) {
@@ -704,6 +797,12 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing }) {
     const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
     c.mark("path", { d: `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`, fill: c.colors[j % c.colors.length] }, `${c.path}.data.columns.${s.column}`);
   });
+  // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge.
+  if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
+    if (!point) return;
+    const lowerEdge = point.from === 0 ? crossing : at(point.from);
+    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i] }), plot.x + (i + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, c.colors[j % c.colors.length]);
+  }));
 }
 
 // ---------------------------------------------------------------------------
@@ -718,10 +817,14 @@ function renderCircularChart(c, spec) {
   })));
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
-  const r = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
-  const inner = spec.kind === "doughnut" ? r * 0.5 : 0;
   const total = values.reduce((sum, value) => sum + value, 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "slice total");
+  // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
+  const sliceTexts = c.dataLabels ? values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][1]) ?? 0, share: total ? value / total : 0 })) : null;
+  const outside = sliceTexts && spec.kind === "pie" && (c.dataLabels.position ?? "outside-end") === "outside-end";
+  const reserve = outside ? outsideLabelReserve(c, sliceTexts) : { x: 0, y: 0 };
+  const r = outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const inner = spec.kind === "doughnut" ? r * 0.5 : 0;
   if (!total) {
     c.text("No positive chart values", area, c.path);
     return;
@@ -739,6 +842,14 @@ function renderCircularChart(c, spec) {
     }
     angle = end;
   });
+  if (sliceTexts) {
+    let start = -Math.PI / 2;
+    values.forEach((value, i) => {
+      const delta = value / total * Math.PI * 2;
+      if (delta > 0) drawSliceLabel(c, sliceTexts[i], { cx, cy, r, inner, mid: start + delta / 2 }, `${c.path}.data.rows.${i}.1`, c.colors[i % c.colors.length]);
+      start += delta;
+    });
+  }
 }
 
 function polar(cx, cy, r, angle) {
@@ -786,6 +897,7 @@ function renderScatterChart(c) {
   plot.width = Math.max(1, box.x + box.width - pad - legendWidth - fontPx - plot.x);
   const xLabelWidth = Math.max(c.width(formatTick(xs.length ? Math.max(...xs) : 1)), c.width(formatTick(xs.length ? Math.min(...xs) : 0))) + fontPx;
   const xScale = niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, maxIntervalsFor(plot.width, xLabelWidth));
+  c.plotArea = plot;
   const xAt = (v) => plot.x + axisFraction(v, xScale) * plot.width;
   const yAt = (v) => plot.y + axisFraction(v, yScale, true) * plot.height;
   for (const tick of yScale.ticks) {
@@ -803,6 +915,10 @@ function renderScatterChart(c) {
   series.forEach((s, j) => {
     const color = c.colors[j % c.colors.length];
     for (const point of s.points) c.mark("circle", { cx: xAt(point.x), cy: yAt(point.y), r: 3 * c.pt, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${point.row}.${s.column}`);
+  });
+  // RR-35: a scatter label shows the Y value, and the X value as its category.
+  if (c.dataLabels) series.forEach((s) => {
+    for (const point of s.points) drawPointLabel(c, labelString(c, { category: String(clean(point.x)), value: point.y }), [xAt(point.x), yAt(point.y)], `${c.path}.data.rows.${point.row}.${s.column}`);
   });
 }
 
@@ -893,6 +1009,10 @@ function renderRadarChart(c, spec) {
     const label = formatTick(tick), width = c.width(label) + fontPx * 0.5;
     c.text(label, { x: cx - width - fontPx * 0.2, y: cy - rAt(tick) - c.lineHeight / 2, width, height: c.lineHeight }, c.path, "right");
   }
+  // RR-35: radar data labels sit above each point (PowerPoint has no position choice for a radar).
+  if (c.dataLabels) series.forEach((s) => s.values.forEach((v, i) => {
+    if (v !== null) drawPointLabel(c, labelString(c, { category: categories[i], value: v }), point(i, v), `${c.path}.data.rows.${i}.${s.column}`);
+  }));
 }
 
 // ---------------------------------------------------------------------------
@@ -968,6 +1088,7 @@ function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentA
     plot: { x, y: top, width: Math.max(1, right - x), height: Math.max(1, box.y + box.height - pad - reserve - top) }
   }));
   drawBottomLabels(c, plan, plot, categories);
+  c.plotArea = plot;
   return { plot, band: plot.width / Math.max(1, categories.length) };
 }
 
@@ -1006,6 +1127,11 @@ function renderHistogramChart(c, spec) {
   bars.forEach((bar, i) => {
     const y = at(bar.value);
     c.mark("rect", { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y), fill: c.colors[0] }, bar.path);
+  });
+  // RR-35: data labels on the columns (a histogram label is the bin's count).
+  if (c.dataLabels) bars.forEach((bar, i) => {
+    const y = at(bar.value);
+    drawBarLabel(c, labelString(c, { category: bar.name, value: bar.value }), { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y) }, bar.value >= 0 ? "up" : "down", bar.path, c.colors[0]);
   });
   if (pareto && bars.length) {
     // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
@@ -1051,6 +1177,11 @@ function renderWaterfallChart(c) {
     const next = bars[k + 1];
     if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt });
   });
+  // RR-35: data labels show each step's value (not the running total) on the floating bars.
+  if (c.dataLabels) bars.forEach((bar) => {
+    const a = at(bar.from), b = at(bar.to);
+    drawBarLabel(c, labelString(c, { category: categories[bar.i], value: bar.value }), { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, c.colors[bar.value < 0 ? 1 : 0]);
+  });
 }
 
 // Funnel: centred bars from the top, widths proportional to the value, value labels inside and category labels on the left.
@@ -1061,6 +1192,7 @@ function renderFunnelChart(c) {
   const max = Math.max(0, ...values.filter((value) => value !== null));
   const labelWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
   const plot = { x: box.x + pad + labelWidth + pad / 2, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - labelWidth - pad / 2), height: Math.max(1, box.height - 2 * pad) };
+  c.plotArea = plot;
   const band = plot.height / count, height = band / 1.06, offset = (band - height) / 2;
   const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
   drawRowLabels(c, planRowLabels(c, entries, band, labelWidth), entries, band, labelWidth, box.x + pad, (i) => plot.y + i * band);
@@ -1071,7 +1203,9 @@ function renderFunnelChart(c) {
     const width = plot.width * Math.min(1, value / max);
     const x = plot.x + (plot.width - width) / 2;
     c.mark("rect", { x, y: y + offset, width, height, fill: c.colors[0] }, `${c.path}.data.rows.${i}.${column}`);
-    c.text(formatTick(value), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`);
+    // RR-35: the funnel labels its bars with values by default; dataLabels picks the content, false removes them.
+    if (c.dataLabelsOff) return;
+    c.text(c.dataLabels ? labelString(c, { category: name, value }) : formatTick(value), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`);
   });
 }
 
@@ -1137,8 +1271,10 @@ function renderTreemapChart(c) {
   rects.forEach((rect, i) => {
     if (!rect || !(rect.width > 0) || !(rect.height > 0)) return;
     c.mark("rect", { x: rect.x, y: rect.y, width: rect.width, height: rect.height, fill: c.colors[i % c.colors.length], stroke: "#FFFFFF", "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
-    if (rect.width >= fontPx * 2 && rect.height >= c.lineHeight) {
-      c.text(categories[i], { x: rect.x + fontPx * 0.25, y: rect.y, width: rect.width - fontPx * 0.5, height: rect.height }, `${c.path}.data.rows.${i}.0`);
+    // RR-35: the treemap labels its tiles with category names by default; dataLabels picks the content, false removes them. PowerPoint
+    // draws the label at the bottom left of its tile whatever the position attribute says (native check 2026-10-01), so the preview does.
+    if (!c.dataLabelsOff && rect.width >= fontPx * 2 && rect.height >= c.lineHeight) {
+      c.text(c.dataLabels ? labelString(c, { category: categories[i], value: values[i] }) : categories[i], { x: rect.x + fontPx * 0.25, y: rect.y + rect.height - c.lineHeight - fontPx * 0.2, width: rect.width - fontPx * 0.5, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, "left");
     }
   });
 }
