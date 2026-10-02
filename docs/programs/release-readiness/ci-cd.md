@@ -121,6 +121,11 @@ invariant: tracking stays in this repository).
      pptx-dev e2e (14).
    - opf-editor `test:playground` takes 6.3 min p50 but 15.6 min p90. That
      spread is the variance to watch.
+   - One flake was measured directly during this study. On pptx-dev Windows,
+     `tests/e2e/inspector-autosave.spec.ts:48` ("an Inspector edit is kept in
+     this browser, offered after a reload and restored") passed on attempt 1
+     of run 37050499352 and failed on attempt 2 of the same SHA:
+     `toBeVisible` timed out after 30 s.
 7. **The release train takes hours, but little of that is publishing.** For
    the 0.12.0 train:
    - 12:55, the core release-prep PR
@@ -413,7 +418,7 @@ run. That takes the 15.7 sibling minutes off every core PR.
   prepare the `merge_group` triggers in advance; they are harmless without
   the queue.
 
-### 5. Caching and artefact reuse (measured: small)
+### 5. Caching and artefact reuse (measured: small, sometimes negative)
 
 Install and setup are not where the time goes.
 
@@ -427,18 +432,32 @@ Install and setup are not where the time goes.
 
 The Linux browser jobs already use the pinned Playwright image.
 
+A cache has to restore faster than the download it replaces, and here it
+often does not. pptx-dev had no dependency cache, so a pnpm store cache was
+tried as quick win 3
+([pptx-dev#75](https://github.com/Data-Advantage/pptx-dev/pull/75), closed).
+Timings are pnpm setup plus setup-node plus install:
+
+| | Before (p50) | With a warm cache |
+|---|---|---|
+| ubuntu | 39 s | 48 s (the restore alone took 25 s) |
+| Windows | 97 s | 109 s (the restore alone took 37 s) |
+
+A cold run also spent 48 to 66 s saving the cache. Native builds still run
+either way.
+
 - **Do.**
-  - The pnpm store cache in pptx-dev (quick win 3).
-  - Cache the Playwright browser on the Windows and macOS legs (as
-    published-matrix.yml does).
+  - Measure any cache on one warm run before keeping it. Caching the
+    Playwright browser on the Windows and macOS legs (the browser install is
+    about 0.3 min) is likely to break even at best.
   - Reuse one built and packed tarball set per SHA across jobs: upload
     `artifacts/npm/*.tgz` once from the core shard and download it in the
     Installed candidates legs, instead of rebuilding and repacking four
     repositories on each OS. That saves about 1.5 min per leg.
   - Fonts come from npm packages and are already covered by the npm and pnpm
     caches.
-- **Saving.** About 0.5 to 1.5 min per affected job. The private Windows
-  minutes matter most.
+- **Saving.** About 1.5 min per Installed candidates leg from tarball reuse.
+  Dependency caching saves nothing measurable here.
 
 ### 6. Golden manifests
 
@@ -572,9 +591,9 @@ Ordered by value over effort. The savings use this week's volume.
 
 | ID | Change | PR | Saving | Risk |
 |---|---|---|---|---|
-| QW1 | Ecosystem checks skip on `docs/programs` / `docs/evidence` PRs; required checks still report | [opf#286](https://github.com/OpenPresentation/opf/pull/286) | about 1,100 runner-min/week; those PRs green in about 9 instead of 21 min | low: conservative path list, pushes to main always full |
-| QW2 | Renderer runs `test:pdf-vector` once (not also in `typecheck`) | [opf-render#111](https://github.com/OpenPresentation/opf-render/pull/111) | 2.2 min per render CI, publish and core ecosystem run, about 1,700 runner-min/week; -2.2 min on two critical paths | very low: every `typecheck` caller also runs `npm test` |
-| QW3 | pnpm store cache in pptx-dev Application compatibility | [pptx-dev#75](https://github.com/Data-Advantage/pptx-dev/pull/75) | about 0.3 (ubuntu) and 0.6 (Windows) min per run, on billed minutes | very low |
+| QW1 | Ecosystem checks skip on `docs/programs` / `docs/evidence` PRs; required checks still report | [opf#286](https://github.com/OpenPresentation/opf/pull/286) | about 1,100 runner-min/week; those PRs green in about 9 instead of 21 min. Measured on the PR: the decision step takes under 1 s on ubuntu, Windows and macOS, and a code change still runs everything | low: conservative path list, pushes to main always full |
+| QW2 | Renderer runs `test:pdf-vector` once (not also in `typecheck`) | [opf-render#111](https://github.com/OpenPresentation/opf-render/pull/111) | 2.2 min per render CI, publish and core ecosystem run, about 1,700 runner-min/week; -2.2 min on two critical paths. Measured on the PR: `typecheck` 3 s (was 2.38 min p50), job 11.2 min (was 16.3 p50) | very low: every `typecheck` caller also runs `npm test` |
+| QW3 | pnpm store cache in pptx-dev Application compatibility | [pptx-dev#75](https://github.com/Data-Advantage/pptx-dev/pull/75), **closed** | measured negative: the warm run was 9 s (ubuntu) and 12 s (Windows) slower, and a cold run adds 48 to 66 s to save the cache; see section 5 | none (not merged) |
 
 ### Next quick wins (not yet done)
 
@@ -582,7 +601,7 @@ Ordered by value over effort. The savings use this week's volume.
 |---|---|---|---|
 | QW4 | Pin determinism-sensitive non-container jobs to `ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19 (runner annotation): OPF CI, published matrix, the sites | avoids a font/ICU drift incident | very low |
 | QW5 | Lock-ancestry guard (section 3) as a warning in ecosystem-ci | catches stale or unmerged pins at once | none (warning) |
-| QW6 | Cache the Playwright browser on core Installed candidates, CLI portability and opf-pptx Windows | about 0.3 min per leg | very low |
+| QW6 | Reuse the packed tarballs from `packages` in the Installed candidates legs instead of rebuilding four repositories per OS (section 5) | about 1.5 min per leg | low |
 | QW7 | pptx-gallery: move production-only checks to `deployment_status` / schedule | about 1 min per PR, fewer production-coupled failures | low, owner sign-off (it moves a check) |
 
 ### Medium (one to three days each)
