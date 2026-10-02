@@ -513,11 +513,24 @@ function chosenFonts(presentation) {
       if (slots.includes(font)) used.add(font);
     }
   }
+  // FF-05: East Asian text in a deck whose language selects no East Asian font names a font for that text in the theme `ea`
+  // (opf-pptx exporter rule: kana is Japanese, hangul Korean, Han alone Simplified Chinese, each as resolveScriptFonts gives
+  // it for that language). It is admitted by the typeface inventory and listed in `Fonts Used`, but it is not a chosen font of
+  // the preview, so it is returned apart. Older exporters write nothing for it.
+  const contentEastAsian = new Set();
+  if (resolveScriptFonts(presentation).sources.eastAsian === 'latin') {
+    const text = textOf(presentation.slides);
+    const language = /[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(text) ? 'japanese' : /\p{Script=Hangul}/u.test(text) ? 'korean' : /\p{Script=Han}/u.test(text) ? 'chinese-simplified' : null;
+    if (language) {
+      const resolved = resolveScriptFonts({...presentation, language});
+      if (resolved.sources.eastAsian !== 'latin') for (const font of [resolved.heading.eastAsian, resolved.body.eastAsian]) contentEastAsian.add(font);
+    }
+  }
   for (const family of runFamilies(presentation.slides)) {
     chosen.add(family);
     used.add(family);
   }
-  return {chosen: [...chosen], used: [...used].sort(compareNames), monospace: [...monospace], roles};
+  return {chosen: [...chosen], used: [...used].sort(compareNames), monospace: [...monospace], roles, contentEastAsian: [...contentEastAsian]};
 }
 // The theme's major and minor latin fonts straight from the catalog record, not through the resolver, when
 // the design names a plain catalog scheme (directly or through its theme).
@@ -645,9 +658,9 @@ async function verifyState(label, presentation, {png = false} = {}) {
   }
 
   // FF-08 typeface inventory, theme fonts against the catalog literals, package structure and re-import.
-  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...selectors], monospace: fonts.monospace});
+  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...selectors, ...fonts.contentEastAsian], monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${label}: typeface inventory`);
-  assert.deepEqual(check.fontsUsed.filter((family) => !selectors.includes(family)), fonts.used, `${label}: exported fonts equal the chosen fonts`);
+  assert.deepEqual(check.fontsUsed.filter((family) => !selectors.includes(family) && !fonts.contentEastAsian.includes(family)), fonts.used, `${label}: exported fonts equal the chosen fonts`);
   const entries = unzipSync(bytes);
   const literal = catalogTheme(document);
   if (literal) {
