@@ -117,7 +117,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | JSON Patch CLI | `opf edit` | No persistent CLI undo history |
 | SVG preview | `renderSvg` / `renderSvgDeck` | Local; same options as layout |
 | PNG | `svgToPng` | Node raster of SVG |
-| PDF | `svgToPdf` | **Raster-backed**, not selectable text |
+| PDF | `svgToPdf` | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `mode: "raster"` keeps the image-per-slide output. Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
 | Editable PPTX export | `toPptx` | OPF → PPTX serialization. Furniture is tagged slide shapes (`OPF_FURNITURE_V1`), not native `p:hf` / notes-master Header/Footer objects |
 | Agent skills | `opf skills install` | Offline after the CLI is installed |
 | Browser canvas | `@openpresentation/opf-editor/canvas` | Host must supply font bytes |
@@ -333,7 +333,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | General native PowerPoint fidelity and real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence, as is one finite mixed-size table edit/save/reopen ([evidence](evidence/windows-native-mixed-edit-20260922/README.md)). Tab tolerance, general mixed-size table layout and preview/native wrapping, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; self-import and tagged furniture do not certify arbitrary Office behavior |
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
-| Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Follows font reliability |
+| Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Shipped in opf-render 0.12.0 (opf-render#90; the browser download entry `@openpresentation/opf-render/export-browser` ships there too); PDF/UA, PDF/A and viewer coverage beyond pdf.js, PDFium and poppler remain open |
 | General SVG diagrams / Mermaid | [diagrams plan](plans/diagrams-svg.md) | Embedded SVG ≠ native editable primitives |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
