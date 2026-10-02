@@ -7,7 +7,8 @@ import { SYMBOL_SCRIPT, isSymbolEncodedFamily, symbolEncodingFor, symbolPreviewF
 export { SYMBOL_SCRIPT, SYMBOL_PLACEHOLDER, SYMBOL_PREVIEW_FACES, SYMBOL_FACE_FAMILIES, SYMBOL_ENCODINGS, SYMBOL_ENCODINGS_SOURCE, isSymbolEncodedFamily, symbolEncodingFor, symbolPreviewFaces, symbolCodeOf, mapSymbolText } from "./symbol-fonts.js";
 export { FONT_COMPATIBILITY, EXPERIMENTAL_FONT_CANDIDATES, disabledFeaturesFor } from "./font-compatibility.js";
 export { FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, fontPolicyFor } from "./font-policy.js";
-export { SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, glyphFallbackFamilies, detectScripts, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
+export { EMOJI_FONT_FAMILIES, SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, createScriptFonts, createScriptTextMeasurement, designatedFamilies, glyphFallbackFamilies, detectScripts, hasEmojiPresentation, hasMathNotation, itemizeScripts, openTypeLanguage, scriptFontAliases, scriptFontRole, scriptOfCharacter, textRole } from "./script-fonts.js";
+export { COLOR_FONT_FACES } from "./color-fonts.js";
 
 export class OPFFontError extends Error {
   constructor(code, message, details = {}) { super(message); this.name = "OPFFontError"; this.code = code; this.details = details; }
@@ -117,8 +118,8 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
       }
     }
   }
-  // Equations require an explicit math-aware choice; never fall through to body text.
-  if (!matching.length && /^(cambria math|stix two math|noto sans math)$/i.test(family)) throw new OPFFontError("math-font-required", `Supply '${family}' or an explicit math-font alias.`, {path:style.path});
+  // FF-45: Cambria Math previews with STIX Two Math (the math pack, loaded as a script face: the alias above resolves it
+  // under every policy). Without the pack the policy error below names the pack; the former `math-font-required` failure is gone.
   if (!matching.length && fallbackFamily) { matching=findFamily(fallbackFamily); compatibility="generic"; via="fallback"; }
   if (!matching.length) throw unavailableFontError(family, style, policy);
   const styled = styleFallback ? matching : matching.filter(face=>face.italic===!!style.italic);
@@ -264,9 +265,14 @@ export function createFontRegistry(entries, options = {}) {
       }
       value={width:run.positions.reduce((total,position)=>total+position.xAdvance,0)/face.font.unitsPerEm,...value};
       if(includeOutline) {
-        const bounds=run.bbox,unit=face.font.unitsPerEm;
-        value.outline=[bounds.minX,bounds.minY,bounds.maxX,bounds.maxY].every(Number.isFinite)
-          ?{x:bounds.minX/unit,y:-bounds.maxY/unit,width:bounds.width/unit,height:bounds.height/unit}:null;
+        const unit=face.font.unitsPerEm;
+        let bounds=null;
+        // FF-45: fontkit reads COLR v0 layers only; a COLRv1 colour face (Noto Color Emoji) has no outlines it can bound (its
+        // glyf outlines are empty), so its ink box is the face's em box over the run: the colour image fills the em square.
+        try { bounds=run.bbox; } catch { bounds=null; }
+        if(bounds&&[bounds.minX,bounds.minY,bounds.maxX,bounds.maxY].every(Number.isFinite)) value.outline={x:bounds.minX/unit,y:-bounds.maxY/unit,width:bounds.width/unit,height:bounds.height/unit};
+        else if(face.font.directory?.tables?.COLR&&value.width>0) { const ascent=face.font.ascent/unit,descent=face.font.descent/unit; value.outline={x:0,y:-ascent,width:value.width,height:ascent-descent}; }
+        else value.outline=null;
       }
       if (text.length<=2048) {
         if (face.cache.size>=512&&!face.cache.has(key)) face.cache.delete(face.cache.keys().next().value);

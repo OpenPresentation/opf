@@ -146,7 +146,9 @@ for(const fontFamily of ['Wingdings','Wingdings 2','Wingdings 3','Webdings','Sym
   assert.equal(symbol.substitute,true);
   assert.ok(symbol.symbolEncoding===fontFamily&&symbol.resolvedFamily==='Noto Sans'||symbol.compatibility==='generic'&&symbol.resolvedFamily==='Roboto',`${fontFamily}: ${JSON.stringify(symbol)}`);
 }
-assert.throws(()=>theme.resolveFont({fontFamily:'Cambria Math',fontWeight:400}),{code:'math-font-required'});
+// FF-45: without the math pack Cambria Math follows the policy like any other visual family (here the registry's generic fallback); with the pack loaded it previews with STIX Two Math (test/emoji-math.mjs).
+assert.equal(theme.resolveFont({fontFamily:'Cambria Math',fontWeight:400}).compatibility,'generic');
+assert.throws(()=>createFontRegistry(entries,{substitutionPolicy:'metric'}).resolveFont({fontFamily:'Cambria Math',fontWeight:400}),error=>error.code==='font-unavailable'&&error.details.replacement==='STIX Two Math'&&error.details.packs.includes('scripts'));
 assert.throws(()=>theme.textMeasurement.measure('你好',25,{fontFamily:'Calibri',fontWeight:400}),{code:'missing-glyph'});
 const noBold=createFontRegistry(entries.filter(face=>face.weight===400),{substitutionPolicy:'metric'});
 assert.throws(()=>noBold.resolveFont({fontFamily:'Calibri',fontWeight:700}),{code:'font-unavailable'});

@@ -123,6 +123,7 @@ jobs:
       - run: npm run test:lazy-face-fallback-browser
       - run: npm run test:script-fonts-browser
       - run: npm run test:script-fonts-auto-browser
+      - run: npm run test:emoji-math-browser
       - run: npm run test:script-corpora-browser
       - run: npm run test:symbol-fonts-browser
       - run: npm run test:plain-whitespace-browser

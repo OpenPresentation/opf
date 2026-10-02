@@ -39,7 +39,32 @@ export const SCRIPT_FONT_FAMILIES = freeze({
   Ethi: {sans: "Noto Sans Ethiopic"}, Armn: {sans: "Noto Sans Armenian"}, Geor: {sans: "Noto Sans Georgian"},
   Mong: {sans: "Noto Sans Mongolian"}, Thaa: {sans: "Noto Sans Thaana"}, Syrc: {sans: "Noto Sans Syriac"},
   Tibt: {serif: "Noto Serif Tibetan"},
+  // FF-45 special families. Zsye (emoji symbols) and Zmth (mathematical notation) are ISO 15924 keys for
+  // text, not scripts a character carries: emoji and math characters are Common, so they stay in their
+  // neighbours' run and reach these faces through the glyph fallback chain (emoji-presentation clusters
+  // take the emoji face first). The keys are last so the chain tries every real script face before them.
+  Zsye: {sans: "Noto Color Emoji"},
+  Zmth: {serif: "STIX Two Math", sans: "Noto Sans Math"},
 });
+
+/**
+ * Emoji presentation (FF-45): a grapheme cluster that a browser or PowerPoint draws with the emoji font. Characters
+ * whose default presentation is emoji (Emoji_Presentation), any cluster with VS16 (U+FE0F), a skin tone modifier
+ * (U+1F3FB-1F3FF), a regional indicator (flags), a keycap (U+20E3) or an emoji tag (U+E0020-E007F). Digits, #, *
+ * and text-default pictographs (U+2764 heart, U+263A) count only with VS16; VS15 (U+FE0E) asks for text.
+ */
+const emojiPresentation = /\p{Emoji_Presentation}|\p{Emoji_Modifier}|\p{Regional_Indicator}|️|⃣|[\u{E0020}-\u{E007F}]/u;
+/** True when the text holds an emoji-presentation cluster (planned in the emoji face, in measurement and drawing). */
+export function hasEmojiPresentation(text) {
+  return typeof text === "string" && emojiPresentation.test(text);
+}
+const textPresentation = /︎/u;
+/** Characters that need a math face rather than a text face: math alphanumerics, letterlike math sets and the rarer operator blocks. */
+const mathNotation = /[\u{1D400}-\u{1D7FF}⟀-⟯⦀-⧿⨀-⫿ℂℇℊ-ℓℕℙ-ℝℤℨℬℭℯ-ℱℳ-ℸ]/u;
+/** True when the text holds mathematical notation that ordinary text faces lack (loads the math pack under `scripts: 'auto'`). */
+export function hasMathNotation(text) {
+  return typeof text === "string" && mathNotation.test(text);
+}
 
 const replacement = (script, substitutes, requestedFamilies) => requestedFamilies.map(requestedFamily => ({
   requestedFamily, script, substitutes, compatibility: "visual",
@@ -87,7 +112,16 @@ export const SCRIPT_FONT_REPLACEMENTS = freeze([
   ...replacement("Thaa", sansThenSerif("Thaa"), ["MV Boli"]),
   ...replacement("Syrc", sansThenSerif("Syrc"), ["Estrangelo Edessa"]),
   ...replacement("Tibt", serifThenSans("Tibt"), ["Microsoft Himalaya"]),
+  // FF-45: Segoe UI Emoji previews with Noto Color Emoji (COLRv1 and SVG colour glyphs; Noto Emoji is the monochrome
+  // face the raster path draws), Cambria Math with STIX Two Math (serif math face with a MATH table; Noto Sans Math
+  // is the sans alternative). Both are visual: advances differ from the Microsoft fonts (see the policy rows).
+  ...replacement("Zsye", ["Noto Color Emoji", "Noto Emoji"], ["Segoe UI Emoji"]),
+  ...replacement("Zmth", ["STIX Two Math", "Noto Sans Math"], ["Cambria Math"]),
 ]);
+
+/** The emoji faces (FF-45): they draw emoji-presentation clusters only, never a run's Latin text or digits. */
+export const EMOJI_FONT_FAMILIES = SCRIPT_FONT_REPLACEMENTS.find(rule => rule.script === "Zsye").substitutes;
+const emojiFaces = new Set(EMOJI_FONT_FAMILIES);
 
 const eastAsianScripts = new Set(["Hani", "Hans", "Hant", "Hanb", "Jpan", "Kore", "Hang", "Jamo", "Hira", "Kana", "Hrkt", "Bopo", "Yiii"]);
 const complexScripts = new Set([
@@ -216,8 +250,11 @@ export function itemizeScripts(text, profile) {
  */
 export function scriptsOfText(text, profile) {
   const source = String(text ?? "");
-  if (latinOnly.test(source) && !(eastAsianLanguage(profile) && eastAsianAmbiguous.test(source))) return [];
-  return itemizeScripts(source, profile).filter(run => run.script !== "Latn").map(run => run.script);
+  // FF-45: emoji-presentation clusters and mathematical notation are Common characters inside a Latin (or other) run; their
+  // faces are needed all the same, so they are reported as the pseudo-scripts Zsye and Zmth, which the emoji and math packs serve.
+  const special = [...(hasEmojiPresentation(source) ? ["Zsye"] : []), ...(hasMathNotation(source) ? ["Zmth"] : [])];
+  if (latinOnly.test(source) && !(eastAsianLanguage(profile) && eastAsianAmbiguous.test(source))) return special;
+  return [...itemizeScripts(source, profile).filter(run => run.script !== "Latn").map(run => run.script), ...special];
 }
 
 /**
@@ -511,13 +548,15 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     // code; `symbolEncoding: null` is the planner's own request for ordinary runs (characters that are not codes).
     const encoding = style.symbolEncoding === null ? undefined : style.symbolEncoding ?? symbolEncodingFor(style.fontFamily)?.family;
     if (encoding) return text ? planSymbols(text, style, encoding) : [{text, family: style.fontFamily, own: true}];
-    if (latinOnly.test(text) && !(eastAsianText && eastAsianAmbiguous.test(text))) {
+    // An emoji face (Noto Color Emoji for a Segoe UI Emoji run) draws emoji-presentation clusters only: its Latin text and digits
+    // are planned per cluster below, where they take a text face (FF-45).
+    const ownFace = measured && fallbackEnabled ? resolveName(style.fontFamily, style) : undefined;
+    if (latinOnly.test(text) && !(eastAsianText && eastAsianAmbiguous.test(text)) && !(ownFace && emojiFaces.has(ownFace))) {
       // Latin-group text is one run in the latin slot's face, unless that face lacks a character
       // (Cyrillic or Greek beyond a Latin replacement): then it is planned per character below.
       if (!fallbackEnabled || !nonAscii.test(text)) return [{text, family: style.fontFamily, own: true}];
       if (!measured) return cyrillicOrGreek.test(text) ? [{text, family: style.fontFamily, own: false, stack: [style.fontFamily, ...designatedFamilies("Latn", serif)]}] : [{text, family: style.fontFamily, own: true}];
-      const own = resolveName(style.fontFamily, style);
-      if (own === null || covers(own, text, style)) return [{text, family: style.fontFamily, own: true}];
+      if (ownFace === null || covers(ownFace, text, style)) return [{text, family: style.fontFamily, own: true}];
     }
     const cacheKey = `${style.fontFamily}\u0000${style.fontWeight ?? 400}\u0000${!!style.italic}\u0000${textRole(style) ?? ""}\u0000${style.path ?? ""}\u0000${text}`;
     const cached = plans.get(cacheKey);
@@ -537,7 +576,11 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     for (const run of runs) {
       if (!measured) { push(run.text, run.candidates[0], run.candidates); continue; }
       const chosen = resolveName(run.candidates[0], style);
-      const whole = run.candidates.map(family => resolveName(family, style)).find(name => name && covers(name, run.text, style));
+      // FF-45: a run with an emoji-presentation cluster, or whose face is an emoji face, is always planned per cluster: VS16 and
+      // emoji-default clusters take the emoji face even when the text face has a monochrome glyph for the base character, and the
+      // emoji face never draws the run's Latin text or digits.
+      const emojiRun = emojiFaces.has(chosen) || hasEmojiPresentation(run.text);
+      const whole = emojiRun ? undefined : run.candidates.map(family => resolveName(family, style)).find(name => name && covers(name, run.text, style));
       if (whole) {
         if (whole !== chosen) noteFallback(pending, chosen, whole, [...run.text].filter(character => !covers(chosen ?? whole, character, style)));
         push(run.text, whole);
@@ -555,7 +598,14 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       let sticky = null;
       // The note lists what the chosen face lacks (a mark, not its covered base letter); a cluster it only lacks as a whole lists all.
       const missingFrom = (face, text) => { const lacking = [...text].filter(character => !covers(face, character, style)); return lacking.length ? lacking : [...text]; };
-      const choose = (subject, sample) => unique([run.candidates[0], ...(sticky ? [sticky] : []), ...run.candidates, ...global, ...(fallbackEnabled ? chainFor(sample) : [])]).find(name => covers(name, subject, style));
+      // An emoji-presentation cluster tries the emoji faces first (Noto Color Emoji, loaded with the emoji pack), then the text
+      // faces; any other cluster tries them last, so a run's digits and Latin text (which the emoji face draws emoji-sized) take a
+      // text face, while a text-presentation symbol only the emoji face has (U+2764 with VS15) is still drawn rather than missing.
+      const choose = (subject, sample, emoji = false) => {
+        const names = unique([run.candidates[0], ...(sticky ? [sticky] : []), ...run.candidates, ...global, ...(fallbackEnabled ? chainFor(sample) : [])]);
+        const emojiNames = names.filter(name => emojiFaces.has(name)), textNames = names.filter(name => !emojiFaces.has(name));
+        return (emoji ? [...emojiNames, ...textNames] : [...textNames, ...emojiNames]).find(name => covers(name, subject, style));
+      };
       const segments = [];
       for (const character of run.text) {
         const script = scriptOfCharacter(character), last = segments.at(-1)?.clusters.at(-1);
@@ -573,7 +623,8 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
         const strong = segment.clusters.filter(cluster => !cluster.weak);
         const face = strong.length ? choose(strong.map(cluster => cluster.text).join(""), strong[0].base) : undefined;
         for (const cluster of segment.clusters) {
-          const family = face && covers(face, cluster.text, style) ? face : choose(cluster.text, cluster.base) ?? choose(cluster.base, cluster.base) ?? primary;
+          const emoji = hasEmojiPresentation(cluster.text);
+          const family = !emoji && face && covers(face, cluster.text, style) ? face : choose(cluster.text, cluster.base, emoji) ?? choose(cluster.base, cluster.base, emoji) ?? primary;
           if (family !== primary && family !== chosen) sticky = family;
           if (chosen !== null && family !== chosen && covers(family, cluster.text, style)) noteFallback(pending, chosen, family, missingFrom(chosen, cluster.text));
           push(cluster.text, family);

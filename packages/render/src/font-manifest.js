@@ -2550,6 +2550,109 @@ export const BUNDLED_FONT_MANIFEST=freeze({
       ]
     },
     {
+      "name": "@expo-google-fonts/noto-color-emoji",
+      "version": "0.4.6",
+      "pack": "scripts",
+      "scripts": [
+        "Zsye"
+      ],
+      "color": {
+        "format": "COLRv1, SVG",
+        "rasterFamily": "Noto Emoji"
+      },
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "ac564676d10054a8445923dfc2dfb13c042d97888bd27c1b6ec6dfe89a9d8d62",
+      "reservedFontNames": [],
+      "upstream": "http://scripts.sil.org/OFL",
+      "copyright": "Copyright 2021 Google Inc. All Rights Reserved.",
+      "faces": [
+        {
+          "file": "400Regular/NotoColorEmoji_400Regular.ttf",
+          "family": "Noto Color Emoji",
+          "weight": 400,
+          "italic": false,
+          "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-emoji",
+      "version": "0.4.7",
+      "pack": "scripts",
+      "scripts": [
+        "Zsye"
+      ],
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.7",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+      "reservedFontNames": [],
+      "upstream": "https://scripts.sil.org/OFL",
+      "copyright": "Copyright 2013 Google LLC",
+      "faces": [
+        {
+          "file": "400Regular/NotoEmoji_400Regular.ttf",
+          "family": "Noto Emoji",
+          "weight": 400,
+          "italic": false,
+          "sha256": "24aaa2a20c9c06ffe9bf04284bfd1f14376a329d10122f902abe2770817eb504"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/stix-two-math",
+      "version": "0.4.0",
+      "pack": "scripts",
+      "scripts": [
+        "Zmth"
+      ],
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/stix-two-math/v/0.4.0",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "0c8825913b60d858aacdb33c4ca6660a7d64b0d6464702efbb19313f5765861a",
+      "reservedFontNames": [
+        "TM Math"
+      ],
+      "upstream": "https://github.com/stipub/stixfonts",
+      "copyright": "Copyright 2001-2021 The STIX Fonts Project Authors (https://github.com/stipub/stixfonts), with Reserved Font Name \"TM Math\". STIX Fonts™ is a trademark of The Institute of Electrical and Electronics Engineers, Inc.",
+      "faces": [
+        {
+          "file": "400Regular/STIXTwoMath_400Regular.ttf",
+          "family": "STIX Two Math",
+          "weight": 400,
+          "italic": false,
+          "sha256": "c3377c20641ecee349677e3f6cc71a6405c30cda7171a4cbc4a1c3970cfff0b4"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-math",
+      "version": "0.4.2",
+      "pack": "scripts",
+      "scripts": [
+        "Zmth",
+        "Zsym"
+      ],
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-math/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseFile": "LICENSE_FONT",
+      "licenseSha256": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+      "reservedFontNames": [],
+      "upstream": "https://github.com/notofonts/math",
+      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/math)",
+      "faces": [
+        {
+          "file": "400Regular/NotoSansMath_400Regular.ttf",
+          "family": "Noto Sans Math",
+          "weight": 400,
+          "italic": false,
+          "sha256": "b4a1dfdbfa13b4755e5eac20cb25c1d17ed5a745ceb89639595e8cf45a2b1e07"
+        }
+      ]
+    },
+    {
       "name": "@expo-google-fonts/noto-sans",
       "version": "0.4.2",
       "pack": "scripts",
@@ -2648,30 +2751,6 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "weight": 700,
           "italic": false,
           "sha256": "5682f6c88d6199623edf026f67a8722697e8c5f409e5249477594e409d657eb0"
-        }
-      ]
-    },
-    {
-      "name": "@expo-google-fonts/noto-sans-math",
-      "version": "0.4.2",
-      "pack": "scripts",
-      "scripts": [
-        "Zsym"
-      ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-math/v/0.4.2",
-      "license": "OFL-1.1",
-      "licenseFile": "LICENSE_FONT",
-      "licenseSha256": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
-      "reservedFontNames": [],
-      "upstream": "https://github.com/notofonts/math",
-      "copyright": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/math)",
-      "faces": [
-        {
-          "file": "400Regular/NotoSansMath_400Regular.ttf",
-          "family": "Noto Sans Math",
-          "weight": 400,
-          "italic": false,
-          "sha256": "b4a1dfdbfa13b4755e5eac20cb25c1d17ed5a745ceb89639595e8cf45a2b1e07"
         }
       ]
     }

@@ -123,3 +123,11 @@ export declare function createScriptTextMeasurement(measurement: TextMeasurement
 export declare function openTypeLanguage(tag: string | undefined): string | undefined;
 /** Heading or body role of a style from its OPF path; undefined without a slide path. */
 export declare function textRole(style: { path?: string } | undefined): "heading" | "body" | undefined;
+/** FF-45: the emoji faces (Noto Color Emoji, then Noto Emoji); they draw emoji-presentation clusters only. */
+export declare const EMOJI_FONT_FAMILIES: readonly string[];
+/** True when the text holds an emoji-presentation cluster (emoji-default characters, VS16, skin tones, flags, keycaps, tags). */
+export declare function hasEmojiPresentation(text: string): boolean;
+/** True when the text holds mathematical notation that text faces lack (math alphanumerics, letterlike math sets, rarer operator blocks). */
+export declare function hasMathNotation(text: string): boolean;
+/** Colour faces of the manifest: resvg draws their monochrome stand-in (`rasterFamily`); browsers draw them in colour. */
+export declare const COLOR_FONT_FACES: readonly { family: string; file: string; package: string; format: string; rasterFamily: string }[];

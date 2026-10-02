@@ -47,7 +47,8 @@ assert.equal(SYMBOL_SCRIPT,'Zsym');
 assert.equal(SYMBOL_PLACEHOLDER,'□');
 assert.deepEqual(SYMBOL_PREVIEW_FACES.Symbol,['Noto Sans','Noto Sans Math','Noto Sans Symbols 2','Noto Sans Symbols']);
 assert.deepEqual([...SYMBOL_FACE_FAMILIES].sort(),['Noto Sans','Noto Sans Math','Noto Sans Symbols','Noto Sans Symbols 2']);
-assert.deepEqual(glyphFallbackFamilies('∑').slice(-3),['Noto Sans Symbols 2','Noto Sans Symbols','Noto Sans Math'],'the symbol faces end the glyph fallback chain');
+assert.deepEqual(glyphFallbackFamilies('∑').slice(-2),['Noto Sans Symbols 2','Noto Sans Symbols'],'the symbol faces end the glyph fallback chain');
+assert.ok(glyphFallbackFamilies('∑').includes('Noto Sans Math'),'Noto Sans Math is in the glyph fallback chain (designated for Zmth)');
 
 // ---- input forms ----
 assert.equal(symbolCodeOf(''),0x6C);assert.equal(symbolCodeOf('l'),0x6C);assert.equal(symbolCodeOf('€'),0x80);assert.equal(symbolCodeOf('•'),0x95);
@@ -71,7 +72,7 @@ assert.deepEqual(mapSymbolText('Calibri','ab').map(item=>item.code),[null,null])
 
 // ---- the pinned faces: OFL, no proprietary family anywhere ----
 const symbolPackages=BUNDLED_FONT_MANIFEST.packages.filter(pkg=>pkg.scripts?.includes(SYMBOL_SCRIPT));
-assert.deepEqual(symbolPackages.map(pkg=>pkg.name),['@expo-google-fonts/noto-sans-symbols-2','@expo-google-fonts/noto-sans-symbols','@expo-google-fonts/noto-sans-math']);
+assert.deepEqual(symbolPackages.map(pkg=>pkg.name).sort(),['@expo-google-fonts/noto-sans-math','@expo-google-fonts/noto-sans-symbols','@expo-google-fonts/noto-sans-symbols-2']);
 for(const pkg of symbolPackages){assert.equal(pkg.pack,'scripts');assert.equal(pkg.license,'OFL-1.1');assert.deepEqual(pkg.reservedFontNames,[]);for(const face of pkg.faces)assert.match(face.sha256,/^[0-9a-f]{64}$/);}
 for(const pkg of BUNDLED_FONT_MANIFEST.packages){
   assert.ok(!PROPRIETARY.test(pkg.name.split('/').pop().replace(/-/g,' ')),pkg.name);

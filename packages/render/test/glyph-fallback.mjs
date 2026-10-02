@@ -121,14 +121,15 @@ for (const [scheme, language] of [['calibri', 'russian'], ['calibri', 'greek'], 
   assert.deepEqual(chain('収', latin).slice(0, 3), ['Noto Sans', 'Noto Sans JP', 'Noto Serif JP'], 'Han in a Latin deck: Noto Sans, then every CJK face');
   assert.deepEqual(chain('ก', latin).slice(0, 2), ['Noto Sans Thai', 'Noto Serif Thai'], 'a script character: its own script face first');
   assert.deepEqual(glyphFallbackFamilies('ρ', latin, true).slice(0, 1), ['Noto Sans']);
-  // FF-45: the open symbol faces end the chain (mathematical operators, arrows, dingbats) after every designated script face.
-  const symbolFaces = ['Noto Sans Symbols 2', 'Noto Sans Symbols', 'Noto Sans Math'];
-  assert.deepEqual(chain('ρ', latin).slice(-3), symbolFaces, 'the symbol faces are last');
+  // FF-45: the open symbol faces end the chain (arrows, dingbats, pictographs) after every designated script, emoji and math face; Noto Sans Math and STIX Two Math are designated for Zmth and come before them.
+  const symbolFaces = ['Noto Sans Symbols 2', 'Noto Sans Symbols', 'Noto Sans Math'], lastFaces = symbolFaces.slice(0, 2);
+  assert.deepEqual(chain('ρ', latin).slice(-2), lastFaces, 'the symbol faces are last');
+  assert.ok(chain('ρ', latin).indexOf('Noto Sans Math') < chain('ρ', latin).indexOf('Noto Sans Symbols 2'), 'the math faces come before the symbol faces');
   for (const family of chain('ρ', latin)) assert.ok(designatedFamiliesAll().includes(family) || symbolFaces.includes(family), `${family} is a designated family`);
   assert.deepEqual(chain('ρ', latin), chain('ρ', latin), 'deterministic');
 }
 function designatedFamiliesAll() {
-  return ['Latn', 'Jpan', 'Hans', 'Hant', 'Kore', 'Arab', 'Hebr', 'Deva', 'Beng', 'Guru', 'Gujr', 'Orya', 'Taml', 'Telu', 'Knda', 'Mlym', 'Sinh', 'Thai', 'Laoo', 'Khmr', 'Mymr', 'Ethi', 'Armn', 'Geor', 'Mong', 'Thaa', 'Syrc', 'Tibt'].flatMap((script) => designatedFamilies(script));
+  return ['Latn', 'Jpan', 'Hans', 'Hant', 'Kore', 'Arab', 'Hebr', 'Deva', 'Beng', 'Guru', 'Gujr', 'Orya', 'Taml', 'Telu', 'Knda', 'Mlym', 'Sinh', 'Thai', 'Laoo', 'Khmr', 'Mymr', 'Ethi', 'Armn', 'Geor', 'Mong', 'Thaa', 'Syrc', 'Tibt', 'Zsye', 'Zmth'].flatMap((script) => designatedFamilies(script));
 }
 
 // 6. Planner API: notes, options and the unmeasured stack.
