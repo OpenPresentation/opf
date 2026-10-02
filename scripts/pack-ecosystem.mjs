@@ -50,6 +50,16 @@ for (const [name, source, version] of packages) {
     if (typeof file !== 'string' || path.isAbsolute(file) || file.split(/[/\\]/).includes('..') || /[*?\[\]{}!]/.test(file)) throw new Error(`Expected a literal contained package file: ${file}`);
     await cp(path.join(directory, file), path.join(stage, file), { recursive: true });
   }
+  // npm rewrites a CRLF shebang line to LF when it links a package's bin files
+  // at install time (bin-links), so an installed bin never equals a stage copied
+  // from a checkout with CRLF endings (Windows core.autocrlf). Normalise exactly
+  // that first line, and nothing else, so the staged bytes are the bytes npm
+  // installs: scripts/test-installed-code.mjs still compares every runtime file.
+  for (const bin of typeof manifest.bin === 'string' ? [manifest.bin] : Object.values(manifest.bin ?? {})) {
+    if (typeof bin !== 'string' || path.isAbsolute(bin) || bin.split(/[/\\]/).includes('..')) throw new Error(`Expected a contained bin file: ${bin}`);
+    const file = path.join(stage, bin), text = (await readFile(file)).toString('latin1');
+    if (/^#![^\r\n]*\r\n/.test(text)) await writeFile(file, Buffer.from(text.replace(/^(#![^\r\n]*)\r\n/, '$1\n'), 'latin1'));
+  }
   await writeFile(
     path.join(stage, "package.json"),
     JSON.stringify(manifest, null, 2) + "\n",
