@@ -57,6 +57,8 @@ export interface CanvasEditorOptions {
    * their properties on double-click.
    */
   textEntry?: "click" | "dblclick";
+  /** Picture tools (default true): a selected picture shows a "Crop picture" button that opens the crop and focal point layer. */
+  imageTools?: boolean;
   /** Optional empty host for property forms; defaults to a floating canvas panel. */
   propertiesContainer?: HTMLElement;
   onSelect?: (selection: {
@@ -89,6 +91,13 @@ export interface CanvasEditor {
   readonly slideIndex: number;
   readonly editingPath: string | null;
   readonly layoutEditing: boolean;
+  /** True while the crop layer is open. */
+  readonly cropping: boolean;
+  /**
+   * Open the crop layer for the picture at `path` (an image block, a slide's `image`, or `slides.N.design.slideImage`); `tool: "focus"`
+   * starts with the focal point. Apply writes one undoable change (see `@openpresentation/opf-editor/image-crop`). Resolves to whether it opened.
+   */
+  cropImage(path: string, options?: { tool?: "crop" | "focus" }): Promise<boolean>;
   setLayoutEditing(enabled: boolean): boolean;
   /** Open reorder and move-to-group controls for a complete block path. */
   openBlockMenu(path: string): void;
@@ -103,6 +112,12 @@ export interface CanvasEditor {
   cancel(): void;
   render(document?: unknown): void;
   setSlide(index: number): boolean;
+  /**
+   * Select the content at `path`, or the closest enclosing content the canvas can select (a list item selects its list),
+   * after showing the slide the path is on. Returns the selected path, or null when nothing is selectable there (speaker
+   * notes, deck fields) or the slide is not drawn yet (fonts loading). Moves keyboard focus only with `focus: true`.
+   */
+  reveal(path: string, options?: { focus?: boolean }): string | null;
   setRenderOptions(options: RenderSvgOptions): boolean;
   destroy(): void;
 }

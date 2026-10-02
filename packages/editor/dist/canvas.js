@@ -20,6 +20,7 @@ import { createLayoutHandles } from "./layout-handles.js";
 import { createRichTextInput } from "./rich-text-input.js";
 import { textInputOffsetAtPoint } from "./text-pointer.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
+import { createImageCropper } from "./image-cropper.js";
 import { FONTS_PENDING, fontsPendingError, whenFontsReady } from "./font-gate.js";
 export { getEditableFields } from "./canvas-fields.js";
 export { createFontGate, whenFontsReady, FONTS_PENDING, FONTS_UNAVAILABLE } from "./font-gate.js";
@@ -93,7 +94,7 @@ export function createCanvasEditor(container, options = {}) {
     overlay = doc.createElement("div"),
     notice = doc.createElement("div");
   root.className = "opf-canvas";
-  root.style.cssText = "position:relative;width:100%;isolation:isolate";
+  root.style.cssText = "position:relative;width:100%;isolation:isolate;touch-action:manipulation";
   preview.className = "opf-canvas-preview";
   overlay.className = "opf-canvas-overlay";
   overlay.style.cssText = "position:absolute;inset:0;pointer-events:none";
@@ -123,6 +124,15 @@ export function createCanvasEditor(container, options = {}) {
     },
     onChange(path) { clearNotice(); options.onCommit?.({path, editor}); }
   });
+  // RR-25: picture tools. A selected picture shows a "Crop picture" button; `cropImage(path)` opens the same layer.
+  const imageCropper = options.imageTools === false ? null : createImageCropper(root, overlay, {
+    editor,
+    beforeOpen: () => commit(),
+    getImageElement: (path) => [...preview.querySelectorAll("image[data-opf-path]")].find((node) => node.getAttribute("data-opf-path") === path) ?? null,
+    report,
+    onCommit: (value) => { clearNotice(); options.onCommit?.({ ...value, editor }); },
+    onCancel: () => options.onCancel?.({}),
+  });
   const layoutHandles = createLayoutHandles(root, {
     editor, enabled: options.layoutEditing, render: renderFor, beforeEdit: commit,
     isTextEditing: () => !!active,
@@ -149,6 +159,7 @@ export function createCanvasEditor(container, options = {}) {
   }
   function choose(path) {
     selectedPath = path;
+    imageCropper?.sync(path);
     for (const node of targets())
       node.toggleAttribute(
         "data-canvas-selected",
@@ -281,11 +292,14 @@ export function createCanvasEditor(container, options = {}) {
       if (node.matches("g")) {
         const bounds = allocatedSelectionBox(node, item);
         const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+        // RR-25: on a touch screen a text block of a few slide units is a few pixels tall, so the target grows (up to 24 slide units
+        // each way) until it is about 44 CSS pixels in each direction.
+        const padX = touchPad(svg, bounds.width), padY = touchPad(svg, bounds.height);
         for (const [key, value] of Object.entries({
-          x: bounds.x - 4,
-          y: bounds.y - 4,
-          width: Math.max(8, bounds.width + 8),
-          height: Math.max(8, bounds.height + 8),
+          x: bounds.x - padX,
+          y: bounds.y - padY,
+          width: Math.max(2 * padX, bounds.width + 2 * padX),
+          height: Math.max(2 * padY, bounds.height + 2 * padY),
           fill: "transparent",
           stroke: "transparent",
           "stroke-width": 1.5,
@@ -328,6 +342,7 @@ export function createCanvasEditor(container, options = {}) {
     }
     layoutHandles.update(document, geometry);
     blockControls.update(document, geometry);
+    imageCropper?.update();
     if (active?.kind === "text") positionInput();
     if (active?.kind === "rich-text") active.rich?.update();
     if (fontsShown) {
@@ -341,6 +356,13 @@ export function createCanvasEditor(container, options = {}) {
       geometry,
       draft: !!active || !!layoutHandles.editingPath,
     });
+  }
+  const coarse = win.matchMedia?.("(pointer: coarse)");
+  function touchPad(svg, size) {
+    if (!coarse?.matches) return 4;
+    const box = svg.getBoundingClientRect(), view = svg.viewBox?.baseVal;
+    const scale = box.width && view?.width ? box.width / view.width : 0;
+    return scale ? Math.max(4, Math.min(24, (44 / scale - size) / 2)) : 4;
   }
   // An in-progress edit whose text needs faces that are not loaded yet waits for them, then draws again.
   function deferDraft(draft) {
@@ -905,6 +927,43 @@ export function createCanvasEditor(container, options = {}) {
     getTarget(path)?.focus();
     options.onCancel?.({ path });
   }
+  function setSlide(index) {
+    if (!Number.isInteger(index) || !editor.document.slides?.[index])
+      throw new RangeError("Slide index is out of range.");
+    if (index === slideIndex) {
+      if (!active) renderFor();
+      return true;
+    }
+    if (!commit()) return false;
+    richToolbar.hide();
+    imageCropper?.cancel();
+    slideIndex = index;
+    selectedPath = null;
+    imageCropper?.sync(null);
+    renderFor();
+    return true;
+  }
+  // RR-25: select the content at `path`, or the closest enclosing content that is a canvas target (a list item, a table
+  // cell or a quote part selects the list, table or quote it belongs to), after showing the slide the path is on. Returns
+  // the path that was selected, or null when the path is not on a slide that is drawn yet (fonts still loading) or no
+  // enclosing content is selectable (speaker notes, deck fields). It never moves keyboard focus unless `focus` is true.
+  function reveal(path, { focus = false } = {}) {
+    if (disposed || typeof path !== "string") return null;
+    const slide = /^slides\.(\d+)(?:\.|$)/.exec(path);
+    if (slide && Number(slide[1]) !== slideIndex && !setSlide(Number(slide[1]))) return null;
+    if (active && !commit()) return null;
+    const segments = path.split(".");
+    for (let length = segments.length; length >= 3; length--) {
+      const candidate = segments.slice(0, length).join(".");
+      const node = getTarget(candidate);
+      if (!node) continue;
+      choose(candidate);
+      node.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+      if (focus) node.focus?.({ preventScroll: true });
+      return candidate;
+    }
+    return null;
+  }
   const unsubscribe = editor.subscribe(() => {
     if (committing || layoutHandles.editingPath) return;
     if (active) {
@@ -927,6 +986,9 @@ export function createCanvasEditor(container, options = {}) {
     active?.rich?.update();
   });
   resize.observe(root);
+  // The on-screen keyboard shrinks the visual viewport; keep the field being typed in visible above it.
+  const keepEditVisible = () => { if (active?.input && coarse?.matches) active.input.scrollIntoView?.({ block: "center", inline: "nearest" }); };
+  win.visualViewport?.addEventListener("resize", keepEditVisible);
   root.addEventListener("pointerdown", () => { pointerTaken = null; }, true);
   root.addEventListener("keydown", (event) => {
     if (
@@ -963,6 +1025,13 @@ export function createCanvasEditor(container, options = {}) {
       return active?.path ?? layoutHandles.editingPath ?? blockControls.editingPath ?? null;
     },
     get layoutEditing() { return layoutHandles.enabled; },
+    /** True while the crop layer is open. */
+    get cropping() { return !!imageCropper?.isOpen; },
+    /** Open the crop layer for the picture at `path` (an image block, a slide's `image`, a slide image). `tool: "focus"` starts with the focal point. */
+    cropImage(path, cropOptions) {
+      if (!imageCropper) return Promise.resolve(false);
+      return imageCropper.open(path, cropOptions);
+    },
     setLayoutEditing(enabled) {
       if (!commit()) return false;
       return layoutHandles.setEnabled(enabled);
@@ -983,20 +1052,8 @@ export function createCanvasEditor(container, options = {}) {
     commit,
     cancel,
     render,
-    setSlide(index) {
-      if (!Number.isInteger(index) || !editor.document.slides?.[index])
-        throw new RangeError("Slide index is out of range.");
-      if (index === slideIndex) {
-        if (!active) renderFor();
-        return true;
-      }
-      if (!commit()) return false;
-      richToolbar.hide();
-      slideIndex = index;
-      selectedPath = null;
-      renderFor();
-      return true;
-    },
+    setSlide,
+    reveal,
     setRenderOptions(next) {
       if (!commit()) return false;
       richToolbar.hide();
@@ -1008,11 +1065,13 @@ export function createCanvasEditor(container, options = {}) {
       disposed = true;
       stopDrag?.();
       active?.rich?.destroy();
+      imageCropper?.destroy();
       richToolbar.destroy();
       layoutHandles.destroy();
       blockControls.destroy();
       unsubscribe();
       resize.disconnect();
+      win.visualViewport?.removeEventListener("resize", keepEditVisible);
       if (frame) win.cancelAnimationFrame(frame);
       root.remove();
       options.propertiesContainer?.replaceChildren();

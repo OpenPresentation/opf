@@ -62,6 +62,8 @@ try {
   // Responsive CSS hides the button text on small screens. Keep names and actions usable.
   for (const viewport of [{ width: 1280, height: 720 }, { width: 540, height: 960 }]) {
     await page.setViewportSize(viewport);
+    // RR-25: on a phone the document's header buttons sit behind the More button.
+    if (await page.locator('#more-actions').isVisible() && await page.locator('#more-actions').getAttribute('aria-expanded') !== 'true') await page.locator('#more-actions').click();
     for (const name of ['Import', 'Copy OPF', 'Source', 'Save OPF']) {
       assert.equal(await button(name).count(), 1, `${name} keeps its accessible name at ${viewport.width}px`);
       assert.equal(await button(name).isVisible(), true);

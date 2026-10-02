@@ -1,6 +1,9 @@
 import {installDataControls} from './data-controls.js';
 import {createSchemaInspector} from '../src/schema-inspector.js';
 import {installTemplateControls} from './template-controls.js';
+import {installFindControls} from './find-controls.js';
+import {installCropControls} from './crop-controls.js';
+import {installMobileControls} from './mobile-controls.js';
 import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession } from '../src/index.js';
 import {createCanvasEditor,createFontGate} from '../src/canvas.js';
@@ -69,7 +72,7 @@ const editor = createEditorSession({
   ],
 }, { rejectInvalid: true });
 const element = id => document.getElementById(id);
-let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure;
+let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure, pictureTools;
 // RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
 // undoable session change, so the editor.subscribe(refresh) below redraws the preview (and loads fonts first) exactly as for an edit.
 const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'background', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
@@ -187,7 +190,7 @@ function select(path) {
   element('value-label').textContent = typeof selectedValue === 'string' ? 'Text content' : 'Content JSON';
   element('preview').querySelectorAll('g[data-opf-path]').forEach(node => node.classList.toggle('is-selected', node.getAttribute('data-opf-path') === path));
   element('value').value = typeof selectedValue === 'string' ? selectedValue : JSON.stringify(selectedValue, null, 2) ?? '';
-  designControls.refresh(); selectionControls.refresh(); dataGrid.refresh();
+  designControls.refresh(); selectionControls.refresh(); dataGrid.refresh(); pictureTools?.refresh();
 }
 // Review text for one font resolution the registry recorded. A change inside one family is a style fallback (the weight or italic asked
 // for is not held, so the nearest face of the same family is drawn), not a replacement font: name the styles, never "Roboto → Roboto".
@@ -423,4 +426,7 @@ for(const [id,path]of [['deck',''],['slide',()=>`/slides/${slideIndex}`],['selec
 element('properties-preview').onclick=event=>{const target=event.target.closest('[data-opf-path]');if(target)propertiesInspector?.navigate(target.getAttribute('data-opf-path'));};
 
 installDataControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,fonts:fontGate});
+pictureTools=installCropControls({editor,getCanvas:()=>canvas,getSelectedPath:()=>selectedPath,getSlideIndex:()=>slideIndex,status});
+installFindControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,goToSlide:index=>{if(index===slideIndex)return;slideIndex=index;return refresh();},status,showPanel});
+installMobileControls();
 installTemplateControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,fonts:fontGate});

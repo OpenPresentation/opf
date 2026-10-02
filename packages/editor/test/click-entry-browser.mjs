@@ -395,6 +395,19 @@ try {
     done('a secondary button does not enter editing');
   }
 
+  // RR-25: reveal(path) shows the slide the path is on and selects the nearest content the canvas can select.
+  await mount();
+  await slide(0);
+  {
+    const selected = await page.evaluate(() => cv.reveal('slides.3.items.1'));
+    assert.match(selected, /^slides.3.items/, 'a list item selects its list');
+    assert.equal(await page.evaluate(() => cv.slideIndex), 3, 'reveal shows the slide');
+    assert.ok(await target(selected).evaluate((node) => node.hasAttribute('data-canvas-selected')));
+    assert.equal(await page.evaluate(() => cv.reveal('slides.0.notes')), null, 'notes are not on the canvas');
+    assert.equal(await page.evaluate(() => cv.slideIndex), 0);
+    done('reveal shows the slide and selects the nearest target');
+  }
+
   // 17. Touch: a tap enters at the tapped character; a touch drag (scroll) does not.
   const touch = await browser.newContext({hasTouch: true, viewport: {width: 1440, height: 1200}});
   {
