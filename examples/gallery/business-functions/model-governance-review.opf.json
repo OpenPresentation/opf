@@ -5,7 +5,7 @@
   "filename": "model-governance-review",
   "language": "english-ca",
   "audience": [
-    "regulators",
+    "regulatory",
     {
       "id": "candidates",
       "attentionBudgetMinutes": 20,

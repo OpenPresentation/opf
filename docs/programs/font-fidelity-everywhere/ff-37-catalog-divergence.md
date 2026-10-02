@@ -93,7 +93,12 @@ Not published at all:
   | `regulators` | `regulatory` |
 
   `candidates`, `engineering-team`, `board` and `all-hands` stay canonical.
-  - **Not applied in this PR.** 81 bundled examples (111 references) and
+  - **Applied by RR-41 (core-first, after the 2026-10-02 decision that core is the source of truth).**
+    The 81 bundled examples and `engine-defaults.json` moved to the singular ids,
+    the six records carry `deprecation`, and `--rehash` rewrote the hashes. The
+    gallery adopts it with the next core release. The text below is the original
+    FF-37 plan.
+  - **Not applied in FF-37.** 81 bundled examples (111 references) and
     `spec/reference/engine-defaults.json` (`audience: "executives"`) use the
     plural ids. Deprecating them would add validator warnings to the example
     corpus, which the example tests reject.

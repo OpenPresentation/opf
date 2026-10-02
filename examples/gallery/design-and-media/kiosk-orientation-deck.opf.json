@@ -14,9 +14,9 @@
     ]
   },
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "mixed",
       "decisionPower": "informational",

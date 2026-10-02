@@ -5,7 +5,7 @@
   "filename": "supplier-risk-heatmap",
   "language": "english-us",
   "audience": [
-    "investors",
+    "investor",
     {
       "id": "all-hands",
       "attentionBudgetMinutes": 18,

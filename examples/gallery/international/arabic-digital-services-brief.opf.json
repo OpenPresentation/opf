@@ -17,7 +17,7 @@
   "audience": [
     "engineering-team",
     {
-      "id": "regulators",
+      "id": "regulatory",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "high",
       "decisionPower": "advisory",

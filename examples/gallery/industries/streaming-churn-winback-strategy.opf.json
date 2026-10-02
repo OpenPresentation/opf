@@ -5,9 +5,9 @@
   "filename": "streaming-churn-winback-strategy",
   "language": "english-gb",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 23,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",

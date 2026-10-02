@@ -19,5 +19,9 @@
     "persuasive",
     "conversational"
   ],
-  "tags": ["internal", "go-to-market", "enablement"]
+  "tags": ["internal", "go-to-market", "enablement"],
+  "deprecation": {
+    "replacedBy": "sales",
+    "reason": "Duplicate of 'sales', the id pptx.gallery publishes. Kept so existing documents keep validating and rendering unchanged; use 'sales' in new documents."
+  }
 }

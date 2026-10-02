@@ -12,8 +12,12 @@ bundled in `@openpresentation/opf` stays tied to it.
 
 ## Contract
 
-- **pptx.gallery is the canonical publisher.** Catalog content changes land in
-  the pptx-gallery repository first.
+- **pptx.gallery publishes the catalog; core is the source of truth for its
+  content.** Since the FF-37 decision (2026-10-02) a record can change here first:
+  the gallery's CI checks its published files against the `@openpresentation/opf`
+  release in its lockfile (`pnpm check:core-catalog`) and adopts the change with
+  the next core release. A change that begins in the gallery still lands through
+  the sync below.
 - **`spec/catalogs/` is a pinned snapshot.** `spec/catalogs/manifest.json`
   records the gallery commit and a content hash per kind.
 - **Engines never fetch at run time by default.** Renderers, exporters,
@@ -137,6 +141,23 @@ so the sync refuses a publisher that stopped serving a bundled id.
 
 ### Updating it
 
+Either side can start a change. To start in core (a deprecation, a wording
+fix), edit the records and index entries under `spec/catalogs/<kind>/`, then
+rewrite the hashes and counts:
+
+```sh
+node scripts/sync-gallery-catalog.mjs --rehash   # index contentSha256, manifest records and contentSha256
+```
+
+`--rehash` leaves the manifest `source` and each kind's `gallery` block alone,
+because they describe the pinned gallery commit, and it does not touch `mode`. A
+mirrored kind must also match the gallery hash, so a core-first change to a mirror
+kind needs the gallery to publish it first, or the kind to move to `subset`. The
+gallery adopts a core-first change with the next `@openpresentation/opf` release
+(its `check:core-catalog` reads that release).
+
+To start in the gallery:
+
 ```sh
 # in the pptx-gallery checkout: edit data/, then
 pnpm build:opf-catalog            # regenerate and validate public/<kind>/
@@ -168,8 +189,8 @@ layouts, and the rest stay gallery-only.
 
 - `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline
   that every kind's records still hash to the value in its index and the
-  manifest. A hand edit to `spec/catalogs/` fails here. Change the gallery and
-  sync instead.
+  manifest. A hand edit to `spec/catalogs/` fails here until `--rehash` (core
+  first) or the sync (gallery first) has rewritten them.
 - Drift between the gallery and this snapshot is checked on the gallery side
   (FF-37): pptx-gallery's `pnpm check:core-catalog` ([pptx-gallery#84](https://github.com/Data-Advantage/pptx-gallery/pull/84)) compares its
   published `public/<kind>/` files with `spec/catalogs` of the

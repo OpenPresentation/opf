@@ -19,5 +19,9 @@
     "authoritative",
     "inspirational"
   ],
-  "tags": ["external", "capital", "fundraising"]
+  "tags": ["external", "capital", "fundraising"],
+  "deprecation": {
+    "replacedBy": "investor",
+    "reason": "Duplicate of 'investor', the id pptx.gallery publishes. Kept so existing documents keep validating and rendering unchanged; use 'investor' in new documents."
+  }
 }
