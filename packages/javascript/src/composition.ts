@@ -776,6 +776,10 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
 }
 
 const textSegments = new Intl.Segmenter("und", { granularity: "grapheme" });
+/** A line may exceed its box by this much (reference pixels) before it wraps: the overflow tests already allow it, and an exact fit (a monospace line of 0.6 em cells filling the box) must not wrap one word early on a rounding error. */
+const WRAP_TOLERANCE = .01;
+/** Whitespace that can hang at a soft line break: every space except the no-break spaces and the zero-width no-break space. */
+const HANGING_SPACE = /[^\S\r\n\u00a0\u202f\ufeff]/u;
 
 /** Deterministic estimate, not a font shaping engine. Preserves explicit line breaks. */
 export function measureText(text: string, fontSize: number): number {
@@ -1411,9 +1415,13 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
     };
     const width=(start:number,end:number)=>measureLine(start,end).width;
     const sourceLines:CodeLineSource[]=[];
-    let start=0,end=0;
+    let start=0,end=0,hangFrom=-1;
     const push=(last:number,nextStart:number,boundary:CodeLineSource['boundary'])=>{
-      sourceLines.push({start,end:last,nextStart,boundary,...measureLine(start,last,true)});
+      const measured=measureLine(start,last,true);
+      // RR-17: a space that did not fit hangs at the end of its line: it stays in the line's source range but not in its width.
+      if(hangFrom>=0&&hangFrom<last)measured.width=measureLine(start,hangFrom).width;
+      hangFrom=-1;
+      sourceLines.push({start,end:last,nextStart,boundary,...measured});
       start=nextStart;end=nextStart;
     };
     const tokens=prose?/\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]+|(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu:/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu;
@@ -1421,11 +1429,13 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
       if (token.index===undefined) throw new Error('Missing code token source offset.');
       const a=token.index,b=a+token[0].length;
       if (/^[\r\n]/.test(token[0])) {push(a,b,'hard');continue;}
-      if (width(start,b)<=box.width+.01) {end=b;continue;}
+      if (width(start,b)<=box.width+WRAP_TOLERANCE) {end=b;continue;}
+      // A space that does not fit hangs at the end of the line instead of starting the next one.
+      if (prose && end>start && /\S/u.test(text.slice(start,end)) && HANGING_SPACE.test(token[0][0]!)) {if(hangFrom<0)hangFrom=end;end=b;continue;}
       // Prefer a word boundary. Keep indentation with a following token's
       // fitting prefix instead of eagerly placing it on a separate line.
       if (end>start && /\S/u.test(text.slice(start,end))) push(a,a,'soft');
-      if (width(start,b)<=box.width+.01) {end=b;continue;}
+      if (width(start,b)<=box.width+WRAP_TOLERANCE) {end=b;continue;}
       // Nonbreaking spaces and word joiners carry an explicit author constraint.
       // Keep the protected token intact and report overflow at the chosen floor.
       if (prose&&/[\u00a0\u202f\u2060\ufeff]/u.test(token[0])) {end=b;continue;}
@@ -1619,27 +1629,30 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
       }return result;
     };
     const width=(start:number,end:number)=>fragments(start,end).reduce((sum,fragment)=>sum+fragment.width,0);
-    const ranges:{start:number;end:number}[]=[];
-    let lineStart=0,lineEnd=0;
-    const push=(end:number)=>{ranges.push({start:lineStart,end});lineStart=end;lineEnd=end;};
+    const ranges:{start:number;end:number}[]=[],hung=new Map<number,number>();
+    let lineStart=0,lineEnd=0,hangFrom=-1;
+    const push=(end:number)=>{if(hangFrom>=0)hung.set(ranges.length,hangFrom);hangFrom=-1;ranges.push({start:lineStart,end});lineStart=end;lineEnd=end;};
     for(const match of whole.matchAll(/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu)){
       const start=match.index!,end=start+match[0].length;
       if(/^[\r\n]/.test(match[0])){push(start);lineStart=end;lineEnd=end;continue;}
-      if(width(lineStart,end)<=box.width){lineEnd=end;continue;}
-      // Wrap at word boundaries; retain whitespace in the source ranges.
+      if(width(lineStart,end)<=box.width+WRAP_TOLERANCE){lineEnd=end;continue;}
+      // Wrap at word boundaries; retain whitespace in the source ranges. RR-17: whitespace that does not fit hangs at the end of the line
+      // (the source stays lossless and the next line never starts with a space); hanging whitespace is not part of the line's width.
+      if(HANGING_SPACE.test(match[0][0]!)&&lineEnd>lineStart&&/\S/u.test(whole.slice(lineStart,lineEnd))){if(hangFrom<0)hangFrom=lineEnd;lineEnd=end;continue;}
       if(lineEnd>lineStart)push(start);
-      if(width(start,end)<=box.width){lineEnd=end;continue;}
+      if(width(start,end)<=box.width+WRAP_TOLERANCE){lineEnd=end;continue;}
       for(const {segment,index}of textSegments.segment(match[0])){
         const next=start+index+segment.length;
-        if(lineEnd>lineStart&&width(lineStart,next)>box.width)push(start+index);
+        if(lineEnd>lineStart&&width(lineStart,next)>box.width+WRAP_TOLERANCE)push(start+index);
         lineEnd=next;
       }
     }
+    if(hangFrom>=0)hung.set(ranges.length,hangFrom);
     ranges.push({start:lineStart,end:lineEnd});
     let y=0;
-    const richLines=ranges.map(range=>{
-      const parts=fragments(range.start,range.end),ascent=Math.max(fontSize,...parts.map(part=>part.fontSize-part.baselineShift)),descent=Math.max(fontSize*.22,...parts.map(part=>part.fontSize*.22+part.baselineShift));
-      const height=ascent+descent,line={fragments:parts,width:parts.reduce((sum,p)=>sum+p.width,0),y,baseline:y+ascent,height};y+=height;return line;
+    const richLines=ranges.map((range,rangeIndex)=>{
+      const parts=fragments(range.start,range.end),shown=hung.get(rangeIndex)??range.end,ascent=Math.max(fontSize,...parts.map(part=>part.fontSize-part.baselineShift)),descent=Math.max(fontSize*.22,...parts.map(part=>part.fontSize*.22+part.baselineShift));
+      const height=ascent+descent,line={fragments:parts,width:shown===range.end?parts.reduce((sum,p)=>sum+p.width,0):width(range.start,shown),y,baseline:y+ascent,height};y+=height;return line;
     });
     if (options.uniformLineHeight) {
       const height = Math.max(...richLines.map(line => line.height));
