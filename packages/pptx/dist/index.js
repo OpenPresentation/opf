@@ -2009,9 +2009,14 @@ async function addSlideImage(slide, presentation, image, slideIndex, context, op
 // FF-62: chart text is one size. The preview draws every chart label (axis, legend, data label) at
 // max(14, composition.minFontSize ?? 16) px scaled by the slide's shorter side over 720 px (renderer charts.js, `fontPx`),
 // the readability floor: 12 pt on a 13.33 x 7.5 in slide. The export writes that size, in hundredths of a point (DrawingML `sz`).
+// RR-16: core composes every font size on PowerPoint's 0.01 pt grid (1/75 px), so the preview draws the grid size, not the raw
+// product: the floor rounds up (core `snapFontSizeUp`) and an unfloored request of 14 px rounds down (`snapFontSizeDown`).
+// Math.round differed from the preview by 0.01 pt on slide sizes whose scale is not a whole number (A4, Letter, 16:10).
 function chartTextSize(context) {
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
-  return Math.round(Math.max(14, context.composition?.minFontSize ?? 16) * scale * 75);
+  const floor = context.composition?.minFontSize ?? 16;
+  const hundredths = Math.max(14, floor) * scale * 75;
+  return floor >= 14 ? Math.ceil(hundredths - 1e-6) : Math.floor(hundredths + 1e-6);
 }
 
 // Every c:txPr of a generated classic chart carries the chart text size: PptxGenJS writes no size on the legend (PowerPoint's

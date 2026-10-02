@@ -32,7 +32,8 @@ async function previewSizes(deck, type) {
   for (const [, attributes] of svg.matchAll(/<text\b([^>]*)>/g)) {
     const path = attributes.match(/data-opf-path="([^"]*)"/)?.[1];
     if (!path?.includes('.chart')) continue;
-    roles[roleOf(path, type)].push(Number(attributes.match(/font-size="([^"]*)"/)[1]) * 0.75);
+    // Hundredths of a point, as the export writes them: core composes on the 0.01 pt grid, the preview prints the size in px to 0.001.
+    roles[roleOf(path, type)].push(Math.round(Number(attributes.match(/font-size="([^"]*)"/)[1]) * 75) / 100);
   }
   return Object.fromEntries(Object.entries(roles).map(([role, sizes]) => [role, unique(sizes)]));
 }
@@ -55,6 +56,10 @@ const configs = [
   {name: 'portrait 540 x 960 px', design: {dimensions: {widthInches: 5.625, heightInches: 10}}, composition: undefined, expected: 9},
   {name: 'minFontSize 20', design: {}, composition: {minFontSize: 20}, expected: 15},
   {name: 'minFontSize 10 (the 14 px floor)', design: {}, composition: {minFontSize: 10}, expected: 10.5},
+  // RR-16: core composes font sizes on the 0.01 pt grid. The scale of an A4 slide (8.27 in * 96 / 720 = 1.10267) makes the 16 px floor 13.232 pt,
+  // which rounds up to 13.24 pt (Math.round wrote 13.23 pt, 0.01 pt under the preview), and the 14 px request 11.578 pt, which rounds down to 11.57 pt.
+  {name: 'A4 11.69 x 8.27 in (fractional scale)', design: {dimensions: {widthInches: 11.69, heightInches: 8.27}}, composition: undefined, expected: 13.24},
+  {name: 'A4, minFontSize 10 (the 14 px request)', design: {dimensions: {widthInches: 11.69, heightInches: 8.27}}, composition: {minFontSize: 10}, expected: 11.57},
 ];
 
 let checks = 0;
