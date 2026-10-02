@@ -7,7 +7,13 @@
     "supportStatus": "docs/programs/font-fidelity-everywhere/gallery-support/support-status.json",
     "auditA": "docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json",
     "auditB": "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json",
+    "auditBExtra": [
+      "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-catalog-only.json"
+    ],
     "parity": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-rr-16-font-size-grid.json",
+    "parityExtra": [
+      "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-catalog-only.json"
+    ],
     "fontTracker": "docs/programs/font-fidelity-everywhere/font-tracker.json",
     "evidence": "docs/evidence",
     "burndown": "docs/programs/release-readiness/burndown.md"
@@ -15,11 +21,11 @@
   "parityNote": "The latest committed parity run (RR-16 font-size grid), measured on the RR-16 candidate heads before the 0.12.0 release train that carries RR-16. The published-package run before it (core 0.11.4, opf-render 0.11.9, opf-pptx 0.11.7) measured 739 perfect, 111 near, 0 mismatch; the two list-6x-heading-title-center layouts are the difference. The RR-20 re-audit on the published 0.12.0 set replaces both.",
   "columns": {
     "spec": "catalog (bundled in core spec/catalogs), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
-    "compose": "pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. For slide sizes: pass for the presets the theme catalog uses, since every gallery config draws at them and the themes audit works; unknown for the others.",
+    "compose": "pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped).",
     "preview": "pass or fail: the renderer draws the value and it changes the preview (audit A render check; audit B host-font preview). For fonts: the preview face is bundled.",
     "export": "pass or fail: opf-pptx exports the value natively (audit A export check; audit B export, and the native chart construct for charts). For fonts: the PPTX keeps the selected family name.",
     "roundTrip": "pass or fail: the export re-imports to the same value (audit A re-import check; audit B has no re-import reason and charts re-import as the same type).",
-    "parity": "perfect, near or mismatch: the worst variant of the value in the latest parity run (inputs.parity); unmeasured when the run has no config for it.",
+    "parity": "perfect, near or mismatch: the worst variant of the value in the latest parity run (inputs.parity); unmeasured when the run has no config for it. The catalog-only records and the slide-size presets come from the later run in inputs.parityExtra (RR-43).",
     "editor": "switch when opf-editor's switch operation covers the dimension (SWITCH_DIMENSIONS, FF-16 and RR-06; one tested case per dimension in test/switches.mjs, values offered from the bundled catalog); none otherwise.",
     "gallery": "shown (page and card), shown-no-preview, json-only (served only as catalog JSON), not-shown, not-shown-deprecated, coming (pptx.gallery home teaser).",
     "native": "exercised when a committed native PowerPoint evidence run names the value (inputs.evidence, rule in inputs.nativeEvidence); unverified otherwise. For fonts: the font tracker's native verification.",
@@ -90,12 +96,6 @@
       "gap": "works-unverified",
       "link": "RR-42",
       "next": "Include the value in the RR-42 native PowerPoint sample of the gallery (supervisor-run) and commit the deck sources and reports under a native evidence folder."
-    },
-    {
-      "id": "measure-catalog-only",
-      "gap": "unknown",
-      "link": "RR-43",
-      "next": "Measure the record with the audit B method (validate, compose, render, export, re-import, parity) on the published 0.12.0 packages and feed the result to this tracker."
     },
     {
       "id": "catalog-only-pages",

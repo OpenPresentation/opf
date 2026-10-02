@@ -36,7 +36,7 @@ function writeFiles(dir, files) {
 function scratchCopy(mutateOverrides = (o) => o) {
   const dir = mkdtempSync(path.join(tmpdir(), "gallery-tracker-"));
   const { evidence, catalogs, ...files } = overrides.inputs;
-  for (const file of [...Object.values(files), FILES.snapshots, FILES.json, FILES.markdown]) {
+  for (const file of [...Object.values(files).flat(), FILES.snapshots, FILES.json, FILES.markdown]) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
   }
