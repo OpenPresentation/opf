@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: 395e4c11aee82e3a3ebac1a70e2e112ec7e5143c
+          ref: c6a7b3840de9f9bdf66a4a38f07951764a953c57
           path: opf
           fetch-depth: 0
           persist-credentials: false
