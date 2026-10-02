@@ -1,4 +1,5 @@
 import { fromPptx, toPptx } from '@openpresentation/opf-pptx';
+import { exportFileName } from '../src/export.js';
 
 export async function readPptxFile(file) {
   const diagnostics = [];
@@ -52,7 +53,7 @@ export function installPptxExport({ editor, getCanvas, renderOptions, status, fo
       });
       if (id !== request || !dialog.open) return;
       bytes = result;
-      filename = `${(deck.name ?? 'presentation').replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'presentation'}.pptx`;
+      filename = exportFileName(deck, 'pptx');
       showConversionDiagnostics($('export-diagnostics'), diagnostics);
       $('export-summary').textContent = `${deck.slides.length} slides · ${result.length.toLocaleString()} bytes · ${diagnostics.length} conversion notes`;
       $('download-pptx').disabled = false;

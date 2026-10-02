@@ -13,6 +13,7 @@ import { renderSvg } from '@openpresentation/opf-render/svg';
 import * as renderFontCore from '@openpresentation/opf-render/fonts';
 import { resolveScriptFonts } from '@openpresentation/opf';
 import { installPptxExport } from './pptx-controls.js';
+import { installDownloadControls } from './download-controls.js';
 import { createDesignControls } from '../src/design-controls.js';
 import { createPersistence } from '../src/persistence.js';
 import { createPersistenceUi } from '../src/persistence-ui.js';
@@ -411,6 +412,8 @@ if (hostPersistence) {
 const galleryConfig=await fetch('./galleries.json').then(response=>{if(!response.ok)throw new Error('Gallery configuration unavailable');return response.json();}).catch(()=>[{name:'PPTX.gallery',url:'https://www.pptx.gallery/registry.json'}]);
 installTransferControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,galleries:galleryConfig,fonts:fontGate});
 installPptxExport({editor,getCanvas:()=>canvas,renderOptions:layoutOptions,status,fonts:fontGate,measurementFor:deck=>layoutFor(deck,0).textMeasurement});
+// RR-23: PDF, PNG and SVG downloads from the same drawing as the preview, with the faces the registry holds.
+installDownloadControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,renderOptions:layoutOptions,status,fonts:fontGate,registry:fontRegistry});
 
 let propertiesInspector,propertiesPreviewToken=0;
 const propertiesDialog=element('properties-dialog');

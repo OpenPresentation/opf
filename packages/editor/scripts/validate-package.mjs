@@ -45,6 +45,9 @@ for (const [entry, file] of [["./templates", "templates"], ["./template-panel", 
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
 }
 
+assert.ok(pkg.exports?.["./export"], "Must expose the RR-23 PDF, PNG and SVG export as a separate entry point.");
+assert.equal(pkg.exports["./export"].default, "./dist/export.js");
+assert.equal(pkg.exports["./export"].types, "./dist/export.d.ts");
 for (const [entry, file] of [["./review", "review"], ["./review-panel", "review-panel"]]) {
   assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (RR-29).`);
   assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
