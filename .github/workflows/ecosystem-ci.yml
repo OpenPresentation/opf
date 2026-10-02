@@ -10,7 +10,7 @@ concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: true
 env:
-  OPF_RENDER_REF: cb15cbaac7aee1ca94ebd18c4f6d6446a46a56e5 # RR-17: opf-render branch codex/rr-17-wrap-golden (opf-render#102: render main plus the golden baseline and font policy snapshot for this branch, 147 of 805 golden slides move); repin to the merged renderer commit
+  OPF_RENDER_REF: cf956bbe5e949f7a316324cce7259169f0179985 # RR-17: opf-render branch codex/rr-17-wrap-golden (opf-render#102: render main plus the golden baseline and font policy snapshot for this branch, 147 of 805 golden slides move); repin to the merged renderer commit
   OPF_EDITOR_REF: 313774a0cbf2bab8cced1a7225dfc95588bdc6e1
   OPF_PPTX_REF: 1ab16309c9624a252bb662c0fc6acb9b2013a892
 jobs:
