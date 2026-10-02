@@ -11,6 +11,7 @@ const text = tree => (tree ?? []).map(node => node['#text'] ?? '').join('');
 // Match nativeTextShapes/nativeShapeParagraphs indexing; positional ordering is
 // still performed by the existing slide importer, not by this reader.
 const shapes = tree => [...nodes(tree, 'p:sp').map(node => node['p:sp']), ...nodes(tree, 'p:grpSp').flatMap(node => shapes(node['p:grpSp']))];
+const LATIN_ONLY = /^[\p{Script=Latin}\p{N}\p{P}\p{S}\p{Z}]*$/u;
 const value = runs => runs.some(run => typeof run !== 'string') ? runs : runs.join('');
 export const joinNativeParagraphs = paragraphs => value(paragraphs.flatMap((paragraph, index) => [
   ...(index ? ['\n'] : []), ...(Array.isArray(paragraph.richText) ? paragraph.richText : [paragraph.richText ?? paragraph.text])
@@ -77,7 +78,9 @@ export function nativeBodyReader(slidePath, archive, relationships, report) {
         const path = `shapes.${index}.paragraphs.${paragraphIndex}.runs.${runIndex++}`;
         const current = tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t'));
         const properties = mergeNativeRunProperties(defaults, drawingObject(node[tag])['a:rPr']);
-        const style = bodyRunStyle(properties, context, relationships, (code, message) => report({code,message,path}));
+        // RR-05: a Latin phrase of a right-to-left paragraph is its own en-US run; its East Asian/complex-script slots can render nothing in it, so the face loss is not reported.
+        const phrase = nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' && properties.lang === 'en-US' && LATIN_ONLY.test(current);
+        const style = bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); });
         if (current) runs.push(Object.keys(style).length ? {text:current,...style} : current);
       }
       return {text:runs.map(run => typeof run === 'string' ? run : run.text).join(''), richText:value(runs)};

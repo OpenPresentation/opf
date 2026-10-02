@@ -63,7 +63,9 @@ export function nativeCellStyle(properties, body, context, scale, report) {
   const listStyle = drawingObject(child(body,'a:lstStyle'));
   const alignments = nodes(body,'a:p').map(paragraph => {
     const p = drawingObject(paragraph['a:p'])['a:pPr'] ?? {};
-    return p.algn ?? listStyle[`a:lvl${Number(p.lvl ?? 0)+1}pPr`]?.algn ?? listStyle['a:defPPr']?.algn ?? 'l';
+    const algn = p.algn ?? listStyle[`a:lvl${Number(p.lvl ?? 0)+1}pPr`]?.algn ?? listStyle['a:defPPr']?.algn ?? 'l';
+    // Alignment is logical for right-to-left text (RR-05): an rtl paragraph aligned right starts at the start edge.
+    return p.rtl === '1' || p.rtl === 1 ? ({l:'r',r:'l'}[algn] ?? algn) : algn;
   });
   const alignment = {l:'left',ctr:'center',r:'right'}[alignments[0] ?? 'l'];
   if (alignment) style.align = alignment;

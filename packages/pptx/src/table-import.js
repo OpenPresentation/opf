@@ -121,7 +121,7 @@ function conditionalProperties(style, properties, row, column, rowCount, columnC
 
 // Use the same direct graphic-frame ordering as the slide collector. The ordered
 // reader retains interleaved runs, fields, breaks, empty paragraphs and spaces.
-export function importTableFrames(slidePath, archive, relationships, report, dimensions) {
+export function importTableFrames(slidePath, archive, relationships, report, dimensions, {rtlDeck = false} = {}) {
   const context = readSlideTheme(slidePath, archive);
   const scale = Math.min(dimensions.widthInches,dimensions.heightInches) * 96 / 720;
   const root = child(context.parsedPart(slidePath)?.tree, 'p:sld');
@@ -133,7 +133,8 @@ export function importTableFrames(slidePath, archive, relationships, report, dim
     const style = tableStyle(props, archive, context, (code, message) => report(frameIndex, '', code, message));
     if (style?.['a:tblBg']) report(frameIndex, '', 'unsupported-table-cell-style', 'The native table style background is not represented; supported character styles are retained.');
     const properties = attrs(table, 'a:tblPr');
-    if (boolean(properties.rtl) === true) report(frameIndex, '', 'unsupported-table-direction', 'Right-to-left table geometry is not represented; cells retain native source order.');
+    // A right-to-left table of a right-to-left deck keeps its logical column order (RR-05); the deck language carries the direction.
+    if (boolean(properties.rtl) === true && !rtlDeck) report(frameIndex, '', 'unsupported-table-direction', 'Right-to-left table geometry is not represented; cells retain native source order.');
     const headers = boolean(properties.firstRow) === true;
     const nativeRows = nodes(table, 'a:tr');
     const columnCount = nodes(child(table, 'a:tblGrid'), 'a:gridCol').length;

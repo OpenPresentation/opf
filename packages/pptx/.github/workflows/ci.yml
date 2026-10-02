@@ -41,6 +41,7 @@ jobs:
           # RR-16 (opf#247) and RR-29 (opf#270) merged: core main 395e4c1 carries both (composed font sizes on the 0.01 pt grid, promoted regions in reading order, chartPaletteForFill).
           # RR-07 pins core main c45baae (opf#246 merged plus RR-34), before the RR-17 wrap change opf#260 (d382351): with it core scripts/test-timeline-workflow.mjs fails on Windows at the pinned pptx (a timeline description wraps differently), which the RR-17 pptx work owns; repin to core main once that lands.
           # RR-17 pins core main 11bccd5 (opf#276 merged on top of 293b5d3, which has the RR-17 wrap change opf#260, plus the timeline workflow ink check that allows for Windows Chromium's whole-pixel text metrics, so scripts/test-timeline-workflow.mjs passes on Windows); repin to the core merge commit once opf#276 merges (never leave it on an unmerged head).
+          # RR-05: core main 11bccd5 also carries opf#259 (right-to-left layout).
           ref: 11bccd5efa6fe2dd11b53d5eedd671c05a7ae883
           path: opf
           fetch-depth: 0
@@ -51,8 +52,9 @@ jobs:
           # opf-render 0.11.8 release commit (the tag draws in the primary colour, as opf-pptx writes it).
           # opf-render 0.11.9 release commit 2fbc0ab (opf-render#83 and #85: draws the same logos, picture bullets and accent font on the combined core).
           # RR-10: opf-render main be9cc47 (opf-render#107 e47aba4, which makes the preview show the placeholder for every malformed or unsafe SVG that test/svg-image-degrade.mjs uses, plus the numbered-list markers of opf-render#99 that RR-33 here needs).
-          # RR-07 pins the opf-render RR-07 head (opf-render#89: render main plus the syntax colours, trend arrows and patterns the parity test compares with); repin to render main once merged.
-          ref: cba7322924cdd307498b2d8b43941014286c1b62
+          # RR-35: opf-render PR #100 head (render main plus the chart options preview); repin to the render merge commit once #100 merges.
+          # RR-34: opf-render PR #104 head (render main plus the footnote, caption and marker drawing); repin to the render merge commit once #104 merges.
+          ref: ab782f5202f33d9e28d6184656fc91c54d899601 # opf-render main (opf-render#98 RR-05 merged)
           path: opf-render
           fetch-depth: 0
           persist-credentials: false

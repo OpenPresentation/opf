@@ -144,8 +144,15 @@ for (const expected of cases) {
   }
   const master = xml['ppt/slideMasters/slideMaster1.xml'];
   assert.equal(/<a:lvl1pPr\b[^>]*\srtl="1"/.test(master), !!expected.rtl, `${expected.id} master default direction`);
-  // Alignment stays exactly as composed (absolute l/ctr/r), so native geometry keeps matching the renderer.
-  assert.deepEqual([...slides(xml).matchAll(/\salgn="(\w+)"/g)].map(match => match[1]), [...slides((await read(deck(undefined, {}, expected.text))).xml).matchAll(/\salgn="(\w+)"/g)].map(match => match[1]), `${expected.id} alignment unchanged`);
+  // Alignment is logical for right-to-left text (RR-05): against the same document in a left-to-right deck, a right-to-left paragraph
+  // flips l and r (its start edge is the right), a left-to-right paragraph and every centred one keep their alignment.
+  const paragraphs = value => [...value.matchAll(/<a:p>([\s\S]*?)<\/a:p>/g)].map(([, body]) => ({algn: /^<a:pPr\b[^>]*\salgn="(\w+)"/.exec(body)?.[1] ?? 'l', rtl: /^<a:pPr\b[^>]*\srtl="([01])"/.exec(body)?.[1]}));
+  const flip = {l: 'r', r: 'l', ctr: 'ctr'};
+  const ownParagraphs = paragraphs(slides(xml)), baseline = paragraphs(slides((await read(deck(undefined, {}, expected.text))).xml));
+  assert.equal(ownParagraphs.length, baseline.length, `${expected.id} paragraph count`);
+  // A core without right-to-left composition (the published 0.11 line, which test:packed runs) keeps the composed absolute alignment.
+  const logical = typeof opf.physicalAlignment === 'function';
+  assert.deepEqual(ownParagraphs.map(paragraph => paragraph.algn), baseline.map((paragraph, index) => logical && ownParagraphs[index].rtl === '1' ? flip[paragraph.algn] : paragraph.algn), `${expected.id} logical alignment`);
 
   // Import maps lang back to the catalog language without new diagnostics.
   const imported = [];

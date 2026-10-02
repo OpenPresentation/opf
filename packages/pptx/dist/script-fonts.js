@@ -13,6 +13,9 @@
 import * as opfCore from "@openpresentation/opf";
 
 const resolver = typeof opfCore.resolveScriptFonts === "function" ? opfCore.resolveScriptFonts : null;
+// RR-05: authored alignment is logical for right-to-left text (`left` is the start edge). Core owns the rule; a core without it
+// reports no line directions either, so the fallback never has anything to flip.
+export const physicalAlignment = typeof opfCore.physicalAlignment === "function" ? opfCore.physicalAlignment : alignment => alignment;
 // The one paragraph-direction rule shared with the renderer (core FF-07).
 const paragraphDirection = typeof opfCore.paragraphDirection === "function" ? opfCore.paragraphDirection : null;
 
@@ -126,24 +129,89 @@ const decodeText = value => value.replace(/&(?:#(\d+)|#x([0-9a-f]+)|(amp|lt|gt|q
   decimal ? String.fromCodePoint(Number(decimal)) : hex ? String.fromCodePoint(parseInt(hex, 16)) : {amp: "&", lt: "<", gt: ">", quot: "\"", apos: "'"}[name.toLowerCase()]);
 
 /**
- * In a right-to-left deck every paragraph states its direction from core's
- * paragraphDirection() over its own text: rtl="1" when it is right-to-left,
- * else an explicit rtl="0", because the master default levels start
- * right-to-left. Alignment is left as composed.
+ * RR-05 bidi runs. PowerPoint treats the digits of a run tagged with a right-to-left language as numbers of that language and
+ * orders them as their own item, so "v2.0" or "PowerPoint 365" inside an Arabic or Hebrew run reads "2.0v" or "365PowerPoint".
+ * Splitting each left-to-right Latin phrase into its own run tagged en-US keeps it one item that PowerPoint orders left to right.
  */
-function paragraphRtl(xml, deckDirection) {
+const LATIN_WORD = /[0-9\p{Script=Latin}]/u, LATIN_LETTER = /\p{Script=Latin}/u, PHRASE_JOINER = /[ \u00a0.,:;&'\u2019/+*_@#=-]/;
+
+/** Ranges [start, end) of the Latin phrases of a decoded string: a Latin letter through the last Latin letter or digit joined by spaces and word punctuation. */
+export function latinPhrases(text) {
+  const ranges = [];
+  for (let index = 0; index < text.length;) {
+    const char = String.fromCodePoint(text.codePointAt(index));
+    if (!LATIN_LETTER.test(char)) { index += char.length; continue; }
+    let end = index + char.length;
+    for (let cursor = end; cursor < text.length;) {
+      const next = String.fromCodePoint(text.codePointAt(cursor));
+      if (LATIN_WORD.test(next)) { cursor += next.length; end = cursor; continue; }
+      if (!PHRASE_JOINER.test(next)) break;
+      // Joiners count only when a Latin letter or digit follows them directly.
+      let after = cursor + next.length;
+      while (after < text.length && PHRASE_JOINER.test(text[after])) after += 1;
+      if (after < text.length && LATIN_WORD.test(String.fromCodePoint(text.codePointAt(after)))) cursor = after; else break;
+    }
+    ranges.push([index, end]);
+    index = end;
+  }
+  return ranges;
+}
+
+const encodeText = value => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+const RUN = /<a:r>(<a:rPr\b[^>]*\/>|<a:rPr\b[^>]*[^/]>[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g;
+
+/** Split the runs of a right-to-left paragraph so each Latin phrase is its own en-US run. */
+function splitLatinRuns(body) {
+  return body.replace(RUN, (run, properties, escaped) => {
+    const text = decodeText(escaped), phrases = latinPhrases(text);
+    if (!phrases.length) return run;
+    const make = (value, lang) => `<a:r>${lang ? properties.replace(/\slang="[^"]*"/, ` lang="${lang}"`) : properties}<a:t>${encodeText(value)}</a:t></a:r>`;
+    const pieces = [];
+    let cursor = 0;
+    for (const [from, to] of phrases) {
+      if (from > cursor) pieces.push(make(text.slice(cursor, from)));
+      pieces.push(make(text.slice(from, to), "en-US"));
+      cursor = to;
+    }
+    if (cursor < text.length) pieces.push(make(text.slice(cursor)));
+    return pieces.join("");
+  });
+}
+
+/**
+ * In a right-to-left deck every paragraph states its direction. The writers mark the lines of a paragraph they laid out
+ * (rtl="1", the direction core computed once for the whole paragraph, so wrapped lines never differ); any other paragraph takes
+ * core's paragraphDirection() over its own text: rtl="1" when it is right-to-left, else an explicit rtl="0", because the master
+ * default levels start right-to-left. A right-to-left paragraph with no explicit alignment starts at the right edge (logical
+ * alignment: the master default is left), and its Latin phrases become en-US runs (see splitLatinRuns). With `notes` the
+ * alignment is also set on an explicit left paragraph, because the notes writers pass no alignment of their own.
+ */
+function paragraphRtl(xml, deckDirection, {notes = false} = {}) {
   return xml.replace(/<a:p>([\s\S]*?)<\/a:p>/g, (paragraph, body) => {
     const text = [...body.matchAll(/<a:t>([^<]*)<\/a:t>|<a:br\b/g)].map(match => match[1] === undefined ? "\n" : decodeText(match[1])).join("");
-    const value = paragraphDirection(text, deckDirection) === "rtl" ? "1" : "0";
     const properties = /^(\s*)<a:pPr\b([^>]*?)(\/?)>/.exec(body);
-    if (!properties) return `<a:p><a:pPr rtl="${value}"/>${body}</a:p>`;
-    const attributes = / rtl="[^"]*"/.test(properties[2]) ? properties[2].replace(/ rtl="[^"]*"/, ` rtl="${value}"`) : `${properties[2]} rtl="${value}"`;
+    const marked = properties && / rtl="([01])"/.exec(properties[2]);
+    const rtl = marked ? marked[1] === "1" : paragraphDirection(text, deckDirection) === "rtl";
+    const value = rtl ? "1" : "0";
+    if (rtl) body = splitLatinRuns(body);
+    if (!properties) return `<a:p><a:pPr rtl="${value}"${rtl ? " algn=\"r\"" : ""}/>${body}</a:p>`;
+    let attributes = / rtl="[^"]*"/.test(properties[2]) ? properties[2].replace(/ rtl="[^"]*"/, ` rtl="${value}"`) : `${properties[2]} rtl="${value}"`;
+    if (rtl) {
+      if (!/\salgn="/.test(attributes)) attributes += " algn=\"r\"";
+      else if (notes) attributes = attributes.replace(/ algn="l"/, " algn=\"r\"");
+    }
     return `<a:p>${properties[1]}<a:pPr${attributes}${properties[3]}>${body.slice(properties[0].length)}</a:p>`;
   });
 }
 
-/** Master, layout and presentation default paragraph levels start right-to-left. */
-const levelRtl = xml => xml.replace(/(<a:(?:lvl\dpPr|defPPr)\b[^>]*?\srtl=")0(")/g, "$11$2");
+/** Tables of a right-to-left deck run right to left: the first column is the rightmost, as core's layout draws it. */
+const tableRtl = xml => xml.replace(/<a:tblPr\b([^>]*?)(\/?)>/g, (match, attributes, close) => / rtl="/.test(attributes) ? match : `<a:tblPr rtl="1"${attributes}${close}>`);
+
+/**
+ * Master, layout and presentation default paragraph levels start right-to-left, and a left-aligned level starts at the right edge
+ * (logical alignment): text typed later in an Arabic or Hebrew deck then reads and aligns as the exported slides do.
+ */
+const levelRtl = xml => xml.replace(/<a:(?:lvl\dpPr|defPPr)\b[^>]*?\srtl="0"[^>]*>/g, level => level.replace(/\srtl="0"/, " rtl=\"1\"").replace(/\salgn="l"/, " algn=\"r\""));
 
 /**
  * Apply the plan to one generated XML part. `slideIndex` names the slide a
@@ -157,10 +225,10 @@ export function partScriptFonts(path, xml, plan, slideIndex) {
   if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
     xml = xml.replace(/<p:(sp|graphicFrame)>[\s\S]*?<\/p:\1>/g, shape =>
       runScriptFonts(shape, resolved, /<p:cNvPr\b[^>]*\bname="OPF heading /.test(shape)));
-    if (plan.rtl) xml = paragraphRtl(xml, plan.deck.direction);
+    if (plan.rtl) xml = tableRtl(paragraphRtl(xml, plan.deck.direction));
   } else if (/^ppt\/(?:charts\/chart(?:Ex)?|notesSlides\/notesSlide)\d+\.xml$/.test(path)) {
     xml = runScriptFonts(xml, resolved, false);
-    if (plan.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, plan.deck.direction);
+    if (plan.rtl && path.startsWith("ppt/notesSlides/")) xml = paragraphRtl(xml, plan.deck.direction, {notes: true});
   } else if (plan.rtl && /^ppt\/(?:slideMasters\/slideMaster\d+|slideLayouts\/slideLayout\d+|notesMasters\/notesMaster\d+|presentation)\.xml$/.test(path)) {
     xml = levelRtl(xml);
   }
@@ -252,6 +320,12 @@ export function reconcileLanguage(groups, observed, report) {
  * language, and theme East Asian/complex-script fonts the document does not
  * reproduce.
  */
+/** Whether the language observed in the runs is written right to left. */
+export function observedRtl(observed) {
+  if (observed.lang === undefined) return false;
+  try { return resolver ? resolver({language: observed.language}).rtl === true : observed.match?.record.direction === "rtl"; } catch { return false; }
+}
+
 export function languageDiagnostics(imported, observed, report) {
   if (!report) return;
   const {lang, match, ranked, rtlParagraphs, theme} = observed;
@@ -259,9 +333,11 @@ export function languageDiagnostics(imported, observed, report) {
     if (rtlParagraphs) report({code: "rtl-language-mismatch", path: "language", message: `${rtlParagraphs} right-to-left paragraph(s) carry no run language, so no presentation language was imported.`});
     return;
   }
-  if (ranked.length > 1) {
+  // RR-05: a right-to-left deck's Latin phrases are their own en-US runs; they are not a second presentation language.
+  const languages = observedRtl(observed) ? ranked.filter(([tag]) => tag === lang || tag !== "en-US") : ranked;
+  if (languages.length > 1) {
     report({code: "mixed-run-languages", path: "language",
-      message: `Runs use ${ranked.length} languages (${ranked.map(([tag, count]) => `${tag} x${count}`).join(", ")}). OPF has one presentation language, so ${lang} was imported.`});
+      message: `Runs use ${languages.length} languages (${languages.map(([tag, count]) => `${tag} x${count}`).join(", ")}). OPF has one presentation language, so ${lang} was imported.`});
   }
   const kept = imported.language === observed.language;
   if (kept && !match) report({code: "language-uncatalogued", path: "language", message: `Run language ${lang} matches no languages catalog record; it was imported as a BCP-47 tag.`});

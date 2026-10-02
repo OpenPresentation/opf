@@ -36,10 +36,11 @@ function blipFillIdentity(blipFill) {
  * left edge and vertically centered. A 90 degree EXIF orientation swaps the
  * frame's axes, so its visual width is the stored height.
  */
-export function logoFrame(metadata, box) {
+export function logoFrame(metadata, box, anchor = 'left') {
   const placed = pictureTransform(metadata, box, 'fit');
   const visualWidth = (metadata.orientation ?? 1) >= 5 ? placed.h : placed.w;
-  return {...placed, x: placed.x - (box.w - visualWidth) / 2};
+  // Right to left (RR-05): a cover logo sits at the top right, anchored to the box's right edge.
+  return {...placed, x: placed.x + (anchor === 'right' ? 1 : -1) * (box.w - visualWidth) / 2};
 }
 
 /**
@@ -61,7 +62,7 @@ export function placeLogos(entries, logos, metadataFor, fail) {
       const embed = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
       const metadata = metadataFor(part, embed);
       if (!metadata) fail(logo.path);
-      const placed = logoFrame(metadata, logo.box);
+      const placed = logoFrame(metadata, logo.box, logo.anchor);
       const attributes = `${placed.rotation ? ` rot="${placed.rotation * 60000}"` : ''}${placed.flipH ? ' flipH="1"' : ''}${placed.flipV ? ' flipV="1"' : ''}`;
       picture = picture.replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, `<a:xfrm${attributes}><a:off x="${emu(placed.x)}" y="${emu(placed.y)}"/><a:ext cx="${emu(placed.w)}" cy="${emu(placed.h)}"/></a:xfrm>`);
       picture = picture.replace(/<a:srcRect\b[^>]*\/>/, '');

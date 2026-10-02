@@ -34,7 +34,7 @@ import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
-import {languageDiagnostics, observeLanguage, partScriptFonts, planScriptFonts, reconcileLanguage} from './script-fonts.js';
+import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, reconcileLanguage} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
@@ -371,7 +371,7 @@ export async function fromPptx(input, options = {}) {
   const mediaRegistry = Object.create(null);
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, options, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage)}, furniture.slides[index], furnitureContexts[index]));
   }
   // Native sections (PowerPoint's own section list, `Default Section` = none)
   // are reconciled with the footer text and the stored value in restoreDocumentProvenance.
@@ -795,7 +795,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const tables = frames.some(frame => frame['a:graphic']?.['a:graphicData']?.['a:tbl'])
     ? importTableFrames(slidePath, {
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
-    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions) : [];
+    }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
   for (const [index, frame] of frames.entries()) {
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`));
     if (item) items.push({...item, sources: [`frame:${index}`]});
@@ -1725,30 +1725,34 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
         color: item.field === "tag" ? tagColor(itemContext) : itemContext.textColor,
-        align: alignmentFor(item),
+        align: physicalAlignment(alignmentFor(item), item.text.directions?.[0]),
+        ...(item.text.directions?.[0] === 'rtl' ? {rtlMode: true} : {}),
         objectName,
         breakLine: false
       });
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);
     } else if (item.field === "text" && item.text?.richLines) {
-      const alignment=item.text.placement?.alignment??alignmentFor(item)??'left';
+      const logicalAlignment=item.text.placement?.alignment??alignmentFor(item)??'left';
       for(const [index,line] of item.text.richLines.entries()){
         const runs=line.fragments.map(fragment=>{
           const runColor=exportColor(fragment.run.color,itemContext,itemContext.colors.text);
           const color=nativeColor(fragment.run.color,runColor,itemContext,itemContext.textColor);
           return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
         });
-        const placed=item.text.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
+        // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
+        const placed=item.text.placement?.lines[index],alignment=placed?.alignment??physicalAlignment(logicalAlignment,item.text.directions?.[index]),factor=alignment==='right'?1:alignment==='center'?.5:0;
         const area=placed?{...region,x:(placed.x+line.width*factor-item.box.width*factor)/96,y:placed.y/96,h:placed.height/96}:{...region,y:region.y+line.y/96,h:line.height/96};
+        // PptxGenJS reads the paragraph direction from the first run's options, not from the shape options.
+        if(item.text.directions?.[index]==='rtl')for(const run of runs)run.options.rtlMode=true;
         if(runs.length)slide.addText(runs,{...textBoxOptions(area,itemContext,item.text.fontSize*.75),align:alignment,fit:'none',wrap:false,lineSpacingMultiple:1});
       }
     } else if (item.field === "text" && typeof item.value === "string") {
-      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:alignmentFor(item)});
+      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:physicalAlignment(alignmentFor(item), item.text.directions?.[0])});
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.imagePlacements.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: alignmentFor(item) ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: alignmentFor(item) ?? "left", direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.imagePlacements.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -1904,7 +1908,12 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
     const addLines=(text,box,color,native,withBullet)=>{
       text.richLines.forEach((line,index)=>{
         const first=withBullet&&index===0,level=Math.min(8,entry.level),inset=first?entry.marker.indent*(level+1):0;
-        const region={x:(box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
+        // Right to left (RR-05): the bullet column is at the right, so the first line's box extends right to hold it and the paragraph
+        // is rtl with its text aligned to the right; marL/indent are the start-side margin and hanging indent in PowerPoint.
+        const entryRtl=entry.direction==='rtl';
+        const region={x:(entryRtl?box.x:box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
+        const lineDirection=(text.directions?.[index])??entry.direction;
+        const lineAlign=physicalAlignment('left',lineDirection);
         const objectName=`OPF list ${path} line ${lineNumber++}`;
         const number=first?entry.marker.number:undefined;
         if(first)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
@@ -1913,8 +1922,8 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below
         // removes the duplicate paragraph-property nodes emitted by PptxGenJS.
-        for(const run of runs)Object.assign(run.options,paragraph);
-        slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:nativeFontOptions(entry.marker.style).fontFace,objectName,align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
+        for(const run of runs)Object.assign(run.options,paragraph,lineDirection==='rtl'?{rtlMode:true}:{});
+        slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:nativeFontOptions(entry.marker.style).fontFace,objectName,align:lineAlign,fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
       });
     };
     addLines(entry.text,entry.textBox,context.colors.text,context.textColor,true);
@@ -2028,7 +2037,7 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
     if (prefix) context.logoPlaceholderTags.set(prefix, {v: 1, role: 'placeholder', slide: `slides.${slideIndex}`, path: logo.path});
     return;
   }
-  context.logos.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box: region, path: logo.path, variant: logo.variant});
+  context.logos.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box: region, path: logo.path, variant: logo.variant, anchor: logo.anchor ?? 'left'});
   if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${logoName()}`, outcome.svg);
   slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? 'Logo'});
 }
@@ -2172,6 +2181,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
     barDir: chartData.barDir,
     barGrouping: chartData.barGrouping,
+    // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
+    // value axis to the right, as the preview draws them. Bar charts keep their vertical category axis.
+    ...(context.direction === 'rtl' && ((chartData.type === 'bar' && chartData.barDir === 'col') || chartData.type === 'line' || chartData.type === 'area') ? { catAxisOrientation: 'maxMin' } : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
@@ -2191,7 +2203,8 @@ function addTablePayload(slide, table, region, context, options, path) {
   }
 
   const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
-    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path
+    scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path,
+    ...(context.direction === 'rtl' ? {direction: 'rtl'} : {})
   });
   const columnCount = layout.columnCount;
   const rows = layout.rows.map(row => row.cells.map(cell => {
@@ -2240,7 +2253,7 @@ function addTablePayload(slide, table, region, context, options, path) {
         ...(rich ? {bold:false,italic:false} : {}),
         lineSpacing: fit.lineHeight * 0.75,
         paraSpaceAfter: 0,
-        align: cellStyle.align ?? context.contentAlignment,
+        align: physicalAlignment(cellStyle.align ?? context.contentAlignment, cell.direction),
         valign: cellStyle.verticalAlign ?? 'top',
         ...(cell.colSpan > 1 ? {colspan:cell.colSpan} : {}),
         ...(cell.rowSpan > 1 ? {rowspan:cell.rowSpan} : {}),
@@ -2299,7 +2312,8 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const link = config.links?.[sourceLineIndex];
     if (fit.sourceLines?.[index]?.boundary === 'hard') sourceLineIndex += 1;
     if (!line&&!config.heading&&!config.sourceText&&!config.timeline&&!config.quote&&!config.keepEmpty) continue;
-    const alignment=fit.placement?.alignment??config.align??context.contentAlignment??'left',placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
+    // Logical alignment (RR-05): a right-to-left line starts at the right edge; furniture and metrics pass physical alignments and report no line directions.
+    const placed=fit.placement?.lines[index],alignment=placed?.alignment??physicalAlignment(fit.placement?.alignment??config.align??context.contentAlignment??'left',fit.directions?.[index]),factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
     const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
     if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
@@ -2318,6 +2332,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
       ...textBoxOptions(area, context, fit.fontSize * .75),
       ...nativeFontOptions(style),
       color: lineColor, align: alignment,
+      ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
       // Reuse the frame's existing relationship to cover blank caption boxes.
       // PptxGenJS also inherits it into runs; keep their native text styling.
       hyperlink: config.hyperlink,
@@ -2453,7 +2468,7 @@ function addMetricPayload(slide,value,layout,context,path,options) {
       slide.addText(part.text.slice(line.start,line.end),{
         ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
         ...nativeFontOptions(part.style),
-        color:partColor(part),align:layout.alignment,fit:'none',wrap:false,lineSpacingMultiple:1,
+        color:partColor(part),align:layout.alignment,...(part.fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       });
     }
