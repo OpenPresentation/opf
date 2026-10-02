@@ -43,6 +43,14 @@ Every content color field — `TextRun.color`, styled table cell `style.fill` an
 
 Prefer names and variables over literal hex: re-theming the deck updates every named reference, while a hex value stays frozen at authoring time. An unknown `var:` id is a validation warning, never an error; engines fall back to their default text color. The styled table cell and border color fields enforce the three forms at the schema level; run colors additionally accept any string so imported decks keep validating — unrecognized values warn, and renderers fall back to the theme color. See [`design-resolution.md`](./design-resolution.md) for the resolution rules.
 
+## Numbered lists
+
+`numbering` on an `items` or `bullets` payload draws numbers instead of bullets: a style name (`arabic`, `roman-upper`, `roman-lower`, `alpha-upper`, `alpha-lower`), a `{ style, start, suffix }` object, or an array with one entry per list level. PowerPoint export writes native auto-numbers and the preview draws the same numbers. See [numbered lists](numbered-lists.md).
+
+```json
+{ "items": ["Define", "Build", "Ship"], "numbering": { "style": "roman-lower", "suffix": "paren" } }
+```
+
 ## Blocks
 
 Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks may contain a concrete content payload or a nested group with its own `blocks` and optional `composition`. Groups cannot mix child blocks with leaf payload fields. See [dynamic composition](dynamic-composition.md) for nesting and inheritance rules.
