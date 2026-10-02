@@ -686,6 +686,7 @@ _No named properties._
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Full-slide text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks. |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide text-style bullet payload. Presence of this field infers type 'text'. |
+| `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
 | `image` | no | `ref:Asset` | Full-slide image source. Presence of this field infers type 'image'. |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
@@ -765,6 +766,7 @@ _No named properties._
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Generic list payload. Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object. List nesting uses item.level rather than nested content payloads. |
 | `bullets` | no | `array<ref:BulletItem>` | Text-style bullet payload. Presence of this field infers type 'text'. |
+| `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
 | `image` | no | `ref:Asset` | Source for an image item. |
 | `video` | no | `ref:Asset` | Source for a video item. |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
@@ -859,6 +861,37 @@ _No named properties._
 _No named properties._
 
 
+### NumberingStyle
+
+- Type: `enum:arabic | roman-upper | roman-lower | alpha-upper | alpha-lower`
+- Required fields: none
+- Purpose: A list number style: 1, 2, 3; I, II, III; i, ii, iii; A, B, C; a, b, c. Alphabetic numbering past 26 repeats the letter as PowerPoint does (aa, bb, cc). Roman numerals stop at 3999; larger values are drawn in arabic with a numbering-adapted diagnostic.
+
+_No named properties._
+
+
+### Numbering
+
+- Type: `object`
+- Required fields: none
+- Purpose: Numbering of one list level.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `style` | no | `ref:NumberingStyle` | Number style. Default arabic. |
+| `start` | no | `integer` | First number counted at this level. Default 1. Native PowerPoint accepts 1 to 32767. |
+| `suffix` | no | `enum:period \| paren \| paren-both` | Text after the number: period (1.), paren (1)) or paren-both ((1)). Default period. |
+
+
+### NumberingSpec
+
+- Type: `oneOf:ref:NumberingStyle / ref:Numbering / array<oneOf:ref:NumberingStyle / ref:Numbering>`
+- Required fields: none
+- Purpose: The value of a numbering field: a style name or Numbering object for every level, or an array with one entry per level (at most 9, the native depth).
+
+_No named properties._
+
+
 ### TextRun
 
 - Type: `oneOf:string / object`
@@ -878,6 +911,32 @@ _No named properties._
 | --- | --- | --- | --- |
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
 | `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. |
+| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
+| `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
+| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
+
+
+### ChartAxisTitles
+
+- Type: `object`
+- Purpose: Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `category` | no | `string` | Title of the category (X) axis. |
+| `value` | no | `string` | Title of the value (Y) axis. |
+
+
+### ChartDataLabels
+
+- Type: `object`
+- Purpose: Data label settings. A label shows the selected content parts in the fixed order category, value, percent, joined by the separator.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `content` | no | `array<string>` | Which parts a label shows: `value`, `percent`, `category` (default `['value']`). 'percent' exists only on pie and doughnut charts; a part a type cannot show is dropped with a `chart-option-adapted` diagnostic. |
+| `position` | no | `string` | `auto` (default), `center`, `inside-end`, `inside-base`, `outside-end`, `above`, `below`, `left`, `right`. The positions a chart type accepts are in docs/chart-options.md; an unsupported position falls back to `auto`. |
+| `separator` | no | `string` | Text between the parts of a label that shows more than one. Defaults to ', '. |
 
 
 ### Table

@@ -135,6 +135,7 @@ export { fitRichText } from './composition.js';
 export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichTextOptions } from './composition.js';
 
 export {fitList} from './composition.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
 export {
   chartColorForFill,
@@ -175,3 +176,5 @@ export type {
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';
 export { SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_FAMILIES, symbolFontEncodingFor, isSymbolEncodedFamily, symbolCodeOf, symbolUnicodeFor, symbolCodeForUnicode, mapSymbolText } from './symbol-font-encodings.js';
 export type { SymbolFontEncoding, SymbolFontEncodingTable, SymbolFontCode, SymbolFontFamily, SymbolTextCharacter } from './symbol-font-encodings.js';
+export {chartOptionSupport,chartOptionTarget,resolveChartOptions,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
+export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartOptions} from './chart-options.js';

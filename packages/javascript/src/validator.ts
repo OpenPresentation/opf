@@ -2,9 +2,11 @@ import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.
 import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
+import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
+import { numberingFindings } from "./numbering.js";
 import { catalogIds, deprecatedCatalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
@@ -496,6 +498,11 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
       };
       payloadTableIssues(slide, slidePath);
       visitContentPayloads(slide, slidePath, payloadTableIssues);
+      const payloadNumberingIssues = (payload: Record<string, unknown>, path: string): void => {
+        for (const finding of numberingFindings(payload).errors) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
+      };
+      payloadNumberingIssues(slide, slidePath);
+      visitContentPayloads(slide, slidePath, payloadNumberingIssues);
     }
   });
 
@@ -614,6 +621,10 @@ function chartTypeWarnings(
   const issues: ValidationIssue[] = [];
   if (isRecord(payload.chart)) {
     pushIfDefined(issues, unknownIdWarning("chartTypes", payload.chart.type, `${pathFor(path, "chart")}/type`, context));
+    // RR-35: an axis title, legend or data label option the chart type cannot show is adapted by every engine; say so.
+    for (const diagnostic of resolveChartOptions(payload.chart, chartOptionTarget(payload.chart.type)).diagnostics) {
+      issues.push(semanticIssue(diagnostic.option.split(".").reduce(pathFor, pathFor(path, "chart")), diagnostic.message, { code: diagnostic.code, option: diagnostic.option, reason: diagnostic.reason }));
+    }
   }
   if (Array.isArray(payload.blocks)) {
     payload.blocks.forEach((block, index) => {
@@ -783,6 +794,11 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     const slidePath = `/slides/${index}`;
     issues.push(...designReferenceWarnings(slide.design, pathFor(slidePath, "design"), context));
     issues.push(...chartTypeWarnings(slide, slidePath, context));
+    const numberingWarnings = (payload: Record<string, unknown>, path: string): void => {
+      for (const finding of numberingFindings(payload).warnings) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
+    };
+    numberingWarnings(slide, slidePath);
+    visitContentPayloads(slide, slidePath, numberingWarnings);
     for (const key of Object.keys(slide)) {
       if (promotedRegionKeySet.has(key)) {
         issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));
