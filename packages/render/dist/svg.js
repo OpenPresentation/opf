@@ -1025,7 +1025,7 @@ function renderList(item, box, bound, options) {
   const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
   for(const entry of fit.listEntries){
     if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
-    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true'},escapeText(entry.marker.text)));
+    else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
     const config={path:entry.textPath,align:'left',fill:bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
@@ -1211,7 +1211,7 @@ function renderImage(item, box, bound, options) {
   const { asset, source, drawable, missingReference } = resolveImageSource(item, bound, options);
   if (drawable) {
     return tag("image", { x: box.x, y: box.y, width: box.width, height: box.height,
-      href: source, preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image",
+      href: source, preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : options.imageAnchor === "right" ? "xMaxYMid meet" : (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image",
       ...traceAttrs(options, item.path), ...generatedAttrs(options) });
   }
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
@@ -1429,7 +1429,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
   const children = [];
   const separateBorders = layout.rows.some(row => row.cells.some(cell => cell.style?.borders));
   const defaultEdges = [], explicitEdges = [];
@@ -1637,7 +1637,7 @@ function renderBranding(bound,presentation,width,height,options) {
   }
   // Cover and section slides: the deck logo core composed at the top-left of the free area, anchored left.
   const logo=bound.geometry.logo;
-  if(logo)pieces.push(renderImage({value:logo.source,path:logo.path},logo.box,bound,{...options,imageAnchor:'left',imageLabel:'Logo',imageGenerated:true}));
+  if(logo)pieces.push(renderImage({value:logo.source,path:logo.path},logo.box,bound,{...options,imageAnchor:logo.anchor??'left',imageLabel:'Logo',imageGenerated:true}));
   return pieces.join('');
 }
 
@@ -1661,6 +1661,10 @@ const RIGHT_TO_LEFT_ISOLATE = "\u2067", POP_DIRECTIONAL_ISOLATE = "\u2069";
 // Core owns the rule (paragraphDirection, core #134), so preview and export agree.
 // Without it (published core 0.11.0) every paragraph is left to right, as in export.
 const coreParagraphDirection = typeof opfCore.paragraphDirection === "function" ? opfCore.paragraphDirection : null;
+// RR-05: authored alignment is logical for right-to-left text, so `left` is the start edge (drawn at the right of a
+// right-to-left line) and `right` the end edge. Core owns the rule; the fallback only serves a core without it, which
+// also reports no line directions, so it never flips.
+const physicalAlignment = typeof opfCore.physicalAlignment === "function" ? opfCore.physicalAlignment : alignment => alignment;
 /** Maps a source offset of the text to whether its paragraph is right to left. */
 function paragraphRtl(bound, text) {
   if (bound.scriptFonts?.rtl !== true || !coreParagraphDirection) return () => false;
@@ -1818,8 +1822,30 @@ function renderRichTextBox(value, box, bound, config) {
   return renderRichLines(value,fit,box,bound,config);
 }
 
+// A rich line without its leading and trailing whitespace: fragments keep their order and styles, positions and widths follow the trimmed text.
+// Returns null when there is nothing to trim or the line holds a tab.
+function trimRichLineEdges(line,textMeasurement) {
+  const fragments=line.fragments.map(fragment=>({...fragment}));
+  if(!fragments.length||fragments.some(fragment=>fragment.kind==='tab'))return null;
+  const width=(fragment,text)=>text?textWidthMeasurer(fragment.style,textMeasurement)(text,fragment.fontSize):0;
+  let changed=false;
+  while(fragments.length&&!/\S/.test(fragments[0].text)){fragments.shift();changed=true;}
+  while(fragments.length&&!/\S/.test(fragments.at(-1).text)){fragments.pop();changed=true;}
+  if(!fragments.length)return null;
+  const first=fragments[0],last=fragments.at(-1);
+  const lead=/^\s*/.exec(first.text)[0],trail=/\s*$/.exec(last.text)[0];
+  if(lead){first.text=first.text.slice(lead.length);first.start+=lead.length;first.width-=width(first,lead);changed=true;}
+  if(trail){last.text=last.text.slice(0,-trail.length);last.end-=trail.length;last.width-=width(last,trail);changed=true;}
+  if(!changed)return null;
+  let x=0;
+  for(const fragment of fragments){fragment.x=x;x+=fragment.width;}
+  return {...line,fragments,width:x};
+}
+
 function renderRichLines(value,fit,box,bound,config) {
-  const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
+  const logicalAlignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
+  // Each line takes its paragraph's direction from core (every wrapped line shares it) and its physical edge from that.
+  const lineAlignment=index=>fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
   let textOffset=0;
   const runOffsets=value.map(run=>{const start=textOffset;textOffset+=(typeof run==='string'?run:run.text).length;return start;});
   const richRtl=paragraphRtl(bound,value.map(run=>typeof run==='string'?run:run.text).join(''));
@@ -1828,13 +1854,18 @@ function renderRichLines(value,fit,box,bound,config) {
   // those estimates into visible gaps. Supplied measurements keep exact origins.
   const naturalFlow=!config.options.textMeasurement?.measure&&!fit.placement;
   const hasTabs=fit.richLines.some(line=>line.fragments.some(fragment=>fragment.kind==='tab'));
-  const content=fit.richLines.map((line,lineIndex)=>{
+  const content=fit.richLines.map((sourceLine,lineIndex)=>{
+    const alignment=lineAlignment(lineIndex);
+    const sourceFirst=sourceLine.fragments[0],rtl=fit.directions?fit.directions[lineIndex]==='rtl':richRtl(sourceFirst?runOffsets[sourceFirst.runIndex]+sourceFirst.start:0);
+    // PowerPoint ignores whitespace at either edge of a right-aligned right-to-left line, so the glyph edge stays on the box edge (RR-05).
+    const edgeTrim=rtl&&alignment==='right'?trimRichLineEdges(sourceLine,config.options.textMeasurement):null;
+    const line=edgeTrim??sourceLine;
     const lineHasTab=line.fragments.some(fragment=>fragment.kind==='tab');
     const flow=naturalFlow&&!lineHasTab;
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
     const placed=fit.placement?.lines[lineIndex];
-    const originX=placed?.x??box.x+offset,baseline=placed?.baseline??box.y+line.baseline;
-    const firstFragment=line.fragments[0],rtl=richRtl(firstFragment?runOffsets[firstFragment.runIndex]+firstFragment.start:0);
+    const originX=placed?placed.x+(edgeTrim?sourceLine.width-line.width:0):box.x+offset,baseline=placed?.baseline??box.y+line.baseline;
+    const firstFragment=line.fragments[0];
     const renderFragment=(fragment,asFlow,edges={})=>{
     const run=fragment.run;
     // Accepted outline placement owns the horizontal advance. Geometric precision
@@ -1880,6 +1911,7 @@ function renderRichLines(value,fit,box,bound,config) {
   const lineTrace=config.options.trace?fit.richLines.map((line,index)=>{
     if(index){const newline=/^(\r\n|\r|\n)/.exec(whole.slice(cursor));if(newline)cursor+=newline[0].length;}
     const start=cursor;cursor+=(fit.lines[index]??'').length;
+    const alignment=lineAlignment(index);
     const offset=alignment==='right'?box.width-line.width:alignment==='center'?(box.width-line.width)/2:0;
     const placed=fit.placement?.lines[index];
     return {start,end:cursor,x:placed?.x??box.x+offset,y:placed?.y??box.y+line.y,height:placed?.height??line.height,
@@ -1906,20 +1938,22 @@ function renderTextBox(text, box, bound, config) {
   const totalHeight = fit.lines.length * fit.lineHeight;
   const startY = config.verticalAlign === "middle"
     ? box.y + Math.max(0, (box.height - totalHeight) / 2) + size : box.y + size;
-  const alignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
-  const anchor = alignment === "center" ? "middle" : alignment === "right" ? "end" : "start";
-  const x = alignment === "center" ? box.x + box.width / 2 : alignment === "right" ? box.x + box.width : box.x;
+  const logicalAlignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
   const type = config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type;
   const source = String(text ?? ""), boxRtl = paragraphRtl(bound, source);
   let cursor = 0;
   const lines = fit.lines.map((line, index) => {
+    // Logical alignment (RR-05): a right-to-left line starts at the right edge.
+    const alignment=fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
+    const anchor = alignment === "center" ? "middle" : alignment === "right" ? "end" : "start";
+    const x = alignment === "center" ? box.x + box.width / 2 : alignment === "right" ? box.x + box.width : box.x;
     const sourceLine=fit.sourceLines?.[index],placed=fit.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
     // The line's paragraph decides its direction: source offsets when layout has them, else the next match.
     const found=sourceLine?sourceLine.start:source.indexOf(line,cursor),lineStart=found>=0?found:cursor;cursor=lineStart+line.length;
-    const rtl=boxRtl(lineStart);
+    const rtl=fit.directions?fit.directions[index]==='rtl':boxRtl(lineStart);
     const origin=placed?.x??x-(sourceLine?.width??0)*factor;
     const tabs=sourceLine?.segments.some(segment=>segment.kind==='tab');
-    let content,family,positioned=false;
+    let content,family,positioned=false,trimWidth=0;
     if(tabs) content=sourceLine.segments.map(segment=>{
       const segmentText=line.slice(segment.start-sourceLine.start,segment.end-sourceLine.start),fixed=segment.kind==='tab'||placed;
       const traced=(start,end)=>config.options.trace?{'data-opf-source-start':start,'data-opf-source-end':end,'data-opf-segment':segment.kind}:{};
@@ -1933,7 +1967,13 @@ function renderTextBox(text, box, bound, config) {
         ...traced(segment.start,segment.end),
       },scripted.content);
     }).join('');
-    else ({content,family,positioned=false}=scriptLine(line,style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x,width:placed.width,fontSize:size}:undefined}));
+    else {
+      // PowerPoint ignores whitespace at either edge of a right-aligned right-to-left line (the glyph edge stays on the box edge, native check
+      // 2026-10-02), so a soft-wrapped line that keeps its trailing space, or a leading space, draws without it (RR-05).
+      const edge=rtl&&alignment==='right'?/^(\s*)([\s\S]*?)(\s*)$/.exec(line):null,trimmed=edge&&edge[2]&&(edge[1]||edge[3])?edge:null;
+      if(trimmed){const measureEdge=textWidthMeasurer(style,config.options.textMeasurement);trimWidth=measureEdge(trimmed[1],size)+measureEdge(trimmed[3],size);}
+      ({content,family,positioned=false}=scriptLine(trimmed?trimmed[2]:line,style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x+trimWidth,width:placed.width-trimWidth,fontSize:size}:undefined}));
+    }
     // Positioned script runs carry their own x and textLength (FF-19).
     const start=tabs||positioned;
     return tag("text", {
@@ -1941,7 +1981,7 @@ function renderTextBox(text, box, bound, config) {
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(size), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
-    textLength:!start&&placed?.width>0?stableNumber(placed.width):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
+    textLength:!start&&placed?.width>0?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceLine.start,'data-opf-source-end':sourceLine.end,'data-opf-source-next-start':sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
   }, content);

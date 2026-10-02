@@ -322,7 +322,7 @@ Characters are assigned to slots following PowerPoint where its rules are known:
 
 Limits:
 
-- Alignment stays absolute, as authored or composed. RTL decks are not right-aligned automatically.
+- Alignment is logical for right-to-left text (RR-05, needs the core release that composes right-to-left decks): `left` is the start edge, so a right-to-left paragraph is drawn against the right edge, its list markers sit at the right (`text-anchor="end"`), the composition is mirrored (the `left` region and the first table column at the right, cover logo and header/footer zones swapped), tables run right to left and column, line and area charts reverse their categories with the value axis at the right. Every wrapped line takes its paragraph's direction from core (`fit.directions`). A left-to-right deck is drawn exactly as before.
 - Known differences from PowerPoint: the character tables above are approximations, not PowerPoint's full per-character table. Non-ASCII common characters, such as Latin-1 symbols and other general punctuation, join the neighbouring run instead of following PowerPoint's per-character slot, and PowerPoint's `hint="eastAsia"` run property is not modelled.
 - Per-run language (`lang` on individual runs) is not modelled. Han text uses kana or Hangul context, then the document language, and defaults to Simplified Chinese.
 - Faces have no italics, so italic script text uses upright advances. Browsers may slant it synthetically.
