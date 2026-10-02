@@ -26,9 +26,9 @@ test('rejects malformed tables', () => {
   assert.throws(() => parseBurndown(`${HEAD}| RR-01 | A | core | none | done | |\n| RR-01 | A | core | none | done | |\n`), /duplicate/);
 });
 
-test('the committed burndown parses and covers RR-01 to RR-35', async () => {
+test('the committed burndown parses and covers RR-01 to RR-39', async () => {
   const items = parseBurndown(await readFile(fileURLToPath(new URL('./burndown.md', import.meta.url)), 'utf8'));
-  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: 35 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
+  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: 39 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
   for (const i of items) assert.ok(STATUSES.includes(i.status));
   for (const i of items) for (const dep of i.depends.match(/RR-\d{2}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
 });
