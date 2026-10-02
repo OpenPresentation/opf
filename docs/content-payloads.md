@@ -188,7 +188,7 @@ Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measu
 
 ## Code
 
-Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required.
+Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required. `language` colours the code in the preview and the PowerPoint export (comments, strings, numbers, keywords, names and types, in colours from the deck theme); an unknown language stays plain and the text is never changed. See [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07) for the supported languages.
 
 ```json
 {
@@ -203,7 +203,7 @@ Code-specific fields are grouped under `code`. A string value is shorthand for `
 
 ## Metric
 
-Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, or trends matter.
+Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, or trends matter. A `trend` (`up`, `down`, `flat`) draws an arrow beside its word, coloured with the delta text, in the preview and the PowerPoint export; the word stays editable text and the arrow carries "Trend: up" as its alternative text (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
 
 The `number-1x` through `number-6x` layout IDs declare one title placeholder and one through six `metric` placeholders. The IDs retain their existing names; the content kind and payload key are `metric`, not `number` or `text`. For several metrics, use separate `{ "metric": ... }` entries in `blocks`. Choosing a layout does not reinterpret existing text as numeric data.
 
