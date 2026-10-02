@@ -13,9 +13,9 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. CLI 0.9.2 bundles OPF 0.11.4 (the design fields compose: logos, picture bullets, header and footer logos, the accent font; plus the 100-layout catalog and the pinned gallery default catalog), including the reference layer (`variables`, ColorRef, payload ids, `opf bundle`), complete code and quote composition, source-preserving pagination and readability floors, styled/merged table cells, shared headers/footers, `opf lint`, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases documented in [the compatibility matrix](../../docs/compatibility-matrix.md).
+Or install it as a development dependency and use `npx --no-install opf`. CLI 0.10.0 bundles OPF 0.12.0 (templates and variables, numbered lists, footnotes and captions, chart options, the 0.01 pt font grid; plus the design fields, the 100-layout catalog and the pinned gallery default catalog), including the reference layer (`variables`, ColorRef, payload ids, `opf bundle`), complete code and quote composition, source-preserving pagination and readability floors, styled/merged table cells, shared headers/footers, `opf lint`, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases documented in [the compatibility matrix](../../docs/compatibility-matrix.md).
 
-To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.9.2.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.10.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
 ## Install agent skills
 
@@ -85,7 +85,7 @@ The digest compares the exact input bytes, including whitespace. The CLI also re
 
 ## Diff, merge and format
 
-Source on `main` (RR-31), not in CLI 0.9.2: check `opf --help`. These commands are local and deterministic. See [patch, diff, merge and format](../../docs/patch-diff-merge-format.md) for the matching rules, conflict objects and key order.
+Added in CLI 0.10.0 (RR-31; not in 0.9.2 or earlier): check `opf --help`. These commands are local and deterministic. See [patch, diff, merge and format](../../docs/patch-diff-merge-format.md) for the matching rules, conflict objects and key order.
 
 ```sh
 opf diff before.opf.json after.opf.json                 # readable report
@@ -191,4 +191,4 @@ opf audit --list-rules
 
 ## OPF lint
 
-CLI 0.8.0 added `opf lint <file|-> [--config <local-json-file>] [--strict]`; CLI **0.9.2** still includes it and bundles core 0.11.4. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Earlier CLI versions than 0.8.0 do not include this command. See [the lint guide](../../docs/lint.md).
+CLI 0.8.0 added `opf lint <file|-> [--config <local-json-file>] [--strict]`; CLI **0.10.0** still includes it and bundles core 0.12.0. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Earlier CLI versions than 0.8.0 do not include this command. See [the lint guide](../../docs/lint.md).

@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "Local OPF CLI for agents: create, validate, lint, edit, paginate, render, export to PPTX/PDF, import PPTX, and inspect presentation JSON.",
   "license": "MIT",
   "type": "module",
