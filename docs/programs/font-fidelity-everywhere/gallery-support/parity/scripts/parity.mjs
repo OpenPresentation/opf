@@ -17,6 +17,7 @@ import {createFontHosts} from './font-host.mjs';
 import {chartexExpectations, chartIdFromLayouts, chartexDataMismatches, chartexPreviewMarks, chooseAlternateContent, parseChartex} from './chartex.mjs';
 import {chartPartTextSizes, chartTextSizeMismatches, previewTextSizes} from './chart-text.mjs';
 import {restoredCharts} from './restored-content.mjs';
+import {chartSeriesColors} from './chart-colors.mjs';
 import {withoutBulletBlips, bulletBlipRids, isPreviewBullet} from './picture-bullets.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -164,23 +165,7 @@ function parseParagraphs(txXml, theme, defaults = {}) {
     return {algn, marL: +(pa.marL ?? 0) / 9525, indent: +(pa.indent ?? 0) / 9525, bullet: bu, runs, text: runs.map(r => r.text).join('')};
   }).filter(p => p.runs.length);
 }
-// Series colours of a native chart, as each construct paints them (FF-38, 2026-09-30):
-//  - a line-kind series (c:lineChart, and c:radarChart except radarStyle filled) is a stroke: its colour is the series a:ln fill;
-//  - a pie or doughnut series has one colour per slice (its c:dPt fills); the 0.75 pt F9F9F9 a:ln that PptxGenJS writes on the
-//    series is the slice border, not a series colour;
-//  - every other series is a fill: the first srgbClr of its c:spPr, as before.
-function chartSeriesColors(cx) {
-  const kind = cx.match(/<c:(lineChart|radarChart|pieChart|doughnutChart)>/)?.[1] ?? null;
-  const strokeSeries = kind === 'lineChart' || (kind === 'radarChart' && !/<c:radarStyle val="filled"\/>/.test(cx));
-  const sers = [...cx.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(m => m[1]);
-  const srgb = xml => xml?.match(/<a:srgbClr val="([0-9A-Fa-f]{6})"/)?.[1]?.toUpperCase() ?? null;
-  const spPr = ser => ser.match(/<c:spPr>([\s\S]*?)<\/c:spPr>/)?.[1] ?? '';
-  let colors;
-  if (strokeSeries) colors = sers.map(ser => srgb(spPr(ser).match(/<a:ln\b[^>]*>([\s\S]*?)<\/a:ln>/)?.[1]) ?? srgb(spPr(ser)));
-  else if (kind === 'pieChart' || kind === 'doughnutChart') colors = sers.flatMap(ser => { const slices = [...ser.matchAll(/<c:dPt>[\s\S]*?<c:spPr>([\s\S]*?)<\/c:spPr>/g)].map(m => srgb(m[1])); return slices.length ? slices : [srgb(spPr(ser).replace(/<a:ln\b[\s\S]*?<\/a:ln>/g, ''))]; });
-  else colors = [...cx.matchAll(/<c:ser>.*?<c:spPr>.*?<a:srgbClr val="([0-9A-Fa-f]{6})"/gs)].map(x => x[1].toUpperCase());
-  return {colors: uniq(colors.filter(Boolean)), strokeSeries};
-}
+// Series colours of a native classic chart: chart-colors.mjs (FF-38; RR-36 reads the c:dPt fills of fill-kind series).
 // OPC part-name resolution: an absolute Target ("/ppt/charts/chart1.xml") is
 // relative to the package root; a relative Target is relative to the folder of
 // the source part.
