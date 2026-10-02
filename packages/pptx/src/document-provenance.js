@@ -75,7 +75,9 @@ function authoredSocials(stored, observed, records) {
 // native PowerPoint counterpart and round-trips from the stored value.
 export const DESIGN_REFERENCES = Object.freeze(['theme', 'colorScheme', 'fontScheme', 'dimensions', 'background']);
 export const COMPOSITION_HINTS = Object.freeze(['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'chartPrimary', 'imageFill', 'listBullet']);
-export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author']);
+// `references` (RR-34): the deck's cited sources. Like `author`, stored as a top-level key of OPF_DOCUMENT_V1 (importers up to
+// 0.11.9 drop a tag with an unknown `supplement` field but ignore an unknown top-level key) and read back into metadata.
+export const METADATA = Object.freeze(['narrative', 'tone', 'audience', 'purpose', 'language', 'organization', 'speaker', 'takeaway', 'duration', 'tags', 'variables', 'filename', 'extensions', 'author', 'references']);
 
 // `author` is native (docProps/core.xml dc:creator), where several authors share one field joined by "; " (the join the
 // schema documents). Import splits a creator on exactly that separator, and only when every part is a non-empty name
@@ -607,9 +609,9 @@ function storable(entries, provenance) {
     const fields = {};
     for (const [key, value] of Object.entries(source[section] ?? {})) {
       const path = section === 'design' ? `design.${key}` : key;
-      if (section === 'metadata' && key === 'author') {
+      if (section === 'metadata' && (key === 'author' || key === 'references')) {
         const prepared = prepare(path, value);
-        if (prepared !== undefined) document.author = prepared;
+        if (prepared !== undefined) document[key] = prepared;
         continue;
       }
       // A design reference is only restorable together with its asset.
@@ -775,10 +777,12 @@ function validateDocument(stored) {
   if (value.metadata?.extensions !== undefined && !object(value.metadata.extensions)) throw Error('Invalid extensions record.');
   const author = stored.author;
   if (author !== undefined && !((typeof author === 'string' && author.length <= MAX_AUTHOR_LENGTH * 256) || (Array.isArray(author) && author.length > 0 && author.length <= 256 && author.every(name => typeof name === 'string' && name.length <= MAX_AUTHOR_LENGTH)))) throw Error('Invalid author record.');
+  const references = stored.references;
+  if (references !== undefined && (!Array.isArray(references) || references.length > 4096 || !references.every(object))) throw Error('Invalid references record.');
   validateOmitted(value.omitted);
-  if (author !== undefined) {
-    const {author: _stored, ...rest} = value;
-    return {...rest, metadata: {...rest.metadata, author}};
+  if (author !== undefined || references !== undefined) {
+    const {author: _author, references: _references, ...rest} = value;
+    return {...rest, metadata: {...rest.metadata, ...(author !== undefined ? {author} : {}), ...(references !== undefined ? {references} : {})}};
   }
   return value;
 }

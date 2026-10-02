@@ -11,6 +11,9 @@ import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeSh
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
 import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTextFingerprint} from './media-provenance.js';
+// RR-34: captions and footnote areas as tagged text boxes; citation markers round-trip through the tags and the marker runs.
+import {addCaption, addFootnotes} from './annotation-export.js';
+import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
@@ -247,6 +250,8 @@ export async function toPptx(input, options = {}) {
   context.nativeFurniture = new Map();
   context.hostDate = options.date;
   context.codeTags = new Map();
+  context.captionTags = new Map();
+  context.footnoteTags = new Map();
   context.metricTags = new Map();
   context.chartHeadings = new Map();
   context.chartFonts = new Map();
@@ -406,6 +411,9 @@ export async function fromPptx(input, options = {}) {
     report({code: "invalid-document-provenance", path: "", message: `${errorMessage(error)} Ordinary import keeps the values observed in the PPTX.`});
   }
   if (slideProvenance.length !== imported.slides.length) throw new OPFPptxError("invalid-import-opf", "Slide provenance does not match the imported slides.");
+  // RR-34: marker runs become cite/footnote on the runs before them, and the references list is rebuilt
+  // from the stored record and the footnote boxes (an edited note keeps its edited text).
+  restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
   applyRunColors(imported, slideProvenance, restoredGroups, report, options);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
@@ -673,6 +681,27 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? []}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
+  // RR-34: a tagged caption re-attaches to the block whose native media shape it names (never by position).
+  const annotations = nativeContext.annotations;
+  if (annotations?.captions.size) {
+    const tree = slideRoot['p:cSld']?.['p:spTree'];
+    const shapeName = node => scalarText(node?.['p:nvSpPr']?.['p:cNvPr']?.name ?? node?.['p:nvPicPr']?.['p:cNvPr']?.name ?? node?.['p:nvGraphicFramePr']?.['p:cNvPr']?.name).trim();
+    const keyByName = new Map();
+    nativeContext.shapes.forEach((shape, index) => keyByName.set(shapeName(shape), `sp:${index}`));
+    nativeContext.pictures.forEach((picture, index) => keyByName.set(shapeName(picture), `pic:${index}`));
+    asArray(tree?.['p:graphicFrame']).forEach((frame, index) => keyByName.set(shapeName(frame), `frame:${index}`));
+    asArray(tree?.['mc:AlternateContent']).forEach((alternate, index) => { for (const node of [...asArray(alternate?.['mc:Choice']), ...asArray(alternate?.['mc:Fallback'])]) if (node?.['p:graphicFrame']) keyByName.set(shapeName(node['p:graphicFrame']), `alt:${index}`); });
+    for (const [mediaName, caption] of annotations.captions) {
+      const key = keyByName.get(mediaName);
+      const entry = key === undefined ? undefined : content.find(item => item.sources.includes(key));
+      if (!entry || !['image', 'chart', 'table', 'video'].includes(inferPayloadKind(entry.payload))) {
+        options.onDiagnostic?.({code: 'caption-detached', path: `slides.${slideIndex}`, message: `The caption of ${caption.path} no longer has its media shape (${mediaName}); its text is imported as an ordinary text block.`});
+        blocks.push({type: 'text', text: caption.value});
+        continue;
+      }
+      entry.payload.caption = captionValue(caption);
+    }
+  }
   if (blocks.length > 0) slide.blocks = blocks;
   // Native bounds of each block in reference px, for content topology matching (document provenance).
   // Which native shapes fed each field and block (import signals); never part of the document.
@@ -717,6 +746,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}));
+  // RR-34: tagged caption and footnote lines are not content; captions re-attach to their media block and notes rebuild cite/footnote.
+  const annotations=importAnnotations({shapes,paragraphs,relationships,entries,slideIndex,readBody,report:diagnostic=>options.onDiagnostic?.(diagnostic)});
+  nativeContext.annotations=annotations;
   for(const group of [...headings.items,...plainText.items]) {
     const item=importShape(group.shapes[0],dimensions,group.paragraphs,true);
     if(item){
@@ -743,6 +775,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
     if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index)) continue;
+    if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
@@ -1701,7 +1734,7 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         const runs=line.fragments.map(fragment=>{
           const runColor=exportColor(fragment.run.color,itemContext,itemContext.colors.text);
           const color=nativeColor(fragment.run.color,runColor,itemContext,itemContext.textColor);
-          return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+          return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
         });
         const placed=item.text.placement?.lines[index],factor=alignment==='right'?1:alignment==='center'?.5:0;
         const area=placed?{...region,x:(placed.x+line.width*factor-item.box.width*factor)/96,y:placed.y/96,h:placed.height/96}:{...region,y:region.y+line.y/96,h:line.height/96};
@@ -1710,9 +1743,17 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:alignmentFor(item)});
     } else {
+      // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
+      const mediaNames = item.caption ? new Set([...context.imagePlacements.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
       await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: alignmentFor(item) ?? "left" }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
+      if (item.caption) {
+        const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.imagePlacements.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
+        addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
+      }
     }
   }
+  // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
+  addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
   // Core composes furniture above all content and opf-render paints it last, so
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
@@ -1824,7 +1865,7 @@ function richLineRuns(line,color,native,context) {
   const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
-    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:fragment.fontSize*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/fragment.fontSize*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
   });
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
@@ -2620,6 +2661,9 @@ function textBoxOptions(region, context, fontSize) {
   };
 }
 
+// The private text helpers annotation-export.js writes captions and footnote lines with (RR-34).
+const exportHelpers = {textBoxOptions, nativeFontOptions, exportColor, nativeColor};
+
 function textRuns(value, context, fallbackFontSize) {
   const runs = Array.isArray(value) ? value : [value];
   return runs.map((run) => {
@@ -3113,6 +3157,7 @@ async function normalizePptxZip(raw, context) {
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
   attachQuoteTags(entries,context.quoteTags);
+  attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);
   attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests,context.furnitureLogoTags);
   // RR-11: the recorded footer shapes become PowerPoint's date, footer and slide-number placeholders.

@@ -142,6 +142,8 @@ function analyzeLines(value, lines) {
     if (!line.fragments.length) continue;
     const span = {start: position, end: position};
     for (const [index, fragment] of line.fragments.entries()) {
+      // RR-34: a citation/footnote marker is generated text with no source range; it never starts a line.
+      if (fragment?.kind === 'marker') continue;
       const text = fragment?.text;
       if (typeof text !== 'string' || !text) return undefined;
       let at = position;

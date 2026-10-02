@@ -83,8 +83,12 @@ for (const [name, source, reason] of broken) {
   checked++;
 }
 
-// The preview shows the same placeholder for a malformed SVG (it only trusts the declared type of raster data URIs, so not for a mislabeled PNG).
-for (const [, source] of broken.filter(([, source]) => source !== notAPng)) {
+// The preview shows the same placeholder for an SVG it cannot size or decode (it only trusts the declared type of raster
+// data URIs, so not for a mislabeled PNG). opf-render main after opf-render#88 draws the unclosed document and the one with
+// an external entity (its own parser repairs the first and never resolves the second), so the preview check covers the
+// cases every renderer flags; the export still degrades all of them.
+const drawnByRendererMain = new Set(['svg that is not closed', 'svg with an external entity']);
+for (const [, source] of broken.filter(([name, source]) => source !== notAPng && !drawnByRendererMain.has(name))) {
   const preview = [];
   const svg = renderSvg({slides: [{title: 'T', image: source}]}, {onDiagnostic: diagnostic => preview.push(diagnostic)});
   assert.ok(svg.includes('data-opf-asset-status="unresolved"'), 'preview placeholder');
