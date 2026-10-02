@@ -269,7 +269,7 @@ Images, videos and any other group have no conversion. Everything else is replac
 | Images | `moveImageToDesign(editor, blockPath, "slideImage" \| "background" \| "watermark", options)`, `moveImageToContent(editor, slideIndex, source)` | Promote an image block to the slide image (with a position), background or watermark and back; alt text, titles, placement and opacity that the target cannot hold are reported. |
 | Slides | `splitSlideByBlocks`, `splitSlideOnOverflow`, `mergeSlides`, `unpaginateSlides` | Split a slide by its blocks, or where it overflows through the existing pagination (the change carries `pages`), merge consecutive slides, and put paginated slides back together from `pages`. Each is one undo step made of per-slide `test`, `replace`, `remove` and `add` operations. |
 
-The playground's Content tab mounts the block-level and slide-structure actions (`slide-content` section of `/design-controls`). Slide-level split and merge are API only until the slide management UI exists.
+The playground's Content tab mounts the block-level and slide-structure actions (`slide-content` section of `/design-controls`). Slide-level split and merge are in the playground's slide menu (the slide manager's `contentActions` option) as well as in the API.
 
 ### Pickers: options, chart types and current values
 

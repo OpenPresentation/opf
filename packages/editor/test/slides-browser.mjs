@@ -426,6 +426,27 @@ try {
   assert.equal(await page.evaluate(() => document.activeElement.id), 'add-layout', 'focus returns to the button that opened it');
   mark('accessibility: names, roles, live regions, menu and dialog focus');
 
+  // --- split and merge (the content actions of RR-26) -------------------------------------------------------------
+  await load({ name: 'Split and merge', design: { theme: 'classic', fontScheme: 'roboto' }, slides: [
+    { id: 'multi', title: 'Many parts', blocks: [{ text: 'One' }, { text: 'Two' }, { items: ['a', 'b'] }] },
+    { id: 'tail', title: 'Tail', text: 'The end' },
+  ] });
+  await card(0).click({ button: 'right' });
+  assert.equal(await page.getByRole('menuitem', { name: 'Split slide into one slide per block' }).isEnabled(), true);
+  await oneStep('Split slide into one slide per block', async () => { await page.getByRole('menuitem', { name: 'Split slide into one slide per block' }).click(); },
+    current => current.slides.length === 4 && current.slides.at(-1).id === 'tail' && current.slides[0].title === 'Many parts',
+    async () => { await waitLive(/Slide split into 3 slides/, 'announces the split'); assert.equal(await cards().count(), 4); });
+  await card(0).click();
+  await card(1).click({ modifiers: ['Shift'] });
+  await card(1).click({ button: 'right' });
+  await oneStep('Merge the selected slides into one', async () => { await page.getByRole('menuitem', { name: 'Merge 2 slides into one' }).click(); },
+    current => current.slides.length === 3 && current.slides.at(-1).id === 'tail',
+    async () => { await waitLive(/Merged 2 slides into one/, 'announces the merge'); });
+  await card(0).click({ button: 'right' });
+  await oneStep('Merge with next slide', async () => { await page.getByRole('menuitem', { name: 'Merge with next slide' }).click(); },
+    current => current.slides.length === 2);
+  mark('split and merge slides from the slide menu, one undo step each');
+
   // --- a plain deck has no section headers -----------------------------------------------------------------------
   await load(plainSource);
   assert.equal(await page.locator('#slide-list .slide-section').count(), 0);

@@ -17,6 +17,7 @@ import { createPersistence } from '../src/persistence.js';
 import { createPersistenceUi } from '../src/persistence-ui.js';
 import { createSlideManager } from '../src/slide-manager.js';
 import { createOutlineView } from '../src/outline-view.js';
+import { splitSlideByBlocks, mergeSlides } from '../src/content-actions.js';
 import { createDataGrid } from '../src/data-grid.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
@@ -146,6 +147,8 @@ function thumbnailHtml(deck, index) {
 const slideManagerOptions = {
   editor, getSlideIndex: () => slideIndex, setSlideIndex: value => { slideIndex = value; refresh(); },
   renderThumbnail: thumbnailHtml, onStatus: message => status(message), onError: () => {}, autoRender: false,
+  // RR-26: split a slide by its blocks and merge slides, from the slide menu.
+  contentActions: { splitSlideByBlocks, mergeSlides },
 };
 const slideManager = createSlideManager(element('slide-list'), {...slideManagerOptions, toolbar: element('slide-toolbar')});
 let sorter, outline, activeView = 'slide';
