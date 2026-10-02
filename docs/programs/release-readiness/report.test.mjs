@@ -55,10 +55,13 @@ test('the Now table is optional and validated', () => {
   assert.deepEqual(pullRequests('see [x](https://github.com/o/r/pull/5), https://github.com/o/r/pull/5 and [i](https://github.com/o/r/issues/6)'), ['o/r#5']);
 });
 
-test('the committed burndown parses and covers RR-01 to RR-44', async () => {
+// Contiguous from RR-01 to the highest item, so adding the next item does not also edit this test.
+test('the committed burndown parses and covers RR-01 to its highest item without gaps', async () => {
   const markdown = await readFile(fileURLToPath(new URL('./burndown.md', import.meta.url)), 'utf8');
   const items = parseBurndown(markdown);
-  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: 44 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
+  const last = Math.max(...items.map((i) => Number(i.id.slice(3))));
+  assert.ok(last >= 53, `expected at least RR-53, found RR-${last}`);
+  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: last }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
   for (const i of items) assert.ok(STATUSES.includes(i.status));
   for (const i of items) for (const dep of i.depends.match(/RR-\d{2}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
   // the work queue only names real items, and no closed item lingers in it
