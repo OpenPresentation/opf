@@ -28,12 +28,12 @@
     "renderManifest": {
       "file": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
       "repository": "OpenPresentation/opf-render",
-      "commit": "9e5d616a14b775622cd7d76b3c7412c0e28e0849",
+      "commit": "8f0d6f1bbdec82f266494113e7e061b931bf44e2",
       "path": "src/font-manifest.js",
-      "capturedAt": "2026-10-01",
+      "capturedAt": "2026-10-02",
       "manifestVersion": 1,
-      "packages": 60,
-      "faces": 190
+      "packages": 66,
+      "faces": 197
     },
     "parity": {
       "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -224,20 +224,20 @@
       "special": 3
     },
     "byStatus": {
-      "loading-gap": 6,
-      "style-gap": 0,
+      "loading-gap": 0,
+      "style-gap": 4,
       "policy-gap": 0,
       "needs-special-path": 3,
       "visual-gap": 1,
       "script-gap": 41,
-      "baseline-needed": 34,
+      "baseline-needed": 36,
       "metric-measured": 0,
       "documented-visual": 42,
       "qualified": 41
     },
     "byPhase": {
-      "1": 34,
-      "2": 6,
+      "1": 36,
+      "2": 4,
       "3": 0,
       "4": 45,
       "5": 83
@@ -245,23 +245,23 @@
     "hostVerification": {
       "node": {
         "verified": 118,
-        "unverified": 43,
-        "NA": 7
+        "unverified": 47,
+        "NA": 3
       },
       "browser": {
         "verified": 118,
-        "unverified": 43,
-        "NA": 7
+        "unverified": 47,
+        "NA": 3
       },
       "editor": {
         "verified": 87,
-        "unverified": 74,
-        "NA": 7
+        "unverified": 78,
+        "NA": 3
       },
       "galleryEditor": {
         "verified": 84,
-        "unverified": 77,
-        "NA": 7
+        "unverified": 81,
+        "NA": 3
       },
       "galleryCards": {
         "verified": 0,
@@ -276,8 +276,8 @@
       "NA": 0
     },
     "bundled": {
-      "yes": 159,
-      "no": 9
+      "yes": 165,
+      "no": 3
     },
     "parityRerunNeeded": 7
   },
@@ -4156,7 +4156,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 74
+        "rank": 72
       }
     },
     {
@@ -5130,7 +5130,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 75
+        "rank": 73
       }
     },
     {
@@ -5385,7 +5385,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 76
+        "rank": 74
       }
     },
     {
@@ -5644,7 +5644,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 61
+        "rank": 59
       }
     },
     {
@@ -6561,7 +6561,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 77
+        "rank": 75
       }
     },
     {
@@ -6581,33 +6581,42 @@
           "Caladea"
         ],
         "alternatesBundled": {
-          "Noto Sans Math": false,
+          "Noto Sans Math": true,
           "Caladea": true
         },
         "disabledFeatures": [],
         "decision": null,
         "source": "https://github.com/stipub/stixfonts",
-        "pendingBundle": {
-          "prs": [
-            "opf-render#95"
-          ],
-          "note": "STIX Two Math and Noto Sans Math join the opf-render manifest as the optional math pack (pseudo-script Zmth) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
-        }
+        "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "STIX Two Math",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null,
-        "pending": {
-          "prs": [
-            "opf-render#95"
-          ],
-          "note": "STIX Two Math and Noto Sans Math join the opf-render manifest as the optional math pack (pseudo-script Zmth) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
-        }
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/stix-two-math",
+            "version": "0.4.0",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/stix-two-math/v/0.4.0",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": [
+              "TM Math"
+            ]
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/STIXTwoMath_400Regular.ttf",
+            "sha256": "c3377c20641ecee349677e3f6cc71a6405c30cda7171a4cbc4a1c3970cfff0b4"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -6622,7 +6631,6 @@
         "700i"
       ],
       "stylesMissing": [
-        "400",
         "400i",
         "700",
         "700i"
@@ -6644,10 +6652,10 @@
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "pending opf-render#95: not in the pinned manifest",
-        "browser": "pending opf-render#95: not in the pinned manifest",
-        "editor": "pending opf-render#95: not in the pinned manifest",
-        "galleryEditor": "pending opf-render#95: not in the pinned manifest",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -6678,8 +6686,8 @@
         "rerunNeeded": false
       },
       "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "STIX Two Math is not in the pinned opf-render manifest until opf-render#95 land",
+      "status": "style-gap",
+      "statusReason": "missing 400i, 700, 700i in STIX Two Math",
       "nextAction": "FF-45 route in place: STIX Two Math (visual; corpus mean 5.0%, max 18.2%, Latin 0.9%) with Noto Sans Math and Caladea as alternates; math runs are text drawn per character (no equation model, no MATH-table layout; OMML imports as fallback text with a diagnostic). Next: native PowerPoint check of the Cambria Math deck (FF-46) and an owner decision on an equation model (RR-18).",
       "evidence": [
         {
@@ -6692,12 +6700,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 39
+        "rank": 44
       }
     },
     {
@@ -6950,7 +6958,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 78
+        "rank": 76
       }
     },
     {
@@ -7392,7 +7400,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 79
+        "rank": 77
       }
     },
     {
@@ -7645,7 +7653,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 62
+        "rank": 60
       }
     },
     {
@@ -7903,7 +7911,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 63
+        "rank": 61
       }
     },
     {
@@ -8168,7 +8176,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 64
+        "rank": 62
       }
     },
     {
@@ -8425,7 +8433,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 80
+        "rank": 78
       }
     },
     {
@@ -9395,7 +9403,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 51
+        "rank": 49
       }
     },
     {
@@ -10037,7 +10045,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 52
+        "rank": 50
       }
     },
     {
@@ -10655,7 +10663,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 81
+        "rank": 79
       }
     },
     {
@@ -10886,7 +10894,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 82
+        "rank": 80
       }
     },
     {
@@ -11138,7 +11146,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 65
+        "rank": 63
       }
     },
     {
@@ -12027,7 +12035,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 83
+        "rank": 81
       }
     },
     {
@@ -12435,7 +12443,7 @@
         "valuesAffected": 5,
         "valuesOpen": 5,
         "hostFactor": 0.25,
-        "rank": 50
+        "rank": 48
       }
     },
     {
@@ -12664,7 +12672,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 55
+        "rank": 53
       }
     },
     {
@@ -13255,7 +13263,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 56
+        "rank": 54
       }
     },
     {
@@ -14975,7 +14983,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 84
+        "rank": 82
       }
     },
     {
@@ -15164,7 +15172,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 85
+        "rank": 83
       }
     },
     {
@@ -15353,7 +15361,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 86
+        "rank": 84
       }
     },
     {
@@ -18696,7 +18704,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 53
+        "rank": 51
       }
     },
     {
@@ -19145,13 +19153,31 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Noto Color Emoji",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/noto-color-emoji",
+            "version": "0.4.6",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/NotoColorEmoji_400Regular.ttf",
+            "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400"
@@ -19172,7 +19198,6 @@
         ]
       },
       "stylesMissing": [
-        "400",
         "400i",
         "700",
         "700i"
@@ -19186,17 +19211,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -19223,12 +19248,12 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
       "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Noto Color Emoji is not bundled by opf-render",
+      "status": "style-gap",
+      "statusReason": "missing 400i, 700, 700i in Noto Color Emoji",
       "nextAction": "Pinned as the optional opf-render emoji pack (Zsye) in the FF-45 render PR; the preview face for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge; a colour raster path when resvg draws COLRv1 or the OT-SVG glyphs are inlined.",
       "evidence": [
         {
@@ -19241,12 +19266,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 40
+        "rank": 45
       }
     },
     {
@@ -19269,22 +19294,38 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Noto Emoji",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/noto-emoji",
+            "version": "0.4.7",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.7",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/NotoEmoji_400Regular.ttf",
+            "sha256": "24aaa2a20c9c06ffe9bf04284bfd1f14376a329d10122f902abe2770817eb504"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400"
       ],
       "replacementStylesRequired": null,
       "stylesRequiredByRole": {},
-      "stylesMissing": [
-        "400"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "declared: Monochrome emoji face used by the resvg raster path; the regular weight is pinned (upstream also ships 300 to 700).",
@@ -19294,17 +19335,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -19331,12 +19372,12 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Noto Emoji is not bundled by opf-render",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
       "nextAction": "Pinned in the FF-45 emoji pack as the raster stand-in and alternate for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge.",
       "evidence": [
         {
@@ -19349,12 +19390,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 41
+        "rank": 85
       }
     },
     {
@@ -19534,7 +19575,7 @@
         "valuesAffected": 2,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 87
+        "rank": 86
       }
     },
     {
@@ -19704,7 +19745,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 88
+        "rank": 87
       }
     },
     {
@@ -19900,7 +19941,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 89
+        "rank": 88
       }
     },
     {
@@ -20060,7 +20101,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 90
+        "rank": 89
       }
     },
     {
@@ -20230,7 +20271,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 91
+        "rank": 90
       }
     },
     {
@@ -20409,7 +20450,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 92
+        "rank": 91
       }
     },
     {
@@ -20590,7 +20631,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 93
+        "rank": 92
       }
     },
     {
@@ -20767,7 +20808,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 94
+        "rank": 93
       }
     },
     {
@@ -20937,7 +20978,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 95
+        "rank": 94
       }
     },
     {
@@ -21114,7 +21155,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 96
+        "rank": 95
       }
     },
     {
@@ -21291,7 +21332,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 97
+        "rank": 96
       }
     },
     {
@@ -21470,7 +21511,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 98
+        "rank": 97
       }
     },
     {
@@ -21659,7 +21700,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 99
+        "rank": 98
       }
     },
     {
@@ -21836,7 +21877,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 100
+        "rank": 99
       }
     },
     {
@@ -22015,7 +22056,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 101
+        "rank": 100
       }
     },
     {
@@ -22207,7 +22248,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 102
+        "rank": 101
       }
     },
     {
@@ -22367,7 +22408,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 103
+        "rank": 102
       }
     },
     {
@@ -22544,7 +22585,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 104
+        "rank": 103
       }
     },
     {
@@ -22567,22 +22608,38 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "Noto Sans Math",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/noto-sans-math",
+            "version": "0.4.2",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-math/v/0.4.2",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/NotoSansMath_400Regular.ttf",
+            "sha256": "b4a1dfdbfa13b4755e5eac20cb25c1d17ed5a745ceb89639595e8cf45a2b1e07"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400"
       ],
       "replacementStylesRequired": null,
       "stylesRequiredByRole": {},
-      "stylesMissing": [
-        "400"
-      ],
+      "stylesMissing": [],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
       "stylesBasis": "declared: Math face with a MATH table; upstream ships one regular weight.",
@@ -22593,17 +22650,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -22630,12 +22687,12 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face Noto Sans Math is not bundled by opf-render",
+      "phase": 1,
+      "status": "baseline-needed",
+      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
       "nextAction": "Pinned in the FF-45 math pack as the sans math face (glyph fallback for sans schemes) and alternate for Cambria Math. Next: tracker snapshot refresh after the render merge.",
       "evidence": [
         {
@@ -22648,12 +22705,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 1,
+        "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 42
+        "rank": 104
       }
     },
     {
@@ -27703,7 +27760,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 66
+        "rank": 64
       }
     },
     {
@@ -28176,7 +28233,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 57
+        "rank": 55
       }
     },
     {
@@ -28407,7 +28464,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 58
+        "rank": 56
       }
     },
     {
@@ -28752,7 +28809,7 @@
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 0.25,
-        "rank": 48
+        "rank": 42
       }
     },
     {
@@ -28771,32 +28828,39 @@
           "Noto Emoji"
         ],
         "alternatesBundled": {
-          "Noto Emoji": false
+          "Noto Emoji": true
         },
         "disabledFeatures": [],
         "decision": null,
         "source": "https://github.com/googlefonts/noto-emoji",
-        "pendingBundle": {
-          "prs": [
-            "opf-render#95"
-          ],
-          "note": "Noto Color Emoji and Noto Emoji join the opf-render manifest as the optional emoji pack (pseudo-script Zsye) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
-        }
+        "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "route-target",
         "family": "Noto Color Emoji",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null,
-        "pending": {
-          "prs": [
-            "opf-render#95"
-          ],
-          "note": "Noto Color Emoji and Noto Emoji join the opf-render manifest as the optional emoji pack (pseudo-script Zsye) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
-        }
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/noto-color-emoji",
+            "version": "0.4.6",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": []
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/NotoColorEmoji_400Regular.ttf",
+            "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400",
@@ -28811,7 +28875,6 @@
         "700i"
       ],
       "stylesMissing": [
-        "400",
         "400i",
         "700",
         "700i"
@@ -28833,10 +28896,10 @@
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "pending opf-render#95: not in the pinned manifest",
-        "browser": "pending opf-render#95: not in the pinned manifest",
-        "editor": "pending opf-render#95: not in the pinned manifest",
-        "galleryEditor": "pending opf-render#95: not in the pinned manifest",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -28867,8 +28930,8 @@
         "rerunNeeded": false
       },
       "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "Noto Color Emoji is not in the pinned opf-render manifest until opf-render#95 land",
+      "status": "style-gap",
+      "statusReason": "missing 400i, 700, 700i in Noto Color Emoji",
       "nextAction": "FF-45 route in place: Noto Color Emoji (visual; 1.2451 em per emoji against 1.3730 em in Segoe UI Emoji 1.33) with Noto Emoji as the monochrome raster face; sequences stay one glyph, browsers draw colour, resvg draws the silhouette. Next: native PowerPoint check of the emoji deck (FF-46) and a colour raster path when resvg gains COLRv1 or the OT-SVG glyphs are inlined.",
       "evidence": [
         {
@@ -28881,12 +28944,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 43
+        "rank": 46
       }
     },
     {
@@ -29180,7 +29243,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 67
+        "rank": 65
       }
     },
     {
@@ -29475,7 +29538,7 @@
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 0.25,
-        "rank": 49
+        "rank": 43
       }
     },
     {
@@ -29768,7 +29831,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 68
+        "rank": 66
       }
     },
     {
@@ -30302,7 +30365,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 54
+        "rank": 52
       }
     },
     {
@@ -30761,7 +30824,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 69
+        "rank": 67
       }
     },
     {
@@ -30990,7 +31053,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 70
+        "rank": 68
       }
     },
     {
@@ -31432,13 +31495,33 @@
         "pendingBundle": null
       },
       "bundled": {
-        "yes": false,
+        "yes": true,
         "applies": "self",
         "family": "STIX Two Math",
-        "packages": [],
-        "faces": [],
-        "stylesAvailable": [],
-        "pack": null
+        "pack": "scripts",
+        "packages": [
+          {
+            "name": "@expo-google-fonts/stix-two-math",
+            "version": "0.4.0",
+            "pack": "scripts",
+            "source": "https://www.npmjs.com/package/@expo-google-fonts/stix-two-math/v/0.4.0",
+            "vendored": null,
+            "license": "OFL-1.1",
+            "reservedFontNames": [
+              "TM Math"
+            ]
+          }
+        ],
+        "faces": [
+          {
+            "style": "400",
+            "file": "400Regular/STIXTwoMath_400Regular.ttf",
+            "sha256": "c3377c20641ecee349677e3f6cc71a6405c30cda7171a4cbc4a1c3970cfff0b4"
+          }
+        ],
+        "stylesAvailable": [
+          "400"
+        ]
       },
       "stylesRequired": [
         "400"
@@ -31459,7 +31542,6 @@
         ]
       },
       "stylesMissing": [
-        "400",
         "400i",
         "700",
         "700i"
@@ -31474,17 +31556,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "not bundled",
-        "browser": "not bundled",
-        "editor": "not bundled",
-        "galleryEditor": "not bundled",
+        "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
+        "browser": "when the host requests scripts (opf-render#55)",
+        "editor": "auto (opf-editor#40)",
+        "galleryEditor": "script-font manifest (opf#171)",
         "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
@@ -31511,12 +31593,12 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
       "phase": 2,
-      "status": "loading-gap",
-      "statusReason": "route face STIX Two Math is not bundled by opf-render",
+      "status": "style-gap",
+      "statusReason": "missing 400i, 700, 700i in STIX Two Math",
       "nextAction": "Pinned as the optional opf-render math pack (Zmth) in the FF-45 render PR; the preview face for Cambria Math. Next: tracker snapshot refresh after the render merge; native Cambria Math comparison (FF-46).",
       "evidence": [
         {
@@ -31529,12 +31611,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 3,
+        "score": 2.5,
+        "severity": 2.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 44
+        "rank": 47
       }
     },
     {
@@ -31895,7 +31977,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 45
+        "rank": 39
       }
     },
     {
@@ -32143,7 +32225,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 71
+        "rank": 69
       }
     },
     {
@@ -32373,7 +32455,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 59
+        "rank": 57
       }
     },
     {
@@ -32603,7 +32685,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 60
+        "rank": 58
       }
     },
     {
@@ -33546,7 +33628,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 72
+        "rank": 70
       }
     },
     {
@@ -33991,7 +34073,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 73
+        "rank": 71
       }
     },
     {
@@ -34276,7 +34358,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 46
+        "rank": 40
       }
     },
     {
@@ -34383,7 +34465,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 47
+        "rank": 41
       }
     },
     {
