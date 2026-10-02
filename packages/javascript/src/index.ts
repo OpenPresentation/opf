@@ -138,6 +138,9 @@ export {fitList} from './composition.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
 export {
   chartColorForFill,
+  chartPaletteForFill,
+  CHART_SERIES_MIN_LIGHTNESS_STEP,
+  CHART_SERIES_MIN_DIFFERENCE,
   colorContrast,
   normalizeHexColor,
   resolveColorRef,
