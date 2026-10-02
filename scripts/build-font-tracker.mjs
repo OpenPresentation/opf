@@ -190,6 +190,8 @@ const NATIVE_BASIS =
  * every shape's per-run font names match (fonts), the theme slots match (themeSlots) and Presentation.Fonts lists only the chosen families
  * (presentationFonts). A family is evidenced by a deck that names it in a theme slot, or lists it in the deck's native Presentation.Fonts;
  * a family the deck only names in its export has no native read-back of its own. Families no run names stay unverified.
+ * A family named by a deck that fails a gated check, with no passing deck that reads it back, is `failed`: the failing checks, deck and mismatch
+ * kinds are recorded (`failures`) so the failure can be triaged into an item or an issue instead of hiding as "unverified".
  */
 function loadNativeEvidence(root, runs) {
   const lc = (value) => String(value ?? "").trim().toLowerCase();
@@ -217,7 +219,9 @@ function loadNativeEvidence(root, runs) {
       for (const name of checks.presentationFonts?.expected ?? []) if (!via.has(lc(name))) via.set(lc(name), { family: String(name).trim(), via: [] });
       for (const [key, item] of via) {
         const record = families.get(key) ?? { family: item.family, decks: [] };
-        record.decks.push({ run: run.id, deck: deck.id, pass, fontsOk, themeOk, listOk, shapes: `${checks.fonts?.ok ?? 0}/${checks.fonts?.shapes ?? 0}`, via: item.via });
+        const failing = [!fontsOk && "fonts", !themeOk && "themeSlots", !listOk && "presentationFonts"].filter(Boolean);
+        const detail = (deck.mismatches ?? []).map((entry) => entry.kind).filter((kind, at, all) => all.indexOf(kind) === at);
+        record.decks.push({ run: run.id, deck: deck.id, pass, fontsOk, themeOk, listOk, failing, detail, shapes: `${checks.fonts?.ok ?? 0}/${checks.fonts?.shapes ?? 0}`, via: item.via });
         families.set(key, record);
       }
     }
@@ -227,9 +231,10 @@ function loadNativeEvidence(root, runs) {
   for (const [key, record] of families) {
     const named = record.decks.filter((deck) => deck.via.length > 0);
     const passing = named.filter((deck) => deck.pass);
-    const partial = named.filter((deck) => deck.fontsOk && deck.themeOk && !deck.pass);
+    const failing = record.decks.filter((deck) => !deck.pass);
     if (passing.length) byFamily.set(key, { status: "verified", decks: passing, others: record.decks.filter((deck) => !passing.includes(deck)) });
-    else if (partial.length) byFamily.set(key, { status: "partial", decks: partial, others: [], reason: "the deck's own fonts and theme slots match, but Presentation.Fonts lists a family the deck does not name (the FF-05 Aptos entry)" });
+    // A deck that reads the family back and fails a gated check, or a family whose only decks fail: failed (not hidden as partial or unverified).
+    else if (failing.some((deck) => deck.via.length > 0) || !record.decks.some((deck) => deck.pass)) byFamily.set(key, { status: "failed", decks: failing, others: record.decks.filter((deck) => deck.pass), failures: failing });
     else if (record.decks.some((deck) => deck.pass)) byFamily.set(key, { status: "partial", decks: record.decks.filter((deck) => deck.pass), others: [], reason: "named in the export and every run matched, but no theme slot or Presentation.Fonts entry reads it back on its own" });
   }
   return { byFamily, runs: summary };
@@ -405,11 +410,22 @@ function nativeRecordOf(evidence, runs, family, authored) {
   });
   const deckList = derived.decks.map((deck) => `${deck.deck} (${deck.shapes} shapes; ${[...new Set(deck.via)].join(", ") || "export names only"})`);
   const listed = deckList.length > 4 ? `${deckList.slice(0, 4).join("; ")}; and ${deckList.length - 4} more` : deckList.join("; ");
-  const failing = derived.others.filter((deck) => !deck.pass);
+  const failing = derived.status === "failed" ? [] : derived.others.filter((deck) => !deck.pass);
   const failedNote = failing.length
     ? `Decks that name it but fail a check: ${failing.map((deck) => `${deck.deck} (${[!deck.fontsOk && "fonts", !deck.themeOk && "themeSlots", !deck.listOk && "presentationFonts"].filter(Boolean).join(", ")})`).join(", ")}.`
     : "";
   const caveat = [authored?.caveat, failedNote].filter(Boolean).join(" ");
+  if (derived.status === "failed") {
+    const failures = derived.failures.map((deck) => ({ run: deck.run, deck: deck.deck, failing: deck.failing, mismatchKinds: deck.detail, shapesFontsOk: deck.shapes, via: deck.via }));
+    return {
+      status: "failed",
+      basis: NATIVE_BASIS,
+      note: `FAILED in ${[...new Set(failures.map((item) => item.run))].join(", ")}: ${failures.map((item) => `${item.deck} (${item.failing.join(", ")}${item.mismatchKinds.length ? `; ${item.mismatchKinds.join(", ")}` : ""}; ${item.shapesFontsOk} shapes)`).join("; ")}. Triage into an item or an issue.`,
+      ...(caveat ? { caveat } : {}),
+      failures,
+      runs: runRecords,
+    };
+  }
   return {
     status: derived.status,
     basis: NATIVE_BASIS,
@@ -791,7 +807,7 @@ export function buildTracker({ root = ROOT } = {}) {
     const appearance = appearanceOf(overrides.appearance?.[family]);
     const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, acceptRules);
     if (!baseAction) throw new Error(`no nextAction for ${family}`);
-    const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
+    const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "failed" ? ` Native name read-back FAILED (${nativeRecord.failures.map((item) => `${item.deck}: ${item.failing.join(", ")}`).join("; ")}); triage it (${nativeRecord.runs.map((run) => run.run).join(", ")}).` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
     const nextAction = `${baseAction}${nativeSentence}`;
     const candidates = overrides.candidates[family] ?? [];
 
@@ -884,9 +900,10 @@ export function buildTracker({ root = ROOT } = {}) {
       byStatus: count("status", STATUSES),
       byPhase: Object.fromEntries([1, 2, 3, 4, 5].map((phase) => [phase, out.filter((rec) => rec.phase === phase).length])),
       hostVerification: Object.fromEntries(HOSTS.map((host) => [host, Object.fromEntries(["verified", "unverified", "NA"].map((value) => [value, out.filter((rec) => rec.hostVerification[host] === value).length]))])),
-      nativeVerification: Object.fromEntries(["verified", "partial", "unverified", "NA"].map((value) => [value, out.filter((rec) => rec.nativeVerification.status === value).length])),
+      nativeVerification: Object.fromEntries(["verified", "partial", "failed", "unverified", "NA"].map((value) => [value, out.filter((rec) => rec.nativeVerification.status === value).length])),
       nativeVerifiedFamilies: out.filter((rec) => rec.nativeVerification.status === "verified").map((rec) => rec.family),
       nativePartialFamilies: out.filter((rec) => rec.nativeVerification.status === "partial").map((rec) => rec.family),
+      nativeFailedFamilies: out.filter((rec) => rec.nativeVerification.status === "failed").map((rec) => rec.family),
       bundled: { yes: out.filter((rec) => rec.bundled.yes).length, no: out.filter((rec) => !rec.bundled.yes).length },
       parityRerunNeeded: out.filter((rec) => rec.paritySignals.rerunNeeded).length,
     },
@@ -973,7 +990,7 @@ function licensingSection(summary, tracker) {
     "",
     `Licence of the bundled faces: the ${found.total} replacement routes use ${bundledLicense.replacementFaces} distinct faces, by licence ${license(bundledLicense.replacementFacesByLicense)}; the pinned opf-render manifest holds ${bundledLicense.manifestPackages} packages and ${bundledLicense.manifestFaces} faces (packages: ${license(bundledLicense.manifestPackagesByLicense)}; faces: ${license(bundledLicense.manifestFacesByLicense)}). The open families themselves: ${license(l.openDirectlyUsable.byLicense)}. Only OFL-1.1, Apache-2.0, MIT and UFL-1.0 may be bundled ([font-licensing.md](font-licensing.md#font-files-bundling-and-licenses)).`,
     "",
-    `A route found is not a route verified: ${tracker.summary.nativeVerification.verified} families are native verified and ${tracker.summary.nativeVerification.partial} partial (see Native evidence); the special path is described under Symbol-encoded families.`,
+    `A route found is not a route verified: ${tracker.summary.nativeVerification.verified} families are native verified, ${tracker.summary.nativeVerification.partial} partial and ${tracker.summary.nativeVerification.failed} failed (see Native evidence); the special path is described under Symbol-encoded families.`,
   ];
 }
 
@@ -981,7 +998,7 @@ function nativeSection(tracker) {
   const { summary, inputs } = tracker;
   const lines = ["", "## Native evidence", ""];
   lines.push(
-    `Native PowerPoint checks are supervisor-run (root owns Office); only their committed comparison output counts here. Basis: ${NATIVE_BASIS} ${summary.nativeVerification.verified} families are verified and ${summary.nativeVerification.partial} partial; a family no run names stays unverified.`,
+    `Native PowerPoint checks are supervisor-run (root owns Office); only their committed comparison output counts here. Basis: ${NATIVE_BASIS} ${summary.nativeVerification.verified} families are verified, ${summary.nativeVerification.partial} partial and ${summary.nativeVerification.failed} failed (a deck that reads the family back fails a gated check: fonts, themeSlots or presentationFonts); a family no run names stays unverified.`,
     "",
     "| Run | Date | Decks | Decks passing every check | Failing checks |",
     "| --- | --- | ---: | ---: | --- |",
@@ -1033,7 +1050,7 @@ export function renderMarkdown(tracker) {
   for (const status of STATUSES) push(`| \`${status}\` | ${summary.byStatus[status]} | ${tracker.statusDefinitions[status].severity} | ${cell(tracker.statusDefinitions[status].meaning)} |`);
   push("", "| Phase | Count | Owner's phase |", "| --- | --- | --- |");
   for (const phase of tracker.ownerPlan.phases) push(`| ${phase.phase} | ${summary.byPhase[phase.phase]} | ${cell(phase.title)} |`);
-  push("", `Phase is the earliest owner phase with unfinished work for the family. Phase 5 (native verification and the full parity rerun) applies to every record: native verification is ${summary.nativeVerification.verified} verified, ${summary.nativeVerification.partial} partial, ${summary.nativeVerification.unverified} unverified (see Native evidence).`);
+  push("", `Phase is the earliest owner phase with unfinished work for the family. Phase 5 (native verification and the full parity rerun) applies to every record: native verification is ${summary.nativeVerification.verified} verified, ${summary.nativeVerification.partial} partial, ${summary.nativeVerification.failed} failed, ${summary.nativeVerification.unverified} unverified (see Native evidence).`);
   push("", "| Class | Count |", "| --- | --- |");
   for (const cls of CLASSES) push(`| ${cls} | ${summary.byClass[cls]} |`);
   push("", "| Host | Verified | Unverified | NA |", "| --- | --- | --- | --- |");
