@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.11.1 (2026-10-02)
+
+Patch release.
+
 - Fix (RR-22): the autosave restore prompt no longer shows a literal `null` between its question and its buttons when no older copy exists (`createRestorePrompt` passed the absent note to `replaceChildren`, which writes it as text). The persistence browser test asserts the prompt has no `null`.
 
 ## 0.11.0
