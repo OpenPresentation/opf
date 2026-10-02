@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix (RR-22): the autosave restore prompt no longer shows a literal `null` between its question and its buttons when no older copy exists (`createRestorePrompt` passed the absent note to `replaceChildren`, which writes it as text). The persistence browser test asserts the prompt has no `null`.
+
 ## 0.11.0
 
 - Release 0.11.0 (lockstep release with core 0.12.0, opf-render 0.12.0 and opf-pptx 0.12.0; minor because it ships the new entry points below, no public export removed). The core floor moves from `@openpresentation/opf` ^0.11.4 to ^0.12.0, the optional `@openpresentation/opf-render` peer from ^0.11.0 to ^0.12.0, and the development renderer and PPTX to ^0.12.0. Core 0.12.0 moves geometry (composed font sizes on PowerPoint's 0.01 pt grid, hanging wrap whitespace, promoted regions in reading order, right-to-left decks composed mirrored), so the canvas, the preview and the export only agree when all resolve the same core: install the editor with renderer 0.12.0 and PPTX 0.12.0. New entry points since 0.10.6: `/find`, `/persistence`, `/export`, `/slides`, `/numbering`, `/data-grid`, the Review panel, `/annotations`, `/templates`, `/chart-options`, the content conversions and the single JSON Patch module on core's `/patch`. The entries below are the details.

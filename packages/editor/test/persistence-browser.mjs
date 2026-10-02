@@ -115,6 +115,7 @@ try {
   assert.equal(await banner(page).getAttribute('role'), 'region');
   assert.equal(await banner(page).getAttribute('aria-label'), 'Restore your work');
   assert.match(await banner(page).locator('.restore-text').textContent(), /You have unsaved work from .* \(2 slides\), kept in this browser\. Restore it\?/);
+  assert.doesNotMatch(await banner(page).textContent(), /null/, "no literal null when there is no older copy");
   assert.equal(await page.evaluate(() => document.activeElement === document.body || document.activeElement.tagName === 'BODY'), true, 'the prompt does not take focus');
   assert.equal(await unload(page), false, 'an offered copy is not the page\'s own unsaved change');
   // Keyboard: Tab reaches Restore, Enter restores.
