@@ -38,6 +38,11 @@ await build({
   format: "esm",
   alias: {
     "@openpresentation/opf/data": path.join(root, "packages/javascript/dist/data.js"),
+    // Editor 0.11 loads PDF and PNG export lazily from this subpath; without its own entry the bare-package alias below treats it as a child of svg.js.
+    "@openpresentation/opf-render/export-browser": path.resolve(
+      root,
+      "../opf-render/src/export-browser.js",
+    ),
     "@openpresentation/opf-render/fonts-browser": path.resolve(
       root,
       "../opf-render/src/fonts-browser.js",
@@ -65,6 +70,11 @@ await build({
   format: "esm",
   alias: {
     "@openpresentation/opf/data": path.join(root, "packages/javascript/dist/data.js"),
+    // Editor 0.11 loads PDF and PNG export lazily from this subpath; without its own entry the bare-package alias below treats it as a child of svg.js.
+    "@openpresentation/opf-render/export-browser": path.resolve(
+      root,
+      "../opf-render/src/export-browser.js",
+    ),
     "@openpresentation/opf-render/fonts-browser": path.resolve(
       root,
       "../opf-render/src/fonts-browser.js",
