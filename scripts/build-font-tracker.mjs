@@ -435,7 +435,8 @@ export function licensingSummary(records, snapshot) {
   const distinct = new Map();
   for (const rec of found) {
     const names = rec.previewRoute.kind === "code-table" ? rec.previewRoute.chain : [rec.previewRoute.family];
-    names.forEach((name, at) => distinct.set(name, faceLicenses(rec)[at]));
+    const licenses = faceLicenses(rec);
+    for (const [at, name] of names.entries()) distinct.set(name, licenses[at]);
   }
   const manifestPackages = snapshot.packages;
   const self = open.filter((rec) => rec.previewRoute.kind === "self" && rec.bundled.yes);
