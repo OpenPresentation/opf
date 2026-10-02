@@ -936,6 +936,32 @@ _No named properties._
 | --- | --- | --- | --- |
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
 | `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. |
+| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
+| `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
+| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
+
+
+### ChartAxisTitles
+
+- Type: `object`
+- Purpose: Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `category` | no | `string` | Title of the category (X) axis. |
+| `value` | no | `string` | Title of the value (Y) axis. |
+
+
+### ChartDataLabels
+
+- Type: `object`
+- Purpose: Data label settings. A label shows the selected content parts in the fixed order category, value, percent, joined by the separator.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `content` | no | `array<string>` | Which parts a label shows: `value`, `percent`, `category` (default `['value']`). 'percent' exists only on pie and doughnut charts; a part a type cannot show is dropped with a `chart-option-adapted` diagnostic. |
+| `position` | no | `string` | `auto` (default), `center`, `inside-end`, `inside-base`, `outside-end`, `above`, `below`, `left`, `right`. The positions a chart type accepts are in docs/chart-options.md; an unsupported position falls back to `auto`. |
+| `separator` | no | `string` | Text between the parts of a label that shows more than one. Defaults to ', '. |
 
 
 ### Table

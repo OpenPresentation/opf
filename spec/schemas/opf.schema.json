@@ -3205,6 +3205,63 @@
             { "$ref": "#/$defs/ChartDataSource" }
           ],
           "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally."
+        },
+        "axisTitles": {
+          "$ref": "#/$defs/ChartAxisTitles",
+          "description": "Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-whisker constructs; the funnel construct takes a category title only); a title on a type without that axis (pie, doughnut, radar, treemap, map) is dropped with a 'chart-option-adapted' diagnostic by renderers and exporters."
+        },
+        "legend": {
+          "type": "string",
+          "enum": ["none", "top", "bottom", "left", "right"],
+          "description": "Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position shows the legend there even for a single-series chart. Of the Office 2016 constructs only box-and-whisker takes a legend; histogram, pareto, waterfall, funnel, treemap and map drop the option with a 'chart-option-adapted' diagnostic."
+        },
+        "dataLabels": {
+          "oneOf": [
+            { "type": "boolean" },
+            { "$ref": "#/$defs/ChartDataLabels" }
+          ],
+          "description": "Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator."
+        }
+      }
+    },
+    "ChartAxisTitles": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "Title of the category (X) axis.",
+          "examples": ["Quarter", "Region"]
+        },
+        "value": {
+          "type": "string",
+          "description": "Title of the value (Y) axis.",
+          "examples": ["Revenue ($M)", "Customers"]
+        }
+      }
+    },
+    "ChartDataLabels": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Data label settings. A label shows the selected content parts in the fixed order category, value, percent, joined by the separator.",
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["value", "percent", "category"] },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Which parts a label shows. Defaults to ['value']. 'percent' is the share of the total and exists only on pie and doughnut charts; 'category' shows the category name (the X value on a scatter chart). A part a chart type cannot show is dropped with a 'chart-option-adapted' diagnostic."
+        },
+        "position": {
+          "type": "string",
+          "enum": ["auto", "center", "inside-end", "inside-base", "outside-end", "above", "below", "left", "right"],
+          "description": "Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked columns and bars; above for line and scatter points. Clustered columns and bars and the histogram, pareto and waterfall constructs take center, inside-end, inside-base and outside-end; stacked columns and bars take center, inside-end and inside-base; pie takes center, inside-end and outside-end; line and scatter points take above, below, left, right and center. Area, doughnut and radar charts and the funnel and treemap constructs take only 'auto' (the box-and-whisker and map constructs have no data labels). An unsupported position falls back to 'auto' with a 'chart-option-adapted' diagnostic."
+        },
+        "separator": {
+          "type": "string",
+          "description": "Text between the parts of a label that shows more than one. Defaults to ', '.",
+          "examples": [", ", "; "]
         }
       }
     },

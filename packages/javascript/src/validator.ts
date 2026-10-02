@@ -2,6 +2,7 @@ import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.
 import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
+import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
@@ -631,6 +632,10 @@ function chartTypeWarnings(
   const issues: ValidationIssue[] = [];
   if (isRecord(payload.chart)) {
     pushIfDefined(issues, unknownIdWarning("chartTypes", payload.chart.type, `${pathFor(path, "chart")}/type`, context));
+    // RR-35: an axis title, legend or data label option the chart type cannot show is adapted by every engine; say so.
+    for (const diagnostic of resolveChartOptions(payload.chart, chartOptionTarget(payload.chart.type)).diagnostics) {
+      issues.push(semanticIssue(diagnostic.option.split(".").reduce(pathFor, pathFor(path, "chart")), diagnostic.message, { code: diagnostic.code, option: diagnostic.option, reason: diagnostic.reason }));
+    }
   }
   if (Array.isArray(payload.blocks)) {
     payload.blocks.forEach((block, index) => {

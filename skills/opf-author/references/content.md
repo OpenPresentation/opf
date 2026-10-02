@@ -18,7 +18,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Timeline | `{"timeline":[{"when":"Now","what":"Prototype"},{"when":"Next","what":"Review"}]}` |
 | Nested group | `{"composition":{"mode":"column"},"blocks":[{"text":"One"},{"text":"Two"}]}` |
 
-These numeric examples are illustrative; replace them only with supported data. Chart type strings must resolve to actual catalog IDs or supported chart types. A richer chart record does not guarantee the current renderer implements every visual detail.
+These numeric examples are illustrative; replace them only with supported data. Chart type strings must resolve to actual catalog IDs or supported chart types. A richer chart record does not guarantee the current renderer implements every visual detail. A chart takes optional `axisTitles` (`{"category":"Quarter","value":"Revenue ($M)"}`), `legend` (`none`, `top`, `bottom`, `left`, `right`) and `dataLabels` (`true`, or `{"content":["value"],"position":"outside-end"}`); omit them to keep the engine defaults, and see `docs/chart-options.md` for what each chart type supports (an option a type cannot show is dropped with a `chart-option-adapted` diagnostic).
 
 Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. Promoted region values are content payloads, for example `"left":{"text":"Context"}`.
 
