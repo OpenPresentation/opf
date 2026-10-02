@@ -6,6 +6,7 @@ import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilie
 import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -249,6 +250,7 @@ export async function toPptx(input, options = {}) {
   context.metricTags = new Map();
   context.chartHeadings = new Map();
   context.chartFonts = new Map();
+  context.chartPalettes = new Map();
   context.chartex = new Map();
   context.imageFormat = options.imageFormat ?? "compatible";
   // Chartex export mode (FF-22b): 'auto' (default) writes native chartex parts for the constructs the native PowerPoint
@@ -752,12 +754,14 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   const frames = asArray(tree?.["p:graphicFrame"]);
+  // RR-35: what a chart's axis titles, legend and data labels cannot express in OPF is reported on the chart's path.
+  const chartReport = label => diagnostic => options.onDiagnostic?.({code: 'chart-option-adapted', ...diagnostic, path: `slides.${slideIndex}.${label}.${diagnostic.option}`});
   const tables = frames.some(frame => frame['a:graphic']?.['a:graphicData']?.['a:tbl'])
     ? importTableFrames(slidePath, {
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions) : [];
   for (const [index, frame] of frames.entries()) {
-    const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index]);
+    const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`));
     if (item) items.push({...item, sources: [`frame:${index}`]});
   }
   // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a classic chart frame
@@ -765,8 +769,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [alternateIndex, alternate] of asArray(tree?.["mc:AlternateContent"]).entries()) {
     const choice = asArray(alternate?.["mc:Choice"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
     const fallback = asArray(alternate?.["mc:Fallback"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
-    const chosen = choice ? importGraphicFrame(entries, choice, slidePath, relationships) : null;
-    const item = chosen?.payload?.type === "chart" ? chosen : fallback ? importGraphicFrame(entries, fallback, slidePath, relationships) : chosen;
+    const chosen = choice ? importGraphicFrame(entries, choice, slidePath, relationships, undefined, chartReport(`charts.alt${alternateIndex}`)) : null;
+    const item = chosen?.payload?.type === "chart" ? chosen : fallback ? importGraphicFrame(entries, fallback, slidePath, relationships, undefined, chartReport(`charts.alt${alternateIndex}`)) : chosen;
     if (item && item.kind !== "unknown") items.push({...item, sources: [`alt:${alternateIndex}`]});
   }
 
@@ -808,7 +812,7 @@ function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txB
   };
 }
 
-function importGraphicFrame(entries, frame, slidePath, relationships, importedTable) {
+function importGraphicFrame(entries, frame, slidePath, relationships, importedTable, report) {
   const bounds = shapeBounds(frame["p:xfrm"]);
   const name = scalarText(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]?.name).trim();
   const graphicData = frame["a:graphic"]?.["a:graphicData"];
@@ -829,8 +833,8 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   const chartRelId = graphicData?.["c:chart"]?.["r:id"] ?? chartExRelId;
   if (chartRelId) {
     const chart = chartExRelId
-      ? chartexFromRelationship(entries, relationships, chartExRelId)
-      : chartFromRelationship(entries, slidePath, relationships, chartRelId);
+      ? chartexFromRelationship(entries, relationships, chartExRelId, report)
+      : chartFromRelationship(entries, slidePath, relationships, chartRelId, report);
     return {
       kind: "chart",
       bounds,
@@ -1116,7 +1120,7 @@ function payloadFromSlideItem(item, report) {
   return null;
 }
 
-function chartFromRelationship(entries, slidePath, relationships, relId) {
+function chartFromRelationship(entries, slidePath, relationships, relId, report) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
   const doc = parseRequiredXml(entries, relationship.path);
@@ -1133,7 +1137,13 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
 
   const budget = { cells: 0 };
   const cachePath = (index, role) => `${relationship.path}#c:ser[${index}]/${role}`;
-  if (chartNode.type === 'scatter') return scatterFromSeries(entries, relationship.path, series, budget, cachePath);
+  // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
+  const withOptions = chart => {
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter'});
+    for (const note of notes) report?.(note);
+    return chart && Object.keys(options).length ? {...chart, ...options} : chart;
+  };
+  if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
   const values = series.map((entry, index) => {
@@ -1154,13 +1164,13 @@ function chartFromRelationship(entries, slidePath, relationships, relId) {
     ]);
   }
 
-  return {
+  return withOptions({
     type: chartNode.type,
     data: {
       columns: [readChartCategoryHeading(entries,relationship.path) ?? "Category", ...names],
       rows
     }
-  };
+  });
 }
 
 // Scatter charts share X values (c:xVal) across Y series (c:yVal). OPF keeps
@@ -1186,7 +1196,7 @@ function scatterFromSeries(entries, chartPart, series, budget, cachePath) {
 // A chartex part (cx:chartSpace): the series layoutIds name the kept OPF chart
 // type and the cached dimensions restore the category-major data, under the
 // same bounds as the classic chart cache.
-function chartexFromRelationship(entries, relationships, relId) {
+function chartexFromRelationship(entries, relationships, relId, report) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
   const doc = parseRequiredXml(entries, relationship.path);
@@ -1194,6 +1204,7 @@ function chartexFromRelationship(entries, relationships, relId) {
     heading: readChartCategoryHeading(entries, relationship.path),
     limits: {points: MAX_CHART_CACHE_POINTS, cells: MAX_CHART_CACHE_CELLS},
     path: relationship.path,
+    report,
     invalid: (message, location) => {
       throw new OPFPptxError('invalid-chart-cache', `Invalid chart cache: ${message}. Repair the chart data before importing.`, {path: location ?? relationship.path});
     }
@@ -2055,6 +2066,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     return;
   }
   for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
+  // RR-35: axis titles, legend position and data labels (core resolves them against what the chart type can show).
+  const chartOptions = resolveChartOptionsFor(chart);
+  reportChartOptionDiagnostics(chartOptions, path, options.onDiagnostic);
 
   // Keep the resolved palette surface (including alpha) explicit in native
   // chart/plot areas, so inherited labels are assessed against their own panel.
@@ -2065,15 +2079,17 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
   const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
   const textSize = chartTextSize(context);
-  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec,textSize});
+  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec,textSize,
+    options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chart.data.rows.length});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   const preferredPalette = CHART_COLORS.map(color=>`#${color}`);
   const palette = (typeof opfComposition.chartPaletteForFill === "function" ? opfComposition.chartPaletteForFill(panelFill, preferredPalette) : preferredPalette.map(color=>chartColorForFill(panelFill,color))).map(color=>normalizeHex(color));
+  context.chartPalettes.set(objectName,palette);
   if (chartData.chartex) {
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette, textSize});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette, textSize, options: chartOptions});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -2091,6 +2107,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     w: region.w,
     h: region.h,
     showLegend: circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1),
+    ...classicChartOptions(chartOptions, {labelColor, font: context.fonts.body, textSize}),
     showTitle: false,
     chartColors,
     chartArea: {fill:{...fill},roundedCorners:false},
@@ -3117,6 +3134,9 @@ async function normalizePptxZip(raw, context) {
       // Normalize only our generated chart text styles; point/series fills stay intact.
       entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));
       entries[chartPart]=encodeText(applyChartTextSize(decodeText(entries[chartPart]),textSize));
+      // RR-35: data labels last, so their own text colours (contrast inside a mark) are not normalized away.
+      const {options:chartOptions,kind:optionKind,pointCount}=context.chartHeadings.get(name);
+      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount}));
     }
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);

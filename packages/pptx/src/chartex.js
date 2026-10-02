@@ -16,6 +16,7 @@
 // chart type (an owned `paretoLine` marks the Office Pareto chart), and the
 // cached dimensions restore the category-major data.
 import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
+import {chartOptionsFromChartex} from './chart-options.js';
 
 const NS = Object.freeze({
   a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -126,7 +127,18 @@ function textProperties(labelColor, font, size) {
   return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
 }
 
-function dataLabels(spec, text) {
+const CX_POSITION = Object.freeze({center: 'ctr', 'inside-end': 'inEnd', 'inside-base': 'inBase', 'outside-end': 'outEnd'});
+
+// RR-35: an explicit dataLabels option writes the selected content, position and separator for every construct that takes it;
+// `dataLabels: false` removes the labels a treemap or funnel carries by default. Without the option the defaults are unchanged.
+function dataLabels(spec, text, options) {
+  if (options?.dataLabelsOff) return '';
+  const labels = options?.dataLabels;
+  if (labels) {
+    const has = part => labels.content.includes(part) ? 1 : 0;
+    const position = labels.position === null ? (spec.layoutId === 'treemap' || spec.layoutId === 'funnel' ? 'ctr' : undefined) : CX_POSITION[labels.position];
+    return `<cx:dataLabels${position ? ` pos="${position}"` : ''}>${text}<cx:visibility seriesName="0" categoryName="${has('category')}" value="${has('value')}"/><cx:separator>${escapeXml(labels.separator)}</cx:separator></cx:dataLabels>`;
+  }
   if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/></cx:dataLabels>`;
   if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabels>`;
   return '';
@@ -140,14 +152,26 @@ export function chartexPointColors(layoutId, values, palette) {
   return values.map(() => null);
 }
 
-function axes(spec, gridColor, text) {
+// RR-35: an axis title is the plain text of the axis (CT_AxisTitle: tx, spPr, txPr), after the axis scaling.
+// Native check 2026-10-01: PowerPoint empties a title written as cx:txData/cx:v (that form holds a cell formula's cached text, and no
+// cx:f is written), so the title is rich text, the way PowerPoint writes a typed chartex title; the importer reads both forms.
+const axisTitle = (value, text, run) => {
+  if (!value) return '';
+  const face = escapeXml(run.font), size = run.textSize;
+  const props = `sz="${size}" b="0"`;
+  const fill = `<a:solidFill><a:srgbClr val="${run.labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/>`;
+  return `<cx:title><cx:tx><cx:rich><a:bodyPr spcFirstLastPara="1" vertOverflow="ellipsis" horzOverflow="overflow" wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" anchorCtr="1"/><a:lstStyle/>` +
+    `<a:p><a:pPr algn="ctr"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(value)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
+};
+
+function axes(spec, gridColor, text, titles = {}, run = {}) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"><a:alpha val="70000"/></a:srgbClr></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
   // CT_Axis order: scaling, units, majorGridlines, tickLabels, spPr, txPr.
-  const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/><cx:tickLabels/>${text}</cx:axis>`;
+  const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/>${axisTitle(titles.category, text, run)}<cx:tickLabels/>${text}</cx:axis>`;
   if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${text}</cx:axis>`;
-  const value = `<cx:axis id="1"><cx:valScaling/>${gridlines}<cx:tickLabels/>${text}</cx:axis>`;
+  const value = `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${text}</cx:axis>`;
   const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
@@ -159,7 +183,7 @@ function axes(spec, gridColor, text) {
  * layout is PptxGenJS's: Sheet1, headings in row 1, categories in column A and
  * one series per following column.
  */
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette, textSize}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette, textSize, options}) {
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -179,19 +203,23 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, text)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, text, options)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {
     // The Office Pareto chart: the cumulative-percentage line owned by the binned columns, on the percentage axis.
     plotted.push(`<cx:series layoutId="${spec.layoutId}" ownerIdx="0" uniqueId="${seriesUniqueId(number, series.length)}"><cx:spPr><a:ln w="19050"><a:solidFill><a:srgbClr val="${palette[1 % palette.length]}"/></a:solidFill></a:ln></cx:spPr><cx:axisId val="0"/><cx:axisId val="2"/></cx:series>`);
   }
-  const legend = spec.layoutId === 'boxWhisker' && series.length > 1 ? `<cx:legend pos="r" align="ctr" overlay="0">${text}</cx:legend>` : '';
+  // RR-35: a box-and-whisker legend follows the option (`none` removes it, a position moves it); the other constructs take none.
+  const legendPosition = {top: 't', bottom: 'b', left: 'l', right: 'r'}[options?.legend];
+  const legend = spec.layoutId === 'boxWhisker' && options?.legend !== undefined
+    ? (legendPosition ? `<cx:legend pos="${legendPosition}" align="ctr" overlay="0">${text}</cx:legend>` : '')
+    : spec.layoutId === 'boxWhisker' && series.length > 1 ? `<cx:legend pos="r" align="ctr" overlay="0">${text}</cx:legend>` : '';
   const alpha = fill.transparency > 0 ? Math.round((100 - fill.transparency) * 1000) : undefined;
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize})}</cx:plotArea>${legend}</cx:chart>` +
     `<cx:spPr>${solidFill(fill.color, alpha)}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';
 }
@@ -324,7 +352,7 @@ const scalar = value => typeof value === 'string' ? value : value && typeof valu
  * heading recovered from the workbook, `limits` the cache bounds
  * ({points, cells}) and `invalid(message, path)` throws the import error.
  */
-export function chartFromChartex(doc, {heading, limits, invalid, path}) {
+export function chartFromChartex(doc, {heading, limits, invalid, path, report}) {
   const space = doc?.['cx:chartSpace'];
   const region = space?.['cx:chart']?.['cx:plotArea']?.['cx:plotAreaRegion'];
   const allSeries = asArray(region?.['cx:series']);
@@ -384,8 +412,11 @@ export function chartFromChartex(doc, {heading, limits, invalid, path}) {
   if (rowCount === 0) return null;
   if (rowCount * (values.length + (labels ? 1 : 0)) > limits.cells) invalid('chart cache exceeds the 1,000,000-cell import limit', path);
   // A histogram or Pareto chart binned from one value column has no category dimension: the column comes back as authored.
-  if (!labels) return {type, data: {columns: [names[0]], rows: values[0].slice(0, rowCount).map((value, index) => [values[0][index] ?? null])}};
+  // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
+  const {options, notes} = chartOptionsFromChartex(space, {type, seriesCount: plotted.length});
+  for (const note of notes) report?.(note);
+  if (!labels) return {type, data: {columns: [names[0]], rows: values[0].slice(0, rowCount).map((value, index) => [values[0][index] ?? null])}, ...options};
   const rows = [];
   for (let index = 0; index < rowCount; index += 1) rows.push([labels[index] ?? null, ...values.map(row => row[index] ?? null)]);
-  return {type, data: {columns: [heading ?? 'Category', ...names], rows}};
+  return {type, data: {columns: [heading ?? 'Category', ...names], rows}, ...options};
 }
