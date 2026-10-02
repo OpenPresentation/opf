@@ -1,6 +1,6 @@
 # Patch, diff, merge and format
 
-Status: source on core `main` (RR-31); not in a published core or CLI yet. Published core 0.11.4 and CLI 0.9.2 have `opf edit` (JSON Patch) but not `opf diff`, `opf merge`, `opf format` or the `@openpresentation/opf/patch`, `/diff` and `/format` entrypoints. Check `opf --help` and the installed package exports before relying on them.
+Status: in core 0.12.0 (RR-31) as the `@openpresentation/opf/patch`, `/diff` and `/format` entrypoints; the CLI commands `opf diff`, `opf merge` and `opf format` are in CLI 0.10.0 and later, not in CLI 0.9.2 (which has `opf edit`, JSON Patch). Core 0.11.4 and earlier lack the entrypoints. Check `opf --help` and the installed package exports before relying on them.
 
 Four deterministic, local pieces share one implementation: no network, no model call, no clock, no randomness. The same inputs always give the same output.
 
