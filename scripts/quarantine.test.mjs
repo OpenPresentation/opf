@@ -125,6 +125,7 @@ test('Playwright ids are the file name and the title path, and the grep matches 
   assert.deepEqual([...playwrightIds(report)], ['a.spec.ts first (1.5x)', 'a.spec.ts group second']);
   const grep = new RegExp(playwrightGrep(['a.spec.ts first (1.5x)']));
   assert.ok(grep.test('a.spec.ts first (1.5x)'));
+  assert.ok(grep.test(' a.spec.ts first (1.5x)'));
   assert.ok(!grep.test('a.spec.ts first (1.5x) and more'));
   assert.ok(!grep.test('a.spec.ts first (115x)'));
   assert.equal(playwrightGrep([]), '');
@@ -136,7 +137,7 @@ test('playwright-grep prints nothing for an empty list and the active ids otherw
   write(root, []);
   assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-02').stdout, '');
   write(root, [entry({ id: 'a.spec.ts flaky one' })]);
-  assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-02').stdout, '^(a\\.spec\\.ts flaky one)$');
+  assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-02').stdout, '^\\s*(a\\.spec\\.ts flaky one)\\s*$');
   assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-20').stdout, '');
   assert.equal(cli(root, 'quarantine.mjs', 'check', '--playwright-list', 'list.json', '--today', '2026-10-02').status, 0);
   write(root, [entry({ id: 'a.spec.ts typo' })]);

@@ -78,7 +78,8 @@ export function playwrightIds(report) {
 }
 export const playwrightId = (file, titles) => [path.posix.basename(String(file).replaceAll('\\', '/')), ...titles].join(' ');
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-export const playwrightGrep = (ids) => (ids.length ? `^(${ids.map(escapeRegExp).join('|')})$` : '');
+// Playwright greps the title path with leading blanks (the empty project name), hence the \\s* around the ids.
+export const playwrightGrep = (ids) => (ids.length ? `^\\s*(${ids.map(escapeRegExp).join('|')})\\s*$` : '');
 
 /**
  * Validate the quarantine list. Returns { errors, expired, active }: `errors` fail the check (malformed entries and expired
