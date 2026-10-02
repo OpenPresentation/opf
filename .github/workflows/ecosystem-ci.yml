@@ -10,16 +10,16 @@ concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: true
 env:
-  OPF_RENDER_REF: dd170614276ec5f41a4238ab0a016ab0420cf237
+  OPF_RENDER_REF: deae96048ad89c8814158202222be7aa418ac3f7
   OPF_EDITOR_REF: 313774a0cbf2bab8cced1a7225dfc95588bdc6e1
-  OPF_PPTX_REF: e382d0db27797cb4494195b1fd69f491b3945aba
+  OPF_PPTX_REF: 73b876138c1a129efd5216f65b76f0bac77011b5
 jobs:
   packages:
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.63.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
