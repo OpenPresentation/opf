@@ -2,9 +2,9 @@
   "description": "Pinned snapshot of the opf-render bundled font manifest (src/font-manifest.js, BUNDLED_FONT_MANIFEST), reduced to the fields the font tracker reads. Refresh with: node scripts/build-font-tracker.mjs --snapshot-manifest <opf-render>/src/font-manifest.js --commit <sha>. Core tests read this file so they never need the sibling repository.",
   "source": {
     "repository": "OpenPresentation/opf-render",
-    "commit": "9e5d616a14b775622cd7d76b3c7412c0e28e0849",
+    "commit": "8f0d6f1bbdec82f266494113e7e061b931bf44e2",
     "path": "src/font-manifest.js",
-    "capturedAt": "2026-10-01",
+    "capturedAt": "2026-10-02",
     "manifestVersion": 1
   },
   "packages": [
@@ -2045,6 +2045,84 @@
       ]
     },
     {
+      "name": "@expo-google-fonts/noto-color-emoji",
+      "version": "0.4.6",
+      "pack": "scripts",
+      "vendored": null,
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-color-emoji/v/0.4.6",
+      "license": "OFL-1.1",
+      "licenseSha256": "ac564676d10054a8445923dfc2dfb13c042d97888bd27c1b6ec6dfe89a9d8d62",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "400Regular/NotoColorEmoji_400Regular.ttf",
+          "family": "Noto Color Emoji",
+          "weight": 400,
+          "italic": false,
+          "sha256": "7fb39738ab18f10612d6f4595e2e8e47a0afdf34738460442d99cd0c344a4d90"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-emoji",
+      "version": "0.4.7",
+      "pack": "scripts",
+      "vendored": null,
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-emoji/v/0.4.7",
+      "license": "OFL-1.1",
+      "licenseSha256": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "400Regular/NotoEmoji_400Regular.ttf",
+          "family": "Noto Emoji",
+          "weight": 400,
+          "italic": false,
+          "sha256": "24aaa2a20c9c06ffe9bf04284bfd1f14376a329d10122f902abe2770817eb504"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/stix-two-math",
+      "version": "0.4.0",
+      "pack": "scripts",
+      "vendored": null,
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/stix-two-math/v/0.4.0",
+      "license": "OFL-1.1",
+      "licenseSha256": "0c8825913b60d858aacdb33c4ca6660a7d64b0d6464702efbb19313f5765861a",
+      "reservedFontNames": [
+        "TM Math"
+      ],
+      "faces": [
+        {
+          "file": "400Regular/STIXTwoMath_400Regular.ttf",
+          "family": "STIX Two Math",
+          "weight": 400,
+          "italic": false,
+          "sha256": "c3377c20641ecee349677e3f6cc71a6405c30cda7171a4cbc4a1c3970cfff0b4"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-math",
+      "version": "0.4.2",
+      "pack": "scripts",
+      "vendored": null,
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-math/v/0.4.2",
+      "license": "OFL-1.1",
+      "licenseSha256": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "400Regular/NotoSansMath_400Regular.ttf",
+          "family": "Noto Sans Math",
+          "weight": 400,
+          "italic": false,
+          "sha256": "b4a1dfdbfa13b4755e5eac20cb25c1d17ed5a745ceb89639595e8cf45a2b1e07"
+        }
+      ]
+    },
+    {
       "name": "@expo-google-fonts/noto-sans",
       "version": "0.4.2",
       "pack": "scripts",
@@ -2081,6 +2159,51 @@
           "weight": 700,
           "italic": true,
           "sha256": "7e34616e092593c340449baf9a259075a054c6419511ccf21ff0d83a1c9dd0d0"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-symbols-2",
+      "version": "0.4.1",
+      "pack": "scripts",
+      "vendored": null,
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-symbols-2/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseSha256": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "400Regular/NotoSansSymbols2_400Regular.ttf",
+          "family": "Noto Sans Symbols 2",
+          "weight": 400,
+          "italic": false,
+          "sha256": "f67f40c65f929f029827ab37cfdc4897dfd9ae3c28d9e98ba46e0d52e39eb97e"
+        }
+      ]
+    },
+    {
+      "name": "@expo-google-fonts/noto-sans-symbols",
+      "version": "0.4.1",
+      "pack": "scripts",
+      "vendored": null,
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-symbols/v/0.4.1",
+      "license": "OFL-1.1",
+      "licenseSha256": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+      "reservedFontNames": [],
+      "faces": [
+        {
+          "file": "400Regular/NotoSansSymbols_400Regular.ttf",
+          "family": "Noto Sans Symbols",
+          "weight": 400,
+          "italic": false,
+          "sha256": "aedeec1cd0514930aeeafc4a88a6deff83cda1e6b58086f0b9bb9c7dd0157578"
+        },
+        {
+          "file": "700Bold/NotoSansSymbols_700Bold.ttf",
+          "family": "Noto Sans Symbols",
+          "weight": 700,
+          "italic": false,
+          "sha256": "5682f6c88d6199623edf026f67a8722697e8c5f409e5249477594e409d657eb0"
         }
       ]
     }
