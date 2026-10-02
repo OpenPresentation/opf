@@ -69,6 +69,9 @@ import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 
 The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
 
+### Content conversions
+
+`@openpresentation/opf/convert` converts one payload between text, list, quote, metric, code, timeline, chart, table and a group of metric blocks (`convertContent`, `contentConversionTargets`), nests list items, groups blocks, moves an image between the content and the slide design, and splits or merges slides (`splitSlide`, `splitSlideOnOverflow`, `mergeSlides`, `unpaginate`). Every function is pure, never invents content, reports `lossless` and `loss`, refuses with a reason and validates its output. See the [conversions guide](../../docs/conversions.md). Not in releases before the one that lists it in the changelog.
 ### Design and accessibility audit
 
 `@openpresentation/opf/audit` exports `auditPresentation(document, options)`, `auditSource(source, options)` and `auditRules`: contrast, overflow, type size, alt text, reading order, fonts, links, charts and more, with stable `audit/<rule>` ids in lint's report shape. Read-only and deterministic; see [the audit guide](../../docs/audit.md).
