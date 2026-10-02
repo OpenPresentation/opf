@@ -20,10 +20,13 @@ export declare const runtimePolicy: Readonly<{
   deterministicLocalExecution: true;
 }>;
 
+/** RFC 6902 operations, executed by core's `@openpresentation/opf/patch`. Paths are JSON Pointers or dotted OPF paths. */
 export type JsonPatchOperation =
   | { op: "add"; path: string; value: unknown }
   | { op: "replace"; path: string; value: unknown }
   | { op: "remove"; path: string }
+  | { op: "move"; from: string; path: string }
+  | { op: "copy"; from: string; path: string }
   | { op: "test"; path: string; value: unknown };
 
 export interface OPFValidationSummary {

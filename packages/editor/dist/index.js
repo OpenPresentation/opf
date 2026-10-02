@@ -1,4 +1,5 @@
 import { paginateSlide } from "@openpresentation/opf/pagination";
+import { PatchError, applyPatch as applyCorePatch, applyPatchWithInverse, formatPointer, invertPatch, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
 import { collectReservedPresentationIds } from "./presentation-ids.js";
 import { DEFAULT_FONT_SCHEME, resolveFontSchemeReference } from "./font-defaults.js";
 import { composeSlide, resolveCanvasDimensions, resolveFontFamilies } from "@openpresentation/opf/composition";
@@ -54,7 +55,6 @@ export const runtimePolicy = Object.freeze({
 const DATA_OPF_PATH = "data-opf-path";
 const COMPONENT_ATTR = "data-opf-component";
 const SELECT_EVENT = "opfselect";
-const MISSING = Symbol("opf-editor.missing");
 
 export class OPFEditorError extends Error {
   constructor(code, message, details = {}) {
@@ -78,9 +78,7 @@ export function splitOpfPath(path) {
 }
 
 export function opfPathToJsonPointer(path) {
-  const segments = splitOpfPath(path);
-  if (!segments.length) return "";
-  return `/${segments.map(escapePointerSegment).join("/")}`;
+  return formatPointer(splitOpfPath(path));
 }
 
 export function jsonPointerToOpfPath(pointer) {
@@ -88,12 +86,12 @@ export function jsonPointerToOpfPath(pointer) {
 }
 
 export function getValueAtPath(document, path, fallback) {
-  const value = readAtPath(document, splitOpfPath(path));
-  return value === MISSING ? fallback : value;
+  const found = readPointer(document, splitOpfPath(path));
+  return found.found ? found.value : fallback;
 }
 
 export function hasValueAtPath(document, path) {
-  return readAtPath(document, splitOpfPath(path)) !== MISSING;
+  return readPointer(document, splitOpfPath(path)).found;
 }
 
 export function createValuePatch(document, path, value) {
@@ -107,45 +105,27 @@ export function createValuePatch(document, path, value) {
   ];
 }
 
+// Patch semantics (RFC 6902, pointers, inverse patches) live in core's
+// "@openpresentation/opf/patch"; the editor adds its path spellings (dotted OPF
+// paths), its error type and its clone policy on top.
 export function applyJsonPatch(document, operations) {
   assertPatchOperations(operations);
-  let next = clone(document);
-  for (const operation of operations) {
-    next = applyJsonPatchOperation(next, normalizeOperation(operation));
+  const patch = operations.map(normalizeOperation);
+  try {
+    return applyCorePatch(document, patch);
+  } catch (error) {
+    throw editorPatchError(error);
   }
-  return next;
 }
 
 export function invertJsonPatch(document, operations) {
   assertPatchOperations(operations);
-  let current = clone(document);
-  const inverse = [];
-
-  for (const operation of operations.map(normalizeOperation)) {
-    const previous = readAtPath(current, parseJsonPointer(operation.path));
-    if (operation.op !== "add" && previous === MISSING) {
-      throw new OPFEditorError("patch-path-missing", `Cannot invert ${operation.op} for missing path ${operation.path}.`, {
-        path: operation.path,
-        operation
-      });
-    }
-    const addReplacedObjectValue = operation.op === "add" && previous !== MISSING && !pathParentIsArray(current, operation.path);
-    const inversePath = operation.op === "add" ? insertedPathForAdd(operation.path, previous, current) : operation.path;
-
-    current = applyJsonPatchOperation(current, operation);
-
-    if (addReplacedObjectValue) {
-      inverse.unshift({ op: "replace", path: operation.path, value: clone(previous) });
-    } else if (operation.op === "add") {
-      inverse.unshift({ op: "remove", path: inversePath });
-    } else if (operation.op === "replace") {
-      inverse.unshift({ op: "replace", path: operation.path, value: clone(previous) });
-    } else if (operation.op === "remove") {
-      inverse.unshift({ op: "add", path: operation.path, value: clone(previous) });
-    }
+  const patch = operations.map(normalizeOperation);
+  try {
+    return invertPatch(document, patch);
+  } catch (error) {
+    throw editorPatchError(error);
   }
-
-  return inverse;
 }
 
 export function validateOpfDocument(document, validator = validatePresentation) {
@@ -178,8 +158,12 @@ export function createEditorSession(input, options = {}) {
     assertPatchOperations(operations);
     const patches = operations.map(normalizeOperation);
     const before = document;
-    const inversePatches = invertJsonPatch(before, patches);
-    const next = applyJsonPatch(before, patches);
+    let next, inversePatches;
+    try {
+      ({ document: next, inverse: inversePatches } = applyPatchWithInverse(before, patches));
+    } catch (error) {
+      throw editorPatchError(error);
+    }
     const nextValidation = validateOpfDocument(next, options.validate ?? validatePresentation);
 
     if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
@@ -615,162 +599,56 @@ function clonePatchOperations(operations) {
   return operations.map((operation) => clone(operation));
 }
 
-function escapePointerSegment(segment) {
-  return String(segment).replaceAll("~", "~0").replaceAll("/", "~1");
-}
-
-function unescapePointerSegment(segment) {
-  return segment.replaceAll("~1", "/").replaceAll("~0", "~");
-}
-
 function parseJsonPointer(pointer) {
-  if (pointer === "") return [];
-  if (typeof pointer !== "string" || !pointer.startsWith("/")) {
-    throw new OPFEditorError("invalid-json-pointer", "JSON Patch paths must be JSON Pointers.", { path: pointer });
+  try {
+    return parsePointer(pointer);
+  } catch (error) {
+    throw editorPatchError(error);
   }
-  return pointer.slice(1).split("/").map(unescapePointerSegment);
 }
 
 function normalizePatchPath(path) {
   return typeof path === "string" && path.startsWith("/") ? path : opfPathToJsonPointer(path);
 }
 
+const PATCH_OPERATIONS = ["add", "replace", "remove", "move", "copy", "test"];
+
 function normalizeOperation(operation) {
   if (!operation || typeof operation !== "object") {
     throw new OPFEditorError("invalid-patch-operation", "JSON Patch operation must be an object.", { operation });
   }
-  if (!["add", "replace", "remove", "test"].includes(operation.op)) {
+  if (!PATCH_OPERATIONS.includes(operation.op)) {
     throw new OPFEditorError("unsupported-patch-operation", `Unsupported JSON Patch operation: ${operation.op}.`, {
       operation
     });
   }
   if (operation.op === "test" && !Object.prototype.hasOwnProperty.call(operation, "value"))
     throw new OPFEditorError("invalid-patch-operation", "A test operation requires a value.");
-  const normalized = {
-    op: operation.op,
-    path: normalizePatchPath(operation.path)
-  };
-  if (operation.op !== "remove") normalized.value = clone(operation.value);
+  const normalized = { op: operation.op };
+  if (operation.op === "move" || operation.op === "copy") {
+    if (operation.from === undefined) throw new OPFEditorError("invalid-patch-operation", `A ${operation.op} operation requires from.`, { operation });
+    normalized.from = normalizePatchPath(operation.from);
+  }
+  normalized.path = normalizePatchPath(operation.path);
+  if (operation.op === "add" || operation.op === "replace" || operation.op === "test") normalized.value = clone(operation.value);
   return normalized;
+}
+
+// Core patch errors keep their stable codes; the editor reports them as OPFEditorError.
+function editorPatchError(error) {
+  if (!(error instanceof PatchError)) return error;
+  const details = {};
+  if (error.path !== undefined) details.path = error.path;
+  if (error.operation !== undefined) details.operation = error.operation;
+  if (error.index !== undefined) details.index = error.index;
+  if (error.validation) details.issues = error.validation.errors;
+  return new OPFEditorError(error.code, error.message, details);
 }
 
 function assertPatchOperations(operations) {
   if (!Array.isArray(operations)) {
     throw new OPFEditorError("invalid-patch", "JSON Patch must be an array of operations.", { operations });
   }
-}
-
-function readAtPath(document, segments) {
-  let current = document;
-  for (const segment of segments) {
-    if (Array.isArray(current)) {
-      if (segment === "-") return MISSING;
-      const index = Number(segment);
-      if (!Number.isInteger(index) || index < 0 || index >= current.length) return MISSING;
-      current = current[index];
-    } else if (current && typeof current === "object" && Object.prototype.hasOwnProperty.call(current, segment)) {
-      current = current[segment];
-    } else {
-      return MISSING;
-    }
-  }
-  return current;
-}
-
-function jsonEqual(a, b) {
-  if (a === b) return true;
-  if (a === null || b === null || typeof a !== "object" || typeof b !== "object" || Array.isArray(a) !== Array.isArray(b)) return false;
-  const keys = Object.keys(a);
-  return keys.length === Object.keys(b).length && keys.every(key => Object.prototype.hasOwnProperty.call(b, key) && jsonEqual(a[key], b[key]));
-}
-function applyJsonPatchOperation(document, operation) {
-  const segments = parseJsonPointer(operation.path);
-  if (operation.op === "test") {
-    const current = readAtPath(document, segments);
-    if (current === MISSING || !jsonEqual(current, operation.value))
-      throw new OPFEditorError("patch-test-failed", `The value changed at ${operation.path || "/"}.`, {path: operation.path});
-    return clone(document);
-  }
-  if (segments.length === 0) {
-    if (operation.op === "remove") return undefined;
-    return clone(operation.value);
-  }
-
-  const next = clone(document);
-  const parent = readAtPath(next, segments.slice(0, -1));
-  const key = segments.at(-1);
-
-  if (parent === MISSING || parent === null || typeof parent !== "object") {
-    throw new OPFEditorError("patch-parent-missing", `Patch parent does not exist for ${operation.path}.`, {
-      path: operation.path,
-      operation
-    });
-  }
-
-  if (Array.isArray(parent)) applyArrayOperation(parent, key, operation);
-  else applyObjectOperation(parent, key, operation);
-
-  return next;
-}
-
-function insertedPathForAdd(path, previous, document) {
-  if (previous !== MISSING || !path.endsWith("/-")) return path;
-  const parentPath = path.slice(0, -2);
-  const parent = readAtPath(document, parseJsonPointer(parentPath));
-  if (!Array.isArray(parent)) return path;
-  return `${parentPath}/${parent.length}`;
-}
-
-function pathParentIsArray(document, path) {
-  const segments = parseJsonPointer(path);
-  if (segments.length === 0) return false;
-  const parent = readAtPath(document, segments.slice(0, -1));
-  return Array.isArray(parent);
-}
-
-function applyArrayOperation(parent, key, operation) {
-  if (!/^(0|[1-9][0-9]*)$/.test(key) && !(key === "-" && operation.op === "add")) {
-    throw new OPFEditorError("invalid-array-index", `Invalid array index in patch path ${operation.path}.`, { path: operation.path });
-  }
-  const index = key === "-" ? parent.length : Number(key);
-  if (!Number.isInteger(index) || index < 0 || index > parent.length) {
-    throw new OPFEditorError("invalid-array-index", `Invalid array index in patch path ${operation.path}.`, {
-      path: operation.path,
-      operation
-    });
-  }
-
-  if (operation.op === "add") {
-    parent.splice(index, 0, clone(operation.value));
-    return;
-  }
-
-  if (index >= parent.length) {
-    throw new OPFEditorError("patch-path-missing", `Patch path does not exist: ${operation.path}.`, {
-      path: operation.path,
-      operation
-    });
-  }
-
-  if (operation.op === "replace") parent[index] = clone(operation.value);
-  else parent.splice(index, 1);
-}
-
-function applyObjectOperation(parent, key, operation) {
-  if (operation.op === "add") {
-    Object.defineProperty(parent, key, { value: clone(operation.value), writable: true, enumerable: true, configurable: true });
-    return;
-  }
-
-  if (!Object.prototype.hasOwnProperty.call(parent, key)) {
-    throw new OPFEditorError("patch-path-missing", `Patch path does not exist: ${operation.path}.`, {
-      path: operation.path,
-      operation
-    });
-  }
-
-  if (operation.op === "replace") parent[key] = clone(operation.value);
-  else delete parent[key];
 }
 
 function assertElementRoot(root) {

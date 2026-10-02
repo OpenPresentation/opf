@@ -65,13 +65,13 @@ jobs:
           for repo in opf-render opf-pptx opf-editor; do
             npm ci --prefix "$repo"
           done
-      # RR-26: /block-convert and /content-actions import @openpresentation/opf/convert, which published core 0.11.4 does not export. The packed check against registry dependencies therefore waits for the core release that lists it (the release-prep PR raises the core floor and removes this condition); every other gate below runs against the pinned source graph.
+      # RR-26 and RR-31: the editor imports @openpresentation/opf/convert and /patch, which published core 0.11.4 does not export. The packed check against registry dependencies therefore waits for the core release that lists them (the release-prep PR raises the core floor and removes this condition); every other gate below runs against the pinned source graph.
       - name: Verify editor with published dependencies
         run: |
-          if node -e "process.exit(require('@openpresentation/opf/package.json').exports['./convert'] ? 0 : 1)"; then
+          if node -e "process.exit(require('@openpresentation/opf/package.json').exports['./patch'] && require('@openpresentation/opf/package.json').exports['./convert'] ? 0 : 1)"; then
             npm run test:packed
           else
-            echo "::notice::RR-26: the published @openpresentation/opf has no ./convert export yet, so test:packed is skipped until the core release."
+            echo "::notice::RR-26/RR-31: the published @openpresentation/opf has no ./convert or ./patch export yet, so test:packed is skipped until the core release."
           fi
       - name: Build and link coordinated sources
         working-directory: opf

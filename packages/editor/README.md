@@ -605,7 +605,7 @@ Headless applications and agents can import `formatRichTextRange`, `replaceRichT
 
 The canvas can show draggable, keyboard-accessible dividers for root and nested composition tracks. Pass `layoutEditing: true`, or call `canvas.setLayoutEditing(true)`. A pointer drag produces live preview drafts and commits one undo step. Escape cancels; strict overflow prevents invalid fit. Automatic layouts become explicit grids when resized. Promoted regions stay fixed, while their nested groups can be resized.
 
-`prepareTrackResize(document, flow, boundary, fraction)` from `@openpresentation/opf-editor/layout` returns a candidate document and guarded patches for headless agents. Obtain `flow` from the shared renderer's `geometry.flows`; preview the candidate before applying. The editor supports JSON Patch `test` guards alongside add/replace/remove; failed guards leave state and history unchanged. This export is included in version 0.1.0.
+`prepareTrackResize(document, flow, boundary, fraction)` from `@openpresentation/opf-editor/layout` returns a candidate document and guarded patches for headless agents. Obtain `flow` from the shared renderer's `geometry.flows`; preview the candidate before applying. The editor supports JSON Patch `test` guards alongside add/replace/remove/move/copy (RFC 6902, executed by core's `@openpresentation/opf/patch`, the module `opf edit` and `opf diff` also use); failed guards leave state and history unchanged. This export is included in version 0.1.0.
 
 
 ### Move complete blocks
