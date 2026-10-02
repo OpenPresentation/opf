@@ -8,6 +8,8 @@ import { mergeCommand } from "./merge.js";
 import { formatCommand } from "./format.js";
 import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
+import {runRenderCommand} from './render.js';
+import {runImportCommand} from './import.js';
 import {runAudit} from './audit.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
 
@@ -37,6 +39,13 @@ const usage = `OPF — local presentation files for agents (Node 24)
            | --combine --output <file|->] [--partial] [--examples] [--force] [--strict]
   opf paginate <input|-> <output|-> [--force] [--strict]
   opf bundle <input|-> <output|-> [--force] [--strict]
+  opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
+           [--paginate] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+  opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
+           [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
+           [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
+           [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--force] [--strict] [--json]
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -68,6 +77,11 @@ Blank cells use the variable's declared value. An unfilled required variable fai
 unless --partial; --examples fills unfilled variables from their example.
 Lint adds source locations, contextual suggestions and explicit host contracts.
 Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
+Render, export and import write files through the optional peers @openpresentation/opf-render
+and @openpresentation/opf-pptx (install them next to the CLI; the error names the command to run).
+They lint the document first, print the lint report shape (diagnostics, counts) plus the written
+files with SHA-256 digests, never load system fonts and never fetch URLs; --strict writes nothing
+when there are warnings. Existing outputs require --force.
 Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
 fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
 
@@ -162,6 +176,8 @@ async function main(argv: string[]) {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
     print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;
   }
+  if (command === 'render' || command === 'export') { await runRenderCommand(command, args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
+  if (command === 'import') { await runImportCommand(args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === "create") {
     const { positional, options } = parse(args, ["title", "from", "force", "strict"]); arity(positional, 0, 1);
     if (options.from && options.title !== undefined) throw new CliError("Use --from or --title, not both.");

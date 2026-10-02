@@ -1,8 +1,8 @@
 # @openpresentation/cli
 
-A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, and inspect the bundled schemas and catalogs. Node 24 on macOS, Linux, or Windows is required.
+A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, inspect the bundled schemas and catalogs, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 24 on macOS, Linux, or Windows is required.
 
-The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. It does not render slides; successful validation is not visual verification.
+The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. Validation, lint and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
 
 ## Install
 
@@ -156,9 +156,24 @@ Bundle inlines every bundled catalog record the document references — includin
 - File-writing commands accept `--strict`. Use `--` before positional filenames that start with `--`.
 - No telemetry, automatic uploads, or execution of instructions inside document text.
 
+## Render, export and import
+
+```sh
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+opf render deck.opf.json --slides 1,3-5 --format png --scale 2 --out slides
+opf export deck.opf.json --format pptx            # deck.pptx
+opf export deck.opf.json --format pdf --pdf-mode vector
+opf export deck.opf.json --format svg --out slides.zip
+opf import deck.pptx --out deck.opf.json --signals signals.json
+```
+
+These commands write files; every other command only prints JSON. They lint the document first and print the `opf lint` report (`diagnostics`, `counts`, exit 1 on errors, `--strict` also on warnings, in which case nothing is written) plus an `outputs` list with each file's SHA-256. Output is deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's bundled open pack plus the `.ttf`/`.otf` files in each `--font-dir`; relative images are read only from the document's folder (`--asset-dir`); URLs are never fetched. Existing outputs need `--force`.
+
+opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer exits 2 with the install command. `--pdf-mode vector` and `--signals` need renderer and PPTX releases that have them and are refused otherwise. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
+
 ## Development checks
 
-`pnpm test:cli` runs command-level regression checks. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
+`pnpm test:cli` runs command-level regression checks, including `test/files.mjs` for render, export and import against the workspace's pinned opf-render and opf-pptx (set `UPDATE_GOLDEN=1` to refresh the pinned SVG digests after a renderer or core bump). `pnpm test:cli:packed:peers` installs the packed CLI with both peers from the npm registry and repeats those checks against the installed binary and through `npm exec`. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
 
 ## Audit design and accessibility
 
