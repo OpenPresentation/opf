@@ -186,8 +186,6 @@
       "GungsuhChe"
     ],
     "special": [
-      "Cambria Math",
-      "Segoe UI Emoji",
       "Symbol",
       "Webdings",
       "Wingdings"
@@ -372,10 +370,12 @@
       "Latin"
     ],
     "Cambria Math": [
-      "Math"
+      "Math",
+      "Latin"
     ],
     "Segoe UI Emoji": [
-      "Emoji (color)"
+      "Emoji",
+      "Latin"
     ],
     "Symbol": [
       "Symbol encoding"
@@ -460,6 +460,20 @@
       "Greek",
       "Cyrillic"
     ],
+    "Noto Color Emoji": [
+      "Emoji"
+    ],
+    "Noto Emoji": [
+      "Emoji"
+    ],
+    "STIX Two Math": [
+      "Math",
+      "Latin"
+    ],
+    "Noto Sans Math": [
+      "Math",
+      "Latin"
+    ],
     "Noto Sans Arabic": [
       "Arabic"
     ],
@@ -522,6 +536,42 @@
         "700i"
       ],
       "reason": "Upstream ships Regular, Italic and Bold only (no bold italic in the static releases or the Google Fonts instances); a bold italic request draws the real italic, reported visual, and bold is never synthesized."
+    },
+    "Cambria Math": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Cambria Math ships one upright face (cambria.ttc); STIX Two Math and Noto Sans Math do too. Bold and italic requests take the regular face and are reported visual."
+    },
+    "Segoe UI Emoji": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Segoe UI Emoji ships one face; Noto Color Emoji does too (colour glyphs have no weights)."
+    },
+    "Noto Color Emoji": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Colour emoji face (COLRv1 and OT-SVG); one face, no weights or italics exist."
+    },
+    "Noto Emoji": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Monochrome emoji face used by the resvg raster path; the regular weight is pinned (upstream also ships 300 to 700)."
+    },
+    "STIX Two Math": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Math face with a MATH table; upstream ships one regular weight (STIX Two Text carries the text styles and is not bundled)."
+    },
+    "Noto Sans Math": {
+      "styles": [
+        "400"
+      ],
+      "reason": "Math face with a MATH table; upstream ships one regular weight."
     }
   },
   "metricBar": {
@@ -2120,33 +2170,41 @@
       ]
     },
     "Cambria Math": {
-      "nextAction": "Qualify a permitted math font and a math-aware layout and export path using fractions, radicals, operators and native equations (renderers fail with math-font-required today).",
+      "nextAction": "FF-45 route in place: STIX Two Math (visual; corpus mean 5.0%, max 18.2%, Latin 0.9%) with Noto Sans Math and Caladea as alternates; math runs are text drawn per character (no equation model, no MATH-table layout; OMML imports as fallback text with a diagnostic). Next: native PowerPoint check of the Cambria Math deck (FF-46) and an owner decision on an equation model (RR-18).",
       "evidence": [
-        "licensing"
+        "licensing",
+        "ff45EmojiMath"
       ]
     },
     "Segoe UI Emoji": {
-      "nextAction": "Qualify a permitted color-emoji path, including ZWJ sequences, variation selectors and skin tones, with browser, raster and native behavior.",
+      "nextAction": "FF-45 route in place: Noto Color Emoji (visual; 1.2451 em per emoji against 1.3730 em in Segoe UI Emoji 1.33) with Noto Emoji as the monochrome raster face; sequences stay one glyph, browsers draw colour, resvg draws the silhouette. Next: native PowerPoint check of the emoji deck (FF-46) and a colour raster path when resvg gains COLRv1 or the OT-SVG glyphs are inlined.",
       "evidence": [
-        "licensing"
+        "licensing",
+        "ff45EmojiMath"
       ]
     },
     "Symbol": {
-      "nextAction": "Build reversible, version-specific character-to-glyph mappings; account for Apple and Microsoft differences.",
+      "nextAction": "Code table built and verified (Adobe and Apple tables against Windows Symbol 5.01: 189 of 224 codes mapped, 189 drawn with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols; Apple differences recorded per code). Open: native PowerPoint verification of exported runs (FF-46) and the appearance delta of the open glyphs.",
       "evidence": [
-        "licensing"
+        "licensing",
+        "symbolEncodings",
+        "symbolRender"
       ]
     },
     "Webdings": {
-      "nextAction": "Qualify permitted glyph replacements with exhaustive code, advance, bounds, export and round-trip tests.",
+      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Webdings 5.01: 223 of 224 codes mapped and drawn with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math); exhaustive code, advance, bounds, browser and raster tests in opf-render. Open: native PowerPoint verification of exported runs (FF-46).",
       "evidence": [
-        "licensing"
+        "licensing",
+        "symbolEncodings",
+        "symbolRender"
       ]
     },
     "Wingdings": {
-      "nextAction": "Build and verify its own reversible mapping; retain original PPTX font names and codes (renderers require font-encoding-required today).",
+      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Wingdings 5.01, Wingdings 2 and 3 1.55: 222, 217 and 208 of 224 codes mapped and drawn with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder); the PPTX keeps the family and codes. Open: native PowerPoint verification of exported runs (FF-46).",
       "evidence": [
-        "licensing"
+        "licensing",
+        "symbolEncodings",
+        "symbolRender"
       ]
     },
     "Intos": {
@@ -2175,6 +2233,34 @@
       "evidence": [
         "intos",
         "licensing"
+      ]
+    },
+    "Noto Color Emoji": {
+      "nextAction": "Pinned as the optional opf-render emoji pack (Zsye) in the FF-45 render PR; the preview face for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge; a colour raster path when resvg draws COLRv1 or the OT-SVG glyphs are inlined.",
+      "evidence": [
+        "licensing",
+        "ff45EmojiMath"
+      ]
+    },
+    "Noto Emoji": {
+      "nextAction": "Pinned in the FF-45 emoji pack as the raster stand-in and alternate for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge.",
+      "evidence": [
+        "licensing",
+        "ff45EmojiMath"
+      ]
+    },
+    "STIX Two Math": {
+      "nextAction": "Pinned as the optional opf-render math pack (Zmth) in the FF-45 render PR; the preview face for Cambria Math. Next: tracker snapshot refresh after the render merge; native Cambria Math comparison (FF-46).",
+      "evidence": [
+        "licensing",
+        "ff45EmojiMath"
+      ]
+    },
+    "Noto Sans Math": {
+      "nextAction": "Pinned in the FF-45 math pack as the sans math face (glyph fallback for sans schemes) and alternate for Cambria Math. Next: tracker snapshot refresh after the render merge.",
+      "evidence": [
+        "licensing",
+        "ff45EmojiMath"
       ]
     },
     "Noto Sans Arabic": {
@@ -2674,6 +2760,18 @@
         "url": "https://github.com/OpenPresentation/opf/pull/178"
       }
     ],
+    "ff45EmojiMath": {
+      "label": "FF-45 special families: emoji and math",
+      "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
+    },
+    "symbolEncodings": {
+      "label": "Special families: symbol-encoded fonts (FF-45: code tables, coverage, advances, decisions)",
+      "url": "https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/special-families.md"
+    },
+    "symbolRender": {
+      "label": "opf-render test/symbol-fonts.mjs and test/symbol-fonts-browser.mjs (FF-45: every code mapped, resolved, measured and drawn in Node, resvg and Chromium)",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/main/test/symbol-fonts.mjs"
+    },
     "latinHostFixtures": [
       {
         "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
@@ -2811,7 +2909,20 @@
     }
   },
   "acceptance": {},
-  "pendingBundle": {},
+  "pendingBundle": {
+    "Cambria Math": {
+      "prs": [
+        "opf-render#95"
+      ],
+      "note": "STIX Two Math and Noto Sans Math join the opf-render manifest as the optional math pack (pseudo-script Zmth) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
+    },
+    "Segoe UI Emoji": {
+      "prs": [
+        "opf-render#95"
+      ],
+      "note": "Noto Color Emoji and Noto Emoji join the opf-render manifest as the optional emoji pack (pseudo-script Zsye) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
+    }
+  },
   "measurementDetails": {
     "Aptos": {
       "verticalMetricsMatch": true,

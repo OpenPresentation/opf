@@ -1,0 +1,129 @@
+name: Published packages matrix
+# RR-04 (FF-09, FF-10, FF-11): the pairwise font-switch matrix, a TypeScript consumer and the determinism grid, run on
+# ubuntu, windows and macos against the PUBLISHED packages installed from the npm registry (versions from
+# release-plan.json, integrity hashes from the committed consumer lockfile), then compared across the three systems.
+on:
+  pull_request:
+    paths:
+      - 'scripts/published-matrix/**'
+      - 'scripts/test-font-switch-ecosystem.mjs'
+      - 'docs/fixtures/image-treatments.opf.json'
+      - 'release-plan.json'
+      - '.github/workflows/published-matrix.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/published-matrix/**'
+      - 'scripts/test-font-switch-ecosystem.mjs'
+      - 'docs/fixtures/image-treatments.opf.json'
+      - 'release-plan.json'
+      - '.github/workflows/published-matrix.yml'
+  schedule:
+    # Weekly, to notice runner image, registry or ICU drift that no commit caused.
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: published-matrix-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  # One Node patch release everywhere: its bundled ICU, Unicode and tz data are then identical on all three systems.
+  NODE_VERSION: 24.21.0
+jobs:
+  matrix:
+    name: Published matrix (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPF_MATRIX_ENGINES: ${{ github.workspace }}/artifacts/published-matrix/consumer/engines-installed.mjs
+      OPF_MATRIX_OUT: ${{ github.workspace }}/artifacts/published-matrix/out
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: scripts/published-matrix/consumer/package-lock.json
+      - name: Install the published packages and type-check the TypeScript consumer
+        run: node scripts/published-matrix/prepare-consumer.mjs
+      - name: Run the TypeScript consumer
+        run: |
+          mkdir -p artifacts/published-matrix/out
+          node artifacts/published-matrix/consumer/dist/consumer.js | tee artifacts/published-matrix/out/consumer.json
+      - name: Pairwise font-switch matrix
+        run: node scripts/test-font-switch-ecosystem.mjs
+      - name: Cache the Playwright browser
+        id: playwright-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            ~/Library/Caches/ms-playwright
+            ~/AppData/Local/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('scripts/published-matrix/consumer/package-lock.json') }}
+      - name: Install headless Chromium (Playwright version pinned by the consumer lockfile)
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            node artifacts/published-matrix/consumer/node_modules/playwright/cli.js install --with-deps chromium
+          else
+            node artifacts/published-matrix/consumer/node_modules/playwright/cli.js install chromium
+          fi
+      - name: Headless-browser preview re-render (embedded faces, scheme switch, no host fonts)
+        run: node scripts/published-matrix/browser-check.mjs
+      - name: Determinism grid (time zone, locale, clock, host fonts)
+        run: node scripts/published-matrix/determinism.mjs --concurrency 2
+      - name: Collect the evidence
+        if: always()
+        run: |
+          cp artifacts/published-matrix/consumer/installed.json artifacts/published-matrix/out/ || true
+          cp artifacts/published-matrix/determinism/determinism.json artifacts/published-matrix/out/ || true
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: published-matrix-${{ matrix.os }}
+          path: |
+            artifacts/published-matrix/out/digests.json
+            artifacts/published-matrix/out/consumer.json
+            artifacts/published-matrix/out/installed.json
+            artifacts/published-matrix/out/determinism.json
+            artifacts/published-matrix/out/browser.json
+            artifacts/published-matrix/out/report.json
+          retention-days: 14
+          if-no-files-found: warn
+
+  compare:
+    name: Cross-OS comparison
+    needs: matrix
+    if: always() && needs.matrix.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: published-matrix-*
+          path: compare
+      - name: Compare PPTX bytes and SVG and PNG hashes across systems
+        run: node scripts/published-matrix/compare.mjs compare --out compare/comparison.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: published-matrix-comparison
+          path: compare/comparison.json
+          retention-days: 14
+          if-no-files-found: warn
