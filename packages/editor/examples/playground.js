@@ -1,4 +1,5 @@
 import {installDataControls} from './data-controls.js';
+import {installReviewControls} from './review-controls.js';
 import {createSchemaInspector} from '../src/schema-inspector.js';
 import {installTemplateControls} from './template-controls.js';
 import {installFindControls} from './find-controls.js';
@@ -73,7 +74,7 @@ const editor = createEditorSession({
   ],
 }, { rejectInvalid: true });
 const element = id => document.getElementById(id);
-let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure, pictureTools;
+let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, renderError, fontsFailure, review, pendingContentFocus = false, pictureTools;
 // RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
 // undoable session change, so the editor.subscribe(refresh) below redraws the preview (and loads fonts first) exactly as for an edit.
 const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'background', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
@@ -97,7 +98,7 @@ let activePanel = 'content';
 const thumbnailCache = new Map();
 function showPanel(panel, focus = false) {
   activePanel = panel;
-  for (const name of ['content', 'design']) {
+  for (const name of ['content', 'design', 'review']) {
     const selected = name === panel;
     element(`tab-${name}`).setAttribute('aria-selected', String(selected));
     element(`tab-${name}`).tabIndex = selected ? 0 : -1;
@@ -261,6 +262,8 @@ function render() {
   if (selectedPath.startsWith(`slides.${slideIndex}.`) && editor.get(selectedPath) === undefined) { const owner = /^(.*[.](?:table|chart))[.]/.exec(selectedPath)?.[1]; if (owner && editor.get(owner) !== undefined) selectedPath = owner; }
   if (!selectedPath.startsWith(`slides.${slideIndex}.`) || editor.get(selectedPath) === undefined) selectedPath = `slides.${slideIndex}.title`;
   select(selectedPath);
+  review?.refresh();
+  if (pendingContentFocus) { pendingContentFocus = false; showPanel('content'); element('value').focus(); }
 }
 function renderSafely() { try { render(); } catch (error) { renderError = error.message; canvas?.destroy(); canvas=undefined; element('preview').textContent = 'Preview unavailable for this document. Use Undo or revise the JSON.'; status(renderError); } }
 let refreshToken = 0;
@@ -362,10 +365,11 @@ function previewSource() {
 }
 element('json').addEventListener('input',()=>{cancelAnimationFrame(sourceFrame);sourceFrame=requestAnimationFrame(previewSource);});
 
-for (const panel of ['content','design']) {
+const inspectorPanels = ['content','design','review'];
+for (const panel of inspectorPanels) {
   element(`tab-${panel}`).onclick = () => showPanel(panel);
   element(`tab-${panel}`).onkeydown = event => {
-    if (['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) { event.preventDefault(); showPanel(event.key==='Home' ? 'content' : event.key==='End' ? 'design' : activePanel==='content' ? 'design' : 'content',true); }
+    if (['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) { event.preventDefault(); const visible = inspectorPanels.filter(name => !element(`tab-${name}`).hidden), at = visible.indexOf(activePanel); showPanel(event.key==='Home' ? visible[0] : event.key==='End' ? visible.at(-1) : visible[(at + (event.key==='ArrowRight' ? 1 : -1) + visible.length) % visible.length],true); }
   };
 }
 element('zoom').onchange = updateZoom;
@@ -433,3 +437,7 @@ pictureTools=installCropControls({editor,getCanvas:()=>canvas,getSelectedPath:()
 installFindControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,goToSlide:index=>{if(index===slideIndex)return;slideIndex=index;return refresh();},status,showPanel});
 installMobileControls();
 installTemplateControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,fonts:fontGate});
+// RR-29: the Review tab. A finding's go-to selects the slide and the content; the panel re-audits after every redraw (render()).
+const openPropertiesAt = pointer => { element('open-properties').click(); propertiesInspector?.navigate(pointer); };
+review = installReviewControls({editor,getSlideIndex:()=>slideIndex,goTo:(index,path)=>{slideIndex=index;selectedPath=path;refresh();},openProperties:openPropertiesAt,focusContentField:()=>{pendingContentFocus=true;refresh();},status,measurementFor:(deck,index)=>layoutFor(deck,index).textMeasurement});
+review?.refresh();

@@ -45,6 +45,12 @@ for (const [entry, file] of [["./templates", "templates"], ["./template-panel", 
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
 }
 
+for (const [entry, file] of [["./review", "review"], ["./review-panel", "review-panel"]]) {
+  assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (RR-29).`);
+  assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
+  assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
+}
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

@@ -41,7 +41,7 @@
       <div class="canvas-footer"><span id="page-position">Slide 1 of 4</span><p id="status" role="status">Ready to edit</p><label class="zoom-label">Zoom<select id="zoom" aria-label="Canvas zoom"><option value="fit">Fit</option><option value="100">100%</option><option value="125">125%</option></select></label></div>
     </section>
     <aside class="inspector" aria-label="Slide inspector">
-      <div class="inspector-tabs" role="tablist" aria-label="Inspector"><button id="tab-content" role="tab" aria-selected="true" aria-controls="panel-content" tabindex="0">Content</button><button id="tab-design" role="tab" aria-selected="false" aria-controls="panel-design" tabindex="-1">Design</button></div>
+      <div class="inspector-tabs" role="tablist" aria-label="Inspector"><button id="tab-content" role="tab" aria-selected="true" aria-controls="panel-content" tabindex="0">Content</button><button id="tab-design" role="tab" aria-selected="false" aria-controls="panel-design" tabindex="-1">Design</button><button id="tab-review" role="tab" aria-selected="false" aria-controls="panel-review" tabindex="-1">Review</button></div>
       <div id="panel-content" class="inspector-panel" role="tabpanel" aria-labelledby="tab-content">
         <div class="section-heading"><h2>Selection</h2><span id="selection-kind" class="small-badge">Title</span></div>
         <button id="copy-selection" class="quiet full-width" style="margin-bottom:12px">Copy selected content</button><div id="canvas-properties"></div><div id="content-fields"><label for="value" id="value-label">Text content</label><textarea id="value" rows="8" spellcheck="true"></textarea>
@@ -61,7 +61,8 @@
         <div class="inspector-section"><div class="section-heading"><h2>Typography</h2><span class="optional">Presentation</span></div><label for="font">Font family</label><select id="font"><option value="roboto">Roboto</option><option value="calibri">Calibri → Carlito</option><option value="cambria">Cambria → Caladea</option><option value="arial">Arial → Arimo</option><option value="times-new-roman">Times New Roman → Tinos</option><option value="courier-new">Courier New → Cousine</option><option value="georgia">Georgia → Gelasio (approximate)</option><option value="aptos">Aptos (approximate)</option></select><p class="field-help">Open-source substitutes are used when the original font isn’t available.</p></div>
         <div id="design-controls" class="inspector-section"><div class="section-heading"><h2>Design options</h2><span class="optional">Presentation or slide</span></div></div>
       </div>
-      <div id="diagnostics-section" class="diagnostics-section" hidden><div class="section-heading"><h2>Review</h2><span id="diagnostic-count" class="review-count"></span></div><ul id="diagnostics" aria-label="Layout diagnostics"></ul></div>
+      <div id="panel-review" class="inspector-panel" role="tabpanel" aria-labelledby="tab-review" hidden><div id="review-controls"></div></div>
+      <div id="diagnostics-section" class="diagnostics-section" hidden><div class="section-heading"><h2>Layout notes</h2><span id="diagnostic-count" class="review-count"></span></div><ul id="diagnostics" aria-label="Layout diagnostics"></ul></div>
       <div class="inspector-bottom"><svg class="icon"><use href="#i-check"/></svg><span id="autosave-status">Changes stay in this session.<br>Save an OPF file to keep your work.</span></div>
     </aside>
   </div>

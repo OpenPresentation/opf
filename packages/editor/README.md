@@ -487,6 +487,26 @@ Select a picture on the canvas and use **Crop picture** (or `canvas.cropImage(pa
 
 At 900px and narrower the playground is one screen: the slide strip on top, the slide in the middle, and a bottom bar (Edit, Design, Find, Undo, Redo) whose Edit and Design open the inspector as a **bottom sheet** that leaves the slide in view above it; the header buttons sit behind More; nothing scrolls sideways down to 320px. On a touch screen the canvas grows each text block's selection target to about 44px (up to 24 slide units each way), a tap on text enters editing at that point, `touch-action: manipulation` removes the double-tap delay, and the field being typed in is scrolled above the on-screen keyboard (visual viewport). The inline field mirrors the slide text, which is smaller than 16px on a phone; iOS would zoom into it on focus, so the playground sets `maximum-scale=1` on the viewport only while a slide text field has the focus and restores it after (embedding hosts should do the same, or keep their own fields at 16px). `test/mobile-browser.mjs` drives six emulated devices (iPhone SE, iPhone 14 Pro, Pixel 7, a 320px Android, an iPad and an Android tablet: Chromium with each device's viewport, scale factor, touch and user agent) through the layout, the sheet, tap-to-type, find and replace by touch and a crop by touch; it does not replace a check on a real iOS Safari.
 
+## Review panel (RR-29)
+
+`@openpresentation/opf-editor/review-panel` mounts the audit's findings next to the document: contrast, text that does not fit, missing alt text, reading order, fonts, links and more, from core's `auditPresentation` (the same rules as `opf audit`; see the [audit guide](https://github.com/OpenPresentation/opf/blob/main/docs/audit.md)). It needs a core release after 0.11.4 and reports `audit-unavailable` on an older one.
+
+```js
+import { createReviewPanel } from "@openpresentation/opf-editor/review-panel";
+
+const panel = createReviewPanel(container, {
+  editor,
+  getSlideIndex: () => slideIndex,
+  // the host's measured fonts, per slide, so overflow is judged like the preview
+  getAuditOptions: (deck) => ({ textMeasurement: (index) => measurementFor(deck, index) }),
+  onGoTo: ({ finding, target }) => select(target.slide, target.path), // target.path: the nearest existing field
+  onFocusField: ({ finding, fix, target }) => focusTextField(target.path), // a title, text, link, language or size
+});
+panel.refresh(); // after the host has redrawn (set autoRefresh: false) or after anything the session did not see
+```
+
+Findings show a severity word, the slide and the rule id. **Go to** selects the content. A fix is a single undoable session edit and is refused when the document has changed since the finding (the list is refreshed instead): switching a failing colour to the readable one is a one-click safe fix; **Write alt text** opens a field in the panel (an `asset:` reference stores the text on the asset so every use has it); **Mark as decorative** (an empty alt) is an explicit choice flagged as one that changes meaning. A check can be hidden in the panel and shown again, and the list can be limited to errors and warnings or to the current slide. The list re-audits after every session change and follows Undo and Redo; arrow keys, Home and End move between findings, Escape cancels the alt-text field and focus stays on a finding after a fix. The headless `/review` entry (`runAudit`, `reviewFindings`, `applyReviewFix`, `setReviewAltText`, `markDecorative`) needs no DOM.
+
 ## Optional React Bindings
 
 React bindings are isolated under `@openpresentation/opf-editor/react` and require the host app to pass its React runtime. The core package does not add React to the critical path.
