@@ -67,6 +67,9 @@ jobs:
       - name: Verify packed CLI install
         run: pnpm test:cli:packed
 
+      - name: Verify packed CLI with its optional render and PPTX peers
+        run: pnpm test:cli:packed:peers
+
       - name: Verify developer quickstart from the npm registry
         run: pnpm test:developer-quickstart
 

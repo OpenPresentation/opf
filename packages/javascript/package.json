@@ -88,9 +88,33 @@
       "types": "./dist/font-policy.d.ts",
       "import": "./dist/font-policy.js"
     },
+    "./symbol-font-encodings": {
+      "types": "./dist/symbol-font-encodings.d.ts",
+      "import": "./dist/symbol-font-encodings.js"
+    },
     "./lint": {
       "types": "./dist/lint.d.ts",
       "import": "./dist/lint.js"
+    },
+    "./patch": {
+      "types": "./dist/patch.d.ts",
+      "import": "./dist/patch.js"
+    },
+    "./diff": {
+      "types": "./dist/diff.d.ts",
+      "import": "./dist/diff.js"
+    },
+    "./format": {
+      "types": "./dist/format.d.ts",
+      "import": "./dist/format.js"
+    },
+    "./convert": {
+      "types": "./dist/convert.d.ts",
+      "import": "./dist/convert.js"
+    },
+    "./audit": {
+      "types": "./dist/audit.d.ts",
+      "import": "./dist/audit.js"
     }
   },
   "files": [

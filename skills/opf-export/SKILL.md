@@ -8,6 +8,10 @@ license: MIT
 
 Start with a validated OPF document and the output formats the user requested. Preserve OPF as the editable source. Read [rendering and conversion](references/rendering.md) for the concrete local APIs and environment boundaries.
 
+## Use the CLI first for files
+
+When the `opf` CLI is available, `opf render`, `opf export` and `opf import` produce and read files with the pinned, deterministic pipeline and the lint report shape, with no code to write: `opf render deck.opf.json --format png`, `opf export deck.opf.json --format pptx|pdf|png|svg`, `opf import deck.pptx`. They need the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` installed beside the CLI (a missing peer exits 2 with the install command), never load system fonts or fetch URLs, and read images only from the deck's folder. Read the report: `diagnostics` and `counts` are the evidence, and `--strict` fails on warnings. Reference: [CLI render, export and import](references/rendering.md#cli). Use the library APIs below when you need custom fonts in code, a browser preview or an option the CLI does not expose.
+
 ## Establish the rendering inputs
 
 Use coordinated versions of `@openpresentation/opf`, `opf-render`, and `opf-pptx`. The repository's preview tarballs can contain APIs absent from published packages. Determine the actual installed exports before using them.

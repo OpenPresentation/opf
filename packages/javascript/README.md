@@ -69,11 +69,22 @@ import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 
 The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
 
+### Content conversions
+
+`@openpresentation/opf/convert` converts one payload between text, list, quote, metric, code, timeline, chart, table and a group of metric blocks (`convertContent`, `contentConversionTargets`), nests list items, groups blocks, moves an image between the content and the slide design, and splits or merges slides (`splitSlide`, `splitSlideOnOverflow`, `mergeSlides`, `unpaginate`). Every function is pure, never invents content, reports `lossless` and `loss`, refuses with a reason and validates its output. See the [conversions guide](../../docs/conversions.md). Not in releases before the one that lists it in the changelog.
+### Design and accessibility audit
+
+`@openpresentation/opf/audit` exports `auditPresentation(document, options)`, `auditSource(source, options)` and `auditRules`: contrast, overflow, type size, alt text, reading order, fonts, links, charts and more, with stable `audit/<rule>` ids in lint's report shape. Read-only and deterministic; see [the audit guide](../../docs/audit.md).
+
 ### Contextual lint (0.10.0)
 
 Version 0.10.0 adds `lintSource(source, options)` and `lintPresentation(document, options)` from `@openpresentation/opf/lint` and the root API. They report strict JSON syntax, duplicate keys, schema constraints, local catalog alternatives, asset registry errors, and explicit host contracts. Source diagnostics retain original UTF-16 ranges without rewriting the document. Options accept already loaded `catalogs` and `contracts`; no remote resources are fetched.
 
 Earlier versions do not include these APIs. See the [lint guide](../../docs/lint.md) for configuration and the source CLI. Passing lint does not certify layout, fonts, or native export fidelity.
+
+### Patch, diff, merge and format (unreleased)
+
+On `main` and not in 0.11.4: `@openpresentation/opf/patch` is the one RFC 6902 implementation the CLI and the editor share (`applyPatch`, `applyPatchWithInverse`, `invertPatch`, strict pointer helpers, optional schema validation of the result); `@openpresentation/opf/diff` has `diffPresentations` (slide matching by id, content and similarity, moves, a readable report and a JSON Patch) and `mergePresentations` (three-way merge with conflict objects that never drop a side); `@openpresentation/opf/format` has `formatPresentation` (canonical key order and layout, idempotent). See [the guide](../../docs/patch-diff-merge-format.md).
 
 ### Layout previews
 

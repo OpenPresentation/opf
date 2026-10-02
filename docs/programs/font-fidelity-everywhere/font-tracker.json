@@ -16,7 +16,7 @@
     "policy": {
       "file": "spec/reference/font-policy.json",
       "version": 1,
-      "families": 164
+      "families": 168
     },
     "measurementReport": {
       "file": "docs/evidence/font-replacements-20260923/report.json",
@@ -215,69 +215,69 @@
   },
   "priorityFormula": "score = severity x (valuesOpen x hostFactor + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesOpen counts parity values whose preview uses the family and whose fontResolution is not already pass (real face or metric replacement with the selected name kept). hostFactor is the share of applicable hosts without per-family verification, never below 0.25.",
   "summary": {
-    "records": 164,
-    "inPolicy": 164,
+    "records": 168,
+    "inPolicy": 168,
     "byClass": {
-      "proprietary-latin": 51,
+      "proprietary-latin": 53,
       "proprietary-script": 41,
-      "open": 67,
-      "special": 5
+      "open": 71,
+      "special": 3
     },
     "byStatus": {
-      "loading-gap": 0,
+      "loading-gap": 6,
       "style-gap": 0,
       "policy-gap": 0,
-      "needs-special-path": 5,
-      "visual-gap": 7,
+      "needs-special-path": 3,
+      "visual-gap": 1,
       "script-gap": 41,
       "baseline-needed": 34,
       "metric-measured": 0,
-      "documented-visual": 36,
+      "documented-visual": 42,
       "qualified": 41
     },
     "byPhase": {
       "1": 34,
-      "2": 0,
+      "2": 6,
       "3": 0,
-      "4": 53,
-      "5": 77
+      "4": 45,
+      "5": 83
     },
     "hostVerification": {
       "node": {
         "verified": 118,
-        "unverified": 41,
-        "NA": 5
+        "unverified": 43,
+        "NA": 7
       },
       "browser": {
         "verified": 118,
-        "unverified": 41,
-        "NA": 5
+        "unverified": 43,
+        "NA": 7
       },
       "editor": {
         "verified": 87,
-        "unverified": 72,
-        "NA": 5
+        "unverified": 74,
+        "NA": 7
       },
       "galleryEditor": {
         "verified": 84,
-        "unverified": 75,
-        "NA": 5
+        "unverified": 77,
+        "NA": 7
       },
       "galleryCards": {
         "verified": 0,
         "unverified": 143,
-        "NA": 21
+        "NA": 25
       }
     },
     "nativeVerification": {
       "verified": 0,
       "partial": 1,
-      "unverified": 163,
+      "unverified": 167,
       "NA": 0
     },
     "bundled": {
       "yes": 159,
-      "no": 5
+      "no": 9
     },
     "parityRerunNeeded": 7
   },
@@ -670,7 +670,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 124
+        "rank": 128
       }
     },
     {
@@ -847,7 +847,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 22
+        "rank": 21
       }
     },
     {
@@ -1204,7 +1204,7 @@
         "valuesAffected": 704,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 125
+        "rank": 129
       }
     },
     {
@@ -1553,7 +1553,7 @@
         "valuesAffected": 704,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 126
+        "rank": 130
       }
     },
     {
@@ -1768,7 +1768,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 118
+        "rank": 122
       }
     },
     {
@@ -2083,7 +2083,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 127
+        "rank": 131
       }
     },
     {
@@ -2398,7 +2398,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 128
+        "rank": 132
       }
     },
     {
@@ -2809,7 +2809,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 129
+        "rank": 133
       }
     },
     {
@@ -3067,7 +3067,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 130
+        "rank": 134
       }
     },
     {
@@ -3306,7 +3306,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 115
+        "rank": 119
       }
     },
     {
@@ -3557,7 +3557,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 119
+        "rank": 123
       }
     },
     {
@@ -3741,7 +3741,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 131
+        "rank": 135
       }
     },
     {
@@ -3940,7 +3940,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 132
+        "rank": 136
       }
     },
     {
@@ -4156,7 +4156,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 70
+        "rank": 74
       }
     },
     {
@@ -4344,7 +4344,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 23
+        "rank": 22
       }
     },
     {
@@ -4532,7 +4532,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 24
+        "rank": 23
       }
     },
     {
@@ -4687,7 +4687,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 133
+        "rank": 137
       }
     },
     {
@@ -4880,7 +4880,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 134
+        "rank": 138
       }
     },
     {
@@ -5130,7 +5130,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 71
+        "rank": 75
       }
     },
     {
@@ -5385,7 +5385,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 72
+        "rank": 76
       }
     },
     {
@@ -5644,7 +5644,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 59
+        "rank": 61
       }
     },
     {
@@ -5823,7 +5823,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 135
+        "rank": 139
       }
     },
     {
@@ -6086,7 +6086,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 136
+        "rank": 140
       }
     },
     {
@@ -6314,7 +6314,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 120
+        "rank": 124
       }
     },
     {
@@ -6561,61 +6561,94 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 73
+        "rank": 77
       }
     },
     {
       "family": "Cambria Math",
-      "class": "special",
+      "class": "proprietary-latin",
       "inPolicy": true,
       "licenseClass": "proprietary-standard",
       "license": "proprietary (Microsoft)",
       "selectedNamePreservedInPptx": true,
       "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
       "previewRoute": {
-        "family": null,
-        "tier": "none",
-        "kind": "none",
-        "alternates": [],
-        "alternatesBundled": {},
+        "family": "STIX Two Math",
+        "tier": "visual",
+        "kind": "replacement",
+        "alternates": [
+          "Noto Sans Math",
+          "Caladea"
+        ],
+        "alternatesBundled": {
+          "Noto Sans Math": false,
+          "Caladea": true
+        },
         "disabledFeatures": [],
         "decision": null,
-        "source": null,
-        "pendingBundle": null
+        "source": "https://github.com/stipub/stixfonts",
+        "pendingBundle": {
+          "prs": [
+            "opf-render#95"
+          ],
+          "note": "STIX Two Math and Noto Sans Math join the opf-render manifest as the optional math pack (pseudo-script Zmth) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
+        }
       },
       "bundled": {
         "yes": false,
-        "applies": "none",
-        "family": null,
+        "applies": "route-target",
+        "family": "STIX Two Math",
         "packages": [],
         "faces": [],
         "stylesAvailable": [],
-        "pack": null
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#95"
+          ],
+          "note": "STIX Two Math and Noto Sans Math join the opf-render manifest as the optional math pack (pseudo-script Zmth) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
+        }
       },
-      "stylesRequired": [],
-      "replacementStylesRequired": [],
-      "stylesMissing": [],
+      "stylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "replacementStylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
-      "stylesBasis": "not applicable: dedicated path",
+      "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
       "scripts": [
-        "Math"
+        "Math",
+        "Latin"
       ],
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "no route",
-        "browser": "no route",
-        "editor": "no route",
-        "galleryEditor": "no route",
-        "galleryCards": "no route"
+        "node": "pending opf-render#95: not in the pinned manifest",
+        "browser": "pending opf-render#95: not in the pinned manifest",
+        "editor": "pending opf-render#95: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#95: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
         "status": "unverified",
@@ -6641,17 +6674,21 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "needs-special-path",
-      "statusReason": "no look-alike route in the policy; dedicated path required",
-      "nextAction": "Qualify a permitted math font and a math-aware layout and export path using fractions, radicals, operators and native equations (renderers fail with math-font-required today).",
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "STIX Two Math is not in the pinned opf-render manifest until opf-render#95 land",
+      "nextAction": "FF-45 route in place: STIX Two Math (visual; corpus mean 5.0%, max 18.2%, Latin 0.9%) with Noto Sans Math and Caladea as alternates; math runs are text drawn per character (no equation model, no MATH-table layout; OMML imports as fallback text with a diagnostic). Next: native PowerPoint check of the Cambria Math deck (FF-46) and an owner decision on an equation model (RR-18).",
       "evidence": [
         {
           "label": "Font licensing and policy table",
           "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "FF-45 special families: emoji and math",
+          "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
         }
       ],
       "priority": {
@@ -6660,7 +6697,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 43
+        "rank": 39
       }
     },
     {
@@ -6913,7 +6950,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 74
+        "rank": 78
       }
     },
     {
@@ -7104,7 +7141,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 137
+        "rank": 141
       }
     },
     {
@@ -7355,7 +7392,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 75
+        "rank": 79
       }
     },
     {
@@ -7608,7 +7645,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 60
+        "rank": 62
       }
     },
     {
@@ -7866,7 +7903,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 61
+        "rank": 63
       }
     },
     {
@@ -8131,7 +8168,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 62
+        "rank": 64
       }
     },
     {
@@ -8388,7 +8425,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 76
+        "rank": 80
       }
     },
     {
@@ -8646,7 +8683,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 138
+        "rank": 142
       }
     },
     {
@@ -8838,7 +8875,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 139
+        "rank": 143
       }
     },
     {
@@ -9358,7 +9395,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 52
+        "rank": 51
       }
     },
     {
@@ -9587,7 +9624,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 25
+        "rank": 24
       }
     },
     {
@@ -9775,7 +9812,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 140
+        "rank": 144
       }
     },
     {
@@ -10000,7 +10037,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 53
+        "rank": 52
       }
     },
     {
@@ -10188,7 +10225,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 26
+        "rank": 25
       }
     },
     {
@@ -10387,7 +10424,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 141
+        "rank": 145
       }
     },
     {
@@ -10618,7 +10655,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 77
+        "rank": 81
       }
     },
     {
@@ -10849,7 +10886,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 78
+        "rank": 82
       }
     },
     {
@@ -11101,7 +11138,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 63
+        "rank": 65
       }
     },
     {
@@ -11466,7 +11503,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 142
+        "rank": 146
       }
     },
     {
@@ -11732,7 +11769,7 @@
         "valuesAffected": 6,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 143
+        "rank": 147
       }
     },
     {
@@ -11990,7 +12027,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 79
+        "rank": 83
       }
     },
     {
@@ -12167,7 +12204,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 27
+        "rank": 26
       }
     },
     {
@@ -12257,7 +12294,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Barlow",
+        "reference": "Grandview 1.04;O365",
+        "meanAbsWidthDelta": 0.0467,
+        "meanWidthDelta": -0.0467,
+        "maxAbsWidthDelta": 0.0976,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -12278,20 +12336,56 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 4.67% and maximum 9.76% in 4 measured styles, 4.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.018x, cap-height 0.986x of the original; 44 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0467,
+        "maxAbsWidthDelta": 0.0976,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.048,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.018,
+        "capHeightRatio": 0.986,
+        "ascentRatio": 1.006,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 44
       },
       "appearance": {
-        "description": "Grandview: Microsoft 365 cloud sans (no reference on this host). Barlow: a slightly condensed grotesque.",
-        "caveat": "Unmeasured: Grandview is not cached on this host."
+        "description": "Grandview: Microsoft 365 cloud sans. Barlow: a slightly condensed grotesque.",
+        "caveat": "About 5% off on average (up to 10%) with glyph-size differences: expect different wrapping."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -12317,10 +12411,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Grandview is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
@@ -12336,12 +12430,12 @@
         }
       ],
       "priority": {
-        "score": 4.5,
-        "severity": 2,
+        "score": 2.3,
+        "severity": 1,
         "valuesAffected": 5,
         "valuesOpen": 5,
         "hostFactor": 0.25,
-        "rank": 21
+        "rank": 50
       }
     },
     {
@@ -12431,7 +12525,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Barlow",
+        "reference": "Grandview Display 0.90;O365",
+        "meanAbsWidthDelta": 0.0249,
+        "meanWidthDelta": -0.0242,
+        "maxAbsWidthDelta": 0.0599,
+        "stylesMeasured": 2,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -12452,20 +12567,55 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 2.49% and maximum 5.99% in 2 measured styles, 26% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.082x, cap-height 0.986x of the original; 44 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 2,
+        "meanAbsWidthDelta": 0.0249,
+        "maxAbsWidthDelta": 0.0599,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.26,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.082,
+        "capHeightRatio": 0.986,
+        "ascentRatio": 1.006,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 44
       },
       "appearance": {
-        "description": "Grandview Display: the display cut (no reference on this host). Barlow: a slightly condensed grotesque.",
-        "caveat": "Unmeasured."
+        "description": "Grandview Display: the display cut. Barlow: a slightly condensed grotesque."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -12490,10 +12640,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Grandview Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
@@ -12509,12 +12659,12 @@
         }
       ],
       "priority": {
-        "score": 3.5,
-        "severity": 2,
+        "score": 1.8,
+        "severity": 1,
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 40
+        "rank": 55
       }
     },
     {
@@ -12702,7 +12852,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 28
+        "rank": 27
       }
     },
     {
@@ -12890,7 +13040,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 29
+        "rank": 28
       }
     },
     {
@@ -13312,7 +13462,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 144
+        "rank": 148
       }
     },
     {
@@ -13519,7 +13669,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 145
+        "rank": 149
       }
     },
     {
@@ -13722,7 +13872,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 146
+        "rank": 150
       }
     },
     {
@@ -13925,7 +14075,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 147
+        "rank": 151
       }
     },
     {
@@ -14458,7 +14608,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 30
+        "rank": 29
       }
     },
     {
@@ -14825,7 +14975,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 80
+        "rank": 84
       }
     },
     {
@@ -15014,7 +15164,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 81
+        "rank": 85
       }
     },
     {
@@ -15203,7 +15353,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 82
+        "rank": 86
       }
     },
     {
@@ -15387,7 +15537,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 148
+        "rank": 152
       }
     },
     {
@@ -15565,7 +15715,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 149
+        "rank": 153
       }
     },
     {
@@ -15778,7 +15928,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 121
+        "rank": 125
       }
     },
     {
@@ -16019,7 +16169,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 116
+        "rank": 120
       }
     },
     {
@@ -16240,7 +16390,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 122
+        "rank": 126
       }
     },
     {
@@ -17039,7 +17189,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 150
+        "rank": 154
       }
     },
     {
@@ -17506,7 +17656,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 123
+        "rank": 127
       }
     },
     {
@@ -17948,7 +18098,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 31
+        "rank": 30
       }
     },
     {
@@ -18125,7 +18275,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 32
+        "rank": 31
       }
     },
     {
@@ -18326,7 +18476,7 @@
         "valuesAffected": 5,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 151
+        "rank": 155
       }
     },
     {
@@ -18546,7 +18696,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 54
+        "rank": 53
       }
     },
     {
@@ -18734,7 +18884,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 33
+        "rank": 32
       }
     },
     {
@@ -18972,7 +19122,239 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 34
+        "rank": 33
+      }
+    },
+    {
+      "family": "Noto Color Emoji",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Noto Color Emoji",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": null
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Noto Color Emoji",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null
+      },
+      "stylesRequired": [
+        "400"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {
+        "400": [
+          "Segoe UI Emoji"
+        ],
+        "700": [
+          "Segoe UI Emoji"
+        ],
+        "400i": [
+          "Segoe UI Emoji"
+        ],
+        "700i": [
+          "Segoe UI Emoji"
+        ]
+      },
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "declared: Colour emoji face (COLRv1 and OT-SVG); one face, no weights or italics exist.",
+      "scripts": [
+        "Emoji"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "NA",
+        "browser": "NA",
+        "editor": "NA",
+        "galleryEditor": "NA",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "not bundled",
+        "browser": "not bundled",
+        "editor": "not bundled",
+        "galleryEditor": "not bundled",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "route face Noto Color Emoji is not bundled by opf-render",
+      "nextAction": "Pinned as the optional opf-render emoji pack (Zsye) in the FF-45 render PR; the preview face for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge; a colour raster path when resvg draws COLRv1 or the OT-SVG glyphs are inlined.",
+      "evidence": [
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "FF-45 special families: emoji and math",
+          "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 40
+      }
+    },
+    {
+      "family": "Noto Emoji",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Noto Emoji",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": null
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Noto Emoji",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null
+      },
+      "stylesRequired": [
+        "400"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {},
+      "stylesMissing": [
+        "400"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "declared: Monochrome emoji face used by the resvg raster path; the regular weight is pinned (upstream also ships 300 to 700).",
+      "scripts": [
+        "Emoji"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "NA",
+        "browser": "NA",
+        "editor": "NA",
+        "galleryEditor": "NA",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "not bundled",
+        "browser": "not bundled",
+        "editor": "not bundled",
+        "galleryEditor": "not bundled",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "route face Noto Emoji is not bundled by opf-render",
+      "nextAction": "Pinned in the FF-45 emoji pack as the raster stand-in and alternate for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge.",
+      "evidence": [
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "FF-45 special families: emoji and math",
+          "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 41
       }
     },
     {
@@ -19152,7 +19534,7 @@
         "valuesAffected": 2,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 83
+        "rank": 87
       }
     },
     {
@@ -19322,7 +19704,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 84
+        "rank": 88
       }
     },
     {
@@ -19518,7 +19900,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 85
+        "rank": 89
       }
     },
     {
@@ -19678,7 +20060,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 86
+        "rank": 90
       }
     },
     {
@@ -19848,7 +20230,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 87
+        "rank": 91
       }
     },
     {
@@ -20027,7 +20409,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 88
+        "rank": 92
       }
     },
     {
@@ -20208,7 +20590,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 89
+        "rank": 93
       }
     },
     {
@@ -20385,7 +20767,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 90
+        "rank": 94
       }
     },
     {
@@ -20555,7 +20937,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 91
+        "rank": 95
       }
     },
     {
@@ -20732,7 +21114,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 92
+        "rank": 96
       }
     },
     {
@@ -20909,7 +21291,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 93
+        "rank": 97
       }
     },
     {
@@ -21088,7 +21470,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 94
+        "rank": 98
       }
     },
     {
@@ -21277,7 +21659,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 95
+        "rank": 99
       }
     },
     {
@@ -21454,7 +21836,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 96
+        "rank": 100
       }
     },
     {
@@ -21633,7 +22015,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 97
+        "rank": 101
       }
     },
     {
@@ -21825,7 +22207,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 98
+        "rank": 102
       }
     },
     {
@@ -21985,7 +22367,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 99
+        "rank": 103
       }
     },
     {
@@ -22162,7 +22544,116 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 100
+        "rank": 104
+      }
+    },
+    {
+      "family": "Noto Sans Math",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "Noto Sans Math",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": null
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "Noto Sans Math",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null
+      },
+      "stylesRequired": [
+        "400"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {},
+      "stylesMissing": [
+        "400"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "declared: Math face with a MATH table; upstream ships one regular weight.",
+      "scripts": [
+        "Math",
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "NA",
+        "browser": "NA",
+        "editor": "NA",
+        "galleryEditor": "NA",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "not bundled",
+        "browser": "not bundled",
+        "editor": "not bundled",
+        "galleryEditor": "not bundled",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "route face Noto Sans Math is not bundled by opf-render",
+      "nextAction": "Pinned in the FF-45 math pack as the sans math face (glyph fallback for sans schemes) and alternate for Cambria Math. Next: tracker snapshot refresh after the render merge.",
+      "evidence": [
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "FF-45 special families: emoji and math",
+          "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 42
       }
     },
     {
@@ -22324,7 +22815,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 101
+        "rank": 105
       }
     },
     {
@@ -22484,7 +22975,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 102
+        "rank": 106
       }
     },
     {
@@ -22661,7 +23152,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 103
+        "rank": 107
       }
     },
     {
@@ -22850,7 +23341,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 104
+        "rank": 108
       }
     },
     {
@@ -23010,7 +23501,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 105
+        "rank": 109
       }
     },
     {
@@ -23170,7 +23661,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 106
+        "rank": 110
       }
     },
     {
@@ -23347,7 +23838,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 107
+        "rank": 111
       }
     },
     {
@@ -23535,7 +24026,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 108
+        "rank": 112
       }
     },
     {
@@ -23712,7 +24203,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 109
+        "rank": 113
       }
     },
     {
@@ -23872,7 +24363,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 110
+        "rank": 114
       }
     },
     {
@@ -24051,7 +24542,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 111
+        "rank": 115
       }
     },
     {
@@ -24218,7 +24709,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 112
+        "rank": 116
       }
     },
     {
@@ -24378,7 +24869,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 113
+        "rank": 117
       }
     },
     {
@@ -24764,7 +25255,7 @@
         "valuesAffected": 7,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 152
+        "rank": 156
       }
     },
     {
@@ -25019,7 +25510,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 114
+        "rank": 118
       }
     },
     {
@@ -25214,7 +25705,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 153
+        "rank": 157
       }
     },
     {
@@ -25402,7 +25893,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 35
+        "rank": 34
       }
     },
     {
@@ -25579,7 +26070,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 154
+        "rank": 158
       }
     },
     {
@@ -25788,7 +26279,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 155
+        "rank": 159
       }
     },
     {
@@ -26152,7 +26643,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 156
+        "rank": 160
       }
     },
     {
@@ -26381,7 +26872,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 157
+        "rank": 161
       }
     },
     {
@@ -26566,7 +27057,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 158
+        "rank": 162
       }
     },
     {
@@ -26766,7 +27257,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 159
+        "rank": 163
       }
     },
     {
@@ -26949,7 +27440,7 @@
         "valuesAffected": 848,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 160
+        "rank": 164
       }
     },
     {
@@ -27212,7 +27703,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 64
+        "rank": 66
       }
     },
     {
@@ -27454,7 +27945,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 36
+        "rank": 35
       }
     },
     {
@@ -27546,7 +28037,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Source Sans 3",
+        "reference": "Seaford 1.04;O365",
+        "meanAbsWidthDelta": 0.0483,
+        "meanWidthDelta": -0.0483,
+        "maxAbsWidthDelta": 0.0965,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -27567,20 +28079,55 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 4.83% and maximum 9.65% in 4 measured styles, 12.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.016x, cap-height 0.982x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0483,
+        "maxAbsWidthDelta": 0.0965,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.128,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.016,
+        "capHeightRatio": 0.982,
+        "ascentRatio": 0.976,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Seaford: Microsoft 365 cloud sans (no reference on this host). Source Sans 3: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Seaford: Microsoft 365 cloud sans. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -27605,10 +28152,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Seaford is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -27624,12 +28171,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 2,
+        "score": 1.5,
+        "severity": 1,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 41
+        "rank": 57
       }
     },
     {
@@ -27721,7 +28268,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Source Sans 3",
+        "reference": "Seaford Display 1.04;O365",
+        "meanAbsWidthDelta": 0.0389,
+        "meanWidthDelta": 0.0388,
+        "maxAbsWidthDelta": 0.0667,
+        "stylesMeasured": 2,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -27742,20 +28310,55 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 3.89% and maximum 6.67% in 2 measured styles, 24.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.059x, cap-height 0.982x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 2,
+        "meanAbsWidthDelta": 0.0389,
+        "maxAbsWidthDelta": 0.0667,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.248,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.059,
+        "capHeightRatio": 0.982,
+        "ascentRatio": 0.976,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Seaford Display: the display cut (no reference on this host). Source Sans 3: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Seaford Display: the display cut. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -27780,10 +28383,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Seaford Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -27799,12 +28402,12 @@
         }
       ],
       "priority": {
-        "score": 3,
-        "severity": 2,
+        "score": 1.5,
+        "severity": 1,
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 42
+        "rank": 58
       }
     },
     {
@@ -28154,56 +28757,87 @@
     },
     {
       "family": "Segoe UI Emoji",
-      "class": "special",
+      "class": "proprietary-latin",
       "inPolicy": true,
       "licenseClass": "proprietary-standard",
       "license": "proprietary (Microsoft)",
       "selectedNamePreservedInPptx": true,
       "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
       "previewRoute": {
-        "family": null,
-        "tier": "none",
-        "kind": "none",
-        "alternates": [],
-        "alternatesBundled": {},
+        "family": "Noto Color Emoji",
+        "tier": "visual",
+        "kind": "replacement",
+        "alternates": [
+          "Noto Emoji"
+        ],
+        "alternatesBundled": {
+          "Noto Emoji": false
+        },
         "disabledFeatures": [],
         "decision": null,
-        "source": null,
-        "pendingBundle": null
+        "source": "https://github.com/googlefonts/noto-emoji",
+        "pendingBundle": {
+          "prs": [
+            "opf-render#95"
+          ],
+          "note": "Noto Color Emoji and Noto Emoji join the opf-render manifest as the optional emoji pack (pseudo-script Zsye) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
+        }
       },
       "bundled": {
         "yes": false,
-        "applies": "none",
-        "family": null,
+        "applies": "route-target",
+        "family": "Noto Color Emoji",
         "packages": [],
         "faces": [],
         "stylesAvailable": [],
-        "pack": null
+        "pack": null,
+        "pending": {
+          "prs": [
+            "opf-render#95"
+          ],
+          "note": "Noto Color Emoji and Noto Emoji join the opf-render manifest as the optional emoji pack (pseudo-script Zsye) in the FF-45 render PR; the tracker snapshot is refreshed after it merges."
+        }
       },
-      "stylesRequired": [],
-      "replacementStylesRequired": [],
-      "stylesMissing": [],
+      "stylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "replacementStylesRequired": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
       "stylesExplicitGaps": [],
       "approximateStyles": [],
-      "stylesBasis": "not applicable: dedicated path",
+      "stylesBasis": "assumed: real font not measured; four styles for Latin, regular and bold for script families",
       "scripts": [
-        "Emoji (color)"
+        "Emoji",
+        "Latin"
       ],
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "NA",
-        "browser": "NA",
-        "editor": "NA",
-        "galleryEditor": "NA",
+        "node": "unverified",
+        "browser": "unverified",
+        "editor": "unverified",
+        "galleryEditor": "unverified",
         "galleryCards": "NA"
       },
       "hostLoading": {
-        "node": "no route",
-        "browser": "no route",
-        "editor": "no route",
-        "galleryEditor": "no route",
-        "galleryCards": "no route"
+        "node": "pending opf-render#95: not in the pinned manifest",
+        "browser": "pending opf-render#95: not in the pinned manifest",
+        "editor": "pending opf-render#95: not in the pinned manifest",
+        "galleryEditor": "pending opf-render#95: not in the pinned manifest",
+        "galleryCards": "no self-hosted card preview"
       },
       "nativeVerification": {
         "status": "unverified",
@@ -28229,17 +28863,21 @@
         "resolvedAtRun": [],
         "pptxNamedValues": 0,
         "byDimension": {},
-        "expectedStatusOnMain": "missing",
+        "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "needs-special-path",
-      "statusReason": "no look-alike route in the policy; dedicated path required",
-      "nextAction": "Qualify a permitted color-emoji path, including ZWJ sequences, variation selectors and skin tones, with browser, raster and native behavior.",
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "Noto Color Emoji is not in the pinned opf-render manifest until opf-render#95 land",
+      "nextAction": "FF-45 route in place: Noto Color Emoji (visual; 1.2451 em per emoji against 1.3730 em in Segoe UI Emoji 1.33) with Noto Emoji as the monochrome raster face; sequences stay one glyph, browsers draw colour, resvg draws the silhouette. Next: native PowerPoint check of the emoji deck (FF-46) and a colour raster path when resvg gains COLRv1 or the OT-SVG glyphs are inlined.",
       "evidence": [
         {
           "label": "Font licensing and policy table",
           "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "FF-45 special families: emoji and math",
+          "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
         }
       ],
       "priority": {
@@ -28248,7 +28886,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 44
+        "rank": 43
       }
     },
     {
@@ -28542,7 +29180,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 65
+        "rank": 67
       }
     },
     {
@@ -29130,7 +29768,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 66
+        "rank": 68
       }
     },
     {
@@ -29664,7 +30302,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 55
+        "rank": 54
       }
     },
     {
@@ -29894,7 +30532,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 37
+        "rank": 36
       }
     },
     {
@@ -29984,7 +30622,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Open Sans",
+        "reference": "Skeena 1.04;O365",
+        "meanAbsWidthDelta": 0.0926,
+        "meanWidthDelta": 0.0926,
+        "maxAbsWidthDelta": 0.1593,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -30005,20 +30664,56 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 9.26% and maximum 15.93% in 4 measured styles, 0.8% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.159x, cap-height 1.113x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0926,
+        "maxAbsWidthDelta": 0.1593,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0.008,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.159,
+        "capHeightRatio": 1.113,
+        "ascentRatio": 1.383,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Skeena: Microsoft 365 cloud sans (no reference on this host). Open Sans: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Skeena: Microsoft 365 cloud sans. Open Sans: a humanist sans.",
+        "caveat": "About 9% off on average (up to 16%): expect different wrapping."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -30042,10 +30737,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Skeena is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -30061,12 +30756,12 @@
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2,
+        "score": 1.3,
+        "severity": 1,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 50
+        "rank": 69
       }
     },
     {
@@ -30156,7 +30851,28 @@
       "scripts": [
         "Latin"
       ],
-      "measurements": null,
+      "measurements": {
+        "replacement": "Open Sans",
+        "reference": "Skeena Display 1.04;O365",
+        "meanAbsWidthDelta": 0.1306,
+        "meanWidthDelta": 0.1306,
+        "maxAbsWidthDelta": 0.2001,
+        "stylesMeasured": 4,
+        "perStyle": null,
+        "corpus": {
+          "strings": 300,
+          "sha256": "611eec19400a21c0985813606e1c97dc3e2ccfc183f463e2626bae066b0972ca",
+          "script": "Latin",
+          "scriptSpecific": false
+        },
+        "date": "2026-09-23",
+        "source": "docs/evidence/font-replacements-20260923/README.md",
+        "sourceNote": null,
+        "verticalMetricsMatch": false,
+        "verticalMetricsNote": null,
+        "lineBreaksMatch": false,
+        "widthBarMet": false
+      },
       "candidates": [],
       "hostVerification": {
         "node": "verified",
@@ -30177,20 +30893,56 @@
         "note": "No per-family native PowerPoint acceptance (phase 5)."
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 13.06% and maximum 20.01% in 4 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.159x, cap-height 1.113x of the original; 0 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.1306,
+        "maxAbsWidthDelta": 0.2001,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 1.159,
+        "capHeightRatio": 1.113,
+        "ascentRatio": 1.383,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 0
       },
       "appearance": {
-        "description": "Skeena Display: the display cut (no reference on this host). Open Sans: a humanist sans.",
-        "caveat": "Unmeasured."
+        "description": "Skeena Display: the display cut. Open Sans: a humanist sans.",
+        "caveat": "About 13% off on average (up to 20%): expect different wrapping."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -30214,10 +30966,10 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Skeena Display is a Microsoft 365 cloud font that is not cached on the measuring host, so there is no reference to qualify against (the fixture already passes in every host). Supervisor step: open this family's slide of the RR-17 native check decks in desktop PowerPoint once, so Office caches the font, then run node scripts/qualify-latin-fonts.mjs and pnpm build:font-tracker; no font file is copied.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note.",
       "evidence": [
         {
           "label": "opf-render#50 (open families bundled)",
@@ -30233,12 +30985,12 @@
         }
       ],
       "priority": {
-        "score": 2.5,
-        "severity": 2,
+        "score": 1.3,
+        "severity": 1,
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 51
+        "rank": 70
       }
     },
     {
@@ -30439,7 +31191,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 161
+        "rank": 165
       }
     },
     {
@@ -30657,7 +31409,132 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 117
+        "rank": 121
+      }
+    },
+    {
+      "family": "STIX Two Math",
+      "class": "open",
+      "inPolicy": true,
+      "licenseClass": "open",
+      "license": "OFL-1.1",
+      "selectedNamePreservedInPptx": true,
+      "pptxNameBasis": "Policy invariant: exporters write the selected family and never a replacement name; the parity typefaces and fontResolution checks read it back",
+      "previewRoute": {
+        "family": "STIX Two Math",
+        "tier": "real",
+        "kind": "self",
+        "alternates": [],
+        "alternatesBundled": {},
+        "disabledFeatures": [],
+        "decision": null,
+        "source": null,
+        "pendingBundle": null
+      },
+      "bundled": {
+        "yes": false,
+        "applies": "self",
+        "family": "STIX Two Math",
+        "packages": [],
+        "faces": [],
+        "stylesAvailable": [],
+        "pack": null
+      },
+      "stylesRequired": [
+        "400"
+      ],
+      "replacementStylesRequired": null,
+      "stylesRequiredByRole": {
+        "400": [
+          "Cambria Math"
+        ],
+        "700": [
+          "Cambria Math"
+        ],
+        "400i": [
+          "Cambria Math"
+        ],
+        "700i": [
+          "Cambria Math"
+        ]
+      },
+      "stylesMissing": [
+        "400",
+        "400i",
+        "700",
+        "700i"
+      ],
+      "stylesExplicitGaps": [],
+      "approximateStyles": [],
+      "stylesBasis": "declared: Math face with a MATH table; upstream ships one regular weight (STIX Two Text carries the text styles and is not bundled).",
+      "scripts": [
+        "Math",
+        "Latin"
+      ],
+      "measurements": null,
+      "candidates": [],
+      "hostVerification": {
+        "node": "NA",
+        "browser": "NA",
+        "editor": "NA",
+        "galleryEditor": "NA",
+        "galleryCards": "NA"
+      },
+      "hostLoading": {
+        "node": "not bundled",
+        "browser": "not bundled",
+        "editor": "not bundled",
+        "galleryEditor": "not bundled",
+        "galleryCards": "no self-hosted card preview"
+      },
+      "nativeVerification": {
+        "status": "unverified",
+        "note": "No per-family native PowerPoint acceptance (phase 5)."
+      },
+      "acceptance": {
+        "fixture": "pending",
+        "accepted": false,
+        "date": null,
+        "evidence": [],
+        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+      },
+      "paritySignals": {
+        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "totalValues": 850,
+        "valuesAffected": 0,
+        "fontResolution": {
+          "pass": 0,
+          "near": 0,
+          "fail": 0
+        },
+        "statusAtRun": {},
+        "resolvedAtRun": [],
+        "pptxNamedValues": 0,
+        "byDimension": {},
+        "expectedStatusOnMain": "missing",
+        "rerunNeeded": false
+      },
+      "phase": 2,
+      "status": "loading-gap",
+      "statusReason": "route face STIX Two Math is not bundled by opf-render",
+      "nextAction": "Pinned as the optional opf-render math pack (Zmth) in the FF-45 render PR; the preview face for Cambria Math. Next: tracker snapshot refresh after the render merge; native Cambria Math comparison (FF-46).",
+      "evidence": [
+        {
+          "label": "Font licensing and policy table",
+          "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "FF-45 special families: emoji and math",
+          "url": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md"
+        }
+      ],
+      "priority": {
+        "score": 3,
+        "severity": 3,
+        "valuesAffected": 0,
+        "valuesOpen": 0,
+        "hostFactor": 1,
+        "rank": 44
       }
     },
     {
@@ -30997,11 +31874,19 @@
       "phase": 4,
       "status": "needs-special-path",
       "statusReason": "no look-alike route in the policy; dedicated path required",
-      "nextAction": "Build reversible, version-specific character-to-glyph mappings; account for Apple and Microsoft differences.",
+      "nextAction": "Code table built and verified (Adobe and Apple tables against Windows Symbol 5.01: 189 of 224 codes mapped, 189 drawn with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols; Apple differences recorded per code). Open: native PowerPoint verification of exported runs (FF-46) and the appearance delta of the open glyphs.",
       "evidence": [
         {
           "label": "Font licensing and policy table",
           "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "Special families: symbol-encoded fonts (FF-45: code tables, coverage, advances, decisions)",
+          "url": "https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/special-families.md"
+        },
+        {
+          "label": "opf-render test/symbol-fonts.mjs and test/symbol-fonts-browser.mjs (FF-45: every code mapped, resolved, measured and drawn in Node, resvg and Chromium)",
+          "url": "https://github.com/OpenPresentation/opf-render/blob/main/test/symbol-fonts.mjs"
         }
       ],
       "priority": {
@@ -31258,7 +32143,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 67
+        "rank": 71
       }
     },
     {
@@ -31419,17 +32304,17 @@
             "url": "https://github.com/OpenPresentation/opf/pull/249"
           }
         ],
-        "note": "Documented look-alike (tier visual): width mean 4.2% and maximum 8.36% in 1 measured styles, 24.4% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
+        "note": "Documented look-alike (tier visual): width mean 5.53% and maximum 11.15% in 4 measured styles, 9.2% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
         "referenceAvailable": true,
-        "stylesMeasured": 1,
-        "meanAbsWidthDelta": 0.042,
-        "maxAbsWidthDelta": 0.0836,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.0553,
+        "maxAbsWidthDelta": 0.1115,
         "widthBarMet": false,
-        "lineBreaksIdenticalFraction": 0.244,
+        "lineBreaksIdenticalFraction": 0.092,
         "verticalMetricsEqual": false,
         "xHeightRatio": 1.105,
         "capHeightRatio": 1.17,
@@ -31488,7 +32373,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 57
+        "rank": 59
       }
     },
     {
@@ -31649,15 +32534,15 @@
             "url": "https://github.com/OpenPresentation/opf/pull/249"
           }
         ],
-        "note": "Documented look-alike (tier visual): width mean 14.76% and maximum 19.75% in 2 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
+        "note": "Documented look-alike (tier visual): width mean 15.22% and maximum 20.23% in 4 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 1.105x, cap-height 1.17x of the original; 3 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
         "referenceAvailable": true,
-        "stylesMeasured": 2,
-        "meanAbsWidthDelta": 0.1476,
-        "maxAbsWidthDelta": 0.1975,
+        "stylesMeasured": 4,
+        "meanAbsWidthDelta": 0.1522,
+        "maxAbsWidthDelta": 0.2023,
         "widthBarMet": false,
         "lineBreaksIdenticalFraction": 0,
         "verticalMetricsEqual": false,
@@ -31718,7 +32603,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 58
+        "rank": 60
       }
     },
     {
@@ -31975,7 +32860,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 162
+        "rank": 166
       }
     },
     {
@@ -32158,7 +33043,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 163
+        "rank": 167
       }
     },
     {
@@ -32400,7 +33285,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 38
+        "rank": 37
       }
     },
     {
@@ -32661,7 +33546,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 68
+        "rank": 72
       }
     },
     {
@@ -33106,7 +33991,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 69
+        "rank": 73
       }
     },
     {
@@ -33370,11 +34255,19 @@
       "phase": 4,
       "status": "needs-special-path",
       "statusReason": "no look-alike route in the policy; dedicated path required",
-      "nextAction": "Qualify permitted glyph replacements with exhaustive code, advance, bounds, export and round-trip tests.",
+      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Webdings 5.01: 223 of 224 codes mapped and drawn with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math); exhaustive code, advance, bounds, browser and raster tests in opf-render. Open: native PowerPoint verification of exported runs (FF-46).",
       "evidence": [
         {
           "label": "Font licensing and policy table",
           "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "Special families: symbol-encoded fonts (FF-45: code tables, coverage, advances, decisions)",
+          "url": "https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/special-families.md"
+        },
+        {
+          "label": "opf-render test/symbol-fonts.mjs and test/symbol-fonts-browser.mjs (FF-45: every code mapped, resolved, measured and drawn in Node, resvg and Chromium)",
+          "url": "https://github.com/OpenPresentation/opf-render/blob/main/test/symbol-fonts.mjs"
         }
       ],
       "priority": {
@@ -33469,11 +34362,19 @@
       "phase": 4,
       "status": "needs-special-path",
       "statusReason": "no look-alike route in the policy; dedicated path required",
-      "nextAction": "Build and verify its own reversible mapping; retain original PPTX font names and codes (renderers require font-encoding-required today).",
+      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Wingdings 5.01, Wingdings 2 and 3 1.55: 222, 217 and 208 of 224 codes mapped and drawn with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder); the PPTX keeps the family and codes. Open: native PowerPoint verification of exported runs (FF-46).",
       "evidence": [
         {
           "label": "Font licensing and policy table",
           "url": "docs/programs/font-fidelity-everywhere/font-licensing.md"
+        },
+        {
+          "label": "Special families: symbol-encoded fonts (FF-45: code tables, coverage, advances, decisions)",
+          "url": "https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/special-families.md"
+        },
+        {
+          "label": "opf-render test/symbol-fonts.mjs and test/symbol-fonts-browser.mjs (FF-45: every code mapped, resolved, measured and drawn in Node, resvg and Chromium)",
+          "url": "https://github.com/OpenPresentation/opf-render/blob/main/test/symbol-fonts.mjs"
         }
       ],
       "priority": {
@@ -33676,7 +34577,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 164
+        "rank": 168
       }
     },
     {
@@ -33929,7 +34830,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 1,
-        "rank": 39
+        "rank": 38
       }
     }
   ]

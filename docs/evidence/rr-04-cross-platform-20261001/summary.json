@@ -1,0 +1,214 @@
+{
+  "item": "RR-04 (FF-09, FF-10, FF-11)",
+  "date": "2026-10-01",
+  "workflow": ".github/workflows/published-matrix.yml",
+  "run": "https://github.com/OpenPresentation/opf/actions/runs/36907715092",
+  "pullRequest": "https://github.com/OpenPresentation/opf/pull/243",
+  "packages": {
+    "@openpresentation/opf": {
+      "version": "0.11.4",
+      "integrity": "sha512-oy9CevLXv8kpAfrzottpTiFnC8yC2uB/km1rcCPRuW5rvJ5aQEmgvXABu0p2OeBbV6cUMKZaGzFo5/jnYjPiZg=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.11.9",
+      "integrity": "sha512-wkdnmBw/fv3sngnqjdxdn3z9Faj5VvE7DJM4QmqeWygjjVIlHxidl/qAGG78qHNkY4jlbcAceWJxp/P6373PhQ=="
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.11.8",
+      "integrity": "sha512-i+MjNp2xhQFFOXp/1ir1RfyVKt2uhb4CFM3YqMt+O3uLqNeoB2VToDYuz10kfiQdFR57g7XR+ae8Hs8eidyKiA=="
+    },
+    "@openpresentation/opf-editor": {
+      "version": "0.10.6",
+      "integrity": "sha512-R2fvtcnCmIuVvf5iy3mUPkfS5/qfsc5qdXkAO2RoXr5Y6/hP6MGoo4JQ+r/LKddEpLxQ07u4yADOCufAb93LzQ=="
+    }
+  },
+  "matrix": {
+    "seed": 61658,
+    "pairwiseDecks": 61,
+    "dimensions": [
+      {
+        "id": "fontScheme",
+        "valueClasses": 8,
+        "slotsPerDeck": 2
+      },
+      {
+        "id": "theme",
+        "valueClasses": 4,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "language",
+        "valueClasses": 14,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "layout",
+        "valueClasses": 12,
+        "slotsPerDeck": 3
+      },
+      {
+        "id": "block",
+        "valueClasses": 8,
+        "slotsPerDeck": 3
+      },
+      {
+        "id": "chart",
+        "valueClasses": 15,
+        "slotsPerDeck": 4
+      },
+      {
+        "id": "headerFooter",
+        "valueClasses": 4,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "colorScheme",
+        "valueClasses": 2,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "background",
+        "valueClasses": 5,
+        "slotsPerDeck": 2
+      },
+      {
+        "id": "image",
+        "valueClasses": 6,
+        "slotsPerDeck": 2
+      },
+      {
+        "id": "narrative",
+        "valueClasses": 2,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "tone",
+        "valueClasses": 2,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "audience",
+        "valueClasses": 2,
+        "slotsPerDeck": 1
+      },
+      {
+        "id": "socials",
+        "valueClasses": 2,
+        "slotsPerDeck": 1
+      }
+    ],
+    "fixedSwitches": 18,
+    "verifiedStates": 274,
+    "digestEntries": 300,
+    "digestFieldsCompared": 1200,
+    "chartPaths": 26,
+    "recordedSubstitutions": 37,
+    "namedExpectedFailures": 0,
+    "chainLanguageScripts": 9,
+    "previewApproximatedCharts": [],
+    "exportFallbackCharts": [
+      "box-and-whisker",
+      "funnel",
+      "histogram",
+      "pareto",
+      "treemap",
+      "waterfall",
+      "world"
+    ]
+  },
+  "crossOs": {
+    "states": 300,
+    "unexplainedDifferences": 0,
+    "allowListed": 0,
+    "staleAllowListEntries": 0,
+    "identical": true
+  },
+  "hosts": [
+    {
+      "os": "ubuntu-latest",
+      "node": "v24.21.0",
+      "platform": "linux",
+      "arch": "x64",
+      "icu": "78.3",
+      "unicode": "17.0",
+      "tzdata": "2026c",
+      "digestsSha256": "18e497830dc06ef356d91fc3a43b6070168f1a1a45156c5ff9cd3c2d6e6afc69",
+      "consumerSha256": "ef3c0e7157f59b15e3c92ade64f75c80293a6e90636a89d00f38ed2d31bd6ac4",
+      "determinismChildren": 17,
+      "determinismStates": 121,
+      "controls": {
+        "offsets": 4,
+        "clocks": 7,
+        "numberFormats": 4,
+        "icuDefaultLocales": 7
+      },
+      "pngInformationalDifferences": 0,
+      "browserPasses": [
+        {
+          "label": "default host fonts",
+          "chromium": "153.0.8010.12",
+          "states": 4
+        },
+        {
+          "label": "minimal host fonts (fontconfig with one unrelated face)",
+          "chromium": "153.0.8010.12",
+          "states": 4
+        }
+      ]
+    },
+    {
+      "os": "windows-latest",
+      "node": "v24.21.0",
+      "platform": "win32",
+      "arch": "x64",
+      "icu": "78.3",
+      "unicode": "17.0",
+      "tzdata": "2026c",
+      "digestsSha256": "18e497830dc06ef356d91fc3a43b6070168f1a1a45156c5ff9cd3c2d6e6afc69",
+      "consumerSha256": "ef3c0e7157f59b15e3c92ade64f75c80293a6e90636a89d00f38ed2d31bd6ac4",
+      "determinismChildren": 17,
+      "determinismStates": 121,
+      "controls": {
+        "offsets": 4,
+        "clocks": 7,
+        "numberFormats": 4,
+        "icuDefaultLocales": 5
+      },
+      "pngInformationalDifferences": 0,
+      "browserPasses": [
+        {
+          "label": "default host fonts",
+          "chromium": "153.0.8010.12",
+          "states": 4
+        }
+      ]
+    },
+    {
+      "os": "macos-latest",
+      "node": "v24.21.0",
+      "platform": "darwin",
+      "arch": "arm64",
+      "icu": "78.3",
+      "unicode": "17.0",
+      "tzdata": "2026c",
+      "digestsSha256": "18e497830dc06ef356d91fc3a43b6070168f1a1a45156c5ff9cd3c2d6e6afc69",
+      "consumerSha256": "ef3c0e7157f59b15e3c92ade64f75c80293a6e90636a89d00f38ed2d31bd6ac4",
+      "determinismChildren": 17,
+      "determinismStates": 121,
+      "controls": {
+        "offsets": 4,
+        "clocks": 7,
+        "numberFormats": 4,
+        "icuDefaultLocales": 7
+      },
+      "pngInformationalDifferences": 0,
+      "browserPasses": [
+        {
+          "label": "default host fonts",
+          "chromium": "153.0.8010.12",
+          "states": 4
+        }
+      ]
+    }
+  ]
+}

@@ -205,6 +205,54 @@ assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok
 console.log('Installed lint: public entrypoints, exact ranges, loaded records, duplicate keys and contracts pass offline.');
 `);
     const lint=await run(process.execPath,['lint.mjs'],{cwd:projectDir});process.stdout.write(lint.stdout);
+    for(const entry of ['patch','diff','format'])assertTarIncludes(files,`package/dist/${entry}.js`);
+    await writeFile(path.join(projectDir,'patch-diff-format.mjs'),`
+import assert from 'node:assert/strict';
+import {applyPatch,invertPatch} from '@openpresentation/opf/patch';
+import {diffPresentations,mergePresentations} from '@openpresentation/opf/diff';
+import {formatPresentation} from '@openpresentation/opf/format';
+const a={name:'A',slides:[{id:'x',title:'X'},{id:'y',title:'Y'}]};
+const b={name:'B',slides:[{id:'y',title:'Y'},{id:'x',title:'X2'}]};
+const diff=diffPresentations(a,b);
+assert.deepEqual(applyPatch(a,diff.patch),b);
+assert.deepEqual(applyPatch(b,invertPatch(a,diff.patch)),a);
+assert.equal(mergePresentations(a,b,a).clean,true);
+assert.equal(mergePresentations(a,{...a,name:'1'},{...a,name:'2'}).conflicts.length,1);
+assert.equal(formatPresentation('{"slides":[],"name":"N"}'),'{\\n  "name": "N",\\n  "slides": []\\n}\\n');
+console.log('Installed patch, diff, merge and format entrypoints pass offline.');
+`);
+    const pdf=await run(process.execPath,['patch-diff-format.mjs'],{cwd:projectDir});process.stdout.write(pdf.stdout);
+    assertTarIncludes(files,'package/dist/convert.js');assertTarIncludes(files,'package/dist/convert.d.ts');
+    await writeFile(path.join(projectDir,'convert.mjs'),`
+import assert from 'node:assert/strict';
+import {convertContent,contentConversionTargets,mergeSlides,OPFConversionError} from '@openpresentation/opf/convert';
+globalThis.fetch=()=>{throw new Error('Offline conversions must not fetch');};
+const converted=convertContent({items:['a',{text:'b',description:'bd'}]},'table');
+assert.deepEqual(converted.payload,{table:{rows:[['a',null],['b','bd']]}});assert.equal(converted.lossless,true);
+assert.deepEqual(contentConversionTargets({text:'a'}).map(target=>target.kind),['list','quote','metric','code','timeline','table']);
+assert.throws(()=>convertContent({image:'a.png'},'text'),OPFConversionError);
+assert.equal(mergeSlides({slides:[{text:'a'},{text:'b'}]},0).slides[0].blocks.length,2);
+console.log('Installed conversions: pure converters, loss reports and refusals work offline.');
+`);
+    const conversions=await run(process.execPath,['convert.mjs'],{cwd:projectDir});process.stdout.write(conversions.stdout);
+    assertTarIncludes(files,'package/dist/audit.js');assertTarIncludes(files,'package/dist/audit.d.ts');
+    await writeFile(path.join(projectDir,'audit.mjs'),`
+import assert from 'node:assert/strict';
+import {auditPresentation as rootAudit,auditRules as rootRules} from '@openpresentation/opf';
+import {auditPresentation,auditSource,auditRules} from '@openpresentation/opf/audit';
+globalThis.fetch=()=>{throw new Error('Offline audit must not fetch');};
+assert.equal(rootAudit,auditPresentation);assert.equal(rootRules,auditRules);
+const deck={name:'Packed audit',language:'en-US',design:{background:{type:'solid',color:'#FFFFFF'}},slides:[{title:'Quarterly results',text:[{text:'faint',color:'#CCCCCC'}]},{text:'No title',image:'https://example.com/a.png'}]};
+const report=auditPresentation(deck);
+assert.deepEqual(report.diagnostics.map(issue=>issue.ruleId),['audit/text-contrast','audit/missing-alt-text','audit/missing-slide-title']);
+assert.equal(report.checks.backgroundPixels,'not-read');
+const source=JSON.stringify(deck,null,1);
+const located=auditSource(source,{only:['missing-alt-text']}).diagnostics[0];
+assert.equal(source.slice(located.location.offset,located.location.offset+located.location.length),'"https://example.com/a.png"');
+assert.equal(auditSource('{"slides":[}').documentValid,false);
+console.log('Installed audit: root and subpath entrypoints, rule ids, source ranges and invalid input pass offline.');
+`);
+    const audit=await run(process.execPath,['audit.mjs'],{cwd:projectDir});process.stdout.write(audit.stdout);
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
