@@ -1,8 +1,8 @@
 # @openpresentation/cli
 
-A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, and inspect the bundled schemas and catalogs. Node 24 on macOS, Linux, or Windows is required.
+A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, inspect the bundled schemas and catalogs, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 24 on macOS, Linux, or Windows is required.
 
-The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. It does not render slides; successful validation is not visual verification.
+The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. Validation, lint and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
 
 ## Install
 
@@ -83,6 +83,22 @@ opf edit decision.opf.json --patch changes.json --in-place --expect-sha256 "$EXP
 
 The digest compares the exact input bytes, including whitespace. The CLI also rechecks the input before replacing that same path. Writes use a temporary sibling file and atomic publication. Existing destinations require `--force`; `--in-place` explicitly authorizes replacing the input. Symlink and non-regular destinations are rejected. Coordinate concurrent writers externally: the hash check and rename are not a filesystem compare-and-swap or a collaboration lock. There is no persistent undo history; use version control or save a separate output when needed.
 
+## Diff, merge and format
+
+Source on `main` (RR-31), not in CLI 0.9.2: check `opf --help`. These commands are local and deterministic. See [patch, diff, merge and format](../../docs/patch-diff-merge-format.md) for the matching rules, conflict objects and key order.
+
+```sh
+opf diff before.opf.json after.opf.json                 # readable report
+opf diff before.opf.json after.opf.json --format patch  # JSON Patch from before to after
+opf diff a.opf.json b.opf.json --exit-code              # exit 1 when they differ
+opf merge base.opf.json ours.opf.json theirs.opf.json --output merged.opf.json
+opf merge base.opf.json ours.opf.json theirs.opf.json --prefer theirs --report conflicts.json --output merged.opf.json
+opf format deck.opf.json --in-place
+opf format decks/*.opf.json --check                     # CI: exit 1 if any file would change (the shell expands the glob)
+```
+
+`diff` matches slides by `id`, then identical content, then content similarity, and reports additions, removals, moves and field, block, design and metadata changes; `--format json` adds the structured changes and `--format patch` prints only the patch, which `opf edit --patch` applies. `merge` combines two edits of a base: changes in different places merge, and conflicts are listed with the base, our and their values and **block the write** (exit 1, report on stderr) unless `--prefer ours|theirs` picks a side, in which case every conflict is still reported. The merged document is validated before it is written. `format` rewrites a file with canonical key order (the schema's property order), two-space indentation, LF endings (`--eol crlf|preserve`) and one trailing newline; it is idempotent and does not validate. `opf edit`, `diff` and `merge` share one RFC 6902 implementation with the editor.
+
 ## Import CSV and JSON data
 
 ```sh
@@ -140,9 +156,24 @@ Bundle inlines every bundled catalog record the document references — includin
 - File-writing commands accept `--strict`. Use `--` before positional filenames that start with `--`.
 - No telemetry, automatic uploads, or execution of instructions inside document text.
 
+## Render, export and import
+
+```sh
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+opf render deck.opf.json --slides 1,3-5 --format png --scale 2 --out slides
+opf export deck.opf.json --format pptx            # deck.pptx
+opf export deck.opf.json --format pdf --pdf-mode vector
+opf export deck.opf.json --format svg --out slides.zip
+opf import deck.pptx --out deck.opf.json --signals signals.json
+```
+
+These commands write files; every other command only prints JSON. They lint the document first and print the `opf lint` report (`diagnostics`, `counts`, exit 1 on errors, `--strict` also on warnings, in which case nothing is written) plus an `outputs` list with each file's SHA-256. Output is deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's bundled open pack plus the `.ttf`/`.otf` files in each `--font-dir`; relative images are read only from the document's folder (`--asset-dir`); URLs are never fetched. Existing outputs need `--force`.
+
+opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer exits 2 with the install command. `--pdf-mode vector` and `--signals` need renderer and PPTX releases that have them and are refused otherwise. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
+
 ## Development checks
 
-`pnpm test:cli` runs command-level regression checks. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
+`pnpm test:cli` runs command-level regression checks, including `test/files.mjs` for render, export and import against the workspace's pinned opf-render and opf-pptx (set `UPDATE_GOLDEN=1` to refresh the pinned SVG digests after a renderer or core bump). `pnpm test:cli:packed:peers` installs the packed CLI with both peers from the npm registry and repeats those checks against the installed binary and through `npm exec`. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
 
 ## Audit design and accessibility
 
