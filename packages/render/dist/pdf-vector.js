@@ -1,5 +1,3 @@
-import { readdir, readFile, stat as fsStat } from "node:fs/promises";
-import path from "node:path";
 import { FontEmbedder, FontLibrary, nominalAdvance } from "./pdf-fonts.js";
 import { actualTextFor, layoutText, textClusters } from "./pdf-text.js";
 import { IDENTITY, viewBoxTransform, applyPoint, applyStyleSheets, attributesOf, inheritStyle, invert, multiply, parseColor, parseFontWeight, parseLength, parseNumberList, parsePath, parseTransform, pathBounds, ROOT_STYLE, shapeToPath, transformPath } from "./pdf-style.js";
@@ -129,6 +127,9 @@ class Converter {
   // Fonts
 
   async loadFontFiles(files, directories) {
+    // Font files are Node-only. A browser host passes no paths: its faces come from the SVG's @font-face data or `fontData`.
+    if (!files.length && !directories.length) return;
+    const { readdir, readFile, stat: fsStat, path } = await nodeFileSystem();
     const seen = new Set();
     const read = async (file) => {
       const resolved = path.resolve(file);
@@ -142,7 +143,7 @@ class Converter {
       }
     };
     for (const directory of directories) {
-      for (const file of await listFonts(directory)) await read(file);
+      for (const file of await listFonts(directory, { readdir, path })) await read(file);
     }
     for (const file of files) await read(file);
   }
@@ -159,7 +160,7 @@ class Converter {
           const comma = source[2].indexOf(",");
           const header = source[2].slice(0, comma), payload = source[2].slice(comma + 1);
           try {
-            const bytes = /;base64/i.test(header) ? Buffer.from(decodeURIComponent(payload), "base64") : Buffer.from(decodeURIComponent(payload), "binary");
+            const bytes = dataUriBytes(header, payload);
             const declared = /font-family\s*:\s*(?:"([^"]*)"|'([^']*)'|([^;"']+))/.exec(rule[1]);
             this.fonts.addData(new Uint8Array(bytes), "svg @font-face", (declared?.[1] ?? declared?.[2] ?? declared?.[3])?.trim());
           } catch { /* a malformed embedded font is skipped; text falls back to the loaded faces */ }
@@ -688,7 +689,7 @@ class Converter {
     const header = href.slice(0, comma), payload = href.slice(comma + 1);
     let bytes;
     try {
-      bytes = /;base64/i.test(header) ? Buffer.from(decodeURIComponent(payload), "base64") : Buffer.from(decodeURIComponent(payload), "binary");
+      bytes = dataUriBytes(header, payload);
     } catch {
       this.unsupported("pdf-image-skipped", "An embedded image could not be decoded and is not drawn.", { path: tracePath });
       return null;
@@ -697,16 +698,15 @@ class Converter {
     if (this.images.has(digest)) return this.images.get(digest);
     let result = null;
     try {
-      const { default: sharp } = await import("sharp");
-      const decoder = sharp(bytes, { limitInputPixels: 40_000_000, animated: false });
-      const meta = await decoder.metadata();
+      const codec = requireCodec(this.options);
+      const meta = await codec.metadata(bytes);
       const resource = `Im${++this.counters.Im}`;
       const isJpeg = meta.format === "jpeg" && (meta.orientation === undefined || meta.orientation === 1) && (meta.channels === 3 || meta.channels === 1) && meta.space !== "cmyk";
       if (isJpeg) {
         const object = this.file.add(`/Type/XObject/Subtype/Image/Width ${meta.width}/Height ${meta.height}/ColorSpace/${meta.channels === 1 ? "DeviceGray" : "DeviceRGB"}/BitsPerComponent 8/Interpolate true/Filter/DCTDecode`, new Uint8Array(bytes));
         result = { resource, object, width: meta.width, height: meta.height };
       } else {
-        const { data, info } = await decoder.autoOrient().toColourspace("srgb").ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+        const { data, info } = await codec.rgba(bytes, { orient: true });
         const pixels = info.width * info.height;
         const color = new Uint8Array(pixels * 3), alpha = new Uint8Array(pixels);
         let opaque = true;
@@ -928,8 +928,7 @@ class Converter {
     const standalone = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${page.width}" height="${page.height}" viewBox="${escapeAttribute(rootAttrs.viewBox ?? `0 0 ${page.width} ${page.height}`)}">${defs.join("")}${open}${serialize(node, onlyLocalReferences)}${"</g>".repeat(chain.length)}</svg>`;
     const scale = this.options.rasterFallbackScale;
     const { png } = await this.options.rasterize(standalone, scale);
-    const { default: sharp } = await import("sharp");
-    const { data, info } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { data, info } = await requireCodec(this.options).rgba(png, { orient: false });
     let minX = info.width, minY = info.height, maxX = -1, maxY = -1;
     for (let y = 0; y < info.height; y++) for (let x = 0; x < info.width; x++) {
       if (data[(y * info.width + x) * 4 + 3]) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; }
@@ -1177,14 +1176,47 @@ function xmpPacket(metadata, language, producer) {
     `<pdf:Producer>${xmpEscape(producer)}</pdf:Producer>${iso ? `<xmp:CreateDate>${iso}</xmp:CreateDate>` : ""}</rdf:Description></rdf:RDF></x:xmpmeta>\n<?xpacket end="w"?>`;
 }
 
-async function listFonts(directory) {
+// The Node modules the font-file paths need, loaded only when a path is given. The specifiers are not literals, so a browser bundler
+// leaves them alone: a browser host never passes a font path.
+async function nodeFileSystem() {
+  const fsName = "node:fs/promises", pathName = "node:path";
+  const [fs, path] = await Promise.all([import(/* webpackIgnore: true */ /* @vite-ignore */ fsName), import(/* webpackIgnore: true */ /* @vite-ignore */ pathName)]);
+  return { readdir: fs.readdir, readFile: fs.readFile, stat: fs.stat, path: path.default ?? path };
+}
+
+// Pictures are decoded by the host's `imageCodec` (sharp in Node, see raster.js; a canvas in a browser, see export-browser.js):
+// `metadata(bytes)` gives {format, width, height, orientation, channels, space} and `rgba(bytes, {orient})` gives
+// {data, info: {width, height}} with 8-bit RGBA pixels (EXIF orientation applied when `orient`). This module imports no decoder, so a
+// browser bundle never reaches the native ones.
+function requireCodec(options) {
+  if (!options.imageCodec) throw new Error("This conversion has no image codec.");
+  return options.imageCodec;
+}
+
+/** The bytes of a data: URI payload (base64, or percent-encoded text read as Latin-1 bytes), without Buffer. */
+export function dataUriBytes(header, payload) {
+  const text = decodeURIComponent(payload);
+  if (/;base64/i.test(header)) {
+    // Lenient like Buffer.from(..., "base64"): characters outside the alphabet are skipped and missing padding is added.
+    const clean = text.replace(/[^A-Za-z0-9+/]/g, "");
+    const binary = atob(clean + "=".repeat((4 - (clean.length % 4)) % 4));
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index++) bytes[index] = binary.charCodeAt(index);
+    return bytes;
+  }
+  const bytes = new Uint8Array(text.length);
+  for (let index = 0; index < text.length; index++) bytes[index] = text.charCodeAt(index) & 0xff;
+  return bytes;
+}
+
+async function listFonts(directory, { readdir, path }) {
   const found = [];
   let entries;
   try { entries = await readdir(directory, { withFileTypes: true }); } catch { return found; }
   entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   for (const entry of entries) {
     const full = path.join(directory, entry.name);
-    if (entry.isDirectory()) found.push(...await listFonts(full));
+    if (entry.isDirectory()) found.push(...await listFonts(full, { readdir, path }));
     else if (/\.(ttf|otf)$/i.test(entry.name)) found.push(full);
   }
   return found;
@@ -1196,7 +1228,16 @@ async function listFonts(directory) {
 export async function svgsToVectorPdf(svgs, options) {
   const converter = new Converter(options);
   await converter.loadFontFiles(options.fontFiles ?? [], options.fontDirs ?? []);
-  for (const [index, source] of svgs.entries()) await converter.addPage(source, index);
+  // Faces handed over as bytes (a browser host has no file paths): { data, family? }.
+  for (const face of options.fontData ?? []) converter.fonts.addData(face.data, face.origin ?? "fontData", face.family);
+  // `signal` cancels between pages, `onProgress({ page, pages })` reports after each one, and `yieldToHost` lets a browser repaint between them.
+  for (const [index, source] of svgs.entries()) {
+    options.signal?.throwIfAborted?.();
+    await converter.addPage(source, index);
+    options.onProgress?.({ page: index + 1, pages: svgs.length });
+    if (options.yieldToHost) await options.yieldToHost();
+  }
+  options.signal?.throwIfAborted?.();
   const first = converter.pages[0];
   // Control characters have no place in document properties.
   const control = new RegExp("[" + String.fromCharCode(0) + "-" + String.fromCharCode(31) + String.fromCharCode(127) + "]", "g");

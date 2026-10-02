@@ -1,5 +1,5 @@
-import { createHash } from "node:crypto";
 import pako from "pako";
+import { sha256Bytes } from "./sha256.js";
 
 // A small PDF object writer for the vector export (RR-12). Everything it emits is a pure function of the objects
 // added to it: objects are numbered in the order they are added, written in number order, compressed with pako
@@ -67,7 +67,7 @@ export function flate(bytes) {
 }
 
 export function sha256(bytes) {
-  return createHash("sha256").update(bytes).digest();
+  return sha256Bytes(bytes);
 }
 
 export class PdfFile {

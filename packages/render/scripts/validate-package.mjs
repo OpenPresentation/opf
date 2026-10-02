@@ -32,6 +32,9 @@ assert.equal(typeof api.renderSvgDeck, "function");
 assert.equal(typeof api.resolvePresentation, "function");
 assert.equal(typeof api.svgToPng, "function");
 assert.equal(typeof api.svgToPdf, "function");
+const browserExport = await import(new URL("../dist/export-browser.js", import.meta.url));
+assert.equal(typeof browserExport.svgToPdf, "function");
+assert.equal(typeof browserExport.svgToPng, "function");
 assert.equal(api.runtimePolicy.requiredNetworkCalls, false);
 assert.equal(api.runtimePolicy.deterministicLocalExecution, true);
 

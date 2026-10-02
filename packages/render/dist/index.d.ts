@@ -196,6 +196,10 @@ export interface SvgToPdfOptions extends SvgToPngOptions {
   rasterFallbackScale?: number;
   /** Vector only. Receives font embedding reports, substitutions, fallbacks and unsupported features. */
   onDiagnostic?: (diagnostic: PdfDiagnostic) => void;
+  /** Vector only. Checked between pages; an abort rejects with the signal's reason. */
+  signal?: AbortSignal;
+  /** Vector only. Called after each page is written. */
+  onProgress?: (progress: { page: number; pages: number }) => void;
 }
 
 export interface ResolvedPresentation {

@@ -73,10 +73,26 @@ async function vectorPdf(inputs, options) {
     strict: options.strict === true,
     rasterFallbackScale: scale,
     onDiagnostic: typeof options.onDiagnostic === "function" ? options.onDiagnostic : undefined,
+    signal: options.signal,
+    imageCodec: sharpImageCodec(),
+    onProgress: typeof options.onProgress === "function" ? options.onProgress : undefined,
     producer: packageName,
     ErrorClass: OPFRenderError,
     rasterize: (svg, factor) => rasterizeSvg(svg, { ...options, scale: factor, background: "rgba(0, 0, 0, 0)" })
   });
+}
+
+// The picture decoder of the Node vector export (the browser entry passes a canvas one). sharp loads on first use.
+function sharpImageCodec() {
+  let loaded;
+  const sharp = () => (loaded ??= import("sharp").then((module) => module.default));
+  return {
+    metadata: async (bytes) => (await sharp())(bytes, { limitInputPixels: 40_000_000, animated: false }).metadata(),
+    rgba: async (bytes, { orient }) => {
+      const decoder = (await sharp())(bytes, orient ? { limitInputPixels: 40_000_000, animated: false } : undefined);
+      return (orient ? decoder.autoOrient().toColourspace("srgb") : decoder).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    },
+  };
 }
 
 async function rasterizeSvg(svgInput, options) {
