@@ -2,9 +2,9 @@
   "description": "Pinned snapshot of pptx.gallery's self-hosted preview webfonts (data/preview-fonts.json, contract opf-gallery-preview-fonts/v1), reduced to the fields the font tracker reads. These serve gallery cards, not the gallery editor (a vendored opf-editor bundle). Refresh with: node scripts/build-font-tracker.mjs --snapshot-gallery-fonts <pptx-gallery>/data/preview-fonts.json --commit <sha>.",
   "source": {
     "repository": "Data-Advantage/pptx-gallery",
-    "commit": "d8f5ae62ce981c6456c609a18442b4293f4c52bb",
+    "commit": "5af1c5f8681b1dea4ff6aad54315f47febcdcc4d",
     "path": "data/preview-fonts.json",
-    "capturedAt": "2026-10-01",
+    "capturedAt": "2026-10-02",
     "contract": "opf-gallery-preview-fonts/v1"
   },
   "families": [
@@ -16,6 +16,9 @@
       "license": "OFL-1.1",
       "weights": [
         800
+      ],
+      "usedAs": [
+        "Impact"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -30,6 +33,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Arial"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -43,6 +49,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Grandview",
+        "Grandview Display"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -54,6 +64,9 @@
       "license": "OFL-1.1",
       "weights": [
         800
+      ],
+      "usedAs": [
+        "Bebas Neue"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -68,6 +81,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Rockwell"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
@@ -80,6 +96,9 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Calibri"
       ],
       "faces": 2,
       "coverageGaps": null
@@ -94,6 +113,10 @@
         400,
         600
       ],
+      "usedAs": [
+        "Consolas",
+        "Courier New"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -106,6 +129,9 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Garamond"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -120,6 +146,11 @@
         400,
         700
       ],
+      "usedAs": [
+        "Tenorite",
+        "Tenorite Display",
+        "Trebuchet MS"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
@@ -133,17 +164,24 @@
         400,
         700
       ],
+      "usedAs": [
+        "Century Schoolbook",
+        "Georgia"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
     {
       "family": "Intos",
       "package": "@openpresentation/opf-render",
-      "version": "0.11.9",
+      "version": "0.12.0",
       "kind": "renderer",
       "license": "OFL-1.1",
       "weights": [
         400
+      ],
+      "usedAs": [
+        "Aptos"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -151,11 +189,14 @@
     {
       "family": "Intos Display",
       "package": "@openpresentation/opf-render",
-      "version": "0.11.9",
+      "version": "0.12.0",
       "kind": "renderer",
       "license": "OFL-1.1",
       "weights": [
         700
+      ],
+      "usedAs": [
+        "Aptos Display"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -170,6 +211,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Bookman Old Style"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -182,6 +226,9 @@
       "weights": [
         700
       ],
+      "usedAs": [
+        "Lora"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
@@ -193,6 +240,9 @@
       "license": "OFL-1.1",
       "weights": [
         400
+      ],
+      "usedAs": [
+        "Merriweather Sans"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -208,6 +258,11 @@
         700,
         800
       ],
+      "usedAs": [
+        "Arial Black",
+        "Montserrat",
+        "Verdana"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
@@ -220,6 +275,12 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Arabic Typesetting",
+        "Noto Naskh Arabic",
+        "Sakkal Majalla",
+        "Traditional Arabic"
       ],
       "faces": 2,
       "coverageGaps": null
@@ -234,6 +295,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Noto Nastaliq Urdu"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -246,6 +310,10 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Noto Sans",
+        "Sylfaen"
       ],
       "faces": 2,
       "coverageGaps": "ესჩმიახლ"
@@ -260,6 +328,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Noto Sans Armenian"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -272,6 +343,11 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Noto Sans Bengali",
+        "Shonar Bangla",
+        "Vrinda"
       ],
       "faces": 4,
       "coverageGaps": null
@@ -286,6 +362,12 @@
         400,
         700
       ],
+      "usedAs": [
+        "Aparajita",
+        "Mangal",
+        "Nirmala UI",
+        "Noto Sans Devanagari"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -298,6 +380,10 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Noto Sans Ethiopic",
+        "Nyala"
       ],
       "faces": 4,
       "coverageGaps": null
@@ -312,6 +398,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Noto Sans Georgian"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -324,6 +413,10 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Noto Sans Gujarati",
+        "Shruti"
       ],
       "faces": 4,
       "coverageGaps": null
@@ -338,6 +431,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Noto Sans Gurmukhi",
+        "Raavi"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -350,6 +447,11 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Gisha",
+        "Miriam",
+        "Noto Sans Hebrew"
       ],
       "faces": 2,
       "coverageGaps": null
@@ -364,6 +466,12 @@
         400,
         700
       ],
+      "usedAs": [
+        "MS Mincho",
+        "Meiryo",
+        "Noto Sans JP",
+        "Yu Gothic"
+      ],
       "faces": 5,
       "coverageGaps": null
     },
@@ -376,6 +484,14 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Batang",
+        "BatangChe",
+        "Gungsuh",
+        "GungsuhChe",
+        "Malgun Gothic",
+        "Noto Sans KR"
       ],
       "faces": 11,
       "coverageGaps": null
@@ -390,6 +506,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Noto Sans Kannada",
+        "Tunga"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -402,6 +522,11 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "DaunPenh",
+        "Khmer UI",
+        "Noto Sans Khmer"
       ],
       "faces": 4,
       "coverageGaps": null
@@ -416,6 +541,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Kartika",
+        "Noto Sans Malayalam"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -428,6 +557,9 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Noto Sans Mongolian"
       ],
       "faces": 1,
       "coverageGaps": "Энэмашсйх"
@@ -442,6 +574,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Kalinga",
+        "Noto Sans Oriya"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -454,6 +590,12 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "FangSong",
+        "Microsoft YaHei",
+        "Noto Sans SC",
+        "SimSun"
       ],
       "faces": 8,
       "coverageGaps": null
@@ -468,6 +610,12 @@
         400,
         700
       ],
+      "usedAs": [
+        "Microsoft JhengHei",
+        "MingLiU",
+        "Noto Sans TC",
+        "PMingLiU"
+      ],
       "faces": 7,
       "coverageGaps": null
     },
@@ -480,6 +628,10 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Latha",
+        "Noto Sans Tamil"
       ],
       "faces": 4,
       "coverageGaps": null
@@ -494,6 +646,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Gautami",
+        "Noto Sans Telugu"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -506,6 +662,11 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Angsana New",
+        "DilleniaUPC",
+        "Noto Sans Thai"
       ],
       "faces": 4,
       "coverageGaps": null
@@ -520,6 +681,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "David"
+      ],
       "faces": 4,
       "coverageGaps": null
     },
@@ -532,6 +696,11 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Open Sans",
+        "Skeena",
+        "Skeena Display"
       ],
       "faces": 2,
       "coverageGaps": null
@@ -546,6 +715,10 @@
         400,
         700
       ],
+      "usedAs": [
+        "Constantia",
+        "PT Serif"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -557,6 +730,9 @@
       "license": "OFL-1.1",
       "weights": [
         700
+      ],
+      "usedAs": [
+        "Playfair Display"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -571,6 +747,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Poppins"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -583,6 +762,9 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Raleway"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -598,6 +780,12 @@
         400,
         700
       ],
+      "usedAs": [
+        "Segoe UI",
+        "Segoe UI Light",
+        "Segoe UI Semibold",
+        "Segoe UI Semilight"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
@@ -610,6 +798,9 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Tahoma"
       ],
       "faces": 2,
       "coverageGaps": null
@@ -624,6 +815,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Roboto"
+      ],
       "faces": 1,
       "coverageGaps": null
     },
@@ -636,6 +830,11 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Seaford",
+        "Seaford Display",
+        "Source Sans Pro"
       ],
       "faces": 1,
       "coverageGaps": null
@@ -650,6 +849,9 @@
         400,
         700
       ],
+      "usedAs": [
+        "Times New Roman"
+      ],
       "faces": 2,
       "coverageGaps": null
     },
@@ -662,6 +864,9 @@
       "weights": [
         400,
         700
+      ],
+      "usedAs": [
+        "Lucida Sans"
       ],
       "faces": 2,
       "coverageGaps": null

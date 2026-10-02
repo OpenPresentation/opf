@@ -1,0 +1,2334 @@
+{
+  "manifest": "rr-05b-native/manifest.json",
+  "nativeDir": "rr-05b-native/native-run4-cjk",
+  "bands": {
+    "closeInkIoU": 0.65,
+    "reviewInkIoU": 0.4,
+    "closeContentSsim": 0.75,
+    "reviewContentSsim": 0.5
+  },
+  "generated": "2026-10-02T18:21:29.629Z",
+  "decks": [
+    {
+      "id": "lang-hi",
+      "tier": 1,
+      "language": "hindi",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 1921,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Mangal"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Mangal"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "Mangal",
+              "native": "Mangal",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "Mangal",
+              "native": "Mangal",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 21,
+          "ok": 21
+        },
+        "direction": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "alignment": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "bullets": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 21,
+          "ok": 21
+        },
+        "geometry": {
+          "shapes": 21,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0124,
+          "diffPixelRatio": 0.0246,
+          "ssim": 0.939,
+          "contentSsim": 0.2298,
+          "inkIoU": 0.7968,
+          "inkRatioNativeToPreview": 1.195,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0156,
+          "diffPixelRatio": 0.0314,
+          "ssim": 0.9064,
+          "contentSsim": 0.0886,
+          "inkIoU": 0.474,
+          "inkRatioNativeToPreview": 2.685,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0188,
+          "diffPixelRatio": 0.0414,
+          "ssim": 0.9105,
+          "contentSsim": 0.2823,
+          "inkIoU": 0.8459,
+          "inkRatioNativeToPreview": 1.183,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0102,
+          "diffPixelRatio": 0.0191,
+          "ssim": 0.9601,
+          "contentSsim": 0.8583,
+          "inkIoU": 0.9676,
+          "inkRatioNativeToPreview": 1.029,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0188,
+          "diffPixelRatio": 0.0413,
+          "ssim": 0.9076,
+          "contentSsim": 0.2403,
+          "inkIoU": 0.8035,
+          "inkRatioNativeToPreview": 1.258,
+          "band": "far"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0423,
+          "diffPixelRatio": 0.1272,
+          "ssim": 0.6579,
+          "contentSsim": 0.3107,
+          "inkIoU": 0.9592,
+          "inkRatioNativeToPreview": 1.022,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0147,
+          "diffPixelRatio": 0.0276,
+          "ssim": 0.9356,
+          "contentSsim": 0.2445,
+          "inkIoU": 0.8041,
+          "inkRatioNativeToPreview": 1.134,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "32/32",
+        "bulletsReported": "32/32",
+        "languageIdsReported": "21/21",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 0,
+          "far": 6,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "lang-ja-meiryo",
+      "tier": 1,
+      "language": "japanese",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 1949,
+      "checks": {
+        "presentationFonts": {
+          "ok": false,
+          "native": [
+            null,
+            "Aptos"
+          ],
+          "expected": [
+            "Meiryo"
+          ],
+          "extras": [
+            "Aptos"
+          ],
+          "missingFromNative": [
+            "Meiryo"
+          ],
+          "emptyNameEntries": 1
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 21,
+          "ok": 21
+        },
+        "direction": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "alignment": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "bullets": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 21,
+          "ok": 21
+        },
+        "geometry": {
+          "shapes": 21,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [
+        {
+          "kind": "presentation-fonts-extra",
+          "slide": null,
+          "shape": null,
+          "extras": [
+            "Aptos"
+          ]
+        }
+      ],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0186,
+          "diffPixelRatio": 0.0342,
+          "ssim": 0.9209,
+          "contentSsim": 0.1846,
+          "inkIoU": 0.8087,
+          "inkRatioNativeToPreview": 1.101,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0222,
+          "diffPixelRatio": 0.0441,
+          "ssim": 0.8945,
+          "contentSsim": 0.172,
+          "inkIoU": 0.8007,
+          "inkRatioNativeToPreview": 1.118,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0249,
+          "diffPixelRatio": 0.0523,
+          "ssim": 0.874,
+          "contentSsim": 0.2033,
+          "inkIoU": 0.8438,
+          "inkRatioNativeToPreview": 1.079,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0176,
+          "diffPixelRatio": 0.0316,
+          "ssim": 0.9228,
+          "contentSsim": 0.7531,
+          "inkIoU": 0.9468,
+          "inkRatioNativeToPreview": 1.02,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0226,
+          "diffPixelRatio": 0.0466,
+          "ssim": 0.889,
+          "contentSsim": 0.2657,
+          "inkIoU": 0.8586,
+          "inkRatioNativeToPreview": 1.075,
+          "band": "far"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.043,
+          "diffPixelRatio": 0.1324,
+          "ssim": 0.6306,
+          "contentSsim": 0.2711,
+          "inkIoU": 0.9488,
+          "inkRatioNativeToPreview": 0.982,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0212,
+          "diffPixelRatio": 0.0391,
+          "ssim": 0.9011,
+          "contentSsim": 0.1904,
+          "inkIoU": 0.8351,
+          "inkRatioNativeToPreview": 1.13,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": false,
+        "presentationFontsEmptyNameEntries": 1,
+        "themeSlots": true,
+        "alignmentReported": "32/32",
+        "bulletsReported": "32/32",
+        "languageIdsReported": "21/21",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 0,
+          "far": 6,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "lang-ko",
+      "tier": 1,
+      "language": "korean",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 1784,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Malgun Gothic"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Malgun Gothic"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "Malgun Gothic",
+              "native": "Malgun Gothic",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "Malgun Gothic",
+              "native": "Malgun Gothic",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 21,
+          "ok": 21
+        },
+        "direction": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "alignment": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "bullets": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 21,
+          "ok": 21
+        },
+        "geometry": {
+          "shapes": 21,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0111,
+          "diffPixelRatio": 0.0242,
+          "ssim": 0.9532,
+          "contentSsim": 0.3569,
+          "inkIoU": 0.9327,
+          "inkRatioNativeToPreview": 1.071,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0127,
+          "diffPixelRatio": 0.0288,
+          "ssim": 0.9443,
+          "contentSsim": 0.4408,
+          "inkIoU": 0.9583,
+          "inkRatioNativeToPreview": 1.025,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0145,
+          "diffPixelRatio": 0.0338,
+          "ssim": 0.9326,
+          "contentSsim": 0.404,
+          "inkIoU": 0.9503,
+          "inkRatioNativeToPreview": 1.005,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0089,
+          "diffPixelRatio": 0.0174,
+          "ssim": 0.9648,
+          "contentSsim": 0.8767,
+          "inkIoU": 0.9875,
+          "inkRatioNativeToPreview": 0.996,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0148,
+          "diffPixelRatio": 0.0346,
+          "ssim": 0.9279,
+          "contentSsim": 0.3405,
+          "inkIoU": 0.942,
+          "inkRatioNativeToPreview": 1.035,
+          "band": "far"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0416,
+          "diffPixelRatio": 0.1262,
+          "ssim": 0.6577,
+          "contentSsim": 0.31,
+          "inkIoU": 0.9662,
+          "inkRatioNativeToPreview": 1.009,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0136,
+          "diffPixelRatio": 0.0283,
+          "ssim": 0.941,
+          "contentSsim": 0.3726,
+          "inkIoU": 0.9467,
+          "inkRatioNativeToPreview": 1.018,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "32/32",
+        "bulletsReported": "32/32",
+        "languageIdsReported": "21/21",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 0,
+          "far": 6,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "lang-th",
+      "tier": 1,
+      "language": "thai",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 1981,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Angsana New",
+            "Aptos",
+            "Aptos Display"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Angsana New"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "Angsana New",
+              "native": "Angsana New",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "Angsana New",
+              "native": "Angsana New",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 22,
+          "ok": 22
+        },
+        "direction": {
+          "paragraphs": 33,
+          "ok": 33
+        },
+        "alignment": {
+          "paragraphs": 33,
+          "ok": 33
+        },
+        "bullets": {
+          "paragraphs": 33,
+          "ok": 33
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 22,
+          "ok": 22
+        },
+        "geometry": {
+          "shapes": 22,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0115,
+          "diffPixelRatio": 0.023,
+          "ssim": 0.9428,
+          "contentSsim": 0.2482,
+          "inkIoU": 0.7042,
+          "inkRatioNativeToPreview": 0.509,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.014,
+          "diffPixelRatio": 0.0294,
+          "ssim": 0.9268,
+          "contentSsim": 0.2624,
+          "inkIoU": 0.7506,
+          "inkRatioNativeToPreview": 0.595,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0164,
+          "diffPixelRatio": 0.0373,
+          "ssim": 0.9106,
+          "contentSsim": 0.2829,
+          "inkIoU": 0.7539,
+          "inkRatioNativeToPreview": 0.589,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.011,
+          "diffPixelRatio": 0.0216,
+          "ssim": 0.9462,
+          "contentSsim": 0.812,
+          "inkIoU": 0.9477,
+          "inkRatioNativeToPreview": 0.891,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0159,
+          "diffPixelRatio": 0.0353,
+          "ssim": 0.9128,
+          "contentSsim": 0.2635,
+          "inkIoU": 0.7477,
+          "inkRatioNativeToPreview": 0.551,
+          "band": "far"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0414,
+          "diffPixelRatio": 0.1244,
+          "ssim": 0.6689,
+          "contentSsim": 0.3137,
+          "inkIoU": 0.9737,
+          "inkRatioNativeToPreview": 0.989,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0138,
+          "diffPixelRatio": 0.0276,
+          "ssim": 0.9303,
+          "contentSsim": 0.1982,
+          "inkIoU": 0.706,
+          "inkRatioNativeToPreview": 0.503,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "33/33",
+        "bulletsReported": "33/33",
+        "languageIdsReported": "22/22",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 0,
+          "far": 6,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "lang-zh-hans",
+      "tier": 1,
+      "language": "chinese-simplified",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 1788,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Microsoft YaHei"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Microsoft YaHei"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "Microsoft YaHei",
+              "native": "Microsoft YaHei",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "Microsoft YaHei",
+              "native": "Microsoft YaHei",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 21,
+          "ok": 21
+        },
+        "direction": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "alignment": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "bullets": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 21,
+          "ok": 21
+        },
+        "geometry": {
+          "shapes": 21,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0101,
+          "diffPixelRatio": 0.0214,
+          "ssim": 0.9677,
+          "contentSsim": 0.5217,
+          "inkIoU": 0.9943,
+          "inkRatioNativeToPreview": 1.148,
+          "band": "review"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.014,
+          "diffPixelRatio": 0.0322,
+          "ssim": 0.9399,
+          "contentSsim": 0.396,
+          "inkIoU": 0.9815,
+          "inkRatioNativeToPreview": 1.112,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0137,
+          "diffPixelRatio": 0.0318,
+          "ssim": 0.9478,
+          "contentSsim": 0.5398,
+          "inkIoU": 0.9908,
+          "inkRatioNativeToPreview": 1.104,
+          "band": "review"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0099,
+          "diffPixelRatio": 0.0197,
+          "ssim": 0.9653,
+          "contentSsim": 0.8812,
+          "inkIoU": 0.9959,
+          "inkRatioNativeToPreview": 1.02,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0118,
+          "diffPixelRatio": 0.0264,
+          "ssim": 0.9601,
+          "contentSsim": 0.64,
+          "inkIoU": 0.9968,
+          "inkRatioNativeToPreview": 1.15,
+          "band": "review"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0378,
+          "diffPixelRatio": 0.1219,
+          "ssim": 0.6756,
+          "contentSsim": 0.3377,
+          "inkIoU": 0.9731,
+          "inkRatioNativeToPreview": 1.012,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0121,
+          "diffPixelRatio": 0.0271,
+          "ssim": 0.9591,
+          "contentSsim": 0.557,
+          "inkIoU": 0.9962,
+          "inkRatioNativeToPreview": 1.132,
+          "band": "review"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "32/32",
+        "bulletsReported": "32/32",
+        "languageIdsReported": "21/21",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 4,
+          "far": 2,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "scripts-inside-latin",
+      "tier": 1,
+      "language": "english",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 5,
+      "slidesRead": 5,
+      "elapsedMs": 2059,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display"
+          ],
+          "extras": [],
+          "missingFromNative": [],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 18,
+          "ok": 18
+        },
+        "direction": {
+          "paragraphs": 33,
+          "ok": 33
+        },
+        "alignment": {
+          "paragraphs": 33,
+          "ok": 33
+        },
+        "bullets": {
+          "paragraphs": 33,
+          "ok": 33
+        },
+        "charts": {
+          "total": 0,
+          "ok": 0
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 0,
+          "ok": 0
+        },
+        "language": {
+          "runs": 18,
+          "ok": 18
+        },
+        "geometry": {
+          "shapes": 18,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0157,
+          "diffPixelRatio": 0.0345,
+          "ssim": 0.9256,
+          "contentSsim": 0.324,
+          "inkIoU": 0.8903,
+          "inkRatioNativeToPreview": 0.937,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0181,
+          "diffPixelRatio": 0.0367,
+          "ssim": 0.9024,
+          "contentSsim": 0.1925,
+          "inkIoU": 0.6992,
+          "inkRatioNativeToPreview": 1.311,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0118,
+          "diffPixelRatio": 0.0258,
+          "ssim": 0.9477,
+          "contentSsim": 0.4325,
+          "inkIoU": 0.9384,
+          "inkRatioNativeToPreview": 0.901,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0141,
+          "diffPixelRatio": 0.0328,
+          "ssim": 0.9302,
+          "contentSsim": 0.421,
+          "inkIoU": 0.9148,
+          "inkRatioNativeToPreview": 0.947,
+          "band": "far"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0098,
+          "diffPixelRatio": 0.0181,
+          "ssim": 0.9614,
+          "contentSsim": 0.9186,
+          "inkIoU": 0.9855,
+          "inkRatioNativeToPreview": 0.982,
+          "band": "close"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "33/33",
+        "bulletsReported": "33/33",
+        "languageIdsReported": "18/18",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 0,
+          "far": 4,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "lang-ja",
+      "tier": 2,
+      "language": "japanese",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 2282,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Meiryo"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Meiryo"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 21,
+          "ok": 21
+        },
+        "direction": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "alignment": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "bullets": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 21,
+          "ok": 21
+        },
+        "geometry": {
+          "shapes": 21,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0149,
+          "diffPixelRatio": 0.0288,
+          "ssim": 0.9374,
+          "contentSsim": 0.3292,
+          "inkIoU": 0.9236,
+          "inkRatioNativeToPreview": 1.051,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0181,
+          "diffPixelRatio": 0.0377,
+          "ssim": 0.9124,
+          "contentSsim": 0.2525,
+          "inkIoU": 0.9224,
+          "inkRatioNativeToPreview": 1.045,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0201,
+          "diffPixelRatio": 0.0444,
+          "ssim": 0.9005,
+          "contentSsim": 0.3395,
+          "inkIoU": 0.934,
+          "inkRatioNativeToPreview": 1.024,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0138,
+          "diffPixelRatio": 0.0241,
+          "ssim": 0.9434,
+          "contentSsim": 0.8152,
+          "inkIoU": 0.9765,
+          "inkRatioNativeToPreview": 1.007,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0183,
+          "diffPixelRatio": 0.0398,
+          "ssim": 0.9129,
+          "contentSsim": 0.399,
+          "inkIoU": 0.9436,
+          "inkRatioNativeToPreview": 1.033,
+          "band": "far"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0409,
+          "diffPixelRatio": 0.1268,
+          "ssim": 0.6524,
+          "contentSsim": 0.3064,
+          "inkIoU": 0.962,
+          "inkRatioNativeToPreview": 0.997,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0181,
+          "diffPixelRatio": 0.0348,
+          "ssim": 0.9149,
+          "contentSsim": 0.2634,
+          "inkIoU": 0.9303,
+          "inkRatioNativeToPreview": 1.086,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "32/32",
+        "bulletsReported": "32/32",
+        "languageIdsReported": "21/21",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 0,
+          "far": 6,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "lang-zh-hant",
+      "tier": 2,
+      "language": "chinese-traditional",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 7,
+      "slidesRead": 7,
+      "elapsedMs": 2277,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Microsoft JhengHei"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Microsoft JhengHei"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "Microsoft JhengHei",
+              "native": "Microsoft JhengHei",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "Microsoft JhengHei",
+              "native": "Microsoft JhengHei",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 21,
+          "ok": 21
+        },
+        "direction": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "alignment": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "bullets": {
+          "paragraphs": 32,
+          "ok": 32
+        },
+        "charts": {
+          "total": 1,
+          "ok": 1
+        },
+        "fields": {
+          "total": 0,
+          "ok": 0
+        },
+        "notes": {
+          "total": 1,
+          "ok": 1
+        },
+        "language": {
+          "runs": 21,
+          "ok": 21
+        },
+        "geometry": {
+          "shapes": 21,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0111,
+          "diffPixelRatio": 0.0236,
+          "ssim": 0.9603,
+          "contentSsim": 0.412,
+          "inkIoU": 0.9879,
+          "inkRatioNativeToPreview": 0.914,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0146,
+          "diffPixelRatio": 0.0335,
+          "ssim": 0.9332,
+          "contentSsim": 0.3098,
+          "inkIoU": 0.9788,
+          "inkRatioNativeToPreview": 0.923,
+          "band": "far"
+        },
+        {
+          "slide": 3,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0146,
+          "diffPixelRatio": 0.0345,
+          "ssim": 0.9384,
+          "contentSsim": 0.4465,
+          "inkIoU": 0.9858,
+          "inkRatioNativeToPreview": 0.91,
+          "band": "far"
+        },
+        {
+          "slide": 4,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0106,
+          "diffPixelRatio": 0.0211,
+          "ssim": 0.9606,
+          "contentSsim": 0.8647,
+          "inkIoU": 0.9943,
+          "inkRatioNativeToPreview": 0.978,
+          "band": "close"
+        },
+        {
+          "slide": 5,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0134,
+          "diffPixelRatio": 0.0313,
+          "ssim": 0.9465,
+          "contentSsim": 0.5084,
+          "inkIoU": 0.9921,
+          "inkRatioNativeToPreview": 0.912,
+          "band": "review"
+        },
+        {
+          "slide": 6,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.039,
+          "diffPixelRatio": 0.1233,
+          "ssim": 0.6662,
+          "contentSsim": 0.3185,
+          "inkIoU": 0.9725,
+          "inkRatioNativeToPreview": 0.999,
+          "band": "far"
+        },
+        {
+          "slide": 7,
+          "previewSize": [
+            1280,
+            720
+          ],
+          "nativeSize": [
+            1280,
+            720
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0127,
+          "diffPixelRatio": 0.0278,
+          "ssim": 0.9505,
+          "contentSsim": 0.4308,
+          "inkIoU": 0.9905,
+          "inkRatioNativeToPreview": 0.904,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "32/32",
+        "bulletsReported": "32/32",
+        "languageIdsReported": "21/21",
+        "tableOrderReported": null,
+        "images": {
+          "close": 1,
+          "review": 1,
+          "far": 5,
+          "size-mismatch": 0
+        }
+      }
+    },
+    {
+      "id": "size-4x3-japanese",
+      "tier": 3,
+      "language": "japanese",
+      "opened": true,
+      "error": null,
+      "truncated": false,
+      "readErrors": 0,
+      "slidesExpected": 2,
+      "slidesRead": 2,
+      "elapsedMs": 955,
+      "checks": {
+        "presentationFonts": {
+          "ok": true,
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Meiryo"
+          ],
+          "extras": [],
+          "missingFromNative": [
+            "Meiryo"
+          ],
+          "emptyNameEntries": 0
+        },
+        "themeSlots": {
+          "ok": true,
+          "slots": [
+            {
+              "slot": "major.latin",
+              "expected": "Aptos Display",
+              "native": "Aptos Display",
+              "ok": true
+            },
+            {
+              "slot": "major.ea",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "major.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            },
+            {
+              "slot": "minor.latin",
+              "expected": "Aptos",
+              "native": "Aptos",
+              "ok": true
+            },
+            {
+              "slot": "minor.ea",
+              "expected": "Meiryo",
+              "native": "Meiryo",
+              "ok": true
+            },
+            {
+              "slot": "minor.cs",
+              "expected": "",
+              "native": "",
+              "ok": true
+            }
+          ]
+        },
+        "fonts": {
+          "shapes": 10,
+          "ok": 10
+        },
+        "direction": {
+          "paragraphs": 10,
+          "ok": 10
+        },
+        "alignment": {
+          "paragraphs": 10,
+          "ok": 10
+        },
+        "bullets": {
+          "paragraphs": 10,
+          "ok": 10
+        },
+        "charts": {
+          "total": 0,
+          "ok": 0
+        },
+        "fields": {
+          "total": 2,
+          "ok": 2
+        },
+        "notes": {
+          "total": 0,
+          "ok": 0
+        },
+        "language": {
+          "runs": 10,
+          "ok": 10
+        },
+        "geometry": {
+          "shapes": 10,
+          "maxDeltaPt": 0,
+          "over1pt": 0
+        },
+        "tableOrder": {
+          "tables": 0,
+          "ok": 0
+        },
+        "shapesMissing": 0
+      },
+      "mismatches": [],
+      "images": [
+        {
+          "slide": 1,
+          "previewSize": [
+            1280,
+            960
+          ],
+          "nativeSize": [
+            1280,
+            960
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0108,
+          "diffPixelRatio": 0.0194,
+          "ssim": 0.9497,
+          "contentSsim": 0.2333,
+          "inkIoU": 0.8366,
+          "inkRatioNativeToPreview": 1.12,
+          "band": "far"
+        },
+        {
+          "slide": 2,
+          "previewSize": [
+            1280,
+            960
+          ],
+          "nativeSize": [
+            1280,
+            960
+          ],
+          "sizeMismatch": false,
+          "meanAbsDiff": 0.0108,
+          "diffPixelRatio": 0.0236,
+          "ssim": 0.9467,
+          "contentSsim": 0.3588,
+          "inkIoU": 0.9415,
+          "inkRatioNativeToPreview": 1.052,
+          "band": "far"
+        }
+      ],
+      "notes": [],
+      "verdict": {
+        "opened": true,
+        "fonts": true,
+        "direction": true,
+        "charts": true,
+        "fields": true,
+        "notes": true,
+        "presentationFonts": true,
+        "presentationFontsEmptyNameEntries": 0,
+        "themeSlots": true,
+        "alignmentReported": "10/10",
+        "bulletsReported": "10/10",
+        "languageIdsReported": "10/10",
+        "tableOrderReported": null,
+        "images": {
+          "close": 0,
+          "review": 0,
+          "far": 2,
+          "size-mismatch": 0
+        }
+      }
+    }
+  ]
+}

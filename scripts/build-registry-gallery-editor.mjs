@@ -33,10 +33,18 @@ const actualSource = await realpath(source);
 if (!contained(actualOut, actualSource)) throw new Error('Gallery staging must stay inside the output directory');
 // base-font-gate.js (FF-41) exists only at editor examples that load base-fonts.json; an older pinned example has none.
 const optionalExampleFiles = new Set(['base-font-gate.js']);
-for (const file of ['playground.js', 'data-controls.js', 'transfer-controls.js', 'pptx-controls.js', 'playground.html', 'playground.css', 'galleries.json', 'base-font-gate.js']) {
+// The example files are the playground's page, styles and gallery data plus every example module the playground imports,
+// followed transitively, so a new control module in an editor release is staged without editing this list.
+const exampleQueue = ['playground.js', 'playground.html', 'playground.css', 'galleries.json', 'base-font-gate.js'];
+const exampleSeen = new Set(exampleQueue);
+for (let index = 0; index < exampleQueue.length; index += 1) {
+  const file = exampleQueue[index];
   const result = spawnSync('git', ['show', `${ref}:examples/${file}`], { cwd: editor, encoding: 'utf8' });
   if (result.status !== 0 && optionalExampleFiles.has(file)) continue;
   if (result.status !== 0) throw new Error(`Cannot read editor example ${ref}:${file}: ${result.stderr}`);
+  if (file.endsWith('.js')) for (const match of result.stdout.matchAll(/(?:from|import\()\s*['"]\.\/([A-Za-z0-9_-]+\.js)['"]/g)) {
+    if (!exampleSeen.has(match[1])) { exampleSeen.add(match[1]); exampleQueue.push(match[1]); }
+  }
   exampleSources[file] = sha256(result.stdout);
   const content = file.endsWith('.js') ? result.stdout.replace(/(['"])\.\.\/src\/([^'"/]+)\.js\1/g,
     (_, quote, module) => `${quote}@openpresentation/opf-editor${module === 'index' ? '' : '/' + module}${quote}`) : result.stdout;
