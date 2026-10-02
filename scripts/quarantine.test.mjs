@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { aggregate, fromPlaywrightJson, render } from './flake-repeat.mjs';
-import { splitCommand, validateQuarantine } from './quarantine.mjs';
+import { playwrightGrep, playwrightIds, splitCommand, validateQuarantine } from './quarantine.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const known = new Set(['a', 'b']);
@@ -117,5 +117,28 @@ test('aggregate, render and the Playwright JSON reader agree on the numbers', ()
   assert.deepEqual([rows[0].runs, rows[0].passes, rows[0].passRate, rows[0].medianSeconds], [2, 1, 0.5, 2]);
   assert.match(render({ repeat: 2, commit: 'abc', runner: 'x', startedAt: 'now', tests: rows }), /1 of 1 tests failed at least once/);
   const runs = fromPlaywrightJson({ suites: [{ title: 'a.spec.ts', file: 'a.spec.ts', specs: [{ title: 't', file: 'a.spec.ts', tests: [{ projectName: 'chromium', results: [{ status: 'passed', duration: 5 }, { status: 'failed', duration: 7, error: { message: 'nope' } }] }] }] }] });
-  assert.deepEqual(aggregate(runs).map((row) => [row.id, row.runs, row.passes]), [['a.spec.ts › t', 2, 1]]);
+  assert.deepEqual(aggregate(runs).map((row) => [row.id, row.runs, row.passes]), [['a.spec.ts t', 2, 1]]);
+});
+
+test('Playwright ids are the file name and the title path, and the grep matches exactly those', () => {
+  const report = { suites: [{ title: 'dir/a.spec.ts', file: 'dir/a.spec.ts', specs: [{ title: 'first (1.5x)', file: 'dir/a.spec.ts' }], suites: [{ title: 'group', specs: [{ title: 'second', file: 'dir/a.spec.ts' }] }] }] };
+  assert.deepEqual([...playwrightIds(report)], ['a.spec.ts first (1.5x)', 'a.spec.ts group second']);
+  const grep = new RegExp(playwrightGrep(['a.spec.ts first (1.5x)']));
+  assert.ok(grep.test('a.spec.ts first (1.5x)'));
+  assert.ok(!grep.test('a.spec.ts first (1.5x) and more'));
+  assert.ok(!grep.test('a.spec.ts first (115x)'));
+  assert.equal(playwrightGrep([]), '');
+});
+test('playwright-grep prints nothing for an empty list and the active ids otherwise; check validates against --playwright-list', () => {
+  const root = scratch();
+  rmSync(path.join(root, 'test/browser-suites.json')); // a repository with Playwright and no suites file
+  writeFileSync(path.join(root, 'list.json'), JSON.stringify({ suites: [{ title: 'a.spec.ts', file: 'a.spec.ts', specs: [{ title: 'flaky one', file: 'a.spec.ts' }] }] }));
+  write(root, []);
+  assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-02').stdout, '');
+  write(root, [entry({ id: 'a.spec.ts flaky one' })]);
+  assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-02').stdout, '^(a\\.spec\\.ts flaky one)$');
+  assert.equal(cli(root, 'quarantine.mjs', 'playwright-grep', '--today', '2026-10-20').stdout, '');
+  assert.equal(cli(root, 'quarantine.mjs', 'check', '--playwright-list', 'list.json', '--today', '2026-10-02').status, 0);
+  write(root, [entry({ id: 'a.spec.ts typo' })]);
+  assert.equal(cli(root, 'quarantine.mjs', 'check', '--playwright-list', 'list.json', '--today', '2026-10-02').status, 1);
 });

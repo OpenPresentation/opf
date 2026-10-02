@@ -11,7 +11,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DEFAULT_SUITES, listTests, readJson, runArgv, splitCommand, summary } from './quarantine.mjs';
+import { DEFAULT_SUITES, listTests, playwrightId, readJson, runArgv, splitCommand, summary } from './quarantine.mjs';
 
 const median = (values) => {
   if (!values.length) return 0;
@@ -52,13 +52,13 @@ export function render(report) {
   return lines.join('\n');
 }
 
-/** Per-test pass rates from a Playwright JSON report made with --repeat-each (title path and project identify a test). */
+/** Per-test pass rates from a Playwright JSON report made with --repeat-each (the id is the spec file name and the title path, as Playwright's --grep sees it). */
 export function fromPlaywrightJson(report) {
   const runs = [];
   const visit = (suite, titles) => {
     const here = suite.title && !/\.(spec|test)\.[jt]sx?$/.test(suite.title) ? [...titles, suite.title] : titles;
     for (const spec of suite.specs ?? []) {
-      const id = `${spec.file ?? suite.file ?? ''} › ${[...here, spec.title].join(' › ')}`;
+      const id = playwrightId(spec.file ?? suite.file ?? '', [...here, spec.title]);
       for (const test of spec.tests ?? []) {
         (test.results ?? []).forEach((result, index) => {
           runs.push({ id, suite: test.projectName || 'playwright', rep: index + 1, ok: result.status === 'passed', code: result.status, ms: result.duration ?? 0, tail: result.error?.message ? String(result.error.message).split('\n').slice(0, 12) : [] });

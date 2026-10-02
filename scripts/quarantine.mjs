@@ -6,6 +6,10 @@
 //   node scripts/quarantine.mjs check                 validate test/quarantine.json against test/browser-suites.json (CI step)
 //   node scripts/quarantine.mjs run-suite <suite>     run a suite's setup and tests in order; quarantined tests are deferred
 //   node scripts/quarantine.mjs run-deferred          run the deferred tests (always-run, continue-on-error step) and report them
+//   node scripts/quarantine.mjs playwright-grep       print the regular expression of the active quarantined Playwright tests
+//                                                     (empty when none): `playwright test --grep-invert "$re"` is the gate,
+//                                                     `--grep "$re"` the non-blocking step. check takes --playwright-list <json>
+//                                                     (playwright test --list --reporter=json) to validate ids.
 //
 // Options: --quarantine <file> (default test/quarantine.json), --suites <file> (default test/browser-suites.json),
 // --today YYYY-MM-DD (tests; default the current UTC date). No dependencies, no network.
@@ -61,6 +65,21 @@ export function listTests(suitesData) {
   return tests;
 }
 
+/** Playwright test ids as `--grep` sees them: the spec file's base name and the title path, joined by spaces. */
+export function playwrightIds(report) {
+  const ids = new Set();
+  const visit = (suite, titles) => {
+    const here = suite.title && !/\.(spec|test)\.[jt]sx?$/.test(suite.title) ? [...titles, suite.title] : titles;
+    for (const spec of suite.specs ?? []) ids.add(playwrightId(spec.file ?? suite.file ?? '', [...here, spec.title]));
+    for (const child of suite.suites ?? []) visit(child, here);
+  };
+  for (const suite of report.suites ?? []) visit(suite, []);
+  return ids;
+}
+export const playwrightId = (file, titles) => [path.posix.basename(String(file).replaceAll('\\', '/')), ...titles].join(' ');
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export const playwrightGrep = (ids) => (ids.length ? `^(${ids.map(escapeRegExp).join('|')})$` : '');
+
 /**
  * Validate the quarantine list. Returns { errors, expired, active }: `errors` fail the check (malformed entries and expired
  * ones), `expired` is the subset that ran out, `active` are the ids the CI honours today.
@@ -106,12 +125,22 @@ export function validateQuarantine(data, { today = todayUtc(), knownIds } = {}) 
   return { errors, expired, active };
 }
 
-/** Load both files and validate. Quarantined ids are checked against the suites file when it exists. */
-export function loadState({ quarantineFile = DEFAULT_QUARANTINE, suitesFile = DEFAULT_SUITES, today = todayUtc() } = {}) {
-  const suites = readJson(suitesFile, 'Suites file');
-  const tests = listTests(suites);
+/**
+ * Load the files and validate. Quarantined ids are checked against the suites file, or against a Playwright --list report
+ * (`playwrightList`) for a repository that has no suites file; with neither, ids are not cross-checked.
+ */
+export function loadState({ quarantineFile = DEFAULT_QUARANTINE, suitesFile = DEFAULT_SUITES, playwrightList, today = todayUtc() } = {}) {
+  let suites = { schema: 1, suites: {} };
+  let tests = [];
+  let knownIds;
+  if (playwrightList) knownIds = playwrightIds(readJson(playwrightList, 'Playwright list'));
+  else if (existsSync(suitesFile)) {
+    suites = readJson(suitesFile, 'Suites file');
+    tests = listTests(suites);
+    knownIds = new Set(tests.map((test) => test.id));
+  }
   const quarantine = readJson(quarantineFile, 'Quarantine file');
-  const result = validateQuarantine(quarantine, { today, knownIds: new Set(tests.map((test) => test.id)) });
+  const result = validateQuarantine(quarantine, { today, knownIds });
   return { suites, tests, quarantine, ...result };
 }
 
@@ -217,7 +246,7 @@ export function renderReport(state, report) {
 
 export function renderCheck(state, today) {
   const lines = ['### Test quarantine', ''];
-  if (!state.quarantine.entries.length) lines.push(`Empty. Every test in \`${DEFAULT_SUITES}\` is a gate.`);
+  if (!state.quarantine.entries.length) lines.push('Empty. Every test is a gate.');
   else {
     lines.push('| Test | Issue | Owner | Added | Expires | State |', '|---|---|---|---|---|---|');
     for (const entry of state.quarantine.entries) {
@@ -242,7 +271,7 @@ export async function main(argv) {
   const options = parseOptions(argv);
   const [command, ...rest] = options._;
   const today = options.today ?? todayUtc();
-  const files = { quarantineFile: options.quarantine ?? DEFAULT_QUARANTINE, suitesFile: options.suites ?? DEFAULT_SUITES, today };
+  const files = { quarantineFile: options.quarantine ?? DEFAULT_QUARANTINE, suitesFile: options.suites ?? DEFAULT_SUITES, playwrightList: options['playwright-list'], today };
   if (command === 'check') {
     const state = loadState(files);
     console.log(renderCheck(state, today));
@@ -258,7 +287,13 @@ export async function main(argv) {
     return runSuite(rest[0], state);
   }
   if (command === 'run-deferred') return runDeferred(loadState(files));
-  throw new Error('Usage: quarantine.mjs check | run-suite <suite> | run-deferred [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
+  if (command === 'playwright-grep') {
+    // Errors are reported by `check`; here an expired or malformed entry is simply not honoured.
+    const state = loadState(files);
+    process.stdout.write(playwrightGrep(state.active.map((id) => id)));
+    return 0;
+  }
+  throw new Error('Usage: quarantine.mjs check | run-suite <suite> | run-deferred | playwright-grep [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
