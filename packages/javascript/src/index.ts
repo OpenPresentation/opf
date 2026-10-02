@@ -108,7 +108,7 @@ export type {
   SpecFileKind,
 } from "./spec-files.js";
 
-export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, resolveFontFamilies, resolveFontSchemeReference, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
+export { composeSlide, resolveCanvasDimensions, fitText, wrapText, measureText, snapFontSizeDown, snapFontSizeUp, FONT_SIZE_GRID_PER_PX, resolveFontFamilies, resolveFontSchemeReference, DEFAULT_FONT_SCHEME, resolveTextStyle, textWidthMeasurer, layoutQuote, OPFCompositionError, MAX_COMPOSITION_DEPTH } from "./composition.js";
 export {layoutFurniture,resolveSocialProfile,type FurnitureSocialLink,type FurnitureTextExtras,type SocialPlatformRecord,type SocialProfile,formatFurnitureDate,formatSlideNumber,DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,type FurnitureLayout,type FurniturePart,type FurnitureTextPart,type FurnitureImagePart,type FurniturePartBase,type FurnitureField} from './composition.js';
 export type { QuoteContent, QuoteTextSource, QuoteTextPart, QuoteLayoutDiagnostic, QuoteLayout, QuoteLayoutOptions } from './composition.js';
 export {layoutCode} from './composition.js';
@@ -135,6 +135,7 @@ export { fitRichText } from './composition.js';
 export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichTextOptions } from './composition.js';
 
 export {fitList} from './composition.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
 export {
   chartColorForFill,

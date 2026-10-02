@@ -2157,6 +2157,11 @@
           "items": { "$ref": "#/$defs/BulletItem" },
           "description": "Full-slide text-style bullet payload. Presence of this field infers type 'text'."
         },
+        "numbering": {
+          "$ref": "#/$defs/NumberingSpec",
+          "description": "Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entry per level (index = level, the last entry repeats for deeper levels). Counting follows PowerPoint: consecutive entries of one level count up from its start, and an entry of a shallower level restarts the deeper levels. Absent = bullets. Valid only with `items` or `bullets`. Native PowerPoint export writes a:buAutoNum with the matching scheme and startAt; the preview draws the same numbers at the same marker geometry.",
+          "examples": ["arabic", "roman-lower", { "style": "alpha-upper", "start": 3, "suffix": "paren" }, ["arabic", "alpha-lower", { "style": "roman-lower", "suffix": "paren-both" }]]
+        },
         "image": {
           "$ref": "#/$defs/Asset",
           "description": "Full-slide image source. Presence of this field infers type 'image'."
@@ -2431,6 +2436,11 @@
           "items": { "$ref": "#/$defs/BulletItem" },
           "description": "Text-style bullet payload. Presence of this field infers type 'text'.",
           "examples": [["Sub-second agent latency", "Drop-in compatible with OpenAI tool-calling", "SOC 2 Type II"]]
+        },
+        "numbering": {
+          "$ref": "#/$defs/NumberingSpec",
+          "description": "Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entry per level (index = level, the last entry repeats for deeper levels). Counting follows PowerPoint: consecutive entries of one level count up from its start, and an entry of a shallower level restarts the deeper levels. Absent = bullets. Valid only with `items` or `bullets`. Native PowerPoint export writes a:buAutoNum with the matching scheme and startAt; the preview draws the same numbers at the same marker geometry.",
+          "examples": ["arabic", "roman-lower", { "style": "alpha-upper", "start": 3, "suffix": "paren" }, ["arabic", "alpha-lower", { "style": "roman-lower", "suffix": "paren-both" }]]
         },
         "image": {
           "$ref": "#/$defs/Asset",
@@ -2922,6 +2932,12 @@
               "type": "integer",
               "minimum": 0,
               "description": "Zero-based nesting level for the list item."
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32767,
+              "description": "Restart the list's numbering at this number for this item (counted at its level); the entries after it continue from it. Only meaningful when the payload has `numbering`. Paginated continuation pages use it to keep the numbers of the whole list."
             }
           }
         }
@@ -2961,7 +2977,58 @@
               "type": "integer",
               "minimum": 0,
               "description": "Zero-based nesting level for the bullet."
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32767,
+              "description": "Restart the list's numbering at this number for this bullet (counted at its level); the entries after it continue from it. Only meaningful when the payload has `numbering`. Paginated continuation pages use it to keep the numbers of the whole list."
             }
+          }
+        }
+      ]
+    },
+    "NumberingStyle": {
+      "type": "string",
+      "enum": ["arabic", "roman-upper", "roman-lower", "alpha-upper", "alpha-lower"],
+      "description": "A list number style: 1, 2, 3; I, II, III; i, ii, iii; A, B, C; a, b, c. Alphabetic numbering past 26 repeats the letter as PowerPoint does (aa, bb, cc). Roman numerals stop at 3999; larger values are drawn in arabic with a numbering-adapted diagnostic."
+    },
+    "Numbering": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Numbering of one list level.",
+      "properties": {
+        "style": {
+          "$ref": "#/$defs/NumberingStyle",
+          "description": "Number style. Default arabic."
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32767,
+          "description": "First number counted at this level. Default 1. Native PowerPoint accepts 1 to 32767."
+        },
+        "suffix": {
+          "type": "string",
+          "enum": ["period", "paren", "paren-both"],
+          "description": "Text after the number: period (1.), paren (1)) or paren-both ((1)). Default period."
+        }
+      }
+    },
+    "NumberingSpec": {
+      "description": "The value of a numbering field: a style name or Numbering object for every level, or an array with one entry per level (at most 9, the native depth).",
+      "oneOf": [
+        { "$ref": "#/$defs/NumberingStyle" },
+        { "$ref": "#/$defs/Numbering" },
+        {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 9,
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/NumberingStyle" },
+              { "$ref": "#/$defs/Numbering" }
+            ]
           }
         }
       ]

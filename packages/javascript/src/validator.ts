@@ -6,6 +6,7 @@ import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
+import { numberingFindings } from "./numbering.js";
 import { catalogIds, deprecatedCatalogIds } from "./generated/catalog-ids.js";
 import type { JsonSchema } from "./json.js";
 import { schemas, type SchemaName } from "./schemas.js";
@@ -497,6 +498,11 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
       };
       payloadTableIssues(slide, slidePath);
       visitContentPayloads(slide, slidePath, payloadTableIssues);
+      const payloadNumberingIssues = (payload: Record<string, unknown>, path: string): void => {
+        for (const finding of numberingFindings(payload).errors) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
+      };
+      payloadNumberingIssues(slide, slidePath);
+      visitContentPayloads(slide, slidePath, payloadNumberingIssues);
     }
   });
 
@@ -788,6 +794,11 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     const slidePath = `/slides/${index}`;
     issues.push(...designReferenceWarnings(slide.design, pathFor(slidePath, "design"), context));
     issues.push(...chartTypeWarnings(slide, slidePath, context));
+    const numberingWarnings = (payload: Record<string, unknown>, path: string): void => {
+      for (const finding of numberingFindings(payload).warnings) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
+    };
+    numberingWarnings(slide, slidePath);
+    visitContentPayloads(slide, slidePath, numberingWarnings);
     for (const key of Object.keys(slide)) {
       if (promotedRegionKeySet.has(key)) {
         issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));
