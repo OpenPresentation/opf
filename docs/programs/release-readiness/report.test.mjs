@@ -55,10 +55,10 @@ test('the Now table is optional and validated', () => {
   assert.deepEqual(pullRequests('see [x](https://github.com/o/r/pull/5), https://github.com/o/r/pull/5 and [i](https://github.com/o/r/issues/6)'), ['o/r#5']);
 });
 
-test('the committed burndown parses and covers RR-01 to RR-39', async () => {
+test('the committed burndown parses and covers RR-01 to RR-40', async () => {
   const markdown = await readFile(fileURLToPath(new URL('./burndown.md', import.meta.url)), 'utf8');
   const items = parseBurndown(markdown);
-  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: 39 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
+  assert.deepEqual(items.map((i) => i.id).sort(), Array.from({ length: 40 }, (_, n) => `RR-${String(n + 1).padStart(2, '0')}`));
   for (const i of items) assert.ok(STATUSES.includes(i.status));
   for (const i of items) for (const dep of i.depends.match(/RR-\d{2}/g) ?? []) assert.ok(items.some((o) => o.id === dep), `${i.id} depends on unknown ${dep}`);
   // the work queue only names real items, and no closed item lingers in it
