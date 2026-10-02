@@ -30,6 +30,7 @@
     <div class="breadcrumb"><svg class="icon"><use href="#i-slides"/></svg><span class="breadcrumb-label">Presentations</span><span class="slash">/</span><input id="document-name" aria-label="Presentation name" value="A presentation you can work on" spellcheck="false"></div>
     <div class="header-actions"><button id="add-opf" class="secondary" aria-label="Import"><svg class="icon"><use href="#i-import"/></svg><span>Import</span></button><button id="copy-opf" class="quiet" aria-label="Copy OPF"><svg class="icon"><use href="#i-copy"/></svg><span>Copy OPF</span></button><button id="open-properties" class="secondary">All properties</button><button id="open-json" class="quiet" aria-label="Source"><svg class="icon"><use href="#i-code"/></svg><span>Source</span></button><button id="download" class="primary" aria-label="Save OPF"><svg class="icon"><use href="#i-download"/></svg><span>Save OPF</span></button><button id="export-pptx" class="secondary">PowerPoint</button></div>
   </header>
+  <div id="restore-banner" class="restore-banner" hidden></div>
   <div class="editing-shell">
     <section class="canvas-column" aria-label="Slide workspace">
       <div class="canvas-toolbar"><div class="slide-heading"><span id="slide-number" class="slide-number">01</span><span id="slide-title">Start with a clear recommendation</span></div><div id="view-switch" class="view-switch" role="group" aria-label="Slide view"><button type="button" id="view-slide" aria-pressed="true">Slide</button><button type="button" id="view-sorter" aria-pressed="false">Sorter</button><button type="button" id="view-outline" aria-pressed="false">Outline</button></div><div class="history-actions"><button id="insert-content" class="secondary" title="Add text, data, images or groups">Add content</button><button id="arrange" class="secondary" aria-pressed="false" title="Resize and reorder content on the slide">Arrange</button><button id="copy-slide" class="icon-button" aria-label="Copy current slide as OPF" title="Copy current slide"><svg class="icon"><use href="#i-copy"/></svg></button><button id="undo" class="icon-button" aria-label="Undo" title="Undo · ⌘/Ctrl Z" aria-keyshortcuts="Meta+Z Control+Z"><svg class="icon"><use href="#i-undo"/></svg></button><button id="redo" class="icon-button" aria-label="Redo" title="Redo · ⌘/Ctrl Shift Z" aria-keyshortcuts="Meta+Shift+Z Control+Shift+Z"><svg class="icon"><use href="#i-redo"/></svg></button></div></div>
@@ -61,7 +62,7 @@
         <div id="design-controls" class="inspector-section"><div class="section-heading"><h2>Design options</h2><span class="optional">Presentation or slide</span></div></div>
       </div>
       <div id="diagnostics-section" class="diagnostics-section" hidden><div class="section-heading"><h2>Review</h2><span id="diagnostic-count" class="review-count"></span></div><ul id="diagnostics" aria-label="Layout diagnostics"></ul></div>
-      <div class="inspector-bottom"><svg class="icon"><use href="#i-check"/></svg><span>Changes stay in this session.<br>Save an OPF file to keep your work.</span></div>
+      <div class="inspector-bottom"><svg class="icon"><use href="#i-check"/></svg><span id="autosave-status">Changes stay in this session.<br>Save an OPF file to keep your work.</span></div>
     </aside>
   </div>
 </main>

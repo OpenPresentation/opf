@@ -10,6 +10,8 @@ import * as renderFontCore from '@openpresentation/opf-render/fonts';
 import { resolveScriptFonts } from '@openpresentation/opf';
 import { installPptxExport } from './pptx-controls.js';
 import { createDesignControls } from '../src/design-controls.js';
+import { createPersistence } from '../src/persistence.js';
+import { createPersistenceUi } from '../src/persistence-ui.js';
 import { createSlideManager } from '../src/slide-manager.js';
 import { createOutlineView } from '../src/outline-view.js';
 import { createDataGrid } from '../src/data-grid.js';
@@ -298,7 +300,7 @@ element('add').onclick = () => act(() => {
 element('add-layout').onclick = () => slideManager.openLayoutPicker();
 let applying = false;
 // Also the gallery handoff: it fills #json and clicks this button in the same tick, without waiting for the source preview.
-element('apply-json').onclick = async () => {
+element('apply-json').onclick = async event => {
   if (applying) return;
   const applied = element('json').value;
   let deck;
@@ -323,6 +325,8 @@ element('apply-json').onclick = async () => {
     updateJsonSource(sourceText ?? prettySource(editor.document), editor.document, sourceMemory);
     sourceText = applied;
     editor.applyPatch([{op:'replace',path:'',value:deck}]);
+    // A host that loads a document (the gallery handoff clicks this button from script) is not the user's work: do not autosave it or warn about it.
+    if (event?.isTrusted === false) persistence?.rebase();
     if (renderError) { element('json-error').textContent = renderError; return; }
     element('source-dialog').close(); status('Presentation source updated');
   } catch(error) { sourceText = prior; element('json-error').textContent = error.issues?.[0]?.message ?? error.message; }
@@ -367,6 +371,7 @@ element('download').onclick = () => {
   const deck=editor.document, blob=new Blob([JSON.stringify(deck,null,2)],{type:'application/json'}), url=URL.createObjectURL(blob);
   const link=document.createElement('a'); link.href=url; link.download=`${(deck.name ?? 'presentation').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-|-$/g,'') || 'presentation'}.opf.json`;
   link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); status('OPF file downloaded');
+  persistence?.markSaved();
 };
 document.addEventListener('keydown',event=>{
   if (!(event.metaKey || event.ctrlKey)) return;
@@ -376,6 +381,22 @@ document.addEventListener('keydown',event=>{
   }
 });
 refresh();
+
+// RR-22: autosave to this browser (IndexedDB, with localStorage as the fallback), a restore prompt for a stored copy that differs from the starting
+// document, and a warning before the page closes with changes that were not saved as an OPF file. Nothing leaves the browser. A host page
+// configures it with `globalThis.OPF_EDITOR_HOST = { persistence: { key, storage, onRestorePrompt } | false }` before this script runs, or a
+// frame with `?persist=<key>` (`?persist=0` turns it off); the default key is shared by every copy of this editor on one origin.
+const hostPersistence = (() => {
+  const params = new URLSearchParams(globalThis.location?.search ?? '');
+  const configured = globalThis.OPF_EDITOR_HOST?.persistence;
+  if (configured === false || params.get('persist') === '0') return null;
+  return { ...(configured && typeof configured === 'object' ? configured : {}), key: params.get('persist') || configured?.key || 'opf-editor-playground' };
+})();
+let persistence;
+if (hostPersistence) {
+  const persistenceUi = createPersistenceUi({ banner: element('restore-banner'), indicator: element('autosave-status'), restoreEarlier: () => persistence.restoreEarlier(), suffix: 'Save an OPF file to keep a copy.', fallback: 'Changes stay in this session.\nSave an OPF file to keep your work.' });
+  persistence = createPersistence(editor, { ...hostPersistence, onRestorePrompt: hostPersistence.onRestorePrompt ?? persistenceUi.prompt, onStatus: status => { persistenceUi.status(status); hostPersistence.onStatus?.(status); }, beforeFlush: () => { canvas?.commit(); } });
+}
 
 const galleryConfig=await fetch('./galleries.json').then(response=>{if(!response.ok)throw new Error('Gallery configuration unavailable');return response.json();}).catch(()=>[{name:'PPTX.gallery',url:'https://www.pptx.gallery/registry.json'}]);
 installTransferControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,renderOptions:layoutOptions,galleries:galleryConfig,fonts:fontGate});

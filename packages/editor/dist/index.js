@@ -282,6 +282,56 @@ export function createEditorSession(input, options = {}) {
       return setCatalogId(editor, path, catalogKind, id, meta);
     },
     applyPatch: commitPatch,
+    /**
+     * The undo and redo stacks as plain data (oldest entry first): `{ undo: [{ patches, inversePatches, meta }], redo: [...] }`.
+     * Together with `document` this is everything `restoreState` needs to bring a session back, for hosts that persist work.
+     */
+    exportHistory() {
+      const entry = (item) => ({ patches: clonePatchOperations(item.patches), inversePatches: clonePatchOperations(item.inversePatches), meta: clone(item.meta ?? {}) });
+      return { undo: undoStack.map(entry), redo: redoStack.map(entry) };
+    },
+    /**
+     * Replace the document, and optionally the undo and redo history, in one step (a session that was persisted and is being restored).
+     * The document is validated like any edit; the history is checked by replaying it (the inverse patches of the undo stack must walk
+     * back from the document, the redo stack must walk forward), and a history that does not fit is refused with `invalid-history`
+     * before anything changes, so a stale or damaged copy never corrupts the session. Emits one `restore` event.
+     */
+    restoreState(state, meta = {}) {
+      if (!state || typeof state !== "object") throw new OPFEditorError("invalid-state", "restoreState needs { document, undo?, redo? }.");
+      const next = parseInput(state.document);
+      const nextValidation = validateOpfDocument(next, options.validate ?? validatePresentation);
+      if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
+        throw new OPFEditorError("invalid-opf-edit", "The restored document is not valid OPF.", { issues: nextValidation.errors });
+      }
+      const undo = state.undo ?? [], redo = state.redo ?? [];
+      const wellFormed = (entries) => Array.isArray(entries) && entries.every((item) => item && Array.isArray(item.patches) && Array.isArray(item.inversePatches));
+      if (!wellFormed(undo) || !wellFormed(redo)) throw new OPFEditorError("invalid-history", "The undo history is not in the exported shape.");
+      try {
+        // The undo stack must walk back from the document and forward again to exactly the document; the redo stack must walk forward and
+        // back again. Inverse patches alone would apply to any document, so the round trip is what ties the history to this one.
+        let base = next;
+        for (let at = undo.length - 1; at >= 0; at -= 1) base = applyJsonPatch(base, undo[at].inversePatches.map(normalizeOperation));
+        let forward = base;
+        for (let at = 0; at < undo.length; at += 1) forward = applyJsonPatch(forward, undo[at].patches.map(normalizeOperation));
+        if (canonicalJson(forward) !== canonicalJson(next)) throw new Error("the undo history does not reproduce the document");
+        let ahead = next;
+        for (let at = redo.length - 1; at >= 0; at -= 1) ahead = applyJsonPatch(ahead, redo[at].patches.map(normalizeOperation));
+        let back = ahead;
+        for (let at = 0; at < redo.length; at += 1) back = applyJsonPatch(back, redo[at].inversePatches.map(normalizeOperation));
+        if (canonicalJson(back) !== canonicalJson(next)) throw new Error("the redo history does not return to the document");
+      } catch (error) {
+        throw new OPFEditorError("invalid-history", "The undo history does not belong to this document.", { cause: error instanceof Error ? error.message : String(error) });
+      }
+      const entry = (item) => ({ patches: item.patches.map(normalizeOperation), inversePatches: item.inversePatches.map(normalizeOperation), meta: clone(item.meta ?? {}) });
+      document = next;
+      validation = nextValidation;
+      undoStack.length = 0;
+      redoStack.length = 0;
+      undoStack.push(...undo.map(entry));
+      redoStack.push(...redo.map(entry));
+      emit({ type: "restore", patches: [], validation, meta });
+      return { document: clone(document), patches: [], validation };
+    },
     undo(meta = {}) {
       const entry = undoStack.pop();
       if (!entry) return null;
@@ -554,6 +604,11 @@ function parseInput(input) {
 function clone(value) {
   if (value === undefined) return undefined;
   return JSON.parse(JSON.stringify(value));
+}
+
+/** JSON with object keys sorted, so two documents compare equal whatever order their keys were written in. */
+function canonicalJson(value) {
+  return JSON.stringify(value, (key, item) => (item && typeof item === "object" && !Array.isArray(item) ? Object.fromEntries(Object.keys(item).sort().map((name) => [name, item[name]])) : item));
 }
 
 function clonePatchOperations(operations) {

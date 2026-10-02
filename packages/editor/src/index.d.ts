@@ -51,7 +51,7 @@ export interface EditorChange {
 }
 
 export interface EditorEvent {
-  type: "patch" | "undo" | "redo";
+  type: "patch" | "undo" | "redo" | "restore";
   patches: JsonPatchOperation[];
   inversePatches?: JsonPatchOperation[];
   redoPatches?: JsonPatchOperation[];
@@ -59,6 +59,9 @@ export interface EditorEvent {
   meta?: Record<string, unknown>;
   snapshot: EditorSnapshot;
 }
+
+export interface EditorHistoryEntry { patches: JsonPatchOperation[]; inversePatches: JsonPatchOperation[]; meta?: Record<string, unknown> }
+export interface EditorHistory { undo: EditorHistoryEntry[]; redo: EditorHistoryEntry[] }
 
 export interface EditorSession {
   paginateSlide(slideIndex: number, options?: PaginationOptions & EditorDiagnosticOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
@@ -75,6 +78,10 @@ export interface EditorSession {
   setGroupComposition(path: string, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   setCatalog(path: string | string[], catalogKind: string, id: string, meta?: Record<string, unknown>): EditorChange;
   applyPatch(operations: JsonPatchOperation[], meta?: Record<string, unknown>): EditorChange;
+  /** The undo and redo stacks as plain data (oldest entry first), for hosts that persist work. */
+  exportHistory(): EditorHistory;
+  /** Replace the document and, optionally, the history in one step (one `restore` event). A history that does not replay against the document throws `invalid-history` before anything changes. */
+  restoreState(state: { document: unknown; undo?: EditorHistoryEntry[]; redo?: EditorHistoryEntry[] }, meta?: Record<string, unknown>): EditorChange;
   undo(meta?: Record<string, unknown>): EditorChange | null;
   redo(meta?: Record<string, unknown>): EditorChange | null;
 }

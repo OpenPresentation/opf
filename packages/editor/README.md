@@ -404,6 +404,31 @@ Run `npm run test:design-controls-browser` (after `npm run build:playground`) fo
 
 A switch changes the document; it does not change what the engines support. Language changes recompose fonts only as far as the installed core, renderer and PPTX packages implement the language and script model (FF-18, FF-19); the editor's own composition measures the Latin families. `image-treatments` previews only where the installed renderer draws `design.slideImage`. `test/switches.mjs` checks the patch, one undo step, undo/redo, and preview refresh for all 14 dimensions. `test/switches-export.mjs` exports after each switch, undo and redo and applies opf-pptx's FF-08 typeface check (`checkPptxTypefaces`) when the installed package has it; set `OPF_REQUIRE_FF08=1` to fail instead of skip when it does not. Published opf-pptx 0.9.1 does not include it.
 
+## Autosave and restore (RR-22)
+
+`@openpresentation/opf-editor/persistence` keeps an editor session in this browser's own storage and brings it back after a reload. It is local only: the module makes no network request, and the data stays in the browser profile (IndexedDB, with localStorage as the fallback). A host that stores documents itself simply does not call it.
+
+```js
+import { createPersistence } from "@openpresentation/opf-editor/persistence";
+import { createPersistenceUi } from "@openpresentation/opf-editor/persistence-ui";
+
+const ui = createPersistenceUi({ banner: document.querySelector("#restore-banner"), indicator: document.querySelector("#autosave-status") });
+const persistence = createPersistence(editor, {
+  key: "my-document",                 // names this document; two documents with one key share a stored copy
+  storage: "indexeddb",               // default; or "localstorage", "memory", false, or your own { get, set, delete } adapter
+  onRestorePrompt: ui.prompt,         // or return "restore" | "discard" | "later" (or a promise) yourself
+  onStatus: ui.status,                // "Saved on this device at 2:03 PM", or why autosave is off
+  beforeFlush: () => canvas.commit(), // commit a draft before every write and before the page unloads
+});
+await persistence.ready;              // { available, offered }: storage opened and read (it does not wait for the user's decision)
+await persistence.markSaved();        // after the host saved the document somewhere of its own: not unsaved, and the stored copy says so
+```
+
+- **Writes** happen after a change, 800 ms after the last one (at most 5 s late), serialized, and never for a document that was only opened: a stored copy is not overwritten until the document changes. The undo and redo history is stored with it (the newest 200 entries, 2,000,000 bytes at most; set `includeHistory: false` to skip it). `flush()` writes now.
+- **Restore** is offered when a stored copy differs from the document the session starts with. `restore()` puts the copy back as one undoable step; into a session nobody has edited it restores the undo history too (`restoreState`, which replays the history against the document and refuses one that does not belong to it, so a stale copy never corrupts the session). If the person keeps editing while the offer is open, the offered copy is first moved aside, so ignoring the prompt never loses it; after a reload the offer mentions the older copy (`restoreEarlier()`). `discard()` deletes the stored copy.
+- **Unsaved changes.** `dirty` is true when the document differs from the last `markSaved()` (or from how the session started); `beforeunload` warns while it is true (`warnOnUnload: false` to opt out) and a final write is started on unload, `pagehide` and when the tab is hidden. A host that loads a document into the editor (the gallery hands a snippet over) calls `rebase()` so that document is neither autosaved nor warned about until the person changes it. The playground marks the document saved on Save OPF, not on a PowerPoint export (a PPTX is not the OPF document).
+- **Degradation.** Private browsing, blocked site data, a failing read or a full store never throw: `status` says `unavailable` or `error` with a sentence the host shows ("... download it to keep it", "browser storage is full ..."), a full store first drops the undo history and then reports, and the next change tries again. Dirty tracking and the unload warning keep working without storage.
+- The playground enables it with the key `opf-editor-playground`. A host page sets `globalThis.OPF_EDITOR_HOST = { persistence: { key, storage, onRestorePrompt } }` (or `persistence: false`) before the script runs; a frame can pass `?persist=<key>` or `?persist=0`. The footer text of the inspector is the autosave indicator and a prompt appears under the document bar.
 ## Fill template panel (RR-32)
 
 A template is an OPF file with variables (`{{id}}` tokens and `var:id` references, root `"template": true`; see [templates and variables](https://github.com/OpenPresentation/opf/blob/main/docs/templates-and-variables.md)). `/templates` is the headless model and `/template-panel` the DOM panel over it. Both need the core release that ships `resolveVariables` (older cores load them and throw `templates-unavailable`).
