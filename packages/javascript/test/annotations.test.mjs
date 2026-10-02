@@ -139,8 +139,11 @@ describe('markers in fits', () => {
       const previous = body[body.indexOf(marker) - 1];
       assert.equal(previous.runIndex, marker.runIndex);
       assert.ok(Math.abs(previous.x + previous.width - marker.x) < 1e-6, 'marker follows its run');
-      assert.ok(Math.abs(marker.fontSize - previous.fontSize * CITATION_MARKER_SCALE) < 1e-6);
-      assert.ok(Math.abs(marker.baselineShift + marker.fontSize * CITATION_MARKER_RAISE) < 1e-6);
+      // The exporter writes the marked run's size; PowerPoint draws 2/3 of it (native probe 2026-10-01); the raise is 0.30 of the nominal size.
+      assert.ok(Math.abs(marker.nominalSize - previous.fontSize) < 1e-9, 'the nominal size is the marked run size');
+      assert.ok(Math.abs(marker.fontSize - previous.fontSize * CITATION_MARKER_SCALE) <= 1 / 75 / 2 + 1e-9, 'glyph is 2/3 of the nominal size on the 0.01 pt grid');
+      assert.ok(Math.abs(marker.fontSize * 75 - Math.round(marker.fontSize * 75)) < 1e-6, 'glyph size sits on the grid');
+      assert.ok(Math.abs(marker.baselineShift + marker.nominalSize * CITATION_MARKER_RAISE) < 1e-9);
       assert.ok(marker.width > 0);
     }
     // Run indexes and offsets of the text fragments are those of the authored runs.

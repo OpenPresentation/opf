@@ -27,9 +27,18 @@ export type Caption = RichText | CaptionObject;
 export interface Reference { id: string; text: RichText; url?: string }
 export interface CaptionSettings { text: RichText; position: CaptionPosition; align: CaptionAlignment }
 
-/** Marker fragments draw at this fraction of the run's font size. */
-export const CITATION_MARKER_SCALE = 0.7;
-/** Marker fragments are raised by this fraction of their own size (DrawingML `baseline="30000"`). */
+/**
+ * A marker is exported as a superscript run at the marked run's own size with DrawingML `baseline="30000"`, the way a user ticks
+ * Superscript. PowerPoint then draws the glyph at 2/3 of that nominal size and raises it by baseline x nominal size. Measured in
+ * PowerPoint 365 on Windows on 2026-10-01 with probe-superscript.pptx (Roboto and Aptos, 10 to 44 pt, digit ink height of a
+ * superscript run against a plain run of the same size): ratio 0.655 to 0.69, mean 0.667, independent of face and size; raise
+ * 0.30 of the nominal size at every size (baseline 30000). An explicit smaller sz on top is reduced again (0.7 x sz drew at about
+ * 0.47 of the run), which is why the exporter does not write one. The preview composes the same glyph size and raise.
+ *
+ * The drawn marker glyph is this fraction of the nominal size (the marked run's size), snapped to the 0.01 pt grid.
+ */
+export const CITATION_MARKER_SCALE = 2 / 3;
+/** The raise as a fraction of the NOMINAL size (the marked run's size): DrawingML `baseline="30000"`. */
 export const CITATION_MARKER_RAISE = 0.3;
 /** Caption text size as a fraction of the body size, before the readable floor. */
 export const CAPTION_FONT_RATIO = 0.6;

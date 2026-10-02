@@ -57,9 +57,9 @@ a copy); without a presentation the slide numbers from 1 and unresolved ids are 
   last fragment of a run with a marker (`RichTextOptions.citationMarker(runPath)`; `composeSlide`
   supplies it from `slideCitations`). The marker has zero source length (`start === end ===
   run.text.length`) so run indexes and `data-opf-text-*` offsets never shift; it wraps with its word; its
-  font size is `CITATION_MARKER_SCALE` (0.7) of the run's and it is raised by `CITATION_MARKER_RAISE`
-  (0.3) of its own size, which is exactly DrawingML `baseline="30000"` through the exporter's existing
-  `-baselineShift / fontSize * 2000` formula (PowerPoint's own superscript button writes 30000). An
+  glyph size is `CITATION_MARKER_SCALE` (2/3) of the run's (the exporter writes the run's own size; PowerPoint draws 2/3 of it) and it is raised by `CITATION_MARKER_RAISE`
+  (0.3) of the run's size, which is exactly DrawingML `baseline="30000"` through the exporter's existing
+  `-baselineShift / nominalSize * 2000` formula (PowerPoint's own superscript button writes 30000). An
   existing `superscript: true` run keeps its larger raise (`baseline="50000"`).
 - **Footnote area** (`layoutFootnotes`, `geometry.footnotes`, algorithm `footnote-area-v1`). A slide
   whose runs carry markers gets an area directly above the footer band (or the bottom padding), with the
@@ -118,11 +118,14 @@ undoable session edit.
 
 Recorded as vetoable decisions; the brief is `rr-33-35/DECISIONS.md` (RR-34 section).
 
-- Marker raise. The brief asks for native `baseline="30000"`. The preview raises a marker by 0.3 of its
-  own (0.7-scaled) size so the exporter's existing baseline formula writes exactly 30000; an authored
-  `superscript: true` run is unchanged (it still exports as 50000). Preview and PowerPoint therefore agree
-  on the marker's size and raise by construction; PowerPoint's own superscript rendering of an explicit
-  `sz` is what the native check confirms.
+- Marker size and raise (measured). A marker is exported as a superscript run at the marked run's own size with
+  `baseline="30000"`, as a user ticking Superscript would. PowerPoint draws such a run at 2/3 of its size and raises
+  it by 0.30 of the nominal size; core composes exactly that (glyph `fontSize` = 2/3 of `nominalSize`, snapped to
+  the 0.01 pt grid; `baselineShift` = 0.30 of `nominalSize`). Measured in PowerPoint 365 on Windows, 2026-10-01,
+  with `probe-superscript.pptx` (Roboto and Aptos, 10 to 44 pt): digit ink height of the superscript run against a
+  plain run of the same size 0.655 to 0.69 (mean 0.667), independent of face and size; raise 0.30 of the nominal size
+  at every size. The first version wrote `sz` = 0.7 of the run on top of that and PowerPoint reduced it again
+  (about 0.47 of the run), which the first native check caught. An authored `superscript: true` run is unchanged.
 - Supported locations. Markers are drawn in `text`, `bullets` and list item runs. Table cells, captions,
   reference and footnote texts reject `cite`/`footnote` with `cite-unsupported-location` instead of
   accepting a marker that no engine would draw.

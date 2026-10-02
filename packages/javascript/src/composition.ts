@@ -1489,6 +1489,8 @@ export interface RichTextFragment {
   kind?: 'tab' | 'marker';
   text: string; runIndex: number; start: number; end: number;
   x: number; width: number; fontSize: number; baselineShift: number;
+  /** A marker only: the size the exporter writes (the marked run's size); `fontSize` is the glyph PowerPoint draws for it (2/3). */
+  nominalSize?: number;
   style: TextStyle; run: RichTextRun;
 }
 export interface RichTextLine { fragments: RichTextFragment[]; width: number; y: number; baseline: number; height: number }
@@ -1565,8 +1567,8 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         // RR-34: the marker follows the run's last character, raised like a superscript (its own
         // baseline shift is written natively as baseline="30000"). Zero source length.
         if(entry.marker&&b===entry.end) {
-          const markerSize=normalSize*CITATION_MARKER_SCALE,width=measure(entry.marker,markerSize);
-          result.push({kind:'marker',text:entry.marker,runIndex:entry.runIndex,start:entry.run.text.length,end:entry.run.text.length,x,width,fontSize:markerSize,baselineShift:-markerSize*CITATION_MARKER_RAISE,style:entry.style,run:entry.run});
+          const markerSize=Math.round(normalSize*CITATION_MARKER_SCALE*FONT_SIZE_GRID_PER_PX)/FONT_SIZE_GRID_PER_PX,width=measure(entry.marker,markerSize);
+          result.push({kind:'marker',text:entry.marker,runIndex:entry.runIndex,start:entry.run.text.length,end:entry.run.text.length,x,width,fontSize:markerSize,nominalSize:normalSize,baselineShift:-normalSize*CITATION_MARKER_RAISE,style:entry.style,run:entry.run});
           x+=width;
         }
       }return result;
