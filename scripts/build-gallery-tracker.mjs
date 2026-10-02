@@ -287,8 +287,11 @@ export function buildTracker({ root = ROOT } = {}) {
   const burndownItems = parseBurndown(readFileSync(path.join(root, inputs.burndown), "utf8"));
   const burndown = new Map(burndownItems.map((item) => [item.id, item]));
   const native = nativeEvidenceIndex(root, inputs.evidence);
-  const audits = auditColumns(auditA, auditB);
-  const parityBy = parityColumns(parity);
+  // RR-43: later runs on records the main runs do not cover (the catalog-only records and the slide-size presets).
+  const auditBExtra = (inputs.auditBExtra ?? []).map((file) => ({ file, ...readJson(root, file) }));
+  const parityExtra = (inputs.parityExtra ?? []).map((file) => ({ file, ...readJson(root, file) }));
+  const audits = auditColumns(auditA, { results: [...auditB.results, ...auditBExtra.flatMap((x) => x.results)] });
+  const parityBy = parityColumns({ results: [...parity.results, ...parityExtra.flatMap((x) => x.results)] });
   const fontStatus = new Map(fontTracker.records.map((r) => [r.family, r.status]));
   const supportBy = new Map(support.items.map((item) => [`${item.dimension}/${item.galleryId}`, item]));
   const switchable = new Set(editor.switchDimensions);
@@ -443,7 +446,8 @@ export function buildTracker({ root = ROOT } = {}) {
   const slideSizeParity = parity.results.every((r) => r.checks.slideSize === "pass") ? "perfect" : "near";
   const themesWork = auditB.results.filter((r) => r.dimension === "themes").every((r) => r.classification === "works");
   for (const id of presets) {
-    const measured = themeDimensions.has(id);
+    const probe = audits.get(`slide-sizes/${id}`);
+    const measured = Boolean(probe) || themeDimensions.has(id);
     const gaps = [];
     if (!switchable.has("slide-sizes")) gaps.push({ code: "missing-editor", detail: `opf-editor ${editor.source.version} has no slide-size switch (SWITCH_DIMENSIONS); a theme switch carries its dimensions` });
     gaps.push({ code: "missing-gallery", detail: "pptx.gallery has no slide-size pages" });
@@ -451,11 +455,18 @@ export function buildTracker({ root = ROOT } = {}) {
     if (!measured) gaps.push({ code: "unknown", detail: "not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset)" });
     else if (!nativeDirs.length) gaps.push({ code: "works-unverified", detail: "no committed native PowerPoint evidence names this preset" });
     const pass = measured && themesWork ? "pass" : "unknown";
+    const col = (c) => probe?.[c] ?? pass;
+    for (const [c, code] of [["compose", "broken"], ["preview", "missing-preview"], ["export", "missing-export"]]) if (col(c) === "fail") gaps.push({ code, detail: clip(probe.reasons.join("; ") || `${c} check failed`) });
+    if (col("roundTrip") === "fail" && col("export") !== "fail") gaps.push({ code: "missing-export", detail: clip(probe.reasons.join("; ") || "re-import check failed") });
+    const presetParity = parityBy.get(`slide-sizes/${id}`)?.class ?? (measured ? slideSizeParity : "unmeasured");
+    if (presetParity === "near") gaps.push({ code: "parity-near", detail: clip([...parityBy.get(`slide-sizes/${id}`).checks].join(", ")) });
+    if (presetParity === "mismatch") gaps.push({ code: "parity-mismatch", detail: clip([...parityBy.get(`slide-sizes/${id}`).checks].join(", ")) });
     push({
       type: "slide-sizes",
       id,
       name: id,
-      columns: { spec: "schema-enum", compose: pass, preview: pass, export: pass, roundTrip: pass, parity: measured ? slideSizeParity : "unmeasured", editor: switchable.has("slide-sizes") ? "switch" : "none", gallery: "not-shown", native: nativeDirs.length ? "exercised" : "unverified", fonts: "n/a" },
+      ...(probe ? { pipeline: probe.pipeline } : {}),
+      columns: { spec: "schema-enum", compose: col("compose"), preview: col("preview"), export: col("export"), roundTrip: col("roundTrip"), parity: presetParity, editor: switchable.has("slide-sizes") ? "switch" : "none", gallery: "not-shown", native: nativeDirs.length ? "exercised" : "unverified", fonts: "n/a" },
       ...(nativeDirs.length ? { nativeEvidence: nativeDirs } : {}),
       gaps,
     });
@@ -500,8 +511,9 @@ export function buildTracker({ root = ROOT } = {}) {
       catalogs: { dir: inputs.catalogs, gallery: catalogs.manifest.source.commit.slice(0, 7), kinds: Object.keys(catalogs.kinds).length },
       gallery: { file: FILES.snapshots, ...gallery.source },
       editor: { file: FILES.snapshots, ...editor.source, switchDimensions: editor.switchDimensions.length },
-      audits: { supportStatus: inputs.supportStatus, auditA: { file: inputs.auditA, heads: support.audits.a.heads }, auditB: { file: inputs.auditB, heads: support.audits.b.heads } },
+      audits: { supportStatus: inputs.supportStatus, auditA: { file: inputs.auditA, heads: support.audits.a.heads }, auditB: { file: inputs.auditB, heads: support.audits.b.heads }, auditBExtra: auditBExtra.map((x) => ({ file: x.file, heads: x.heads, values: x.results.length })) },
       parity: { file: inputs.parity, generatedAt: parity.meta.generatedAt, heads: Object.fromEntries(Object.entries(parity.meta.heads).map(([k, v]) => [k, v.slice(0, 7)])), values: parity.results.length, note: overrides.parityNote },
+      parityExtra: parityExtra.map((x) => ({ file: x.file, generatedAt: x.meta.generatedAt, heads: Object.fromEntries(Object.entries(x.meta.heads).map(([k, v]) => [k, String(v).slice(0, 7)])), values: x.results.length })),
       fontTracker: { file: inputs.fontTracker, asOf: fontTracker.asOf, records: fontTracker.records.length },
       nativeEvidence: { dir: inputs.evidence, rule: "json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it" },
       burndown: { file: inputs.burndown, items: burndownItems.length },
@@ -595,6 +607,8 @@ export function renderMarkdown(tracker) {
     `| Editor switches | \`${inp.editor.file}\` (${inp.editor.repository} ${inp.editor.version} \`${inp.editor.commit.slice(0, 7)}\`, \`${inp.editor.switches}\` SWITCH_DIMENSIONS, tested by \`${inp.editor.test}\`) |`,
     `| Audits A and B | \`${inp.audits.auditA.file}\`, \`${inp.audits.auditB.file}\` (opf \`${inp.audits.auditA.heads.opf}\`, opf-render \`${inp.audits.auditA.heads["opf-render"]}\`, opf-pptx \`${inp.audits.auditA.heads["opf-pptx"]}\`, opf-editor \`${inp.audits.auditB.heads["opf-editor"]}\`, pptx-gallery \`${inp.audits.auditA.heads["pptx-gallery"]}\`) |`,
     `| Parity | \`${inp.parity.file}\` (${inp.parity.values} values, ${inp.parity.generatedAt}; opf \`${inp.parity.heads.opf}\`, opf-render \`${inp.parity.heads["opf-render"]}\`, opf-pptx \`${inp.parity.heads["opf-pptx"]}\`, pptx-gallery \`${inp.parity.heads["pptx-gallery"]}\`). ${cell(inp.parity.note)} |`,
+    ...inp.audits.auditBExtra.map((x) => `| Audit B, later run | \`${x.file}\` (${x.values} values; ${Object.entries(x.heads ?? {}).map(([k, v]) => `${k} \`${v}\``).join(", ")}) |`),
+    ...inp.parityExtra.map((x) => `| Parity, later run | \`${x.file}\` (${x.values} values, ${x.generatedAt}; ${Object.entries(x.heads).map(([k, v]) => `${k} \`${v}\``).join(", ")}) |`),
     `| Fonts | \`${inp.fontTracker.file}\` (${inp.fontTracker.records} families, as of ${inp.fontTracker.asOf}) |`,
     `| Native evidence | \`${inp.nativeEvidence.dir}\`: ${inp.nativeEvidence.rule} |`,
     `| Links | \`${inp.burndown.file}\` (${inp.burndown.items} items) and ${inp.overrides.rules} rules in \`${inp.overrides.file}\` |`,

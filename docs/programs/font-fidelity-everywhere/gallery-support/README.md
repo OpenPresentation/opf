@@ -71,6 +71,26 @@ drift is removed by FF-22 and FF-37.
 
 - 2026-10-01 (core 0.11.4 picture bullets): the exported picture-bullet list is a text shape whose paragraphs carry `a:buBlip`, not a picture. `parity/scripts/picture-bullets.mjs` (unit test `picture-bullets.test.mjs`, `pnpm check:audit-picture-bullets`) keeps the bullet blips out of the shape's own picture and compares them separately: one aria-hidden preview list image per bulleted paragraph, same bytes (a count mismatch fails, different bytes are near). No check or tolerance was relaxed. Results: `parity/parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json`.
 
+- RR-43 (2026-10-02): audit B covers the catalog records the gallery has no config for, and the slide-size presets.
+  - **Snippets.** `audit-b/scripts/gen-catalog-only.mjs` (run after `gen-snippets.mjs`, `--only` for the catalog-only set) builds one snippet per record from a gallery snippet of the same kind, with only the value swapped:
+    - narratives: from `narratives/problem-solution`;
+    - audiences: from `audiences/executive`;
+    - purposes: from `tones/formal`, without `tone`;
+    - slide-size presets: from `themes/minimal`, with `design.dimensions` set to the preset.
+
+    Each entry records `synthetic.from`.
+  - **Audit B.** `audit.mjs` resolves `purposes` against the core catalog and the slide-size presets against the schema's `DimensionPreset`, and strips `purpose` or `design.dimensions` for the consumption diff. For a preset it measures:
+    - the size the preset resolves to (core `resolveCanvasDimensions`);
+    - the preview SVG size;
+    - the PPTX `p:sldSz`;
+    - the re-imported dimensions.
+
+    `summarize.mjs` classifies purposes like tones. A preset `works` when the preview size and the re-imported size are within 0.5 px of the resolved size and `p:sldSz` is within 1 EMU. No existing check changed.
+  - **Results.** The audit and the parity harness ran on the published 0.12.0 packages: core `5e1dda7`, opf-render `3b300a3` and opf-pptx `1f50912`, each npm `gitHead` stamped into its `package.json`. They used gallery snippets at pptx-gallery `34e6656` and Node 26.4.0.
+    - Files: `audit-b/results-2026-10-02-catalog-only.json`, `parity/parity-results-2026-10-02-catalog-only.json` and `parity/PARITY-2026-10-02-catalog-only.md`.
+    - Outcome: all 62 values (38 narratives, 8 audiences, 9 purposes, 7 presets) are `works` and `perfect`.
+    - The gallery tracker reads both files as `auditBExtra` and `parityExtra`.
+
 ## Re-running on published packages
 
 To measure what npm serves, use the tarballs instead of worktrees (FF-58): `npm pack @openpresentation/opf@X @openpresentation/opf-render@Y @openpresentation/opf-pptx@Z @openpresentation/opf-editor@V`, unpack each into `sources/pub-<name>`, copy `dist/` to `src/` for opf-render and opf-pptx (audit A imports `src/`), run `npm install --omit=dev` in each, install the optional script-font peers of opf-render and `esbuild` (audit B and parity bundle the snippets with it), and stamp the registry `gitHead` (`npm view <pkg>@<version> gitHead`) into each `package.json`. The core is a worktree of its release tag (`pnpm install && pnpm -r build`), and its `packages/javascript` files should be byte-compared with the unpacked tarball. Point `audit-A-*`, `audit-B-*` and `parity-*` at those directories (Windows: junctions). Pass the register loader to Node as a `file:///` URL.
