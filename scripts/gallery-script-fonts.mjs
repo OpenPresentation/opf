@@ -50,7 +50,7 @@ export function verifyGalleryScriptFontManifest(manifest) {
   if (!Array.isArray(manifest.packages) || !manifest.packages.length) fail('no packages');
   const seen = new Set();
   for (const pkg of manifest.packages) {
-    if (!/^@expo-google-fonts\/noto-[a-z-]+$/.test(pkg.name)) fail(`${pkg.name} is not a pinned @expo-google-fonts/noto-* package`);
+    if (!/^@expo-google-fonts\/(?:noto-[a-z0-9-]+|stix-two-math)$/.test(pkg.name)) fail(`${pkg.name} is not a pinned @expo-google-fonts/noto-* or stix-two-math package`);
     if (!/^\d+\.\d+\.\d+$/.test(pkg.version)) fail(`${pkg.name} needs an exact version`);
     if (!ALLOWED_SCRIPT_FONT_LICENSES.includes(pkg.license)) fail(`${pkg.name} license ${pkg.license} is not allowed`);
     if (!hex.test(pkg.licenseSha256) || !pkg.licenseFile || /[\\/]|\.\./.test(pkg.licenseFile)) fail(`${pkg.name} needs a hashed license file`);
