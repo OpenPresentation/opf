@@ -11438,16 +11438,750 @@
    "licenseClass": "proprietary-standard",
    "route": "Barlow",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "27367425465.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "80e60cbef23f030cf75cfb19d54f9b5ddc6bf62982d4e90becdb08e21892a072"
+     },
+     "replacement": {
+      "family": "Barlow",
+      "weight": 400,
+      "italic": false,
+      "package": "barlow",
+      "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.048,
+     "meanWidthDelta": -0.048,
+     "maxAbsWidthDelta": 0.0725,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 39,
+      "differing": 211,
+      "identicalFraction": 0.156,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 8,
+        "differing": 42
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 10,
+        "differing": 40
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 8,
+        "differing": 42
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 10,
+        "differing": 40
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9941,
+       -0.2061,
+       0
+      ],
+      "typo": [
+       0.7939,
+       -0.2061,
+       0.2002
+      ],
+      "win": [
+       0.9941,
+       0.2061
+      ],
+      "xHeight": 0.4971,
+      "capHeight": 0.71,
+      "inkXHeight": 0.4971,
+      "inkCapHeight": 0.71
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.2,
+       0
+      ],
+      "typo": [
+       1,
+       -0.2,
+       0
+      ],
+      "win": [
+       1.112,
+       0.249
+      ],
+      "xHeight": 0.506,
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.018,
+     "capHeightRatio": 0.986,
+     "ascentRatio": 1.006,
+     "outlines": {
+      "sharedNonemptyGlyphs": 442,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 364,
+      "missingInReplacement": 44,
+      "missingSample": [
+       "U+0181",
+       "U+0186",
+       "U+0189",
+       "U+018A",
+       "U+018E",
+       "U+0190",
+       "U+0191",
+       "U+0194",
+       "U+0198",
+       "U+0199",
+       "U+01B2",
+       "U+01B3"
+      ]
+     }
+    },
+    {
+     "style": "700",
+     "reference": {
+      "file": "28800444183.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "6dae4afa5d820d142bdadbcdfa8cac272e486056109bd61fcfa4b6ecbafecbeb"
+     },
+     "replacement": {
+      "family": "Barlow",
+      "weight": 700,
+      "italic": false,
+      "package": "barlow",
+      "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0211,
+     "meanWidthDelta": -0.0209,
+     "maxAbsWidthDelta": 0.05,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 119,
+      "differing": 131,
+      "identicalFraction": 0.476,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 25,
+        "differing": 25
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 26,
+        "differing": 24
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 25,
+        "differing": 25
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 22,
+        "differing": 28
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 21,
+        "differing": 29
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9941,
+       -0.2061,
+       0
+      ],
+      "typo": [
+       0.7939,
+       -0.2061,
+       0.2002
+      ],
+      "win": [
+       0.9941,
+       0.2061
+      ],
+      "xHeight": 0.4971,
+      "capHeight": 0.71,
+      "inkXHeight": 0.4971,
+      "inkCapHeight": 0.71
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.2,
+       0
+      ],
+      "typo": [
+       1,
+       -0.2,
+       0
+      ],
+      "win": [
+       1.112,
+       0.249
+      ],
+      "xHeight": 0.514,
+      "capHeight": 0.7,
+      "inkXHeight": 0.514,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.034,
+     "capHeightRatio": 0.986,
+     "ascentRatio": 1.006
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "28117545753.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "70a8d40667548a64d6b30b0491dfa5e600dda61a2cd9e432b1ca9023102f86d8"
+     },
+     "replacement": {
+      "family": "Barlow",
+      "weight": 400,
+      "italic": true,
+      "package": "barlow",
+      "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0722,
+     "meanWidthDelta": -0.0722,
+     "maxAbsWidthDelta": 0.0976,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 12,
+      "differing": 238,
+      "identicalFraction": 0.048,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9941,
+       -0.2061,
+       0
+      ],
+      "typo": [
+       0.7939,
+       -0.2061,
+       0.2002
+      ],
+      "win": [
+       0.9941,
+       0.2061
+      ],
+      "xHeight": 0.4971,
+      "capHeight": 0.71,
+      "inkXHeight": 0.4971,
+      "inkCapHeight": 0.71
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.2,
+       0
+      ],
+      "typo": [
+       1,
+       -0.2,
+       0
+      ],
+      "win": [
+       1.112,
+       0.249
+      ],
+      "xHeight": 0.506,
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.018,
+     "capHeightRatio": 0.986,
+     "ascentRatio": 1.006
+    },
+    {
+     "style": "700i",
+     "reference": {
+      "file": "26382703803.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "4cce7215a2e17536b47231c838eb3b71d384e165eeeb101c6c7ec4a249fc1e0f"
+     },
+     "replacement": {
+      "family": "Barlow",
+      "weight": 700,
+      "italic": true,
+      "package": "barlow",
+      "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0457,
+     "meanWidthDelta": -0.0457,
+     "maxAbsWidthDelta": 0.0728,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 45,
+      "differing": 205,
+      "identicalFraction": 0.18,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 12,
+        "differing": 38
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 11,
+        "differing": 39
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9941,
+       -0.2061,
+       0
+      ],
+      "typo": [
+       0.7939,
+       -0.2061,
+       0.2002
+      ],
+      "win": [
+       0.9941,
+       0.2061
+      ],
+      "xHeight": 0.4971,
+      "capHeight": 0.71,
+      "inkXHeight": 0.4971,
+      "inkCapHeight": 0.71
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.2,
+       0
+      ],
+      "typo": [
+       1,
+       -0.2,
+       0
+      ],
+      "win": [
+       1.112,
+       0.249
+      ],
+      "xHeight": 0.514,
+      "capHeight": 0.7,
+      "inkXHeight": 0.514,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.034,
+     "capHeightRatio": 0.986,
+     "ascentRatio": 1.006
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 4,
+    "standardStylesMeasured": 4,
+    "meanAbsWidthDelta": 0.0467,
+    "meanWidthDelta": -0.0467,
+    "worstStyleMeanAbsWidthDelta": 0.0722,
+    "maxAbsWidthDelta": 0.0976,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0.048,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 1.018,
+    "capHeightRatio": 0.986,
+    "ascentRatio": 1.006,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 44
+   }
   },
   {
    "family": "Grandview Display",
    "licenseClass": "proprietary-standard",
    "route": "Barlow",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "23698762969.ttf",
+      "version": "Version 0.90;O365",
+      "sha256": "c1475ea2d2dd596b83d6bb7fa6266fe8b664c6fd65e46e5779173b6cfa0440b8"
+     },
+     "replacement": {
+      "family": "Barlow",
+      "weight": 400,
+      "italic": false,
+      "package": "barlow",
+      "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0129,
+     "meanWidthDelta": -0.0117,
+     "maxAbsWidthDelta": 0.037,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 158,
+      "differing": 92,
+      "identicalFraction": 0.632,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 28,
+        "differing": 22
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 30,
+        "differing": 20
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 33,
+        "differing": 17
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 27,
+        "differing": 23
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 40,
+        "differing": 10
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9941,
+       -0.2061,
+       0
+      ],
+      "typo": [
+       0.7939,
+       -0.2061,
+       0.2002
+      ],
+      "win": [
+       0.9941,
+       0.2061
+      ],
+      "xHeight": 0.4683,
+      "capHeight": 0.71,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.71
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.2,
+       0
+      ],
+      "typo": [
+       1,
+       -0.2,
+       0
+      ],
+      "win": [
+       1.112,
+       0.249
+      ],
+      "xHeight": 0.506,
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.082,
+     "capHeightRatio": 0.986,
+     "ascentRatio": 1.006,
+     "outlines": {
+      "sharedNonemptyGlyphs": 442,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 364,
+      "missingInReplacement": 44,
+      "missingSample": [
+       "U+0181",
+       "U+0186",
+       "U+0189",
+       "U+018A",
+       "U+018E",
+       "U+0190",
+       "U+0191",
+       "U+0194",
+       "U+0198",
+       "U+0199",
+       "U+01B2",
+       "U+01B3"
+      ]
+     }
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "31988896137.ttf",
+      "version": "Version 0.90;O365",
+      "sha256": "c7eb46807e30ff6ab5f5d8dab22e08cd607ee6c745e5bee5c68a8d13772d1338"
+     },
+     "replacement": {
+      "family": "Barlow",
+      "weight": 400,
+      "italic": true,
+      "package": "barlow",
+      "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0368,
+     "meanWidthDelta": -0.0368,
+     "maxAbsWidthDelta": 0.0599,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 65,
+      "differing": 185,
+      "identicalFraction": 0.26,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 15,
+        "differing": 35
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 13,
+        "differing": 37
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 19,
+        "differing": 31
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9941,
+       -0.2061,
+       0
+      ],
+      "typo": [
+       0.7939,
+       -0.2061,
+       0.2002
+      ],
+      "win": [
+       0.9941,
+       0.2061
+      ],
+      "xHeight": 0.4683,
+      "capHeight": 0.71,
+      "inkXHeight": 0.4678,
+      "inkCapHeight": 0.71
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.2,
+       0
+      ],
+      "typo": [
+       1,
+       -0.2,
+       0
+      ],
+      "win": [
+       1.112,
+       0.249
+      ],
+      "xHeight": 0.506,
+      "capHeight": 0.7,
+      "inkXHeight": 0.506,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.082,
+     "capHeightRatio": 0.986,
+     "ascentRatio": 1.006
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 2,
+    "standardStylesMeasured": 2,
+    "meanAbsWidthDelta": 0.0249,
+    "meanWidthDelta": -0.0242,
+    "worstStyleMeanAbsWidthDelta": 0.0368,
+    "maxAbsWidthDelta": 0.0599,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0.26,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 1.082,
+    "capHeightRatio": 0.986,
+    "ascentRatio": 1.006,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 44
+   }
   },
   {
    "family": "Impact",
@@ -14628,16 +15362,724 @@
    "licenseClass": "proprietary-standard",
    "route": "Source Sans 3",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "19722397430.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "437945bc3a40cce5da9b5cff58e3be8c8c0c7e690157e6058800a603abef301a"
+     },
+     "replacement": {
+      "family": "Source Sans 3",
+      "weight": 400,
+      "italic": false,
+      "package": "source-sans-3",
+      "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0526,
+     "meanWidthDelta": -0.0526,
+     "maxAbsWidthDelta": 0.0945,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 32,
+      "differing": 218,
+      "identicalFraction": 0.128,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 7,
+        "differing": 43
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 8,
+        "differing": 42
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       1.0244,
+       -0.2451,
+       0
+      ],
+      "typo": [
+       0.7813,
+       -0.2187,
+       0.2695
+      ],
+      "win": [
+       0.9756,
+       0.2451
+      ],
+      "xHeight": 0.4785,
+      "capHeight": 0.668,
+      "inkXHeight": 0.4785,
+      "inkCapHeight": 0.668
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.326,
+       0
+      ],
+      "typo": [
+       1,
+       -0.326,
+       0
+      ],
+      "win": [
+       1,
+       0.326
+      ],
+      "xHeight": 0.486,
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.016,
+     "capHeightRatio": 0.982,
+     "ascentRatio": 0.976,
+     "outlines": {
+      "sharedNonemptyGlyphs": 225,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 217,
+      "missingInReplacement": 0,
+      "missingSample": []
+     }
+    },
+    {
+     "style": "700",
+     "reference": {
+      "file": "21203783350.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "b8f3703183a4e4afdfa069cdac7d5d7238b5353ee687dda7b2dd4452c63b0888"
+     },
+     "replacement": {
+      "family": "Source Sans 3",
+      "weight": 700,
+      "italic": false,
+      "package": "source-sans-3",
+      "sha256": "9214b9d95e4231c609802815c2646c98174e2102d0d37f88978a7f8e71006e6a"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0349,
+     "meanWidthDelta": -0.0349,
+     "maxAbsWidthDelta": 0.0661,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 80,
+      "differing": 170,
+      "identicalFraction": 0.32,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 17,
+        "differing": 33
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 19,
+        "differing": 31
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 14,
+        "differing": 36
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 14,
+        "differing": 36
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 16,
+        "differing": 34
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       1.0244,
+       -0.2451,
+       0
+      ],
+      "typo": [
+       0.7813,
+       -0.2187,
+       0.2695
+      ],
+      "win": [
+       0.9756,
+       0.2451
+      ],
+      "xHeight": 0.4873,
+      "capHeight": 0.668,
+      "inkXHeight": 0.4873,
+      "inkCapHeight": 0.668
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.326,
+       0
+      ],
+      "typo": [
+       1,
+       -0.326,
+       0
+      ],
+      "win": [
+       1,
+       0.326
+      ],
+      "xHeight": 0.496,
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.018,
+     "capHeightRatio": 0.976,
+     "ascentRatio": 0.976
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "27995279839.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "f333e5835bcd01049c247c53769b41274c60ebd01c4d50ef40b5ac46e35fc4a6"
+     },
+     "replacement": {
+      "family": "Source Sans 3",
+      "weight": 400,
+      "italic": true,
+      "package": "source-sans-3",
+      "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0517,
+     "meanWidthDelta": -0.0517,
+     "maxAbsWidthDelta": 0.0965,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 32,
+      "differing": 218,
+      "identicalFraction": 0.128,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 7,
+        "differing": 43
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       1.0244,
+       -0.2451,
+       0
+      ],
+      "typo": [
+       0.7813,
+       -0.2187,
+       0.2695
+      ],
+      "win": [
+       0.9756,
+       0.2451
+      ],
+      "xHeight": 0.4785,
+      "capHeight": 0.668,
+      "inkXHeight": 0.4785,
+      "inkCapHeight": 0.668
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.326,
+       0
+      ],
+      "typo": [
+       1,
+       -0.326,
+       0
+      ],
+      "win": [
+       1,
+       0.326
+      ],
+      "xHeight": 0.486,
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.016,
+     "capHeightRatio": 0.982,
+     "ascentRatio": 0.976
+    },
+    {
+     "style": "700i",
+     "reference": {
+      "file": "30513229001.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "d56da2da71ed270d8de93232c178ccbb537911d5c438f1d06c4e8dd335eb3fc6"
+     },
+     "replacement": {
+      "family": "Source Sans 3",
+      "weight": 700,
+      "italic": true,
+      "package": "source-sans-3",
+      "sha256": "7978291fc1bf314db887e0366853b33c5cf2e964c7b95cfb9ce403a6ec46a842"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.054,
+     "meanWidthDelta": -0.054,
+     "maxAbsWidthDelta": 0.0822,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 32,
+      "differing": 218,
+      "identicalFraction": 0.128,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       1.0244,
+       -0.2451,
+       0
+      ],
+      "typo": [
+       0.7813,
+       -0.2187,
+       0.2695
+      ],
+      "win": [
+       0.9756,
+       0.2451
+      ],
+      "xHeight": 0.4873,
+      "capHeight": 0.668,
+      "inkXHeight": 0.4873,
+      "inkCapHeight": 0.668
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.326,
+       0
+      ],
+      "typo": [
+       1,
+       -0.326,
+       0
+      ],
+      "win": [
+       1,
+       0.326
+      ],
+      "xHeight": 0.496,
+      "capHeight": 0.66,
+      "inkXHeight": 0.496,
+      "inkCapHeight": 0.652
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.018,
+     "capHeightRatio": 0.976,
+     "ascentRatio": 0.976
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 4,
+    "standardStylesMeasured": 4,
+    "meanAbsWidthDelta": 0.0483,
+    "meanWidthDelta": -0.0483,
+    "worstStyleMeanAbsWidthDelta": 0.054,
+    "maxAbsWidthDelta": 0.0965,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0.128,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 1.016,
+    "capHeightRatio": 0.982,
+    "ascentRatio": 0.976,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 0
+   }
   },
   {
    "family": "Seaford Display",
    "licenseClass": "proprietary-standard",
    "route": "Source Sans 3",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "19111619463.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "044d775049e75161d4913210183a82f279bdd89c53630ab8ccb13638f5f9f7fb"
+     },
+     "replacement": {
+      "family": "Source Sans 3",
+      "weight": 400,
+      "italic": false,
+      "package": "source-sans-3",
+      "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0392,
+     "meanWidthDelta": 0.0391,
+     "maxAbsWidthDelta": 0.061,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 62,
+      "differing": 188,
+      "identicalFraction": 0.248,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 10,
+        "differing": 40
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 7,
+        "differing": 43
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 15,
+        "differing": 35
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 14,
+        "differing": 36
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 16,
+        "differing": 34
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       1.0244,
+       -0.2451,
+       0
+      ],
+      "typo": [
+       0.7813,
+       -0.2187,
+       0.2695
+      ],
+      "win": [
+       0.9756,
+       0.2451
+      ],
+      "xHeight": 0.459,
+      "capHeight": 0.668,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.668
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.326,
+       0
+      ],
+      "typo": [
+       1,
+       -0.326,
+       0
+      ],
+      "win": [
+       1,
+       0.326
+      ],
+      "xHeight": 0.486,
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.059,
+     "capHeightRatio": 0.982,
+     "ascentRatio": 0.976,
+     "outlines": {
+      "sharedNonemptyGlyphs": 225,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 217,
+      "missingInReplacement": 0,
+      "missingSample": []
+     }
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "26296393166.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "7e79141425050da49ed334cab4c20bb61251056bc058826e7b3dd426f702f6a6"
+     },
+     "replacement": {
+      "family": "Source Sans 3",
+      "weight": 400,
+      "italic": true,
+      "package": "source-sans-3",
+      "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0386,
+     "meanWidthDelta": 0.0385,
+     "maxAbsWidthDelta": 0.0667,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 64,
+      "differing": 186,
+      "identicalFraction": 0.256,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 19,
+        "differing": 31
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 13,
+        "differing": 37
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 11,
+        "differing": 39
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 12,
+        "differing": 38
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       1.0244,
+       -0.2451,
+       0
+      ],
+      "typo": [
+       0.7813,
+       -0.2187,
+       0.2695
+      ],
+      "win": [
+       0.9756,
+       0.2451
+      ],
+      "xHeight": 0.459,
+      "capHeight": 0.668,
+      "inkXHeight": 0.459,
+      "inkCapHeight": 0.668
+     },
+     "replacementVertical": {
+      "hhea": [
+       1,
+       -0.326,
+       0
+      ],
+      "typo": [
+       1,
+       -0.326,
+       0
+      ],
+      "win": [
+       1,
+       0.326
+      ],
+      "xHeight": 0.486,
+      "capHeight": 0.66,
+      "inkXHeight": 0.486,
+      "inkCapHeight": 0.656
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.059,
+     "capHeightRatio": 0.982,
+     "ascentRatio": 0.976
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 2,
+    "standardStylesMeasured": 2,
+    "meanAbsWidthDelta": 0.0389,
+    "meanWidthDelta": 0.0388,
+    "worstStyleMeanAbsWidthDelta": 0.0392,
+    "maxAbsWidthDelta": 0.0667,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0.248,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 1.059,
+    "capHeightRatio": 0.982,
+    "ascentRatio": 0.976,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 0
+   }
   },
   {
    "family": "Segoe UI",
@@ -15926,16 +17368,942 @@
    "licenseClass": "proprietary-standard",
    "route": "Open Sans",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "22813529367.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "73c11546378bf7a6692abbee0dd2a2107f81d38b1133b75c2d022193b71c808f"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 400,
+      "italic": false,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "33e93bec67d91c396876db50694213802a39e43a911bb5c22322f0dbdf4d5e43"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1252,
+     "meanWidthDelta": 0.1252,
+     "maxAbsWidthDelta": 0.1593,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 2,
+      "differing": 248,
+      "identicalFraction": 0.008,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.4619,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4619,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5352,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.159,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.383,
+     "outlines": {
+      "sharedNonemptyGlyphs": 247,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 217,
+      "missingInReplacement": 0,
+      "missingSample": []
+     }
+    },
+    {
+     "style": "700",
+     "reference": {
+      "file": "26831676451.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "c25e80a309ba58b410d5bd4b94079ea3ec3b935a023259fe3abfd8f0cfb5f768"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 700,
+      "italic": false,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "5f4c6f0c6beae94863a099a7a538059c480f91587f1abffc06552e9fa3a44f40"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1103,
+     "meanWidthDelta": 0.1103,
+     "maxAbsWidthDelta": 0.1378,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 2,
+      "differing": 248,
+      "identicalFraction": 0.008,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.8101,
+       -0.2388,
+       0.1025
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.4634,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4634,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5459,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.178,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.319
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "20796954239.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "c963b16747e46e3e065af2dc180f13e4db54983e510c79bd22abea1dab3c5281"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 400,
+      "italic": true,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "dd74eb2d271b57ef5c382a97403818715bfb6b1d53d7fa6da9c88336763651fb"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0795,
+     "meanWidthDelta": 0.0795,
+     "maxAbsWidthDelta": 0.1024,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 9,
+      "differing": 241,
+      "identicalFraction": 0.036,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.458,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.458,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5352,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.169,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.383
+    },
+    {
+     "style": "700i",
+     "reference": {
+      "file": "23189197481.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "17773fadf5d7e17f562380e141f423d609f83a42e10344ad80a057eaea3120c7"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 700,
+      "italic": true,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "c7e0a936ff0f08b6726cf205126a5e6dd6ae1340111325f7e86cbba1408e82d7"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0554,
+     "meanWidthDelta": 0.0554,
+     "maxAbsWidthDelta": 0.085,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 33,
+      "differing": 217,
+      "identicalFraction": 0.132,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 7,
+        "differing": 43
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 10,
+        "differing": 40
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 5,
+        "differing": 45
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 7,
+        "differing": 43
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.8101,
+       -0.2388,
+       0.1025
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.4595,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.46,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5459,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.187,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.319
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 4,
+    "standardStylesMeasured": 4,
+    "meanAbsWidthDelta": 0.0926,
+    "meanWidthDelta": 0.0926,
+    "worstStyleMeanAbsWidthDelta": 0.1252,
+    "maxAbsWidthDelta": 0.1593,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0.008,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 1.159,
+    "capHeightRatio": 1.113,
+    "ascentRatio": 1.383,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 0
+   }
   },
   {
    "family": "Skeena Display",
    "licenseClass": "proprietary-standard",
    "route": "Open Sans",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "22141054618.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "a9c55c03f19c2328589440a3f97b7d35f75c4de5ad4f510caaf0478f746f9fbe"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 400,
+      "italic": false,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "33e93bec67d91c396876db50694213802a39e43a911bb5c22322f0dbdf4d5e43"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1653,
+     "meanWidthDelta": 0.1653,
+     "maxAbsWidthDelta": 0.2001,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 0,
+      "differing": 250,
+      "identicalFraction": 0,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.4619,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4619,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5352,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.159,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.383,
+     "outlines": {
+      "sharedNonemptyGlyphs": 247,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 217,
+      "missingInReplacement": 0,
+      "missingSample": []
+     }
+    },
+    {
+     "style": "700",
+     "reference": {
+      "file": "25295610244.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "d7b9e705abca7ba3954e2342ab0e161705ce1c966e64333734e5ed7fd744f34a"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 700,
+      "italic": false,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "5f4c6f0c6beae94863a099a7a538059c480f91587f1abffc06552e9fa3a44f40"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1543,
+     "meanWidthDelta": 0.1543,
+     "maxAbsWidthDelta": 0.1836,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 1,
+      "differing": 249,
+      "identicalFraction": 0.004,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.812,
+       -0.2397,
+       0.0967
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.4634,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.4639,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5459,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.177,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.316
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "19087792834.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "dacef07dc37b3f1c204f93a8308f16a355c10cac751be38166002920a4fd7f77"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 400,
+      "italic": true,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "dd74eb2d271b57ef5c382a97403818715bfb6b1d53d7fa6da9c88336763651fb"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1098,
+     "meanWidthDelta": 0.1098,
+     "maxAbsWidthDelta": 0.1385,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 4,
+      "differing": 246,
+      "identicalFraction": 0.016,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.458,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.458,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5352,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.169,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.383
+    },
+    {
+     "style": "700i",
+     "reference": {
+      "file": "25302207512.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "ffdaca21f841412f2452b6560bc6372c769d00288bedd06f9c715463709c2061"
+     },
+     "replacement": {
+      "family": "Open Sans",
+      "weight": 700,
+      "italic": true,
+      "package": "@expo-google-fonts/open-sans",
+      "sha256": "c7e0a936ff0f08b6726cf205126a5e6dd6ae1340111325f7e86cbba1408e82d7"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0929,
+     "meanWidthDelta": 0.0929,
+     "maxAbsWidthDelta": 0.1277,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 11,
+      "differing": 239,
+      "identicalFraction": 0.044,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 2,
+        "differing": 48
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.812,
+       -0.2397,
+       0.0967
+      ],
+      "typo": [
+       0.7729,
+       -0.2271,
+       0.2002
+      ],
+      "win": [
+       0.873,
+       0.3271
+      ],
+      "xHeight": 0.46,
+      "capHeight": 0.6416,
+      "inkXHeight": 0.46,
+      "inkCapHeight": 0.6416
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "typo": [
+       1.0688,
+       -0.293,
+       0
+      ],
+      "win": [
+       1.124,
+       0.3179
+      ],
+      "xHeight": 0.5352,
+      "capHeight": 0.7139,
+      "inkXHeight": 0.5459,
+      "inkCapHeight": 0.7139
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.187,
+     "capHeightRatio": 1.113,
+     "ascentRatio": 1.316
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 4,
+    "standardStylesMeasured": 4,
+    "meanAbsWidthDelta": 0.1306,
+    "meanWidthDelta": 0.1306,
+    "worstStyleMeanAbsWidthDelta": 0.1653,
+    "maxAbsWidthDelta": 0.2001,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 1.159,
+    "capHeightRatio": 1.113,
+    "ascentRatio": 1.383,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 0
+   }
   },
   {
    "family": "Source Sans Pro",
@@ -16795,17 +19163,344 @@
        "U+2030"
       ]
      }
+    },
+    {
+     "style": "700",
+     "reference": {
+      "file": "23768909766.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "8f565cf1b588e13ac6c614621c6938bd3cc744e497ce0d2155a10728ca8f5a16"
+     },
+     "replacement": {
+      "family": "Figtree",
+      "weight": 700,
+      "italic": false,
+      "package": "@expo-google-fonts/figtree",
+      "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0573,
+     "meanWidthDelta": 0.0573,
+     "maxAbsWidthDelta": 0.0988,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 36,
+      "differing": 214,
+      "identicalFraction": 0.144,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 7,
+        "differing": 43
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 11,
+        "differing": 39
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 9,
+        "differing": 41
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 5,
+        "differing": 45
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9531,
+       -0.2471,
+       0
+      ],
+      "typo": [
+       0.6616,
+       -0.2471,
+       0.2915
+      ],
+      "win": [
+       0.9531,
+       0.2471
+      ],
+      "xHeight": 0.4526,
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
+     },
+     "replacementVertical": {
+      "hhea": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "typo": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "win": [
+       0.979,
+       0.222
+      ],
+      "xHeight": 0.5,
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.701
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.105,
+     "capHeightRatio": 1.172,
+     "ascentRatio": 0.997
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "21567663513.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "7e30fc6490a8d590f2de7f40b6f255b454b96b477f4bf51066f7b38b85924145"
+     },
+     "replacement": {
+      "family": "Figtree",
+      "weight": 400,
+      "italic": true,
+      "package": "@expo-google-fonts/figtree",
+      "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0551,
+     "meanWidthDelta": 0.0551,
+     "maxAbsWidthDelta": 0.0915,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 35,
+      "differing": 215,
+      "identicalFraction": 0.14,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 8,
+        "differing": 42
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 8,
+        "differing": 42
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 8,
+        "differing": 42
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 5,
+        "differing": 45
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9531,
+       -0.2471,
+       0
+      ],
+      "typo": [
+       0.6616,
+       -0.2471,
+       0.2915
+      ],
+      "win": [
+       0.9531,
+       0.2471
+      ],
+      "xHeight": 0.4526,
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
+     },
+     "replacementVertical": {
+      "hhea": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "typo": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "win": [
+       0.979,
+       0.222
+      ],
+      "xHeight": 0.5,
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.105,
+     "capHeightRatio": 1.17,
+     "ascentRatio": 0.997
+    },
+    {
+     "style": "700i",
+     "reference": {
+      "file": "23143075437.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "559a80dc415e82eda2b1646fbf047a44960d88e8af725d574d4069ce065d6e9b"
+     },
+     "replacement": {
+      "family": "Figtree",
+      "weight": 700,
+      "italic": true,
+      "package": "@expo-google-fonts/figtree",
+      "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.0668,
+     "meanWidthDelta": 0.0668,
+     "maxAbsWidthDelta": 0.1115,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 23,
+      "differing": 227,
+      "identicalFraction": 0.092,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 6,
+        "differing": 44
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 3,
+        "differing": 47
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 4,
+        "differing": 46
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9531,
+       -0.2471,
+       0
+      ],
+      "typo": [
+       0.6616,
+       -0.2471,
+       0.2915
+      ],
+      "win": [
+       0.9531,
+       0.2471
+      ],
+      "xHeight": 0.4526,
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
+     },
+     "replacementVertical": {
+      "hhea": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "typo": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "win": [
+       0.979,
+       0.222
+      ],
+      "xHeight": 0.5,
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.105,
+     "capHeightRatio": 1.17,
+     "ascentRatio": 0.997
     }
    ],
    "summary": {
-    "stylesMeasured": 1,
-    "standardStylesMeasured": 1,
-    "meanAbsWidthDelta": 0.042,
-    "meanWidthDelta": 0.042,
-    "worstStyleMeanAbsWidthDelta": 0.042,
-    "maxAbsWidthDelta": 0.0836,
+    "stylesMeasured": 4,
+    "standardStylesMeasured": 4,
+    "meanAbsWidthDelta": 0.0553,
+    "meanWidthDelta": 0.0553,
+    "worstStyleMeanAbsWidthDelta": 0.0668,
+    "maxAbsWidthDelta": 0.1115,
     "widthBarMet": false,
-    "lineBreaksIdenticalFraction": 0.244,
+    "lineBreaksIdenticalFraction": 0.092,
     "verticalMetricsEqual": false,
     "xHeightRatio": 1.105,
     "capHeightRatio": 1.17,
@@ -17052,15 +19747,233 @@
      "xHeightRatio": 1.105,
      "capHeightRatio": 1.172,
      "ascentRatio": 0.997
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "20593736369.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "553065b6a6f65477a465c26db113ccfe69ee99d6a64d986c01b5d5b495e7d25d"
+     },
+     "replacement": {
+      "family": "Figtree",
+      "weight": 400,
+      "italic": true,
+      "package": "@expo-google-fonts/figtree",
+      "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1741,
+     "meanWidthDelta": 0.1741,
+     "maxAbsWidthDelta": 0.2023,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 0,
+      "differing": 250,
+      "identicalFraction": 0,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9531,
+       -0.2471,
+       0
+      ],
+      "typo": [
+       0.6616,
+       -0.2471,
+       0.2915
+      ],
+      "win": [
+       0.9531,
+       0.2471
+      ],
+      "xHeight": 0.4526,
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
+     },
+     "replacementVertical": {
+      "hhea": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "typo": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "win": [
+       0.979,
+       0.222
+      ],
+      "xHeight": 0.5,
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.105,
+     "capHeightRatio": 1.17,
+     "ascentRatio": 0.997
+    },
+    {
+     "style": "700i",
+     "reference": {
+      "file": "19107885847.ttf",
+      "version": "Version 1.04;O365",
+      "sha256": "fba2e8017777a82b1352f3545d0b6dd96996de28b4d84814b08fc31543be0e60"
+     },
+     "replacement": {
+      "family": "Figtree",
+      "weight": 700,
+      "italic": true,
+      "package": "@expo-google-fonts/figtree",
+      "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1397,
+     "meanWidthDelta": 0.1397,
+     "maxAbsWidthDelta": 0.1648,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 1,
+      "differing": 249,
+      "identicalFraction": 0.004,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 1,
+        "differing": 49
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.9531,
+       -0.2471,
+       0
+      ],
+      "typo": [
+       0.6616,
+       -0.2471,
+       0.2915
+      ],
+      "win": [
+       0.9531,
+       0.2471
+      ],
+      "xHeight": 0.4526,
+      "capHeight": 0.5981,
+      "inkXHeight": 0.4526,
+      "inkCapHeight": 0.5981
+     },
+     "replacementVertical": {
+      "hhea": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "typo": [
+       0.95,
+       -0.25,
+       0
+      ],
+      "win": [
+       0.979,
+       0.222
+      ],
+      "xHeight": 0.5,
+      "capHeight": 0.7,
+      "inkXHeight": 0.5,
+      "inkCapHeight": 0.7
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 1.105,
+     "capHeightRatio": 1.17,
+     "ascentRatio": 0.997
     }
    ],
    "summary": {
-    "stylesMeasured": 2,
-    "standardStylesMeasured": 2,
-    "meanAbsWidthDelta": 0.1476,
-    "meanWidthDelta": 0.1476,
-    "worstStyleMeanAbsWidthDelta": 0.1661,
-    "maxAbsWidthDelta": 0.1975,
+    "stylesMeasured": 4,
+    "standardStylesMeasured": 4,
+    "meanAbsWidthDelta": 0.1522,
+    "meanWidthDelta": 0.1522,
+    "worstStyleMeanAbsWidthDelta": 0.1741,
+    "maxAbsWidthDelta": 0.2023,
     "widthBarMet": false,
     "lineBreaksIdenticalFraction": 0,
     "verticalMetricsEqual": false,

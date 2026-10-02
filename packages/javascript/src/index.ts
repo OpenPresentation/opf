@@ -139,6 +139,9 @@ export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
 export {
   chartColorForFill,
+  chartPaletteForFill,
+  CHART_SERIES_MIN_LIGHTNESS_STEP,
+  CHART_SERIES_MIN_DIFFERENCE,
   colorContrast,
   normalizeHexColor,
   resolveColorRef,
