@@ -1,0 +1,190 @@
+{
+  "name": "Kitchen sink",
+  "language": "en-US",
+  "tags": [
+    "alpha",
+    "beta"
+  ],
+  "variables": {
+    "risk": "#B42318"
+  },
+  "slides": [
+    {
+      "id": "one",
+      "layout": "title",
+      "section": "Part 1",
+      "title": "Title with a styled word",
+      "subtitle": "Subtitle",
+      "blocks": [
+        {
+          "text": [
+            "Soft wrapped paragraph with a hard\nbreak and a ",
+            {
+              "text": "link",
+              "link": "https://example.com/a_b"
+            },
+            "."
+          ]
+        },
+        {
+          "items": [
+            "star bullet",
+            {
+              "text": "nested star",
+              "level": 1
+            }
+          ]
+        },
+        {
+          "items": [
+            "plus bullet"
+          ]
+        },
+        {
+          "items": [
+            "numbered one",
+            "numbered two"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Block variety",
+      "blocks": [
+        {
+          "quote": {
+            "text": "Quoted words continue here",
+            "attribution": "Ada Lovelace, Analyst"
+          }
+        },
+        {
+          "code": {
+            "source": "print(\"tilde fence\")",
+            "language": "python",
+            "filename": "a.py"
+          }
+        },
+        {
+          "table": {
+            "columns": [
+              "Item",
+              "Qty"
+            ],
+            "rows": [
+              [
+                "Pens",
+                "12"
+              ],
+              [
+                "Paper",
+                "007"
+              ],
+              [
+                "Ink",
+                null
+              ]
+            ]
+          }
+        },
+        {
+          "image": {
+            "src": "assets/dash board.png",
+            "alt": "Dashboard",
+            "title": "Q3"
+          }
+        },
+        {
+          "chart": {
+            "type": "pie",
+            "data": {
+              "columns": [
+                "Region",
+                "Share"
+              ],
+              "rows": [
+                [
+                  "North",
+                  40
+                ],
+                [
+                  "South",
+                  "60"
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "chart": {
+            "type": "line",
+            "data": {
+              "columns": [
+                "x",
+                "y"
+              ],
+              "rows": [
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "metric": {
+            "value": "42%",
+            "label": "Uptime: 30 days",
+            "unit": "%"
+          }
+        },
+        {
+          "timeline": [
+            {
+              "when": "Now",
+              "what": "Plan"
+            },
+            {
+              "when": "Q1 2027",
+              "what": "Launch",
+              "description": "with a description"
+            },
+            {
+              "what": "Someday"
+            }
+          ]
+        },
+        {
+          "text": [
+            {
+              "text": "A small heading",
+              "bold": true
+            }
+          ]
+        }
+      ],
+      "notes": "first line\nsecond line\n\n# not a title inside notes",
+      "hidden": true
+    },
+    {
+      "id": "three",
+      "left": {
+        "id": "left-col",
+        "text": "Left text"
+      },
+      "right": {
+        "bullets": [
+          "right one",
+          "right two"
+        ]
+      },
+      "extensions": {
+        "owner": "ops"
+      }
+    }
+  ]
+}

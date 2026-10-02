@@ -8,6 +8,7 @@ import { mergeCommand } from "./merge.js";
 import { formatCommand } from "./format.js";
 import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
+import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
 import {runAudit} from './audit.js';
@@ -39,6 +40,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
            | --combine --output <file|->] [--partial] [--examples] [--force] [--strict]
   opf paginate <input|-> <output|-> [--force] [--strict]
   opf bundle <input|-> <output|-> [--force] [--strict]
+${MARKDOWN_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
            [--paginate] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
   opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
@@ -84,6 +86,8 @@ files with SHA-256 digests, never load system fonts and never fetch URLs; --stri
 when there are warnings. Existing outputs require --force.
 Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
 fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
+
+${MARKDOWN_HELP}
 
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
@@ -172,6 +176,7 @@ async function main(argv: string[]) {
   const [command, ...args] = argv;
   if (command === 'audit') { await runAudit(args); return; }
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
+  if (command === 'from-md' || command === 'to-md') { await markdownCommand(command, args); return; }
   if (command === 'skills') {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
     print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;

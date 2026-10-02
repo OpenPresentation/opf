@@ -235,6 +235,23 @@ assert.equal(mergeSlides({slides:[{text:'a'},{text:'b'}]},0).slides[0].blocks.le
 console.log('Installed conversions: pure converters, loss reports and refusals work offline.');
 `);
     const conversions=await run(process.execPath,['convert.mjs'],{cwd:projectDir});process.stdout.write(conversions.stdout);
+    assertTarIncludes(files,'package/dist/markdown.js');assertTarIncludes(files,'package/dist/markdown.d.ts');
+    await writeFile(path.join(projectDir,'markdown.mjs'),`
+import assert from 'node:assert/strict';
+import {markdownToOpf,opfToMarkdown,OPFMarkdownError} from '@openpresentation/opf/markdown';
+globalThis.fetch=()=>{throw new Error('Offline Markdown conversion must not fetch');};
+const source='---\\nname: Installed\\n---\\n\\n<!-- slide: id=a -->\\n# One\\n\\n- x\\n- y\\n\\n---\\n\\n# Two\\n\\nNote: speaking\\n';
+const converted=markdownToOpf(source);
+assert.equal(converted.valid,true);
+assert.deepEqual(converted.document,{name:'Installed',slides:[{id:'a',title:'One',items:['x','y']},{title:'Two',notes:'speaking'}]});
+const written=opfToMarkdown(converted.document);
+assert.equal(written.markdown,source);assert.equal(written.report.native,true);
+const broken=markdownToOpf('# A\\n\\n<!-- slide: nope=1 -->');
+assert.equal(broken.valid,false);assert.deepEqual([broken.diagnostics[0].location.line,broken.diagnostics[0].location.column],[3,1]);
+assert.throws(()=>opfToMarkdown({slides:'x'}),OPFMarkdownError);
+console.log('Installed Markdown: dialect conversion, round trip and located errors work offline.');
+`);
+    const markdown=await run(process.execPath,['markdown.mjs'],{cwd:projectDir});process.stdout.write(markdown.stdout);
     assertTarIncludes(files,'package/dist/audit.js');assertTarIncludes(files,'package/dist/audit.d.ts');
     await writeFile(path.join(projectDir,'audit.mjs'),`
 import assert from 'node:assert/strict';
