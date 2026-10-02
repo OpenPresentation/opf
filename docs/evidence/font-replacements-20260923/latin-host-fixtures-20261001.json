@@ -7,8 +7,8 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/latin-family-hosts.mjs",
-    "commit": "1a7945f0e8570828a87739b26d4d9a6447e50452",
-    "runtime": "Node v26.4.0"
+    "commit": "ea71c4aced162c77dc7be22f0ccca5963222aa01",
+    "runtime": "Node v26.7.0"
    },
    "families": {
     "Anton": {
@@ -904,8 +904,8 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/latin-family-hosts-browser.mjs",
-    "commit": "1a7945f0e8570828a87739b26d4d9a6447e50452",
-    "runtime": "Node v26.4.0, Chromium-based browser 154.0.4258.37, offline"
+    "commit": "ea71c4aced162c77dc7be22f0ccca5963222aa01",
+    "runtime": "Node v26.7.0, Chromium-based browser 153.0.8010.12, offline"
    },
    "filesFetchedInTotal": 94,
    "bytesFetchedInTotal": 25675328,
@@ -1674,8 +1674,8 @@
    "source": {
     "repository": "OpenPresentation/opf-editor",
     "test": "test/font-gate-latin-families.mjs",
-    "commit": "e78fcbf44bd46d293e928e8e7bb23764f6fd884c",
-    "runtime": "Node v26.4.0, renderer 0.11.9, the editor's createFontGate"
+    "commit": "d48a45cada0ed7ccd18a1fa33a5eeea62709f60b",
+    "runtime": "Node v26.7.0, renderer 0.12.0, the editor's createFontGate"
    },
    "families": {
     "Anton": {
@@ -2426,8 +2426,8 @@
    "source": {
     "repository": "Data-Advantage/pptx-gallery",
     "test": "tests/editor-latin-families.test.ts",
-    "commit": "d9a3d0097b5fbb2d6e26b9f6bbf61254b2f4ac24",
-    "runtime": "renderer 0.11.9, manifest public/opf-editor/lazy-fonts.json (renderer 0.11.9)"
+    "commit": "6c31f31fa83a0e37f4354dfaa5a6d6e8b6b1335f",
+    "runtime": "renderer 0.12.0, manifest public/opf-editor/lazy-fonts.json (renderer 0.12.0)"
    },
    "families": {
     "Anton": {
@@ -2820,6 +2820,21 @@
      ],
      "lazyBytes": 2301580
     },
+    "Liberation Mono": {
+     "route": "Cousine",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Liberation Sans": {
+     "route": "Arimo",
+     "files": [],
+     "lazyBytes": 0
+    },
+    "Liberation Serif": {
+     "route": "Tinos",
+     "files": [],
+     "lazyBytes": 0
+    },
     "Libre Caslon Text": {
      "route": "Libre Caslon Text",
      "files": [
@@ -3207,11 +3222,11 @@
    "familiesWithoutLazyFiles": 23
   },
   "galleryEditor": {
-   "families": 84,
+   "families": 87,
    "deckBytesMedianMiB": 0.414,
    "deckBytesMaxMiB": 2.964,
    "largestDeck": "Aptos Narrow",
-   "familiesWithoutLazyFiles": 20
+   "familiesWithoutLazyFiles": 23
   }
  }
 }

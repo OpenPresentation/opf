@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -14,8 +14,9 @@ const policyNames = policy.families.map((row) => row.family);
 
 // A scratch copy of the inputs, outputs and script, so drift and error cases never touch the checkout.
 function scratchCopy() {
-  const dir = mkdtempSync(path.join(tmpdir(), "font-tracker-"));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
+  // realpath: on macOS the temporary directory is a symlink, and the script only runs when its resolved path is the entry point.
+  const dir = realpathSync(mkdtempSync(path.join(tmpdir(), "font-tracker-")));
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
@@ -148,7 +149,8 @@ test("every proprietary script family and open script face carries its script-co
     assert.equal(record.hostVerification.browser, "verified", name);
   }
   assert.deepEqual(committed.records.find((record) => record.family === "Noto Sans Mongolian").stylesRequired, ["400"]);
-  assert.equal(committed.records.find((record) => record.family === "Noto Sans Mongolian").status, "baseline-needed");
+  // RR-17: the open script faces have their own fixture in every host (script-host-fixtures), so they are qualified.
+  assert.equal(committed.records.find((record) => record.family === "Noto Sans Mongolian").status, "qualified");
   assert.ok(renderMarkdown(committed).includes("## Script corpus (FF-44)"));
 });
 
@@ -181,7 +183,8 @@ test("the Aptos family is qualified with Intos bundled and fixtures in every hos
     assert.equal(record.paritySignals.fontResolution.pass, 704, name);
     assert.equal(record.priority.valuesOpen, 0, name);
     assert.equal(record.phase, 5, `${name}: only native verification is left`);
-    assert.ok(record.priority.rank > 100, `${name} passes every audited value, so it ranks low (rank ${record.priority.rank})`);
+    // It ranks below every family that still has work before native verification (phases 1 to 4).
+    assert.ok(record.priority.rank > committed.records.filter((item) => item.phase < 5).length, `${name} passes every audited value, so it ranks low (rank ${record.priority.rank})`);
   }
   for (const name of INTOS) {
     const record = committed.records.find((item) => item.family === name);
@@ -393,7 +396,8 @@ test("a Latin family is accepted only with a fixture in every host and a measure
   const hostEvidence = read(overrides.hostFixtureEvidence);
   const qualification = read(overrides.qualificationReport);
   const measured = new Map(qualification.results.map((row) => [row.family, row]));
-  for (const record of committed.records) {
+  // The script, emoji and math families derive theirs from their own evidence (the tests at the end of this file).
+  for (const record of committed.records.filter((item) => item.scripts.every((script) => script === "Latin"))) {
     const fixtureHosts = rules.hosts.filter((host) => hostEvidence.hosts[host].families[record.family]);
     if (record.acceptance.accepted) {
       assert.deepEqual(fixtureHosts, rules.hosts, `${record.family}: accepted without a fixture in every host`);
@@ -416,13 +420,13 @@ test("a Latin family is accepted only with a fixture in every host and a measure
     assert.equal(record.status, "visual-gap", name);
     assert.match(record.nextAction, /Unmeasured/, name);
   }
-  // Liberation: the gallery editor's pinned renderer predates the alias, so the third host is missing and the family is not accepted yet.
+  // Liberation: the gallery editor pinned renderer 0.12.0, which carries the alias, so the fixture now passes in all four hosts and the metric alias is accepted.
   for (const name of ["Liberation Sans", "Liberation Serif", "Liberation Mono"]) {
     const record = committed.records.find((item) => item.family === name);
     assert.equal(record.previewRoute.tier, "metric", name);
-    assert.deepEqual(rules.hosts.filter((host) => hostEvidence.hosts[host].families[name]), ["node", "browser", "editor"], name);
-    assert.equal(record.acceptance.accepted, false, name);
-    assert.match(record.acceptance.note, /missing in galleryEditor/, name);
+    assert.deepEqual(rules.hosts.filter((host) => hostEvidence.hosts[host].families[name]), rules.hosts, name);
+    assert.equal(record.acceptance.accepted, true, name);
+    assert.equal(record.status, "qualified", name);
   }
 });
 
@@ -740,4 +744,129 @@ test("gallery cards are verified for the families pptx-gallery's own preview-fon
   assert.equal(record("Arial").hostVerification.galleryCards, "verified");
   assert.equal(record("Sylfaen").hostVerification.galleryCards, "unverified", "Noto Sans has a recorded Georgian coverage gap in the cards");
   assert.equal(record("Calibri Light").hostVerification.galleryCards, "unverified", "no font scheme uses Calibri Light");
+});
+
+// ---- RR-17 (FF-44, FF-45): the open script, emoji and math families derive acceptance from their own per-host fixture evidence ----------
+
+const SCRIPT_HOSTS = overrides.scriptAcceptance.hosts;
+const isLatinOnly = (rec) => rec.scripts.every((script) => script === "Latin");
+
+test("an open script, emoji or math family is qualified only with a passing fixture in every host, and a recorded finding keeps it out", () => {
+  const rules = overrides.scriptAcceptance;
+  const evidence = read(overrides.scriptHostFixtureEvidence);
+  assert.deepEqual(rules.hosts, ["node", "browser", "editor", "galleryEditor"]);
+  const open = committed.records.filter((rec) => rec.class === "open" && !isLatinOnly(rec));
+  assert.equal(open.length, 35, "the 35 faces of the scripts pack");
+  for (const rec of open) {
+    const passed = rules.hosts.filter((host) => evidence.hosts[host].families[rec.family]);
+    const findings = rules.hosts.filter((host) => evidence.hosts[host].findings?.[rec.family]);
+    // A family is under a host's families or its findings, never both.
+    for (const host of findings) assert.ok(!evidence.hosts[host].families[rec.family], `${rec.family}: both passed and a finding in ${host}`);
+    if (passed.length === rules.hosts.length) {
+      assert.equal(rec.acceptance.accepted, true, rec.family);
+      assert.equal(rec.status, "qualified", rec.family);
+      assert.equal(rec.acceptance.date, rules.date, rec.family);
+      assert.ok(rec.acceptance.evidence.length >= 2, rec.family);
+      assert.match(rec.acceptance.note, /draws as itself in every host/, rec.family);
+      for (const host of rules.hosts) assert.equal(rec.hostVerification[host], "verified", `${rec.family} ${host}`);
+      assert.equal(rec.phase, 5, rec.family);
+      assert.equal(rec.hostFixtureFindings, undefined, rec.family);
+    } else {
+      assert.equal(rec.acceptance.accepted, false, rec.family);
+      assert.equal(rec.status, "baseline-needed", rec.family);
+      assert.ok(findings.length > 0 || passed.length > 0, `${rec.family}: not accepted without a reason`);
+      if (findings.length) {
+        assert.deepEqual(Object.keys(rec.hostFixtureFindings), findings, rec.family);
+        assert.match(rec.acceptance.note, /Not accepted: the fixture recorded a finding in/, rec.family);
+        for (const host of findings) assert.notEqual(rec.hostVerification[host], "verified", `${rec.family} ${host}`);
+      }
+    }
+  }
+  // The one recorded finding: Chromium falls back for the emoji-presentation sequences of the monochrome Noto Emoji; the check was not relaxed.
+  const emoji = committed.records.find((rec) => rec.family === "Noto Emoji");
+  assert.equal(emoji.status, "baseline-needed");
+  assert.deepEqual(Object.keys(emoji.hostFixtureFindings), ["browser"]);
+  assert.deepEqual(rules.hosts.filter((host) => evidence.hosts[host].families["Noto Emoji"]), ["node", "editor", "galleryEditor"]);
+  assert.match(emoji.hostFixtureFindings.browser.reason, /1\.0000? em|1\.000 em/);
+  assert.equal(committed.records.find((rec) => rec.family === "Noto Color Emoji").status, "qualified");
+  assert.equal(committed.summary.byStatus["baseline-needed"], open.filter((rec) => rec.status === "baseline-needed").length, "no other family is baseline-needed");
+});
+
+test("the script host fixtures name the same families in every host, every one of them in the scripts pack, and none is also a Latin fixture", () => {
+  const evidence = read(overrides.scriptHostFixtureEvidence);
+  const latin = read(overrides.hostFixtureEvidence);
+  assert.equal(evidence.schema, "opf-script-host-fixtures/v1");
+  const all = Object.keys(evidence.hosts.node.families).sort();
+  assert.equal(all.length, 35);
+  for (const host of SCRIPT_HOSTS) {
+    const entry = evidence.hosts[host];
+    assert.match(entry.source.commit, /^[0-9a-f]{40}$/, host);
+    const names = [...Object.keys(entry.families), ...Object.keys(entry.findings ?? {})].sort();
+    assert.deepEqual(names, all, `${host} accounts for every family (passed or a finding)`);
+    for (const [family, value] of Object.entries(entry.families)) {
+      assert.ok(committed.records.some((rec) => rec.family === family), `${host}: ${family} has a record`);
+      assert.equal(value.route, family, `${host}: ${family} draws itself`);
+      assert.ok(value.files.length >= 1 && value.samples.length >= 2 && value.lazyBytes > 0, `${host}: ${family} names its files and at least two samples`);
+      assert.ok(!latin.hosts[host].families[family], `${family} is in both fixture files (${host})`);
+    }
+    for (const [family, finding] of Object.entries(entry.findings ?? {})) assert.ok(finding.check && finding.reason, `${host}: ${family} finding says what failed and why`);
+  }
+  assert.deepEqual(Object.keys(evidence.hosts.browser.findings), ["Noto Emoji"]);
+});
+
+test("the script rule leaves the Latin path alone: without it the Latin records are unchanged, and a family missing from one host is not accepted", () => {
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, FILES.overrides);
+    const edited = JSON.parse(readFileSync(file, "utf8"));
+    delete edited.scriptAcceptance;
+    delete edited.scriptHostFixtureEvidence;
+    writeFileSync(file, JSON.stringify(edited));
+    const without = buildTracker({ root: dir }).tracker.records;
+    // Every Latin-only record is identical except its global priority rank (the ranking counts the other families).
+    const strip = (rec) => ({ ...rec, priority: { ...rec.priority, rank: 0 } });
+    for (const rec of committed.records.filter(isLatinOnly)) {
+      assert.deepEqual(strip(without.find((item) => item.family === rec.family)), strip(rec), rec.family);
+    }
+    // Without the script evidence the open script faces fall back to the authored host map and stay baseline-needed.
+    for (const rec of without.filter((item) => item.class === "open" && !isLatinOnly(item))) assert.equal(rec.status, "baseline-needed", rec.family);
+
+    // With the evidence, a family dropped from the gallery editor's fixture is not accepted and the note names the missing host.
+    const again = JSON.parse(readFileSync(file, "utf8"));
+    again.scriptAcceptance = overrides.scriptAcceptance;
+    again.scriptHostFixtureEvidence = overrides.scriptHostFixtureEvidence;
+    writeFileSync(file, JSON.stringify(again));
+    const evidenceFile = path.join(dir, overrides.scriptHostFixtureEvidence);
+    const evidence = JSON.parse(readFileSync(evidenceFile, "utf8"));
+    delete evidence.hosts.galleryEditor.families["Noto Sans Hebrew"];
+    writeFileSync(evidenceFile, JSON.stringify(evidence));
+    const dropped = buildTracker({ root: dir }).tracker.records.find((item) => item.family === "Noto Sans Hebrew");
+    assert.equal(dropped.status, "baseline-needed");
+    assert.equal(dropped.acceptance.accepted, false);
+    assert.match(dropped.acceptance.note, /the script fixture passes in node, browser, editor and is missing in galleryEditor/);
+    assert.equal(dropped.hostVerification.galleryEditor, "unverified");
+
+    // A family in both the Latin and the script evidence is an error: each family has one fixture model.
+    const latin = JSON.parse(readFileSync(path.join(dir, overrides.hostFixtureEvidence), "utf8"));
+    latin.hosts.node.families["Noto Sans Hebrew"] = latin.hosts.node.families.Arial;
+    writeFileSync(path.join(dir, overrides.hostFixtureEvidence), JSON.stringify(latin));
+    evidence.hosts.node.families["Noto Sans Hebrew"] = evidence.hosts.node.families["Noto Sans JP"];
+    writeFileSync(evidenceFile, JSON.stringify(evidence));
+    assert.throws(() => buildTracker({ root: dir }), /Noto Sans Hebrew is in both the Latin and the script host fixture evidence/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("the assembler turns the four host reports into the evidence file, with a finding beside the families and never among them", async () => {
+  const { assemble } = await import("./assemble-script-host-evidence.mjs");
+  const row = (family) => ({ family, route: family, package: "noto-sans-x", scripts: ["Xxxx"], files: [`noto-sans-x/${family}.ttf`], lazyBytes: 1048576, samples: ["a", "b"], weights: [400] });
+  const report = { node: "v26", browser: "1", renderer: "0.12.0", manifestVersion: "0.12.0", report: [row("A"), row("B")] };
+  const commit = "0".repeat(40);
+  const out = assemble({ node: report, browser: { ...report, report: [row("A")], findings: [{ family: "B", message: "advance differs", reason: "why" }] }, editor: report, gallery: report, commits: { render: commit, editor: commit, gallery: commit } });
+  assert.deepEqual(Object.keys(out.hosts), ["node", "browser", "editor", "galleryEditor"]);
+  assert.deepEqual(Object.keys(out.hosts.browser.families), ["A"]);
+  assert.deepEqual(out.hosts.browser.findings, { B: { check: "advance differs", reason: "why" } });
+  assert.equal(out.hosts.node.findings, undefined);
+  assert.equal(out.lazyBudget.node.families, 2);
 });
