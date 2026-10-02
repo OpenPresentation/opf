@@ -1,5 +1,17 @@
 # Rendering and conversion APIs
 
+## CLI
+
+```sh
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+opf render deck.opf.json --slides 1,3-5 --format svg|png [--scale 2] [--out dir]
+opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|x.zip] [--pdf-mode vector|raster]
+           [--chartex auto|native|fallback] [--provenance full|references-only|none] [--paginate] [--date YYYY-MM-DD]
+opf import deck.pptx [--out deck.opf.json] [--signals signals.json]
+```
+
+Each prints one JSON report (the `opf lint` shape: `ok`, `diagnostics` with `ruleId`/`severity`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on warnings with `--strict` (nothing is written then). The CLI uses the same `prepareNodeFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). `--pdf-mode vector` and `--signals` need an opf-render and opf-pptx that have them; the CLI refuses them otherwise. Full reference: `docs/cli.md` in the core repository.
+
 ## Prepared font inputs
 
 Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`

@@ -142,6 +142,9 @@ export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_
 export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
 export {
   chartColorForFill,
+  chartPaletteForFill,
+  CHART_SERIES_MIN_LIGHTNESS_STEP,
+  CHART_SERIES_MIN_DIFFERENCE,
   colorContrast,
   normalizeHexColor,
   resolveColorRef,

@@ -369,8 +369,8 @@ test("per-family acceptance records come from overrides, with fixture, date and 
     assert.equal(arial.acceptance.accepted, true);
     assert.equal(arial.acceptance.date, "2026-10-01");
     assert.equal(arial.acceptance.evidence.length, 1);
-    const grandview = buildTracker({ root: dir }).tracker.records.find((record) => record.family === "Grandview");
-    assert.equal(grandview.acceptance.accepted, false, "acceptance never transfers to another family");
+    const didot = buildTracker({ root: dir }).tracker.records.find((record) => record.family === "Didot");
+    assert.equal(didot.acceptance.accepted, false, "acceptance never transfers to another family");
 
     edited.acceptance.Arial.date = null;
     writeFileSync(file, JSON.stringify(edited));
@@ -405,8 +405,8 @@ test("a Latin family is accepted only with a fixture in every host and a measure
       assert.ok(!["qualified", "documented-visual"].includes(record.status), `${record.family} is not accepted`);
     }
   }
-  // Families whose real font is not available to the measuring host stay unaccepted, with the supervisor step in their next action.
-  for (const name of ["Didot", "Grandview", "Grandview Display", "Seaford", "Seaford Display", "Skeena", "Skeena Display"]) {
+  // Didot is Apple-only, so its real font is not available to the Windows measuring host: unaccepted, with the reason in its next action. The Microsoft 365 cloud fonts (Grandview, Seaford, Skeena and their Display cuts) were measured once Office cached them.
+  for (const name of ["Didot"]) {
     const record = committed.records.find((item) => item.family === name);
     assert.equal(measured.get(name).referenceAvailable, false, name);
     assert.equal(record.acceptance.accepted, false, name);
@@ -440,7 +440,7 @@ test("the host fixtures name the same Latin families in every host and the quali
   const rows = new Set(qualification.results.map((row) => row.family));
   // Cambria Math and Segoe UI Emoji left the special class in FF-45 (RR-17): their qualification is the FF-45 emoji and math corpus, not the Latin report.
   for (const record of committed.records.filter((item) => item.class === "proprietary-latin" && !["Cambria Math", "Segoe UI Emoji"].includes(item.family))) assert.ok(rows.has(record.family), `${record.family} is in the qualification report`);
-  assert.equal(qualification.results.filter((row) => !row.referenceAvailable).length, 7);
+  assert.deepEqual(qualification.results.filter((row) => !row.referenceAvailable).map((row) => row.family), ["Didot"]);
 });
 
 test("the decisions of RR-17 are recorded: Aptos Narrow and Serif route to Intos, Aptos Mono keeps Cousine, Liberation aliases the Croscore faces", () => {
