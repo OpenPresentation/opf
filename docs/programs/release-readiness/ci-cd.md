@@ -607,11 +607,17 @@ are filed as issues.
 | QW7 | pptx-gallery runs the production-only checks (production smoke, Lighthouse on www.pptx.gallery, remote validate) after merge, not on PRs | [pptx-gallery#85](https://github.com/Data-Advantage/pptx-gallery/pull/85) | 51 s of a 223 s p50 PR job (23%), on billed minutes; no production-coupled PR failures | low: they still run on every push to main and on demand |
 | QW8 | pptx-dev Windows leg policy: ubuntu on every PR; Windows on master, manual runs, a weekly schedule, and Windows-sensitive or `windows`-labelled PRs | [pptx-dev#78](https://github.com/Data-Advantage/pptx-dev/pull/78) | 50 of the last 60 PRs touch a Windows-sensitive path (the lockfile and `package.json` 30, `tests/e2e` 24), so about 17% of PR runs skip Windows: about 170 billed-minute equivalents a month with a weekly drift run. A nightly run would cost about 420 a month, a net loss of about 190, so the PR runs it weekly (vetoable) | low: master pushes always run Windows |
 
-Flake recorded while measuring: on pptx-dev Windows,
-`tests/e2e/inspector-autosave.spec.ts:48` passed and then failed on the same
-SHA. It is a quarantine candidate in
-[pptx-dev#77](https://github.com/Data-Advantage/pptx-dev/issues/77), handled
-under RR-44.
+Flakes recorded while measuring, the first quarantine candidates for RR-44:
+
+- pptx-dev Windows, `tests/e2e/inspector-autosave.spec.ts:48`: it failed and
+  passed on the same SHA, and failed in 2 of the last 4 Windows runs that
+  reached it
+  ([pptx-dev#77](https://github.com/Data-Advantage/pptx-dev/issues/77)).
+- openpresentation-site, `tests/e2e/code-editing.spec.ts:65` ("/playground
+  Enter continues bullets"): it failed on attempt 1 of the same commit
+  (`f85e318`, the slide still showed "Minimal OPF Deck") and passed on
+  attempt 2. It also failed on a `main` push in the sample
+  ([openpresentation-site#65](https://github.com/Data-Advantage/openpresentation-site/issues/65)).
 
 ### Medium (one to three days each)
 
