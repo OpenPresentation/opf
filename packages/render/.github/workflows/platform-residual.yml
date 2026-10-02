@@ -131,7 +131,8 @@ jobs:
     needs: measure
     if: always()
     continue-on-error: true
-    runs-on: ubuntu-latest
+    # RR-40: a fixed image; ubuntu-latest moves to Ubuntu 26 from 2026-10-19. Move to the next LTS in its own PR.
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
