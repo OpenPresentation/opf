@@ -521,11 +521,12 @@ test("Symbol, Wingdings and Webdings carry the code-table route from the pinned 
     assert.equal(item.hostVerification.node, "verified", name);
     assert.equal(item.hostVerification.browser, "verified", name);
     assert.equal(item.hostVerification.editor, "unverified", name);
-    // Nothing is claimed beyond what is verified: no native PowerPoint check of symbol runs exists in docs/evidence.
-    assert.equal(item.nativeVerification.status, "unverified", name);
+    // Nothing is claimed beyond what is verified: the FF-46 native run read the name back (not the glyph shapes), and acceptance stays pending.
+    assert.equal(item.nativeVerification.status, "verified", name);
+    assert.deepEqual(item.nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002"], name);
     assert.equal(item.acceptance.accepted, false, name);
-    assert.match(item.statusReason, /no native PowerPoint check is recorded/, name);
-    assert.match(item.nextAction, /none is recorded/, name);
+    assert.match(item.statusReason, /native PowerPoint name read-back passed/, name);
+    assert.match(item.nextAction, /no a:sym element/, name);
   }
   assert.deepEqual(snapshot.previewFaces.Wingdings, ["Noto Sans Symbols 2", "Noto Sans Symbols", "Noto Sans Math", "Noto Sans"]);
   assert.match(renderMarkdown(committed), /## Symbol-encoded families \(FF-45\)/);
@@ -561,18 +562,20 @@ test("the symbol snapshot is reduced from the renderer module and refuses a bad 
 
 test("native verification comes from committed comparison output, and only for families the runs name", () => {
   const verified = committed.summary.nativeVerifiedFamilies;
-  assert.deepEqual(
-    [...verified].sort(),
-    ["Angsana New", "Aptos", "Aptos Display", "Arabic Typesetting", "David", "Malgun Gothic", "Mangal", "Meiryo", "Microsoft JhengHei", "Microsoft YaHei"],
-  );
+  // FF-46 (2026-10-02): every deck of the 0.12.0 native run passes, and every family is named by one, so every record is verified by name read-back.
+  assert.deepEqual([...verified].sort(), committed.records.map((item) => item.family).sort());
+  assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length, partial: 0, unverified: 0, NA: 0 });
   assert.equal(committed.summary.nativeVerification.verified, verified.length);
-  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002"]);
+  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002"]);
   const runs = Object.fromEntries(committed.inputs.nativeEvidence.map((run) => [run.id, run]));
   assert.equal(runs["rr-05b-native-20261002"].decks, 4);
   assert.equal(runs["rr-05b-native-20261002"].decksPassing, 4);
   assert.equal(runs["rr-05-cjk-native-20261002"].decks, 9);
   assert.equal(runs["rr-05-cjk-native-20261002"].decksPassing, 8);
   assert.deepEqual(runs["rr-05-cjk-native-20261002"].failingChecks, [{ deck: "lang-ja-meiryo", failing: ["presentationFonts"], detail: ["presentation-fonts-extra"] }]);
+  assert.equal(runs["ff-46-native-0.12-20261002"].decks, 43);
+  assert.equal(runs["ff-46-native-0.12-20261002"].decksPassing, 43);
+  assert.deepEqual(runs["ff-46-native-0.12-20261002"].failingChecks, []);
   for (const name of verified) {
     const item = record(name);
     assert.equal(item.nativeVerification.status, "verified", name);
@@ -581,23 +584,23 @@ test("native verification comes from committed comparison output, and only for f
       assert.ok(existsSync(path.join(ROOT, run.file)) && existsSync(path.join(ROOT, run.readme)), `${name}: evidence files exist`);
       assert.ok(run.decks.every((deck) => deck.via.length > 0), `${name}: read back by a theme slot or Presentation.Fonts`);
     }
-    assert.ok(item.evidence.some((entry) => entry.url.startsWith("docs/evidence/rr-05")), name);
+    assert.ok(item.evidence.some((entry) => entry.url.startsWith("docs/evidence/rr-05") || entry.url.startsWith("docs/evidence/ff-46")), name);
     assert.match(item.nextAction, /Native name read-back passed/, name);
   }
   // Which family came from which deck.
-  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002"]);
+  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002", "ff-46-native-0.12-20261002"]);
   assert.deepEqual(record("David").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-he", "rtl-structures-he"]);
   assert.deepEqual(record("Mangal").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-hi"]);
-  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
+  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["ff-46-native-0.12-20261002", "rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
   // lang-ja-meiryo failed only the Presentation.Fonts check (FF-05); Meiryo is verified by the decks that pass and the failure is a caveat.
   assert.deepEqual(record("Meiryo").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-ja", "size-4x3-japanese"]);
   assert.match(record("Meiryo").nativeVerification.caveat, /lang-ja-meiryo \(presentationFonts\)/);
   assert.match(record("Aptos").nativeVerification.caveat, /FF-05/);
-  // A family no run names stays unverified, with the reason stated.
-  for (const name of ["Calibri", "Arial", "Wingdings", "Noto Sans JP", "Aptos Narrow", "Cambria Math"]) {
-    assert.equal(record(name).nativeVerification.status === "verified", false, name);
+  // Families only the FF-46 run names are verified by it alone, through their own slide (per-run names and Presentation.Fonts).
+  for (const name of ["Calibri", "Arial", "Wingdings", "Noto Sans JP", "Aptos Narrow", "Cambria Math", "Segoe UI Emoji"]) {
+    assert.deepEqual(record(name).nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002"], name);
   }
-  assert.match(record("Arial").nativeVerification.note, /No native PowerPoint check recorded/);
+  assert.match(record("Arial").nativeVerification.note, /Passed in ff-46-native-0.12-20261002/);
   // Evidence is committed without absolute user paths.
   for (const run of overrides.nativeEvidence) for (const file of [run.file, path.join(path.dirname(run.file), "compare.md")]) assert.doesNotMatch(readFileSync(path.join(ROOT, file), "utf8"), /[A-Z]:\\Users|\/Users\/|micha/, file);
 });
@@ -605,6 +608,11 @@ test("native verification comes from committed comparison output, and only for f
 test("a deck that fails the fonts check, or a family that no deck names, gives no native verification", () => {
   const dir = scratchCopy();
   try {
+    // The FF-46 run names every family; take it out so the RR-05 decks below are the only evidence being perturbed.
+    const baseFile = path.join(dir, FILES.overrides);
+    const base = JSON.parse(readFileSync(baseFile, "utf8"));
+    base.nativeEvidence = base.nativeEvidence.filter((run) => run.id !== "ff-46-native-0.12-20261002");
+    writeFileSync(baseFile, JSON.stringify(base));
     const cjk = path.join(dir, "docs/evidence/rr-05-cjk-native-20261002/compare.json");
     const report = JSON.parse(readFileSync(cjk, "utf8"));
     const deck = (id) => report.decks.find((item) => item.id === id);
@@ -633,6 +641,28 @@ test("a deck that fails the fonts check, or a family that no deck names, gives n
     assert.equal(without.records.find((item) => item.family === "Meiryo").nativeVerification.status, "unverified");
     assert.equal(without.records.find((item) => item.family === "Aptos").nativeVerification.status, "verified");
     assert.equal(without.summary.nativeVerification.verified, 4, "Aptos, Aptos Display, Arabic Typesetting and David remain, from the Arabic and Hebrew run");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a failing FF-46 deck takes verification from the families only that deck names", () => {
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, "docs/evidence/ff-46-native-0.12-20261002/compare.json");
+    const report = JSON.parse(readFileSync(file, "utf8"));
+    const deck = report.decks.find((item) => item.id === "latin-03-tahoma");
+    deck.checks.presentationFonts.ok = false;
+    deck.checks.presentationFonts.extras = ["Aptos"];
+    writeFileSync(file, JSON.stringify(report));
+    const rebuilt = buildTracker({ root: dir }).tracker;
+    // Tahoma's slide is only in this deck: the deck's own fonts and theme slots match, so it is partial (not verified) with the reason.
+    const tahoma = rebuilt.records.find((item) => item.family === "Tahoma").nativeVerification;
+    assert.equal(tahoma.status, "partial");
+    assert.match(tahoma.note, /Presentation.Fonts lists a family the deck does not name/);
+    assert.ok(rebuilt.summary.nativePartialFamilies.includes("Tahoma"));
+    assert.equal(rebuilt.summary.nativeVerification.verified, committed.records.length - rebuilt.summary.nativePartialFamilies.length);
+    assert.deepEqual(rebuilt.inputs.nativeEvidence.find((run) => run.id === "ff-46-native-0.12-20261002").failingChecks.map((item) => item.deck), ["latin-03-tahoma"]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

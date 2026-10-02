@@ -58,6 +58,22 @@ jobs:
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
+      # RR-40: a pin must be a commit on the sibling's main (never a throwaway pin branch or an unmerged head).
+      # Warning only for now; the full-history checkouts above fetch origin/main, so this costs no network.
+      - name: Warn when a sibling pin is not on its main branch
+        if: steps.scope.outputs.run == 'true'
+        shell: bash
+        run: |
+          for repo in opf-render opf-editor opf-pptx; do
+            pin=$(git -C "$repo" rev-parse HEAD)
+            if ! git -C "$repo" rev-parse --verify --quiet origin/main >/dev/null; then
+              echo "::warning title=Ecosystem pin not verified::$repo: origin/main was not fetched, so pin ${pin:0:12} was not checked."
+            elif git -C "$repo" merge-base --is-ancestor "$pin" origin/main; then
+              echo "$repo pin ${pin:0:12} is on main ($(git -C "$repo" rev-list --count "$pin..origin/main") commits behind)."
+            else
+              echo "::warning title=Ecosystem pin not on main::$repo is pinned to ${pin:0:12}, which is not on OpenPresentation/$repo main ($(git -C "$repo" rev-list --count "origin/main..$pin") commits not in main). Repin to a merged commit."
+            fi
+          done
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         if: steps.scope.outputs.run == 'true'
         with:
