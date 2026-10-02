@@ -64,6 +64,7 @@ import type {FontFaceSelection, TextStyle} from '@openpresentation/opf/compositi
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createDataContent} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
+import {markdownToOpf, opfToMarkdown, type MarkdownDiagnostic} from '@openpresentation/opf/markdown';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
@@ -79,6 +80,13 @@ const lossless: boolean = converted.lossless;
 // @ts-expect-error unknown content kind must be rejected
 convertContent({text: 'a'}, 'unsupported');
 void lossless;
+const fromMarkdown = markdownToOpf('# Typed\\n');
+const slides: Presentation['slides'] = fromMarkdown.document.slides;
+const firstDiagnostic: MarkdownDiagnostic | undefined = fromMarkdown.diagnostics[0];
+const markdown: string = opfToMarkdown(deck).markdown;
+// @ts-expect-error unsupported mode must be rejected
+opfToMarkdown(deck, {unsupported: 'maybe'});
+void slides; void firstDiagnostic; void markdown;
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Numbered Lists",
+  "description": "Fixture for the numbering field: every style and suffix, start numbers, per-level styles with nesting and restarts, wide markers, bullets, an entry start, and a numbered list beside other blocks. See docs/numbered-lists.md.",
+  "design": { "theme": "classic", "colorScheme": "forest-green" },
+  "slides": [
+    {
+      "id": "styles",
+      "title": "Styles",
+      "blocks": [
+        { "items": ["Define the goal", "Pick the owner", "Ship it"], "numbering": "arabic" },
+        { "items": ["Define the goal", "Pick the owner", "Ship it"], "numbering": "roman-upper" },
+        { "items": ["Define the goal", "Pick the owner", "Ship it"], "numbering": "alpha-lower" }
+      ]
+    },
+    {
+      "id": "suffix-and-start",
+      "title": "Suffix and start",
+      "items": ["Review the draft", "Collect comments", "Resolve conflicts", "Publish"],
+      "numbering": { "style": "alpha-upper", "start": 3, "suffix": "paren" }
+    },
+    {
+      "id": "per-level",
+      "title": "Per-level styles",
+      "items": [
+        "Freeze the schema",
+        { "text": "Migrate the data", "level": 1 },
+        { "text": "Verify the counts", "level": 1 },
+        { "text": "Sample ten tables", "level": 2 },
+        "Switch traffic",
+        { "text": "Watch the error rate", "level": 1 },
+        "Retire the old service"
+      ],
+      "numbering": ["arabic", { "style": "alpha-lower", "suffix": "paren" }, { "style": "roman-lower", "suffix": "paren-both" }]
+    },
+    {
+      "id": "wide-markers",
+      "title": "Wide markers",
+      "items": ["Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen"],
+      "numbering": { "style": "roman-lower", "start": 8, "suffix": "paren-both" }
+    },
+    {
+      "id": "bullets-and-restart",
+      "title": "Bullets and an entry start",
+      "left": {
+        "bullets": ["First point", "Second point", { "text": "Resumed at six", "start": 6 }, "Seventh point"],
+        "numbering": "arabic"
+      },
+      "right": {
+        "items": ["Plain bullet", "Plain bullet again"]
+      }
+    },
+    {
+      "id": "beside-blocks",
+      "title": "Beside other blocks",
+      "left": {
+        "items": [
+          { "text": "Collect the requirements", "description": "Interviews and the support backlog." },
+          { "text": "Draft the proposal", "description": "One page, with the trade-offs." },
+          { "text": "Decide", "description": "Owner signs off." }
+        ],
+        "numbering": "arabic"
+      },
+      "right": {
+        "metric": { "value": "3", "label": "steps to a decision" }
+      }
+    }
+  ]
+}
