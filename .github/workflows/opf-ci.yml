@@ -17,7 +17,9 @@ permissions:
 jobs:
   verify:
     name: Verify OPF packages
-    runs-on: ubuntu-latest
+    # RR-40: a fixed image, so ubuntu-latest moving to Ubuntu 26 (from 2026-10-19) cannot change fonts, ICU or
+    # system libraries under this required check; move to the next LTS in its own PR.
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
