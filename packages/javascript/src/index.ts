@@ -100,6 +100,8 @@ export type {
 export type * from "./types.js";
 export {lintPresentation, lintSource} from './lint.js';
 export type {LintSeverity, LintLocation, LintSuggestion, LintDiagnostic, LintContract, LintOptions, LintReport} from './lint.js';
+export {auditPresentation, auditSource, auditRules, findAuditRule, DEFAULT_AUDIT_THRESHOLDS, DEFAULT_CHART_PALETTE} from './audit.js';
+export type {AuditSeverity, AuditCategory, AuditDiagnostic, AuditFix, AuditPatchOperation, AuditOptions, AuditReport, AuditRuleInfo, AuditThresholds} from './audit.js';
 export type {
   SpecFileEntry,
   SpecFilePath,
@@ -168,5 +170,7 @@ export type {
   FontReplacementMeasurement,
 } from './font-policy.js';
 export type {TextLineInk,TextPlacementLine,TextPlacement} from './composition.js';
+export { SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_FAMILIES, symbolFontEncodingFor, isSymbolEncodedFamily, symbolCodeOf, symbolUnicodeFor, symbolCodeForUnicode, mapSymbolText } from './symbol-font-encodings.js';
+export type { SymbolFontEncoding, SymbolFontEncodingTable, SymbolFontCode, SymbolFontFamily, SymbolTextCharacter } from './symbol-font-encodings.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartOptions} from './chart-options.js';
