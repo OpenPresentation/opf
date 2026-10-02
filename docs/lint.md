@@ -18,6 +18,7 @@ Lint is read-only and local. It returns JSON diagnostics with stable rule IDs, s
 | Catalog definitions | Validates supplied and inline records; rejects duplicate IDs within one catalog and reports invalid overrides |
 | Asset references | Reports missing document registry IDs and cyclic `asset:` references; does not fetch resource bytes |
 | Explicit contracts | Reports existing fields outside the allowed values in a host-supplied policy |
+| Citations and captions | Semantic errors keep their code as the rule id (`opf/cite-unknown-reference`, `opf/reference-id-duplicate`, `opf/cite-unsupported-location`, `opf/caption-unsupported-payload`); a reference no run cites is the warning `opf/unused-reference` |
 
 Free-form audience/purpose descriptions and arbitrary extension data do not become catalog references because of their spelling. An inline custom tone/narrative remains distinct from a string catalog reference. External catalog sources remain visible as informational diagnostics; URL and `pkg:` records are not resolved by this local lint pass. Suggestions name records actually present in the supplied context and never silently replace authored values.
 

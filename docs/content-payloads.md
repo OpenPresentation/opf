@@ -185,6 +185,21 @@ Use the current coordinated Node 24 train: core 0.11.4, renderer 0.11.9, editor 
 
 Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measures scalar and rich cells, keeps short rows compact, and gives wrapped or multiline rows the height they need. When space is constrained it reduces spare row height before shrinking text, and reports overflow when the minimum fitting size cannot fit. Pass the same `scale`, font family, measurement provider and effective `minFontSize` to each consumer. The returned row boxes, cell text boxes and fits are shared by the coordinated SVG and PPTX implementations; rich table cells use uniform line advances to match native cell paragraph spacing. Native viewer fidelity remains a separate verification boundary.
 
+## Captions
+
+An `image`, `chart`, `table` or `video` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "left" | "center" | "right" }` (defaults `below`, `left`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
+
+```json
+{
+  "title": "Pipeline",
+  "blocks": [
+    { "image": "asset:funnel", "caption": "Figure 1. Pipeline by stage, Q3" },
+    { "table": { "columns": ["Stage", "Count"], "rows": [["Qualified", 42]] }, "caption": { "text": "Table 1. Counts", "position": "above", "align": "center" } }
+  ]
+}
+```
+
+Core composition reserves the caption band inside the block's region and shrinks the media by its height (`item.caption` carries the band, `item.box` is the media box); the preview and the PPTX export draw that band in the muted text colour at the caption size (0.6 of the body size, never under the readable floor). Captioned blocks are the only ones whose geometry changes. See [footnotes, citations and captions](footnotes-citations-captions.md).
 
 ## Code
 
