@@ -80,7 +80,7 @@ test("every record carries the fields the owner asked for, with valid values", (
     assert.ok(record.scripts.length > 0, where);
     assert.ok(record.measurements === null || typeof record.measurements.meanAbsWidthDelta === "number", where);
     for (const host of ["node", "browser", "editor", "galleryEditor", "galleryCards"]) assert.ok(["verified", "unverified", "NA"].includes(record.hostVerification[host]), `${where} ${host}`);
-    assert.ok(["verified", "partial", "unverified", "NA"].includes(record.nativeVerification.status), where);
+    assert.ok(["verified", "partial", "failed", "unverified", "NA"].includes(record.nativeVerification.status), where);
     assert.ok(STATUSES.includes(record.status), where);
     assert.ok([1, 2, 3, 4, 5].includes(record.phase), where);
     assert.ok(record.nextAction.length > 20, where);
@@ -564,7 +564,8 @@ test("native verification comes from committed comparison output, and only for f
   const verified = committed.summary.nativeVerifiedFamilies;
   // FF-46 (2026-10-02): every deck of the 0.12.0 native run passes, and every family is named by one, so every record is verified by name read-back.
   assert.deepEqual([...verified].sort(), committed.records.map((item) => item.family).sort());
-  assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length, partial: 0, unverified: 0, NA: 0 });
+  assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length, partial: 0, failed: 0, unverified: 0, NA: 0 });
+  assert.deepEqual(committed.summary.nativeFailedFamilies, []);
   assert.equal(committed.summary.nativeVerification.verified, verified.length);
   assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002"]);
   const runs = Object.fromEntries(committed.inputs.nativeEvidence.map((run) => [run.id, run]));
@@ -605,7 +606,7 @@ test("native verification comes from committed comparison output, and only for f
   for (const run of overrides.nativeEvidence) for (const file of [run.file, path.join(path.dirname(run.file), "compare.md")]) assert.doesNotMatch(readFileSync(path.join(ROOT, file), "utf8"), /[A-Z]:\\Users|\/Users\/|micha/, file);
 });
 
-test("a deck that fails the fonts check, or a family that no deck names, gives no native verification", () => {
+test("a deck that fails a gated check marks the families it reads back failed, and a family no deck names stays unverified", () => {
   const dir = scratchCopy();
   try {
     // The FF-46 run names every family; take it out so the RR-05 decks below are the only evidence being perturbed.
@@ -620,18 +621,26 @@ test("a deck that fails the fonts check, or a family that no deck names, gives n
     deck("lang-hi").checks.fonts.ok -= 1;
     // Microsoft YaHei: the fonts and theme slots match but Presentation.Fonts lists an extra family: partial, with the reason.
     deck("lang-zh-hans").checks.presentationFonts.ok = false;
-    // Angsana New: a deck that never opened has no evidence.
+    // Angsana New: a deck that never opened fails the fonts check (nothing was read), so the family is failed, not verified.
     deck("lang-th").opened = false;
     writeFileSync(cjk, JSON.stringify(report));
     const rebuilt = buildTracker({ root: dir }).tracker;
     const get = (name) => rebuilt.records.find((item) => item.family === name).nativeVerification;
-    assert.equal(get("Mangal").status, "unverified");
-    assert.equal(get("Microsoft YaHei").status, "partial");
-    assert.match(get("Microsoft YaHei").note, /Presentation\.Fonts lists a family the deck does not name/);
-    assert.equal(get("Angsana New").status, "unverified");
+    // A deck that reads the family back and fails a gated check marks the family failed, with the check, the deck and the evidence run.
+    assert.equal(get("Mangal").status, "failed");
+    assert.deepEqual(get("Mangal").failures.map((item) => [item.run, item.deck, item.failing]), [["rr-05-cjk-native-20261002", "lang-hi", ["fonts"]]]);
+    assert.equal(get("Microsoft YaHei").status, "failed");
+    assert.deepEqual(get("Microsoft YaHei").failures.map((item) => [item.deck, item.failing]), [["lang-zh-hans", ["presentationFonts"]]]);
+    assert.match(get("Microsoft YaHei").note, /^FAILED in rr-05-cjk-native-20261002: lang-zh-hans \(presentationFonts/);
+    assert.equal(get("Microsoft YaHei").runs[0].readme, "docs/evidence/rr-05-cjk-native-20261002/README.md");
+    assert.equal(get("Angsana New").status, "failed");
+    assert.deepEqual(get("Angsana New").failures.map((item) => [item.deck, item.failing]), [["lang-th", ["fonts"]]]);
     assert.equal(get("Malgun Gothic").status, "verified");
     assert.ok(!rebuilt.summary.nativeVerifiedFamilies.includes("Mangal"));
-    assert.deepEqual(rebuilt.summary.nativePartialFamilies, ["Microsoft YaHei"]);
+    assert.deepEqual(rebuilt.summary.nativePartialFamilies, []);
+    assert.deepEqual([...rebuilt.summary.nativeFailedFamilies].sort(), ["Angsana New", "Mangal", "Microsoft YaHei"]);
+    assert.equal(rebuilt.summary.nativeVerification.failed, 3);
+    assert.match(rebuilt.records.find((item) => item.family === "Mangal").nextAction, /Native name read-back FAILED \(lang-hi: fonts\)/);
     // Drop the whole run: its families go back to unverified; Aptos stays verified through the other run.
     const overridesFile = path.join(dir, FILES.overrides);
     const edited = JSON.parse(readFileSync(overridesFile, "utf8"));
@@ -646,7 +655,7 @@ test("a deck that fails the fonts check, or a family that no deck names, gives n
   }
 });
 
-test("a failing FF-46 deck takes verification from the families only that deck names", () => {
+test("a failing FF-46 deck marks failed the families only that deck reads back, and a passing deck elsewhere keeps a family verified", () => {
   const dir = scratchCopy();
   try {
     const file = path.join(dir, "docs/evidence/ff-46-native-0.12-20261002/compare.json");
@@ -654,15 +663,29 @@ test("a failing FF-46 deck takes verification from the families only that deck n
     const deck = report.decks.find((item) => item.id === "latin-03-tahoma");
     deck.checks.presentationFonts.ok = false;
     deck.checks.presentationFonts.extras = ["Aptos"];
+    deck.mismatches = [{ kind: "presentation-fonts-extra", extras: ["Aptos"] }];
     writeFileSync(file, JSON.stringify(report));
     const rebuilt = buildTracker({ root: dir }).tracker;
-    // Tahoma's slide is only in this deck: the deck's own fonts and theme slots match, so it is partial (not verified) with the reason.
+    // Tahoma's slide is only in this deck: it reads the family back and a gated check fails, so Tahoma is failed with the check and the mismatch kind.
     const tahoma = rebuilt.records.find((item) => item.family === "Tahoma").nativeVerification;
-    assert.equal(tahoma.status, "partial");
-    assert.match(tahoma.note, /Presentation.Fonts lists a family the deck does not name/);
-    assert.ok(rebuilt.summary.nativePartialFamilies.includes("Tahoma"));
-    assert.equal(rebuilt.summary.nativeVerification.verified, committed.records.length - rebuilt.summary.nativePartialFamilies.length);
+    assert.equal(tahoma.status, "failed");
+    assert.deepEqual(tahoma.failures.map((item) => [item.run, item.deck, item.failing, item.mismatchKinds, item.shapesFontsOk]), [["ff-46-native-0.12-20261002", "latin-03-tahoma", ["presentationFonts"], ["presentation-fonts-extra"], "53/53"]]);
+    assert.ok(tahoma.failures[0].via.length > 0);
+    assert.match(tahoma.note, /^FAILED in ff-46-native-0\.12-20261002: latin-03-tahoma \(presentationFonts; presentation-fonts-extra; 53\/53 shapes\)/);
+    const failed = rebuilt.summary.nativeFailedFamilies;
+    assert.ok(failed.includes("Tahoma"));
+    assert.equal(rebuilt.summary.nativeVerification.failed, failed.length);
+    assert.equal(rebuilt.summary.nativeVerification.verified + failed.length, committed.records.length);
     assert.deepEqual(rebuilt.inputs.nativeEvidence.find((run) => run.id === "ff-46-native-0.12-20261002").failingChecks.map((item) => item.deck), ["latin-03-tahoma"]);
+    // A family that a passing deck also reads back stays verified, with the failing deck as a caveat.
+    const ok = JSON.parse(readFileSync(file, "utf8"));
+    const aptosDeck = ok.decks.find((item) => item.id === "latin-01-aptos");
+    aptosDeck.checks.presentationFonts.native.push("Tahoma");
+    aptosDeck.checks.presentationFonts.expected.push("Tahoma");
+    writeFileSync(file, JSON.stringify(ok));
+    const again = buildTracker({ root: dir }).tracker.records.find((item) => item.family === "Tahoma").nativeVerification;
+    assert.equal(again.status, "verified");
+    assert.match(again.caveat, /latin-03-tahoma \(presentationFonts\)/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
