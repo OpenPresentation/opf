@@ -149,6 +149,32 @@ describe("font policy table", () => {
     assert.equal(fontPolicyFor("Aptos").replacement.compatibility, "metric");
     assert.equal(fontPolicyFor("Cambria").replacement.compatibility, "visual", "Caladea advances differ from Cambria 6.99");
   });
+
+  // RR-38: a visual replacement whose glyphs and advances are far from the real font's carries a preview size multiplier.
+  test("sizeAdjust is a preview-only multiplier on visual rows, with its basis, and only Arabic Typesetting has one", () => {
+    const adjusted = rows.filter((row) => row.replacement?.sizeAdjust !== undefined);
+    assert.deepEqual(adjusted.map((row) => `${row.family}->${row.replacement.family}`), ["Arabic Typesetting->Noto Naskh Arabic"]);
+    for (const row of adjusted) {
+      const { sizeAdjust, sizeAdjustBasis, compatibility } = row.replacement;
+      assert.equal(compatibility, "visual", row.family);
+      assert.ok(sizeAdjust >= 0.25 && sizeAdjust <= 2 && sizeAdjust !== 1, row.family);
+      assert.match(sizeAdjustBasis, /advances/, row.family);
+    }
+    // A row with a multiplier must say how it was measured; a basis without the multiplier is meaningless.
+    const ajv = new Ajv2020({ allErrors: true, strict: true });
+    addFormats(ajv);
+    const validate = ajv.compile(schema);
+    for (const drop of ["sizeAdjustBasis"]) {
+      const broken = structuredClone(source);
+      delete broken.families.find((row) => row.family === "Arabic Typesetting").replacement[drop];
+      assert.equal(validate(broken), false, `dropping ${drop}`);
+    }
+    const tooSmall = structuredClone(source);
+    tooSmall.families.find((row) => row.family === "Arabic Typesetting").replacement.sizeAdjust = 0.1;
+    assert.equal(validate(tooSmall), false);
+    // Arabic Typesetting measured against the installed font, in place: 0.643 of Noto Naskh Arabic's advances, rounded to 0.64.
+    assert.equal(fontPolicyFor("Arabic Typesetting").replacement.sizeAdjust, 0.64);
+  });
 });
 
 describe("provisional owner decisions", () => {

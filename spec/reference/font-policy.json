@@ -273,6 +273,8 @@
       "replacement": {
         "family": "Noto Naskh Arabic",
         "compatibility": "visual",
+        "sizeAdjust": 0.64,
+        "sizeAdjustBasis": "RR-38: sum of Arabic Typesetting 6.85 advances over sum of Noto Naskh Arabic 400 advances (fontkit, each sample's OpenType language). 0.643 on the 12 Arabic-script corpus samples of opf-render test/fixtures/script-corpora.json (per-sample range 0.57 to 0.86); 0.598 on 29 Arabic strings of the RR-05b native deck (running Arabic text); 0.614 pooled; Noto Naskh Arabic 700 gives 0.62, 0.58 and 0.59, so bold runs draw about 3 percent long. Ink height of alef, lam, meem and heh is 0.71 of Noto Naskh Arabic's. 0.64 balances the two: lines come out about 4 percent longer than PowerPoint's and glyphs about 10 percent smaller.",
         "measured": {
           "replacement": "Noto Naskh Arabic",
           "meanAbsWidthDelta": 0.6632,
