@@ -6,9 +6,12 @@
 //                                                  refresh the pinned render-manifest snapshot, then rebuild
 //   node scripts/build-font-tracker.mjs --snapshot-gallery-fonts <pptx-gallery>/data/preview-fonts.json --commit <sha>
 //                                                  refresh the pinned gallery preview-font (cards) snapshot, then rebuild
+//   node scripts/build-font-tracker.mjs --snapshot-symbol-fonts <opf-render>/src/symbol-fonts.js --commit <sha>
+//                                                  refresh the pinned symbol preview-face (code-table route) snapshot, then rebuild
 //
 // Derived data (never hand edited): spec/reference/font-policy.json, the measurement report, the pinned
-// opf-render font manifest snapshot, the pinned pptx.gallery preview-font snapshot and the committed parity results. Authored data:
+// opf-render font manifest snapshot, the pinned opf-render symbol-font snapshot, the pinned pptx.gallery preview-font snapshot, the committed
+// native PowerPoint comparison output (overrides.nativeEvidence) and the committed parity results. Authored data:
 // docs/programs/font-fidelity-everywhere/font-tracker.overrides.json (owner plan text, reconciled next
 // actions, evidence keys, classes, scripts, style rules and in-flight candidates).
 import { readFileSync, writeFileSync } from "node:fs";
@@ -30,6 +33,7 @@ export const STATUSES = [
   "style-gap",
   "policy-gap",
   "needs-special-path",
+  "code-table",
   "visual-gap",
   "script-gap",
   "baseline-needed",
@@ -84,6 +88,7 @@ export function gallerySnapshotFromPreviewFonts(previewFonts, { commit, captured
       kind: family.kind,
       license: family.license,
       weights: family.weights,
+      usedAs: family.usedAs ?? [],
       faces: family.faces.length,
       coverageGaps: family.coverageGaps || null,
     })),
@@ -130,6 +135,104 @@ function bundledRecord(index, family, applies) {
     faces: entry.faces.map((face) => ({ style: face.style, file: face.file, sha256: face.sha256 })).sort((a, b) => styleOrder(a.style, b.style)),
     stylesAvailable: sortStyles(entry.faces.map((face) => face.style)),
   };
+}
+
+/**
+ * Reduce opf-render's symbol-font module (src/symbol-fonts.js: SYMBOL_PREVIEW_FACES, SYMBOL_SCRIPT, SYMBOL_PLACEHOLDER) to the code-table
+ * route the tracker reads (FF-45): the open faces a symbol-encoded family previews with, in the order a code tries them.
+ */
+export function snapshotFromSymbolFonts(symbolFonts, { commit, capturedAt }) {
+  return {
+    description:
+      "Pinned snapshot of opf-render's symbol-font preview route (src/symbol-fonts.js, SYMBOL_PREVIEW_FACES), reduced to the fields the font tracker reads. Symbol, Wingdings, Wingdings 2, Wingdings 3 and Webdings are not text fonts: their codes map to Unicode through core's spec/reference/symbol-font-encodings.json and draw with the first loaded open face of the chain. Refresh with: node scripts/build-font-tracker.mjs --snapshot-symbol-fonts <opf-render>/src/symbol-fonts.js --commit <sha>.",
+    source: { repository: "OpenPresentation/opf-render", commit, path: "src/symbol-fonts.js", capturedAt },
+    script: symbolFonts.SYMBOL_SCRIPT,
+    placeholder: symbolFonts.SYMBOL_PLACEHOLDER,
+    previewFaces: Object.fromEntries(Object.entries(symbolFonts.SYMBOL_PREVIEW_FACES).map(([family, faces]) => [family, [...faces]])),
+  };
+}
+
+/** The code-table route of a symbol-encoded family: no look-alike family, an ordered chain of open faces, one glyph per code. */
+function codeTableRoute(family, symbols) {
+  return { family: null, tier: "code-table", kind: "code-table", chain: symbols.previewFaces[family], decision: null, source: symbols.source.path, disabledFeatures: [] };
+}
+
+/** The bundled record of a code-table route: every chain face must be in the pinned manifest; faces and packages are listed per chain entry. */
+function codeTableBundled(index, chain) {
+  const entries = chain.map((name) => bundledRecord(index, name, "code-table"));
+  const packages = [];
+  for (const entry of entries) for (const pkg of entry.packages) if (!packages.some((item) => item.name === pkg.name)) packages.push(pkg);
+  return {
+    yes: entries.every((entry) => entry.yes),
+    applies: "code-table",
+    family: null,
+    chain: entries.map((entry) => ({ family: entry.family, bundled: entry.yes, pack: entry.pack, stylesAvailable: entry.stylesAvailable, license: entry.packages[0]?.license ?? null })),
+    pack: "scripts",
+    packages,
+    faces: entries.flatMap((entry) => entry.faces),
+    stylesAvailable: sortStyles(entries.flatMap((entry) => entry.stylesAvailable)),
+  };
+}
+
+/** The code counts of core's symbol-font encoding table (spec/reference/symbol-font-encodings.json), per family. */
+function loadSymbolEncodings(root, file) {
+  const encodings = readJson(root, file);
+  return new Map(encodings.families.map((entry) => [entry.family, { codes: entry.summary.codes, mapped: entry.summary.mapped, unmapped: entry.summary.unmapped, verifiedAgainst: `${entry.verifiedAgainst.file} ${entry.verifiedAgainst.version}` }]));
+}
+
+// ---- native PowerPoint evidence ---------------------------------------------------------------
+
+const NATIVE_BASIS =
+  "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).";
+
+/**
+ * Per-family native verification from the committed comparison output of supervisor-run PowerPoint checks (RR-05 compare.json). A deck passes when
+ * every shape's per-run font names match (fonts), the theme slots match (themeSlots) and Presentation.Fonts lists only the chosen families
+ * (presentationFonts). A family is evidenced by a deck that names it in a theme slot, or lists it in the deck's native Presentation.Fonts;
+ * a family the deck only names in its export has no native read-back of its own. Families no run names stay unverified.
+ */
+function loadNativeEvidence(root, runs) {
+  const lc = (value) => String(value ?? "").trim().toLowerCase();
+  const families = new Map();
+  const summary = [];
+  for (const run of runs) {
+    const report = readJson(root, run.file);
+    const entry = { id: run.id, label: run.label, file: run.file, readme: run.readme, date: run.date, host: run.host, decks: report.decks.length, decksPassing: 0, failingChecks: [] };
+    for (const deck of report.decks) {
+      const checks = deck.checks ?? {};
+      const fontsOk = Boolean(deck.opened) && !deck.truncated && checks.fonts?.shapes > 0 && checks.fonts.ok === checks.fonts.shapes && checks.shapesMissing === 0;
+      const themeOk = checks.themeSlots?.ok === true;
+      const listOk = checks.presentationFonts?.ok === true;
+      const pass = fontsOk && themeOk && listOk;
+      if (pass) entry.decksPassing += 1;
+      else entry.failingChecks.push({ deck: deck.id, failing: [!fontsOk && "fonts", !themeOk && "themeSlots", !listOk && "presentationFonts"].filter(Boolean), detail: (deck.mismatches ?? []).map((item) => item.kind).filter((kind, at, all) => all.indexOf(kind) === at) });
+      const via = new Map();
+      const note = (name, how) => {
+        if (!lc(name)) return;
+        via.set(lc(name), { family: String(name).trim(), via: [...(via.get(lc(name))?.via ?? []), how] });
+      };
+      for (const slot of checks.themeSlots?.slots ?? []) if (slot.ok && lc(slot.expected) && lc(slot.expected) === lc(slot.native)) note(slot.expected, `theme ${slot.slot}`);
+      const nativeList = new Set((checks.presentationFonts?.native ?? []).map(lc));
+      for (const name of checks.presentationFonts?.expected ?? []) if (nativeList.has(lc(name))) note(name, "Presentation.Fonts");
+      for (const name of checks.presentationFonts?.expected ?? []) if (!via.has(lc(name))) via.set(lc(name), { family: String(name).trim(), via: [] });
+      for (const [key, item] of via) {
+        const record = families.get(key) ?? { family: item.family, decks: [] };
+        record.decks.push({ run: run.id, deck: deck.id, pass, fontsOk, themeOk, listOk, shapes: `${checks.fonts?.ok ?? 0}/${checks.fonts?.shapes ?? 0}`, via: item.via });
+        families.set(key, record);
+      }
+    }
+    summary.push(entry);
+  }
+  const byFamily = new Map();
+  for (const [key, record] of families) {
+    const named = record.decks.filter((deck) => deck.via.length > 0);
+    const passing = named.filter((deck) => deck.pass);
+    const partial = named.filter((deck) => deck.fontsOk && deck.themeOk && !deck.pass);
+    if (passing.length) byFamily.set(key, { status: "verified", decks: passing, others: record.decks.filter((deck) => !passing.includes(deck)) });
+    else if (partial.length) byFamily.set(key, { status: "partial", decks: partial, others: [], reason: "the deck's own fonts and theme slots match, but Presentation.Fonts lists a family the deck does not name (the FF-05 Aptos entry)" });
+    else if (record.decks.some((deck) => deck.pass)) byFamily.set(key, { status: "partial", decks: record.decks.filter((deck) => deck.pass), others: [], reason: "named in the export and every run matched, but no theme slot or Presentation.Fonts entry reads it back on its own" });
+  }
+  return { byFamily, runs: summary };
 }
 
 // ---- script corpus (FF-44) --------------------------------------------------------------------
@@ -241,11 +344,22 @@ function hostVerificationOf(family, host, target, cards, overrides, hostEvidence
   if (hostEvidence?.hosts?.[host]?.families?.[family]) return "verified";
   const set = overrides.hostVerification[family]?.[host];
   if (set) return set;
-  if (host === "galleryCards") return cards ? "unverified" : "NA";
+  if (host === "galleryCards") return cardVerification(family, cards);
   return target.yes || overrides.pendingBundle[family] ? "unverified" : "NA";
 }
 
+/**
+ * Gallery cards: a family's card face is verified when pptx.gallery's tests/preview-fonts.test.ts covers it. That test resolves every font
+ * scheme's stack to a bundled, hash-pinned, licensed self-hosted face (the face's `usedAs` lists the selected families), checks the weight
+ * and the glyph coverage of the scheme text, and records the gaps. A face with a recorded coverage gap stays unverified.
+ */
+function cardVerification(family, cards) {
+  if (!cards) return "NA";
+  return cards.usedAs.includes(family) && !cards.coverageGaps ? "verified" : "unverified";
+}
+
 function expectedStatus(route, targetBundled) {
+  if (route.kind === "code-table") return targetBundled ? "code-table" : "missing";
   if (route.tier === "none") return "missing";
   if (route.kind === "self") return targetBundled ? "real" : "missing";
   return route.tier === "metric" && targetBundled ? "metric-substitute" : "visual-substitute";
@@ -279,6 +393,85 @@ function resolveEvidence(keys, dictionary) {
   return out;
 }
 
+/** The record's native verification: derived from the committed native comparison output where a run names the family, else the authored status. */
+function nativeRecordOf(evidence, runs, family, authored) {
+  const derived = evidence.byFamily.get(family.toLowerCase());
+  if (!derived) return authored ? { status: authored.status, note: authored.note } : { status: "unverified", note: "No native PowerPoint check recorded for this family in docs/evidence." };
+  const byRun = new Map();
+  for (const deck of derived.decks) byRun.set(deck.run, [...(byRun.get(deck.run) ?? []), deck]);
+  const runRecords = [...byRun].map(([id, decks]) => {
+    const run = runs.find((item) => item.id === id);
+    return { run: id, label: run.label, readme: run.readme, file: run.file, date: run.date, decks: decks.map((deck) => ({ deck: deck.deck, shapesFontsOk: deck.shapes, via: deck.via })) };
+  });
+  const deckList = derived.decks.map((deck) => `${deck.deck} (${deck.shapes} shapes; ${[...new Set(deck.via)].join(", ") || "export names only"})`);
+  const listed = deckList.length > 4 ? `${deckList.slice(0, 4).join("; ")}; and ${deckList.length - 4} more` : deckList.join("; ");
+  const failing = derived.others.filter((deck) => !deck.pass);
+  const failedNote = failing.length
+    ? `Decks that name it but fail a check: ${failing.map((deck) => `${deck.deck} (${[!deck.fontsOk && "fonts", !deck.themeOk && "themeSlots", !deck.listOk && "presentationFonts"].filter(Boolean).join(", ")})`).join(", ")}.`
+    : "";
+  const caveat = [authored?.caveat, failedNote].filter(Boolean).join(" ");
+  return {
+    status: derived.status,
+    basis: NATIVE_BASIS,
+    note: `${derived.status === "verified" ? "Passed" : "Partial"} in ${runRecords.map((run) => run.run).join(", ")}: ${listed}.${derived.reason ? ` ${derived.reason}.` : ""}`,
+    ...(caveat ? { caveat } : {}),
+    runs: runRecords,
+    reason: derived.reason,
+  };
+}
+
+/**
+ * The owner's four questions, answered from the records (never typed): how many fonts, how many are licensed for direct use (open), how many
+ * need a replacement (proprietary), how many have a bundled replacement, and what licence the bundled faces carry. A replacement is found when
+ * its route face (or, for a code-table route, every face of its chain) is in the pinned opf-render manifest.
+ */
+export function licensingSummary(records, snapshot) {
+  const open = records.filter((rec) => rec.class === "open");
+  const needs = records.filter((rec) => rec.class !== "open");
+  const found = needs.filter((rec) => rec.bundled.yes && (rec.previewRoute.family || rec.previewRoute.kind === "code-table"));
+  const noRoute = needs.filter((rec) => !found.includes(rec));
+  const countBy = (list, key) => Object.fromEntries([...new Set(list.map(key))].sort().map((value) => [value, list.filter((item) => key(item) === value).length]));
+  const faceLicenses = (rec) => (rec.previewRoute.kind === "code-table" ? rec.bundled.chain.map((face) => face.license) : rec.bundled.packages.slice(0, 1).map((pkg) => pkg.license));
+  const distinct = new Map();
+  for (const rec of found) {
+    const names = rec.previewRoute.kind === "code-table" ? rec.previewRoute.chain : [rec.previewRoute.family];
+    names.forEach((name, at) => distinct.set(name, faceLicenses(rec)[at]));
+  }
+  const manifestPackages = snapshot.packages;
+  const self = open.filter((rec) => rec.previewRoute.kind === "self" && rec.bundled.yes);
+  const alias = open.filter((rec) => rec.previewRoute.kind === "alias" && rec.bundled.yes);
+  return {
+    totalFamilies: records.length,
+    openDirectlyUsable: {
+      total: open.length,
+      drawnAsItself: self.length,
+      openAlias: alias.length,
+      notBundled: open.length - self.length - alias.length,
+      aliases: alias.map((rec) => rec.family).sort(),
+      byLicense: countBy(open, (rec) => rec.license),
+    },
+    needsReplacement: { total: needs.length, byClass: countBy(needs, (rec) => rec.class) },
+    replacementFound: {
+      total: found.length,
+      metricCompatible: found.filter((rec) => rec.class === "proprietary-latin" && rec.previewRoute.tier === "metric").length,
+      visualLookAlike: found.filter((rec) => rec.class === "proprietary-latin" && rec.previewRoute.tier === "visual").length,
+      scriptFace: found.filter((rec) => rec.class === "proprietary-script").length,
+      specialPath: found.filter((rec) => rec.class === "special").length,
+      specialPathKinds: countBy(found.filter((rec) => rec.class === "special"), (rec) => rec.previewRoute.kind),
+    },
+    noRoute: { total: noRoute.length, families: noRoute.map((rec) => rec.family).sort() },
+    bundledFaceLicenses: {
+      replacementRecordsByLicense: countBy(found, (rec) => [...new Set(faceLicenses(rec))].sort().join(" + ")),
+      replacementFacesByLicense: countBy([...distinct], ([, license]) => license),
+      replacementFaces: distinct.size,
+      manifestPackagesByLicense: countBy(manifestPackages, (pkg) => pkg.license),
+      manifestFacesByLicense: Object.fromEntries(Object.entries(countBy(manifestPackages.flatMap((pkg) => pkg.faces.map(() => pkg)), (pkg) => pkg.license))),
+      manifestPackages: manifestPackages.length,
+      manifestFaces: manifestPackages.reduce((sum, pkg) => sum + pkg.faces.length, 0),
+    },
+  };
+}
+
 export function buildTracker({ root = ROOT } = {}) {
   const policy = readJson(root, FILES.policy);
   const overrides = readJson(root, FILES.overrides);
@@ -290,6 +483,9 @@ export function buildTracker({ root = ROOT } = {}) {
   const qualReport = readJson(root, overrides.qualificationReport);
   const qualByFamily = new Map(qualReport.results.map((row) => [row.family, row]));
   const hostEvidence = readJson(root, overrides.hostFixtureEvidence);
+  const symbolSnapshot = readJson(root, overrides.symbolFontsSnapshot);
+  const symbolEncodings = loadSymbolEncodings(root, overrides.symbolEncodings);
+  const nativeEvidence = loadNativeEvidence(root, overrides.nativeEvidence);
   const acceptRules = overrides.latinAcceptance;
   const decisions = policy.provisionalDecisions?.decisions ?? {};
   const corpus = overrides.scriptCorpus ? loadScriptCorpus(root, overrides.scriptCorpus) : null;
@@ -314,7 +510,12 @@ export function buildTracker({ root = ROOT } = {}) {
   const classOf = (row) => (specialClass.has(row.family) ? "special" : scriptClass.has(row.family) ? "proprietary-script" : row.licenseClass === "open" ? "open" : "proprietary-latin");
 
   // First pass: everything derived from one policy row.
-  const rows = policy.families.map((row) => ({ row, cls: classOf(row), inPolicy: true, route: routeOf(row, decisions) }));
+  // FF-45: a special family that opf-render previews through a code table has that route (a chain of open faces), not a look-alike family.
+  const rows = policy.families.map((row) => {
+    const cls = classOf(row);
+    const codeTable = cls === "special" && symbolSnapshot.previewFaces[row.family];
+    return { row, cls, inPolicy: true, route: codeTable ? codeTableRoute(row.family, symbolSnapshot) : routeOf(row, decisions) };
+  });
   for (const extra of overrides.extras) {
     rows.push({
       row: { family: extra.family, licenseClass: "open", license: "OFL-1.1", availability: [], embeddableByOpf: true, replacement: null, alternates: [] },
@@ -328,8 +529,8 @@ export function buildTracker({ root = ROOT } = {}) {
   const records = rows.map((item) => {
     const { row, cls, inPolicy, route } = item;
     const family = row.family;
-    const applies = route.kind === "self" ? "self" : route.family ? "route-target" : "none";
-    const bundled = bundledRecord(index, route.family, applies);
+    const applies = route.kind === "code-table" ? "code-table" : route.kind === "self" ? "self" : route.family ? "route-target" : "none";
+    const bundled = route.kind === "code-table" ? codeTableBundled(index, route.chain) : bundledRecord(index, route.family, applies);
 
     // Measurements: the policy aggregate plus per-style detail from the report while both still describe the routed face.
     const measured = row.replacement?.measured ?? null;
@@ -379,7 +580,14 @@ export function buildTracker({ root = ROOT } = {}) {
     let stylesBasis;
     if (cls === "special") {
       stylesRequired = [];
-      stylesBasis = "not applicable: dedicated path";
+      stylesBasis = route.kind === "code-table" ? "not applicable: code table (one glyph per code; a bold or italic request draws the same glyph)" : "not applicable: dedicated path";
+    } else if (cls !== "open" && fixed?.styles) {
+      // A proprietary family whose declared style list is the real font's own (checked on the measuring host): an original that ships one face has no
+      // bold or italic to match, so the rule never demands the four styles of a Latin family from it or from the face that replaces it.
+      if (perStyle && sortStyles(perStyle.map((entry) => entry.style)).join() !== sortStyles(fixed.styles).join()) throw new Error(`overrides.stylesRequired for ${family} disagrees with the measured styles of the real font`);
+      stylesRequired = fixed.styles;
+      replacementStylesRequired = sortStyles(fixed.styles);
+      stylesBasis = `declared: ${fixed.reason}`;
     } else if (cls === "open") {
       stylesRequired = fixed ? fixed.styles : scripts.includes("Latin") ? FOUR : TWO;
       stylesBasis = fixed ? `declared: ${fixed.reason}` : "assumed: four styles for Latin faces, regular and bold for script faces";
@@ -441,9 +649,13 @@ export function buildTracker({ root = ROOT } = {}) {
     if (pending && target.yes) throw new Error(`overrides.pendingBundle for ${family} is stale: ${route.family} is now bundled in the pinned manifest snapshot`);
     let status;
     let statusReason;
-    if (cls === "special") {
+    const codeTable = route.kind === "code-table" ? symbolEncodings.get(family) : null;
+    if (cls === "special" && route.kind === "code-table" && target.yes) {
+      status = "code-table";
+      statusReason = `code-table preview (FF-45): ${codeTable ? `${codeTable.mapped} of ${codeTable.codes} codes map to Unicode (${codeTable.verifiedAgainst}); ` : ""}each code draws with the first loaded of ${route.chain.join(", ")} at the verified font's advance; verified in opf-render's node, browser and raster tests; no native PowerPoint check is recorded`;
+    } else if (cls === "special") {
       status = "needs-special-path";
-      statusReason = "no look-alike route in the policy; dedicated path required";
+      statusReason = route.kind === "code-table" ? `code-table route faces (${route.chain.filter((name) => !index.has(name)).join(", ")}) are not in the pinned opf-render manifest` : "no look-alike route in the policy; dedicated path required";
     } else if (!inPolicy) {
       status = "policy-gap";
       statusReason = "face ships in the renderer but has no policy row";
@@ -512,7 +724,7 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = derivedClass === "visual" ? "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font" : derivedClass === "metric" ? "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar" : "open family: fixtures in every host";
     }
 
-    const phaseByStatus = { "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1, "documented-visual": 5, "qualified": 5 };
+    const phaseByStatus = { "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "code-table": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1, "documented-visual": 5, "qualified": 5 };
     // An accepted Latin family has only native verification and the full parity rerun (owner phase 5) left.
     const phase = derivedClass ? 5 : overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
 
@@ -549,16 +761,16 @@ export function buildTracker({ root = ROOT } = {}) {
 
     // Hosts.
     // A vendored package can load differently from the rest of its pack (Intos is an office-pack package that browser hosts load lazily).
-    const packKey = target.yes ? (hostModel.packageModels?.[target.packages[0].name] ?? target.pack) : null;
+    const packKey = route.kind === "code-table" ? (target.yes ? "symbol" : null) : target.yes ? (hostModel.packageModels?.[target.packages[0].name] ?? target.pack) : null;
     const packModel = packKey ? hostModel.packs[packKey] : null;
     const verified = overrides.hostVerification[family];
     const hostVerification = {};
     const hostLoading = {};
     for (const host of HOSTS) {
       if (host === "galleryCards") {
-        hostVerification[host] = verified?.[host] ?? (cards ? "unverified" : "NA");
+        hostVerification[host] = verified?.[host] ?? cardVerification(family, cards);
         hostLoading[host] = cards
-          ? `self-hosted preview webfont: ${cards.package} ${cards.version} (${cards.kind}, weights ${cards.weights.join(" ")}, upright only)`
+          ? `self-hosted preview webfont: ${cards.package} ${cards.version} (${cards.kind}, weights ${cards.weights.join(" ")}, upright only)${hostVerification[host] === "verified" ? "; covered by pptx-gallery tests/preview-fonts.test.ts (font-scheme stacks resolve to this hash-pinned face)" : cards.coverageGaps ? "; recorded coverage gap in the scheme text" : "; no font scheme uses this family, so no card test covers it"}`
           : cls === "special" ? "no route" : "no self-hosted card preview";
         continue;
       }
@@ -573,9 +785,13 @@ export function buildTracker({ root = ROOT } = {}) {
     if (corpusRecord) evidenceKeys.push("scriptCorpora", "scriptCorporaEvidence");
     const native = overrides.nativeVerification[family];
     if (native?.evidence) evidenceKeys.push(...native.evidence);
+    const nativeRecord = nativeRecordOf(nativeEvidence, overrides.nativeEvidence, family, native);
+    for (const run of nativeRecord.runs ?? []) evidenceKeys.push({ label: run.label, url: run.readme });
     const appearance = appearanceOf(overrides.appearance?.[family]);
-    const nextAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, acceptRules);
-    if (!nextAction) throw new Error(`no nextAction for ${family}`);
+    const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, acceptRules);
+    if (!baseAction) throw new Error(`no nextAction for ${family}`);
+    const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}); acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
+    const nextAction = `${baseAction}${nativeSentence}`;
     const candidates = overrides.candidates[family] ?? [];
 
     const record = {
@@ -592,6 +808,7 @@ export function buildTracker({ root = ROOT } = {}) {
         family: route.family,
         tier: route.tier,
         kind: route.kind,
+        ...(route.chain ? { chain: route.chain } : {}),
         alternates: row.alternates ?? [],
         alternatesBundled: Object.fromEntries((row.alternates ?? []).map((name) => [name, index.has(name)])),
         disabledFeatures: route.disabledFeatures,
@@ -612,7 +829,7 @@ export function buildTracker({ root = ROOT } = {}) {
       candidates,
       hostVerification,
       hostLoading,
-      nativeVerification: native ? { status: native.status, note: native.note } : { status: "unverified", note: "No per-family native PowerPoint acceptance (phase 5)." },
+      nativeVerification: Object.fromEntries(Object.entries(nativeRecord).filter(([key]) => key !== "reason")),
       acceptance,
       ...(corpusRecord ? { scriptCorpus: corpusRecord } : {}),
       ...(qualification ? { qualification } : {}),
@@ -641,13 +858,15 @@ export function buildTracker({ root = ROOT } = {}) {
     asOf: overrides.asOf,
     generatedBy: "scripts/build-font-tracker.mjs",
     description:
-      "One record per font family: every font-policy family (the 153 the owner reviewed on 2026-09-29 plus the four Intos rows added by opf#166) plus the seven shipped script-font dependencies the policy still lacks. Derived fields come from the policy, the measurement report, the pinned opf-render manifest snapshot and the committed parity results; next actions and evidence come from font-tracker.overrides.json.",
+      `One record per font family: every font-policy family (${policy.families.length}: the 153 the owner reviewed on 2026-09-29 plus the rows added since for Intos, the emoji and math faces and the script-font dependencies)${overrides.extras.length ? ` plus ${overrides.extras.length} shipped script-font dependencies the policy still lacks` : ""}. Derived fields come from the policy, the measurement report, the pinned opf-render manifest and symbol-font snapshots, the pinned pptx.gallery card-font snapshot, the committed native PowerPoint comparison output and the committed parity results; next actions and evidence come from font-tracker.overrides.json. The summary's licensing block answers how many fonts there are, how many are open, how many need a replacement and how many have one.`,
     inputs: {
       galleryPreviewFonts: { file: overrides.galleryFontsSnapshot, ...galleryFonts.source, families: galleryFonts.families.length },
       policy: { file: FILES.policy, version: policy.version, families: policy.families.length },
       measurementReport: { file: overrides.measurementReport, corpus: report.corpus },
       renderManifest: { file: overrides.manifestSnapshot, ...snapshot.source, packages: snapshot.packages.length, faces: snapshot.packages.reduce((sum, pkg) => sum + pkg.faces.length, 0) },
       parity: { file: overrides.paritySource, generatedAt: parity.meta.generatedAt, heads: parity.meta.heads, values: parity.results.length },
+      symbolFonts: { file: overrides.symbolFontsSnapshot, ...symbolSnapshot.source, families: Object.keys(symbolSnapshot.previewFaces).length, encodings: overrides.symbolEncodings },
+      nativeEvidence: nativeEvidence.runs.map((run) => ({ id: run.id, label: run.label, file: run.file, readme: run.readme, date: run.date, host: run.host, decks: run.decks, decksPassing: run.decksPassing, failingChecks: run.failingChecks })),
       qualification: { file: overrides.qualificationReport, corpusStrings: qualReport.corpus.strings, lineBreakCases: acceptRules.lineBreakCases },
       hostFixtures: { file: overrides.hostFixtureEvidence, date: hostEvidence.date, hosts: Object.fromEntries(Object.entries(hostEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length }])), lazyBudget: hostEvidence.lazyBudget },
       overrides: { file: FILES.overrides },
@@ -659,11 +878,14 @@ export function buildTracker({ root = ROOT } = {}) {
     summary: {
       records: out.length,
       inPolicy: out.filter((rec) => rec.inPolicy).length,
+      licensing: licensingSummary(out, snapshot),
       byClass: count("class", CLASSES),
       byStatus: count("status", STATUSES),
       byPhase: Object.fromEntries([1, 2, 3, 4, 5].map((phase) => [phase, out.filter((rec) => rec.phase === phase).length])),
       hostVerification: Object.fromEntries(HOSTS.map((host) => [host, Object.fromEntries(["verified", "unverified", "NA"].map((value) => [value, out.filter((rec) => rec.hostVerification[host] === value).length]))])),
       nativeVerification: Object.fromEntries(["verified", "partial", "unverified", "NA"].map((value) => [value, out.filter((rec) => rec.nativeVerification.status === value).length])),
+      nativeVerifiedFamilies: out.filter((rec) => rec.nativeVerification.status === "verified").map((rec) => rec.family),
+      nativePartialFamilies: out.filter((rec) => rec.nativeVerification.status === "partial").map((rec) => rec.family),
       bundled: { yes: out.filter((rec) => rec.bundled.yes).length, no: out.filter((rec) => !rec.bundled.yes).length },
       parityRerunNeeded: out.filter((rec) => rec.paritySignals.rerunNeeded).length,
     },
@@ -689,12 +911,14 @@ function evidenceLink(evidence) {
 
 function routeCell(rec) {
   const route = rec.previewRoute;
+  if (route.kind === "code-table") return `code table (${route.chain[0]} first)`;
   if (!route.family) return "none";
   const base = route.kind === "self" ? `self (${route.tier})` : `${route.family} (${route.tier})`;
   return route.pendingBundle ? `${base}; faces pending ${route.pendingBundle.prs.join(" and ")}` : base;
 }
 
 function bundledCell(rec) {
+  if (rec.previewRoute.kind === "code-table") return rec.bundled.yes ? `chain of ${rec.bundled.chain.length}` : "no";
   if (rec.class === "special") return "n/a";
   if (!rec.bundled.yes) return "no";
   const styles = rec.bundled.stylesAvailable.join(" ");
@@ -728,6 +952,59 @@ function scriptCorpusSection(records) {
   return lines;
 }
 
+function licensingSection(summary, tracker) {
+  const l = summary.licensing;
+  const found = l.replacementFound;
+  const bundledLicense = l.bundledFaceLicenses;
+  const license = (counts) => Object.entries(counts).map(([name, count]) => `${name} (${count})`).join(", ");
+  return [
+    "## Fonts, licences and replacements",
+    "",
+    "The owner's four questions, answered from the records below (rebuilt on every run, never typed). A replacement counts as found when its face is bundled in the pinned opf-render manifest. Licensed (proprietary) fonts are never bundled or embedded; the PPTX keeps the selected name.",
+    "",
+    "| Question | Count | Breakdown |",
+    "| --- | ---: | --- |",
+    `| How many fonts do we have? | ${l.totalFamilies} | ${l.openDirectlyUsable.total} open, ${l.needsReplacement.total} proprietary |`,
+    `| How many are licensed so we can use them directly (open)? | ${l.openDirectlyUsable.total} | ${l.openDirectlyUsable.drawnAsItself} drawn as themselves, ${l.openDirectlyUsable.openAlias} open aliases (${l.openDirectlyUsable.aliases.join(", ") || "none"})${l.openDirectlyUsable.notBundled ? `, ${l.openDirectlyUsable.notBundled} not bundled` : ""} |`,
+    `| How many need a replacement (proprietary)? | ${l.needsReplacement.total} | ${Object.entries(l.needsReplacement.byClass).map(([cls, count]) => `${count} ${cls}`).join(", ")} |`,
+    `| How many have a replacement found? | ${found.total} | ${found.metricCompatible} metric-compatible, ${found.visualLookAlike} visual look-alike (Latin), ${found.scriptFace} script face, ${found.specialPath} special path (${Object.entries(found.specialPathKinds).map(([kind, count]) => `${count} ${kind}`).join(", ") || "none"}) |`,
+    `| How many have no route? | ${l.noRoute.total} | ${l.noRoute.families.join(", ") || "none"} |`,
+    "",
+    `Licence of the bundled faces: the ${found.total} replacement routes use ${bundledLicense.replacementFaces} distinct faces, by licence ${license(bundledLicense.replacementFacesByLicense)}; the pinned opf-render manifest holds ${bundledLicense.manifestPackages} packages and ${bundledLicense.manifestFaces} faces (packages: ${license(bundledLicense.manifestPackagesByLicense)}; faces: ${license(bundledLicense.manifestFacesByLicense)}). The open families themselves: ${license(l.openDirectlyUsable.byLicense)}. Only OFL-1.1, Apache-2.0, MIT and UFL-1.0 may be bundled ([font-licensing.md](font-licensing.md#font-files-bundling-and-licenses)).`,
+    "",
+    `A route found is not a route verified: ${tracker.summary.nativeVerification.verified} families are native verified and ${tracker.summary.nativeVerification.partial} partial (see Native evidence); the special path is described under Symbol-encoded families.`,
+  ];
+}
+
+function nativeSection(tracker) {
+  const { summary, inputs } = tracker;
+  const lines = ["", "## Native evidence", ""];
+  lines.push(
+    `Native PowerPoint checks are supervisor-run (root owns Office); only their committed comparison output counts here. Basis: ${NATIVE_BASIS} ${summary.nativeVerification.verified} families are verified and ${summary.nativeVerification.partial} partial; a family no run names stays unverified.`,
+    "",
+    "| Run | Date | Decks | Decks passing every check | Failing checks |",
+    "| --- | --- | ---: | ---: | --- |",
+  );
+  for (const run of inputs.nativeEvidence) lines.push(`| [${cell(run.label)}](${path.posix.relative(DIR, run.readme)}) | ${run.date} | ${run.decks} | ${run.decksPassing} | ${run.failingChecks.map((item) => `${item.deck}: ${item.failing.join(", ")}`).join("; ") || "none"} |`);
+  lines.push("", "| Family | Status | Where |", "| --- | --- | --- |");
+  for (const rec of tracker.records.filter((item) => item.nativeVerification.runs)) lines.push(`| ${cell(rec.family)} | ${rec.nativeVerification.status} | ${cell(rec.nativeVerification.note)}${rec.nativeVerification.caveat ? ` Caveat: ${cell(rec.nativeVerification.caveat)}` : ""} |`);
+  return lines;
+}
+
+function symbolSection(tracker) {
+  const symbols = tracker.records.filter((rec) => rec.previewRoute.kind === "code-table");
+  if (!symbols.length) return [];
+  const lines = ["", "## Symbol-encoded families (FF-45)", ""];
+  lines.push(
+    `Symbol, Wingdings and Webdings are not text fonts: their glyphs sit at codes 0x20 to 0xFF of a Microsoft Symbol cmap. opf-render previews them through a code table (opf-render#94 and #95; [special-families.md](special-families.md)): each code maps to Unicode through core's [symbol-font-encodings.json](../../../spec/reference/symbol-font-encodings.json) and draws with the first loaded open face of the chain (pinned at opf-render \`${tracker.inputs.symbolFonts.commit.slice(0, 7)}\`), at the verified font's advance. The route kind is \`code-table\` and the status \`code-table\`: the route exists and is verified in opf-render's node, browser and raster tests. Native PowerPoint verification of symbol runs is not recorded for any of them. Wingdings 2 and Wingdings 3 share the Wingdings policy row and have no record of their own.`,
+    "",
+    "| Family | Chain (first loaded face draws) | Codes mapped | Bundled | Node / browser | Native |",
+    "| --- | --- | --- | --- | --- | --- |",
+  );
+  for (const rec of symbols) lines.push(`| ${cell(rec.family)} | ${rec.previewRoute.chain.join(", ")} | ${cell(rec.statusReason.match(/\d+ of \d+ codes/)?.[0] ?? "-")} | ${rec.bundled.yes ? "yes" : "no"} | ${rec.hostVerification.node} / ${rec.hostVerification.browser} | ${rec.nativeVerification.status} |`);
+  return lines;
+}
+
 export function renderMarkdown(tracker) {
   const { summary, records } = tracker;
   const lines = [];
@@ -739,13 +1016,15 @@ export function renderMarkdown(tracker) {
     "",
     "<!-- Generated by scripts/build-font-tracker.mjs from font-tracker.json. Do not edit; edit font-tracker.overrides.json and rebuild. -->",
     "",
-    `As of ${tracker.asOf}. Machine-readable source: [font-tracker.json](font-tracker.json). Authored inputs: [font-tracker.overrides.json](font-tracker.overrides.json). Program tracker: [burndown.md](burndown.md) (FF-40 to FF-46). Policy table: [font-licensing.md](font-licensing.md).`,
+    `As of ${tracker.asOf}. Machine-readable source: [font-tracker.json](font-tracker.json). Authored inputs: [font-tracker.overrides.json](font-tracker.overrides.json). Program tracker: [burndown.md](burndown.md) (FF-40 to FF-46). Policy table: [font-licensing.md](font-licensing.md). Internal program documentation: no support or progress status of any kind is shown on pptx.gallery or any site.`,
     "",
-    "This is the per-font work list behind the owner's 2026-09-29 review. Each record holds the family's selected name, preview route and tier, the bundled face (package, version, hashes, styles), the styles it needs and lacks, scripts, per-style measurements, host and native verification, parity signals, phase, status, next action and evidence. A family counts as accepted (status qualified or documented-visual) only when its own fixtures pass in every host and, for a proprietary family, its measurement against the real font is on record (RR-17); every other family still needs its own fixture and acceptance record, and no row claims native PowerPoint verification.",
+    ...licensingSection(summary, tracker),
+    "",
+    "This is the per-font work list behind the owner's 2026-09-29 review. Each record holds the family's selected name, preview route and tier, the bundled face (package, version, hashes, styles), the styles it needs and lacks, scripts, per-style measurements, host and native verification, parity signals, phase, status, next action and evidence. A family counts as accepted (status qualified or documented-visual) only when its own fixtures pass in every host and, for a proprietary family, its measurement against the real font is on record (RR-17); every other family still needs its own fixture and acceptance record, Native PowerPoint verification is recorded only where a committed native run (see Native evidence) names the family; every other family is unverified.",
     "",
     "## Summary",
     "",
-    `${summary.records} records: ${summary.inPolicy} policy families plus ${summary.records - summary.inPolicy} shipped script-font dependencies that the policy lacks. ${summary.bundled.yes} route to a face that opf-render bundles; ${summary.bundled.no} do not. ${summary.parityRerunNeeded} records were read by the committed parity run in a way that is stale against main (rerun needed).`,
+    `${summary.records} records: ${summary.inPolicy} policy families${summary.records > summary.inPolicy ? ` plus ${summary.records - summary.inPolicy} shipped script-font dependencies that the policy lacks` : ""}. ${summary.bundled.yes} route to a face that opf-render bundles (a code-table route counts when every face of its chain is bundled); ${summary.bundled.no} do not. ${summary.parityRerunNeeded} records were read by the committed parity run in a way that is stale against main (rerun needed).`,
     "",
     "| Status | Count | Severity | Meaning |",
     "| --- | --- | --- | --- |",
@@ -753,7 +1032,7 @@ export function renderMarkdown(tracker) {
   for (const status of STATUSES) push(`| \`${status}\` | ${summary.byStatus[status]} | ${tracker.statusDefinitions[status].severity} | ${cell(tracker.statusDefinitions[status].meaning)} |`);
   push("", "| Phase | Count | Owner's phase |", "| --- | --- | --- |");
   for (const phase of tracker.ownerPlan.phases) push(`| ${phase.phase} | ${summary.byPhase[phase.phase]} | ${cell(phase.title)} |`);
-  push("", `Phase is the earliest owner phase with unfinished work for the family. Phase 5 (native verification and the full parity rerun) applies to every record: native verification is ${summary.nativeVerification.verified} verified, ${summary.nativeVerification.partial} partial, ${summary.nativeVerification.unverified} unverified.`);
+  push("", `Phase is the earliest owner phase with unfinished work for the family. Phase 5 (native verification and the full parity rerun) applies to every record: native verification is ${summary.nativeVerification.verified} verified, ${summary.nativeVerification.partial} partial, ${summary.nativeVerification.unverified} unverified (see Native evidence).`);
   push("", "| Class | Count |", "| --- | --- |");
   for (const cls of CLASSES) push(`| ${cls} | ${summary.byClass[cls]} |`);
   push("", "| Host | Verified | Unverified | NA |", "| --- | --- | --- | --- |");
@@ -765,6 +1044,8 @@ export function renderMarkdown(tracker) {
   for (const rec of [...records].sort(byRank).slice(0, 15)) push(`| ${rec.priority.rank} | ${cell(rec.family)} | ${rec.class} | ${rec.phase} | \`${rec.status}\` | ${rec.priority.valuesAffected} | ${rec.priority.score} | ${cell(rec.nextAction)} |`);
 
   push(...scriptCorpusSection(records));
+
+  push(...nativeSection(tracker), ...symbolSection(tracker));
 
   push("", "## The owner's plan", "", `Owner input, ${tracker.ownerPlan.date}, adopted as the program order. Request: "${tracker.ownerPlan.request}"`, "", `> ${tracker.ownerPlan.summary}`, ">");
   for (const phase of tracker.ownerPlan.phases) push(`> ${phase.phase}. ${phase.text}`);
@@ -865,6 +1146,14 @@ async function main() {
     const snapshot = gallerySnapshotFromPreviewFonts(previewFonts, { commit, capturedAt: option("--date") ?? new Date().toISOString().slice(0, 10) });
     writeFileSync(path.join(ROOT, overrides.galleryFontsSnapshot), `${JSON.stringify(snapshot, null, 2)}\n`);
     console.log(`Wrote ${overrides.galleryFontsSnapshot} (${snapshot.families.length} families at ${commit.slice(0, 7)}).`);
+  }
+  if (args.includes("--snapshot-symbol-fonts")) {
+    const commit = option("--commit");
+    if (!/^[0-9a-f]{40}$/.test(commit ?? "")) throw new Error("--commit must be the full 40-character opf-render commit the module was read from");
+    const symbolFonts = await import(pathToFileURL(path.resolve(option("--snapshot-symbol-fonts"))).href);
+    const snapshot = snapshotFromSymbolFonts(symbolFonts, { commit, capturedAt: option("--date") ?? new Date().toISOString().slice(0, 10) });
+    writeFileSync(path.join(ROOT, overrides.symbolFontsSnapshot), `${JSON.stringify(snapshot, null, 2)}\n`);
+    console.log(`Wrote ${overrides.symbolFontsSnapshot} (${Object.keys(snapshot.previewFaces).length} families at ${commit.slice(0, 7)}).`);
   }
   if (args.includes("--check")) {
     const { drift } = checkTracker();

@@ -1,6 +1,6 @@
 {
   "$comment": "Authored input for scripts/build-font-tracker.mjs. Derived fields (policy, bundle, measurements, parity) are never written here; this file holds owner-plan text, reconciled next actions, evidence keys, classes, scripts, style rules and in-flight candidates. Regenerate with: node scripts/build-font-tracker.mjs",
-  "asOf": "2026-10-01",
+  "asOf": "2026-10-02",
   "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
   "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
   "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
@@ -53,12 +53,13 @@
     "Carlito is vendored as unmodified google/fonts files (opf-render#58) because its Reserved Font Name applies. Licenses, Reserved Font Names and no-hotlink rules are guarded in core and the renderer (opf#165, opf-render#53).",
     "Script fonts: previews load script faces when the `scripts` option is passed (opf-render#55, opf-editor#40) and fall back per character to Noto Sans (opf-render#57). The parity run of 2026-09-30 models the gallery editor host (its font gate loads the script and vendored faces a document needs), so the 88 family uses it used to record as `missing` now resolve to their Noto route; loading is not verification per family. Still failing there: Raleway and Playfair Display (not bundled; the editor draws Roboto) and the Noto Sans Mongolian face, which cannot shape any text.",
     "Hosts are recorded separately. The default Node registry (`prepareNodeFonts`) uses the `base` pack (Roboto and Roboto Mono only); the office-pack faces (Carlito, Arimo, Tinos, Cousine, Gelasio, Caladea, Intos) and the open pack load only when `pack: 'office'` is requested, and script faces only when the `scripts` option is passed. Browser hosts and the opf-editor playground load the 33 eager base and office faces and now load the vendored open pack and Intos lazily, on demand (opf-render#54, opf-editor#42). The gallery editor (a vendored opf-editor bundle) gets them only with a release that includes opf-editor#42, so it is recorded as pending, not as a gap in the family's status.",
-    "Gallery cards are a different host from the gallery editor. pptx-gallery self-hosts preview webfonts (pptx-gallery#53 and #54; replacement data in #51) for 49 families, including Anton, Barlow, Bitter, EB Garamond, Figtree, Libre Caslon Text, Work Sans, Playfair Display, Raleway, Open Sans and Montserrat, as upright regular and bold faces from pinned @fontsource packages or unmodified upstream files. The tracker reads that list from a pinned snapshot (`galleryCards`). Card previews do not change the editor's bundle, and no per-family card verification exists.",
+    "Gallery cards are a different host from the gallery editor. pptx-gallery self-hosts preview webfonts (pptx-gallery#53 and #54; replacement data in #51) as upright regular and bold faces from pinned @fontsource packages, unmodified upstream files or the vendored Intos faces. The tracker reads that list from a pinned snapshot (`galleryCards`, refreshed 2026-10-02 at pptx-gallery 5af1c5f: 51 families, 138 faces). Card previews do not change the editor's bundle. A family's card host is `verified` when pptx-gallery's tests/preview-fonts.test.ts covers it (a font scheme uses it, its stack resolves to the hash-pinned licensed face, weights and glyph coverage hold, no recorded coverage gap); a family no font scheme uses, or whose card face has a recorded coverage gap, stays `unverified`. The snapshot was pinned at efb63ac (2026-09-29) and had not been refreshed since, so it counted no card family as verified.",
     "fontResolution treats a policy look-alike as near, not fail, when the PPTX names the selected family (opf#159). Parity harness fixes merged in opf#164 and opf#168. The value set is 850 after pptx-gallery#40 removed 50 unsupported chart types; Aptos and Aptos Display each appear in 704 of them.",
     "Selawik 1.01 was measured and rejected as a Segoe UI replacement (opf#166: regular 0.16% mean and 2.51% max on the standard 300-string corpus, 0.73% and 9.7% on the reviewer's broader corpus); Red Hat Display stays the visual route. Segoe UI Light, Semilight and Semibold were measured separately.",
     "Cover slide centering (opf-pptx#97) is geometry work with no font impact.",
-    "The seven shipped script-font dependencies missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) are tracked as policy-gap records. Adding their policy rows is follow-up work: this change does not edit font-policy.json.",
-    "FF-43 (open replacement faces, opf-render branch claude/ff-43-bundle-open-candidates with this companion change): Barlow and Anton (google/fonts statics, byte-identical at commit 23e54b51ddff), Figtree, Work Sans, EB Garamond, Archivo Narrow, Libre Caslon Text and Bitter (npm-derived @expo-google-fonts statics, exact versions; no Reserved Font Name except Bitter, whose reserved name \"Bitter Pro\" is in no face name) are bundled with only the styles the policy needs, lazy in browser hosts; the eager list stays 33 faces. Red Hat Display now ships 300, 400, 600 and 700 with italics and Red Hat Text 400 and 700 with italics: the RedHatFont repository statics were unusable (the Regular, Light and SemiBold italics (and Red Hat Text Italic) do not set the OS/2 italic bit (only the Bold Italic files do), Red Hat Display SemiBold declares weight 707 and Bold 799 (Red Hat Text Bold declares 700), so a 600 request paints as Bold and the regular and bold italics as one face in resvg, probed), and Red Hat has no Reserved Font Name, so the correctly labelled @expo-google-fonts instances replace them. Libre Caslon Text has no bold italic upstream (explicit gap). The 19 rows whose route face was measured are re-measured (Rockwell on Bitter: 1.1% to 4.4% mean, up to 8.5% max) on 2026-09-29 against the installed Windows originals; the widths are unchanged (except Corbel and Gill Sans MT, which now follow the vendored Source Sans 3) and every row stays visual: none meets the metric bar. Grandview, Grandview Display, Tenorite and Tenorite Display are not installed on the measuring host and stay unmeasured. Trade-off: the shipped Red Hat Display Bold is about 2.5% narrower than the RedHatFont Bold it replaces (Segoe UI Bold preview mean width +0.6% to -1.8%, mean absolute 0.95% to 1.86%)."
+    "The seven shipped script-font dependencies that were once missing from the registry (Noto Sans Arabic, Sinhala, Lao, Myanmar, Thaana, Syriac and Noto Serif Tibetan) have policy rows since RR-17 (FF-44), so no record is a policy-gap and `extras` is empty.",
+    "FF-43 (open replacement faces, opf-render branch claude/ff-43-bundle-open-candidates with this companion change): Barlow and Anton (google/fonts statics, byte-identical at commit 23e54b51ddff), Figtree, Work Sans, EB Garamond, Archivo Narrow, Libre Caslon Text and Bitter (npm-derived @expo-google-fonts statics, exact versions; no Reserved Font Name except Bitter, whose reserved name \"Bitter Pro\" is in no face name) are bundled with only the styles the policy needs, lazy in browser hosts; the eager list stays 33 faces. Red Hat Display now ships 300, 400, 600 and 700 with italics and Red Hat Text 400 and 700 with italics: the RedHatFont repository statics were unusable (the Regular, Light and SemiBold italics (and Red Hat Text Italic) do not set the OS/2 italic bit (only the Bold Italic files do), Red Hat Display SemiBold declares weight 707 and Bold 799 (Red Hat Text Bold declares 700), so a 600 request paints as Bold and the regular and bold italics as one face in resvg, probed), and Red Hat has no Reserved Font Name, so the correctly labelled @expo-google-fonts instances replace them. Libre Caslon Text has no bold italic upstream (explicit gap). The 19 rows whose route face was measured are re-measured (Rockwell on Bitter: 1.1% to 4.4% mean, up to 8.5% max) on 2026-09-29 against the installed Windows originals; the widths are unchanged (except Corbel and Gill Sans MT, which now follow the vendored Source Sans 3) and every row stays visual: none meets the metric bar. Grandview, Grandview Display, Tenorite and Tenorite Display are not installed on the measuring host and stay unmeasured. Trade-off: the shipped Red Hat Display Bold is about 2.5% narrower than the RedHatFont Bold it replaces (Segoe UI Bold preview mean width +0.6% to -1.8%, mean absolute 0.95% to 1.86%).",
+    "RR-17 follow-up (2026-10-02): the tracker answers the owner's four questions in `summary.licensing` (how many fonts, how many open, how many need a replacement, how many have one, and the licence of the bundled faces). Symbol, Wingdings and Webdings now carry the code-table route that opf-render#94 (FF-45) added: previewRoute kind `code-table` through the chain pinned in font-tracker.symbol-fonts.json, status `code-table`, node and browser verified, native unverified. Native PowerPoint evidence is read from the committed comparison output of the RR-05 runs (`overrides.nativeEvidence`): a family is native verified only when a deck that names it passes per-run fonts, theme slots and Presentation.Fonts. The style rule now takes a proprietary family's declared styles as the real font's (Cambria Math and Segoe UI Emoji ship one face, so their four-style requirement was an assumption, not a gap)."
   ],
   "statusDefs": {
     "loading-gap": {
@@ -75,7 +76,7 @@
     },
     "needs-special-path": {
       "severity": 3,
-      "meaning": "No ordinary look-alike can serve the family: it needs a dedicated math, emoji or symbol-encoding path."
+      "meaning": "No ordinary look-alike can serve the family and no code-table route is bundled for it: it needs a dedicated math, emoji or symbol-encoding path."
     },
     "visual-gap": {
       "severity": 2,
@@ -100,6 +101,10 @@
     "qualified": {
       "severity": 0.1,
       "meaning": "RR-17: an open family that draws as itself, or a metric route whose four-style widths and line breaks are within the bar, with its own fixture in every host (node, browser, editor, gallery editor). Native PowerPoint verification (FF-46) remains."
+    },
+    "code-table": {
+      "severity": 1.5,
+      "meaning": "A symbol-encoded family (Symbol, Wingdings, Webdings) previews through a code table (FF-45, opf-render#94 and #95): each code maps to Unicode and draws with the first loaded open Noto symbol face at the verified font's advance. The route is bundled and verified in opf-render's node, browser and raster tests; native PowerPoint verification of symbol runs is not recorded, and the open glyphs differ in shape from the originals."
     }
   },
   "hostLoading": {
@@ -134,6 +139,12 @@
         "browser": "lazy: the browser loader fetches hash-verified vendored faces on demand (opf-render#54)",
         "editor": "lazy: the playground loads them on demand (opf-editor#42)",
         "galleryEditor": "lazy: the font gate loads them on demand from the page's fonts/ directory (opf-editor 0.10.1, pptx-gallery#59: hash-pinned public/opf-editor/lazy-fonts.json, same-origin)"
+      },
+      "symbol": {
+        "node": "only when the scripts option selects the symbol pack: scripts: 'auto' picks Zsym when a run, design.fonts or a font scheme names a symbol-encoded family (opf-render#94); Noto Sans is also the glyph-fallback face of every office registry",
+        "browser": "when the host requests scripts (opf-render#55); scripts: 'auto' picks Zsym for a symbol-encoded family (opf-render#94)",
+        "editor": "auto (opf-editor#40); not verified for the symbol pack",
+        "galleryEditor": "script-font manifest (opf#171) lists the three Noto symbol faces under Zsym; not verified for the symbol pack"
       }
     },
     "lazyPendingPacks": [],
@@ -541,13 +552,13 @@
       "styles": [
         "400"
       ],
-      "reason": "Cambria Math ships one upright face (cambria.ttc); STIX Two Math and Noto Sans Math do too. Bold and italic requests take the regular face and are reported visual."
+      "reason": "The real Cambria Math ships one upright face: cambria.ttc holds Cambria and Cambria Math, both Regular (read on the Windows measuring host with fontkit, 2026-10-02; the separate cambriab, cambriai and cambriaz files are Cambria's own bold and italic, not Cambria Math's). STIX Two Math and Noto Sans Math also ship one upright face. Bold and italic requests take the regular face and are reported visual."
     },
     "Segoe UI Emoji": {
       "styles": [
         "400"
       ],
-      "reason": "Segoe UI Emoji ships one face; Noto Color Emoji does too (colour glyphs have no weights)."
+      "reason": "The real Segoe UI Emoji ships one face: seguiemj.ttf is its only file and reads as Regular (Windows measuring host with fontkit, 2026-10-02); Noto Color Emoji ships one too (colour glyphs have no weights)."
     },
     "Noto Color Emoji": {
       "styles": [
@@ -1066,12 +1077,40 @@
         "scriptCorpora"
       ],
       "note": "Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified. Script corpus (2026-10-01): loaded and drawn by the strict Node registry (scripts: auto) and offline in Chromium with advances within 0.1 px. Editor, gallery editor and gallery cards are unverified."
+    },
+    "Symbol": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "symbolRender",
+        "symbolRoute"
+      ],
+      "note": "opf-render test/symbol-fonts.mjs (every code: mapped, resolved, advance, bounds, drawn through resvg) and test/symbol-fonts-browser.mjs (Chromium advances within 0.015 px). The editor and the gallery editor have no per-family symbol fixture."
+    },
+    "Wingdings": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "symbolRender",
+        "symbolRoute"
+      ],
+      "note": "opf-render test/symbol-fonts.mjs (every code: mapped, resolved, advance, bounds, drawn through resvg) and test/symbol-fonts-browser.mjs (Chromium advances within 0.015 px). The editor and the gallery editor have no per-family symbol fixture."
+    },
+    "Webdings": {
+      "node": "verified",
+      "browser": "verified",
+      "evidence": [
+        "symbolRender",
+        "symbolRoute"
+      ],
+      "note": "opf-render test/symbol-fonts.mjs (every code: mapped, resolved, advance, bounds, drawn through resvg) and test/symbol-fonts-browser.mjs (Chromium advances within 0.015 px). The editor and the gallery editor have no per-family symbol fixture."
     }
   },
   "nativeVerification": {
     "Aptos": {
       "status": "partial",
       "note": "Aptos 2.01 is present on the native host and PowerPoint lists it in Presentation.Fonts (FF-04); which part or style requests it, and which face draws, is open (FF-05). No per-family native rendering acceptance.",
+      "caveat": "FF-05: PowerPoint adds an Aptos entry to Presentation.Fonts of a deck that names only other fonts (lang-ja-meiryo); which part or style requests it, and which face draws, is open. A theme slot read-back is not a rendering acceptance.",
       "evidence": [
         "nativeInventory",
         "aptosBrief"
@@ -2170,21 +2209,21 @@
       ]
     },
     "Cambria Math": {
-      "nextAction": "FF-45 route in place: STIX Two Math (visual; corpus mean 5.0%, max 18.2%, Latin 0.9%) with Noto Sans Math and Caladea as alternates; math runs are text drawn per character (no equation model, no MATH-table layout; OMML imports as fallback text with a diagnostic). Next: native PowerPoint check of the Cambria Math deck (FF-46) and an owner decision on an equation model (RR-18).",
+      "nextAction": "FF-45 route in place: STIX Two Math (visual; corpus mean 5.0%, max 18.2%, Latin 0.9%) with Noto Sans Math and Caladea as alternates; math runs are text drawn per character (no equation model, no MATH-table layout; OMML imports as fallback text with a diagnostic). The real Cambria Math has one face, so no bold or italic is required. Next: native PowerPoint check of the Cambria Math deck (FF-46) and an owner decision on an equation model (RR-18).",
       "evidence": [
         "licensing",
         "ff45EmojiMath"
       ]
     },
     "Segoe UI Emoji": {
-      "nextAction": "FF-45 route in place: Noto Color Emoji (visual; 1.2451 em per emoji against 1.3730 em in Segoe UI Emoji 1.33) with Noto Emoji as the monochrome raster face; sequences stay one glyph, browsers draw colour, resvg draws the silhouette. Next: native PowerPoint check of the emoji deck (FF-46) and a colour raster path when resvg gains COLRv1 or the OT-SVG glyphs are inlined.",
+      "nextAction": "FF-45 route in place: Noto Color Emoji (visual; 1.2451 em per emoji against 1.3730 em in Segoe UI Emoji 1.33) with Noto Emoji as the monochrome raster face; sequences stay one glyph, browsers draw colour, resvg draws the silhouette. The real Segoe UI Emoji has one face, so no bold or italic is required. Next: native PowerPoint check of the emoji deck (FF-46) and a colour raster path when resvg gains COLRv1 or the OT-SVG glyphs are inlined.",
       "evidence": [
         "licensing",
         "ff45EmojiMath"
       ]
     },
     "Symbol": {
-      "nextAction": "Code table built and verified (Adobe and Apple tables against Windows Symbol 5.01: 189 of 224 codes mapped, 189 drawn with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols; Apple differences recorded per code). Open: native PowerPoint verification of exported runs (FF-46) and the appearance delta of the open glyphs.",
+      "nextAction": "Code-table route (FF-45): 189 of 224 codes map to Unicode (Adobe and Apple tables, verified against Windows Symbol 5.01) and draw with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols at the verified advances; Apple differences recorded per code. Verified in opf-render's node, browser and raster tests. Open: native PowerPoint check of exported Symbol runs (FF-46; none is recorded) and the appearance delta of the open glyphs.",
       "evidence": [
         "licensing",
         "symbolEncodings",
@@ -2192,7 +2231,7 @@
       ]
     },
     "Webdings": {
-      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Webdings 5.01: 223 of 224 codes mapped and drawn with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math); exhaustive code, advance, bounds, browser and raster tests in opf-render. Open: native PowerPoint verification of exported runs (FF-46).",
+      "nextAction": "Code-table route (FF-45): 223 of 224 codes map to Unicode (Unicode 7.0 repertoire, verified against Windows Webdings 5.01) and draw with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math; exhaustive code, advance, bounds, browser and raster tests in opf-render. Open: native PowerPoint check of exported Webdings runs (FF-46; none is recorded).",
       "evidence": [
         "licensing",
         "symbolEncodings",
@@ -2200,7 +2239,7 @@
       ]
     },
     "Wingdings": {
-      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Wingdings 5.01, Wingdings 2 and 3 1.55: 222, 217 and 208 of 224 codes mapped and drawn with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder); the PPTX keeps the family and codes. Open: native PowerPoint verification of exported runs (FF-46).",
+      "nextAction": "Code-table route (FF-45): 222 of 224 codes map to Unicode (Unicode 7.0 repertoire, verified against Windows Wingdings 5.01; Wingdings 2 and 3 share this row: 217 and 208 of 224) and draw with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder. The PPTX keeps the family and codes. Verified in opf-render's node, browser and raster tests. Open: native PowerPoint check of exported Wingdings runs, including whether PowerPoint needs an a:sym element beside a:latin (FF-46; none is recorded).",
       "evidence": [
         "licensing",
         "symbolEncodings",
@@ -2236,7 +2275,7 @@
       ]
     },
     "Noto Color Emoji": {
-      "nextAction": "Pinned as the optional opf-render emoji pack (Zsye) in the FF-45 render PR; the preview face for Segoe UI Emoji. Next: tracker snapshot refresh after the render merge; a colour raster path when resvg draws COLRv1 or the OT-SVG glyphs are inlined.",
+      "nextAction": "Bundled as the optional opf-render emoji pack (Zsye, opf-render#95); the preview face for Segoe UI Emoji, which has one regular face like Noto Color Emoji. Next: per-host verification of the emoji route and a colour raster path when resvg draws COLRv1 or the OT-SVG glyphs are inlined.",
       "evidence": [
         "licensing",
         "ff45EmojiMath"
@@ -2250,7 +2289,7 @@
       ]
     },
     "STIX Two Math": {
-      "nextAction": "Pinned as the optional opf-render math pack (Zmth) in the FF-45 render PR; the preview face for Cambria Math. Next: tracker snapshot refresh after the render merge; native Cambria Math comparison (FF-46).",
+      "nextAction": "Bundled as the optional opf-render math pack (Zmth, opf-render#95); the preview face for Cambria Math, which has one regular face like STIX Two Math. Next: per-host verification of the math route and the native Cambria Math comparison (FF-46).",
       "evidence": [
         "licensing",
         "ff45EmojiMath"
@@ -2807,7 +2846,17 @@
     "scriptCorporaEvidence": {
       "label": "Script corpora evidence (2026-10-01)",
       "url": "docs/evidence/script-corpora-20261001/README.md"
-    }
+    },
+    "symbolRoute": [
+      {
+        "label": "opf-render#94 (FF-45: symbol-encoded families preview through code tables)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/94"
+      },
+      {
+        "label": "opf-render#95 (FF-45: emoji and math paths)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/95"
+      }
+    ]
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
   "measurementSources": {
@@ -3193,5 +3242,25 @@
     "qualification": "docs/evidence/script-corpora-20261001/qualification.json",
     "references": "docs/evidence/script-corpora-20261001/references.json",
     "corpus": "docs/evidence/script-corpora-20261001/script-corpora.json"
-  }
+  },
+  "symbolFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.symbol-fonts.json",
+  "symbolEncodings": "spec/reference/symbol-font-encodings.json",
+  "nativeEvidence": [
+    {
+      "id": "rr-05b-native-20261002",
+      "label": "RR-05b native run: Arabic and Hebrew decks (2026-10-02)",
+      "file": "docs/evidence/rr-05b-native-20261002/compare.json",
+      "readme": "docs/evidence/rr-05b-native-20261002/README.md",
+      "date": "2026-10-02",
+      "host": "PowerPoint 365, Windows"
+    },
+    {
+      "id": "rr-05-cjk-native-20261002",
+      "label": "RR-05 native run: CJK, Thai and Hindi decks (2026-10-02)",
+      "file": "docs/evidence/rr-05-cjk-native-20261002/compare.json",
+      "readme": "docs/evidence/rr-05-cjk-native-20261002/README.md",
+      "date": "2026-10-02",
+      "host": "PowerPoint 365, Windows"
+    }
+  ]
 }

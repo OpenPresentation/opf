@@ -1,0 +1,43 @@
+{
+  "description": "Pinned snapshot of opf-render's symbol-font preview route (src/symbol-fonts.js, SYMBOL_PREVIEW_FACES), reduced to the fields the font tracker reads. Symbol, Wingdings, Wingdings 2, Wingdings 3 and Webdings are not text fonts: their codes map to Unicode through core's spec/reference/symbol-font-encodings.json and draw with the first loaded open face of the chain. Refresh with: node scripts/build-font-tracker.mjs --snapshot-symbol-fonts <opf-render>/src/symbol-fonts.js --commit <sha>.",
+  "source": {
+    "repository": "OpenPresentation/opf-render",
+    "commit": "8f0d6f1bbdec82f266494113e7e061b931bf44e2",
+    "path": "src/symbol-fonts.js",
+    "capturedAt": "2026-10-02"
+  },
+  "script": "Zsym",
+  "placeholder": "□",
+  "previewFaces": {
+    "Symbol": [
+      "Noto Sans",
+      "Noto Sans Math",
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols"
+    ],
+    "Wingdings": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+    ],
+    "Wingdings 2": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+    ],
+    "Wingdings 3": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+    ],
+    "Webdings": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+    ]
+  }
+}
