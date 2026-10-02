@@ -1,3 +1,4 @@
+import type { ConvertOptions } from "@openpresentation/opf/convert";
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
 /** The 14 pptx.gallery dimensions. */
@@ -38,8 +39,10 @@ export interface DimensionSwitchOptions {
   index?: number;
   /** blocks: media source for the image and video kinds. */
   source?: string;
-  /** blocks: convert the block's own content to the new kind (text to list, quote, metric, code or timeline and back; chart and table) instead of replacing it. See block-convert. */
+  /** blocks: convert the block's own content to the new kind (text, list, quote, metric, code, timeline, chart, table and a group of metrics; see block-convert) instead of replacing it. */
   convert?: boolean;
+  /** blocks with `convert`: core's conversion options (`looseWhen`, `fences`, `headings`, `columns`, `delimiter`, `header`). */
+  conversion?: ConvertOptions;
   /** Session change metadata (switchDimension only). */
   meta?: Record<string, unknown>;
 }

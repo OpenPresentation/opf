@@ -33,10 +33,11 @@ import {
   setHeaderFooterZone,
   setLogoVariant,
 } from "./design-options.js";
+import { createContentControls } from "./content-controls.js";
 import { describeTableCell, mergeTableCells, parseTableCellPath, readTableStyle, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
 
 /** The sections a panel can show. `selection` and `table` follow the current selection; the rest follow the deck or the current slide. */
-export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "background", "slide-image", "header-footer", "brand", "layout-options", "info", "selection", "table"]);
+export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "background", "slide-image", "header-footer", "brand", "layout-options", "info", "selection", "table", "slide-content"]);
 
 const SECTION_TITLES = {
   look: "Look and language",
@@ -48,6 +49,7 @@ const SECTION_TITLES = {
   info: "Audience and story",
   selection: "Selected content",
   table: "Table",
+  "slide-content": "Slide structure",
 };
 const OPEN_BY_DEFAULT = new Set(["look", "selection", "table"]);
 const LOGO_VARIANT_LABELS = {
@@ -376,6 +378,8 @@ export function createDesignControls(container, options = {}) {
 
   const built = {};
   for (const section of sections) built[section] = group(section);
+  // RR-26: list levels, grouping, regions and images between content and design (content-controls.js).
+  const contentControls = built.selection || built["slide-content"] ? createContentControls({ editor, h, selectField, run, nextId, getSlide, reselect }) : undefined;
 
   // --- look and language --------------------------------------------------------------------------
 
@@ -896,9 +900,11 @@ export function createDesignControls(container, options = {}) {
       help: "Only types the chart's data can use as it is.",
       onChange: (value) => run(() => switchDimension(editor, "charts", value, { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() }), `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.`),
     });
-    body.append(summary, convert.wrap, unavailable, chartType.wrap, replace.wrap);
+    body.append(summary, convert.wrap, unavailable, contentControls.nodes.metrics, contentControls.nodes.list, chartType.wrap, contentControls.nodes.arrange, replace.wrap);
     dynamic.selection = { details, summary, convert, unavailable, replace, chartType };
   }
+
+  if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
 
   // --- table --------------------------------------------------------------------------------------
 
@@ -1023,6 +1029,11 @@ export function createDesignControls(container, options = {}) {
           }
         }
       }
+    }
+    if (contentControls) {
+      contentControls.sync({ blockPath, content, selectedPath: selected, slideIndex: getSlide() });
+      const slideContent = built["slide-content"];
+      if (slideContent) slideContent.details.hidden = [...contentControls.slideNode.children].every((node) => node.hidden);
     }
   }
 

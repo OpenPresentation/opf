@@ -55,7 +55,7 @@ Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits pr
 - Structured catalog controls that only commit known catalog IDs
 - JSON Patch state transitions with inverse patches for undo/redo
 - Optional DOM controls plus React and Svelte bindings in separate embeddable entry points
-- Dimension switches, safe block conversion, design-level options, table style and cell merge as headless APIs (`/switches`, `/block-convert`, `/design-options`, `/tables`, `/assets`, `/backgrounds`) and one accessible DOM panel (`/design-controls`)
+- Dimension switches, safe block conversion and content actions (list levels, grouping, regions, images to design, slide split and merge), design-level options, table style and cell merge as headless APIs (`/switches`, `/block-convert`, `/content-actions`, `/design-options`, `/tables`, `/assets`, `/backgrounds`) and one accessible DOM panel (`/design-controls`)
 
 ## Live browser canvas
 
@@ -224,9 +224,9 @@ const { patches, document } = prepareDimensionSwitch(editor.document, "themes", 
 
 A deck-level design switch cannot reach a slide that carries its own value for that key. The result lists those slides in `shadowed`; `clearSlideOverrides: true` removes the overrides in the same transaction. `record` adds a gallery item's catalog record inline in the same transaction when neither the document nor the bundled catalog defines its id (a gallery-only layout or font scheme). Every switch is validated: an unknown catalog id, an invalid value or an invalid resulting document throws before anything changes, and switching to the current value commits nothing. The editor session emits the usual `patch`, `undo` and `redo` events with `meta.source: "dimension-switch"` and `meta.dimension`, so the canvas and any host preview recompose from the switched document. `resolveSlideFonts(document, slideIndex)` returns the heading, body and code families the preview measures and the export names.
 
-### Content-type conversion (RR-06)
+### Content-type conversion (RR-06, RR-26)
 
-`blocks` replaces a block by default and discards its old payload. Pass `convert: true` (or call `convertBlock`) to move the block's own content into the new kind instead. A conversion keeps the text and never adds content: no value, label, date, number or sentence is invented, what a target kind cannot carry is reported in `loss` rather than dropped silently, and a pair with no meaningful mapping is refused.
+`blocks` replaces a block by default and discards its old payload. Pass `convert: true` (or call `convertBlock`) to move the block's own content into the new kind instead. A conversion keeps the user's content and never adds any: no value, label, date, number or sentence is invented, what a target kind cannot carry is reported in `loss` rather than dropped silently, and a pair with no meaningful mapping is refused. The converters themselves are pure functions in core, `@openpresentation/opf/convert` (see [content conversions](https://github.com/OpenPresentation/opf/blob/main/docs/conversions.md) for every pair, its loss report and the decisions behind them); this entry point is the transaction around them: it finds the block, guards the patch with a `test` of what it read, validates the document and applies one undoable step.
 
 ```js
 import { convertBlock, blockConversionTargets, prepareBlockConversion } from "@openpresentation/opf-editor/block-convert";
@@ -235,22 +235,41 @@ blockConversionTargets(editor.document, "slides.2.blocks.0");
 // [{ kind: "list", label: "List", available: true, lossless: true, loss: [] }, { kind: "metric", available: false, reason: "The first line is longer than 24 characters, ..." }, ...]
 const change = convertBlock(editor, "slides.2.blocks.0", "list"); // one undoable step
 change.lossless; change.loss; // for example [] or ["text formatting", "list nesting levels"]
-switchDimension(editor, "blocks", "list", { path: "slides.2.blocks.0", convert: true }); // the same through the switch
+convertBlock(editor, "slides.2.blocks.0", "table", {}, { delimiter: "," }); // the fifth argument is core's conversion options
+switchDimension(editor, "blocks", "list", { path: "slides.2.blocks.0", convert: true }); // the same through the switch (`conversion` carries the options)
 ```
 
 | From | To | What happens |
 | --- | --- | --- |
-| text | list, timeline | One item (event) per line; blank lines are dropped and reported. Run formatting stays on list items; a timeline event is plain text. |
-| list | text, timeline | One line per item. Nesting levels are flattened and reported. |
-| text | quote | The text is the quote. A last line that starts with an em dash becomes the attribution. Formatting is flattened and reported. |
-| quote | text | The quote, then `— attribution`, then the source, one per line. Lossless. |
+| text | list | One item per line; indentation and `-`, `*`, `1.` markers become nesting levels (numbering is reported); blank lines are dropped and reported. Run formatting stays. |
+| text | quote | The text is the quote. A trailing dash line (`— Name, Title`, `–`, `--`, `~`, `-`) is the attribution and a second one the source; only unambiguous endings are read. Formatting is flattened and reported. |
 | text | metric | The first line (at most 24 characters) is the value (a canonical number becomes a number), the second the label, the rest the description. Refused when the first line is longer. |
-| metric | text | `value unit`, label, description and delta, one per line. A trend is reported as lost. |
-| text, code | code, text | The text is the source; going back loses the language and filename, which are reported. |
-| timeline | text, list | `when: what` per event (an event without `when` is just its text). |
-| chart, table | table, chart | Inline data only. A chart's type is reported as lost. A table converts when it has a plain label for every column and numbers in every column after the first; styled, merged or rich cells and external data are refused. |
+| text | code | One fenced block gives the source, the language and the file name; nothing is guessed from the code. |
+| text | timeline | One event per line; `2024 — Launch`, `Q1 2026: Pilot` and `Jan - Kickoff` give `when`; an indented line is the previous event's description. |
+| text | table | A Markdown pipe table, tab-separated lines or a `delimiter`; refused without that structure. |
+| list | text, timeline, table | Nesting becomes indentation (lossless) or is reported; a description is kept as an indented line or an event description; a table has one column, or text and description, with no invented headings. |
+| quote, metric, code | text | The quote, then `— attribution` and `— source`; the metric as `value unit`, label, description and delta (a trend is reported as lost); code in a fenced block that keeps its language and file name. |
+| timeline | text, list, table | `when: what` per event with the description indented; a table has `When`, `What`, `Description` columns for the fields in use. Lossless apart from the timeline name and description. |
+| chart | table | Inline data only. A chart's type is reported as lost. |
+| table | chart | Needs a plain label for every column and numbers after the first; styled, merged or rich cells and external data are refused. |
+| table | list, timeline, text, metric blocks | First column is the item; columns are read by heading (`When`, `What`, `Value`, ...); Markdown or tab-separated text. Dropped columns and headings are reported. |
+| group of metrics | table | A group (or a slide, or a region) whose blocks are all metrics; only the columns in use. |
 
-Images, videos and groups have no conversion. Everything else is replacement. `blockPathForSelection(document, selectedPath)` maps a selection such as `slides.0.blocks.1.text` to its block for a host that offers the control on selection. Conversions are guarded by a `test` operation, so one built from a stale read cannot overwrite a concurrent edit.
+Images, videos and any other group have no conversion. Everything else is replacement. `blockPathForSelection(document, selectedPath)` maps a selection such as `slides.0.blocks.1.text` to its block for a host that offers the control on selection, and `metricGroupForSelection` finds the group of metrics around a selected metric. Conversions are guarded by a `test` operation, so one built from a stale read cannot overwrite a concurrent edit.
+
+### Content actions (RR-26)
+
+`@openpresentation/opf-editor/content-actions` holds the other pure transforms of core's `/convert` as editor transactions. Every action has a `prepare...` form that returns `{ document, patches, path, changed, lossless, loss, reason }` without touching a session (pass `{ validate: false }` for a dry run that only needs the loss report), and an applying form that is one guarded, validated, undoable step. A refusal throws `content-action-refused` with core's reason.
+
+| Action | Applying form | What it does |
+| --- | --- | --- |
+| List levels | `shiftListItems(editor, listPath, [indexes], delta)` | Indent (`1`) or outdent (`-1`) items; a level is at most one deeper than the item above, items under a moved item move with it, nothing is lost. |
+| Group | `groupBlocks(editor, containerPath, [indexes])`, `ungroupBlock(editor, groupPath)` | Wrap blocks of a slide or group in a group, or dissolve one (its composition and id are reported). |
+| Regions | `placeBlocksInRegions`, `regionsAsBlocks`, `moveSlideRegion` | Give each block its own named region (no overlap), turn regions back into blocks in reading order (placement is reported), move or swap a region. |
+| Images | `moveImageToDesign(editor, blockPath, "slideImage" \| "background" \| "watermark", options)`, `moveImageToContent(editor, slideIndex, source)` | Promote an image block to the slide image (with a position), background or watermark and back; alt text, titles, placement and opacity that the target cannot hold are reported. |
+| Slides | `splitSlideByBlocks`, `splitSlideOnOverflow`, `mergeSlides`, `unpaginateSlides` | Split a slide by its blocks, or where it overflows through the existing pagination (the change carries `pages`), merge consecutive slides, and put paginated slides back together from `pages`. Each is one undo step made of per-slide `test`, `replace`, `remove` and `add` operations. |
+
+The playground's Content tab mounts the block-level and slide-structure actions (`slide-content` section of `/design-controls`). Slide-level split and merge are API only until the slide management UI exists.
 
 ### Pickers: options, chart types and current values
 
@@ -380,11 +399,11 @@ const controls = createDesignControls(designPanel, {
   getSelectedPath: () => selectedPath,
   sections: ["look", "slide-image", "header-footer", "brand", "layout-options", "info"],
 });
-const selectionControls = createDesignControls(contentPanel, { editor, getSlideIndex, getSelectedPath, sections: ["selection", "table"], onSelectPath: select });
+const selectionControls = createDesignControls(contentPanel, { editor, getSlideIndex, getSelectedPath, sections: ["selection", "table", "slide-content"], onSelectPath: select });
 controls.refresh(); // when the slide or the selection changes
 ```
 
-Sections: `look` (theme, color scheme, font scheme, language, this slide's layout), `background` (type, theme slot, solid color, gradient with its stops, image, any of the 54 patterns, opacity; a draft until Apply, with Remove), `slide-image`, `header-footer` (choose header or footer and a zone, then every part the zone supports: text, logo, image, organization, socials, section, slide number and format, current or fixed date and format, with a summary of the zones in use), `brand` (logo variants, organization logo, picture bullets, accent font, watermark), `layout-options` (alignment, direction, primary chart, content box), `info` (narrative, tone, audience, socials), `selection` (content type with a loss report, replacement, chart type) and `table` (style, merge, split, cell fill and alignment). The panel is native `details`, `fieldset`, `select`, checkbox and text controls with a label on each, so it works with the keyboard and with screen readers: groups open with Enter or Space, a select changes with the arrow keys, text fields commit on Enter or when you leave them, and results and refusals are announced in `role="status"` and `role="alert"` regions. A refused change (an invalid value, text a merge would hide) is explained, changes nothing, and puts the field back. "Applies to" switches the design controls between the whole presentation and the current slide, and a control shows when a slide value is "set on this slide" or "from the presentation". The panel offers only conversions that exist, shows what a conversion loses before you choose it, and lists why an unavailable one is unavailable.
+Sections: `look` (theme, color scheme, font scheme, language, this slide's layout), `background` (type, theme slot, solid color, gradient with its stops, image, any of the 54 patterns, opacity; a draft until Apply, with Remove), `slide-image`, `header-footer` (choose header or footer and a zone, then every part the zone supports: text, logo, image, organization, socials, section, slide number and format, current or fixed date and format, with a summary of the zones in use), `brand` (logo variants, organization logo, picture bullets, accent font, watermark), `layout-options` (alignment, direction, primary chart, content box), `info` (narrative, tone, audience, socials), `selection` (content type with a loss report, list levels, group of metrics, group and ungroup, image to design, replacement, chart type), `slide-content` (blocks to regions and back, design images back into the content) and `table` (style, merge, split, cell fill and alignment). The panel is native `details`, `fieldset`, `select`, checkbox and text controls with a label on each, so it works with the keyboard and with screen readers: groups open with Enter or Space, a select changes with the arrow keys, text fields commit on Enter or when you leave them, and results and refusals are announced in `role="status"` and `role="alert"` regions. A refused change (an invalid value, text a merge would hide) is explained, changes nothing, and puts the field back. "Applies to" switches the design controls between the whole presentation and the current slide, and a control shows when a slide value is "set on this slide" or "from the presentation". The panel offers only conversions that exist, shows what a conversion loses before you choose it, and lists why an unavailable one is unavailable.
 
 In React (or Svelte, or anything else) mount it into a ref and destroy it on unmount; it needs no framework runtime:
 

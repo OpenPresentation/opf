@@ -1,9 +1,12 @@
+import type { ConvertOptions } from "@openpresentation/opf/convert";
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
-export type BlockKind = "text" | "list" | "quote" | "metric" | "code" | "timeline" | "chart" | "table" | "image" | "video" | "group";
+export type { ConvertOptions } from "@openpresentation/opf/convert";
+
+export type BlockKind = "text" | "list" | "quote" | "metric" | "code" | "timeline" | "chart" | "table" | "image" | "video" | "group" | "metrics";
 /** Display label of every content kind. */
 export declare const BLOCK_KIND_LABELS: Readonly<Record<BlockKind, string>>;
-/** Source kind to the kinds it can convert to: text to list, quote, metric, code or timeline; list to text or timeline; quote, metric and code to text; timeline to text or list; chart and table to each other. */
+/** Source kind to the kinds it can convert to (core's `CONTENT_CONVERSIONS`): text to list, quote, metric, code, timeline or table; list to text, timeline or table; quote, metric and code to text; timeline to text, list or table; chart to table; table to chart, list, timeline, text or a set of metric blocks; a group of metric blocks to a table. */
 export declare const BLOCK_CONVERSIONS: Readonly<Record<string, readonly BlockKind[]>>;
 
 export interface BlockContent {
@@ -56,6 +59,6 @@ export declare function blockPathForSelection(document: unknown, selectedPath: s
 /** The kinds the block can convert to, each with its loss report or the reason it is unavailable. */
 export declare function blockConversionTargets(document: unknown, path: string | string[]): BlockConversionTarget[];
 /** Compute the conversion patch without touching a session. Throws `block-not-convertible` for an unsupported pair or content that does not fit. */
-export declare function prepareBlockConversion(document: unknown, path: string | string[], kind: BlockKind): PreparedBlockConversion;
+export declare function prepareBlockConversion(document: unknown, path: string | string[], kind: BlockKind, options?: ConvertOptions): PreparedBlockConversion;
 /** Convert one block as a single undoable transaction. */
-export declare function convertBlock(editor: EditorSession, path: string | string[], kind: BlockKind, meta?: Record<string, unknown>): BlockConversionChange;
+export declare function convertBlock(editor: EditorSession, path: string | string[], kind: BlockKind, meta?: Record<string, unknown>, options?: ConvertOptions): BlockConversionChange;

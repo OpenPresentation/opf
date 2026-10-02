@@ -42,6 +42,10 @@ const source = {
       { chart: { type: 'column', data: { columns: ['Quarter', 'Revenue'], rows: [['Q1', 12], ['Q2', 18]] } } },
       { table: { columns: ['Region', 'Q1', 'Q2'], rows: [['north', 'b', 'c'], ['d', '', '']] } },
     ] },
+    // RR-26: a group of metrics, an image block and two blocks that can be placed in regions.
+    { id: 'kpis', title: 'KPIs', blocks: [{ metric: { value: 42, label: 'Retention' } }, { metric: { value: '$1.2M', label: 'Revenue' } }] },
+    { id: 'media', title: 'Media', blocks: [{ image: { src: 'asset:photo', alt: 'A pixel' } }, { text: 'Caption' }] },
+    { id: 'cols', title: 'Columns', blocks: [{ text: 'Left text' }, { items: ['Right'] }] },
   ],
 };
 
@@ -289,7 +293,10 @@ try {
 
   // Conversion: options say what is lost; unavailable ones are explained; the change keeps the text.
   const targets = await selection.getByLabel(label('Content type')).locator('option').evaluateAll(options => options.map(option => [option.value, option.textContent, option.disabled]));
-  assert.deepEqual(targets.map(entry => entry[0]), ['', 'list', 'quote', 'metric', 'code', 'timeline']);
+  assert.deepEqual(targets.map(entry => entry[0]), ['', 'list', 'quote', 'metric', 'code', 'timeline', 'table']);
+  // A table needs structure the text does not have: it is listed, disabled, with the reason as its title.
+  assert.deepEqual(targets.at(-1).slice(1), ['Table (unavailable)', true]);
+  assert.match(await selection.getByLabel(label('Content type')).locator('option[value="table"]').getAttribute('title'), /no table structure/);
   await step('block conversion text to list', () => selection.getByLabel(label('Content type')).selectOption('list'), current => JSON.stringify(current.slides[1].blocks[0]) === '{"items":["First line","Second line"]}', { preview: true });
   // Keyboard-only conversion: focus the select and press ArrowDown (the first target is the list).
   {
@@ -370,6 +377,123 @@ try {
   assert.deepEqual(await doc(), beforeRefusal, 'a merge that would hide text changes nothing');
   await step('table merge keeping text', async () => { await selection.getByLabel('Keep text from the merged cells').check(); await selection.getByRole('button', { name: 'Merge cells' }).click(); }, current => JSON.stringify(current.slides[2].blocks[1].table.rows[0][0]) === '{"value":"north b","colSpan":2}');
   mark('a merge never hides text unless asked to keep it');
+
+  // --- RR-26: more conversions and content actions in the Content tab ----------------------------------------
+  await page.locator('#tab-content').click();
+  await slide(1);
+  // list to table; the option lists what the target keeps.
+  await page.locator('#preview [data-canvas-target][data-opf-path^="slides.1.blocks.1"]').first().click({ position: { x: 4, y: 4 } });
+  await page.keyboard.press('Escape');
+  await selection.getByLabel(label('Content type')).waitFor();
+  const listTargets = await selection.getByLabel(label('Content type')).locator('option').evaluateAll(options => options.map(option => option.value));
+  assert.deepEqual(listTargets, ['', 'text', 'timeline', 'table']);
+  await step('list to table conversion', () => selection.getByLabel(label('Content type')).selectOption('table'), current => JSON.stringify(current.slides[1].blocks[1]) === '{"table":{"rows":[["One"],["Two"]]}}', { preview: true });
+  mark('a list converts to a table in one undo step');
+
+  // List levels: select an item, indent it from the keyboard, outdent it; each is one undo step.
+  const second = page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.1.items.1"]');
+  await second.click();
+  await page.keyboard.press('Escape');
+  const indent = selection.getByRole('button', { name: 'Indent item', exact: true });
+  const outdent = selection.getByRole('button', { name: 'Outdent item', exact: true });
+  await indent.waitFor();
+  assert.equal(await outdent.isDisabled(), true, 'a top level item cannot be outdented');
+  assert.match(await selection.locator('[data-role="outdent-note"]').textContent(), /already at the top level/);
+  assert.match(await selection.locator('[data-role="indent-note"]').textContent(), /Nothing is lost/);
+  assert.equal(await indent.getAttribute('aria-describedby'), await selection.locator('[data-role="indent-note"]').getAttribute('id'), 'the report is the button description');
+  await step('list indent from the keyboard', async () => { await indent.focus(); await page.keyboard.press('Enter'); }, current => JSON.stringify(current.slides[1].blocks[1].items) === '["One",{"text":"Two","level":1}]', { preview: true });
+  await indent.click();
+  await waitDoc(current => current.slides[1].blocks[1].items[1].level === 1, 'indented for the outdent step');
+  await settle();
+  await step('list outdent', () => outdent.click(), current => JSON.stringify(current.slides[1].blocks[1].items) === '["One","Two"]');
+  await button('Undo').click();
+  await waitDoc(current => JSON.stringify(current.slides[1].blocks[1].items) === '["One","Two"]', 'indent undone');
+  await settle();
+  await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.1.items.0"]').click();
+  await page.keyboard.press('Escape');
+  assert.equal(await indent.isDisabled(), true, 'the first item cannot be nested');
+  assert.match(await selection.locator('[data-role="indent-note"]').textContent(), /first item/);
+  mark('list levels move in and out, with the reason when they cannot');
+
+  // Group with the next block, then ungroup from inside the group.
+  await slide(1);
+  await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.0.text"]').click();
+  await page.keyboard.press('Escape');
+  const groupNext = selection.getByRole('button', { name: 'Group with the next block', exact: true });
+  await groupNext.waitFor();
+  assert.match(await selection.locator('[data-role="group-next-note"]').textContent(), /Nothing is lost/);
+  await step('group with the next block', () => groupNext.click(), current => current.slides[1].blocks.length === 2 && current.slides[1].blocks[0].blocks?.length === 2, { preview: true });
+  await groupNext.click();
+  await waitDoc(current => current.slides[1].blocks[0].blocks?.length === 2, 'grouped for the ungroup step');
+  await settle();
+  await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.0.blocks.0.text"]').click();
+  await page.keyboard.press('Escape');
+  await step('ungroup', () => selection.getByRole('button', { name: 'Ungroup these blocks', exact: true }).click(), current => current.slides[1].blocks.length === 3 && current.slides[1].blocks[0].text !== undefined, { preview: true });
+  await button('Undo').click();
+  await waitDoc(current => current.slides[1].blocks.length === 3 && current.slides[1].blocks[0].text !== undefined, 'group undone');
+  await settle();
+  mark('blocks group and ungroup');
+
+  // A group of metrics converts to a table as a whole.
+  await slide(3);
+  await page.locator('#preview [data-canvas-target][data-opf-path^="slides.3.blocks.0"]').first().click({ position: { x: 4, y: 4 } });
+  await page.keyboard.press('Escape');
+  const metricGroup = selection.getByLabel(label('Group of metrics'));
+  await metricGroup.waitFor();
+  assert.deepEqual(await metricGroup.locator('option').evaluateAll(options => options.map(option => option.value)), ['', 'table']);
+  await step('metric group to table', () => metricGroup.selectOption('table'), current => JSON.stringify(current.slides[3].table) === '{"columns":["Label","Value"],"rows":[["Retention",42],["Revenue","$1.2M"]]}' && current.slides[3].blocks === undefined, { preview: true });
+  mark('a group of metrics converts to a table');
+
+  // An image block goes to the slide's design; the loss is on the option; Slide structure puts it back.
+  await slide(4);
+  await page.locator('#preview [data-canvas-target][data-opf-path^="slides.4.blocks.0"]').first().click({ position: { x: 4, y: 4 } });
+  await page.keyboard.press('Escape');
+  const imageUse = selection.getByLabel(label('Use this image as'));
+  await imageUse.waitFor();
+  const imageOptions = await imageUse.locator('option').evaluateAll(options => options.map(option => [option.value, option.textContent]));
+  assert.deepEqual(imageOptions.map(entry => entry[0]), ['', 'slideImage:right', 'slideImage:left', 'slideImage:top', 'slideImage:bottom', 'slideImage:background', 'background', 'watermark']);
+  assert.equal(imageOptions.find(entry => entry[0] === 'slideImage:right')[1], 'Slide image, on the right', 'alt text travels with a slide image');
+  assert.match(imageOptions.find(entry => entry[0] === 'watermark')[1], /loses image alt text/, 'what a destination loses is on the option');
+  await step('image to slide image', () => imageUse.selectOption('slideImage:left'), current => current.slides[4].design?.slideImage?.position === 'left' && current.slides[4].blocks.length === 1, { preview: true });
+  // The change moved the selection to the slide, so select the image block again.
+  await page.locator('#preview [data-canvas-target][data-opf-path^="slides.4.blocks.0"]').first().click({ position: { x: 4, y: 4 } });
+  await page.keyboard.press('Escape');
+  await imageUse.selectOption('slideImage:left');
+  await waitDoc(current => current.slides[4].design?.slideImage?.position === 'left', 'slide image for the move back');
+  await settle();
+  const backImage = selection.getByRole('button', { name: 'Move the slide image into the content', exact: true });
+  await backImage.waitFor();
+  assert.match(await selection.locator('[data-role="back-slideImage-note"]').textContent(), /image position and framing/);
+  await step('slide image back into the content', () => backImage.click(), current => current.slides[4].design === undefined && current.slides[4].blocks.length === 2 && JSON.stringify(current.slides[4].blocks[1]) === '{"image":{"src":"asset:photo","alt":"A pixel"}}', { preview: true });
+  await button('Undo').click();
+  await waitDoc(current => current.slides[4].design === undefined, 'slide image undone');
+  await settle();
+  mark('an image moves between the content and the slide design');
+
+  // Blocks into regions and back: layouts are offered by block count, the loss comes before the change.
+  await slide(5);
+  const regionLayout = selection.getByLabel(label('Place the blocks in regions'));
+  await regionLayout.waitFor();
+  assert.deepEqual(await regionLayout.locator('option').evaluateAll(options => options.map(option => option.value)), ['', 'left-right', 'top-bottom']);
+  await step('blocks to regions', () => regionLayout.selectOption('left-right'), current => current.slides[5].left?.text === 'Left text' && current.slides[5].right?.items?.[0] === 'Right' && current.slides[5].blocks === undefined, { preview: true });
+  await regionLayout.selectOption('left-right');
+  await waitDoc(current => current.slides[5].left !== undefined, 'regions for the move back');
+  await settle();
+  const toBlocks = selection.getByRole('button', { name: 'Turn regions into blocks', exact: true });
+  await toBlocks.waitFor();
+  assert.match(await selection.locator('[data-role="regions-to-blocks-note"]').textContent(), /region placement/);
+  await step('regions to blocks', () => toBlocks.click(), current => current.slides[5].blocks?.length === 2 && current.slides[5].left === undefined, { preview: true });
+  await button('Undo').click();
+  await waitDoc(current => current.slides[5].blocks?.length === 2, 'regions undone');
+  await settle();
+  mark('blocks and regions convert both ways');
+
+  // Every new control has a name; every action button's description is its report.
+  const unnamed = await page.evaluate(() => [...document.querySelectorAll('#selection-controls select, #selection-controls input, #selection-controls button')].filter(node => !node.closest('[hidden]') && !(node.labels?.length || node.textContent.trim())).map(node => node.outerHTML.slice(0, 80)));
+  assert.deepEqual(unnamed, [], 'every visible content control has a name');
+  const described = await page.evaluate(() => [...document.querySelectorAll('#selection-controls .opf-dc-action > button')].filter(node => !node.closest('[hidden]')).map(node => !!document.getElementById(node.getAttribute('aria-describedby'))));
+  assert.ok(described.every(Boolean), 'every action button points at its report');
+  mark('the content controls are named and described');
 
   // The controls follow Undo and Redo done elsewhere: the theme select shows the document, not its last click.
   await page.locator('#tab-design').click();

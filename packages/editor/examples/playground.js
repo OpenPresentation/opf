@@ -76,7 +76,7 @@ let slideIndex = 0, selectedPath = 'slides.0.title', selectedValue, canvas, rend
 // RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
 // undoable session change, so the editor.subscribe(refresh) below redraws the preview (and loads fonts first) exactly as for an edit.
 const designControls = createDesignControls(element('design-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'background', 'slide-image', 'header-footer', 'brand', 'layout-options', 'info']});
-const selectionControls = createDesignControls(element('selection-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'table'], onSelectPath: path => select(path)});
+const selectionControls = createDesignControls(element('selection-controls'), {editor, getSlideIndex: () => slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'table', 'slide-content'], onSelectPath: path => select(path)});
 // RR-24: "Edit data" opens the data grid for the selected chart or table over the bottom of the canvas (it never moves the slide), so edits show in the preview at once.
 let dataGridOpen = false, dataGrid;
 const syncDataGrid = () => {

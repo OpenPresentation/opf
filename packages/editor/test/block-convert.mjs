@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { validatePresentation } from "@openpresentation/opf";
 import { renderSvg } from "@openpresentation/opf-render/svg";
 import { createEditorSession } from "../dist/index.js";
-import { BLOCK_CONVERSIONS, BLOCK_KIND_LABELS, blockConversionTargets, blockPathForSelection, convertBlock, prepareBlockConversion, readBlockContent } from "../dist/block-convert.js";
+import { BLOCK_CONVERSIONS, BLOCK_KIND_LABELS, blockConversionTargets, blockPathForSelection, convertBlock, metricGroupForSelection, prepareBlockConversion, readBlockContent } from "../dist/block-convert.js";
 import { switchDimension } from "../dist/switches.js";
 
 const deck = () => ({
@@ -40,7 +40,11 @@ const at = (index) => `slides.0.blocks.${index}`;
 const kinds = ["plain", "list", "metric", "quote", "code", "timeline", "chart", "table", "image"];
 
 // The matrix: documented pairs, nothing else.
-assert.deepEqual(BLOCK_CONVERSIONS.text, ["list", "quote", "metric", "code", "timeline"]);
+assert.deepEqual(BLOCK_CONVERSIONS.text, ["list", "quote", "metric", "code", "timeline", "table"]);
+assert.deepEqual(BLOCK_CONVERSIONS.list, ["text", "timeline", "table"]);
+assert.deepEqual(BLOCK_CONVERSIONS.timeline, ["text", "list", "table"]);
+assert.deepEqual(BLOCK_CONVERSIONS.table, ["chart", "list", "timeline", "text", "metrics"]);
+assert.deepEqual(BLOCK_CONVERSIONS.group, ["table"]);
 assert.deepEqual(BLOCK_CONVERSIONS.chart, ["table"]);
 assert.equal(BLOCK_KIND_LABELS.list, "List");
 
@@ -48,8 +52,10 @@ assert.equal(BLOCK_KIND_LABELS.list, "List");
 {
   const document = withImage();
   const targets = (index) => Object.fromEntries(blockConversionTargets(document, at(index)).map((entry) => [entry.kind, entry]));
-  assert.deepEqual(Object.keys(targets(0)), ["list", "quote", "metric", "code", "timeline"]);
+  assert.deepEqual(Object.keys(targets(0)), ["list", "quote", "metric", "code", "timeline", "table"]);
   assert.equal(targets(0).quote.lossless, true);
+  assert.equal(targets(0).table.available, false, "plain lines are not a table");
+  assert.match(targets(0).table.reason, /no table structure/);
   assert.deepEqual(targets(1).text, { kind: "text", label: "Text", available: true, lossless: true, loss: [] });
   assert.deepEqual(blockConversionTargets(document, at(8)), [], "an image has no text to convert");
   assert.deepEqual(blockConversionTargets(document, "slides.0"), [], "a slide with blocks is a group, not one block");
@@ -122,11 +128,15 @@ function readValue(document, path) {
   convertBlock(editor, at(3), "quote");
   assert.deepEqual(editor.get(`${at(3)}.quote`), { text: "Make the next step clear.", attribution: "Design team" });
 
+  // Core keeps the language and file name in a fenced block, so the text carries everything and the round trip is lossless.
   const code = convertBlock(editor, at(4), "text");
-  assert.equal(editor.get(`${at(4)}.text`), "const a = 1;\n\nconst b = 2;");
-  assert.deepEqual(code.loss, ["code language", "code filename"], "what text cannot carry is named");
+  assert.equal(editor.get(`${at(4)}.text`), '```ts title="a.ts"\nconst a = 1;\n\nconst b = 2;\n```');
+  assert.equal(code.lossless, true);
   convertBlock(editor, at(4), "code");
-  assert.deepEqual(editor.get(`${at(4)}.code`), { source: "const a = 1;\n\nconst b = 2;" });
+  assert.deepEqual(editor.get(`${at(4)}.code`), { source: "const a = 1;\n\nconst b = 2;", language: "ts", filename: "a.ts" });
+  // Without fences the bare source is written and what text cannot carry is named.
+  const bare = convertBlock(createEditorSession(withImage(), { rejectInvalid: true }), at(4), "text", {}, { fences: "never" });
+  assert.deepEqual(bare.loss, ["code language", "code filename"], "what text cannot carry is named");
 }
 
 // Refusals: nothing is invented and nothing is hidden.
@@ -251,6 +261,81 @@ function readValue(document, path) {
   const prepared = prepareBlockConversion(editor.document, at(0), "list");
   editor.set(`${at(0)}.text`, "Changed elsewhere");
   assert.throws(() => editor.applyPatch(prepared.patches), (error) => error.code === "patch-test-failed");
+}
+
+// RR-26: the conversions core added are reachable through the same transaction (one undo step, loss reported).
+{
+  const editor = session();
+  const before = editor.document;
+  // list <-> table
+  const listToTable = convertBlock(editor, at(1), "table");
+  assert.deepEqual(editor.get(`${at(1)}.table`), { rows: [["First"], ["Second"]] });
+  assert.equal(listToTable.lossless, true);
+  assert.equal(editor.snapshot().undoDepth, 1);
+  const tableToList = convertBlock(editor, at(1), "list");
+  assert.deepEqual(editor.get(`${at(1)}.items`), ["First", "Second"]);
+  assert.equal(tableToList.lossless, true);
+  // timeline <-> table
+  const timelineToTable = convertBlock(editor, at(5), "table");
+  assert.deepEqual(editor.get(`${at(5)}.table`), { columns: ["When", "What"], rows: [["Now", "Prototype"], [null, "Review"]] });
+  assert.equal(timelineToTable.lossless, true);
+  convertBlock(editor, at(5), "timeline");
+  assert.deepEqual(editor.get(`${at(5)}.timeline`), [{ when: "Now", what: "Prototype" }, { what: "Review" }]);
+  // table to a list names what the list cannot keep.
+  const tableList = prepareBlockConversion(editor.document, at(7), "list");
+  assert.deepEqual(tableList.loss, ["column headings"]);
+  assert.deepEqual(tableList.document.slides[0].blocks[7].items, [{ text: "Q1", description: "12" }, { text: "Q2", description: "18" }]);
+  // text parsing: a timeline with dates, a quote with its attribution, a fenced code block.
+  const document = withImage();
+  document.slides[0].blocks[0] = { text: "2024 — Launch\nQ1 2026: Pilot" };
+  assert.deepEqual(prepareBlockConversion(document, at(0), "timeline").document.slides[0].blocks[0].timeline, [{ when: "2024", what: "Launch" }, { when: "Q1 2026", what: "Pilot" }]);
+  document.slides[0].blocks[0] = { text: "Be brave.\n— Jane Doe, CTO" };
+  assert.deepEqual(prepareBlockConversion(document, at(0), "quote").document.slides[0].blocks[0].quote, { text: "Be brave.", attribution: "Jane Doe, CTO" });
+  document.slides[0].blocks[0] = { text: "```py\nprint(1)\n```" };
+  assert.deepEqual(prepareBlockConversion(document, at(0), "code").document.slides[0].blocks[0].code, { source: "print(1)", language: "py" });
+  // Everything above is undoable back to the start.
+  while (editor.snapshot().canUndo) editor.undo();
+  assert.deepEqual(editor.document, before);
+}
+
+// A group of metric blocks converts to a table as a whole (on a slide, a region or a group) and back.
+{
+  const document = withImage();
+  document.slides.push({ id: "kpis", title: "KPIs", blocks: [{ metric: { value: 42, label: "Customers", unit: "k" } }, { metric: { value: "$1.2M", label: "Revenue" } }] });
+  document.slides.push({ id: "mixed", title: "Mixed", blocks: [{ blocks: [{ metric: 1 }, { metric: 2 }] }, { text: "Context" }] });
+  const editor = createEditorSession(document, { rejectInvalid: true });
+  const group = "slides.3";
+  assert.equal(readBlockContent(editor.document, group).kind, "group");
+  assert.deepEqual(blockConversionTargets(editor.document, group).map((target) => [target.kind, target.available, target.lossless]), [["table", true, true]]);
+  assert.equal(readBlockContent(editor.document, "slides.0"), undefined, "a group of mixed blocks has no conversion");
+  assert.equal(metricGroupForSelection(editor.document, "slides.3.blocks.1.metric"), group);
+  assert.equal(metricGroupForSelection(editor.document, "slides.4.blocks.0.blocks.1.metric"), "slides.4.blocks.0");
+  assert.equal(metricGroupForSelection(editor.document, "slides.0.blocks.0.text"), undefined);
+  const change = convertBlock(editor, group, "table");
+  assert.deepEqual(editor.get(`${group}.table`), { columns: ["Label", "Value", "Unit"], rows: [["Customers", 42, "k"], ["Revenue", "$1.2M", null]] });
+  assert.equal(editor.get(`${group}.title`), "KPIs", "the slide's own fields stay");
+  assert.equal(editor.get(`${group}.blocks`), undefined);
+  assert.equal(change.lossless, true);
+  assert.equal(editor.snapshot().undoDepth, 1);
+  convertBlock(editor, group, "metrics");
+  assert.deepEqual(editor.get(`${group}.blocks`), document.slides[3].blocks);
+  // A nested group converts in place; its composition cannot sit on a table and is reported.
+  const nested = convertBlock(editor, "slides.4.blocks.0", "table");
+  assert.deepEqual(editor.get("slides.4.blocks.0"), { table: { columns: ["Value"], rows: [[1], [2]] } });
+  assert.equal(nested.lossless, true);
+  assert.equal(validatePresentation(editor.document).valid, true);
+}
+
+// Conversion options reach core: a delimiter reads comma separated text as a table.
+{
+  const document = withImage();
+  document.slides[0].blocks[0] = { text: "a,b\nc,d" };
+  assert.deepEqual(blockConversionTargets(document, at(0)).find((target) => target.kind === "table").available, false);
+  const result = prepareBlockConversion(document, at(0), "table", { delimiter: ",", header: true });
+  assert.deepEqual(result.document.slides[0].blocks[0].table, { columns: ["a", "b"], rows: [["c", "d"]] });
+  const editor = createEditorSession(document, { rejectInvalid: true });
+  switchDimension(editor, "blocks", "table", { path: at(0), convert: true, conversion: { delimiter: "," } });
+  assert.deepEqual(editor.get(`${at(0)}.table`), { rows: [["a", "b"], ["c", "d"]] });
 }
 
 console.log(`Block conversion: ${Object.keys(BLOCK_CONVERSIONS).length} source kinds, ${kinds.length} fixtures, text/list/quote/metric/code/timeline/chart/table pairs, loss reports, refusals, one undo step each, ${"preview"} refresh.`);

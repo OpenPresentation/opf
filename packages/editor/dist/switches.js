@@ -217,7 +217,7 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     // convert: true moves the block's own text into the new kind (block-convert.js) instead of replacing it.
     if (options.convert) {
       if (typeof value !== "string") throw fail("invalid-switch-value", "Convert a block to a content kind name.", { value });
-      const conversion = prepareBlockConversion(document, options.path, value);
+      const conversion = prepareBlockConversion(document, options.path, value, options.conversion);
       patches = conversion.changed ? conversion.patches : [];
       conversionLoss = conversion.loss;
     } else {

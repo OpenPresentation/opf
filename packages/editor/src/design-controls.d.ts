@@ -1,7 +1,7 @@
 import type { EditorSession } from "./index.js";
 
-export type DesignControlSection = "look" | "background" | "slide-image" | "header-footer" | "brand" | "layout-options" | "info" | "selection" | "table";
-/** Every section, in panel order. `selection` and `table` follow the host's current selection. */
+export type DesignControlSection = "look" | "background" | "slide-image" | "header-footer" | "brand" | "layout-options" | "info" | "selection" | "table" | "slide-content";
+/** Every section, in panel order. `selection` and `table` follow the host's current selection; `slide-content` (RR-26: blocks and regions, images between content and design) follows the current slide. */
 export declare const DESIGN_CONTROL_SECTIONS: readonly DesignControlSection[];
 
 export interface DesignControlsOptions {
