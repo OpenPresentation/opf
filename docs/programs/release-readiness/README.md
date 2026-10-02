@@ -204,6 +204,7 @@ PR.
 - [Font fidelity everywhere](../font-fidelity-everywhere/README.md) and its
   [burndown](../font-fidelity-everywhere/burndown.md), the predecessor program
 - [Release process](../../release-process.md)
+- [Release-readiness note for the 0.12.0 release train](release-notes-0.12.0.md) (FF-15, draft)
 - [Compatibility matrix](../../compatibility-matrix.md)
 - Roadmap issues: [opf#87](https://github.com/OpenPresentation/opf/issues/87)
   (PowerPoint acceptance and native header/footer),
