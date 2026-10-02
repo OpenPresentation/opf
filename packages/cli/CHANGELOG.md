@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- RR-29: `opf audit <file|-> [--json] [--rule <id>]... [--ignore <id>]... [--fail-on <error|warning|info|never>] [--severity <id>=<level>] [--threshold <name>=<n>] [--config <file>]`, `opf audit --list-rules` and `opf audit --explain <id>`: design and accessibility checks (contrast, overflow, type size, alt text, reading order, fonts, links, charts, placeholders) with stable rule ids, a human reporter and lint's JSON shape. Exit 0 for no finding at or above `--fail-on` (default `error`), 1 otherwise, 2 for usage or I/O errors. Read-only; fetches nothing. See [the audit guide](../../docs/audit.md).
+
 ## 0.9.2
 
 - Rebuild with core 0.11.4 catalogs, schema and layout code (CLI 0.9.1 bundled core 0.11.3). The bundled schema gains `HeaderFooterItem.logo`, so `opf validate` and `opf lint` accept a header or footer item that is a logo, and the bundle carries the core that now composes the design fields that earlier validated but drew nowhere (cover and section logos, `design.contentDirection`, `design.chartPrimary`, `design.listBullet: "image"` picture bullets, header and footer logos, the accent font) and aligns a cover's tag and subtitle with its title. The CLI does not render or export, so those drawing changes reach users through renderer 0.11.9, PPTX 0.11.7 and editor 0.10.6 (which require core ^0.11.4); the CLI itself changes only where it reads the core schema, catalogs or layout geometry. No command, option or output field changes. The CLI still requires Node 24 (`engines.node` `24.x`, bundle target `node24`); Node 20 and 22 stay unsupported, as since 0.8.0.

@@ -359,6 +359,17 @@ async function generateTypes() {
   }
 }
 
+async function generateSymbolFontEncodings() {
+  // FF-45: the reversible code-to-Unicode tables for the symbol-encoded families are reference data, not a catalog.
+  const table = await readJson(path.join(specRoot, "reference", "symbol-font-encodings.json"));
+  const lines = [
+    generatedHeader("spec/reference/symbol-font-encodings.json"),
+    `export const symbolFontEncodingsSource: unknown = ${asTs(table)};`,
+    "",
+  ];
+  await fs.writeFile(path.join(generatedRoot, "symbol-font-encodings.ts"), lines.join("\n"));
+}
+
 async function generateFontPolicy() {
   // FF-31: the authoritative font policy table is reference data, not a catalog.
   const policy = await readJson(path.join(specRoot, "reference", "font-policy.json"));
@@ -374,6 +385,7 @@ async function generateFontPolicy() {
 await fs.rm(generatedRoot, { recursive: true, force: true });
 await fs.mkdir(generatedRoot, { recursive: true });
 await generateFontPolicy();
+await generateSymbolFontEncodings();
 await generateSchemas();
 await generateCatalogs();
 await generateCatalogIds();

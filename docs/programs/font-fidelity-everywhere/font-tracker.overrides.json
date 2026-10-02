@@ -2132,21 +2132,27 @@
       ]
     },
     "Symbol": {
-      "nextAction": "Build reversible, version-specific character-to-glyph mappings; account for Apple and Microsoft differences.",
+      "nextAction": "Code table built and verified (Adobe and Apple tables against Windows Symbol 5.01: 189 of 224 codes mapped, 189 drawn with Noto Sans, Noto Sans Math, Noto Sans Symbols 2 or Noto Sans Symbols; Apple differences recorded per code). Open: native PowerPoint verification of exported runs (FF-46) and the appearance delta of the open glyphs.",
       "evidence": [
-        "licensing"
+        "licensing",
+        "symbolEncodings",
+        "symbolRender"
       ]
     },
     "Webdings": {
-      "nextAction": "Qualify permitted glyph replacements with exhaustive code, advance, bounds, export and round-trip tests.",
+      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Webdings 5.01: 223 of 224 codes mapped and drawn with Noto Sans Symbols 2, Noto Sans Symbols or Noto Sans Math); exhaustive code, advance, bounds, browser and raster tests in opf-render. Open: native PowerPoint verification of exported runs (FF-46).",
       "evidence": [
-        "licensing"
+        "licensing",
+        "symbolEncodings",
+        "symbolRender"
       ]
     },
     "Wingdings": {
-      "nextAction": "Build and verify its own reversible mapping; retain original PPTX font names and codes (renderers require font-encoding-required today).",
+      "nextAction": "Code table built and verified (Unicode 7.0 repertoire against Windows Wingdings 5.01, Wingdings 2 and 3 1.55: 222, 217 and 208 of 224 codes mapped and drawn with Noto Sans Symbols 2 or Noto Sans Symbols; 0xFF is the Windows logo, a placeholder); the PPTX keeps the family and codes. Open: native PowerPoint verification of exported runs (FF-46).",
       "evidence": [
-        "licensing"
+        "licensing",
+        "symbolEncodings",
+        "symbolRender"
       ]
     },
     "Intos": {
@@ -2674,6 +2680,14 @@
         "url": "https://github.com/OpenPresentation/opf/pull/178"
       }
     ],
+    "symbolEncodings": {
+      "label": "Special families: symbol-encoded fonts (FF-45: code tables, coverage, advances, decisions)",
+      "url": "https://github.com/OpenPresentation/opf/blob/main/docs/programs/font-fidelity-everywhere/special-families.md"
+    },
+    "symbolRender": {
+      "label": "opf-render test/symbol-fonts.mjs and test/symbol-fonts-browser.mjs (FF-45: every code mapped, resolved, measured and drawn in Node, resvg and Chromium)",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/main/test/symbol-fonts.mjs"
+    },
     "latinHostFixtures": [
       {
         "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",

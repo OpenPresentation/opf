@@ -82,9 +82,9 @@ function svgDimensions(text: string): Dimensions | undefined {
   return undefined;
 }
 
-const cache = new Map<string, number | undefined>(), CACHE_ENTRIES = 64;
+const cache = new Map<string, Dimensions | undefined>(), CACHE_ENTRIES = 64;
 
-function readAspect(source: string): number | undefined {
+function readDimensions(source: string): Dimensions | undefined {
   const first = dataBytes(source, PREFIX_BYTES);
   if (!first) return undefined;
   let dimensions: Dimensions | undefined;
@@ -97,17 +97,24 @@ function readAspect(source: string): number | undefined {
       if (more) dimensions = rasterDimensions(more.bytes);
     }
   }
-  return dimensions && dimensions.width > 0 && dimensions.height > 0 ? dimensions.width / dimensions.height : undefined;
+  return dimensions && dimensions.width > 0 && dimensions.height > 0 ? dimensions : undefined;
+}
+
+/** Whether the value is an embedded raster or SVG image whose size is readable, and its pixel size (SVG: its user-unit size). */
+export function intrinsicImageSize(value: unknown, assets?: unknown): (Dimensions & { svg: boolean }) | undefined {
+  let source = sourceOf(value);
+  for (let hop = 0; source?.startsWith('asset:') && hop < 8; hop++) source = sourceOf(isRecord(assets) ? assets[source.slice(6)] : undefined);
+  if (!source?.startsWith('data:')) return undefined;
+  if (!cache.has(source)) {
+    if (cache.size >= CACHE_ENTRIES) cache.delete(cache.keys().next().value as string);
+    cache.set(source, readDimensions(source));
+  }
+  const size = cache.get(source);
+  return size ? { ...size, svg: /^data:image\/svg/i.test(source) } : undefined;
 }
 
 /** Width / height of an embedded image, following `asset:<id>` references through `assets`; undefined when unreadable. */
 export function intrinsicImageAspect(value: unknown, assets?: unknown): number | undefined {
-  let source = sourceOf(value);
-  for (let hop = 0; source?.startsWith('asset:') && hop < 8; hop++) source = sourceOf(isRecord(assets) ? assets[source.slice(6)] : undefined);
-  if (!source?.startsWith('data:')) return undefined;
-  if (cache.has(source)) return cache.get(source);
-  const aspect = readAspect(source);
-  if (cache.size >= CACHE_ENTRIES) cache.delete(cache.keys().next().value as string);
-  cache.set(source, aspect);
-  return aspect;
+  const size = intrinsicImageSize(value, assets);
+  return size ? size.width / size.height : undefined;
 }

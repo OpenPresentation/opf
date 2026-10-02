@@ -63,6 +63,7 @@ import {composeSlide} from '@openpresentation/opf/composition';
 import type {FontFaceSelection, TextStyle} from '@openpresentation/opf/composition';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createDataContent} from '@openpresentation/opf/data';
+import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
@@ -73,6 +74,11 @@ const valid: boolean = validatePresentation(deck).valid;
 const pages = paginatePresentation(deck).presentation;
 composeSlide(pages.slides[0]);
 createDataContent('Name,Value\\nA,1', {as: 'table'});
+const converted: ConvertedContent = convertContent({text: 'a'}, 'list');
+const lossless: boolean = converted.lossless;
+// @ts-expect-error unknown content kind must be rejected
+convertContent({text: 'a'}, 'unsupported');
+void lossless;
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected
