@@ -1,0 +1,31 @@
+{
+ "schema": "rr-42-native-decks/1",
+ "exportOptions": {
+  "seed": 1,
+  "date": "2026-10-02",
+  "timestamp": "2026-10-02T00:00:00Z",
+  "zipDate": "2026-10-02T00:00:00Z"
+ },
+ "decks": [
+  {
+   "id": "viet-fix-01-english-us",
+   "set": "viet-fix",
+   "sha256": "5f7eb051512868afd5518e0d46e1461f94f88303cfe155a4b3abba120538de0d",
+   "bytes": 19475,
+   "slides": 1,
+   "covers": [
+    "languages/english-us"
+   ]
+  },
+  {
+   "id": "viet-fix-02-vietnamese-quoc-ngu",
+   "set": "viet-fix",
+   "sha256": "76a7eb046e5e8c8eecc1d21f3cb68f2496c6f729b5f01169e0dbc994a7e2f1ad",
+   "bytes": 19514,
+   "slides": 1,
+   "covers": [
+    "languages/vietnamese-quoc-ngu"
+   ]
+  }
+ ]
+}
