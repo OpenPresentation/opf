@@ -12,7 +12,7 @@ This repository is the canonical home for the OPF **spec**, **JSON Schemas**, **
 
 For AI agents, use the [OPF skill set](docs/agent-skills.md) for authoring, layout, presets, editing, export, and schema inspection.
 
-Published CLI 0.9.2 installs all six skills into your project with `npx @openpresentation/cli@0.9.2 skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and source development.
+Published CLI 0.10.0 installs all six skills into your project with `npx @openpresentation/cli@0.10.0 skills install`. It uses local copies, preserves existing instructions and refuses to overwrite customized skills. See the [installation and update guide](docs/agent-skills.md) for personal or agent-specific targets and source development.
 
 For a fresh Node 24 project that installs **published** packages (not this
 checkout), follow the [developer quickstart](docs/quickstart.md) and the
@@ -42,7 +42,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.11.4, renderer 0.11.9, editor 0.10.6, PPTX 0.11.9 and CLI 0.9.2.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.12.0, renderer 0.12.0, editor 0.11.0, PPTX 0.12.0 and CLI 0.10.0.
 2. **Author, lint, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
