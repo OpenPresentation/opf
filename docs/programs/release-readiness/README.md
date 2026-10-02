@@ -175,6 +175,19 @@ unknown status, names an unknown item, or leaves a closed item in the work queue
 the row when an item changes hands or state, and delete it when the item closes. This is internal; it is never shown
 on a site.
 
+The [gallery tracker](gallery-tracker.md) (RR-41) is the per-item view: one record per item pptx.gallery shows or the
+catalogs define (layouts, colour and font schemes, languages, themes, narratives, charts, audiences, tones, socials,
+headers and footers, content blocks, image treatments, backgrounds, purposes, fonts, slide sizes and the gallery's
+coming teasers), with the columns spec, compose, preview, export, round trip, parity, editor, gallery, native and
+fonts taken from the committed audits, parity run, font tracker, native evidence and two pinned snapshots (pptx.gallery
+and opf-editor). Each record has a status (`done` to `broken`, with severities) and, per gap, a next action and a link:
+an open RR item, a pull request, or an issue for a descoped gap. A record is addressed when every gap has one.
+`pnpm build:gallery-tracker` regenerates `gallery-tracker.json` and `.md` (rules in `gallery-tracker.overrides.json`;
+refresh the snapshots with `--snapshot-gallery <pptx-gallery> --commit <sha>` and `--snapshot-editor <opf-editor>
+--commit <sha>`), and `pnpm check:gallery-tracker`, part of `pnpm test` and so of CI, fails when it is stale, including
+after a burndown status change that a gap links to. `pnpm report:release` prints its one-line summary under the
+headline.
+
 ## Resume protocol
 
 Any session (supervisor or subagent) resuming this program:

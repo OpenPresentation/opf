@@ -8,6 +8,9 @@
 //                                   (asks GitHub through the `gh` CLI; the only mode that touches the network)
 //   node report.mjs --json          the same numbers as JSON (with --live: plus the pull request states)
 //   node report.mjs --file <path>   read another burndown (default: the one beside this script)
+//
+// The default and --json outputs also carry one line from the gallery tracker (gallery-tracker.json beside this script,
+// built by `pnpm build:gallery-tracker`): records, addressed, and the unaddressed records by item type.
 import { execFileSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -114,13 +117,29 @@ export function summarize(items, now = []) {
   };
 }
 
+/**
+ * One line from the gallery tracker's summary (gallery-tracker.json, RR-41): total records, addressed, and the
+ * unaddressed records by item type. Pure; throws on a summary that is not the tracker's shape.
+ */
+export function gallerySummary(tracker) {
+  const s = tracker?.summary;
+  if (!s || !Number.isInteger(s.records) || !Number.isInteger(s.addressed) || !s.byType) throw new Error('gallery tracker: summary missing or malformed');
+  const types = Object.entries(s.byType);
+  if (types.reduce((n, [, t]) => n + t.records, 0) !== s.records) throw new Error('gallery tracker: per-type records do not add up to the total');
+  const unaddressed = types.filter(([, t]) => t.unaddressed > 0).map(([type, t]) => ({ type, count: t.unaddressed }));
+  const done = s.byStatus?.done ?? 0;
+  const line = `gallery tracker: ${s.records} records in ${types.length} item types (${done} done), ${s.addressed} addressed, ${s.records - s.addressed} unaddressed${unaddressed.length ? ` (${unaddressed.map((u) => `${u.type} ${u.count}`).join(', ')})` : ''}`;
+  return { records: s.records, types: types.length, done, addressed: s.addressed, unaddressed: s.records - s.addressed, unaddressedByType: Object.fromEntries(unaddressed.map((u) => [u.type, u.count])), asOf: tracker.asOf ?? null, line };
+}
+
 const plain = (s) => String(s ?? '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
 const clip = (s, n) => (s.length > n ? `${s.slice(0, n - 1)}...` : s);
 
-export function format(summary, { queueOnly = false, live = null } = {}) {
+export function format(summary, { queueOnly = false, live = null, gallery = null } = {}) {
   const lines = [];
   if (!queueOnly) {
     lines.push(`release readiness: ${summary.closed} of ${summary.total} items closed (done or descoped, ${summary.percent.toFixed(1)}%)`);
+    if (gallery) lines.push(gallery.line);
     lines.push(`statuses: ${STATUSES.map((s) => `${s} ${summary.byStatus[s]}`).join(', ')}`, '', 'open items:');
     for (const o of summary.open) lines.push(`  ${o.id}  ${o.status.padEnd(11)}  ${clip(plain(o.item), 96)}`);
     lines.push('');
@@ -161,8 +180,14 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const file = fileIdx >= 0 ? path.resolve(args[fileIdx + 1] ?? '') : path.join(here, 'burndown.md');
   const markdown = await readFile(file, 'utf8');
   const summary = summarize(parseBurndown(markdown), parseNow(markdown));
+  let gallery = null;
+  try {
+    gallery = gallerySummary(JSON.parse(await readFile(path.join(here, 'gallery-tracker.json'), 'utf8')));
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
   const wantLive = args.includes('--live');
   const live = wantLive ? Object.fromEntries(summary.open.flatMap((o) => o.pulls ?? []).map((pr) => [pr, liveState(pr)])) : null;
-  if (args.includes('--json')) console.log(JSON.stringify(live ? { ...summary, live } : summary, null, 2));
-  else console.log(format(summary, { queueOnly: args.includes('--now') || wantLive, live }));
+  if (args.includes('--json')) console.log(JSON.stringify({ ...summary, ...(gallery ? { gallery } : {}), ...(live ? { live } : {}) }, null, 2));
+  else console.log(format(summary, { queueOnly: args.includes('--now') || wantLive, live, gallery }));
 }
