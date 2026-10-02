@@ -10,7 +10,8 @@ import {fromPptx, toPptx, inventoryPptxTypefaces} from '../dist/index.js';
 // Office's convention and the owner font policy (the PPTX names what the author selected and nothing else):
 // - a slot is written only when a script font is actually selected for it (an explicit `eastAsian`/`complexScript`
 //   on the design font scheme, the scheme's own script family, or the language's script font, Model C);
-// - every other slot stays empty, exactly as in Office's own themes, so PowerPoint picks its per-language default;
+// - complex-script slots with nothing selected stay empty, as in Office's own themes (FF-05: the ea slot is never empty, it repeats
+//   the latin family, because PowerPoint lists an empty ea as an empty-name font through every paragraph end mark);
 // - the language never changes the theme's latin fonts.
 // The preview resolves the same slots (opf-render's per-slide script profile): equal to the theme where the theme
 // names a family, and the latin family where the theme is empty. Export is deterministic; re-import keeps the
@@ -40,7 +41,7 @@ assert.ok(fontSchemeIds.length >= 89, 'the bundled catalog has the 89 upstream f
 for (const record of catalogs.fontSchemes) {
   const {inventory, diagnostics} = await exported(deck(record.id));
   const {major, minor} = theme(inventory);
-  assert.deepEqual({major, minor}, {major: {latin: record.major, ea: '', cs: ''}, minor: {latin: record.minor, ea: '', cs: ''}}, `${record.id}: theme names latin only`);
+  assert.deepEqual({major, minor}, {major: {latin: record.major, ea: record.major, cs: ''}, minor: {latin: record.minor, ea: record.minor, cs: ''}}, `${record.id}: theme names latin, and ea repeats it`);
   assert.deepEqual(diagnostics.filter(diagnostic => /script|language/.test(diagnostic.code)), [], `${record.id}: no script diagnostics`);
   const profile = previewProfile(deck(record.id));
   assert.deepEqual([profile.heading.latin, profile.heading.eastAsian, profile.heading.complexScript], [record.major, record.major, record.major], `${record.id}: preview heading slots`);
@@ -75,7 +76,9 @@ for (const scheme of schemes) {
     for (const [element, key] of SLOTS) {
       for (const [name, slots, roleKey, latinFamily] of [['major', major, 'heading', record.major], ['minor', minor, 'body', record.minor]]) {
         const want = supplied(resolved, roleKey, key);
-        assert.equal(slots[element], want, `${label}: ${name} ${element} is ${want ? 'the selected script font' : 'empty (nothing selected)'}`);
+        // FF-05: ea is never empty (PowerPoint lists an empty slot as an empty-name font); it repeats the latin family. cs stays empty.
+        const expectedFace = want || (element === 'ea' ? latinFamily : '');
+        assert.equal(slots[element], expectedFace, `${label}: ${name} ${element} is ${want ? 'the selected script font' : element === 'ea' ? 'the latin family (nothing selected)' : 'empty (nothing selected)'}`);
         if (want) {
           assert.ok(selected.has(want), `${label}: ${name} ${element} "${want}" is a selected family`);
           writtenSlots += 1;
@@ -85,11 +88,11 @@ for (const scheme of schemes) {
       }
     }
     // The slot the language's script uses names the language's script font, and only that slot.
-    if (role === 'latin') assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], ['', '', '', ''], `${label}: Latin-slot language writes no ea/cs`);
+    if (role === 'latin') assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], [record.major, '', record.minor, ''], `${label}: Latin-slot language writes the latin family in ea and no cs`);
     else {
       const own = role === 'eastAsian' ? 'ea' : 'cs', other = own === 'ea' ? 'cs' : 'ea';
       assert.ok(major[own] && minor[own], `${label}: the language's ${own} is written`);
-      assert.deepEqual([major[other], minor[other]], ['', ''], `${label}: the other slot stays empty`);
+      assert.deepEqual([major[other], minor[other]], other === 'ea' ? [record.major, record.minor] : ['', ''], `${label}: the other slot is ${other === 'ea' ? 'the latin family' : 'empty'}`);
     }
     assert.equal(profile.lang, resolved.lang, `${label}: preview lang`);
     assert.equal(profile.rtl, resolved.rtl, `${label}: preview direction`);
@@ -116,7 +119,7 @@ for (const [scheme, language] of [['meiryo', 'japanese'], ['calibri', 'english-u
 {
   const record = {id: 'legacy-face', name: 'Legacy face', app: 'PowerPoint', languageFamily: 'latin', languages: [], major: 'Legacy Head', minor: 'Legacy Body', type: 'sans-serif'};
   const {inventory} = await exported(deck('legacy-face', undefined, {catalogs: {fontSchemes: {records: [record]}}}));
-  assert.deepEqual(theme(inventory), {major: {latin: 'Legacy Head', ea: '', cs: ''}, minor: {latin: 'Legacy Body', ea: '', cs: ''}});
+  assert.deepEqual(theme(inventory), {major: {latin: 'Legacy Head', ea: 'Legacy Head', cs: ''}, minor: {latin: 'Legacy Body', ea: 'Legacy Body', cs: ''}});
   const explicit = {id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}, complexScript: {major: 'Noto Naskh Arabic', minor: 'Noto Naskh Arabic'}};
   const slots = theme((await exported(deck(explicit, 'english-us'))).inventory);
   assert.deepEqual([slots.major.ea, slots.major.cs, slots.minor.ea, slots.minor.cs], ['Noto Sans JP', 'Noto Naskh Arabic', 'Noto Sans JP', 'Noto Naskh Arabic']);
@@ -124,13 +127,13 @@ for (const [scheme, language] of [['meiryo', 'japanese'], ['calibri', 'english-u
   assert.deepEqual([only.major.cs, only.minor.cs], ['', ''], 'only the selected slot is written');
 }
 
-// 5. Run-level slots are unchanged: runs still repeat their own latin face in ea/cs for a Latin deck.
+// 5. Run-level slots (FF-05): a run names only its latin face, as PowerPoint writes it; an explicit ea/cs typeface makes
+// PowerPoint list an empty-name font, so the East Asian and complex-script faces come from the theme slots.
 {
   const {bytes} = await exported(deck('calibri'));
   const slideXml = new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
-  const triples = [...slideXml.matchAll(/<a:latin typeface="([^"+][^"]*)"[^>]*\/>\s*<a:ea typeface="([^"]*)"[^>]*\/>\s*<a:cs\s+typeface="([^"]*)"/g)];
-  assert.ok(triples.length > 0);
-  for (const [, latin, ea, cs] of triples) assert.deepEqual([ea, cs], [latin, latin]);
+  assert.ok([...slideXml.matchAll(/<a:latin typeface="([^"+][^"]*)"/g)].length > 0, 'runs name their latin face');
+  assert.doesNotMatch(slideXml, /<a:(?:ea|cs)\s+typeface="[^+"]/, 'runs name no explicit ea/cs typeface');
 }
 
 // 6. The example corpus: a theme slot is written exactly where the deck selected a script font, and never with an open replacement.
@@ -141,9 +144,15 @@ for (const {file, deck: example} of examples) {
   const resolved = resolveScriptFonts(example);
   const {major, minor} = theme((await exported(example, {imageResolver: async () => image})).inventory);
   for (const [element, key] of SLOTS) {
-    assert.equal(major[element], supplied(resolved, 'heading', key), `${file}: major ${element}`);
-    assert.equal(minor[element], supplied(resolved, 'body', key), `${file}: minor ${element}`);
-    for (const face of [major[element], minor[element]]) if (face) { corpusWritten += 1; assert.ok(families.has(face) || face === example.design?.fontScheme?.[key]?.major || face === example.design?.fontScheme?.[key]?.minor, `${file}: ${face} is selected`); }
+    // ea names a font in every deck (FF-05): the selected script font, a font for East Asian text in the deck, else the latin family.
+    const eastAsianText = element === 'ea' && /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(JSON.stringify(example.slides));
+    for (const [slots, role] of [[major, 'heading'], [minor, 'body']]) {
+      const want = supplied(resolved, role, key);
+      if (want || element === 'cs') assert.equal(slots[element], want, `${file}: ${role} ${element}`);
+      else if (eastAsianText) assert.ok(slots.ea, `${file}: ${role} ea names a font for the East Asian text`);
+      else assert.equal(slots.ea, slots.latin, `${file}: ${role} ea repeats latin`);
+    }
+    for (const face of [major[element], minor[element]]) if (face && (element === 'cs' || face !== major.latin && face !== minor.latin)) { corpusWritten += 1; assert.ok(families.has(face) || face === example.design?.fontScheme?.[key]?.major || face === example.design?.fontScheme?.[key]?.minor, `${file}: ${face} is selected`); }
   }
   corpus += 1;
 }

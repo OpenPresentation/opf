@@ -93,7 +93,10 @@ for (const expected of cases) {
   for (const [slot, key] of Object.entries(slotKeys)) {
     const supplied = own && key === expected.role;
     assert.equal(resolved.sources[key] !== 'latin', Boolean(supplied), `${expected.id} resolver source for ${key}`);
-    assert.deepEqual({heading: major[slot], body: minor[slot]}, supplied ? own : {heading: '', body: ''}, `${expected.id} theme ${slot} ${supplied ? 'names the language font scheme' : 'stays empty (nothing selected)'}`);
+    // FF-05: the ea slot is never empty (PowerPoint lists an empty one as an empty-name font through every paragraph end mark): it
+    // repeats the latin family when nothing is selected. cs stays empty.
+    const unselected = slot === 'ea' ? {heading: major.latin, body: minor.latin} : {heading: '', body: ''};
+    assert.deepEqual({heading: major[slot], body: minor[slot]}, supplied ? own : unselected, `${expected.id} theme ${slot} ${supplied ? 'names the language font scheme' : slot === 'ea' ? 'repeats the latin family' : 'stays empty (nothing selected)'}`);
   }
 
   // Supplement: the language's own script entry names the language font; every other vendored entry is unchanged.
@@ -107,20 +110,15 @@ for (const expected of cases) {
     assert.equal(major.block.replace(/<a:(?:ea|cs) typeface="[^"]*"\/>/g, ''), themeFonts(vendored, 'majorFont').block.replace(/<a:(?:ea|cs) typeface="[^"]*"\/>/g, ''), `${expected.id} keeps the vendored per-script list`);
   }
 
-  // Runs: the language's own slot names the language font for heading and body text; the other slot repeats latin.
+  // Runs (FF-05): slide runs name only the latin face, as PowerPoint writes them; an explicit run ea/cs typeface makes
+  // PowerPoint list an empty-name font. The East Asian and complex-script faces come from the theme slots above.
   const slot = {eastAsian: 'ea', complexScript: 'cs', latin: 'latin'}[expected.role];
+  for (const other of ['ea', 'cs']) assert.deepEqual(runFaces(xml, other), new Set(), `${expected.id} run ${other} is not written`);
+  assert.deepEqual(partsMatching(xml, /^ppt\/notesSlides\/notesSlide\d+\.xml$/).filter(part => /<a:(?:ea|cs)\s+typeface="[^+"]/.test(part)), [], `${expected.id} notes runs name no ea/cs`);
   if (own) {
-    assert.deepEqual(runFaces(xml, slot), new Set([own.heading, own.body]), `${expected.id} run ${slot}`);
-    const other = slot === 'ea' ? 'cs' : 'ea';
-    assert.deepEqual(runFaces(xml, other), runFaces(xml, 'latin'), `${expected.id} run ${other} repeats latin`);
-    // Headings take the heading slot; the chart keeps its body face.
-    const title = xml['ppt/slides/slide1.xml'].match(/name="OPF heading slides\.0\.title line 0"[\s\S]*?<\/p:sp>/)[0];
-    assert.match(title, new RegExp(`<a:${slot} typeface="${own.heading}"/>`), `${expected.id} title ${slot}`);
     // Chart text (whose latin/ea/cs FF-08 sets to the body font) takes the body script font.
     const chart = partsMatching(xml, /^ppt\/charts\/chart\d+\.xml$/).join('');
     assert.match(chart, new RegExp(`<a:${slot} typeface="${own.body}"/>`), `${expected.id} chart ${slot}`);
-  } else {
-    for (const other of ['ea', 'cs']) assert.deepEqual(runFaces(xml, other), runFaces(xml, 'latin'), `${expected.id} run ${other} repeats latin`);
   }
 
   // Direction: core's paragraphDirection() decides every slide and notes
@@ -162,13 +160,35 @@ for (const expected of cases) {
   assert.equal(opf.validatePresentation(restored).valid, true);
 }
 
-// A document without a language is en-US and keeps the vendored empty theme ea/cs.
+// A document without a language is en-US; its theme ea repeats the latin family (FF-05) and cs keeps the vendored empty slot.
 {
   const {xml} = await read(deck(undefined));
   assert.deepEqual([...langs(xml)], ['en-US']);
   const major = themeFonts(xml, 'majorFont'), minor = themeFonts(xml, 'minorFont');
-  assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], ['', '', '', '']);
+  assert.deepEqual([major.ea, major.cs, minor.ea, minor.cs], [major.latin, '', minor.latin, '']);
   assert.equal((await fromPptx((await read(deck(undefined))).bytes)).language, 'english-us');
+}
+
+// FF-05: East Asian text in a deck whose language selects no East Asian font. The theme ea slot names a font for that
+// text (kana is Japanese, hangul Korean, Han alone Simplified Chinese; each as core resolves it for that language), so
+// the East Asian text does not read an unresolved +mn-ea; without such text the slot repeats the latin family.
+{
+  const resolvedFor = language => resolveScriptFonts({...deck('english-us'), language}).body.eastAsian;
+  for (const [text, language] of [['日本語のテキスト', 'japanese'], ['한국어 텍스트', 'korean'], ['中文文本', 'chinese-simplified']]) {
+    const presentation = deck('english-us', {}, text);
+    const {xml} = await read(presentation);
+    const expected = resolvedFor(language);
+    assert.notEqual(expected, themeFonts(xml, 'minorFont').latin, `${language} resolves to an East Asian family`);
+    assert.deepEqual([themeFonts(xml, 'majorFont').ea, themeFonts(xml, 'minorFont').ea], [expected, expected], `${language} text in an English deck names ${expected}`);
+    assert.equal(themeFonts(xml, 'minorFont').cs, '', 'complex script stays empty');
+    assert.deepEqual(runFaces(xml, 'ea'), new Set(), `${language} text: runs name no ea`);
+    assert.equal(themeFonts(xml, 'minorFont').latin, 'Aptos', 'the content rule changes no latin font');
+  }
+  const {xml: latinOnly} = await read(deck('english-us'));
+  assert.equal(themeFonts(latinOnly, 'minorFont').ea, themeFonts(latinOnly, 'minorFont').latin, 'no East Asian text: ea repeats latin');
+  // A deck language with its own East Asian font is not overridden by the text.
+  const korean = await read(deck('korean', {}, '日本語のテキスト'));
+  assert.equal(themeFonts(korean.xml, 'minorFont').ea, resolvedFor('korean'), 'the deck language wins');
 }
 
 // An explicit eastAsian slot on the design font scheme fills ea in a Latin deck
@@ -184,7 +204,7 @@ for (const expected of cases) {
   const observedOnly = (await read(deck('english-us', {design: {fontScheme}}), {provenance: false})).bytes;
   assert.equal(themeFonts(xml, 'minorFont').ea, 'Noto Sans JP');
   assert.equal(themeFonts(xml, 'minorFont').cs, '', 'only the explicit slot fills');
-  assert.deepEqual(runFaces(xml, 'ea'), new Set(['Noto Sans JP']));
+  assert.deepEqual(runFaces(xml, 'ea'), new Set(), 'runs name no ea');
   assert.deepEqual([...langs(xml)], ['en-US']);
   const diagnostics = [];
   await fromPptx(observedOnly, {onDiagnostic: diagnostic => diagnostics.push(diagnostic.code)});

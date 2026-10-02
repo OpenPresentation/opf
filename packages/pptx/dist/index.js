@@ -3,6 +3,7 @@ import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './number
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
+import {giveNotesMastersOwnThemes} from './master-themes.js';
 import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
@@ -34,7 +35,7 @@ import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
-import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, reconcileLanguage} from './script-fonts.js';
+import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, reconcileLanguage, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
@@ -3322,6 +3323,7 @@ async function normalizePptxZip(raw, context) {
   }
 
   writeNativeFurnitureMasters(output, context);
+  giveNotesMastersOwnThemes(output);
   finalizeFontsUsed(output);
   // Document references record evidence from the final normalized parts.
   if (context.documentProvenance) {
@@ -3400,6 +3402,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (/^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = themeMasterBulletFonts(xml);
     if (context.masterBackground && path === 'ppt/slideMasters/slideMaster1.xml') xml = writeMasterBackground(xml, context.masterBackground);
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
+    if (path === 'ppt/presentation.xml') xml = presentationInSchemaOrder(xml);
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       xml = writeLinkSentinels(xml, context.linkSentinels);
@@ -3544,6 +3547,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     }
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
+    else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);
+    if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = stripRunScriptFonts(xml);
     return encodeText(normalizePartReferences(xml, renameMaps));
   }
   return bytes;
@@ -3560,6 +3565,16 @@ const THEME_MINOR_BULLET_FONT = '<a:buFont typeface="+mn-lt"/>';
 function themeMasterBulletFonts(xml) {
   return xml.replace(/<p:bodyStyle>[\s\S]*?<\/p:bodyStyle>/, bodyStyle =>
     bodyStyle.split(VENDOR_MASTER_BULLET_FONT).join(THEME_MINOR_BULLET_FONT));
+}
+
+// FF-05: PptxGenJS 4.0.1 writes p:notesMasterIdLst after p:sldIdLst, but CT_Presentation is a sequence
+// (sldMasterIdLst, notesMasterIdLst, handoutMasterIdLst, sldIdLst, sldSz, ...). PowerPoint reads the out-of-order
+// list as no notes master and lists a default-theme font (Aptos) in Presentation.Fonts; schema order restores
+// the exporter's own notes master. Only the list's position changes.
+function presentationInSchemaOrder(xml) {
+  const notes = /<p:notesMasterIdLst>[\s\S]*?<\/p:notesMasterIdLst>/.exec(xml)?.[0];
+  if (!notes || xml.indexOf(notes) < xml.indexOf('</p:sldMasterIdLst>')) return xml;
+  return xml.replace(notes, '').replace('</p:sldMasterIdLst>', `</p:sldMasterIdLst>${notes}`);
 }
 
 function isXmlPart(path) {

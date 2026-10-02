@@ -111,7 +111,7 @@ try {
     assert.deepEqual(blocks(deck).map(plain),['SECOND_BODY','MOVED'],'Current native positions determine ordinary body reading order');
   });
   await check(`${mode}/unsupported-properties-diagnostic`,async()=>{
-    const {value,diagnostics}=await current(base,`${mode}-unsupported`,body('<a:p><a:r><a:rPr b="garbage" u="wavy" strike="dblStrike" baseline="12000" sz="bad"><a:solidFill><a:schemeClr val="missing"/></a:solidFill><a:latin typeface="+mn-ea"/><a:hlinkClick r:id="missing"/></a:rPr><a:t> CURRENT UNSUPPORTED </a:t></a:r></a:p>'));
+    const {value,diagnostics}=await current(base,`${mode}-unsupported`,body('<a:p><a:r><a:rPr b="garbage" u="wavy" strike="dblStrike" baseline="12000" sz="bad"><a:solidFill><a:schemeClr val="missing"/></a:solidFill><a:latin typeface="+mn-cs"/><a:hlinkClick r:id="missing"/></a:rPr><a:t> CURRENT UNSUPPORTED </a:t></a:r></a:p>'));
     assert.equal(plain(value),' CURRENT UNSUPPORTED ');assert.equal(at(value,' CURRENT UNSUPPORTED ').underline,undefined);
     for(const code of ['unsupported-body-text-style','approximate-body-text-baseline','unsupported-body-font','unsupported-body-text-color','unsupported-body-link'])assert.ok(diagnostics.some(d=>d.code===code),code);
     assert.ok(diagnostics.filter(d=>d.code.includes('body')).every(d=>/^slides\.0\.shapes\.\d+\.paragraphs\.0\.runs\.0$/.test(d.path)));

@@ -122,7 +122,7 @@ export function applyPitchFamilies(entries, pitch) {
 // docProps/app.xml: regenerate the "Fonts Used" group of HeadingPairs and
 // TitlesOfParts from the fonts the finished package uses, and name the theme
 // the way the theme part does. Other groups (slide titles) are kept.
-export function writeFontsUsed(appXml, fonts, themeName) {
+export function writeFontsUsed(appXml, fonts, themeNames) {
   const pairs = headingPairs(appXml), titles = titlesOfParts(appXml);
   if (!pairs || !titles) return appXml;
   const groups = [];
@@ -135,7 +135,8 @@ export function writeFontsUsed(appXml, fonts, themeName) {
   if (fontsGroup) fontsGroup[1] = fonts;
   else groups.unshift(['Fonts Used', fonts]);
   const themeGroup = groups.find(([name]) => name === 'Theme');
-  if (themeGroup && themeName && themeGroup[1].length === 1) themeGroup[1] = [themeName];
+  const names = [themeNames ?? []].flat();
+  if (themeGroup && names.length) themeGroup[1] = names;
   const kept = groups.filter(([, items]) => items.length);
   const variants = kept.map(([name, items]) => `<vt:variant><vt:lpstr>${escapeXml(name)}</vt:lpstr></vt:variant><vt:variant><vt:i4>${items.length}</vt:i4></vt:variant>`).join('');
   const items = kept.flatMap(([, list]) => list).map(item => `<vt:lpstr>${escapeXml(item)}</vt:lpstr>`).join('');
@@ -152,8 +153,9 @@ export function finalizeFontsUsed(output) {
   const parts = {};
   for (const [path, [bytes]] of Object.entries(output)) if (/^ppt\/.*\.xml$/.test(path)) parts[path] = bytes;
   const fonts = packageFontsUsed(inventoryPptxTypefaces(parts, {nested: false}));
-  const themeName = /<a:theme\b[^>]*\bname="([^"]*)"/.exec(parts['ppt/theme/theme1.xml'] ? text(parts['ppt/theme/theme1.xml']) : '')?.[1];
-  output['docProps/app.xml'] = [encoder.encode(writeFontsUsed(text(app[0]), fonts, themeName === undefined ? undefined : unescapeFace(themeName))), app[1]];
+  const themeNames = Object.keys(parts).filter(path => /^ppt\/theme\/theme\d+\.xml$/.test(path)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
+    .map(path => /<a:theme\b[^>]*\bname="([^"]*)"/.exec(text(parts[path]))?.[1]).filter(name => name !== undefined).map(unescapeFace);
+  output['docProps/app.xml'] = [encoder.encode(writeFontsUsed(text(app[0]), fonts, themeNames)), app[1]];
 }
 
 function unescapeFace(value) {

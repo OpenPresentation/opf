@@ -57,7 +57,37 @@ export function planScriptFonts(presentation, report) {
     report?.({code: "paragraph-direction-unavailable", path: "language",
       message: "The installed @openpresentation/opf has no paragraphDirection, so right-to-left paragraphs are not marked; the preview and export must share that rule. Use a core release that exports it."});
   }
-  return {deck, slides, lang: deck.lang, rtl};
+  return {deck, slides, lang: deck.lang, rtl, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+}
+
+// FF-05: East Asian characters in a deck whose own language has no East Asian font (an English deck with Japanese
+// text) still need a real East Asian theme font; an empty slot reads as an unresolved +mn-ea in PowerPoint. The
+// script of the text picks the language core resolves it for: kana is Japanese, hangul Korean, Han alone Simplified
+// Chinese. Returns {heading, body} families, or null when the deck language already selects one or the text has none.
+const KANA = /[\p{Script=Hiragana}\p{Script=Katakana}]/u, HANGUL = /\p{Script=Hangul}/u, HAN = /\p{Script=Han}/u;
+function contentEastAsianFonts(presentation, deck, report) {
+  if (deck.sources.eastAsian !== "latin") return null;
+  let kana = false, hangul = false, han = false;
+  const seen = new Set();
+  const walk = value => {
+    if (typeof value === "string") {
+      kana ||= KANA.test(value); hangul ||= HANGUL.test(value); han ||= HAN.test(value);
+    } else if (value && typeof value === "object" && !seen.has(value)) {
+      seen.add(value);
+      for (const item of Object.values(value)) walk(item);
+    }
+  };
+  walk(presentation.slides);
+  const language = kana ? "japanese" : hangul ? "korean" : han ? "chinese-simplified" : null;
+  if (!language) return null;
+  try {
+    const resolved = resolver({...presentation, language}, {slideIndex: 0});
+    return resolved.sources.eastAsian === "latin" ? null : {heading: resolved.heading.eastAsian, body: resolved.body.eastAsian};
+  } catch (error) {
+    report?.({code: "language-export-unavailable", path: "language",
+      message: `East Asian theme fonts for the East Asian text could not be resolved (${error instanceof Error ? error.message : String(error)}); the theme names the latin family for them.`});
+    return null;
+  }
 }
 
 const escapeAttribute = value => String(value).replace(/[&<>"']/g, char => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&apos;"}[char]));
@@ -82,8 +112,12 @@ export function themeScriptFonts(xml, plan) {
   for (const [tag, slots, family] of [["majorFont", heading, supplement?.heading], ["minorFont", body, supplement?.body]]) {
     xml = xml.replace(new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`), block => {
       for (const [element, slot] of SCRIPT_SLOTS) {
-        if (plan.deck.sources[slot] === "latin") continue;
-        const face = escapeAttribute(slots[slot]);
+        // FF-05: the East Asian slot always names a font (a script font, a font for the East Asian text, else the latin
+        // family): PowerPoint lists an empty slot as an empty-name font through every paragraph end mark. Complex script
+        // stays empty unless a script font is selected.
+        const content = element === "ea" && plan.deck.sources[slot] === "latin" ? plan.contentEastAsian?.[tag === "majorFont" ? "heading" : "body"] : undefined;
+        if (plan.deck.sources[slot] === "latin" && element !== "ea") continue;
+        const face = escapeAttribute(content ?? slots[slot]);
         block = block.replace(new RegExp(`<a:${element}\\b[^>]*/>`), `<a:${element} typeface="${face}"/>`);
       }
       if (supplement && family) {
@@ -363,4 +397,27 @@ export function languageDiagnostics(imported, observed, report) {
       }
     }
   }
+}
+
+/**
+ * FF-05: PptxGenJS writes every run's East Asian and complex-script font as a copy of the Latin face, with the
+ * charsets of other scripts (-122, -120). PowerPoint lists such a run font as an empty-name font in
+ * Presentation.Fonts and hides the real one (the charset is not the cause: a bare typeface does the same).
+ * PowerPoint's own runs name only the Latin face; East Asian and complex-script faces come from the paragraph or
+ * master style and the theme slots (+mn-ea, +mn-cs), which the exporter writes. A run keeps no explicit ea/cs
+ * typeface; theme references stay.
+ */
+export function stripRunScriptFonts(xml) {
+  return xml.replace(/<a:(?:ea|cs)\s+typeface="(?!\+)[^"]*"[^>]*\/>/g, "");
+}
+
+/**
+ * Without core's resolver the theme's East Asian slot still repeats the latin family of its font group, which keeps
+ * the paragraph end marks from reading an empty font (see themeScriptFonts).
+ */
+export function themeEastAsianFromLatin(xml) {
+  return xml.replace(/<a:(majorFont|minorFont)>[\s\S]*?<\/a:\1>/g, block => {
+    const latin = /<a:latin\b[^>]*\btypeface="([^"]+)"/.exec(block)?.[1];
+    return latin ? block.replace(/<a:ea typeface=""\/>/, `<a:ea typeface="${latin}"/>`) : block;
+  });
 }
