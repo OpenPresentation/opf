@@ -5,9 +5,9 @@
   "filename": "enterprise-account-expansion-plan",
   "language": "english-gb",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "medium",
       "decisionPower": "advisory",

@@ -14,7 +14,7 @@
     ]
   },
   "audience": [
-    "investors",
+    "investor",
     {
       "id": "all-hands",
       "attentionBudgetMinutes": 30,

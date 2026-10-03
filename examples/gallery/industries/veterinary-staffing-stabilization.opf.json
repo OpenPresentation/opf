@@ -7,7 +7,7 @@
   "audience": [
     "candidates",
     {
-      "id": "investors",
+      "id": "investor",
       "attentionBudgetMinutes": 22,
       "technicalFluency": "high",
       "decisionPower": "advisory",

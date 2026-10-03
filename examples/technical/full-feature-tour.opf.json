@@ -5,7 +5,7 @@
   "filename": "full-feature-tour.pptx",
   "author": "OPF Maintainers",
   "audience": [
-    "executives",
+    "executive",
     { "id": "engineering-team", "attentionBudgetMinutes": 30 }
   ],
   "purpose": "decide",

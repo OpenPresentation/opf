@@ -20,7 +20,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | narratives | 48 | done 10, descoped 38 | 48 | 0 |
 | charts | 76 | done 10, deprecated 50, descoped 1, parity-near 15 | 76 | 0 |
 | themes | 4 | done 1, parity-near 3 | 4 | 0 |
-| audiences | 22 | done 14, descoped 8 | 22 | 0 |
+| audiences | 22 | done 20, descoped 2 | 22 | 0 |
 | tones | 7 | done 7 | 7 | 0 |
 | socials | 10 | done 10 | 10 | 0 |
 | headers-footers | 10 | done 10 | 10 | 0 |
@@ -33,9 +33,9 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 382 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 388 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 50 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
-| `descoped` | 453 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
+| `descoped` | 447 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
 | `unknown` | 0 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 47 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
@@ -75,7 +75,7 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | charts | `missing-export` (descoped) | 1 | `world` | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-impo... | Parked for post-v1 by the owner (2026-10-01): the export stays on the clustered column fallback with a chart-data-adapted diagnostic; an offline native map export is the future work. | [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) |
 | purposes | `missing-editor` (descoped) | 9 | `align`, `decide`, `educate`, `inform`, `persuade`, `pitch`, `plan`, `report`, `sell` | opf-editor 0.11.0 has no purposes switch (SWITCH_DIMENSIONS) | Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh). | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | slide-sizes | `missing-editor` (descoped) | 7 | `16:9`, `4:3`, `16:10`, `letter`, `a4`, `widescreen`, `standard` | opf-editor 0.11.0 has no slide-size switch (SWITCH_DIMENSIONS); a theme switch carries its dimensions | Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh). | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
-| audiences | `missing-gallery` (descoped) | 8 | `candidates`, `customers`, `engineering-team`, `executives`, `investors`, `marketing-team`, `regulators`, `sales-team` | served as catalog JSON only; the gallery has no page for this id | Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead. | [opf#291](https://github.com/OpenPresentation/opf/issues/291) |
+| audiences | `missing-gallery` (descoped) | 2 | `candidates`, `engineering-team` | served as catalog JSON only; the gallery has no page for this id | Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead. | [opf#291](https://github.com/OpenPresentation/opf/issues/291) |
 | blocks | `parity-near` | 8 | `agenda-overview`, `comparison-table`, `decision-brief`, `market-opportunity`, `milestone-timeline`, `qa-discussion`, `roadmap-timeline`, `team-grid` | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Segoe UI Semibold): Segoe UI Semibold -> Red Hat Display; fo... (and 1 other detail) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 | charts | `parity-near` | 15 | `area`, `bar`, `column`, `filled-radar`, `line`, `line-with-markers`, `radar`, `radar-with-markers`, `scatter`, `stacked-area-3x`, `stacked-bar-3x`, `stacked-column-3x` and 3 more | text near (text: chart label wrapped/split in preview (native chart lays out its own labels)) | The preview's value-axis tick labels (such as 0) are not in the chart part's strings because PowerPoint computes its own ticks, so the text check counts them as wrapped labels. Classify computed axis ticks separately in the parity harness (no tolerance change), then re-run parity on the published 0.12.0 set with the RR-20 re-audit. | [RR-44](burndown.md) (todo) |
 | charts | `parity-near` (descoped) | 1 | `world` | reimport near (reimport: slides.0 chart re-imports as column, expected world (chart-data-adapted reported)) | Follows the parked export: the fallback column chart re-imports as column. | [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) |

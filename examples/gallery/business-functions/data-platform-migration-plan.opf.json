@@ -5,9 +5,9 @@
   "filename": "data-platform-migration-plan",
   "language": "english-au",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "mixed",
       "decisionPower": "informational",

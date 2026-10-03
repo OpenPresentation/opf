@@ -5,9 +5,9 @@
   "filename": "broadband-public-hearing-deck",
   "language": "english-au",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",
