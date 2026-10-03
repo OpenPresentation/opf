@@ -9590,8 +9590,372 @@
    "licenseClass": "proprietary-standard",
    "route": "Playfair Display",
    "tier": "visual",
-   "referenceAvailable": false,
-   "styles": []
+   "referenceAvailable": true,
+   "styles": [
+    {
+     "style": "400",
+     "reference": {
+      "file": "Didot.ttc",
+      "version": "13.0d1e3",
+      "sha256": "c227867f4e386af05fce563afeacde2a9360365e93e326fd40fb066d6f02fe8c"
+     },
+     "replacement": {
+      "family": "Playfair Display",
+      "weight": 400,
+      "italic": false,
+      "package": "playfair-display",
+      "sha256": "70ef3ee8de32dc81c39f2733a4a2a050c7e6ba78a2f1632f9d5c6cfd482c3abb"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.2016,
+     "meanWidthDelta": -0.2016,
+     "maxAbsWidthDelta": 0.2271,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 0,
+      "differing": 250,
+      "identicalFraction": 0,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.941,
+       -0.299,
+       0.024
+      ],
+      "typo": [
+       0.941,
+       -0.299,
+       0.026
+      ],
+      "win": [
+       0.941,
+       0.299
+      ],
+      "xHeight": 0.436,
+      "capHeight": 0.721,
+      "inkXHeight": 0.429,
+      "inkCapHeight": 0.712
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0823,
+       -0.2508,
+       0
+      ],
+      "typo": [
+       1.0823,
+       -0.2516,
+       0
+      ],
+      "win": [
+       0.9403,
+       0.1968
+      ],
+      "xHeight": 0.4145,
+      "capHeight": 0.571,
+      "inkXHeight": 0.4153,
+      "inkCapHeight": 0.571
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 0.968,
+     "capHeightRatio": 0.802,
+     "ascentRatio": 1.15,
+     "outlines": {
+      "sharedNonemptyGlyphs": 371,
+      "identicalOutlines": 0,
+      "identicalBeyondPlainRectangles": 0
+     },
+     "coverage": {
+      "referenceLatinCodepoints": 344,
+      "missingInReplacement": 9,
+      "missingSample": [
+       "U+00B5",
+       "U+2011",
+       "U+2012",
+       "U+2015",
+       "U+201B",
+       "U+201F",
+       "U+2024",
+       "U+2025",
+       "U+2031"
+      ]
+     }
+    },
+    {
+     "style": "700",
+     "reference": {
+      "file": "Didot.ttc",
+      "version": "13.0d1e3",
+      "sha256": "c227867f4e386af05fce563afeacde2a9360365e93e326fd40fb066d6f02fe8c"
+     },
+     "replacement": {
+      "family": "Playfair Display",
+      "weight": 700,
+      "italic": false,
+      "package": "playfair-display",
+      "sha256": "898a01a59214578e72012131ef4c346844c1fd35613f4ee113a37d61a094a2d0"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.1786,
+     "meanWidthDelta": -0.1786,
+     "maxAbsWidthDelta": 0.2,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 0,
+      "differing": 250,
+      "identicalFraction": 0,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.969,
+       -0.294,
+       0.026
+      ],
+      "typo": [
+       0.969,
+       -0.295,
+       0.026
+      ],
+      "win": [
+       0.969,
+       0.294
+      ],
+      "xHeight": 0.436,
+      "capHeight": 0.72,
+      "inkXHeight": 0.429,
+      "inkCapHeight": 0.712
+     },
+     "replacementVertical": {
+      "hhea": [
+       1.0823,
+       -0.2508,
+       0
+      ],
+      "typo": [
+       1.0823,
+       -0.2516,
+       0
+      ],
+      "win": [
+       0.9403,
+       0.1968
+      ],
+      "xHeight": 0.4169,
+      "capHeight": 0.571,
+      "inkXHeight": 0.4169,
+      "inkCapHeight": 0.571
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 0.972,
+     "capHeightRatio": 0.802,
+     "ascentRatio": 1.117
+    },
+    {
+     "style": "400i",
+     "reference": {
+      "file": "Didot.ttc",
+      "version": "13.0d1e3",
+      "sha256": "c227867f4e386af05fce563afeacde2a9360365e93e326fd40fb066d6f02fe8c"
+     },
+     "replacement": {
+      "family": "Playfair Display",
+      "weight": 400,
+      "italic": true,
+      "package": "playfair-display",
+      "sha256": "30a7eb5a9309754d4b3e205e6435ef07d80e1b86735774b2ace427f6ed61f991"
+     },
+     "strings": 300,
+     "meanAbsWidthDelta": 0.241,
+     "meanWidthDelta": -0.241,
+     "maxAbsWidthDelta": 0.2696,
+     "meetsWidthBar": false,
+     "lineBreaks": {
+      "cases": 250,
+      "identical": 0,
+      "differing": 250,
+      "identicalFraction": 0,
+      "perWidth": [
+       {
+        "boxEm": 8,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 11.5,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 16,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 22,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       },
+       {
+        "boxEm": 30,
+        "paragraphs": 50,
+        "identical": 0,
+        "differing": 50
+       }
+      ]
+     },
+     "referenceVertical": {
+      "hhea": [
+       0.942,
+       -0.29,
+       0.025
+      ],
+      "typo": [
+       0.942,
+       -0.291,
+       0.026
+      ],
+      "win": [
+       0.942,
+       0.29
+      ],
+      "xHeight": 0.442,
+      "capHeight": 0.719,
+      "inkXHeight": 0.442,
+      "inkCapHeight": 0.712
+     },
+     "replacementVertical": {
+      "hhea": [
+       0.8056,
+       -0.1944,
+       0
+      ],
+      "typo": [
+       0.8056,
+       -0.1944,
+       0
+      ],
+      "win": [
+       0.9685,
+       0.2024
+      ],
+      "xHeight": 0.4145,
+      "capHeight": 0.571,
+      "inkXHeight": 0.4258,
+      "inkCapHeight": 0.571
+     },
+     "verticalMetricsEqual": false,
+     "verticalFieldsDiffering": [
+      "hhea",
+      "typo",
+      "win",
+      "xHeight",
+      "capHeight"
+     ],
+     "xHeightRatio": 0.963,
+     "capHeightRatio": 0.802,
+     "ascentRatio": 0.855
+    }
+   ],
+   "summary": {
+    "stylesMeasured": 3,
+    "standardStylesMeasured": 3,
+    "meanAbsWidthDelta": 0.2071,
+    "meanWidthDelta": -0.2071,
+    "worstStyleMeanAbsWidthDelta": 0.241,
+    "maxAbsWidthDelta": 0.2696,
+    "widthBarMet": false,
+    "lineBreaksIdenticalFraction": 0,
+    "verticalMetricsEqual": false,
+    "xHeightRatio": 0.968,
+    "capHeightRatio": 0.802,
+    "ascentRatio": 1.15,
+    "identicalOutlinesBeyondPlainRectangles": 0,
+    "latinCodepointsMissing": 9
+   }
   },
   {
    "family": "Franklin Gothic Book",
@@ -21412,6 +21776,23 @@
     "identicalOutlinesBeyondPlainRectangles": 0,
     "latinCodepointsMissing": 15
    }
+  }
+ ],
+ "supplementalRuns": [
+  {
+   "family": "Didot",
+   "date": "2026-10-02",
+   "tool": "scripts/qualify-latin-fonts.mjs (fontkit 2.0.4, opf-render 0.12.0)",
+   "host": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "macos": "26.6.2",
+    "node": "v26.7.0",
+    "referenceDirs": [
+     "Didot.ttc (system font, read in place through a symlink in a scratch folder)"
+    ]
+   },
+   "evidence": "docs/evidence/mac-checks-20261002/README.md"
   }
  ]
 }
