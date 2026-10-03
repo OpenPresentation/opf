@@ -1928,9 +1928,9 @@
   "editor": {
     "source": {
       "repository": "OpenPresentation/opf-editor",
-      "commit": "9c38a1e67943240857ba1c432d27a3d85ab1db8d",
-      "capturedAt": "2026-10-02",
-      "version": "0.11.0",
+      "commit": "c7ac1d7d9c12ac76a62320ee3ed885334be130b2",
+      "capturedAt": "2026-10-03",
+      "version": "0.11.2",
       "switches": "src/switches.js",
       "test": "test/switches.mjs"
     },
@@ -1948,7 +1948,9 @@
       "socials",
       "headers-footers",
       "blocks",
-      "image-treatments"
+      "image-treatments",
+      "slide-sizes",
+      "purposes"
     ]
   }
 }
