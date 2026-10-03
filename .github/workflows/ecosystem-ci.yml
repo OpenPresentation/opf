@@ -252,7 +252,7 @@ jobs:
       # RR-50: ecosystem.lock.json (the coordinated set, written by the roller) must be valid. Offline, on every change.
       - name: Check the ecosystem lock
         working-directory: opf
-        run: node --test scripts/ecosystem-lock.test.mjs && node scripts/ecosystem-lock.mjs validate
+        run: node --test scripts/ecosystem-lock.test.mjs scripts/ecosystem-roll.test.mjs && node scripts/ecosystem-lock.mjs validate
       # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
