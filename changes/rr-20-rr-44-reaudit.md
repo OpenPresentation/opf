@@ -1,5 +1,0 @@
----
-type: changed
-packages: []
----
-RR-20 and RR-44 (program evidence and tooling, no package change): the re-audit on the published 0.12 set (core 0.12.0 `5e1dda7`, opf-render 0.12.0 `3b300a3`, opf-pptx 0.12.2 `e4569ac`, opf-editor 0.11.1 `f4779da`, pptx-gallery `c349a61`; npm tarballs, no Office) measures 818 of 819 gallery configs `works` (only `world` is not), parity 756 perfect, 94 near, 0 mismatch of 850, and the 62 catalog-only values 62 of 62 `works` and perfect. No value regressed against the 0.11.4-train run (739 / 111 / 0) or the RR-16 candidate run (741 / 109 / 0). The parity text check classifies a computed value-axis tick label apart from authored chart strings (RR-44: the 26 charts go from 10 perfect / 16 near to 25 / 1; `world` stays near), and audit B's script-slot check accepts the face the exported theme's `ea` or `cs` slot names when the runs name none, as opf-pptx 0.12.1 writes (793 of 819 with the unchanged check; the pre-change classification is kept). No tolerance changed; see [gallery-support.md](docs/programs/font-fidelity-everywhere/gallery-support.md).
