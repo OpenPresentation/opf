@@ -158,7 +158,13 @@ function classify(r) {
       // Script slot (ea or cs): the runs must name the language's font there.
       if (p.scriptSlot === 'ea' || p.scriptSlot === 'cs') {
         const fam = [m.expected?.heading, m.expected?.body].filter(Boolean);
-        if (!(p.slotFaces ?? []).some(f => fam.includes(f))) reasons.push(`native text uses the ${p.scriptSlot} slot but runs name ${list(p.slotFaces) || 'no face'} there (scheme ${list(fam)})`);
+        // RR-44b (opf-pptx 0.12.1, FF-05): a run names no explicit ea/cs typeface, as PowerPoint's own runs do; the slot resolves through the
+        // theme (+mn-ea, +mn-cs), so a run with no face there passes when the exported theme's slot (major or minor) names the language's font.
+        // A run that names a face there is judged as before, and the theme check (themeScriptGaps) still fails a theme slot that differs.
+        const slotIndex = p.scriptSlot === 'ea' ? 0 : 1;
+        const themeFaces = ['major', 'minor'].map(role => m.exportThemeEaCs?.[role]?.[slotIndex]).filter(Boolean);
+        const faces = (p.slotFaces ?? []).length ? p.slotFaces : themeFaces;
+        if (!faces.some(f => fam.includes(f))) reasons.push(`native text uses the ${p.scriptSlot} slot but runs and theme name ${list(faces) || 'no face'} there (scheme ${list(fam)})`);
       }
       // The theme names the script font the language (or the scheme) selected for its slot; an unselected slot stays empty (FF-49).
       for (const gap of themeScriptGaps(m)) reasons.push(gap);
