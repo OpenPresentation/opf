@@ -1,0 +1,125 @@
+name: Release train
+# RR-51: a workflow_dispatch wrapper around scripts/release-train.mjs (docs/release-process.md, "Release train").
+# The supervisor normally runs the script locally with their own `gh` login; this workflow is the same script on a
+# runner.
+#
+# Plan only until the owner installs the GitHub App (opf#298). Tags pushed with the workflow's GITHUB_TOKEN start no
+# other workflow, so a tag created here with GITHUB_TOKEN would never reach the trusted-publishing workflows, and
+# GITHUB_TOKEN cannot open pull requests or push branches in the sibling repositories. Without the App, `mode:
+# execute` fails at once and `mode: plan` reads the state (REST reads only) and writes it to the job summary.
+#
+# With the App: set the repository variable ECOSYSTEM_APP_ID and the secret ECOSYSTEM_APP_PRIVATE_KEY (the App of
+# opf#298, contents and pull-requests write on opf, opf-render, opf-pptx and opf-editor; the roller uses the same one).
+# `mode: execute` then runs `release-train.mjs run --execute`: it opens release-prep PRs, tags merged release commits
+# and waits for each repository's own publish workflow, and stops at the first step that needs a person (merging a
+# release-prep PR). It never merges and never publishes; npm publishing stays in each repository's workflow (OIDC,
+# --provenance). Dispatch it again after the merge: every step already done is detected and skipped.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: plan (read only) or execute (needs the GitHub App, opf#298)
+        type: choice
+        options: [plan, execute]
+        default: plan
+      core:
+        description: '@openpresentation/opf version (empty: not in the train)'
+        default: ''
+      render:
+        description: '@openpresentation/opf-render version'
+        default: ''
+      pptx:
+        description: '@openpresentation/opf-pptx version'
+        default: ''
+      editor:
+        description: '@openpresentation/opf-editor version'
+        default: ''
+      cli:
+        description: '@openpresentation/cli version'
+        default: ''
+      item:
+        description: Item id for release-prep PR titles (for example RR-20)
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: release-train
+  cancel-in-progress: false
+jobs:
+  train:
+    name: Release train (${{ inputs.mode }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Check the release train script
+        run: node --test scripts/release-train.test.mjs
+      # Runs only once the App is configured (opf#298).
+      - name: GitHub App token
+        id: app
+        if: vars.ECOSYSTEM_APP_ID != ''
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.ECOSYSTEM_APP_ID }}
+          private-key: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
+          owner: OpenPresentation
+          repositories: opf,opf-render,opf-pptx,opf-editor
+      - name: Refuse execute without the App
+        if: inputs.mode == 'execute' && steps.app.outputs.token == ''
+        run: |
+          echo "::error title=Release train::mode execute needs the GitHub App (opf#298): tags pushed with GITHUB_TOKEN start no publish workflow. Run it locally instead: node scripts/release-train.mjs run <versions> --execute"
+          exit 1
+      - name: Plan (read only)
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          CORE: ${{ inputs.core }}
+          RENDER: ${{ inputs.render }}
+          PPTX: ${{ inputs.pptx }}
+          EDITOR: ${{ inputs.editor }}
+          CLI: ${{ inputs.cli }}
+        run: |
+          args=()
+          [ -n "$CORE" ] && args+=(--core "$CORE")
+          [ -n "$RENDER" ] && args+=(--render "$RENDER")
+          [ -n "$PPTX" ] && args+=(--pptx "$PPTX")
+          [ -n "$EDITOR" ] && args+=(--editor "$EDITOR")
+          [ -n "$CLI" ] && args+=(--cli "$CLI")
+          set +e
+          node scripts/release-train.mjs plan "${args[@]}" > plan.txt 2>&1
+          code=$?
+          set -e
+          cat plan.txt
+          { echo '### Release train plan'; echo; echo '```'; cat plan.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          # 1 means "not done yet" (the plan says what is missing); anything else is an error.
+          [ "$code" -le 1 ]
+      - name: Run the train
+        if: inputs.mode == 'execute' && steps.app.outputs.token != ''
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          CORE: ${{ inputs.core }}
+          RENDER: ${{ inputs.render }}
+          PPTX: ${{ inputs.pptx }}
+          EDITOR: ${{ inputs.editor }}
+          CLI: ${{ inputs.cli }}
+          ITEM: ${{ inputs.item }}
+        run: |
+          git config --global user.name "opf-release-train[bot]"
+          git config --global user.email "opf-release-train[bot]@users.noreply.github.com"
+          args=()
+          [ -n "$CORE" ] && args+=(--core "$CORE")
+          [ -n "$RENDER" ] && args+=(--render "$RENDER")
+          [ -n "$PPTX" ] && args+=(--pptx "$PPTX")
+          [ -n "$EDITOR" ] && args+=(--editor "$EDITOR")
+          [ -n "$CLI" ] && args+=(--cli "$CLI")
+          [ -n "$ITEM" ] && args+=(--item "$ITEM")
+          set +e
+          node scripts/release-train.mjs run "${args[@]}" --execute 2>&1 | tee run.txt
+          code=${PIPESTATUS[0]}
+          { echo '### Release train run'; echo; echo '```'; cat run.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          exit "$code"
