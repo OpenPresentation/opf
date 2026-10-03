@@ -11,7 +11,7 @@
 //   node scripts/ecosystem-scope.mjs            # prints the decision, writes run=true|false to $GITHUB_OUTPUT
 //   node scripts/ecosystem-scope.mjs --files a b # classifies the given paths instead (local check)
 import { execFileSync } from "node:child_process";
-import { appendFileSync } from "node:fs";
+import { appendFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 /** True when no ecosystem check reads `file`, so a change to it cannot change their result. */
@@ -51,11 +51,57 @@ export function scopeForEvent(event, listChangedFiles) {
   }
 }
 
+/**
+ * RR-53, consumer-driven contracts (ci-cd.md, section 3): which depth of the sibling suites the ecosystem shards run.
+ *   contract  each sibling's `npm run test:contract` (the part of its suite that exercises core's APIs): pull requests only.
+ *   full      each sibling's whole `npm test`: everything else. merge_group, push to main, the nightly schedule, manual runs
+ *             and any case this function cannot classify. A docs-only or contract-only change never lowers a non-PR run.
+ * A pull request is also `full` when it can change what the contract tier trusts: the ecosystem lock, the roller's branches
+ * (ecosystem-roll/*), the tiering machinery itself, or when it carries the label `ecosystem-full` (the opt-in for a change
+ * the author knows reaches past the contract).
+ */
+export const FULL_TIER_PATHS = new Set([
+  "ecosystem.lock.json",
+  ".github/workflows/ecosystem-ci.yml",
+  ".github/actions/ecosystem-refs/action.yml",
+  "scripts/ecosystem-scope.mjs",
+  "scripts/package-ecosystem-plan.mjs",
+  "scripts/test-package-ecosystem.mjs",
+]);
+
+export function tierForEvent(event, { listChangedFiles = () => [], headRef = "", labels = [] } = {}) {
+  if (event !== "pull_request") return { tier: "full", reason: `${event} runs always run the full sibling suites` };
+  if (headRef.startsWith("ecosystem-roll/")) return { tier: "full", reason: "the roller's branch (ecosystem-roll/*) must pass the full suites" };
+  if (labels.includes("ecosystem-full")) return { tier: "full", reason: "the pull request carries the label ecosystem-full" };
+  let files;
+  try {
+    files = listChangedFiles();
+  } catch (error) {
+    return { tier: "full", reason: `could not list the changed paths (${error.message.split("\n")[0]})` };
+  }
+  if (files.length === 0) return { tier: "full", reason: "no changed paths could be listed" };
+  const sensitive = files.filter((file) => FULL_TIER_PATHS.has(file));
+  if (sensitive.length > 0) return { tier: "full", reason: `the change touches ${sensitive.join(", ")}`, sensitive };
+  return { tier: "contract", reason: "a pull request runs the siblings' contract suites; merge_group, main and the nightly run run the full suites" };
+}
+
+function pullRequestLabels() {
+  try {
+    return (JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, "utf8")).pull_request?.labels ?? []).map((label) => label.name);
+  } catch {
+    return [];
+  }
+}
+
 function main(argv) {
   const event = process.env.GITHUB_EVENT_NAME ?? "local";
   const decision = argv[0] === "--files" ? ecosystemScope(argv.slice(1)) : scopeForEvent(event, changedFiles);
   const line = `Ecosystem checks: ${decision.run ? "run" : "skipped"} (${decision.reason}).`;
   console.log(line);
+  const tier = argv[0] === "--files" ? tierForEvent("pull_request", { listChangedFiles: () => argv.slice(1) }) : tierForEvent(event, { listChangedFiles: changedFiles, headRef: process.env.GITHUB_HEAD_REF ?? "", labels: pullRequestLabels() });
+  console.log(`Sibling suites: ${tier.tier} (${tier.reason}).`);
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `tier=${tier.tier}\n`);
+  if (process.env.GITHUB_STEP_SUMMARY && decision.run) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Sibling suites: **${tier.tier}** (${tier.reason}).\n`);
   if (decision.relevant) console.log(decision.relevant.slice(0, 20).join("\n"));
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `run=${decision.run}\n`);
   if (process.env.GITHUB_STEP_SUMMARY && !decision.run) {
