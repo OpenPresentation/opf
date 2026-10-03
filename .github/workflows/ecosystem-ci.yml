@@ -1,6 +1,9 @@
 name: Coordinated public packages
 on:
   pull_request:
+  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
+  # pull_request payload (scripts/ecosystem-scope.mjs runs everything for it), and it is never cancelled.
+  merge_group:
   push:
     branches: [main]
   workflow_dispatch:
@@ -8,7 +11,7 @@ permissions:
   contents: read
 concurrency:
   group: ecosystem-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 env:
   OPF_RENDER_REF: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce
   OPF_EDITOR_REF: f4779dab851bc36cadca62f7c4b89c1dc9e17bf3
