@@ -5,9 +5,9 @@
   "filename": "parks-master-plan-workshop",
   "language": "english-au",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "mixed",
       "decisionPower": "informational",

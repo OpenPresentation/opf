@@ -161,7 +161,7 @@ assert.ok(repoReadme.length > 100, "repo-readme subpath should ship the upstream
 
 const validDeck = {
   name: "Packed Package Smoke",
-  audience: ["executives"],
+  audience: ["executive"],
   slides: [{ title: "Smoke Test", items: ["Root import", "Focused import", "Raw JSON import"] }],
 };
 

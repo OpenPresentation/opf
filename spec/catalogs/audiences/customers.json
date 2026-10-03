@@ -19,5 +19,9 @@
     "casual",
     "authoritative"
   ],
-  "tags": ["external", "customer", "sales"]
+  "tags": ["external", "customer", "sales"],
+  "deprecation": {
+    "replacedBy": "customer",
+    "reason": "Duplicate of 'customer', the id pptx.gallery publishes. Kept so existing documents keep validating and rendering unchanged; use 'customer' in new documents."
+  }
 }

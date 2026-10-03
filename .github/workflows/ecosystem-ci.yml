@@ -109,7 +109,10 @@ jobs:
         env:
           # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
           # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
+          # RR-41: the bundled examples changed (plural audience ids moved to the singular ones), so their source digest is no longer the one the renderer's own
+          # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
+          # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
         run: pnpm test:packages
       - name: Verify installed type failure propagation
         if: steps.scope.outputs.run == 'true'

@@ -5,9 +5,9 @@
   "filename": "satellite-maintenance-readiness-review",
   "language": "english-gb",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",
