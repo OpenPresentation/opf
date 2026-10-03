@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46). A new Node test needs no entry; add a file here only when it is a helper, fixture or harness, or a test that another step runs (font-licenses.mjs runs in check:fonts). Files named *-browser*.mjs are browser suites (test/browser-suites.json, scripts/quarantine.mjs) and are skipped by name.",
+  "include": [
+    "fonts-browser.mjs"
+  ],
+  "nodeTest": [],
+  "exclude": [
+    "accepted-text-fixtures.mjs",
+    "font-licenses.mjs",
+    "font-preparation.mjs",
+    "font-variants.mjs",
+    "furniture-review.mjs",
+    "golden-store.mjs",
+    "latin-family-fixture.mjs",
+    "packed-install.mjs",
+    "pdf-helpers.mjs",
+    "platform-residual-probe.mjs",
+    "probe-text-ink.mjs",
+    "readability-review-sheets.mjs",
+    "review-code-raster.mjs",
+    "review-text-fits.mjs",
+    "rich-flow-review-sheets.mjs",
+    "script-corpora-raster.mjs",
+    "script-corpora.mjs",
+    "script-family-fixture.mjs",
+    "shared-code.mjs",
+    "shared-metric.mjs",
+    "source-whitespace-review-sheets.mjs",
+    "timeline-review-sheets.mjs",
+    "variable-font-retained-gate.mjs"
+  ]
+}

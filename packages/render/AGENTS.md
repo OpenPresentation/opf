@@ -13,6 +13,11 @@
 
 - This checkout is used with `core.autocrlf=true`; text files are stored LF and check out CRLF. Do not commit line-ending-only churn.
 
+## Changelog fragments and test discovery (RR-46)
+
+- Changelog: add `changes/<slug>.md` (front matter `type: added|changed|fixed`, see `changes/README.md`) in the PR that makes a user-facing change; never edit `CHANGELOG.md` or `## Unreleased` by hand. The release-prep PR runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z [--summary "..."]`, which moves the fragments into the release section. CI warns when `src/` changes without a fragment.
+- Tests: `npm test` runs `scripts/run-tests.mjs`, which globs `test/*.mjs` (not `*-browser*.mjs`, which are browser suites run through `scripts/quarantine.mjs`, and not the files in `test/suites.json`). A new test is one new file with no `package.json` edit; add a name to `test/suites.json` only for a helper, fixture or a file another step runs. `npm run typecheck` is `scripts/check-syntax.mjs` over `src`, `test` and `scripts`.
+
 ## Active programs
 
 The cross-repo program tracker lives in core at [docs/programs/font-fidelity-everywhere](https://github.com/OpenPresentation/opf/tree/main/docs/programs/font-fidelity-everywhere). `README.md` there holds the goal, done criteria and resume protocol; `burndown.md` holds item IDs and status. Before starting work:

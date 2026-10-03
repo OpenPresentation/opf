@@ -1,0 +1,7 @@
+{
+  "default": "",
+  "targets": {
+    "": "CHANGELOG.md"
+  },
+  "codePaths": ["src/"]
+}
