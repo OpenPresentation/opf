@@ -245,6 +245,10 @@ jobs:
       - name: Check the test quarantine
         working-directory: opf
         run: node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check
+      # RR-50: ecosystem.lock.json (the coordinated set, written by the roller) must be valid. Offline, on every change.
+      - name: Check the ecosystem lock
+        working-directory: opf
+        run: node --test scripts/ecosystem-lock.test.mjs && node scripts/ecosystem-lock.mjs validate
       # These commits are the coordinated checkpoint, not mutable default branches.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
@@ -286,6 +290,24 @@ jobs:
               echo "::warning title=Ecosystem pin not on main::$repo is pinned to ${pin:0:12}, which is not on OpenPresentation/$repo main ($(git -C "$repo" rev-list --count "origin/main..$pin") commits not in main). Repin to a merged commit."
             fi
           done
+      # RR-50: every ecosystem.lock.json entry must be on its repository's main (the REST compare API, the equivalent of
+      # `git merge-base --is-ancestor`, no clone), and only the roller's branches (ecosystem-roll/*) may change a locked
+      # SHA. Warning only for now (ci-cd.md section 3, migration step 1): set the repository variable
+      # ECOSYSTEM_LOCK_GUARD=blocking (or pass --blocking) to make a finding fail this job.
+      - name: Guard the ecosystem lock
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ECOSYSTEM_LOCK_GUARD: ${{ vars.ECOSYSTEM_LOCK_GUARD }}
+        run: |
+          args=()
+          # A pull_request checkout is the merge commit: its first parent is the base, whose lock the hand-edit check compares.
+          if [ "$GITHUB_EVENT_NAME" = pull_request ] && git show HEAD^1:ecosystem.lock.json > "$RUNNER_TEMP/base-ecosystem.lock.json" 2>/dev/null; then
+            args+=(--base-lock "$RUNNER_TEMP/base-ecosystem.lock.json")
+          fi
+          node scripts/ecosystem-lock.mjs guard "${args[@]}"
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
         if: steps.scope.outputs.run == 'true'
         with:
