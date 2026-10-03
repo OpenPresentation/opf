@@ -95,6 +95,8 @@ drift is removed by FF-22 and FF-37.
 
 To measure what npm serves, use the tarballs instead of worktrees (FF-58): `npm pack @openpresentation/opf@X @openpresentation/opf-render@Y @openpresentation/opf-pptx@Z @openpresentation/opf-editor@V`, unpack each into `sources/pub-<name>`, copy `dist/` to `src/` for opf-render and opf-pptx (audit A imports `src/`), run `npm install --omit=dev` in each, install the optional script-font peers of opf-render and `esbuild` (audit B and parity bundle the snippets with it), and stamp the registry `gitHead` (`npm view <pkg>@<version> gitHead`) into each `package.json`. The core is a worktree of its release tag (`pnpm install && pnpm -r build`), and its `packages/javascript` files should be byte-compared with the unpacked tarball. Point `audit-A-*`, `audit-B-*` and `parity-*` at those directories (Windows: junctions). Pass the register loader to Node as a `file:///` URL.
 
+The parity harness has a CI driver for this on ubuntu, windows and macos (RR-04): `scripts/published-matrix/installed-parity.mjs` (workflow `.github/workflows/installed-parity.yml`, comparison `compare-parity.mjs`) installs the planned published versions into one npm project, lays out `sources/parity-{opf,opf-render,opf-pptx}` as copies, runs `gen-snippets.mjs` (or reads the committed snapshot of its output when pptx-gallery is not readable), `parity.mjs` and `summarize.mjs`, and compares the systems. Evidence: [rr-04-installed-parity-20261002](../../../evidence/rr-04-installed-parity-20261002/README.md).
+
 ## Re-running against new heads
 
 The scripts locate their inputs relative to their own folder, so copy them into
