@@ -220,7 +220,7 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
   const nextManifest = {
     $schema: CATALOG_MANIFEST_SCHEMA_ID,
     description:
-      "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync.",
+      "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync. `layouts` is a subset by design (RR-41, opf#292), not by omission: it bundles 100 of the gallery's 485 layouts, and the other 385 resolve through the default catalog or an inline record, because bundling them adds about 382 KB (19 KB gzipped) to every browser bundle of the renderer, editor and exporter for records none of them read.",
     publisher: DEFAULT_CATALOG_PUBLISHER,
     source,
     kinds: Object.fromEntries(SNAPSHOT_KINDS.map(({ kind }) => [kind, kinds[kind].manifestEntry])),

@@ -164,6 +164,48 @@ the sync reports an id the gallery does not publish. The layouts snapshot uses
 this for the 70 legacy gallery slugs (FF-55): it holds 100 of the gallery's 485
 layouts, and the rest stay gallery-only.
 
+### Layouts stay a subset by design (RR-41, opf#292)
+
+`layouts` is a permanent `subset`, decided on 2026-10-02 (vetoable by the owner).
+The other 385 layouts (the Dark master; 24 of them deprecated aliases from FF-52)
+are published only by pptx.gallery. A document names one of them and resolves it
+online through the default catalog, or offline with an inline
+`catalogs.layouts.records` entry, which the gallery snippets add and
+`bundlePresentation` inlines for the 100 bundled ids. All 485 compose, validate
+and export; this decision is about where the records live, not about the engines.
+
+Measured on `@openpresentation/opf` 0.12.0 with all 485 layouts synced (`npm pack
+--dry-run`, then minified esbuild browser bundles of the published `opf-render`
+0.12.0 against each core build, and of the gallery editor playground at the
+`opf-editor` 0.11.1 release commit):
+
+| | 100 layouts (now) | 485 layouts | Change |
+| --- | ---: | ---: | ---: |
+| Packed tarball | 2,925,351 B | 2,979,596 B | +54,245 B (+1.9%) |
+| Unpacked | 9,177,405 B | 10,327,874 B | +1,150,469 B (+12.5%) |
+| Files | 645 | 1,030 | +385 |
+| `opf-render` bundle (minified / gzip) | 1,186,297 / 307,353 B | 1,568,259 / 326,443 B | +381,962 / +19,090 B (+32% / +6.2%) |
+| Gallery editor playground bundle (minified / gzip) | 3,656,803 / 1,207,310 B | 4,038,759 / 1,225,176 B | +381,956 / +17,866 B (+10.4% / +1.5%) |
+
+The packed growth is small (gzip compresses the repetitive records). The bundle
+growth is not: `opf-render`, `opf-editor` and `opf-pptx` never import
+`@openpresentation/opf/catalogs` and never read a layout record from the bundled
+catalog, but `composition`, `validator`, `pagination` and `convert` all reach the
+one generated catalogs chunk, which a bundler cannot tree-shake, so every browser
+bundle would carry about 382 KB more for data it does not use. The catalog is not
+lazily loadable today. The supervisor rule was to bundle only when the packed
+core grows by less than about 1.5 MB and the bundles do not meaningfully grow;
+the second condition fails, so the subset is kept on purpose. Narrative layout
+hints do not need the rest: the FF-28 beat table references 17 gallery layouts,
+13 of them already bundled, and the other four (`text-1x-left`, `title-left`,
+`title-center`, `list-2x-title-center`) can be added with `--include` if the
+hints are restored.
+
+To revisit: split the generated catalogs module per kind (or load it lazily) so a
+consumer that does not read layouts does not carry them. After that, bundling all
+485 costs about 54 KB of packed size and nothing in the browser bundles, and the
+kind can be switched to `mirror` with a core release.
+
 ### Checks
 
 - `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline
