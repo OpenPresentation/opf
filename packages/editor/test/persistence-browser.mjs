@@ -135,9 +135,10 @@ try {
   assert.deepEqual(errors, []);
   await page.close();
 
-  // The stored copy equals the restored document: nothing to offer.
+  // The restored copy is still stored and still differs from the default document, so it is offered again. The offer appears once
+  // storage has opened and been read, which takes as long as the runner needs: wait for it (a fixed sleep raced that read).
   ({ page, errors } = await open(context));
-  await page.waitForTimeout(400);
+  await banner(page).waitFor();
   assert.equal(await banner(page).isHidden(), false, 'a copy that differs from the default is still offered');
   await page.close();
 
