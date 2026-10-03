@@ -690,10 +690,10 @@ Per family fixtures for the open script, emoji and math families (script-host-fi
 
 | Host | Repository and test | Commit | Families passed | Findings |
 | --- | --- | --- | ---: | ---: |
-| node | OpenPresentation/opf-render `test/script-family-hosts.mjs` | `6b7924169ceb` | 35 | 0 |
-| browser | OpenPresentation/opf-render `test/script-family-hosts-browser.mjs` | `6b7924169ceb` | 34 | 1 |
-| editor | OpenPresentation/opf-editor `test/font-gate-script-families.mjs` | `e05c0e4d9db2` | 35 | 0 |
-| galleryEditor | Data-Advantage/pptx-gallery `tests/editor-script-families.test.ts` | `328b522c5d52` | 35 | 0 |
+| node | OpenPresentation/opf-render `test/script-family-hosts.mjs` | `0246b7b2ea26` | 35 | 0 |
+| browser | OpenPresentation/opf-render `test/script-family-hosts-browser.mjs` | `0246b7b2ea26` | 34 | 1 |
+| editor | OpenPresentation/opf-editor `test/font-gate-script-families.mjs` | `823f29dcfa57` | 35 | 0 |
+| galleryEditor | Data-Advantage/pptx-gallery `tests/editor-script-families.test.ts` | `3ea21c64ab05` | 35 | 0 |
 
 | Family | Host | Finding |
 | --- | --- | --- |

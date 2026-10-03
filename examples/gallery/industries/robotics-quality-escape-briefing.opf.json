@@ -5,9 +5,9 @@
   "filename": "robotics-quality-escape-briefing",
   "language": "english-au",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "mixed",
       "decisionPower": "informational",

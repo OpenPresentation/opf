@@ -7,6 +7,8 @@
 //   node scripts/sync-gallery-catalog.mjs --url https://www.pptx.gallery --check
 //                                                                       compare against the live site
 //   node scripts/sync-gallery-catalog.mjs --verify                     offline: snapshot matches its manifest
+//   node scripts/sync-gallery-catalog.mjs --rehash                     after a core-first edit of spec/catalogs: rewrite
+//                                                                       the index and manifest hashes and counts
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --report     per-kind divergence summary
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --include layouts:<id>[,<id>...]
 //                                                                       add published ids to a subset kind (repeatable)
@@ -339,6 +341,35 @@ export function parseIncludes(argv) {
   return include;
 }
 
+/**
+ * Rewrites the index `contentSha256` and the manifest `records` and `contentSha256` of every kind from the
+ * records on disk, for a core-first catalog edit (core is the source of truth since the FF-37 decision, so
+ * a record can change here before the gallery publishes it). The manifest `source` and each `gallery` block
+ * keep describing the pinned gallery commit, so they are never touched. Returns the files it changed.
+ */
+export async function rehashSnapshot(catalogsRoot) {
+  const manifestFile = path.join(catalogsRoot, "manifest.json");
+  const manifest = await readJson(manifestFile);
+  const changed = [];
+  for (const { kind } of SNAPSHOT_KINDS) {
+    const entry = manifest.kinds?.[kind];
+    if (!entry) continue;
+    const { index, records } = await readSnapshotKind(catalogsRoot, kind);
+    const contentSha256 = catalogContentSha256(records);
+    if (index.contentSha256 !== contentSha256) {
+      await writeFile(path.join(catalogsRoot, kind, "index.json"), serializeJson({ ...index, contentSha256 }), "utf8");
+      changed.push(`${kind}/index.json`);
+    }
+    if (entry.contentSha256 !== contentSha256 || entry.records !== records.length) {
+      entry.contentSha256 = contentSha256;
+      entry.records = records.length;
+      changed.push(`manifest.json (${kind})`);
+    }
+  }
+  if (changed.some((name) => name.startsWith("manifest.json"))) await writeFile(manifestFile, serializeJson(manifest), "utf8");
+  return changed;
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const catalogsRoot = path.resolve(option(argv, "--catalogs") ?? defaultCatalogsRoot);
 
@@ -349,9 +380,17 @@ export async function main(argv = process.argv.slice(2)) {
     return;
   }
 
+  if (argv.includes("--rehash")) {
+    const changed = await rehashSnapshot(catalogsRoot);
+    const problems = await verifySnapshot(catalogsRoot);
+    if (problems.length > 0) throw new Error(`Default-catalog snapshot is still inconsistent after rehashing:\n${problems.join("\n")}`);
+    process.stdout.write(changed.length > 0 ? `Rehashed:\n${changed.join("\n")}\n` : "Hashes already match the records.\n");
+    return;
+  }
+
   const galleryDir = option(argv, "--gallery");
   const url = option(argv, "--url");
-  if (!galleryDir && !url) throw new Error("Pass --gallery <pptx-gallery checkout> or --url <base URL> (or --verify).");
+  if (!galleryDir && !url) throw new Error("Pass --gallery <pptx-gallery checkout> or --url <base URL> (or --verify or --rehash).");
   const readOnly = argv.includes("--check") || argv.includes("--report");
   if (argv.includes("--allow-dirty") && !readOnly) {
     throw new Error("--allow-dirty requires --check or --report; snapshot writes must pin committed catalog bytes.");

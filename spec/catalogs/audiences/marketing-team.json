@@ -19,5 +19,9 @@
     "persuasive",
     "authoritative"
   ],
-  "tags": ["internal", "go-to-market", "brand"]
+  "tags": ["internal", "go-to-market", "brand"],
+  "deprecation": {
+    "replacedBy": "marketing",
+    "reason": "Duplicate of 'marketing', the id pptx.gallery publishes. Kept so existing documents keep validating and rendering unchanged; use 'marketing' in new documents."
+  }
 }

@@ -19,5 +19,9 @@
     "authoritative",
     "persuasive"
   ],
-  "tags": ["leadership", "decision-making"]
+  "tags": ["leadership", "decision-making"],
+  "deprecation": {
+    "replacedBy": "executive",
+    "reason": "Duplicate of 'executive', the id pptx.gallery publishes. Kept so existing documents keep validating and rendering unchanged; use 'executive' in new documents."
+  }
 }

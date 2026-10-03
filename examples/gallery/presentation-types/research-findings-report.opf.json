@@ -5,9 +5,9 @@
   "filename": "research-findings-report",
   "language": "english-gb",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",

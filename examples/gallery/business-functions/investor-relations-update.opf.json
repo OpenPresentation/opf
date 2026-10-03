@@ -5,9 +5,9 @@
   "filename": "investor-relations-update",
   "language": "english-gb",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",

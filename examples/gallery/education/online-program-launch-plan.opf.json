@@ -5,9 +5,9 @@
   "filename": "online-program-launch-plan",
   "language": "english-gb",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",

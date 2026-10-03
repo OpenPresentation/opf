@@ -5,9 +5,9 @@
   "filename": "drive-thru-throughput-playbook",
   "language": "english-au",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "mixed",
       "decisionPower": "informational",

@@ -61,7 +61,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Audiences this narrative works well for, e.g. ['executives', 'investors', 'customers']."
+      "description": "Audiences this narrative works well for, e.g. ['executive', 'investor', 'customer']."
     },
     "durationRange": {
       "type": "object",

@@ -7,7 +7,7 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/latin-family-hosts.mjs",
-    "commit": "6b7924169ceb5376273cf9882fe85221d6cb6b76",
+    "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
     "runtime": "Node v26.7.0"
    },
    "families": {
@@ -904,7 +904,7 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/latin-family-hosts-browser.mjs",
-    "commit": "6b7924169ceb5376273cf9882fe85221d6cb6b76",
+    "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
     "runtime": "Node v26.7.0, Chromium-based browser 153.0.8010.12, offline"
    },
    "filesFetchedInTotal": 94,
@@ -1674,7 +1674,7 @@
    "source": {
     "repository": "OpenPresentation/opf-editor",
     "test": "test/font-gate-latin-families.mjs",
-    "commit": "e05c0e4d9db2caad266afba850cc286423f7e265",
+    "commit": "823f29dcfa57e78f965d4bfddda7eba83eaecfe4",
     "runtime": "Node v26.7.0, renderer 0.12.0, the editor's createFontGate"
    },
    "families": {
@@ -2426,7 +2426,7 @@
    "source": {
     "repository": "Data-Advantage/pptx-gallery",
     "test": "tests/editor-latin-families.test.ts",
-    "commit": "328b522c5d52ef5caa28f4f1a3327b310dbc50fb",
+    "commit": "3ea21c64ab0544be139289d768f6d4dc6c485ca5",
     "runtime": "renderer 0.12.0, manifest public/opf-editor/lazy-fonts.json (renderer 0.12.0)"
    },
    "families": {

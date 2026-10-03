@@ -19,7 +19,7 @@
   "language": "english",
   "narrative": "classic-story",
   "tone": "formal",
-  "audience": "executives",
+  "audience": "executive",
 
   "fontScheme": {
     "pptx":   { "latin": "aptos",  "ea": "microsoft-yahei", "cs": "nirmala-ui" },
