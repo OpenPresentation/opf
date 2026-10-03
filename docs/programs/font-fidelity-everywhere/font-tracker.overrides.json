@@ -2863,6 +2863,24 @@
         "label": "opf-render#95 (FF-45: emoji and math paths)",
         "url": "https://github.com/OpenPresentation/opf-render/pull/95"
       }
+    ],
+    "scriptHostFixtures": [
+      {
+        "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+        "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+      },
+      {
+        "label": "opf-render#114 (Node and browser script family fixtures)",
+        "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+      },
+      {
+        "label": "opf-editor#82 (editor font gate script family fixture)",
+        "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+      },
+      {
+        "label": "pptx-gallery#90 (gallery editor script family fixture)",
+        "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+      }
     ]
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
@@ -2986,6 +3004,7 @@
   },
   "qualificationReport": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
   "hostFixtureEvidence": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json",
+  "scriptHostFixtureEvidence": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json",
   "latinAcceptance": {
     "date": "2026-10-01",
     "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
@@ -3006,6 +3025,24 @@
       "documented-visual": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note."
     },
     "reasons": {}
+  },
+  "scriptAcceptance": {
+    "date": "2026-10-02",
+    "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+    "hosts": [
+      "node",
+      "browser",
+      "editor",
+      "galleryEditor"
+    ],
+    "evidence": [
+      "scriptHostFixtures",
+      "scriptCorpora",
+      "scriptCorporaEvidence"
+    ],
+    "nextActions": {
+      "qualified": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains."
+    }
   },
   "appearance": {
     "Aptos": {

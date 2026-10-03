@@ -14,7 +14,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | --- | ---: | --- | ---: | ---: |
 | layouts | 485 | done 100, descoped 385 | 485 | 0 |
 | color-schemes | 14 | done 14 | 14 | 0 |
-| font-schemes | 93 | done 11, descoped 3, parity-near 19, font-gap 60 | 93 | 0 |
+| font-schemes | 93 | done 35, descoped 3, parity-near 19, font-gap 36 | 93 | 0 |
 | languages | 93 | done 66, parity-near 2, font-gap 25 | 93 | 0 |
 | backgrounds | 6 | done 6 | 6 | 0 |
 | narratives | 48 | done 48 | 48 | 0 |
@@ -27,19 +27,19 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | blocks | 32 | done 24, parity-near 8 | 32 | 0 |
 | image-treatments | 15 | done 15 | 15 | 0 |
 | purposes | 9 | done 9 | 9 | 0 |
-| fonts | 168 | done 84, font-gap 84 | 168 | 0 |
+| fonts | 168 | done 121, font-gap 47 | 168 | 0 |
 | slide-sizes | 7 | descoped 7 | 7 | 0 |
 | gallery-teasers | 1 | descoped 1 | 1 | 0 |
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 452 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 513 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 50 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
 | `descoped` | 397 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
 | `unknown` | 0 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 32 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
-| `font-gap` | 169 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
+| `font-gap` | 108 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
 | `missing-gallery` | 0 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
 | `missing-spec` | 0 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
@@ -75,10 +75,10 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | charts | `missing-export` (descoped) | 1 | `world` | export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-impo... | Parked for post-v1 by the owner (2026-10-01): the export stays on the clustered column fallback with a chart-data-adapted diagnostic; an offline native map export is the future work. | [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) |
 | blocks | `parity-near` | 8 | `agenda-overview`, `comparison-table`, `decision-brief`, `market-opportunity`, `milestone-timeline`, `qa-discussion`, `roadmap-timeline`, `team-grid` | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Segoe UI Semibold): Segoe UI Semibold -> Red Hat Display; fo... (and 1 other detail) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 | charts | `parity-near` (descoped) | 1 | `world` | reimport near (reimport: slides.0 chart re-imports as column, expected world (chart-data-adapted reported)) | Follows the parked export: the fallback column chart re-imports as column. | [opf-pptx#133](https://github.com/OpenPresentation/opf-pptx/issues/133) |
-| font-schemes | `font-gap` | 60 | `angsana-new`, `aparajita`, `arabic-typesetting`, `batang`, `daunpenh`, `david`, `dilleniaupc`, `fangsong`, `gautami`, `gisha`, `gungsuh`, `kalinga` and 48 more | Angsana New script-gap (and 58 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). | [RR-17](burndown.md) (in-progress) |
 | font-schemes | `parity-near` | 55 | `angsana-new`, `aparajita`, `arabic-typesetting`, `arial`, `batang`, `bookman`, `century-schoolbook`, `classic-editorial`, `consolas`, `constantia`, `daunpenh`, `david` and 43 more | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Angsana New): Angsana New -> Noto Sans Thai) (and 54 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
+| font-schemes | `font-gap` | 36 | `angsana-new`, `aparajita`, `arabic-typesetting`, `batang`, `daunpenh`, `david`, `dilleniaupc`, `fangsong`, `gautami`, `gisha`, `gungsuh`, `kalinga` and 24 more | Angsana New script-gap (and 35 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). | [RR-17](burndown.md) (in-progress) |
 | font-schemes | `missing-spec` (descoped) | 4 | `bold-impact`, `classic-editorial`, `modern-professional`, `warm-storytelling` | legacy gallery item not published in any OPF catalog | Decided (RR-41, 2026-10-02): publish the four legacy pairings gallery-first as schema-valid font schemes with app "Google Slides" (additive; retiring them would remove public pages), then sync and release core; tracked in opf#317. | [opf#317](https://github.com/OpenPresentation/opf/issues/317) |
-| fonts | `font-gap` | 84 | `Angsana New`, `Aparajita`, `Arabic Typesetting`, `Batang`, `BatangChe`, `Cambria Math`, `DaunPenh`, `David`, `DilleniaUPC`, `Ebrima`, `FangSong`, `Gautami` and 72 more | font tracker status script-gap (and 3 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). Each record names its own next action in the JSON (43 distinct). | [RR-17](burndown.md) (in-progress) |
+| fonts | `font-gap` | 47 | `Angsana New`, `Aparajita`, `Arabic Typesetting`, `Batang`, `BatangChe`, `Cambria Math`, `DaunPenh`, `David`, `DilleniaUPC`, `Ebrima`, `FangSong`, `Gautami` and 35 more | font tracker status script-gap (and 3 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). Each record names its own next action in the JSON (26 distinct). | [RR-17](burndown.md) (in-progress) |
 | gallery-teasers | `missing-gallery` (descoped) | 1 | `transitions-and-motion` | pptx.gallery home lists "Transitions & motion" as coming: Per-slide transitions and element-level animation tokens. | Navigation and motion are deferred out of v1 by the owner (2026-10-01). | [opf#250](https://github.com/OpenPresentation/opf/issues/250) |
 | languages | `parity-near` | 27 | `amharic`, `arabic`, `armenian`, `bengali`, `chinese-simplified`, `chinese-traditional`, `chittagonian`, `georgian`, `gujarati`, `hebrew`, `hindi`, `japanese` and 15 more | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Nyala): Nyala -> Noto Sans Ethiopic) (and 20 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 | languages | `font-gap` | 25 | `amharic`, `arabic`, `armenian`, `bengali`, `chinese-simplified`, `chinese-traditional`, `chittagonian`, `georgian`, `gujarati`, `hebrew`, `hindi`, `japanese` and 13 more | Nyala script-gap (and 19 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). | [RR-17](burndown.md) (in-progress) |

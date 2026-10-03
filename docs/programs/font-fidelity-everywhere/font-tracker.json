@@ -105,6 +105,66 @@
       "corpusStrings": 300,
       "lineBreakCases": 250
     },
+    "scriptHostFixtures": {
+      "file": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json",
+      "date": "2026-10-02",
+      "hosts": {
+        "node": {
+          "repository": "OpenPresentation/opf-render",
+          "test": "test/script-family-hosts.mjs",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
+          "families": 35,
+          "findings": 0
+        },
+        "browser": {
+          "repository": "OpenPresentation/opf-render",
+          "test": "test/script-family-hosts-browser.mjs",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
+          "families": 34,
+          "findings": 1
+        },
+        "editor": {
+          "repository": "OpenPresentation/opf-editor",
+          "test": "test/font-gate-script-families.mjs",
+          "commit": "823f29dcfa57e78f965d4bfddda7eba83eaecfe4",
+          "families": 35,
+          "findings": 0
+        },
+        "galleryEditor": {
+          "repository": "Data-Advantage/pptx-gallery",
+          "test": "tests/editor-script-families.test.ts",
+          "commit": "3ea21c64ab0544be139289d768f6d4dc6c485ca5",
+          "families": 35,
+          "findings": 0
+        }
+      },
+      "lazyBudget": {
+        "node": {
+          "families": 35,
+          "packageBytesMedianMiB": 0.35,
+          "packageBytesMaxMiB": 23.948,
+          "largestPackage": "Noto Color Emoji"
+        },
+        "browser": {
+          "families": 34,
+          "packageBytesMedianMiB": 0.35,
+          "packageBytesMaxMiB": 23.948,
+          "largestPackage": "Noto Color Emoji"
+        },
+        "editor": {
+          "families": 35,
+          "packageBytesMedianMiB": 0.35,
+          "packageBytesMaxMiB": 23.948,
+          "largestPackage": "Noto Color Emoji"
+        },
+        "galleryEditor": {
+          "families": 35,
+          "packageBytesMedianMiB": 0.35,
+          "packageBytesMaxMiB": 23.948,
+          "largestPackage": "Noto Color Emoji"
+        }
+      }
+    },
     "hostFixtures": {
       "file": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json",
       "date": "2026-10-01",
@@ -112,26 +172,26 @@
         "node": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/latin-family-hosts.mjs",
-          "commit": "1a7945f0e8570828a87739b26d4d9a6447e50452",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
           "families": 87
         },
         "browser": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/latin-family-hosts-browser.mjs",
-          "commit": "1a7945f0e8570828a87739b26d4d9a6447e50452",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
           "families": 87
         },
         "editor": {
           "repository": "OpenPresentation/opf-editor",
           "test": "test/font-gate-latin-families.mjs",
-          "commit": "e78fcbf44bd46d293e928e8e7bb23764f6fd884c",
+          "commit": "823f29dcfa57e78f965d4bfddda7eba83eaecfe4",
           "families": 87
         },
         "galleryEditor": {
           "repository": "Data-Advantage/pptx-gallery",
           "test": "tests/editor-latin-families.test.ts",
-          "commit": "d9a3d0097b5fbb2d6e26b9f6bbf61254b2f4ac24",
-          "families": 84
+          "commit": "3ea21c64ab0544be139289d768f6d4dc6c485ca5",
+          "families": 87
         }
       },
       "lazyBudget": {
@@ -157,11 +217,11 @@
           "familiesWithoutLazyFiles": 23
         },
         "galleryEditor": {
-          "families": 84,
+          "families": 87,
           "deckBytesMedianMiB": 0.414,
           "deckBytesMaxMiB": 2.964,
           "largestDeck": "Aptos Narrow",
-          "familiesWithoutLazyFiles": 20
+          "familiesWithoutLazyFiles": 23
         }
       }
     },
@@ -349,37 +409,37 @@
       "code-table": 3,
       "visual-gap": 2,
       "script-gap": 41,
-      "baseline-needed": 38,
+      "baseline-needed": 1,
       "metric-measured": 0,
       "documented-visual": 43,
-      "qualified": 41
+      "qualified": 78
     },
     "byPhase": {
-      "1": 38,
+      "1": 1,
       "2": 0,
       "3": 0,
       "4": 46,
-      "5": 84
+      "5": 121
     },
     "hostVerification": {
       "node": {
-        "verified": 121,
-        "unverified": 47,
+        "verified": 125,
+        "unverified": 43,
         "NA": 0
       },
       "browser": {
-        "verified": 121,
-        "unverified": 47,
+        "verified": 124,
+        "unverified": 44,
         "NA": 0
       },
       "editor": {
-        "verified": 87,
-        "unverified": 81,
+        "verified": 122,
+        "unverified": 46,
         "NA": 0
       },
       "galleryEditor": {
-        "verified": 84,
-        "unverified": 84,
+        "verified": 122,
+        "unverified": 46,
         "NA": 0
       },
       "galleryCards": {
@@ -1035,7 +1095,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 128
+        "rank": 91
       }
     },
     {
@@ -1758,7 +1818,7 @@
         "valuesAffected": 704,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 129
+        "rank": 92
       }
     },
     {
@@ -2268,7 +2328,7 @@
         "valuesAffected": 704,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 130
+        "rank": 93
       }
     },
     {
@@ -2506,7 +2566,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 121
+        "rank": 84
       }
     },
     {
@@ -2844,7 +2904,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 131
+        "rank": 94
       }
     },
     {
@@ -3182,7 +3242,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 132
+        "rank": 95
       }
     },
     {
@@ -3674,7 +3734,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 133
+        "rank": 96
       }
     },
     {
@@ -3955,7 +4015,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 134
+        "rank": 97
       }
     },
     {
@@ -4217,7 +4277,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 118
+        "rank": 81
       }
     },
     {
@@ -4491,7 +4551,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 122
+        "rank": 85
       }
     },
     {
@@ -4698,7 +4758,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 135
+        "rank": 98
       }
     },
     {
@@ -4920,7 +4980,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 136
+        "rank": 99
       }
     },
     {
@@ -5759,7 +5819,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 137
+        "rank": 100
       }
     },
     {
@@ -5979,7 +6039,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 138
+        "rank": 101
       }
     },
     {
@@ -7018,7 +7078,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 139
+        "rank": 102
       }
     },
     {
@@ -7348,7 +7408,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 140
+        "rank": 103
       }
     },
     {
@@ -7599,7 +7659,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 123
+        "rank": 86
       }
     },
     {
@@ -8520,7 +8580,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 141
+        "rank": 104
       }
     },
     {
@@ -10200,7 +10260,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 142
+        "rank": 105
       }
     },
     {
@@ -10415,7 +10475,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 143
+        "rank": 106
       }
     },
     {
@@ -11085,7 +11145,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 124
+        "rank": 87
       }
     },
     {
@@ -11548,7 +11608,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 144
+        "rank": 107
       }
     },
     {
@@ -12229,7 +12289,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 145
+        "rank": 108
       }
     },
     {
@@ -13429,7 +13489,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 146
+        "rank": 109
       }
     },
     {
@@ -13718,7 +13778,7 @@
         "valuesAffected": 6,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 147
+        "rank": 110
       }
     },
     {
@@ -15595,7 +15655,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 148
+        "rank": 111
       }
     },
     {
@@ -15825,7 +15885,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 149
+        "rank": 112
       }
     },
     {
@@ -16051,7 +16111,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 150
+        "rank": 113
       }
     },
     {
@@ -16277,7 +16337,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 151
+        "rank": 114
       }
     },
     {
@@ -17207,7 +17267,7 @@
         "node": "verified",
         "browser": "verified",
         "editor": "verified",
-        "galleryEditor": "unverified",
+        "galleryEditor": "verified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
@@ -17241,11 +17301,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted yet: the fixture passes in node, browser, editor and is missing in galleryEditor (the host's pinned renderer or editor predates the family's route)."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Metric route: width mean 0% and maximum 0% in 4 styles, 100% of 250 wrap cases break at the same words (floor 99.5%); vertical metrics differ (recorded; the baseline is placed from the font size, not the font's ascent); x-height 1x, cap-height 1x of the original. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
@@ -17282,10 +17367,10 @@
         "expectedStatusOnMain": "metric-substitute",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "RR-17: Liberation Mono previews with Cousine (metric alias, 0.0000% against Liberation 2.1.5 in four styles). The fixture passes in the node, browser and editor hosts; the gallery editor accepts it once pptx.gallery pins an opf-render release that carries the alias (the first release with opf-render#92). No Liberation files are bundled (Reserved Font Name, about 4.4 MB). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf#165 (license and no-hotlink guards)",
@@ -17305,12 +17390,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 79
+        "hostFactor": 0.25,
+        "rank": 115
       }
     },
     {
@@ -17419,7 +17504,7 @@
         "node": "verified",
         "browser": "verified",
         "editor": "verified",
-        "galleryEditor": "unverified",
+        "galleryEditor": "verified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
@@ -17453,11 +17538,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted yet: the fixture passes in node, browser, editor and is missing in galleryEditor (the host's pinned renderer or editor predates the family's route)."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Metric route: width mean 0% and maximum 0% in 4 styles, 100% of 250 wrap cases break at the same words (floor 99.5%); vertical metrics differ (recorded; the baseline is placed from the font size, not the font's ascent); x-height 1x, cap-height 1x of the original. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
@@ -17494,10 +17604,10 @@
         "expectedStatusOnMain": "metric-substitute",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "RR-17: Liberation Sans previews with Arimo (metric alias, 0.0000% against Liberation 2.1.5 in four styles). The fixture passes in the node, browser and editor hosts; the gallery editor accepts it once pptx.gallery pins an opf-render release that carries the alias (the first release with opf-render#92). No Liberation files are bundled (Reserved Font Name, about 4.4 MB). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf#165 (license and no-hotlink guards)",
@@ -17517,12 +17627,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 80
+        "hostFactor": 0.25,
+        "rank": 116
       }
     },
     {
@@ -17631,7 +17741,7 @@
         "node": "verified",
         "browser": "verified",
         "editor": "verified",
-        "galleryEditor": "unverified",
+        "galleryEditor": "verified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
@@ -17665,11 +17775,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted yet: the fixture passes in node, browser, editor and is missing in galleryEditor (the host's pinned renderer or editor predates the family's route)."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Metric route: width mean 0% and maximum 0% in 4 styles, 100% of 250 wrap cases break at the same words (floor 99.5%); vertical metrics differ (recorded; the baseline is placed from the font size, not the font's ascent); x-height 1x, cap-height 1x of the original. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
@@ -17706,10 +17841,10 @@
         "expectedStatusOnMain": "metric-substitute",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "RR-17: Liberation Serif previews with Tinos (metric alias, 0.0000% against Liberation 2.1.5 in four styles). The fixture passes in the node, browser and editor hosts; the gallery editor accepts it once pptx.gallery pins an opf-render release that carries the alias (the first release with opf-render#92). No Liberation files are bundled (Reserved Font Name, about 4.4 MB). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the drawn behaviour of this family's slide in the RR-17 native check decks (rr-17-native/latin). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf#165 (license and no-hotlink guards)",
@@ -17729,12 +17864,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 81
+        "hostFactor": 0.25,
+        "rank": 117
       }
     },
     {
@@ -17945,7 +18080,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 152
+        "rank": 118
       }
     },
     {
@@ -18146,7 +18281,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 153
+        "rank": 119
       }
     },
     {
@@ -18386,7 +18521,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 125
+        "rank": 88
       }
     },
     {
@@ -18650,7 +18785,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 119
+        "rank": 82
       }
     },
     {
@@ -18894,7 +19029,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 126
+        "rank": 89
       }
     },
     {
@@ -19871,7 +20006,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 154
+        "rank": 120
       }
     },
     {
@@ -20409,7 +20544,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 127
+        "rank": 90
       }
     },
     {
@@ -21346,7 +21481,7 @@
         "valuesAffected": 5,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 155
+        "rank": 121
       }
     },
     {
@@ -22129,10 +22264,10 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
-        "browser": "unverified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -22166,11 +22301,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (emoji-pictographs, emoji-sequences) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -22188,10 +22348,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Bundled as the optional opf-render emoji pack (Zsye, opf-render#95); the preview face for Segoe UI Emoji, which has one regular face like Noto Color Emoji. Next: per-host verification of the emoji route and a colour raster path when resvg draws COLRv1 or the OT-SVG glyphs are inlined. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "Font licensing and policy table",
@@ -22207,12 +22367,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 82
+        "hostFactor": 0.25,
+        "rank": 122
       }
     },
     {
@@ -22276,11 +22436,17 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
+        "node": "verified",
         "browser": "unverified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
+      },
+      "hostFixtureFindings": {
+        "browser": {
+          "check": "Noto Emoji emoji-sequences: \"1️⃣❤️🏴󠁧󠁢󠁳󠁣󠁴󠁿\" advance 299.109375 differs from accepted 342.773",
+          "reason": "Chromium does not draw emoji-presentation sequences (VS16: the keycap 1️⃣, the red heart ❤️, the rainbow flag) with the monochrome Noto Emoji: each falls to another face at a 1.000 em advance, where the face and the renderer give 1.2695 em. The pictograph, flag, skin-tone, ZWJ and tag sequences draw in Noto Emoji at its own advance. The colour face (Noto Color Emoji) draws all of them. Noto Emoji is the raster stand-in and an alternate of Segoe UI Emoji, never the browser face of a Segoe UI Emoji run (the planner gives emoji runs to Noto Color Emoji)."
+        }
       },
       "hostLoading": {
         "node": "only when the scripts option is passed ('auto' or a script list; opf-render#55)",
@@ -22317,7 +22483,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "note": "Not accepted: the fixture recorded a finding in browser, and the check stays as strict as for every other family. browser: Chromium does not draw emoji-presentation sequences (VS16: the keycap 1️⃣, the red heart ❤️, the rainbow flag) with the monochrome Noto Emoji: each falls to another face at a 1.000 em advance, where the face and the renderer give 1.2695 em. The pictograph, flag, skin-tone, ZWJ and tag sequences draw in Noto Emoji at its own advance. The colour face (Noto Color Emoji) draws all of them. Noto Emoji is the raster stand-in and an alternate of Segoe UI Emoji, never the browser face of a Segoe UI Emoji run (the planner gives emoji runs to Noto Color Emoji)."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -22358,8 +22524,8 @@
         "severity": 1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 83
+        "hostFactor": 0.25,
+        "rank": 79
       }
     },
     {
@@ -22442,8 +22608,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -22477,11 +22643,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (arab-joining, arab-lam-alef, arab-harakat) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -22522,10 +22713,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (99.8% of the BMP script), measured advances equal HarfBuzz's on 24 of 24 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -22557,12 +22748,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 2,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 84
+        "hostFactor": 0.25,
+        "rank": 123
       }
     },
     {
@@ -22635,8 +22826,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -22670,11 +22861,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (arab-joining, arab-lam-alef, arab-digits) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -22715,10 +22931,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (23.7% of the BMP script), measured advances equal HarfBuzz's on 20 of 24 face-samples (4 recorded fontkit limits), Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. fontkit cannot position its marks (measured without mark positioning, up to 1 percent off); Urdu-only face. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -22750,12 +22966,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 85
+        "hostFactor": 0.25,
+        "rank": 124
       }
     },
     {
@@ -22852,8 +23068,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
@@ -22887,11 +23103,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (latn-vi, cyrl-ru, grek-title) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -22934,10 +23175,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (92.7% of the BMP script), measured advances equal HarfBuzz's on 54 of 54 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Covers the Latin, Cyrillic and Greek corpus; it is the glyph-fallback face for every other design font. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#57 (glyph fallback)",
@@ -22969,12 +23210,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.6,
-        "rank": 86
+        "hostFactor": 0.25,
+        "rank": 125
       }
     },
     {
@@ -23047,8 +23288,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -23082,11 +23323,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (arab-joining, arab-lam-alef, arab-harakat) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -23121,10 +23387,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (99.8% of the BMP script), measured advances equal HarfBuzz's on 24 of 24 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23152,12 +23418,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 87
+        "hostFactor": 0.25,
+        "rank": 126
       }
     },
     {
@@ -23230,8 +23496,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -23265,11 +23531,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (armn-title, armn-ligature, armn-punctuation) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -23310,10 +23601,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23345,12 +23636,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 88
+        "hostFactor": 0.25,
+        "rank": 127
       }
     },
     {
@@ -23432,8 +23723,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -23467,11 +23758,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (beng-title, beng-conjuncts, beng-reph) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -23512,10 +23828,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 12 of 12 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23547,12 +23863,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 89
+        "hostFactor": 0.25,
+        "rank": 128
       }
     },
     {
@@ -23636,8 +23952,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -23671,11 +23987,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (deva-title, deva-conjuncts, deva-reph) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -23716,10 +24057,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 18 of 18 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23751,12 +24092,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 90
+        "hostFactor": 0.25,
+        "rank": 129
       }
     },
     {
@@ -23836,8 +24177,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -23875,11 +24216,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (ethi-title, ethi-words, ethi-punctuation) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -23920,10 +24286,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23955,12 +24321,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 91
+        "hostFactor": 0.25,
+        "rank": 130
       }
     },
     {
@@ -24033,8 +24399,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -24068,11 +24434,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (geor-title, geor-mtavruli) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -24113,10 +24504,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 4 of 4 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -24148,12 +24539,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 92
+        "hostFactor": 0.25,
+        "rank": 131
       }
     },
     {
@@ -24233,8 +24624,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -24268,11 +24659,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (gujr-title, gujr-conjuncts, gujr-marks) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -24313,10 +24729,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -24348,12 +24764,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 93
+        "hostFactor": 0.25,
+        "rank": 132
       }
     },
     {
@@ -24433,8 +24849,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -24468,11 +24884,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (guru-title, guru-marks, guru-subjoined) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -24513,10 +24954,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -24548,12 +24989,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 94
+        "hostFactor": 0.25,
+        "rank": 133
       }
     },
     {
@@ -24635,8 +25076,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -24670,11 +25111,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (hebr-words, hebr-final-forms, hebr-niqqud) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -24715,10 +25181,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 12 of 12 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -24750,12 +25216,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 95
+        "hostFactor": 0.25,
+        "rank": 134
       }
     },
     {
@@ -24842,8 +25308,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -24877,11 +25343,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (jpan-prolonged, jpan-combining-dakuten, jpan-mixed-latin) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -24927,10 +25418,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of JIS X 0208), measured advances equal HarfBuzz's on 14 of 14 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -24962,12 +25453,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 96
+        "hostFactor": 0.25,
+        "rank": 135
       }
     },
     {
@@ -25047,8 +25538,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -25082,11 +25573,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (knda-title, knda-conjuncts, knda-vowels) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -25127,10 +25643,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (98.9% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -25162,12 +25678,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 97
+        "hostFactor": 0.25,
+        "rank": 136
       }
     },
     {
@@ -25249,8 +25765,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -25284,11 +25800,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (khmr-title, khmr-coeng, khmr-words) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -25329,10 +25870,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -25364,12 +25905,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 98
+        "hostFactor": 0.25,
+        "rank": 137
       }
     },
     {
@@ -25459,8 +26000,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -25494,11 +26035,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (kore-sentence, kore-jamo, kore-hanja) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -25544,10 +26110,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (98.4% of KS X 1001), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -25579,12 +26145,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 99
+        "hostFactor": 0.25,
+        "rank": 138
       }
     },
     {
@@ -25657,8 +26223,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -25692,11 +26258,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (laoo-words, laoo-marks) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -25731,10 +26322,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 4 of 4 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -25762,12 +26353,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 100
+        "hostFactor": 0.25,
+        "rank": 139
       }
     },
     {
@@ -25847,8 +26438,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -25882,11 +26473,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (mlym-title, mlym-chillu, mlym-conjuncts) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -25927,10 +26543,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -25962,12 +26578,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 101
+        "hostFactor": 0.25,
+        "rank": 140
       }
     },
     {
@@ -26032,10 +26648,10 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
-        "browser": "unverified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -26069,11 +26685,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (math-operators, math-alphanumerics) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -26091,10 +26732,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Pinned in the FF-45 math pack as the sans math face (glyph fallback for sans schemes) and alternate for Cambria Math. Next: tracker snapshot refresh after the render merge. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "Font licensing and policy table",
@@ -26110,12 +26751,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 102
+        "hostFactor": 0.25,
+        "rank": 141
       }
     },
     {
@@ -26181,8 +26822,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
@@ -26216,11 +26857,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (mong-words, mong-names, mong-latin) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -26260,10 +26926,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": true
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 3 of 3 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Shapes in fontkit since FF-44 groundwork (the undecodable GSUB lookup is skipped) and equals HarfBuzz; upstream ships Regular only, so bold requests draw regular. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -26295,12 +26961,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.6,
-        "rank": 103
+        "hostFactor": 0.25,
+        "rank": 142
       }
     },
     {
@@ -26373,8 +27039,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -26412,11 +27078,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (mymr-digits, mymr-words, mymr-medials) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -26451,10 +27142,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 2 of 6 face-samples (4 recorded fontkit limits), Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. fontkit has no Myanmar shaper (kinzi, medial ra): Myanmar words measure up to 3.5 percent wider than HarfBuzz; recorded limit. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -26482,12 +27173,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 104
+        "hostFactor": 0.25,
+        "rank": 143
       }
     },
     {
@@ -26567,8 +27258,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -26602,11 +27293,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (orya-title, orya-conjuncts, orya-nukta) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -26647,10 +27363,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -26682,12 +27398,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 105
+        "hostFactor": 0.25,
+        "rank": 144
       }
     },
     {
@@ -26774,8 +27490,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -26809,11 +27525,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (hans-mixed-latin, hans-sentence, hans-punctuation) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -26859,10 +27600,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (91.6% of GB 2312), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -26894,12 +27635,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 106
+        "hostFactor": 0.25,
+        "rank": 145
       }
     },
     {
@@ -26972,8 +27713,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -27007,11 +27748,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (sinh-title, sinh-conjuncts, sinh-vowels) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -27046,10 +27812,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 6 of 6 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -27077,12 +27843,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 107
+        "hostFactor": 0.25,
+        "rank": 146
       }
     },
     {
@@ -27155,8 +27921,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -27190,11 +27956,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (syrc-words, syrc-marks) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -27229,10 +28020,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (84.9% of the BMP script), measured advances equal HarfBuzz's on 2 of 4 face-samples (2 recorded fontkit limits), Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. fontkit mis-joins one Syriac word (1.6 percent narrower than HarfBuzz); recorded limit. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -27260,12 +28051,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 108
+        "hostFactor": 0.25,
+        "rank": 147
       }
     },
     {
@@ -27345,8 +28136,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -27380,11 +28171,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (taml-title, taml-split-vowels, taml-ligatures) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -27425,10 +28241,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 10 of 10 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -27460,12 +28276,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 109
+        "hostFactor": 0.25,
+        "rank": 148
       }
     },
     {
@@ -27551,8 +28367,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -27586,11 +28402,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (hant-bopomofo, hant-mixed-latin, hant-sentence) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -27636,10 +28477,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (99.3% of Big5 levels 1 and 2), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -27671,12 +28512,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 110
+        "hostFactor": 0.25,
+        "rank": 149
       }
     },
     {
@@ -27756,8 +28597,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -27791,11 +28632,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (telu-title, telu-conjuncts, telu-vowels) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -27836,10 +28702,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (99.0% of the BMP script), measured advances equal HarfBuzz's on 8 of 8 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -27871,12 +28737,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 111
+        "hostFactor": 0.25,
+        "rank": 150
       }
     },
     {
@@ -27949,8 +28815,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -27984,11 +28850,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (thaa-words, thaa-digits) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -28023,10 +28914,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 4 of 4 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -28054,12 +28945,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 112
+        "hostFactor": 0.25,
+        "rank": 151
       }
     },
     {
@@ -28141,8 +29032,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -28176,11 +29067,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (thai-title, thai-tone-marks, thai-sara-am) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -28221,10 +29137,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 14 of 14 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. PNG output of this script is mis-shaped by resvg-js (SVG is correct): raster limit, fixed by opf-render#97 once merged. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -28256,12 +29172,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 1,
         "valuesOpen": 0,
-        "hostFactor": 0.4,
-        "rank": 113
+        "hostFactor": 0.25,
+        "rank": 152
       }
     },
     {
@@ -28341,8 +29257,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "unverified"
       },
       "hostLoading": {
@@ -28376,11 +29292,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (hebr-words, hebr-final-forms, hebr-niqqud) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -28415,10 +29356,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 12 of 12 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -28446,12 +29387,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.6,
-        "rank": 114
+        "hostFactor": 0.25,
+        "rank": 153
       }
     },
     {
@@ -28524,8 +29465,8 @@
       "hostVerification": {
         "node": "verified",
         "browser": "verified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -28559,11 +29500,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (tibt-words, tibt-stacks) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -28598,10 +29564,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Native PowerPoint draws this family itself only where it is installed; the native check compares the typeface names in the file (FF-46). Script corpus 2026-10-01: complete own-script coverage (100.0% of the BMP script), measured advances equal HarfBuzz's on 4 of 4 face-samples, Chromium agrees within 0.1 px, loaded and drawn by the strict Node registry and the offline browser. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -28629,12 +29595,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 0.5,
-        "rank": 115
+        "hostFactor": 0.25,
+        "rank": 154
       }
     },
     {
@@ -29072,7 +30038,7 @@
         "valuesAffected": 7,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 156
+        "rank": 155
       }
     },
     {
@@ -29350,7 +30316,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 116
+        "rank": 80
       }
     },
     {
@@ -29572,7 +30538,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 157
+        "rank": 156
       }
     },
     {
@@ -29983,7 +30949,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 158
+        "rank": 157
       }
     },
     {
@@ -30215,7 +31181,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 159
+        "rank": 158
       }
     },
     {
@@ -30631,7 +31597,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 160
+        "rank": 159
       }
     },
     {
@@ -30883,7 +31849,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 161
+        "rank": 160
       }
     },
     {
@@ -31091,7 +32057,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 162
+        "rank": 161
       }
     },
     {
@@ -31314,7 +32280,7 @@
         "valuesAffected": 3,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 163
+        "rank": 162
       }
     },
     {
@@ -31520,7 +32486,7 @@
         "valuesAffected": 848,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 164
+        "rank": 163
       }
     },
     {
@@ -35681,7 +36647,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 165
+        "rank": 164
       }
     },
     {
@@ -35922,7 +36888,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 120
+        "rank": 83
       }
     },
     {
@@ -35993,10 +36959,10 @@
       "measurements": null,
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
-        "browser": "unverified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "NA"
       },
       "hostLoading": {
@@ -36030,11 +36996,36 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
+        "fixture": "Per-family script fixtures in node and browser (opf-render test/script-family-hosts.mjs, script-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-script-families.mjs) and the gallery editor manifest and loader (pptx-gallery tests/editor-script-families.test.ts): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in the family's own pinned file with no glyph fallback.",
+        "accepted": true,
+        "date": "2026-10-02",
+        "evidence": [
+          {
+            "label": "RR-17 per-family script, emoji and math host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json"
+          },
+          {
+            "label": "opf-render#114 (Node and browser script family fixtures)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/114"
+          },
+          {
+            "label": "opf-editor#82 (editor font gate script family fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/82"
+          },
+          {
+            "label": "pptx-gallery#90 (gallery editor script family fixture)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
+          },
+          {
+            "label": "Script corpora and per-family qualification (FF-44)",
+            "url": "docs/programs/font-fidelity-everywhere/script-corpora.md"
+          },
+          {
+            "label": "Script corpora evidence (2026-10-01)",
+            "url": "docs/evidence/script-corpora-20261001/README.md"
+          }
+        ],
+        "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (math-operators, math-alphanumerics, math-brackets) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-02-published-0.12.json",
@@ -36052,10 +37043,10 @@
         "expectedStatusOnMain": "real",
         "rerunNeeded": false
       },
-      "phase": 1,
-      "status": "baseline-needed",
-      "statusReason": "bundled with required styles; fresh per-host verification outstanding",
-      "nextAction": "Bundled as the optional opf-render math pack (Zmth, opf-render#95); the preview face for Cambria Math, which has one regular face like STIX Two Math. Next: per-host verification of the math route and the native Cambria Math comparison (FF-46). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "qualified",
+      "statusReason": "open family: fixtures in every host",
+      "nextAction": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "Font licensing and policy table",
@@ -36071,12 +37062,12 @@
         }
       ],
       "priority": {
-        "score": 1,
-        "severity": 1,
+        "score": 0.1,
+        "severity": 0.1,
         "valuesAffected": 0,
         "valuesOpen": 0,
-        "hostFactor": 1,
-        "rank": 117
+        "hostFactor": 0.25,
+        "rank": 165
       }
     },
     {
