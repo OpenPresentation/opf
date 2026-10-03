@@ -1,0 +1,67 @@
+name: Ecosystem lock roller
+# RR-50: tries the four OpenPresentation main branches together and, when the coordinated checks pass on them, proposes
+# the new ecosystem.lock.json as a pull request. It never writes main. scripts/ecosystem-roll.mjs explains every step;
+# docs/ecosystem-development.md explains the lock.
+#
+# Dispatch only until the owner installs the GitHub App (opf#298). Without the App the roller runs with GITHUB_TOKEN:
+# its pushes start no workflow and its pull requests start no checks, so the roller dispatches the check workflows on
+# its branch and waits for them itself (about 40 min), and this repository does not let GitHub Actions open pull
+# requests today, so a green roll ends with a compare link in the job summary for a maintainer to open.
+#
+# With the App: set the repository variable ECOSYSTEM_APP_ID and the secret ECOSYSTEM_APP_PRIVATE_KEY; the token
+# step below then runs and the roller opens the pull request itself (its normal pull_request checks decide). Then
+# uncomment the schedule (the one-line switch), and let the siblings send `repository_dispatch` (type
+# `ecosystem-main-updated`) after each merge to main.
+on:
+  workflow_dispatch:
+    inputs:
+      wait-minutes:
+        description: Longest wait for the dispatched checks (minutes)
+        default: '150'
+  # schedule:
+  #   - cron: '17 * * * *'
+  repository_dispatch:
+    types: [ecosystem-main-updated]
+  # A change to the roller runs its tests and a read-only plan once (a new workflow cannot be dispatched before it is on main).
+  pull_request:
+    paths: ['.github/workflows/ecosystem-roll.yml', 'scripts/ecosystem-roll.mjs', 'scripts/ecosystem-roll.test.mjs']
+permissions:
+  contents: read
+concurrency:
+  group: ecosystem-roll-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+jobs:
+  roll:
+    name: Roll the ecosystem lock
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: write # force-move ecosystem-roll/main and commit the candidate lock on it
+      actions: write # dispatch the check workflows on that branch (GITHUB_TOKEN dispatches do start runs)
+      pull-requests: write # open or update the roll pull request (refused today by the repository setting)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check the roller and the lock
+        run: node --test scripts/ecosystem-lock.test.mjs scripts/ecosystem-roll.test.mjs && node scripts/ecosystem-lock.mjs validate
+      # Runs only once the App is configured (opf#298); until then the roller uses GITHUB_TOKEN.
+      - name: GitHub App token
+        id: app
+        if: vars.ECOSYSTEM_APP_ID != '' && github.event_name != 'pull_request'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ vars.ECOSYSTEM_APP_ID }}
+          private-key: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
+      - name: Plan only (pull request; reads, writes nothing)
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/ecosystem-roll.mjs plan --lock ecosystem.lock.json
+      - name: Try the four mains and propose the lock
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          ROLLER_TOKEN_KIND: ${{ steps.app.outputs.token && 'app' || 'github-token' }}
+          WAIT_MINUTES: ${{ inputs.wait-minutes || '150' }}
+        run: node scripts/ecosystem-roll.mjs run --wait-minutes "$WAIT_MINUTES"
