@@ -39,6 +39,11 @@ jobs:
       # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
       - name: Check the test quarantine
         run: node --test scripts/quarantine.test.mjs scripts/browser-suites.test.mjs && node scripts/quarantine.mjs check
+      # RR-46: a reminder, never a failure: src/ changed without a changelog fragment (changes/README.md).
+      - name: Changelog fragment
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
