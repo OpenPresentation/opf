@@ -1,0 +1,1064 @@
+{
+ "schema": "opf-script-family-samples/v1",
+ "description": "Samples that exercise each open script, emoji and math family of the opf-render `scripts` pack (RR-17, FF-44, FF-45). Each sample is original short text from the FF-44 script corpora (opf-render test/fixtures/script-corpora.json, MIT; no third-party prose) or an FF-45 emoji sequence or math notation, chosen by opf-render test/script-family-fixture.mjs: the samples that every face of the family covers completely, so a deck of them needs no glyph fallback. The samples make no claim of translation quality; they exist to exercise shaping.",
+ "families": {
+  "Noto Sans JP": {
+   "package": "@expo-google-fonts/noto-sans-jp",
+   "scripts": [
+    "Jpan"
+   ],
+   "samples": [
+    {
+     "id": "jpan-prolonged",
+     "script": "Jpan",
+     "text": "コンピューター サーバー ッ ャ ュ ョ ぁ ぃ",
+     "lang": "ja",
+     "language": "ja",
+     "rtl": false
+    },
+    {
+     "id": "jpan-combining-dakuten",
+     "script": "Jpan",
+     "text": "が が ぱ ぱ ガ ガ",
+     "lang": "ja",
+     "language": "ja",
+     "rtl": false
+    },
+    {
+     "id": "jpan-mixed-latin",
+     "script": "Jpan",
+     "text": "Q3 2026 の概要と OPF の計画",
+     "lang": "ja",
+     "language": "ja",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans SC": {
+   "package": "@expo-google-fonts/noto-sans-sc",
+   "scripts": [
+    "Hans"
+   ],
+   "samples": [
+    {
+     "id": "hans-mixed-latin",
+     "script": "Hans",
+     "text": "2026 年 Q3 报告 (OPF)",
+     "lang": "zh-Hans",
+     "language": "zh-Hans",
+     "rtl": false
+    },
+    {
+     "id": "hans-sentence",
+     "script": "Hans",
+     "text": "季度回顾：销售额同比增长百分之十二。",
+     "lang": "zh-Hans",
+     "language": "zh-Hans",
+     "rtl": false
+    },
+    {
+     "id": "hans-punctuation",
+     "script": "Hans",
+     "text": "，。！？；：“引号”（括号）《书名》、",
+     "lang": "zh-Hans",
+     "language": "zh-Hans",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans TC": {
+   "package": "@expo-google-fonts/noto-sans-tc",
+   "scripts": [
+    "Hant"
+   ],
+   "samples": [
+    {
+     "id": "hant-bopomofo",
+     "script": "Hant",
+     "text": "ㄅㄆㄇㄈ ㄉㄊㄋㄌ ˊˇˋ˙ 注音符號",
+     "lang": "zh-Hant",
+     "language": "zh-Hant",
+     "rtl": false
+    },
+    {
+     "id": "hant-mixed-latin",
+     "script": "Hant",
+     "text": "2026 年 Q3 報告 (OPF)",
+     "lang": "zh-Hant",
+     "language": "zh-Hant",
+     "rtl": false
+    },
+    {
+     "id": "hant-sentence",
+     "script": "Hant",
+     "text": "季度回顧：銷售額年增百分之十二。",
+     "lang": "zh-Hant",
+     "language": "zh-Hant",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans KR": {
+   "package": "@expo-google-fonts/noto-sans-kr",
+   "scripts": [
+    "Kore"
+   ],
+   "samples": [
+    {
+     "id": "kore-sentence",
+     "script": "Kore",
+     "text": "분기별 검토: 매출이 전년 대비 12퍼센트 증가했습니다.",
+     "lang": "ko",
+     "language": "ko",
+     "rtl": false
+    },
+    {
+     "id": "kore-jamo",
+     "script": "Kore",
+     "text": "한글 한글",
+     "lang": "ko",
+     "language": "ko",
+     "rtl": false
+    },
+    {
+     "id": "kore-hanja",
+     "script": "Kore",
+     "text": "大韓民國 대한민국 (大韓民國)",
+     "lang": "ko",
+     "language": "ko",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Arabic": {
+   "package": "@expo-google-fonts/noto-sans-arabic",
+   "scripts": [
+    "Arab"
+   ],
+   "samples": [
+    {
+     "id": "arab-joining",
+     "script": "Arab",
+     "text": "مراجعة ربع سنوية للمبيعات",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    },
+    {
+     "id": "arab-lam-alef",
+     "script": "Arab",
+     "text": "الإنسان لا يعيش بالخبز وحده",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    },
+    {
+     "id": "arab-harakat",
+     "script": "Arab",
+     "text": "مَرْحَبًا بِكُمْ فِي الْعَرْضِ",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Naskh Arabic": {
+   "package": "@expo-google-fonts/noto-naskh-arabic",
+   "scripts": [
+    "Arab"
+   ],
+   "samples": [
+    {
+     "id": "arab-joining",
+     "script": "Arab",
+     "text": "مراجعة ربع سنوية للمبيعات",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    },
+    {
+     "id": "arab-lam-alef",
+     "script": "Arab",
+     "text": "الإنسان لا يعيش بالخبز وحده",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    },
+    {
+     "id": "arab-harakat",
+     "script": "Arab",
+     "text": "مَرْحَبًا بِكُمْ فِي الْعَرْضِ",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Nastaliq Urdu": {
+   "package": "@expo-google-fonts/noto-nastaliq-urdu",
+   "scripts": [
+    "Arab"
+   ],
+   "samples": [
+    {
+     "id": "arab-joining",
+     "script": "Arab",
+     "text": "مراجعة ربع سنوية للمبيعات",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    },
+    {
+     "id": "arab-lam-alef",
+     "script": "Arab",
+     "text": "الإنسان لا يعيش بالخبز وحده",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    },
+    {
+     "id": "arab-digits",
+     "script": "Arab",
+     "text": "الفصل ٢٠٢٦ — نمو ١٢٫٥٪",
+     "lang": "ar",
+     "language": "ar",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Sans Hebrew": {
+   "package": "@expo-google-fonts/noto-sans-hebrew",
+   "scripts": [
+    "Hebr"
+   ],
+   "samples": [
+    {
+     "id": "hebr-words",
+     "script": "Hebr",
+     "text": "סקירה רבעונית של המכירות",
+     "lang": "he",
+     "language": "he",
+     "rtl": true
+    },
+    {
+     "id": "hebr-final-forms",
+     "script": "Hebr",
+     "text": "ךםןףץ כמנפצ שלום לכולם",
+     "lang": "he",
+     "language": "he",
+     "rtl": true
+    },
+    {
+     "id": "hebr-niqqud",
+     "script": "Hebr",
+     "text": "שָׁלוֹם עוֹלָם בְּרֵאשִׁית",
+     "lang": "he",
+     "language": "he",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Serif Hebrew": {
+   "package": "@expo-google-fonts/noto-serif-hebrew",
+   "scripts": [
+    "Hebr"
+   ],
+   "samples": [
+    {
+     "id": "hebr-words",
+     "script": "Hebr",
+     "text": "סקירה רבעונית של המכירות",
+     "lang": "he",
+     "language": "he",
+     "rtl": true
+    },
+    {
+     "id": "hebr-final-forms",
+     "script": "Hebr",
+     "text": "ךםןףץ כמנפצ שלום לכולם",
+     "lang": "he",
+     "language": "he",
+     "rtl": true
+    },
+    {
+     "id": "hebr-niqqud",
+     "script": "Hebr",
+     "text": "שָׁלוֹם עוֹלָם בְּרֵאשִׁית",
+     "lang": "he",
+     "language": "he",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Sans Devanagari": {
+   "package": "@expo-google-fonts/noto-sans-devanagari",
+   "scripts": [
+    "Deva"
+   ],
+   "samples": [
+    {
+     "id": "deva-title",
+     "script": "Deva",
+     "text": "हिन्दी भाषा में तिमाही समीक्षा",
+     "lang": "hi",
+     "language": "hi",
+     "rtl": false
+    },
+    {
+     "id": "deva-conjuncts",
+     "script": "Deva",
+     "text": "विज्ञान क्षत्रिय श्रीमान द्वार पुस्तक धर्म",
+     "lang": "hi",
+     "language": "hi",
+     "rtl": false
+    },
+    {
+     "id": "deva-reph",
+     "script": "Deva",
+     "text": "कार्य सूर्य वर्ष दर्शन कर्म",
+     "lang": "hi",
+     "language": "hi",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Bengali": {
+   "package": "@expo-google-fonts/noto-sans-bengali",
+   "scripts": [
+    "Beng"
+   ],
+   "samples": [
+    {
+     "id": "beng-title",
+     "script": "Beng",
+     "text": "বাংলা ভাষায় ত্রৈমাসিক পর্যালোচনা",
+     "lang": "bn",
+     "language": "bn",
+     "rtl": false
+    },
+    {
+     "id": "beng-conjuncts",
+     "script": "Beng",
+     "text": "ক্ষ জ্ঞ স্ত ন্দ ব্যবহার প্রশ্ন",
+     "lang": "bn",
+     "language": "bn",
+     "rtl": false
+    },
+    {
+     "id": "beng-reph",
+     "script": "Beng",
+     "text": "কর্ম ধর্ম সূর্য বর্ষা",
+     "lang": "bn",
+     "language": "bn",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Gurmukhi": {
+   "package": "@expo-google-fonts/noto-sans-gurmukhi",
+   "scripts": [
+    "Guru"
+   ],
+   "samples": [
+    {
+     "id": "guru-title",
+     "script": "Guru",
+     "text": "ਪੰਜਾਬੀ ਭਾਸ਼ਾ ਵਿੱਚ ਤਿਮਾਹੀ ਸਮੀਖਿਆ",
+     "lang": "pa",
+     "language": "pa-Guru",
+     "rtl": false
+    },
+    {
+     "id": "guru-marks",
+     "script": "Guru",
+     "text": "ਸ਼ ਖ਼ ਗ਼ ਜ਼ ਫ਼ ਲ਼ ਅੱਖ ਕੁੱਤਾ ਹੈ ਹਨ",
+     "lang": "pa",
+     "language": "pa-Guru",
+     "rtl": false
+    },
+    {
+     "id": "guru-subjoined",
+     "script": "Guru",
+     "text": "ਪ੍ਰਸ਼ਨ ਸ੍ਰੀ ਦ੍ਰਿਸ਼ਟੀ",
+     "lang": "pa",
+     "language": "pa-Guru",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Gujarati": {
+   "package": "@expo-google-fonts/noto-sans-gujarati",
+   "scripts": [
+    "Gujr"
+   ],
+   "samples": [
+    {
+     "id": "gujr-title",
+     "script": "Gujr",
+     "text": "ગુજરાતી ભાષામાં ત્રિમાસિક સમીક્ષા",
+     "lang": "gu",
+     "language": "gu",
+     "rtl": false
+    },
+    {
+     "id": "gujr-conjuncts",
+     "script": "Gujr",
+     "text": "જ્ઞાન ક્ષ શ્રી દ્વારા કાર્ય સૂર્ય",
+     "lang": "gu",
+     "language": "gu",
+     "rtl": false
+    },
+    {
+     "id": "gujr-marks",
+     "script": "Gujr",
+     "text": "કિ કી કુ કૂ કે કૈ કો કૌ કં કઃ કઁ",
+     "lang": "gu",
+     "language": "gu",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Oriya": {
+   "package": "@expo-google-fonts/noto-sans-oriya",
+   "scripts": [
+    "Orya"
+   ],
+   "samples": [
+    {
+     "id": "orya-title",
+     "script": "Orya",
+     "text": "ଓଡ଼ିଆ ଭାଷାରେ ତ୍ରୈମାସିକ ସମୀକ୍ଷା",
+     "lang": "or",
+     "language": "or",
+     "rtl": false
+    },
+    {
+     "id": "orya-conjuncts",
+     "script": "Orya",
+     "text": "କ୍ଷ ଜ୍ଞ ଶ୍ରୀ ପ୍ରଶ୍ନ ବିଦ୍ୟା",
+     "lang": "or",
+     "language": "or",
+     "rtl": false
+    },
+    {
+     "id": "orya-nukta",
+     "script": "Orya",
+     "text": "ଡ଼ ଢ଼ ୟ କି କୀ କୁ କୂ କେ କୈ କୋ କୌ",
+     "lang": "or",
+     "language": "or",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Tamil": {
+   "package": "@expo-google-fonts/noto-sans-tamil",
+   "scripts": [
+    "Taml"
+   ],
+   "samples": [
+    {
+     "id": "taml-title",
+     "script": "Taml",
+     "text": "தமிழ் மொழியில் காலாண்டு மதிப்பாய்வு",
+     "lang": "ta",
+     "language": "ta",
+     "rtl": false
+    },
+    {
+     "id": "taml-split-vowels",
+     "script": "Taml",
+     "text": "கொ கோ கௌ கெ கே கை",
+     "lang": "ta",
+     "language": "ta",
+     "rtl": false
+    },
+    {
+     "id": "taml-ligatures",
+     "script": "Taml",
+     "text": "க்ஷ ஸ்ரீ ஜ ஷ ஸ ஹ",
+     "lang": "ta",
+     "language": "ta",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Telugu": {
+   "package": "@expo-google-fonts/noto-sans-telugu",
+   "scripts": [
+    "Telu"
+   ],
+   "samples": [
+    {
+     "id": "telu-title",
+     "script": "Telu",
+     "text": "తెలుగు భాషలో త్రైమాసిక సమీక్ష",
+     "lang": "te",
+     "language": "te",
+     "rtl": false
+    },
+    {
+     "id": "telu-conjuncts",
+     "script": "Telu",
+     "text": "క్ష జ్ఞ స్త్ర క్త ప్ర శ్రీ",
+     "lang": "te",
+     "language": "te",
+     "rtl": false
+    },
+    {
+     "id": "telu-vowels",
+     "script": "Telu",
+     "text": "కి కీ కు కూ కె కే కై కొ కో కౌ",
+     "lang": "te",
+     "language": "te",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Kannada": {
+   "package": "@expo-google-fonts/noto-sans-kannada",
+   "scripts": [
+    "Knda"
+   ],
+   "samples": [
+    {
+     "id": "knda-title",
+     "script": "Knda",
+     "text": "ಕನ್ನಡ ಭಾಷೆಯಲ್ಲಿ ತ್ರೈಮಾಸಿಕ ವಿಮರ್ಶೆ",
+     "lang": "kn",
+     "language": "kn",
+     "rtl": false
+    },
+    {
+     "id": "knda-conjuncts",
+     "script": "Knda",
+     "text": "ಕ್ಷ ಜ್ಞ ಸ್ತ್ರ ಪ್ರ ಶ್ರೀ ಕ್ತ",
+     "lang": "kn",
+     "language": "kn",
+     "rtl": false
+    },
+    {
+     "id": "knda-vowels",
+     "script": "Knda",
+     "text": "ಕಿ ಕೀ ಕು ಕೂ ಕೆ ಕೇ ಕೈ ಕೊ ಕೋ ಕೌ",
+     "lang": "kn",
+     "language": "kn",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Malayalam": {
+   "package": "@expo-google-fonts/noto-sans-malayalam",
+   "scripts": [
+    "Mlym"
+   ],
+   "samples": [
+    {
+     "id": "mlym-title",
+     "script": "Mlym",
+     "text": "മലയാള ഭാഷയിൽ ത്രൈമാസ അവലോകനം",
+     "lang": "ml",
+     "language": "ml",
+     "rtl": false
+    },
+    {
+     "id": "mlym-chillu",
+     "script": "Mlym",
+     "text": "കൺ ഇൻ കൽ വാർ കൾ",
+     "lang": "ml",
+     "language": "ml",
+     "rtl": false
+    },
+    {
+     "id": "mlym-conjuncts",
+     "script": "Mlym",
+     "text": "ക്ക ങ്ങ ന്ത ണ്ട ക്ഷ ശ്ശ സ്ത്ര",
+     "lang": "ml",
+     "language": "ml",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Sinhala": {
+   "package": "@expo-google-fonts/noto-sans-sinhala",
+   "scripts": [
+    "Sinh"
+   ],
+   "samples": [
+    {
+     "id": "sinh-title",
+     "script": "Sinh",
+     "text": "සිංහල භාෂාවෙන් කාර්තුමය සමාලෝචනය",
+     "lang": "si",
+     "language": "si",
+     "rtl": false
+    },
+    {
+     "id": "sinh-conjuncts",
+     "script": "Sinh",
+     "text": "ක්‍ෂ ශ්‍රී ක්‍ර ද්‍ය ත්‍ර",
+     "lang": "si",
+     "language": "si",
+     "rtl": false
+    },
+    {
+     "id": "sinh-vowels",
+     "script": "Sinh",
+     "text": "කි කී කු කූ කෙ කේ කො කෝ කෞ",
+     "lang": "si",
+     "language": "si",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Thai": {
+   "package": "@expo-google-fonts/noto-sans-thai",
+   "scripts": [
+    "Thai"
+   ],
+   "samples": [
+    {
+     "id": "thai-title",
+     "script": "Thai",
+     "text": "รายงานสรุปผลประจำไตรมาส",
+     "lang": "th",
+     "language": "th",
+     "rtl": false
+    },
+    {
+     "id": "thai-tone-marks",
+     "script": "Thai",
+     "text": "ที่ นี่ ผู้ เก็บ น้ำ ป่า ก๊อก",
+     "lang": "th",
+     "language": "th",
+     "rtl": false
+    },
+    {
+     "id": "thai-sara-am",
+     "script": "Thai",
+     "text": "สำนักงาน คำสั่ง น้ำใจ",
+     "lang": "th",
+     "language": "th",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Lao": {
+   "package": "@expo-google-fonts/noto-sans-lao",
+   "scripts": [
+    "Laoo"
+   ],
+   "samples": [
+    {
+     "id": "laoo-words",
+     "script": "Laoo",
+     "text": "ພາສາລາວ ສະບາຍດີ ຂອບໃຈ ປະເທດລາວ",
+     "lang": "lo",
+     "language": "lo",
+     "rtl": false
+    },
+    {
+     "id": "laoo-marks",
+     "script": "Laoo",
+     "text": "ນ້ຳ ໂຮງຮຽນ ຫຍັງ ຫມາ",
+     "lang": "lo",
+     "language": "lo",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Khmer": {
+   "package": "@expo-google-fonts/noto-sans-khmer",
+   "scripts": [
+    "Khmr"
+   ],
+   "samples": [
+    {
+     "id": "khmr-title",
+     "script": "Khmr",
+     "text": "ភាសាខ្មែរពិតជាស្រស់ស្អាត",
+     "lang": "km",
+     "language": "km",
+     "rtl": false
+    },
+    {
+     "id": "khmr-coeng",
+     "script": "Khmr",
+     "text": "ក្រុម ស្រី ខ្ញុំ ប្រទេសកម្ពុជា",
+     "lang": "km",
+     "language": "km",
+     "rtl": false
+    },
+    {
+     "id": "khmr-words",
+     "script": "Khmr",
+     "text": "សួស្តី អរគុណ ភាសាខ្មែរ",
+     "lang": "km",
+     "language": "km",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Myanmar": {
+   "package": "@expo-google-fonts/noto-sans-myanmar",
+   "scripts": [
+    "Mymr"
+   ],
+   "samples": [
+    {
+     "id": "mymr-digits",
+     "script": "Mymr",
+     "text": "၀၁၂၃၄၅၆၇၈၉ ၂၀၂၆",
+     "lang": "my",
+     "language": "my",
+     "rtl": false
+    },
+    {
+     "id": "mymr-words",
+     "script": "Mymr",
+     "text": "မြန်မာဘာသာ မင်္ဂလာပါ ကျေးဇူးတင်ပါတယ်",
+     "lang": "my",
+     "language": "my",
+     "rtl": false
+    },
+    {
+     "id": "mymr-medials",
+     "script": "Mymr",
+     "text": "ပြည်ထောင်စု မြန်မာနိုင်ငံ ကြောင်",
+     "lang": "my",
+     "language": "my",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Ethiopic": {
+   "package": "@expo-google-fonts/noto-sans-ethiopic",
+   "scripts": [
+    "Ethi"
+   ],
+   "samples": [
+    {
+     "id": "ethi-title",
+     "script": "Ethi",
+     "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+     "lang": "am",
+     "language": "am",
+     "rtl": false
+    },
+    {
+     "id": "ethi-words",
+     "script": "Ethi",
+     "text": "ሰላም ለዓለም ኢትዮጵያ",
+     "lang": "am",
+     "language": "am",
+     "rtl": false
+    },
+    {
+     "id": "ethi-punctuation",
+     "script": "Ethi",
+     "text": "አንድ፡ ሁለት፣ ሦስት። አራት፤ አምስት",
+     "lang": "am",
+     "language": "am",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Armenian": {
+   "package": "@expo-google-fonts/noto-sans-armenian",
+   "scripts": [
+    "Armn"
+   ],
+   "samples": [
+    {
+     "id": "armn-title",
+     "script": "Armn",
+     "text": "Հայերեն լեզու Երեւան Բարեւ Ձեզ",
+     "lang": "hy",
+     "language": "hy",
+     "rtl": false
+    },
+    {
+     "id": "armn-ligature",
+     "script": "Armn",
+     "text": "և ﬓ ﬔ եւ",
+     "lang": "hy",
+     "language": "hy",
+     "rtl": false
+    },
+    {
+     "id": "armn-punctuation",
+     "script": "Armn",
+     "text": "Ինչպե՞ս եք։ Շնորհակալություն՝ շատ։",
+     "lang": "hy",
+     "language": "hy",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Georgian": {
+   "package": "@expo-google-fonts/noto-sans-georgian",
+   "scripts": [
+    "Geor"
+   ],
+   "samples": [
+    {
+     "id": "geor-title",
+     "script": "Geor",
+     "text": "ქართული ენა გამარჯობა მადლობა",
+     "lang": "ka",
+     "language": "ka",
+     "rtl": false
+    },
+    {
+     "id": "geor-mtavruli",
+     "script": "Geor",
+     "text": "ᲥᲐᲠᲗᲣᲚᲘ ᲔᲜᲐ ᲒᲐᲛᲐᲠᲯᲝᲑᲐ",
+     "lang": "ka",
+     "language": "ka",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Mongolian": {
+   "package": "@expo-google-fonts/noto-sans-mongolian",
+   "scripts": [
+    "Mong"
+   ],
+   "samples": [
+    {
+     "id": "mong-words",
+     "script": "Mong",
+     "text": "ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ ᠪᠢᠴᠢᠭ",
+     "lang": "mn",
+     "language": "mn",
+     "rtl": false
+    },
+    {
+     "id": "mong-names",
+     "script": "Mong",
+     "text": "ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ ᠴᠢᠩᠭᠢᠰ ᠬᠠᠭᠠᠨ",
+     "lang": "mn",
+     "language": "mn",
+     "rtl": false
+    },
+    {
+     "id": "mong-latin",
+     "script": "Mong",
+     "text": "Font scheme preview 2026",
+     "lang": "mn",
+     "language": "mn",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Thaana": {
+   "package": "@expo-google-fonts/noto-sans-thaana",
+   "scripts": [
+    "Thaa"
+   ],
+   "samples": [
+    {
+     "id": "thaa-words",
+     "script": "Thaa",
+     "text": "ދިވެހި ބަސް ދިވެހިރާއްޖެ",
+     "lang": "dv",
+     "language": "dv",
+     "rtl": true
+    },
+    {
+     "id": "thaa-digits",
+     "script": "Thaa",
+     "text": "ދިވެހި 2026 ރިޕޯޓު",
+     "lang": "dv",
+     "language": "dv",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Sans Syriac": {
+   "package": "@expo-google-fonts/noto-sans-syriac",
+   "scripts": [
+    "Syrc"
+   ],
+   "samples": [
+    {
+     "id": "syrc-words",
+     "script": "Syrc",
+     "text": "ܠܫܢܐ ܣܘܪܝܝܐ ܫܠܡܐ",
+     "lang": "syr",
+     "language": "syr",
+     "rtl": true
+    },
+    {
+     "id": "syrc-marks",
+     "script": "Syrc",
+     "text": "ܐܲܒܵܐ ܡܸܢ ܫܡܲܝܵܐ",
+     "lang": "syr",
+     "language": "syr",
+     "rtl": true
+    }
+   ]
+  },
+  "Noto Serif Tibetan": {
+   "package": "@expo-google-fonts/noto-serif-tibetan",
+   "scripts": [
+    "Tibt"
+   ],
+   "samples": [
+    {
+     "id": "tibt-words",
+     "script": "Tibt",
+     "text": "བོད་སྐད། བཀྲ་ཤིས་བདེ་ལེགས།",
+     "lang": "bo",
+     "language": "bo",
+     "rtl": false
+    },
+    {
+     "id": "tibt-stacks",
+     "script": "Tibt",
+     "text": "རྒྱལ་པོ སྤྱི་ཚོགས གྲོང་ཁྱེར",
+     "lang": "bo",
+     "language": "bo",
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Color Emoji": {
+   "package": "@expo-google-fonts/noto-color-emoji",
+   "scripts": [
+    "Zsye"
+   ],
+   "samples": [
+    {
+     "id": "emoji-pictographs",
+     "script": "Zsye",
+     "text": "🚀👨‍👩‍👧‍👦🇩🇪👍🏽",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    },
+    {
+     "id": "emoji-sequences",
+     "script": "Zsye",
+     "text": "1️⃣❤️🏴󠁧󠁢󠁳󠁣󠁴󠁿👩🏾‍💻🏳️‍🌈",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Emoji": {
+   "package": "@expo-google-fonts/noto-emoji",
+   "scripts": [
+    "Zsye"
+   ],
+   "samples": [
+    {
+     "id": "emoji-pictographs",
+     "script": "Zsye",
+     "text": "🚀👨‍👩‍👧‍👦🇩🇪👍🏽",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    },
+    {
+     "id": "emoji-sequences",
+     "script": "Zsye",
+     "text": "1️⃣❤️🏴󠁧󠁢󠁳󠁣󠁴󠁿👩🏾‍💻🏳️‍🌈",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    }
+   ]
+  },
+  "STIX Two Math": {
+   "package": "@expo-google-fonts/stix-two-math",
+   "scripts": [
+    "Zmth"
+   ],
+   "samples": [
+    {
+     "id": "math-operators",
+     "script": "Zmth",
+     "text": "∑∫√≤∞≠≈",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    },
+    {
+     "id": "math-alphanumerics",
+     "script": "Zmth",
+     "text": "𝑎𝑏𝑐ℝℕℤαβγ",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    },
+    {
+     "id": "math-brackets",
+     "script": "Zmth",
+     "text": "⟨⟩⌈⌉⌊⌋〈〉",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans Math": {
+   "package": "@expo-google-fonts/noto-sans-math",
+   "scripts": [
+    "Zmth"
+   ],
+   "samples": [
+    {
+     "id": "math-operators",
+     "script": "Zmth",
+     "text": "∑∫√≤∞≠≈",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    },
+    {
+     "id": "math-alphanumerics",
+     "script": "Zmth",
+     "text": "𝑎𝑏𝑐ℝℕℤαβγ",
+     "lang": null,
+     "language": null,
+     "rtl": false
+    }
+   ]
+  },
+  "Noto Sans": {
+   "package": "@expo-google-fonts/noto-sans",
+   "scripts": [
+    "Latn",
+    "Cyrl",
+    "Grek"
+   ],
+   "samples": [
+    {
+     "id": "latn-vi",
+     "script": "Latn",
+     "text": "Tiếng Việt: Ăn quả nhớ kẻ trồng cây ướp ượt",
+     "lang": "vi",
+     "language": "vi-Latn",
+     "rtl": false
+    },
+    {
+     "id": "cyrl-ru",
+     "script": "Cyrl",
+     "text": "Квартальный обзор продаж: рост 12%",
+     "lang": "ru",
+     "language": "ru",
+     "rtl": false
+    },
+    {
+     "id": "grek-title",
+     "script": "Grek",
+     "text": "Τριμηνιαία ανασκόπηση πωλήσεων",
+     "lang": "el",
+     "language": "el",
+     "rtl": false
+    }
+   ]
+  }
+ }
+}
