@@ -62,6 +62,84 @@ the registry, a follow-up docs change updates `release-plan.json`, the
 compatibility matrix and the quickstart to the published set, and the gallery
 consumer dependencies are bumped.
 
+## Release train (scripted, RR-51)
+
+`scripts/release-train.mjs` runs the coordinated release above in lockstep order. It is run by the supervisor with
+their own `gh` login (or `GH_TOKEN`); every command is a dry run unless `--execute` is given. It only reads, opens
+release-prep pull requests and creates tags: it never merges a pull request and never publishes. Each package is still
+published by its own repository's trusted-publishing workflow (OIDC, `--provenance`) when its tag appears.
+
+Name the versions of the train, any subset: `--core X.Y.Z --render X.Y.Z --pptx X.Y.Z --editor X.Y.Z --cli X.Y.Z`.
+The order is always core, then opf-render, then opf-pptx, then opf-editor and the CLI.
+
+```sh
+# 1. What is missing (read only; exit 1 until every package is on npm)
+node scripts/release-train.mjs plan --core 0.12.1 --render 0.12.1 --pptx 0.12.3 --editor 0.11.3 --cli 0.10.1
+
+# 2. The release-prep PR of the next package, once its upstream is on npm (dry run first: a scratch clone and the diff)
+node scripts/release-train.mjs prep render --core 0.12.1 --render 0.12.1 [--item RR-nn]
+node scripts/release-train.mjs prep render --core 0.12.1 --render 0.12.1 --item RR-nn --execute
+
+# 3. After a person merged it with green CI: tag the release commit, wait for the publish run and npm, verify
+node scripts/release-train.mjs tag render --core 0.12.1 --render 0.12.1 --execute
+
+# 4. Verify any published version (also run by `tag` and `run`)
+node scripts/release-train.mjs verify @openpresentation/opf-render@0.12.1
+
+# Or the whole sequence: it stops at the first step that needs a person and prints the command to resume
+node scripts/release-train.mjs run --core 0.12.1 --render 0.12.1 --pptx 0.12.3 --editor 0.11.3 --cli 0.10.1 --execute
+```
+
+What each step checks:
+
+- `plan` reads, per package: whether the version is already on npm (then it is only verified), the version in the
+  manifest at `main`'s head, the release commit (the commit that set the version) and its merged release-prep PR, the
+  required checks on the release commit (the `main` ruleset's required checks; for a repository without a ruleset,
+  every reported check), the tag, whether the upstream versions of the train are on npm, and the dependency floors.
+  It flags every sibling whose `@openpresentation/opf` floor stays below a new core in the train, with hints from core's
+  fragments or changelog section: the tool cannot know whether a core release moves geometry, so the release owner
+  decides whether the lockstep rule below applies (flag, never decided).
+- `prep` refuses until every upstream version of the train is on npm. In a scratch clone of `main` it bumps the
+  version, runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z --date <today>` (with `--package opf` or
+  `--package cli` in core, `--summary` when given), raises the floors that name a package of the train (caret and
+  tilde ranges keep their operator; exact devDependency pins move to the exact version; `workspace:*` is untouched;
+  for the CLI, `PEER_RANGES` in `packages/cli/src/peers.ts` follows its peer ranges) and refreshes the lockfile
+  (`npm install --package-lock-only` in the siblings, `pnpm install --lockfile-only` in core). It fails if a fragment
+  for the package is left or if anything other than the manifest, changelog, fragments, lockfile and peers file
+  changed. The PR body lists README lines that name the previous version for a person to review; prose is not
+  rewritten. Branch `codex/release-<package>-<x-y-z>` unless `--branch` is given. An open release-prep PR (found by
+  branch or by a "release <package> X.Y.Z" title) or a merged one is detected and nothing is written.
+- `tag` re-verifies right before tagging: the version at the release commit, that the commit is on `main`, green
+  required checks, every upstream of the train on npm and every runtime floor naming a version npm has. It then creates
+  `refs/tags/<prefix>X.Y.Z` (`opf-v`, `opf-render-v`, `opf-pptx-v`, `opf-editor-v`, `cli-v`) with
+  `POST /repos/{repo}/git/refs` on the release commit, polls that repository's publish workflow run for the tag
+  (default every 120 s, up to 90 min), polls npm until the version is visible, and runs `verify`. A tag that already
+  exists on the release commit is not created again; one on another commit stops the train. A failed publish run stops
+  with its link: never move or re-push the tag; re-run a transient failure (`gh run rerun <id> --failed`), fix a real
+  one on `main` with a new version.
+- `verify` checks the registry manifest, that `gitHead` equals the tagged commit (and that the commit is on `main` and
+  carries the version), `dist.attestations` with the SLSA v1 provenance predicate, the provenance statement itself
+  (built by `.github/workflows/<publish workflow>` of the package's repository on `refs/tags/<tag>` from the tagged
+  commit, subject digest equal to `dist.integrity`), `npm audit signatures --include-attestations` in a scratch
+  project that installs exactly that version (no invalid or missing signatures; the package has a verified
+  attestation), and the GitHub release where the repository's workflow creates one (core only; the sibling and CLI
+  workflows create none). The dist-tag is reported for information.
+- `run` repeats `plan` per package in order and does the next step: verify what is on npm, stop at an open release-prep
+  PR, open a missing one (`prep`), wait for pending checks on a merged release commit, then `tag`. Re-running it after
+  a stop skips every step already done; a version already on npm is never published again.
+
+The follow-up docs PR (`release-plan.json`, the compatibility matrix and the quickstart) and the gallery consumer bumps
+stay by hand after the train.
+
+`.github/workflows/release-train.yml` is the same script as a `workflow_dispatch` (inputs: the versions and `mode`).
+Until the GitHub App of [opf#298](https://github.com/OpenPresentation/opf/issues/298) exists it is plan-only: tags
+pushed with a workflow's `GITHUB_TOKEN` start no other workflow (so the publish workflows would never run), and
+`GITHUB_TOKEN` cannot push branches or open pull requests in the sibling repositories, so `mode: execute` fails at
+once. With the App (`ECOSYSTEM_APP_ID` variable and `ECOSYSTEM_APP_PRIVATE_KEY` secret, the roller's App) `mode:
+execute` runs `run --execute` with the App's token.
+
+The steps by hand below remain the fallback when the script cannot run.
+
 ## Geometry-moving core releases: lockstep floors
 
 Core composition changes that move geometry (for example opf#169 cover centering) make the preview and the PPTX export drift when `@openpresentation/opf-render` and `@openpresentation/opf-pptx` resolve different core versions (measured: 186-300 pt title offsets on covers).
@@ -150,7 +228,8 @@ temporary fallback, and remove or revoke it once OIDC publishing works again.
 
 ## Verify The Release
 
-After the workflow completes, verify npm:
+`node scripts/release-train.mjs verify <package>@X.Y.Z` runs every registry check of this section and the provenance
+checks (see "Release train" above). By hand, after the workflow completes, verify npm:
 
 ```sh
 npm view @openpresentation/opf version
