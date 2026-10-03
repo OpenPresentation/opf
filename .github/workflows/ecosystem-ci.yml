@@ -629,18 +629,23 @@ jobs:
         run: |
           set -u
           status=0
+          find sharded unsharded -maxdepth 4 -name 'manifest.json' -o -maxdepth 4 -name '*.tgz' | sort
+          # upload-artifact roots the archive at the common ancestor of its paths, so locate the manifest.
           for run in sharded unsharded; do
-            echo "== $run manifest"; cat "$run/opf/artifacts/npm/manifest.json"
-            (cd "$run/opf/artifacts/npm" && sha256sum *.tgz | sort -k2) > "$run.sha256"
+            manifest=$(find "$run" -name manifest.json -path '*/npm/manifest.json' | head -n 1)
+            test -n "$manifest" || { echo "::error::no npm/manifest.json in $run"; exit 1; }
+            npm_dir=$(dirname "$manifest"); echo "$npm_dir" > "$run.dir"
+            echo "== $run manifest ($manifest)"; cat "$manifest"
+            (cd "$npm_dir" && sha256sum *.tgz | sort -k2) > "$run.sha256"
             : > "$run.contents"
-            for tgz in "$run"/opf/artifacts/npm/*.tgz; do
+            for tgz in "$npm_dir"/*.tgz; do
               echo "# $(basename "$tgz")" >> "$run.contents"
               tar -tvzf "$tgz" | sed -E 's/^([^ ]+) [^ ]+ +([0-9]+) [^ ]+ [^ ]+ (.*)$/\1 \2 \3/' | sort -k3 >> "$run.contents"
             done
           done
           diff sharded.sha256 unsharded.sha256 && echo 'Tarball digests identical.' || { echo '::error::Tarball digests differ'; status=1; }
           diff sharded.contents unsharded.contents && echo 'Tarball file lists and sizes identical.' || { echo '::error::Tarball contents differ'; status=1; }
-          diff <(jq -S . sharded/opf/artifacts/npm/manifest.json) <(jq -S . unsharded/opf/artifacts/npm/manifest.json) && echo 'manifest.json identical.' || { echo '::error::manifest.json differs'; status=1; }
+          diff <(jq -S . "$(cat sharded.dir)/manifest.json") <(jq -S . "$(cat unsharded.dir)/manifest.json") && echo 'manifest.json identical.' || { echo '::error::manifest.json differs'; status=1; }
           exit $status
   installed-portability:
     name: Installed candidates (${{ matrix.os }})
