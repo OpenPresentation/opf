@@ -1,6 +1,10 @@
 name: CI
 on:
   pull_request:
+  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
+  # pull_request payload, so the concurrency group falls back to its own gh-readonly-queue ref, and a
+  # queue run is never cancelled by a newer push.
+  merge_group:
   push:
     branches: [main]
   workflow_dispatch:
@@ -8,7 +12,7 @@ permissions:
   contents: read
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 jobs:
   package:
     runs-on: ${{ matrix.os }}
