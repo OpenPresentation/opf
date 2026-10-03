@@ -88,15 +88,24 @@
       "next": "Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead."
     },
     {
-      "id": "layouts-not-bundled",
+      "id": "layouts-subset-by-design",
       "gap": "missing-spec",
       "types": [
-        "layouts",
-        "font-schemes"
+        "layouts"
       ],
       "link": "https://github.com/OpenPresentation/opf/issues/292",
       "descoped": true,
-      "next": "Decide whether core bundles the gallery-only layouts (or keeps a permanent subset), and publish or retire the four legacy font pairings."
+      "next": "Decided (RR-41, 2026-10-02): core keeps the 100 bundled layouts on purpose. Bundling the other 385 adds 54 KB to the packed core but 382 KB (19 KB gzipped) to every renderer, editor and exporter browser bundle, which never read a layout record. They resolve through the default catalog online or an inline record. Revisit after opf#318 splits the catalogs module per kind."
+    },
+    {
+      "id": "legacy-font-pairings",
+      "gap": "missing-spec",
+      "types": [
+        "font-schemes"
+      ],
+      "link": "https://github.com/OpenPresentation/opf/issues/317",
+      "descoped": true,
+      "next": "Decided (RR-41, 2026-10-02): publish the four legacy pairings gallery-first as schema-valid font schemes with app \"Google Slides\" (additive; retiring them would remove public pages), then sync and release core; tracked in opf#317."
     },
     {
       "id": "slide-size-and-purpose-editor",
