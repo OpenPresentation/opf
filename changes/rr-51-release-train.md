@@ -1,0 +1,5 @@
+---
+type: added
+packages: []
+---
+RR-51 (repository tooling; no package change): `scripts/release-train.mjs` runs the coordinated release train in lockstep order (core, opf-render, opf-pptx, then opf-editor and the CLI) with the supervisor's own `gh` login. `plan` reports what is missing (release-prep PR merged, version at `main`, required checks on the release commit, upstream on npm, dependency floors, and flags the lockstep core-floor rule without deciding it); `prep` opens a release-prep PR once its upstream is on npm (version, `changelog-fragments.mjs assemble`, floors, lockfile); `tag` tags the re-verified release commit and waits for that repository's own publish workflow; `verify` checks the npm version, `gitHead` against the tag, the SLSA provenance statement, `npm audit signatures` and the GitHub release; `run` chains them, stops at the first step that needs a person and is idempotent. Dry run unless `--execute`; it never merges or publishes. `.github/workflows/release-train.yml` wraps it as a plan-only `workflow_dispatch` until the GitHub App of opf#298 exists. Runbook: `docs/release-process.md`, "Release train".
