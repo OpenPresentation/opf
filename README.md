@@ -177,3 +177,4 @@ The published JavaScript package copies package-addressable OPF schemas, catalog
 ## License
 
 MIT. See [LICENSE](./LICENSE).
+
