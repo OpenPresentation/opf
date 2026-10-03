@@ -26,6 +26,9 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-render
+      # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
+      - name: Check the test quarantine
+        run: node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check
       # FF-19 uses core resolveScriptFonts (FF-18) and paragraphDirection (#134); sibling pins
       # match core main's ecosystem-ci. Verify the released graph before using source links.
       # FF-29 pins merged core (opf#132) that adds composed item.alignment.
@@ -109,30 +112,16 @@ jobs:
       - run: npm run test:code
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
-      - run: npm run test:browser
-      # RR-28: <opf-deck> and the slideshow player in the pinned browser, offline (axe-core, speaker view, BroadcastChannel sync).
-      - run: npm run test:player-browser
-      - run: npm run test:export-browser
-      - run: npm run test:code-browser
-      - run: npm run test:font-preparation-browser
-      - run: npm run test:font-variants-browser
+      # RR-47: the browser commands are test/browser-suites.json; a quarantined test is deferred to the non-blocking step below.
+      # RR-28: <opf-deck> and the slideshow player (test:player-browser) run in the pinned browser, offline (axe-core, speaker view, BroadcastChannel sync).
+      - name: Browser suites
+        run: node scripts/quarantine.mjs run-suite browser
       # Variable-font native advance gate (#24, RR-15): 0.15 px by owner decision 2026-10-01, this check only.
       - run: npm run test:variable-font-gate
-      - run: npm run test:aptos-preview-browser
-      - run: npm run test:lazy-fonts-browser
-      - run: npm run test:extra-lazy-fonts-browser
-      - run: npm run test:latin-family-hosts-browser
-      - run: npm run test:lazy-face-fallback-browser
-      - run: npm run test:script-fonts-browser
-      - run: npm run test:script-fonts-auto-browser
-      - run: npm run test:emoji-math-browser
-      - run: npm run test:script-corpora-browser
-      - run: npm run test:symbol-fonts-browser
-      - run: npm run test:plain-whitespace-browser
-      - id: rich-flow
-        run: npm run test:rich-flow-browser
-      - if: ${{ success() || steps.rich-flow.conclusion == 'failure' }}
-        run: npm run test:rich-spacing-browser
+      - name: Font and script browser suites
+        run: node scripts/quarantine.mjs run-suite browser-fonts
+      - name: Rich text browser suites
+        run: node scripts/quarantine.mjs run-suite rich
       - name: Install and exercise coordinated candidate tarballs
         working-directory: opf
         run: |
@@ -147,6 +136,11 @@ jobs:
           node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
       - run: npm pack --dry-run
+      # RR-47: tests listed in test/quarantine.json run here, after every gate, and are reported without failing the job.
+      - name: Quarantined tests (non-blocking)
+        if: always()
+        continue-on-error: true
+        run: node scripts/quarantine.mjs run-deferred
       - name: Preserve candidate and raster evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -158,6 +152,7 @@ jobs:
             opf/artifacts/editor/*failure.png
             opf/artifacts/editor/*installed-code*.json
             opf-render/artifacts/golden/**
+            opf-render/artifacts/quarantine/**
             opf-render/artifacts/jpeg/browser/report.json
             opf-render/artifacts/quote-footer/browser/report.json
             opf-render/artifacts/font-preparation*.json

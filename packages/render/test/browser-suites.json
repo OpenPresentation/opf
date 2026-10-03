@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "suites": {
+    "browser": {
+      "description": "Browser suites of the CI package job before the variable-font gate (which stays a plain step: its tolerance is not quarantinable).",
+      "tests": [
+        {
+          "id": "browser:browser",
+          "command": "npm run test:browser"
+        },
+        {
+          "id": "browser:player-browser",
+          "command": "npm run test:player-browser"
+        },
+        {
+          "id": "browser:export-browser",
+          "command": "npm run test:export-browser"
+        },
+        {
+          "id": "browser:code-browser",
+          "command": "npm run test:code-browser"
+        },
+        {
+          "id": "browser:font-preparation-browser",
+          "command": "npm run test:font-preparation-browser"
+        },
+        {
+          "id": "browser:font-variants-browser",
+          "command": "npm run test:font-variants-browser"
+        }
+      ]
+    },
+    "browser-fonts": {
+      "description": "Font and script browser suites after the variable-font gate.",
+      "tests": [
+        {
+          "id": "browser:aptos-preview-browser",
+          "command": "npm run test:aptos-preview-browser"
+        },
+        {
+          "id": "browser:lazy-fonts-browser",
+          "command": "npm run test:lazy-fonts-browser"
+        },
+        {
+          "id": "browser:extra-lazy-fonts-browser",
+          "command": "npm run test:extra-lazy-fonts-browser"
+        },
+        {
+          "id": "browser:latin-family-hosts-browser",
+          "command": "npm run test:latin-family-hosts-browser"
+        },
+        {
+          "id": "browser:lazy-face-fallback-browser",
+          "command": "npm run test:lazy-face-fallback-browser"
+        },
+        {
+          "id": "browser:script-fonts-browser",
+          "command": "npm run test:script-fonts-browser"
+        },
+        {
+          "id": "browser:script-fonts-auto-browser",
+          "command": "npm run test:script-fonts-auto-browser"
+        },
+        {
+          "id": "browser:emoji-math-browser",
+          "command": "npm run test:emoji-math-browser"
+        },
+        {
+          "id": "browser:script-corpora-browser",
+          "command": "npm run test:script-corpora-browser"
+        },
+        {
+          "id": "browser:symbol-fonts-browser",
+          "command": "npm run test:symbol-fonts-browser"
+        },
+        {
+          "id": "browser:plain-whitespace-browser",
+          "command": "npm run test:plain-whitespace-browser"
+        }
+      ]
+    },
+    "rich": {
+      "description": "Rich text flow and spacing; the second runs even when the first fails, as in CI.",
+      "continueOnFailure": true,
+      "tests": [
+        {
+          "id": "browser:rich-flow-browser",
+          "command": "npm run test:rich-flow-browser"
+        },
+        {
+          "id": "browser:rich-spacing-browser",
+          "command": "npm run test:rich-spacing-browser"
+        }
+      ]
+    }
+  }
+}
