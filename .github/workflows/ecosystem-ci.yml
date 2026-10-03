@@ -1,6 +1,9 @@
 name: Coordinated public packages
 on:
   pull_request:
+  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
+  # pull_request payload (scripts/ecosystem-scope.mjs runs everything for it), and it is never cancelled.
+  merge_group:
   push:
     branches: [main]
   workflow_dispatch:
@@ -8,13 +11,219 @@ permissions:
   contents: read
 concurrency:
   group: ecosystem-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 env:
   OPF_RENDER_REF: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce
   OPF_EDITOR_REF: f4779dab851bc36cadca62f7c4b89c1dc9e17bf3
   OPF_PPTX_REF: 986d22bb1d455e9b1a9eb8c86d54328865893a25
 jobs:
+  # RR-45: the former single `packages` job is three parallel shards behind the `packages` aggregator, so the
+  # required check name stays. The commands are identical: scripts/package-ecosystem-plan.mjs lists them and
+  # scripts/package-ecosystem-plan.test.mjs proves the shards partition the unsharded list. Every shard keeps
+  # the docs-only gate (RR-40) in its own steps, so a skipped shard still succeeds and the aggregator reports.
+  # The required status check `packages` (ruleset 24382980). It always runs, even when a shard failed or was
+  # cancelled, and passes only when every shard succeeded. A shard that the docs-only gate skips step by step
+  # still succeeds; a shard that did not run at all (skipped job) is a failure here, never a silent pass.
   packages:
+    needs: [ecosystem-render, ecosystem-pptx-editor, ecosystem-core]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every ecosystem shard
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          echo "$RESULTS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+          if echo "$RESULTS" | jq -e 'to_entries | all(.value.result == "success")' >/dev/null; then
+            echo 'All ecosystem shards succeeded.'
+          else
+            echo '::error title=Ecosystem shard did not succeed::A shard failed, was cancelled or did not run; see the list above.'
+            exit 1
+          fi
+  ecosystem-render:
+    runs-on: ubuntu-latest
+    # Matches the renderer's locked Playwright 1.63.0, including Chromium and
+    # system libraries; avoids mutable apt repositories during browser setup.
+    container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: opf
+          fetch-depth: 0
+          persist-credentials: false
+      # RR-40: a pull request that only changes docs/programs or docs/evidence (no evidence decks) skips the
+      # checks below and reports success; scripts/ecosystem-scope.mjs lists the rule. Pushes to main always run.
+      - name: Decide whether this change needs the ecosystem checks
+        id: scope
+        working-directory: opf
+        run: node scripts/ecosystem-scope.mjs
+      # These commits are the coordinated checkpoint, not mutable default branches.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ env.OPF_RENDER_REF }}
+          path: opf-render
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-editor
+          ref: ${{ env.OPF_EDITOR_REF }}
+          path: opf-editor
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-pptx
+          ref: ${{ env.OPF_PPTX_REF }}
+          path: opf-pptx
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.scope.outputs.run == 'true'
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.scope.outputs.run == 'true'
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: opf/pnpm-lock.yaml
+      - name: Install locked dependencies
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-editor opf-pptx; do
+            npm ci --prefix "$repo"
+          done
+      - name: Build and link coordinated sources
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        run: |
+          pnpm build
+          node scripts/link-ecosystem.mjs --packages-only
+      - name: Renderer typecheck, validate, test, code and font checks against the linked core
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        env:
+          # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
+          # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
+          # RR-41: the bundled examples changed (plural audience ids moved to the singular ones), so their source digest is no longer the one the renderer's own
+          # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
+          # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-render
+      - name: Check scalar source whitespace and accepted browser advances
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf-render
+        run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
+      - name: Check physical font selections in an offline browser
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf-render
+        run: npm run test:font-variants-browser
+      - name: Preserve renderer evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ecosystem-render-evidence
+          path: |
+            opf-render/artifacts/golden/**
+            opf-render/artifacts/font-variants*.json
+            opf-render/artifacts/plain-whitespace-browser/**
+          retention-days: 7
+          if-no-files-found: ignore
+  ecosystem-pptx-editor:
+    runs-on: ubuntu-latest
+    # Matches the renderer's locked Playwright 1.63.0, including Chromium and
+    # system libraries; avoids mutable apt repositories during browser setup.
+    container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: opf
+          fetch-depth: 0
+          persist-credentials: false
+      # RR-40: a pull request that only changes docs/programs or docs/evidence (no evidence decks) skips the
+      # checks below and reports success; scripts/ecosystem-scope.mjs lists the rule. Pushes to main always run.
+      - name: Decide whether this change needs the ecosystem checks
+        id: scope
+        working-directory: opf
+        run: node scripts/ecosystem-scope.mjs
+      # These commits are the coordinated checkpoint, not mutable default branches.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ env.OPF_RENDER_REF }}
+          path: opf-render
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-editor
+          ref: ${{ env.OPF_EDITOR_REF }}
+          path: opf-editor
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-pptx
+          ref: ${{ env.OPF_PPTX_REF }}
+          path: opf-pptx
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.scope.outputs.run == 'true'
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.scope.outputs.run == 'true'
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: opf/pnpm-lock.yaml
+      - name: Install locked dependencies
+        if: steps.scope.outputs.run == 'true'
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-editor opf-pptx; do
+            npm ci --prefix "$repo"
+          done
+      - name: Build and link coordinated sources
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        run: |
+          pnpm build
+          node scripts/link-ecosystem.mjs --packages-only
+      - name: opf-pptx and opf-editor typecheck, validate, test, code and font checks against the linked core
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        env:
+          # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
+          # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
+          # RR-41: the bundled examples changed (plural audience ids moved to the singular ones), so their source digest is no longer the one the renderer's own
+          # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
+          # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-editor,opf-pptx
+      - name: Preserve opf-pptx evidence
+        if: always() && steps.scope.outputs.run == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ecosystem-pptx-editor-evidence
+          path: |
+            opf-pptx/artifacts/zip-date/**
+          retention-days: 7
+          if-no-files-found: ignore
+  ecosystem-core:
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.63.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
@@ -31,7 +240,7 @@ jobs:
       - name: Decide whether this change needs the ecosystem checks
         id: scope
         working-directory: opf
-        run: node --test scripts/ecosystem-scope.test.mjs && node scripts/ecosystem-scope.mjs
+        run: node --test scripts/ecosystem-scope.test.mjs scripts/package-ecosystem-plan.test.mjs && node scripts/ecosystem-scope.mjs
       # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
       - name: Check the test quarantine
         working-directory: opf
@@ -117,7 +326,7 @@ jobs:
           # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
           # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
-        run: pnpm test:packages
+        run: node scripts/test-package-ecosystem.mjs --skip-siblings
       - name: Verify installed type failure propagation
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
@@ -129,14 +338,6 @@ jobs:
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           # RR-47: the commands are test/browser-suites.json (installed-browser); a quarantined test is deferred to the non-blocking step below.
           node scripts/quarantine.mjs run-suite installed-browser
-      - name: Check scalar source whitespace and accepted browser advances
-        if: steps.scope.outputs.run == 'true'
-        working-directory: opf-render
-        run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
-      - name: Check physical font selections in an offline browser
-        if: steps.scope.outputs.run == 'true'
-        working-directory: opf-render
-        run: npm run test:font-variants-browser
       - name: Check accepted metric outlines and actual offline SVG ink
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
@@ -203,8 +404,6 @@ jobs:
             opf/artifacts/editor/rich-input-installed*.png
             opf/artifacts/editor/json-editor-registry.json
             opf/artifacts/npm/registry-consumer/fidelity/report.json
-            opf-render/artifacts/golden/**
-            opf-render/artifacts/font-variants*.json
             opf/artifacts/npm/consumer/artifacts/*font-variants*.json
             opf/artifacts/metric-outline-browser/**
             opf/artifacts/plain-whitespace-installed/**
@@ -214,16 +413,13 @@ jobs:
             opf/artifacts/furniture-fields-browser/**
             opf/artifacts/npm/renderer-absent-furniture/**
             opf/artifacts/npm/zip-date-candidate/**
-            opf-pptx/artifacts/zip-date/**
             opf/artifacts/timeline-acceptance.json
-            opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
           if-no-files-found: ignore
       - name: Report the verification boundary
         if: always() && steps.scope.outputs.run == 'true'
         run: |
           echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
-
   installed-portability:
     name: Installed candidates (${{ matrix.os }})
     runs-on: ${{ matrix.os }}

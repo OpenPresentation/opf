@@ -477,6 +477,18 @@ either way.
   baselines changed" re-run loop (6 failures this week, 20 to 30 min each).
 - **Risk.** Low. Regeneration must run only in the pinned image; the workflow
   refuses other runners.
+- **Result (RR-52, 2026-10-02).** Implemented in
+  [opf-render#115](https://github.com/OpenPresentation/opf-render/pull/115)
+  (`df50c98`): 13 baselines migrated byte-for-byte to one file per deck (1636
+  files), every `OPF_GOLDEN_BASELINE` selection still works, and the
+  regenerate-goldens workflow ran on GitHub
+  ([run 37082388962](https://github.com/OpenPresentation/opf-render/actions/runs/37082388962)).
+  Finding: the old single manifest already merged disjoint decks cleanly (0 of
+  400 trials, `scripts/golden-merge-demo.mjs`); the real conflict sources were
+  the README prepend and same-deck moves. Different-deck moves plus review notes
+  now merge cleanly; same-deck moves still conflict, but in one small file that
+  regeneration resolves. The lock seam for RR-50 is opf-render
+  `scripts/ecosystem-pins.mjs`.
 
 ### 7. Flake quarantine and measurement
 
