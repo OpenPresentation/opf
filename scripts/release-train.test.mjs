@@ -18,6 +18,7 @@ import {
   lockstepOrder,
   main,
   nextStep,
+  npmRegistry,
   packageOf,
   parseSpec,
   plan,
@@ -347,6 +348,152 @@ test("verify fails on a gitHead that is not the tag, foreign provenance, a missi
 
   const missing = await verify(fakeWorld().deps, packageOf("editor"), "9.9.9");
   assert.deepEqual(failed(missing), ["npm version"]);
+});
+
+// ---------------------------------------------------------------------------------------------------------------
+// verify: npm propagation (RR-51, the first live use for core 0.12.1)
+
+const failedChecks = (result) => result.checks.filter((check) => !check.ok).map((check) => check.name);
+const BUNDLE = "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.12.0";
+
+/** The attestation bundle answers HTTP 404 (null) for the first `times` fetches, as the registry did minutes after publish. */
+function bundleAppearsAfter(world, times) {
+  const bundle = world.attestations[BUNDLE];
+  let fetches = 0;
+  world.deps.npm.attestations = async () => {
+    fetches += 1;
+    return fetches > times ? bundle : null;
+  };
+  return () => fetches;
+}
+
+test("verify with a wait retries a 404 attestation bundle until it appears, and fails fast without one", async () => {
+  const world = publishedWorld();
+  const fetches = bundleAppearsAfter(world, 2);
+  const result = await verify(world.deps, packageOf("render"), "0.12.0", { waitMinutes: 15, pollSeconds: 30 });
+  assert.equal(result.ok, true, JSON.stringify(result.checks, null, 2));
+  assert.equal(fetches(), 3);
+  assert.equal(world.clock, 60_000, "two polls of 30 s");
+  assert.equal(world.logs.filter((line) => /waiting for npm to propagate the attestation bundle of @openpresentation\/opf-render@0\.12\.0 \(HTTP 404/.test(line)).length, 2);
+
+  const fast = publishedWorld();
+  bundleAppearsAfter(fast, 1);
+  const result404 = await verify(fast.deps, packageOf("render"), "0.12.0");
+  assert.deepEqual(failedChecks(result404), ["SLSA provenance"]);
+  assert.match(result404.checks.find((check) => check.name === "SLSA provenance").detail, /not served yet \(HTTP 404\)$/);
+  assert.equal(fast.clock, 0, "standalone verify does not wait unless asked");
+});
+
+test("verify with a wait retries a notarget scratch install until npm can serve the version", async () => {
+  const world = publishedWorld();
+  let installs = 0;
+  world.deps.npm.auditSignatures = (name, version) => {
+    installs += 1;
+    if (installs <= 2) return { ok: false, pending: true, error: `npm install failed: npm error code ETARGET npm error notarget No matching version found for ${name}@${version}.` };
+    return world.audit(name, version);
+  };
+  const result = await verify(world.deps, packageOf("render"), "0.12.0", { waitMinutes: 15, pollSeconds: 30 });
+  assert.equal(result.ok, true, JSON.stringify(result.checks, null, 2));
+  assert.equal(installs, 3);
+  assert.equal(world.clock, 60_000);
+
+  const fast = publishedWorld();
+  fast.deps.npm.auditSignatures = () => ({ ok: false, pending: true, error: "npm install failed: notarget" });
+  assert.deepEqual(failedChecks(await verify(fast.deps, packageOf("render"), "0.12.0")), ["npm audit signatures"]);
+  assert.equal(fast.clock, 0);
+});
+
+test("verify fails at once on provenance that is present but wrong, an invalid signature or an unrelated install failure, even with a wait", async () => {
+  const foreign = publishedWorld();
+  foreign.publish("render", "0.12.0", foreign.repos["opf-render"].head, { workflowRef: "refs/heads/main" });
+  const provenance = await verify(foreign.deps, packageOf("render"), "0.12.0", { waitMinutes: 15, pollSeconds: 30 });
+  assert.deepEqual(failedChecks(provenance), ["SLSA provenance"]);
+  assert.match(provenance.checks.find((check) => check.name === "SLSA provenance").detail, /does not match: ref refs\/heads\/main/);
+  assert.equal(foreign.clock, 0, "no wait");
+
+  const wrongCommit = publishedWorld();
+  wrongCommit.publish("render", "0.12.0", sha("another commit"));
+  assert.match((await verify(wrongCommit.deps, packageOf("render"), "0.12.0", { waitMinutes: 15 })).checks.find((check) => check.name === "SLSA provenance").detail, /source commit/);
+  assert.equal(wrongCommit.clock, 0);
+
+  const noSlsa = publishedWorld();
+  noSlsa.attestations[BUNDLE] = { attestations: [{ predicateType: "https://github.com/npm/attestation/tree/main/specs/publish/v0.1", bundle: {} }] };
+  const missingSlsa = await verify(noSlsa.deps, packageOf("render"), "0.12.0", { waitMinutes: 15 });
+  assert.match(missingSlsa.checks.find((check) => check.name === "SLSA provenance").detail, /no SLSA provenance in the attestation bundle/);
+  assert.equal(noSlsa.clock, 0, "a bundle that arrived without SLSA is final");
+
+  const invalid = publishedWorld();
+  invalid.audit = (name, version) => ({ ok: false, report: { invalid: [{ name, version }], missing: [], verified: [] } });
+  assert.deepEqual(failedChecks(await verify(invalid.deps, packageOf("render"), "0.12.0", { waitMinutes: 15 })), ["npm audit signatures"]);
+  assert.equal(invalid.clock, 0);
+
+  const other = publishedWorld();
+  other.deps.npm.auditSignatures = () => ({ ok: false, error: "npm install failed: EAI_AGAIN getaddrinfo" });
+  assert.deepEqual(failedChecks(await verify(other.deps, packageOf("render"), "0.12.0", { waitMinutes: 15 })), ["npm audit signatures"]);
+  assert.equal(other.clock, 0);
+});
+
+test("verify times out with a failing check that says the bundle or install never propagated", async () => {
+  const world = publishedWorld();
+  const fetches = bundleAppearsAfter(world, Infinity);
+  world.deps.npm.auditSignatures = () => ({ ok: false, pending: true, error: "npm install failed: notarget No matching version found" });
+  const result = await verify(world.deps, packageOf("render"), "0.12.0", { waitMinutes: 2, pollSeconds: 30 });
+  assert.deepEqual(failedChecks(result), ["SLSA provenance", "npm audit signatures"]);
+  assert.equal(fetches(), 5, "probes at 0, 30, 60, 90 and 120 s");
+  assert.equal(world.clock, 240_000, "two minutes for the bundle, then two for the install");
+  assert.match(result.checks.find((check) => check.name === "SLSA provenance").detail, /still not propagated after 2 min/);
+  assert.match(result.checks.find((check) => check.name === "npm audit signatures").detail, /notarget.*still not propagated after 2 min/);
+});
+
+test("npmRegistry flags a notarget install as pending and any other install failure as final", () => {
+  const exec = (stderr) => (command, args) => ({ status: args[0] === "install" ? 1 : 0, stdout: "", stderr });
+  const scratch = mkdtempSync(path.join(os.tmpdir(), "rt-audit-"));
+  try {
+    const lag = npmRegistry({ exec: exec("npm error code ETARGET\nnpm error notarget No matching version found for @openpresentation/opf@0.12.1.") }).auditSignatures("@openpresentation/opf", "0.12.1", { scratch });
+    assert.deepEqual([lag.ok, lag.pending], [false, true]);
+    const real = npmRegistry({ exec: exec("npm error code EINTEGRITY\nnpm error sha512 mismatch") }).auditSignatures("@openpresentation/opf", "0.12.1", { scratch });
+    assert.deepEqual([real.ok, real.pending], [false, false]);
+  } finally {
+    rmSync(scratch, { recursive: true, force: true });
+  }
+});
+
+test("tag --execute waits for the attestation bundle after the version appears, and --attest-wait-minutes 0 does not", async () => {
+  const { world, release } = readyWorld();
+  world.onRunsPoll = () => {
+    world.repos["opf-pptx"].runs = [{ id: 7, head_branch: "opf-pptx-v0.12.3", head_sha: release, status: "completed", conclusion: "success", html_url: "https://github.com/run/7" }];
+    world.publish("pptx", "0.12.3", release);
+    const bundle = world.attestations["https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.12.3"];
+    let fetches = 0;
+    world.deps.npm.attestations = async () => (++fetches > 3 ? bundle : null);
+  };
+  const result = await tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true });
+  assert.equal(result.status, "released");
+  assert.equal(world.clock, 90_000, "three 30 s polls waited for the bundle");
+
+  const impatient = readyWorld();
+  impatient.world.onRunsPoll = () => {
+    impatient.world.repos["opf-pptx"].runs = [{ id: 7, head_branch: "opf-pptx-v0.12.3", head_sha: impatient.release, status: "completed", conclusion: "success", html_url: "https://github.com/run/7" }];
+    impatient.world.publish("pptx", "0.12.3", impatient.release);
+    impatient.world.deps.npm.attestations = async () => null;
+  };
+  await assert.rejects(
+    tagRelease(impatient.world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true, attestWaitMinutes: 0 }),
+    (error) => error instanceof TrainStop && /is on npm but did not verify/.test(error.message),
+  );
+  assert.equal(impatient.world.clock, 0);
+});
+
+test("main: verify --wait <minutes> retries propagation, and a negative wait is refused", async () => {
+  const world = publishedWorld();
+  bundleAppearsAfter(world, 2);
+  assert.equal(await main(["verify", "render@0.12.0", "--wait", "5", "--attest-poll-seconds", "10"], world.deps), 0);
+  assert.equal(world.clock, 20_000);
+  const fast = publishedWorld();
+  bundleAppearsAfter(fast, 2);
+  assert.equal(await main(["verify", "render@0.12.0"], fast.deps), 1);
+  assert.equal(fast.clock, 0);
+  await assert.rejects(main(["verify", "render@0.12.0", "--wait", "-1"], fast.deps), /--wait must be a non-negative number/);
 });
 
 // ---------------------------------------------------------------------------------------------------------------

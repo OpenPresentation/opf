@@ -124,6 +124,16 @@ What each step checks:
   project that installs exactly that version (no invalid or missing signatures; the package has a verified
   attestation), and the GitHub release where the repository's workflow creates one (core only; the sibling and CLI
   workflows create none). The dist-tag is reported for information.
+  - Propagation: right after a publish, npm serves the packument (with `dist.attestations.url`) minutes before the
+    attestation bundle (HTTP 404 `{"error":"Not found"}`) and before a fresh `npm install` can resolve the version
+    (`notarget`, "No matching version found"); the first live use, core 0.12.1, failed `verify` on exactly these two
+    for 2-4 minutes. Only those two checks wait: `tag` and `run` retry the bundle fetch and the scratch install every
+    30 s (`--attest-poll-seconds`) for up to 15 min (`--attest-wait-minutes`; 0 turns the wait off) and say what they
+    wait for in the log. Any answer that is not "not yet there" fails at once without waiting: a bundle that is
+    present but has no SLSA provenance or names another repository, workflow, ref, commit or digest, an invalid or
+    missing signature, any other install error. If the wait runs out, the check fails with "still not propagated
+    after N min". Standalone `verify` keeps failing fast; `verify <package>@X.Y.Z --wait <minutes>` gives it the same
+    retry (for example right after a publish run you started by hand).
 - `run` repeats `plan` per package in order and does the next step: verify what is on npm, stop at an open release-prep
   PR, open a missing one (`prep`), wait for pending checks on a merged release commit, then `tag`. Re-running it after
   a stop skips every step already done; a version already on npm is never published again.

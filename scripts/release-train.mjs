@@ -15,9 +15,12 @@
 //       the release-prep PR of one package once its upstream is on npm: version bump, `changelog-fragments.mjs
 //       assemble`, dependency floors, lockfile refresh. Dry run: prepares a scratch clone and prints the diff.
 //   node scripts/release-train.mjs tag <package>[@X.Y.Z] [versions] [--execute] [--wait-minutes 90] [--poll-seconds 120]
-//       creates refs/tags/<prefix>X.Y.Z on the release commit (re-verified), waits for the publish run, then verifies
-//   node scripts/release-train.mjs verify <npm name or package>@X.Y.Z [--json]
-//       npm version, gitHead = tagged commit, SLSA provenance (bundle and `npm audit signatures`), GitHub release
+//                                   [--attest-wait-minutes 15] [--attest-poll-seconds 30]
+//       creates refs/tags/<prefix>X.Y.Z on the release commit (re-verified), waits for the publish run, then verifies,
+//       waiting up to --attest-wait-minutes for npm to serve the attestation bundle and the install (RR-51)
+//   node scripts/release-train.mjs verify <npm name or package>@X.Y.Z [--json] [--wait <minutes>]
+//       npm version, gitHead = tagged commit, SLSA provenance (bundle and `npm audit signatures`), GitHub release.
+//       Fails fast by default; --wait retries only the two propagation-sensitive checks (404 bundle, notarget install)
 //   node scripts/release-train.mjs run [versions] [--execute] [--item RR-nn]
 //       the whole sequence in lockstep order; stops at the first step that is not done (a PR to merge, a red check,
 //       a failed publish) with the command to resume. Idempotent: a step already done is detected and skipped, and a
@@ -45,6 +48,10 @@ export const PACKAGES = [
 ];
 export const PACKAGE_KEYS = PACKAGES.map((pkg) => pkg.key);
 const SLSA = "https://slsa.dev/provenance/v1";
+/** `npm install` output for a version that is in the packument but not yet installable (registry/CDN propagation lag). */
+/** Default bound (minutes) on waiting for npm's attestation bundle and installability after a publish (RR-51). */
+const ATTEST_WAIT_MINUTES = 15;
+const NOT_YET_SERVED = /\bnotarget\b|No matching version found/i;
 /** Check runs that are advisory and never gate a release (the merge watcher ignored the same one). */
 const ADVISORY_CHECKS = new Set(["Cursor Bugbot"]);
 const SCRIPT = "node scripts/release-train.mjs";
@@ -211,7 +218,11 @@ export function npmRegistry({ registry = "https://registry.npmjs.org", fetchImpl
       const dir = mkdtempSync(path.join(scratch ?? os.tmpdir(), "release-train-audit-"));
       writeFileSync(path.join(dir, "package.json"), `${JSON.stringify({ name: "release-train-audit", private: true, dependencies: { [name]: version } }, null, 2)}\n`);
       const install = exec("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", "--omit=peer", "--registry", registry], { cwd: dir });
-      if (install.status !== 0) return { ok: false, dir, error: `npm install failed: ${(install.stderr || install.stdout).trim().split("\n").slice(-3).join(" ")}` };
+      if (install.status !== 0) {
+        const output = `${install.stderr}\n${install.stdout}`;
+        // notarget / "No matching version": the packument names a version the registry's install path cannot serve yet.
+        return { ok: false, dir, pending: NOT_YET_SERVED.test(output), error: `npm install failed: ${(install.stderr || install.stdout).trim().split("\n").slice(-3).join(" ")}` };
+      }
       const audit = exec("npm", ["audit", "signatures", "--json", "--include-attestations", "--registry", registry], { cwd: dir });
       let report;
       try {
@@ -576,10 +587,34 @@ export function nextStep(result) {
 // ---------------------------------------------------------------------------------------------------------------
 // verify
 
-/** Checks one published package. Returns { ok, checks: [{ name, ok, detail }] }. */
-export async function verify(deps, pkg, version, { auditSignatures = true } = {}) {
+/**
+ * Retries `probe` while it reports { pending: true } (npm has not propagated what the packument already names), every
+ * `pollSeconds` for at most `waitMinutes`. Anything else, including a present-but-wrong result, returns at once.
+ * With waitMinutes 0 it probes once. A result still pending at the deadline comes back with `timedOut: true`.
+ */
+async function settle(deps, what, probe, { waitMinutes = 0, pollSeconds = 30 } = {}) {
+  const deadline = deps.now() + waitMinutes * 60_000;
+  for (;;) {
+    const result = await probe();
+    if (!result.pending) return result;
+    if (deps.now() >= deadline) return { ...result, timedOut: waitMinutes > 0 };
+    deps.log(`waiting for npm to propagate ${what} (${result.detail})...`);
+    await deps.sleep(pollSeconds * 1000);
+  }
+}
+
+const pendingNote = (result, waitMinutes) => (result.timedOut ? ` (still not propagated after ${waitMinutes} min)` : "");
+
+/**
+ * Checks one published package. Returns { ok, checks: [{ name, ok, detail }] }.
+ * The attestation bundle and the scratch install behind `npm audit signatures` lag the packument by minutes on a fresh
+ * publish (HTTP 404 / notarget). With `waitMinutes` > 0 only those two are retried while they report "not yet there";
+ * a bundle that is there but wrong, or an invalid signature, fails at once. Standalone verify defaults to no wait.
+ */
+export async function verify(deps, pkg, version, { auditSignatures = true, waitMinutes = 0, pollSeconds = 30 } = {}) {
   const checks = [];
   const add = (name, ok, detail) => checks.push({ name, ok, detail });
+  const patience = { waitMinutes, pollSeconds };
   const tag = tagOf(pkg, version);
   const manifest = await deps.npm.manifest(pkg.name, version);
   if (!manifest) {
@@ -599,9 +634,19 @@ export async function verify(deps, pkg, version, { auditSignatures = true } = {}
   const attestations = manifest.dist?.attestations;
   add("dist.attestations", attestations?.provenance?.predicateType === SLSA, attestations ? `${attestations.provenance?.predicateType ?? "no provenance predicate"} (${attestations.url})` : "the registry lists no attestations");
   if (attestations?.url) {
-    const bundle = await deps.npm.attestations(attestations.url);
-    const slsa = (bundle?.attestations ?? []).find((entry) => entry.predicateType === SLSA);
-    if (!slsa) add("SLSA provenance", false, "no SLSA provenance in the attestation bundle");
+    // A 404 (null) is the registry not serving the bundle yet; a bundle that arrives is judged at once.
+    const fetched = await settle(
+      deps,
+      `the attestation bundle of ${pkg.name}@${version}`,
+      async () => {
+        const bundle = await deps.npm.attestations(attestations.url);
+        return bundle ? { bundle } : { pending: true, detail: `HTTP 404 from ${attestations.url}` };
+      },
+      patience,
+    );
+    const slsa = (fetched.bundle?.attestations ?? []).find((entry) => entry.predicateType === SLSA);
+    if (fetched.pending) add("SLSA provenance", false, `the attestation bundle is not served yet (HTTP 404)${pendingNote(fetched, waitMinutes)}`);
+    else if (!slsa) add("SLSA provenance", false, "no SLSA provenance in the attestation bundle");
     else {
       const statement = JSON.parse(Buffer.from(slsa.bundle.dsseEnvelope.payload, "base64").toString("utf8"));
       const workflow = statement.predicate?.buildDefinition?.externalParameters?.workflow ?? {};
@@ -620,8 +665,17 @@ export async function verify(deps, pkg, version, { auditSignatures = true } = {}
     }
   }
   if (auditSignatures) {
-    const audit = deps.npm.auditSignatures(pkg.name, version, { scratch: deps.scratch });
-    if (!audit.report) add("npm audit signatures", false, audit.error);
+    // notarget / "No matching version" on the scratch install is propagation lag; any other failure is final.
+    const audit = await settle(
+      deps,
+      `${pkg.name}@${version} for \`npm audit signatures\``,
+      async () => {
+        const result = deps.npm.auditSignatures(pkg.name, version, { scratch: deps.scratch });
+        return result.pending ? { ...result, detail: result.error } : result;
+      },
+      patience,
+    );
+    if (!audit.report) add("npm audit signatures", false, `${audit.error}${pendingNote(audit, waitMinutes)}`);
     else {
       const own = (audit.report.verified ?? []).find((entry) => entry.name === pkg.name && entry.version === version);
       const invalid = audit.report.invalid ?? [];
@@ -676,7 +730,7 @@ async function publishRun(deps, pkg, tag, sha) {
  * Tags the release commit of pkg@version, waits for its publish run and the registry, then verifies. Re-verifies
  * everything first; skips what is done. Returns { status, ... }; throws TrainStop when it cannot go on.
  */
-export async function tagRelease(deps, pkg, version, train, { execute = false, waitMinutes = 90, pollSeconds = 120, npmPollSeconds = 30 } = {}) {
+export async function tagRelease(deps, pkg, version, train, { execute = false, waitMinutes = 90, pollSeconds = 120, npmPollSeconds = 30, attestWaitMinutes = ATTEST_WAIT_MINUTES, attestPollSeconds = 30 } = {}) {
   const tag = tagOf(pkg, version);
   const state = await packageState(deps, pkg, version, { ...train, [pkg.key]: version });
   if (state.step === "published") {
@@ -725,7 +779,8 @@ export async function tagRelease(deps, pkg, version, train, { execute = false, w
       );
   }
   await pollUntil(deps, `${pkg.name}@${version} on the registry`, async () => ({ done: Boolean(await deps.npm.manifest(pkg.name, version)) }), { waitMinutes: 30, pollSeconds: npmPollSeconds });
-  const verified = await verify(deps, pkg, version);
+  // The version is visible, but its attestation bundle and installability can lag by minutes: wait for those only.
+  const verified = await verify(deps, pkg, version, { waitMinutes: attestWaitMinutes, pollSeconds: attestPollSeconds });
   deps.log(formatVerify(pkg, version, verified));
   if (!verified.ok) throw new TrainStop(`${pkg.name}@${version} is on npm but did not verify (see above)`);
   return { status: "released", sha, tag, run: run.run.html_url, verified };
@@ -870,7 +925,7 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
 // run
 
 /** The whole train. Stops (TrainStop) at the first step that needs a person or failed; returns when all is verified. */
-export async function runTrain(deps, train, { execute = false, item, waitMinutes, pollSeconds, summary } = {}) {
+export async function runTrain(deps, train, { execute = false, item, waitMinutes, pollSeconds, summary, attestWaitMinutes, attestPollSeconds } = {}) {
   const args = trainArgs(train);
   const resume = `${SCRIPT} run ${args} --execute${item ? ` --item ${item}` : ""}`;
   const done = [];
@@ -878,7 +933,7 @@ export async function runTrain(deps, train, { execute = false, item, waitMinutes
     const version = train[pkg.key];
     const state = await packageState(deps, pkg, version, train);
     if (state.step === "published") {
-      const verified = await verify(deps, pkg, version);
+      const verified = await verify(deps, pkg, version, { waitMinutes: attestWaitMinutes ?? ATTEST_WAIT_MINUTES, pollSeconds: attestPollSeconds ?? 30 });
       deps.log(formatVerify(pkg, version, verified));
       if (!verified.ok) throw new TrainStop(`${pkg.name}@${version} is on npm but did not verify; fix what failed (never re-publish), then: ${resume}`);
       done.push(`${pkg.name}@${version}`);
@@ -905,7 +960,7 @@ export async function runTrain(deps, train, { execute = false, item, waitMinutes
         { waitMinutes: waitMinutes ?? 90, pollSeconds: pollSeconds ?? 120 },
       );
     }
-    const result = await tagRelease(deps, pkg, version, train, { execute, waitMinutes, pollSeconds });
+    const result = await tagRelease(deps, pkg, version, train, { execute, waitMinutes, pollSeconds, attestWaitMinutes, attestPollSeconds });
     if (!execute) {
       deps.log(`dry run stops here: ${pkg.name}@${version} must be on npm before the later packages.`);
       return { status: "dry-run", done, next: `${SCRIPT} tag ${pkg.key} ${args} --execute` };
@@ -958,9 +1013,9 @@ export function defaultDeps(overrides = {}) {
 const USAGE = `Usage: node scripts/release-train.mjs <command> [--core X.Y.Z] [--render X.Y.Z] [--pptx X.Y.Z] [--editor X.Y.Z] [--cli X.Y.Z]
   plan [--json]                         read-only state of the train and what is missing
   prep <package> [--execute] [--item RR-nn] [--branch b] [--summary s] [--date YYYY-MM-DD]
-  tag <package>[@X.Y.Z] [--execute] [--wait-minutes 90] [--poll-seconds 120]
-  verify <package>@X.Y.Z [--json]       e.g. @openpresentation/opf-pptx@0.12.2
-  run [--execute] [--item RR-nn]        the whole train in lockstep order
+  tag <package>[@X.Y.Z] [--execute] [--wait-minutes 90] [--poll-seconds 120] [--attest-wait-minutes 15] [--attest-poll-seconds 30]
+  verify <package>@X.Y.Z [--json] [--wait <minutes>] [--attest-poll-seconds 30]   e.g. @openpresentation/opf-pptx@0.12.2
+  run [--execute] [--item RR-nn]        the whole train in lockstep order (same wait options as tag)
 Packages: ${PACKAGE_KEYS.join(", ")} (or the repository or npm name). Without --execute nothing is written.`;
 
 export async function main(argv, deps = defaultDeps()) {
@@ -968,7 +1023,14 @@ export async function main(argv, deps = defaultDeps()) {
   const execute = args.includes("--execute");
   const json = args.includes("--json");
   const train = trainFromArgs(args);
-  const waits = { waitMinutes: Number(option(args, "--wait-minutes") ?? 90), pollSeconds: Number(option(args, "--poll-seconds") ?? 120) };
+  const attestPollSeconds = Number(option(args, "--attest-poll-seconds") ?? 30);
+  const waits = {
+    waitMinutes: Number(option(args, "--wait-minutes") ?? 90),
+    pollSeconds: Number(option(args, "--poll-seconds") ?? 120),
+    attestWaitMinutes: Number(option(args, "--attest-wait-minutes") ?? ATTEST_WAIT_MINUTES),
+    attestPollSeconds,
+  };
+  for (const [name, value] of Object.entries(waits)) if (!Number.isFinite(value) || value < 0) throw new Error(`${name} must be a non-negative number`);
   try {
     if (command === "plan") {
       const result = await plan(deps, train);
@@ -979,7 +1041,9 @@ export async function main(argv, deps = defaultDeps()) {
       if (!args[0] || args[0].startsWith("--")) throw new Error("verify needs <package>@X.Y.Z");
       const { pkg, version } = parseSpec(args[0]);
       if (!version) throw new Error("verify needs <package>@X.Y.Z");
-      const result = await verify(deps, pkg, version);
+      const wait = Number(option(args, "--wait") ?? 0);
+      if (!Number.isFinite(wait) || wait < 0) throw new Error("--wait must be a non-negative number of minutes");
+      const result = await verify(deps, pkg, version, { waitMinutes: wait, pollSeconds: attestPollSeconds });
       deps.log(json ? JSON.stringify(result, null, 2) : formatVerify(pkg, version, result));
       return result.ok ? 0 : 1;
     }
