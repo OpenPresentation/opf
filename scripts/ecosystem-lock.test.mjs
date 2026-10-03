@@ -3,7 +3,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { ancestry, goldenSelection, guard, handEditedPins, isSafeRelativePath, outputLines, parseLock, REPOSITORIES, readLock, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { ancestry, dependsOnOverrides, goldenSelection, guard, handEditedPins, isSafeRelativePath, outputLines, parseDependsOn, parseLock, pullRequestOfEvent, REPOSITORIES, readLock, resolveDependency, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const schema = JSON.parse(readFileSync(path.join(root, "scripts/ecosystem-lock.schema.json"), "utf8"));
@@ -160,4 +162,94 @@ test("the composite action runs this script from the same commit as the lock", (
   const action = readFileSync(path.join(root, ".github/actions/ecosystem-refs/action.yml"), "utf8");
   assert.match(action, /node "\$GITHUB_ACTION_PATH\/\.\.\/\.\.\/\.\.\/scripts\/ecosystem-lock\.mjs"/);
   for (const output of ["opf", "opf_render", "opf_pptx", "opf_editor", "golden", "lock_file"]) assert.match(action, new RegExp(`^  ${output}:\\n`, "m"), output);
+});
+
+test("Depends-On trailers: forms, fences, other repositories and duplicates", () => {
+  const body = [
+    "RR-99: something.",
+    "",
+    "Depends-On: OpenPresentation/opf#264",
+    "depends-on: https://github.com/OpenPresentation/opf-render/pull/120/, OpenPresentation/opf-pptx#7",
+    "  Depends-On: OpenPresentation/opf#264",
+    "```",
+    "Depends-On: OpenPresentation/opf-editor#1",
+    "```",
+    "~~~md",
+    "Depends-On: OpenPresentation/opf-editor#2",
+    "~~~",
+    "Text that mentions `Depends-On: OpenPresentation/opf-editor#3` inline does not count.",
+    "> Depends-On: OpenPresentation/opf-editor#4",
+    "Depends-On: Data-Advantage/pptx-gallery#89 OpenPresentation/opf-cli#1 opf-editor#5",
+    "Depends-On:",
+  ].join("\r\n");
+  const { dependencies, warnings } = parseDependsOn(body);
+  assert.deepEqual(dependencies, [
+    { repository: "opf", number: 264 },
+    { repository: "opf-render", number: 120 },
+    { repository: "opf-pptx", number: 7 },
+  ]);
+  assert.equal(warnings.length, 4);
+  assert.match(warnings[0], /Data-Advantage\/pptx-gallery#89 is not one of the ecosystem repositories/);
+  assert.match(warnings[1], /OpenPresentation\/opf-cli#1 is not one of the ecosystem repositories/);
+  assert.match(warnings[2], /"opf-editor#5" is not OpenPresentation/);
+  assert.match(warnings[3], /names no pull request/);
+  assert.deepEqual(parseDependsOn(null), { dependencies: [], warnings: [] });
+  assert.deepEqual(parseDependsOn("Depends-On: openpresentation/opf#1").dependencies, [{ repository: "opf", number: 1 }]);
+  assert.throws(() => parseDependsOn("Depends-On: OpenPresentation/opf#1\nDepends-On: OpenPresentation/opf#2"), /two pull requests of OpenPresentation\/opf/);
+});
+
+function pullsApi(pulls) {
+  return async (route) => {
+    const match = /^\/repos\/OpenPresentation\/([\w.-]+)\/pulls\/(\d+)$/.exec(route);
+    assert.ok(match, route);
+    const pull = pulls[`${match[1]}#${match[2]}`];
+    if (!pull) throw Object.assign(new Error("HTTP 404"), { status: 404 });
+    return pull;
+  };
+}
+
+test("a dependency resolves to its merge commit, its test merge commit or its head", async () => {
+  const api = pullsApi({
+    "opf#1": { state: "closed", merged_at: "2026-10-03T00:00:00Z", merge_commit_sha: sha("a"), head: { sha: sha("b") } },
+    "opf#2": { state: "open", mergeable: true, merge_commit_sha: sha("c"), head: { sha: sha("d") } },
+    "opf#3": { state: "open", mergeable: false, merge_commit_sha: sha("e"), head: { sha: sha("f") } },
+    "opf#4": { state: "open", mergeable: null, merge_commit_sha: null, head: { sha: sha("9") } },
+    "opf#5": { state: "closed", merged_at: null, merge_commit_sha: sha("8"), head: { sha: sha("7") } },
+  });
+  assert.equal((await resolveDependency(api, { repository: "opf", number: 1 })).ref, sha("a"));
+  assert.equal((await resolveDependency(api, { repository: "opf", number: 2 })).ref, sha("c"));
+  assert.equal((await resolveDependency(api, { repository: "opf", number: 3 })).ref, sha("f"));
+  assert.match((await resolveDependency(api, { repository: "opf", number: 4 })).source, /its head, because GitHub reports mergeable=null/);
+  await assert.rejects(resolveDependency(api, { repository: "opf", number: 5 }), /closed without merging/);
+});
+
+test("Depends-On overrides the lock for that repository only, reads the current body and ignores the consumer itself", async () => {
+  const api = pullsApi({
+    "opf-pptx#50": { body: "Depends-On: OpenPresentation/opf#2\nDepends-On: OpenPresentation/opf-pptx#50" },
+    "opf#2": { state: "open", mergeable: true, merge_commit_sha: sha("c"), head: { sha: sha("d") } },
+  });
+  const pullRequest = { repository: "OpenPresentation/opf-pptx", number: 50, body: "stale payload body" };
+  const { overrides, warnings, dependencies } = await dependsOnOverrides(api, pullRequest, "opf-pptx");
+  assert.deepEqual(Object.keys(overrides), ["opf"]);
+  assert.equal(dependencies.length, 1);
+  assert.match(warnings.join("\n"), /names this repository/);
+  assert.match(warnings.join("\n"), /OpenPresentation\/opf#2 is still open: merge it before this pull request/);
+  const resolved = resolveRefs(sampleLock(), { consumer: "opf-pptx", overrides });
+  assert.equal(resolved.refs.opf.ref, sha("c"));
+  assert.match(resolved.refs.opf.source, /Depends-On OpenPresentation\/opf#2/);
+  assert.equal(resolved.refs["opf-render"].ref, sha("2"));
+  assert.equal(resolved.refs["opf-editor"].ref, sha("4"));
+  // No pull request (push, merge_group, workflow_dispatch): the lock only.
+  assert.deepEqual(await dependsOnOverrides(api, undefined, "opf"), { overrides: {}, warnings: [], dependencies: [] });
+  // The body cannot be read: the event payload is used and the failure is reported.
+  const fallback = await dependsOnOverrides(pullsApi({}), { repository: "OpenPresentation/opf", number: 9, body: "no trailers" }, "opf");
+  assert.match(fallback.warnings[0], /using the event payload/);
+});
+
+test("only pull_request events carry a pull request", () => {
+  const directory = mkdtempSync(path.join(tmpdir(), "ecosystem-lock-"));
+  const eventPath = path.join(directory, "event.json");
+  writeFileSync(eventPath, JSON.stringify({ pull_request: { number: 12, body: "Depends-On: OpenPresentation/opf#1" } }));
+  assert.deepEqual(pullRequestOfEvent({ GITHUB_EVENT_NAME: "pull_request", GITHUB_EVENT_PATH: eventPath, GITHUB_REPOSITORY: "OpenPresentation/opf-editor" }), { repository: "OpenPresentation/opf-editor", number: 12, body: "Depends-On: OpenPresentation/opf#1" });
+  for (const event of ["push", "merge_group", "workflow_dispatch", "schedule"]) assert.equal(pullRequestOfEvent({ GITHUB_EVENT_NAME: event, GITHUB_EVENT_PATH: eventPath }), undefined, event);
 });
