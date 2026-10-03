@@ -6,14 +6,24 @@ on:
   merge_group:
   push:
     branches: [main]
+  # RR-53: the nightly full run. Together with the push to main it is the safety net while the merge queue is off (opf#297):
+  # a pull request runs the siblings' contract suites only; main and the nightly run their full suites. Scheduled runs use the default branch.
+  schedule:
+    - cron: '37 1 * * *'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: ecosystem-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
+  # The nightly run has its own group, so a push to main never cancels it (and it never cancels a push).
+  group: ecosystem-${{ github.event_name == 'schedule' && 'nightly-' || '' }}${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' && github.event_name != 'schedule' }}
 # RR-50: no hand-written pins. Every job reads the sibling commits and the golden baseline from ecosystem.lock.json
 # (written by the roller; docs/ecosystem-development.md) through .github/actions/ecosystem-refs.
+# RR-53, consumer-driven contracts (ci-cd.md, section 3): scripts/ecosystem-scope.mjs decides the `tier` output. A pull
+# request runs each sibling's `npm run test:contract` (the part of its suite that exercises core's APIs); merge_group,
+# push to main, the nightly schedule and manual runs run the sibling's full `npm test`. The roller's branch, a lock change,
+# a change to this tiering and the label `ecosystem-full` also run the full suites. No tier skips a check: every sibling
+# step still runs, only its depth differs, and nothing about a docs-only or contract-only change lowers a non-PR run.
 jobs:
   # RR-45: the former single `packages` job is three parallel shards behind the `packages` aggregator, so the
   # required check name stays. The commands are identical: scripts/package-ecosystem-plan.mjs lists them and
@@ -112,13 +122,13 @@ jobs:
         run: |
           pnpm build
           node scripts/link-ecosystem.mjs --packages-only
-      - name: Renderer typecheck, validate, test, code and font checks against the linked core
+      - name: Renderer typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
           # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
-        run: node scripts/test-package-ecosystem.mjs --siblings opf-render
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-render --tier ${{ steps.scope.outputs.tier }}
       - name: Check scalar source whitespace and accepted browser advances
         if: steps.scope.outputs.run == 'true'
         working-directory: opf-render
@@ -211,13 +221,13 @@ jobs:
         run: |
           pnpm build
           node scripts/link-ecosystem.mjs --packages-only
-      - name: opf-pptx and opf-editor typecheck, validate, test, code and font checks against the linked core
+      - name: opf-pptx and opf-editor typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
           # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
-        run: node scripts/test-package-ecosystem.mjs --siblings opf-editor,opf-pptx
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-editor,opf-pptx --tier ${{ steps.scope.outputs.tier }}
       - name: Preserve opf-pptx evidence
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -548,3 +558,40 @@ jobs:
             opf-pptx/artifacts/zip-date/**
           retention-days: 7
           if-no-files-found: ignore
+  # RR-53: while the merge queue is off (opf#297), the push to main and the nightly run are the only full-suite gates, so a
+  # failure there must be loud. The workflow run itself fails (the `packages` aggregator, or Installed candidates); this job also
+  # keeps one open issue labelled `main-red` per red period (a comment per further red run, closed by the next green one), which
+  # the supervisor polls: gh api 'repos/OpenPresentation/opf/issues?labels=main-red&state=open'. It never fails itself.
+  main-status:
+    needs: [packages, installed-portability]
+    if: always() && (github.event_name == 'push' || github.event_name == 'schedule')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Open, update or close the main-red issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PACKAGES: ${{ needs.packages.result }}
+          PORTABILITY: ${{ needs.installed-portability.result }}
+          EVENT: ${{ github.event_name }}
+          SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          echo "packages: $PACKAGES; installed-portability: $PORTABILITY"
+          open=$(gh api "repos/$REPO/issues?labels=main-red&state=open&per_page=1" --jq '.[0].number // empty')
+          if [ "$PACKAGES" = failure ] || [ "$PORTABILITY" = failure ]; then
+            body="The full coordinated ecosystem suites failed on $EVENT at $SHA: $RUN_URL (packages: $PACKAGES; installed candidates: $PORTABILITY). Pull requests only run the siblings' contract suites (RR-53), so this run is the gate for the rest; fix forward or revert. This issue closes itself on the next green push or nightly run."
+            if [ -n "$open" ]; then
+              gh api "repos/$REPO/issues/$open/comments" -f body="$body"
+            else
+              gh api "repos/$REPO/issues" -f title="Coordinated public packages is red on main" -f body="$body" -f 'labels[]=main-red'
+            fi
+            echo "::error title=Full ecosystem run failed::$EVENT run of Coordinated public packages is red; see the main-red issue and $RUN_URL"
+          elif [ "$PACKAGES" = success ] && [ "$PORTABILITY" = success ] && [ -n "$open" ]; then
+            gh api "repos/$REPO/issues/$open/comments" -f body="Green again on $EVENT at $SHA: $RUN_URL."
+            gh api -X PATCH "repos/$REPO/issues/$open" -f state=closed
+          fi
