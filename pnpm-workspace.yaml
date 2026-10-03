@@ -1,2 +1,8 @@
 packages:
   - "packages/*"
+
+# Moved from the package.json "pnpm" field, which pnpm 11 no longer reads (pnpm 10.33
+# still does, so the lockfile is unchanged). Same ranges and targets as before.
+overrides:
+  "esbuild@>=0.27.3 <0.28.1": "0.28.2"
+  "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
