@@ -8,11 +8,11 @@
     "auditA": "docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json",
     "auditB": "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json",
     "auditBExtra": [
-      "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-catalog-only.json"
+      "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json"
     ],
-    "parity": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-rr-16-font-size-grid.json",
+    "parity": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json",
     "parityExtra": [
-      "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-catalog-only.json"
+      "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12-catalog-only.json"
     ],
     "fontTracker": "docs/programs/font-fidelity-everywhere/font-tracker.json",
     "evidence": "docs/evidence",
@@ -22,7 +22,7 @@
     ],
     "burndown": "docs/programs/release-readiness/burndown.md"
   },
-  "parityNote": "The latest committed parity run (RR-16 font-size grid), measured on the RR-16 candidate heads before the 0.12.0 release train that carries RR-16. The published-package run before it (core 0.11.4, opf-render 0.11.9, opf-pptx 0.11.7) measured 739 perfect, 111 near, 0 mismatch; the two list-6x-heading-title-center layouts are the difference. The RR-20 re-audit on the published 0.12.0 set replaces both.",
+  "parityNote": "The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed.",
   "columns": {
     "spec": "catalog (bundled in core spec/catalogs), catalog-deprecated, gallery-catalog (published by the pptx.gallery catalog only), schema (a gallery item that maps to an OPF schema value), schema-enum (slide-size presets), policy (font policy), none.",
     "compose": "pass or fail: the gallery config validates and composes in core (audit A schema check; audit B schema and catalog checks). unknown when no audit measured the value. The catalog-only records and the slide-size presets come from the later audit B run in inputs.auditBExtra (RR-43: a gallery snippet of the same kind with only the value swapped).",
@@ -61,16 +61,6 @@
       "link": "https://github.com/OpenPresentation/opf-pptx/issues/133",
       "descoped": true,
       "next": "Follows the parked export: the fallback column chart re-imports as column."
-    },
-    {
-      "id": "chart-tick-labels",
-      "gap": "parity-near",
-      "types": [
-        "charts"
-      ],
-      "detail": "chart label wrapped/split in preview",
-      "link": "RR-44",
-      "next": "The preview's value-axis tick labels (such as 0) are not in the chart part's strings because PowerPoint computes its own ticks, so the text check counts them as wrapped labels. Classify computed axis ticks separately in the parity harness (no tolerance change), then re-run parity on the published 0.12.0 set with the RR-20 re-audit."
     },
     {
       "id": "font-routes-near",

@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-03T00:21:44.770Z",
+ "generated": "2026-10-03T00:22:14.756Z",
  "fontHost": "gallery",
  "heads": {
   "pptx-gallery": "c349a61",
@@ -21707,9 +21707,11 @@
    "ooxmlLang": "am-ET",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang am-ET; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Nyala, Nyala)"
+   ]
   },
   {
    "dimension": "languages",
@@ -21989,9 +21991,11 @@
    "ooxmlLang": "ar-SA",
    "direction": "rtl",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ar-SA; native-text rtl paragraphs 1, preview rtl lines 1",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Arabic Typesetting, Arabic Typesetting)"
+   ]
   },
   {
    "dimension": "languages",
@@ -23154,9 +23158,11 @@
    "ooxmlLang": "bn-BD",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang bn-BD; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Shonar Bangla, Shonar Bangla)"
+   ]
   },
   {
    "dimension": "languages",
@@ -24939,9 +24945,11 @@
    "ooxmlLang": "zh-CN",
    "direction": "ltr",
    "scriptSlot": "ea",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang zh-CN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the ea slot but runs name no face there (scheme Microsoft YaHei, Microsoft YaHei)"
+   ]
   },
   {
    "dimension": "languages",
@@ -25219,9 +25227,11 @@
    "ooxmlLang": "zh-TW",
    "direction": "ltr",
    "scriptSlot": "ea",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang zh-TW; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the ea slot but runs name no face there (scheme Microsoft JhengHei, Microsoft JhengHei)"
+   ]
   },
   {
    "dimension": "languages",
@@ -30588,9 +30598,11 @@
    "ooxmlLang": "ka-GE",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ka-GE; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Sylfaen, Sylfaen)"
+   ]
   },
   {
    "dimension": "languages",
@@ -31470,9 +31482,11 @@
    "ooxmlLang": "gu-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang gu-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Shruti, Shruti)"
+   ]
   },
   {
    "dimension": "languages",
@@ -32052,9 +32066,11 @@
    "ooxmlLang": "he-IL",
    "direction": "rtl",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang he-IL; native-text rtl paragraphs 1, preview rtl lines 1",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme David, David)"
+   ]
   },
   {
    "dimension": "languages",
@@ -32332,9 +32348,11 @@
    "ooxmlLang": "hi-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang hi-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Mangal, Mangal)"
+   ]
   },
   {
    "dimension": "languages",
@@ -33816,9 +33834,11 @@
    "ooxmlLang": "ja-JP",
    "direction": "ltr",
    "scriptSlot": "ea",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ja-JP; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the ea slot but runs name no face there (scheme Meiryo, Meiryo)"
+   ]
   },
   {
    "dimension": "languages",
@@ -34096,9 +34116,11 @@
    "ooxmlLang": "kn-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang kn-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Tunga, Tunga)"
+   ]
   },
   {
    "dimension": "languages",
@@ -34677,9 +34699,11 @@
    "ooxmlLang": "km-KH",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang km-KH; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme DaunPenh, DaunPenh)"
+   ]
   },
   {
    "dimension": "languages",
@@ -35258,9 +35282,11 @@
    "ooxmlLang": "ko-KR",
    "direction": "ltr",
    "scriptSlot": "ea",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ko-KR; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the ea slot but runs name no face there (scheme Malgun Gothic, Malgun Gothic)"
+   ]
   },
   {
    "dimension": "languages",
@@ -37344,9 +37370,11 @@
    "ooxmlLang": "ml-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ml-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Kartika, Kartika)"
+   ]
   },
   {
    "dimension": "languages",
@@ -37925,9 +37953,11 @@
    "ooxmlLang": "mr-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang mr-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Mangal, Mangal)"
+   ]
   },
   {
    "dimension": "languages",
@@ -38506,9 +38536,11 @@
    "ooxmlLang": "ne-NP",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ne-NP; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Mangal, Mangal)"
+   ]
   },
   {
    "dimension": "languages",
@@ -39087,9 +39119,11 @@
    "ooxmlLang": "or-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang or-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Kalinga, Kalinga)"
+   ]
   },
   {
    "dimension": "languages",
@@ -39694,9 +39728,11 @@
    "ooxmlLang": "ps-AF",
    "direction": "rtl",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ps-AF; native-text rtl paragraphs 1, preview rtl lines 1",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Arial Black, Arial)"
+   ]
   },
   {
    "dimension": "languages",
@@ -39976,9 +40012,11 @@
    "ooxmlLang": "fa-IR",
    "direction": "rtl",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang fa-IR; native-text rtl paragraphs 1, preview rtl lines 1",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Arabic Typesetting, Arabic Typesetting)"
+   ]
   },
   {
    "dimension": "languages",
@@ -40858,9 +40896,11 @@
    "ooxmlLang": "pa-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang pa-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Raavi, Raavi)"
+   ]
   },
   {
    "dimension": "languages",
@@ -41164,9 +41204,11 @@
    "ooxmlLang": "pa-Arab-PK",
    "direction": "rtl",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang pa-Arab-PK; native-text rtl paragraphs 1, preview rtl lines 1",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Arial Black, Arial)"
+   ]
   },
   {
    "dimension": "languages",
@@ -45357,9 +45399,11 @@
    "ooxmlLang": "ta-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ta-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Latha, Latha)"
+   ]
   },
   {
    "dimension": "languages",
@@ -45637,9 +45681,11 @@
    "ooxmlLang": "te-IN",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang te-IN; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Gautami, Gautami)"
+   ]
   },
   {
    "dimension": "languages",
@@ -45917,9 +45963,11 @@
    "ooxmlLang": "th-TH",
    "direction": "ltr",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang th-TH; native-text rtl paragraphs 0, preview rtl lines 0",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Angsana New, Angsana New)"
+   ]
   },
   {
    "dimension": "languages",
@@ -46801,9 +46849,11 @@
    "ooxmlLang": "ur-PK",
    "direction": "rtl",
    "scriptSlot": "cs",
-   "classification": "works",
+   "classification": "partial",
    "engineSummary": "removing language changes preview=true (lang attribute only), export=true; slide lang ur-PK; native-text rtl paragraphs 1, preview rtl lines 1",
-   "reasons": []
+   "reasons": [
+    "native text uses the cs slot but runs name no face there (scheme Arabic Typesetting, Arabic Typesetting)"
+   ]
   },
   {
    "dimension": "languages",

@@ -30,60 +30,60 @@
       "auditA": {
         "file": "docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json",
         "heads": {
-          "opf": "e414bca",
-          "opf-render": "2fbc0ab",
-          "opf-pptx": "a9bcbd7",
-          "pptx-gallery": "d8f5ae6",
-          "node": "24.21.0"
+          "opf": "5e1dda7",
+          "opf-render": "3b300a3",
+          "opf-pptx": "e4569ac",
+          "pptx-gallery": "c349a61",
+          "node": "26.7.0"
         }
       },
       "auditB": {
         "file": "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json",
         "heads": {
-          "pptx-gallery": "d8f5ae6",
-          "opf": "e414bca",
-          "opf-render": "2fbc0ab",
-          "opf-pptx": "a9bcbd7",
-          "opf-editor": "313774a",
-          "node": "24.21.0"
+          "pptx-gallery": "c349a61",
+          "opf": "5e1dda7",
+          "opf-render": "3b300a3",
+          "opf-pptx": "e4569ac",
+          "opf-editor": "f4779da",
+          "node": "26.7.0"
         }
       },
       "auditBExtra": [
         {
-          "file": "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-catalog-only.json",
+          "file": "docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json",
           "heads": {
-            "pptx-gallery": "34e6656",
+            "pptx-gallery": "c349a61",
             "opf": "5e1dda7",
             "opf-render": "3b300a3",
-            "opf-pptx": "1f50912",
-            "node": "26.4.0",
-            "packages": "published 0.12.0"
+            "opf-pptx": "e4569ac",
+            "opf-editor": "f4779da",
+            "node": "26.7.0"
           },
           "values": 62
         }
       ]
     },
     "parity": {
-      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-rr-16-font-size-grid.json",
-      "generatedAt": "2026-10-01T17:51:38.640Z",
+      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json",
+      "generatedAt": "2026-10-03T00:22:04.269Z",
       "heads": {
-        "opf": "448c47f",
-        "opf-render": "f392fa6",
-        "opf-pptx": "b679524",
-        "pptx-gallery": "d8f5ae6"
+        "opf": "5e1dda7",
+        "opf-render": "3b300a3",
+        "opf-pptx": "e4569ac",
+        "pptx-gallery": "c349a61"
       },
       "values": 850,
-      "note": "The latest committed parity run (RR-16 font-size grid), measured on the RR-16 candidate heads before the 0.12.0 release train that carries RR-16. The published-package run before it (core 0.11.4, opf-render 0.11.9, opf-pptx 0.11.7) measured 739 perfect, 111 near, 0 mismatch; the two list-6x-heading-title-center layouts are the difference. The RR-20 re-audit on the published 0.12.0 set replaces both."
+      "note": "The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed."
     },
     "parityExtra": [
       {
-        "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-catalog-only.json",
-        "generatedAt": "2026-10-02T20:36:53.259Z",
+        "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12-catalog-only.json",
+        "generatedAt": "2026-10-03T00:22:05.850Z",
         "heads": {
           "opf": "5e1dda7",
           "opf-render": "3b300a3",
-          "opf-pptx": "1f50912",
-          "pptx-gallery": "34e6656"
+          "opf-pptx": "e4569ac",
+          "pptx-gallery": "c349a61"
         },
         "values": 62
       }
@@ -113,7 +113,7 @@
     },
     "overrides": {
       "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
-      "rules": 10
+      "rules": 9
     }
   },
   "statusDefinitions": {
@@ -203,15 +203,6 @@
       "link": "https://github.com/OpenPresentation/opf-pptx/issues/133",
       "descoped": true,
       "next": "Follows the parked export: the fallback column chart re-imports as column."
-    },
-    "chart-tick-labels": {
-      "gap": "parity-near",
-      "types": [
-        "charts"
-      ],
-      "detail": "chart label wrapped/split in preview",
-      "link": "RR-44",
-      "next": "The preview's value-axis tick labels (such as 0) are not in the chart part's strings because PowerPoint computes its own ticks, so the text check counts them as wrapped labels. Classify computed axis ticks separately in the parity harness (no tolerance change), then re-run parity on the published 0.12.0 set with the RR-20 re-audit."
     },
     "font-routes-near": {
       "gap": "parity-near",
@@ -320,12 +311,12 @@
     "addressed": 1101,
     "unaddressed": 0,
     "byStatus": {
-      "done": 381,
+      "done": 396,
       "deprecated": 50,
       "descoped": 453,
       "works-unverified": 0,
       "unknown": 0,
-      "parity-near": 47,
+      "parity-near": 32,
       "font-gap": 170,
       "missing-gallery": 0,
       "missing-spec": 0,
@@ -395,10 +386,9 @@
       "charts": {
         "records": 76,
         "byStatus": {
-          "done": 10,
+          "done": 25,
           "deprecated": 50,
-          "descoped": 1,
-          "parity-near": 15
+          "descoped": 1
         },
         "addressed": 76,
         "unaddressed": 0
@@ -1251,9 +1241,9 @@
     {"type":"charts","id":"100pct-stacked-bar-3x","name":"100PCT_STACKED_BAR_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"100pct-stacked-column-2x","name":"100PCT_STACKED_COLUMN_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"100pct-stacked-column-3x","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"100pct-stacked-column-3x","name":"100PCT_STACKED_COLUMN_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"charts","id":"area","name":"AREA","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"area","name":"AREA","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"australia","name":"AUSTRALIA","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"world","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"bar","name":"BAR","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"bar","name":"BAR","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"box-and-whisker","name":"BOX_AND_WHISKER","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"box-and-whisker-2x","name":"BOX_AND_WHISKER_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"box-and-whisker","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"box-and-whisker-3x","name":"BOX_AND_WHISKER_3X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"box-and-whisker","status":"deprecated","gaps":[],"addressed":true},
@@ -1266,7 +1256,7 @@
     {"type":"charts","id":"canada","name":"CANADA","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"world","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"clustered-bar-2x","name":"CLUSTERED_BAR_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"bar","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"clustered-column","name":"CLUSTERED_COLUMN","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"column","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"column","name":"COLUMN","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"column","name":"COLUMN","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"dot-plot","name":"DOT_PLOT","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"scatter","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"dot-plot-2x","name":"DOT_PLOT_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"scatter","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"dot-plot-3x","name":"DOT_PLOT_3X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"scatter","status":"deprecated","gaps":[],"addressed":true},
@@ -1275,22 +1265,22 @@
     {"type":"charts","id":"dot-plot-6x","name":"DOT_PLOT_6X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"scatter","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"doughnut","name":"DOUGHNUT","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"dumbbell","name":"DUMBBELL","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"scatter","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"filled-radar","name":"FILLED_RADAR","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"filled-radar","name":"FILLED_RADAR","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"funnel","name":"FUNNEL","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"histogram","name":"HISTOGRAM","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"charts","id":"line","name":"LINE","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"line","name":"LINE","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"line-2x","name":"LINE_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"line-3x","name":"LINE_3X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"line-with-high-low","name":"LINE_WITH_HIGH_LOW","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"line-with-high-low-and-markers","name":"LINE_WITH_HIGH_LOW_AND_MARKERS","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line-with-markers","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"line-with-markers","name":"LINE_WITH_MARKERS","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"line-with-markers","name":"LINE_WITH_MARKERS","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"line-with-markers-2x","name":"LINE_WITH_MARKERS_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line-with-markers","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"line-with-markers-3x","name":"LINE_WITH_MARKERS_3X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line-with-markers","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"pareto","name":"PARETO","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"pie","name":"PIE","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"charts","id":"radar","name":"RADAR","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
-    {"type":"charts","id":"radar-with-markers","name":"RADAR_WITH_MARKERS","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
-    {"type":"charts","id":"scatter","name":"SCATTER","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"radar","name":"RADAR","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
+    {"type":"charts","id":"radar-with-markers","name":"RADAR_WITH_MARKERS","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
+    {"type":"charts","id":"scatter","name":"SCATTER","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"sparkline","name":"SPARKLINE","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"sparkline-2x","name":"SPARKLINE_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"sparkline-3x","name":"SPARKLINE_3X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
@@ -1298,21 +1288,21 @@
     {"type":"charts","id":"sparkline-5x","name":"SPARKLINE_5X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"sparkline-6x","name":"SPARKLINE_6X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"line","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"stacked-area-2x","name":"STACKED_AREA_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"stacked-area-3x","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"stacked-area-3x","name":"STACKED_AREA_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"stacked-area-3x","name":"STACKED_AREA_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"stacked-bar-2x","name":"STACKED_BAR_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"stacked-bar-3x","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"stacked-bar-3x","name":"STACKED_BAR_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"stacked-bar-3x","name":"STACKED_BAR_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"stacked-column-2x","name":"STACKED_COLUMN_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"stacked-column-3x","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"stacked-column-3x","name":"STACKED_COLUMN_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"stacked-column-3x","name":"STACKED_COLUMN_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"stacked-line-2x","name":"STACKED_LINE_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"stacked-line-3x","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"stacked-line-3x","name":"STACKED_LINE_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"stacked-line-3x","name":"STACKED_LINE_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"stacked-line-with-markers-2x","name":"STACKED_LINE_WITH_MARKERS_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"stacked-line-with-markers-3x","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"stacked-line-with-markers-3x","name":"STACKED_LINE_WITH_MARKERS_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"stacked-line-with-markers-3x","name":"STACKED_LINE_WITH_MARKERS_3X","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"treemap","name":"TREEMAP","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"treemap-2x","name":"TREEMAP_2X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"treemap","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"treemap-3x","name":"TREEMAP_3X","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"treemap","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"united-kingdom","name":"UNITED_KINGDOM","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"world","status":"deprecated","gaps":[],"addressed":true},
     {"type":"charts","id":"united-states","name":"UNITED_STATES","columns":{"spec":"catalog-deprecated","compose":"n/a","preview":"n/a","export":"n/a","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"not-shown-deprecated","native":"n/a","fonts":"n/a"},"replacedBy":"world","status":"deprecated","gaps":[],"addressed":true},
-    {"type":"charts","id":"waterfall","name":"WATERFALL","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"text near (text: chart label wrapped/split in preview (native chart lays out its own labels))","rule":"chart-tick-labels","link":"RR-44","addressed":true,"linkStatus":"todo"}],"status":"parity-near","addressed":true},
+    {"type":"charts","id":"waterfall","name":"WATERFALL","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"world","name":"WORLD","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"fail","roundTrip":"fail","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"partial","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-export","detail":"export writes barChart, barDir col, grouping clustered; core catalog mappings.openxml mapChart; export reports chart-data-adapted (chartex-fallback); re-impo...","rule":"world-parked","link":"https://github.com/OpenPresentation/opf-pptx/issues/133","descoped":true,"addressed":true},{"code":"parity-near","detail":"reimport near (reimport: slides.0 chart re-imports as column, expected world (chart-data-adapted reported))","rule":"world-parked-parity","link":"https://github.com/OpenPresentation/opf-pptx/issues/133","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
     {"type":"themes","id":"bold","name":"Bold","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Grandview: documented-visual","Impact: documented-visual","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Impact): Impact -> Anton; fontResolution: visual-only replac...","rule":"font-routes-near","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"parity-near","addressed":true},
     {"type":"themes","id":"classic","name":"Classic","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"near","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Roboto Mono: qualified","Tenorite: documented-visual","Tenorite Display: documented-visual"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"parity-near","detail":"fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Tenorite Display): Tenorite Display -> Figtree; fontResoluti...","rule":"font-routes-near","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"parity-near","addressed":true},
