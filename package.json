@@ -8,6 +8,8 @@
     "typecheck": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs",
     "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && pnpm test:gallery-script-fonts && pnpm test:gallery-lazy-fonts && pnpm test:gallery-base-fonts && pnpm check:text && pnpm check:spec && pnpm check:catalog && pnpm check:font-hotlinks && pnpm check:font-tracker && pnpm check:gallery-tracker && pnpm check:published-matrix && pnpm check:works-percent && pnpm check:release-report && pnpm check:audit-placement && pnpm check:audit-chartex && pnpm check:audit-restored && pnpm check:audit-picture-bullets",
+    "check:quarantine": "node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check",
+    "test:flake-repeat": "node scripts/flake-repeat.mjs",
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
     "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs",
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs scripts/qualify-latin-fonts.test.mjs && node scripts/build-font-tracker.mjs --check",
