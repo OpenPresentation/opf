@@ -76,18 +76,6 @@
       "next": "The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46)."
     },
     {
-      "id": "catalog-only-pages",
-      "gap": "missing-gallery",
-      "types": [
-        "narratives",
-        "audiences",
-        "purposes"
-      ],
-      "link": "https://github.com/OpenPresentation/opf/issues/291",
-      "descoped": true,
-      "next": "Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead."
-    },
-    {
       "id": "layouts-subset-by-design",
       "gap": "missing-spec",
       "types": [
@@ -106,17 +94,6 @@
       "link": "https://github.com/OpenPresentation/opf/issues/317",
       "descoped": true,
       "next": "Decided (RR-41, 2026-10-02): publish the four legacy pairings gallery-first as schema-valid font schemes with app \"Google Slides\" (additive; retiring them would remove public pages), then sync and release core; tracked in opf#317."
-    },
-    {
-      "id": "slide-size-and-purpose-editor",
-      "gap": "missing-editor",
-      "types": [
-        "slide-sizes",
-        "purposes"
-      ],
-      "link": "https://github.com/OpenPresentation/opf/issues/293",
-      "descoped": true,
-      "next": "Editor switches for slide-size presets and purpose (one patch, exact undo, preview refresh)."
     },
     {
       "id": "slide-size-pages",
