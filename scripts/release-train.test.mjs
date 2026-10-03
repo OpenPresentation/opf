@@ -446,7 +446,7 @@ test("verify times out with a failing check that says the bundle or install neve
 });
 
 test("npmRegistry flags a notarget install as pending and any other install failure as final", () => {
-  const exec = (stderr) => (command, args) => ({ status: args[0] === "install" ? 1 : 0, stdout: "", stderr });
+  const exec = (stderr) => (_command, args) => ({ status: args[0] === "install" ? 1 : 0, stdout: "", stderr });
   const scratch = mkdtempSync(path.join(os.tmpdir(), "rt-audit-"));
   try {
     const lag = npmRegistry({ exec: exec("npm error code ETARGET\nnpm error notarget No matching version found for @openpresentation/opf@0.12.1.") }).auditSignatures("@openpresentation/opf", "0.12.1", { scratch });
