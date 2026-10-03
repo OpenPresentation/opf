@@ -32,6 +32,11 @@ jobs:
       # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
       - name: Check the test quarantine
         run: node --test scripts/quarantine.test.mjs scripts/browser-suites.test.mjs && node scripts/quarantine.mjs check
+      # RR-46: a reminder, never a failure: src/ changed without a changelog fragment (changes/README.md).
+      - name: Changelog fragment
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
       # The ecosystem is pinned to the versions this package depends on: opf main after #219 (the packed-ecosystem check there knows renderer 0.11.8), opf-render 0.11.8 (tag colour; extra lazy fonts, face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises; chart label rotation) and opf-pptx 0.11.5.
       # Release 0.10.6 pins the 0.11.4 train sources: opf#234 (design fields, picture bullets, 0.11.9 lazy face count), opf-render main fa1949a and opf-pptx main 9b9b0e4; repin each to its merge commit (opf-pptx to the merge of #124). The registry dependencies resolve once core 0.11.4, renderer 0.11.9 and PPTX 0.11.7 are published (npm ci and test:packed).
       # Verify registry dependencies before linking the pinned source graph.

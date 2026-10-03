@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46). A new Node test needs no entry; add a file here only when it is a helper, fixture or harness, or a check that CI runs in its own step. Files named *-browser*.mjs are browser suites (test/browser-suites.json, scripts/quarantine.mjs) and are skipped by name.",
+  "include": [],
+  "nodeTest": [],
+  "exclude": [
+    "native-playground-verify.mjs",
+    "packed-install.mjs",
+    "playground-base-fonts.mjs",
+    "playground-download.mjs",
+    "playground-ensure-fonts.mjs",
+    "playground-lazy-fonts.mjs",
+    "playground-pptx.mjs",
+    "playground-script-fonts.mjs",
+    "playground-source.mjs",
+    "switch-fixture.mjs"
+  ]
+}
