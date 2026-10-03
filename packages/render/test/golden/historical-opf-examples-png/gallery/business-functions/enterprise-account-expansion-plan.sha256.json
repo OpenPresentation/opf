@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/enterprise-account-expansion-plan.opf.json",
+  "entries": {
+    "gallery/business-functions/enterprise-account-expansion-plan.opf.json#0": {
+      "sha256": "c14d239a4d54d650a617a26885b1ee8282c4f2f8f392e0fce0aa74a34d22a541",
+      "bytes": 835
+    },
+    "gallery/business-functions/enterprise-account-expansion-plan.opf.json#1": {
+      "sha256": "178443d0a1b0f3f6879f29d0355bf6f44ca06fdaf11591d3e215f71895581767",
+      "bytes": 843
+    },
+    "gallery/business-functions/enterprise-account-expansion-plan.opf.json#2": {
+      "sha256": "e96254f0fb65c0fb9e3417b8f49a9d3b505962f3798dbfc1798799b38dabcc03",
+      "bytes": 1619
+    },
+    "gallery/business-functions/enterprise-account-expansion-plan.opf.json#3": {
+      "sha256": "c39168557cf8b26e122bb447e7fb3ba2c89a980e016a8201548ce69a02e2efa8",
+      "bytes": 4195
+    },
+    "gallery/business-functions/enterprise-account-expansion-plan.opf.json#4": {
+      "sha256": "11bf5768a81dd39e9bdab58aba3ff971f290bf942f888369edda33776d475e87",
+      "bytes": 1309
+    },
+    "gallery/business-functions/enterprise-account-expansion-plan.opf.json#5": {
+      "sha256": "0477ef875a07f0e03cd6ee4f894235228d890e50848176e36b2022f5a3517499",
+      "bytes": 837
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/presentation-types/monthly-board-update.opf.json",
+  "entries": {
+    "gallery/presentation-types/monthly-board-update.opf.json#0": {
+      "sha256": "130e5a7a5a2f702a25f188b47697dd02ecfb7b00ab2e1e151d8b16b4d757a746",
+      "bytes": 4132
+    },
+    "gallery/presentation-types/monthly-board-update.opf.json#1": {
+      "sha256": "77df1ae9cf304ce90e447228db24b0c33e0c07dbec2b929ca456234738d3f8fe",
+      "bytes": 7339
+    },
+    "gallery/presentation-types/monthly-board-update.opf.json#2": {
+      "sha256": "b5b90b8ce8a168f7152cd36b4626256d25007388eb5eedf812d162b36da43780",
+      "bytes": 3735
+    },
+    "gallery/presentation-types/monthly-board-update.opf.json#3": {
+      "sha256": "a7a2cae69a61463afa1744adc24fe1de068e926d640fc771a9bb9966c4e500d9",
+      "bytes": 5091
+    }
+  }
+}

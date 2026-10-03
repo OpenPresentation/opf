@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/battery-line-supplier-readiness.opf.json",
+  "entries": {
+    "gallery/industries/battery-line-supplier-readiness.opf.json#0": {
+      "sha256": "6572fff03720425ea1abe2ff954e880547a935ba3d31f0238ebee92ac2b13660",
+      "bytes": 5705
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#1": {
+      "sha256": "0e6be84abd757c02c7f767fa56c7f50ea4d2c5a7799ced3919c72502fb59058b",
+      "bytes": 7832
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#2": {
+      "sha256": "3fc895eca0b12b35a6e756282e8b50db6c358b71a7ab0a831d3ff8c2beef388f",
+      "bytes": 3617
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#3": {
+      "sha256": "f3faef4c784e295893bb15dec15e91e49e0b040ebee5be1d0f1011b7f8e7aafd",
+      "bytes": 6814
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#4": {
+      "sha256": "4711ebdb9a1cac6299d81adcd1d98deafb4d2ac07d9268a1b95285a3d6611ff6",
+      "bytes": 6491
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#5": {
+      "sha256": "8c9ccb108ab4e1d71222559e9a859a3425fcfb04e6c81fe4f57b8743ef6d897c",
+      "bytes": 15869
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#6": {
+      "sha256": "de51acabb4474a950cfd6effc6f95374592bf3ca3fd1138cf4274f4ccdff8cab",
+      "bytes": 8259
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#7": {
+      "sha256": "18934eca385bace726c9f2494bf4193c65111e7019e32791e62eab3ca38145c6",
+      "bytes": 5046
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#8": {
+      "sha256": "b4be1886a5f53ed93632750c0fab67cc970ca3849c68504bfceea2ca583f289a",
+      "bytes": 5731
+    },
+    "gallery/industries/battery-line-supplier-readiness.opf.json#9": {
+      "sha256": "88dfeeebf00f039ea27c4b7995a0c15beba5f12b9f6524af0bcac80ad30d18dc",
+      "bytes": 10165
+    }
+  }
+}

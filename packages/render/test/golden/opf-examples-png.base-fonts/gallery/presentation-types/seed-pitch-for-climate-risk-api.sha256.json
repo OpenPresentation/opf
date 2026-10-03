@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json",
+  "entries": {
+    "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json#0": {
+      "sha256": "77aa5db9e4792ef5319dca7aa0e12f61c9594d04bfe4256024e3ee56e642d62f",
+      "bytes": 3895
+    },
+    "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json#1": {
+      "sha256": "9a8e974305646c55503951e14ff110a4bdff647dce66c68f690a5bf5aa0fea24",
+      "bytes": 5763
+    },
+    "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json#2": {
+      "sha256": "046c45eddbd609a38b9ad0c7aa6d34b897d9330cccda0eb8349fd225ac53c9a2",
+      "bytes": 2665
+    },
+    "gallery/presentation-types/seed-pitch-for-climate-risk-api.opf.json#3": {
+      "sha256": "46a3825e9f6a00a9bc6560ea01311a3c2d923f03ed40ca04c3ecc0f4f3ab8462",
+      "bytes": 4000
+    }
+  }
+}

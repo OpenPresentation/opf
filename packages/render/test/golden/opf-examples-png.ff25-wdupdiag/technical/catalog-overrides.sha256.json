@@ -1,0 +1,17 @@
+{
+  "deck": "technical/catalog-overrides.opf.json",
+  "entries": {
+    "technical/catalog-overrides.opf.json#0": {
+      "sha256": "02d1f2317f11ffd809f0269138ee62d9903c8867263f0677771f0868ac27111c",
+      "bytes": 4165
+    },
+    "technical/catalog-overrides.opf.json#1": {
+      "sha256": "291954114da82f9d32ef8cde27b95ac4655f9d489d8c20f6b6d3e449d6c7afb0",
+      "bytes": 3332
+    },
+    "technical/catalog-overrides.opf.json#2": {
+      "sha256": "36239c86c7f03c2d3f69caf9f679b0537e687d55d76ff38d99f81c7870eed68b",
+      "bytes": 5787
+    }
+  }
+}

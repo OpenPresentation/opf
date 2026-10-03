@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/alumni-giving-campaign.opf.json",
+  "entries": {
+    "gallery/education/alumni-giving-campaign.opf.json#0": {
+      "sha256": "4126b753410f75ff0f5787fe38c0289bd12dd33ceeddb79b4185bf242811afe3",
+      "bytes": 9347
+    },
+    "gallery/education/alumni-giving-campaign.opf.json#1": {
+      "sha256": "c4c04125887acca70fc9a0b4a07be85b2e575c755a047a45539ca8326d744462",
+      "bytes": 12257
+    },
+    "gallery/education/alumni-giving-campaign.opf.json#2": {
+      "sha256": "bb60177ca474341cfd53e8381d430042b63324df1d4fb1fa1419fa218c09f7ef",
+      "bytes": 7397
+    },
+    "gallery/education/alumni-giving-campaign.opf.json#3": {
+      "sha256": "9cb430ea965776850be0e02f1e7f31fcbe7381af8f11a1434990550e05e9caae",
+      "bytes": 9308
+    },
+    "gallery/education/alumni-giving-campaign.opf.json#4": {
+      "sha256": "c6cbf5f1d7efc2e5568f5c57afd0ac32d046e7d5e257d0bafaf4c746e46500f5",
+      "bytes": 11950
+    },
+    "gallery/education/alumni-giving-campaign.opf.json#5": {
+      "sha256": "466116dc84473e022388ac146af61a9373e600c3b27d81f6395f6d1fab04d568",
+      "bytes": 11513
+    }
+  }
+}

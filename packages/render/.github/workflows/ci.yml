@@ -18,7 +18,7 @@ jobs:
       run:
         working-directory: opf-render
     env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering
     steps:
       # Release 0.12.0 pins core main da45b2e (the release commit 5e1dda7, tag opf-v0.12.0, plus the renderer 0.12.0 lazy font count, opf#282). opf-pptx e6c0391 and opf-editor dea8a79 are unchanged from release 0.11.9.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

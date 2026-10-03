@@ -5,6 +5,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync, symlinkSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { readBaseline, serialize } from './golden-store.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const core = path.resolve(root, '../opf');
@@ -13,13 +14,17 @@ const runtime = path.join(out, 'before-runtime');
 const beforeCore = path.join(runtime, 'core');
 const coreRef = 'a3ab4784ed22caffdad8c4e306f9a51b1e954ae9';
 const rendererRef = 'f2f2d51caddddc912588dd4f0f7a9586d3330475';
-const baseline = path.join(root, 'test/golden/opf-examples-png.timeline.sha256.json');
+// RR-52: the accepted baseline is a per-deck directory; the old predecessor golden.mjs reads one manifest file, so
+// materialize the byte-identical reassembled manifest next to the review output.
+const acceptedBaseline = path.join(root, 'test/golden/opf-examples-png.timeline.sha256.json');
+const baseline = path.join(out, 'accepted-baseline.sha256.json');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const json = file => JSON.parse(readFileSync(file, 'utf8'));
 const git = (cwd, ...args) => execFileSync('git', args, { cwd, maxBuffer: 256 * 1024 * 1024 });
 const save = (name, value) => writeFileSync(path.join(out, name), JSON.stringify(value, null, 2) + '\n');
 assert.equal(process.versions.node.split('.')[0], '24', 'Use Node 24 for this review');
 mkdirSync(out, { recursive: true });
+writeFileSync(baseline, serialize(readBaseline(acceptedBaseline)));
 
 function archive(cwd, ref, destination, files) {
   assert.ok(!existsSync(destination), `Use a new output directory: ${destination}`);

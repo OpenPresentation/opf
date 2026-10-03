@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/support-deflection-program.opf.json",
+  "entries": {
+    "gallery/business-functions/support-deflection-program.opf.json#0": {
+      "sha256": "ba35f7d99af889406a10d3d8a08768bd64dc73a68b771f9c302ce09a2375acc0",
+      "bytes": 6748
+    },
+    "gallery/business-functions/support-deflection-program.opf.json#1": {
+      "sha256": "ea10ebe091926b3966c59b66acdd42c99ad91b2d0f45aa1222a7d8231e44ebad",
+      "bytes": 9017
+    },
+    "gallery/business-functions/support-deflection-program.opf.json#2": {
+      "sha256": "d930b4cffd5a0e0f068e73b59a84322feb289c2bf5ae721b2a16aaac47d2871f",
+      "bytes": 5323
+    },
+    "gallery/business-functions/support-deflection-program.opf.json#3": {
+      "sha256": "df581d32c7c9657755e8859ecc6a4fb2e9ef56d7983803997e925312bcf6ec71",
+      "bytes": 7698
+    },
+    "gallery/business-functions/support-deflection-program.opf.json#4": {
+      "sha256": "1a738c3c829a3b8cc5f00f967f54c47c90ca8d5d732e4c090b27721589b1069d",
+      "bytes": 9056
+    },
+    "gallery/business-functions/support-deflection-program.opf.json#5": {
+      "sha256": "16811a2f394c64a8c246e82dd8037121ac892674363a09d9b3c0ad383e2d94a9",
+      "bytes": 8361
+    }
+  }
+}

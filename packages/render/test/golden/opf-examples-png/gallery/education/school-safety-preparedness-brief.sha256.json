@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/education/school-safety-preparedness-brief.opf.json",
+  "entries": {
+    "gallery/education/school-safety-preparedness-brief.opf.json#0": {
+      "sha256": "6410defc81eaefdad636e7708536866b781d52af672d7430b4365b0124415233",
+      "bytes": 4574
+    },
+    "gallery/education/school-safety-preparedness-brief.opf.json#1": {
+      "sha256": "e32af4dec23ff4cbc5b630873024c47e34951a7a5884ec503c8b6cdbba06a6ab",
+      "bytes": 6057
+    },
+    "gallery/education/school-safety-preparedness-brief.opf.json#2": {
+      "sha256": "12a5cc3d43a7b72c911ec465decbb876355bac4cbc07b9ca85edd75b58498073",
+      "bytes": 3808
+    },
+    "gallery/education/school-safety-preparedness-brief.opf.json#3": {
+      "sha256": "d257921e4980135792e08985ebc236c806b143aa9782fb7ab2cd27cc6d20d22b",
+      "bytes": 4073
+    }
+  }
+}

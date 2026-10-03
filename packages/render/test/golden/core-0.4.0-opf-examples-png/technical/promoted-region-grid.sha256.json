@@ -1,0 +1,17 @@
+{
+  "deck": "technical/promoted-region-grid.opf.json",
+  "entries": {
+    "technical/promoted-region-grid.opf.json#0": {
+      "sha256": "cfedca1b8f50caf4dcbb85f711d34ea68b81a04ecd04643fdf97a06185f88087",
+      "bytes": 3331
+    },
+    "technical/promoted-region-grid.opf.json#1": {
+      "sha256": "b802f25445953002e702fc2222076a549633b55d9712b95fea0942aeea83b846",
+      "bytes": 5712
+    },
+    "technical/promoted-region-grid.opf.json#2": {
+      "sha256": "1c21ad9c5ffc28dc388fd79b72b818560a45b4049feaba872114c9185145e0d5",
+      "bytes": 3961
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/retail-launch-readiness-deck.opf.json",
+  "entries": {
+    "gallery/industries/retail-launch-readiness-deck.opf.json#0": {
+      "sha256": "d4afacaccfecacebfae33b5f535683c6f8f4c66bd426a18ff404b6c5a8d18a32",
+      "bytes": 5029
+    },
+    "gallery/industries/retail-launch-readiness-deck.opf.json#1": {
+      "sha256": "a615bdbf2401e9fe6f7ab7ea079bc9bd82236f5e3ec478838bbb9906e91f27d1",
+      "bytes": 7207
+    },
+    "gallery/industries/retail-launch-readiness-deck.opf.json#2": {
+      "sha256": "0a4bf0c1a6d7839a6a6a2baaaf79719e0edb35d7cf1ff3dd60557bbeaf8c21aa",
+      "bytes": 5965
+    },
+    "gallery/industries/retail-launch-readiness-deck.opf.json#3": {
+      "sha256": "b318eefb345155a0c600f8195568ecc754b0e060bf27cd1336596e2578a5842e",
+      "bytes": 6589
+    },
+    "gallery/industries/retail-launch-readiness-deck.opf.json#4": {
+      "sha256": "d7d473d4fb1b654b2722aeae599ca2935bfd68668c8b50267dd6c15f8a6c1712",
+      "bytes": 7217
+    },
+    "gallery/industries/retail-launch-readiness-deck.opf.json#5": {
+      "sha256": "a3ecf070f42d34a22024f76e2a3a599d4f6ac12e42593426f17d55f380860f3b",
+      "bytes": 6353
+    }
+  }
+}

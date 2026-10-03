@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/investor-relations-update.opf.json",
+  "entries": {
+    "gallery/business-functions/investor-relations-update.opf.json#0": {
+      "sha256": "fe58f41ec635249fcfa92182606791dcc89214bfea3e0b4f2818e26414fa9c6a",
+      "bytes": 858
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#1": {
+      "sha256": "83ca994f4b2e49cdd7f44e9be7ba833b25ef19f560e04d605942da505d61ba6b",
+      "bytes": 866
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#2": {
+      "sha256": "2228dfcb8b7f345b5c4eef22fbf3ce21558121b156e72d3e8ecbd67839451fca",
+      "bytes": 1629
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#3": {
+      "sha256": "d0bc9da9fec1ae85807288ce4c74be96dc8a91e9c4e6c439291f4d86f181da81",
+      "bytes": 4369
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#4": {
+      "sha256": "4cd2bbd10cac2dec2e7acbd66409e9121cc409f0a2e2e3e36f283c444c751def",
+      "bytes": 1331
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#5": {
+      "sha256": "7a3ed7004131cfaa9f9a439b516c3aa8db003b0124974c8f3f8f1667d917f8e1",
+      "bytes": 5304
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#6": {
+      "sha256": "0bbeb56e8b3b139d34dc8495ebaf53b790ad2d8496a36f1e6c7bd1580f772c1c",
+      "bytes": 3476
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#7": {
+      "sha256": "f893dbe4adec0d8d86e2af080a2ba77a31e1222b189765e176b9e7588849768a",
+      "bytes": 2346
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#8": {
+      "sha256": "7b71c6a1dc73df204bdf16ee44ba31f09fcf9f43b76db07755f4682c14da2b74",
+      "bytes": 3076
+    },
+    "gallery/business-functions/investor-relations-update.opf.json#9": {
+      "sha256": "a2190b551604420336aa129b0c2ff05d4f8e5b37ef6920f25c09a10c94970268",
+      "bytes": 882
+    }
+  }
+}

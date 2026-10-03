@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/renewal-save-plan.opf.json",
+  "entries": {
+    "gallery/business-functions/renewal-save-plan.opf.json#0": {
+      "sha256": "fb1327226725012e171eef94ffd82f9ce1af46df89cdd44f225e6c8f0b5747a5",
+      "bytes": 4539
+    },
+    "gallery/business-functions/renewal-save-plan.opf.json#1": {
+      "sha256": "fcf3ee225a4a7367ae581fd9eb82b987a9e9c42cde824f41b710b620054931d0",
+      "bytes": 7870
+    },
+    "gallery/business-functions/renewal-save-plan.opf.json#2": {
+      "sha256": "3cdfcc9491345fd15cdd8e2b471be4b97c2201b47a27b5f3b3c8bbcecce0acd4",
+      "bytes": 4191
+    },
+    "gallery/business-functions/renewal-save-plan.opf.json#3": {
+      "sha256": "4025ca2722b060555ac0b123ef56e8cc46cb6c7159bf1f10cbab02ac646f1e68",
+      "bytes": 6748
+    },
+    "gallery/business-functions/renewal-save-plan.opf.json#4": {
+      "sha256": "b30deacf0531a04d35b77be29f7e27a075753230e3ad36d8cd151f4bd7c9a554",
+      "bytes": 8154
+    },
+    "gallery/business-functions/renewal-save-plan.opf.json#5": {
+      "sha256": "bc6e8ddae7cb99a124f46c523fd877cbe58ee55f40e5cf2b0be4727a0e412124",
+      "bytes": 7473
+    }
+  }
+}

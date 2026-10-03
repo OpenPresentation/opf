@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/trial-enrollment-rescue-plan.opf.json",
+  "entries": {
+    "gallery/industries/trial-enrollment-rescue-plan.opf.json#0": {
+      "sha256": "19273f5196c4039fbe6d23f7c1663520042d869ba1d5df282889ef15a74afce9",
+      "bytes": 5767
+    },
+    "gallery/industries/trial-enrollment-rescue-plan.opf.json#1": {
+      "sha256": "3dfa755f29e6a28901bd21758a0755ee2cbd1290d4c03713c8b5d0edb93acac9",
+      "bytes": 7443
+    },
+    "gallery/industries/trial-enrollment-rescue-plan.opf.json#2": {
+      "sha256": "be9db772a41c11e668b6c92bc94189cf837331ebc8432e554b369bf2654ab827",
+      "bytes": 6773
+    },
+    "gallery/industries/trial-enrollment-rescue-plan.opf.json#3": {
+      "sha256": "63d3c610952d41c92a3e43a1e0e433b192208bde2be3485ac1f01e0f3fb607a8",
+      "bytes": 6583
+    },
+    "gallery/industries/trial-enrollment-rescue-plan.opf.json#4": {
+      "sha256": "3cbac8ce11395f3418c1b095cfa1accfc4015f3036d449d6044a6c76b3afc56b",
+      "bytes": 7200
+    },
+    "gallery/industries/trial-enrollment-rescue-plan.opf.json#5": {
+      "sha256": "afa1049b7d9e138cce350449e41edb2a1ec5c7a5879e875f34199a94c6982a04",
+      "bytes": 6466
+    }
+  }
+}

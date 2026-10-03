@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/design-and-media/video-demo-sales-narrative.opf.json",
+  "entries": {
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#0": {
+      "sha256": "6aa0e774ec3148ea0a0b2ca275e166f754df8d868e34e94a367fadead596ad26",
+      "bytes": 4540
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#1": {
+      "sha256": "51a87094e477399c25985bee6dfccc46efd2ef109f01efc1afd98b885d75ac84",
+      "bytes": 7396
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#2": {
+      "sha256": "d435ae305e5bcbe68757e03b626ce83ccea73db68c006b2ce5bbcd1a64e99743",
+      "bytes": 3370
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#3": {
+      "sha256": "f7757252128e8b4bfbd9adc20bbf00450bfb7059393dcbc6015860602806e9cb",
+      "bytes": 6516
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#4": {
+      "sha256": "30fd60ccb8b9cdc76a5423c8413b5ac48c89a223dcb4dd9e1c6de677049450c0",
+      "bytes": 6326
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#5": {
+      "sha256": "7a9ae5488f738f96bffdb106d98488c12ed2bf5d8e15ccd17ad0f72c2fab60ac",
+      "bytes": 15955
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#6": {
+      "sha256": "7178ef2a9f84f99b17ddfdd2503d0aa7470239bb24a4ac62f2e4d95765cef288",
+      "bytes": 9428
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#7": {
+      "sha256": "f7e9868e2e5fa82ff235fdf9bd229105a0a3b85bff6c23a721c16ba4e26e0a4a",
+      "bytes": 3617
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#8": {
+      "sha256": "aa9ab57d9c3fcb10456663ca7ceca736eeb1b0a593d03831df58b53b626a8686",
+      "bytes": 4723
+    },
+    "gallery/design-and-media/video-demo-sales-narrative.opf.json#9": {
+      "sha256": "0db179f250c90f6b0c66aeb0e0fbf05395595794ab8fada7f5cbe34928cbe874",
+      "bytes": 10807
+    }
+  }
+}

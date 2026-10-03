@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/business-functions/employee-town-hall-run-of-show.opf.json",
+  "entries": {
+    "gallery/business-functions/employee-town-hall-run-of-show.opf.json#0": {
+      "sha256": "45bd1aa2c3a560d7b45198b87b4ba29d6a1d8fcd68756943b0dc04cfa55f2b2a",
+      "bytes": 5399
+    },
+    "gallery/business-functions/employee-town-hall-run-of-show.opf.json#1": {
+      "sha256": "bb36df6e7625a1b3027995e790790f4bd281afae2cd7e5e30b6842e7254f76df",
+      "bytes": 7773
+    },
+    "gallery/business-functions/employee-town-hall-run-of-show.opf.json#2": {
+      "sha256": "2ee2ed34072c01e8e0327033a502fb24906e8e3b062326f30147ad7a233a066c",
+      "bytes": 5486
+    },
+    "gallery/business-functions/employee-town-hall-run-of-show.opf.json#3": {
+      "sha256": "2a3d603a0b892c27c77ca7677443622b4f4a3d894fb0aa2ad557cc11ce182a4d",
+      "bytes": 5344
+    }
+  }
+}

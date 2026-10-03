@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/port-dwell-time-improvement-plan.opf.json",
+  "entries": {
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#0": {
+      "sha256": "99bd5fa645ce9e9b4906dd8141dc88131426e2a2f627447a202af2d7327b11bc",
+      "bytes": 11211
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#1": {
+      "sha256": "c9be353efa7473be052e0fda0d9c5c0fb80f31eca680e9d1c111cb9ae14de303",
+      "bytes": 9566
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#2": {
+      "sha256": "bef6bd1754819d017adbb6a9a38982374a2dc897000f5e4d5fea659caeb7d81e",
+      "bytes": 5707
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#3": {
+      "sha256": "69bcc5e6d0c8e795f58d1c4cbc0b3541842fbd2d11044242ca54f48db9b827b2",
+      "bytes": 8484
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#4": {
+      "sha256": "5b9cbf6aeb2c95afff02e900fe4a8f5bc3510714e02cc47f159d056343894cac",
+      "bytes": 8890
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#5": {
+      "sha256": "729f57ad9b45ba3a0c1d35b112a045418abfa2fa996d4a219da0434c6ab932c0",
+      "bytes": 18236
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#6": {
+      "sha256": "3ee74a0242a54e4da43527f680ef5bce87fc00f1e56d1d93db9458c31e1fde3f",
+      "bytes": 12516
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#7": {
+      "sha256": "f010a2dc3d35a970efc32d99b2994680de6359168c6f96ff5a255ec16418c044",
+      "bytes": 6619
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#8": {
+      "sha256": "0c9a9e76db1f0061cc381d1548f5bb603e37a410ddd213b1da1d5b6d077a431c",
+      "bytes": 6981
+    },
+    "gallery/industries/port-dwell-time-improvement-plan.opf.json#9": {
+      "sha256": "b5ecfc331c60f446dd4adc850169eb13324f972ecd0dfd0938aed55598c99b5c",
+      "bytes": 14886
+    }
+  }
+}

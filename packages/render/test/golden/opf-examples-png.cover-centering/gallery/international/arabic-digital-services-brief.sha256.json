@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/international/arabic-digital-services-brief.opf.json",
+  "entries": {
+    "gallery/international/arabic-digital-services-brief.opf.json#0": {
+      "sha256": "a30aaeda67f63a4f73a70ae778f271d6115788f36bd0bb2e1c457c9a5f0b9a22",
+      "bytes": 11998
+    },
+    "gallery/international/arabic-digital-services-brief.opf.json#1": {
+      "sha256": "31205ba0146ca7f5ef49d0987a47288425bfd01ca957e2de69f5065eb5879618",
+      "bytes": 14372
+    },
+    "gallery/international/arabic-digital-services-brief.opf.json#2": {
+      "sha256": "24c2aa717eaf0309900736dbea29c03d1ae6f522b864e32b870dfcc70b713fef",
+      "bytes": 9030
+    },
+    "gallery/international/arabic-digital-services-brief.opf.json#3": {
+      "sha256": "4b7ef6809bfe841ae136ec41c16f7fc3981425dbc71df2e4a229a7fa08426b8a",
+      "bytes": 11013
+    },
+    "gallery/international/arabic-digital-services-brief.opf.json#4": {
+      "sha256": "dc84bc4f52218fd0259298a145f2bc6a71d5fa662ebdeb182d612e86bce124c8",
+      "bytes": 14247
+    },
+    "gallery/international/arabic-digital-services-brief.opf.json#5": {
+      "sha256": "b18cb183177af6e65ae8408c6c87fb0670d07fddc56d469403d243fb747e2ebc",
+      "bytes": 13568
+    }
+  }
+}

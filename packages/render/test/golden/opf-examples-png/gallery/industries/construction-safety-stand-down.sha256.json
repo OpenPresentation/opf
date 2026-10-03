@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/construction-safety-stand-down.opf.json",
+  "entries": {
+    "gallery/industries/construction-safety-stand-down.opf.json#0": {
+      "sha256": "cfde070bd13f310067b47053153f55b0dd41472af8610d4e3ce2d0c2664d25f2",
+      "bytes": 7348
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#1": {
+      "sha256": "71d5416e0f07653759765a77132c9c6cf903f2c8110fa7e1b9dddbc366e8796d",
+      "bytes": 10210
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#2": {
+      "sha256": "bddcd9ddead225602a4d1dbf476b12c5c18a9aa0aaafe781d6d8256391cfd31b",
+      "bytes": 5670
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#3": {
+      "sha256": "ff5aed250ec11238d6ad332069b3446a3325cf4d76c908df6f09204cb08340ed",
+      "bytes": 7820
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#4": {
+      "sha256": "5044055fa76ade17f5e5e830c322cdce1fe49483509e529c302021f1939864f4",
+      "bytes": 8701
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#5": {
+      "sha256": "f0ca9a8188ae81144f03f007d990a3d47341b883584f14d69cc0109a127d903c",
+      "bytes": 18160
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#6": {
+      "sha256": "3ce3913e702a816628eaa987fc24d0df83c7c3cc0bb0ac3b9479f318e9141656",
+      "bytes": 10646
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#7": {
+      "sha256": "646a3f46a16afff7d4d1bfe0a43a793d8b9b2c8d2911513cb147777559ef0906",
+      "bytes": 4720
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#8": {
+      "sha256": "aae41ed4aab2a2f69894f663b9966551273ab36a8f786ff1da6611ad51c20bdb",
+      "bytes": 5961
+    },
+    "gallery/industries/construction-safety-stand-down.opf.json#9": {
+      "sha256": "4eba6a6f473767850060d968a2d53b8d719cf63237c4e03fa644a74692370fed",
+      "bytes": 13192
+    }
+  }
+}

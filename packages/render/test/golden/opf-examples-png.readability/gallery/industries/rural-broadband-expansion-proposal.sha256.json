@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/industries/rural-broadband-expansion-proposal.opf.json",
+  "entries": {
+    "gallery/industries/rural-broadband-expansion-proposal.opf.json#0": {
+      "sha256": "14d9f56535c0a52ad13e8cad049248a97122e4a53dc9833fa6a058750a9a6aa7",
+      "bytes": 5312
+    },
+    "gallery/industries/rural-broadband-expansion-proposal.opf.json#1": {
+      "sha256": "7a596c010ce780e442ac8f080219fd66d35f07e22fea5b32988b9d681b1972b9",
+      "bytes": 7815
+    },
+    "gallery/industries/rural-broadband-expansion-proposal.opf.json#2": {
+      "sha256": "0d4cabdc0d346f6f7f3f98d9e854477e58aafb220e008f310b47b74b35e0d44b",
+      "bytes": 3160
+    },
+    "gallery/industries/rural-broadband-expansion-proposal.opf.json#3": {
+      "sha256": "8b6df2fd9f592e10dbb0b21bb7707c33d501d222ede3f35a558bbfbb634100d0",
+      "bytes": 5279
+    }
+  }
+}

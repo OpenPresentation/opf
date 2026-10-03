@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/product-roadmap-decision-review.opf.json",
+  "entries": {
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#0": {
+      "sha256": "f6d49e41216109c564444f6d75e3ef5ff602e933ef170e9e4654d7284958be70",
+      "bytes": 5657
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#1": {
+      "sha256": "7825805b7b0ae1ccadb5af7473e74b2b005eac9a5e56dc90a93c46edd2093119",
+      "bytes": 8195
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#2": {
+      "sha256": "b7fff3d86e71aad5a92f4aea37994d9be00f438bcc7f6273a0ce08bafa30dc30",
+      "bytes": 4439
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#3": {
+      "sha256": "9bdfce810fe934773835eb99696d5ba47f1f8a6684fc20e7a42396e3ff552837",
+      "bytes": 6917
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#4": {
+      "sha256": "a1494ab2dc3ccafd98e50606b325ef55d6e69f66874ecc8a5cc006ae8bdb7a18",
+      "bytes": 7606
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#5": {
+      "sha256": "df46b19b9fd8b37946e7308dcd8d488677e406f1fcdfac0d855deffbc95b95f2",
+      "bytes": 17108
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#6": {
+      "sha256": "338464bf0221458428166079e506886474658a28c00e54d55ed61434cd4076c0",
+      "bytes": 9802
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#7": {
+      "sha256": "ad251684ba42fe56f03142a3f8f3fbd7f598646305a1ae237d635c8311aa0ef0",
+      "bytes": 3965
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#8": {
+      "sha256": "d41c9053c3294c4240f5d2446bbadd997f83c3370fdbcf0c64769bef7e75fed3",
+      "bytes": 5536
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#9": {
+      "sha256": "884aa6b397dde22da31443dc6c988aff4b967fe358ff5fcc3095e5b5dbb57b7c",
+      "bytes": 10373
+    }
+  }
+}

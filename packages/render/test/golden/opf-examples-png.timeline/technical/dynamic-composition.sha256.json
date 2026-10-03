@@ -1,0 +1,21 @@
+{
+  "deck": "technical/dynamic-composition.opf.json",
+  "entries": {
+    "technical/dynamic-composition.opf.json#0": {
+      "sha256": "dbe9834b064b4199acdcae2d63ff3c31a9de305f9536fe2338425fb345e3678d",
+      "bytes": 7705
+    },
+    "technical/dynamic-composition.opf.json#1": {
+      "sha256": "ad8f4eb695fa135a85169820094332bf5e0eca0692f34800c63a71a1e442c123",
+      "bytes": 7016
+    },
+    "technical/dynamic-composition.opf.json#2": {
+      "sha256": "070fe9c8ccd5b9fc1eb93065e9b6af507030348c9a93a4bfb205c5c045315592",
+      "bytes": 5426
+    },
+    "technical/dynamic-composition.opf.json#3": {
+      "sha256": "d821bfb7245c93786d1ff508ccc1ead493d0f6f7efd69d33c8306b1f90f30a3f",
+      "bytes": 8411
+    }
+  }
+}

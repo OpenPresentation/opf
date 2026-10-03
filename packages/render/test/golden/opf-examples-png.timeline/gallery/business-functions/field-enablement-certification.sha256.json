@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/field-enablement-certification.opf.json",
+  "entries": {
+    "gallery/business-functions/field-enablement-certification.opf.json#0": {
+      "sha256": "868ced4b62a316070c730fe107bfdde997a71d010675aed3cc54b6bbeca9f24f",
+      "bytes": 21316
+    },
+    "gallery/business-functions/field-enablement-certification.opf.json#1": {
+      "sha256": "e8d3ffde0966967e8f60cc0ec73ad136674f7d90189823111501d46c4e464526",
+      "bytes": 14006
+    },
+    "gallery/business-functions/field-enablement-certification.opf.json#2": {
+      "sha256": "d65a93dc844a5ba51661843c3c3acaa2d7ea8ee032c8b9ef41435622c43aab3a",
+      "bytes": 9711
+    },
+    "gallery/business-functions/field-enablement-certification.opf.json#3": {
+      "sha256": "640b5ecb8b492d9602dbd3995778839d77d0b28ff8cf5550006d3ba867601491",
+      "bytes": 12976
+    },
+    "gallery/business-functions/field-enablement-certification.opf.json#4": {
+      "sha256": "e252313d6f54448366145d5b743cdc67f3d0083146ba99bc91408e512e439ad3",
+      "bytes": 13853
+    },
+    "gallery/business-functions/field-enablement-certification.opf.json#5": {
+      "sha256": "acb7928bfedd1db46ead088367ea994e718e8a2d2ccd49ab051f3c8c6145c271",
+      "bytes": 20718
+    }
+  }
+}

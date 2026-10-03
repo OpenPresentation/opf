@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/demand-generation-campaign-brief.opf.json",
+  "entries": {
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#0": {
+      "sha256": "9259945dcc5f233b968d05631910743e80fb0457ac130515a49fa17e66e3e655",
+      "bytes": 5443
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#1": {
+      "sha256": "80af6c86b95353acf1a72bb235c0479ec41cee1289514a2e94f924048d12dde2",
+      "bytes": 7592
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#2": {
+      "sha256": "cf6fee163b94e6ee64090d6b40f9184883b65cb6bce289d49b0bb50174ce1229",
+      "bytes": 3861
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#3": {
+      "sha256": "365e563d707dd130a51475a3d14e35e22b12623bf3aecaa4725597f75a4d1440",
+      "bytes": 6242
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#4": {
+      "sha256": "1a91dd87833dc0746e4aa906c43a7bfd3502bf243f5baa66a25cf207e04fe90c",
+      "bytes": 6280
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#5": {
+      "sha256": "4891b2eef9db49733f9b506c8287c7e1b58c66e0a1aa140e64875c262f78bb87",
+      "bytes": 14424
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#6": {
+      "sha256": "d0a600e01fb0439fe875e1c0429294acae5d901bc78d5e63edcdcd086ee624d7",
+      "bytes": 7901
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#7": {
+      "sha256": "96a3395eee755987f6ce8ac93624137901fe3b65921da0df4b4a24a2623c57f3",
+      "bytes": 5520
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#8": {
+      "sha256": "8b4dfb9bcc2bfc61b143d560a470874facb437a3f881ef39df1f6dcb004fb9d3",
+      "bytes": 4912
+    },
+    "gallery/business-functions/demand-generation-campaign-brief.opf.json#9": {
+      "sha256": "9bc5dcbb44dac63f1e2ceeb0ab5067976e61953f0958323f1154490c80ba93f2",
+      "bytes": 9312
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/apprenticeship-partnership-deck.opf.json",
+  "entries": {
+    "gallery/education/apprenticeship-partnership-deck.opf.json#0": {
+      "sha256": "edaeb87e7df9b6a1102ef34de6bb001e6b4a49dbc419aa4291d12d2afc996aed",
+      "bytes": 6312
+    },
+    "gallery/education/apprenticeship-partnership-deck.opf.json#1": {
+      "sha256": "965c2f7cac9b77fb15bbce7499713fd9d5dbccff26d01b779569a1143acc0556",
+      "bytes": 8163
+    },
+    "gallery/education/apprenticeship-partnership-deck.opf.json#2": {
+      "sha256": "e5297671ae233efb5158cec7168d46e108f235b5449789e05e8892aa70e7d99d",
+      "bytes": 6154
+    },
+    "gallery/education/apprenticeship-partnership-deck.opf.json#3": {
+      "sha256": "c94216b81e1f8abb502173a66a55aaaac9db0c09813c0e83d95d97eb0d6cecb0",
+      "bytes": 7383
+    },
+    "gallery/education/apprenticeship-partnership-deck.opf.json#4": {
+      "sha256": "5f89b61b60f8442c6fa40d55c94facef46a5dc18fa54f9415d72b88f3983fd62",
+      "bytes": 8091
+    },
+    "gallery/education/apprenticeship-partnership-deck.opf.json#5": {
+      "sha256": "af7b6445f60d532c4ec5d680848193d845ade1f3b88e0645f1115d56ce34df00",
+      "bytes": 7074
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/government/grant-equity-review.opf.json",
+  "entries": {
+    "gallery/government/grant-equity-review.opf.json#0": {
+      "sha256": "9f9777590059dfe7c9b379fcf3beef67b935f45c19f7ca710274ca81a185f49f",
+      "bytes": 3914
+    },
+    "gallery/government/grant-equity-review.opf.json#1": {
+      "sha256": "978adca7d2b56e2b25d2b5fd2f65c3eb7762bd43963498a56a3695e7b275c1e6",
+      "bytes": 7478
+    },
+    "gallery/government/grant-equity-review.opf.json#2": {
+      "sha256": "1be5ecd6357ffdf7b53b5369352a73ec09600febca718e7d8aeeb192bfef010c",
+      "bytes": 3360
+    },
+    "gallery/government/grant-equity-review.opf.json#3": {
+      "sha256": "306e0ca8e2caa1fe88c4aa988c894f550f9a8f6a69dd336062ecb7707833d64b",
+      "bytes": 4863
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/research-grant-pitch.opf.json",
+  "entries": {
+    "gallery/education/research-grant-pitch.opf.json#0": {
+      "sha256": "2803f96d60196e1b35793fa2249e92a495e44ca6ec58c23eb41e1f0ad13a8691",
+      "bytes": 2670
+    },
+    "gallery/education/research-grant-pitch.opf.json#1": {
+      "sha256": "155c802c4f8f8ccbec2105f73ea43b6cf9be70c24e3ac718af9bb87775e324e0",
+      "bytes": 6246
+    },
+    "gallery/education/research-grant-pitch.opf.json#2": {
+      "sha256": "b927ace449f572c733f71c64f48a03353dd4d1712e9150612ba63caa44b8f28d",
+      "bytes": 2976
+    },
+    "gallery/education/research-grant-pitch.opf.json#3": {
+      "sha256": "cd10e20827bc7ace38bf8920a7143f3a91633e82cec5e8004ed8ec5d08372853",
+      "bytes": 5384
+    },
+    "gallery/education/research-grant-pitch.opf.json#4": {
+      "sha256": "0e291697fa348876435b3489dec50416afee784700e6320d6e602079104fa9e4",
+      "bytes": 5352
+    },
+    "gallery/education/research-grant-pitch.opf.json#5": {
+      "sha256": "907b8f9abc3c2bc13a096cbfc2867b41ec3fa8b1951f999708bbecfd1ce4d51b",
+      "bytes": 5273
+    }
+  }
+}

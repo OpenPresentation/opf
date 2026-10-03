@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/design-and-media/visual-brand-system-sampler.opf.json",
+  "entries": {
+    "gallery/design-and-media/visual-brand-system-sampler.opf.json#0": {
+      "sha256": "7b760be26f7469a446a749ced2d58c86e2744df1f4fa5c72b99456d8d1647d05",
+      "bytes": 5263
+    },
+    "gallery/design-and-media/visual-brand-system-sampler.opf.json#1": {
+      "sha256": "d475bf5c4d50c62ab4cffbb672943088ee2b3a40c810b241abdd2d34f1313949",
+      "bytes": 7613
+    },
+    "gallery/design-and-media/visual-brand-system-sampler.opf.json#2": {
+      "sha256": "f9618d3022b8860908944b540b69ee4b385f257b5702f2ac96b1c38f8f1954ba",
+      "bytes": 3848
+    },
+    "gallery/design-and-media/visual-brand-system-sampler.opf.json#3": {
+      "sha256": "0ebef827d7fa5e7cfd93d1f481f5052028e5e059fcc34966175f025ebd12c99b",
+      "bytes": 6465
+    },
+    "gallery/design-and-media/visual-brand-system-sampler.opf.json#4": {
+      "sha256": "b761bbad7808ca5830acfebbd694677656df346104f530dd2db54f0fb4bfd961",
+      "bytes": 6755
+    },
+    "gallery/design-and-media/visual-brand-system-sampler.opf.json#5": {
+      "sha256": "4f999351abddd270e21672a56102a7f01441f9db9cac21bc8235fa9c092ff39a",
+      "bytes": 7365
+    }
+  }
+}

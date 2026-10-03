@@ -8,6 +8,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 import {examples} from '@openpresentation/opf/examples';
 import {renderSvgDeck,svgToPng} from '../dist/index.js';
+import {readBaseline} from './golden-store.mjs';
 const [consumer,directory='artifacts/code-review']=process.argv.slice(2);assert.ok(consumer);
 const root=await realpath(consumer),base=await realpath(path.join(root,'node_modules/@openpresentation/opf-render'));
 assert.ok(base.startsWith(root+path.sep),'Use an installed registry baseline, not a source alias');
@@ -15,7 +16,7 @@ const baseline=await import(pathToFileURL(path.join(base,'dist/index.js')));
 const lock=JSON.parse(await readFile(path.join(root,'package-lock.json'),'utf8'));
 const entry=lock.packages['node_modules/@openpresentation/opf-render'];
 assert.equal(entry.version,'0.6.0');assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/')&&!entry.link);
-const expected=JSON.parse(await readFile('test/golden/pre-shared-code-opf-examples-png.sha256.json','utf8'));
+const expected=readBaseline('test/golden/pre-shared-code-opf-examples-png.sha256.json'); // a per-deck baseline directory since RR-52
 const candidate=JSON.parse(await readFile('artifacts/golden/candidate.json','utf8'));
 assert.deepEqual(expected.source,candidate.source);
 const changed=Object.keys(expected.entries).filter(key=>expected.entries[key].sha256!==candidate.entries[key].sha256);

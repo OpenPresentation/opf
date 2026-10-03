@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/wildfire-evacuation-preparedness.opf.json",
+  "entries": {
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#0": {
+      "sha256": "6d8fcd6b2c8657ad6bdbb3e7fec6d6ca53a9765f682d573ef6cb026d86d340e1",
+      "bytes": 6290
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#1": {
+      "sha256": "aaebe95b17555e18de9984d02afb53f1757ded360004212693005ab463bb6cbc",
+      "bytes": 7694
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#2": {
+      "sha256": "603ab6c4b2db46c4b64664b78b8adad80be091703542d8f6b914eeee0f7c569d",
+      "bytes": 4045
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#3": {
+      "sha256": "4963956c125e1f8deee63af2d37dafc68202bf35f1fb3bd0734f4cf9ba96990e",
+      "bytes": 6753
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#4": {
+      "sha256": "17a64a406c87c894e371034e4cc337385b4205a788f65cbb18816550504bc10a",
+      "bytes": 7907
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#5": {
+      "sha256": "6ca1154d59262524400844ea2b43a2baaa8998f5fb84320a6816e1aa5e829965",
+      "bytes": 13802
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#6": {
+      "sha256": "014d3c53167d60b0e2bbe634e71a3341caf588d9a6b44e09be13adebfc2bc7a2",
+      "bytes": 8543
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#7": {
+      "sha256": "8f0534b2ff7c069d3ec23f0874798b6579265aa39621750a151676803ab7364e",
+      "bytes": 6311
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#8": {
+      "sha256": "f6b9c54aef0a6e8ced25bb90899c09e5c081edffcc28355e46e727d5eaf9e576",
+      "bytes": 5022
+    },
+    "gallery/government/wildfire-evacuation-preparedness.opf.json#9": {
+      "sha256": "728b5f730b1846155b67f464e7880cb8f80757ec67d255490e561cbecd5bf52b",
+      "bytes": 8782
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "deck": "technical/header-footer-logo-set.opf.json",
+  "entries": {
+    "technical/header-footer-logo-set.opf.json#0": {
+      "sha256": "1e300a47356abb2009a3a8ae50a6cecfb3a3ce5aaf8374e4007928540c319877",
+      "bytes": 5500
+    },
+    "technical/header-footer-logo-set.opf.json#1": {
+      "sha256": "2317a245f4c6622098a408770af5b47a8cafec30ad5b1476a939685379c34b20",
+      "bytes": 3263
+    }
+  }
+}

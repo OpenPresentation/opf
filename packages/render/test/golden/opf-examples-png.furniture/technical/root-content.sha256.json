@@ -1,0 +1,17 @@
+{
+  "deck": "technical/root-content.opf.json",
+  "entries": {
+    "technical/root-content.opf.json#0": {
+      "sha256": "9d3ebd6797a4542b509eeb2e082061d4cebcab3be9ddebd4135e8964b53a802f",
+      "bytes": 3246
+    },
+    "technical/root-content.opf.json#1": {
+      "sha256": "50b7fcd8fa7854296bc0c4854e2973483066ad4d09974f2dbfbdfaa37247c140",
+      "bytes": 4442
+    },
+    "technical/root-content.opf.json#2": {
+      "sha256": "4b058d55a3263d32c23a3c1e8cc7005a09d2590781a34245b1ef7bce965e1c04",
+      "bytes": 3664
+    }
+  }
+}

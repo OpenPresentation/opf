@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/business-functions/onboarding-experience-redesign.opf.json",
+  "entries": {
+    "gallery/business-functions/onboarding-experience-redesign.opf.json#0": {
+      "sha256": "d9e5dff1f8c1357eae5c292800ae00c0e43f4df6ec0403b3244a4467b8782e8d",
+      "bytes": 4407
+    },
+    "gallery/business-functions/onboarding-experience-redesign.opf.json#1": {
+      "sha256": "f8783746fa72ce5c7af07aa020c7c36d0fe30a0eb9132409ad03d460097945ec",
+      "bytes": 6127
+    },
+    "gallery/business-functions/onboarding-experience-redesign.opf.json#2": {
+      "sha256": "99ec89ad1e874f79fd944609dcb42693786ec3dc0de128cf4e194579bb305a59",
+      "bytes": 2876
+    },
+    "gallery/business-functions/onboarding-experience-redesign.opf.json#3": {
+      "sha256": "a26ccd13f08185712b5e025a88b4599c46671473c35ff47ae9d111d932e35d41",
+      "bytes": 4190
+    }
+  }
+}

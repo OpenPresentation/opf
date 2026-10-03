@@ -5,9 +5,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { examples } from '@openpresentation/opf/examples';
 import { renderSvgDeck, svgToPng } from '../dist/index.js';
+import { diffManifests, readBaseline } from './golden-store.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+// RR-52: a baseline is a directory with one file per deck (test/golden/<name>/...). A legacy
+// `<name>.sha256.json` path still selects `<name>/` and a legacy single-file manifest still loads.
 const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.cover-centering.sha256.json'));
+const started = performance.now();
 const output = path.resolve(process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden'));
 const update = process.argv.includes('--update');
 const scale = Number(process.env.OPF_GOLDEN_SCALE ?? '0.25');
@@ -26,6 +30,10 @@ const next = {
   format: 'png-sha256', scale, systemFonts: false, entries: {},
 };
 mkdirSync(output, { recursive: true });
+// OPF_GOLDEN_ARTIFACTS=1 keeps every slide for review; OPF_GOLDEN_ARTIFACTS=changed keeps only the slides whose hash
+// differs from the selected baseline (the regenerate-goldens workflow), so the review sheets show what moved.
+const artifactMode = process.env.OPF_GOLDEN_ARTIFACTS;
+const reference = artifactMode === 'changed' ? readBaseline(baselinePath) : undefined;
 const slides = [];
 for (const { file, deck } of corpus) {
   const svgs = renderSvgDeck(deck, { trace: true });
@@ -34,7 +42,8 @@ for (const { file, deck } of corpus) {
     const png = await svgToPng(svg, { scale, loadSystemFonts: false });
     const key = `${file}#${index}`;
     next.entries[key] = { sha256: sha256(png), bytes: png.byteLength };
-    if (update || process.env.OPF_GOLDEN_ARTIFACTS === '1') {
+    const keep = reference ? JSON.stringify(reference.entries[key]) !== JSON.stringify(next.entries[key]) : update || artifactMode === '1';
+    if (keep) {
       const asset = `${String(slides.length).padStart(4, '0')}.png`;
       writeFileSync(path.join(output, asset), png);
       slides.push({ key, asset, png });
@@ -56,19 +65,18 @@ if (slides.length) {
 }
 if (update) {
   // --update only creates a candidate. Promotion is a separate review step.
-  console.log(`Golden candidate: ${Object.keys(next.entries).length} slides, ${corpus.length} decks. Review ${output}/index.html, then copy candidate.json to ${baselinePath}.`);
+  console.log(`Golden candidate: ${Object.keys(next.entries).length} slides, ${corpus.length} decks. Review ${output}/index.html, then promote it into ${baselinePath} with npm run golden:promote (it rewrites only the decks that differ).`);
 } else {
-  const expected = JSON.parse(readFileSync(baselinePath, 'utf8'));
-  const changes = [...new Set([...Object.keys(expected.entries), ...Object.keys(next.entries)])]
-    .filter(key => JSON.stringify(expected.entries[key]) !== JSON.stringify(next.entries[key]));
-  writeFileSync(path.join(output, 'diff.json'), JSON.stringify({ sourceMatches: JSON.stringify(expected.source) === JSON.stringify(next.source), changedSlides: changes }, null, 2) + '\n');
+  const expected = readBaseline(baselinePath);
+  const { changedSlides: changes, changedDecks } = diffManifests(expected, next);
+  writeFileSync(path.join(output, 'diff.json'), JSON.stringify({ sourceMatches: JSON.stringify(expected.source) === JSON.stringify(next.source), changedSlides: changes, changedDecks }, null, 2) + '\n');
   assert.deepEqual(next.source, expected.source, 'Golden corpus changed; inspect candidate and review the new corpus.');
   assert.equal(next.version, expected.version, 'Golden manifest version changed');
   assert.equal(next.scale, expected.scale, 'Golden scale changed');
   assert.equal(next.format, expected.format, 'Golden format changed');
   assert.equal(next.systemFonts, expected.systemFonts, 'Golden font policy changed');
   assert.equal(changes.length, 0, `${changes.length} raster baselines changed; see ${output}/diff.json`);
-  console.log(`Golden passed: ${Object.keys(next.entries).length} slides, ${corpus.length} decks; no skipped corpus.`);
+  console.log(`Golden passed: ${Object.keys(next.entries).length} slides, ${corpus.length} decks; no skipped corpus (${((performance.now() - started) / 1000).toFixed(1)} s).`);
 }
 function readCorpus(directory, prefix = '') {
   return readdirSync(directory, { withFileTypes: true }).flatMap(entry => {

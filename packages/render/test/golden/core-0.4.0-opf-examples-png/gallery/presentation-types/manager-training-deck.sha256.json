@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/presentation-types/manager-training-deck.opf.json",
+  "entries": {
+    "gallery/presentation-types/manager-training-deck.opf.json#0": {
+      "sha256": "081a71c0d0aba01ad996bba8447d7c8bcecf1561941ddaa0dc0dce6f2aca3ffe",
+      "bytes": 4975
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#1": {
+      "sha256": "4f242abf83fa8eca11a199ae8092c166ce2fad4e8c58a77c6a9a765a00af32b7",
+      "bytes": 8514
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#2": {
+      "sha256": "4234fb3d394ad258a03fafd5575a9161e87983819d2ece161f76ed9986be8762",
+      "bytes": 4050
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#3": {
+      "sha256": "dcc4f9bb4686f085b4e41f9ba58e1ab409a561d6eb14c2f55ab54f2d310cf380",
+      "bytes": 6693
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#4": {
+      "sha256": "68be88fbe007e5c8cc355fb9949b033b47f9b27a378fe749559f4ba8f4e037d2",
+      "bytes": 7174
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#5": {
+      "sha256": "85bb975e45df940bf3137188ffec10f8c791c2b1daada7edccaf0d8e2ccef7fe",
+      "bytes": 16461
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#6": {
+      "sha256": "6cc3f4e6201e21fa25e5a756a0ccdc79b1c2da1343e2510c8f335d31daf5a68e",
+      "bytes": 9483
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#7": {
+      "sha256": "9d29a33f56fd7d5ddee015d57b7bf12973ba3925aeccbc83bcba8519bcdecbb5",
+      "bytes": 3892
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#8": {
+      "sha256": "4768c8c8d9631a5103ab38f9f77709a174ed84e863202926b2c6456052bff2d9",
+      "bytes": 5630
+    },
+    "gallery/presentation-types/manager-training-deck.opf.json#9": {
+      "sha256": "5a9585fca1df550343be7fac9f81c43cc169553261a60689932d117849822cb9",
+      "bytes": 11507
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "deck": "technical/grid-spans.opf.json",
+  "entries": {
+    "technical/grid-spans.opf.json#0": {
+      "sha256": "30b8a325ea355f281a8594fba026ca5f7e2c24d24b5019dfeb19983b0996d0f6",
+      "bytes": 3573
+    },
+    "technical/grid-spans.opf.json#1": {
+      "sha256": "ca023d17de4412e59cad559a599c3b0a8040dd8d5e14835dee1c80d422917c45",
+      "bytes": 4926
+    }
+  }
+}

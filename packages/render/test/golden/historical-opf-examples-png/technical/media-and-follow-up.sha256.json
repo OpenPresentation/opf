@@ -1,0 +1,13 @@
+{
+  "deck": "technical/media-and-follow-up.opf.json",
+  "entries": {
+    "technical/media-and-follow-up.opf.json#0": {
+      "sha256": "657c473750878a1bb633534f736ff7814b444910db01a8c349e5054fc60ab022",
+      "bytes": 3173
+    },
+    "technical/media-and-follow-up.opf.json#1": {
+      "sha256": "f2a9fd68d56939f83b597aadb546b2a907ef48a78a18967709aa9b38c2766d81",
+      "bytes": 2784
+    }
+  }
+}

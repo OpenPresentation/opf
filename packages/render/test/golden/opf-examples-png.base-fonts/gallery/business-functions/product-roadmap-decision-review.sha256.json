@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/product-roadmap-decision-review.opf.json",
+  "entries": {
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#0": {
+      "sha256": "f6d49e41216109c564444f6d75e3ef5ff602e933ef170e9e4654d7284958be70",
+      "bytes": 5657
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#1": {
+      "sha256": "040f1c38552632844bea9ecfcd804fd61c0d8f372e0f71ab7b16b6351086de2c",
+      "bytes": 8167
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#2": {
+      "sha256": "5e2a683971a4ffb16edbae9ab4bf1308434dbc013bea63807e12894b05ed116c",
+      "bytes": 4291
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#3": {
+      "sha256": "1559ee0a4a36d7bdeef5b3e2568b5177ba0e7e1e63aeb1a48d2ed20b17eee747",
+      "bytes": 6561
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#4": {
+      "sha256": "ec95c495154fb6c434237dc3209dbe4c5332b992c2066cd4157bfa64d8b9d273",
+      "bytes": 6567
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#5": {
+      "sha256": "289b43073421bf5862050a440321d633fa88417bd434e75cace2e55d53a637ef",
+      "bytes": 17002
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#6": {
+      "sha256": "8a3241d47c8e420f000e4092498bc669521df2ecc02b512d3d49af5f7a040597",
+      "bytes": 9647
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#7": {
+      "sha256": "ad251684ba42fe56f03142a3f8f3fbd7f598646305a1ae237d635c8311aa0ef0",
+      "bytes": 3965
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#8": {
+      "sha256": "d41c9053c3294c4240f5d2446bbadd997f83c3370fdbcf0c64769bef7e75fed3",
+      "bytes": 5536
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#9": {
+      "sha256": "07095db0f19cc8031256c9babbda63d0a8501428288f98c9a5ecb72cc095c1de",
+      "bytes": 10337
+    }
+  }
+}

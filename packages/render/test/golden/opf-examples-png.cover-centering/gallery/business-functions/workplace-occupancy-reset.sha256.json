@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/workplace-occupancy-reset.opf.json",
+  "entries": {
+    "gallery/business-functions/workplace-occupancy-reset.opf.json#0": {
+      "sha256": "de359d26671e55db39500c9fa8b34a9bd8b3ebafa54118a224b9c595f71b3848",
+      "bytes": 5660
+    },
+    "gallery/business-functions/workplace-occupancy-reset.opf.json#1": {
+      "sha256": "b475b26bb19391a506723030af1cef96c2d59d99bdc8c2f472bcf08eb40d49e3",
+      "bytes": 7516
+    },
+    "gallery/business-functions/workplace-occupancy-reset.opf.json#2": {
+      "sha256": "d79849c30ea31e43b912152a5fd6339b4ff8f9a847910f0c3883bf5a21445c85",
+      "bytes": 6161
+    },
+    "gallery/business-functions/workplace-occupancy-reset.opf.json#3": {
+      "sha256": "b15d01df87f5bc8b4a80530beb673c6b20b24c5dcbeeb85d5775f4397dad4b4c",
+      "bytes": 6679
+    },
+    "gallery/business-functions/workplace-occupancy-reset.opf.json#4": {
+      "sha256": "ba30406700deb9041403c90947836dafbda715de0afc67cf93c1ce495039d100",
+      "bytes": 7436
+    },
+    "gallery/business-functions/workplace-occupancy-reset.opf.json#5": {
+      "sha256": "0f5baf3007de5762c60e9340a98a66fd37399e92662d46662c9b83de451d7349",
+      "bytes": 6775
+    }
+  }
+}

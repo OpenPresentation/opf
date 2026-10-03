@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/model-governance-review.opf.json",
+  "entries": {
+    "gallery/business-functions/model-governance-review.opf.json#0": {
+      "sha256": "5d6cb5538b46796523f9275679f722059dc16f086cc74bb262226a78ff410c78",
+      "bytes": 9046
+    },
+    "gallery/business-functions/model-governance-review.opf.json#1": {
+      "sha256": "cf0311db38ec4392c53cc0b8c8bd7faa0bc68ba97188b03d860f5764bcce07ab",
+      "bytes": 11792
+    },
+    "gallery/business-functions/model-governance-review.opf.json#2": {
+      "sha256": "a8ebd874028626eb92c593c5188388bada37464f3f9bba1cbce2d26dd20ad692",
+      "bytes": 7267
+    },
+    "gallery/business-functions/model-governance-review.opf.json#3": {
+      "sha256": "4717177c26e76cc8af4806e5bc3724aa9e6d2594734e6e2b04464b6afbe37188",
+      "bytes": 9125
+    },
+    "gallery/business-functions/model-governance-review.opf.json#4": {
+      "sha256": "884da1757e0adb400763b0d512632cedf825ddae412428c57f1b0adb8a8e1238",
+      "bytes": 11636
+    },
+    "gallery/business-functions/model-governance-review.opf.json#5": {
+      "sha256": "e0360ee155b9d6c4698182f93915f446d0a136df651688be6114f9ade24fc5e3",
+      "bytes": 17711
+    },
+    "gallery/business-functions/model-governance-review.opf.json#6": {
+      "sha256": "5cb11e5df7a46d4df62d48bb23e1e1adead612e6dc3d86404c224a58c2b66cfc",
+      "bytes": 12507
+    },
+    "gallery/business-functions/model-governance-review.opf.json#7": {
+      "sha256": "0eb6181cd207e1087f8b0fe5109872dd6820c755ae39947220a1a96299cabc91",
+      "bytes": 6302
+    },
+    "gallery/business-functions/model-governance-review.opf.json#8": {
+      "sha256": "9a58f626715e23c8b4cb0a1a17c02e54d73bd10afeb1aa2110f3ffae9b794e88",
+      "bytes": 6321
+    },
+    "gallery/business-functions/model-governance-review.opf.json#9": {
+      "sha256": "1bac1d8c84831294ac3d38cf562af3be035b44cc6cb7c05b1b4f54cab876dc08",
+      "bytes": 13542
+    }
+  }
+}

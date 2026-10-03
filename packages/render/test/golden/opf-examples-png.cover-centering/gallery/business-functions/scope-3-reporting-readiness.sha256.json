@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/scope-3-reporting-readiness.opf.json",
+  "entries": {
+    "gallery/business-functions/scope-3-reporting-readiness.opf.json#0": {
+      "sha256": "3e2a9db4999f59d449a0bb03f51faa7378662f99e55d395178e4ef00c0f0f7dd",
+      "bytes": 5661
+    },
+    "gallery/business-functions/scope-3-reporting-readiness.opf.json#1": {
+      "sha256": "60f68ff26ef2c868318f5054aa1aca80f6029ad4b8b01caa2274b2f99e29a4a5",
+      "bytes": 7373
+    },
+    "gallery/business-functions/scope-3-reporting-readiness.opf.json#2": {
+      "sha256": "aac354dab9e02cbd02b324f2df8e858f55f800f8fd58151b9e4d85d1d482bbd3",
+      "bytes": 5639
+    },
+    "gallery/business-functions/scope-3-reporting-readiness.opf.json#3": {
+      "sha256": "1713c37b95f96ba18f0bb5035545ba1e6b532aad4c31cc8d18d184525d87a2b0",
+      "bytes": 6534
+    },
+    "gallery/business-functions/scope-3-reporting-readiness.opf.json#4": {
+      "sha256": "8b586e4f28e5efadfa3ef6753e6447b8c5e2f9746084143a1185970e3d389f53",
+      "bytes": 7193
+    },
+    "gallery/business-functions/scope-3-reporting-readiness.opf.json#5": {
+      "sha256": "9113e6dc5691a64c450857ee851090b1bf6875a15bb94cb8b3971657a37dffff",
+      "bytes": 6709
+    }
+  }
+}
