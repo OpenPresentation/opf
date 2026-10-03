@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "suites": {
+    "browser": {
+      "description": "npm run test:browser in package.json: the bundled importer and renderer checked in the pinned browser.",
+      "setup": ["npm run build:browser-check"],
+      "tests": [
+        { "id": "browser:browser-check", "command": "node test/browser-check.mjs" }
+      ]
+    }
+  }
+}

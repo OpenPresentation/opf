@@ -32,6 +32,9 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-pptx
+      # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
+      - name: Check the test quarantine
+        run: node --test scripts/quarantine.test.mjs scripts/browser-suites.test.mjs && node scripts/quarantine.mjs check
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -128,7 +131,9 @@ jobs:
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
       - if: runner.os == 'Windows'
         run: npx playwright install chromium
-      - run: npm run test:browser
+      # RR-47: test/browser-suites.json (the commands of npm run test:browser); a quarantined test is deferred to the non-blocking step below.
+      - name: Browser suite
+        run: node scripts/quarantine.mjs run-suite browser
       - name: Install and exercise coordinated candidate tarballs
         working-directory: opf
         run: |
@@ -145,12 +150,18 @@ jobs:
           node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
           node scripts/test-installed-code-guards.mjs
       - run: npm pack --dry-run
+      # RR-47: tests listed in test/quarantine.json run here, after every gate, and are reported without failing the job.
+      - name: Quarantined tests (non-blocking)
+        if: always()
+        continue-on-error: true
+        run: node scripts/quarantine.mjs run-deferred
       - name: Preserve candidate and raster evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: candidate-opf-pptx-${{ runner.os }}-node24
           path: |
+            opf-pptx/artifacts/quarantine/**
             opf/artifacts/plain-whitespace-workflow/**
             opf/artifacts/readability-browser/**
             opf/artifacts/timeline-workflow/**
