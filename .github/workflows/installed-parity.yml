@@ -40,7 +40,7 @@ env:
   # The same Node patch release as the published matrix: identical ICU, Unicode and tz data on all three systems.
   NODE_VERSION: 24.21.0
   # Planned versions are release-plan.json; this replaces entries the plan does not carry yet.
-  OPF_PARITY_OVERRIDES: ${{ inputs.overrides || vars.OPF_PARITY_OVERRIDES || '' }}
+  OPF_PARITY_OVERRIDES: ${{ inputs.overrides || vars.OPF_PARITY_OVERRIDES || '@openpresentation/opf-pptx@0.12.2' }}
 jobs:
   parity:
     name: Installed parity (${{ matrix.os }})
