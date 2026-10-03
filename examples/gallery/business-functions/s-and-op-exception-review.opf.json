@@ -5,9 +5,9 @@
   "filename": "s-and-op-exception-review",
   "language": "english-gb",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 29,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",

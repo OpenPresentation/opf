@@ -5,9 +5,9 @@
   "filename": "vaccination-outreach-briefing",
   "language": "english-gb",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 29,
       "technicalFluency": "medium",
       "decisionPower": "decision-maker",

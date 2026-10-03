@@ -5,9 +5,9 @@
   "filename": "identity-incident-executive-brief",
   "language": "english-gb",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "medium",
       "decisionPower": "informational",
