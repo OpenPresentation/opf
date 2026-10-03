@@ -1,14 +1,18 @@
 # RR-04: the installed FF-38 parity audit on ubuntu, windows and macos (2026-10-02)
 
 The FF-38 parity harness (preview against exported PPTX, 850 pptx.gallery values) ran on three GitHub-hosted systems
-against the packages installed from the npm registry. Result: **850 values on every system, 741 perfect, 109 near,
+against the packages installed from the npm registry, twice: on the planned set (opf-pptx 0.12.1, `pptx-0.12.1/`) and,
+once 0.12.2 was published, on the current `latest` set (opf-pptx 0.12.2, `pptx-0.12.2/`, the final run). Both gave the same
+result: **850 values on every system, 741 perfect, 109 near,
 0 mismatch, and no difference between the systems** (same values, same class, same outcome of every check, fact, diff
 and diagnostic). Internal evidence only; nothing here is shown on pptx.gallery.
 
 - Pull request: [opf#315](https://github.com/OpenPresentation/opf/pull/315).
-- Run: [Installed parity audit, run 37078965487](https://github.com/OpenPresentation/opf/actions/runs/37078965487) on
-  commit `c1da7a8f` (`ubuntu-24.04`, `windows-latest`, `macos-latest`; artifacts `installed-parity-<os>` are kept 14
-  days, the files below are copies). An earlier run of the same code on `afb99849`
+- Final run (opf-pptx 0.12.2): [Installed parity audit, run 37084054973](https://github.com/OpenPresentation/opf/actions/runs/37084054973)
+  on commit `28b4b40b` (`ubuntu-24.04`, `windows-latest`, `macos-latest` and the comparison job all green).
+- Run on the planned set (opf-pptx 0.12.1): [run 37078965487](https://github.com/OpenPresentation/opf/actions/runs/37078965487)
+  on commit `c1da7a8f`, repeated on `429d3b67` ([37081218124](https://github.com/OpenPresentation/opf/actions/runs/37081218124),
+  same result). Artifacts `installed-parity-<os>` are kept 14 days; the files below are copies. An earlier run of the same code on `afb99849`
   ([37078104253](https://github.com/OpenPresentation/opf/actions/runs/37078104253)) gave the same counts and no
   difference; it is not used because it recorded the checkout's HEAD instead of the package commits as the head of each
   source (fixed in `c1da7a8f`, and the comparison now fails on it).
@@ -24,8 +28,8 @@ and diagnostic). Internal evidence only; nothing here is shown on pptx.gallery.
 
 | | |
 | --- | --- |
-| Packages (npm registry, `--ignore-scripts`) | `@openpresentation/opf` 0.12.0 (`5e1dda7`), `opf-render` 0.12.0 (`3b300a3`), `opf-pptx` 0.12.1 (`986d22b`), `opf-editor` 0.11.1 (`f4779da`); the versions of `release-plan.json`. The npm `gitHead` of each is stamped into its `package.json` and the harness records it as that source's head. |
-| opf-pptx 0.12.2 | Not on the registry when the run was made (`npm view @openpresentation/opf-pptx@0.12.2` answered 404). When it is published, `release-plan.json` or `OPF_PARITY_OVERRIDES` moves the audit to it with no code change. |
+| Packages (npm registry, `--ignore-scripts`) | `@openpresentation/opf` 0.12.0 (`5e1dda7`), `opf-render` 0.12.0 (`3b300a3`), `opf-pptx` 0.12.2 (`e4569ac`; 0.12.1 `986d22b` in `pptx-0.12.1/`), `opf-editor` 0.11.1 (`f4779da`). `release-plan.json` still lists opf-pptx 0.12.1, so the final run replaced that one entry with `OPF_PARITY_OVERRIDES=@openpresentation/opf-pptx@0.12.2` (set in the workflow for that run only, then removed). The npm `gitHead` of each package is stamped into its `package.json` and the harness records it as that source's head. |
+| opf-pptx 0.12.2 against 0.12.1 | 850 values, class and every check identical. The only per-value difference is the `typefaces.scriptSupplementFaces` list of `languages/vietnamese-quoc-ngu` (43 faces become 45: the Viet/Uigh own-script theme supplement fix, opf-pptx#154; reported, not gated by the typefaces check). |
 | Renderer peers | The script-font packages of `opf-render@0.12.0` `peerDependencies` (the `@expo-google-fonts/*` packs), plus `esbuild` 0.28.2 for the snippet bundler. |
 | Node | 24.21.0 on all three systems (`actions/setup-node`), the same patch release as the published matrix. |
 | Font host | `PARITY_FONT_HOST=gallery`: the gallery editor's bundled font host modelled in Node (`font-host.mjs`). No host font is read, so the fonts of the runner cannot enter the result. |
@@ -73,10 +77,12 @@ with the `chart-data-adapted` diagnostic).
 `compare-parity.mjs` compares every leaf of every result (class, checks, stats, font resolution, typefaces, diffs and
 all diagnostics, 850 values) and of the run's `meta` (Node version, heads, font host, tolerances, definitions), and it
 checks that the recorded heads are the registry commits of the installed packages. Nothing is allow-listed.
-[comparison.json](comparison.json): 850 values, **0 differences**. After removing the clock (`meta.generatedAt`) the
-three result files have the same SHA-256 (of `JSON.stringify` of the parsed file with `meta.generatedAt` set to
-null; the first 16 hex digits are `298c385dbf8fcb51`). A fourth run on the Mac mini that wrote this evidence (Node 26.7.0,
-the same packages and snapshot, outside CI) also gave 741 / 109 / 0 and differs from the CI results only in `meta.node`.
+[pptx-0.12.2/comparison.json](pptx-0.12.2/comparison.json) and [pptx-0.12.1/comparison.json](pptx-0.12.1/comparison.json): 850
+values, **0 differences** in each. After removing the clock (`meta.generatedAt`) the three result files of a set have
+the same SHA-256 (of `JSON.stringify` of the parsed file with `meta.generatedAt` set to null; the first 16 hex digits
+are `ce8a411673a61f7c` for 0.12.2 and `298c385dbf8fcb51` for 0.12.1). A fourth run on the Mac mini that wrote this evidence (Node 26.7.0,
+opf-pptx 0.12.1, the same snapshot, outside CI) also gave 741 / 109 / 0 and differs from the CI results of that set only
+in `meta.node`.
 
 The 11 installed dependencies that differ by system are the platform builds of `esbuild`, `sharp`, `sharp-libvips` and
 `@resvg/resvg-js` (`@esbuild/<os>`, `@img/sharp-<os>`, `@img/sharp-libvips-<os>`, `@resvg/resvg-js-<os>`; the same
@@ -93,16 +99,16 @@ guarded by a check in the driver and in the comparison).
 
 ## Files
 
-- `ubuntu-24.04/`, `windows-latest/`, `macos-latest/`: `parity-results.json.gz` (the harness's results file, gzip),
+- `pptx-0.12.2/` and `pptx-0.12.1/`, each with `ubuntu-24.04/`, `windows-latest/`, `macos-latest/`: `parity-results.json.gz` (the harness's results file, gzip),
   `PARITY.md` (the harness's generated report), `installed.json` (Node, platform, packages with `gitHead`, every
   installed dependency version).
-- `comparison.json`: the cross-OS comparison.
+- `comparison.json` in each set: the cross-OS comparison.
 
 ## Re-running
 
 ```bash
 node scripts/published-matrix/installed-parity.mjs all        # on any system; work directory under RUNNER_TEMP or the temporary directory
-OPF_PARITY_OVERRIDES=@openpresentation/opf-pptx@0.12.2 node scripts/published-matrix/installed-parity.mjs all
+OPF_PARITY_OVERRIDES=@openpresentation/opf-pptx@0.12.2 node scripts/published-matrix/installed-parity.mjs all   # replace a planned version
 GALLERY_DIR=<pptx-gallery checkout> node scripts/published-matrix/installed-parity.mjs all   # snippets from a checkout, not the snapshot
 node scripts/published-matrix/compare-parity.mjs <directory with one sub-directory per system>
 ```
