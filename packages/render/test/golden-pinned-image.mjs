@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readFromCiWorkflow } from '../scripts/ecosystem-pins.mjs';
+import { readFromCiWorkflow, readLockRefs, readPins } from '../scripts/ecosystem-pins.mjs';
 import { pinnedImageProblems } from '../scripts/golden-pinned-image.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -36,5 +36,27 @@ assert.ok(workflow.includes(`image: ${pins.image}`), 'regenerate-goldens.yml mus
 assert.ok(workflow.includes(`OPF_PLAYWRIGHT_IMAGE: ${pins.image}`), 'The job env repeats the image the guard compares with ci.yml');
 assert.ok(workflow.indexOf('golden-pinned-image.mjs') < workflow.indexOf('npm ci'), 'The guard runs before any install');
 assert.equal(/runs-on:\s*(\S+)/.exec(workflow)[1], /runs-on:\s*(\S+)/.exec(ci)[1], 'The workflow uses the runner label of the ci.yml package job');
-assert.equal(pins.baselineDirectory, 'test/golden/opf-examples-png.cover-centering', 'ci.yml selects a per-deck baseline directory (legacy .sha256.json name accepted)');
-console.log('Golden pinned-image guard passed: eight refusals, the real script refuses here, workflow and ci.yml pin the same image.');
+// RR-50: ci.yml pins no sibling and no golden by hand; its golden-override is empty (the lock's golden) or a renderer
+// baseline directory (legacy .sha256.json name accepted).
+assert.match(pins.goldenOverride, /^$|^opf-render\/test\/golden\/[\w.-]+$/, 'ci.yml golden-override is empty or a renderer baseline directory');
+const lock = {
+  version: 1,
+  repositories: { opf: { sha: '1'.repeat(40) }, 'opf-render': { sha: '2'.repeat(40) }, 'opf-pptx': { sha: '3'.repeat(40) }, 'opf-editor': { sha: '4'.repeat(40) } },
+  golden: { repository: 'opf', path: 'scripts/fixtures/opf-examples-png.audience-ids.sha256.json' },
+};
+const withOverride = value => ci.replace(/^(\s*golden-override:).*$/m, `$1 ${value}`);
+assert.deepEqual(readPins({ lock, workflowText: withOverride("''") }), {
+  opf: '1'.repeat(40), 'opf-pptx': '3'.repeat(40), 'opf-editor': '4'.repeat(40), image: pins.image,
+  baseline: 'opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json', baselineDirectory: '', goldenSource: 'lock',
+});
+const own = readPins({ lock, workflowText: withOverride('opf-render/test/golden/opf-examples-png.cover-centering.sha256.json') });
+assert.equal(own.baseline, 'opf-render/test/golden/opf-examples-png.cover-centering.sha256.json');
+assert.equal(own.baselineDirectory, 'test/golden/opf-examples-png.cover-centering');
+assert.equal(own.goldenSource, 'override');
+assert.throws(() => readFromCiWorkflow(ci.replace(/ref: \$\{\{ steps\.refs\.outputs\.opf \}\}/, 'ref: da45b2e29812efbf67829f2fe987ef76858990f7')), /pinned by hand/);
+assert.throws(() => readFromCiWorkflow(`${ci}\n    env:\n      OPF_GOLDEN_BASELINE: x\n`), /OPF_GOLDEN_BASELINE by hand/);
+assert.throws(() => readLockRefs({ repositories: { opf: { sha: 'main' } } }), /no full SHA/);
+const workflowPins = workflow.indexOf('ecosystem-pins.mjs --lock');
+assert.ok(workflowPins > workflow.indexOf('actions/ecosystem-refs@main'), 'regenerate-goldens reads the lock the ecosystem-refs action resolves');
+assert.ok(workflow.includes('--require-renderer-baseline'), 'regenerate-goldens refuses a baseline outside the renderer');
+console.log('Golden pinned-image guard passed: eight refusals, the real script refuses here, workflow and ci.yml pin the same image; the pins come from the ecosystem lock.');

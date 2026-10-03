@@ -3,7 +3,7 @@
 # Start it by adding the `regenerate-goldens` label to a pull request from a branch of this repository, or by running
 # the workflow on that branch (workflow_dispatch). It:
 #   1. refuses to run anywhere but the pinned image (scripts/golden-pinned-image.mjs),
-#   2. rebuilds the coordinated source graph ci.yml pins (scripts/ecosystem-pins.mjs reads the pins from ci.yml),
+#   2. rebuilds the coordinated source graph ci.yml tests (core's ecosystem.lock.json, read by scripts/ecosystem-pins.mjs),
 #   3. renders the corpus, rewrites only the per-deck files whose hashes differ (scripts/golden-promote.mjs) and never
 #      changes the comparison (exact hashes at the baseline's scale; the 0.1 px and 0.15 px metric gates are untouched),
 #   4. uploads artifacts/golden (diff.json, the review sheets of the changed slides, the changed PNGs) as an artifact,
@@ -53,26 +53,34 @@ jobs:
       # Fail fast, before any install: wrong runner, wrong image, wrong OS.
       - name: Refuse anything but the pinned Playwright image
         run: node opf-render/scripts/golden-pinned-image.mjs
-      # RR-50 replaces this with a read of ecosystem.lock.json; the output names stay.
-      - name: Read the pins from ci.yml
+      # RR-50: the sibling commits come from core's ecosystem.lock.json (the same action ci.yml runs), the golden
+      # selection from ci.yml's golden-override or the lock; the output names stay (scripts/ecosystem-pins.mjs).
+      - name: Read core's ecosystem.lock.json
+        id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-render
+      - name: Read the pins (lock) and the golden selection (ci.yml)
         id: pins
-        run: node opf-render/scripts/ecosystem-pins.mjs --github-output
+        env:
+          LOCK_FILE: ${{ steps.refs.outputs.lock_file }}
+        run: node opf-render/scripts/ecosystem-pins.mjs --lock "$LOCK_FILE" --github-output --require-renderer-baseline
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: ${{ steps.pins.outputs.opf }}
+          ref: ${{ steps.refs.outputs.opf }}
           path: opf
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ steps.pins.outputs.opf_pptx }}
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: ${{ steps.pins.outputs.opf_editor }}
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           persist-credentials: false
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0

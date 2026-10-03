@@ -21,10 +21,7 @@ jobs:
     defaults:
       run:
         working-directory: opf-render
-    env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering
     steps:
-      # Release 0.12.0 pins core main da45b2e (the release commit 5e1dda7, tag opf-v0.12.0, plus the renderer 0.12.0 lazy font count, opf#282). opf-pptx e6c0391 and opf-editor dea8a79 are unchanged from release 0.11.9.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -38,40 +35,37 @@ jobs:
         if: github.event_name == 'pull_request'
         continue-on-error: true
         run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
-      # FF-19 uses core resolveScriptFonts (FF-18) and paragraphDirection (#134); sibling pins
-      # match core main's ecosystem-ci. Verify the released graph before using source links.
-      # FF-29 pins merged core (opf#132) that adds composed item.alignment.
-      # FF-31 pins merged core (opf#133): src/font-policy.js snapshots its spec/reference/font-policy.json.
-      # FF-31 Gelasio metric tier pins merged core opf#163 (Georgia disabledFeatures). opf-pptx and opf-editor move to the coordinated heads core main pins (ecosystem-ci), which pass core#155 and its packed quote test.
-      # FF-31 (Intos) pins core PR opf#166 (core main plus the Intos policy, skills, docs and build scripts); repin to its merge commit once merged (never leave it on an unmerged head).
-      # Cover centering pins merged core opf#169 (ce3c779): 103 golden slides move, selected through OPF_GOLDEN_BASELINE.
-      # Release 0.11.7 pins core main b8db055 (the coordinated release plan and FF-58 closure plus the 0.11.7 lazy font count, opf#216); the opf-pptx and opf-editor pins are unchanged.
-      # Release 0.11.6 pins core main b266190 (0.11.3 plus the 0.11.6 lazy font count, opf#211), the opf-pptx 0.11.4 release commit c08105f and opf-editor main 8bf5ba0 (both pass with the 100-layout catalog).
-      # Release 0.11.8 pins core core main 3ae62f9 (records the 0.11.8 lazy font count, opf#219), opf-pptx main b5ed201 and opf-editor main 159c08b.
-      # FF-43 pins core PR opf#178 (font policy measured values for the vendored Source Sans 3 rows, the measurement tools and the tracker); merged as 72d337bf5778cc7d9048d236debc10ba0d37fb4c.
-      # Release 0.11.9 pins core main 07cd9d4 (design fields and preview fixes opf#229 to #232, the 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235), opf-pptx main e6c0391 (after opf-pptx#124) and opf-editor main dea8a79.
-      # RR-17 repins to core main 395e4c1 (opf#247 RR-16 merged, with opf#270 RR-29 and the font policy rows of opf#255 and opf#261), which contains opf#249, #253, #254 and #256 (the policy rows this branch snapshots); repin to core main once opf#247 merges. Earlier pins follow.
-      # RR-32 pins core PR opf#256 (template variables, resolveVariables) and RR-16 pins core PR opf#247 (composed font sizes on PowerPoint's 0.01 pt grid; 316 golden slides move, selected through OPF_GOLDEN_BASELINE). Both are unmerged, so the pin is the throwaway branch codex/rr-16-combined-rr-32-b (8c2bfd9: opf#247 commit 448c47f merged with the opf#256 commit render main pins, ba727c7; it carries no other core change, so the font policy snapshot stays valid). Repin to the core merge commit once both merge (never leave it on an unmerged head).
-      # RR-29 pins core PR opf#270 (promoted regions in reading order, chartPaletteForFill) on top of that combined branch: the throwaway branch codex/rr-29-combined-ci-pin (f1c1a0d: 8c2bfd9 plus the opf#270 commit 987f61b without the audit, which this repository does not use; it changes no font policy). Repin to the core merge commit once opf#270 merges (never leave it on an unmerged head).
-      # RR-07 pins core main d382351 (opf#246 merged, then RR-34 and RR-17 wrap: the shared code syntax, metric trend and measured pattern tables, on core main after RR-16, RR-29, RR-32 and RR-33).
+      # RR-50: no hand pins. The commits of opf, opf-pptx and opf-editor and the golden baseline (OPF_GOLDEN_BASELINE, exported
+      # to the later steps) come from core's ecosystem.lock.json, written by the roller. A `Depends-On:` trailer in the pull
+      # request body tests an unmerged pull request of another repository instead (core docs/ecosystem-development.md).
+      - name: Resolve the coordinated commits from core's ecosystem.lock.json
+        id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-render
+          export-golden: 'true'
+          # A renderer pull request that moves pixels selects its own baseline directory here, e.g.
+          # opf-render/test/golden/<name> (regenerate-goldens writes into it; scripts/ecosystem-pins.mjs reads it).
+          # Empty selects the lock's golden.
+          golden-override: ''
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: da45b2e29812efbf67829f2fe987ef76858990f7
+          ref: ${{ steps.refs.outputs.opf }}
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: e6c03911fd3c14a72a770da1c7439abf934c65de
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: dea8a7957b322b1e0b837c6512b15af5073aa081
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
