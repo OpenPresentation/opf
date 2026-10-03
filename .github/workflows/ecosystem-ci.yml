@@ -32,6 +32,10 @@ jobs:
         id: scope
         working-directory: opf
         run: node --test scripts/ecosystem-scope.test.mjs && node scripts/ecosystem-scope.mjs
+      # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
+      - name: Check the test quarantine
+        working-directory: opf
+        run: node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check
       # These commits are the coordinated checkpoint, not mutable default branches.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
@@ -123,16 +127,8 @@ jobs:
         working-directory: opf
         run: |
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
-          pnpm test:packed-browser
-          node scripts/test-installed-code-guards.mjs
-          node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
-          node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed
-          node scripts/test-readability-browser.mjs artifacts/readability-browser installed
-          node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
-          node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
-          node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
-          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
-          node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
+          # RR-47: the commands are test/browser-suites.json (installed-browser); a quarantined test is deferred to the non-blocking step below.
+          node scripts/quarantine.mjs run-suite installed-browser
       - name: Check scalar source whitespace and accepted browser advances
         if: steps.scope.outputs.run == 'true'
         working-directory: opf-render
@@ -171,6 +167,12 @@ jobs:
           node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
           node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
+      # RR-47: tests listed in test/quarantine.json run here, after every gate, and are reported without failing the job.
+      - name: Quarantined tests (non-blocking)
+        if: always() && steps.scope.outputs.run == 'true'
+        continue-on-error: true
+        working-directory: opf
+        run: node scripts/quarantine.mjs run-deferred
       - name: Preserve installed-browser evidence
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -178,6 +180,7 @@ jobs:
           name: installed-browser-node24
           path: |
             opf/artifacts/portability/**
+            opf/artifacts/quarantine/**
             opf/artifacts/npm/*.tgz
             opf/artifacts/npm/manifest.json
             opf/artifacts/npm/consumer/package.json
