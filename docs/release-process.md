@@ -41,7 +41,23 @@ the upstream publish. `@openpresentation/cli` bundles core and is released
 separately by `cli-publish.yml` (`cli-vX.Y.Z`) when a fresh bundle is needed.
 
 Release-prep PRs contain only version bumps, changelog entries, dependency ranges
-and lockfile changes (plus current-instruction docs). After the whole set is on
+and lockfile changes (plus current-instruction docs). The changelog entries are
+not written by hand: every change adds a fragment `changes/<slug>.md` in its own
+PR (RR-46, [changes/README.md](../changes/README.md)), and the release-prep PR
+runs the assembler, which moves the fragments into the new release section of
+`CHANGELOG.md` and deletes them. Each sibling repository has the same
+`changes/` directory and script:
+
+```sh
+# core (packages are named in each fragment: opf = CHANGELOG.md, cli = packages/cli/CHANGELOG.md)
+node scripts/changelog-fragments.mjs assemble --version X.Y.Z --package opf --date YYYY-MM-DD
+node scripts/changelog-fragments.mjs assemble --version A.B.C --package cli   # only when the CLI is released
+# opf-render, opf-pptx, opf-editor
+node scripts/changelog-fragments.mjs assemble --version X.Y.Z --date YYYY-MM-DD [--summary "Patch release: ..."]
+```
+
+Use `--dry-run` to preview, and check that no `changes/*.md` other than
+`README.md` remains for the released package before opening the PR. After the whole set is on
 the registry, a follow-up docs change updates `release-plan.json`, the
 compatibility matrix and the quickstart to the published set, and the gallery
 consumer dependencies are bumped.
@@ -59,7 +75,7 @@ The parity harness must always run with `--import <opf>/scripts/register-local-o
 Before tagging, confirm that the release commit on `main` already contains:
 
 - `packages/javascript/package.json` with the intended version.
-- `CHANGELOG.md` with the matching release section.
+- `CHANGELOG.md` with the matching release section (assembled from `changes/`, see above).
 - Passing `OPF CI` on the release commit.
 
 The publish workflow validates the tag name against

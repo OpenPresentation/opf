@@ -62,13 +62,21 @@ When a schema or catalog change is accepted:
 
 Bug fixes, generator script changes, and documentation improvements can go straight to a pull request. Please don't hand-edit generated TypeScript under `packages/javascript/src/generated` (or similar generated output) — change the generator or the underlying `spec/` data instead.
 
+### Tests and scripts
+
+`pnpm test` discovers its tests instead of listing them: a package runs every `test/*.mjs` (`node ../../scripts/run-tests.mjs`, with `test/suites.json` for the few helpers and separately-run files that are excluded) and the root runs every `check:*` script (`scripts/run-checks.mjs`, with `scripts/checks.json`). A new test is one new file and a new check is one new `check:*` script, so two pull requests that each add one never conflict.
+
+### Generated trackers
+
+The gallery tracker (`docs/programs/release-readiness/gallery-tracker.*`) and the font tracker (`docs/programs/font-fidelity-everywhere/font-tracker.*`) are derived from committed data. A pull request does not have to regenerate them: when it changes a tracker input, CI only warns that the committed tracker is stale (`OPF_TRACKER_STALE=warn`), and after the merge the "Tracker refresh" workflow regenerates both and offers the result as one pull request from `bot/tracker-refresh`. Regenerate in your own pull request (`pnpm build:font-tracker`, then `pnpm build:gallery-tracker`) only when that pull request changes a tracker generator, its overrides or its tests. A local `pnpm test` and the CI runs on `main`, tags and releases still fail on a stale tracker; if `main` is red for that reason, merge the refresh pull request.
+
 ### Releases
 
 Only maintainers cut releases. The owner has authorized agents to prepare and publish npm releases through the documented workflow when a release is required (authorized 2026-09-29; see [`docs/release-process.md`](./docs/release-process.md#agent-authorization-and-coordinated-release-order)). See that runbook for the full procedure (tagging, npm trusted publishing with provenance, coordinated package order and release notes).
 
 ## Pull requests
 
-Please fill out the pull request template, make sure `pnpm test` passes, and update `CHANGELOG.md` for any user-facing change. See [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) for the full checklist.
+Please fill out the pull request template, make sure `pnpm test` passes, and add a changelog fragment `changes/<slug>.md` for any user-facing change (see [`changes/README.md`](./changes/README.md); do not edit `CHANGELOG.md` or `## Unreleased` by hand, the release-prep PR assembles the fragments). See [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) for the full checklist.
 
 ## License
 

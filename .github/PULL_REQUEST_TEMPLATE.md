@@ -14,7 +14,7 @@
 
 - [ ] `pnpm test` passes locally
 - [ ] `index.json` updated for any added/removed/renamed catalog records
-- [ ] `CHANGELOG.md` updated for any user-facing change
+- [ ] `changes/<slug>.md` fragment added for any user-facing change (not an edit to `CHANGELOG.md`)
 
 ## Additional context
 

@@ -16,7 +16,7 @@ const policyNames = policy.families.map((row) => row.family);
 function scratchCopy() {
   // realpath: on macOS the temporary directory is a symlink, and the script only runs when its resolved path is the entry point.
   const dir = realpathSync(mkdtempSync(path.join(tmpdir(), "font-tracker-")));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs", "scripts/tracker-staleness.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
@@ -235,7 +235,8 @@ test("--check detects drift in the tracker files and passes after a rebuild", ()
   const dir = scratchCopy();
   try {
     const script = path.join(dir, "scripts/build-font-tracker.mjs");
-    const run = (...args) => spawnSync(process.execPath, [script, ...args], { encoding: "utf8" });
+    // CI sets OPF_TRACKER_STALE=warn on pull requests (RR-46); this test is about the strict default.
+    const run = (...args) => spawnSync(process.execPath, [script, ...args], { encoding: "utf8", env: { ...process.env, OPF_TRACKER_STALE: "fail" } });
     assert.equal(run("--check").status, 0, "fresh copy is current");
 
     writeFileSync(path.join(dir, FILES.markdown), `${readFileSync(path.join(dir, FILES.markdown), "utf8")}\nhand edit\n`);

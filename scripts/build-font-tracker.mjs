@@ -17,6 +17,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { reportStale } from "./tracker-staleness.mjs";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = "docs/programs/font-fidelity-everywhere";
@@ -1234,8 +1235,8 @@ async function main() {
   if (args.includes("--check")) {
     const { drift } = checkTracker();
     if (drift.length) {
-      console.error(`Font tracker drift: ${drift.join(", ")}. Run node scripts/build-font-tracker.mjs and commit the result.`);
-      process.exit(1);
+      if (reportStale(`Font tracker drift: ${drift.join(", ")}. Run node scripts/build-font-tracker.mjs and commit the result.`)) process.exit(1);
+      return;
     }
     console.log("Font tracker is up to date.");
     return;
