@@ -7,7 +7,7 @@ decision 2026-09-30; see the [README](README.md) invariants). Tracker: [burndown
 It covers what the lockstep release train of 2026-10-02 shipped, the native PowerPoint evidence behind the
 PowerPoint-facing claims, the gaps that are descoped or still open (with their issues) and the decisions taken on
 the owner's behalf that the owner can veto. Two parts of RR-20 are not finished and are marked as such below: the
-three sites adopt the release (another agent), and the audits are re-run on the published 0.12.0 set.
+three sites adopt the release (another agent), and the native fidelity pass on the published set is still to run (the configuration audits and the parity run are done).
 
 ## What the owner needs to know
 
@@ -194,9 +194,18 @@ slide tag colour rule, quote provenance) stay in the [font burndown](../font-fid
   [openpresentation-site#61](https://github.com/Data-Advantage/openpresentation-site/pull/61) (RR-28) are drafts.
   RR-14 (the pptx.dev "Understand this deck" feature) is merged behind default-off flags and also waits for the
   dependency bump, live model recordings and the owner's gateway, budget and zero-data-retention decisions.
-- **Re-audit on the published set**: the gallery configuration audit, the parity run and a native fidelity pass on
-  core 0.12.0, renderer 0.12.0, PPTX 0.12.0 and editor 0.11.0 are not run yet; the result will be linked from the
-  RR-20 row. The last recorded audits measured the 0.11.4 train ([font program README](../font-fidelity-everywhere/README.md)),
-  and the RR-16 parity run on unpublished core main is in [rr-16-font-size-grid.md](rr-16-font-size-grid.md).
+- **Re-audit on the published set**: done 2026-10-02 for the configuration audits and the parity run on core 0.12.0,
+  renderer 0.12.0, PPTX 0.12.2 and editor 0.11.1 (pptx-gallery `c349a61`): no value regressed against the 0.11.4 train
+  or the RR-16 candidate run. Results (RR-20 row evidence):
+  [audit A](../font-fidelity-everywhere/gallery-support/audit-a/SUMMARY.md),
+  [audit B](../font-fidelity-everywhere/gallery-support/audit-b/results.json) with the
+  [catalog-only values](../font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json),
+  the [parity run](../font-fidelity-everywhere/gallery-support/parity/PARITY-2026-10-02-published-0.12.md) with its
+  [catalog-only run](../font-fidelity-everywhere/gallery-support/parity/PARITY-2026-10-02-published-0.12-catalog-only.md),
+  the measurement record in [gallery-support.md](../font-fidelity-everywhere/gallery-support.md), the RR-44 and slot-check
+  classifier changes in the [harness README](../font-fidelity-everywhere/gallery-support/README.md#classifier-changes),
+  and the regenerated [gallery tracker](gallery-tracker.md) and [font tracker](../font-fidelity-everywhere/font-tracker.md).
+  The native fidelity pass on the published set is the owner's and not run yet. The RR-16 parity run on unpublished core
+  main is in [rr-16-font-size-grid.md](rr-16-font-size-grid.md).
 - **Open items that close RR-20** (burndown): RR-02, RR-03, RR-04, RR-05, RR-14, RR-17, RR-18, RR-19, RR-22, RR-23,
   RR-28; run `pnpm report:release` for the current count.
