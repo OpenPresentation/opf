@@ -30,26 +30,28 @@ jobs:
           path: opf
           fetch-depth: 0
           persist-credentials: false
-      # The sibling pins are the ones the packages job uses: one source of truth.
-      - name: Read the sibling pins of the packages job
-        run: |
-          grep -E '^  OPF_(RENDER|EDITOR|PPTX)_REF: [0-9a-f]{40}$' opf/.github/workflows/ecosystem-ci.yml | sed 's/^ *//; s/: /=/' | tee -a "$GITHUB_ENV"
+      # The sibling commits are the ones the packages job uses: ecosystem.lock.json, one source of truth (RR-50).
+      - name: Resolve the coordinated commits from ecosystem.lock.json
+        id: refs
+        uses: ./opf/.github/actions/ecosystem-refs
+        with:
+          consumer: opf
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ env.OPF_RENDER_REF }}
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          ref: ${{ env.OPF_EDITOR_REF }}
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ env.OPF_PPTX_REF }}
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           persist-credentials: false
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
