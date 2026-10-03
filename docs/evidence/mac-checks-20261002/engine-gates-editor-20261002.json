@@ -1,0 +1,467 @@
+{
+ "date": "2026-10-02",
+ "suite": "editor",
+ "checkout": "opf-editor 0.11.1 (f4779da) with opf-render 0.12.0",
+ "results": [
+  {
+   "gate": "playground-source",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 13
+  },
+  {
+   "gate": "playground-source",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 15
+  },
+  {
+   "gate": "playground-pptx",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 18
+  },
+  {
+   "gate": "playground-pptx",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 11,
+   "tail": [
+    "",
+    "+ 'The I/O read operation failed.'",
+    "- ''",
+    "",
+    "    at test/playground-pptx.webkit.mjs:116:10 {",
+    "  generatedMessage: true,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: 'The I/O read operation failed.',"
+   ]
+  },
+  {
+   "gate": "playground-download",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 14
+  },
+  {
+   "gate": "playground-download",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 9,
+   "tail": [
+    "+ 'The browser could not draw this SVG as an image.'",
+    "- ''",
+    "",
+    "    at create (test/playground-download.webkit.mjs:57:12)",
+    "    at async test/playground-download.webkit.mjs:114:3 {",
+    "  generatedMessage: true,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: 'The browser could not draw this SVG as an image.',"
+   ]
+  },
+  {
+   "gate": "playground-script-fonts",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 8
+  },
+  {
+   "gate": "playground-script-fonts",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 8,
+   "tail": [
+    "+ ''",
+    "- 'opf-inline-input'",
+    "",
+    "    at pressCaret (test/playground-script-fonts.webkit.mjs:88:12)",
+    "    at async test/playground-script-fonts.webkit.mjs:107:87 {",
+    "  generatedMessage: true,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: '',"
+   ]
+  },
+  {
+   "gate": "playground-lazy-fonts",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 28
+  },
+  {
+   "gate": "playground-lazy-fonts",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 16,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Intos Display: drawn 793.01953125 differs from measured 791.622",
+    "    at test/playground-lazy-fonts.webkit.mjs:70:12 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "playground-base-fonts",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 38
+  },
+  {
+   "gate": "playground-base-fonts",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 20,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Carlito: drawn 782.05078125 differs from measured 779.783",
+    "    at test/playground-base-fonts.webkit.mjs:112:12 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "playground-ensure-fonts",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 40
+  },
+  {
+   "gate": "playground-ensure-fonts",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 47
+  },
+  {
+   "gate": "canvas-fonts-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 7
+  },
+  {
+   "gate": "canvas-fonts-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 7
+  },
+  {
+   "gate": "design-controls-browser",
+   "engine": "chromium",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 15,
+   "tail": [
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: keyboard theme change: {\"name\":\"Design controls\",\"language\":\"english\",\"narrative\":\"problem-solution\",\"tone\":\"formal\",\"audience\":[\"executives\"],\"speaker\":{\"id\":\"alice\",\"name\":\"Alice Chen\"},\"organization\":{\"id\":\"acme\",\"name\":\"Acme\"},\"assets\":{\"logo\":\"data:image/png;base",
+    "    at waitDoc (test/design-controls-browser.chromium.mjs:71:47)",
+    "    at async test/design-controls-browser.chromium.mjs:146:19 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: undefined,"
+   ]
+  },
+  {
+   "gate": "design-controls-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 17,
+   "tail": [
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: keyboard theme change: {\"name\":\"Design controls\",\"language\":\"english\",\"narrative\":\"problem-solution\",\"tone\":\"formal\",\"audience\":[\"executives\"],\"speaker\":{\"id\":\"alice\",\"name\":\"Alice Chen\"},\"organization\":{\"id\":\"acme\",\"name\":\"Acme\"},\"assets\":{\"logo\":\"data:image/png;base",
+    "    at waitDoc (test/design-controls-browser.webkit.mjs:71:47)",
+    "    at async test/design-controls-browser.webkit.mjs:146:19 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: undefined,"
+   ]
+  },
+  {
+   "gate": "design-gaps-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 24
+  },
+  {
+   "gate": "design-gaps-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 31
+  },
+  {
+   "gate": "chart-options-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 42
+  },
+  {
+   "gate": "chart-options-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 42
+  },
+  {
+   "gate": "persistence-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 115
+  },
+  {
+   "gate": "persistence-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 129
+  },
+  {
+   "gate": "slides-browser",
+   "engine": "chromium",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 9,
+   "tail": [
+    "  ]",
+    "",
+    "    at test/slides-browser.chromium.mjs:227:10",
+    "    at runNextTicks (node:internal/process/task_queues:65:5)",
+    "    at process.processImmediate (node:internal/timers:541:9) {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: [ 'false', 'false', 'false', 'false', 'true', 'false' ],"
+   ]
+  },
+  {
+   "gate": "slides-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 11,
+   "tail": [
+    "    'true',",
+    "    'false'",
+    "  ]",
+    "",
+    "    at test/slides-browser.webkit.mjs:227:10 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: [ 'false', 'false', 'false', 'false', 'true', 'false' ],"
+   ]
+  },
+  {
+   "gate": "template-panel-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 7
+  },
+  {
+   "gate": "template-panel-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 8
+  },
+  {
+   "gate": "numbering-panel-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 7
+  },
+  {
+   "gate": "numbering-panel-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 9
+  },
+  {
+   "gate": "find-replace-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 7
+  },
+  {
+   "gate": "find-replace-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 8
+  },
+  {
+   "gate": "image-crop-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 9
+  },
+  {
+   "gate": "image-crop-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 9,
+   "tail": [
+    "AssertionError [ERR_ASSERTION]: Tab stays inside the crop layer",
+    "",
+    "false !== true",
+    "",
+    "    at test/image-crop-browser.webkit.mjs:305:12 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "mobile-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 42
+  },
+  {
+   "gate": "mobile-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 7,
+   "tail": [
+    "iPhone SE: page errors [] {\"id\":\"three\",\"title\":\"Picture\",\"blocks\":[{\"image\":{\"src\":\"asset:photo\",\"alt\":\"A picture\"}},{\"text\":\"Beside it\"}]} 400 \u00d7 200 px of 400 \u00d7 200 (100% of the picture) /  / ResetRestore originalCancelApply crop status: Changes saved in this session",
+    "node:internal/modules/run_main:107",
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "browserContext.newCDPSession: CDP session is only available in Chromium",
+    "    at test/mobile-browser.webkit.mjs:158:35 {",
+    "  log: [],"
+   ]
+  },
+  {
+   "gate": "review-panel-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 38
+  },
+  {
+   "gate": "review-panel-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 39
+  },
+  {
+   "gate": "json-editor-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "json-editor-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "selection-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "selection-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "click-entry-browser",
+   "engine": "chromium",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 3,
+   "tail": [
+    "+ 'slides.7.blocks.0.table.rows.1.0'",
+    "- 'slides.7.blocks.0.table.rows.0.1'",
+    "                                ^",
+    "",
+    "    at test/click-entry-browser.chromium.mjs:282:12 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: 'slides.7.blocks.0.table.rows.1.0',"
+   ]
+  },
+  {
+   "gate": "click-entry-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "",
+    "AssertionError [ERR_ASSERTION]: hover keeps the outline highlight",
+    "    at test/click-entry-browser.webkit.mjs:99:12",
+    "    at runNextTicks (node:internal/process/task_queues:65:5)",
+    "    at process.processImmediate (node:internal/timers:541:9) {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: 'rgba(0, 0, 0, 0)',"
+   ]
+  },
+  {
+   "gate": "playground-pptx",
+   "engine": "webkit-online",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 17
+  },
+  {
+   "gate": "playground-download",
+   "engine": "webkit-online",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 18
+  }
+ ],
+ "host": {
+  "macos": "26.6.2",
+  "arch": "arm64",
+  "node": "v26.7.0",
+  "playwright": "1.63.0",
+  "chromium": "153.0.8010.12",
+  "webkit": "26.6"
+ }
+}

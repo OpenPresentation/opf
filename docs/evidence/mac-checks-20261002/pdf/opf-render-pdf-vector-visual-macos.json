@@ -1,0 +1,602 @@
+{
+ "summary": {
+  "slides": 51,
+  "corpusSlides": 805,
+  "step": 16,
+  "mae": {
+   "p50": 0.1439134837962963,
+   "p90": 0.39077213541666667,
+   "p99": 0.8223657407407408,
+   "max": 0.8223657407407408
+  },
+  "largePixelPercent": {
+   "p50": 0.00044900030083020153,
+   "p90": 0.013470009024906048,
+   "p99": 0.01949643493761141,
+   "max": 0.01949643493761141
+  },
+  "pdfBytes": {
+   "vectorMean": 24882,
+   "rasterMean": 27517
+  },
+  "vectorExportMsPerSlide": 251,
+  "textExtraction": {
+   "pdfjs": {
+    "slidesWithAllDrawnCharacters": 51,
+    "mismatches": []
+   },
+   "pdfium": {
+    "slidesWithAllDrawnCharacters": 51,
+    "mismatches": []
+   }
+  },
+  "fallbackNotes": [],
+  "tolerances": {
+   "maxMae": 1.5,
+   "maxLargePercent": 0.5
+  }
+ },
+ "rows": [
+  {
+   "key": "gallery/business-functions/compliance-readiness-review.opf.json#0",
+   "mae": 0.09462528935185185,
+   "largePercent": 0.01171875,
+   "bytes": 19778,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/data-platform-migration-plan.opf.json#0",
+   "mae": 0.8223657407407408,
+   "largePercent": 0,
+   "bytes": 22185,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#0",
+   "mae": 0.13467978395061728,
+   "largePercent": 0.004629629629629629,
+   "bytes": 22653,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/engineering-capacity-planning.opf.json#2",
+   "mae": 0.06723484848484848,
+   "largePercent": 0.016247029114676174,
+   "bytes": 20105,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/field-enablement-certification.opf.json#2",
+   "mae": 0.19205859375,
+   "largePercent": 0,
+   "bytes": 21902,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/investor-relations-update.opf.json#2",
+   "mae": 0.05370804398148148,
+   "largePercent": 0.005642361111111111,
+   "bytes": 20624,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/model-governance-review.opf.json#8",
+   "mae": 0.12919753086419752,
+   "largePercent": 0,
+   "bytes": 46328,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+   "mae": 0.6237961179433991,
+   "largePercent": 0.014368009626566449,
+   "bytes": 28615,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/renewal-save-plan.opf.json#2",
+   "mae": 0.10934653992884842,
+   "largePercent": 0,
+   "bytes": 18176,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/s-and-op-exception-review.opf.json#2",
+   "mae": 0.30719552915433784,
+   "largePercent": 0.014368009626566449,
+   "bytes": 22714,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#2",
+   "mae": 0.18729311342592592,
+   "largePercent": 0.009548611111111112,
+   "bytes": 22524,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#8",
+   "mae": 0.15292578125,
+   "largePercent": 0.00546875,
+   "bytes": 33118,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#2",
+   "mae": 0.14265625,
+   "largePercent": 0,
+   "bytes": 23036,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#8",
+   "mae": 0.17051692708333333,
+   "largePercent": 0.009375,
+   "bytes": 33002,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#4",
+   "mae": 0.1439134837962963,
+   "largePercent": 0.008680555555555556,
+   "bytes": 27734,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/education/advising-retention-review.opf.json#4",
+   "mae": 0.17727734375,
+   "largePercent": 0.0046875,
+   "bytes": 43230,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/education/athletics-budget-review.opf.json#2",
+   "mae": 0.09338018667062785,
+   "largePercent": 0.011605020796197267,
+   "bytes": 23017,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/education/curriculum-approval-brief.opf.json#2",
+   "mae": 0.16977449708224637,
+   "largePercent": 0.013470009024906048,
+   "bytes": 23287,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/education/library-modernization-roadmap.opf.json#4",
+   "mae": 0.17186805555555557,
+   "largePercent": 0,
+   "bytes": 30677,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/education/research-grant-pitch.opf.json#4",
+   "mae": 0.8087934027777778,
+   "largePercent": 0,
+   "bytes": 28712,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/education/student-mental-health-capacity-review.opf.json#2",
+   "mae": 0.39077213541666667,
+   "largePercent": 0.009375,
+   "bytes": 23515,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/broadband-public-hearing-deck.opf.json#2",
+   "mae": 0.5678501157407407,
+   "largePercent": 0.009982638888888888,
+   "bytes": 24868,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/digital-services-modernization.opf.json#2",
+   "mae": 0.07521291344820756,
+   "largePercent": 0,
+   "bytes": 7331,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/parks-master-plan-workshop.opf.json#0",
+   "mae": 0.1461111111111111,
+   "largePercent": 0,
+   "bytes": 19535,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/recycling-participation-campaign.opf.json#4",
+   "mae": 0.18553643048128343,
+   "largePercent": 0.012533422459893048,
+   "bytes": 29592,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/tax-portal-modernization.opf.json#4",
+   "mae": 0.15662471064814815,
+   "largePercent": 0.0078125,
+   "bytes": 43373,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/vaccination-outreach-briefing.opf.json#0",
+   "mae": 0.23076969128235983,
+   "largePercent": 0.00044900030083020153,
+   "bytes": 19848,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#0",
+   "mae": 0.16761188271604938,
+   "largePercent": 0.008680555555555556,
+   "bytes": 22833,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/government/workforce-reskilling-initiative.opf.json#6",
+   "mae": 0.48669088274955813,
+   "largePercent": 0.013470009024906048,
+   "bytes": 27962,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/ambulatory-access-recovery-plan.opf.json#2",
+   "mae": 0.18561328125,
+   "largePercent": 0,
+   "bytes": 10456,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#4",
+   "mae": 0.18167052469135803,
+   "largePercent": 0,
+   "bytes": 27678,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/cold-chain-waste-reduction-review.opf.json#2",
+   "mae": 0.08336226851851852,
+   "largePercent": 0,
+   "bytes": 22395,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/consulting-margin-recovery-plan.opf.json#2",
+   "mae": 0.06958333333333333,
+   "largePercent": 0,
+   "bytes": 35060,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/food-bank-distribution-capacity-plan.opf.json#0",
+   "mae": 0.12008680555555555,
+   "largePercent": 0,
+   "bytes": 15242,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#2",
+   "mae": 0.24301041666666667,
+   "largePercent": 0.003125,
+   "bytes": 23906,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#8",
+   "mae": 0.10743634259259259,
+   "largePercent": 0.004340277777777778,
+   "bytes": 46307,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/rural-broadband-expansion-proposal.opf.json#2",
+   "mae": 0.08962325460487225,
+   "largePercent": 0,
+   "bytes": 15896,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#2",
+   "mae": 0.0729759837962963,
+   "largePercent": 0.012152777777777778,
+   "bytes": 22685,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/industries/veterinary-staffing-stabilization.opf.json#2",
+   "mae": 0.14311156912259854,
+   "largePercent": 0.018103832442067737,
+   "bytes": 35696,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/international/arabic-digital-services-brief.opf.json#2",
+   "mae": 0.12137459150326797,
+   "largePercent": 0.01949643493761141,
+   "bytes": 36179,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/international/india-rural-payments-pilot.opf.json#0",
+   "mae": 0.0642259837962963,
+   "largePercent": 0,
+   "bytes": 14422,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/presentation-types/data-incident-postmortem.opf.json#2",
+   "mae": 0.15852864583333334,
+   "largePercent": 0,
+   "bytes": 20728,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/presentation-types/manager-training-deck.opf.json#0",
+   "mae": 0.10297831253713606,
+   "largePercent": 0.011605020796197267,
+   "bytes": 18058,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#2",
+   "mae": 0.3861041666666667,
+   "largePercent": 0,
+   "bytes": 24563,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "gallery/presentation-types/product-launch-narrative.opf.json#8",
+   "mae": 0.12920910493827162,
+   "largePercent": 0,
+   "bytes": 46008,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "technical/asset-source-forms.opf.json#0",
+   "mae": 0.044581886574074074,
+   "largePercent": 0,
+   "bytes": 14249,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "technical/content-payload-matrix.opf.json#1",
+   "mae": 0.04092737268518518,
+   "largePercent": 0,
+   "bytes": 18909,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "technical/dynamic-composition.opf.json#1",
+   "mae": 0.14393229166666666,
+   "largePercent": 0,
+   "bytes": 16412,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "technical/header-footer-logo-set.opf.json#0",
+   "mae": 0.07911313657407408,
+   "largePercent": 0,
+   "bytes": 23085,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "technical/promoted-region-grid.opf.json#2",
+   "mae": 0.04145688657407407,
+   "largePercent": 0,
+   "bytes": 16260,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  },
+  {
+   "key": "technical/slide-sections.opf.json#3",
+   "mae": 0.05480324074074074,
+   "largePercent": 0,
+   "bytes": 14500,
+   "textMatches": {
+    "pdfjs": true,
+    "pdfium": true
+   },
+   "notes": []
+  }
+ ]
+}

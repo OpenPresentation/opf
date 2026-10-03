@@ -298,13 +298,13 @@
     "addressed": 1100,
     "unaddressed": 0,
     "byStatus": {
-      "done": 512,
+      "done": 513,
       "deprecated": 50,
       "descoped": 397,
       "works-unverified": 0,
       "unknown": 0,
       "parity-near": 32,
-      "font-gap": 109,
+      "font-gap": 108,
       "missing-gallery": 0,
       "missing-spec": 0,
       "missing-editor": 0,
@@ -448,8 +448,8 @@
       "fonts": {
         "records": 168,
         "byStatus": {
-          "done": 120,
-          "font-gap": 48
+          "done": 121,
+          "font-gap": 47
         },
         "addressed": 168,
         "unaddressed": 0
@@ -1437,7 +1437,7 @@
     {"type":"fonts","id":"Cousine","name":"Cousine","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"qualified"},"gaps":[],"status":"done","addressed":true},
     {"type":"fonts","id":"DaunPenh","name":"DaunPenh","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Khmer (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the sa...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
     {"type":"fonts","id":"David","name":"David","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Serif Hebrew (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 12 of 12 face-samples; th...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
-    {"type":"fonts","id":"Didot","name":"Didot","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"visual-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status visual-gap","next":"Unmeasured: Didot is Apple-only (macOS), so no reference can be installed on the Windows measuring host (the fixture already passes in every host). It can be qualified only on a Mac with the same qualification script, or stay documented ...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
+    {"type":"fonts","id":"Didot","name":"Didot","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"documented-visual"},"gaps":[],"status":"done","addressed":true},
     {"type":"fonts","id":"DilleniaUPC","name":"DilleniaUPC","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the s...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
     {"type":"fonts","id":"EB Garamond","name":"EB Garamond","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"qualified"},"gaps":[],"status":"done","addressed":true},
     {"type":"fonts","id":"Ebrima","name":"Ebrima","columns":{"spec":"policy","compose":"n/a","preview":"pass","export":"pass","roundTrip":"n/a","parity":"n/a","editor":"n/a","gallery":"n/a","native":"exercised","fonts":"script-gap"},"gaps":[{"code":"font-gap","detail":"font tracker status script-gap","next":"Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 54 of 54 face-samples; the same s...","rule":"font-tracker-gaps","link":"RR-17","addressed":true,"linkStatus":"in-progress"}],"status":"font-gap","addressed":true},
