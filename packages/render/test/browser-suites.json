@@ -50,6 +50,10 @@
           "command": "npm run test:latin-family-hosts-browser"
         },
         {
+          "id": "browser:script-family-hosts-browser",
+          "command": "npm run test:script-family-hosts-browser"
+        },
+        {
           "id": "browser:lazy-face-fallback-browser",
           "command": "npm run test:lazy-face-fallback-browser"
         },
