@@ -69,8 +69,8 @@
         "charts"
       ],
       "detail": "chart label wrapped/split in preview",
-      "link": "RR-44",
-      "next": "The preview's value-axis tick labels (such as 0) are not in the chart part's strings because PowerPoint computes its own ticks, so the text check counts them as wrapped labels. Classify computed axis ticks separately in the parity harness (no tolerance change), then re-run parity on the published 0.12.0 set with the RR-20 re-audit."
+      "link": "RR-20",
+      "next": "Fixed in the parity harness (RR-44, opf#313, merged: computed numeric value-axis tick lines are skipped, no tolerance change; the 26 charts measure 25 perfect, 1 near, 0 mismatch on the published 0.12 set in parity-results-2026-10-02-rr-44-computed-ticks.json). The tracker still reads the older RR-16 parity run, in which these 15 charts are near; the RR-20 re-audit (opf#314) replaces that run and clears the gap."
     },
     {
       "id": "font-routes-near",
