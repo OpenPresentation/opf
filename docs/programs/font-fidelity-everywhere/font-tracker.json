@@ -36,13 +36,13 @@
       "faces": 197
     },
     "parity": {
-      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
-      "generatedAt": "2026-10-01T14:39:22.606Z",
+      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json",
+      "generatedAt": "2026-10-03T00:22:04.269Z",
       "heads": {
-        "opf": "e414bca31f12359a1940e1c7e053a3b5fbd43422",
-        "opf-render": "2fbc0abf3c327b6e9e9525a52c8ea9e56e84646e",
-        "opf-pptx": "a9bcbd75886bd1ac195b4206cefae83525b1fea4",
-        "pptx-gallery": "d8f5ae62ce981c6456c609a18442b4293f4c52bb"
+        "opf": "5e1dda754896dae222191919bf70050b48747cd3",
+        "opf-render": "3b300a3d1d34ecca4e323c74bed64cbe554d6bce",
+        "opf-pptx": "e4569ac99cc25dfcaa63d90e98134910526d6dcd",
+        "pptx-gallery": "c349a613b8162add0ff6a063b9be695761116734"
       },
       "values": 850
     },
@@ -112,14 +112,14 @@
         "node": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/script-family-hosts.mjs",
-          "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
           "families": 35,
           "findings": 0
         },
         "browser": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/script-family-hosts-browser.mjs",
-          "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
           "families": 34,
           "findings": 1
         },
@@ -172,13 +172,13 @@
         "node": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/latin-family-hosts.mjs",
-          "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
           "families": 87
         },
         "browser": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/latin-family-hosts-browser.mjs",
-          "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
+          "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
           "families": 87
         },
         "editor": {
@@ -841,7 +841,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -1048,7 +1048,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -1230,7 +1230,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -1711,7 +1711,7 @@
         "description": "Aptos: a contemporary neo-grotesque sans. Intos: OFL sans derived from Inter, built to Aptos advances and vertical metrics; original outlines (0 identical glyphs)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 704,
         "fontResolution": {
@@ -2229,7 +2229,7 @@
         "description": "Aptos Display: the optical-size display cut of Aptos. Intos Display: the matching Inter-derived display cut."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 704,
         "fontResolution": {
@@ -2531,7 +2531,7 @@
         "caveat": "Cousine has the larger x-height (0.528 em against 0.476) and a smaller hhea ascent (0.833 against 0.939); capitals match (0.659 against 0.657). Source Code Pro (x-height 0.486, cap 0.660) and Red Hat Mono (0.488, 0.700) are closer in glyph size but 0.016% off the cell and add bytes: not adopted, vetoable."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -2845,7 +2845,7 @@
         "description": "Aptos Narrow: the condensed width of Aptos. Intos Narrow: the matching Inter-derived condensed cut."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -3183,7 +3183,7 @@
         "description": "Aptos Serif: a sturdy contemporary text serif. Intos Serif: Gelasio-derived serif built to Aptos Serif advances."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -3450,7 +3450,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 4,
         "fontResolution": {
@@ -3687,7 +3687,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -3969,7 +3969,7 @@
         "description": "Arial: neo-grotesque sans. Arimo: Arial-metric sans from the Croscore set; letterforms are Arimo's own, near Arial's in texture."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 3,
         "fontResolution": {
@@ -4227,7 +4227,7 @@
         "caveat": "There is no 900 italic: italic runs draw Montserrat Bold Italic. A regular run draws the 900 face since the weight-named role fix; a bold run draws Montserrat Bold, which is lighter than the 900."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 3,
         "fontResolution": {
@@ -4512,7 +4512,7 @@
         "description": "Arial Narrow: condensed neo-grotesque. Archivo Narrow: a condensed grotesque with similar texture."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -4723,7 +4723,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -4933,7 +4933,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -5180,7 +5180,7 @@
         "caveat": "Wider than the original by about 19% and with larger glyphs: a poor look-alike. A closer open candidate is the improvement to look for (vetoable)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -5361,7 +5361,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -5572,7 +5572,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -5774,7 +5774,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -5992,7 +5992,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -6281,7 +6281,7 @@
         "caveat": "Narrower than the original by about 15% on average with smaller capitals (0.87x): expect different wrapping."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -6555,7 +6555,7 @@
         "description": "Book Antiqua: Palatino-style old-style serif. PT Serif: a transitional serif with humanist details."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -6827,7 +6827,7 @@
         "description": "Bookman Old Style: wide old-style serif with sturdy serifs. Libre Caslon Text: a Caslon-style text serif."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -7043,7 +7043,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -7355,7 +7355,7 @@
         "description": "Calibri: soft humanist sans with rounded stroke ends. Carlito: Lato-derived humanist sans cut to Calibri advances."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -7624,7 +7624,7 @@
         "description": "Calibri Light: the light weight of Calibri. Carlito Regular: the bundled Carlito has no Light face, so the preview is heavier."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -7890,7 +7890,7 @@
         "description": "Cambria: sturdy transitional text serif. Caladea: the Cambria-style serif of the Croscore set; not metric (about 3% narrower on average)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -8051,7 +8051,7 @@
         "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -8327,7 +8327,7 @@
         "description": "Candara: humanist sans with flared terminals. Source Sans 3: a humanist sans with plainer terminals."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -8537,7 +8537,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -8815,7 +8815,7 @@
         "description": "Century Gothic: geometric sans (Avant Garde style) with a large x-height. Work Sans: a grotesque-influenced geometric sans with smaller glyphs (x-height 0.94x)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -9085,7 +9085,7 @@
         "description": "Century Schoolbook: wide, sturdy modern serif. Gelasio: a Georgia-metric serif."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -9366,7 +9366,7 @@
         "caveat": "Cousine is 9.15% wider per character than Consolas, so lines of code break earlier in the preview."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -9650,7 +9650,7 @@
         "description": "Constantia: old-style text serif with low contrast. PT Serif: a transitional serif."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -9936,7 +9936,7 @@
         "description": "Corbel: soft humanist sans. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -10215,7 +10215,7 @@
         "caveat": "The preview looks sans where Courier New is slab-serif; widths and wraps are the same."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -10440,7 +10440,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -10616,7 +10616,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -10852,7 +10852,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -11070,7 +11070,7 @@
         "caveat": "Unmeasured: the Apple Didot reference is not available to the measuring host."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -11292,7 +11292,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -11521,7 +11521,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -11761,7 +11761,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -11958,7 +11958,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -12202,7 +12202,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -12464,7 +12464,7 @@
         "description": "Franklin Gothic Book: American grotesque. Barlow: a slightly condensed grotesque with a similar American feel."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -12718,7 +12718,7 @@
         "description": "Franklin Gothic Medium: the medium weight of Franklin Gothic. Barlow: only Regular and Bold are vendored (no Medium face), so the weight is approximate."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -12983,7 +12983,7 @@
         "caveat": "The real Garamond has no bold italic; PowerPoint synthesizes it."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -13173,7 +13173,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -13410,7 +13410,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -13683,7 +13683,7 @@
         "description": "Georgia: wide screen serif with old-style figures. Gelasio: Georgia-metric serif; ligatures (liga, clig) are switched off so widths match."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 6,
         "fontResolution": {
@@ -13976,7 +13976,7 @@
         "caveat": "Individual strings differ by up to 15% either way (mean absolute 5%): wrapping differs."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -14154,7 +14154,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -14422,7 +14422,7 @@
         "caveat": "About 5% off on average (up to 10%) with glyph-size differences: expect different wrapping."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 5,
         "fontResolution": {
@@ -14675,7 +14675,7 @@
         "description": "Grandview Display: the display cut. Barlow: a slightly condensed grotesque."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 3,
         "fontResolution": {
@@ -14867,7 +14867,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -15078,7 +15078,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -15335,7 +15335,7 @@
         "caveat": "Neither has an italic: the preview draws the upright face and PowerPoint synthesizes the slant."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -15552,7 +15552,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -15782,7 +15782,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -16012,7 +16012,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -16238,7 +16238,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -16438,7 +16438,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -16645,7 +16645,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -16846,7 +16846,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -17052,7 +17052,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -17312,7 +17312,7 @@
         "description": "Liberation Mono 2.1.5: Courier-metric sans monospace. Cousine: the Croscore face Liberation 2 is built from; most glyph outlines are byte-identical."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -17549,7 +17549,7 @@
         "description": "Liberation Sans 2.1.5: Arial-metric sans. Arimo: the Croscore face Liberation 2 is built from; glyph boxes are identical."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -17786,7 +17786,7 @@
         "description": "Liberation Serif 2.1.5: Times-metric serif. Tinos: the Croscore face Liberation 2 is built from; most glyph outlines are byte-identical."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -17993,7 +17993,7 @@
         "note": "The open family draws as itself in every host. Explicit style gaps (never synthesized): 700i. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -18196,7 +18196,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -18446,7 +18446,7 @@
         "description": "Lucida Console: humanist monospace. Cousine: a sans monospace."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -18696,7 +18696,7 @@
         "description": "Lucida Sans: wide humanist sans. Work Sans: a geometric sans with smaller glyphs (x-height 0.94x)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -18950,7 +18950,7 @@
         "description": "Lucida Sans Unicode: the wide humanist sans with broad coverage. Work Sans: a geometric sans with smaller glyphs (x-height 0.94x)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -19217,7 +19217,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -19449,7 +19449,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 4,
         "fontResolution": {
@@ -19691,7 +19691,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -19921,7 +19921,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -20194,7 +20194,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -20469,7 +20469,7 @@
         "description": "Microsoft Sans Serif: the Arial-like UI sans. Arimo: Arial-metric sans."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -20732,7 +20732,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -20948,7 +20948,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -21152,7 +21152,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -21393,7 +21393,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 5,
         "fontResolution": {
@@ -21625,7 +21625,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -21826,7 +21826,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -22091,7 +22091,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -22293,7 +22293,7 @@
         "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (emoji-pictographs, emoji-sequences) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -22446,7 +22446,7 @@
         "note": "Not accepted: the fixture recorded a finding in browser, and the check stays as strict as for every other family. browser: Chromium does not draw emoji-presentation sequences (VS16: the keycap 1️⃣, the red heart ❤️, the rainbow flag) with the monochrome Noto Emoji: each falls to another face at a 1.000 em advance, where the face and the renderer give 1.2695 em. The pictograph, flag, skin-tone, ZWJ and tag sequences draw in Noto Emoji at its own advance. The colour face (Noto Color Emoji) draws all of them. Noto Emoji is the raster stand-in and an alternate of Segoe UI Emoji, never the browser face of a Segoe UI Emoji run (the planner gives emoji runs to Noto Color Emoji)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -22652,7 +22652,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -22870,7 +22870,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -23114,7 +23114,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -23332,7 +23332,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -23540,7 +23540,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -23767,7 +23767,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -23996,7 +23996,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -24225,7 +24225,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -24443,7 +24443,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -24668,7 +24668,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -24893,7 +24893,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -25120,7 +25120,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -25357,7 +25357,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -25582,7 +25582,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -25809,7 +25809,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -26049,7 +26049,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -26267,7 +26267,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -26482,7 +26482,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -26677,7 +26677,7 @@
         "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (math-operators, math-alphanumerics) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -26865,7 +26865,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -27087,7 +27087,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -27302,7 +27302,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -27539,7 +27539,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -27757,7 +27757,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -27965,7 +27965,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -28180,7 +28180,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -28416,7 +28416,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -28641,7 +28641,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -28859,7 +28859,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -29076,7 +29076,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -29301,7 +29301,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -29509,7 +29509,7 @@
         "original": null
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -29701,7 +29701,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -29938,7 +29938,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 7,
         "fontResolution": {
@@ -30237,7 +30237,7 @@
         "description": "Palatino Linotype: old-style serif with calligraphic stroke. PT Serif: a transitional serif."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -30453,7 +30453,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -30640,7 +30640,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -30863,7 +30863,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 3,
         "fontResolution": {
@@ -31088,7 +31088,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -31282,7 +31282,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -31504,7 +31504,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -31762,7 +31762,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -31970,7 +31970,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -32189,7 +32189,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 3,
         "fontResolution": {
@@ -32383,7 +32383,7 @@
         "note": "The open family draws as itself in every host. Explicit style gaps (never synthesized): 400i, 700i. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 848,
         "fontResolution": {
@@ -32683,7 +32683,7 @@
         "description": "Rockwell: geometric slab serif. Bitter: a contemporary slab serif for text."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -32958,7 +32958,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -33227,7 +33227,7 @@
         "description": "Seaford: Microsoft 365 cloud sans. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -33481,7 +33481,7 @@
         "description": "Seaford Display: the display cut. Source Sans 3: a humanist sans."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -33841,7 +33841,7 @@
         "description": "Segoe UI: humanist UI sans. Red Hat Display: a geometric humanist sans."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 7,
         "fontResolution": {
@@ -34027,7 +34027,7 @@
         "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -34326,7 +34326,7 @@
         "description": "Segoe UI Light: the light weight. Red Hat Display 300."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -34643,7 +34643,7 @@
         "description": "Segoe UI Semibold: the semibold weight. Red Hat Display 600, which a regular run draws since the weight-named role fix."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 7,
         "fontResolution": {
@@ -34964,7 +34964,7 @@
         "description": "Segoe UI Semilight: weight 350. Red Hat Display 400: there is no 350 face."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -35152,7 +35152,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -35359,7 +35359,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -35567,7 +35567,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -35810,7 +35810,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -36082,7 +36082,7 @@
         "caveat": "About 9% off on average (up to 16%): expect different wrapping."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -36334,7 +36334,7 @@
         "caveat": "About 13% off on average (up to 20%): expect different wrapping."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -36572,7 +36572,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -36803,7 +36803,7 @@
         "description": "Source Sans Pro 2.045: Adobe's humanist sans (the predecessor name). Source Sans 3: the renamed family; regular and bold match within 0.15%, italics within 0.41%."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -36988,7 +36988,7 @@
         "note": "The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (math-operators, math-alphanumerics, math-brackets) are drawn strictly in its own pinned file with no glyph fallback. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -37257,7 +37257,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 3,
         "fontResolution": {
@@ -37541,7 +37541,7 @@
         "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -37814,7 +37814,7 @@
         "caveat": "Smaller lowercase (x-height 0.90x)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -38070,7 +38070,7 @@
         "caveat": "About 4% wider than the original on regular; only the regular style is cached on this host."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -38323,7 +38323,7 @@
         "caveat": "About 15% wider than the original on average: expect different wrapping."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -38608,7 +38608,7 @@
         "description": "Times New Roman: classic Times-style serif. Tinos: Times-metric serif from the Croscore set."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -38824,7 +38824,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -39059,7 +39059,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -39359,7 +39359,7 @@
         "description": "Trebuchet MS: humanist sans with distinctive italics. Figtree: a friendly geometric sans."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -39549,7 +39549,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -39856,7 +39856,7 @@
         "description": "Verdana: very wide humanist screen sans. Montserrat: a wide geometric sans, about 3% narrower than Verdana on average."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {
@@ -40046,7 +40046,7 @@
         "original": "not installed on the measuring host"
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 2,
         "fontResolution": {
@@ -40330,7 +40330,7 @@
         "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -40599,7 +40599,7 @@
         "note": "Own fixture and acceptance record required; grouped work does not transfer acceptance."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -40820,7 +40820,7 @@
         "note": "The open family draws as itself in every host. Native PowerPoint verification is separate (FF-46)."
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 0,
         "fontResolution": {
@@ -41082,7 +41082,7 @@
         ]
       },
       "paritySignals": {
-        "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+        "source": "parity-results-2026-10-02-published-0.12.json",
         "totalValues": 850,
         "valuesAffected": 1,
         "fontResolution": {

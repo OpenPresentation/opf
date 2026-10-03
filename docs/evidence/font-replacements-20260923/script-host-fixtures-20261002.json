@@ -7,7 +7,7 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/script-family-hosts.mjs",
-    "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
+    "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
     "runtime": "Node v26.7.0"
    },
    "families": {
@@ -739,7 +739,7 @@
    "source": {
     "repository": "OpenPresentation/opf-render",
     "test": "test/script-family-hosts-browser.mjs",
-    "commit": "0246b7b2ea26b73e708b20770c5f68ca25e61949",
+    "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
     "runtime": "Node v26.7.0, Chromium 153.0.8010.12, offline"
    },
    "filesFetchedInTotal": 67,

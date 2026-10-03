@@ -1,7 +1,7 @@
 {
   "$comment": "Authored input for scripts/build-font-tracker.mjs. Derived fields (policy, bundle, measurements, parity) are never written here; this file holds owner-plan text, reconciled next actions, evidence keys, classes, scripts, style rules and in-flight candidates. Regenerate with: node scripts/build-font-tracker.mjs",
   "asOf": "2026-10-02",
-  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
+  "paritySource": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json",
   "manifestSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
   "measurementReport": "docs/evidence/font-replacements-20260923/report.json",
   "ownerPlan": {
