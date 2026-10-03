@@ -5,9 +5,9 @@
   "filename": "research-grant-pitch",
   "language": "english-au",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 19,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",

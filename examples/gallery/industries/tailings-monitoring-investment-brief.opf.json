@@ -5,9 +5,9 @@
   "filename": "tailings-monitoring-investment-brief",
   "language": "english-au",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 19,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",

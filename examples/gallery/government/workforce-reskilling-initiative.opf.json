@@ -14,7 +14,7 @@
     ]
   },
   "audience": [
-    "marketing-team",
+    "marketing",
     {
       "id": "board",
       "attentionBudgetMinutes": 23,

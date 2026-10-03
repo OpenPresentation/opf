@@ -5,9 +5,9 @@
   "filename": "renewal-save-plan",
   "language": "english-au",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 35,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",

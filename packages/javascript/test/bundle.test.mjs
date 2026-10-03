@@ -7,7 +7,7 @@ const deck = () => ({
   name: "Bundle Fixture",
   narrative: "classic-story",
   tone: "formal",
-  audience: ["executives"],
+  audience: ["executive"],
   design: { theme: "classic" },
   organization: { id: "acme", name: "Acme Corp", socials: { linkedin: "acme" } },
   slides: [

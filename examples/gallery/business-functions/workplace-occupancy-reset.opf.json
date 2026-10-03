@@ -5,9 +5,9 @@
   "filename": "workplace-occupancy-reset",
   "language": "english-au",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 25,
       "technicalFluency": "mixed",
       "decisionPower": "advisory",

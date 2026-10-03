@@ -248,7 +248,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Q3 Business Review",
   "description": "Quarterly review for the executive team.",
-  "audience": "executives",
+  "audience": "executive",
   "purpose": "decide",
   "tone": "formal",
   "language": "en-US",
