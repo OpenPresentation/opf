@@ -12,10 +12,8 @@ permissions:
 concurrency:
   group: ecosystem-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name != 'merge_group' }}
-env:
-  OPF_RENDER_REF: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce
-  OPF_EDITOR_REF: f4779dab851bc36cadca62f7c4b89c1dc9e17bf3
-  OPF_PPTX_REF: 986d22bb1d455e9b1a9eb8c86d54328865893a25
+# RR-50: no hand-written pins. Every job reads the sibling commits and the golden baseline from ecosystem.lock.json
+# (written by the roller; docs/ecosystem-development.md) through .github/actions/ecosystem-refs.
 jobs:
   # RR-45: the former single `packages` job is three parallel shards behind the `packages` aggregator, so the
   # required check name stays. The commands are identical: scripts/package-ecosystem-plan.mjs lists them and
@@ -59,12 +57,19 @@ jobs:
         id: scope
         working-directory: opf
         run: node scripts/ecosystem-scope.mjs
-      # These commits are the coordinated checkpoint, not mutable default branches.
+      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      - name: Resolve the coordinated commits from ecosystem.lock.json
+        id: refs
+        if: steps.scope.outputs.run == 'true'
+        uses: ./opf/.github/actions/ecosystem-refs
+        with:
+          consumer: opf
+      # These commits are the coordinated checkpoint (the lock), not mutable default branches.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ env.OPF_RENDER_REF }}
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -72,7 +77,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-editor
-          ref: ${{ env.OPF_EDITOR_REF }}
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -80,7 +85,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ env.OPF_PPTX_REF }}
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -111,12 +116,8 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
-          # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
-          # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
-          # RR-41: the bundled examples changed (plural audience ids moved to the singular ones), so their source digest is no longer the one the renderer's own
-          # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
-          # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
+          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --siblings opf-render
       - name: Check scalar source whitespace and accepted browser advances
         if: steps.scope.outputs.run == 'true'
@@ -155,12 +156,19 @@ jobs:
         id: scope
         working-directory: opf
         run: node scripts/ecosystem-scope.mjs
-      # These commits are the coordinated checkpoint, not mutable default branches.
+      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      - name: Resolve the coordinated commits from ecosystem.lock.json
+        id: refs
+        if: steps.scope.outputs.run == 'true'
+        uses: ./opf/.github/actions/ecosystem-refs
+        with:
+          consumer: opf
+      # These commits are the coordinated checkpoint (the lock), not mutable default branches.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ env.OPF_RENDER_REF }}
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -168,7 +176,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-editor
-          ref: ${{ env.OPF_EDITOR_REF }}
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -176,7 +184,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ env.OPF_PPTX_REF }}
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
@@ -207,12 +215,8 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
-          # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
-          # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
-          # RR-41: the bundled examples changed (plural audience ids moved to the singular ones), so their source digest is no longer the one the renderer's own
-          # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
-          # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
+          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --siblings opf-editor,opf-pptx
       - name: Preserve opf-pptx evidence
         if: always() && steps.scope.outputs.run == 'true'
@@ -249,12 +253,19 @@ jobs:
       - name: Check the ecosystem lock
         working-directory: opf
         run: node --test scripts/ecosystem-lock.test.mjs && node scripts/ecosystem-lock.mjs validate
-      # These commits are the coordinated checkpoint, not mutable default branches.
+      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      - name: Resolve the coordinated commits from ecosystem.lock.json
+        id: refs
+        if: steps.scope.outputs.run == 'true'
+        uses: ./opf/.github/actions/ecosystem-refs
+        with:
+          consumer: opf
+      # These commits are the coordinated checkpoint (the lock), not mutable default branches.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ env.OPF_RENDER_REF }}
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
@@ -262,7 +273,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-editor
-          ref: ${{ env.OPF_EDITOR_REF }}
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
@@ -270,27 +281,11 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ env.OPF_PPTX_REF }}
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
-      # RR-40: a pin must be a commit on the sibling's main (never a throwaway pin branch or an unmerged head).
-      # Warning only for now; the full-history checkouts above fetch origin/main, so this costs no network.
-      - name: Warn when a sibling pin is not on its main branch
-        if: steps.scope.outputs.run == 'true'
-        shell: bash
-        run: |
-          for repo in opf-render opf-editor opf-pptx; do
-            pin=$(git -C "$repo" rev-parse HEAD)
-            if ! git -C "$repo" rev-parse --verify --quiet origin/main >/dev/null; then
-              echo "::warning title=Ecosystem pin not verified::$repo: origin/main was not fetched, so pin ${pin:0:12} was not checked."
-            elif git -C "$repo" merge-base --is-ancestor "$pin" origin/main; then
-              echo "$repo pin ${pin:0:12} is on main ($(git -C "$repo" rev-list --count "$pin..origin/main") commits behind)."
-            else
-              echo "::warning title=Ecosystem pin not on main::$repo is pinned to ${pin:0:12}, which is not on OpenPresentation/$repo main ($(git -C "$repo" rev-list --count "origin/main..$pin") commits not in main). Repin to a merged commit."
-            fi
-          done
-      # RR-50: every ecosystem.lock.json entry must be on its repository's main (the REST compare API, the equivalent of
+      # RR-50 (replaces the opf#296 git-based pin warning): every ecosystem.lock.json entry must be on its repository's main (the REST compare API, the equivalent of
       # `git merge-base --is-ancestor`, no clone), and only the roller's branches (ecosystem-roll/*) may change a locked
       # SHA. Warning only for now (ci-cd.md section 3, migration step 1): set the repository variable
       # ECOSYSTEM_LOCK_GUARD=blocking (or pass --blocking) to make a finding fail this job.
@@ -342,12 +337,8 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
-          # The pinned renderer's own baseline (opf-render 0.11.9 `2fbc0ab`, whose source is main `fa1949a` plus the release commit: opf-render#83 and #85, which draw these fields and carry the picture-bullet size and furniture image alignment fixes): core 0.11.4 combines the design fields with the cover
-          # alignment change, 181 of 805 slides differ from the renderer 0.11.8 baseline. scripts/fixtures/README.md keeps the review record.
-          # RR-41: the bundled examples changed (plural audience ids moved to the singular ones), so their source digest is no longer the one the renderer's own
-          # baseline records (it still checks the published core 0.12.0 examples). Core's copy has the same 805 raster hashes and the new digest; scripts/fixtures/README.md
-          # has the review. Select the renderer's own file again once the renderer adopts the core release that carries these examples.
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json
+          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --skip-siblings
       - name: Verify installed type failure propagation
         if: steps.scope.outputs.run == 'true'
@@ -464,25 +455,32 @@ jobs:
       - name: Decide whether this change needs the ecosystem checks
         id: scope
         run: node scripts/ecosystem-scope.mjs
+      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      - name: Resolve the coordinated commits from ecosystem.lock.json
+        id: refs
+        if: steps.scope.outputs.run == 'true'
+        uses: ./opf/.github/actions/ecosystem-refs
+        with:
+          consumer: opf
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-render
-          ref: ${{ env.OPF_RENDER_REF }}
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-editor
-          ref: ${{ env.OPF_EDITOR_REF }}
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: steps.scope.outputs.run == 'true'
         with:
           repository: OpenPresentation/opf-pptx
-          ref: ${{ env.OPF_PPTX_REF }}
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           persist-credentials: false
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0

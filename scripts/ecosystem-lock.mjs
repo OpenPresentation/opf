@@ -10,6 +10,14 @@
 // Usage:
 //   node scripts/ecosystem-lock.mjs validate [--lock ecosystem.lock.json]
 //   node scripts/ecosystem-lock.mjs guard [--lock ecosystem.lock.json] [--base-lock <file>] [--head-ref <branch>] [--blocking]
+//   node scripts/ecosystem-lock.mjs resolve --consumer <repository> [--lock <file>] [--golden-override <path>] [--github-output] [--github-env]
+//
+// `resolve` is what every repository's CI runs (through .github/actions/ecosystem-refs): it prints, and writes as step
+// outputs, the commit to check out for each of the four repositories (opf, opf_render, opf_pptx, opf_editor) and the
+// golden baseline as a path relative to the workspace that holds the four checkouts side by side (`golden`).
+// `--github-env` also exports OPF_GOLDEN_BASELINE (absolute, under GITHUB_WORKSPACE) for the later steps of the job.
+// `--golden-override` replaces the lock's golden with a workspace-relative path (a renderer pull request that moves
+// pixels selects its own baseline this way).
 //
 // `guard` checks, through the GitHub REST API (no clone), that every locked SHA is an ancestor of its repository's
 // main (the REST equivalent of `git merge-base --is-ancestor <sha> main`), and warns when a pull request edits a
@@ -176,6 +184,37 @@ export async function guard(lock, api, { baseLock, headRef } = {}) {
   return { problems, lines };
 }
 
+/** The workspace-relative golden selection: the lock's, or a workspace-relative override such as `opf-render/test/golden/x`. */
+export function goldenSelection(lock, override) {
+  if (override) {
+    const [repository, ...rest] = override.split("/");
+    if (!REPOSITORIES.includes(repository) || !isSafeRelativePath(rest.join("/"))) {
+      throw new Error(`golden override ${JSON.stringify(override)} must be <repository>/<path> inside one of ${REPOSITORIES.join(", ")}`);
+    }
+    return { repository, path: rest.join("/"), source: "override" };
+  }
+  return { repository: lock.golden.repository, path: lock.golden.path, source: "lock" };
+}
+
+/**
+ * The commit each checkout uses: the locked SHA for every repository. The consumer's own entry is reported too (its
+ * CI checks out its own head, not the lock). The golden is relative to the workspace (`<repository>/<path>`).
+ */
+export function resolveRefs(lock, { consumer, goldenOverride } = {}) {
+  if (consumer !== undefined && !REPOSITORIES.includes(consumer)) throw new Error(`--consumer must be one of ${REPOSITORIES.join(", ")}`);
+  const refs = {};
+  for (const name of REPOSITORIES) refs[name] = { ref: lock.repositories[name].sha, source: name === consumer ? "own head (lock entry shown)" : "lock" };
+  const golden = goldenSelection(lock, goldenOverride);
+  return { consumer, refs, golden: { ...golden, workspacePath: `${golden.repository}/${golden.path}` } };
+}
+
+/** Step outputs: repository names with underscores (`opf_render`), as GitHub expressions and ecosystem-pins.mjs use them. */
+export function outputLines(resolved, lockFile) {
+  const lines = REPOSITORIES.map((name) => `${name.replace(/-/g, "_")}=${resolved.refs[name].ref}`);
+  lines.push(`golden=${resolved.golden.workspacePath}`, `golden_source=${resolved.golden.source}`, `lock_file=${lockFile}`);
+  return lines;
+}
+
 function option(args, name) {
   const index = args.indexOf(name);
   return index < 0 ? undefined : args[index + 1];
@@ -217,7 +256,22 @@ async function main(argv) {
     if (!problems.length) console.log("Every locked SHA is on its repository's main.");
     return problems.length && blocking ? 1 : 0;
   }
-  console.error("Usage: node scripts/ecosystem-lock.mjs validate|guard [--lock <file>] [--base-lock <file>] [--head-ref <branch>] [--blocking]");
+  if (command === "resolve") {
+    const lock = readLock(lockFile);
+    const resolved = resolveRefs(lock, { consumer: option(args, "--consumer"), goldenOverride: option(args, "--golden-override") || undefined });
+    for (const name of REPOSITORIES) console.log(`${name.padEnd(10)} ${resolved.refs[name].ref} (${resolved.refs[name].source})`);
+    console.log(`golden     ${resolved.golden.workspacePath} (${resolved.golden.source})`);
+    if (args.includes("--github-output")) {
+      if (!process.env.GITHUB_OUTPUT) throw new Error("GITHUB_OUTPUT is not set");
+      appendFileSync(process.env.GITHUB_OUTPUT, `${outputLines(resolved, lockFile).join("\n")}\n`);
+    }
+    if (args.includes("--github-env")) {
+      if (!process.env.GITHUB_ENV || !process.env.GITHUB_WORKSPACE) throw new Error("GITHUB_ENV or GITHUB_WORKSPACE is not set");
+      appendFileSync(process.env.GITHUB_ENV, `OPF_GOLDEN_BASELINE=${path.join(process.env.GITHUB_WORKSPACE, ...resolved.golden.workspacePath.split("/"))}\n`);
+    }
+    return 0;
+  }
+  console.error("Usage: node scripts/ecosystem-lock.mjs validate|guard|resolve (see the header of this file)");
   return 2;
 }
 

@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { ancestry, guard, handEditedPins, isSafeRelativePath, parseLock, readLock, REPOSITORIES, validateLock } from "./ecosystem-lock.mjs";
+import { ancestry, goldenSelection, guard, handEditedPins, isSafeRelativePath, outputLines, parseLock, REPOSITORIES, readLock, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const schema = JSON.parse(readFileSync(path.join(root, "scripts/ecosystem-lock.schema.json"), "utf8"));
@@ -117,17 +117,47 @@ test("only the roller's branches may change a locked SHA", () => {
   assert.deepEqual(handEditedPins(base, sampleLock({ golden: { repository: "opf-render", path: "test/golden/x" } }), "codex/rr-99-golden"), []);
 });
 
-test("while ecosystem-ci.yml still pins by hand, its pins equal the lock (migration step 1)", () => {
-  const lock = readLock(path.join(root, "ecosystem.lock.json"));
-  const workflow = readFileSync(path.join(root, ".github/workflows/ecosystem-ci.yml"), "utf8");
-  const pins = {
-    "opf-render": /^\s*OPF_RENDER_REF:\s*([0-9a-f]{40})\s*$/m.exec(workflow)?.[1],
-    "opf-pptx": /^\s*OPF_PPTX_REF:\s*([0-9a-f]{40})\s*$/m.exec(workflow)?.[1],
-    "opf-editor": /^\s*OPF_EDITOR_REF:\s*([0-9a-f]{40})\s*$/m.exec(workflow)?.[1],
-  };
-  if (!pins["opf-render"]) return; // The workflow reads the lock (migration step 2); nothing to compare.
-  for (const [name, pin] of Object.entries(pins)) assert.equal(lock.repositories[name].sha, pin, `${name}: ecosystem-ci.yml pin and lock differ`);
-  const baselines = [...workflow.matchAll(/^\s*OPF_GOLDEN_BASELINE:\s*\$\{\{\s*github\.workspace\s*\}\}\/(\S+)\s*$/gm)].map((m) => m[1]);
-  assert.ok(baselines.length > 0);
-  for (const baseline of baselines) assert.equal(baseline, `${lock.golden.repository}/${lock.golden.path}`);
+test("resolve gives the locked SHA for every repository and a workspace-relative golden", () => {
+  const resolved = resolveRefs(sampleLock(), { consumer: "opf-render" });
+  assert.deepEqual(Object.fromEntries(Object.entries(resolved.refs).map(([name, value]) => [name, value.ref])), { opf: sha("1"), "opf-render": sha("2"), "opf-pptx": sha("3"), "opf-editor": sha("4") });
+  assert.match(resolved.refs["opf-render"].source, /own head/);
+  assert.equal(resolved.refs.opf.source, "lock");
+  assert.equal(resolved.golden.workspacePath, "opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json");
+  assert.deepEqual(outputLines(resolved, "/w/opf/ecosystem.lock.json"), [
+    `opf=${sha("1")}`,
+    `opf_render=${sha("2")}`,
+    `opf_pptx=${sha("3")}`,
+    `opf_editor=${sha("4")}`,
+    "golden=opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json",
+    "golden_source=lock",
+    "lock_file=/w/opf/ecosystem.lock.json",
+  ]);
+  assert.throws(() => resolveRefs(sampleLock(), { consumer: "pptx-gallery" }), /--consumer/);
+});
+
+test("a golden override must name a checkout and stay inside it", () => {
+  assert.deepEqual(goldenSelection(sampleLock(), "opf-render/test/golden/opf-examples-png.cover-centering"), { repository: "opf-render", path: "test/golden/opf-examples-png.cover-centering", source: "override" });
+  for (const bad of ["test/golden/x", "opf-render/../opf/x", "/opf-render/x", "opf-render/"]) assert.throws(() => goldenSelection(sampleLock(), bad), /golden override/, bad);
+});
+
+test("no core workflow pins an OpenPresentation repository by hand (RR-50: the lock is the only source)", () => {
+  const directory = path.join(root, ".github/workflows");
+  for (const file of readdirSync(directory).filter((name) => name.endsWith(".yml"))) {
+    const text = readFileSync(path.join(directory, file), "utf8");
+    assert.doesNotMatch(text, /^\s*OPF_(RENDER|PPTX|EDITOR)_REF:/m, `${file}: hand-written sibling pin`);
+    const lines = text.split(/\r?\n/);
+    lines.forEach((line, index) => {
+      if (!/^\s*repository:\s*OpenPresentation\//.test(line)) return;
+      for (const next of lines.slice(index + 1, index + 6)) {
+        assert.doesNotMatch(next, /^\s*ref:\s*[0-9a-f]{7,40}\s*(#.*)?$/, `${file}:${index + 1}: hand-written SHA for ${line.trim()}`);
+      }
+    });
+    assert.doesNotMatch(text, /OPF_GOLDEN_BASELINE:\s*\$\{\{\s*github\.workspace\s*\}\}\/(?!\$\{\{)/, `${file}: hand-written golden selection`);
+  }
+});
+
+test("the composite action runs this script from the same commit as the lock", () => {
+  const action = readFileSync(path.join(root, ".github/actions/ecosystem-refs/action.yml"), "utf8");
+  assert.match(action, /node "\$GITHUB_ACTION_PATH\/\.\.\/\.\.\/\.\.\/scripts\/ecosystem-lock\.mjs"/);
+  for (const output of ["opf", "opf_render", "opf_pptx", "opf_editor", "golden", "lock_file"]) assert.match(action, new RegExp(`^  ${output}:\\n`, "m"), output);
 });
