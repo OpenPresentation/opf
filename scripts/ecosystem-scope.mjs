@@ -36,18 +36,24 @@ function changedFiles() {
   return out.split("\n").map((line) => line.trim()).filter(Boolean);
 }
 
+/**
+ * The decision for one workflow event. Only a pull_request can skip: its checkout is a merge commit whose first parent
+ * is the base, so the changed paths are known. Every other event runs in full, including `merge_group` (RR-48): a
+ * merge queue run has no pull_request payload and is the last gate before main, so the queue always tests the whole
+ * coordinated ecosystem (ci-cd.md, tier T2).
+ */
+export function scopeForEvent(event, listChangedFiles) {
+  if (event !== "pull_request") return { run: true, reason: `${event} runs always run the ecosystem checks` };
+  try {
+    return ecosystemScope(listChangedFiles());
+  } catch (error) {
+    return { run: true, reason: `could not list the changed paths (${error.message.split("\n")[0]})` };
+  }
+}
+
 function main(argv) {
   const event = process.env.GITHUB_EVENT_NAME ?? "local";
-  let decision;
-  if (argv[0] === "--files") decision = ecosystemScope(argv.slice(1));
-  else if (event !== "pull_request") decision = { run: true, reason: `${event} runs always run the ecosystem checks` };
-  else {
-    try {
-      decision = ecosystemScope(changedFiles());
-    } catch (error) {
-      decision = { run: true, reason: `could not list the changed paths (${error.message.split("\n")[0]})` };
-    }
-  }
+  const decision = argv[0] === "--files" ? ecosystemScope(argv.slice(1)) : scopeForEvent(event, changedFiles);
   const line = `Ecosystem checks: ${decision.run ? "run" : "skipped"} (${decision.reason}).`;
   console.log(line);
   if (decision.relevant) console.log(decision.relevant.slice(0, 20).join("\n"));
