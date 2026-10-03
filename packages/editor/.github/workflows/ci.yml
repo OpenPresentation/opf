@@ -21,8 +21,6 @@ jobs:
     defaults:
       run:
         working-directory: opf-editor
-    env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.furniture.sha256.json
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -37,27 +35,34 @@ jobs:
         if: github.event_name == 'pull_request'
         continue-on-error: true
         run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
-      # The ecosystem is pinned to the versions this package depends on: opf main after #219 (the packed-ecosystem check there knows renderer 0.11.8), opf-render 0.11.8 (tag colour; extra lazy fonts, face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises; chart label rotation) and opf-pptx 0.11.5.
-      # Release 0.10.6 pins the 0.11.4 train sources: opf#234 (design fields, picture bullets, 0.11.9 lazy face count), opf-render main fa1949a and opf-pptx main 9b9b0e4; repin each to its merge commit (opf-pptx to the merge of #124). The registry dependencies resolve once core 0.11.4, renderer 0.11.9 and PPTX 0.11.7 are published (npm ci and test:packed).
+      # RR-50: no hand pins. The commits of the other OpenPresentation repositories (and OPF_GOLDEN_BASELINE, exported to
+      # the later steps) come from core's ecosystem.lock.json, written by the roller. A `Depends-On:` trailer in the pull
+      # request body tests an unmerged pull request of another repository instead (core docs/ecosystem-development.md).
+      - name: Resolve the coordinated commits from core's ecosystem.lock.json
+        id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-editor
+          export-golden: 'true'
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          ref: da45b2e29812efbf67829f2fe987ef76858990f7 # core main (0.12.0 release commit 5e1dda7, tag opf-v0.12.0, plus the renderer 0.12.0 lazy font count, opf#282)
+          ref: ${{ steps.refs.outputs.opf }}
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          ref: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce # opf-render 0.12.0 release commit (tag opf-render-v0.12.0)
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-pptx
-          ref: 1f509129723e2fb09f5cf5d040fa0b6a12ca774a # opf-pptx 0.12.0 release commit (tag opf-pptx-v0.12.0)
+          ref: ${{ steps.refs.outputs.opf_pptx }}
           path: opf-pptx
           fetch-depth: 0
           persist-credentials: false
