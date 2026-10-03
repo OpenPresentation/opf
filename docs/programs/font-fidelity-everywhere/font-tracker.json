@@ -347,19 +347,19 @@
       "policy-gap": 0,
       "needs-special-path": 0,
       "code-table": 3,
-      "visual-gap": 3,
+      "visual-gap": 2,
       "script-gap": 41,
       "baseline-needed": 38,
       "metric-measured": 0,
-      "documented-visual": 42,
+      "documented-visual": 43,
       "qualified": 41
     },
     "byPhase": {
       "1": 38,
       "2": 0,
       "3": 0,
-      "4": 47,
-      "5": 83
+      "4": 46,
+      "5": 84
     },
     "hostVerification": {
       "node": {
@@ -2506,7 +2506,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 122
+        "rank": 121
       }
     },
     {
@@ -4217,7 +4217,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 119
+        "rank": 118
       }
     },
     {
@@ -4491,7 +4491,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 123
+        "rank": 122
       }
     },
     {
@@ -5159,7 +5159,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 70
+        "rank": 69
       }
     },
     {
@@ -6256,7 +6256,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 71
+        "rank": 70
       }
     },
     {
@@ -6534,7 +6534,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 72
+        "rank": 71
       }
     },
     {
@@ -6816,7 +6816,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 57
+        "rank": 56
       }
     },
     {
@@ -7599,7 +7599,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 124
+        "rank": 123
       }
     },
     {
@@ -7869,7 +7869,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 73
+        "rank": 72
       }
     },
     {
@@ -8306,7 +8306,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 74
+        "rank": 73
       }
     },
     {
@@ -8794,7 +8794,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 75
+        "rank": 74
       }
     },
     {
@@ -9070,7 +9070,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 58
+        "rank": 57
       }
     },
     {
@@ -9351,7 +9351,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 59
+        "rank": 58
       }
     },
     {
@@ -9639,7 +9639,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 60
+        "rank": 59
       }
     },
     {
@@ -9919,7 +9919,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 76
+        "rank": 75
       }
     },
     {
@@ -10994,20 +10994,56 @@
         ]
       },
       "acceptance": {
-        "fixture": "pending",
-        "accepted": false,
-        "date": null,
-        "evidence": [],
-        "note": "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present."
+        "fixture": "Per-family host fixtures in node and browser (opf-render test/latin-family-hosts.mjs, latin-family-hosts-browser.mjs), the editor font gate (opf-editor test/font-gate-latin-families.mjs) and the gallery editor manifest (pptx-gallery tests/editor-latin-families.test.ts), plus the per-family qualification against the real font (scripts/qualify-latin-fonts.mjs).",
+        "accepted": true,
+        "date": "2026-10-01",
+        "evidence": [
+          {
+            "label": "RR-17 per-family host fixtures (node, browser, editor, gallery editor)",
+            "url": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json"
+          },
+          {
+            "label": "opf-render#92 (Node and browser fixtures, weight-named roles, single-style italics)",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/92"
+          },
+          {
+            "label": "opf-editor#61 (editor font gate fixture)",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/61"
+          },
+          {
+            "label": "pptx-gallery#80 (gallery editor lazy font check)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/80"
+          },
+          {
+            "label": "RR-17 Latin qualification report (widths, line breaks, vertical metrics, outlines, coverage)",
+            "url": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json"
+          },
+          {
+            "label": "opf#249 (qualification tool, Liberation aliases, new measurements)",
+            "url": "https://github.com/OpenPresentation/opf/pull/249"
+          }
+        ],
+        "note": "Documented look-alike (tier visual): width mean 20.71% and maximum 26.96% in 3 measured styles, 0% of 250 wrap cases break at the same words; vertical metrics differ; x-height 0.968x, cap-height 0.802x of the original; 9 Latin code points missing; 0 identical outlines beyond plain rectangles. Reflow against the real font is expected. Native PowerPoint verification is separate (FF-46)."
       },
       "qualification": {
         "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
         "date": "2026-10-01",
-        "referenceAvailable": false
+        "referenceAvailable": true,
+        "stylesMeasured": 3,
+        "meanAbsWidthDelta": 0.2071,
+        "maxAbsWidthDelta": 0.2696,
+        "widthBarMet": false,
+        "lineBreaksIdenticalFraction": 0,
+        "verticalMetricsEqual": false,
+        "xHeightRatio": 0.968,
+        "capHeightRatio": 0.802,
+        "ascentRatio": 1.15,
+        "identicalOutlinesBeyondPlainRectangles": 0,
+        "latinCodepointsMissing": 9
       },
       "appearance": {
-        "description": "Didot: Didone high-contrast serif (Apple version, no reference on this host). Playfair Display: a high-contrast transitional display serif.",
-        "caveat": "Unmeasured: the Apple Didot reference is not available to the measuring host."
+        "description": "Didot: Didone high-contrast serif (Apple version 13.0d1e3, measured in place on macOS). Playfair Display: a high-contrast transitional display serif with heavier colour and smaller capitals.",
+        "caveat": "Narrower than the original by about 21% on average with smaller capitals (0.80x): expect different wrapping. Didot has no bold italic face on macOS. A closer open candidate is the improvement to look for (vetoable)."
       },
       "paritySignals": {
         "source": "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json",
@@ -11025,14 +11061,18 @@
         "expectedStatusOnMain": "visual-substitute",
         "rerunNeeded": false
       },
-      "phase": 4,
-      "status": "visual-gap",
-      "statusReason": "visual route; metric or appearance qualification outstanding",
-      "nextAction": "Unmeasured: Didot is Apple-only (macOS), so no reference can be installed on the Windows measuring host (the fixture already passes in every host). It can be qualified only on a Mac with the same qualification script, or stay documented as an unmeasured look-alike of Playfair Display; vetoable. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
+      "phase": 5,
+      "status": "documented-visual",
+      "statusReason": "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font",
+      "nextAction": "Native verification (FF-46): confirm the selected name in the saved file and the line-break and width effect of this look-alike on this family's slide in the RR-17 native check decks (rr-17-native/latin). The measured gaps are in the acceptance note. Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.",
       "evidence": [
         {
           "label": "Font replacement measurements (2026-09-23)",
           "url": "docs/evidence/font-replacements-20260923/README.md"
+        },
+        {
+          "label": "RR-17 Mac checks: Didot against the system font, vector PDF in PDFKit, Quick Look, WebKit (2026-10-02)",
+          "url": "docs/evidence/mac-checks-20261002/README.md"
         },
         {
           "label": "FF-46 native run: every family on the 0.12.0 train (2026-10-02)",
@@ -11040,12 +11080,12 @@
         }
       ],
       "priority": {
-        "score": 2,
-        "severity": 2,
+        "score": 0.5,
+        "severity": 0.5,
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 43
+        "rank": 124
       }
     },
     {
@@ -11756,7 +11796,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 44
+        "rank": 43
       }
     },
     {
@@ -12443,7 +12483,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 77
+        "rank": 76
       }
     },
     {
@@ -12697,7 +12737,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 78
+        "rank": 77
       }
     },
     {
@@ -12972,7 +13012,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 61
+        "rank": 60
       }
     },
     {
@@ -13959,7 +13999,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 79
+        "rank": 78
       }
     },
     {
@@ -14665,7 +14705,7 @@
         "valuesAffected": 3,
         "valuesOpen": 3,
         "hostFactor": 0.25,
-        "rank": 48
+        "rank": 47
       }
     },
     {
@@ -15325,7 +15365,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 49
+        "rank": 48
       }
     },
     {
@@ -17270,7 +17310,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 80
+        "rank": 79
       }
     },
     {
@@ -17482,7 +17522,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 81
+        "rank": 80
       }
     },
     {
@@ -17694,7 +17734,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 82
+        "rank": 81
       }
     },
     {
@@ -18610,7 +18650,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 120
+        "rank": 119
       }
     },
     {
@@ -21549,7 +21589,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 45
+        "rank": 44
       }
     },
     {
@@ -22172,7 +22212,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 83
+        "rank": 82
       }
     },
     {
@@ -22319,7 +22359,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 84
+        "rank": 83
       }
     },
     {
@@ -22522,7 +22562,7 @@
         "valuesAffected": 2,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 85
+        "rank": 84
       }
     },
     {
@@ -22715,7 +22755,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 86
+        "rank": 85
       }
     },
     {
@@ -22934,7 +22974,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 87
+        "rank": 86
       }
     },
     {
@@ -23117,7 +23157,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 88
+        "rank": 87
       }
     },
     {
@@ -23310,7 +23350,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 89
+        "rank": 88
       }
     },
     {
@@ -23512,7 +23552,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 90
+        "rank": 89
       }
     },
     {
@@ -23716,7 +23756,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 91
+        "rank": 90
       }
     },
     {
@@ -23920,7 +23960,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 92
+        "rank": 91
       }
     },
     {
@@ -24113,7 +24153,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 93
+        "rank": 92
       }
     },
     {
@@ -24313,7 +24353,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 94
+        "rank": 93
       }
     },
     {
@@ -24513,7 +24553,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 95
+        "rank": 94
       }
     },
     {
@@ -24715,7 +24755,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 96
+        "rank": 95
       }
     },
     {
@@ -24927,7 +24967,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 97
+        "rank": 96
       }
     },
     {
@@ -25127,7 +25167,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 98
+        "rank": 97
       }
     },
     {
@@ -25329,7 +25369,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 99
+        "rank": 98
       }
     },
     {
@@ -25544,7 +25584,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 100
+        "rank": 99
       }
     },
     {
@@ -25727,7 +25767,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 101
+        "rank": 100
       }
     },
     {
@@ -25927,7 +25967,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 102
+        "rank": 101
       }
     },
     {
@@ -26075,7 +26115,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 103
+        "rank": 102
       }
     },
     {
@@ -26260,7 +26300,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 104
+        "rank": 103
       }
     },
     {
@@ -26447,7 +26487,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 105
+        "rank": 104
       }
     },
     {
@@ -26647,7 +26687,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 106
+        "rank": 105
       }
     },
     {
@@ -26859,7 +26899,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 107
+        "rank": 106
       }
     },
     {
@@ -27042,7 +27082,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 108
+        "rank": 107
       }
     },
     {
@@ -27225,7 +27265,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 109
+        "rank": 108
       }
     },
     {
@@ -27425,7 +27465,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 110
+        "rank": 109
       }
     },
     {
@@ -27636,7 +27676,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 111
+        "rank": 110
       }
     },
     {
@@ -27836,7 +27876,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 112
+        "rank": 111
       }
     },
     {
@@ -28019,7 +28059,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 113
+        "rank": 112
       }
     },
     {
@@ -28221,7 +28261,7 @@
         "valuesAffected": 1,
         "valuesOpen": 0,
         "hostFactor": 0.4,
-        "rank": 114
+        "rank": 113
       }
     },
     {
@@ -28411,7 +28451,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.6,
-        "rank": 115
+        "rank": 114
       }
     },
     {
@@ -28594,7 +28634,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 116
+        "rank": 115
       }
     },
     {
@@ -29310,7 +29350,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.25,
-        "rank": 117
+        "rank": 116
       }
     },
     {
@@ -31766,7 +31806,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 62
+        "rank": 61
       }
     },
     {
@@ -32311,7 +32351,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 50
+        "rank": 49
       }
     },
     {
@@ -32565,7 +32605,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 51
+        "rank": 50
       }
     },
     {
@@ -33100,7 +33140,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 46
+        "rank": 45
       }
     },
     {
@@ -33417,7 +33457,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 63
+        "rank": 62
       }
     },
     {
@@ -34051,7 +34091,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 64
+        "rank": 63
       }
     },
     {
@@ -34660,7 +34700,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 47
+        "rank": 46
       }
     },
     {
@@ -35165,7 +35205,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 65
+        "rank": 64
       }
     },
     {
@@ -35417,7 +35457,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 66
+        "rank": 65
       }
     },
     {
@@ -35882,7 +35922,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 121
+        "rank": 120
       }
     },
     {
@@ -36036,7 +36076,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 1,
-        "rank": 118
+        "rank": 117
       }
     },
     {
@@ -36601,7 +36641,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 54
+        "rank": 53
       }
     },
     {
@@ -36876,7 +36916,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 67
+        "rank": 66
       }
     },
     {
@@ -37129,7 +37169,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 52
+        "rank": 51
       }
     },
     {
@@ -37382,7 +37422,7 @@
         "valuesAffected": 2,
         "valuesOpen": 2,
         "hostFactor": 0.25,
-        "rank": 53
+        "rank": 52
       }
     },
     {
@@ -38417,7 +38457,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 68
+        "rank": 67
       }
     },
     {
@@ -38914,7 +38954,7 @@
         "valuesAffected": 1,
         "valuesOpen": 1,
         "hostFactor": 0.25,
-        "rank": 69
+        "rank": 68
       }
     },
     {
@@ -39390,7 +39430,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 55
+        "rank": 54
       }
     },
     {
@@ -39659,7 +39699,7 @@
         "valuesAffected": 0,
         "valuesOpen": 0,
         "hostFactor": 0.5,
-        "rank": 56
+        "rank": 55
       }
     },
     {

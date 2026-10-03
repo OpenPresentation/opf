@@ -1,0 +1,411 @@
+{
+ "tool": "docs/evidence/mac-checks-20261002/measure-didot.mjs",
+ "date": "2026-10-02",
+ "host": {
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v26.7.0",
+  "macos": "26.6.2"
+ },
+ "referenceFile": {
+  "name": "Didot.ttc",
+  "sha256": "c227867f4e386af05fce563afeacde2a9360365e93e326fd40fb066d6f02fe8c",
+  "faces": [
+   "400",
+   "400i",
+   "700"
+  ]
+ },
+ "corpus": {
+  "strings": 300,
+  "paragraphs": 50,
+  "boxWidthsEm": [
+   8,
+   11.5,
+   16,
+   22,
+   30
+  ]
+ },
+ "styles": [
+  {
+   "style": "400",
+   "reference": {
+    "file": "Didot.ttc",
+    "postscript": "Didot",
+    "version": "13.0d1e3"
+   },
+   "replacement": {
+    "family": "Playfair Display",
+    "weight": 400,
+    "italic": false
+   },
+   "widthRatioReplacementOverReference": {
+    "mean": 0.7984,
+    "stdev": 0.0083,
+    "min": 0.7729,
+    "p05": 0.7841,
+    "p95": 0.8108,
+    "max": 0.8305
+   },
+   "lineBreaksAsRouted": {
+    "cases": 250,
+    "identical": 0,
+    "identicalFraction": 0,
+    "perWidth": [
+     {
+      "boxEm": 8,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 11.5,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 16,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 22,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 30,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     }
+    ]
+   },
+   "lineBreaksIfWidthMatched": {
+    "scale": 1.2525,
+    "cases": 250,
+    "identical": 194,
+    "identicalFraction": 0.776,
+    "perWidth": [
+     {
+      "boxEm": 8,
+      "paragraphs": 50,
+      "identical": 37,
+      "differing": 13
+     },
+     {
+      "boxEm": 11.5,
+      "paragraphs": 50,
+      "identical": 34,
+      "differing": 16
+     },
+     {
+      "boxEm": 16,
+      "paragraphs": 50,
+      "identical": 39,
+      "differing": 11
+     },
+     {
+      "boxEm": 22,
+      "paragraphs": 50,
+      "identical": 42,
+      "differing": 8
+     },
+     {
+      "boxEm": 30,
+      "paragraphs": 50,
+      "identical": 42,
+      "differing": 8
+     }
+    ]
+   },
+   "hheaLineHeight": {
+    "reference": 1.264,
+    "replacement": 1.3331,
+    "ratio": 1.055
+   },
+   "unitsPerEm": {
+    "reference": 1000,
+    "replacement": 1240
+   }
+  },
+  {
+   "style": "700",
+   "reference": {
+    "file": "Didot.ttc",
+    "postscript": "Didot-Bold",
+    "version": "13.0d1e3"
+   },
+   "replacement": {
+    "family": "Playfair Display",
+    "weight": 700,
+    "italic": false
+   },
+   "widthRatioReplacementOverReference": {
+    "mean": 0.7982,
+    "stdev": 0.0067,
+    "min": 0.7802,
+    "p05": 0.788,
+    "p95": 0.8097,
+    "max": 0.8251
+   },
+   "lineBreaksAsRouted": {
+    "cases": 250,
+    "identical": 0,
+    "identicalFraction": 0,
+    "perWidth": [
+     {
+      "boxEm": 8,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 11.5,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 16,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 22,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 30,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     }
+    ]
+   },
+   "lineBreaksIfWidthMatched": {
+    "scale": 1.2528,
+    "cases": 250,
+    "identical": 191,
+    "identicalFraction": 0.764,
+    "perWidth": [
+     {
+      "boxEm": 8,
+      "paragraphs": 50,
+      "identical": 36,
+      "differing": 14
+     },
+     {
+      "boxEm": 11.5,
+      "paragraphs": 50,
+      "identical": 30,
+      "differing": 20
+     },
+     {
+      "boxEm": 16,
+      "paragraphs": 50,
+      "identical": 44,
+      "differing": 6
+     },
+     {
+      "boxEm": 22,
+      "paragraphs": 50,
+      "identical": 40,
+      "differing": 10
+     },
+     {
+      "boxEm": 30,
+      "paragraphs": 50,
+      "identical": 41,
+      "differing": 9
+     }
+    ]
+   },
+   "hheaLineHeight": {
+    "reference": 1.289,
+    "replacement": 1.3331,
+    "ratio": 1.034
+   },
+   "unitsPerEm": {
+    "reference": 1000,
+    "replacement": 1240
+   }
+  },
+  {
+   "style": "400i",
+   "reference": {
+    "file": "Didot.ttc",
+    "postscript": "Didot-Italic",
+    "version": "13.0d1e3"
+   },
+   "replacement": {
+    "family": "Playfair Display",
+    "weight": 400,
+    "italic": true
+   },
+   "widthRatioReplacementOverReference": {
+    "mean": 0.8267,
+    "stdev": 0.0093,
+    "min": 0.7974,
+    "p05": 0.8099,
+    "p95": 0.8394,
+    "max": 0.8544
+   },
+   "lineBreaksAsRouted": {
+    "cases": 250,
+    "identical": 0,
+    "identicalFraction": 0,
+    "perWidth": [
+     {
+      "boxEm": 8,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 11.5,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 16,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 22,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     },
+     {
+      "boxEm": 30,
+      "paragraphs": 50,
+      "identical": 0,
+      "differing": 50
+     }
+    ]
+   },
+   "lineBreaksIfWidthMatched": {
+    "scale": 1.2096,
+    "cases": 250,
+    "identical": 180,
+    "identicalFraction": 0.72,
+    "perWidth": [
+     {
+      "boxEm": 8,
+      "paragraphs": 50,
+      "identical": 32,
+      "differing": 18
+     },
+     {
+      "boxEm": 11.5,
+      "paragraphs": 50,
+      "identical": 27,
+      "differing": 23
+     },
+     {
+      "boxEm": 16,
+      "paragraphs": 50,
+      "identical": 39,
+      "differing": 11
+     },
+     {
+      "boxEm": 22,
+      "paragraphs": 50,
+      "identical": 39,
+      "differing": 11
+     },
+     {
+      "boxEm": 30,
+      "paragraphs": 50,
+      "identical": 43,
+      "differing": 7
+     }
+    ]
+   },
+   "hheaLineHeight": {
+    "reference": 1.257,
+    "replacement": 1,
+    "ratio": 0.796
+   },
+   "unitsPerEm": {
+    "reference": 1000,
+    "replacement": 1240
+   }
+  },
+  {
+   "style": "700i",
+   "referenceFace": null,
+   "note": "Didot ships no such face on macOS; PowerPoint draws a synthesized slant and weight, the preview draws the Playfair face."
+  }
+ ],
+ "nearestBundledRegularByWidth": [
+  {
+   "family": "Intos Serif",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.716,
+   "meanAbsWidthDelta": 0.0092,
+   "meanWidthDelta": -0.007
+  },
+  {
+   "family": "Figtree",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.572,
+   "meanAbsWidthDelta": 0.016,
+   "meanWidthDelta": -0.0141
+  },
+  {
+   "family": "Raleway",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.476,
+   "meanAbsWidthDelta": 0.0175,
+   "meanWidthDelta": 0.0143
+  },
+  {
+   "family": "PT Serif",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.5,
+   "meanAbsWidthDelta": 0.019,
+   "meanWidthDelta": -0.0188
+  },
+  {
+   "family": "Bitter",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.48,
+   "meanAbsWidthDelta": 0.0197,
+   "meanWidthDelta": 0.0189
+  },
+  {
+   "family": "Red Hat Text",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.42,
+   "meanAbsWidthDelta": 0.0226,
+   "meanWidthDelta": -0.0218
+  },
+  {
+   "family": "Open Sans",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.392,
+   "meanAbsWidthDelta": 0.0242,
+   "meanWidthDelta": 0.0234
+  },
+  {
+   "family": "Lora",
+   "strings": 300,
+   "lineBreaksIdenticalFraction": 0.308,
+   "meanAbsWidthDelta": 0.0289,
+   "meanWidthDelta": 0.0286
+  }
+ ],
+ "playfairRank": 24
+}

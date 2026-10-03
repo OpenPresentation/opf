@@ -1293,9 +1293,10 @@
       ]
     },
     "Didot": {
-      "nextAction": "Unmeasured: Didot is Apple-only (macOS), so no reference can be installed on the Windows measuring host (the fixture already passes in every host). It can be qualified only on a Mac with the same qualification script, or stay documented as an unmeasured look-alike of Playfair Display; vetoable.",
+      "nextAction": "Measured on macOS 26.6 against the system Didot 13.0d1e3 (RR-17, 2026-10-02): Playfair Display is a documented look-alike, 20.7% narrower on average with no line break matching (see mac-checks-20261002). Reconsider the route: Intos Serif (0.9%) and PT Serif (1.9%) are far closer in width; vetoable.",
       "evidence": [
-        "measurement"
+        "measurement",
+        "macChecks"
       ]
     },
     "Franklin Gothic Book": {
@@ -2787,6 +2788,10 @@
       "label": "Parity run on the merged Intos mains (opf#175)",
       "url": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-intos-default.md"
     },
+    "macChecks": {
+      "label": "RR-17 Mac checks: Didot against the system font, vector PDF in PDFKit, Quick Look, WebKit (2026-10-02)",
+      "url": "docs/evidence/mac-checks-20261002/README.md"
+    },
     "ff43Measure": {
       "label": "FF-43 bundled replacement measurements (widths, vertical metrics, outline identity, 2026-09-29)",
       "url": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json"
@@ -3118,9 +3123,9 @@
       "replacement": "Source Sans 3: a humanist sans."
     },
     "Didot": {
-      "original": "Didot: Didone high-contrast serif (Apple version, no reference on this host).",
-      "replacement": "Playfair Display: a high-contrast transitional display serif.",
-      "caveat": "Unmeasured: the Apple Didot reference is not available to the measuring host."
+      "original": "Didot: Didone high-contrast serif (Apple version 13.0d1e3, measured in place on macOS).",
+      "replacement": "Playfair Display: a high-contrast transitional display serif with heavier colour and smaller capitals.",
+      "caveat": "Narrower than the original by about 21% on average with smaller capitals (0.80x): expect different wrapping. Didot has no bold italic face on macOS. A closer open candidate is the improvement to look for (vetoable)."
     },
     "Franklin Gothic Book": {
       "original": "Franklin Gothic Book: American grotesque.",

@@ -1,0 +1,304 @@
+{
+ "date": "2026-10-02",
+ "decks": [
+  "contract-cycle-time-brief",
+  "chart-data-sources",
+  "cjk",
+  "rtl",
+  "indic-sea"
+ ],
+ "summary": {
+  "chromium": {
+   "version": "153.0.8010.12",
+   "externalRequests": 0,
+   "textElements": 174,
+   "naturalMinusRendererWidthPx": {
+    "count": 67,
+    "meanAbs": 0.005,
+    "p95Abs": 0.014,
+    "maxAbs": 0.015,
+    "over0_1": 0,
+    "over0_15": 0
+   },
+   "perDeck": {
+    "contract-cycle-time-brief": {
+     "count": 55,
+     "meanAbs": 0.004,
+     "p95Abs": 0.012,
+     "maxAbs": 0.015,
+     "over0_1": 0,
+     "over0_15": 0
+    },
+    "chart-data-sources": {
+     "count": 3,
+     "meanAbs": 0.004,
+     "p95Abs": 0.01,
+     "maxAbs": 0.01,
+     "over0_1": 0,
+     "over0_15": 0
+    },
+    "cjk": {
+     "count": 2,
+     "meanAbs": 0,
+     "p95Abs": 0,
+     "maxAbs": 0,
+     "over0_1": 0,
+     "over0_15": 0
+    },
+    "rtl": {
+     "count": 2,
+     "meanAbs": 0.007,
+     "p95Abs": 0.012,
+     "maxAbs": 0.012,
+     "over0_1": 0,
+     "over0_15": 0
+    },
+    "indic-sea": {
+     "count": 5,
+     "meanAbs": 0.012,
+     "p95Abs": 0.015,
+     "maxAbs": 0.015,
+     "over0_1": 0,
+     "over0_15": 0
+    }
+   },
+   "textLengthHonoured": {
+    "count": 67,
+    "meanAbs": 0,
+    "p95Abs": 0,
+    "maxAbs": 0,
+    "over0_1": 0,
+    "over0_15": 0
+   },
+   "facesLoaded": 28
+  },
+  "webkit": {
+   "version": "26.6",
+   "externalRequests": 0,
+   "textElements": 174,
+   "naturalMinusRendererWidthPx": {
+    "count": 67,
+    "meanAbs": 0.697,
+    "p95Abs": 2.392,
+    "maxAbs": 8.154,
+    "over0_1": 45,
+    "over0_15": 37
+   },
+   "perDeck": {
+    "contract-cycle-time-brief": {
+     "count": 55,
+     "meanAbs": 0.621,
+     "p95Abs": 2.346,
+     "maxAbs": 2.847,
+     "over0_1": 41,
+     "over0_15": 33
+    },
+    "chart-data-sources": {
+     "count": 3,
+     "meanAbs": 1.45,
+     "p95Abs": 2.69,
+     "maxAbs": 2.69,
+     "over0_1": 3,
+     "over0_15": 3
+    },
+    "cjk": {
+     "count": 2,
+     "meanAbs": 0,
+     "p95Abs": 0,
+     "maxAbs": 0,
+     "over0_1": 0,
+     "over0_15": 0
+    },
+    "rtl": {
+     "count": 2,
+     "meanAbs": 4.077,
+     "p95Abs": 8.154,
+     "maxAbs": 8.154,
+     "over0_1": 1,
+     "over0_15": 1
+    },
+    "indic-sea": {
+     "count": 5,
+     "meanAbs": 0,
+     "p95Abs": 0,
+     "maxAbs": 0,
+     "over0_1": 0,
+     "over0_15": 0
+    }
+   },
+   "textLengthHonoured": {
+    "count": 67,
+    "meanAbs": 0.697,
+    "p95Abs": 2.392,
+    "maxAbs": 8.154,
+    "over0_1": 45,
+    "over0_15": 37
+   },
+   "facesLoaded": 28
+  },
+  "faces": {
+   "families": [
+    "Intos",
+    "Intos Display",
+    "Noto Naskh Arabic",
+    "Noto Sans Bengali",
+    "Noto Sans Devanagari",
+    "Noto Sans Hebrew",
+    "Noto Sans JP",
+    "Noto Sans KR",
+    "Noto Sans Khmer",
+    "Noto Sans SC",
+    "Noto Sans Tamil",
+    "Noto Sans Thai",
+    "sans-serif"
+   ],
+   "loaded": 28
+  },
+  "webkitMinusChromiumNaturalPx": {
+   "count": 174,
+   "meanAbs": 0.409,
+   "p95Abs": 2.172,
+   "maxAbs": 8.152,
+   "over0_1": 74,
+   "over0_15": 63
+  },
+  "webkitMinusChromiumStartXPx": {
+   "count": 174,
+   "meanAbs": 0.149,
+   "p95Abs": 0.727,
+   "maxAbs": 8.151,
+   "over0_1": 28,
+   "over0_15": 24
+  },
+  "webkitMinusChromiumEndXPx": {
+   "count": 174,
+   "meanAbs": 0.136,
+   "p95Abs": 0.758,
+   "maxAbs": 2.848,
+   "over0_1": 30,
+   "over0_15": 26
+  },
+  "worstWebkitElements": [
+   {
+    "slide": "contract-cycle-time-brief#3",
+    "path": "slides.2.title",
+    "family": "Intos Display, sans-serif",
+    "size": 54,
+    "chars": 12,
+    "deltaPx": 2.847,
+    "deltaPercent": 1.018,
+    "chromiumDeltaPx": 0.011
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": null,
+    "family": "Intos, sans-serif",
+    "size": 25,
+    "chars": 24,
+    "deltaPx": 2.392,
+    "deltaPercent": 0.897,
+    "chromiumDeltaPx": 0.001
+   },
+   {
+    "slide": "contract-cycle-time-brief#1",
+    "path": "slides.0.title",
+    "family": "Intos Display, sans-serif",
+    "size": 54,
+    "chars": 25,
+    "deltaPx": 2.346,
+    "deltaPercent": 0.4,
+    "chromiumDeltaPx": 0.005
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": null,
+    "family": "Intos, sans-serif",
+    "size": 25,
+    "chars": 53,
+    "deltaPx": 2.295,
+    "deltaPercent": 0.423,
+    "chromiumDeltaPx": 0.014
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": "slides.1.title",
+    "family": "Intos Display, sans-serif",
+    "size": 54,
+    "chars": 16,
+    "deltaPx": 1.661,
+    "deltaPercent": 0.419,
+    "chromiumDeltaPx": 0.001
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": null,
+    "family": "Intos, sans-serif",
+    "size": 25,
+    "chars": 45,
+    "deltaPx": 1.611,
+    "deltaPercent": 0.339,
+    "chromiumDeltaPx": 0.011
+   },
+   {
+    "slide": "contract-cycle-time-brief#1",
+    "path": "slides.0.subtitle",
+    "family": "Intos, sans-serif",
+    "size": 25,
+    "chars": 30,
+    "deltaPx": 1.404,
+    "deltaPercent": 0.435,
+    "chromiumDeltaPx": 0.006
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": null,
+    "family": "Intos, sans-serif",
+    "size": 25,
+    "chars": 28,
+    "deltaPx": 1.27,
+    "deltaPercent": 0.377,
+    "chromiumDeltaPx": 0.007
+   },
+   {
+    "slide": "contract-cycle-time-brief#1",
+    "path": "slides.0.tag",
+    "family": "Intos, sans-serif",
+    "size": 16,
+    "chars": 16,
+    "deltaPx": 0.758,
+    "deltaPercent": 0.666,
+    "chromiumDeltaPx": 0
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": null,
+    "family": "Intos, sans-serif",
+    "size": 25,
+    "chars": 26,
+    "deltaPx": 0.452,
+    "deltaPercent": 0.148,
+    "chromiumDeltaPx": 0.011
+   },
+   {
+    "slide": "contract-cycle-time-brief#1",
+    "path": "design.footer.center.text",
+    "family": "Intos, sans-serif",
+    "size": 16,
+    "chars": 23,
+    "deltaPx": 0.406,
+    "deltaPercent": 0.267,
+    "chromiumDeltaPx": 0
+   },
+   {
+    "slide": "contract-cycle-time-brief#2",
+    "path": "design.footer.center.text",
+    "family": "Intos, sans-serif",
+    "size": 16,
+    "chars": 23,
+    "deltaPx": 0.406,
+    "deltaPercent": 0.267,
+    "chromiumDeltaPx": 0
+   }
+  ]
+ }
+}
