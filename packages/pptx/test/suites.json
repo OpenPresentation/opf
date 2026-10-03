@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46). A new Node test needs no entry; add a file here only when it is a helper, fixture or harness, or a check that CI runs in its own step. Files named *-browser*.mjs are browser suites (test/browser-suites.json, scripts/quarantine.mjs) and are skipped by name.",
+  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46). A new Node test needs no entry; add a file here only when it is a helper, fixture or harness, or a check that CI runs in its own step. Files named *-browser*.mjs are browser suites (test/browser-suites.json, scripts/quarantine.mjs) and are skipped by name. RR-53: contractExclude lists the tests the contract suite (npm run test:contract, run by core's pull-request tier) leaves out, each with its reason; every other test of the full run is in the contract.",
   "include": [],
   "nodeTest": [
     "chart-cache-import.mjs"
@@ -60,5 +60,8 @@
     "table-row-sizing.mjs",
     "table-styles.mjs",
     "webp-fallback.mjs"
-  ]
+  ],
+  "contractExclude": {
+    "dependency-boundary.mjs": "Proves the vendored pptxgenjs does not load image-size (packaging boundary); no core input."
+  }
 }

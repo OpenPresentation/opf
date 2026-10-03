@@ -41,6 +41,34 @@ test('test/suites.json agrees with test/ and every excluded file is a real file'
   assert.equal(new Set(tests.map((t) => t.file)).size, tests.length);
 });
 
+test('RR-53: the contract suite is the full suite minus contractExclude, and a stale or unexplained exclusion fails', () => {
+  const files = ['a.mjs', 'b.mjs', 'c.mjs', 'c-browser.mjs', 'helper.mjs'];
+  const suites = { exclude: ['helper.mjs'], contractExclude: { 'b.mjs': 'package internal' } };
+  assert.deepEqual(selectTests(files, suites).map((t) => t.file), ['test/a.mjs', 'test/b.mjs', 'test/c.mjs']);
+  assert.deepEqual(selectTests(files, suites, 'contract').map((t) => t.file), ['test/a.mjs', 'test/c.mjs']);
+  assert.deepEqual(selectTests(files, { exclude: suites.exclude }, 'contract'), selectTests(files, { exclude: suites.exclude }), 'no contractExclude: the contract is the full suite');
+  assert.throws(() => selectTests(files, { contractExclude: { 'gone.mjs': 'x' } }, 'contract'), /contractExclude names gone\.mjs/);
+  assert.throws(() => selectTests(files, { exclude: ['a.mjs'], contractExclude: { 'a.mjs': 'x' } }, 'contract'), /contractExclude names a\.mjs, which the full suite does not run/);
+  assert.throws(() => selectTests(files, { contractExclude: { 'c-browser.mjs': 'x' } }, 'contract'), /does not run/);
+  assert.throws(() => selectTests(files, { contractExclude: { 'a.mjs': ' ' } }, 'contract'), /needs a reason for a\.mjs/);
+  assert.throws(() => selectTests(files, suites, 'nightly'), /Unknown suite/);
+});
+
+test('RR-53: test/suites.json contract exclusions are real full-suite tests with reasons, and npm run test:contract runs the contract suite', () => {
+  const suites = JSON.parse(readFileSync(path.join(root, 'test', 'suites.json'), 'utf8'));
+  const files = readdirSync(path.join(root, 'test'), { withFileTypes: true }).filter((e) => e.isFile() && e.name.endsWith('.mjs')).map((e) => e.name);
+  const full = selectTests(files, suites).map((t) => t.file);
+  const contract = selectTests(files, suites, 'contract').map((t) => t.file);
+  const excluded = Object.keys(suites.contractExclude ?? {});
+  assert.equal(contract.length, full.length - excluded.length);
+  assert.ok(contract.length > 0 && contract.every((file) => full.includes(file)), 'the contract is a subset of the full suite');
+  for (const name of excluded) assert.ok(full.includes(`test/${name}`), `${name} is a full-suite test`);
+  const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
+  assert.match(scripts['test:contract'], /run-tests\.mjs --suite contract/);
+  assert.doesNotMatch(scripts.test, /--suite/, 'npm test stays the full suite');
+  assert.match(scripts.test, /run-tests\.mjs(?! --suite)/);
+});
+
 test('run-tests stops at the first failing test and lists commands with --list', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'run-tests-'));
   try {
