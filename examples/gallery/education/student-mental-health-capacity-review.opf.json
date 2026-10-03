@@ -5,9 +5,9 @@
   "filename": "student-mental-health-capacity-review",
   "language": "english-au",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "mixed",
       "decisionPower": "informational",

@@ -5,7 +5,7 @@
   "filename": "video-demo-sales-narrative",
   "language": "english-us",
   "audience": [
-    "investors",
+    "investor",
     {
       "id": "all-hands",
       "attentionBudgetMinutes": 24,

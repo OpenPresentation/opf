@@ -86,18 +86,6 @@
       "next": "The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46)."
     },
     {
-      "id": "catalog-only-pages",
-      "gap": "missing-gallery",
-      "types": [
-        "narratives",
-        "audiences",
-        "purposes"
-      ],
-      "link": "https://github.com/OpenPresentation/opf/issues/291",
-      "descoped": true,
-      "next": "Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead."
-    },
-    {
       "id": "layouts-subset-by-design",
       "gap": "missing-spec",
       "types": [

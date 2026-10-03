@@ -14,7 +14,7 @@
     ]
   },
   "audience": [
-    "regulators",
+    "regulatory",
     {
       "id": "candidates",
       "attentionBudgetMinutes": 34,

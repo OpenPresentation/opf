@@ -113,7 +113,7 @@
     },
     "overrides": {
       "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
-      "rules": 11
+      "rules": 10
     }
   },
   "statusDefinitions": {
@@ -224,17 +224,6 @@
       "link": "RR-17",
       "next": "The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46)."
     },
-    "catalog-only-pages": {
-      "gap": "missing-gallery",
-      "types": [
-        "narratives",
-        "audiences",
-        "purposes"
-      ],
-      "link": "https://github.com/OpenPresentation/opf/issues/291",
-      "descoped": true,
-      "next": "Gallery pages and cards for the catalog-only records after the FF-37 reconciliation; the six plural audience ids are deprecated instead."
-    },
     "layouts-subset-by-design": {
       "gap": "missing-spec",
       "types": [
@@ -328,9 +317,9 @@
     "addressed": 1100,
     "unaddressed": 0,
     "byStatus": {
-      "done": 421,
+      "done": 427,
       "deprecated": 50,
-      "descoped": 412,
+      "descoped": 406,
       "works-unverified": 0,
       "unknown": 0,
       "parity-near": 47,
@@ -422,8 +411,7 @@
       "audiences": {
         "records": 22,
         "byStatus": {
-          "done": 16,
-          "descoped": 6
+          "done": 22
         },
         "addressed": 22,
         "unaddressed": 0
@@ -1330,22 +1318,22 @@
     {"type":"audiences","id":"board","name":"Board of Directors","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"candidates","name":"Candidates","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"customer","name":"Customer","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"audiences","id":"customers","name":"Customers","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"json-only","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"served as catalog JSON only; the gallery has no page for this id","rule":"catalog-only-pages","link":"https://github.com/OpenPresentation/opf/issues/291","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"audiences","id":"customers","name":"Customers","columns":{"spec":"catalog-deprecated","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown-deprecated","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"replacedBy":"customer","gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"engineering-team","name":"Engineering Team","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"executive","name":"Executive","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"audiences","id":"executives","name":"Executives","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"json-only","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"served as catalog JSON only; the gallery has no page for this id","rule":"catalog-only-pages","link":"https://github.com/OpenPresentation/opf/issues/291","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"audiences","id":"executives","name":"Executives","columns":{"spec":"catalog-deprecated","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown-deprecated","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"replacedBy":"executive","gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"general-public","name":"General Public","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"internal-team","name":"Internal Team","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"investor","name":"Investor","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"audiences","id":"investors","name":"Investors","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"json-only","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"served as catalog JSON only; the gallery has no page for this id","rule":"catalog-only-pages","link":"https://github.com/OpenPresentation/opf/issues/291","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"audiences","id":"investors","name":"Investors","columns":{"spec":"catalog-deprecated","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown-deprecated","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"replacedBy":"investor","gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"marketing","name":"Marketing","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"audiences","id":"marketing-team","name":"Marketing Team","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"json-only","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"served as catalog JSON only; the gallery has no page for this id","rule":"catalog-only-pages","link":"https://github.com/OpenPresentation/opf/issues/291","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"audiences","id":"marketing-team","name":"Marketing Team","columns":{"spec":"catalog-deprecated","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown-deprecated","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"replacedBy":"marketing","gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"media","name":"Media & Press","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"partner","name":"Partner / Channel","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"audiences","id":"regulators","name":"Regulators","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"json-only","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"served as catalog JSON only; the gallery has no page for this id","rule":"catalog-only-pages","link":"https://github.com/OpenPresentation/opf/issues/291","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"audiences","id":"regulators","name":"Regulators","columns":{"spec":"catalog-deprecated","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown-deprecated","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"replacedBy":"regulatory","gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"regulatory","name":"Regulatory / Compliance","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"sales","name":"Sales","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"audiences","id":"sales-team","name":"Sales Team","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"json-only","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"served as catalog JSON only; the gallery has no page for this id","rule":"catalog-only-pages","link":"https://github.com/OpenPresentation/opf/issues/291","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"audiences","id":"sales-team","name":"Sales Team","columns":{"spec":"catalog-deprecated","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown-deprecated","native":"verified","fonts":"n/a"},"pipeline":"works","nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"replacedBy":"sales","gaps":[],"status":"done","addressed":true},
     {"type":"audiences","id":"technical","name":"Technical","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"tones","id":"authoritative","name":"Authoritative","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"tones","id":"casual","name":"Casual","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},

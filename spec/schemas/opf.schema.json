@@ -75,15 +75,15 @@
           "minItems": 1
         }
       ],
-      "description": "Intended audiences for the presentation. Accepts either:\n- A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executives'), an HTTPS URL, or a 'pkg:' reference.\n- An array of string shorthands and/or inline Audience objects for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
+      "description": "Intended audiences for the presentation. Accepts either:\n- A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference.\n- An array of string shorthands and/or inline Audience objects for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
       "examples": [
-        "executives",
+        "executive",
         "Biology Students and Wildlife Enthusiasts",
-        ["executives"],
+        ["executive"],
         ["board", "c-suite"],
         ["Series B investors", "https://acme.com/decks/audiences/acme-board.json"],
         [
-          { "id": "executives", "attentionBudgetMinutes": 20 },
+          { "id": "executive", "attentionBudgetMinutes": 20 },
           { "name": "Regional Sales Leaders", "seniority": "director", "technicalFluency": "medium", "decisionPower": "advisory" }
         ]
       ]
@@ -297,7 +297,7 @@
           "type": "string",
           "pattern": "^[a-z][a-z0-9-]*$",
           "description": "Optional audiences catalog id to resolve before applying inline overrides.",
-          "examples": ["executives", "board", "engineering-team"]
+          "examples": ["executive", "board", "engineering-team"]
         },
         "name": {
           "type": "string",
@@ -697,7 +697,7 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "Audiences this narrative works well for. Free-form strings or 'audiences' catalog ids.",
-          "examples": [["executives", "investors", "customers"]]
+          "examples": [["executive", "investor", "customer"]]
         },
         "durationRange": {
           "type": "object",

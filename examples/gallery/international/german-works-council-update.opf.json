@@ -5,9 +5,9 @@
   "filename": "german-works-council-update",
   "language": "german",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 21,
       "technicalFluency": "medium",
       "decisionPower": "informational",

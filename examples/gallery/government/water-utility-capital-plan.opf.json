@@ -5,9 +5,9 @@
   "filename": "water-utility-capital-plan",
   "language": "english-gb",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 33,
       "technicalFluency": "medium",
       "decisionPower": "informational",
