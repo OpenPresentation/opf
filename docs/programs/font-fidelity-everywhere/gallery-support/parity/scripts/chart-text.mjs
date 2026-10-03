@@ -86,3 +86,13 @@ export function chartTextSizeMismatches(preview, part, tolerance) {
   }
   return messages;
 }
+
+// RR-44: a value-axis tick label (`0`, `50`, `1,000`, `20%`) is computed by the consumer from the series values: the chart part carries no string for it,
+// and PowerPoint draws its own ticks. The preview stamps it with the chart's own path (no `.data.` suffix) and it is numeric. Such a line is neither an
+// authored chart string nor a wrapped one, so the wrapped-label check skips it. Authored strings (categories, series names, titles) keep full checking.
+const NUMERIC_TICK = /^[-+\d.,%$€£\s]+$/;
+/** True for a computed value-axis tick label: numeric text with the chart's own trace path (not a `data.rows` or `data.columns` string). */
+export function isComputedTickLabel(text, path) {
+  const t = String(text ?? '').trim();
+  return t !== '' && NUMERIC_TICK.test(t) && !/\.data\.(columns|rows)\./.test(String(path ?? ''));
+}
