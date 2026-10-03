@@ -1,5 +1,0 @@
----
-type: changed
-packages: []
----
-RR-46 (repository tooling; no package change): changelog fragments, discovered tests and conflict-free generated trackers. A change adds `changes/<slug>.md` instead of editing `## Unreleased`, and the release-prep PR runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z --package opf|cli`; `pnpm test` runs every `check:*` root script (`scripts/run-checks.mjs`, `scripts/checks.json`) and each package runs every `test/*.mjs` (`scripts/run-tests.mjs` replaces `scripts/run-node-tests.mjs`, `test/suites.json` lists the helpers), so a new test or check touches only its own file. The set of tests `pnpm test` runs is unchanged. The gallery and font trackers no longer need regenerating in every PR: on a pull request or merge queue run a stale tracker is a warning (`OPF_TRACKER_STALE=warn`), `main`, tags and local runs still fail, and the new `tracker-refresh.yml` workflow regenerates both after each push to `main` and offers the result on `bot/tracker-refresh` (a pull request, opened by hand until the GitHub App of opf#298 exists).
