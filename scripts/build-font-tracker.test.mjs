@@ -16,7 +16,7 @@ const policyNames = policy.families.map((row) => row.family);
 function scratchCopy() {
   // realpath: on macOS the temporary directory is a symlink, and the script only runs when its resolved path is the entry point.
   const dir = realpathSync(mkdtempSync(path.join(tmpdir(), "font-tracker-")));
-  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs"];
+  const files = [FILES.policy, FILES.overrides, FILES.json, FILES.markdown, overrides.manifestSnapshot, overrides.galleryFontsSnapshot, overrides.measurementReport, overrides.paritySource, overrides.qualificationReport, overrides.hostFixtureEvidence, overrides.scriptHostFixtureEvidence, overrides.symbolFontsSnapshot, overrides.symbolEncodings, ...overrides.nativeEvidence.map((run) => run.file), ...Object.values(overrides.scriptCorpus), "scripts/build-font-tracker.mjs", "scripts/tracker-staleness.mjs"];
   for (const file of files) {
     mkdirSync(path.dirname(path.join(dir, file)), { recursive: true });
     cpSync(path.join(ROOT, file), path.join(dir, file));
