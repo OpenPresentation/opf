@@ -85,6 +85,7 @@
     "typecheck": "node scripts/check-syntax.mjs src test scripts",
     "validate": "node scripts/validate-package.mjs",
     "test": "npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+    "test:contract": "npm run build && npm run check:fonts && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
     "check:runners": "node --test scripts/run-tests.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:fonts": "node test/font-licenses.mjs && npm run check:font-hotlinks",
