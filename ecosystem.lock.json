@@ -1,0 +1,22 @@
+{
+  "$schema": "./scripts/ecosystem-lock.schema.json",
+  "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. A pull request may change `golden` (a reviewed golden decision); use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
+  "version": 1,
+  "repositories": {
+    "opf": { "sha": "8a1674090d6c656ac5387f0f70d784f6fa976726" },
+    "opf-render": { "sha": "3b300a3d1d34ecca4e323c74bed64cbe554d6bce" },
+    "opf-pptx": { "sha": "986d22bb1d455e9b1a9eb8c86d54328865893a25" },
+    "opf-editor": { "sha": "f4779dab851bc36cadca62f7c4b89c1dc9e17bf3" }
+  },
+  "golden": {
+    "repository": "opf",
+    "path": "scripts/fixtures/opf-examples-png.audience-ids.sha256.json",
+    "note": "RR-41: the renderer's own opf-examples-png.cover-centering baseline records the published core 0.12.0 examples; this core fixture has the same 805 raster hashes and the digest of core main's examples (scripts/fixtures/README.md). Select the renderer's own baseline again once the renderer adopts the core release that ships these examples."
+  },
+  "provenance": {
+    "source": "migration",
+    "at": "2026-10-03T03:00:00Z",
+    "run": "https://github.com/OpenPresentation/opf/actions/runs/37090275962",
+    "note": "Generated from the hand pins of .github/workflows/ecosystem-ci.yml (OPF_RENDER_REF, OPF_PPTX_REF, OPF_EDITOR_REF and OPF_GOLDEN_BASELINE) and core main 8a16740, whose push run of Coordinated public packages passed with them."
+  }
+}
