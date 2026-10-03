@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ecosystemScope, isEcosystemIndependent } from "./ecosystem-scope.mjs";
+import { ecosystemScope, isEcosystemIndependent, scopeForEvent } from "./ecosystem-scope.mjs";
 
 test("program tracking and native evidence are independent of the ecosystem checks", () => {
   for (const file of [
@@ -43,4 +43,15 @@ test("only a non-empty, fully independent change skips the checks", () => {
   const mixed = ecosystemScope(["docs/programs/release-readiness/burndown.md", "scripts/pack-ecosystem.mjs"]);
   assert.equal(mixed.run, true);
   assert.deepEqual(mixed.relevant, ["scripts/pack-ecosystem.mjs"]);
+});
+
+test("only a pull request can skip; push, merge_group, manual and local runs always run in full", () => {
+  const docsOnly = () => ["docs/programs/release-readiness/burndown.md"];
+  assert.equal(scopeForEvent("pull_request", docsOnly).run, false);
+  for (const event of ["push", "merge_group", "workflow_dispatch", "schedule", "local"]) {
+    const decision = scopeForEvent(event, () => { throw new Error("must not list files for " + event); });
+    assert.equal(decision.run, true, event);
+    assert.match(decision.reason, new RegExp(event));
+  }
+  assert.equal(scopeForEvent("pull_request", () => { throw new Error("no parent"); }).run, true);
 });
