@@ -29,6 +29,9 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           path: opf-editor
+      # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
+      - name: Check the test quarantine
+        run: node --test scripts/quarantine.test.mjs scripts/browser-suites.test.mjs && node scripts/quarantine.mjs check
       # The ecosystem is pinned to the versions this package depends on: opf main after #219 (the packed-ecosystem check there knows renderer 0.11.8), opf-render 0.11.8 (tag colour; extra lazy fonts, face-level lazy fonts and host render options; lazy script and preview faces, incl. Barlow, which test:playground exercises; chart label rotation) and opf-pptx 0.11.5.
       # Release 0.10.6 pins the 0.11.4 train sources: opf#234 (design fields, picture bullets, 0.11.9 lazy face count), opf-render main fa1949a and opf-pptx main 9b9b0e4; repin each to its merge commit (opf-pptx to the merge of #124). The registry dependencies resolve once core 0.11.4, renderer 0.11.9 and PPTX 0.11.7 are published (npm ci and test:packed).
       # Verify registry dependencies before linking the pinned source graph.
@@ -92,14 +95,11 @@ jobs:
           OPF_REQUIRE_FF08: "1"
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
-      - run: npm run test:playground
-      - run: npm run test:data-grid-browser
-      - run: npm run test:code-browser
-      - run: npm run test:selection-browser
-      - run: npm run test:click-entry-browser
-      - run: npm run test:json-browser -- artifacts/json-editor-browser.json
-      - run: npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured
-      - run: npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated
+      # RR-47: the commands are test/browser-suites.json; a quarantined test is deferred to the non-blocking step below.
+      - name: Playground browser suite
+        run: node scripts/quarantine.mjs run-suite playground
+      - name: Standalone browser suites
+        run: node scripts/quarantine.mjs run-suite browser
       - name: Install and exercise coordinated candidate tarballs
         working-directory: opf
         run: |
@@ -115,6 +115,11 @@ jobs:
           node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer
           node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
       - run: npm pack --dry-run
+      # RR-47: tests listed in test/quarantine.json run here, after every gate, and are reported without failing the job.
+      - name: Quarantined tests (non-blocking)
+        if: always()
+        continue-on-error: true
+        run: node scripts/quarantine.mjs run-deferred
       - name: Preserve candidate and raster evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -122,6 +127,7 @@ jobs:
           name: candidate-opf-editor-${{ runner.os }}-node24
           path: |
             opf-editor/artifacts/rich-input-browser*.json
+            opf-editor/artifacts/quarantine/**
             opf-editor/artifacts/json-editor-browser.json
             opf-editor/artifacts/packed-consumer-node24.json
             opf-editor/artifacts/packed-json*-node24.json

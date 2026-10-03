@@ -1,0 +1,101 @@
+name: Flake measurement
+# RR-47: runs the browser suites of the package job (test:playground and the standalone browser suites) five times on main and
+# records a pass rate per test (job summary and the flake-repeat artifact). It measures; it does not gate.
+# Quarantine rule: test/QUARANTINE.md.
+on:
+  schedule:
+    - cron: '41 3 * * *'
+  # A change to this workflow runs it once, so the change is verified before it reaches main (a new workflow cannot be dispatched until then).
+  pull_request:
+    paths: ['.github/workflows/flake-repeat.yml']
+  workflow_dispatch:
+    inputs:
+      repeat:
+        description: Runs per test
+        default: '5'
+permissions:
+  contents: read
+concurrency:
+  group: flake-repeat-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  repeat:
+    name: Repeat the browser suites
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    timeout-minutes: 120
+    defaults:
+      run:
+        working-directory: opf-editor
+    env:
+      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.furniture.sha256.json
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: opf-editor
+          persist-credentials: false
+      # The sibling pins are the ones the CI package job uses: one source of truth (the `ref:` after each `repository:`).
+      - name: Read the sibling pins of the CI package job
+        working-directory: .
+        run: |
+          for repo in opf opf-render opf-pptx; do
+            ref=$(awk -v name="OpenPresentation/$repo" '$1 == "repository:" && $2 == name { found = 1 } found && $1 == "ref:" { print $2; exit }' opf-editor/.github/workflows/ci.yml)
+            case "$ref" in [0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*) ;; *) echo "No pin for $repo in ci.yml" >&2; exit 1;; esac
+            echo "PIN_$(echo "$repo" | tr 'a-z-' 'A-Z_')=$ref" | tee -a "$GITHUB_ENV"
+          done
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ env.PIN_OPF }}
+          path: opf
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ env.PIN_OPF_RENDER }}
+          path: opf-render
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-pptx
+          ref: ${{ env.PIN_OPF_PPTX }}
+          path: opf-pptx
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: opf-editor/package-lock.json
+      - name: Install locked coordinated dependencies
+        working-directory: .
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-pptx opf-editor; do
+            npm ci --prefix "$repo"
+          done
+      - name: Build and link coordinated sources
+        working-directory: opf
+        run: |
+          pnpm build
+          node scripts/link-ecosystem.mjs --packages-only
+      - run: npm run build
+      - name: Repeat the playground suite
+        env:
+          REPEAT: ${{ inputs.repeat || '5' }}
+          OPF_REQUIRE_FF08: "1"
+        run: node scripts/flake-repeat.mjs --suite playground --repeat "$REPEAT" --out artifacts/flake-repeat/playground
+      - name: Repeat the standalone browser suites
+        env:
+          REPEAT: ${{ inputs.repeat || '5' }}
+        run: node scripts/flake-repeat.mjs --suite browser --repeat "$REPEAT" --out artifacts/flake-repeat/browser
+      - name: Preserve the measurement
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: flake-repeat-opf-editor
+          path: opf-editor/artifacts/flake-repeat/**
+          retention-days: 30
+          if-no-files-found: warn

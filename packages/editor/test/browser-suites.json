@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "suites": {
+    "playground": {
+      "description": "test:playground in package.json, one test per script (a drift test keeps the two in step).",
+      "setup": [
+        "npm run build:playground",
+        "npm run check:font-hotlinks:built"
+      ],
+      "tests": [
+        {
+          "id": "playground:playground-pptx",
+          "command": "node test/playground-pptx.mjs"
+        },
+        {
+          "id": "playground:playground-script-fonts",
+          "command": "node test/playground-script-fonts.mjs artifacts/playground-script-fonts"
+        },
+        {
+          "id": "playground:playground-lazy-fonts",
+          "command": "node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts"
+        },
+        {
+          "id": "playground:playground-base-fonts",
+          "command": "node test/playground-base-fonts.mjs artifacts/playground-base-fonts"
+        },
+        {
+          "id": "playground:playground-source",
+          "command": "node test/playground-source.mjs"
+        },
+        {
+          "id": "playground:design-controls-browser",
+          "command": "node test/design-controls-browser.mjs"
+        },
+        {
+          "id": "playground:design-gaps-browser",
+          "command": "node test/design-gaps-browser.mjs"
+        },
+        {
+          "id": "playground:chart-options-browser",
+          "command": "node test/chart-options-browser.mjs"
+        },
+        {
+          "id": "playground:persistence-browser",
+          "command": "node test/persistence-browser.mjs"
+        },
+        {
+          "id": "playground:slides-browser",
+          "command": "node test/slides-browser.mjs"
+        },
+        {
+          "id": "playground:template-panel-browser",
+          "command": "node test/template-panel-browser.mjs"
+        },
+        {
+          "id": "playground:numbering-panel-browser",
+          "command": "node test/numbering-panel-browser.mjs"
+        },
+        {
+          "id": "playground:playground-ensure-fonts",
+          "command": "node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts"
+        },
+        {
+          "id": "playground:canvas-fonts-browser",
+          "command": "node test/canvas-fonts-browser.mjs artifacts/canvas-fonts"
+        },
+        {
+          "id": "playground:find-replace-browser",
+          "command": "node test/find-replace-browser.mjs"
+        },
+        {
+          "id": "playground:image-crop-browser",
+          "command": "node test/image-crop-browser.mjs"
+        },
+        {
+          "id": "playground:mobile-browser",
+          "command": "node test/mobile-browser.mjs"
+        },
+        {
+          "id": "playground:review-panel-browser",
+          "command": "node test/review-panel-browser.mjs"
+        },
+        {
+          "id": "playground:playground-download",
+          "command": "node test/playground-download.mjs artifacts/playground-download"
+        }
+      ]
+    },
+    "browser": {
+      "description": "The standalone browser suites the CI package job runs after test:playground.",
+      "tests": [
+        {
+          "id": "browser:data-grid",
+          "command": "npm run test:data-grid-browser"
+        },
+        {
+          "id": "browser:code",
+          "command": "npm run test:code-browser"
+        },
+        {
+          "id": "browser:selection",
+          "command": "npm run test:selection-browser"
+        },
+        {
+          "id": "browser:click-entry",
+          "command": "npm run test:click-entry-browser"
+        },
+        {
+          "id": "browser:json-editor",
+          "command": "npm run test:json-browser -- artifacts/json-editor-browser.json"
+        },
+        {
+          "id": "browser:rich-input-measured",
+          "command": "npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured"
+        },
+        {
+          "id": "browser:rich-input-estimated",
+          "command": "npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated"
+        }
+      ]
+    }
+  }
+}
