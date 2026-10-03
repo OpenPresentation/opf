@@ -1,0 +1,501 @@
+{
+ "hosts": [
+  "macos-latest",
+  "ubuntu-24.04",
+  "windows-latest"
+ ],
+ "reference": "macos-latest",
+ "values": 850,
+ "counts": {
+  "macos-latest": {
+   "values": 850,
+   "perfect": 741,
+   "near": 109,
+   "mismatch": 0,
+   "checks": {
+    "geometry": {
+     "pass": 850
+    },
+    "text": {
+     "pass": 835,
+     "near": 15
+    },
+    "fills": {
+     "pass": 850
+    },
+    "zOrder": {
+     "pass": 850
+    },
+    "slideSize": {
+     "pass": 850
+    },
+    "typefaces": {
+     "pass": 850
+    },
+    "reimport": {
+     "pass": 849,
+     "near": 1
+    },
+    "fontResolution": {
+     "pass": 757,
+     "near": 93
+    },
+    "theme": {
+     "pass": 850
+    },
+    "mapping": {
+     "pass": 850
+    }
+   },
+   "dimensions": {
+    "color-schemes": {
+     "values": 14,
+     "perfect": 14,
+     "near": 0,
+     "mismatch": 0
+    },
+    "font-schemes": {
+     "values": 89,
+     "perfect": 35,
+     "near": 54,
+     "mismatch": 0
+    },
+    "font-schemes-legacy": {
+     "values": 4,
+     "perfect": 3,
+     "near": 1,
+     "mismatch": 0
+    },
+    "languages": {
+     "values": 93,
+     "perfect": 66,
+     "near": 27,
+     "mismatch": 0
+    },
+    "themes": {
+     "values": 4,
+     "perfect": 1,
+     "near": 3,
+     "mismatch": 0
+    },
+    "narratives": {
+     "values": 10,
+     "perfect": 10,
+     "near": 0,
+     "mismatch": 0
+    },
+    "audiences": {
+     "values": 14,
+     "perfect": 14,
+     "near": 0,
+     "mismatch": 0
+    },
+    "tones": {
+     "values": 7,
+     "perfect": 7,
+     "near": 0,
+     "mismatch": 0
+    },
+    "socials": {
+     "values": 10,
+     "perfect": 10,
+     "near": 0,
+     "mismatch": 0
+    },
+    "backgrounds": {
+     "values": 12,
+     "perfect": 12,
+     "near": 0,
+     "mismatch": 0
+    },
+    "image-treatments": {
+     "values": 30,
+     "perfect": 30,
+     "near": 0,
+     "mismatch": 0
+    },
+    "headers-footers": {
+     "values": 20,
+     "perfect": 20,
+     "near": 0,
+     "mismatch": 0
+    },
+    "blocks": {
+     "values": 32,
+     "perfect": 24,
+     "near": 8,
+     "mismatch": 0
+    },
+    "layouts": {
+     "values": 485,
+     "perfect": 485,
+     "near": 0,
+     "mismatch": 0
+    },
+    "charts": {
+     "values": 26,
+     "perfect": 10,
+     "near": 16,
+     "mismatch": 0
+    }
+   }
+  },
+  "ubuntu-24.04": {
+   "values": 850,
+   "perfect": 741,
+   "near": 109,
+   "mismatch": 0,
+   "checks": {
+    "geometry": {
+     "pass": 850
+    },
+    "text": {
+     "pass": 835,
+     "near": 15
+    },
+    "fills": {
+     "pass": 850
+    },
+    "zOrder": {
+     "pass": 850
+    },
+    "slideSize": {
+     "pass": 850
+    },
+    "typefaces": {
+     "pass": 850
+    },
+    "reimport": {
+     "pass": 849,
+     "near": 1
+    },
+    "fontResolution": {
+     "pass": 757,
+     "near": 93
+    },
+    "theme": {
+     "pass": 850
+    },
+    "mapping": {
+     "pass": 850
+    }
+   },
+   "dimensions": {
+    "color-schemes": {
+     "values": 14,
+     "perfect": 14,
+     "near": 0,
+     "mismatch": 0
+    },
+    "font-schemes": {
+     "values": 89,
+     "perfect": 35,
+     "near": 54,
+     "mismatch": 0
+    },
+    "font-schemes-legacy": {
+     "values": 4,
+     "perfect": 3,
+     "near": 1,
+     "mismatch": 0
+    },
+    "languages": {
+     "values": 93,
+     "perfect": 66,
+     "near": 27,
+     "mismatch": 0
+    },
+    "themes": {
+     "values": 4,
+     "perfect": 1,
+     "near": 3,
+     "mismatch": 0
+    },
+    "narratives": {
+     "values": 10,
+     "perfect": 10,
+     "near": 0,
+     "mismatch": 0
+    },
+    "audiences": {
+     "values": 14,
+     "perfect": 14,
+     "near": 0,
+     "mismatch": 0
+    },
+    "tones": {
+     "values": 7,
+     "perfect": 7,
+     "near": 0,
+     "mismatch": 0
+    },
+    "socials": {
+     "values": 10,
+     "perfect": 10,
+     "near": 0,
+     "mismatch": 0
+    },
+    "backgrounds": {
+     "values": 12,
+     "perfect": 12,
+     "near": 0,
+     "mismatch": 0
+    },
+    "image-treatments": {
+     "values": 30,
+     "perfect": 30,
+     "near": 0,
+     "mismatch": 0
+    },
+    "headers-footers": {
+     "values": 20,
+     "perfect": 20,
+     "near": 0,
+     "mismatch": 0
+    },
+    "blocks": {
+     "values": 32,
+     "perfect": 24,
+     "near": 8,
+     "mismatch": 0
+    },
+    "layouts": {
+     "values": 485,
+     "perfect": 485,
+     "near": 0,
+     "mismatch": 0
+    },
+    "charts": {
+     "values": 26,
+     "perfect": 10,
+     "near": 16,
+     "mismatch": 0
+    }
+   }
+  },
+  "windows-latest": {
+   "values": 850,
+   "perfect": 741,
+   "near": 109,
+   "mismatch": 0,
+   "checks": {
+    "geometry": {
+     "pass": 850
+    },
+    "text": {
+     "pass": 835,
+     "near": 15
+    },
+    "fills": {
+     "pass": 850
+    },
+    "zOrder": {
+     "pass": 850
+    },
+    "slideSize": {
+     "pass": 850
+    },
+    "typefaces": {
+     "pass": 850
+    },
+    "reimport": {
+     "pass": 849,
+     "near": 1
+    },
+    "fontResolution": {
+     "pass": 757,
+     "near": 93
+    },
+    "theme": {
+     "pass": 850
+    },
+    "mapping": {
+     "pass": 850
+    }
+   },
+   "dimensions": {
+    "color-schemes": {
+     "values": 14,
+     "perfect": 14,
+     "near": 0,
+     "mismatch": 0
+    },
+    "font-schemes": {
+     "values": 89,
+     "perfect": 35,
+     "near": 54,
+     "mismatch": 0
+    },
+    "font-schemes-legacy": {
+     "values": 4,
+     "perfect": 3,
+     "near": 1,
+     "mismatch": 0
+    },
+    "languages": {
+     "values": 93,
+     "perfect": 66,
+     "near": 27,
+     "mismatch": 0
+    },
+    "themes": {
+     "values": 4,
+     "perfect": 1,
+     "near": 3,
+     "mismatch": 0
+    },
+    "narratives": {
+     "values": 10,
+     "perfect": 10,
+     "near": 0,
+     "mismatch": 0
+    },
+    "audiences": {
+     "values": 14,
+     "perfect": 14,
+     "near": 0,
+     "mismatch": 0
+    },
+    "tones": {
+     "values": 7,
+     "perfect": 7,
+     "near": 0,
+     "mismatch": 0
+    },
+    "socials": {
+     "values": 10,
+     "perfect": 10,
+     "near": 0,
+     "mismatch": 0
+    },
+    "backgrounds": {
+     "values": 12,
+     "perfect": 12,
+     "near": 0,
+     "mismatch": 0
+    },
+    "image-treatments": {
+     "values": 30,
+     "perfect": 30,
+     "near": 0,
+     "mismatch": 0
+    },
+    "headers-footers": {
+     "values": 20,
+     "perfect": 20,
+     "near": 0,
+     "mismatch": 0
+    },
+    "blocks": {
+     "values": 32,
+     "perfect": 24,
+     "near": 8,
+     "mismatch": 0
+    },
+    "layouts": {
+     "values": 485,
+     "perfect": 485,
+     "near": 0,
+     "mismatch": 0
+    },
+    "charts": {
+     "values": 26,
+     "perfect": 10,
+     "near": 16,
+     "mismatch": 0
+    }
+   }
+  }
+ },
+ "differences": [],
+ "installedDifferences": [
+  {
+   "dependency": "@esbuild/darwin-arm64",
+   "values": {
+    "macos-latest": "0.28.2",
+    "ubuntu-24.04": null,
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@img/sharp-darwin-arm64",
+   "values": {
+    "macos-latest": "0.35.4",
+    "ubuntu-24.04": null,
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@img/sharp-libvips-darwin-arm64",
+   "values": {
+    "macos-latest": "1.3.3",
+    "ubuntu-24.04": null,
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@resvg/resvg-js-darwin-arm64",
+   "values": {
+    "macos-latest": "2.6.2",
+    "ubuntu-24.04": null,
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@esbuild/linux-x64",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": "0.28.2",
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@img/sharp-libvips-linux-x64",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": "1.3.3",
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@img/sharp-linux-x64",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": "0.35.4",
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@resvg/resvg-js-linux-x64-gnu",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": "2.6.2",
+    "windows-latest": null
+   }
+  },
+  {
+   "dependency": "@esbuild/win32-x64",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": null,
+    "windows-latest": "0.28.2"
+   }
+  },
+  {
+   "dependency": "@img/sharp-win32-x64",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": null,
+    "windows-latest": "0.35.4"
+   }
+  },
+  {
+   "dependency": "@resvg/resvg-js-win32-x64-msvc",
+   "values": {
+    "macos-latest": null,
+    "ubuntu-24.04": null,
+    "windows-latest": "2.6.2"
+   }
+  }
+ ]
+}
