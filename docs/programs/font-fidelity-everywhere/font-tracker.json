@@ -112,28 +112,28 @@
         "node": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/script-family-hosts.mjs",
-          "commit": "ea71c4aced162c77dc7be22f0ccca5963222aa01",
+          "commit": "6b7924169ceb5376273cf9882fe85221d6cb6b76",
           "families": 35,
           "findings": 0
         },
         "browser": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/script-family-hosts-browser.mjs",
-          "commit": "ea71c4aced162c77dc7be22f0ccca5963222aa01",
+          "commit": "6b7924169ceb5376273cf9882fe85221d6cb6b76",
           "families": 34,
           "findings": 1
         },
         "editor": {
           "repository": "OpenPresentation/opf-editor",
           "test": "test/font-gate-script-families.mjs",
-          "commit": "d48a45cada0ed7ccd18a1fa33a5eeea62709f60b",
+          "commit": "e05c0e4d9db2caad266afba850cc286423f7e265",
           "families": 35,
           "findings": 0
         },
         "galleryEditor": {
           "repository": "Data-Advantage/pptx-gallery",
           "test": "tests/editor-script-families.test.ts",
-          "commit": "6c31f31fa83a0e37f4354dfaa5a6d6e8b6b1335f",
+          "commit": "328b522c5d52ef5caa28f4f1a3327b310dbc50fb",
           "families": 35,
           "findings": 0
         }
@@ -172,25 +172,25 @@
         "node": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/latin-family-hosts.mjs",
-          "commit": "ea71c4aced162c77dc7be22f0ccca5963222aa01",
+          "commit": "6b7924169ceb5376273cf9882fe85221d6cb6b76",
           "families": 87
         },
         "browser": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/latin-family-hosts-browser.mjs",
-          "commit": "ea71c4aced162c77dc7be22f0ccca5963222aa01",
+          "commit": "6b7924169ceb5376273cf9882fe85221d6cb6b76",
           "families": 87
         },
         "editor": {
           "repository": "OpenPresentation/opf-editor",
           "test": "test/font-gate-latin-families.mjs",
-          "commit": "d48a45cada0ed7ccd18a1fa33a5eeea62709f60b",
+          "commit": "e05c0e4d9db2caad266afba850cc286423f7e265",
           "families": 87
         },
         "galleryEditor": {
           "repository": "Data-Advantage/pptx-gallery",
           "test": "tests/editor-latin-families.test.ts",
-          "commit": "6c31f31fa83a0e37f4354dfaa5a6d6e8b6b1335f",
+          "commit": "328b522c5d52ef5caa28f4f1a3327b310dbc50fb",
           "families": 87
         }
       },
@@ -22404,7 +22404,7 @@
       },
       "hostFixtureFindings": {
         "browser": {
-          "check": "Noto Emoji emoji-sequences: \"1️⃣❤️🏴󠁧󠁢\udb40\" advance 299.109375 differs from accepted 342.773",
+          "check": "Noto Emoji emoji-sequences: \"1️⃣❤️🏴󠁧󠁢󠁳󠁣󠁴󠁿\" advance 299.109375 differs from accepted 342.773",
           "reason": "Chromium does not draw emoji-presentation sequences (VS16: the keycap 1️⃣, the red heart ❤️, the rainbow flag) with the monochrome Noto Emoji: each falls to another face at a 1.000 em advance, where the face and the renderer give 1.2695 em. The pictograph, flag, skin-tone, ZWJ and tag sequences draw in Noto Emoji at its own advance. The colour face (Noto Color Emoji) draws all of them. Noto Emoji is the raster stand-in and an alternate of Segoe UI Emoji, never the browser face of a Segoe UI Emoji run (the planner gives emoji runs to Noto Color Emoji)."
         }
       },
