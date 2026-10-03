@@ -209,6 +209,7 @@
     "build": "node scripts/build.mjs",
     "typecheck": "node scripts/check-syntax.mjs src test scripts examples",
     "test": "npm run build && npm run check:font-hotlinks && node scripts/run-tests.mjs && npm run check:runners && npm run check:changes",
+    "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract",
     "check:runners": "node --test scripts/run-tests.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "validate": "node scripts/validate-package.mjs",
