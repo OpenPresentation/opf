@@ -17,7 +17,25 @@ import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
 import { populateLayoutPlaceholders } from "./layout-placeholders.js";
 import { blockConversionTargets, prepareBlockConversion } from "./block-convert.js";
 
-/** The 14 pptx.gallery dimensions (gallery-support.md), in the gallery's order. */
+/** The schema's DimensionPreset values (RR-41), the values of the slide-sizes switch. */
+export const SLIDE_SIZE_PRESETS = Object.freeze(["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"]);
+
+// Slide size in inches per preset, as core's resolveCanvasDimensions composes it (for picker labels).
+const SLIDE_SIZE_LABELS = Object.freeze({
+  "16:9": "16:9 (13.33 x 7.5 in)",
+  "4:3": "4:3 (10 x 7.5 in)",
+  "16:10": "16:10 (10 x 6.25 in)",
+  letter: "Letter (11 x 8.5 in)",
+  a4: "A4 (11.69 x 8.27 in)",
+  widescreen: "Widescreen (13.33 x 7.5 in)",
+  standard: "Standard (10 x 7.5 in)",
+});
+
+/**
+ * Every switchable dimension, in the gallery's order: the 14 pptx.gallery dimensions (gallery-support.md), then the
+ * two document-level ones the gallery does not page yet (RR-41): `slide-sizes` (design.dimensions) and `purposes`
+ * (the document's purpose).
+ */
 export const SWITCH_DIMENSIONS = Object.freeze([
   "layouts",
   "color-schemes",
@@ -33,6 +51,8 @@ export const SWITCH_DIMENSIONS = Object.freeze([
   "headers-footers",
   "blocks",
   "image-treatments",
+  "slide-sizes",
+  "purposes",
 ]);
 
 // Catalog kind behind each catalog-backed dimension.
@@ -47,6 +67,7 @@ const CATALOG_KIND = Object.freeze({
   tones: "tones",
   socials: "socialPlatforms",
   charts: "chartTypes",
+  purposes: "purposes",
 });
 // Top-level document field for the simple metadata dimensions.
 const ROOT_FIELD = Object.freeze({ languages: "language", narratives: "narrative", tones: "tone", audiences: "audience" });
@@ -184,7 +205,26 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
   let slideIndex;
   let conversionLoss;
 
-  if (dimension === "layouts") {
+  if (dimension === "slide-sizes") {
+    // A preset string; a custom size (design.dimensions as an object with inches) is replaced by it.
+    if (!SLIDE_SIZE_PRESETS.includes(value)) throw fail("invalid-switch-value", `Switch slide-sizes to one of ${SLIDE_SIZE_PRESETS.join(", ")}.`, { value });
+    if (scopeIndex !== undefined) throw fail("deck-scope-only", "A presentation has one slide size: switch slide-sizes for the deck, without slideIndex.", { slideIndex: scopeIndex });
+    const own = document.design?.dimensions;
+    // {preset} alone is the same size as the bare preset string.
+    const sameSize = own && typeof own === "object" && !Array.isArray(own) && own.preset === value && Object.keys(own).length === 1;
+    patches = sameSize ? [] : designPatches(document, [], { dimensions: value });
+    shadowed = shadowedSlides(document, ["dimensions"]);
+    if (options.clearSlideOverrides) {
+      for (const index of shadowed) patches.push({ op: "remove", path: opfPathToJsonPointer(["slides", String(index), "design", "dimensions"]) });
+      shadowed = [];
+    }
+  } else if (dimension === "purposes") {
+    // A catalog id, free-form goal text (no id check: any goal is valid) or an inline Purpose object; the schema validates it.
+    if (typeof value !== "string" && !(value && typeof value === "object" && !Array.isArray(value)))
+      throw fail("invalid-switch-value", "Switch purposes to a catalog id, a goal string or a purpose object.", { value });
+    if (typeof value === "string" && value.length === 0) throw fail("invalid-switch-value", "Switch purposes to a non-empty goal.", { value });
+    patches = [...catalogRecordPatches(document, dimension, options), ...rootPatch(document, "purpose", value)];
+  } else if (dimension === "layouts") {
     slideIndex = scopeIndex;
     slideAt(document, slideIndex, "a layout switch");
     scope = "slide";
@@ -336,6 +376,7 @@ const labelOf = (record) => record.label ?? record.name ?? record.id;
  */
 export function listSwitchOptions(document, dimension, options = {}) {
   if (dimension === "blocks") return BLOCK_KINDS.map((kind) => ({ id: kind, label: kind[0].toUpperCase() + kind.slice(1) }));
+  if (dimension === "slide-sizes") return SLIDE_SIZE_PRESETS.map((preset) => ({ id: preset, label: SLIDE_SIZE_LABELS[preset] }));
   const kind = CATALOG_KIND[dimension];
   if (!kind) return [];
   const seen = new Set();
@@ -407,6 +448,24 @@ export function currentSwitchValue(document, dimension, options = {}) {
     return { value: owner ? getValueAtPath(document, [...owner, "chart", "type"]) : undefined, scope: "slide" };
   }
   if (dimension === "blocks") return { value: undefined, scope: "block" };
+  if (dimension === "slide-sizes") {
+    // The size the deck composes at: its own design.dimensions, else the theme's; a {preset} object reads as its preset.
+    // A custom size (inches without a preset) reads as the object itself. Unset reads as undefined (composed as widescreen).
+    const own = design("dimensions");
+    let size = own.value;
+    let scope = own.scope;
+    if (size === undefined) {
+      const themeId = idOf(design("theme").value);
+      size = themeId ? findCatalogRecord(document, "themes", themeId, {})?.dimensions : undefined;
+      scope = "deck";
+    }
+    return { value: size && typeof size === "object" && !Array.isArray(size) && Object.keys(size).length === 1 && size.preset ? size.preset : size, scope };
+  }
+  if (dimension === "purposes") {
+    // A catalog id or goal text reads as itself, a Purpose object as its id (else the object).
+    const purpose = document.purpose;
+    return { value: purpose && typeof purpose === "object" && !Array.isArray(purpose) ? (purpose.id ?? purpose) : purpose, scope: "deck" };
+  }
   if (dimension === "socials") {
     const host = document[options.owner ?? "speaker"];
     const target = Array.isArray(host) ? host[options.index ?? 0] : host;

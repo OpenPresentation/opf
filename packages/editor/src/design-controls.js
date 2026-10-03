@@ -402,6 +402,17 @@ export function createDesignControls(container, options = {}) {
     catalogField("color-scheme", "Color scheme", "color-schemes");
     catalogField("font-scheme", "Font scheme", "font-schemes", { help: "Fonts the preview and export use. The preview shows an open look-alike where a font is not bundled." });
     catalogField("language", "Language", "languages", { perSlide: false, help: "Sets the language for the whole presentation, including its script fonts." });
+    // RR-41: one size for the whole presentation; the slides recompose and the export writes the matching slide size.
+    const slideSize = selectField("slide-size", "Slide size", {
+      help: "The size and shape of every slide. The preview recomposes at the new size.",
+      onChange: (value) => run(() => switchDimension(editor, "slide-sizes", value), `Slide size set to ${slideSize.select.selectedOptions[0]?.textContent ?? value}.`),
+    });
+    body.append(slideSize.wrap);
+    syncs.push(() => {
+      slideSize.setOptions(listSwitchOptions(editor.document, "slide-sizes").map((entry) => ({ value: entry.id, label: entry.label })));
+      const { value } = currentSwitchValue(editor.document, "slide-sizes");
+      slideSize.set(value && typeof value === "object" ? "Custom size" : value);
+    });
 
     const layout = selectField("layout", "Layout of this slide", {
       help: "Adds the blank placeholders the layout declares and keeps your content.",
@@ -827,6 +838,7 @@ export function createDesignControls(container, options = {}) {
     };
     single("narrative", "Narrative", "narratives", "The storyline the deck follows. Authoring metadata: the slides do not change.");
     single("tone", "Tone", "tones");
+    single("purpose", "Purpose", "purposes", "What the deck is for. Authoring metadata: the slides do not change. A goal written in the JSON source shows as custom.");
     const audience = selectField("audience", "Audience", {
       multiple: true,
       size: 6,

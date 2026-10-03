@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import { catalogs } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";
-import { SWITCH_DIMENSIONS, compatibleChartTypes, currentSwitchValue, listSwitchOptions, switchDimension } from "../dist/switches.js";
+import { SLIDE_SIZE_PRESETS, SWITCH_DIMENSIONS, compatibleChartTypes, currentSwitchValue, listSwitchOptions, switchDimension } from "../dist/switches.js";
 import { baseDeck } from "./switch-fixture.mjs";
 
 // Every catalog dimension lists exactly the bundled ids; document records come first and override.
@@ -18,6 +18,7 @@ for (const [dimension, kind] of [
   ["tones", "tones"],
   ["socials", "socialPlatforms"],
   ["charts", "chartTypes"],
+  ["purposes", "purposes"],
 ]) {
   const options = listSwitchOptions({}, dimension);
   assert.deepEqual(options.map((option) => option.id), catalogs[kind].map((record) => record.id), `${dimension} lists the bundled catalog`);
@@ -32,6 +33,13 @@ for (const [dimension, kind] of [
   assert.equal(options.length, catalogs.fontSchemes.length + 2);
   assert.deepEqual(listSwitchOptions({}, "blocks").map((option) => option.id), ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group", "image", "video"]);
   assert.deepEqual(listSwitchOptions({}, "backgrounds"), [], "free-form dimensions have no catalog");
+  // RR-41: the slide sizes are the schema's seven presets, each labelled with its size in inches.
+  const sizes = listSwitchOptions({}, "slide-sizes");
+  assert.deepEqual(sizes.map((option) => option.id), [...SLIDE_SIZE_PRESETS]);
+  assert.deepEqual(sizes.map((option) => option.id), ["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"]);
+  assert.equal(sizes.find((option) => option.id === "a4").label, "A4 (11.69 x 8.27 in)");
+  assert.ok(sizes.every((option) => /\d in\)$/.test(option.label)));
+  assert.deepEqual(catalogs.purposes.map((record) => record.id), ["inform", "decide", "align", "persuade", "educate", "report", "pitch", "sell", "plan"]);
 }
 
 // Compatible chart types follow the data shape: the first column labels the categories and each
@@ -90,6 +98,21 @@ for (const [dimension, kind] of [
   assert.equal(at("image-treatments", { slideIndex: 1 }).scope, "deck");
   assert.deepEqual(at("image-treatments").value, { slideImage: undefined, imageFill: undefined });
   assert.equal(at("blocks").scope, "block");
+  // RR-41: slide sizes read the deck's design.dimensions, else the theme's; purposes read the goal text or Purpose id.
+  assert.deepEqual(at("slide-sizes"), { value: "widescreen", scope: "deck" }, "no design.dimensions: the theme's size");
+  assert.deepEqual(at("slide-sizes", { slideIndex: 1 }), { value: "widescreen", scope: "deck" });
+  const sized = (dimensions, extra = {}) => ({ ...document, design: { ...document.design, dimensions }, ...extra });
+  assert.deepEqual(currentSwitchValue(sized("a4"), "slide-sizes"), { value: "a4", scope: "deck" });
+  assert.deepEqual(currentSwitchValue(sized({ preset: "letter" }), "slide-sizes"), { value: "letter", scope: "deck" }, "{preset} reads as the preset");
+  assert.deepEqual(currentSwitchValue(sized({ preset: "a4", widthInches: 12 }), "slide-sizes").value, { preset: "a4", widthInches: 12 }, "a custom size reads as the object");
+  const own = sized("4:3");
+  own.slides = [{ ...own.slides[0] }, { ...own.slides[1], design: { dimensions: "letter" } }];
+  assert.deepEqual(currentSwitchValue(own, "slide-sizes", { slideIndex: 1 }), { value: "letter", scope: "slide" });
+  assert.deepEqual(currentSwitchValue({ slides: [] }, "slide-sizes"), { value: undefined, scope: "deck" }, "unset");
+  assert.deepEqual(at("purposes"), { value: undefined, scope: "deck" });
+  assert.deepEqual(currentSwitchValue({ ...document, purpose: "decide" }, "purposes"), { value: "decide", scope: "deck" });
+  assert.deepEqual(currentSwitchValue({ ...document, purpose: "Raise a Series B round" }, "purposes"), { value: "Raise a Series B round", scope: "deck" });
+  assert.deepEqual(currentSwitchValue({ ...document, purpose: { id: "decide", outcome: "Approve it" } }, "purposes"), { value: "decide", scope: "deck" }, "an object reads as its id");
   for (const dimension of SWITCH_DIMENSIONS) assert.ok(at(dimension, { slideIndex: 1 }), `${dimension} has a reader`);
 }
 

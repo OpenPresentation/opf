@@ -1,6 +1,18 @@
 // Shared fixture for the FF-16 dimension-switch tests (switches.mjs, switches-export.mjs).
 // One case per pptx.gallery dimension, with the exact patch the switch must produce.
 
+// The slide sizes (the schema's DimensionPreset) and each one's composed canvas in px (96 per inch)
+// and exported slide size in EMU (914400 per inch), as core and opf-pptx produce them.
+export const SLIDE_SIZES = {
+  "16:9": { width: 1280, height: 720, cx: 12192000, cy: 6858000 },
+  "4:3": { width: 960, height: 720, cx: 9144000, cy: 6858000 },
+  "16:10": { width: 960, height: 600, cx: 9144000, cy: 5715000 },
+  letter: { width: 1056, height: 816, cx: 10058400, cy: 7772400 },
+  a4: { width: 1122.24, height: 793.92, cx: 10689336, cy: 7562088 },
+  widescreen: { width: 1280, height: 720, cx: 12192000, cy: 6858000 },
+  standard: { width: 960, height: 720, cx: 9144000, cy: 6858000 },
+};
+
 // gallery-support.md sectionAnchors, in order. The editor must cover every one.
 export const GALLERY_DIMENSIONS = [
   "layouts",
@@ -18,6 +30,9 @@ export const GALLERY_DIMENSIONS = [
   "blocks",
   "image-treatments",
 ];
+
+// RR-41: the document-level dimensions the gallery does not page yet, switched the same way.
+export const EXTRA_DIMENSIONS = ["slide-sizes", "purposes"];
 
 const PIXEL =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
@@ -188,6 +203,22 @@ export const cases = [
     slide: 0,
     preview: "image",
     patches: [{ op: "add", path: "/slides/0/design", value: { slideImage: { src: "asset:cover", position: "right" }, imageFill: "crop" } }],
+  },
+  {
+    dimension: "slide-sizes",
+    value: "4:3",
+    options: {},
+    slide: 0,
+    preview: "svg",
+    patches: [{ op: "add", path: "/design/dimensions", value: "4:3" }],
+  },
+  {
+    dimension: "purposes",
+    value: "decide",
+    options: {},
+    slide: 0,
+    preview: "metadata",
+    patches: [{ op: "add", path: "/purpose", value: "decide" }],
   },
 ];
 

@@ -6,12 +6,13 @@ import { validatePresentation } from "@openpresentation/opf";
 import { renderSvg } from "@openpresentation/opf-render/svg";
 import { OPFEditorError, createEditorSession, resolveSlideFonts } from "../dist/index.js";
 import { prepareBlockReplace } from "../dist/layout.js";
-import { prepareDimensionSwitch, switchDimension, SWITCH_DIMENSIONS } from "../dist/switches.js";
-import { GALLERY_DIMENSIONS, baseDeck, cases } from "./switch-fixture.mjs";
+import { currentSwitchValue, prepareDimensionSwitch, switchDimension, SWITCH_DIMENSIONS } from "../dist/switches.js";
+import { EXTRA_DIMENSIONS, GALLERY_DIMENSIONS, SLIDE_SIZES, baseDeck, cases } from "./switch-fixture.mjs";
 
-// Coverage: every gallery dimension has a switch and a case, and nothing else does.
-assert.deepEqual([...SWITCH_DIMENSIONS], GALLERY_DIMENSIONS);
-assert.deepEqual(cases.map((entry) => entry.dimension), GALLERY_DIMENSIONS);
+// Coverage: every gallery dimension, then slide-sizes and purposes (RR-41), has a switch and a case, and nothing else does.
+const ALL_DIMENSIONS = [...GALLERY_DIMENSIONS, ...EXTRA_DIMENSIONS];
+assert.deepEqual([...SWITCH_DIMENSIONS], ALL_DIMENSIONS);
+assert.deepEqual(cases.map((entry) => entry.dimension), ALL_DIMENSIONS);
 
 const session = (document = baseDeck()) => createEditorSession(document, { rejectInvalid: true });
 const svg = (document, slideIndex) => renderSvg(document, { slideIndex });
@@ -100,7 +101,7 @@ for (const entry of cases) {
   assert.equal(editor.snapshot().undoDepth, 1);
   summary.push(dimension);
 }
-assert.deepEqual(summary, GALLERY_DIMENSIONS);
+assert.deepEqual(summary, ALL_DIMENSIONS);
 
 // Design dimensions: a slide scope patches the slide, and a deck scope reports shadowing.
 {
@@ -293,6 +294,108 @@ assert.deepEqual(summary, GALLERY_DIMENSIONS);
   assert.equal(fresh.get("slides.2.blocks.1.items.0"), "Changed since preview");
 }
 
+// Slide sizes (RR-41): each of the seven presets is one patch and one undo step, the shared composition
+// and the SVG preview recompose at the new canvas, and undo restores the exact size.
+{
+  const canvas = (document) => {
+    const composed = createEditorSession(document).composeSlide(0);
+    return { width: composed.width, height: composed.height };
+  };
+  const viewBox = (document) => svg(document, 0).match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/).slice(1).map(Number);
+  assert.deepEqual(canvas(baseDeck()), { width: 1280, height: 720 }, "the fixture starts at widescreen");
+  for (const [preset, size] of Object.entries(SLIDE_SIZES)) {
+    const editor = session();
+    const original = editor.document;
+    const beforeBoxes = JSON.stringify(editor.composeSlide(0).items);
+    const change = switchDimension(editor, "slide-sizes", preset);
+    assert.deepEqual(change.patches, [{ op: "add", path: "/design/dimensions", value: preset }], preset);
+    assert.equal(change.scope, "deck");
+    assert.equal(editor.snapshot().undoDepth, 1, `${preset} is one undo step`);
+    assert.deepEqual(canvas(editor.document), { width: size.width, height: size.height }, `${preset}: composition canvas`);
+    assert.deepEqual(viewBox(editor.document), [size.width, size.height], `${preset}: preview viewBox`);
+    // The slide's content is laid out again at the new canvas, not just cropped or scaled.
+    if (size.width !== 1280) assert.notEqual(JSON.stringify(editor.composeSlide(0).items), beforeBoxes, `${preset}: boxes recomposed`);
+    assert.equal(editor.validation.valid, true);
+    assert.deepEqual(editor.undo().document, original, `${preset} undo`);
+    assert.deepEqual(canvas(editor.document), { width: 1280, height: 720 });
+    assert.deepEqual(viewBox(editor.document), [1280, 720]);
+    editor.redo();
+    assert.deepEqual(viewBox(editor.document), [size.width, size.height], `${preset}: redo restores the preview`);
+    assert.equal(switchDimension(editor, "slide-sizes", preset).changed, false, `${preset}: repeat switch`);
+  }
+  // Switching from one size to another replaces the value in place.
+  const editor = session();
+  switchDimension(editor, "slide-sizes", "4:3");
+  assert.deepEqual(switchDimension(editor, "slide-sizes", "letter").patches, [{ op: "replace", path: "/design/dimensions", value: "letter" }]);
+  assert.deepEqual(viewBox(editor.document), [1056, 816]);
+  // The aliases are separate values: the document keeps what was chosen.
+  assert.equal(switchDimension(editor, "slide-sizes", "standard").changed, true);
+  assert.equal(editor.get("design.dimensions"), "standard");
+  // {preset} alone is the same size as the bare string; a custom size is replaced by the preset.
+  const object = session({ ...baseDeck(), design: { ...baseDeck().design, dimensions: { preset: "a4" } } });
+  assert.equal(switchDimension(object, "slide-sizes", "a4").changed, false);
+  const custom = session({ ...baseDeck(), design: { ...baseDeck().design, dimensions: { preset: "a4", widthInches: 12 } } });
+  assert.deepEqual(viewBox(custom.document), [1152, 793.92]);
+  assert.deepEqual(switchDimension(custom, "slide-sizes", "a4").patches, [{ op: "replace", path: "/design/dimensions", value: "a4" }]);
+  assert.deepEqual(viewBox(custom.document), [1122.24, 793.92]);
+  custom.undo();
+  assert.deepEqual(custom.get("design.dimensions"), { preset: "a4", widthInches: 12 });
+  // A theme's own size is what a document without design.dimensions has; the switch makes the choice explicit.
+  const themed = session({ ...baseDeck(), design: { theme: "minimal" } });
+  assert.deepEqual(currentSwitchValue(themed.document, "slide-sizes"), { value: "widescreen", scope: "deck" });
+  // A slide with its own size hides the deck switch: it is reported, and clearSlideOverrides joins the same transaction.
+  const shadow = baseDeck();
+  shadow.slides[1].design = { dimensions: "letter" };
+  const deck = session(shadow);
+  const shadowed = switchDimension(deck, "slide-sizes", "4:3");
+  assert.deepEqual(shadowed.shadowed, [1]);
+  const cleared = switchDimension(deck, "slide-sizes", "16:10", { clearSlideOverrides: true });
+  assert.deepEqual(cleared.patches, [
+    { op: "replace", path: "/design/dimensions", value: "16:10" },
+    { op: "remove", path: "/slides/1/design/dimensions" },
+  ]);
+  assert.deepEqual(cleared.shadowed, []);
+  assert.equal(deck.snapshot().undoDepth, 2);
+  assert.equal(deck.undo().document.slides[1].design.dimensions, "letter");
+  // A theme switch still carries its own size and is a separate step from a slide-size switch.
+  const bundle = session();
+  switchDimension(bundle, "slide-sizes", "4:3");
+  switchDimension(bundle, "themes", "classic");
+  assert.equal(bundle.get("design.dimensions"), "widescreen");
+  assert.equal(bundle.snapshot().undoDepth, 2);
+  assert.equal(bundle.undo().document.design.dimensions, "4:3");
+}
+
+// Purposes (RR-41): a catalog id, free-form goal text or a Purpose object, one patch, exact undo.
+{
+  const editor = session();
+  const original = editor.document;
+  assert.deepEqual(switchDimension(editor, "purposes", "decide").patches, [{ op: "add", path: "/purpose", value: "decide" }]);
+  assert.deepEqual(switchDimension(editor, "purposes", "pitch").patches, [{ op: "replace", path: "/purpose", value: "pitch" }]);
+  // Any goal text is valid, in or out of the catalog.
+  const goal = "Raise a Series B round of $30M";
+  switchDimension(editor, "purposes", goal);
+  assert.equal(editor.get("purpose"), goal);
+  assert.equal(editor.validation.valid, true);
+  // An inline Purpose object, and a catalog-backed one.
+  switchDimension(editor, "purposes", { id: "decide", outcome: "Approve the Q4 hiring plan" });
+  assert.deepEqual(editor.get("purpose"), { id: "decide", outcome: "Approve the Q4 hiring plan" });
+  assert.equal(switchDimension(editor, "purposes", { id: "decide", outcome: "Approve the Q4 hiring plan" }).changed, false);
+  assert.equal(editor.snapshot().undoDepth, 4);
+  while (editor.canUndo) editor.undo();
+  assert.deepEqual(editor.document, original);
+  assert.equal("purpose" in editor.document, false);
+  // The preview does not change: purpose is authoring metadata.
+  switchDimension(editor, "purposes", "sell");
+  assert.equal(svg(editor.document, 0), svg(original, 0));
+  // A gallery item's record is added inline in the same transaction, then the purpose names it.
+  const record = { id: "fundraise", name: "Fundraise", summary: "Raise a round.", outcome: "A term sheet." };
+  const withRecord = switchDimension(session(), "purposes", "fundraise", { record });
+  assert.deepEqual(withRecord.patches.map((patch) => [patch.op, patch.path]), [["add", "/catalogs"], ["add", "/purpose"]]);
+  assert.equal(withRecord.document.catalogs.purposes.records[0].id, "fundraise");
+  assert.throws(() => switchDimension(session(), "purposes", "other", { record }), (error) => error.code === "record-id-mismatch");
+}
+
 // Rejections leave the document and history unchanged.
 {
   const editor = session();
@@ -334,6 +437,17 @@ assert.deepEqual(summary, GALLERY_DIMENSIONS);
   reject("socials", { platform: "x", handle: "" }, {}, "invalid-switch-value");
   reject("blocks", "diagram", { path: "slides.2.blocks.0" }, "invalid-switch-value");
   reject("font-schemes", "georgia", { slideIndex: 9 }, "slide-index-out-of-range");
+  reject("slide-sizes", "a5", {}, "invalid-switch-value");
+  reject("slide-sizes", "", {}, "invalid-switch-value");
+  reject("slide-sizes", { preset: "a4" }, {}, "invalid-switch-value");
+  reject("slide-sizes", null, {}, "invalid-switch-value");
+  reject("slide-sizes", "4:3", { slideIndex: 0 }, "deck-scope-only");
+  reject("slide-sizes", "4:3", { record: { id: "4:3" } }, "record-id-mismatch");
+  reject("purposes", "", {}, "invalid-switch-value");
+  reject("purposes", 5, {}, "invalid-switch-value");
+  reject("purposes", ["decide"], {}, "invalid-switch-value");
+  reject("purposes", null, {}, "invalid-switch-value");
+  reject("purposes", { outcome: 5 }, {}, "invalid-opf-edit");
 }
 
 console.log(`Dimension switches passed: ${summary.length} dimensions (patch, one undo step, undo/redo, preview refresh; slide image preview ${slideImageSupported ? "checked" : "skipped: installed renderer lacks design.slideImage"}; language preview ${languagePreview}).`);

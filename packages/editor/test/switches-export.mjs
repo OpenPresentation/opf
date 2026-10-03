@@ -12,9 +12,11 @@ import * as core from "@openpresentation/opf";
 const { catalogs } = core;
 import { createEditorSession, resolveSlideFonts } from "../dist/index.js";
 import { switchDimension } from "../dist/switches.js";
-import { baseDeck, cases } from "./switch-fixture.mjs";
+import { createRequire } from "node:module";
+import { SLIDE_SIZES, baseDeck, cases } from "./switch-fixture.mjs";
 
-const { toPptx, checkPptxTypefaces } = pptx;
+const { toPptx, fromPptx, checkPptxTypefaces } = pptx;
+const JSZip = createRequire(import.meta.resolve("@openpresentation/opf-pptx"))("jszip");
 const checkerAvailable = typeof checkPptxTypefaces === "function";
 if (!checkerAvailable && process.env.OPF_REQUIRE_FF08 === "1")
   throw new Error("OPF_REQUIRE_FF08=1 but the installed @openpresentation/opf-pptx has no checkPptxTypefaces (FF-08).");
@@ -111,6 +113,39 @@ if (checkerAvailable) {
   const stale = checkPptxTypefaces(bytes, { fonts: ["Aptos", "Aptos Display", "Roboto Mono"], monospace: ["Roboto Mono"] });
   assert.ok(stale.violations.some((violation) => violation.typeface === "Georgia"), "Georgia is reported when only the old fonts are allowed");
   assert.ok(!stale.inventory.typefaces.some((entry) => entry.typeface === "Aptos" && entry.part.startsWith("ppt/slides/")), "no slide keeps the old body font");
+}
+
+// RR-41: the slide-size switch is what the export writes. Every preset sets the package's p:sldSz to
+// the size the preview composes at (96 px per inch, 914400 EMU per inch), undo restores the old size,
+// and re-importing the package returns the switched preset.
+const sldSz = async (document) => {
+  const bytes = await toPptx(structuredClone(document), { strictAssets: true });
+  const xml = await (await JSZip.loadAsync(bytes)).file("ppt/presentation.xml").async("string");
+  const match = xml.match(/<p:sldSz cx="(\d+)" cy="(\d+)"/);
+  assert.ok(match, "presentation.xml has p:sldSz");
+  return { cx: Number(match[1]), cy: Number(match[2]), bytes };
+};
+{
+  const editor = createEditorSession(deck(), { rejectInvalid: true });
+  const original = await sldSz(editor.document);
+  assert.deepEqual([original.cx, original.cy], [SLIDE_SIZES.widescreen.cx, SLIDE_SIZES.widescreen.cy], "the fixture exports at widescreen");
+  for (const [preset, size] of Object.entries(SLIDE_SIZES)) {
+    switchDimension(editor, "slide-sizes", preset);
+    const out = await sldSz(editor.document);
+    assert.deepEqual([out.cx, out.cy], [size.cx, size.cy], `${preset}: p:sldSz`);
+    // The exported size is the composed canvas, 96 px and 914400 EMU per inch.
+    assert.ok(Math.abs(out.cx - Math.round(size.width * 9525)) <= 1 && Math.abs(out.cy - Math.round(size.height * 9525)) <= 1, `${preset}: p:sldSz matches the preview canvas`);
+    assert.equal((await fromPptx(out.bytes)).design?.dimensions, preset, `${preset}: re-import returns the preset`);
+    await verify(editor.document, `slide size ${preset}`);
+    editor.undo();
+    const back = await sldSz(editor.document);
+    assert.deepEqual([back.cx, back.cy], [original.cx, original.cy], `${preset}: undo restores p:sldSz`);
+  }
+  // A purpose does not touch the slide size.
+  switchDimension(editor, "purposes", "pitch");
+  const withPurpose = await sldSz(editor.document);
+  assert.deepEqual([withPurpose.cx, withPurpose.cy], [original.cx, original.cy]);
+  assert.equal((await fromPptx(withPurpose.bytes)).purpose, "pitch", "the purpose survives the export and re-import");
 }
 
 // Every switch in one session, in gallery order, then unwound.

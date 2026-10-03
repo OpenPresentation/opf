@@ -1,7 +1,11 @@
 import type { ConvertOptions } from "@openpresentation/opf/convert";
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
-/** The 14 pptx.gallery dimensions. */
+/** The schema's DimensionPreset values: the values of the slide-sizes switch. */
+export declare const SLIDE_SIZE_PRESETS: readonly ["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"];
+export type SlideSizePreset = (typeof SLIDE_SIZE_PRESETS)[number];
+
+/** Every switchable dimension: the 14 pptx.gallery dimensions, then `slide-sizes` and `purposes`. */
 export declare const SWITCH_DIMENSIONS: readonly [
   "layouts",
   "color-schemes",
@@ -17,6 +21,8 @@ export declare const SWITCH_DIMENSIONS: readonly [
   "headers-footers",
   "blocks",
   "image-treatments",
+  "slide-sizes",
+  "purposes",
 ];
 export type SwitchDimension = (typeof SWITCH_DIMENSIONS)[number];
 
@@ -32,7 +38,7 @@ export interface DimensionSwitchOptions {
   catalogSources?: Record<string, unknown>;
   /** themes: also write the theme's color scheme, font scheme, background and dimensions to the deck design (default true). */
   bundle?: boolean;
-  /** Deck-scope design switches: remove slide-level values that would hide the switch. */
+  /** Deck-scope design switches (and slide-sizes): remove slide-level values that would hide the switch. */
   clearSlideOverrides?: boolean;
   /** socials: which document field holds the handle (default "speaker") and, for an array, which entry (default 0). */
   owner?: "speaker" | "organization";
@@ -49,8 +55,8 @@ export interface DimensionSwitchOptions {
 
 export type DimensionSwitchValue =
   | null /* backgrounds: remove it */
-  | string
-  | string[]
+  | string /* slide-sizes: a SlideSizePreset. purposes: a catalog id or free-form goal text. */
+  | string[] /* audiences: catalog ids */
   | { platform: string; handle: string }
   | { header?: unknown; footer?: unknown }
   | { slideImage?: unknown; imageFill?: string | null }
@@ -94,10 +100,10 @@ export interface CompatibleChartType extends SwitchOption {
   /** True for the chart's present type, which is always listed. */
   current: boolean;
 }
-/** Values a picker can offer for a catalog-backed dimension (document inline records, caller catalogs, then the bundled catalog, without duplicates); `blocks` lists the content kinds. */
+/** Values a picker can offer for a catalog-backed dimension (document inline records, caller catalogs, then the bundled catalog, without duplicates); `blocks` lists the content kinds and `slide-sizes` the presets (labelled with their inches). `purposes` lists the catalog; any other goal text is also a valid switch value. */
 export declare function listSwitchOptions(document: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "catalogSources">): SwitchOption[];
 /** Chart types the chart's inline data can use as it is (data-shape compatibility, not an engine-support claim). `path` or `slideIndex` picks the chart. */
 export declare function compatibleChartTypes(document: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "catalogSources">): CompatibleChartType[];
-/** The value a dimension currently has: `{ value, scope }`, with the catalog id for catalog dimensions. */
+/** The value a dimension currently has: `{ value, scope }`, with the catalog id for catalog dimensions. `slide-sizes` reads the deck's design.dimensions, else its theme's (a preset string, or the object for a custom size); `purposes` reads the goal text or Purpose id. */
 export declare function currentSwitchValue(document: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index">): { value: unknown; scope: "deck" | "slide" | "block" };
 export { blockConversionTargets } from "./block-convert.js";

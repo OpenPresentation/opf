@@ -171,6 +171,19 @@ try {
   await step('headers-footers', async () => { const input = field(design, 'Text'); await input.fill('Confidential'); await input.press('Enter'); }, current => current.design.footer?.center?.text === 'Confidential');
   await step('image-treatments (slide image)', () => field(design, 'Position').selectOption('right'), current => current.design.slideImage?.position === 'right');
   await step('picture placeholder fill', () => field(design, 'Picture placeholders').selectOption('fit'), current => current.design.imageFill === 'fit');
+  // RR-41: slide size and purpose. The size is one deck-level choice; the preview recomposes at it.
+  const previewBox = () => page.locator('#preview svg').first().getAttribute('viewBox');
+  assert.equal(await previewBox(), '0 0 1280 720', 'the classic theme composes at widescreen');
+  assert.deepEqual(await field(design, 'Slide size').locator('option').evaluateAll(nodes => nodes.map(node => node.value)), ['16:9', '4:3', '16:10', 'letter', 'a4', 'widescreen', 'standard'], 'the seven presets');
+  assert.equal(await field(design, 'Slide size').inputValue(), 'widescreen', 'the control shows the theme size');
+  await step('slide-sizes', async () => {
+    await field(design, 'Slide size').selectOption('4:3');
+    await page.waitForFunction(() => document.querySelector('#preview svg')?.getAttribute('viewBox') === '0 0 960 720', undefined, { timeout: 8000 });
+    assert.equal(await field(design, 'Slide size').inputValue(), '4:3');
+  }, current => current.design.dimensions === '4:3', { preview: true });
+  assert.equal(await previewBox(), '0 0 1280 720', 'Undo restores the preview size');
+  await step('slide-sizes (A4)', () => field(design, 'Slide size').selectOption('a4'), current => current.design.dimensions === 'a4', { preview: true });
+  await step('purposes', () => field(design, 'Purpose').selectOption('decide'), current => current.purpose === 'decide');
 
   // Per-slide scope: the same controls write the slide, not the deck.
   await slide(1);
