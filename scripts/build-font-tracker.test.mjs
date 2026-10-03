@@ -235,7 +235,8 @@ test("--check detects drift in the tracker files and passes after a rebuild", ()
   const dir = scratchCopy();
   try {
     const script = path.join(dir, "scripts/build-font-tracker.mjs");
-    const run = (...args) => spawnSync(process.execPath, [script, ...args], { encoding: "utf8" });
+    // CI sets OPF_TRACKER_STALE=warn on pull requests (RR-46); this test is about the strict default.
+    const run = (...args) => spawnSync(process.execPath, [script, ...args], { encoding: "utf8", env: { ...process.env, OPF_TRACKER_STALE: "fail" } });
     assert.equal(run("--check").status, 0, "fresh copy is current");
 
     writeFileSync(path.join(dir, FILES.markdown), `${readFileSync(path.join(dir, FILES.markdown), "utf8")}\nhand edit\n`);
