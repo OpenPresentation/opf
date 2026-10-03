@@ -15,7 +15,7 @@ import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
 import {createFontHosts} from './font-host.mjs';
 import {chartexExpectations, chartIdFromLayouts, chartexDataMismatches, chartexPreviewMarks, chooseAlternateContent, parseChartex} from './chartex.mjs';
-import {chartPartTextSizes, chartTextSizeMismatches, previewTextSizes} from './chart-text.mjs';
+import {chartPartTextSizes, chartTextSizeMismatches, previewTextSizes, isComputedTickLabel} from './chart-text.mjs';
 import {restoredCharts} from './restored-content.mjs';
 import {chartSeriesColors} from './chart-colors.mjs';
 import {withoutBulletBlips, bulletBlipRids, isPreviewBullet} from './picture-bullets.mjs';
@@ -340,7 +340,7 @@ async function parity(doc) {
         for (const m of pvMarkers) { const para = xb.find(p => p.single && p.shape.box && Math.abs(p.shape.box.y + ((p.runs[0]?.sizePt ?? 0) / PX_PT) - m.y) < 1); if (!para) continue; const bx = para.shape.box.x + para.marL + para.indent; const d = r3(Math.abs(bx - m.x) * PX_PT); maxDelta(d); if (overTol(d)) add('geometry', sev(d), `list marker x delta ${bucket(d)}`, key, d); } }
       if (isChart) {
         const ch = G.px.find(s => s.chart).chart; const strs = new Set(ch.strings.map(normText));
-        const allStr = [...strs].join(''); const wrapped = pvLines.filter(l => !strs.has(normText(l.text)) && allStr.includes(normText(l.text))); if (wrapped.length) add('text', 'near', 'chart label wrapped/split in preview (native chart lays out its own labels)', key, wrapped.map(m => m.text).slice(0, 4).join(' | '));
+        const allStr = [...strs].join(''); const wrapped = pvLines.filter(l => !strs.has(normText(l.text)) && !isComputedTickLabel(l.text, l.path) && allStr.includes(normText(l.text))); if (wrapped.length) add('text', 'near', 'chart label wrapped/split in preview (native chart lays out its own labels)', key, wrapped.map(m => m.text).slice(0, 4).join(' | '));
         // A histogram's bin range labels are laid out by the consumer from the value cache (the chartex part has no category cache for them).
         const generatedBin = l => ch.chartex && ch.layouts.includes('clusteredColumn') && /^[\[(]\s*-?[\d.]+,\s*-?[\d.]+\s*[\])]$/.test(l.text.trim());
         const missing = pvLines.filter(l => !wrapped.includes(l)).filter(l => !strs.has(normText(l.text)) && !/^[-\d.,%$€£\s]+$/.test(l.text) && !generatedBin(l) && !pxParas.some(p => normText(p.text) === normText(l.text)));
