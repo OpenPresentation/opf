@@ -5,9 +5,9 @@
   "filename": "field-enablement-certification",
   "language": "english-gb",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "medium",
       "decisionPower": "informational",

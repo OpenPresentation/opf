@@ -5,9 +5,9 @@
   "filename": "data-incident-postmortem",
   "language": "english-gb",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 31,
       "technicalFluency": "medium",
       "decisionPower": "advisory",

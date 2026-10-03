@@ -8,7 +8,7 @@
     "description": "A compact arc that states the contract, proves it, and asks for adoption.",
     "audienceFit": [
       "engineering-team",
-      "executives"
+      "executive"
     ],
     "durationRange": {
       "minMinutes": 8,

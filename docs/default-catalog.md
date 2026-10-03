@@ -12,8 +12,12 @@ bundled in `@openpresentation/opf` stays tied to it.
 
 ## Contract
 
-- **pptx.gallery is the canonical publisher.** Catalog content changes land in
-  the pptx-gallery repository first.
+- **pptx.gallery publishes the catalog; core is the source of truth for its
+  content.** Since the FF-37 decision (2026-10-02) a record can change here first:
+  the gallery's CI checks its published files against the `@openpresentation/opf`
+  release in its lockfile (`pnpm check:core-catalog`) and adopts the change with
+  the next core release. A change that begins in the gallery still lands through
+  the sync below.
 - **`spec/catalogs/` is a pinned snapshot.** `spec/catalogs/manifest.json`
   records the gallery commit and a content hash per kind.
 - **Engines never fetch at run time by default.** Renderers, exporters,
@@ -137,6 +141,23 @@ so the sync refuses a publisher that stopped serving a bundled id.
 
 ### Updating it
 
+Either side can start a change. To start in core (a deprecation, a wording
+fix), edit the records and index entries under `spec/catalogs/<kind>/`, then
+rewrite the hashes and counts:
+
+```sh
+node scripts/sync-gallery-catalog.mjs --rehash   # index contentSha256, manifest records and contentSha256
+```
+
+`--rehash` leaves the manifest `source` and each kind's `gallery` block alone,
+because they describe the pinned gallery commit, and it does not touch `mode`. A
+mirrored kind must also match the gallery hash, so a core-first change to a mirror
+kind needs the gallery to publish it first, or the kind to move to `subset`. The
+gallery adopts a core-first change with the next `@openpresentation/opf` release
+(its `check:core-catalog` reads that release).
+
+To start in the gallery:
+
 ```sh
 # in the pptx-gallery checkout: edit data/, then
 pnpm build:opf-catalog            # regenerate and validate public/<kind>/
@@ -164,12 +185,54 @@ the sync reports an id the gallery does not publish. The layouts snapshot uses
 this for the 70 legacy gallery slugs (FF-55): it holds 100 of the gallery's 485
 layouts, and the rest stay gallery-only.
 
+### Layouts stay a subset by design (RR-41, opf#292)
+
+`layouts` is a permanent `subset`, decided on 2026-10-02 (vetoable by the owner).
+The other 385 layouts (the Dark master; 24 of them deprecated aliases from FF-52)
+are published only by pptx.gallery. A document names one of them and resolves it
+online through the default catalog, or offline with an inline
+`catalogs.layouts.records` entry, which the gallery snippets add and
+`bundlePresentation` inlines for the 100 bundled ids. All 485 compose, validate
+and export; this decision is about where the records live, not about the engines.
+
+Measured on `@openpresentation/opf` 0.12.0 with all 485 layouts synced (`npm pack
+--dry-run`, then minified esbuild browser bundles of the published `opf-render`
+0.12.0 against each core build, and of the gallery editor playground at the
+`opf-editor` 0.11.1 release commit):
+
+| | 100 layouts (now) | 485 layouts | Change |
+| --- | ---: | ---: | ---: |
+| Packed tarball | 2,925,351 B | 2,979,596 B | +54,245 B (+1.9%) |
+| Unpacked | 9,177,405 B | 10,327,874 B | +1,150,469 B (+12.5%) |
+| Files | 645 | 1,030 | +385 |
+| `opf-render` bundle (minified / gzip) | 1,186,297 / 307,353 B | 1,568,259 / 326,443 B | +381,962 / +19,090 B (+32% / +6.2%) |
+| Gallery editor playground bundle (minified / gzip) | 3,656,803 / 1,207,310 B | 4,038,759 / 1,225,176 B | +381,956 / +17,866 B (+10.4% / +1.5%) |
+
+The packed growth is small (gzip compresses the repetitive records). The bundle
+growth is not: `opf-render`, `opf-editor` and `opf-pptx` never import
+`@openpresentation/opf/catalogs` and never read a layout record from the bundled
+catalog, but `composition`, `validator`, `pagination` and `convert` all reach the
+one generated catalogs chunk, which a bundler cannot tree-shake, so every browser
+bundle would carry about 382 KB more for data it does not use. The catalog is not
+lazily loadable today. The supervisor rule was to bundle only when the packed
+core grows by less than about 1.5 MB and the bundles do not meaningfully grow;
+the second condition fails, so the subset is kept on purpose. Narrative layout
+hints do not need the rest: the FF-28 beat table references 17 gallery layouts,
+13 of them already bundled, and the other four (`text-1x-left`, `title-left`,
+`title-center`, `list-2x-title-center`) can be added with `--include` if the
+hints are restored.
+
+To revisit: split the generated catalogs module per kind (or load it lazily) so a
+consumer that does not read layouts does not carry them. After that, bundling all
+485 costs about 54 KB of packed size and nothing in the browser bundles, and the
+kind can be switched to `mirror` with a core release.
+
 ### Checks
 
 - `pnpm check:spec` and `pnpm check:catalog` (both in `pnpm test`) verify offline
   that every kind's records still hash to the value in its index and the
-  manifest. A hand edit to `spec/catalogs/` fails here. Change the gallery and
-  sync instead.
+  manifest. A hand edit to `spec/catalogs/` fails here until `--rehash` (core
+  first) or the sync (gallery first) has rewritten them.
 - Drift between the gallery and this snapshot is checked on the gallery side
   (FF-37): pptx-gallery's `pnpm check:core-catalog` ([pptx-gallery#84](https://github.com/Data-Advantage/pptx-gallery/pull/84)) compares its
   published `public/<kind>/` files with `spec/catalogs` of the

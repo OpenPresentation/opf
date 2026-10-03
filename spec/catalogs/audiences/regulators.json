@@ -19,5 +19,9 @@
     "authoritative",
     "technical"
   ],
-  "tags": ["external", "compliance", "policy"]
+  "tags": ["external", "compliance", "policy"],
+  "deprecation": {
+    "replacedBy": "regulatory",
+    "reason": "Duplicate of 'regulatory', the id pptx.gallery publishes. Kept so existing documents keep validating and rendering unchanged; use 'regulatory' in new documents."
+  }
 }

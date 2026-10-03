@@ -9,7 +9,7 @@ const doc = {
   organization: { id: "acme", name: "Acme Corp" },
   speaker: { id: "alice", name: "Alice Chen" },
   author: "Test Author",
-  audience: ["executives"],
+  audience: ["executive"],
   language: "en-US",
   takeaway: "Remember this result",
   duration: 10,
@@ -118,7 +118,7 @@ describe("presentation shapes that must validate", () => {
       audience: [
         "board",
         {
-          id: "executives",
+          id: "executive",
           attentionBudgetMinutes: 20,
         },
       ],
@@ -928,6 +928,38 @@ describe("catalog-id warning behavior", () => {
     assert.equal(result.warnings.some((candidate) => candidate.path === "/slides/1/chart/type"), false);
   });
 
+  test("the six plural audience ids stay valid but warn with their singular replacement", () => {
+    const replacements = {
+      executives: "executive",
+      investors: "investor",
+      customers: "customer",
+      "sales-team": "sales",
+      "marketing-team": "marketing",
+      regulators: "regulatory",
+    };
+    const plural = Object.keys(replacements);
+    const result = validatePresentation({
+      name: "Plural Audiences",
+      audience: [...plural, ...Object.values(replacements), "candidates", "engineering-team"],
+      slides: [{ title: "Slide Title" }],
+    });
+    assert.equal(result.valid, true, "deprecated ids must warn, never error");
+    assert.deepEqual(result.errors, []);
+    assert.deepEqual(
+      result.warnings.map((warning) => [warning.path, warning.message]),
+      plural.map((id, index) => [`/audience/${index}`, `deprecated audiences catalog id '${id}'; use '${replacements[id]}'`]),
+    );
+    for (const warning of result.warnings) assert.equal(warning.params.replacedBy, replacements[warning.params.id]);
+
+    const object = validatePresentation({
+      name: "Plural Audience Override",
+      audience: [{ id: "sales-team", attentionBudgetMinutes: 20 }],
+      slides: [{ title: "Slide Title" }],
+    });
+    assert.equal(object.valid, true);
+    assert.deepEqual(object.warnings.map((warning) => warning.message), ["deprecated audiences catalog id 'sales-team'; use 'sales'"]);
+  });
+
   test("inline catalog record legitimizes an id the bundled catalogs don't know", () => {
     // Inline catalog records and custom sources legitimize ids the bundled catalogs don't know.
     assert.equal(validatePresentation({
@@ -963,7 +995,7 @@ describe("catalog-id warning behavior", () => {
 
     const list = validatePresentation({
       name: "Unknown Audience Entries",
-      audience: ["executives", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }],
+      audience: ["executive", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }],
       slides: [{ title: "Slide Title" }],
     });
     assert.deepEqual(list.warnings.map((warning) => warning.path).sort(), ["/audience/1", "/audience/2/id"]);
