@@ -24,8 +24,6 @@ jobs:
         # PowerShell reports only the final native command's exit code in a
         # multiline step. Bash's Actions wrapper stops on the first failure.
         shell: bash
-    env:
-      OPF_GOLDEN_BASELINE: ${{ github.workspace }}/opf-render/test/golden/opf-examples-png.cover-centering.sha256.json
     strategy:
       fail-fast: false
       matrix:
@@ -44,38 +42,34 @@ jobs:
         if: github.event_name == 'pull_request'
         continue-on-error: true
         run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
+      # RR-50: no hand pins. The commits of the other OpenPresentation repositories (and OPF_GOLDEN_BASELINE, exported to
+      # the later steps) come from core's ecosystem.lock.json, written by the roller. A `Depends-On:` trailer in the pull
+      # request body tests an unmerged pull request of another repository instead (core docs/ecosystem-development.md).
+      - name: Resolve the coordinated commits from core's ecosystem.lock.json
+        id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-pptx
+          export-golden: 'true'
       # Verify registry dependencies before linking the pinned source graph.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
-          # Core main 1228351 (core 0.11.3 plus the recorded renderer 0.11.8 lazy font count and the FF-56 evidence, opf#222) plus opf#231 (lane scripts accept the root payload form that content topology restores, opf-pptx#122); the published core this release requires is ^0.11.3.
-          # Core main 07cd9d4 (published 0.11.4 plus the renderer 0.11.9 lazy font count opf#234 and the ecosystem repin opf#235; core 0.11.3 plus opf#229 design fields, opf#230 cover alignment, opf#231 and opf#232 picture-bullet size and furniture alignment; the combined core that ships as 0.11.4). Lockstep: the PPTX floor moves to 0.11.4.
-          # RR-16 (opf#247) and RR-29 (opf#270) merged: core main 395e4c1 carries both (composed font sizes on the 0.01 pt grid, promoted regions in reading order, chartPaletteForFill).
-          # RR-07 pins core main c45baae (opf#246 merged plus RR-34), before the RR-17 wrap change opf#260 (d382351): with it core scripts/test-timeline-workflow.mjs fails on Windows at the pinned pptx (a timeline description wraps differently), which the RR-17 pptx work owns; repin to core main once that lands.
-          # RR-17 pins core main 11bccd5 (opf#276 merged on top of 293b5d3, which has the RR-17 wrap change opf#260, plus the timeline workflow ink check that allows for Windows Chromium's whole-pixel text metrics, so scripts/test-timeline-workflow.mjs passes on Windows); repin to the core merge commit once opf#276 merges (never leave it on an unmerged head).
-          # RR-05: core main 11bccd5 also carries opf#259 (right-to-left layout).
-          ref: da45b2e29812efbf67829f2fe987ef76858990f7
+          ref: ${{ steps.refs.outputs.opf }}
           path: opf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-render
-          # opf-render 0.11.8 release commit (the tag draws in the primary colour, as opf-pptx writes it).
-          # opf-render 0.11.9 release commit 2fbc0ab (opf-render#83 and #85: draws the same logos, picture bullets and accent font on the combined core).
-          # RR-10: opf-render main be9cc47 (opf-render#107 e47aba4, which makes the preview show the placeholder for every malformed or unsafe SVG that test/svg-image-degrade.mjs uses, plus the numbered-list markers of opf-render#99 that RR-33 here needs).
-          # RR-35: opf-render PR #100 head (render main plus the chart options preview); repin to the render merge commit once #100 merges.
-          # RR-34: opf-render PR #104 head (render main plus the footnote, caption and marker drawing); repin to the render merge commit once #104 merges.
-          # Release 0.12.0 pins the opf-render 0.12.0 release commit 3b300a3 (tag opf-render-v0.12.0, opf-render#110).
-          ref: 3b300a3d1d34ecca4e323c74bed64cbe554d6bce
+          ref: ${{ steps.refs.outputs.opf_render }}
           path: opf-render
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf-editor
-          # opf-editor main dea8a79 (0.10.5 plus #57: code-browser accepts the root payload form that content topology restores, opf-pptx#122).
-          ref: dea8a7957b322b1e0b837c6512b15af5073aa081
+          ref: ${{ steps.refs.outputs.opf_editor }}
           path: opf-editor
           fetch-depth: 0
           persist-credentials: false
