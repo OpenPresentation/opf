@@ -19,6 +19,12 @@
 // `--golden-override` replaces the lock's golden with a workspace-relative path (a renderer pull request that moves
 // pixels selects its own baseline this way).
 //
+// Depends-On (pull_request events only): a line `Depends-On: OpenPresentation/<repository>#<number>` in the pull
+// request body (read through the REST API, so editing the body and re-running the job picks it up) makes `resolve`
+// check out that pull request instead of the lock entry: its test merge commit while it is open and mergeable, its
+// head otherwise, and its merge commit (on main) once merged. A closed, unmerged dependency fails the step.
+//   node scripts/ecosystem-lock.mjs depends-on [--body-file <file>]   # prints what a body declares (no network)
+//
 // `guard` checks, through the GitHub REST API (no clone), that every locked SHA is an ancestor of its repository's
 // main (the REST equivalent of `git merge-base --is-ancestor <sha> main`), and warns when a pull request edits a
 // locked SHA from a branch other than the roller's. It only warns unless `--blocking` is given or
@@ -184,6 +190,106 @@ export async function guard(lock, api, { baseLock, headRef } = {}) {
   return { problems, lines };
 }
 
+const DEPENDS_ON_LINE = /^\s*Depends-On:\s*(.*)$/i;
+const DEPENDENCY = [
+  /^([\w.-]+)\/([\w.-]+)#(\d+)$/,
+  /^https:\/\/github\.com\/([\w.-]+)\/([\w.-]+)\/pull\/(\d+)\/?$/,
+];
+
+/**
+ * The `Depends-On:` trailers of a pull request body. A trailer is a line that starts with `Depends-On:` (any case),
+ * outside fenced code blocks, naming one or more pull requests separated by commas or spaces, each as
+ * `OpenPresentation/<repository>#<number>` or its https://github.com/... pull request URL. Only the four ecosystem
+ * repositories count; anything else is reported as a warning and ignored. Two different pull requests of the same
+ * repository are an error (CI can check out only one).
+ */
+export function parseDependsOn(body) {
+  const dependencies = [];
+  const warnings = [];
+  let fence = null;
+  for (const line of String(body ?? "").split(/\r?\n/)) {
+    const fenceMatch = /^\s*(`{3,}|~{3,})/.exec(line);
+    if (fenceMatch) {
+      if (!fence) fence = fenceMatch[1][0];
+      else if (fenceMatch[1][0] === fence) fence = null;
+      continue;
+    }
+    if (fence) continue;
+    const trailer = DEPENDS_ON_LINE.exec(line);
+    if (!trailer) continue;
+    const tokens = trailer[1].split(/[\s,]+/).filter(Boolean);
+    if (!tokens.length) warnings.push(`"${line.trim()}" names no pull request`);
+    for (const token of tokens) {
+      const match = DEPENDENCY.map((pattern) => pattern.exec(token)).find(Boolean);
+      if (!match) {
+        warnings.push(`"${token}" is not OpenPresentation/<repository>#<number> or a pull request URL; ignored`);
+        continue;
+      }
+      const [, owner, repository, number] = match;
+      if (owner.toLowerCase() !== OWNER.toLowerCase() || !REPOSITORIES.includes(repository)) {
+        warnings.push(`${owner}/${repository}#${number} is not one of the ecosystem repositories (${REPOSITORIES.map((name) => `${OWNER}/${name}`).join(", ")}); ignored`);
+        continue;
+      }
+      const existing = dependencies.find((dependency) => dependency.repository === repository);
+      if (existing && existing.number !== Number(number)) throw new Error(`Depends-On names two pull requests of ${OWNER}/${repository} (#${existing.number} and #${number}); CI can check out only one`);
+      if (!existing) dependencies.push({ repository, number: Number(number) });
+    }
+  }
+  return { dependencies, warnings };
+}
+
+/**
+ * The commit to check out for one dependency, from GET /repos/OpenPresentation/<repository>/pulls/<number>:
+ * merged: its merge commit (on main); open and mergeable: its test merge commit (refs/pull/<n>/merge, the change as
+ * it would land); open otherwise: its head; closed without merging: an error.
+ */
+export async function resolveDependency(api, { repository, number }) {
+  const pull = await api(`/repos/${OWNER}/${repository}/pulls/${number}`);
+  const name = `${OWNER}/${repository}#${number}`;
+  if (pull.merged_at || pull.merged) return { ref: pull.merge_commit_sha, source: `Depends-On ${name} (merged; its merge commit on main)`, state: "merged" };
+  if (pull.state !== "open") throw new Error(`Depends-On ${name} is closed without merging; remove the trailer or point it at the replacement`);
+  if (pull.mergeable === true && pull.merge_commit_sha) return { ref: pull.merge_commit_sha, source: `Depends-On ${name} (open; its test merge commit)`, state: "open" };
+  return { ref: pull.head.sha, source: `Depends-On ${name} (open; its head, because GitHub reports mergeable=${pull.mergeable})`, state: "open" };
+}
+
+/** The pull request this run tests, from the event payload (pull_request events only). */
+export function pullRequestOfEvent(env = process.env) {
+  if (!["pull_request", "pull_request_target"].includes(env.GITHUB_EVENT_NAME) || !env.GITHUB_EVENT_PATH) return undefined;
+  const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8"));
+  if (!event.pull_request) return undefined;
+  return { repository: env.GITHUB_REPOSITORY, number: event.pull_request.number, body: event.pull_request.body ?? "" };
+}
+
+/**
+ * The Depends-On overrides for `consumer`: parses the current body of the pull request under test (falling back to
+ * the event payload) and resolves each dependency. A dependency on the consumer itself is ignored with a warning.
+ */
+export async function dependsOnOverrides(api, pullRequest, consumer) {
+  if (!pullRequest) return { overrides: {}, warnings: [], dependencies: [] };
+  const warnings = [];
+  let body = pullRequest.body;
+  try {
+    body = (await api(`/repos/${pullRequest.repository}/pulls/${pullRequest.number}`)).body ?? "";
+  } catch (error) {
+    warnings.push(`could not read the current body of ${pullRequest.repository}#${pullRequest.number} (${error.message}); using the event payload`);
+  }
+  const parsed = parseDependsOn(body);
+  warnings.push(...parsed.warnings);
+  const overrides = {};
+  const dependencies = [];
+  for (const dependency of parsed.dependencies) {
+    if (dependency.repository === consumer) {
+      warnings.push(`Depends-On ${OWNER}/${dependency.repository}#${dependency.number} names this repository; CI already tests this pull request's own head, so it is ignored`);
+      continue;
+    }
+    const resolved = await resolveDependency(api, dependency);
+    overrides[dependency.repository] = resolved;
+    dependencies.push({ ...dependency, ...resolved });
+    if (resolved.state === "open") warnings.push(`${OWNER}/${dependency.repository}#${dependency.number} is still open: merge it before this pull request (this run tests against it, not the lock)`);
+  }
+  return { overrides, warnings, dependencies };
+}
+
 /** The workspace-relative golden selection: the lock's, or a workspace-relative override such as `opf-render/test/golden/x`. */
 export function goldenSelection(lock, override) {
   if (override) {
@@ -200,10 +306,13 @@ export function goldenSelection(lock, override) {
  * The commit each checkout uses: the locked SHA for every repository. The consumer's own entry is reported too (its
  * CI checks out its own head, not the lock). The golden is relative to the workspace (`<repository>/<path>`).
  */
-export function resolveRefs(lock, { consumer, goldenOverride } = {}) {
+export function resolveRefs(lock, { consumer, goldenOverride, overrides = {} } = {}) {
   if (consumer !== undefined && !REPOSITORIES.includes(consumer)) throw new Error(`--consumer must be one of ${REPOSITORIES.join(", ")}`);
   const refs = {};
-  for (const name of REPOSITORIES) refs[name] = { ref: lock.repositories[name].sha, source: name === consumer ? "own head (lock entry shown)" : "lock" };
+  for (const name of REPOSITORIES) {
+    if (overrides[name] && name !== consumer) refs[name] = { ref: overrides[name].ref, source: overrides[name].source };
+    else refs[name] = { ref: lock.repositories[name].sha, source: name === consumer ? "own head (lock entry shown)" : "lock" };
+  }
   const golden = goldenSelection(lock, goldenOverride);
   return { consumer, refs, golden: { ...golden, workspacePath: `${golden.repository}/${golden.path}` } };
 }
@@ -256,9 +365,18 @@ async function main(argv) {
     if (!problems.length) console.log("Every locked SHA is on its repository's main.");
     return problems.length && blocking ? 1 : 0;
   }
+  if (command === "depends-on") {
+    const bodyFile = option(args, "--body-file");
+    const parsed = parseDependsOn(bodyFile ? readFileSync(bodyFile, "utf8") : readFileSync(0, "utf8"));
+    console.log(JSON.stringify(parsed, null, 2));
+    return 0;
+  }
   if (command === "resolve") {
     const lock = readLock(lockFile);
-    const resolved = resolveRefs(lock, { consumer: option(args, "--consumer"), goldenOverride: option(args, "--golden-override") || undefined });
+    const consumer = option(args, "--consumer");
+    const { overrides, warnings } = await dependsOnOverrides(githubApi(), pullRequestOfEvent(), consumer);
+    for (const warning of warnings) annotate("warning", "Depends-On", warning);
+    const resolved = resolveRefs(lock, { consumer, goldenOverride: option(args, "--golden-override") || undefined, overrides });
     for (const name of REPOSITORIES) console.log(`${name.padEnd(10)} ${resolved.refs[name].ref} (${resolved.refs[name].source})`);
     console.log(`golden     ${resolved.golden.workspacePath} (${resolved.golden.source})`);
     if (args.includes("--github-output")) {
@@ -271,7 +389,7 @@ async function main(argv) {
     }
     return 0;
   }
-  console.error("Usage: node scripts/ecosystem-lock.mjs validate|guard|resolve (see the header of this file)");
+  console.error("Usage: node scripts/ecosystem-lock.mjs validate|guard|resolve|depends-on (see the header of this file)");
   return 2;
 }
 

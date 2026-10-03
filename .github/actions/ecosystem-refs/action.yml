@@ -5,8 +5,13 @@
 # `OpenPresentation/opf/.github/actions/ecosystem-refs@main`), so the lock and its reader always match. The lock is
 # written by the roller, never by hand (docs/ecosystem-development.md, "Coordinated CI: the ecosystem lock").
 #
+# On pull_request events it also honours `Depends-On: OpenPresentation/<repository>#<number>` lines in the pull
+# request body: that repository is checked out at the named pull request (its test merge commit while open, its merge
+# commit once merged) instead of the lock. It reads the current body through the REST API, so edit the body and
+# re-run the job. Other events (push, merge_group, workflow_dispatch, schedule) use the lock only.
+#
 # Needs only `node` on the runner (every GitHub-hosted runner and the pinned Playwright image have it); run it before
-# actions/setup-node if you like. It makes no network call unless a later RR-50 step needs one (Depends-On trailers).
+# actions/setup-node if you like.
 name: OpenPresentation ecosystem refs
 description: Resolve the commits of opf, opf-render, opf-pptx and opf-editor (and the golden baseline) from ecosystem.lock.json.
 inputs:
@@ -22,7 +27,7 @@ inputs:
     required: false
     default: 'false'
   token:
-    description: Token for the GitHub REST API (reads only).
+    description: Token for the GitHub REST API (reads only; the pull request body and its Depends-On pull requests).
     required: false
     default: ${{ github.token }}
 outputs:
