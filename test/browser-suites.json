@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "suites": {
+    "installed-browser": {
+      "description": "The installed-tarball browser checks of the coordinated packages job (RR-47). Run from the opf checkout after pack:ecosystem and test:packed-ecosystem.",
+      "tests": [
+        { "id": "installed:packed-browser", "command": "pnpm test:packed-browser" },
+        { "id": "installed:code-guards", "command": "node scripts/test-installed-code-guards.mjs" },
+        { "id": "installed:rich-input-browser", "command": "node ../opf-editor/test/rich-input-browser.mjs artifacts/editor/rich-input-installed.json measured artifacts/npm/consumer" },
+        { "id": "installed:plain-whitespace-workflow", "command": "node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-installed installed" },
+        { "id": "installed:readability-browser", "command": "node scripts/test-readability-browser.mjs artifacts/readability-browser installed" },
+        { "id": "installed:timeline-workflow", "command": "node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed" },
+        { "id": "installed:furniture-workflow", "command": "node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed" },
+        { "id": "installed:furniture-fields-browser", "command": "node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser" },
+        { "id": "installed:json-editor-browser", "command": "node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer" },
+        { "id": "installed:timeline-acceptance", "command": "node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json" }
+      ]
+    }
+  }
+}

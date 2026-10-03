@@ -69,7 +69,7 @@ Phase is the earliest owner phase with unfinished work for the family. Phase 5 (
 
 ## Priority queue
 
-Priority: score = severity x (valuesOpen x hostFactor + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesOpen counts parity values whose preview uses the family and whose fontResolution is not already pass (real face or metric replacement with the selected name kept). hostFactor is the share of applicable hosts without per-family verification, never below 0.25. The audited set is 850 gallery values (parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json).
+Priority: score = severity x (valuesOpen x hostFactor + 1). severity is the status severity, plus 0.5 for a visual Latin route whose measured maximum width delta exceeds 5%. valuesOpen counts parity values whose preview uses the family and whose fontResolution is not already pass (real face or metric replacement with the selected name kept). hostFactor is the share of applicable hosts without per-family verification, never below 0.25. The audited set is 850 gallery values (parity-results-2026-10-02-published-0.12.json).
 
 | Rank | Family | Class | Phase | Status | Values | Score | Next action |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -403,7 +403,7 @@ The owner's review predates some merged and in-flight work. The records above us
 - FF-46 (2026-10-02): the supervisor ran 43 decks (225 slides, every family named by at least one deck) in PowerPoint 365 on the 0.12.0 train (opf 0.12.0, opf-render 0.12.0, opf-pptx main with FF-05) and the comparison output is committed in docs/evidence/ff-46-native-0.12-20261002: every deck passes per-run fonts, theme slots and Presentation.Fonts (no extra and no missing names), so all 168 families are native name verified. That is a name read-back only: the check says nothing about the look or metrics of the preview face against the real font, and a family that is not installed on the host is still read by its selected name. A deck has one theme, so only the first family of a multi-family deck is read through its own theme slot; every family is read through per-run names and Presentation.Fonts.
 - FF-46 follow-up (2026-10-02): native verification has a `failed` status. A family that a deck reads back (theme slot or Presentation.Fonts) or names, where that deck fails a gated check (fonts, themeSlots or presentationFonts; a deck that did not open fails fonts) and no passing deck reads it back, is `failed`: `nativeVerification.failures` lists the run, deck, failing checks and mismatch kinds, the next action says to triage it, and `summary.nativeFailedFamilies` lists the families. A passing deck that reads the family back keeps it `verified` with the failing deck as a caveat. The committed FF-46 run has no failed family.
 
-Inputs: policy version 1 (168 families); opf-render manifest at `8f0d6f1bbdec82f266494113e7e061b931bf44e2` (66 packages, 197 faces, captured 2026-10-02); measurement report corpus 300 Latin strings; parity run 2026-10-01T14:39:22.606Z at opf `e414bca`, opf-render `2fbc0ab`, opf-pptx `a9bcbd7`, pptx-gallery `d8f5ae6`.
+Inputs: policy version 1 (168 families); opf-render manifest at `8f0d6f1bbdec82f266494113e7e061b931bf44e2` (66 packages, 197 faces, captured 2026-10-02); measurement report corpus 300 Latin strings; parity run 2026-10-03T00:22:04.269Z at opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, pptx-gallery `c349a61`.
 
 ## Records by phase and class
 

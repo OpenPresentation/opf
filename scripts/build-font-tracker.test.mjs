@@ -201,7 +201,7 @@ test("the Aptos family is qualified with Intos bundled and fixtures in every hos
   // The queue now follows values that are still not pass.
   const top = [...committed.records].sort((a, b) => a.priority.rank - b.priority.rank).slice(0, 10);
   for (const record of top) assert.ok(record.priority.valuesOpen > 0, `${record.family} leads the queue with open values`);
-  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-10-01-published-0.11.9-gallery-d8f5ae6.json");
+  assert.equal(committed.inputs.parity.file.split("/").pop(), "parity-results-2026-10-02-published-0.12.json");
 });
 
 test("a pendingBundle override for a family whose route face is bundled is stale and fails the build", () => {
