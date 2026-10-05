@@ -1,0 +1,236 @@
+{
+  "powerpoint": {
+    "version": "16.0",
+    "build": "20430"
+  },
+  "method": "attempt 3: Presentations.Add(-1) with a window, in memory, never saved; attempts 1 (read-only deck, no window) and 2 (Presentations.Add(0), no window) could not set PageSetup.SlideSize",
+  "opfPptxVersion": "0.12.3",
+  "rows": [
+    {
+      "preset": "a4",
+      "powerpointPreset": "A4 Paper",
+      "constant": "ppSlideSizeA4Paper",
+      "value": 3,
+      "powerpoint": {
+        "cx": 9906000,
+        "cy": 6858000,
+        "inches": [
+          10.8333,
+          7.5
+        ],
+        "points": [
+          780,
+          540
+        ]
+      },
+      "opfPptx": {
+        "cx": 10689336,
+        "cy": 7562088,
+        "inches": [
+          11.69,
+          8.27
+        ]
+      },
+      "deltaEmu": [
+        -783336,
+        -704088
+      ],
+      "match": false
+    },
+    {
+      "preset": "4:3",
+      "powerpointPreset": "On-screen Show (4:3)",
+      "constant": "ppSlideSizeOnScreen",
+      "value": 1,
+      "powerpoint": {
+        "cx": 9144000,
+        "cy": 6858000,
+        "inches": [
+          10,
+          7.5
+        ],
+        "points": [
+          720,
+          540
+        ]
+      },
+      "opfPptx": {
+        "cx": 9144000,
+        "cy": 6858000,
+        "inches": [
+          10,
+          7.5
+        ]
+      },
+      "deltaEmu": [
+        0,
+        0
+      ],
+      "match": true
+    },
+    {
+      "preset": "16:10",
+      "powerpointPreset": "On-screen Show (16:10)",
+      "constant": "ppSlideSizeOnScreen16x10",
+      "value": 16,
+      "powerpoint": {
+        "cx": 9144000,
+        "cy": 5715000,
+        "inches": [
+          10,
+          6.25
+        ],
+        "points": [
+          720,
+          450
+        ]
+      },
+      "opfPptx": {
+        "cx": 9144000,
+        "cy": 5715000,
+        "inches": [
+          10,
+          6.25
+        ]
+      },
+      "deltaEmu": [
+        0,
+        0
+      ],
+      "match": true
+    },
+    {
+      "preset": "letter",
+      "powerpointPreset": "Letter Paper",
+      "constant": "ppSlideSizeLetterPaper",
+      "value": 2,
+      "powerpoint": {
+        "cx": 9144000,
+        "cy": 6858000,
+        "inches": [
+          10,
+          7.5
+        ],
+        "points": [
+          720,
+          540
+        ]
+      },
+      "opfPptx": {
+        "cx": 10058400,
+        "cy": 7772400,
+        "inches": [
+          11,
+          8.5
+        ]
+      },
+      "deltaEmu": [
+        -914400,
+        -914400
+      ],
+      "match": false
+    },
+    {
+      "preset": "16:9",
+      "powerpointPreset": "On-screen Show (16:9)",
+      "constant": "ppSlideSizeOnScreen16x9",
+      "value": 15,
+      "powerpoint": {
+        "cx": 9144000,
+        "cy": 5143500,
+        "inches": [
+          10,
+          5.625
+        ],
+        "points": [
+          720,
+          405
+        ]
+      },
+      "opfPptx": {
+        "cx": 12192000,
+        "cy": 6858000,
+        "inches": [
+          13.333333333333334,
+          7.5
+        ]
+      },
+      "deltaEmu": [
+        -3048000,
+        -1714500
+      ],
+      "match": false
+    },
+    {
+      "preset": "ref-9",
+      "powerpointPreset": "A3 Paper (reference)",
+      "constant": "ppSlideSizeA3Paper",
+      "value": 9,
+      "powerpoint": {
+        "cx": 12801600,
+        "cy": 9601200,
+        "inches": [
+          14,
+          10.5
+        ],
+        "points": [
+          1008,
+          756
+        ]
+      },
+      "opfPptx": null,
+      "deltaEmu": null,
+      "match": null
+    },
+    {
+      "preset": "ref-10",
+      "powerpointPreset": "B4 (ISO) Paper (reference)",
+      "constant": "ppSlideSizeB4ISOPaper",
+      "value": 10,
+      "powerpoint": {
+        "cx": 10826750,
+        "cy": 8120062,
+        "inches": [
+          11.8403,
+          8.8802
+        ],
+        "points": [
+          852.5,
+          639.375
+        ]
+      },
+      "opfPptx": null,
+      "deltaEmu": null,
+      "match": null
+    },
+    {
+      "preset": "widescreen",
+      "powerpointPreset": "Widescreen (Design > Slide Size; the default of a new presentation: SlideSize 7 custom, 960 x 540 pt)",
+      "powerpoint": {
+        "cx": 12192000,
+        "cy": 6858000,
+        "inches": [
+          13.333333333333334,
+          7.5
+        ],
+        "points": [
+          960,
+          540
+        ]
+      },
+      "opfPptx": {
+        "cx": 12192000,
+        "cy": 6858000,
+        "inches": [
+          13.333333333333334,
+          7.5
+        ]
+      },
+      "deltaEmu": [
+        0,
+        0
+      ],
+      "match": true
+    }
+  ]
+}

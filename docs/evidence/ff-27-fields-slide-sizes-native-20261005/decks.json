@@ -1,0 +1,386 @@
+{
+  "item": "FF-27 fields renumber and update (opf#323 section 2) and slide-size presets (opf#323 section 5)",
+  "built": {
+    "node": "24.21.0",
+    "zipDate": "2026-10-05",
+    "packages": {
+      "@openpresentation/opf": "0.12.1",
+      "@openpresentation/opf-pptx": "0.12.3",
+      "@openpresentation/opf-render": "0.12.0"
+    },
+    "note": "Published npm packages only, exact versions pinned in package.json."
+  },
+  "dateField": {
+    "optionsDate": "2026-01-15",
+    "dateFormat": "MMMM d, yyyy",
+    "exportedFieldType": "datetime4",
+    "cachedText": "January 15, 2026",
+    "nativeHeadersFootersFormat": 4,
+    "localeNote": "MMMM d, yyyy is an en-US field type (PowerPoint's ppDateTimeMMMMdyyyy). The exported run is lang en-US, so month names should read English whatever the host region; compare.mjs tolerates a locale-dependent rendering of the same day (WARN) and fails a read of the cached date.",
+    "why": "The cached date is a past date on purpose: a live field must read today (the clock), a static one would read the cached text."
+  },
+  "decks": {
+    "01-headers-footers": {
+      "title": "Headers and footers: slide number and date fields on every slide",
+      "file": "decks/01-headers-footers.pptx",
+      "bytes": 43060,
+      "sha256": "a664ff41d23464ce436cb0685bb946794d1b8b4bcc5d49d16be3426b12969c50",
+      "slides": 5,
+      "footerText": "FF-27 fields check",
+      "diagnostics": [],
+      "perSlide": [
+        {
+          "index": 1,
+          "part": "ppt/slides/slide1.xml",
+          "slideNumber": {
+            "shape": "OPF furniture 0 part 2 line 0",
+            "placeholder": "sldNum",
+            "fieldType": "slidenum",
+            "cachedText": "1"
+          },
+          "date": {
+            "shape": "OPF furniture 0 part 0 line 0",
+            "placeholder": "dt",
+            "fieldType": "datetime4",
+            "cachedText": "January 15, 2026"
+          },
+          "footerText": {
+            "shape": "OPF furniture 0 part 1 line 0",
+            "placeholder": "ftr",
+            "text": "FF-27 fields check"
+          }
+        },
+        {
+          "index": 2,
+          "part": "ppt/slides/slide2.xml",
+          "slideNumber": {
+            "shape": "OPF furniture 1 part 2 line 0",
+            "placeholder": "sldNum",
+            "fieldType": "slidenum",
+            "cachedText": "2"
+          },
+          "date": {
+            "shape": "OPF furniture 1 part 0 line 0",
+            "placeholder": "dt",
+            "fieldType": "datetime4",
+            "cachedText": "January 15, 2026"
+          },
+          "footerText": {
+            "shape": "OPF furniture 1 part 1 line 0",
+            "placeholder": "ftr",
+            "text": "FF-27 fields check"
+          }
+        },
+        {
+          "index": 3,
+          "part": "ppt/slides/slide3.xml",
+          "slideNumber": {
+            "shape": "OPF furniture 2 part 2 line 0",
+            "placeholder": "sldNum",
+            "fieldType": "slidenum",
+            "cachedText": "3"
+          },
+          "date": {
+            "shape": "OPF furniture 2 part 0 line 0",
+            "placeholder": "dt",
+            "fieldType": "datetime4",
+            "cachedText": "January 15, 2026"
+          },
+          "footerText": {
+            "shape": "OPF furniture 2 part 1 line 0",
+            "placeholder": "ftr",
+            "text": "FF-27 fields check"
+          }
+        },
+        {
+          "index": 4,
+          "part": "ppt/slides/slide4.xml",
+          "slideNumber": {
+            "shape": "OPF furniture 3 part 2 line 0",
+            "placeholder": "sldNum",
+            "fieldType": "slidenum",
+            "cachedText": "4"
+          },
+          "date": {
+            "shape": "OPF furniture 3 part 0 line 0",
+            "placeholder": "dt",
+            "fieldType": "datetime4",
+            "cachedText": "January 15, 2026"
+          },
+          "footerText": {
+            "shape": "OPF furniture 3 part 1 line 0",
+            "placeholder": "ftr",
+            "text": "FF-27 fields check"
+          }
+        },
+        {
+          "index": 5,
+          "part": "ppt/slides/slide5.xml",
+          "slideNumber": {
+            "shape": "OPF furniture 4 part 2 line 0",
+            "placeholder": "sldNum",
+            "fieldType": "slidenum",
+            "cachedText": "5"
+          },
+          "date": {
+            "shape": "OPF furniture 4 part 0 line 0",
+            "placeholder": "dt",
+            "fieldType": "datetime4",
+            "cachedText": "January 15, 2026"
+          },
+          "footerText": {
+            "shape": "OPF furniture 4 part 1 line 0",
+            "placeholder": "ftr",
+            "text": "FF-27 fields check"
+          }
+        }
+      ],
+      "steps": [
+        {
+          "step": "initial",
+          "titles": [
+            "Alpha slide",
+            "Bravo slide",
+            "Charlie slide",
+            "Delta slide",
+            "Echo slide"
+          ],
+          "operation": null,
+          "expectedSlideNumberText": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "step": "after-duplicate",
+          "titles": [
+            "Alpha slide",
+            "Alpha slide",
+            "Bravo slide",
+            "Charlie slide",
+            "Delta slide",
+            "Echo slide"
+          ],
+          "operation": "Slides(1).Duplicate()",
+          "expectedSlideNumberText": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "step": "after-move",
+          "titles": [
+            "Echo slide",
+            "Alpha slide",
+            "Alpha slide",
+            "Bravo slide",
+            "Charlie slide",
+            "Delta slide"
+          ],
+          "operation": "Slides(6).MoveTo(1)",
+          "expectedSlideNumberText": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        }
+      ]
+    },
+    "02-plain-16x9": {
+      "title": "Plain 16:9 deck, the vehicle for reading PowerPoint slide-size presets",
+      "file": "decks/02-plain-16x9.pptx",
+      "bytes": 23051,
+      "sha256": "5bfb7a003ed4cd1f6ec1acc4aa03ded1e71ea29fa69ee1a57c486f16ae53f6bd",
+      "slides": 2,
+      "sldSz": {
+        "cx": 12192000,
+        "cy": 6858000
+      }
+    }
+  },
+  "slideSizes": {
+    "opfPptx": {
+      "a4": {
+        "cx": 10689336,
+        "cy": 7562088,
+        "sldSzAttributes": null,
+        "inches": [
+          11.69,
+          8.27
+        ],
+        "points": [
+          841.68,
+          595.44
+        ],
+        "notesSz": [
+          7562088,
+          10689336
+        ]
+      },
+      "4:3": {
+        "cx": 9144000,
+        "cy": 6858000,
+        "sldSzAttributes": null,
+        "inches": [
+          10,
+          7.5
+        ],
+        "points": [
+          720,
+          540
+        ],
+        "notesSz": [
+          6858000,
+          9144000
+        ]
+      },
+      "16:10": {
+        "cx": 9144000,
+        "cy": 5715000,
+        "sldSzAttributes": null,
+        "inches": [
+          10,
+          6.25
+        ],
+        "points": [
+          720,
+          450
+        ],
+        "notesSz": [
+          5715000,
+          9144000
+        ]
+      },
+      "letter": {
+        "cx": 10058400,
+        "cy": 7772400,
+        "sldSzAttributes": null,
+        "inches": [
+          11,
+          8.5
+        ],
+        "points": [
+          792,
+          612
+        ],
+        "notesSz": [
+          7772400,
+          10058400
+        ]
+      },
+      "16:9": {
+        "cx": 12192000,
+        "cy": 6858000,
+        "sldSzAttributes": null,
+        "inches": [
+          13.333333333333334,
+          7.5
+        ],
+        "points": [
+          960,
+          540
+        ],
+        "notesSz": [
+          6858000,
+          12192000
+        ]
+      },
+      "widescreen": {
+        "cx": 12192000,
+        "cy": 6858000,
+        "sldSzAttributes": null,
+        "inches": [
+          13.333333333333334,
+          7.5
+        ],
+        "points": [
+          960,
+          540
+        ],
+        "notesSz": [
+          6858000,
+          12192000
+        ]
+      },
+      "standard": {
+        "cx": 9144000,
+        "cy": 6858000,
+        "sldSzAttributes": null,
+        "inches": [
+          10,
+          7.5
+        ],
+        "points": [
+          720,
+          540
+        ],
+        "notesSz": [
+          6858000,
+          9144000
+        ]
+      }
+    },
+    "nativePresets": [
+      {
+        "key": "a4",
+        "name": "ppSlideSizeA4Paper",
+        "value": 3,
+        "opf": "a4"
+      },
+      {
+        "key": "4:3",
+        "name": "ppSlideSizeOnScreen",
+        "value": 1,
+        "opf": "4:3"
+      },
+      {
+        "key": "16:10",
+        "name": "ppSlideSizeOnScreen16x10",
+        "value": 16,
+        "opf": "16:10"
+      },
+      {
+        "key": "letter",
+        "name": "ppSlideSizeLetterPaper",
+        "value": 2,
+        "opf": "letter"
+      },
+      {
+        "key": "16:9",
+        "name": "ppSlideSizeOnScreen16x9",
+        "value": 15,
+        "opf": "16:9"
+      },
+      {
+        "key": "widescreen",
+        "name": "custom 960 x 540 pt (Design > Slide Size > Widescreen)",
+        "widthPt": 960,
+        "heightPt": 540,
+        "opf": "widescreen"
+      },
+      {
+        "key": "ref-9",
+        "name": "PpSlideSizeType 9 (ppSlideSizeA3Paper)",
+        "value": 9,
+        "opf": null
+      },
+      {
+        "key": "ref-10",
+        "name": "PpSlideSizeType 10 (ppSlideSizeB4ISOPaper)",
+        "value": 10,
+        "opf": null
+      }
+    ],
+    "note": "opf-pptx values are p:sldSz of tiny decks exported with design.dimensions = the preset (published opf-pptx 0.12.3); PowerPoint values are read in memory by native-slide-sizes.ps1."
+  }
+}

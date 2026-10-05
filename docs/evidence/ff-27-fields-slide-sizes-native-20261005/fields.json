@@ -1,0 +1,1050 @@
+{
+    "deck":  "01-headers-footers",
+    "startedAt":  "2026-10-05T19:01:21.4749263Z",
+    "stage":  "done",
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "clock":  {
+                  "localDate":  "2026-10-05",
+                  "localTime":  "12:01:21",
+                  "expectedEnUS":  "October 5, 2026",
+                  "culture":  "en-US",
+                  "uiCulture":  "en-US",
+                  "shortDatePattern":  "M/d/yyyy"
+              },
+    "steps":  [
+                  {
+                      "step":  "initial",
+                      "operation":  "",
+                      "slideCount":  5,
+                      "slides":  [
+                                     {
+                                         "index":  1,
+                                         "slideId":  256,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.0.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Alpha slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.0.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "First slide. Footer: date, text, slide number."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "1"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  2,
+                                         "slideId":  257,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.1.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Bravo slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.1.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Second slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "2"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  3,
+                                         "slideId":  258,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.2.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Charlie slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.2.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Third slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "3"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  4,
+                                         "slideId":  259,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.3.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Delta slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.3.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Fourth slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "4"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  5,
+                                         "slideId":  260,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.4.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Echo slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.4.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Fifth slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "5"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     }
+                                 ],
+                      "afterRender":  [
+                                          {
+                                              "index":  1,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "1"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  2,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "2"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  3,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "3"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  4,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "4"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  5,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "5"
+                                                                           }
+                                                                       ]
+                                          }
+                                      ]
+                  },
+                  {
+                      "step":  "after-duplicate",
+                      "operation":  "Slides(1).Duplicate()",
+                      "slideCount":  6,
+                      "slides":  [
+                                     {
+                                         "index":  1,
+                                         "slideId":  256,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.0.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Alpha slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.0.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "First slide. Footer: date, text, slide number."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "1"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  2,
+                                         "slideId":  261,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.0.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Alpha slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.0.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "First slide. Footer: date, text, slide number."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "2"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  3,
+                                         "slideId":  257,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.1.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Bravo slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.1.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Second slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "3"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  4,
+                                         "slideId":  258,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.2.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Charlie slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.2.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Third slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "4"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  5,
+                                         "slideId":  259,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.3.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Delta slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.3.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Fourth slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "5"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  6,
+                                         "slideId":  260,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.4.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Echo slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.4.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Fifth slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "6"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     }
+                                 ],
+                      "afterRender":  [
+                                          {
+                                              "index":  1,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "1"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  2,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "2"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  3,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "3"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  4,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "4"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  5,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "5"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  6,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "6"
+                                                                           }
+                                                                       ]
+                                          }
+                                      ]
+                  },
+                  {
+                      "step":  "after-move",
+                      "operation":  "Slides(6).MoveTo(1)",
+                      "slideCount":  6,
+                      "slides":  [
+                                     {
+                                         "index":  1,
+                                         "slideId":  260,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.4.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Echo slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.4.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Fifth slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 4 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "1"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  2,
+                                         "slideId":  256,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.0.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Alpha slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.0.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "First slide. Footer: date, text, slide number."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "2"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  3,
+                                         "slideId":  261,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.0.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Alpha slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.0.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "First slide. Footer: date, text, slide number."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "3"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  4,
+                                         "slideId":  257,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.1.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Bravo slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.1.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Second slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "4"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  5,
+                                         "slideId":  258,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.2.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Charlie slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.2.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Third slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "5"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     },
+                                     {
+                                         "index":  6,
+                                         "slideId":  259,
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.3.title line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Delta slide"
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.3.text line 0",
+                                                            "placeholderType":  null,
+                                                            "text":  "Fourth slide."
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 0 line 0",
+                                                            "placeholderType":  16,
+                                                            "text":  "October 5, 2026"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 1 line 0",
+                                                            "placeholderType":  15,
+                                                            "text":  "FF-27 fields check"
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 3 part 2 line 0",
+                                                            "placeholderType":  13,
+                                                            "text":  "6"
+                                                        }
+                                                    ],
+                                         "headersFooters":  {
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  4,
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "FF-27 fields check"
+                                                            }
+                                     }
+                                 ],
+                      "afterRender":  [
+                                          {
+                                              "index":  1,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 4 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "1"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  2,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "2"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  3,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 0 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "3"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  4,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 1 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "4"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  5,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 2 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "5"
+                                                                           }
+                                                                       ]
+                                          },
+                                          {
+                                              "index":  6,
+                                              "furnitureAfterRender":  [
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 0 line 0",
+                                                                               "placeholderType":  16,
+                                                                               "text":  "October 5, 2026"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 1 line 0",
+                                                                               "placeholderType":  15,
+                                                                               "text":  "FF-27 fields check"
+                                                                           },
+                                                                           {
+                                                                               "name":  "OPF furniture 3 part 2 line 0",
+                                                                               "placeholderType":  13,
+                                                                               "text":  "6"
+                                                                           }
+                                                                       ]
+                                          }
+                                      ]
+                  }
+              ],
+    "finishedAt":  "2026-10-05T19:01:22.9941360Z"
+}
