@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import {readFile,mkdir,writeFile,symlink,rm,realpath} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {execFileSync} from 'node:child_process';
+import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {tar} from './archive-tar.mjs';
+import {examplesDigest,reviewedCoreGolden} from './registry-golden.mjs';
 const root=process.cwd();
 const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
 const consumer=path.resolve(process.argv[2]??'artifacts/npm/registry-consumer');
@@ -31,6 +33,14 @@ const nativeContent=atLeast('@openpresentation/opf-pptx',[0,5,2]);
 const sharedQuotes=atLeast('@openpresentation/opf',[0,8,0]);
 const sharedCode=atLeast('@openpresentation/opf',[0,9,0]);
 const acceptedLayout=atLeast('@openpresentation/opf',[0,10,0]);
+// Core releases that change the bundled examples without moving a pixel (opf#309) are verified against the reviewed core
+// copy of the renderer baseline that ecosystem.lock.json selects; see scripts/registry-golden.mjs.
+// The package exports ./examples for import only, so resolve it from the installed manifest, not through require.
+const coreManifestPath=require.resolve('@openpresentation/opf/package.json');
+const coreExamples=JSON.parse(await readFile(coreManifestPath,'utf8')).exports['./examples'].import;
+const {examples}=await import(pathToFileURL(path.resolve(path.dirname(coreManifestPath),coreExamples)).href);
+const reviewedGolden=reviewedCoreGolden({root,lock:JSON.parse(await readFile(path.join(root,'ecosystem.lock.json'),'utf8')),digest:examplesDigest(examples)});
+if(reviewedGolden)console.log('Registry golden: installed core examples match the reviewed core baseline '+path.relative(root,reviewedGolden)+'; pixel hashes compared exactly.');
 const suites=[
  ['opf-render',['webp.mjs','jpeg-orientation.mjs','rich-table.mjs','golden.mjs',...(styled?['styled-table.mjs']:[]),...(quoteFooter?['quote-footer.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs']:[]),...(acceptedLayout?['accepted-text.mjs','shared-metric.mjs','timeline.mjs']:[])]],
  ['opf-pptx',['dependency-boundary.mjs',...(styled?['styled-table.mjs','styled-table-import.mjs']:[]),...(nativeContent?['content-layout.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs','code-provenance.mjs']:[]),...(acceptedLayout?['plain-whitespace.mjs','accepted-text.mjs','content-cards.mjs','shared-timeline.mjs','font-variants.mjs']:[])]],
@@ -52,6 +62,7 @@ for(const [repo,tests] of suites){
  for(const test of tests){
   const env={...process.env};
   for(const key of ['NODE_OPTIONS','OPF_TEST_RASTER_MODULE','OPF_TEST_PPTX_MODULE','OPF_GOLDEN_BASELINE','OPF_EXAMPLES_DIR','OPF_GOLDEN_OUT','OPF_GOLDEN_SCALE']) delete env[key];
+  if(test==='golden.mjs'&&reviewedGolden)env.OPF_GOLDEN_BASELINE=reviewedGolden;
   const output=execFileSync(process.execPath,[path.join(directory,'test',test)],{cwd:consumer,env,encoding:'utf8',maxBuffer:8*1024*1024});
   await writeFile(path.join(directory,test+'.log'),output);console.log(output.trim());results.push({repo,ref,test,passed:true});
  }

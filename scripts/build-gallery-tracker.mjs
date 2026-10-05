@@ -17,6 +17,7 @@ import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseBurndown } from "../docs/programs/release-readiness/report.mjs";
+import { reportStale } from "./tracker-staleness.mjs";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = "docs/programs/release-readiness";
@@ -680,8 +681,8 @@ function main() {
   const { drift, expected, tracker } = checkTracker();
   if (args.includes("--check")) {
     if (drift.length) {
-      console.error(`Gallery tracker is stale: ${drift.join(", ")}. Run pnpm build:gallery-tracker and commit the result.`);
-      process.exit(1);
+      if (reportStale(`Gallery tracker is stale: ${drift.join(", ")}. Run pnpm build:gallery-tracker and commit the result.`)) process.exit(1);
+      return;
     }
     console.log(`Gallery tracker is up to date (${tracker.summary.records} records, ${tracker.summary.unaddressed} unaddressed).`);
     return;

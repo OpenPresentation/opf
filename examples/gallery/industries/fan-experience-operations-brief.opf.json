@@ -5,9 +5,9 @@
   "filename": "fan-experience-operations-brief",
   "language": "english-au",
   "audience": [
-    "customers",
+    "customer",
     {
-      "id": "marketing-team",
+      "id": "marketing",
       "attentionBudgetMinutes": 23,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",

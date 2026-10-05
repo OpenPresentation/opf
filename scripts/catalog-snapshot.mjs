@@ -112,7 +112,7 @@ export async function verifySnapshot(catalogsRoot) {
     const hash = catalogContentSha256(records);
     if (index.kind !== kind) problems.push(`${kind}/index.json: kind is '${index.kind}', expected '${kind}'`);
     if (index.contentSha256 !== hash) {
-      problems.push(`${kind}/index.json: contentSha256 ${index.contentSha256} does not match the records (${hash}); re-run scripts/sync-gallery-catalog.mjs instead of editing the snapshot by hand`);
+      problems.push(`${kind}/index.json: contentSha256 ${index.contentSha256} does not match the records (${hash}); run scripts/sync-gallery-catalog.mjs --rehash (core-first edit) or sync from the gallery`);
     }
     if (entry.contentSha256 !== hash) {
       problems.push(`manifest.json kinds.${kind}.contentSha256 ${entry.contentSha256} does not match the records (${hash})`);

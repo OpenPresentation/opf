@@ -5,9 +5,9 @@
   "filename": "visual-brand-system-sampler",
   "language": "english-au",
   "audience": [
-    "executives",
+    "executive",
     {
-      "id": "sales-team",
+      "id": "sales",
       "attentionBudgetMinutes": 23,
       "technicalFluency": "mixed",
       "decisionPower": "decision-maker",

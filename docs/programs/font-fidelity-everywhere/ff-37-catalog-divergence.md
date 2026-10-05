@@ -93,7 +93,12 @@ Not published at all:
   | `regulators` | `regulatory` |
 
   `candidates`, `engineering-team`, `board` and `all-hands` stay canonical.
-  - **Not applied in this PR.** 81 bundled examples (111 references) and
+  - **Applied by RR-41 (core-first, after the 2026-10-02 decision that core is the source of truth).**
+    The 81 bundled examples and `engine-defaults.json` moved to the singular ids,
+    the six records carry `deprecation`, and `--rehash` rewrote the hashes. The
+    gallery adopts it with the next core release. The text below is the original
+    FF-37 plan.
+  - **Not applied in FF-37.** 81 bundled examples (111 references) and
     `spec/reference/engine-defaults.json` (`audience: "executives"`) use the
     plural ids. Deprecating them would add validator warnings to the example
     corpus, which the example tests reject.
@@ -153,6 +158,8 @@ Not published at all:
 ### layouts (follow-up, largest)
 
 - **Update (FF-55, 2026-09-30).** The snapshot now holds 100 of the 485 gallery layouts: the 30 core layouts plus the 70 legacy gallery slugs (`master: "Gallery"`), added with `sync-gallery-catalog.mjs --include`. The mode stays `subset`: the other 385 layouts (Dark master, 24 of them deprecated aliases from FF-52) are still not bundled. Bundling the 70 makes them valid narrative `layoutHint` values for `check:spec` rule (e); restoring the hints is still open.
+
+- **Update (RR-41, 2026-10-02).** Decided: `layouts` stays a permanent `subset` (100 of 485). Bundling all 485 adds 54 KB to the packed core but about 382 KB (19 KB gzipped) to every browser bundle of the renderer, editor and exporter, which never read a layout record. See [Layouts stay a subset by design](../../default-catalog.md#layouts-stay-a-subset-by-design-rr-41-opf292). Restoring the narrative hints needs only four more ids (`text-1x-left`, `title-left`, `title-center`, `list-2x-title-center`).
 
 - **Current state.** Core bundles 30 structural layouts; the gallery publishes
   485. All 30 overlap.

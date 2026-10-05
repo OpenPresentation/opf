@@ -15,6 +15,12 @@ Use only the skills relevant to the user's task; ordinary repository maintenance
 
 The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare the release and publish on npm you can do that now and permanently in the future if it's required"). Publish only when a release is required, only after the release gates pass, and only through the trusted-publishing workflows in [docs/release-process.md](docs/release-process.md): open a release-prep PR (version, `CHANGELOG.md`, dependency ranges and lockfile only), merge it, publish in dependency order (core, then renderer and PPTX, then editor), and verify each registry artifact and its provenance. Never publish from an unmerged branch or skip a gate to make a release pass.
 
+## Changelog, tests and generated trackers
+
+- Changelog: add a fragment `changes/<slug>.md` (front matter `type: added|changed|fixed`, `packages: [opf, cli]`; see `changes/README.md`) in the PR that makes the change; never edit `CHANGELOG.md` or `## Unreleased` by hand. The release-prep PR runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z --package opf` (and `--package cli`), which moves the fragments into the release section. CI warns when package code changes without a fragment.
+- Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
+- Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
+
 ## Active programs
 
 Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state. Release readiness uses `codex/rr-<nn>-<slug>` branches and `RR-<nn>: ` PR titles.
@@ -22,6 +28,7 @@ Cross-repository work is tracked in `docs/programs/`. Before starting program wo
 - [Font fidelity everywhere](docs/programs/font-fidelity-everywhere/README.md): every pptx.gallery dimension previews and exports with only the developer's chosen fonts, in PowerPoint and on every OS and runtime.
   Per-font status, priorities and next actions: [font tracker](docs/programs/font-fidelity-everywhere/font-tracker.md) (`pnpm check:font-tracker`; rebuild with `pnpm build:font-tracker`).
 - [Release readiness](docs/programs/release-readiness/README.md) (opened 2026-10-01): every package, the CLI and the three sites release-ready, with shipped features verified natively, gaps closed or descoped with issues, CI green and cross-platform, and a release-readiness note for the owner. Progress: `pnpm report:release`. It carries the open font-fidelity items; font fidelity above is in closure (its goal state is reached and its remaining items are tracked as RR items).
+- [Cloudflare hosting](docs/programs/cloudflare-hosting/README.md) (opened 2026-10-04, branches `codex/cf-<nn>-<slug>`, PR titles `CF-<nn>: `): the three sites move from Vercel to Cloudflare Workers without downtime and without changing a public contract; agents build and preview on localhost only and never deploy, log in or change DNS.
 
 ## Fonts
 

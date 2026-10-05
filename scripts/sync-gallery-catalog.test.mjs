@@ -12,7 +12,7 @@ import {
   readJson,
   verifySnapshot,
 } from "./catalog-snapshot.mjs";
-import { applySnapshot, diffSnapshot, loadValidators, main, parseIncludes, planSnapshot, readCurrentSnapshot } from "./sync-gallery-catalog.mjs";
+import { applySnapshot, diffSnapshot, loadValidators, main, parseIncludes, planSnapshot, readCurrentSnapshot, rehashSnapshot } from "./sync-gallery-catalog.mjs";
 
 const catalogsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "spec", "catalogs");
 const source = { repository: "https://github.com/Data-Advantage/pptx-gallery", commit: "0".repeat(40), path: "public" };
@@ -169,6 +169,41 @@ describe("applySnapshot", () => {
     await writeFile(file, JSON.stringify({ ...record, summary: "Edited by hand." }));
     const problems = await verifySnapshot(workdir);
     assert.ok(problems.some((problem) => problem.startsWith("tones/index.json: contentSha256")), problems.join("\n"));
+  });
+});
+
+describe("rehashSnapshot (core-first edits)", () => {
+  let workdir;
+  before(async () => {
+    workdir = await mkdtemp(path.join(tmpdir(), "opf-catalog-rehash-"));
+    await cp(catalogsRoot, workdir, { recursive: true });
+  });
+  after(async () => {
+    await rm(workdir, { recursive: true, force: true });
+  });
+
+  test("a core-first record edit is rehashed, leaving the gallery pin untouched", async () => {
+    assert.deepEqual(await rehashSnapshot(workdir), []);
+    const before = await readJson(path.join(workdir, "manifest.json"));
+    const file = path.join(workdir, "audiences", "board.json");
+    const record = JSON.parse(await readFile(file, "utf8"));
+    await writeFile(file, `${JSON.stringify({ ...record, summary: "Edited in core first." }, null, 2)}\n`);
+    assert.notDeepEqual(await verifySnapshot(workdir), []);
+    assert.deepEqual((await rehashSnapshot(workdir)).sort(), ["audiences/index.json", "manifest.json (audiences)"]);
+    assert.deepEqual(await verifySnapshot(workdir), []);
+    const after = await readJson(path.join(workdir, "manifest.json"));
+    assert.notEqual(after.kinds.audiences.contentSha256, before.kinds.audiences.contentSha256);
+    assert.deepEqual(after.kinds.audiences.gallery, before.kinds.audiences.gallery);
+    assert.deepEqual(after.source, before.source);
+  });
+
+  test("a mirrored kind still has to match the gallery hash", async () => {
+    const file = path.join(workdir, "tones", "formal.json");
+    const record = JSON.parse(await readFile(file, "utf8"));
+    await writeFile(file, `${JSON.stringify({ ...record, summary: "Edited in core first." }, null, 2)}\n`);
+    await rehashSnapshot(workdir);
+    const problems = await verifySnapshot(workdir);
+    assert.ok(problems.some((problem) => problem.includes("a mirrored kind must match the gallery hash")), problems.join("\n"));
   });
 });
 

@@ -1,0 +1,48 @@
+{
+  "samples" : [
+    "The quick brown fox jumps over the lazy dog",
+    "Quarterly revenue grew 24% year over year",
+    "Strategy, execution and measurement",
+    "Customer onboarding checklist",
+    "Annual General Meeting 2027 agenda"
+  ],
+  "styles" : [
+    {
+      "coreTextWidthRatioPlayfairOverDidot" : [
+        0.79339999999999999,
+        0.80220000000000002,
+        0.81259999999999999,
+        0.80310000000000004,
+        0.78620000000000001
+      ],
+      "didotPostScript" : "Didot",
+      "mean" : 0.79949999999999999,
+      "style" : "400"
+    },
+    {
+      "coreTextWidthRatioPlayfairOverDidot" : [
+        0.79190000000000005,
+        0.79279999999999995,
+        0.79700000000000004,
+        0.80210000000000004,
+        0.78280000000000005
+      ],
+      "didotPostScript" : "Didot-Bold",
+      "mean" : 0.79330000000000001,
+      "style" : "700"
+    },
+    {
+      "coreTextWidthRatioPlayfairOverDidot" : [
+        0.81979999999999997,
+        0.82979999999999998,
+        0.83879999999999999,
+        0.83399999999999996,
+        0.81669999999999998
+      ],
+      "didotPostScript" : "Didot-Italic",
+      "mean" : 0.82779999999999998,
+      "style" : "400i"
+    }
+  ],
+  "tool" : "docs\/evidence\/mac-checks-20261002\/didot-coretext.swift"
+}

@@ -1,0 +1,2850 @@
+{
+ "schema": "opf-script-host-fixtures/v1",
+ "date": "2026-10-02",
+ "description": "Per-family host fixtures for the open script, emoji and math families (FF-44, FF-45): the 35 faces of the renderer's scripts pack. A family appears under a host's families only when that host's fixture passed for it: the family's package loaded, every style resolved to the family itself (exact; a missing bold is visual), a deck of samples of its script (original FF-44 corpus text; FF-45 emoji and math) was drawn strictly in the family's own pinned file with no glyph fallback, the pinned advances matched the face within 0.1 px, and, where a host draws, the glyphs painted. A family whose fixture failed a check is listed under the host's findings with the failure and its diagnosis, and the check was not relaxed. The gallery editor entry covers the files its committed manifest serves; the editor's gate code is the vendored opf-editor bundle, exercised by the editor entry.",
+ "hosts": {
+  "node": {
+   "source": {
+    "repository": "OpenPresentation/opf-render",
+    "test": "test/script-family-hosts.mjs",
+    "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
+    "runtime": "Node v26.7.0"
+   },
+   "families": {
+    "Noto Sans JP": {
+     "route": "Noto Sans JP",
+     "package": "noto-sans-jp",
+     "scripts": [
+      "Jpan"
+     ],
+     "files": [
+      "noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf"
+     ],
+     "lazyBytes": 10940972,
+     "samples": [
+      "jpan-prolonged",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans SC": {
+     "route": "Noto Sans SC",
+     "package": "noto-sans-sc",
+     "scripts": [
+      "Hans"
+     ],
+     "files": [
+      "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf"
+     ],
+     "lazyBytes": 21108304,
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans TC": {
+     "route": "Noto Sans TC",
+     "package": "noto-sans-tc",
+     "scripts": [
+      "Hant"
+     ],
+     "files": [
+      "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf"
+     ],
+     "lazyBytes": 14213672,
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans KR": {
+     "route": "Noto Sans KR",
+     "package": "noto-sans-kr",
+     "scripts": [
+      "Kore"
+     ],
+     "files": [
+      "noto-sans-kr/400Regular/NotoSansKR_400Regular.ttf",
+      "noto-sans-kr/700Bold/NotoSansKR_700Bold.ttf"
+     ],
+     "lazyBytes": 12369800,
+     "samples": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Arabic": {
+     "route": "Noto Sans Arabic",
+     "package": "noto-sans-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-sans-arabic/400Regular/NotoSansArabic_400Regular.ttf",
+      "noto-sans-arabic/700Bold/NotoSansArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 388556,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Naskh Arabic": {
+     "route": "Noto Naskh Arabic",
+     "package": "noto-naskh-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+      "noto-naskh-arabic/700Bold/NotoNaskhArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 399136,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Nastaliq Urdu": {
+     "route": "Noto Nastaliq Urdu",
+     "package": "noto-nastaliq-urdu",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-nastaliq-urdu/400Regular/NotoNastaliqUrdu_400Regular.ttf",
+      "noto-nastaliq-urdu/700Bold/NotoNastaliqUrdu_700Bold.ttf"
+     ],
+     "lazyBytes": 1059084,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-digits"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Hebrew": {
+     "route": "Noto Sans Hebrew",
+     "package": "noto-sans-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf",
+      "noto-sans-hebrew/700Bold/NotoSansHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 96028,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Serif Hebrew": {
+     "route": "Noto Serif Hebrew",
+     "package": "noto-serif-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf",
+      "noto-serif-hebrew/700Bold/NotoSerifHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 112364,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Devanagari": {
+     "route": "Noto Sans Devanagari",
+     "package": "noto-sans-devanagari",
+     "scripts": [
+      "Deva"
+     ],
+     "files": [
+      "noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf",
+      "noto-sans-devanagari/700Bold/NotoSansDevanagari_700Bold.ttf"
+     ],
+     "lazyBytes": 442736,
+     "samples": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Bengali": {
+     "route": "Noto Sans Bengali",
+     "package": "noto-sans-bengali",
+     "scripts": [
+      "Beng"
+     ],
+     "files": [
+      "noto-sans-bengali/400Regular/NotoSansBengali_400Regular.ttf",
+      "noto-sans-bengali/700Bold/NotoSansBengali_700Bold.ttf"
+     ],
+     "lazyBytes": 282540,
+     "samples": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Gurmukhi": {
+     "route": "Noto Sans Gurmukhi",
+     "package": "noto-sans-gurmukhi",
+     "scripts": [
+      "Guru"
+     ],
+     "files": [
+      "noto-sans-gurmukhi/400Regular/NotoSansGurmukhi_400Regular.ttf",
+      "noto-sans-gurmukhi/700Bold/NotoSansGurmukhi_700Bold.ttf"
+     ],
+     "lazyBytes": 117508,
+     "samples": [
+      "guru-title",
+      "guru-marks",
+      "guru-subjoined"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Gujarati": {
+     "route": "Noto Sans Gujarati",
+     "package": "noto-sans-gujarati",
+     "scripts": [
+      "Gujr"
+     ],
+     "files": [
+      "noto-sans-gujarati/400Regular/NotoSansGujarati_400Regular.ttf",
+      "noto-sans-gujarati/700Bold/NotoSansGujarati_700Bold.ttf"
+     ],
+     "lazyBytes": 350472,
+     "samples": [
+      "gujr-title",
+      "gujr-conjuncts",
+      "gujr-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Oriya": {
+     "route": "Noto Sans Oriya",
+     "package": "noto-sans-oriya",
+     "scripts": [
+      "Orya"
+     ],
+     "files": [
+      "noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf",
+      "noto-sans-oriya/700Bold/NotoSansOriya_700Bold.ttf"
+     ],
+     "lazyBytes": 340492,
+     "samples": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Tamil": {
+     "route": "Noto Sans Tamil",
+     "package": "noto-sans-tamil",
+     "scripts": [
+      "Taml"
+     ],
+     "files": [
+      "noto-sans-tamil/400Regular/NotoSansTamil_400Regular.ttf",
+      "noto-sans-tamil/700Bold/NotoSansTamil_700Bold.ttf"
+     ],
+     "lazyBytes": 158004,
+     "samples": [
+      "taml-title",
+      "taml-split-vowels",
+      "taml-ligatures"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Telugu": {
+     "route": "Noto Sans Telugu",
+     "package": "noto-sans-telugu",
+     "scripts": [
+      "Telu"
+     ],
+     "files": [
+      "noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf",
+      "noto-sans-telugu/700Bold/NotoSansTelugu_700Bold.ttf"
+     ],
+     "lazyBytes": 360248,
+     "samples": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Kannada": {
+     "route": "Noto Sans Kannada",
+     "package": "noto-sans-kannada",
+     "scripts": [
+      "Knda"
+     ],
+     "files": [
+      "noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf",
+      "noto-sans-kannada/700Bold/NotoSansKannada_700Bold.ttf"
+     ],
+     "lazyBytes": 298112,
+     "samples": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Malayalam": {
+     "route": "Noto Sans Malayalam",
+     "package": "noto-sans-malayalam",
+     "scripts": [
+      "Mlym"
+     ],
+     "files": [
+      "noto-sans-malayalam/400Regular/NotoSansMalayalam_400Regular.ttf",
+      "noto-sans-malayalam/700Bold/NotoSansMalayalam_700Bold.ttf"
+     ],
+     "lazyBytes": 213572,
+     "samples": [
+      "mlym-title",
+      "mlym-chillu",
+      "mlym-conjuncts"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Sinhala": {
+     "route": "Noto Sans Sinhala",
+     "package": "noto-sans-sinhala",
+     "scripts": [
+      "Sinh"
+     ],
+     "files": [
+      "noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+      "noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf"
+     ],
+     "lazyBytes": 486656,
+     "samples": [
+      "sinh-title",
+      "sinh-conjuncts",
+      "sinh-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Thai": {
+     "route": "Noto Sans Thai",
+     "package": "noto-sans-thai",
+     "scripts": [
+      "Thai"
+     ],
+     "files": [
+      "noto-sans-thai/400Regular/NotoSansThai_400Regular.ttf",
+      "noto-sans-thai/700Bold/NotoSansThai_700Bold.ttf"
+     ],
+     "lazyBytes": 94964,
+     "samples": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Lao": {
+     "route": "Noto Sans Lao",
+     "package": "noto-sans-lao",
+     "scripts": [
+      "Laoo"
+     ],
+     "files": [
+      "noto-sans-lao/400Regular/NotoSansLao_400Regular.ttf",
+      "noto-sans-lao/700Bold/NotoSansLao_700Bold.ttf"
+     ],
+     "lazyBytes": 106292,
+     "samples": [
+      "laoo-words",
+      "laoo-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Khmer": {
+     "route": "Noto Sans Khmer",
+     "package": "noto-sans-khmer",
+     "scripts": [
+      "Khmr"
+     ],
+     "files": [
+      "noto-sans-khmer/400Regular/NotoSansKhmer_400Regular.ttf",
+      "noto-sans-khmer/700Bold/NotoSansKhmer_700Bold.ttf"
+     ],
+     "lazyBytes": 211920,
+     "samples": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Myanmar": {
+     "route": "Noto Sans Myanmar",
+     "package": "noto-sans-myanmar",
+     "scripts": [
+      "Mymr"
+     ],
+     "files": [
+      "noto-sans-myanmar/400Regular/NotoSansMyanmar_400Regular.ttf",
+      "noto-sans-myanmar/700Bold/NotoSansMyanmar_700Bold.ttf"
+     ],
+     "lazyBytes": 366520,
+     "samples": [
+      "mymr-digits",
+      "mymr-words",
+      "mymr-medials"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Ethiopic": {
+     "route": "Noto Sans Ethiopic",
+     "package": "noto-sans-ethiopic",
+     "scripts": [
+      "Ethi"
+     ],
+     "files": [
+      "noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf",
+      "noto-sans-ethiopic/700Bold/NotoSansEthiopic_700Bold.ttf"
+     ],
+     "lazyBytes": 733732,
+     "samples": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Armenian": {
+     "route": "Noto Sans Armenian",
+     "package": "noto-sans-armenian",
+     "scripts": [
+      "Armn"
+     ],
+     "files": [
+      "noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+      "noto-sans-armenian/700Bold/NotoSansArmenian_700Bold.ttf"
+     ],
+     "lazyBytes": 99884,
+     "samples": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Georgian": {
+     "route": "Noto Sans Georgian",
+     "package": "noto-sans-georgian",
+     "scripts": [
+      "Geor"
+     ],
+     "files": [
+      "noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf",
+      "noto-sans-georgian/700Bold/NotoSansGeorgian_700Bold.ttf"
+     ],
+     "lazyBytes": 125848,
+     "samples": [
+      "geor-title",
+      "geor-mtavruli"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Mongolian": {
+     "route": "Noto Sans Mongolian",
+     "package": "noto-sans-mongolian",
+     "scripts": [
+      "Mong"
+     ],
+     "files": [
+      "noto-sans-mongolian/400Regular/NotoSansMongolian_400Regular.ttf"
+     ],
+     "lazyBytes": 388820,
+     "samples": [
+      "mong-words",
+      "mong-names",
+      "mong-latin"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans Thaana": {
+     "route": "Noto Sans Thaana",
+     "package": "noto-sans-thaana",
+     "scripts": [
+      "Thaa"
+     ],
+     "files": [
+      "noto-sans-thaana/400Regular/NotoSansThaana_400Regular.ttf",
+      "noto-sans-thaana/700Bold/NotoSansThaana_700Bold.ttf"
+     ],
+     "lazyBytes": 94520,
+     "samples": [
+      "thaa-words",
+      "thaa-digits"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Syriac": {
+     "route": "Noto Sans Syriac",
+     "package": "noto-sans-syriac",
+     "scripts": [
+      "Syrc"
+     ],
+     "files": [
+      "noto-sans-syriac/400Regular/NotoSansSyriac_400Regular.ttf",
+      "noto-sans-syriac/700Bold/NotoSansSyriac_700Bold.ttf"
+     ],
+     "lazyBytes": 168968,
+     "samples": [
+      "syrc-words",
+      "syrc-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Serif Tibetan": {
+     "route": "Noto Serif Tibetan",
+     "package": "noto-serif-tibetan",
+     "scripts": [
+      "Tibt"
+     ],
+     "files": [
+      "noto-serif-tibetan/400Regular/NotoSerifTibetan_400Regular.ttf",
+      "noto-serif-tibetan/700Bold/NotoSerifTibetan_700Bold.ttf"
+     ],
+     "lazyBytes": 1475496,
+     "samples": [
+      "tibt-words",
+      "tibt-stacks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Color Emoji": {
+     "route": "Noto Color Emoji",
+     "package": "noto-color-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 25111640,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": [
+      400
+     ],
+     "raster": "Noto Emoji (resvg draws neither COLRv1 nor OT-SVG; the renderer documents the monochrome stand-in)"
+    },
+    "Noto Emoji": {
+     "route": "Noto Emoji",
+     "package": "noto-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-emoji/400Regular/NotoEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 886572,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "STIX Two Math": {
+     "route": "STIX Two Math",
+     "package": "stix-two-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "stix-two-math/400Regular/STIXTwoMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1471976,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics",
+      "math-brackets"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans Math": {
+     "route": "Noto Sans Math",
+     "package": "noto-sans-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "noto-sans-math/400Regular/NotoSansMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1004120,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans": {
+     "route": "Noto Sans",
+     "package": "noto-sans",
+     "scripts": [
+      "Latn",
+      "Cyrl",
+      "Grek"
+     ],
+     "files": [
+      "noto-sans/400Regular/NotoSans_400Regular.ttf",
+      "noto-sans/700Bold/NotoSans_700Bold.ttf",
+      "noto-sans/400Regular_Italic/NotoSans_400Regular_Italic.ttf",
+      "noto-sans/700Bold_Italic/NotoSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 2546680,
+     "samples": [
+      "latn-vi",
+      "cyrl-ru",
+      "grek-title"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    }
+   }
+  },
+  "browser": {
+   "source": {
+    "repository": "OpenPresentation/opf-render",
+    "test": "test/script-family-hosts-browser.mjs",
+    "commit": "2584f6ecfd20a7cbb0cb3f727c4a8d831827a00b",
+    "runtime": "Node v26.7.0, Chromium 153.0.8010.12, offline"
+   },
+   "filesFetchedInTotal": 67,
+   "bytesFetchedInTotal": 98626208,
+   "families": {
+    "Noto Sans JP": {
+     "route": "Noto Sans JP",
+     "package": "noto-sans-jp",
+     "scripts": [
+      "Jpan"
+     ],
+     "files": [
+      "noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf"
+     ],
+     "lazyBytes": 10940972,
+     "samples": [
+      "jpan-prolonged",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ],
+     "weights": []
+    },
+    "Noto Sans SC": {
+     "route": "Noto Sans SC",
+     "package": "noto-sans-sc",
+     "scripts": [
+      "Hans"
+     ],
+     "files": [
+      "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf"
+     ],
+     "lazyBytes": 21108304,
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ],
+     "weights": []
+    },
+    "Noto Sans TC": {
+     "route": "Noto Sans TC",
+     "package": "noto-sans-tc",
+     "scripts": [
+      "Hant"
+     ],
+     "files": [
+      "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf"
+     ],
+     "lazyBytes": 14213672,
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ],
+     "weights": []
+    },
+    "Noto Sans KR": {
+     "route": "Noto Sans KR",
+     "package": "noto-sans-kr",
+     "scripts": [
+      "Kore"
+     ],
+     "files": [
+      "noto-sans-kr/400Regular/NotoSansKR_400Regular.ttf",
+      "noto-sans-kr/700Bold/NotoSansKR_700Bold.ttf"
+     ],
+     "lazyBytes": 12369800,
+     "samples": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja"
+     ],
+     "weights": []
+    },
+    "Noto Sans Arabic": {
+     "route": "Noto Sans Arabic",
+     "package": "noto-sans-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-sans-arabic/400Regular/NotoSansArabic_400Regular.ttf",
+      "noto-sans-arabic/700Bold/NotoSansArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 388556,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": []
+    },
+    "Noto Naskh Arabic": {
+     "route": "Noto Naskh Arabic",
+     "package": "noto-naskh-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+      "noto-naskh-arabic/700Bold/NotoNaskhArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 399136,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": []
+    },
+    "Noto Nastaliq Urdu": {
+     "route": "Noto Nastaliq Urdu",
+     "package": "noto-nastaliq-urdu",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-nastaliq-urdu/400Regular/NotoNastaliqUrdu_400Regular.ttf",
+      "noto-nastaliq-urdu/700Bold/NotoNastaliqUrdu_700Bold.ttf"
+     ],
+     "lazyBytes": 1059084,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-digits"
+     ],
+     "weights": []
+    },
+    "Noto Sans Hebrew": {
+     "route": "Noto Sans Hebrew",
+     "package": "noto-sans-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf",
+      "noto-sans-hebrew/700Bold/NotoSansHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 96028,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": []
+    },
+    "Noto Serif Hebrew": {
+     "route": "Noto Serif Hebrew",
+     "package": "noto-serif-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf",
+      "noto-serif-hebrew/700Bold/NotoSerifHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 112364,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": []
+    },
+    "Noto Sans Devanagari": {
+     "route": "Noto Sans Devanagari",
+     "package": "noto-sans-devanagari",
+     "scripts": [
+      "Deva"
+     ],
+     "files": [
+      "noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf",
+      "noto-sans-devanagari/700Bold/NotoSansDevanagari_700Bold.ttf"
+     ],
+     "lazyBytes": 442736,
+     "samples": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph"
+     ],
+     "weights": []
+    },
+    "Noto Sans Bengali": {
+     "route": "Noto Sans Bengali",
+     "package": "noto-sans-bengali",
+     "scripts": [
+      "Beng"
+     ],
+     "files": [
+      "noto-sans-bengali/400Regular/NotoSansBengali_400Regular.ttf",
+      "noto-sans-bengali/700Bold/NotoSansBengali_700Bold.ttf"
+     ],
+     "lazyBytes": 282540,
+     "samples": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph"
+     ],
+     "weights": []
+    },
+    "Noto Sans Gurmukhi": {
+     "route": "Noto Sans Gurmukhi",
+     "package": "noto-sans-gurmukhi",
+     "scripts": [
+      "Guru"
+     ],
+     "files": [
+      "noto-sans-gurmukhi/400Regular/NotoSansGurmukhi_400Regular.ttf",
+      "noto-sans-gurmukhi/700Bold/NotoSansGurmukhi_700Bold.ttf"
+     ],
+     "lazyBytes": 117508,
+     "samples": [
+      "guru-title",
+      "guru-marks",
+      "guru-subjoined"
+     ],
+     "weights": []
+    },
+    "Noto Sans Gujarati": {
+     "route": "Noto Sans Gujarati",
+     "package": "noto-sans-gujarati",
+     "scripts": [
+      "Gujr"
+     ],
+     "files": [
+      "noto-sans-gujarati/400Regular/NotoSansGujarati_400Regular.ttf",
+      "noto-sans-gujarati/700Bold/NotoSansGujarati_700Bold.ttf"
+     ],
+     "lazyBytes": 350472,
+     "samples": [
+      "gujr-title",
+      "gujr-conjuncts",
+      "gujr-marks"
+     ],
+     "weights": []
+    },
+    "Noto Sans Oriya": {
+     "route": "Noto Sans Oriya",
+     "package": "noto-sans-oriya",
+     "scripts": [
+      "Orya"
+     ],
+     "files": [
+      "noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf",
+      "noto-sans-oriya/700Bold/NotoSansOriya_700Bold.ttf"
+     ],
+     "lazyBytes": 340492,
+     "samples": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ],
+     "weights": []
+    },
+    "Noto Sans Tamil": {
+     "route": "Noto Sans Tamil",
+     "package": "noto-sans-tamil",
+     "scripts": [
+      "Taml"
+     ],
+     "files": [
+      "noto-sans-tamil/400Regular/NotoSansTamil_400Regular.ttf",
+      "noto-sans-tamil/700Bold/NotoSansTamil_700Bold.ttf"
+     ],
+     "lazyBytes": 158004,
+     "samples": [
+      "taml-title",
+      "taml-split-vowels",
+      "taml-ligatures"
+     ],
+     "weights": []
+    },
+    "Noto Sans Telugu": {
+     "route": "Noto Sans Telugu",
+     "package": "noto-sans-telugu",
+     "scripts": [
+      "Telu"
+     ],
+     "files": [
+      "noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf",
+      "noto-sans-telugu/700Bold/NotoSansTelugu_700Bold.ttf"
+     ],
+     "lazyBytes": 360248,
+     "samples": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels"
+     ],
+     "weights": []
+    },
+    "Noto Sans Kannada": {
+     "route": "Noto Sans Kannada",
+     "package": "noto-sans-kannada",
+     "scripts": [
+      "Knda"
+     ],
+     "files": [
+      "noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf",
+      "noto-sans-kannada/700Bold/NotoSansKannada_700Bold.ttf"
+     ],
+     "lazyBytes": 298112,
+     "samples": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ],
+     "weights": []
+    },
+    "Noto Sans Malayalam": {
+     "route": "Noto Sans Malayalam",
+     "package": "noto-sans-malayalam",
+     "scripts": [
+      "Mlym"
+     ],
+     "files": [
+      "noto-sans-malayalam/400Regular/NotoSansMalayalam_400Regular.ttf",
+      "noto-sans-malayalam/700Bold/NotoSansMalayalam_700Bold.ttf"
+     ],
+     "lazyBytes": 213572,
+     "samples": [
+      "mlym-title",
+      "mlym-chillu",
+      "mlym-conjuncts"
+     ],
+     "weights": []
+    },
+    "Noto Sans Sinhala": {
+     "route": "Noto Sans Sinhala",
+     "package": "noto-sans-sinhala",
+     "scripts": [
+      "Sinh"
+     ],
+     "files": [
+      "noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+      "noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf"
+     ],
+     "lazyBytes": 486656,
+     "samples": [
+      "sinh-title",
+      "sinh-conjuncts",
+      "sinh-vowels"
+     ],
+     "weights": []
+    },
+    "Noto Sans Thai": {
+     "route": "Noto Sans Thai",
+     "package": "noto-sans-thai",
+     "scripts": [
+      "Thai"
+     ],
+     "files": [
+      "noto-sans-thai/400Regular/NotoSansThai_400Regular.ttf",
+      "noto-sans-thai/700Bold/NotoSansThai_700Bold.ttf"
+     ],
+     "lazyBytes": 94964,
+     "samples": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am"
+     ],
+     "weights": []
+    },
+    "Noto Sans Lao": {
+     "route": "Noto Sans Lao",
+     "package": "noto-sans-lao",
+     "scripts": [
+      "Laoo"
+     ],
+     "files": [
+      "noto-sans-lao/400Regular/NotoSansLao_400Regular.ttf",
+      "noto-sans-lao/700Bold/NotoSansLao_700Bold.ttf"
+     ],
+     "lazyBytes": 106292,
+     "samples": [
+      "laoo-words",
+      "laoo-marks"
+     ],
+     "weights": []
+    },
+    "Noto Sans Khmer": {
+     "route": "Noto Sans Khmer",
+     "package": "noto-sans-khmer",
+     "scripts": [
+      "Khmr"
+     ],
+     "files": [
+      "noto-sans-khmer/400Regular/NotoSansKhmer_400Regular.ttf",
+      "noto-sans-khmer/700Bold/NotoSansKhmer_700Bold.ttf"
+     ],
+     "lazyBytes": 211920,
+     "samples": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words"
+     ],
+     "weights": []
+    },
+    "Noto Sans Myanmar": {
+     "route": "Noto Sans Myanmar",
+     "package": "noto-sans-myanmar",
+     "scripts": [
+      "Mymr"
+     ],
+     "files": [
+      "noto-sans-myanmar/400Regular/NotoSansMyanmar_400Regular.ttf",
+      "noto-sans-myanmar/700Bold/NotoSansMyanmar_700Bold.ttf"
+     ],
+     "lazyBytes": 366520,
+     "samples": [
+      "mymr-digits",
+      "mymr-words",
+      "mymr-medials"
+     ],
+     "weights": []
+    },
+    "Noto Sans Ethiopic": {
+     "route": "Noto Sans Ethiopic",
+     "package": "noto-sans-ethiopic",
+     "scripts": [
+      "Ethi"
+     ],
+     "files": [
+      "noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf",
+      "noto-sans-ethiopic/700Bold/NotoSansEthiopic_700Bold.ttf"
+     ],
+     "lazyBytes": 733732,
+     "samples": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ],
+     "weights": []
+    },
+    "Noto Sans Armenian": {
+     "route": "Noto Sans Armenian",
+     "package": "noto-sans-armenian",
+     "scripts": [
+      "Armn"
+     ],
+     "files": [
+      "noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+      "noto-sans-armenian/700Bold/NotoSansArmenian_700Bold.ttf"
+     ],
+     "lazyBytes": 99884,
+     "samples": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ],
+     "weights": []
+    },
+    "Noto Sans Georgian": {
+     "route": "Noto Sans Georgian",
+     "package": "noto-sans-georgian",
+     "scripts": [
+      "Geor"
+     ],
+     "files": [
+      "noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf",
+      "noto-sans-georgian/700Bold/NotoSansGeorgian_700Bold.ttf"
+     ],
+     "lazyBytes": 125848,
+     "samples": [
+      "geor-title",
+      "geor-mtavruli"
+     ],
+     "weights": []
+    },
+    "Noto Sans Mongolian": {
+     "route": "Noto Sans Mongolian",
+     "package": "noto-sans-mongolian",
+     "scripts": [
+      "Mong"
+     ],
+     "files": [
+      "noto-sans-mongolian/400Regular/NotoSansMongolian_400Regular.ttf"
+     ],
+     "lazyBytes": 388820,
+     "samples": [
+      "mong-words",
+      "mong-names",
+      "mong-latin"
+     ],
+     "weights": []
+    },
+    "Noto Sans Thaana": {
+     "route": "Noto Sans Thaana",
+     "package": "noto-sans-thaana",
+     "scripts": [
+      "Thaa"
+     ],
+     "files": [
+      "noto-sans-thaana/400Regular/NotoSansThaana_400Regular.ttf",
+      "noto-sans-thaana/700Bold/NotoSansThaana_700Bold.ttf"
+     ],
+     "lazyBytes": 94520,
+     "samples": [
+      "thaa-words",
+      "thaa-digits"
+     ],
+     "weights": []
+    },
+    "Noto Sans Syriac": {
+     "route": "Noto Sans Syriac",
+     "package": "noto-sans-syriac",
+     "scripts": [
+      "Syrc"
+     ],
+     "files": [
+      "noto-sans-syriac/400Regular/NotoSansSyriac_400Regular.ttf",
+      "noto-sans-syriac/700Bold/NotoSansSyriac_700Bold.ttf"
+     ],
+     "lazyBytes": 168968,
+     "samples": [
+      "syrc-words",
+      "syrc-marks"
+     ],
+     "weights": []
+    },
+    "Noto Serif Tibetan": {
+     "route": "Noto Serif Tibetan",
+     "package": "noto-serif-tibetan",
+     "scripts": [
+      "Tibt"
+     ],
+     "files": [
+      "noto-serif-tibetan/400Regular/NotoSerifTibetan_400Regular.ttf",
+      "noto-serif-tibetan/700Bold/NotoSerifTibetan_700Bold.ttf"
+     ],
+     "lazyBytes": 1475496,
+     "samples": [
+      "tibt-words",
+      "tibt-stacks"
+     ],
+     "weights": []
+    },
+    "Noto Color Emoji": {
+     "route": "Noto Color Emoji",
+     "package": "noto-color-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 25111640,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": []
+    },
+    "STIX Two Math": {
+     "route": "STIX Two Math",
+     "package": "stix-two-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "stix-two-math/400Regular/STIXTwoMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1471976,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics",
+      "math-brackets"
+     ],
+     "weights": []
+    },
+    "Noto Sans Math": {
+     "route": "Noto Sans Math",
+     "package": "noto-sans-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "noto-sans-math/400Regular/NotoSansMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1004120,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics"
+     ],
+     "weights": []
+    },
+    "Noto Sans": {
+     "route": "Noto Sans",
+     "package": "noto-sans",
+     "scripts": [
+      "Latn",
+      "Cyrl",
+      "Grek"
+     ],
+     "files": [
+      "noto-sans/400Regular/NotoSans_400Regular.ttf",
+      "noto-sans/700Bold/NotoSans_700Bold.ttf",
+      "noto-sans/400Regular_Italic/NotoSans_400Regular_Italic.ttf",
+      "noto-sans/700Bold_Italic/NotoSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 2546680,
+     "samples": [
+      "latn-vi",
+      "cyrl-ru",
+      "grek-title"
+     ],
+     "weights": []
+    }
+   },
+   "findings": {
+    "Noto Emoji": {
+     "check": "Noto Emoji emoji-sequences: \"1️⃣❤️🏴󠁧󠁢󠁳󠁣󠁴󠁿\" advance 299.109375 differs from accepted 342.773",
+     "reason": "Chromium does not draw emoji-presentation sequences (VS16: the keycap 1️⃣, the red heart ❤️, the rainbow flag) with the monochrome Noto Emoji: each falls to another face at a 1.000 em advance, where the face and the renderer give 1.2695 em. The pictograph, flag, skin-tone, ZWJ and tag sequences draw in Noto Emoji at its own advance. The colour face (Noto Color Emoji) draws all of them. Noto Emoji is the raster stand-in and an alternate of Segoe UI Emoji, never the browser face of a Segoe UI Emoji run (the planner gives emoji runs to Noto Color Emoji)."
+    }
+   }
+  },
+  "editor": {
+   "source": {
+    "repository": "OpenPresentation/opf-editor",
+    "test": "test/font-gate-script-families.mjs",
+    "commit": "823f29dcfa57e78f965d4bfddda7eba83eaecfe4",
+    "runtime": "Node v26.7.0, renderer 0.12.0, the editor's createFontGate"
+   },
+   "families": {
+    "Noto Sans JP": {
+     "route": "Noto Sans JP",
+     "package": "noto-sans-jp",
+     "scripts": [
+      "Jpan"
+     ],
+     "files": [
+      "noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf"
+     ],
+     "lazyBytes": 10940972,
+     "samples": [
+      "jpan-prolonged",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans SC": {
+     "route": "Noto Sans SC",
+     "package": "noto-sans-sc",
+     "scripts": [
+      "Hans"
+     ],
+     "files": [
+      "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf"
+     ],
+     "lazyBytes": 21108304,
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans TC": {
+     "route": "Noto Sans TC",
+     "package": "noto-sans-tc",
+     "scripts": [
+      "Hant"
+     ],
+     "files": [
+      "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf"
+     ],
+     "lazyBytes": 14213672,
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans KR": {
+     "route": "Noto Sans KR",
+     "package": "noto-sans-kr",
+     "scripts": [
+      "Kore"
+     ],
+     "files": [
+      "noto-sans-kr/400Regular/NotoSansKR_400Regular.ttf",
+      "noto-sans-kr/700Bold/NotoSansKR_700Bold.ttf"
+     ],
+     "lazyBytes": 12369800,
+     "samples": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Arabic": {
+     "route": "Noto Sans Arabic",
+     "package": "noto-sans-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-sans-arabic/400Regular/NotoSansArabic_400Regular.ttf",
+      "noto-sans-arabic/700Bold/NotoSansArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 388556,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Naskh Arabic": {
+     "route": "Noto Naskh Arabic",
+     "package": "noto-naskh-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+      "noto-naskh-arabic/700Bold/NotoNaskhArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 399136,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Nastaliq Urdu": {
+     "route": "Noto Nastaliq Urdu",
+     "package": "noto-nastaliq-urdu",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-nastaliq-urdu/400Regular/NotoNastaliqUrdu_400Regular.ttf",
+      "noto-nastaliq-urdu/700Bold/NotoNastaliqUrdu_700Bold.ttf"
+     ],
+     "lazyBytes": 1059084,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-digits"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Hebrew": {
+     "route": "Noto Sans Hebrew",
+     "package": "noto-sans-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf",
+      "noto-sans-hebrew/700Bold/NotoSansHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 96028,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Serif Hebrew": {
+     "route": "Noto Serif Hebrew",
+     "package": "noto-serif-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf",
+      "noto-serif-hebrew/700Bold/NotoSerifHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 112364,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Devanagari": {
+     "route": "Noto Sans Devanagari",
+     "package": "noto-sans-devanagari",
+     "scripts": [
+      "Deva"
+     ],
+     "files": [
+      "noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf",
+      "noto-sans-devanagari/700Bold/NotoSansDevanagari_700Bold.ttf"
+     ],
+     "lazyBytes": 442736,
+     "samples": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Bengali": {
+     "route": "Noto Sans Bengali",
+     "package": "noto-sans-bengali",
+     "scripts": [
+      "Beng"
+     ],
+     "files": [
+      "noto-sans-bengali/400Regular/NotoSansBengali_400Regular.ttf",
+      "noto-sans-bengali/700Bold/NotoSansBengali_700Bold.ttf"
+     ],
+     "lazyBytes": 282540,
+     "samples": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Gurmukhi": {
+     "route": "Noto Sans Gurmukhi",
+     "package": "noto-sans-gurmukhi",
+     "scripts": [
+      "Guru"
+     ],
+     "files": [
+      "noto-sans-gurmukhi/400Regular/NotoSansGurmukhi_400Regular.ttf",
+      "noto-sans-gurmukhi/700Bold/NotoSansGurmukhi_700Bold.ttf"
+     ],
+     "lazyBytes": 117508,
+     "samples": [
+      "guru-title",
+      "guru-marks",
+      "guru-subjoined"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Gujarati": {
+     "route": "Noto Sans Gujarati",
+     "package": "noto-sans-gujarati",
+     "scripts": [
+      "Gujr"
+     ],
+     "files": [
+      "noto-sans-gujarati/400Regular/NotoSansGujarati_400Regular.ttf",
+      "noto-sans-gujarati/700Bold/NotoSansGujarati_700Bold.ttf"
+     ],
+     "lazyBytes": 350472,
+     "samples": [
+      "gujr-title",
+      "gujr-conjuncts",
+      "gujr-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Oriya": {
+     "route": "Noto Sans Oriya",
+     "package": "noto-sans-oriya",
+     "scripts": [
+      "Orya"
+     ],
+     "files": [
+      "noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf",
+      "noto-sans-oriya/700Bold/NotoSansOriya_700Bold.ttf"
+     ],
+     "lazyBytes": 340492,
+     "samples": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Tamil": {
+     "route": "Noto Sans Tamil",
+     "package": "noto-sans-tamil",
+     "scripts": [
+      "Taml"
+     ],
+     "files": [
+      "noto-sans-tamil/400Regular/NotoSansTamil_400Regular.ttf",
+      "noto-sans-tamil/700Bold/NotoSansTamil_700Bold.ttf"
+     ],
+     "lazyBytes": 158004,
+     "samples": [
+      "taml-title",
+      "taml-split-vowels",
+      "taml-ligatures"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Telugu": {
+     "route": "Noto Sans Telugu",
+     "package": "noto-sans-telugu",
+     "scripts": [
+      "Telu"
+     ],
+     "files": [
+      "noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf",
+      "noto-sans-telugu/700Bold/NotoSansTelugu_700Bold.ttf"
+     ],
+     "lazyBytes": 360248,
+     "samples": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Kannada": {
+     "route": "Noto Sans Kannada",
+     "package": "noto-sans-kannada",
+     "scripts": [
+      "Knda"
+     ],
+     "files": [
+      "noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf",
+      "noto-sans-kannada/700Bold/NotoSansKannada_700Bold.ttf"
+     ],
+     "lazyBytes": 298112,
+     "samples": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Malayalam": {
+     "route": "Noto Sans Malayalam",
+     "package": "noto-sans-malayalam",
+     "scripts": [
+      "Mlym"
+     ],
+     "files": [
+      "noto-sans-malayalam/400Regular/NotoSansMalayalam_400Regular.ttf",
+      "noto-sans-malayalam/700Bold/NotoSansMalayalam_700Bold.ttf"
+     ],
+     "lazyBytes": 213572,
+     "samples": [
+      "mlym-title",
+      "mlym-chillu",
+      "mlym-conjuncts"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Sinhala": {
+     "route": "Noto Sans Sinhala",
+     "package": "noto-sans-sinhala",
+     "scripts": [
+      "Sinh"
+     ],
+     "files": [
+      "noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+      "noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf"
+     ],
+     "lazyBytes": 486656,
+     "samples": [
+      "sinh-title",
+      "sinh-conjuncts",
+      "sinh-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Thai": {
+     "route": "Noto Sans Thai",
+     "package": "noto-sans-thai",
+     "scripts": [
+      "Thai"
+     ],
+     "files": [
+      "noto-sans-thai/400Regular/NotoSansThai_400Regular.ttf",
+      "noto-sans-thai/700Bold/NotoSansThai_700Bold.ttf"
+     ],
+     "lazyBytes": 94964,
+     "samples": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Lao": {
+     "route": "Noto Sans Lao",
+     "package": "noto-sans-lao",
+     "scripts": [
+      "Laoo"
+     ],
+     "files": [
+      "noto-sans-lao/400Regular/NotoSansLao_400Regular.ttf",
+      "noto-sans-lao/700Bold/NotoSansLao_700Bold.ttf"
+     ],
+     "lazyBytes": 106292,
+     "samples": [
+      "laoo-words",
+      "laoo-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Khmer": {
+     "route": "Noto Sans Khmer",
+     "package": "noto-sans-khmer",
+     "scripts": [
+      "Khmr"
+     ],
+     "files": [
+      "noto-sans-khmer/400Regular/NotoSansKhmer_400Regular.ttf",
+      "noto-sans-khmer/700Bold/NotoSansKhmer_700Bold.ttf"
+     ],
+     "lazyBytes": 211920,
+     "samples": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Myanmar": {
+     "route": "Noto Sans Myanmar",
+     "package": "noto-sans-myanmar",
+     "scripts": [
+      "Mymr"
+     ],
+     "files": [
+      "noto-sans-myanmar/400Regular/NotoSansMyanmar_400Regular.ttf",
+      "noto-sans-myanmar/700Bold/NotoSansMyanmar_700Bold.ttf"
+     ],
+     "lazyBytes": 366520,
+     "samples": [
+      "mymr-digits",
+      "mymr-words",
+      "mymr-medials"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Ethiopic": {
+     "route": "Noto Sans Ethiopic",
+     "package": "noto-sans-ethiopic",
+     "scripts": [
+      "Ethi"
+     ],
+     "files": [
+      "noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf",
+      "noto-sans-ethiopic/700Bold/NotoSansEthiopic_700Bold.ttf"
+     ],
+     "lazyBytes": 733732,
+     "samples": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Armenian": {
+     "route": "Noto Sans Armenian",
+     "package": "noto-sans-armenian",
+     "scripts": [
+      "Armn"
+     ],
+     "files": [
+      "noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+      "noto-sans-armenian/700Bold/NotoSansArmenian_700Bold.ttf"
+     ],
+     "lazyBytes": 99884,
+     "samples": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Georgian": {
+     "route": "Noto Sans Georgian",
+     "package": "noto-sans-georgian",
+     "scripts": [
+      "Geor"
+     ],
+     "files": [
+      "noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf",
+      "noto-sans-georgian/700Bold/NotoSansGeorgian_700Bold.ttf"
+     ],
+     "lazyBytes": 125848,
+     "samples": [
+      "geor-title",
+      "geor-mtavruli"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Mongolian": {
+     "route": "Noto Sans Mongolian",
+     "package": "noto-sans-mongolian",
+     "scripts": [
+      "Mong"
+     ],
+     "files": [
+      "noto-sans-mongolian/400Regular/NotoSansMongolian_400Regular.ttf"
+     ],
+     "lazyBytes": 388820,
+     "samples": [
+      "mong-words",
+      "mong-names",
+      "mong-latin"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans Thaana": {
+     "route": "Noto Sans Thaana",
+     "package": "noto-sans-thaana",
+     "scripts": [
+      "Thaa"
+     ],
+     "files": [
+      "noto-sans-thaana/400Regular/NotoSansThaana_400Regular.ttf",
+      "noto-sans-thaana/700Bold/NotoSansThaana_700Bold.ttf"
+     ],
+     "lazyBytes": 94520,
+     "samples": [
+      "thaa-words",
+      "thaa-digits"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Syriac": {
+     "route": "Noto Sans Syriac",
+     "package": "noto-sans-syriac",
+     "scripts": [
+      "Syrc"
+     ],
+     "files": [
+      "noto-sans-syriac/400Regular/NotoSansSyriac_400Regular.ttf",
+      "noto-sans-syriac/700Bold/NotoSansSyriac_700Bold.ttf"
+     ],
+     "lazyBytes": 168968,
+     "samples": [
+      "syrc-words",
+      "syrc-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Serif Tibetan": {
+     "route": "Noto Serif Tibetan",
+     "package": "noto-serif-tibetan",
+     "scripts": [
+      "Tibt"
+     ],
+     "files": [
+      "noto-serif-tibetan/400Regular/NotoSerifTibetan_400Regular.ttf",
+      "noto-serif-tibetan/700Bold/NotoSerifTibetan_700Bold.ttf"
+     ],
+     "lazyBytes": 1475496,
+     "samples": [
+      "tibt-words",
+      "tibt-stacks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Color Emoji": {
+     "route": "Noto Color Emoji",
+     "package": "noto-color-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 25111640,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Emoji": {
+     "route": "Noto Emoji",
+     "package": "noto-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-emoji/400Regular/NotoEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 886572,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "STIX Two Math": {
+     "route": "STIX Two Math",
+     "package": "stix-two-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "stix-two-math/400Regular/STIXTwoMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1471976,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics",
+      "math-brackets"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans Math": {
+     "route": "Noto Sans Math",
+     "package": "noto-sans-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "noto-sans-math/400Regular/NotoSansMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1004120,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans": {
+     "route": "Noto Sans",
+     "package": "noto-sans",
+     "scripts": [
+      "Latn",
+      "Cyrl",
+      "Grek"
+     ],
+     "files": [
+      "noto-sans/400Regular/NotoSans_400Regular.ttf",
+      "noto-sans/700Bold/NotoSans_700Bold.ttf",
+      "noto-sans/400Regular_Italic/NotoSans_400Regular_Italic.ttf",
+      "noto-sans/700Bold_Italic/NotoSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 2546680,
+     "samples": [
+      "latn-vi",
+      "cyrl-ru",
+      "grek-title"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    }
+   }
+  },
+  "galleryEditor": {
+   "source": {
+    "repository": "Data-Advantage/pptx-gallery",
+    "test": "tests/editor-script-families.test.ts",
+    "commit": "3ea21c64ab0544be139289d768f6d4dc6c485ca5",
+    "runtime": "renderer 0.12.0, manifest public/opf-editor/script-fonts.json (renderer 0.12.0)"
+   },
+   "families": {
+    "Noto Sans JP": {
+     "route": "Noto Sans JP",
+     "package": "noto-sans-jp",
+     "scripts": [
+      "Jpan"
+     ],
+     "files": [
+      "noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf",
+      "noto-sans-jp/700Bold/NotoSansJP_700Bold.ttf"
+     ],
+     "lazyBytes": 10940972,
+     "samples": [
+      "jpan-prolonged",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans SC": {
+     "route": "Noto Sans SC",
+     "package": "noto-sans-sc",
+     "scripts": [
+      "Hans"
+     ],
+     "files": [
+      "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf",
+      "noto-sans-sc/700Bold/NotoSansSC_700Bold.ttf"
+     ],
+     "lazyBytes": 21108304,
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans TC": {
+     "route": "Noto Sans TC",
+     "package": "noto-sans-tc",
+     "scripts": [
+      "Hant"
+     ],
+     "files": [
+      "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf",
+      "noto-sans-tc/700Bold/NotoSansTC_700Bold.ttf"
+     ],
+     "lazyBytes": 14213672,
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans KR": {
+     "route": "Noto Sans KR",
+     "package": "noto-sans-kr",
+     "scripts": [
+      "Kore"
+     ],
+     "files": [
+      "noto-sans-kr/400Regular/NotoSansKR_400Regular.ttf",
+      "noto-sans-kr/700Bold/NotoSansKR_700Bold.ttf"
+     ],
+     "lazyBytes": 12369800,
+     "samples": [
+      "kore-sentence",
+      "kore-jamo",
+      "kore-hanja"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Arabic": {
+     "route": "Noto Sans Arabic",
+     "package": "noto-sans-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-sans-arabic/400Regular/NotoSansArabic_400Regular.ttf",
+      "noto-sans-arabic/700Bold/NotoSansArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 388556,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Naskh Arabic": {
+     "route": "Noto Naskh Arabic",
+     "package": "noto-naskh-arabic",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+      "noto-naskh-arabic/700Bold/NotoNaskhArabic_700Bold.ttf"
+     ],
+     "lazyBytes": 399136,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Nastaliq Urdu": {
+     "route": "Noto Nastaliq Urdu",
+     "package": "noto-nastaliq-urdu",
+     "scripts": [
+      "Arab"
+     ],
+     "files": [
+      "noto-nastaliq-urdu/400Regular/NotoNastaliqUrdu_400Regular.ttf",
+      "noto-nastaliq-urdu/700Bold/NotoNastaliqUrdu_700Bold.ttf"
+     ],
+     "lazyBytes": 1059084,
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-digits"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Hebrew": {
+     "route": "Noto Sans Hebrew",
+     "package": "noto-sans-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf",
+      "noto-sans-hebrew/700Bold/NotoSansHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 96028,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Serif Hebrew": {
+     "route": "Noto Serif Hebrew",
+     "package": "noto-serif-hebrew",
+     "scripts": [
+      "Hebr"
+     ],
+     "files": [
+      "noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf",
+      "noto-serif-hebrew/700Bold/NotoSerifHebrew_700Bold.ttf"
+     ],
+     "lazyBytes": 112364,
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Devanagari": {
+     "route": "Noto Sans Devanagari",
+     "package": "noto-sans-devanagari",
+     "scripts": [
+      "Deva"
+     ],
+     "files": [
+      "noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf",
+      "noto-sans-devanagari/700Bold/NotoSansDevanagari_700Bold.ttf"
+     ],
+     "lazyBytes": 442736,
+     "samples": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Bengali": {
+     "route": "Noto Sans Bengali",
+     "package": "noto-sans-bengali",
+     "scripts": [
+      "Beng"
+     ],
+     "files": [
+      "noto-sans-bengali/400Regular/NotoSansBengali_400Regular.ttf",
+      "noto-sans-bengali/700Bold/NotoSansBengali_700Bold.ttf"
+     ],
+     "lazyBytes": 282540,
+     "samples": [
+      "beng-title",
+      "beng-conjuncts",
+      "beng-reph"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Gurmukhi": {
+     "route": "Noto Sans Gurmukhi",
+     "package": "noto-sans-gurmukhi",
+     "scripts": [
+      "Guru"
+     ],
+     "files": [
+      "noto-sans-gurmukhi/400Regular/NotoSansGurmukhi_400Regular.ttf",
+      "noto-sans-gurmukhi/700Bold/NotoSansGurmukhi_700Bold.ttf"
+     ],
+     "lazyBytes": 117508,
+     "samples": [
+      "guru-title",
+      "guru-marks",
+      "guru-subjoined"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Gujarati": {
+     "route": "Noto Sans Gujarati",
+     "package": "noto-sans-gujarati",
+     "scripts": [
+      "Gujr"
+     ],
+     "files": [
+      "noto-sans-gujarati/400Regular/NotoSansGujarati_400Regular.ttf",
+      "noto-sans-gujarati/700Bold/NotoSansGujarati_700Bold.ttf"
+     ],
+     "lazyBytes": 350472,
+     "samples": [
+      "gujr-title",
+      "gujr-conjuncts",
+      "gujr-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Oriya": {
+     "route": "Noto Sans Oriya",
+     "package": "noto-sans-oriya",
+     "scripts": [
+      "Orya"
+     ],
+     "files": [
+      "noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf",
+      "noto-sans-oriya/700Bold/NotoSansOriya_700Bold.ttf"
+     ],
+     "lazyBytes": 340492,
+     "samples": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Tamil": {
+     "route": "Noto Sans Tamil",
+     "package": "noto-sans-tamil",
+     "scripts": [
+      "Taml"
+     ],
+     "files": [
+      "noto-sans-tamil/400Regular/NotoSansTamil_400Regular.ttf",
+      "noto-sans-tamil/700Bold/NotoSansTamil_700Bold.ttf"
+     ],
+     "lazyBytes": 158004,
+     "samples": [
+      "taml-title",
+      "taml-split-vowels",
+      "taml-ligatures"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Telugu": {
+     "route": "Noto Sans Telugu",
+     "package": "noto-sans-telugu",
+     "scripts": [
+      "Telu"
+     ],
+     "files": [
+      "noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf",
+      "noto-sans-telugu/700Bold/NotoSansTelugu_700Bold.ttf"
+     ],
+     "lazyBytes": 360248,
+     "samples": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Kannada": {
+     "route": "Noto Sans Kannada",
+     "package": "noto-sans-kannada",
+     "scripts": [
+      "Knda"
+     ],
+     "files": [
+      "noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf",
+      "noto-sans-kannada/700Bold/NotoSansKannada_700Bold.ttf"
+     ],
+     "lazyBytes": 298112,
+     "samples": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Malayalam": {
+     "route": "Noto Sans Malayalam",
+     "package": "noto-sans-malayalam",
+     "scripts": [
+      "Mlym"
+     ],
+     "files": [
+      "noto-sans-malayalam/400Regular/NotoSansMalayalam_400Regular.ttf",
+      "noto-sans-malayalam/700Bold/NotoSansMalayalam_700Bold.ttf"
+     ],
+     "lazyBytes": 213572,
+     "samples": [
+      "mlym-title",
+      "mlym-chillu",
+      "mlym-conjuncts"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Sinhala": {
+     "route": "Noto Sans Sinhala",
+     "package": "noto-sans-sinhala",
+     "scripts": [
+      "Sinh"
+     ],
+     "files": [
+      "noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+      "noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf"
+     ],
+     "lazyBytes": 486656,
+     "samples": [
+      "sinh-title",
+      "sinh-conjuncts",
+      "sinh-vowels"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Thai": {
+     "route": "Noto Sans Thai",
+     "package": "noto-sans-thai",
+     "scripts": [
+      "Thai"
+     ],
+     "files": [
+      "noto-sans-thai/400Regular/NotoSansThai_400Regular.ttf",
+      "noto-sans-thai/700Bold/NotoSansThai_700Bold.ttf"
+     ],
+     "lazyBytes": 94964,
+     "samples": [
+      "thai-title",
+      "thai-tone-marks",
+      "thai-sara-am"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Lao": {
+     "route": "Noto Sans Lao",
+     "package": "noto-sans-lao",
+     "scripts": [
+      "Laoo"
+     ],
+     "files": [
+      "noto-sans-lao/400Regular/NotoSansLao_400Regular.ttf",
+      "noto-sans-lao/700Bold/NotoSansLao_700Bold.ttf"
+     ],
+     "lazyBytes": 106292,
+     "samples": [
+      "laoo-words",
+      "laoo-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Khmer": {
+     "route": "Noto Sans Khmer",
+     "package": "noto-sans-khmer",
+     "scripts": [
+      "Khmr"
+     ],
+     "files": [
+      "noto-sans-khmer/400Regular/NotoSansKhmer_400Regular.ttf",
+      "noto-sans-khmer/700Bold/NotoSansKhmer_700Bold.ttf"
+     ],
+     "lazyBytes": 211920,
+     "samples": [
+      "khmr-title",
+      "khmr-coeng",
+      "khmr-words"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Myanmar": {
+     "route": "Noto Sans Myanmar",
+     "package": "noto-sans-myanmar",
+     "scripts": [
+      "Mymr"
+     ],
+     "files": [
+      "noto-sans-myanmar/400Regular/NotoSansMyanmar_400Regular.ttf",
+      "noto-sans-myanmar/700Bold/NotoSansMyanmar_700Bold.ttf"
+     ],
+     "lazyBytes": 366520,
+     "samples": [
+      "mymr-digits",
+      "mymr-words",
+      "mymr-medials"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Ethiopic": {
+     "route": "Noto Sans Ethiopic",
+     "package": "noto-sans-ethiopic",
+     "scripts": [
+      "Ethi"
+     ],
+     "files": [
+      "noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf",
+      "noto-sans-ethiopic/700Bold/NotoSansEthiopic_700Bold.ttf"
+     ],
+     "lazyBytes": 733732,
+     "samples": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Armenian": {
+     "route": "Noto Sans Armenian",
+     "package": "noto-sans-armenian",
+     "scripts": [
+      "Armn"
+     ],
+     "files": [
+      "noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+      "noto-sans-armenian/700Bold/NotoSansArmenian_700Bold.ttf"
+     ],
+     "lazyBytes": 99884,
+     "samples": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Georgian": {
+     "route": "Noto Sans Georgian",
+     "package": "noto-sans-georgian",
+     "scripts": [
+      "Geor"
+     ],
+     "files": [
+      "noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf",
+      "noto-sans-georgian/700Bold/NotoSansGeorgian_700Bold.ttf"
+     ],
+     "lazyBytes": 125848,
+     "samples": [
+      "geor-title",
+      "geor-mtavruli"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Mongolian": {
+     "route": "Noto Sans Mongolian",
+     "package": "noto-sans-mongolian",
+     "scripts": [
+      "Mong"
+     ],
+     "files": [
+      "noto-sans-mongolian/400Regular/NotoSansMongolian_400Regular.ttf"
+     ],
+     "lazyBytes": 388820,
+     "samples": [
+      "mong-words",
+      "mong-names",
+      "mong-latin"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans Thaana": {
+     "route": "Noto Sans Thaana",
+     "package": "noto-sans-thaana",
+     "scripts": [
+      "Thaa"
+     ],
+     "files": [
+      "noto-sans-thaana/400Regular/NotoSansThaana_400Regular.ttf",
+      "noto-sans-thaana/700Bold/NotoSansThaana_700Bold.ttf"
+     ],
+     "lazyBytes": 94520,
+     "samples": [
+      "thaa-words",
+      "thaa-digits"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Sans Syriac": {
+     "route": "Noto Sans Syriac",
+     "package": "noto-sans-syriac",
+     "scripts": [
+      "Syrc"
+     ],
+     "files": [
+      "noto-sans-syriac/400Regular/NotoSansSyriac_400Regular.ttf",
+      "noto-sans-syriac/700Bold/NotoSansSyriac_700Bold.ttf"
+     ],
+     "lazyBytes": 168968,
+     "samples": [
+      "syrc-words",
+      "syrc-marks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Serif Tibetan": {
+     "route": "Noto Serif Tibetan",
+     "package": "noto-serif-tibetan",
+     "scripts": [
+      "Tibt"
+     ],
+     "files": [
+      "noto-serif-tibetan/400Regular/NotoSerifTibetan_400Regular.ttf",
+      "noto-serif-tibetan/700Bold/NotoSerifTibetan_700Bold.ttf"
+     ],
+     "lazyBytes": 1475496,
+     "samples": [
+      "tibt-words",
+      "tibt-stacks"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    },
+    "Noto Color Emoji": {
+     "route": "Noto Color Emoji",
+     "package": "noto-color-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 25111640,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Emoji": {
+     "route": "Noto Emoji",
+     "package": "noto-emoji",
+     "scripts": [
+      "Zsye"
+     ],
+     "files": [
+      "noto-emoji/400Regular/NotoEmoji_400Regular.ttf"
+     ],
+     "lazyBytes": 886572,
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "STIX Two Math": {
+     "route": "STIX Two Math",
+     "package": "stix-two-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "stix-two-math/400Regular/STIXTwoMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1471976,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics",
+      "math-brackets"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans Math": {
+     "route": "Noto Sans Math",
+     "package": "noto-sans-math",
+     "scripts": [
+      "Zmth"
+     ],
+     "files": [
+      "noto-sans-math/400Regular/NotoSansMath_400Regular.ttf"
+     ],
+     "lazyBytes": 1004120,
+     "samples": [
+      "math-operators",
+      "math-alphanumerics"
+     ],
+     "weights": [
+      400
+     ]
+    },
+    "Noto Sans": {
+     "route": "Noto Sans",
+     "package": "noto-sans",
+     "scripts": [
+      "Latn",
+      "Cyrl",
+      "Grek"
+     ],
+     "files": [
+      "noto-sans/400Regular/NotoSans_400Regular.ttf",
+      "noto-sans/700Bold/NotoSans_700Bold.ttf",
+      "noto-sans/400Regular_Italic/NotoSans_400Regular_Italic.ttf",
+      "noto-sans/700Bold_Italic/NotoSans_700Bold_Italic.ttf"
+     ],
+     "lazyBytes": 2546680,
+     "samples": [
+      "latn-vi",
+      "cyrl-ru",
+      "grek-title"
+     ],
+     "weights": [
+      400,
+      700
+     ]
+    }
+   }
+  }
+ },
+ "lazyBudget": {
+  "node": {
+   "families": 35,
+   "packageBytesMedianMiB": 0.35,
+   "packageBytesMaxMiB": 23.948,
+   "largestPackage": "Noto Color Emoji"
+  },
+  "browser": {
+   "families": 34,
+   "packageBytesMedianMiB": 0.35,
+   "packageBytesMaxMiB": 23.948,
+   "largestPackage": "Noto Color Emoji"
+  },
+  "editor": {
+   "families": 35,
+   "packageBytesMedianMiB": 0.35,
+   "packageBytesMaxMiB": 23.948,
+   "largestPackage": "Noto Color Emoji"
+  },
+  "galleryEditor": {
+   "families": 35,
+   "packageBytesMedianMiB": 0.35,
+   "packageBytesMaxMiB": 23.948,
+   "largestPackage": "Noto Color Emoji"
+  }
+ }
+}

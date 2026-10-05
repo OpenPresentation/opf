@@ -11,7 +11,7 @@
     "build": "pnpm --filter @openpresentation/opf build && tsup",
     "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
     "clean": "rm -rf dist",
-    "test": "pnpm build && node ../../scripts/run-node-tests.mjs && node test/cli.mjs && node test/files.mjs",
+    "test": "pnpm build && node ../../scripts/run-tests.mjs",
     "test:packed": "node test/packed.mjs",
     "test:packed:peers": "node test/packed-files.mjs",
     "prepack": "pnpm build"

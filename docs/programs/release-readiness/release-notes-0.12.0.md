@@ -7,7 +7,7 @@ decision 2026-09-30; see the [README](README.md) invariants). Tracker: [burndown
 It covers what the lockstep release train of 2026-10-02 shipped, the native PowerPoint evidence behind the
 PowerPoint-facing claims, the gaps that are descoped or still open (with their issues) and the decisions taken on
 the owner's behalf that the owner can veto. Two parts of RR-20 are not finished and are marked as such below: the
-three sites adopt the release (another agent), and the audits are re-run on the published 0.12.0 set.
+three sites adopt the release (another agent), and the native fidelity pass on the published set is still to run (the configuration audits and the parity run are done).
 
 ## What the owner needs to know
 
@@ -194,9 +194,39 @@ slide tag colour rule, quote provenance) stay in the [font burndown](../font-fid
   [openpresentation-site#61](https://github.com/Data-Advantage/openpresentation-site/pull/61) (RR-28) are drafts.
   RR-14 (the pptx.dev "Understand this deck" feature) is merged behind default-off flags and also waits for the
   dependency bump, live model recordings and the owner's gateway, budget and zero-data-retention decisions.
-- **Re-audit on the published set**: the gallery configuration audit, the parity run and a native fidelity pass on
-  core 0.12.0, renderer 0.12.0, PPTX 0.12.0 and editor 0.11.0 are not run yet; the result will be linked from the
-  RR-20 row. The last recorded audits measured the 0.11.4 train ([font program README](../font-fidelity-everywhere/README.md)),
-  and the RR-16 parity run on unpublished core main is in [rr-16-font-size-grid.md](rr-16-font-size-grid.md).
+- **Re-audit on the published set**: done 2026-10-02 for the configuration audits and the parity run on core 0.12.0,
+  renderer 0.12.0, PPTX 0.12.2 and editor 0.11.1 (pptx-gallery `c349a61`): no value regressed against the 0.11.4 train
+  or the RR-16 candidate run. Results (RR-20 row evidence):
+  [audit A](../font-fidelity-everywhere/gallery-support/audit-a/SUMMARY.md),
+  [audit B](../font-fidelity-everywhere/gallery-support/audit-b/results.json) with the
+  [catalog-only values](../font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json),
+  the [parity run](../font-fidelity-everywhere/gallery-support/parity/PARITY-2026-10-02-published-0.12.md) with its
+  [catalog-only run](../font-fidelity-everywhere/gallery-support/parity/PARITY-2026-10-02-published-0.12-catalog-only.md),
+  the measurement record in [gallery-support.md](../font-fidelity-everywhere/gallery-support.md), the RR-44 and slot-check
+  classifier changes in the [harness README](../font-fidelity-everywhere/gallery-support/README.md#classifier-changes),
+  and the regenerated [gallery tracker](gallery-tracker.md) and [font tracker](../font-fidelity-everywhere/font-tracker.md).
+  The native fidelity pass on the published set is the owner's and not run yet. The RR-16 parity run on unpublished core
+  main is in [rr-16-font-size-grid.md](rr-16-font-size-grid.md).
 - **Open items that close RR-20** (burndown): RR-02, RR-03, RR-04, RR-05, RR-14, RR-17, RR-18, RR-19, RR-22, RR-23,
   RR-28; run `pnpm report:release` for the current count.
+
+## 0.12.1 / 0.12.2 / 0.11.2 patch releases (addendum, 2026-10-03)
+
+After the 0.12.0 train three patches were published and verified (npm `latest`, `gitHead` = release merge commit, SLSA
+provenance, `npm audit signatures`):
+
+- `@openpresentation/opf-pptx` **0.12.2** (2026-10-02, `e4569ac`, [opf-pptx#155](https://github.com/OpenPresentation/opf-pptx/pull/155)):
+  writes the deck language's own Office script entry (Viet, Uigh) with the deck's font, so `Presentation.Fonts` lists no
+  extra name (the last case of the FF-05 class; [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154),
+  native re-run [rr-17-viet-supplement-native-20261002](../../evidence/rr-17-viet-supplement-native-20261002/README.md)).
+- `@openpresentation/opf-editor` **0.11.2** (2026-10-03, `c7ac1d7`, opf-editor#85): the slide-size and purpose switches
+  ([opf-editor#80](https://github.com/OpenPresentation/opf-editor/pull/80)).
+- `@openpresentation/opf` **0.12.1** (2026-10-03, `1f698c4`, [opf#338](https://github.com/OpenPresentation/opf/pull/338)):
+  the six plural audience ids (`executives`, `investors`, `customers`, `sales-team`, `marketing-team`, `regulators`) are
+  deprecated with `replacedBy` ([opf#309](https://github.com/OpenPresentation/opf/pull/309)); additive catalog data, no
+  geometry change (805 raster hashes unchanged), so `opf-render` stays at 0.12.0 and the packages keep `^0.12.0` floors. It
+  is the first release run through `scripts/release-train.mjs` ([RR-51](burndown.md)).
+
+The published set is core 0.12.1, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.2 and CLI 0.10.0. The numbers and
+findings above are for the 0.12.0 set; the re-audit in [opf#314](https://github.com/OpenPresentation/opf/pull/314) used
+core 0.12.0, which differs from 0.12.1 only in the audience catalog records.

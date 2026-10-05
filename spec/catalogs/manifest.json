@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-catalog-manifest/v1",
-  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync.",
+  "description": "Pinned snapshot of the default OPF catalog published by pptx.gallery. Written by scripts/sync-gallery-catalog.mjs; change a kind's `mode` by hand, everything else by re-running the sync. `layouts` is a subset by design (RR-41, opf#292), not by omission: it bundles 100 of the gallery's 485 layouts, and the other 385 resolve through the default catalog or an inline record, because bundling them adds about 382 KB (19 KB gzipped) to every browser bundle of the renderer, editor and exporter for records none of them read.",
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",
@@ -11,7 +11,7 @@
     "audiences": {
       "mode": "subset",
       "records": 22,
-      "contentSha256": "90ab1b5a3c55ff36ec8c05595a2b0f90a18c108af82c959b33f204f077ee4e51",
+      "contentSha256": "bfb44226b533a2da04c92077eb39c689dde43181e0b9979fb15c247dfaba1f98",
       "gallery": {
         "records": 22,
         "contentSha256": "90ab1b5a3c55ff36ec8c05595a2b0f90a18c108af82c959b33f204f077ee4e51"

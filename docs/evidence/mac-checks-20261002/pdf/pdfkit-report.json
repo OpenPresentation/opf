@@ -1,0 +1,470 @@
+[
+  {
+    "allFontsEmbedded" : true,
+    "allFontsSubsetTagged" : true,
+    "expectedPages" : 3,
+    "fontCount" : 2,
+    "fonts" : [
+      {
+        "baseFont" : "HNCHLY+IntosDisplay-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "TEVDFY+Intos-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      }
+    ],
+    "locked" : false,
+    "opens" : true,
+    "pageCount" : 3,
+    "pages" : [
+      {
+        "extractedCharacters" : 42,
+        "extractedMatchesSvgText" : true,
+        "page" : 1,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 42,
+        "textLines" : 12,
+        "textLinesInLogicalOrder" : 12,
+        "thumbnailInkShare" : 0.99419999999999997
+      },
+      {
+        "extractedCharacters" : 23,
+        "extractedMatchesSvgText" : true,
+        "page" : 2,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 23,
+        "textLines" : 2,
+        "textLinesInLogicalOrder" : 2,
+        "thumbnailInkShare" : 0.99429999999999996
+      },
+      {
+        "extractedCharacters" : 33,
+        "extractedMatchesSvgText" : true,
+        "page" : 3,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 33,
+        "textLines" : 2,
+        "textLinesInLogicalOrder" : 2,
+        "thumbnailInkShare" : 0.98950000000000005
+      }
+    ],
+    "pdf" : "chart-data-sources",
+    "version" : "1.7"
+  },
+  {
+    "allFontsEmbedded" : true,
+    "allFontsSubsetTagged" : true,
+    "expectedPages" : 3,
+    "fontCount" : 8,
+    "fonts" : [
+      {
+        "baseFont" : "GBDESL+IntosDisplay-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "HVQZMA+NotoSansJP-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "NBYQDO+NotoSansSC-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "WIKHWV+NotoSansKR-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "XEHOEN+NotoSansKR-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "XIDNYX+Intos-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "YQHVCN+NotoSansJP-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "ZUGFAG+NotoSansSC-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      }
+    ],
+    "locked" : false,
+    "opens" : true,
+    "pageCount" : 3,
+    "pages" : [
+      {
+        "extractedCharacters" : 77,
+        "extractedMatchesSvgText" : true,
+        "page" : 1,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 77,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 7,
+        "thumbnailInkShare" : 0.98319999999999996
+      },
+      {
+        "extractedCharacters" : 44,
+        "extractedMatchesSvgText" : true,
+        "page" : 2,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 44,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 7,
+        "thumbnailInkShare" : 0.98799999999999999
+      },
+      {
+        "extractedCharacters" : 72,
+        "extractedMatchesSvgText" : true,
+        "page" : 3,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 72,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 7,
+        "thumbnailInkShare" : 0.98870000000000002
+      }
+    ],
+    "pdf" : "cjk",
+    "version" : "1.7"
+  },
+  {
+    "allFontsEmbedded" : true,
+    "allFontsSubsetTagged" : true,
+    "expectedPages" : 6,
+    "fontCount" : 3,
+    "fonts" : [
+      {
+        "baseFont" : "GWVFTO+Intos-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "SIIDNA+IntosDisplay-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "TOKRHH+Intos-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      }
+    ],
+    "locked" : false,
+    "opens" : true,
+    "pageCount" : 6,
+    "pages" : [
+      {
+        "extractedCharacters" : 105,
+        "extractedMatchesSvgText" : true,
+        "page" : 1,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 105,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 7,
+        "thumbnailInkShare" : 0.033799999999999997
+      },
+      {
+        "extractedCharacters" : 207,
+        "extractedMatchesSvgText" : true,
+        "page" : 2,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 207,
+        "textLines" : 10,
+        "textLinesInLogicalOrder" : 10,
+        "thumbnailInkShare" : 0.046800000000000001
+      },
+      {
+        "extractedCharacters" : 76,
+        "extractedMatchesSvgText" : true,
+        "page" : 3,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 76,
+        "textLines" : 18,
+        "textLinesInLogicalOrder" : 18,
+        "thumbnailInkShare" : 0.0344
+      },
+      {
+        "extractedCharacters" : 229,
+        "extractedMatchesSvgText" : true,
+        "page" : 4,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 229,
+        "textLines" : 21,
+        "textLinesInLogicalOrder" : 21,
+        "thumbnailInkShare" : 0.1207
+      },
+      {
+        "extractedCharacters" : 317,
+        "extractedMatchesSvgText" : true,
+        "page" : 5,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 317,
+        "textLines" : 23,
+        "textLinesInLogicalOrder" : 23,
+        "thumbnailInkShare" : 0.050900000000000001
+      },
+      {
+        "extractedCharacters" : 210,
+        "extractedMatchesSvgText" : true,
+        "page" : 6,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 210,
+        "textLines" : 19,
+        "textLinesInLogicalOrder" : 19,
+        "thumbnailInkShare" : 0.0402
+      }
+    ],
+    "pdf" : "contract-cycle-time-brief",
+    "version" : "1.7"
+  },
+  {
+    "allFontsEmbedded" : true,
+    "allFontsSubsetTagged" : true,
+    "expectedPages" : 5,
+    "fontCount" : 11,
+    "fonts" : [
+      {
+        "baseFont" : "CXNJXE+NotoSansBengali-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "FIIMJW+NotoSansDevanagari-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "FOQAXL+NotoSansThai-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "GJQXFI+Intos-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "HNVAVC+NotoSansBengali-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "MIOKUJ+NotoSansKhmer-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "MZBIJJ+NotoSansThai-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "PWIHCW+NotoSansDevanagari-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "QZMTFJ+NotoSansTamil-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "TEQJJQ+NotoSansTamil-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "TJEYSH+NotoSansKhmer-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      }
+    ],
+    "locked" : false,
+    "opens" : true,
+    "pageCount" : 5,
+    "pages" : [
+      {
+        "extractedCharacters" : 97,
+        "extractedMatchesSvgText" : true,
+        "page" : 1,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 97,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 3,
+        "thumbnailInkShare" : 0.98340000000000005
+      },
+      {
+        "extractedCharacters" : 65,
+        "extractedMatchesSvgText" : false,
+        "page" : 2,
+        "selectionMatchesSvgText" : false,
+        "svgCharacters" : 65,
+        "textLines" : 5,
+        "textLinesInLogicalOrder" : 2,
+        "thumbnailInkShare" : 0.98119999999999996
+      },
+      {
+        "extractedCharacters" : 76,
+        "extractedMatchesSvgText" : true,
+        "page" : 3,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 76,
+        "textLines" : 5,
+        "textLinesInLogicalOrder" : 2,
+        "thumbnailInkShare" : 0.97209999999999996
+      },
+      {
+        "extractedCharacters" : 94,
+        "extractedMatchesSvgText" : true,
+        "page" : 4,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 94,
+        "textLines" : 5,
+        "textLinesInLogicalOrder" : 5,
+        "thumbnailInkShare" : 0.98250000000000004
+      },
+      {
+        "extractedCharacters" : 45,
+        "extractedMatchesSvgText" : false,
+        "page" : 5,
+        "selectionMatchesSvgText" : false,
+        "svgCharacters" : 45,
+        "textLines" : 3,
+        "textLinesInLogicalOrder" : 1,
+        "thumbnailInkShare" : 0.98619999999999997
+      }
+    ],
+    "pdf" : "indic-sea",
+    "version" : "1.7"
+  },
+  {
+    "allFontsEmbedded" : true,
+    "allFontsSubsetTagged" : true,
+    "expectedPages" : 2,
+    "fontCount" : 5,
+    "fonts" : [
+      {
+        "baseFont" : "BVAJDX+NotoSansHebrew-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "GJQXFI+Intos-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "WENMKH+NotoSansHebrew-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "YDGWUH+NotoNaskhArabic-Bold",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      },
+      {
+        "baseFont" : "ZBRQJY+NotoNaskhArabic-Regular",
+        "embedded" : true,
+        "hasToUnicode" : true,
+        "subsetTag" : true,
+        "subtype" : "Type0"
+      }
+    ],
+    "locked" : false,
+    "opens" : true,
+    "pageCount" : 2,
+    "pages" : [
+      {
+        "extractedCharacters" : 147,
+        "extractedMatchesSvgText" : true,
+        "page" : 1,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 147,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 7,
+        "thumbnailInkShare" : 0.99819999999999998
+      },
+      {
+        "extractedCharacters" : 115,
+        "extractedMatchesSvgText" : true,
+        "page" : 2,
+        "selectionMatchesSvgText" : true,
+        "svgCharacters" : 115,
+        "textLines" : 7,
+        "textLinesInLogicalOrder" : 7,
+        "thumbnailInkShare" : 0.98770000000000002
+      }
+    ],
+    "pdf" : "rtl",
+    "version" : "1.7"
+  }
+]

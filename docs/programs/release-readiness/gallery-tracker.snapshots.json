@@ -3,8 +3,8 @@
   "gallery": {
     "source": {
       "repository": "Data-Advantage/pptx-gallery",
-      "commit": "5af1c5f8681b1dea4ff6aad54315f47febcdcc4d",
-      "capturedAt": "2026-10-02"
+      "commit": "555c1a1fdd0888378987173af9c33c6fe6df483a",
+      "capturedAt": "2026-10-05"
     },
     "kinds": {
       "audiences": {
@@ -23,7 +23,9 @@
           "media",
           "partner",
           "regulatory",
-          "all-hands"
+          "all-hands",
+          "candidates",
+          "engineering-team"
         ],
         "legacyItems": [],
         "deprecated": [],
@@ -923,7 +925,45 @@
           "sparkline",
           "data-story",
           "change-story",
-          "vision-roadmap"
+          "vision-roadmap",
+          "scqa",
+          "strategic-narrative",
+          "golden-circle",
+          "conference-talk",
+          "transformation-arc",
+          "pitch-deck",
+          "early-startup-pitch",
+          "venture-pitch",
+          "persuasive-sales",
+          "company-intro",
+          "marketing-strategy",
+          "product-launch",
+          "strategic-advisory",
+          "challenge-resolution",
+          "project-proposal",
+          "failure-analysis",
+          "classic-story",
+          "business-narrative",
+          "rags-to-riches",
+          "underdog-victory",
+          "survival-story",
+          "educate",
+          "persuade",
+          "reveal",
+          "justice",
+          "innovation",
+          "focus",
+          "qbr",
+          "business-review",
+          "board-meeting",
+          "weekly-progress",
+          "status-update",
+          "performance-review",
+          "survey-analysis",
+          "trend-analysis",
+          "employee-review",
+          "performance-improvement-plan",
+          "capacity-planning"
         ],
         "legacyItems": [],
         "deprecated": [],
@@ -931,7 +971,7 @@
         "previewAssetsMissing": []
       },
       "purposes": {
-        "page": false,
+        "page": true,
         "items": [
           "inform",
           "decide",
@@ -1882,19 +1922,15 @@
       {
         "title": "Transitions & motion",
         "description": "Per-slide transitions and element-level animation tokens."
-      },
-      {
-        "title": "Aspect ratios",
-        "description": "16:9, 4:3, A4, Letter, and custom canvas profiles."
       }
     ]
   },
   "editor": {
     "source": {
       "repository": "OpenPresentation/opf-editor",
-      "commit": "9c38a1e67943240857ba1c432d27a3d85ab1db8d",
-      "capturedAt": "2026-10-02",
-      "version": "0.11.0",
+      "commit": "c7ac1d7d9c12ac76a62320ee3ed885334be130b2",
+      "capturedAt": "2026-10-05",
+      "version": "0.11.2",
       "switches": "src/switches.js",
       "test": "test/switches.mjs"
     },
@@ -1912,7 +1948,9 @@
       "socials",
       "headers-footers",
       "blocks",
-      "image-treatments"
+      "image-treatments",
+      "slide-sizes",
+      "purposes"
     ]
   }
 }

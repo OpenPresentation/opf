@@ -1,16 +1,15 @@
 {
- "generated": "2026-10-01T14:37:22.601Z",
+ "generated": "2026-10-03T00:21:44.770Z",
  "fontHost": "gallery",
  "heads": {
-  "pptx-gallery": "d8f5ae6",
-  "opf": "e414bca",
-  "opf-render": "2fbc0ab",
-  "opf-pptx": "a9bcbd7",
-  "opf-editor": "313774a",
-  "node": "24.21.0"
+  "pptx-gallery": "c349a61",
+  "opf": "5e1dda7",
+  "opf-render": "3b300a3",
+  "opf-pptx": "e4569ac",
+  "opf-editor": "f4779da",
+  "node": "26.7.0"
  },
  "sharedExportGaps": [
-  "theme major/minor ea or cs typeface=\"\" (271/271 exports)",
   "re-import emits heading-import-reflow (271/271 exports)"
  ],
  "results": [
@@ -38,8 +37,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -124,8 +122,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -210,8 +207,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -296,8 +292,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -384,8 +379,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -468,8 +462,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -552,8 +545,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -638,8 +630,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -724,8 +715,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -810,8 +800,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -896,8 +885,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -984,8 +972,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -1070,8 +1057,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -1154,8 +1140,7 @@
      "dimensions"
     ],
     "diagnostics": [
-     "heading-import-reflow",
-     "content-structure-changed"
+     "heading-import-reflow"
     ]
    },
    "measure": {
@@ -1296,11 +1281,11 @@
     "exportThemeMinorLatin": "Consolas",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Consolas",
       ""
      ],
      "minor": [
-      "",
+      "Consolas",
       ""
      ]
     },
@@ -1324,6 +1309,7 @@
      "Theme",
      "Slide Titles",
      "Consolas",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -1481,11 +1467,11 @@
     "exportThemeMinorLatin": "Courier New",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Courier New",
       ""
      ],
      "minor": [
-      "",
+      "Courier New",
       ""
      ]
     },
@@ -1509,6 +1495,7 @@
      "Theme",
      "Slide Titles",
      "Courier New",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -1663,7 +1650,7 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Montserrat",
+      "heading": "Arial Black",
       "body": "Arimo",
       "code": "Roboto Mono"
      },
@@ -1676,11 +1663,11 @@
     "exportThemeMinorLatin": "Arial",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arial Black",
       ""
      ],
      "minor": [
-      "",
+      "Arial",
       ""
      ]
     },
@@ -1706,6 +1693,7 @@
      "Slide Titles",
      "Arial",
      "Arial Black",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -1901,11 +1889,11 @@
     "exportThemeMinorLatin": "Calibri",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Calibri",
       ""
      ],
      "minor": [
-      "",
+      "Calibri",
       ""
      ]
     },
@@ -1929,6 +1917,7 @@
      "Theme",
      "Slide Titles",
      "Calibri",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -2111,11 +2100,11 @@
     "exportThemeMinorLatin": "Grandview",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Impact",
       ""
      ],
      "minor": [
-      "",
+      "Grandview",
       ""
      ]
     },
@@ -2141,6 +2130,7 @@
      "Slide Titles",
      "Grandview",
      "Impact",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -2341,11 +2331,11 @@
     "exportThemeMinorLatin": "Lucida Sans",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Lucida Sans",
       ""
      ],
      "minor": [
-      "",
+      "Lucida Sans",
       ""
      ]
     },
@@ -2369,6 +2359,7 @@
      "Theme",
      "Slide Titles",
      "Lucida Sans",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -2543,7 +2534,7 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Red Hat Display",
+      "heading": "Segoe UI Semibold",
       "body": "Red Hat Display",
       "code": "Roboto Mono"
      },
@@ -2556,11 +2547,11 @@
     "exportThemeMinorLatin": "Segoe UI",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Segoe UI Semibold",
       ""
      ],
      "minor": [
-      "",
+      "Segoe UI",
       ""
      ]
     },
@@ -2586,6 +2577,7 @@
      "Slide Titles",
      "Segoe UI",
      "Segoe UI Semibold",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -2783,7 +2775,7 @@
      "ok": true,
      "fonts": {
       "heading": "Red Hat Display",
-      "body": "Red Hat Display",
+      "body": "Segoe UI Light",
       "code": "Roboto Mono"
      },
      "substitutions": [
@@ -2795,11 +2787,11 @@
     "exportThemeMinorLatin": "Segoe UI Light",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Segoe UI Semilight",
       ""
      ],
      "minor": [
-      "",
+      "Segoe UI Light",
       ""
      ]
     },
@@ -2825,6 +2817,7 @@
      "Slide Titles",
      "Segoe UI Light",
      "Segoe UI Semilight",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -3025,11 +3018,11 @@
     "exportThemeMinorLatin": "Tahoma",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Tahoma",
       ""
      ],
      "minor": [
-      "",
+      "Tahoma",
       ""
      ]
     },
@@ -3053,6 +3046,7 @@
      "Theme",
      "Slide Titles",
      "Tahoma",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -3231,11 +3225,11 @@
     "exportThemeMinorLatin": "Trebuchet MS",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Trebuchet MS",
       ""
      ],
      "minor": [
-      "",
+      "Trebuchet MS",
       ""
      ]
     },
@@ -3259,6 +3253,7 @@
      "Theme",
      "Slide Titles",
      "Trebuchet MS",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -3437,11 +3432,11 @@
     "exportThemeMinorLatin": "Verdana",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Verdana",
       ""
      ],
      "minor": [
-      "",
+      "Verdana",
       ""
      ]
     },
@@ -3465,6 +3460,7 @@
      "Theme",
      "Slide Titles",
      "Verdana",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -3643,11 +3639,11 @@
     "exportThemeMinorLatin": "Bookman Old Style",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Bookman Old Style",
       ""
      ],
      "minor": [
-      "",
+      "Bookman Old Style",
       ""
      ]
     },
@@ -3671,6 +3667,7 @@
      "Theme",
      "Slide Titles",
      "Bookman Old Style",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -3849,11 +3846,11 @@
     "exportThemeMinorLatin": "Century Schoolbook",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Century Schoolbook",
       ""
      ],
      "minor": [
-      "",
+      "Century Schoolbook",
       ""
      ]
     },
@@ -3877,6 +3874,7 @@
      "Theme",
      "Slide Titles",
      "Century Schoolbook",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -4055,11 +4053,11 @@
     "exportThemeMinorLatin": "Constantia",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Constantia",
       ""
      ],
      "minor": [
-      "",
+      "Constantia",
       ""
      ]
     },
@@ -4083,6 +4081,7 @@
      "Theme",
      "Slide Titles",
      "Constantia",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -4261,11 +4260,11 @@
     "exportThemeMinorLatin": "Garamond",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Garamond",
       ""
      ],
      "minor": [
-      "",
+      "Garamond",
       ""
      ]
     },
@@ -4289,6 +4288,7 @@
      "Theme",
      "Slide Titles",
      "Garamond",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -4467,11 +4467,11 @@
     "exportThemeMinorLatin": "Rockwell",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Rockwell",
       ""
      ],
      "minor": [
-      "",
+      "Rockwell",
       ""
      ]
     },
@@ -4495,6 +4495,7 @@
      "Theme",
      "Slide Titles",
      "Rockwell",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -4673,11 +4674,11 @@
     "exportThemeMinorLatin": "Times New Roman",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Times New Roman",
       ""
      ],
      "minor": [
-      "",
+      "Times New Roman",
       ""
      ]
     },
@@ -4701,6 +4702,7 @@
      "Theme",
      "Slide Titles",
      "Times New Roman",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -4882,11 +4884,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -4912,6 +4914,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -5110,11 +5113,11 @@
     "exportThemeMinorLatin": "Grandview",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Grandview Display",
       ""
      ],
      "minor": [
-      "",
+      "Grandview",
       ""
      ]
     },
@@ -5140,6 +5143,7 @@
      "Slide Titles",
      "Grandview",
      "Grandview Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -5349,11 +5353,11 @@
     "exportThemeMinorLatin": "Seaford",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Seaford Display",
       ""
      ],
      "minor": [
-      "",
+      "Seaford",
       ""
      ]
     },
@@ -5379,6 +5383,7 @@
      "Slide Titles",
      "Seaford",
      "Seaford Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -5588,11 +5593,11 @@
     "exportThemeMinorLatin": "Skeena",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Skeena Display",
       ""
      ],
      "minor": [
-      "",
+      "Skeena",
       ""
      ]
     },
@@ -5618,6 +5623,7 @@
      "Slide Titles",
      "Skeena",
      "Skeena Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -5827,11 +5833,11 @@
     "exportThemeMinorLatin": "Tenorite",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Tenorite Display",
       ""
      ],
      "minor": [
-      "",
+      "Tenorite",
       ""
      ]
     },
@@ -5857,6 +5863,7 @@
      "Slide Titles",
      "Tenorite",
      "Tenorite Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -6057,11 +6064,11 @@
     "exportThemeMinorLatin": "Georgia",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Georgia",
       ""
      ],
      "minor": [
-      "",
+      "Georgia",
       ""
      ]
     },
@@ -6085,6 +6092,7 @@
      "Theme",
      "Slide Titles",
      "Georgia",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -6251,11 +6259,11 @@
     "exportThemeMinorLatin": "Microsoft YaHei",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Microsoft YaHei",
       ""
      ],
      "minor": [
-      "",
+      "Microsoft YaHei",
       ""
      ]
     },
@@ -6279,6 +6287,7 @@
      "Theme",
      "Slide Titles",
      "Microsoft YaHei",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -6460,11 +6469,11 @@
     "exportThemeMinorLatin": "SimSun",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "SimSun",
       ""
      ],
      "minor": [
-      "",
+      "SimSun",
       ""
      ]
     },
@@ -6488,6 +6497,7 @@
      "Theme",
      "Slide Titles",
      "SimSun",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -6669,11 +6679,11 @@
     "exportThemeMinorLatin": "FangSong",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "FangSong",
       ""
      ],
      "minor": [
-      "",
+      "FangSong",
       ""
      ]
     },
@@ -6697,6 +6707,7 @@
      "Theme",
      "Slide Titles",
      "FangSong",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -6878,11 +6889,11 @@
     "exportThemeMinorLatin": "Yu Gothic",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Yu Gothic",
       ""
      ],
      "minor": [
-      "",
+      "Yu Gothic",
       ""
      ]
     },
@@ -6906,6 +6917,7 @@
      "Theme",
      "Slide Titles",
      "Yu Gothic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -7087,11 +7099,11 @@
     "exportThemeMinorLatin": "PMingLiU",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "PMingLiU",
       ""
      ],
      "minor": [
-      "",
+      "PMingLiU",
       ""
      ]
     },
@@ -7115,6 +7127,7 @@
      "Theme",
      "Slide Titles",
      "PMingLiU",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -7296,11 +7309,11 @@
     "exportThemeMinorLatin": "MingLiU",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "MingLiU",
       ""
      ],
      "minor": [
-      "",
+      "MingLiU",
       ""
      ]
     },
@@ -7324,6 +7337,7 @@
      "Theme",
      "Slide Titles",
      "MingLiU",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -7505,11 +7519,11 @@
     "exportThemeMinorLatin": "MS Mincho",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "MS Mincho",
       ""
      ],
      "minor": [
-      "",
+      "MS Mincho",
       ""
      ]
     },
@@ -7533,6 +7547,7 @@
      "Theme",
      "Slide Titles",
      "MS Mincho",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -7714,11 +7729,11 @@
     "exportThemeMinorLatin": "Malgun Gothic",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Malgun Gothic",
       ""
      ],
      "minor": [
-      "",
+      "Malgun Gothic",
       ""
      ]
     },
@@ -7742,6 +7757,7 @@
      "Theme",
      "Slide Titles",
      "Malgun Gothic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -7931,11 +7947,11 @@
     "exportThemeMinorLatin": "Batang",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "BatangChe",
       ""
      ],
      "minor": [
-      "",
+      "Batang",
       ""
      ]
     },
@@ -7961,6 +7977,7 @@
      "Slide Titles",
      "Batang",
      "BatangChe",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -8171,11 +8188,11 @@
     "exportThemeMinorLatin": "Gungsuh",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "GungsuhChe",
       ""
      ],
      "minor": [
-      "",
+      "Gungsuh",
       ""
      ]
     },
@@ -8201,6 +8218,7 @@
      "Slide Titles",
      "Gungsuh",
      "GungsuhChe",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -8403,11 +8421,11 @@
     "exportThemeMinorLatin": "Mangal",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Mangal",
       ""
      ],
      "minor": [
-      "",
+      "Mangal",
       ""
      ]
     },
@@ -8431,6 +8449,7 @@
      "Theme",
      "Slide Titles",
      "Mangal",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -8612,11 +8631,11 @@
     "exportThemeMinorLatin": "Nirmala UI",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Nirmala UI",
       ""
      ],
      "minor": [
-      "",
+      "Nirmala UI",
       ""
      ]
     },
@@ -8640,6 +8659,7 @@
      "Theme",
      "Slide Titles",
      "Nirmala UI",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -8821,11 +8841,11 @@
     "exportThemeMinorLatin": "Latha",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Latha",
       ""
      ],
      "minor": [
-      "",
+      "Latha",
       ""
      ]
     },
@@ -8849,6 +8869,7 @@
      "Theme",
      "Slide Titles",
      "Latha",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -9030,11 +9051,11 @@
     "exportThemeMinorLatin": "David",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "David",
       ""
      ],
      "minor": [
-      "",
+      "David",
       ""
      ]
     },
@@ -9058,6 +9079,7 @@
      "Theme",
      "Slide Titles",
      "David",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -9240,11 +9262,11 @@
     "exportThemeMinorLatin": "Miriam",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Miriam",
       ""
      ],
      "minor": [
-      "",
+      "Miriam",
       ""
      ]
     },
@@ -9268,6 +9290,7 @@
      "Theme",
      "Slide Titles",
      "Miriam",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -9450,11 +9473,11 @@
     "exportThemeMinorLatin": "Gisha",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Gisha",
       ""
      ],
      "minor": [
-      "",
+      "Gisha",
       ""
      ]
     },
@@ -9478,6 +9501,7 @@
      "Theme",
      "Slide Titles",
      "Gisha",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -9660,11 +9684,11 @@
     "exportThemeMinorLatin": "Vrinda",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Vrinda",
       ""
      ],
      "minor": [
-      "",
+      "Vrinda",
       ""
      ]
     },
@@ -9688,6 +9712,7 @@
      "Theme",
      "Slide Titles",
      "Vrinda",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -9869,11 +9894,11 @@
     "exportThemeMinorLatin": "Shruti",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Shruti",
       ""
      ],
      "minor": [
-      "",
+      "Shruti",
       ""
      ]
     },
@@ -9897,6 +9922,7 @@
      "Theme",
      "Slide Titles",
      "Shruti",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -10078,11 +10104,11 @@
     "exportThemeMinorLatin": "Tunga",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Tunga",
       ""
      ],
      "minor": [
-      "",
+      "Tunga",
       ""
      ]
     },
@@ -10106,6 +10132,7 @@
      "Theme",
      "Slide Titles",
      "Tunga",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -10287,11 +10314,11 @@
     "exportThemeMinorLatin": "Kartika",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Kartika",
       ""
      ],
      "minor": [
-      "",
+      "Kartika",
       ""
      ]
     },
@@ -10315,6 +10342,7 @@
      "Theme",
      "Slide Titles",
      "Kartika",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -10496,11 +10524,11 @@
     "exportThemeMinorLatin": "Kalinga",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Kalinga",
       ""
      ],
      "minor": [
-      "",
+      "Kalinga",
       ""
      ]
     },
@@ -10524,6 +10552,7 @@
      "Theme",
      "Slide Titles",
      "Kalinga",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -10705,11 +10734,11 @@
     "exportThemeMinorLatin": "Raavi",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Raavi",
       ""
      ],
      "minor": [
-      "",
+      "Raavi",
       ""
      ]
     },
@@ -10733,6 +10762,7 @@
      "Theme",
      "Slide Titles",
      "Raavi",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -10914,11 +10944,11 @@
     "exportThemeMinorLatin": "Gautami",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Gautami",
       ""
      ],
      "minor": [
-      "",
+      "Gautami",
       ""
      ]
     },
@@ -10942,6 +10972,7 @@
      "Theme",
      "Slide Titles",
      "Gautami",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -11123,11 +11154,11 @@
     "exportThemeMinorLatin": "Arabic Typesetting",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arabic Typesetting",
       ""
      ],
      "minor": [
-      "",
+      "Arabic Typesetting",
       ""
      ]
     },
@@ -11151,6 +11182,7 @@
      "Theme",
      "Slide Titles",
      "Arabic Typesetting",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -11334,11 +11366,11 @@
     "exportThemeMinorLatin": "Microsoft JhengHei",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Microsoft JhengHei",
       ""
      ],
      "minor": [
-      "",
+      "Microsoft JhengHei",
       ""
      ]
     },
@@ -11362,6 +11394,7 @@
      "Theme",
      "Slide Titles",
      "Microsoft JhengHei",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -11543,11 +11576,11 @@
     "exportThemeMinorLatin": "Meiryo",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Meiryo",
       ""
      ],
      "minor": [
-      "",
+      "Meiryo",
       ""
      ]
     },
@@ -11571,6 +11604,7 @@
      "Theme",
      "Slide Titles",
      "Meiryo",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -11752,11 +11786,11 @@
     "exportThemeMinorLatin": "Angsana New",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Angsana New",
       ""
      ],
      "minor": [
-      "",
+      "Angsana New",
       ""
      ]
     },
@@ -11780,6 +11814,7 @@
      "Theme",
      "Slide Titles",
      "Angsana New",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -11961,11 +11996,11 @@
     "exportThemeMinorLatin": "Aparajita",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aparajita",
       ""
      ],
      "minor": [
-      "",
+      "Aparajita",
       ""
      ]
     },
@@ -11989,6 +12024,7 @@
      "Theme",
      "Slide Titles",
      "Aparajita",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -12170,11 +12206,11 @@
     "exportThemeMinorLatin": "DilleniaUPC",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "DilleniaUPC",
       ""
      ],
      "minor": [
-      "",
+      "DilleniaUPC",
       ""
      ]
     },
@@ -12198,6 +12234,7 @@
      "Theme",
      "Slide Titles",
      "DilleniaUPC",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -12379,11 +12416,11 @@
     "exportThemeMinorLatin": "Sakkal Majalla",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Sakkal Majalla",
       ""
      ],
      "minor": [
-      "",
+      "Sakkal Majalla",
       ""
      ]
     },
@@ -12407,6 +12444,7 @@
      "Theme",
      "Slide Titles",
      "Sakkal Majalla",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -12590,11 +12628,11 @@
     "exportThemeMinorLatin": "Shonar Bangla",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Shonar Bangla",
       ""
      ],
      "minor": [
-      "",
+      "Shonar Bangla",
       ""
      ]
     },
@@ -12618,6 +12656,7 @@
      "Theme",
      "Slide Titles",
      "Shonar Bangla",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -12799,11 +12838,11 @@
     "exportThemeMinorLatin": "Sylfaen",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Sylfaen",
       ""
      ],
      "minor": [
-      "",
+      "Sylfaen",
       ""
      ]
     },
@@ -12827,6 +12866,7 @@
      "Theme",
      "Slide Titles",
      "Sylfaen",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -13008,11 +13048,11 @@
     "exportThemeMinorLatin": "Traditional Arabic",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Traditional Arabic",
       ""
      ],
      "minor": [
-      "",
+      "Traditional Arabic",
       ""
      ]
     },
@@ -13036,6 +13076,7 @@
      "Theme",
      "Slide Titles",
      "Traditional Arabic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -13223,11 +13264,11 @@
     "exportThemeMinorLatin": "Montserrat",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Montserrat",
       ""
      ],
      "minor": [
-      "",
+      "Montserrat",
       ""
      ]
     },
@@ -13251,6 +13292,7 @@
      "Theme",
      "Slide Titles",
      "Montserrat",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -13421,11 +13463,11 @@
     "exportThemeMinorLatin": "Open Sans",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Open Sans",
       ""
      ],
      "minor": [
-      "",
+      "Open Sans",
       ""
      ]
     },
@@ -13449,6 +13491,7 @@
      "Theme",
      "Slide Titles",
      "Open Sans",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -13619,11 +13662,11 @@
     "exportThemeMinorLatin": "Poppins",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Poppins",
       ""
      ],
      "minor": [
-      "",
+      "Poppins",
       ""
      ]
     },
@@ -13647,6 +13690,7 @@
      "Theme",
      "Slide Titles",
      "Poppins",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -13817,11 +13861,11 @@
     "exportThemeMinorLatin": "PT Serif",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "PT Serif",
       ""
      ],
      "minor": [
-      "",
+      "PT Serif",
       ""
      ]
     },
@@ -13845,6 +13889,7 @@
      "Theme",
      "Slide Titles",
      "PT Serif",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -14015,11 +14060,11 @@
     "exportThemeMinorLatin": "Raleway",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Raleway",
       ""
      ],
      "minor": [
-      "",
+      "Raleway",
       ""
      ]
     },
@@ -14043,6 +14088,7 @@
      "Theme",
      "Slide Titles",
      "Raleway",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -14216,11 +14262,11 @@
     "exportThemeMinorLatin": "Roboto",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Roboto",
       ""
      ],
      "minor": [
-      "",
+      "Roboto",
       ""
      ]
     },
@@ -14244,6 +14290,7 @@
      "Theme",
      "Slide Titles",
      "Roboto",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -14410,11 +14457,11 @@
     "exportThemeMinorLatin": "Noto Naskh Arabic",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Naskh Arabic",
       ""
      ],
      "minor": [
-      "",
+      "Noto Naskh Arabic",
       ""
      ]
     },
@@ -14438,6 +14485,7 @@
      "Theme",
      "Slide Titles",
      "Noto Naskh Arabic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -14615,11 +14663,11 @@
     "exportThemeMinorLatin": "Noto Sans Armenian",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Armenian",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Armenian",
       ""
      ]
     },
@@ -14643,6 +14691,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Armenian",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -14818,11 +14867,11 @@
     "exportThemeMinorLatin": "Noto Sans Bengali",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Bengali",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Bengali",
       ""
      ]
     },
@@ -14846,6 +14895,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Bengali",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -15021,11 +15071,11 @@
     "exportThemeMinorLatin": "Noto Sans Devanagari",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Devanagari",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Devanagari",
       ""
      ]
     },
@@ -15049,6 +15099,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Devanagari",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -15224,11 +15275,11 @@
     "exportThemeMinorLatin": "Noto Sans Georgian",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Georgian",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Georgian",
       ""
      ]
     },
@@ -15252,6 +15303,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Georgian",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -15427,11 +15479,11 @@
     "exportThemeMinorLatin": "Noto Sans Gujarati",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Gujarati",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Gujarati",
       ""
      ]
     },
@@ -15455,6 +15507,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Gujarati",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -15630,11 +15683,11 @@
     "exportThemeMinorLatin": "Noto Sans Gurmukhi",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Gurmukhi",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Gurmukhi",
       ""
      ]
     },
@@ -15658,6 +15711,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Gurmukhi",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -15833,11 +15887,11 @@
     "exportThemeMinorLatin": "Noto Sans Hebrew",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Hebrew",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Hebrew",
       ""
      ]
     },
@@ -15861,6 +15915,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Hebrew",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -16037,11 +16092,11 @@
     "exportThemeMinorLatin": "Noto Sans JP",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans JP",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans JP",
       ""
      ]
     },
@@ -16065,6 +16120,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans JP",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -16240,11 +16296,11 @@
     "exportThemeMinorLatin": "Noto Sans Kannada",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Kannada",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Kannada",
       ""
      ]
     },
@@ -16268,6 +16324,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Kannada",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -16443,11 +16500,11 @@
     "exportThemeMinorLatin": "Noto Sans KR",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans KR",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans KR",
       ""
      ]
     },
@@ -16471,6 +16528,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans KR",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -16646,11 +16704,11 @@
     "exportThemeMinorLatin": "Noto Sans Malayalam",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Malayalam",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Malayalam",
       ""
      ]
     },
@@ -16674,6 +16732,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Malayalam",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -16849,11 +16908,11 @@
     "exportThemeMinorLatin": "Noto Sans Mongolian",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Mongolian",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Mongolian",
       ""
      ]
     },
@@ -16877,6 +16936,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Mongolian",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -17052,11 +17112,11 @@
     "exportThemeMinorLatin": "Noto Sans Oriya",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Oriya",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Oriya",
       ""
      ]
     },
@@ -17080,6 +17140,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Oriya",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -17255,11 +17316,11 @@
     "exportThemeMinorLatin": "Noto Sans SC",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans SC",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans SC",
       ""
      ]
     },
@@ -17283,6 +17344,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans SC",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -17458,11 +17520,11 @@
     "exportThemeMinorLatin": "Noto Sans Tamil",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Tamil",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Tamil",
       ""
      ]
     },
@@ -17486,6 +17548,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Tamil",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -17661,11 +17724,11 @@
     "exportThemeMinorLatin": "Noto Sans TC",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans TC",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans TC",
       ""
      ]
     },
@@ -17689,6 +17752,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans TC",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -17864,11 +17928,11 @@
     "exportThemeMinorLatin": "Noto Sans Telugu",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Telugu",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Telugu",
       ""
      ]
     },
@@ -17892,6 +17956,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Telugu",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -18071,11 +18136,11 @@
     "exportThemeMinorLatin": "Noto Sans",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans",
       ""
      ]
     },
@@ -18099,6 +18164,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -18278,11 +18344,11 @@
     "exportThemeMinorLatin": "Noto Sans Thai",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Thai",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Thai",
       ""
      ]
     },
@@ -18306,6 +18372,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Thai",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -18481,11 +18548,11 @@
     "exportThemeMinorLatin": "Noto Nastaliq Urdu",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Nastaliq Urdu",
       ""
      ],
      "minor": [
-      "",
+      "Noto Nastaliq Urdu",
       ""
      ]
     },
@@ -18509,6 +18576,7 @@
      "Theme",
      "Slide Titles",
      "Noto Nastaliq Urdu",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -18686,11 +18754,11 @@
     "exportThemeMinorLatin": "Noto Naskh Arabic",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Naskh Arabic",
       ""
      ],
      "minor": [
-      "",
+      "Noto Naskh Arabic",
       ""
      ]
     },
@@ -18714,6 +18782,7 @@
      "Theme",
      "Slide Titles",
      "Noto Naskh Arabic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -18891,11 +18960,11 @@
     "exportThemeMinorLatin": "Noto Sans Ethiopic",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Ethiopic",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Ethiopic",
       ""
      ]
     },
@@ -18919,6 +18988,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Ethiopic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -19094,11 +19164,11 @@
     "exportThemeMinorLatin": "Noto Sans Khmer",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Noto Sans Khmer",
       ""
      ],
      "minor": [
-      "",
+      "Noto Sans Khmer",
       ""
      ]
     },
@@ -19122,6 +19192,7 @@
      "Theme",
      "Slide Titles",
      "Noto Sans Khmer",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -19297,11 +19368,11 @@
     "exportThemeMinorLatin": "Nyala",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Nyala",
       ""
      ],
      "minor": [
-      "",
+      "Nyala",
       ""
      ]
     },
@@ -19325,6 +19396,7 @@
      "Theme",
      "Slide Titles",
      "Nyala",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -19506,11 +19578,11 @@
     "exportThemeMinorLatin": "DaunPenh",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "DaunPenh",
       ""
      ],
      "minor": [
-      "",
+      "DaunPenh",
       ""
      ]
     },
@@ -19534,6 +19606,7 @@
      "Theme",
      "Slide Titles",
      "DaunPenh",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -19715,11 +19788,11 @@
     "exportThemeMinorLatin": "Khmer UI",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Khmer UI",
       ""
      ],
      "minor": [
-      "",
+      "Khmer UI",
       ""
      ]
     },
@@ -19743,6 +19816,7 @@
      "Theme",
      "Slide Titles",
      "Khmer UI",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -19938,11 +20012,11 @@
     "exportThemeMinorLatin": "Source Sans Pro",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Playfair Display",
       ""
      ],
      "minor": [
-      "",
+      "Source Sans Pro",
       ""
      ]
     },
@@ -19968,6 +20042,7 @@
      "Slide Titles",
      "Playfair Display",
      "Source Sans Pro",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -20169,11 +20244,11 @@
     "exportThemeMinorLatin": "Open Sans",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Montserrat",
       ""
      ],
      "minor": [
-      "",
+      "Open Sans",
       ""
      ]
     },
@@ -20199,6 +20274,7 @@
      "Slide Titles",
      "Montserrat",
      "Open Sans",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -20396,11 +20472,11 @@
     "exportThemeMinorLatin": "Roboto",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Bebas Neue",
       ""
      ],
      "minor": [
-      "",
+      "Roboto",
       ""
      ]
     },
@@ -20426,6 +20502,7 @@
      "Slide Titles",
      "Bebas Neue",
      "Roboto",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -20621,11 +20698,11 @@
     "exportThemeMinorLatin": "Merriweather Sans",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Lora",
       ""
      ],
      "minor": [
-      "",
+      "Merriweather Sans",
       ""
      ]
     },
@@ -20651,6 +20728,7 @@
      "Slide Titles",
      "Lora",
      "Merriweather Sans",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -20849,11 +20927,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -20879,6 +20957,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -20973,6 +21052,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -21018,11 +21098,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -21152,11 +21228,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -21182,6 +21258,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -21276,6 +21353,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -21321,11 +21399,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -21440,11 +21514,11 @@
     "exportThemeMinorLatin": "Nyala",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Nyala",
       "Nyala"
      ],
      "minor": [
-      "",
+      "Nyala",
       "Nyala"
      ]
     },
@@ -21462,12 +21536,13 @@
      "Nyala"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Nyala",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -21560,10 +21635,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -21605,9 +21682,7 @@
       "am-ET"
      ],
      "exportRunFaces": [
-      "latin:Nyala",
-      "ea:Nyala",
-      "cs:Nyala"
+      "latin:Nyala"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -21616,9 +21691,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Nyala"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -21721,11 +21794,11 @@
     "exportThemeMinorLatin": "Arabic Typesetting",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arabic Typesetting",
       "Arabic Typesetting"
      ],
      "minor": [
-      "",
+      "Arabic Typesetting",
       "Arabic Typesetting"
      ]
     },
@@ -21743,12 +21816,13 @@
      "Arabic Typesetting"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Arabic Typesetting",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -21844,6 +21918,7 @@
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
        "ppt/presentation.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
@@ -21889,9 +21964,7 @@
       "ar-SA"
      ],
      "exportRunFaces": [
-      "latin:Arabic Typesetting",
-      "ea:Arabic Typesetting",
-      "cs:Arabic Typesetting"
+      "latin:Arabic Typesetting"
      ],
      "exportRtl": 40,
      "exportSlideLangs": [
@@ -21900,9 +21973,7 @@
      "exportSlideRtlParagraphs": 1,
      "previewRtlLines": 1,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Arabic Typesetting"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -22005,11 +22076,11 @@
     "exportThemeMinorLatin": "Sylfaen",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Sylfaen",
       "Sylfaen"
      ],
      "minor": [
-      "",
+      "Sylfaen",
       "Sylfaen"
      ]
     },
@@ -22027,12 +22098,13 @@
      "Sylfaen"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Sylfaen",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -22125,10 +22197,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -22170,9 +22244,7 @@
       "hy-AM"
      ],
      "exportRunFaces": [
-      "latin:Sylfaen",
-      "ea:Sylfaen",
-      "cs:Sylfaen"
+      "latin:Sylfaen"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -22301,11 +22373,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -22331,6 +22403,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -22425,6 +22498,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -22470,11 +22544,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -22604,11 +22674,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -22634,6 +22704,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -22728,6 +22799,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -22773,11 +22845,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -22893,11 +22961,11 @@
     "exportThemeMinorLatin": "Shonar Bangla",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Shonar Bangla",
       "Shonar Bangla"
      ],
      "minor": [
-      "",
+      "Shonar Bangla",
       "Shonar Bangla"
      ]
     },
@@ -22915,12 +22983,13 @@
      "Shonar Bangla"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Shonar Bangla",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -23013,10 +23082,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -23058,9 +23129,7 @@
       "bn-BD"
      ],
      "exportRunFaces": [
-      "latin:Shonar Bangla",
-      "ea:Shonar Bangla",
-      "cs:Shonar Bangla"
+      "latin:Shonar Bangla"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -23069,9 +23138,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Shonar Bangla"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -23189,11 +23256,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -23219,6 +23286,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -23313,6 +23381,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -23358,11 +23427,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -23492,11 +23557,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -23522,6 +23587,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -23616,6 +23682,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -23661,11 +23728,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -23795,11 +23858,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -23825,6 +23888,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -23919,6 +23983,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -23964,11 +24029,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -24098,11 +24159,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -24128,6 +24189,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -24222,6 +24284,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -24267,11 +24330,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -24401,11 +24460,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -24431,6 +24490,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -24525,6 +24585,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -24570,11 +24631,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -24711,12 +24768,13 @@
      "Microsoft YaHei"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 4,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Microsoft YaHei",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -24809,10 +24867,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -24854,9 +24914,7 @@
       "zh-CN"
      ],
      "exportRunFaces": [
-      "latin:Microsoft YaHei",
-      "ea:Microsoft YaHei",
-      "cs:Microsoft YaHei"
+      "latin:Microsoft YaHei"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -24865,9 +24923,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "ea",
-     "slotFaces": [
-      "Microsoft YaHei"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -24992,12 +25048,13 @@
      "Microsoft JhengHei"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 4,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Microsoft JhengHei",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -25090,10 +25147,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -25135,9 +25194,7 @@
       "zh-TW"
      ],
      "exportRunFaces": [
-      "latin:Microsoft JhengHei",
-      "ea:Microsoft JhengHei",
-      "cs:Microsoft JhengHei"
+      "latin:Microsoft JhengHei"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -25146,9 +25203,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "ea",
-     "slotFaces": [
-      "Microsoft JhengHei"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -25251,11 +25306,11 @@
     "exportThemeMinorLatin": "Vrinda",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Vrinda",
       "Vrinda"
      ],
      "minor": [
-      "",
+      "Vrinda",
       "Vrinda"
      ]
     },
@@ -25273,12 +25328,13 @@
      "Vrinda"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Vrinda",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -25371,10 +25427,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -25416,9 +25474,7 @@
       "bn-BD"
      ],
      "exportRunFaces": [
-      "latin:Vrinda",
-      "ea:Vrinda",
-      "cs:Vrinda"
+      "latin:Vrinda"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -25547,11 +25603,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -25577,6 +25633,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -25671,6 +25728,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -25716,11 +25774,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -25850,11 +25904,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -25880,6 +25934,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -25974,6 +26029,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -26019,11 +26075,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -26153,11 +26205,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -26183,6 +26235,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -26277,6 +26330,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -26322,11 +26376,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -26456,11 +26506,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -26486,6 +26536,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -26580,6 +26631,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -26625,11 +26677,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -26759,11 +26807,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -26789,6 +26837,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -26924,11 +26973,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -27058,11 +27103,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -27088,6 +27133,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -27182,6 +27228,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -27227,11 +27274,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -27361,11 +27404,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -27391,6 +27434,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -27485,6 +27529,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -27530,11 +27575,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -27664,11 +27705,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -27694,6 +27735,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -27788,6 +27830,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -27833,11 +27876,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -27967,11 +28006,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -27997,6 +28036,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -28091,6 +28131,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -28136,11 +28177,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -28270,11 +28307,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -28300,6 +28337,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -28435,11 +28473,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -28569,11 +28603,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -28599,6 +28633,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -28693,6 +28728,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -28738,11 +28774,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -28873,11 +28905,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -28903,6 +28935,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -28997,6 +29030,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -29042,11 +29076,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -29176,11 +29206,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -29206,6 +29236,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -29300,6 +29331,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -29345,11 +29377,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -29479,11 +29507,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -29509,6 +29537,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -29603,6 +29632,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -29648,11 +29678,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -29782,11 +29808,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -29812,6 +29838,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -29906,6 +29933,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -29951,11 +29979,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -30085,11 +30109,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -30115,6 +30139,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -30209,6 +30234,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -30254,11 +30280,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -30373,11 +30395,11 @@
     "exportThemeMinorLatin": "Sylfaen",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Sylfaen",
       "Sylfaen"
      ],
      "minor": [
-      "",
+      "Sylfaen",
       "Sylfaen"
      ]
     },
@@ -30395,12 +30417,13 @@
      "Sylfaen"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Sylfaen",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -30493,10 +30516,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -30538,9 +30563,7 @@
       "ka-GE"
      ],
      "exportRunFaces": [
-      "latin:Sylfaen",
-      "ea:Sylfaen",
-      "cs:Sylfaen"
+      "latin:Sylfaen"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -30549,9 +30572,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Sylfaen"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -30669,11 +30690,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -30699,6 +30720,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -30793,6 +30815,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -30838,11 +30861,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -30972,11 +30991,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -31002,6 +31021,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -31096,6 +31116,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -31141,11 +31162,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -31260,11 +31277,11 @@
     "exportThemeMinorLatin": "Shruti",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Shruti",
       "Shruti"
      ],
      "minor": [
-      "",
+      "Shruti",
       "Shruti"
      ]
     },
@@ -31282,12 +31299,13 @@
      "Shruti"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Shruti",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -31380,10 +31398,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -31425,9 +31445,7 @@
       "gu-IN"
      ],
      "exportRunFaces": [
-      "latin:Shruti",
-      "ea:Shruti",
-      "cs:Shruti"
+      "latin:Shruti"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -31436,9 +31454,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Shruti"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -31556,11 +31572,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -31586,6 +31602,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -31680,6 +31697,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -31725,11 +31743,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -31844,11 +31858,11 @@
     "exportThemeMinorLatin": "David",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "David",
       "David"
      ],
      "minor": [
-      "",
+      "David",
       "David"
      ]
     },
@@ -31866,12 +31880,13 @@
      "David"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "David",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -31966,6 +31981,7 @@
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
        "ppt/presentation.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
@@ -32011,9 +32027,7 @@
       "he-IL"
      ],
      "exportRunFaces": [
-      "latin:David",
-      "ea:David",
-      "cs:David"
+      "latin:David"
      ],
      "exportRtl": 40,
      "exportSlideLangs": [
@@ -32022,9 +32036,7 @@
      "exportSlideRtlParagraphs": 1,
      "previewRtlLines": 1,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "David"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -32127,11 +32139,11 @@
     "exportThemeMinorLatin": "Mangal",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Mangal",
       "Mangal"
      ],
      "minor": [
-      "",
+      "Mangal",
       "Mangal"
      ]
     },
@@ -32149,12 +32161,13 @@
      "Mangal"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Mangal",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -32247,10 +32260,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -32292,9 +32307,7 @@
       "hi-IN"
      ],
      "exportRunFaces": [
-      "latin:Mangal",
-      "ea:Mangal",
-      "cs:Mangal"
+      "latin:Mangal"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -32303,9 +32316,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Mangal"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -32423,11 +32434,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -32453,6 +32464,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -32547,6 +32559,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -32592,11 +32605,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -32726,11 +32735,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -32756,6 +32765,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -32850,6 +32860,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -32895,11 +32906,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -33029,11 +33036,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -33059,6 +33066,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -33153,6 +33161,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -33198,11 +33207,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -33332,11 +33337,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -33362,6 +33367,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -33456,6 +33462,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -33501,11 +33508,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -33642,12 +33645,13 @@
      "Meiryo"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 4,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Meiryo",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -33740,10 +33744,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -33785,9 +33791,7 @@
       "ja-JP"
      ],
      "exportRunFaces": [
-      "latin:Meiryo",
-      "ea:Meiryo",
-      "cs:Meiryo"
+      "latin:Meiryo"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -33796,9 +33800,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "ea",
-     "slotFaces": [
-      "Meiryo"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -33901,11 +33903,11 @@
     "exportThemeMinorLatin": "Tunga",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Tunga",
       "Tunga"
      ],
      "minor": [
-      "",
+      "Tunga",
       "Tunga"
      ]
     },
@@ -33923,12 +33925,13 @@
      "Tunga"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Tunga",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -34021,10 +34024,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -34066,9 +34071,7 @@
       "kn-IN"
      ],
      "exportRunFaces": [
-      "latin:Tunga",
-      "ea:Tunga",
-      "cs:Tunga"
+      "latin:Tunga"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -34077,9 +34080,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Tunga"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -34197,11 +34198,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -34227,6 +34228,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -34321,6 +34323,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -34366,11 +34369,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -34485,11 +34484,11 @@
     "exportThemeMinorLatin": "DaunPenh",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "DaunPenh",
       "DaunPenh"
      ],
      "minor": [
-      "",
+      "DaunPenh",
       "DaunPenh"
      ]
     },
@@ -34507,12 +34506,13 @@
      "DaunPenh"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "DaunPenh",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -34605,10 +34605,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -34650,9 +34652,7 @@
       "km-KH"
      ],
      "exportRunFaces": [
-      "latin:DaunPenh",
-      "ea:DaunPenh",
-      "cs:DaunPenh"
+      "latin:DaunPenh"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -34661,9 +34661,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "DaunPenh"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -34781,11 +34779,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -34811,6 +34809,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -34905,6 +34904,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -34950,11 +34950,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -35091,12 +35087,13 @@
      "Malgun Gothic"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 4,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Malgun Gothic",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -35189,10 +35186,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -35234,9 +35233,7 @@
       "ko-KR"
      ],
      "exportRunFaces": [
-      "latin:Malgun Gothic",
-      "ea:Malgun Gothic",
-      "cs:Malgun Gothic"
+      "latin:Malgun Gothic"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -35245,9 +35242,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "ea",
-     "slotFaces": [
-      "Malgun Gothic"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -35365,11 +35360,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -35395,6 +35390,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -35489,6 +35485,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -35534,11 +35531,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -35668,11 +35661,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -35698,6 +35691,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -35792,6 +35786,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -35837,11 +35832,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -35971,11 +35962,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -36001,6 +35992,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -36095,6 +36087,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -36140,11 +36133,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -36274,11 +36263,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -36304,6 +36293,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -36398,6 +36388,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -36443,11 +36434,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -36577,11 +36564,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -36607,6 +36594,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -36701,6 +36689,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -36746,11 +36735,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -36880,11 +36865,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -36910,6 +36895,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -37004,6 +36990,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -37049,11 +37036,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -37168,11 +37151,11 @@
     "exportThemeMinorLatin": "Kartika",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Kartika",
       "Kartika"
      ],
      "minor": [
-      "",
+      "Kartika",
       "Kartika"
      ]
     },
@@ -37190,12 +37173,13 @@
      "Kartika"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Kartika",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -37288,10 +37272,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -37333,9 +37319,7 @@
       "ml-IN"
      ],
      "exportRunFaces": [
-      "latin:Kartika",
-      "ea:Kartika",
-      "cs:Kartika"
+      "latin:Kartika"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -37344,9 +37328,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Kartika"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -37464,11 +37446,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -37494,6 +37476,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -37588,6 +37571,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -37633,11 +37617,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -37752,11 +37732,11 @@
     "exportThemeMinorLatin": "Mangal",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Mangal",
       "Mangal"
      ],
      "minor": [
-      "",
+      "Mangal",
       "Mangal"
      ]
     },
@@ -37774,12 +37754,13 @@
      "Mangal"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Mangal",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -37872,10 +37853,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -37917,9 +37900,7 @@
       "mr-IN"
      ],
      "exportRunFaces": [
-      "latin:Mangal",
-      "ea:Mangal",
-      "cs:Mangal"
+      "latin:Mangal"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -37928,9 +37909,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Mangal"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -38048,11 +38027,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -38078,6 +38057,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -38172,6 +38152,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -38217,11 +38198,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -38336,11 +38313,11 @@
     "exportThemeMinorLatin": "Mangal",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Mangal",
       "Mangal"
      ],
      "minor": [
-      "",
+      "Mangal",
       "Mangal"
      ]
     },
@@ -38358,12 +38335,13 @@
      "Mangal"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Mangal",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -38456,10 +38434,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -38501,9 +38481,7 @@
       "ne-NP"
      ],
      "exportRunFaces": [
-      "latin:Mangal",
-      "ea:Mangal",
-      "cs:Mangal"
+      "latin:Mangal"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -38512,9 +38490,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Mangal"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -38632,11 +38608,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -38662,6 +38638,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -38756,6 +38733,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -38801,11 +38779,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -38920,11 +38894,11 @@
     "exportThemeMinorLatin": "Kalinga",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Kalinga",
       "Kalinga"
      ],
      "minor": [
-      "",
+      "Kalinga",
       "Kalinga"
      ]
     },
@@ -38942,12 +38916,13 @@
      "Kalinga"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Kalinga",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -39040,10 +39015,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -39085,9 +39062,7 @@
       "or-IN"
      ],
      "exportRunFaces": [
-      "latin:Kalinga",
-      "ea:Kalinga",
-      "cs:Kalinga"
+      "latin:Kalinga"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -39096,9 +39071,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Kalinga"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -39216,11 +39189,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -39246,6 +39219,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -39340,6 +39314,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -39385,11 +39360,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -39506,7 +39477,7 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Montserrat",
+      "heading": "Arial Black",
       "body": "Arimo",
       "code": "Roboto Mono"
      },
@@ -39519,11 +39490,11 @@
     "exportThemeMinorLatin": "Arial",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arial Black",
       "Arial Black"
      ],
      "minor": [
-      "",
+      "Arial",
       "Arial"
      ]
     },
@@ -39542,13 +39513,14 @@
      "Arial"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Arial",
      "Arial Black",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -39650,6 +39622,7 @@
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
        "ppt/presentation.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
@@ -39696,11 +39669,7 @@
      ],
      "exportRunFaces": [
       "latin:Arial Black",
-      "ea:Arial Black",
-      "cs:Arial Black",
-      "latin:Arial",
-      "ea:Arial",
-      "cs:Arial"
+      "latin:Arial"
      ],
      "exportRtl": 40,
      "exportSlideLangs": [
@@ -39709,10 +39678,7 @@
      "exportSlideRtlParagraphs": 1,
      "previewRtlLines": 1,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Arial Black",
-      "Arial"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -39815,11 +39781,11 @@
     "exportThemeMinorLatin": "Arabic Typesetting",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arabic Typesetting",
       "Arabic Typesetting"
      ],
      "minor": [
-      "",
+      "Arabic Typesetting",
       "Arabic Typesetting"
      ]
     },
@@ -39837,12 +39803,13 @@
      "Arabic Typesetting"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Arabic Typesetting",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -39938,6 +39905,7 @@
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
        "ppt/presentation.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
@@ -39983,9 +39951,7 @@
       "fa-IR"
      ],
      "exportRunFaces": [
-      "latin:Arabic Typesetting",
-      "ea:Arabic Typesetting",
-      "cs:Arabic Typesetting"
+      "latin:Arabic Typesetting"
      ],
      "exportRtl": 40,
      "exportSlideLangs": [
@@ -39994,9 +39960,7 @@
      "exportSlideRtlParagraphs": 1,
      "previewRtlLines": 1,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Arabic Typesetting"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -40114,11 +40078,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -40144,6 +40108,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -40238,6 +40203,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -40283,11 +40249,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -40417,11 +40379,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -40447,6 +40409,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -40541,6 +40504,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -40586,11 +40550,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -40705,11 +40665,11 @@
     "exportThemeMinorLatin": "Raavi",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Raavi",
       "Raavi"
      ],
      "minor": [
-      "",
+      "Raavi",
       "Raavi"
      ]
     },
@@ -40727,12 +40687,13 @@
      "Raavi"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Raavi",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -40825,10 +40786,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -40870,9 +40833,7 @@
       "pa-IN"
      ],
      "exportRunFaces": [
-      "latin:Raavi",
-      "ea:Raavi",
-      "cs:Raavi"
+      "latin:Raavi"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -40881,9 +40842,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Raavi"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -40988,7 +40947,7 @@
     "previewOfficeVisual": {
      "ok": true,
      "fonts": {
-      "heading": "Montserrat",
+      "heading": "Arial Black",
       "body": "Arimo",
       "code": "Roboto Mono"
      },
@@ -41001,11 +40960,11 @@
     "exportThemeMinorLatin": "Arial",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arial Black",
       "Arial Black"
      ],
      "minor": [
-      "",
+      "Arial",
       "Arial"
      ]
     },
@@ -41024,13 +40983,14 @@
      "Arial"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Arial",
      "Arial Black",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -41132,6 +41092,7 @@
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
        "ppt/presentation.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
@@ -41178,11 +41139,7 @@
      ],
      "exportRunFaces": [
       "latin:Arial Black",
-      "ea:Arial Black",
-      "cs:Arial Black",
-      "latin:Arial",
-      "ea:Arial",
-      "cs:Arial"
+      "latin:Arial"
      ],
      "exportRtl": 40,
      "exportSlideLangs": [
@@ -41191,10 +41148,7 @@
      "exportSlideRtlParagraphs": 1,
      "previewRtlLines": 1,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Arial Black",
-      "Arial"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -41312,11 +41266,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -41342,6 +41296,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -41436,6 +41391,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -41481,11 +41437,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -41615,11 +41567,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -41645,6 +41597,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -41739,6 +41692,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -41784,11 +41738,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -41918,11 +41868,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -41948,6 +41898,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -42042,6 +41993,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -42087,11 +42039,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -42221,11 +42169,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -42251,6 +42199,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -42345,6 +42294,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -42390,11 +42340,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -42524,11 +42470,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -42554,6 +42500,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -42648,6 +42595,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -42693,11 +42641,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -42827,11 +42771,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -42857,6 +42801,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -42951,6 +42896,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -42996,11 +42942,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -43130,11 +43072,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -43160,6 +43102,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -43254,6 +43197,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -43299,11 +43243,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -43433,11 +43373,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -43463,6 +43403,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -43557,6 +43498,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -43602,11 +43544,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -43736,11 +43674,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -43766,6 +43704,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -43860,6 +43799,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -43905,11 +43845,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -44039,11 +43975,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -44069,6 +44005,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -44163,6 +44100,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -44208,11 +44146,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -44342,11 +44276,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -44372,6 +44306,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -44466,6 +44401,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -44511,11 +44447,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -44645,11 +44577,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -44675,6 +44607,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -44769,6 +44702,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -44814,11 +44748,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -44948,11 +44878,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -44978,6 +44908,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -45072,6 +45003,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -45117,11 +45049,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -45236,11 +45164,11 @@
     "exportThemeMinorLatin": "Latha",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Latha",
       "Latha"
      ],
      "minor": [
-      "",
+      "Latha",
       "Latha"
      ]
     },
@@ -45258,12 +45186,13 @@
      "Latha"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Latha",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -45356,10 +45285,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -45401,9 +45332,7 @@
       "ta-IN"
      ],
      "exportRunFaces": [
-      "latin:Latha",
-      "ea:Latha",
-      "cs:Latha"
+      "latin:Latha"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -45412,9 +45341,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Latha"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -45517,11 +45444,11 @@
     "exportThemeMinorLatin": "Gautami",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Gautami",
       "Gautami"
      ],
      "minor": [
-      "",
+      "Gautami",
       "Gautami"
      ]
     },
@@ -45539,12 +45466,13 @@
      "Gautami"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Gautami",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -45637,10 +45565,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -45682,9 +45612,7 @@
       "te-IN"
      ],
      "exportRunFaces": [
-      "latin:Gautami",
-      "ea:Gautami",
-      "cs:Gautami"
+      "latin:Gautami"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -45693,9 +45621,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Gautami"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -45798,11 +45724,11 @@
     "exportThemeMinorLatin": "Angsana New",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Angsana New",
       "Angsana New"
      ],
      "minor": [
-      "",
+      "Angsana New",
       "Angsana New"
      ]
     },
@@ -45820,12 +45746,13 @@
      "Angsana New"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Angsana New",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -45918,10 +45845,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
-       "ppt/theme/theme1.xml"
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -45963,9 +45892,7 @@
       "th-TH"
      ],
      "exportRunFaces": [
-      "latin:Angsana New",
-      "ea:Angsana New",
-      "cs:Angsana New"
+      "latin:Angsana New"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -45974,9 +45901,7 @@
      "exportSlideRtlParagraphs": 0,
      "previewRtlLines": 0,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Angsana New"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -46094,11 +46019,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -46124,6 +46049,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -46218,6 +46144,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -46263,11 +46190,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -46397,11 +46320,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -46427,6 +46350,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -46521,6 +46445,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -46566,11 +46491,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -46685,11 +46606,11 @@
     "exportThemeMinorLatin": "Arabic Typesetting",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Arabic Typesetting",
       "Arabic Typesetting"
      ],
      "minor": [
-      "",
+      "Arabic Typesetting",
       "Arabic Typesetting"
      ]
     },
@@ -46707,12 +46628,13 @@
      "Arabic Typesetting"
     ],
     "foreignTypefaces": [],
-    "emptyTypefaceSlots": 2,
+    "emptyTypefaceSlots": 0,
     "appXmlFonts": [
      "Fonts Used",
      "Theme",
      "Slide Titles",
      "Arabic Typesetting",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -46808,6 +46730,7 @@
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
        "ppt/presentation.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml",
@@ -46853,9 +46776,7 @@
       "ur-PK"
      ],
      "exportRunFaces": [
-      "latin:Arabic Typesetting",
-      "ea:Arabic Typesetting",
-      "cs:Arabic Typesetting"
+      "latin:Arabic Typesetting"
      ],
      "exportRtl": 40,
      "exportSlideLangs": [
@@ -46864,9 +46785,7 @@
      "exportSlideRtlParagraphs": 1,
      "previewRtlLines": 1,
      "scriptSlot": "cs",
-     "slotFaces": [
-      "Arabic Typesetting"
-     ]
+     "slotFaces": []
     }
    },
    "glyph": {
@@ -46984,11 +46903,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -47014,6 +46933,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -47108,6 +47028,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -47153,11 +47074,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -47287,11 +47204,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -47317,6 +47234,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -47411,9 +47329,12 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
-       "ppt/tags/opfDocument.xml"
+       "ppt/tags/opfDocument.xml",
+       "ppt/theme/theme1.xml",
+       "ppt/theme/theme2.xml"
       ]
      }
     },
@@ -47456,11 +47377,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -47590,11 +47507,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -47620,6 +47537,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -47714,6 +47632,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -47759,11 +47678,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -47893,11 +47808,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -47923,6 +47838,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -48017,6 +47933,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -48062,11 +47979,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -48196,11 +48109,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -48226,6 +48139,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Office Theme",
      "Office Theme",
      "Slide 1"
     ],
@@ -48320,6 +48234,7 @@
       "diffParts": [
        "ppt/notesMasters/notesMaster1.xml",
        "ppt/notesSlides/notesSlide1.xml",
+       "ppt/slideLayouts/slideLayout1.xml",
        "ppt/slideMasters/slideMaster1.xml",
        "ppt/slides/slide1.xml",
        "ppt/tags/opfDocument.xml"
@@ -48365,11 +48280,7 @@
      ],
      "exportRunFaces": [
       "latin:Aptos Display",
-      "ea:Aptos Display",
-      "cs:Aptos Display",
-      "latin:Aptos",
-      "ea:Aptos",
-      "cs:Aptos"
+      "latin:Aptos"
      ],
      "exportRtl": 0,
      "exportSlideLangs": [
@@ -48543,11 +48454,11 @@
     "exportThemeMinorLatin": "Aptos",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Aptos Display",
       ""
      ],
      "minor": [
-      "",
+      "Aptos",
       ""
      ]
     },
@@ -48573,6 +48484,7 @@
      "Slide Titles",
      "Aptos",
      "Aptos Display",
+     "Minimal",
      "Minimal",
      "Slide 1"
     ],
@@ -48851,11 +48763,11 @@
     "exportThemeMinorLatin": "Tenorite",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Tenorite Display",
       ""
      ],
      "minor": [
-      "",
+      "Tenorite",
       ""
      ]
     },
@@ -48881,6 +48793,7 @@
      "Slide Titles",
      "Tenorite",
      "Tenorite Display",
+     "Classic",
      "Classic",
      "Slide 1"
     ],
@@ -49170,11 +49083,11 @@
     "exportThemeMinorLatin": "Seaford",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Seaford Display",
       ""
      ],
      "minor": [
-      "",
+      "Seaford",
       ""
      ]
     },
@@ -49200,6 +49113,7 @@
      "Slide Titles",
      "Seaford",
      "Seaford Display",
+     "Dark",
      "Dark",
      "Slide 1"
     ],
@@ -49490,11 +49404,11 @@
     "exportThemeMinorLatin": "Grandview",
     "exportThemeEaCs": {
      "major": [
-      "",
+      "Impact",
       ""
      ],
      "minor": [
-      "",
+      "Grandview",
       ""
      ]
     },
@@ -49520,6 +49434,7 @@
      "Slide Titles",
      "Grandview",
      "Impact",
+     "Bold",
      "Bold",
      "Slide 1"
     ],

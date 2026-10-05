@@ -5,9 +5,9 @@
   "filename": "mixed-use-leasing-pipeline-review",
   "language": "english-gb",
   "audience": [
-    "sales-team",
+    "sales",
     {
-      "id": "customers",
+      "id": "customer",
       "attentionBudgetMinutes": 27,
       "technicalFluency": "medium",
       "decisionPower": "informational",

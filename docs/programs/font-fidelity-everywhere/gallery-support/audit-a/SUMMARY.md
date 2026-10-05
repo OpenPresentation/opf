@@ -1,6 +1,6 @@
 # Dimension audit A: layouts, content blocks, image treatments, backgrounds, headers & footers
 
-Commits: opf `e414bca`, opf-render `2fbc0ab`, opf-pptx `a9bcbd7`, pptx-gallery `d8f5ae6`. Node v24.21.0. Core bundled layout catalog: 100 records.
+Commits: opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, pptx-gallery `c349a61`. Node v26.7.0. Core bundled layout catalog: 100 records.
 
 Method: gallery lib/opf-snippets.ts builders bundled with esbuild; @openpresentation/opf linked to local core dist; opf-render/opf-pptx from source; engine default text measurement for geometry and text; font availability against the gallery preview host model (parity/scripts/font-host.mjs); no Office/COM. Each value's OPF is the exact document the gallery page emits (lib/opf-snippets.ts). Checks: (1) core validatePresentation, (2) catalog/reference resolution, (3) opf-render SVG vs a baseline document without the dimension, (4) opf-pptx export + OPC parts + dimension-specific native XML, (5) opf-pptx fromPptx re-import, (6) docs/evidence + compatibility-matrix hits. "withAssets" re-runs values whose gallery snippet references undeclared `asset:*` ids with a real raster supplied.
 

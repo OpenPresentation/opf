@@ -7,16 +7,22 @@
     "build": "pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build",
     "typecheck": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs",
-    "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && pnpm test:gallery-script-fonts && pnpm test:gallery-lazy-fonts && pnpm test:gallery-base-fonts && pnpm check:text && pnpm check:spec && pnpm check:catalog && pnpm check:font-hotlinks && pnpm check:font-tracker && pnpm check:gallery-tracker && pnpm check:published-matrix && pnpm check:works-percent && pnpm check:release-report && pnpm check:audit-placement && pnpm check:audit-chartex && pnpm check:audit-restored && pnpm check:audit-picture-bullets",
+    "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+    "check:runners": "node --test scripts/run-tests.test.mjs scripts/run-checks.test.mjs",
+    "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && node scripts/run-checks.mjs",
+    "check:quarantine": "node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check",
+    "test:flake-repeat": "node scripts/flake-repeat.mjs",
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
-    "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs",
+    "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs scripts/published-matrix/compare-parity.test.mjs",
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs scripts/qualify-latin-fonts.test.mjs && node scripts/build-font-tracker.mjs --check",
     "build:font-tracker": "node scripts/build-font-tracker.mjs",
-    "check:gallery-tracker": "node --test scripts/build-gallery-tracker.test.mjs && node scripts/build-gallery-tracker.mjs --check",
+    "check:gallery-tracker": "node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check",
     "build:gallery-tracker": "node scripts/build-gallery-tracker.mjs",
     "report:works": "node docs/programs/font-fidelity-everywhere/gallery-support/works-percent.mjs",
     "report:release": "node docs/programs/release-readiness/report.mjs",
     "check:release-report": "node --test docs/programs/release-readiness/report.test.mjs",
+    "check:registry-golden": "node --test scripts/registry-golden.test.mjs",
+    "check:release-train": "node --test scripts/release-train.test.mjs",
     "check:works-percent": "node --test docs/programs/font-fidelity-everywhere/gallery-support/works-percent.test.mjs",
     "pack:dry-run": "pnpm --filter @openpresentation/opf pack:dry-run",
     "test:ecosystem": "node --import ./scripts/register-local-opf.mjs scripts/test-ecosystem.mjs",
@@ -69,11 +75,5 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.3",
     "@typescript/native": "npm:typescript@~7.0.2"
-  },
-  "pnpm": {
-    "overrides": {
-      "esbuild@>=0.27.3 <0.28.1": "0.28.2",
-      "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
-    }
   }
 }

@@ -26,16 +26,16 @@ the versions below or established complete native compatibility.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.12.0 | — |
+| `@openpresentation/opf` | 0.12.1 | — |
 | `@openpresentation/cli` | 0.10.0 | Bundles core 0.12.0; registry metadata has no runtime `dependencies` |
 | `@openpresentation/opf-render` | 0.12.0 | `@openpresentation/opf@^0.12.0` |
-| `@openpresentation/opf-editor` | 0.11.1 | `@openpresentation/opf@^0.12.0`; optional peer `@openpresentation/opf-render@^0.12.0` |
-| `@openpresentation/opf-pptx` | 0.12.1 | `@openpresentation/opf@^0.12.0`; optional peer `@openpresentation/opf-render@^0.12.0` |
+| `@openpresentation/opf-editor` | 0.11.2 | `@openpresentation/opf@^0.12.0`; optional peer `@openpresentation/opf-render@^0.12.0` |
+| `@openpresentation/opf-pptx` | 0.12.3 | `@openpresentation/opf@^0.12.0`; optional peer `@openpresentation/opf-render@^0.12.0` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.12.0 with renderer 0.12.0, PPTX 0.12.1 and editor 0.11.1), so
+core in lockstep (core 0.12.1 with renderer 0.12.0, PPTX 0.12.3 and editor 0.11.2), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -345,6 +345,9 @@ APIs stay Node-only; renderer 0.12.0 adds the separate `@openpresentation/opf-re
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.12.1, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.2, editor 0.11.2 | Previous coordinated set. PPTX 0.12.3 corrects the table range of a chart's embedded workbook (apostrophe-quoted sheet references and bubble-series references), which made Keynote drop category charts on import (opf-pptx#162, opf-pptx#163; every other part of the package is byte-identical). Core, renderer and editor are unchanged and keep the core floor `^0.12.0` and the renderer peer `^0.12.0`. |
+| core 0.12.0, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.2, editor 0.11.2 | Previous coordinated set. Core 0.12.1 deprecates the six plural audience ids (`executives`, `investors`, `customers`, `sales-team`, `marketing-team`, `regulators`) in favour of the singular ids: additive catalog data, validation warns and never errors, and no geometry moves, so renderer, PPTX and editor keep the core floor `^0.12.0`. |
+| core 0.12.0, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.1, editor 0.11.1 | Previous coordinated set (PowerPoint lists only the deck's fonts). PPTX 0.12.2 also names the deck's font in the theme's `Viet` (Vietnamese) and `Uigh` (Uyghur) per-language script entries, which PowerPoint applies to `vi-VN` and `ug` runs and which kept Office's Times New Roman and Arial for those two languages (RR-17; every other language is byte-identical). Editor 0.11.2 adds the `slide-sizes` and `purposes` switch dimensions, `SLIDE_SIZE_PRESETS` and the Slide size and Purpose selects in the Design panel (RR-41, additive API). Both keep the core floor `^0.12.0` and the renderer peer `^0.12.0`. |
 | core 0.12.0, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.0, editor 0.11.0 | Previous coordinated set (the 0.12.0 train). PPTX 0.12.1 writes the deck's fonts so that PowerPoint's font list shows only the fonts the deck uses (FF-05: schema-order `presentation.xml`, an own notes theme, no east-asian or complex-script font on runs, and a theme east-asian slot that is never empty); editor 0.11.1 stops the restore prompt showing a literal `null`. Both keep the core floor `^0.12.0` and the renderer peer `^0.12.0`. |
 | core 0.11.4, CLI 0.9.2, renderer 0.11.9, PPTX 0.11.9, editor 0.10.6 | Previous coordinated set (native header/footer placeholders, SVG pictures, `fromPptx` import signals; the published 0.11.4 train measured in the font-fidelity program). Core 0.12.0 moves geometry (composed font sizes on PowerPoint's 0.01 pt grid, hanging wrap whitespace, promoted regions in reading order, right-to-left decks composed mirrored), so renderer 0.12.0, PPTX 0.12.0 and editor 0.11.0 raise their core floor to `^0.12.0` and the renderer peer of PPTX and editor to `^0.12.0` together; the set adds templates and variables, numbered lists, footnotes, citations and captions and chart options (additive schema), vector PDF with selectable text and the browser export entry, the `<opf-deck>` player, the editor's slide management, autosave, data grid, find and replace, image crop, Review panel and fill UI, and the shared JSON Patch module. CLI 0.10.0 bundles core 0.12.0 and adds `opf audit`, `from-md`, `to-md`, `diff`, `merge`, `format`, `render`, `export` and `import`. |
 | core 0.11.4, CLI 0.9.2, renderer 0.11.9, PPTX 0.11.8, editor 0.10.6 | Previous coordinated set (PPTX 0.11.8 re-imports wrapped rich text as one authored payload; CLI 0.9.2 bundles core 0.11.4). PPTX 0.11.9 writes a deck footer's first text, date and slide number as native PowerPoint Header & Footer placeholders (every export also carries the footer placeholders on its master, layout and notes master, so Insert > Header & Footer works), exports an SVG image as a native SVG picture over a PNG fallback (rasterized in Node by the optional opf-render peer or `options.svgRasterizer`) and adds the opt-in `fromPptx(bytes, {signals: true})` import signals; core floor `^0.11.4` unchanged. |
