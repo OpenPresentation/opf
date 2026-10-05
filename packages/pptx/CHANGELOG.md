@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.12.3 (2026-10-05)
+
+- RR-53 (tooling, no package change): `npm run test:contract` runs the contract suite, the part of `npm test` that exercises core's APIs; core's pull-request checks run it instead of the full suite, while core's merge queue, pushes to main and nightly run `npm test`. `test/suites.json` `contractExclude` lists, with a reason each, the tests it leaves out, and `node scripts/run-tests.mjs --suite contract` selects it.
+- RR-46 (repository tooling; no package change): changelog fragments and discovered tests. A change adds `changes/<slug>.md` instead of editing `## Unreleased`; the release-prep PR runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z`. `npm test` runs every `test/*.mjs` through `scripts/run-tests.mjs` (`test/suites.json` lists the helpers and separately-run files; browser suites still run through `scripts/quarantine.mjs`) and `npm run typecheck` is `scripts/check-syntax.mjs` over `src`, `test` and `scripts`, so adding a test touches only its own file. The set of tests `npm test` runs is unchanged.
+- RR-46: `npm test` now also runs `test/shared-metric.mjs` and `test/metric-provenance.mjs`, the metric payload round-trip and provenance checks that no CI step ran (they were only behind `npm run test:metric`). The other 54 `test/*.mjs` files that `npm test` skips stay in `test/suites.json` `exclude`, each for a recorded reason (helper or fixture, native PowerPoint harness, a CI step of its own, or already run through `test/dependency-boundary.mjs`). No export or import behaviour changes.
+- RR-50 (repository tooling; no package output changes): CI reads the commits of the other OpenPresentation repositories and the golden baseline from core's bot-owned `ecosystem.lock.json` through `OpenPresentation/opf/.github/actions/ecosystem-refs@main` instead of hand-edited SHA pins (`ci.yml`, `flake-repeat.yml`).
+- RR-17 (opf-pptx#162): Keynote imports native charts again. PptxGenJS 4.0.1 writes an invalid table range into the embedded chart workbook of every category chart (bar, column, line, area, pie, doughnut, radar, and the classic fallback of chartex charts): `ref="A1:C7'"`, with a stray apostrophe (upstream gitbrent/PptxGenJS#1531). Keynote 15.1.1 dropped every such chart on import (only scatter charts survived), and Excel had to repair the workbook when the chart data was opened. The export now sets each embedded table (and autoFilter) ref, and the sheet dimension, to the cell range the sheet holds; for OPF charts only the table ref changes (the apostrophe goes). The chart XML and every other part are byte-identical; the vendored PptxGenJS is unchanged.
+
 ## 0.12.2 (2026-10-02)
 
 Patch release: Vietnamese and Uyghur decks list only the deck's fonts (RR-17, the one RR-42 native failure).
