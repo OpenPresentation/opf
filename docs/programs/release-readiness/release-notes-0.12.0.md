@@ -241,9 +241,9 @@ unchanged and opf-pptx keeps the core floor `^0.12.0`.
 - **What it fixes** ([opf-pptx#162](https://github.com/OpenPresentation/opf-pptx/issues/162),
   [opf-pptx#163](https://github.com/OpenPresentation/opf-pptx/pull/163)): the embedded workbook of a native chart had a
   table range (`ref`) with a stray apostrophe, and a bubble chart's range ended one row short of its data (its last row).
-  Keynote dropped the native chart on import when the table range was invalid; PowerPoint was not affected (it was not
-  the engine of the 0.12.0 native evidence, which stands). The fix writes both ranges correctly. The apostrophe is in
-  PptxGenJS itself; the same fix is submitted upstream as
+  Keynote dropped the native chart on import when the table range was invalid (it tolerates the short bubble range
+  either way). The fix writes both ranges correctly. The native PowerPoint evidence above is unchanged and was not
+  re-run for this patch. The apostrophe is in PptxGenJS itself; the same fix is submitted upstream as
   [gitbrent/PptxGenJS#1537](https://github.com/gitbrent/PptxGenJS/pull/1537).
 - **How it was found**: the Keynote native check of the 20-deck import set ([opf#341](https://github.com/OpenPresentation/opf/pull/341),
   [evidence](../../evidence/mac-checks-20261002/keynote/README.md)). On opf-pptx 0.12.2 six decks failed, all by losing
