@@ -82,3 +82,14 @@ check is about names, not drawn glyphs.
   slots written to `theme1.xml`, and fonts by package part.
 
 The decks, the raw read-outs and the PNGs are not committed.
+
+## Decision (2026-10-05, Windows supervisor, vetoable)
+
+**Accepted: FF-12 passes on all 12 decks.** PowerPoint's `Presentation.Fonts` lists the Latin families of the runs. It
+leaves out a theme-only East Asian or complex-script family when the deck's Latin family is different. The FF-12
+criterion is about foreign names, and this sample has none. The chosen script family is proven by the theme slots and
+by every run's `NameFarEast` or `NameComplexScript` reading it back.
+
+The stricter "must be listed" rule in the comparison script applied to East Asian Meiryo in deck 08, but not to the
+complex-script families of decks 05, 10 and 11. Under the accepted reading, both cases are treated alike. The raw
+script output stays unchanged above as measured. This closes FF-12 and, with it, RR-05.
