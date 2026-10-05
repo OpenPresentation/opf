@@ -23,6 +23,10 @@ jobs:
     # RR-40: a fixed image, so ubuntu-latest moving to Ubuntu 26 (from 2026-10-19) cannot change fonts, ICU or
     # system libraries under this required check; move to the next LTS in its own PR.
     runs-on: ubuntu-24.04
+    # RR-45 (opf#368, item 5): each package is built once in this job and the later `pnpm build`, `pnpm test`, pack and
+    # prepack builds reuse it (scripts/reuse-build.mjs; the token is this run, attempt and job, never shared).
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
 
     steps:
       - name: Checkout
@@ -56,10 +60,21 @@ jobs:
 
       # RR-46: the generated trackers are regenerated after merge (tracker-refresh.yml), so a pull request or a merge
       # queue run only warns about a stale one; main, tags and a local run fail (scripts/tracker-staleness.mjs).
+      # RR-45 (opf#368, item 5): scripts/run-checks.mjs runs the root checks four at a time, one log per check
+      # (artifacts/checks); a failing check's whole log is printed at the end and uploaded below.
       - name: Test
         run: pnpm test
         env:
           OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
+
+      - name: Preserve the check logs
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: check-logs
+          path: artifacts/checks/*.log
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Validate examples
         run: pnpm run check:examples
@@ -76,8 +91,18 @@ jobs:
       - name: Verify packed CLI install
         run: pnpm test:cli:packed
 
+      # RR-45 (opf#368, item 5): the peers' npm downloads are cached between runs, keyed by the exact peer versions in
+      # packages/cli/package.json; the CLI tarball and npm exec installs are never reused (packages/cli/test/packed-files.mjs).
+      - name: Restore the npm cache of the CLI's optional peers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/opf-cli-peers-npm
+          key: opf-cli-peers-npm-${{ runner.os }}-node24-${{ hashFiles('packages/cli/package.json') }}
+
       - name: Verify packed CLI with its optional render and PPTX peers
         run: pnpm test:cli:packed:peers
+        env:
+          OPF_NPM_CACHE: ${{ runner.temp }}/opf-cli-peers-npm
 
       - name: Verify developer quickstart from the npm registry
         run: pnpm test:developer-quickstart
@@ -94,6 +119,8 @@ jobs:
   node-range:
     name: Node ${{ matrix.node }} (engines range)
     runs-on: ubuntu-24.04
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.node }}
     strategy:
       fail-fast: false
       matrix:
@@ -133,5 +160,13 @@ jobs:
       - name: Verify packed CLI install
         run: pnpm test:cli:packed
 
+      - name: Restore the npm cache of the CLI's optional peers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/opf-cli-peers-npm
+          key: opf-cli-peers-npm-${{ runner.os }}-node${{ matrix.node }}-${{ hashFiles('packages/cli/package.json') }}
+
       - name: Verify packed CLI with its optional render and PPTX peers
         run: pnpm test:cli:packed:peers
+        env:
+          OPF_NPM_CACHE: ${{ runner.temp }}/opf-cli-peers-npm
