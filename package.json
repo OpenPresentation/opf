@@ -21,6 +21,7 @@
     "report:works": "node docs/programs/font-fidelity-everywhere/gallery-support/works-percent.mjs",
     "report:release": "node docs/programs/release-readiness/report.mjs",
     "check:release-report": "node --test docs/programs/release-readiness/report.test.mjs",
+    "check:registry-golden": "node --test scripts/registry-golden.test.mjs",
     "check:release-train": "node --test scripts/release-train.test.mjs",
     "check:works-percent": "node --test docs/programs/font-fidelity-everywhere/gallery-support/works-percent.test.mjs",
     "pack:dry-run": "pnpm --filter @openpresentation/opf pack:dry-run",
