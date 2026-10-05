@@ -128,7 +128,7 @@
     "package.json"
   ],
   "engines": {
-    "node": "24.x"
+    "node": ">=22"
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",

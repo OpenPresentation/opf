@@ -14,7 +14,7 @@ Before making changes, it helps to understand how the pieces fit together:
 
 ## Development setup
 
-Requirements: [pnpm](https://pnpm.io) and Node.js **24.x** (see `.nvmrc`). Node 20 and 22 users must upgrade before using the next coordinated release; see [migration instructions](docs/migrations/node24.md).
+Requirements: [pnpm](https://pnpm.io) and Node.js **24.x** for development (see `.nvmrc`). The packages themselves declare the open-ended `engines.node` `>=22` (RR-20), tested on Node 22, 24 and 26: never declare a closed range such as `24.x`, which makes npm on any other Node silently install an old release (`pnpm check:engines-range` fails on one). See also the [Node 24 migration notes](docs/migrations/node24.md).
 
 ```sh
 pnpm install
