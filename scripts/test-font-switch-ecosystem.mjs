@@ -50,6 +50,7 @@ import {createHash} from 'node:crypto';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads';
 
 // The engines come from sibling source checkouts by default (`pnpm test:fonts`). With OPF_MATRIX_ENGINES set to an
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
@@ -727,7 +728,7 @@ const replaceSlide = (index, slide) => (editor) => editor.applyPatch([{op: 'repl
 const generationStarted = Date.now();
 const matrix = generateMatrix();
 const generationMilliseconds = Date.now() - generationStarted;
-console.log(`Pairwise covering array: ${matrix.rows.length} decks over ${FACTORS.length} dimensions (${FACTORS.map((factor) => `${factor.levels.length}${factor.slots > 1 ? `x${factor.slots}` : ''}`).join(' ')} classes and slots), seed ${matrix.seed}, every value-class pair covered (generated in ${generationMilliseconds} ms).`);
+if (isMainThread) console.log(`Pairwise covering array: ${matrix.rows.length} decks over ${FACTORS.length} dimensions (${FACTORS.map((factor) => `${factor.levels.length}${factor.slots > 1 ? `x${factor.slots}` : ''}`).join(' ')} classes and slots), seed ${matrix.seed}, every value-class pair covered (generated in ${generationMilliseconds} ms).`);
 if (process.argv.includes('--plan')) process.exit(0);
 assert.ok(matrix.rows.length >= 50 && matrix.rows.length <= 80, `the covering array has ${matrix.rows.length} decks`);
 
@@ -743,17 +744,87 @@ if (DETERMINISM) {
     }
   }
 }
-for (const [index, row] of matrix.rows.entries()) {
-  if (DETERMINISM && !determinismRows.has(index)) continue;
-  pairwiseDecks++;
+async function runPairwiseDeck(index) {
   const name = `pairwise-${String(index + 1).padStart(2, '0')}`;
-  const {deck, schemeA, schemeB} = buildDeck(name, row, index);
+  const {deck, schemeA, schemeB} = buildDeck(name, matrix.rows[index], index);
   await runSwitch(name, deck, [
     {label: `B (${schemeB})`, apply: setScheme('design.fontScheme', schemeB)},
     {label: 'A again', apply: setScheme('design.fontScheme', schemeA), returnsToStart: true}
   ], {png: true});
-  switches++;
 }
+// RR-45 (opf#368, item 4): the pairwise decks run on a pool of worker threads, each a copy of this script that stops after
+// its preamble (the same registry, catalogs and matrix) and verifies the decks it is given, in order. A deck's outcome is
+// what the serial loop records: its digests, state reports and substitutions. The main thread merges them in deck order,
+// so the output order is the serial one, and a failing deck fails the run with its own assertion (the lowest failing deck).
+// The partition is fixed: deck i goes to worker i mod OPF_MATRIX_WORKERS (default 4, whatever the machine), so every run
+// on every host verifies each deck after the same earlier decks. That matters: the renderer's measurement of a deck can
+// depend on what the same process measured before (opf-render#ISSUE; pairwise-50, Bengali in a monospace scheme), so a
+// different partition, or the serial loop (OPF_MATRIX_WORKERS=1, as before), can give that deck a different SVG digest.
+const pairwiseStarted = Date.now();
+const pairwiseIndexes = matrix.rows.map((row, index) => index).filter((index) => !DETERMINISM || determinismRows.has(index));
+const takeDeckOutcome = () => {
+  const outcome = {digests: Object.entries(digests), stateReports: stateReports.splice(0), substitutions: [...substitutionLog]};
+  for (const label of Object.keys(digests)) delete digests[label];
+  substitutionLog.clear();
+  return outcome;
+};
+if (!isMainThread) {
+  // A worker: verify its decks in order and send back what each recorded. Nothing before the pairwise decks records a state.
+  assert.deepEqual([Object.keys(digests).length, stateReports.length, substitutionLog.size], [0, 0, 0], 'the preamble records no state');
+  for (const index of workerData.indexes) {
+    try {
+      await runPairwiseDeck(index);
+      parentPort.postMessage({index, outcome: takeDeckOutcome()});
+    } catch (error) {
+      parentPort.postMessage({index, error: {message: error.message, stack: error.stack}});
+      break; // like the serial loop, a worker stops at its first failing deck
+    }
+  }
+  parentPort.postMessage({done: true});
+  await new Promise(() => {}); // the main thread ends the worker; a worker never runs the fixed cases below
+}
+const workerCount = Math.max(1, Math.min(Number(process.env.OPF_MATRIX_WORKERS || 4), pairwiseIndexes.length));
+if (!Number.isInteger(workerCount)) throw new Error(`OPF_MATRIX_WORKERS must be a positive integer, not ${process.env.OPF_MATRIX_WORKERS}`);
+if (workerCount === 1) {
+  for (const index of pairwiseIndexes) await runPairwiseDeck(index);
+} else {
+  const outcomes = new Map();
+  const failures = [];
+  await Promise.all(Array.from({length: workerCount}, (_, slot) => new Promise((resolve, reject) => {
+    const indexes = pairwiseIndexes.filter((index, position) => position % workerCount === slot);
+    const worker = new Worker(new URL(import.meta.url), {argv: process.argv.slice(2), workerData: {indexes}});
+    let done = false;
+    worker.on('message', (message) => {
+      if (message.done) {
+        done = true;
+        worker.terminate().then(() => resolve(), reject);
+      } else if (message.error) failures.push(message);
+      else outcomes.set(message.index, message.outcome);
+    });
+    worker.on('error', reject);
+    worker.on('exit', (code) => { if (!done) reject(new Error(`a font-switch matrix worker exited (${code}) before it finished its decks`)); });
+  })));
+  if (failures.length) {
+    failures.sort((a, b) => a.index - b.index);
+    for (const failure of failures) console.error(`pairwise-${String(failure.index + 1).padStart(2, '0')} failed: ${failure.error.message}`);
+    const error = new Error(failures[0].error.message);
+    error.stack = failures[0].error.stack;
+    throw error;
+  }
+  for (const index of pairwiseIndexes) {
+    const outcome = outcomes.get(index);
+    assert.ok(outcome, `pairwise-${String(index + 1).padStart(2, '0')}: a worker verified it`);
+    for (const [label, digest] of outcome.digests) {
+      assert.equal(digests[label], undefined, `${label}: state labels are unique`);
+      digests[label] = digest;
+    }
+    stateReports.push(...outcome.stateReports);
+    for (const [key, compatibility] of outcome.substitutions) substitutionLog.set(key, compatibility);
+  }
+}
+pairwiseDecks += pairwiseIndexes.length;
+switches += pairwiseIndexes.length;
+console.log(`Pairwise decks: ${pairwiseIndexes.length} verified on ${workerCount === 1 ? 'the main thread' : `${workerCount} worker threads`} in ${((Date.now() - pairwiseStarted) / 1000).toFixed(1)} s.`);
 
 // ---------------------------------------------------------------------------
 // Fixed must-have cases.
