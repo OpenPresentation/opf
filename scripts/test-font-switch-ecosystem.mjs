@@ -758,7 +758,7 @@ async function runPairwiseDeck(index) {
 // so the output order is the serial one, and a failing deck fails the run with its own assertion (the lowest failing deck).
 // The partition is fixed: deck i goes to worker i mod OPF_MATRIX_WORKERS (default 4, whatever the machine), so every run
 // on every host verifies each deck after the same earlier decks. That matters: the renderer's measurement of a deck can
-// depend on what the same process measured before (opf-render#ISSUE; pairwise-50, Bengali in a monospace scheme), so a
+// depend on what the same process measured before (opf-render#125; pairwise-50, Bengali in a monospace scheme), so a
 // different partition, or the serial loop (OPF_MATRIX_WORKERS=1, as before), can give that deck a different SVG digest.
 const pairwiseStarted = Date.now();
 const pairwiseIndexes = matrix.rows.map((row, index) => index).filter((index) => !DETERMINISM || determinismRows.has(index));
