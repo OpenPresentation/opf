@@ -111,7 +111,8 @@ export function inlineTableData<T>(table: T, document?: unknown): T;
 export function inlineChartData<T>(chart: T, document?: unknown): T;
 /**
  * Resolve a chart's data to the canonical positional table: [category, (x,) ...series].
- * Category cells are kept as authored; X and series cells pass through chartNumber.
+ * Category cells are kept as authored; X and series cells pass through chartNumber. Data with a single column has no
+ * category: that column is the chart's values and passes through chartNumber too (with chart-value-not-numeric per cell).
  * Inline ChartData, a DatasetRef (needs the document) and mapping are resolved here.
  * options.path is the chart's JSON Pointer, the base of diagnostic paths (dataset cells report at /datasets/<id>/...).
  */
@@ -146,10 +147,68 @@ Core composition, table layout and pagination accept dataset-backed tables and c
 
 ## Engines
 
-- **Preview (opf-render)** calls `inlineDatasets` and `resolveChartData`, and replaces its own `chartNumber` with core's. Data labels and value-axis tick labels use `formatDataNumber` with the series format; the value axis uses the first plotted series' format, as Excel does when the axis is source-linked. Table cells draw `tableCellDisplayValue`.
-- **PPTX export (opf-pptx)** uses the same resolution and core `chartNumber` (its `parsedNumber` lenient parse is removed). It writes `excelNumberFormat` as the series `c:numCache/c:formatCode`, the data-label `c:numFmt` (`sourceLinked="0"`), the value-axis `c:numFmt` and the embedded workbook cell number formats. Table cells export their formatted text. Provenance keeps `datasets`, dataset references, `mapping`, formats and `source`, so a re-import restores the authored OPF.
-- **PPTX import (opf-pptx)**, without provenance: a series `formatCode` that `numberFormatFromExcel` maps back becomes that column's `DataColumn.format`. Anything else is not invented and is reported.
-- **Editor (opf-editor)**: the data grid edits charts and tables whose columns are `DataColumn` objects, keeping each format. It edits a dataset-backed target at `/datasets/<id>` and says how many items share the dataset. It offers a per-column number format and, for charts, the category, X and series mapping. Each edit is one undoable patch.
+All three engines read core's functions when they exist and fall back to their previous behaviour on a core without RR-54, so each can ship before or after core. A document that uses none of the new fields renders, exports and edits byte for byte as before (renderer: all 805 slides of the core examples; PPTX: 21 golden digests; editor: identical patches).
+
+### Preview (opf-render, [opf-render#127](https://github.com/OpenPresentation/opf-render/pull/127))
+
+- **Data:** every chart path reads `resolveChartData`: the catalog charts, the chartex constructs, scatter, pie and doughnut, single-column charts, and the legacy sketch. Its own `chartNumber` delegates to core's, so `"0x10"` is now a gap too. Data that does not resolve keeps the "No chart data" placeholder. A document with an unknown dataset or mapping column fails validation (`invalid-opf`) like any other invalid document.
+- **Formats:**
+  - Data labels use their series' format, through `formatDataNumber`.
+  - Value-axis ticks use the first plotted series' format, as Excel does for a source-linked axis.
+  - The scatter X axis and X labels use the X column's format.
+  - Percent axes (100% stacked, pareto) and pie percent labels stay percent.
+  - A histogram of a lone column plots counts and takes no format.
+- **Tables:** cells draw core layout's display text, so a body cell's own `format` wins over its column's.
+- **Tracing:** the editor relies on each drawn part's authored path.
+  - Every part of a dataset-backed chart or table traces to its authored `slides.N.chart` or `slides.N.table` path, because it has no rows of its own.
+  - A chart with `mapping` traces each part to the authored column index.
+
+### PPTX export (opf-pptx, [opf-pptx#171](https://github.com/OpenPresentation/opf-pptx/pull/171))
+
+- **Numbers:** the export resolves data through `resolveChartData`, and the lenient `parsedNumber`/`numericValue` are removed. Non-numeric strings export as gaps, with one `chart-value-not-numeric` diagnostic per chart that carries a `count`.
+- **Classic charts:** `excelNumberFormat` codes are written as:
+  - the series `c:numCache/c:formatCode` (added where PptxGenJS writes none, such as pie and doughnut);
+  - the series and chart-group data-label `c:numFmt sourceLinked="0"`;
+  - the value-axis `c:numFmt`. The first plotted series' format is used, a scatter X axis takes the X column's, and a 100% stacked axis keeps `0%`.
+  - Labels that show percentages keep PowerPoint's percent form.
+- **Chartex:** `cx:lvl formatCode` and the value-label and value-axis `cx:numFmt`, except on binned constructs.
+- **Embedded workbook:** custom `numFmt` entries from id 164, with cell styles on every value cell, so Edit Data shows the formats.
+- **Tables:** tables export core layout's display text.
+- **Datasets and mapping:** a chart that uses them exports exactly like its inline equivalent.
+- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form, plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
+
+### PPTX import (opf-pptx)
+
+- **With provenance:** `datasets` is restored before document provenance validates. A frame's dataset reference, `mapping`, formats and `source` are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`.
+- **Without provenance:** a cache `formatCode` that `numberFormatFromExcel` maps back becomes that column's `{ name, format }`, for both classic and chartex charts. Core returns the canonical spelling, such as `#,##0 units` for `#,##0 "units"`. Other codes are reported as `chart-number-format-adapted` and never invented.
+- **Cached values:** these follow the strict rule as well. XML decimal forms (`+5`, `.5`, `007`) are numbers; anything else is a gap with a diagnostic, never a stripped number or 0.
+
+### Editor (opf-editor, [opf-editor#92](https://github.com/OpenPresentation/opf-editor/pull/92))
+
+- **DataColumn headers:** the data grid shows a `DataColumn` header's `name`. Rename, insert, delete, move and paste keep each column's format.
+- **Chart cells:** they follow `chartNumber`. Text that is not a number is refused with the reason, and a stored string read as a gap is flagged.
+- **Shared datasets:** a dataset-backed chart or table is edited at `/datasets/<id>` through `fields`.
+  - Hidden columns keep their data.
+  - A column added while `fields` is set goes to both the dataset and `fields`.
+  - A rename updates every `fields` and `mapping` that names the column, in the same patch.
+  - Deleting a column another item uses is refused with `dataset-column-in-use`.
+  - The status line says how many items share the dataset, and "Use a copy of the data" (`detachGridDataset`) inlines one item's data.
+- **Format and mapping:**
+  - A per-column format field (`setGridColumnFormat`) is checked with `numberFormatError`.
+  - A "Chart columns" panel (`setChartMapping`) sets the category, the X column (XY charts only) and the series, and writes only what differs from the default.
+- **Import:** "Store as a shared dataset" (`prepareDatasetImport`) imports into `datasets.<id>`, as `opf import-data --dataset` does.
+- **Other panels:** the table style panel and `table-options` refuse a dataset table with `table-dataset-backed`. Find and replace also searches dataset text.
+- **Undo:** each edit is one undoable patch.
+
+### Native PowerPoint checks
+
+Wanted before release:
+- formatted data labels and value axes;
+- Edit Data shows the workbook cell formats with no repair prompt;
+- no repair prompt for the frame `custDataLst`;
+- after a plain save in PowerPoint, the data tags and cache hash survive.
+
+Sample decks are written by the PPTX branch under `artifacts/rr-54-native/`.
 
 ## Not in this change
 

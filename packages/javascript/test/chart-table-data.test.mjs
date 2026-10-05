@@ -256,6 +256,12 @@ describe("resolveChartData", () => {
     assert.deepEqual(result.rows, [["x", null], ["y", null]]);
     assert.deepEqual(result.diagnostics.map((entry) => entry.path), ["/data/rows/1/1"]);
   });
+
+  test("a lone column is the chart's values: strict numbers and a warning per non-numeric cell", () => {
+    const result = resolveChartData({ type: "histogram", data: { columns: ["Score"], rows: [[4], ["5"], ["12%"], [""], [null]] } });
+    assert.deepEqual(result.rows, [[4], [5], [null], [null], [null]]);
+    assert.deepEqual(result.diagnostics.map((entry) => [entry.code, entry.path]), [["chart-value-not-numeric", "/data/rows/2/0"]]);
+  });
 });
 
 describe("resolveTableData and display values", () => {

@@ -61,7 +61,7 @@ export type ResolvedChartData =
       columns: string[];
       /** The number format of each column (from its DataColumn), aligned with `columns`. */
       formats: (string | undefined)[];
-      /** Category cells as authored; X and series cells passed through `chartNumber` (null is a gap). */
+      /** Category cells as authored; X and series cells (and a lone column, which has no category) passed through `chartNumber` (null is a gap). */
       rows: DataCellValue[][];
       source?: DataSourceRef;
       /** The dataset id when the chart references one. */
@@ -515,10 +515,12 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
   } else series = names.map((_, index) => index).filter(index => index !== category && index !== x);
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
+  // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.
+  const lone = names.length === 1 && !diagnostics.some(entry => entry.code === 'dataset-field-unknown');
   const out: DataCellValue[][] = rows.map((row, rowIndex) => order.map((column, position) => {
     const sourceIndex = selected ? selected[column]! : column;
     const cell = Array.isArray(row) && sourceIndex < row.length ? row[sourceIndex] : null;
-    if (position === 0) return (cell === undefined ? null : cell) as DataCellValue;
+    if (position === 0 && !lone) return (cell === undefined ? null : cell) as DataCellValue;
     const number = chartNumber(cell);
     if (number === null && cell !== null && cell !== undefined && cell !== '' && !numberVariable(document, cell)) {
       diagnostics.push({ code: 'chart-value-not-numeric', severity: 'warning', path: at(rowsPath, rowIndex, sourceIndex), message: `chart value ${JSON.stringify(cell)} is not a number; it is plotted as a gap. Write numbers as plain decimals (12, -3.5, 1e6) and put units, currency and percent in the column format` });
