@@ -7,7 +7,13 @@ import {insideRect, measureInk, outsideCell, referenceInk} from './metric-outlin
 const sharp = createRequire(new URL('../../opf-render/package.json', import.meta.url))('sharp');
 
 // A deterministic pseudo-random generator, so a failure reproduces.
-function random(seed) { return () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32; }
+function random(seed) {
+  let state = seed;
+  return () => {
+    state = (state * 1664525 + 1013904223) >>> 0;
+    return state / 2 ** 32;
+  };
+}
 
 function blank(width, height, channels = 3) { return {data: Buffer.alloc(width * height * channels), width, height, channels}; }
 function paint(image, x, y, rgb) { const at = (y * image.width + x) * image.channels; for (let i = 0; i < 3; i++) image.data[at + i] = rgb[i]; }

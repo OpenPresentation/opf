@@ -69,7 +69,7 @@ async function runCase(page,index){
   const result={id:item.id,sourceSha256:item.sourceSha256,svgSha256:item.svgSha256,cell:item.cell,...observed,ink:[]};results[index]=result;
   if(item.id.endsWith('540-right-4')){await page.locator('svg').screenshot({path:path.join(out,item.id+'.png')});await writeFile(path.join(out,item.id+'.opf.json'),JSON.stringify(item.document,null,2)+'\n');}
   if(!parts.length)return;
-  const grid=gridOf(item,parts.length),regions=parts.map((part,i)=>({left:(i%grid.columns)*item.width,top:Math.floor(i/grid.columns)*item.height,width:item.width,height:item.height}));
+  const grid=gridOf(item,parts.length),regions=parts.map((_,i)=>({left:(i%grid.columns)*item.width,top:Math.floor(i/grid.columns)*item.height,width:item.width,height:item.height}));
   await page.evaluate(({sourcePaths,regions})=>{
     const main=document.querySelector('main'),original=main.querySelector('svg');
     main.replaceChildren(...sourcePaths.map((sourcePath,i)=>{
