@@ -11,8 +11,8 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.12.0**,
-CLI **0.10.0**, renderer **0.12.0**, PPTX **0.12.2**, editor **0.11.2**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.12.1**,
+CLI **0.10.0**, renderer **0.12.0**, PPTX **0.12.3**, editor **0.11.2**). All of these packages declare
 `engines.node: 24.x`.
 
 ```sh
@@ -20,7 +20,7 @@ node -v   # must be 24.x
 npm install @openpresentation/opf@0.12.1 \
   @openpresentation/opf-render@0.12.0 \
   @openpresentation/opf-editor@0.11.2 \
-  @openpresentation/opf-pptx@0.12.2 \
+  @openpresentation/opf-pptx@0.12.3 \
   @openpresentation/cli@0.10.0
 ```
 
