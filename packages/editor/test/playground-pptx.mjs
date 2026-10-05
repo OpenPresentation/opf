@@ -4,11 +4,11 @@ import { existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
 import { chromium } from 'playwright';
 import { fromPptx, toPptx } from '@openpresentation/opf-pptx';
 import { validatePresentation } from '@openpresentation/opf';
-const JSZip = createRequire(import.meta.resolve('@openpresentation/opf-pptx'))('jszip');
+// RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
+import JSZip from 'jszip';
 
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' };

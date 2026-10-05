@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { createRequire } from 'node:module';
 import { toPptx } from '@openpresentation/opf-pptx';
 import { renderSvg } from '@openpresentation/opf-render/svg';
 import { startPlayground } from './support/playground-harness.mjs';
@@ -8,7 +7,8 @@ import { startPlayground } from './support/playground-harness.mjs';
 // (red left half, blue right half, a green square at the lower right) is cropped by dragging handles, with an aspect lock, from the
 // keyboard and from the exact numbers; each Apply is one undo step; the focal point cuts the frame's shape around a chosen point;
 // Restore original goes back; and the document that results exports to PPTX with the same pixels the preview draws.
-const JSZip = createRequire(import.meta.resolve('@openpresentation/opf-pptx'))('jszip');
+// RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
+import JSZip from 'jszip';
 const app = await startPlayground({ contextOptions: { viewport: { width: 1440, height: 1100 } } });
 const { page, errors } = app;
 const checks = [];

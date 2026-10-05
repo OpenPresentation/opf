@@ -2,12 +2,12 @@
 // registry's embedded faces, the permissive-license rule, cancellation, diagnostics and the converter hand-off (the real PDF and
 // PNG conversion is checked in a browser by test/playground-download.mjs).
 import assert from 'node:assert/strict';
-import { createRequire } from 'node:module';
 import { loadBundledFontRegistry } from '@openpresentation/opf-render/fonts-node';
 import { EXPORT_FORMATS, describeDiagnostic, embeddableFonts, exportDeck, exportFileName, slidesToExport } from '../src/export.js';
 import { crc32, createZip } from '../src/zip.js';
 
-const JSZip = createRequire(import.meta.resolve('@openpresentation/opf-pptx'))('jszip');
+// RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
+import JSZip from 'jszip';
 const registry = await loadBundledFontRegistry();
 const renderOptions = { textMeasurement: registry.textMeasurement };
 const deck = {

@@ -4,13 +4,13 @@
 // a long export can be cancelled, the deck's filename names the file, hidden slides are opt-in, and nothing is sent anywhere.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { createRequire } from 'node:module';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
-const JSZip = createRequire(import.meta.resolve('@openpresentation/opf-pptx'))('jszip');
+// RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
+import JSZip from 'jszip';
 
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const outputDirectory = path.resolve(process.argv[2] ?? 'artifacts/playground-download');

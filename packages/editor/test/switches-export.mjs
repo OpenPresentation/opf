@@ -12,11 +12,11 @@ import * as core from "@openpresentation/opf";
 const { catalogs } = core;
 import { createEditorSession, resolveSlideFonts } from "../dist/index.js";
 import { switchDimension } from "../dist/switches.js";
-import { createRequire } from "node:module";
 import { SLIDE_SIZES, baseDeck, cases } from "./switch-fixture.mjs";
 
 const { toPptx, fromPptx, checkPptxTypefaces } = pptx;
-const JSZip = createRequire(import.meta.resolve("@openpresentation/opf-pptx"))("jszip");
+// RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
+import JSZip from 'jszip';
 const checkerAvailable = typeof checkPptxTypefaces === "function";
 if (!checkerAvailable && process.env.OPF_REQUIRE_FF08 === "1")
   throw new Error("OPF_REQUIRE_FF08=1 but the installed @openpresentation/opf-pptx has no checkPptxTypefaces (FF-08).");

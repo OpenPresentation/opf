@@ -299,6 +299,7 @@
     "@openpresentation/opf-render": "^0.12.0",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
+    "jszip": "3.10.2",
     "pdfjs-dist": "6.3.289",
     "playwright": "1.63.0",
     "@expo-google-fonts/noto-color-emoji": "0.4.6",
