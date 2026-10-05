@@ -1,7 +1,7 @@
 // RR-45: the three `packages` shards run exactly the commands of the unsharded run, once each, in the original order.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { parseShardArguments, planEcosystem } from './package-ecosystem-plan.mjs';
+import { parseShardArguments, planEcosystem, resolveStep } from './package-ecosystem-plan.mjs';
 
 const key = (step) => `${step.sibling ?? 'opf'}: ${step.command} ${step.args.join(' ')}`;
 const full = planEcosystem([]).map(key);
@@ -34,5 +34,32 @@ test('sibling shards run only sibling suites and keep their order', () => {
 });
 
 test('bad arguments fail', () => {
-  for (const argv of [['--siblings'], ['--siblings', ''], ['--siblings', 'opf-nope'], ['--siblings', 'opf-render', '--skip-siblings'], ['--other']]) assert.throws(() => parseShardArguments(argv));
+  for (const argv of [['--siblings'], ['--siblings', ''], ['--siblings', 'opf-nope'], ['--siblings', 'opf-render', '--skip-siblings'], ['--other'], ['--tier'], ['--tier', 'nightly'], ['--tier=fast']]) assert.throws(() => parseShardArguments(argv));
+});
+
+// RR-53: the contract tier swaps only each sibling's `npm run test` for `npm run test:contract`.
+test('the contract tier changes nothing but the siblings\' test step, and the full tier is the default', () => {
+  const contract = planEcosystem(['--tier', 'contract']);
+  assert.deepEqual(planEcosystem(['--tier', 'full']).map(key), full);
+  assert.equal(contract.length, planEcosystem([]).length);
+  const swapped = contract.map((step, index) => [step, planEcosystem([])[index]]).filter(([a, b]) => key(a) !== key(b));
+  assert.deepEqual(swapped.map(([a]) => key(a)), ['opf-render: npm run test:contract', 'opf-editor: npm run test:contract', 'opf-pptx: npm run test:contract']);
+  assert.deepEqual(swapped.map(([, b]) => key(b)), ['opf-render: npm run test', 'opf-editor: npm run test', 'opf-pptx: npm run test']);
+  // The shards still partition the contract plan, and core's own steps are identical in both tiers.
+  const shard = (argv) => planEcosystem([...argv, '--tier', 'contract']).map(key);
+  assert.deepEqual([...shard(['--siblings', 'opf-render']), ...shard(['--siblings', 'opf-editor,opf-pptx']), ...shard(['--skip-siblings'])].sort(), contract.map(key).sort());
+  assert.deepEqual(shard(['--skip-siblings']), shards.core);
+  assert.deepEqual(planEcosystem(['--tier=contract', '--siblings=opf-render']).map(key), shard(['--siblings', 'opf-render']));
+});
+
+test('a sibling without test:contract (a lock that predates RR-53) runs its full test, never nothing', () => {
+  const [contractStep] = planEcosystem(['--siblings', 'opf-pptx', '--tier', 'contract']).filter((step) => step.args.at(-1) === 'test:contract');
+  const has = { 'opf-pptx': { test: 'x', 'test:contract': 'y' } };
+  assert.deepEqual(resolveStep(contractStep, (name) => has[name]), { step: contractStep, fellBack: false });
+  const old = resolveStep(contractStep, () => ({ test: 'x' }));
+  assert.equal(old.fellBack, true);
+  assert.equal(key(old.step), 'opf-pptx: npm run test');
+  assert.equal(resolveStep(contractStep, () => undefined).fellBack, true);
+  const plain = planEcosystem(['--siblings', 'opf-pptx'])[0];
+  assert.deepEqual(resolveStep(plain, () => ({})), { step: plain, fellBack: false });
 });
