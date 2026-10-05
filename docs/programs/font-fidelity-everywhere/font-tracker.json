@@ -101,14 +101,24 @@
       },
       {
         "id": "ff-46-documented-visual-native-20261005",
-        "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+        "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
         "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
         "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
         "date": "2026-10-05",
         "host": "PowerPoint 365, Windows",
-        "decks": 28,
-        "decksPassing": 28,
-        "failingChecks": []
+        "decks": 48,
+        "decksPassing": 47,
+        "failingChecks": [
+          {
+            "deck": "scripts-40-amharic-ebrima",
+            "failing": [
+              "presentationFonts"
+            ],
+            "detail": [
+              "presentation-fonts-extra"
+            ]
+          }
+        ]
       }
     ],
     "qualification": {
@@ -118,7 +128,7 @@
     },
     "nativeVisual": {
       "id": "ff-46-documented-visual-native-20261005",
-      "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+      "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
       "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
       "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
       "date": "2026-10-05",
@@ -792,7 +802,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-th (22/22 shapes; theme major.cs, theme minor.cs); scripts-18-thai (15/15 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-18-thai (16/16 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-th (22/22 shapes; theme major.cs, theme minor.cs); scripts-18-thai (15/15 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-35-thai-angsana-new (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05-cjk-native-20261002",
@@ -835,14 +845,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-18-thai",
-                "shapesFontsOk": "16/16",
+                "deck": "scripts-35-thai-angsana-new",
+                "shapesFontsOk": "8/8",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -862,7 +872,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: preview much wider than the real font: native / preview ink width median 0.7003 on 6 line(s) with no preview size adjustment; replacement width 400 Thai +42%, 700 Thai +50% with no preview size adjustment. Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: preview much wider than the real font: native / preview ink width median 0.6971 on 6 line(s) with no preview size adjustment; replacement width 400 Thai +42%, 700 Thai +50% with no preview size adjustment. Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -871,7 +881,7 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.7003,
+        "inkWidthRatio": 0.6971,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -884,7 +894,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "preview much wider than the real font: native / preview ink width median 0.7003 on 6 line(s) with no preview size adjustment",
+          "preview much wider than the real font: native / preview ink width median 0.6971 on 6 line(s) with no preview size adjustment",
           "replacement width 400 Thai +42%, 700 Thai +50% with no preview size adjustment"
         ],
         "notes": [],
@@ -947,7 +957,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +42.4% mean, 58.2% max over 7 samples; line height 1.16 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 42 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Native name read-back passed (rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (preview much wider than the real font: native / preview ink width median 0.7003 on 6 line(s) with no preview size adjustment; replacement width 400 Thai +42%, 700 Thai +50% with no preview size adjustment).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +42.4% mean, 58.2% max over 7 samples; line height 1.16 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 42 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Native name read-back passed (rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (preview much wider than the real font: native / preview ink width median 0.6971 on 6 line(s) with no preview size adjustment; replacement width 400 Thai +42%, 700 Thai +50% with no preview size adjustment).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -986,7 +996,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -1270,7 +1280,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-09-hindi (9/9 shapes; Presentation.Fonts); scripts-09-hindi (21/21 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-09-hindi (9/9 shapes; Presentation.Fonts); scripts-24-hindi-aparajita (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -1290,15 +1300,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-09-hindi",
-                "shapesFontsOk": "21/21",
+                "deck": "scripts-24-hindi-aparajita",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -1320,11 +1336,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.102,
-        "lineBoxes": 7,
-        "singleLineBoxes": 7,
+        "inkWidthRatio": 0.9112,
+        "lineBoxes": 8,
+        "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 3,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -1415,7 +1431,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -1789,7 +1805,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -1959,7 +1975,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -2328,7 +2344,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -2490,7 +2506,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -3532,7 +3548,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05b-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-ar (24/24 shapes; theme major.cs, theme minor.cs); rtl-structures-ar (16/16 shapes; theme major.cs, theme minor.cs); scripts-05-arabic (18/18 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-05-arabic (24/24 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in rr-05b-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-ar (24/24 shapes; theme major.cs, theme minor.cs); rtl-structures-ar (16/16 shapes; theme major.cs, theme minor.cs); scripts-05-arabic (18/18 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-15-arabic-arabic-typesetting (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05b-native-20261002",
@@ -3583,14 +3599,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-05-arabic",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-15-arabic-arabic-typesetting",
+                "shapesFontsOk": "6/6",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -3610,7 +3626,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9807 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits, preview size adjustment 0.64), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9306 on lines of at least 200 pt, 6 of 6 line boxes read one native line, 0 overflow where the preview fits, preview size adjustment 0.64), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -3619,9 +3635,9 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.9807,
-        "lineBoxes": 8,
-        "singleLineBoxes": 8,
+        "inkWidthRatio": 0.9306,
+        "lineBoxes": 6,
+        "singleLineBoxes": 6,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": 0.64,
@@ -3731,7 +3747,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -5532,7 +5548,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-04-korean (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-13-korean-batang (8/8 shapes; theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -5552,15 +5568,17 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-04-korean",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-13-korean-batang",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -5573,7 +5591,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 18.41 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 2 line box(es), max 139.53 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -5582,10 +5600,10 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.1063,
+        "inkWidthRatio": 1.0557,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 1,
+        "fontOverflowBoxes": 2,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -5595,7 +5613,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 18.41 pt past the box",
+          "native overflow where the preview fits: 2 line box(es), max 139.53 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -5687,7 +5705,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -5789,7 +5807,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-04-korean (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-13-korean-batang (8/8 shapes; theme major.latin, theme major.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -5809,15 +5827,17 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-04-korean",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-13-korean-batang",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -5830,7 +5850,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 18.41 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 2 line box(es), max 139.53 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -5839,10 +5859,10 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.1063,
+        "inkWidthRatio": 1.0557,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 1,
+        "fontOverflowBoxes": 2,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -5852,7 +5872,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 18.41 pt past the box",
+          "native overflow where the preview fits: 2 line box(es), max 139.53 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -5944,7 +5964,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -7616,7 +7636,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -7757,7 +7777,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -8402,7 +8422,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -8427,7 +8447,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9374 on lines of at least 200 pt, 26 of 26 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9688 on lines of at least 200 pt, 26 of 26 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -8436,7 +8456,7 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.9374,
+        "inkWidthRatio": 0.9688,
         "lineBoxes": 26,
         "singleLineBoxes": 26,
         "fontOverflowBoxes": 0,
@@ -8444,8 +8464,8 @@
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
-          "review": 0,
-          "far": 13,
+          "review": 1,
+          "far": 12,
           "size-mismatch": 0
         },
         "reasons": [],
@@ -8486,7 +8506,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -10971,7 +10991,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-19-khmer (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-19-khmer (14/14 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-19-khmer (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-37-khmer-daunpenh (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -10997,14 +11017,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-19-khmer",
-                "shapesFontsOk": "14/14",
+                "deck": "scripts-37-khmer-daunpenh",
+                "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -11033,7 +11053,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.5158,
+        "inkWidthRatio": 0.5673,
         "lineBoxes": 7,
         "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
@@ -11129,7 +11149,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -11233,7 +11253,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05b-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-he (22/22 shapes; theme major.cs, theme minor.cs); rtl-structures-he (16/16 shapes; theme major.cs, theme minor.cs); scripts-08-hebrew (9/9 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-08-hebrew (24/24 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in rr-05b-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-he (22/22 shapes; theme major.cs, theme minor.cs); rtl-structures-he (16/16 shapes; theme major.cs, theme minor.cs); scripts-08-hebrew (9/9 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-20-hebrew-david (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05b-native-20261002",
@@ -11284,14 +11304,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-08-hebrew",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-20-hebrew-david",
+                "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -11320,9 +11340,9 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9221,
-        "lineBoxes": 8,
-        "singleLineBoxes": 8,
+        "inkWidthRatio": 0.9025,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
@@ -11420,7 +11440,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -11781,7 +11801,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-18-thai (15/15 shapes; Presentation.Fonts); scripts-18-thai (16/16 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-18-thai (15/15 shapes; Presentation.Fonts); scripts-36-thai-dilleniaupc (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -11801,15 +11821,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-18-thai",
-                "shapesFontsOk": "16/16",
+                "deck": "scripts-36-thai-dilleniaupc",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -11822,7 +11848,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: preview much wider than the real font: native / preview ink width median 0.6975 on 7 line(s) with no preview size adjustment; replacement width 400 Thai +55%, 700 Thai +60% with no preview size adjustment. Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: preview much wider than the real font: native / preview ink width median 0.6392 on 7 line(s) with no preview size adjustment; replacement width 400 Thai +55%, 700 Thai +60% with no preview size adjustment. Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -11831,7 +11857,7 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.6975,
+        "inkWidthRatio": 0.6392,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -11844,7 +11870,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "preview much wider than the real font: native / preview ink width median 0.6975 on 7 line(s) with no preview size adjustment",
+          "preview much wider than the real font: native / preview ink width median 0.6392 on 7 line(s) with no preview size adjustment",
           "replacement width 400 Thai +55%, 700 Thai +60% with no preview size adjustment"
         ],
         "notes": [],
@@ -11906,7 +11932,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +55.5% mean, 64.5% max over 7 samples; line height 0.6 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 55 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (preview much wider than the real font: native / preview ink width median 0.6975 on 7 line(s) with no preview size adjustment; replacement width 400 Thai +55%, 700 Thai +60% with no preview size adjustment).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Thai (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +55.5% mean, 64.5% max over 7 samples; line height 0.6 (original) against 1.51 em (preview face). No open face of the script is this narrow (Noto Serif Thai was measured wider still): previews draw 55 percent longer lines than PowerPoint, a recorded visual gap. PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (preview much wider than the real font: native / preview ink width median 0.6392 on 7 line(s) with no preview size adjustment; replacement width 400 Thai +55%, 700 Thai +60% with no preview size adjustment).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -11941,7 +11967,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -12308,7 +12334,8 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-24-amharic (6/6 shapes; Presentation.Fonts); scripts-20-amharic (16/16 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002: scripts-24-amharic (6/6 shapes; Presentation.Fonts).",
+        "caveat": "Decks that name it but fail a check: scripts-40-amharic-ebrima (presentationFonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -12325,22 +12352,6 @@
                 ]
               }
             ]
-          },
-          {
-            "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
-            "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
-            "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
-            "date": "2026-10-05",
-            "decks": [
-              {
-                "deck": "scripts-20-amharic",
-                "shapesFontsOk": "16/16",
-                "via": [
-                  "Presentation.Fonts"
-                ]
-              }
-            ]
           }
         ]
       },
@@ -12349,7 +12360,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: real font wider than the replacement: native / preview ink width median 1.074 on 3 line(s) of at least 200 pt (a full composed line overflows by about 7%). Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: name read-back failed (scripts-40-amharic-ebrima); real font wider than the replacement: native / preview ink width median 1.074 on 3 line(s) of at least 200 pt (a full composed line overflows by about 7%). Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -12371,6 +12382,7 @@
           "size-mismatch": 0
         },
         "reasons": [
+          "name read-back failed (scripts-40-amharic-ebrima)",
           "real font wider than the replacement: native / preview ink width median 1.074 on 3 line(s) of at least 200 pt (a full composed line overflows by about 7%)"
         ],
         "notes": [],
@@ -12414,7 +12426,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 54 of 54 face-samples; the same samples agree in Chromium within 0.1 px. N'Ko, Tifinagh and Vai have no bundled face and no corpus: descoped for FF-44 (no catalog language or scheme selects them). Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (real font wider than the replacement: native / preview ink width median 1.074 on 3 line(s) of at least 200 pt (a full composed line overflows by about 7%)).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 54 of 54 face-samples; the same samples agree in Chromium within 0.1 px. N'Ko, Tifinagh and Vai have no bundled face and no corpus: descoped for FF-44 (no catalog language or scheme selects them). Native name read-back passed (ff-46-native-0.12-20261002), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (name read-back failed (scripts-40-amharic-ebrima); real font wider than the replacement: native / preview ink width median 1.074 on 3 line(s) of at least 200 pt (a full composed line overflows by about 7%)).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -12443,10 +12455,6 @@
         {
           "label": "FF-46 native run: every family on the 0.12.0 train (2026-10-02)",
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
-        },
-        {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
-          "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
       "priority": {
@@ -12547,7 +12555,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-02-chinese-simplified (15/15 shapes; Presentation.Fonts); scripts-02-chinese-simplified (35/35 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-02-chinese-simplified (15/15 shapes; Presentation.Fonts); scripts-08-chinese-simplified-fangsong (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -12567,15 +12575,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-02-chinese-simplified",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-08-chinese-simplified-fangsong",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -12597,16 +12609,16 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9989,
+        "inkWidthRatio": 0.9951,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
-          "close": 1,
-          "review": 1,
-          "far": 0,
+          "close": 0,
+          "review": 0,
+          "far": 2,
           "size-mismatch": 0
         },
         "reasons": [
@@ -12701,7 +12713,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -13806,7 +13818,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-15-telugu (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-15-telugu (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-15-telugu (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-32-telugu-gautami (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -13832,13 +13844,13 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-15-telugu",
+                "deck": "scripts-32-telugu-gautami",
                 "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
@@ -13868,11 +13880,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9199,
+        "inkWidthRatio": 0.9882,
         "lineBoxes": 7,
         "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 2,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -13964,7 +13976,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -14844,7 +14856,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-08-hebrew (9/9 shapes; Presentation.Fonts); scripts-08-hebrew (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-08-hebrew (9/9 shapes; Presentation.Fonts); scripts-21-hebrew-gisha (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -14864,15 +14876,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-08-hebrew",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-21-hebrew-gisha",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -14894,7 +14912,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.8799,
+        "inkWidthRatio": 0.9616,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -14902,8 +14920,8 @@
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
-          "review": 0,
-          "far": 2,
+          "review": 1,
+          "far": 1,
           "size-mismatch": 0
         },
         "reasons": [
@@ -14989,7 +15007,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -15597,7 +15615,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-04-korean (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-14-korean-gungsuh (8/8 shapes; theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -15617,15 +15635,17 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-04-korean",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-14-korean-gungsuh",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -15638,7 +15658,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 20.16 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 2 line box(es), max 141.78 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -15647,10 +15667,10 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.1006,
+        "inkWidthRatio": 1.0557,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 1,
+        "fontOverflowBoxes": 2,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -15660,7 +15680,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 20.16 pt past the box",
+          "native overflow where the preview fits: 2 line box(es), max 141.78 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -15752,7 +15772,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -15854,7 +15874,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-04-korean (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-04-korean (12/12 shapes; Presentation.Fonts); scripts-14-korean-gungsuh (8/8 shapes; theme major.latin, theme major.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -15874,15 +15894,17 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-04-korean",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-14-korean-gungsuh",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -15895,7 +15917,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 20.16 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 2 line box(es), max 141.78 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -15904,10 +15926,10 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.1006,
+        "inkWidthRatio": 1.0557,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 1,
+        "fontOverflowBoxes": 2,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -15917,7 +15939,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 20.16 pt past the box",
+          "native overflow where the preview fits: 2 line box(es), max 141.78 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -16009,7 +16031,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -17259,7 +17281,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-13-odia (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-13-odia (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-13-odia (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-30-odia-kalinga (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -17285,14 +17307,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-13-odia",
-                "shapesFontsOk": "6/6",
+                "deck": "scripts-30-odia-kalinga",
+                "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -17321,11 +17343,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.8895,
-        "lineBoxes": 6,
-        "singleLineBoxes": 6,
+        "inkWidthRatio": 0.8889,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 1,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -17417,7 +17439,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -17517,7 +17539,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-17-malayalam (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-17-malayalam (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-17-malayalam (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-34-malayalam-kartika (10/10 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -17543,14 +17565,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-17-malayalam",
-                "shapesFontsOk": "7/7",
+                "deck": "scripts-34-malayalam-kartika",
+                "shapesFontsOk": "10/10",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -17570,7 +17592,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 4 line box(es), max 199.41 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -17579,11 +17601,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.1997,
-        "lineBoxes": 7,
-        "singleLineBoxes": 7,
-        "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 3,
+        "inkWidthRatio": 1.0943,
+        "lineBoxes": 10,
+        "singleLineBoxes": 10,
+        "fontOverflowBoxes": 4,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -17592,6 +17614,7 @@
           "size-mismatch": 0
         },
         "reasons": [
+          "native overflow where the preview fits: 4 line box(es), max 199.41 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -17675,7 +17698,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -17775,7 +17798,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-19-khmer (6/6 shapes; Presentation.Fonts); scripts-19-khmer (14/14 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-19-khmer (6/6 shapes; Presentation.Fonts); scripts-38-khmer-khmer-ui (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -17795,15 +17818,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-19-khmer",
-                "shapesFontsOk": "14/14",
+                "deck": "scripts-38-khmer-khmer-ui",
+                "shapesFontsOk": "7/7",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -17825,7 +17854,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.5158,
+        "inkWidthRatio": 1.1166,
         "lineBoxes": 7,
         "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
@@ -17920,7 +17949,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -18020,7 +18049,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-14-tamil (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-14-tamil (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-14-tamil (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-31-tamil-latha (9/9 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -18046,14 +18075,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-14-tamil",
-                "shapesFontsOk": "6/6",
+                "deck": "scripts-31-tamil-latha",
+                "shapesFontsOk": "9/9",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -18073,7 +18102,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 3 line box(es), max 89.16 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -18082,11 +18111,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0505,
-        "lineBoxes": 6,
-        "singleLineBoxes": 6,
-        "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 3,
+        "inkWidthRatio": 1.0634,
+        "lineBoxes": 9,
+        "singleLineBoxes": 9,
+        "fontOverflowBoxes": 3,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -18095,6 +18124,7 @@
           "size-mismatch": 0
         },
         "reasons": [
+          "native overflow where the preview fits: 3 line box(es), max 89.16 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -18178,7 +18208,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -20189,7 +20219,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-ko (21/21 shapes; theme major.ea, theme minor.ea); scripts-04-korean (12/12 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-04-korean (24/24 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
+        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-ko (21/21 shapes; theme major.ea, theme minor.ea); scripts-04-korean (12/12 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-12-korean-malgun-gothic (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05-cjk-native-20261002",
@@ -20230,14 +20260,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-04-korean",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-12-korean-malgun-gothic",
+                "shapesFontsOk": "8/8",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -20255,7 +20285,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: native overflow where the preview fits: 1 line box(es), max 15.16 pt past the box; real font wider than the replacement: native / preview ink width median 1.0744 on 7 line(s) of at least 200 pt (a full composed line overflows by about 7%). Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: native overflow where the preview fits: 2 line box(es), max 130.78 pt past the box; real font wider than the replacement: native / preview ink width median 1.0494 on 4 line(s) of at least 200 pt (a full composed line overflows by about 5%). Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -20264,10 +20294,10 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 1.0744,
+        "inkWidthRatio": 1.0494,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 1,
+        "fontOverflowBoxes": 2,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -20277,8 +20307,8 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 15.16 pt past the box",
-          "real font wider than the replacement: native / preview ink width median 1.0744 on 7 line(s) of at least 200 pt (a full composed line overflows by about 7%)"
+          "native overflow where the preview fits: 2 line box(es), max 130.78 pt past the box",
+          "real font wider than the replacement: native / preview ink width median 1.0494 on 4 line(s) of at least 200 pt (a full composed line overflows by about 5%)"
         ],
         "notes": [],
         "ownFixtureHosts": []
@@ -20358,7 +20388,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans KR (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -5.9% mean, 9.0% max over 4 samples; line height 1.33 (original) against 1.45 em (preview face). Native name read-back passed (rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (native overflow where the preview fits: 1 line box(es), max 15.16 pt past the box; real font wider than the replacement: native / preview ink width median 1.0744 on 7 line(s) of at least 200 pt (a full composed line overflows by about 7%)).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans KR (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 8 of 8 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -5.9% mean, 9.0% max over 4 samples; line height 1.33 (original) against 1.45 em (preview face). Native name read-back passed (rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (native overflow where the preview fits: 2 line box(es), max 130.78 pt past the box; real font wider than the replacement: native / preview ink width median 1.0494 on 4 line(s) of at least 200 pt (a full composed line overflows by about 5%)).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -20401,7 +20431,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -20501,7 +20531,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-hi (21/21 shapes; theme major.cs, theme minor.cs); scripts-09-hindi (9/9 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-09-hindi (21/21 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-hi (21/21 shapes; theme major.cs, theme minor.cs); scripts-09-hindi (9/9 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-23-hindi-mangal (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05-cjk-native-20261002",
@@ -20544,14 +20574,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-09-hindi",
-                "shapesFontsOk": "21/21",
+                "deck": "scripts-23-hindi-mangal",
+                "shapesFontsOk": "8/8",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -20571,7 +20601,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 3 line box(es), max 180.41 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -20580,11 +20610,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.1637,
-        "lineBoxes": 7,
-        "singleLineBoxes": 7,
-        "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 3,
+        "inkWidthRatio": 1.151,
+        "lineBoxes": 8,
+        "singleLineBoxes": 8,
+        "fontOverflowBoxes": 3,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -20593,6 +20623,7 @@
           "size-mismatch": 0
         },
         "reasons": [
+          "native overflow where the preview fits: 3 line box(es), max 180.41 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -20680,7 +20711,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -20782,7 +20813,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-ja (21/21 shapes; theme major.ea, theme minor.ea); size-4x3-japanese (10/10 shapes; theme major.ea, theme minor.ea); scripts-01-japanese (19/19 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-01-japanese (35/35 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
+        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-ja (21/21 shapes; theme major.ea, theme minor.ea); size-4x3-japanese (10/10 shapes; theme major.ea, theme minor.ea); scripts-01-japanese (19/19 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-01-japanese-meiryo (11/11 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "caveat": "Decks that name it but fail a check: lang-ja-meiryo (presentationFonts).",
         "runs": [
           {
@@ -20832,14 +20863,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-01-japanese",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-01-japanese-meiryo",
+                "shapesFontsOk": "11/11",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -20857,7 +20888,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 13.28 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -20866,10 +20897,10 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0168,
+        "inkWidthRatio": 1.0177,
         "lineBoxes": 11,
         "singleLineBoxes": 11,
-        "fontOverflowBoxes": 0,
+        "fontOverflowBoxes": 1,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -20879,6 +20910,7 @@
           "size-mismatch": 0
         },
         "reasons": [
+          "native overflow where the preview fits: 1 line box(es), max 13.28 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -20975,7 +21007,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -21316,7 +21348,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-zh-hant (21/21 shapes; theme major.ea, theme minor.ea); scripts-03-chinese-traditional (13/13 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-03-chinese-traditional (28/28 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
+        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-zh-hant (21/21 shapes; theme major.ea, theme minor.ea); scripts-03-chinese-traditional (13/13 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-09-chinese-traditional-microsoft-jhenghei (12/12 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05-cjk-native-20261002",
@@ -21357,14 +21389,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-03-chinese-traditional",
-                "shapesFontsOk": "28/28",
+                "deck": "scripts-09-chinese-traditional-microsoft-jhenghei",
+                "shapesFontsOk": "12/12",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -21382,7 +21414,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9982 on lines of at least 200 pt, 12 of 12 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9974 on lines of at least 200 pt, 12 of 12 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -21391,7 +21423,7 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.9982,
+        "inkWidthRatio": 0.9974,
         "lineBoxes": 12,
         "singleLineBoxes": 12,
         "fontOverflowBoxes": 0,
@@ -21525,7 +21557,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -21901,7 +21933,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-zh-hans (21/21 shapes; theme major.ea, theme minor.ea); scripts-02-chinese-simplified (15/15 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-02-chinese-simplified (35/35 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
+        "note": "Passed in rr-05-cjk-native-20261002, ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: lang-zh-hans (21/21 shapes; theme major.ea, theme minor.ea); scripts-02-chinese-simplified (15/15 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts); scripts-05-chinese-simplified-microsoft-yahei (11/11 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "rr-05-cjk-native-20261002",
@@ -21942,14 +21974,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-02-chinese-simplified",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-05-chinese-simplified-microsoft-yahei",
+                "shapesFontsOk": "11/11",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -22110,7 +22142,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -22212,7 +22244,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-03-chinese-traditional (13/13 shapes; Presentation.Fonts); scripts-03-chinese-traditional (28/28 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-03-chinese-traditional (13/13 shapes; Presentation.Fonts); scripts-10-chinese-traditional-mingliu (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -22232,15 +22264,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-03-chinese-traditional",
-                "shapesFontsOk": "28/28",
+                "deck": "scripts-10-chinese-traditional-mingliu",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -22262,7 +22298,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9982,
+        "inkWidthRatio": 0.9991,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -22366,7 +22402,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -22466,7 +22502,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-08-hebrew (9/9 shapes; Presentation.Fonts); scripts-08-hebrew (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-08-hebrew (9/9 shapes; Presentation.Fonts); scripts-22-hebrew-miriam (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -22486,15 +22522,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-08-hebrew",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-22-hebrew-miriam",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -22516,7 +22558,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.8732,
+        "inkWidthRatio": 0.9002,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -22611,7 +22653,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -22965,7 +23007,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-01-japanese (19/19 shapes; Presentation.Fonts); scripts-01-japanese (35/35 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-01-japanese (19/19 shapes; Presentation.Fonts); scripts-03-japanese-ms-gothic (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -22985,15 +23027,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-01-japanese",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-03-japanese-ms-gothic",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -23006,7 +23052,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: real font wider than the replacement: native / preview ink width median 1.0371 on 7 line(s) of at least 200 pt (a full composed line overflows by about 4%). Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: native overflow where the preview fits: 1 line box(es), max 35.78 pt past the box; real font wider than the replacement: native / preview ink width median 1.0241 on 7 line(s) of at least 200 pt (a full composed line overflows by about 2%). Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -23015,20 +23061,21 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 1.0371,
+        "inkWidthRatio": 1.0241,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 0,
+        "fontOverflowBoxes": 1,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
-          "review": 0,
-          "far": 2,
+          "review": 1,
+          "far": 1,
           "size-mismatch": 0
         },
         "reasons": [
-          "real font wider than the replacement: native / preview ink width median 1.0371 on 7 line(s) of at least 200 pt (a full composed line overflows by about 4%)"
+          "native overflow where the preview fits: 1 line box(es), max 35.78 pt past the box",
+          "real font wider than the replacement: native / preview ink width median 1.0241 on 7 line(s) of at least 200 pt (a full composed line overflows by about 2%)"
         ],
         "notes": [],
         "ownFixtureHosts": []
@@ -23088,7 +23135,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans JP (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -5.0% mean, 16.2% max over 7 samples; line height 1 (original) against 1.45 em (preview face). Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (real font wider than the replacement: native / preview ink width median 1.0371 on 7 line(s) of at least 200 pt (a full composed line overflows by about 4%)).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans JP (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 14 of 14 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -5.0% mean, 16.2% max over 7 samples; line height 1 (original) against 1.45 em (preview face). Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (native overflow where the preview fits: 1 line box(es), max 35.78 pt past the box; real font wider than the replacement: native / preview ink width median 1.0241 on 7 line(s) of at least 200 pt (a full composed line overflows by about 2%)).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23123,7 +23170,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -23225,7 +23272,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-01-japanese (19/19 shapes; Presentation.Fonts); scripts-01-japanese (35/35 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-01-japanese (19/19 shapes; Presentation.Fonts); scripts-04-japanese-ms-mincho (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -23245,15 +23292,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-01-japanese",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-04-japanese-ms-mincho",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -23266,7 +23317,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 35.78 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -23275,10 +23326,10 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0391,
+        "inkWidthRatio": 1.0054,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
-        "fontOverflowBoxes": 0,
+        "fontOverflowBoxes": 1,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
@@ -23288,6 +23339,7 @@
           "size-mismatch": 0
         },
         "reasons": [
+          "native overflow where the preview fits: 1 line box(es), max 35.78 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -23379,7 +23431,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -23526,7 +23578,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-09-hindi (9/9 shapes; Presentation.Fonts); scripts-09-hindi (21/21 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-09-hindi (9/9 shapes; Presentation.Fonts); scripts-25-hindi-nirmala-ui (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -23546,15 +23598,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-09-hindi",
-                "shapesFontsOk": "21/21",
+                "deck": "scripts-25-hindi-nirmala-ui",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -23567,7 +23625,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: real font wider than the replacement: native / preview ink width median 1.0758 on 2 line(s) of at least 200 pt (a full composed line overflows by about 8%). Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: native overflow where the preview fits: 2 line box(es), max 55.28 pt past the box; real font wider than the replacement: native / preview ink width median 1.0266 on 5 line(s) of at least 200 pt (a full composed line overflows by about 3%). Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -23576,11 +23634,11 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 1.0758,
-        "lineBoxes": 7,
-        "singleLineBoxes": 7,
-        "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 3,
+        "inkWidthRatio": 1.0266,
+        "lineBoxes": 8,
+        "singleLineBoxes": 8,
+        "fontOverflowBoxes": 2,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -23589,7 +23647,8 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "real font wider than the replacement: native / preview ink width median 1.0758 on 2 line(s) of at least 200 pt (a full composed line overflows by about 8%)"
+          "native overflow where the preview fits: 2 line box(es), max 55.28 pt past the box",
+          "real font wider than the replacement: native / preview ink width median 1.0266 on 5 line(s) of at least 200 pt (a full composed line overflows by about 3%)"
         ],
         "notes": [],
         "ownFixtureHosts": []
@@ -23650,7 +23709,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -6.2% mean, 9.2% max over 9 samples; line height 1.33 (original) against 1.3 em (preview face). PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Its other Indic scripts (Bengali, Gujarati, Gurmukhi, Kannada, Malayalam, Odia, Tamil, Telugu, Sinhala) route to their own Noto faces, each qualified above. Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (real font wider than the replacement: native / preview ink width median 1.0758 on 2 line(s) of at least 200 pt (a full composed line overflows by about 8%)).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Sans Devanagari (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 18 of 18 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta -6.2% mean, 9.2% max over 9 samples; line height 1.33 (original) against 1.3 em (preview face). PNG output of this script is mis-shaped by resvg-js (SVG is correct); recorded as a raster limit (fixed by opf-render#97 once merged). Its other Indic scripts (Bengali, Gujarati, Gurmukhi, Kannada, Malayalam, Odia, Tamil, Telugu, Sinhala) route to their own Noto faces, each qualified above. Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (native overflow where the preview fits: 2 line box(es), max 55.28 pt past the box; real font wider than the replacement: native / preview ink width median 1.0266 on 5 line(s) of at least 200 pt (a full composed line overflows by about 3%)).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -23685,7 +23744,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -31189,7 +31248,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-24-amharic (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-20-amharic (16/16 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-24-amharic (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-39-amharic-nyala (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -31215,14 +31274,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-20-amharic",
-                "shapesFontsOk": "16/16",
+                "deck": "scripts-39-amharic-nyala",
+                "shapesFontsOk": "8/8",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -31251,11 +31310,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9074,
+        "inkWidthRatio": 0.9535,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 2,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -31347,7 +31406,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -32180,7 +32239,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-03-chinese-traditional (13/13 shapes; Presentation.Fonts); scripts-03-chinese-traditional (28/28 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-03-chinese-traditional (13/13 shapes; Presentation.Fonts); scripts-11-chinese-traditional-pmingliu (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -32200,15 +32259,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-03-chinese-traditional",
-                "shapesFontsOk": "28/28",
+                "deck": "scripts-11-chinese-traditional-pmingliu",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -32230,7 +32293,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9948,
+        "inkWidthRatio": 0.9964,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -32334,7 +32397,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -32866,7 +32929,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-11-punjabi (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-11-punjabi (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-11-punjabi (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-28-punjabi-raavi (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -32892,13 +32955,13 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-11-punjabi",
+                "deck": "scripts-28-punjabi-raavi",
                 "shapesFontsOk": "6/6",
                 "via": [
                   "theme major.latin",
@@ -32928,7 +32991,7 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0737,
+        "inkWidthRatio": 1.0754,
         "lineBoxes": 6,
         "singleLineBoxes": 6,
         "fontOverflowBoxes": 0,
@@ -33024,7 +33087,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -34546,7 +34609,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-05-arabic (18/18 shapes; Presentation.Fonts); scripts-06-urdu (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-07-persian (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-05-arabic (24/24 shapes; Presentation.Fonts); and 2 more.",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-05-arabic (18/18 shapes; Presentation.Fonts); scripts-06-urdu (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-07-persian (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-17-arabic-sakkal-majalla (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); and 2 more.",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -34592,20 +34655,26 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-05-arabic",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-17-arabic-sakkal-majalla",
+                "shapesFontsOk": "7/7",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               },
               {
-                "deck": "scripts-06-urdu",
+                "deck": "scripts-18-urdu-sakkal-majalla",
                 "shapesFontsOk": "3/3",
                 "via": [
                   "theme major.latin",
@@ -34618,7 +34687,7 @@
                 ]
               },
               {
-                "deck": "scripts-07-persian",
+                "deck": "scripts-19-persian-sakkal-majalla",
                 "shapesFontsOk": "3/3",
                 "via": [
                   "theme major.latin",
@@ -34639,7 +34708,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: preview much wider than the real font: native / preview ink width median 0.5955 on 11 line(s) with no preview size adjustment. Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: replacement width 400 Arab +25%, 700 Arab +26% with no preview size adjustment. Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -34648,9 +34717,9 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.5955,
-        "lineBoxes": 14,
-        "singleLineBoxes": 14,
+        "inkWidthRatio": 0.8054,
+        "lineBoxes": 13,
+        "singleLineBoxes": 13,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
@@ -34661,7 +34730,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "preview much wider than the real font: native / preview ink width median 0.5955 on 11 line(s) with no preview size adjustment"
+          "replacement width 400 Arab +25%, 700 Arab +26% with no preview size adjustment"
         ],
         "notes": [],
         "ownFixtureHosts": []
@@ -34735,7 +34804,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Naskh Arabic (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 24 of 24 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +24.6% mean, 36.3% max over 12 samples; line height 1.4 (original) against 1.7 em (preview face). No open face of the script is this narrow: previews draw 25 percent longer lines than PowerPoint, a recorded visual gap. Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (preview much wider than the real font: native / preview ink width median 0.5955 on 11 line(s) with no preview size adjustment).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Naskh Arabic (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 24 of 24 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +24.6% mean, 36.3% max over 12 samples; line height 1.4 (original) against 1.7 em (preview face). No open face of the script is this narrow: previews draw 25 percent longer lines than PowerPoint, a recorded visual gap. Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (replacement width 400 Arab +25%, 700 Arab +26% with no preview size adjustment).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -34770,7 +34839,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -35776,7 +35845,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -35870,7 +35939,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -36921,7 +36990,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-10-bengali (6/6 shapes; Presentation.Fonts); scripts-10-bengali (12/12 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-10-bengali (6/6 shapes; Presentation.Fonts); scripts-27-bengali-shonar-bangla (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -36941,15 +37010,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-10-bengali",
-                "shapesFontsOk": "12/12",
+                "deck": "scripts-27-bengali-shonar-bangla",
+                "shapesFontsOk": "7/7",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -36962,7 +37037,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 3.66 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -36971,11 +37046,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0504,
-        "lineBoxes": 6,
-        "singleLineBoxes": 6,
-        "fontOverflowBoxes": 1,
-        "compositionOverflowBoxes": 1,
+        "inkWidthRatio": 0.7232,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
+        "fontOverflowBoxes": 0,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -36984,7 +37059,6 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 3.66 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -37068,7 +37142,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -37168,7 +37242,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-12-gujarati (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-12-gujarati (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-12-gujarati (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-29-gujarati-shruti (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -37194,14 +37268,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-12-gujarati",
-                "shapesFontsOk": "6/6",
+                "deck": "scripts-29-gujarati-shruti",
+                "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -37221,7 +37295,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 112.03 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 2 line box(es), max 167.03 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -37230,11 +37304,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0256,
-        "lineBoxes": 6,
-        "singleLineBoxes": 6,
-        "fontOverflowBoxes": 1,
-        "compositionOverflowBoxes": 1,
+        "inkWidthRatio": 1.0529,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
+        "fontOverflowBoxes": 2,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -37243,7 +37317,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 112.03 pt past the box",
+          "native overflow where the preview fits: 2 line box(es), max 167.03 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -37327,7 +37401,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -37429,7 +37503,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-02-chinese-simplified (15/15 shapes; Presentation.Fonts); scripts-02-chinese-simplified (35/35 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-02-chinese-simplified (15/15 shapes; Presentation.Fonts); scripts-07-chinese-simplified-simhei (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -37449,15 +37523,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-02-chinese-simplified",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-07-chinese-simplified-simhei",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -37479,15 +37557,15 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.9989,
+        "inkWidthRatio": 1.0032,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
-          "close": 1,
-          "review": 1,
+          "close": 0,
+          "review": 2,
           "far": 0,
           "size-mismatch": 0
         },
@@ -37573,7 +37651,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -37703,7 +37781,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-02-chinese-simplified (15/15 shapes; Presentation.Fonts); scripts-02-chinese-simplified (35/35 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-02-chinese-simplified (15/15 shapes; Presentation.Fonts); scripts-06-chinese-simplified-simsun (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -37723,15 +37801,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-02-chinese-simplified",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-06-chinese-simplified-simsun",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -37744,7 +37826,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9989 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9984 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -37753,16 +37835,16 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.9989,
+        "inkWidthRatio": 0.9984,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
-          "close": 1,
+          "close": 0,
           "review": 1,
-          "far": 0,
+          "far": 1,
           "size-mismatch": 0
         },
         "reasons": [],
@@ -37869,7 +37951,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -39164,7 +39246,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-25-armenian (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-26-georgian (2/2 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-21-armenian (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-22-georgian (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-25-armenian (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-26-georgian (2/2 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-41-armenian-sylfaen (8/8 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-42-georgian-sylfaen (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -39203,13 +39285,13 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-21-armenian",
+                "deck": "scripts-41-armenian-sylfaen",
                 "shapesFontsOk": "8/8",
                 "via": [
                   "theme major.latin",
@@ -39222,7 +39304,7 @@
                 ]
               },
               {
-                "deck": "scripts-22-georgian",
+                "deck": "scripts-42-georgian-sylfaen",
                 "shapesFontsOk": "6/6",
                 "via": [
                   "theme major.latin",
@@ -39243,7 +39325,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.949 on lines of at least 200 pt, 14 of 14 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9366 on lines of at least 200 pt, 14 of 14 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -39252,7 +39334,7 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.949,
+        "inkWidthRatio": 0.9366,
         "lineBoxes": 14,
         "singleLineBoxes": 14,
         "fontOverflowBoxes": 0,
@@ -39377,7 +39459,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -39597,7 +39679,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -39618,7 +39700,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.8953 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.8965 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -39627,7 +39709,7 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.8953,
+        "inkWidthRatio": 0.8965,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -39689,7 +39771,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -41094,7 +41176,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-05-arabic (18/18 shapes; Presentation.Fonts); scripts-05-arabic (24/24 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-05-arabic (18/18 shapes; Presentation.Fonts); scripts-16-arabic-traditional-arabic (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -41114,15 +41196,21 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-05-arabic",
-                "shapesFontsOk": "24/24",
+                "deck": "scripts-16-arabic-traditional-arabic",
+                "shapesFontsOk": "7/7",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme major.cs",
+                  "theme minor.latin",
+                  "theme minor.ea",
+                  "theme minor.cs",
                   "Presentation.Fonts"
                 ]
               }
@@ -41135,7 +41223,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: preview much wider than the real font: native / preview ink width median 0.5912 on 7 line(s) with no preview size adjustment. Owner decision needed; the gate is unchanged."
+        "note": "Not accepted: the native visual comparison (ff-46-documented-visual-native-20261005) recorded a finding: replacement width 400 Arab +28%, 700 Arab +26% with no preview size adjustment. Owner decision needed; the gate is unchanged."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -41144,9 +41232,9 @@
         "date": "2026-10-05",
         "outcome": "finding",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.5912,
-        "lineBoxes": 8,
-        "singleLineBoxes": 8,
+        "inkWidthRatio": 0.8148,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
         "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
@@ -41157,7 +41245,7 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "preview much wider than the real font: native / preview ink width median 0.5912 on 7 line(s) with no preview size adjustment"
+          "replacement width 400 Arab +28%, 700 Arab +26% with no preview size adjustment"
         ],
         "notes": [],
         "ownFixtureHosts": []
@@ -41231,7 +41319,7 @@
       "phase": 4,
       "status": "script-gap",
       "statusReason": "visual script route: the script corpus (FF-44) qualifies coverage and shaping; native PowerPoint comparison and the recorded appearance gap remain",
-      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Naskh Arabic (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 24 of 24 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +27.7% mean, 41.1% max over 9 samples; line height 1.49 (original) against 1.7 em (preview face). No open face of the script is this narrow: previews draw 28 percent longer lines than PowerPoint, a recorded visual gap. Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (preview much wider than the real font: native / preview ink width median 0.5912 on 7 line(s) with no preview size adjustment).",
+      "nextAction": "Native PowerPoint comparison (FF-46, RR-05) is the remaining acceptance gate. Script corpus 2026-10-01: Noto Naskh Arabic (400, 700) has complete own-script coverage and its measured advances equal HarfBuzz's on 24 of 24 face-samples; the same samples agree in Chromium within 0.1 px. Installed original read in place: width delta +27.7% mean, 41.1% max over 9 samples; line height 1.49 (original) against 1.7 em (preview face). No open face of the script is this narrow: previews draw 28 percent longer lines than PowerPoint, a recorded visual gap. Native name read-back passed (ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains. Native visual comparison (ff-46-documented-visual-native-20261005): finding, owner decision needed (replacement width 400 Arab +28%, 700 Arab +26% with no preview size adjustment).",
       "evidence": [
         {
           "label": "opf-render#55 (auto script fonts)",
@@ -41266,7 +41354,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -41650,7 +41738,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-16-kannada (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-16-kannada (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-16-kannada (3/3 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-33-kannada-tunga (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -41676,14 +41764,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-16-kannada",
-                "shapesFontsOk": "6/6",
+                "deck": "scripts-33-kannada-tunga",
+                "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -41712,11 +41800,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 0.8498,
-        "lineBoxes": 6,
-        "singleLineBoxes": 6,
+        "inkWidthRatio": 0.9595,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
         "fontOverflowBoxes": 0,
-        "compositionOverflowBoxes": 2,
+        "compositionOverflowBoxes": 0,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -41808,7 +41896,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -42198,7 +42286,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-10-bengali (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-10-bengali (12/12 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-10-bengali (6/6 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts); scripts-26-bengali-vrinda (7/7 shapes; theme major.latin, theme major.ea, theme major.cs, theme minor.latin, theme minor.ea, theme minor.cs, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -42224,14 +42312,14 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-10-bengali",
-                "shapesFontsOk": "12/12",
+                "deck": "scripts-26-bengali-vrinda",
+                "shapesFontsOk": "7/7",
                 "via": [
                   "theme major.latin",
                   "theme major.ea",
@@ -42251,7 +42339,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (native overflow where the preview fits: 1 line box(es), max 3.66 pt past the box; not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
+        "note": "Not accepted: the real font is not installed on the native host of ff-46-documented-visual-native-20261005, so PowerPoint drew a substitute and the real face was not compared (not installed on the native host: PowerPoint drew a substitute, so the real face was not compared). It needs a native host with the font installed."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -42260,11 +42348,11 @@
         "date": "2026-10-05",
         "outcome": "unmeasured",
         "installedOnNativeHost": false,
-        "inkWidthRatio": 1.0689,
-        "lineBoxes": 6,
-        "singleLineBoxes": 6,
-        "fontOverflowBoxes": 1,
-        "compositionOverflowBoxes": 1,
+        "inkWidthRatio": 1.0744,
+        "lineBoxes": 7,
+        "singleLineBoxes": 7,
+        "fontOverflowBoxes": 0,
+        "compositionOverflowBoxes": 2,
         "previewSizeAdjust": null,
         "images": {
           "close": 0,
@@ -42273,7 +42361,6 @@
           "size-mismatch": 0
         },
         "reasons": [
-          "native overflow where the preview fits: 1 line box(es), max 3.66 pt past the box",
           "not installed on the native host: PowerPoint drew a substitute, so the real face was not compared"
         ],
         "notes": [],
@@ -42357,7 +42444,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -42577,7 +42664,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -42598,7 +42685,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.907 on lines of at least 200 pt, 4 of 4 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 0.9085 on lines of at least 200 pt, 4 of 4 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -42607,7 +42694,7 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 0.907,
+        "inkWidthRatio": 0.9085,
         "lineBoxes": 4,
         "singleLineBoxes": 4,
         "fontOverflowBoxes": 0,
@@ -42669,7 +42756,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -42889,7 +42976,7 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
@@ -42981,7 +43068,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],
@@ -43338,7 +43425,7 @@
       "nativeVerification": {
         "status": "verified",
         "basis": "Native name read-back: supervisor-run PowerPoint 365 read the family's selected name from every run (latin, East Asian, complex script) and from the theme slots of a saved deck that names it, and the names matched the export. It does not accept the preview face's look or metrics against the real font (image scores are reported, not gated).",
-        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-01-japanese (19/19 shapes; Presentation.Fonts); scripts-27-latin-deck-slots (21/21 shapes; theme major.ea, theme minor.ea); scripts-01-japanese (35/35 shapes; Presentation.Fonts).",
+        "note": "Passed in ff-46-native-0.12-20261002, ff-46-documented-visual-native-20261005: scripts-01-japanese (19/19 shapes; Presentation.Fonts); scripts-27-latin-deck-slots (21/21 shapes; theme major.ea, theme minor.ea); scripts-02-japanese-yu-gothic (8/8 shapes; theme major.latin, theme major.ea, theme minor.latin, theme minor.ea, Presentation.Fonts).",
         "runs": [
           {
             "run": "ff-46-native-0.12-20261002",
@@ -43366,15 +43453,19 @@
           },
           {
             "run": "ff-46-documented-visual-native-20261005",
-            "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+            "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
             "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
             "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
             "date": "2026-10-05",
             "decks": [
               {
-                "deck": "scripts-01-japanese",
-                "shapesFontsOk": "35/35",
+                "deck": "scripts-02-japanese-yu-gothic",
+                "shapesFontsOk": "8/8",
                 "via": [
+                  "theme major.latin",
+                  "theme major.ea",
+                  "theme minor.latin",
+                  "theme minor.ea",
                   "Presentation.Fonts"
                 ]
               }
@@ -43387,7 +43478,7 @@
         "accepted": false,
         "date": null,
         "evidence": [],
-        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 1.0097 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
+        "note": "Not accepted yet: the native visual comparison (ff-46-documented-visual-native-20261005) passed (native / preview ink width 1.0071 on lines of at least 200 pt, 8 of 8 line boxes read one native line, 0 overflow where the preview fits), but the family's own host fixture is missing in node, browser, editor, galleryEditor (the script host fixtures cover the open route face, which does not transfer)."
       },
       "nativeVisual": {
         "run": "ff-46-documented-visual-native-20261005",
@@ -43396,7 +43487,7 @@
         "date": "2026-10-05",
         "outcome": "pass",
         "installedOnNativeHost": true,
-        "inkWidthRatio": 1.0097,
+        "inkWidthRatio": 1.0071,
         "lineBoxes": 8,
         "singleLineBoxes": 8,
         "fontOverflowBoxes": 0,
@@ -43525,7 +43616,7 @@
           "url": "docs/evidence/ff-46-native-0.12-20261002/README.md"
         },
         {
-          "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+          "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
           "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
         }
       ],

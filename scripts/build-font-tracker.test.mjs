@@ -589,10 +589,13 @@ test("native verification comes from committed comparison output, and only for f
   assert.equal(runs["ff-46-native-0.12-20261002"].decks, 43);
   assert.equal(runs["ff-46-native-0.12-20261002"].decksPassing, 43);
   assert.deepEqual(runs["ff-46-native-0.12-20261002"].failingChecks, []);
-  // FF-46 / RR-17 (2026-10-05): the script, visual and code-table decks on opf-pptx 0.12.3 all pass the name checks.
-  assert.equal(runs["ff-46-documented-visual-native-20261005"].decks, 28);
-  assert.equal(runs["ff-46-documented-visual-native-20261005"].decksPassing, 28);
-  assert.deepEqual(runs["ff-46-documented-visual-native-20261005"].failingChecks, []);
+  // FF-46 / RR-17 (2026-10-05, one family per deck on opf-pptx 0.12.3): 47 of 48 decks pass the name checks; the Ebrima (Amharic)
+  // deck lists Nyala, the language's Ethi supplement, in Presentation.Fonts. Ebrima stays verified through the 2026-10-02 run, with
+  // the failing deck as a caveat.
+  assert.equal(runs["ff-46-documented-visual-native-20261005"].decks, 48);
+  assert.equal(runs["ff-46-documented-visual-native-20261005"].decksPassing, 47);
+  assert.deepEqual(runs["ff-46-documented-visual-native-20261005"].failingChecks, [{ deck: "scripts-40-amharic-ebrima", failing: ["presentationFonts"], detail: ["presentation-fonts-extra"] }]);
+  assert.match(record("Ebrima").nativeVerification.caveat, /scripts-40-amharic-ebrima \(presentationFonts\)/);
   for (const name of verified) {
     const item = record(name);
     assert.equal(item.nativeVerification.status, "verified", name);

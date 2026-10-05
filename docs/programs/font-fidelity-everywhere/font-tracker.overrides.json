@@ -3056,7 +3056,7 @@
   },
   "visualAcceptance": {
     "id": "ff-46-documented-visual-native-20261005",
-    "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+    "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
     "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
     "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
     "date": "2026-10-05",
@@ -3353,7 +3353,7 @@
     },
     {
       "id": "ff-46-documented-visual-native-20261005",
-      "label": "FF-46 native visual run: script, visual and code-table families (2026-10-05)",
+      "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
       "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
       "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
       "date": "2026-10-05",
