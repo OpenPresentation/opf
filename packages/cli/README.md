@@ -1,6 +1,6 @@
 # @openpresentation/cli
 
-A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, inspect the bundled schemas and catalogs, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 24 on macOS, Linux, or Windows is required.
+A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, inspect the bundled schemas and catalogs, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 22 or later on macOS, Linux, or Windows is required (`engines.node` `>=22` from the release after 0.10.0; 0.10.0 and earlier 24.x-only releases make npm on Node 22 or 26 silently install the 0.7.0 CLI, which has no `export` or `render` command).
 
 The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. Validation, lint and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
 

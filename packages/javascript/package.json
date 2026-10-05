@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "Canonical Open Presentation Format schemas, catalogs, TypeScript types, and local validation.",
   "license": "MIT",
   "author": "Open Presentation",
@@ -128,7 +128,7 @@
     "package.json"
   ],
   "engines": {
-    "node": "24.x"
+    "node": ">=22"
   },
   "scripts": {
     "clean": "rm -rf dist src/generated",
