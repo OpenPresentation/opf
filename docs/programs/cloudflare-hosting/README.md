@@ -63,7 +63,7 @@ Every burndown item is `done` or `descoped` with its evidence or issue linked, a
 Nothing past the pilot is blocked on code; these are the owner's calls (tracked as CF-02 and CF-03):
 
 1. **Cloudflare account and plan.** Use the "Data Advantage" account (it holds the three zones) and decide whether to
-   buy Workers Paid. The pilot fits the Free limits today (Worker 22 MiB of 64 MiB, 14,225 of 20,000 static assets),
+   buy Workers Paid. The pilot fits the Free limits today (Worker 29.1 MiB of 64 MiB, 14,225 of 20,000 static assets),
    but pptx.gallery has about 1,900 prerendered routes and pptx.dev is large and CPU-bound; Paid is recommended for
    CPU time, request volume and headroom. Note pptx.dev's zone sits on a different name-server pair than the other two:
    confirm it is the same account.
