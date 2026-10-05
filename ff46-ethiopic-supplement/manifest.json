@@ -1,0 +1,591 @@
+{
+  "item": "FF-46 theme script supplement of a latin-slot script names the chosen scheme family (opf#375)",
+  "builds": {
+    "before": {
+      "core": "opf main b66ea0c0 (0.12.2)"
+    },
+    "after": {
+      "core": "opf codex/ff-46-ethiopic-supplement d9d7880a"
+    },
+    "opfPptx": "main 7c93a1b (0.12.3); the fix is in core, opf-pptx writes the supplement as core resolves it"
+  },
+  "options": {
+    "seed": 1,
+    "timestamp": "2026-10-05T00:00:00Z",
+    "zipDate": "2026-10-05T00:00:00Z"
+  },
+  "pass": [
+    "Every deck opens without a repair prompt and reads stage: done.",
+    "Presentation.Fonts lists no empty name and nothing outside expect.fonts (the families the deck chose). The accepted RR-05 reading is that PowerPoint may omit theme-only script families.",
+    "after decks: the runs holding the script sample read expect.family in Name; the theme file names expect.themeScript for the script entry (file fact).",
+    "before decks marked changed: expected to FAIL (BASELINE): Presentation.Fonts lists the language default (Nyala or Sylfaen) beside the chosen family. This is the opf#375 defect kept as evidence.",
+    "control decks (changed: false): before and after are byte-identical (same sha256) and read the same."
+  ],
+  "decks": {
+    "ethi-amharic-ebrima": {
+      "title": "The opf#375 repro: Amharic on an Ebrima cs scheme. Before: Ethi = Nyala and Presentation.Fonts lists Nyala. After: Ebrima only",
+      "document": {
+        "name": "Amharic on Ebrima",
+        "language": "amharic",
+        "design": {
+          "fontScheme": {
+            "major": "Ebrima",
+            "minor": "Ebrima",
+            "languageFamily": "cs",
+            "languages": [
+              "Amharic"
+            ]
+          }
+        },
+        "slides": [
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          },
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው። አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          }
+        ]
+      },
+      "script": "Ethi",
+      "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+      "changed": true,
+      "expect": {
+        "fonts": [
+          "Ebrima"
+        ],
+        "family": "Ebrima",
+        "themeScript": "Ebrima"
+      },
+      "files": {
+        "before": {
+          "file": "ethi-amharic-ebrima-before.pptx",
+          "bytes": 23103,
+          "sha256": "09d8c6c692346b4a9ffd1bd5443aad9749511a07d308372d2fa971ed28eda50b",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        },
+        "after": {
+          "file": "ethi-amharic-ebrima-after.pptx",
+          "bytes": 23095,
+          "sha256": "0842a3bc75db112a8ecb48ab97cbf867353845bc4ecfbdd792b1008de21edd7c",
+          "themeScript": {
+            "major": "Ebrima",
+            "minor": "Ebrima"
+          }
+        }
+      }
+    },
+    "ethi-amharic-ebrima-inline": {
+      "title": "The native FF-46 deck scripts-40-amharic-ebrima, built the same way: language am, inline scheme with an explicit complexScript slot. Before: Ethi = Nyala and Presentation.Fonts lists Nyala. After: Ebrima only",
+      "document": {
+        "name": "Amharic on Ebrima (inline complexScript)",
+        "language": "am",
+        "design": {
+          "fontScheme": {
+            "major": "Ebrima",
+            "minor": "Ebrima",
+            "complexScript": {
+              "major": "Ebrima",
+              "minor": "Ebrima"
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          },
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው። አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          }
+        ]
+      },
+      "script": "Ethi",
+      "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+      "changed": true,
+      "expect": {
+        "fonts": [
+          "Ebrima"
+        ],
+        "family": "Ebrima",
+        "themeScript": "Ebrima"
+      },
+      "files": {
+        "before": {
+          "file": "ethi-amharic-ebrima-inline-before.pptx",
+          "bytes": 23112,
+          "sha256": "57232cff6bb6456efe9785cc64ea45855b4a743eee96b574c940b7c37020e507",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        },
+        "after": {
+          "file": "ethi-amharic-ebrima-inline-after.pptx",
+          "bytes": 23104,
+          "sha256": "7e8fbd394f3582326e07d148943603f827798c93f1d8cb40c8479c73db679d08",
+          "themeScript": {
+            "major": "Ebrima",
+            "minor": "Ebrima"
+          }
+        }
+      }
+    },
+    "jpan-japanese-msgothic-inline": {
+      "title": "Control, byte-identical: the inline eastAsian form (MS Gothic) on a Japanese deck; the Jpan entry already follows the slot",
+      "document": {
+        "name": "Japanese on MS Gothic (inline eastAsian)",
+        "language": "ja",
+        "design": {
+          "fontScheme": {
+            "major": "MS Gothic",
+            "minor": "MS Gothic",
+            "eastAsian": {
+              "major": "MS Gothic",
+              "minor": "MS Gothic"
+            }
+          }
+        },
+        "slides": [
+          {
+            "title": "ひらがなとカタカナと漢字",
+            "text": "ひらがなとカタカナと漢字"
+          },
+          {
+            "title": "ひらがなとカタカナと漢字",
+            "text": "ひらがなとカタカナと漢字 ひらがなとカタカナと漢字"
+          }
+        ]
+      },
+      "script": "Jpan",
+      "text": "ひらがなとカタカナと漢字",
+      "changed": false,
+      "expect": {
+        "fonts": [
+          "MS Gothic"
+        ],
+        "family": "MS Gothic",
+        "themeScript": "MS Gothic"
+      },
+      "files": {
+        "before": {
+          "file": "jpan-japanese-msgothic-inline-before.pptx",
+          "bytes": 23068,
+          "sha256": "74d38fb6bff1be4825ad959cc0f5d11b54760ea1222dd7183cd8a7a6bde63746",
+          "themeScript": {
+            "major": "MS Gothic",
+            "minor": "MS Gothic"
+          }
+        },
+        "after": {
+          "file": "jpan-japanese-msgothic-inline-after.pptx",
+          "bytes": 23068,
+          "sha256": "74d38fb6bff1be4825ad959cc0f5d11b54760ea1222dd7183cd8a7a6bde63746",
+          "themeScript": {
+            "major": "MS Gothic",
+            "minor": "MS Gothic"
+          }
+        }
+      }
+    },
+    "ethi-amharic-noto": {
+      "title": "Amharic on the catalog scheme noto-sans-ethiopic (before: Ethi = Nyala)",
+      "document": {
+        "name": "Amharic on Noto Sans Ethiopic",
+        "language": "amharic",
+        "design": {
+          "fontScheme": "noto-sans-ethiopic"
+        },
+        "slides": [
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          },
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው። አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          }
+        ]
+      },
+      "script": "Ethi",
+      "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+      "changed": true,
+      "expect": {
+        "fonts": [
+          "Noto Sans Ethiopic"
+        ],
+        "family": "Noto Sans Ethiopic",
+        "themeScript": "Noto Sans Ethiopic"
+      },
+      "files": {
+        "before": {
+          "file": "ethi-amharic-noto-before.pptx",
+          "bytes": 23152,
+          "sha256": "7baa81df14395e7b0b00e23ee55237fba8394cab9589e1f13c0001e9bdef0af9",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        },
+        "after": {
+          "file": "ethi-amharic-noto-after.pptx",
+          "bytes": 23146,
+          "sha256": "ec35763baaf2878d5115c27d4ad68011267c08c82505f1a0b3a12a5d4d542d4b",
+          "themeScript": {
+            "major": "Noto Sans Ethiopic",
+            "minor": "Noto Sans Ethiopic"
+          }
+        }
+      }
+    },
+    "armn-armenian-noto": {
+      "title": "Armenian on the catalog scheme noto-sans-armenian (before: Armn = Sylfaen)",
+      "document": {
+        "name": "Armenian on Noto Sans Armenian",
+        "language": "armenian",
+        "design": {
+          "fontScheme": "noto-sans-armenian"
+        },
+        "slides": [
+          {
+            "title": "Հայերեն լեզու",
+            "text": "Հայերեն լեզու"
+          },
+          {
+            "title": "Հայերեն լեզու",
+            "text": "Հայերեն լեզու Հայերեն լեզու"
+          }
+        ]
+      },
+      "script": "Armn",
+      "text": "Հայերեն լեզու",
+      "changed": true,
+      "expect": {
+        "fonts": [
+          "Noto Sans Armenian"
+        ],
+        "family": "Noto Sans Armenian",
+        "themeScript": "Noto Sans Armenian"
+      },
+      "files": {
+        "before": {
+          "file": "armn-armenian-noto-before.pptx",
+          "bytes": 23083,
+          "sha256": "31c6393c5f44471d869197e107bebebf838f328c3a6c1b5e051f779ef4325f43",
+          "themeScript": {
+            "major": "Sylfaen",
+            "minor": "Sylfaen"
+          }
+        },
+        "after": {
+          "file": "armn-armenian-noto-after.pptx",
+          "bytes": 23087,
+          "sha256": "55128701a972527446c393d175c9d5c52200c2ab2250988ef00a01eebbc742b4",
+          "themeScript": {
+            "major": "Noto Sans Armenian",
+            "minor": "Noto Sans Armenian"
+          }
+        }
+      }
+    },
+    "geor-georgian-noto": {
+      "title": "Georgian on the catalog scheme noto-sans-georgian (before: Geor = Sylfaen)",
+      "document": {
+        "name": "Georgian on Noto Sans Georgian",
+        "language": "georgian",
+        "design": {
+          "fontScheme": "noto-sans-georgian"
+        },
+        "slides": [
+          {
+            "title": "ქართული ენა",
+            "text": "ქართული ენა"
+          },
+          {
+            "title": "ქართული ენა",
+            "text": "ქართული ენა ქართული ენა"
+          }
+        ]
+      },
+      "script": "Geor",
+      "text": "ქართული ენა",
+      "changed": true,
+      "expect": {
+        "fonts": [
+          "Noto Sans Georgian"
+        ],
+        "family": "Noto Sans Georgian",
+        "themeScript": "Noto Sans Georgian"
+      },
+      "files": {
+        "before": {
+          "file": "geor-georgian-noto-before.pptx",
+          "bytes": 23104,
+          "sha256": "a45bd1840de261823bfb0c144a36234825901ba3b639a66824ef2a001c7ba5f4",
+          "themeScript": {
+            "major": "Sylfaen",
+            "minor": "Sylfaen"
+          }
+        },
+        "after": {
+          "file": "geor-georgian-noto-after.pptx",
+          "bytes": 23098,
+          "sha256": "31bbf257942af68026de8c3a8efc7376fa0b721b101def2a978ff78a6d4b45d8",
+          "themeScript": {
+            "major": "Noto Sans Georgian",
+            "minor": "Noto Sans Georgian"
+          }
+        }
+      }
+    },
+    "ethi-amharic-default": {
+      "title": "Control, byte-identical before and after: Amharic on the default scheme (the language names Nyala for Ethi)",
+      "document": {
+        "name": "Amharic default",
+        "language": "amharic",
+        "slides": [
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          },
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው። አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          }
+        ]
+      },
+      "script": "Ethi",
+      "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+      "changed": false,
+      "expect": {
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Nyala"
+        ],
+        "themeScript": "Nyala"
+      },
+      "files": {
+        "before": {
+          "file": "ethi-amharic-default-before.pptx",
+          "bytes": 23101,
+          "sha256": "b911096de178e60278c5906e1479504b84f45058bd8867b70f46f6475dbae4fb",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        },
+        "after": {
+          "file": "ethi-amharic-default-after.pptx",
+          "bytes": 23101,
+          "sha256": "b911096de178e60278c5906e1479504b84f45058bd8867b70f46f6475dbae4fb",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        }
+      }
+    },
+    "ethi-amharic-nyala": {
+      "title": "Control, byte-identical: Amharic on the Nyala cs scheme",
+      "document": {
+        "name": "Amharic on Nyala",
+        "language": "amharic",
+        "design": {
+          "fontScheme": "nyala"
+        },
+        "slides": [
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          },
+          {
+            "title": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+            "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው። አማርኛ ቋንቋ እጅግ ጥሩ ነው።"
+          }
+        ]
+      },
+      "script": "Ethi",
+      "text": "አማርኛ ቋንቋ እጅግ ጥሩ ነው።",
+      "changed": false,
+      "expect": {
+        "fonts": [
+          "Nyala"
+        ],
+        "family": "Nyala",
+        "themeScript": "Nyala"
+      },
+      "files": {
+        "before": {
+          "file": "ethi-amharic-nyala-before.pptx",
+          "bytes": 23061,
+          "sha256": "2c3be78d23c0a35d6265bf5eb22e7b9124e3aa6e7affdcc309a4a557a08e257c",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        },
+        "after": {
+          "file": "ethi-amharic-nyala-after.pptx",
+          "bytes": 23061,
+          "sha256": "2c3be78d23c0a35d6265bf5eb22e7b9124e3aa6e7affdcc309a4a557a08e257c",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        }
+      }
+    },
+    "armn-armenian-sylfaen": {
+      "title": "Control, byte-identical: Armenian on the Sylfaen cs scheme",
+      "document": {
+        "name": "Armenian on Sylfaen",
+        "language": "armenian",
+        "design": {
+          "fontScheme": "sylfaen"
+        },
+        "slides": [
+          {
+            "title": "Հայերեն լեզու",
+            "text": "Հայերեն լեզու"
+          },
+          {
+            "title": "Հայերեն լեզու",
+            "text": "Հայերեն լեզու Հայերեն լեզու"
+          }
+        ]
+      },
+      "script": "Armn",
+      "text": "Հայերեն լեզու",
+      "changed": false,
+      "expect": {
+        "fonts": [
+          "Sylfaen"
+        ],
+        "family": "Sylfaen",
+        "themeScript": "Sylfaen"
+      },
+      "files": {
+        "before": {
+          "file": "armn-armenian-sylfaen-before.pptx",
+          "bytes": 23015,
+          "sha256": "2957883a7dc1a212e017572f5810f5fcc7966bcd9f407edc1388556ed60239fd",
+          "themeScript": {
+            "major": "Sylfaen",
+            "minor": "Sylfaen"
+          }
+        },
+        "after": {
+          "file": "armn-armenian-sylfaen-after.pptx",
+          "bytes": 23015,
+          "sha256": "2957883a7dc1a212e017572f5810f5fcc7966bcd9f407edc1388556ed60239fd",
+          "themeScript": {
+            "major": "Sylfaen",
+            "minor": "Sylfaen"
+          }
+        }
+      }
+    },
+    "geor-georgian-sylfaen": {
+      "title": "Control, byte-identical: Georgian on the Sylfaen cs scheme",
+      "document": {
+        "name": "Georgian on Sylfaen",
+        "language": "georgian",
+        "design": {
+          "fontScheme": "sylfaen"
+        },
+        "slides": [
+          {
+            "title": "ქართული ენა",
+            "text": "ქართული ენა"
+          },
+          {
+            "title": "ქართული ენა",
+            "text": "ქართული ენა ქართული ენა"
+          }
+        ]
+      },
+      "script": "Geor",
+      "text": "ქართული ენა",
+      "changed": false,
+      "expect": {
+        "fonts": [
+          "Sylfaen"
+        ],
+        "family": "Sylfaen",
+        "themeScript": "Sylfaen"
+      },
+      "files": {
+        "before": {
+          "file": "geor-georgian-sylfaen-before.pptx",
+          "bytes": 23031,
+          "sha256": "c6d9c709b30052dcc1ba540b84583efcd8338da2a9ad3e99b3426b24b47cc4e1",
+          "themeScript": {
+            "major": "Sylfaen",
+            "minor": "Sylfaen"
+          }
+        },
+        "after": {
+          "file": "geor-georgian-sylfaen-after.pptx",
+          "bytes": 23031,
+          "sha256": "c6d9c709b30052dcc1ba540b84583efcd8338da2a9ad3e99b3426b24b47cc4e1",
+          "themeScript": {
+            "major": "Sylfaen",
+            "minor": "Sylfaen"
+          }
+        }
+      }
+    },
+    "latin-english-control": {
+      "title": "Control, byte-identical: English on the default scheme (no script supplement)",
+      "document": {
+        "name": "English default",
+        "language": "english-us",
+        "slides": [
+          {
+            "title": "Hello world",
+            "text": "Hello world"
+          },
+          {
+            "title": "Hello world",
+            "text": "Hello world Hello world"
+          }
+        ]
+      },
+      "script": "Ethi",
+      "text": "Hello world",
+      "changed": false,
+      "expect": {
+        "fonts": [
+          "Aptos",
+          "Aptos Display"
+        ]
+      },
+      "files": {
+        "before": {
+          "file": "latin-english-control-before.pptx",
+          "bytes": 22986,
+          "sha256": "c08348e6702bb44fb77f8f5b5b777e09d1a07d818970debb0537e7340021a7ea",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        },
+        "after": {
+          "file": "latin-english-control-after.pptx",
+          "bytes": 22986,
+          "sha256": "c08348e6702bb44fb77f8f5b5b777e09d1a07d818970debb0537e7340021a7ea",
+          "themeScript": {
+            "major": "Nyala",
+            "minor": "Nyala"
+          }
+        }
+      }
+    }
+  }
+}

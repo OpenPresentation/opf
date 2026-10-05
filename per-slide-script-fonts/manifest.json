@@ -1,0 +1,412 @@
+{
+  "item": "FF-05 per-slide script fonts (opf-pptx#168): one slide master and theme per script profile",
+  "builds": {
+    "before": {
+      "checkout": "opf-pptx codex/rr-17-pptxgenjs-plus 3fb1387"
+    },
+    "after": {
+      "checkout": "opf-pptx codex/rr-17-per-slide-script-fonts d65390a"
+    }
+  },
+  "options": {
+    "seed": 1,
+    "timestamp": "2026-10-05T00:00:00Z",
+    "zipDate": "2026-10-05T00:00:00Z"
+  },
+  "pass": [
+    "Every deck opens without a repair prompt and reads stage: done.",
+    "Presentation.Fonts lists no empty name and nothing outside expect.fonts (the families the deck names); the accepted RR-05 reading is that PowerPoint may omit theme-only script families.",
+    "after decks: on every slide the runs holding expect.script read expect.slot (NameFarEast or NameComplexScript) = expect.family, and the slide uses master expect.master (Designs order).",
+    "before decks (a, a2): expected to FAIL the per-slide check from slide 2 on (they read slide 1's family): the opf-pptx#168 baseline.",
+    "b-single-profile: before and after are byte-identical (same sha256) and read the same."
+  ],
+  "decks": {
+    "a-three-profiles": {
+      "title": "(a) Three per-slide script profiles: Japanese Meiryo, Arabic Traditional Arabic, Hindi Nirmala UI (latin Arial)",
+      "document": {
+        "name": "Three script profiles",
+        "slides": [
+          {
+            "title": "Japanese 日本語",
+            "design": {
+              "fontScheme": {
+                "major": "Arial",
+                "minor": "Arial",
+                "eastAsian": {
+                  "major": "Meiryo",
+                  "minor": "Meiryo"
+                }
+              }
+            },
+            "text": "ひらがなとカタカナと漢字"
+          },
+          {
+            "title": "Arabic مرحبا",
+            "design": {
+              "fontScheme": {
+                "major": "Arial",
+                "minor": "Arial",
+                "complexScript": {
+                  "major": "Traditional Arabic",
+                  "minor": "Traditional Arabic"
+                }
+              }
+            },
+            "text": "مرحبا بالعالم العربي",
+            "notes": "ملاحظات المتحدث"
+          },
+          {
+            "title": "Hindi नमस्ते",
+            "design": {
+              "fontScheme": {
+                "major": "Arial",
+                "minor": "Arial",
+                "complexScript": {
+                  "major": "Nirmala UI",
+                  "minor": "Nirmala UI"
+                }
+              }
+            },
+            "text": "नमस्ते दुनिया हिंदी"
+          }
+        ]
+      },
+      "expect": {
+        "fonts": [
+          "Arial",
+          "Meiryo",
+          "Traditional Arabic",
+          "Nirmala UI"
+        ],
+        "slides": [
+          {
+            "master": 1,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "Meiryo"
+          },
+          {
+            "master": 2,
+            "script": "مرحبا بالعالم العربي",
+            "slot": "nameComplexScript",
+            "family": "Traditional Arabic"
+          },
+          {
+            "master": 3,
+            "script": "नमस्ते दुनिया हिंदी",
+            "slot": "nameComplexScript",
+            "family": "Nirmala UI"
+          }
+        ]
+      },
+      "files": {
+        "afterDiagnostics": [
+          "script-font-notes-not-exported slides.1.notes"
+        ],
+        "after": {
+          "file": "a-three-profiles-after.pptx",
+          "bytes": 35090,
+          "sha256": "adf0265e24da879ebbdd5389c1122524bd6065a8307b655b0d8582947ad484ea",
+          "slideMasters": 3,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml",
+            "ppt/theme/theme3.xml",
+            "ppt/theme/theme4.xml"
+          ],
+          "fontsUsed": [
+            "Arial",
+            "Meiryo",
+            "Nirmala UI",
+            "Traditional Arabic"
+          ],
+          "runEaCs": 0
+        },
+        "before": {
+          "file": "a-three-profiles-before.pptx",
+          "bytes": 25266,
+          "sha256": "a80005aa5461a0da79548ab8e5ea03492d378f0a85973697aa6f9f0232631003",
+          "slideMasters": 1,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "fontsUsed": [
+            "Arial",
+            "Meiryo"
+          ],
+          "runEaCs": 0
+        }
+      }
+    },
+    "a2-thai-repro": {
+      "title": "(a2) The opf-pptx#168 repro: Thai, slide 1 Angsana New, slide 2 DilleniaUPC (catalog font schemes)",
+      "document": {
+        "name": "Per-slide script font",
+        "language": "th",
+        "design": {
+          "theme": "classic",
+          "dimensions": "widescreen"
+        },
+        "slides": [
+          {
+            "id": "one",
+            "title": "รายงานสรุปผล",
+            "design": {
+              "fontScheme": "angsana-new"
+            },
+            "blocks": [
+              {
+                "text": "ภาษาไทยเป็นภาษาที่มีวรรณยุกต์"
+              }
+            ]
+          },
+          {
+            "id": "two",
+            "title": "รายงานสรุปผล",
+            "design": {
+              "fontScheme": "dilleniaupc"
+            },
+            "blocks": [
+              {
+                "text": "ภาษาไทยเป็นภาษาที่มีวรรณยุกต์"
+              }
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "fonts": [
+          "Angsana New",
+          "DilleniaUPC"
+        ],
+        "slides": [
+          {
+            "master": 1,
+            "script": "ภาษาไทยเป็นภาษาที่มีวรรณยุกต์",
+            "slot": "nameComplexScript",
+            "family": "Angsana New"
+          },
+          {
+            "master": 2,
+            "script": "ภาษาไทยเป็นภาษาที่มีวรรณยุกต์",
+            "slot": "nameComplexScript",
+            "family": "DilleniaUPC"
+          }
+        ]
+      },
+      "files": {
+        "after": {
+          "file": "a2-thai-repro-after.pptx",
+          "bytes": 26311,
+          "sha256": "21aea590365edb8325019fc8017c62dbaca2aff4563ea6718d2c99892d837bd6",
+          "slideMasters": 2,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml",
+            "ppt/theme/theme3.xml"
+          ],
+          "fontsUsed": [
+            "Angsana New",
+            "DilleniaUPC"
+          ],
+          "runEaCs": 0
+        },
+        "before": {
+          "file": "a2-thai-repro-before.pptx",
+          "bytes": 21410,
+          "sha256": "941c760f2d7f618e9b06c90e9bac98e59a0c7042e60b2c30cb4f0a3f579de05f",
+          "slideMasters": 1,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "fontsUsed": [
+            "Angsana New",
+            "DilleniaUPC"
+          ],
+          "runEaCs": 0
+        }
+      }
+    },
+    "b-single-profile": {
+      "title": "(b) One script profile (Japanese, Meiryo through the language; per-slide Latin-only font schemes): byte-identical before and after",
+      "document": {
+        "name": "Single profile",
+        "language": "japanese",
+        "slides": [
+          {
+            "title": "日本語の見出し",
+            "text": "ひらがなとカタカナと漢字",
+            "notes": "メモ"
+          },
+          {
+            "title": "日本語の見出し",
+            "design": {
+              "fontScheme": "georgia"
+            },
+            "text": "ひらがなとカタカナと漢字"
+          },
+          {
+            "title": "日本語の見出し",
+            "design": {
+              "fontScheme": "meiryo"
+            },
+            "text": "ひらがなとカタカナと漢字"
+          }
+        ]
+      },
+      "expect": {
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Georgia",
+          "Meiryo"
+        ],
+        "slides": [
+          {
+            "master": 1,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "Meiryo"
+          },
+          {
+            "master": 1,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "Meiryo"
+          },
+          {
+            "master": 1,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "Meiryo"
+          }
+        ]
+      },
+      "files": {
+        "after": {
+          "file": "b-single-profile-after.pptx",
+          "bytes": 25154,
+          "sha256": "b09a366fd1e3cf7954b9cdd8e3f8d97fa4d5f5574f1ba9bc635799890ccd72f0",
+          "slideMasters": 1,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "fontsUsed": [
+            "Aptos",
+            "Aptos Display",
+            "Georgia",
+            "Meiryo"
+          ],
+          "runEaCs": 0
+        },
+        "before": {
+          "file": "b-single-profile-before.pptx",
+          "bytes": 25154,
+          "sha256": "b09a366fd1e3cf7954b9cdd8e3f8d97fa4d5f5574f1ba9bc635799890ccd72f0",
+          "slideMasters": 1,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "fontsUsed": [
+            "Aptos",
+            "Aptos Display",
+            "Georgia",
+            "Meiryo"
+          ],
+          "runEaCs": 0
+        }
+      }
+    },
+    "c-mixed-default": {
+      "title": "(c) A per-slide override mixed with the deck default: Japanese (Meiryo through the language), slides 2 and 4 MS Mincho",
+      "document": {
+        "name": "Mixed",
+        "language": "japanese",
+        "slides": [
+          {
+            "title": "日本語の見出し",
+            "text": "ひらがなとカタカナと漢字",
+            "notes": "メモ"
+          },
+          {
+            "title": "日本語の見出し",
+            "design": {
+              "fontScheme": "ms-mincho"
+            },
+            "text": "ひらがなとカタカナと漢字"
+          },
+          {
+            "title": "日本語の見出し",
+            "text": "ひらがなとカタカナと漢字",
+            "notes": "メモ"
+          },
+          {
+            "title": "日本語の見出し",
+            "design": {
+              "fontScheme": "ms-mincho"
+            },
+            "text": "ひらがなとカタカナと漢字"
+          }
+        ]
+      },
+      "expect": {
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Meiryo",
+          "MS Mincho"
+        ],
+        "slides": [
+          {
+            "master": 1,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "Meiryo"
+          },
+          {
+            "master": 2,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "MS Mincho"
+          },
+          {
+            "master": 1,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "Meiryo"
+          },
+          {
+            "master": 2,
+            "script": "ひらがなとカタカナと漢字",
+            "slot": "nameFarEast",
+            "family": "MS Mincho"
+          }
+        ]
+      },
+      "files": {
+        "after": {
+          "file": "c-mixed-default-after.pptx",
+          "bytes": 33919,
+          "sha256": "3acce7469ff87cad51d05af94d00613457b9eadcd6f3231bfd546ec0573f8220",
+          "slideMasters": 2,
+          "themes": [
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml",
+            "ppt/theme/theme3.xml"
+          ],
+          "fontsUsed": [
+            "Aptos",
+            "Aptos Display",
+            "Meiryo",
+            "MS Mincho"
+          ],
+          "runEaCs": 0
+        }
+      }
+    }
+  }
+}

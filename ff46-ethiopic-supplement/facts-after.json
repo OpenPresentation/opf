@@ -1,0 +1,101 @@
+{
+  "ethi-amharic-ebrima": {
+    "file": "ethi-amharic-ebrima-after.pptx",
+    "bytes": 23095,
+    "sha256": "0842a3bc75db112a8ecb48ab97cbf867353845bc4ecfbdd792b1008de21edd7c",
+    "themeScript": {
+      "major": "Ebrima",
+      "minor": "Ebrima"
+    }
+  },
+  "ethi-amharic-ebrima-inline": {
+    "file": "ethi-amharic-ebrima-inline-after.pptx",
+    "bytes": 23104,
+    "sha256": "7e8fbd394f3582326e07d148943603f827798c93f1d8cb40c8479c73db679d08",
+    "themeScript": {
+      "major": "Ebrima",
+      "minor": "Ebrima"
+    }
+  },
+  "jpan-japanese-msgothic-inline": {
+    "file": "jpan-japanese-msgothic-inline-after.pptx",
+    "bytes": 23068,
+    "sha256": "74d38fb6bff1be4825ad959cc0f5d11b54760ea1222dd7183cd8a7a6bde63746",
+    "themeScript": {
+      "major": "MS Gothic",
+      "minor": "MS Gothic"
+    }
+  },
+  "ethi-amharic-noto": {
+    "file": "ethi-amharic-noto-after.pptx",
+    "bytes": 23146,
+    "sha256": "ec35763baaf2878d5115c27d4ad68011267c08c82505f1a0b3a12a5d4d542d4b",
+    "themeScript": {
+      "major": "Noto Sans Ethiopic",
+      "minor": "Noto Sans Ethiopic"
+    }
+  },
+  "armn-armenian-noto": {
+    "file": "armn-armenian-noto-after.pptx",
+    "bytes": 23087,
+    "sha256": "55128701a972527446c393d175c9d5c52200c2ab2250988ef00a01eebbc742b4",
+    "themeScript": {
+      "major": "Noto Sans Armenian",
+      "minor": "Noto Sans Armenian"
+    }
+  },
+  "geor-georgian-noto": {
+    "file": "geor-georgian-noto-after.pptx",
+    "bytes": 23098,
+    "sha256": "31bbf257942af68026de8c3a8efc7376fa0b721b101def2a978ff78a6d4b45d8",
+    "themeScript": {
+      "major": "Noto Sans Georgian",
+      "minor": "Noto Sans Georgian"
+    }
+  },
+  "ethi-amharic-default": {
+    "file": "ethi-amharic-default-after.pptx",
+    "bytes": 23101,
+    "sha256": "b911096de178e60278c5906e1479504b84f45058bd8867b70f46f6475dbae4fb",
+    "themeScript": {
+      "major": "Nyala",
+      "minor": "Nyala"
+    }
+  },
+  "ethi-amharic-nyala": {
+    "file": "ethi-amharic-nyala-after.pptx",
+    "bytes": 23061,
+    "sha256": "2c3be78d23c0a35d6265bf5eb22e7b9124e3aa6e7affdcc309a4a557a08e257c",
+    "themeScript": {
+      "major": "Nyala",
+      "minor": "Nyala"
+    }
+  },
+  "armn-armenian-sylfaen": {
+    "file": "armn-armenian-sylfaen-after.pptx",
+    "bytes": 23015,
+    "sha256": "2957883a7dc1a212e017572f5810f5fcc7966bcd9f407edc1388556ed60239fd",
+    "themeScript": {
+      "major": "Sylfaen",
+      "minor": "Sylfaen"
+    }
+  },
+  "geor-georgian-sylfaen": {
+    "file": "geor-georgian-sylfaen-after.pptx",
+    "bytes": 23031,
+    "sha256": "c6d9c709b30052dcc1ba540b84583efcd8338da2a9ad3e99b3426b24b47cc4e1",
+    "themeScript": {
+      "major": "Sylfaen",
+      "minor": "Sylfaen"
+    }
+  },
+  "latin-english-control": {
+    "file": "latin-english-control-after.pptx",
+    "bytes": 22986,
+    "sha256": "c08348e6702bb44fb77f8f5b5b777e09d1a07d818970debb0537e7340021a7ea",
+    "themeScript": {
+      "major": "Nyala",
+      "minor": "Nyala"
+    }
+  }
+}
