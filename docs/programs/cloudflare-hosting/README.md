@@ -1,6 +1,7 @@
 # Program: Cloudflare hosting (CF)
 
-Status: **active** (opened 2026-10-04). Tracker: [burndown.md](burndown.md).
+Status: **active** (opened 2026-10-04). All three sites serve production from Cloudflare Workers (cut over 2026-10-05); what
+remains is CI/CD (CF-04 to CF-06), the apex static-asset redirect (CF-07) and the Vercel retirement (CF-08). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for moving the three sites from Vercel to Cloudflare. Agents and people
 resuming work start here, not from chat history or local scratch files.
 
@@ -14,8 +15,8 @@ The owner's direction (2026-10-03), restated:
 Sites in scope (the libraries and packages are not hosted and do not change):
 
 - [openpresentation-site](https://github.com/Data-Advantage/openpresentation-site): openpresentation.org. The pilot (CF-01).
-- [pptx-gallery](https://github.com/Data-Advantage/pptx-gallery): pptx.gallery (CF-05, CF-06).
-- [pptx-dev](https://github.com/Data-Advantage/pptx-dev): pptx.dev, api.pptx.dev and mcp.pptx.dev. The hard one (CF-07 to CF-16).
+- [pptx-gallery](https://github.com/Data-Advantage/pptx-gallery): pptx.gallery (CF-02).
+- [pptx-dev](https://github.com/Data-Advantage/pptx-dev): pptx.dev, api.pptx.dev and mcp.pptx.dev. The hard one (CF-03).
 
 Target: Next.js on Cloudflare Workers through OpenNext (`@opennextjs/cloudflare`), static assets on Workers static
 assets, secrets as Worker secrets, DNS on the Cloudflare zones the domains already use. Vercel keeps serving each site
@@ -31,17 +32,17 @@ Every burndown item is `done` or `descoped` with its evidence or issue linked, a
    `/mcp`, the SDK base URLs, the response headers (CORS and nosniff on the agent resources), the sitemap, robots and
    `llms*.txt`.
 3. **Previews and CI are replaced**: a preview URL per pull request, a smoke check against it, and the production
-   checks against the Cloudflare deployment, in place of the RR-49 Vercel pieces (CF-17).
+   checks against the Cloudflare deployment, in place of the RR-49 Vercel pieces (CF-04, CF-05, CF-06).
 4. **Rollback was rehearsed**: for each site, pointing DNS back at Vercel restored service while the Vercel project
    still existed.
-5. **Vercel is decommissioned** only after a stable period and with the owner's go-ahead (CF-19): projects, domains,
+5. **Vercel is decommissioned** only after a stable period and with the owner's go-ahead (CF-08): projects, domains,
    the Vercel analytics package, `vercel.json`, the ignore-build scripts and the Vercel gating docs.
 
 ## Invariants
 
 - **No downtime.** Cut over one hostname at a time, behind a rehearsed rollback. Vercel keeps deploying `main` until
-  CF-19.
-- **Rollback is a DNS change**: point the records back at Vercel. Nothing is deleted on the Vercel side before CF-19.
+  CF-08.
+- **Rollback is a DNS change**: point the records back at Vercel. Nothing is deleted on the Vercel side before CF-08.
 - **Keep the public contracts** listed under Definition of done, including the canonical `www` hosts and the
   `api.pptx.dev` / `mcp.pptx.dev` hosts, `/schema/*`, `/mcp` and the SDK base URLs.
 - **No public support, parity, progress or release-readiness status on any site** (no badges, legends, panels, API
@@ -60,7 +61,14 @@ Every burndown item is `done` or `descoped` with its evidence or issue linked, a
 
 ## Owner decisions needed
 
-Nothing past the pilot is blocked on code; these are the owner's calls (tracked as CF-02 and CF-03):
+Update 2026-10-05: the sites are live, so most of these were settled in practice. Recorded as observed: Workers Paid is
+active on the "Data Advantage" account (decision 1); pptx.dev's `AI_GATEWAY_API_KEY` is a Worker secret (decision 3: not
+recorded here whether the Cloudflare AI Gateway replaced the Vercel AI Gateway); previews and Workers Builds (decisions 4 and 5) are
+not decided, and CF-04 deploys from GitHub Actions with an API token secret instead. The owner also decided on 2026-10-05 that
+pptx.dev runs on the Clerk development instance and a dev Convex deployment for now (no production users yet); production
+Clerk and Convex come when real users arrive. The numbered list below is the original wording.
+
+These were the owner's calls when the program opened:
 
 1. **Cloudflare account and plan.** Use the "Data Advantage" account (it holds the three zones) and decide whether to
    buy Workers Paid. The pilot fits the Free limits today (Worker 29.1 MiB of 64 MiB, 14,225 of 20,000 static assets),
@@ -98,16 +106,27 @@ Recorded here because they apply to the other two sites:
 
 ## Relation to the release-readiness program
 
-Once CF-* lands, these RR items become obsolete or change (the RR burndown is not edited here; the supervisor
-reconciles it when a CF item closes):
+Once CF-* lands, these RR items become obsolete or change (the RR burndown is edited by the supervisor when a CF item
+changes state):
 
-- **RR-49** (Vercel Ignored Build Step, `deployment_status` preview and production workflows, `vercel-gating.md`) is
-  replaced by CF-17, and [opf#299](https://github.com/OpenPresentation/opf/issues/299) (the owner's Vercel settings for
-  it) becomes obsolete.
-- **RR-14**'s gateway step (the owner configuring the Vercel AI Gateway for "Understand this deck") changes to the
-  Cloudflare AI Gateway and the provider SDK (CF-12).
+- **RR-49** (Vercel Ignored Build Step, `deployment_status` preview and production workflows, `vercel-gating.md`): the
+  sites now serve production from Cloudflare, so the Vercel preview checks and the bypass secret
+  ([opf#299](https://github.com/OpenPresentation/opf/issues/299)) no longer cover production. Production checks run after
+  the CF-04 deploy workflow (gallery) and a curl smoke (site). The supervisor proposes descoping the Vercel parts; that is
+  the owner's decision (RR README, Open decisions 5). The replacement previews are not built yet.
+- **RR-14**: the feature runs on the Cloudflare Worker, so its flags are Worker variables / build variables and
+  `AI_GATEWAY_API_KEY` is a Worker secret; the provider SDK change from the original plan was not needed to go live.
 - The sites' `vercel.json`, `@vercel/analytics`, `VERCEL_*` heuristics and the Vercel references in each site's docs go
-  in CF-18 / CF-19.
+  in CF-08.
+
+## Open decisions (owner)
+
+- **Vercel retirement (CF-08).** When to remove the wildcard record, the Vercel projects and the Vercel code paths, after
+  a stable period. Until then Vercel keeps the domains as a warm rollback for pptx.dev.
+- **RR-49 descope.** Whether to drop the Vercel preview and bypass-secret parts of RR-49 (RR README, Open decisions 5).
+- **CF-04 and CF-05 inputs.** The Actions secrets for the deploy-on-main workflows (two repositories) and a Clerk test user
+  with its secrets for the signed-in test.
+- **Production Clerk and Convex** for pptx.dev when real users arrive.
 
 ## Naming
 
