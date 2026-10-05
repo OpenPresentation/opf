@@ -29,6 +29,8 @@ jobs:
   # required check name stays. The commands are identical: scripts/package-ecosystem-plan.mjs lists them and
   # scripts/package-ecosystem-plan.test.mjs proves the shards partition the unsharded list. Every shard keeps
   # the docs-only gate (RR-40) in its own steps, so a skipped shard still succeeds and the aggregator reports.
+  # RR-45 (opf#368): ecosystem-core is itself three matrix shards (model, installed, registry); its result is success
+  # only when all three succeeded.
   # The required status check `packages` (ruleset 24382980). It always runs, even when a shard failed or was
   # cancelled, and passes only when every shard succeeded. A shard that the docs-only gate skips step by step
   # still succeeds; a shard that did not run at all (skipped job) is a failure here, never a silent pass.
@@ -237,12 +239,24 @@ jobs:
             opf-pptx/artifacts/zip-date/**
           retention-days: 7
           if-no-files-found: ignore
+  # RR-45 (opf#368, item 1): the former serial ecosystem-core job is three parallel shards of one matrix, each with its own
+  # setup. `model`: the model, geometry, fonts and CLI suites (with the FF-09 covering array). `installed`: the local
+  # tarballs, their consumer, installed types and the installed-browser and metric-outline checks. `registry`: the exact
+  # published registry packages and the current-checkout measurements that use their fonts. Every command of the old job
+  # runs in exactly one shard (scripts/package-ecosystem-plan.test.mjs proves the split of test-package-ecosystem.mjs;
+  # scripts/ecosystem-scope.test.mjs pins the shard list). The `packages` aggregator needs `ecosystem-core`, whose result
+  # is success only when every shard succeeded: a failed, cancelled or missing shard fails it.
   ecosystem-core:
+    name: ecosystem-core (${{ matrix.shard }})
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.63.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [model, installed, registry]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -257,10 +271,12 @@ jobs:
         run: node --test scripts/ecosystem-scope.test.mjs scripts/package-ecosystem-plan.test.mjs && node scripts/ecosystem-scope.mjs
       # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
       - name: Check the test quarantine
+        if: matrix.shard == 'model'
         working-directory: opf
         run: node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check
       # RR-50: ecosystem.lock.json (the coordinated set, written by the roller) must be valid. Offline, on every change.
       - name: Check the ecosystem lock
+        if: matrix.shard == 'model'
         working-directory: opf
         run: node --test scripts/ecosystem-lock.test.mjs scripts/ecosystem-roll.test.mjs && node scripts/ecosystem-lock.mjs validate
       # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
@@ -300,7 +316,7 @@ jobs:
       # SHA. Warning only for now (ci-cd.md section 3, migration step 1): set the repository variable
       # ECOSYSTEM_LOCK_GUARD=blocking (or pass --blocking) to make a finding fail this job.
       - name: Guard the ecosystem lock
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'model'
         working-directory: opf
         shell: bash
         env:
@@ -343,19 +359,25 @@ jobs:
         run: |
           pnpm build
           node scripts/link-ecosystem.mjs --packages-only
-      - name: Model, geometry, fonts, CLI, TypeScript and packed browser bundle checks
-        if: steps.scope.outputs.run == 'true'
+      - name: Model, geometry, fonts, CLI and TypeScript checks
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'model'
         working-directory: opf
         env:
           # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
-        run: node scripts/test-package-ecosystem.mjs --skip-siblings
+        run: node scripts/test-package-ecosystem.mjs --skip-siblings --core model
+      - name: Pack the tarballs and check the packed consumer and browser bundle
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
+        working-directory: opf
+        env:
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
+        run: node scripts/test-package-ecosystem.mjs --skip-siblings --core packed
       - name: Verify installed type failure propagation
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
         working-directory: opf
         run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
       - name: Execute installed tarball browser interactions
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
         working-directory: opf
         run: |
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
@@ -364,13 +386,13 @@ jobs:
       # RR-45 (opf#368): one masks screenshot per case, ink measured with sharp stats() (scripts/metric-outline-ink.mjs,
       # proven against the previous per-pixel loop by its test), four pages in parallel.
       - name: Check accepted metric outlines and actual offline SVG ink
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
         working-directory: opf
         run: |
           node --test scripts/metric-outline-ink.test.mjs
           node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
       - name: Verify exact published registry packages and fidelity fixtures
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'registry'
         working-directory: opf
         run: |
           pnpm test:registry-ecosystem
@@ -383,13 +405,13 @@ jobs:
           node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
       - name: Measure current checkout code internals with registry fonts
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'registry'
         working-directory: opf
         run: |
           node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
           node scripts/test-code-layout-browser.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json artifacts/code-layout-browser.json
       - name: Measure current checkout metric internals with registry fonts
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'registry'
         working-directory: opf
         run: |
           node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
@@ -397,7 +419,7 @@ jobs:
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
       # RR-47: tests listed in test/quarantine.json run here, after every gate, and are reported without failing the job.
       - name: Quarantined tests (non-blocking)
-        if: always() && steps.scope.outputs.run == 'true'
+        if: always() && steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
         continue-on-error: true
         working-directory: opf
         run: node scripts/quarantine.mjs run-deferred
@@ -405,7 +427,7 @@ jobs:
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: installed-browser-node24
+          name: installed-browser-node24-${{ matrix.shard }}
           path: |
             opf/artifacts/portability/**
             opf/artifacts/quarantine/**
@@ -446,7 +468,7 @@ jobs:
       - name: Report the verification boundary
         if: always() && steps.scope.outputs.run == 'true'
         run: |
-          echo 'This job tests coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Shard ${{ matrix.shard }} of ecosystem-core. Together the three shards test coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
   installed-portability:
     name: Installed candidates (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
