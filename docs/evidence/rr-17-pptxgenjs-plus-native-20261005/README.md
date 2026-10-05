@@ -27,6 +27,8 @@ comment of 2026-10-05). It gates releasing the migration as opf-pptx 0.13.0.
 | a | opf-pptx main `bc97949` (the 0.12.3 candidate) | PptxGenJS 4.0.1 |
 | b | opf-pptx `codex/rr-17-pptxgenjs-plus` `0773be6` | pptxgenjs-plus 4.3.4 |
 
+At the time of the run, opf-pptx#165's head was `3fb1387`. It is one commit ahead of `0773be6` and changes only `docs/pptxgenjs-plus-migration.md`, so the result holds for that head.
+
 ## What was compared
 
 20 documents, the Keynote set: Latin rich text, serif/mono/code, Japanese, Hindi, Arabic and Hebrew RTL, numbered
