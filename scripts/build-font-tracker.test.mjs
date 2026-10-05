@@ -531,9 +531,11 @@ test("Symbol, Wingdings and Webdings carry the code-table route from the pinned 
     assert.equal(item.hostVerification.node, "verified", name);
     assert.equal(item.hostVerification.browser, "verified", name);
     assert.equal(item.hostVerification.editor, "unverified", name);
-    // Nothing is claimed beyond what is verified: the FF-46 native run read the name back (not the glyph shapes), and acceptance stays pending.
+    // Nothing is claimed beyond what is verified: the FF-46 native runs read the name back, the 2026-10-05 run compared the drawn lines
+    // (nativeVisual: pass), and acceptance stays pending until the family's own fixture is in every host.
     assert.equal(item.nativeVerification.status, "verified", name);
-    assert.deepEqual(item.nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002"], name);
+    assert.deepEqual(item.nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"], name);
+    assert.equal(item.nativeVisual.outcome, "pass", name);
     assert.equal(item.acceptance.accepted, false, name);
     assert.match(item.statusReason, /native PowerPoint name read-back passed/, name);
     assert.match(item.nextAction, /no a:sym element/, name);
@@ -577,7 +579,7 @@ test("native verification comes from committed comparison output, and only for f
   assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length, partial: 0, failed: 0, unverified: 0, NA: 0 });
   assert.deepEqual(committed.summary.nativeFailedFamilies, []);
   assert.equal(committed.summary.nativeVerification.verified, verified.length);
-  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002"]);
+  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"]);
   const runs = Object.fromEntries(committed.inputs.nativeEvidence.map((run) => [run.id, run]));
   assert.equal(runs["rr-05b-native-20261002"].decks, 4);
   assert.equal(runs["rr-05b-native-20261002"].decksPassing, 4);
@@ -587,6 +589,13 @@ test("native verification comes from committed comparison output, and only for f
   assert.equal(runs["ff-46-native-0.12-20261002"].decks, 43);
   assert.equal(runs["ff-46-native-0.12-20261002"].decksPassing, 43);
   assert.deepEqual(runs["ff-46-native-0.12-20261002"].failingChecks, []);
+  // FF-46 / RR-17 (2026-10-05, one family per deck on opf-pptx 0.12.3): 47 of 48 decks pass the name checks; the Ebrima (Amharic)
+  // deck lists Nyala, the language's Ethi supplement, in Presentation.Fonts. Ebrima stays verified through the 2026-10-02 run, with
+  // the failing deck as a caveat.
+  assert.equal(runs["ff-46-documented-visual-native-20261005"].decks, 48);
+  assert.equal(runs["ff-46-documented-visual-native-20261005"].decksPassing, 47);
+  assert.deepEqual(runs["ff-46-documented-visual-native-20261005"].failingChecks, [{ deck: "scripts-40-amharic-ebrima", failing: ["presentationFonts"], detail: ["presentation-fonts-extra"] }]);
+  assert.match(record("Ebrima").nativeVerification.caveat, /scripts-40-amharic-ebrima \(presentationFonts\)/);
   for (const name of verified) {
     const item = record(name);
     assert.equal(item.nativeVerification.status, "verified", name);
@@ -599,17 +608,21 @@ test("native verification comes from committed comparison output, and only for f
     assert.match(item.nextAction, /Native name read-back passed/, name);
   }
   // Which family came from which deck.
-  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002", "ff-46-native-0.12-20261002"]);
+  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"]);
   assert.deepEqual(record("David").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-he", "rtl-structures-he"]);
   assert.deepEqual(record("Mangal").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-hi"]);
-  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["ff-46-native-0.12-20261002", "rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
+  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["ff-46-documented-visual-native-20261005", "ff-46-native-0.12-20261002", "rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
   // lang-ja-meiryo failed only the Presentation.Fonts check (FF-05); Meiryo is verified by the decks that pass and the failure is a caveat.
   assert.deepEqual(record("Meiryo").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-ja", "size-4x3-japanese"]);
   assert.match(record("Meiryo").nativeVerification.caveat, /lang-ja-meiryo \(presentationFonts\)/);
   assert.match(record("Aptos").nativeVerification.caveat, /FF-05/);
   // Families only the FF-46 run names are verified by it alone, through their own slide (per-run names and Presentation.Fonts).
-  for (const name of ["Calibri", "Arial", "Wingdings", "Noto Sans JP", "Aptos Narrow", "Cambria Math", "Segoe UI Emoji"]) {
+  for (const name of ["Arial", "Noto Sans JP", "Aptos Narrow"]) {
     assert.deepEqual(record(name).nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002"], name);
+  }
+  // The 2026-10-05 run reads back its own families and the Calibri and Aptos of its symbol and emoji decks.
+  for (const name of ["Calibri", "Wingdings", "Cambria Math", "Segoe UI Emoji"]) {
+    assert.deepEqual(record(name).nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"], name);
   }
   assert.match(record("Arial").nativeVerification.note, /Passed in ff-46-native-0.12-20261002/);
   // Evidence is committed without absolute user paths.
@@ -619,10 +632,10 @@ test("native verification comes from committed comparison output, and only for f
 test("a deck that fails a gated check marks the families it reads back failed, and a family no deck names stays unverified", () => {
   const dir = scratchCopy();
   try {
-    // The FF-46 run names every family; take it out so the RR-05 decks below are the only evidence being perturbed.
+    // The FF-46 runs name every family; take them out so the RR-05 decks below are the only evidence being perturbed.
     const baseFile = path.join(dir, FILES.overrides);
     const base = JSON.parse(readFileSync(baseFile, "utf8"));
-    base.nativeEvidence = base.nativeEvidence.filter((run) => run.id !== "ff-46-native-0.12-20261002");
+    base.nativeEvidence = base.nativeEvidence.filter((run) => !run.id.startsWith("ff-46-"));
     writeFileSync(baseFile, JSON.stringify(base));
     const cjk = path.join(dir, "docs/evidence/rr-05-cjk-native-20261002/compare.json");
     const report = JSON.parse(readFileSync(cjk, "utf8"));
@@ -875,4 +888,73 @@ test("the assembler turns the four host reports into the evidence file, with a f
   assert.deepEqual(out.hosts.browser.findings, { B: { check: "advance differs", reason: "why" } });
   assert.equal(out.hosts.node.findings, undefined);
   assert.equal(out.lazyBudget.node.families, 2);
+});
+
+test("a script, visual or code-table family is documented-visual only with a native visual pass and its own fixture in every host (FF-46)", () => {
+  const rules = overrides.visualAcceptance;
+  assert.ok(rules, "overrides.visualAcceptance is set");
+  assert.deepEqual(rules.statuses, ["script-gap", "visual-gap", "code-table"]);
+  assert.deepEqual(rules.hosts, ["node", "browser", "editor", "galleryEditor"]);
+  assert.ok(overrides.nativeEvidence.some((run) => run.id === rules.id && run.file === rules.file), "the run is also native name evidence");
+  const report = read(rules.file);
+  const withVisual = committed.records.filter((rec) => rec.nativeVisual);
+  assert.equal(withVisual.length, report.families.length, "every family of the run has a record with its outcome");
+  const counts = { pass: 0, finding: 0, unmeasured: 0 };
+  for (const rec of withVisual) {
+    const entry = report.families.find((item) => item.family === rec.family);
+    counts[rec.nativeVisual.outcome] += 1;
+    assert.equal(rec.nativeVisual.run, rules.id, rec.family);
+    assert.deepEqual(rec.nativeVisual.reasons, entry.reasons, rec.family);
+    if (rec.nativeVisual.outcome === "pass") assert.equal(entry.reasons.length, 0, rec.family);
+    if (rec.nativeVisual.outcome === "unmeasured") assert.equal(entry.installedOnNativeHost, false, rec.family);
+    // No proprietary script, emoji, math or code-table family has its own host fixture yet, so none is accepted by this run alone.
+    assert.ok(rules.statuses.includes(rec.status), `${rec.family} keeps its status (${rec.status})`);
+    assert.equal(rec.acceptance.accepted, false, rec.family);
+    const pattern = { pass: /Not accepted yet: the native visual comparison .* passed .* own host fixture is missing in node, browser, editor, galleryEditor/, finding: /Not accepted: the native visual comparison .* recorded a finding: .*Owner decision needed/, unmeasured: /Not accepted: the real font is not installed on the native host/ }[rec.nativeVisual.outcome];
+    assert.match(rec.acceptance.note, pattern, rec.family);
+  }
+  assert.deepEqual(counts, { pass: committed.inputs.nativeVisual.pass, finding: committed.inputs.nativeVisual.finding, unmeasured: committed.inputs.nativeVisual.unmeasured });
+  assert.equal(committed.records.find((rec) => rec.family === "Didot").nativeVisual, undefined, "Didot (Apple-only) is not part of the Windows run");
+
+  const dir = scratchCopy();
+  try {
+    // A passing family with its own fixture in every host becomes documented-visual; a finding family with fixtures stays out; a passing
+    // family missing one host's fixture stays out and the note names the host.
+    const evidenceFile = path.join(dir, overrides.scriptHostFixtureEvidence);
+    const evidence = JSON.parse(readFileSync(evidenceFile, "utf8"));
+    const own = (family, hosts) => { for (const host of hosts) evidence.hosts[host].families[family] = { route: "fixture", files: ["fixture.ttf"], samples: ["a", "b"], lazyBytes: 1 }; };
+    const pass = withVisual.filter((rec) => rec.nativeVisual.outcome === "pass").map((rec) => rec.family);
+    const finding = withVisual.find((rec) => rec.nativeVisual.outcome === "finding").family;
+    own(pass[0], rules.hosts);
+    own(pass[1], ["node", "browser", "editor"]);
+    own(finding, rules.hosts);
+    writeFileSync(evidenceFile, JSON.stringify(evidence));
+    const records = buildTracker({ root: dir }).tracker.records;
+    const accepted = records.find((rec) => rec.family === pass[0]);
+    assert.equal(accepted.status, "documented-visual");
+    assert.equal(accepted.acceptance.accepted, true);
+    assert.equal(accepted.acceptance.date, rules.date);
+    assert.equal(accepted.phase, 5);
+    assert.match(accepted.acceptance.note, /native visual comparison .* passed .* own fixture passes in every host/);
+    const partial = records.find((rec) => rec.family === pass[1]);
+    assert.ok(rules.statuses.includes(partial.status), partial.family);
+    assert.match(partial.acceptance.note, /own host fixture is missing in galleryEditor/);
+    const held = records.find((rec) => rec.family === finding);
+    assert.ok(rules.statuses.includes(held.status), held.family);
+    assert.equal(held.acceptance.accepted, false);
+
+    // The rule is opt-in: without overrides.visualAcceptance no record carries nativeVisual and the statuses are the committed ones.
+    const file = path.join(dir, FILES.overrides);
+    const edited = JSON.parse(readFileSync(file, "utf8"));
+    delete edited.visualAcceptance;
+    writeFileSync(file, JSON.stringify(edited));
+    writeFileSync(evidenceFile, readFileSync(path.join(ROOT, overrides.scriptHostFixtureEvidence)));
+    const without = buildTracker({ root: dir }).tracker.records;
+    for (const rec of without) {
+      assert.equal(rec.nativeVisual, undefined, rec.family);
+      assert.equal(rec.status, committed.records.find((item) => item.family === rec.family).status, rec.family);
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

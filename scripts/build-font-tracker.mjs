@@ -241,6 +241,40 @@ function loadNativeEvidence(root, runs) {
   return { byFamily, runs: summary };
 }
 
+/**
+ * FF-46 / RR-17 (opf#323 section 3): the per-family outcome of the native visual comparison (compare.json `families`, written by the
+ * scratch comparison tool from the supervisor's native read and the in-place measurements). Only the run's own outcome is read: `pass`
+ * when the tool found no reason to hold the family, `unmeasured` when the real font was not installed on the native host (PowerPoint drew
+ * a substitute, so the real face was not compared), else `finding` with the reasons. Nothing is reinterpreted here.
+ */
+function loadVisualEvidence(root, rules) {
+  for (const key of ["id", "label", "file", "readme", "date", "fixture"]) if (!rules[key]) throw new Error(`overrides.visualAcceptance needs ${key}`);
+  if (!Array.isArray(rules.hosts) || !rules.hosts.length || !Array.isArray(rules.statuses) || !rules.statuses.length) throw new Error("overrides.visualAcceptance needs hosts and statuses");
+  const report = readJson(root, rules.file);
+  const byFamily = new Map();
+  for (const entry of report.families ?? []) {
+    const outcome = entry.proposal === "documented-visual candidate" && !(entry.reasons ?? []).length ? "pass" : entry.installedOnNativeHost === false ? "unmeasured" : "finding";
+    byFamily.set(entry.family, {
+      run: rules.id,
+      file: rules.file,
+      readme: rules.readme,
+      date: rules.date,
+      outcome,
+      installedOnNativeHost: entry.installedOnNativeHost ?? null,
+      inkWidthRatio: entry.ink?.longMedianRatio ?? null,
+      lineBoxes: entry.lines?.boxes ?? 0,
+      singleLineBoxes: entry.lines?.singleLine ?? 0,
+      fontOverflowBoxes: entry.lines?.fontOverflow ?? 0,
+      compositionOverflowBoxes: entry.compositionOverflow?.boxes ?? 0,
+      previewSizeAdjust: entry.previewSizeAdjust?.factor ?? null,
+      images: entry.images ?? null,
+      reasons: entry.reasons ?? [],
+      notes: entry.notes ?? [],
+    });
+  }
+  return byFamily;
+}
+
 // ---- script corpus (FF-44) --------------------------------------------------------------------
 
 /**
@@ -532,6 +566,10 @@ export function buildTracker({ root = ROOT } = {}) {
   const symbolSnapshot = readJson(root, overrides.symbolFontsSnapshot);
   const symbolEncodings = loadSymbolEncodings(root, overrides.symbolEncodings);
   const nativeEvidence = loadNativeEvidence(root, overrides.nativeEvidence);
+  // FF-46 / RR-17: the native visual comparison of the script, visual and code-table families (opf#323 section 3). A family whose run
+  // outcome passes still needs its own fixture in every host before it is documented-visual; a finding keeps its status.
+  const visualRules = overrides.visualAcceptance ?? null;
+  const visualByFamily = visualRules ? loadVisualEvidence(root, visualRules) : new Map();
   const acceptRules = overrides.latinAcceptance;
   const decisions = policy.provisionalDecisions?.decisions ?? {};
   const corpus = overrides.scriptCorpus ? loadScriptCorpus(root, overrides.scriptCorpus) : null;
@@ -546,6 +584,7 @@ export function buildTracker({ root = ROOT } = {}) {
   for (const name of Object.keys(overrides.pendingBundle)) if (!policyNames.has(name)) throw new Error(`overrides.pendingBundle names ${name}, which is not a policy family`);
   for (const name of Object.keys(overrides.acceptance)) if (!policyNames.has(name) && !overrides.extras.some((extra) => extra.family === name)) throw new Error(`overrides.acceptance names ${name}, which has no record`);
   for (const name of Object.keys(overrides.families)) if (!policyNames.has(name)) throw new Error(`overrides.families names ${name}, which is not a policy family`);
+  for (const name of visualByFamily.keys()) if (!policyNames.has(name)) throw new Error(`the native visual comparison names ${name}, which is not a policy family`);
   for (const extra of overrides.extras) {
     if (policyNames.has(extra.family)) throw new Error(`${extra.family} is in the policy; remove it from overrides.extras`);
     if (!index.has(extra.family)) throw new Error(`${extra.family} is not in the pinned render manifest snapshot`);
@@ -785,9 +824,34 @@ export function buildTracker({ root = ROOT } = {}) {
       statusReason = derivedClass === "visual" ? "documented visual look-alike: fixtures in every host, widths, line breaks and vertical metrics measured against the real font" : derivedClass === "metric" ? "metric route qualified: fixtures in every host, four-style widths and line breaks within the bar" : "open family: fixtures in every host";
     }
 
+    // FF-46 / RR-17: a script, visual or code-table family with a native visual comparison. `documented-visual` needs both the run's
+    // pass and the family's OWN fixture in every host (the host evidence keyed by the family's name, as for the Latin families); the
+    // fixtures of its open route face do not transfer. A finding or a missing fixture keeps the status and says why.
+    const visual = visualRules?.statuses.includes(status) ? visualByFamily.get(family) ?? null : null;
+    let visualAccepted = false;
+    let nativeVisual = null;
+    if (visual) {
+      const ownHosts = visualRules.hosts.filter((host) => hostFixtureView.hosts?.[host]?.families?.[family]);
+      const missingHosts = visualRules.hosts.filter((host) => !ownHosts.includes(host));
+      nativeVisual = { ...visual, ownFixtureHosts: ownHosts };
+      const measured = `native / preview ink width ${visual.inkWidthRatio ?? "n/a"} on lines of at least 200 pt, ${visual.singleLineBoxes} of ${visual.lineBoxes} line boxes read one native line, ${visual.fontOverflowBoxes} overflow where the preview fits${visual.previewSizeAdjust ? `, preview size adjustment ${visual.previewSizeAdjust}` : ""}`;
+      if (!accepted && visual.outcome === "pass" && !missingHosts.length && target.yes) {
+        visualAccepted = true;
+        acceptance = { fixture: visualRules.fixture, accepted: true, date: visualRules.date, evidence: resolveEvidence(visualRules.evidence ?? [], overrides.evidence), note: `Documented look-alike: the native visual comparison (${visual.run}) passed (${measured}); the family's own fixture passes in every host. Reflow against the real font is expected.` };
+        statusReason = "documented visual look-alike: fixtures in every host and the native visual comparison (FF-46) against the real font";
+        status = "documented-visual";
+      } else if (!accepted && visual.outcome === "pass") {
+        acceptance = { ...acceptance, note: `Not accepted yet: the native visual comparison (${visual.run}) passed (${measured}), but the family's own host fixture is missing in ${missingHosts.join(", ")} (the script host fixtures cover the open route face, which does not transfer).` };
+      } else if (!accepted && visual.outcome === "unmeasured") {
+        acceptance = { ...acceptance, note: `Not accepted: the real font is not installed on the native host of ${visual.run}, so PowerPoint drew a substitute and the real face was not compared (${visual.reasons.join("; ")}). It needs a native host with the font installed.` };
+      } else if (!accepted) {
+        acceptance = { ...acceptance, note: `Not accepted: the native visual comparison (${visual.run}) recorded a finding: ${visual.reasons.join("; ")}. Owner decision needed; the gate is unchanged.` };
+      }
+    }
+
     const phaseByStatus = { "loading-gap": 2, "style-gap": 2, "policy-gap": 1, "needs-special-path": 4, "code-table": 4, "visual-gap": 4, "script-gap": 4, "baseline-needed": 1, "metric-measured": 1, "documented-visual": 5, "qualified": 5 };
     // An accepted Latin family has only native verification and the full parity rerun (owner phase 5) left.
-    const phase = derivedClass ? 5 : overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
+    const phase = derivedClass || visualAccepted ? 5 : overrides.phaseOverrides[family]?.phase ?? phaseByStatus[status];
 
     // Parity.
     const used = usage.get(family);
@@ -849,10 +913,11 @@ export function buildTracker({ root = ROOT } = {}) {
     const nativeRecord = nativeRecordOf(nativeEvidence, overrides.nativeEvidence, family, native);
     for (const run of nativeRecord.runs ?? []) evidenceKeys.push({ label: run.label, url: run.readme });
     const appearance = appearanceOf(overrides.appearance?.[family]);
-    const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, derivedBy ?? acceptRules);
+    const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, derivedBy ?? (visualAccepted ? visualRules : acceptRules));
     if (!baseAction) throw new Error(`no nextAction for ${family}`);
     const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "failed" ? ` Native name read-back FAILED (${nativeRecord.failures.map((item) => `${item.deck}: ${item.failing.join(", ")}`).join("; ")}); triage it (${nativeRecord.runs.map((run) => run.run).join(", ")}).` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
-    const nextAction = `${baseAction}${nativeSentence}`;
+    const visualSentence = !nativeVisual || visualAccepted ? "" : nativeVisual.outcome === "pass" ? ` Native visual comparison passed (${nativeVisual.run}); documented-visual waits for the family's own host fixture in ${visualRules.hosts.filter((host) => !nativeVisual.ownFixtureHosts.includes(host)).join(", ")}.` : nativeVisual.outcome === "unmeasured" ? ` Native visual comparison (${nativeVisual.run}): unmeasured, the real font is not installed on the native host; re-run on a host that has it.` : ` Native visual comparison (${nativeVisual.run}): finding, owner decision needed (${nativeVisual.reasons.join("; ")}).`;
+    const nextAction = `${baseAction}${nativeSentence}${visualSentence}`;
     const candidates = overrides.candidates[family] ?? [];
 
     const record = {
@@ -893,6 +958,7 @@ export function buildTracker({ root = ROOT } = {}) {
       hostLoading,
       nativeVerification: Object.fromEntries(Object.entries(nativeRecord).filter(([key]) => key !== "reason")),
       acceptance,
+      ...(nativeVisual ? { nativeVisual } : {}),
       ...(corpusRecord ? { scriptCorpus: corpusRecord } : {}),
       ...(qualification ? { qualification } : {}),
       ...(appearance ? { appearance } : {}),
@@ -930,6 +996,7 @@ export function buildTracker({ root = ROOT } = {}) {
       symbolFonts: { file: overrides.symbolFontsSnapshot, ...symbolSnapshot.source, families: Object.keys(symbolSnapshot.previewFaces).length, encodings: overrides.symbolEncodings },
       nativeEvidence: nativeEvidence.runs.map((run) => ({ id: run.id, label: run.label, file: run.file, readme: run.readme, date: run.date, host: run.host, decks: run.decks, decksPassing: run.decksPassing, failingChecks: run.failingChecks })),
       qualification: { file: overrides.qualificationReport, corpusStrings: qualReport.corpus.strings, lineBreakCases: acceptRules.lineBreakCases },
+      ...(visualRules ? { nativeVisual: { id: visualRules.id, label: visualRules.label, file: visualRules.file, readme: visualRules.readme, date: visualRules.date, hosts: visualRules.hosts, statuses: visualRules.statuses, families: visualByFamily.size, pass: [...visualByFamily.values()].filter((entry) => entry.outcome === "pass").length, finding: [...visualByFamily.values()].filter((entry) => entry.outcome === "finding").length, unmeasured: [...visualByFamily.values()].filter((entry) => entry.outcome === "unmeasured").length } } : {}),
       ...(scriptEvidence ? { scriptHostFixtures: { file: overrides.scriptHostFixtureEvidence, date: scriptEvidence.date, hosts: Object.fromEntries(Object.entries(scriptEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length, findings: Object.keys(entry.findings ?? {}).length }])), lazyBudget: scriptEvidence.lazyBudget } } : {}),
       hostFixtures: { file: overrides.hostFixtureEvidence, date: hostEvidence.date, hosts: Object.fromEntries(Object.entries(hostEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length }])), lazyBudget: hostEvidence.lazyBudget },
       overrides: { file: FILES.overrides },
@@ -1055,6 +1122,24 @@ function nativeSection(tracker) {
   return lines;
 }
 
+function nativeVisualSection(tracker) {
+  const run = tracker.inputs.nativeVisual;
+  if (!run) return [];
+  const rows = tracker.records.filter((rec) => rec.nativeVisual);
+  const lines = ["", "## Native visual comparison (FF-46)", ""];
+  lines.push(
+    `[${cell(run.label)}](${path.posix.relative(DIR, run.readme)}) (${run.date}): ${run.families} families of status ${run.statuses.join(", ")}: ${run.pass} pass, ${run.finding} have a finding and ${run.unmeasured} are unmeasured (the real font is not installed on the native host). PowerPoint does not re-wrap the exported single-line boxes, so line breaks are read as where each native line ends against its box. A family is documented-visual only when the run passes and its own fixture passes in every host (${run.hosts.join(", ")}); a finding keeps the status for an owner decision.`,
+    "",
+    "| Family | Status | Outcome | Installed on the native host | Ink native / preview | Own fixture hosts | Reasons |",
+    "| --- | --- | --- | --- | ---: | --- | --- |",
+  );
+  for (const rec of rows) {
+    const v = rec.nativeVisual;
+    lines.push(`| ${cell(rec.family)} | ${rec.status} | ${v.outcome} | ${v.installedOnNativeHost == null ? "-" : v.installedOnNativeHost ? "yes" : "no"} | ${v.inkWidthRatio ?? "-"} | ${v.ownFixtureHosts.join(", ") || "none"} | ${cell(v.reasons.join("; ")) || "-"} |`);
+  }
+  return lines;
+}
+
 function symbolSection(tracker) {
   const symbols = tracker.records.filter((rec) => rec.previewRoute.kind === "code-table");
   if (!symbols.length) return [];
@@ -1109,7 +1194,7 @@ export function renderMarkdown(tracker) {
 
   push(...scriptCorpusSection(records));
 
-  push(...nativeSection(tracker), ...symbolSection(tracker));
+  push(...nativeSection(tracker), ...nativeVisualSection(tracker), ...symbolSection(tracker));
 
   push("", "## The owner's plan", "", `Owner input, ${tracker.ownerPlan.date}, adopted as the program order. Request: "${tracker.ownerPlan.request}"`, "", `> ${tracker.ownerPlan.summary}`, ">");
   for (const phase of tracker.ownerPlan.phases) push(`> ${phase.phase}. ${phase.text}`);
