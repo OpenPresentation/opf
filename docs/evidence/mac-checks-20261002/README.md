@@ -6,7 +6,7 @@ Date: 2026-10-02. Host: the owner's Mac mini (Apple silicon), macOS 26.6.2 (25G8
 (`f4779da`, built with opf-render 0.12.0) for the playground. Not covered, by rule: Keynote, PowerPoint (not installed), the Preview and
 Safari applications (no GUI app was opened or automated; Quick Look ran through `qlmanage` thumbnails, PDFKit through a Swift program,
 WebKit through Playwright). This is evidence for these checks on this Mac only. It is not a native PowerPoint claim and not a claim about
-Safari's user interface.
+Safari's user interface. Keynote was checked afterwards by the supervisor (2026-10-04): see [keynote/README.md](keynote/README.md).
 
 | Check | Verdict |
 | --- | --- |

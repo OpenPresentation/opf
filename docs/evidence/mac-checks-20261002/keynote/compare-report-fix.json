@@ -1,0 +1,1404 @@
+{
+  "packages": {
+    "@openpresentation/opf": "0.12.0",
+    "@openpresentation/opf-pptx": "0.12.2+rr17 (branch codex/rr-17-keynote-charts 50a6e0e, npm pack; opf-pptx#162 fix)",
+    "@openpresentation/opf-render": "0.12.0"
+  },
+  "counts": {
+    "PASS": 0,
+    "WARN": 20,
+    "FAIL": 0,
+    "MISSING": 0
+  },
+  "results": [
+    {
+      "id": "01-latin-rich-text",
+      "title": "Latin text and rich runs",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAB+Georgia",
+          "AAAAAC+Georgia-Bold",
+          "AAAAAD+Georgia-Italic"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Georgia",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Georgia, AAAAAC+Georgia-Bold, AAAAAD+Georgia-Italic"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Georgia, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "02-fonts-serif-mono-code",
+      "title": "Serif body, monospace code, quote and metric",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAB+TimesNewRomanPS-BoldMT",
+          "AAAAAC+Helvetica-Bold",
+          "AAAAAD+Helvetica",
+          "AAAAAE+TimesNewRomanPSMT"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Helvetica",
+          "Roboto Mono",
+          "Times New Roman"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Roboto Mono (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+TimesNewRomanPS-BoldMT, AAAAAC+Helvetica-Bold, AAAAAD+Helvetica, AAAAAE+TimesNewRomanPSMT"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Helvetica, Roboto Mono, Times New Roman"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "03-cjk-japanese",
+      "title": "Japanese (East Asian script)",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAC+PingFangSC-Semibold",
+          "AAAAAD+HiraginoSans-W6",
+          "AAAAAF+PingFangSC-Regular",
+          "AAAAAG+HiraginoSans-W3",
+          "AAAAAH+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica",
+          "Meiryo"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display, Meiryo (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "PingFangSC, HiraginoSans-W6, HiraginoSans-W3, Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAC+PingFangSC-Semibold, AAAAAD+HiraginoSans-W6, AAAAAF+PingFangSC-Regular, AAAAAG+HiraginoSans-W3, AAAAAH+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica, Meiryo"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "ja-JP"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "04-devanagari-hindi",
+      "title": "Hindi (Devanagari, complex script)",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAC+KohinoorDevanagari-Bold",
+          "AAAAAD+Helvetica-Bold",
+          "AAAAAF+KohinoorDevanagari-Regular",
+          "AAAAAG+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica",
+          "Mangal"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF slide 1: text found but not contiguous",
+          "detail": "ग्रामीण भुगतान परियोजना  (reordered)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF slide 2: text found but not contiguous",
+          "detail": "मुख्य बिंदु  (reordered) | किसानों के लिए सरल भुगतान  (reordered) | हर महीने प्रगति की समीक्षा  (reordered)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF slide 3: text found but not contiguous",
+          "detail": "यह स्लाइड संयुक्ताक्षर और मात्राओं की जाँच करती है: क्षत्रिय, ज्ञान, श्री, द्वारा।  (reordered)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display, Mangal (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "KohinoorDevanagari, Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAC+KohinoorDevanagari-Bold, AAAAAD+Helvetica-Bold, AAAAAF+KohinoorDevanagari-Regular, AAAAAG+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica, Mangal"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "hi-IN"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "05-rtl-arabic",
+      "title": "Arabic (right-to-left)",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAC+GeezaPro",
+          "AAAAAD+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Arabic Typesetting",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF slide 1: text found but not contiguous",
+          "detail": "الخدمات الرقمية  (words) | ملخص تنفيذي  (words)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF slide 2: text found but not contiguous",
+          "detail": "النقاط الرئيسية  (words) | تبسيط الخدمات للمواطنين  (reordered) | تقليل وقت المعالجة إلى 5 أيام  (reordered) | قياس الرضا كل ربع سنة  (words)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF slide 3: text found but not contiguous",
+          "detail": "المؤشرات  (reordered)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display, Arabic Typesetting (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "GeezaPro, Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAC+GeezaPro, AAAAAD+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Arabic Typesetting, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "ar-SA"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "06-rtl-hebrew",
+      "title": "Hebrew (right-to-left)",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAC+LucidaGrande-Bold",
+          "AAAAAD+Helvetica-Bold",
+          "AAAAAF+LucidaGrande",
+          "AAAAAG+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "David",
+          "Helvetica",
+          "Tenorite",
+          "Tenorite Display"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF slide 1: text found but not contiguous",
+          "detail": "סקירת רבעון  (words) | תוצאות ותוכניות  (words)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF slide 2: text found but not contiguous",
+          "detail": "נקודות עיקריות  (words) | ההכנסות עלו ב-18%  (reordered) | השקנו את OPF בשלושה שווקים  (words) | היעד הבא: 2027  (reordered)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF slide 3: text found but not contiguous",
+          "detail": "\"התכנון הטוב ביותר הוא זה שנראה לעין.\"  (reordered) | דנה לוי  (words)"
+        },
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "David, Tenorite, Tenorite Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "LucidaGrande, Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAC+LucidaGrande-Bold, AAAAAD+Helvetica-Bold, AAAAAF+LucidaGrande, AAAAAG+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "David, Helvetica, Tenorite, Tenorite Display"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US, he-IL"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "07-bullets-numbered",
+      "title": "Bullets, nesting and numbered lists",
+      "pdf": {
+        "pages": 4,
+        "fonts": [
+          "AAAAAB+Arial-Black",
+          "AAAAAC+ArialMT",
+          "AAAAAD+ArialMT"
+        ]
+      },
+      "pptx": {
+        "slides": 4,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Arial",
+          "Arial Black",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Arial-Black, AAAAAC+ArialMT, AAAAAD+ArialMT"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Arial, Arial Black, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "08-tables",
+      "title": "Tables",
+      "pdf": {
+        "pages": 2,
+        "fonts": [
+          "AAAAAC+Calibri-Bold",
+          "AAAAAE+Calibri"
+        ]
+      },
+      "pptx": {
+        "slides": 2,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Calibri",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAC+Calibri-Bold, AAAAAE+Calibri"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Calibri, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "09-charts-core",
+      "title": "Native chart families (core)",
+      "pdf": {
+        "pages": 8,
+        "fonts": [
+          "AAAAAB+Helvetica-Bold",
+          "AAAAAC+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 8,
+        "charts": 8,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica-Bold, AAAAAC+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 5: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 6: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 7: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX slide 8: chart type changed",
+          "detail": "expected radar:standard, got radar:filled"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 8: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "10-charts-variants",
+      "title": "Native chart variants (stacked, percent, markers, filled)",
+      "pdf": {
+        "pages": 6,
+        "fonts": [
+          "AAAAAB+Helvetica-Bold",
+          "AAAAAC+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 6,
+        "charts": 6,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica-Bold, AAAAAC+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 5: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 6: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "11-charts-chartex",
+      "title": "Office 2016 chartex families",
+      "pdf": {
+        "pages": 6,
+        "fonts": [
+          "AAAAAB+Helvetica-Bold",
+          "AAAAAC+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 6,
+        "charts": 6,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica-Bold, AAAAAC+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: chartex waterfall",
+          "detail": "Keynote wrote 1 chart part(s): native:bar:col:clustered"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: chartex funnel",
+          "detail": "Keynote wrote 1 chart part(s): native:bar:col:clustered"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: chartex treemap",
+          "detail": "Keynote wrote 1 chart part(s): native:bar:col:clustered"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: chartex clusteredColumn",
+          "detail": "Keynote wrote 1 chart part(s): native:bar:col:clustered"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 5: chartex clusteredColumn,paretoLine",
+          "detail": "Keynote wrote 1 chart part(s): native:bar:col:clustered"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 5: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 6: chartex boxWhisker",
+          "detail": "Keynote wrote 1 chart part(s): native:bar:col:clustered"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 6: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "12-svg-png-fallback",
+      "title": "SVG picture with PNG fallback",
+      "pdf": {
+        "pages": 2,
+        "fonts": [
+          "AAAAAB+Helvetica-Bold",
+          "AAAAAC+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 2,
+        "charts": 0,
+        "pictures": 2,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica-Bold, AAAAAC+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "13-header-footer-numbers",
+      "title": "Native header, footer and slide numbers",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAC+Calibri",
+          "AAAAAE+Calibri-Bold"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Calibri",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAC+Calibri, AAAAAE+Calibri-Bold"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Calibri, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "14-speaker-notes",
+      "title": "Speaker notes",
+      "pdf": {
+        "pages": 3,
+        "fonts": [
+          "AAAAAB+Helvetica-Bold",
+          "AAAAAC+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 3,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 2,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica-Bold, AAAAAC+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "15-backgrounds",
+      "title": "Slide backgrounds: solid, gradient, pattern, image",
+      "pdf": {
+        "pages": 5,
+        "fonts": [
+          "AAAAAB+Helvetica-Bold",
+          "AAAAAC+Helvetica"
+        ]
+      },
+      "pptx": {
+        "slides": 5,
+        "charts": 0,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica-Bold, AAAAAC+Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected pattern:wdUpDiag, got image"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected pattern:smGrid, got image"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "16-footnotes-captions",
+      "title": "Footnotes, citations and captions",
+      "pdf": {
+        "pages": 2,
+        "fonts": [
+          "AAAAAB+Georgia-Bold",
+          "AAAAAC+Georgia"
+        ]
+      },
+      "pptx": {
+        "slides": 2,
+        "charts": 1,
+        "pictures": 0,
+        "notesSlides": 0,
+        "fonts": [
+          "Georgia",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Georgia-Bold, AAAAAC+Georgia"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Georgia, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "17-gallery-bold",
+      "title": "Gallery theme: bold",
+      "pdf": {
+        "pages": 4,
+        "fonts": [
+          "AAAAAB+Tahoma",
+          "AAAAAC+Tahoma-Bold"
+        ]
+      },
+      "pptx": {
+        "slides": 4,
+        "charts": 1,
+        "pictures": 0,
+        "notesSlides": 1,
+        "fonts": [
+          "Helvetica",
+          "Tahoma"
+        ]
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Tahoma, AAAAAC+Tahoma-Bold"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Helvetica, Tahoma"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-US"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "18-gallery-classic",
+      "title": "Gallery theme: classic",
+      "pdf": {
+        "pages": 4,
+        "fonts": [
+          "AAAAAB+Helvetica",
+          "AAAAAC+Helvetica-Bold"
+        ]
+      },
+      "pptx": {
+        "slides": 4,
+        "charts": 1,
+        "pictures": 0,
+        "notesSlides": 1,
+        "fonts": [
+          "Helvetica",
+          "Tenorite",
+          "Tenorite Display"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Tenorite, Tenorite Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica, AAAAAC+Helvetica-Bold"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Helvetica, Tenorite, Tenorite Display"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-GB"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "19-gallery-dark",
+      "title": "Gallery theme: dark",
+      "pdf": {
+        "pages": 4,
+        "fonts": [
+          "AAAAAB+Helvetica",
+          "AAAAAC+Helvetica-Bold"
+        ]
+      },
+      "pptx": {
+        "slides": 4,
+        "charts": 1,
+        "pictures": 0,
+        "notesSlides": 1,
+        "fonts": [
+          "Helvetica",
+          "Meiryo"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Meiryo (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica, AAAAAC+Helvetica-Bold"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Helvetica, Meiryo"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-CA"
+        }
+      ],
+      "status": "WARN"
+    },
+    {
+      "id": "20-gallery-minimal-indic",
+      "title": "Gallery theme: minimal (international example)",
+      "pdf": {
+        "pages": 4,
+        "fonts": [
+          "AAAAAB+Helvetica",
+          "AAAAAC+Helvetica-Bold"
+        ]
+      },
+      "pptx": {
+        "slides": 4,
+        "charts": 1,
+        "pictures": 0,
+        "notesSlides": 1,
+        "fonts": [
+          "Aptos",
+          "Aptos Display",
+          "Helvetica"
+        ]
+      },
+      "findings": [
+        {
+          "level": "WARN",
+          "check": "PDF fonts: named in the deck but not embedded",
+          "detail": "Aptos, Aptos Display (substituted or not used by the text on these pages)"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts: embedded but not named in the deck",
+          "detail": "Helvetica"
+        },
+        {
+          "level": "INFO",
+          "check": "PDF fonts (all)",
+          "detail": "AAAAAB+Helvetica, AAAAAC+Helvetica-Bold"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 1: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 2: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 3: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX slide 4: background",
+          "detail": "expected solid, got inherit"
+        },
+        {
+          "level": "INFO",
+          "check": "PPTX fonts (Keynote export)",
+          "detail": "Aptos, Aptos Display, Helvetica"
+        },
+        {
+          "level": "WARN",
+          "check": "PPTX language tags lost",
+          "detail": "en-IN"
+        }
+      ],
+      "status": "WARN"
+    }
+  ]
+}

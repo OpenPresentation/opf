@@ -1,0 +1,1 @@
+{"name":"keynote-set","private":true,"type":"module","dependencies":{"@openpresentation/opf":"0.12.0","@openpresentation/opf-pptx":"0.12.2","@openpresentation/opf-render":"0.12.0","jszip":"^3.10.2","pdfjs-dist":"^5.7.284"}}
