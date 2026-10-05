@@ -9,10 +9,9 @@
 // workflow) `check` always fails, so the build always runs, exactly as before; `stamp` then removes any old stamp.
 //   node scripts/reuse-build.mjs check [package-directory]   exit 0: reuse this job's build; exit 1: build
 //   node scripts/reuse-build.mjs stamp [package-directory]   record a successful build for this job
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
-import { realpathSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
 // The stamp lives in the package's node_modules: never packed, never committed, gone with a clean install.
 export const stampPath = (directory) => path.join(directory, 'node_modules', '.opf-build-stamp');
