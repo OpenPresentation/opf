@@ -189,9 +189,9 @@ slide tag colour rule, quote provenance) stay in the [font burndown](../font-fid
 ## What is not finished (RR-20)
 
 - **Site adoption** (another agent): pptx-dev master is on opf-pptx 0.11.9, core 0.11.4, renderer 0.11.9 and
-  editor 0.10.6; [pptx-gallery#83](https://github.com/Data-Advantage/pptx-gallery/pull/83) (RR-22),
-  [pptx-dev#70](https://github.com/Data-Advantage/pptx-dev/pull/70) (RR-23) and
-  [openpresentation-site#61](https://github.com/Data-Advantage/openpresentation-site/pull/61) (RR-28) are drafts.
+  editor 0.10.6; pptx-gallery#83 (RR-22),
+  pptx-dev#70 (RR-23) and
+  openpresentation-site#61 (RR-28) are drafts.
   RR-14 (the pptx.dev "Understand this deck" feature) is merged behind default-off flags and also waits for the
   dependency bump, live model recordings and the owner's gateway, budget and zero-data-retention decisions.
 - **Re-audit on the published set**: done 2026-10-02 for the configuration audits and the parity run on core 0.12.0,

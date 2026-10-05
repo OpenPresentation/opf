@@ -435,7 +435,7 @@ The Linux browser jobs already use the pinned Playwright image.
 A cache has to restore faster than the download it replaces, and here it
 often does not. pptx-dev had no dependency cache, so a pnpm store cache was
 tried as quick win 3
-([pptx-dev#75](https://github.com/Data-Advantage/pptx-dev/pull/75), closed).
+(pptx-dev#75, closed).
 Timings are pnpm setup plus setup-node plus install:
 
 | | Before (p50) | With a warm cache |
@@ -607,29 +607,29 @@ are filed as issues.
 |---|---|---|---|---|
 | QW1 | Ecosystem checks skip on `docs/programs` / `docs/evidence` PRs; required checks still report | [opf#286](https://github.com/OpenPresentation/opf/pull/286), merged | about 1,100 runner-min/week; those PRs green in about 9 instead of 21 min. On the PR, the decision step took under 1 s on ubuntu, Windows and macOS, and a code change still ran everything | low: conservative path list, pushes to main always full |
 | QW2 | Renderer runs `test:pdf-vector` once (not also in `typecheck`) | [opf-render#111](https://github.com/OpenPresentation/opf-render/pull/111), merged | `typecheck` 3 s (was 2.38 min p50); renderer job 11.2 min (was 16.3 min p50); about 1,700 runner-min/week once core repins | very low: every `typecheck` caller also runs `npm test` |
-| QW3 | pnpm store cache in pptx-dev Application compatibility | [pptx-dev#75](https://github.com/Data-Advantage/pptx-dev/pull/75), **closed** | negative: the warm run was 9 s (ubuntu) and 12 s (Windows) slower, and a cold run adds 48 to 66 s to save the cache (section 5) | none (not merged) |
+| QW3 | pnpm store cache in pptx-dev Application compatibility | pptx-dev#75, **closed** | negative: the warm run was 9 s (ubuntu) and 12 s (Windows) slower, and a cold run adds 48 to 66 s to save the cache (section 5) | none (not merged) |
 
 ### Quick wins, second set (supervisor decisions of 2026-10-02)
 
 | ID | Change | PR | Saving, measured | Risk |
 |---|---|---|---|---|
-| QW4 | Pin the non-container Linux jobs to `ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19: OPF CI, published matrix, renderer residual compare, the three sites | [opf#295](https://github.com/OpenPresentation/opf/pull/295), merged, [opf-render#112](https://github.com/OpenPresentation/opf-render/pull/112), merged, [pptx-gallery#86](https://github.com/Data-Advantage/pptx-gallery/pull/86), merged, [openpresentation-site#63](https://github.com/Data-Advantage/openpresentation-site/pull/63), merged, [pptx-dev#76](https://github.com/Data-Advantage/pptx-dev/pull/76), merged | no time change (same image today); avoids a font or ICU drift incident. The publish workflows are left alone | very low |
+| QW4 | Pin the non-container Linux jobs to `ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19: OPF CI, published matrix, renderer residual compare, the three sites | [opf#295](https://github.com/OpenPresentation/opf/pull/295), merged, [opf-render#112](https://github.com/OpenPresentation/opf-render/pull/112), merged, pptx-gallery#86, merged, openpresentation-site#63, merged, pptx-dev#76, merged | no time change (same image today); avoids a font or ICU drift incident. The publish workflows are left alone | very low |
 | QW5 | Warn when an ecosystem pin is not on the sibling's `main` | [opf#296](https://github.com/OpenPresentation/opf/pull/296), merged | under 1 s. Replayed against the pre-opf#283 pin `1ea2292`, it warns "49 commits not in main" | none (warning) |
 | QW6 | Reuse the packed tarballs in the Installed candidates legs | **declined after measuring** | at most 36 s per leg (`pnpm build` 30 s and packing 6 s; the sibling installs are still needed for Playwright and the test scripts), on legs that finish about 20 min before `packages`, so no wall-clock gain. Packing on Windows and macOS is itself under test: those legs caught the RR-37 CRLF defect ("Installed runtime differs from the staged package"), so reusing Linux tarballs would remove coverage | not done |
-| QW7 | pptx-gallery runs the production-only checks (production smoke, Lighthouse on www.pptx.gallery, remote validate) after merge, not on PRs | [pptx-gallery#85](https://github.com/Data-Advantage/pptx-gallery/pull/85), merged | 51 s of a 223 s p50 PR job (23%), on billed minutes; no production-coupled PR failures | low: they still run on every push to main and on demand |
-| QW8 | pptx-dev Windows leg policy: ubuntu on every PR; Windows on master, manual runs, a weekly schedule, and Windows-sensitive or `windows`-labelled PRs | [pptx-dev#78](https://github.com/Data-Advantage/pptx-dev/pull/78), merged | 50 of the last 60 PRs touch a Windows-sensitive path (the lockfile and `package.json` 30, `tests/e2e` 24), so about 17% of PR runs skip Windows: about 170 billed-minute equivalents a month with a weekly drift run. A nightly run would cost about 420 a month, a net loss of about 190, so the PR runs it weekly (vetoable) | low: master pushes always run Windows |
+| QW7 | pptx-gallery runs the production-only checks (production smoke, Lighthouse on www.pptx.gallery, remote validate) after merge, not on PRs | pptx-gallery#85, merged | 51 s of a 223 s p50 PR job (23%), on billed minutes; no production-coupled PR failures | low: they still run on every push to main and on demand |
+| QW8 | pptx-dev Windows leg policy: ubuntu on every PR; Windows on master, manual runs, a weekly schedule, and Windows-sensitive or `windows`-labelled PRs | pptx-dev#78, merged | 50 of the last 60 PRs touch a Windows-sensitive path (the lockfile and `package.json` 30, `tests/e2e` 24), so about 17% of PR runs skip Windows: about 170 billed-minute equivalents a month with a weekly drift run. A nightly run would cost about 420 a month, a net loss of about 190, so the PR runs it weekly (vetoable) | low: master pushes always run Windows |
 
 Flakes recorded while measuring, the first quarantine candidates for RR-47:
 
 - pptx-dev Windows, `tests/e2e/inspector-autosave.spec.ts:48`: it failed and
   passed on the same SHA, and failed in 2 of the last 4 Windows runs that
   reached it
-  ([pptx-dev#77](https://github.com/Data-Advantage/pptx-dev/issues/77)).
+  (pptx-dev#77).
 - openpresentation-site, `tests/e2e/code-editing.spec.ts:65` ("/playground
   Enter continues bullets"): it failed on attempt 1 of the same commit
   (`f85e318`, the slide still showed "Minimal OPF Deck") and passed on
   attempt 2. It also failed on a `main` push in the sample
-  ([openpresentation-site#65](https://github.com/Data-Advantage/openpresentation-site/issues/65)).
+  (openpresentation-site#65).
 
 ### Medium (one to three days each)
 
@@ -678,7 +678,7 @@ Flakes recorded while measuring, the first quarantine candidates for RR-47:
    CI. Otherwise site CI stops again around 2026-10-08.
 2. **pptx-dev Windows leg policy.** Decided by the supervisor on 2026-10-02
    (vetoable) and implemented in
-   [pptx-dev#78](https://github.com/Data-Advantage/pptx-dev/pull/78), with a
+   pptx-dev#78, with a
    weekly drift run instead of a nightly one, for the measured reason in QW8.
 3. **Merge queue** on the OpenPresentation `main` rulesets (RR-48,
    [opf#297](https://github.com/OpenPresentation/opf/issues/297)), after RR-47.

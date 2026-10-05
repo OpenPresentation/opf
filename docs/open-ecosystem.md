@@ -15,7 +15,7 @@ Public documentation should be generated from a recorded source snapshot, link t
 
 ## Commercial applications
 
-Commercial applications may use the MIT-licensed foundation, subject to license notices and third-party terms. The planned paid AI layer at `pptx.dev` should consume the same open format and public libraries. Application accounts, model orchestration, billing, hosted storage, and paid experiences belong in that separate application. They must not become requirements for using the open-source tools or accessing the specification and skills.
+Commercial applications may use the MIT-licensed foundation, subject to license notices and third-party terms. [pptx.dev](https://www.pptx.dev) is the sponsor of OPF and runs hosted API, AI and file services on the same open format and public libraries. Application accounts, model orchestration, billing and hosted storage belong in that separate application, not in the libraries. Nothing in OPF requires pptx.dev: the open-source tools, the specification and the skills work without an account, a hosted service or an AI model.
 
 ## Agent workflow
 

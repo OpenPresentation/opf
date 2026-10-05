@@ -87,7 +87,7 @@ generator fix (pptx-dev#93) went from 0 of 7 charts kept to 7 of 7. The PowerPoi
 Windows runs in opf#323. Keynote is opened read-only, never saved, only by the supervisor.
 
 The openpresentation-site playground e2e flake (`tests/e2e/code-editing.spec.ts`) is fixed at the root in
-[openpresentation-site#78](https://github.com/Data-Advantage/openpresentation-site/pull/78) (a no-op update in `JsonEditor` reset a DOM
+openpresentation-site#78 (a no-op update in `JsonEditor` reset a DOM
 selection; deterministic regression test, 5 consecutive green CI attempts).
 
 Parked: [opf#335](https://github.com/OpenPresentation/opf/pull/335) (ready, not merged) until the merge queue is enabled.
