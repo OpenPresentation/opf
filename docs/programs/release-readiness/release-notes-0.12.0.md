@@ -230,3 +230,43 @@ provenance, `npm audit signatures`):
 The published set is core 0.12.1, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.2 and CLI 0.10.0. The numbers and
 findings above are for the 0.12.0 set; the re-audit in [opf#314](https://github.com/OpenPresentation/opf/pull/314) used
 core 0.12.0, which differs from 0.12.1 only in the audience catalog records.
+
+## 0.12.3 patch release (addendum, 2026-10-05)
+
+`@openpresentation/opf-pptx` **0.12.3** was published and verified on 2026-10-05 (npm `latest`, `gitHead` `1188964` = the
+tag `opf-pptx-v0.12.3`, SLSA provenance, `npm audit signatures`), through `scripts/release-train.mjs`. The published set
+is core 0.12.1, opf-render 0.12.0, opf-pptx 0.12.3, opf-editor 0.11.2 and CLI 0.10.0; core, renderer, editor and CLI are
+unchanged and opf-pptx keeps the core floor `^0.12.0`.
+
+- **What it fixes** ([opf-pptx#162](https://github.com/OpenPresentation/opf-pptx/issues/162),
+  [opf-pptx#163](https://github.com/OpenPresentation/opf-pptx/pull/163)): the embedded workbook of a native chart had a
+  table range (`ref`) with a stray apostrophe, and a bubble chart's range ended one row short of its data (its last row).
+  Keynote dropped the native chart on import when the table range was invalid; PowerPoint was not affected (it was not
+  the engine of the 0.12.0 native evidence, which stands). The fix writes both ranges correctly. The apostrophe is in
+  PptxGenJS itself; the same fix is submitted upstream as
+  [gitbrent/PptxGenJS#1537](https://github.com/gitbrent/PptxGenJS/pull/1537).
+- **How it was found**: the Keynote native check of the 20-deck import set ([opf#341](https://github.com/OpenPresentation/opf/pull/341),
+  [evidence](../../evidence/mac-checks-20261002/keynote/README.md)). On opf-pptx 0.12.2 six decks failed, all by losing
+  native category charts; the bisect pointed at the table range. The re-check of the fixed decks (built from the fix
+  branch before the release) has PASS 0, WARN 20, FAIL 0. This is a Keynote check on a Mac, not a PowerPoint check.
+- **Pptx-dev's own generator had the same bug.** Its `/api/v1/generate` and `/api/v1/author/export` output goes through
+  PptxGenJS directly, not through opf-pptx, so 0.12.3 does not cover it. Fixed in
+  [pptx-dev#93](https://github.com/Data-Advantage/pptx-dev/pull/93) (merged): Keynote kept 0 of 7 charts before and 7 of
+  7 after.
+- **Adoption**: [pptx-gallery#96](https://github.com/Data-Advantage/pptx-gallery/pull/96),
+  [pptx-dev#92](https://github.com/Data-Advantage/pptx-dev/pull/92) and
+  [openpresentation-site#76](https://github.com/Data-Advantage/openpresentation-site/pull/76) (release records), and the
+  core release plan in [opf#346](https://github.com/OpenPresentation/opf/pull/346) (merged, `05ed089`).
+
+### Pending: the `pptxgenjs-plus` migration (opf-pptx 0.13.0)
+
+PptxGenJS is dormant, so opf-pptx moves to the maintained fork `pptxgenjs-plus` (MIT) as 0.13.0
+([opf-pptx#165](https://github.com/OpenPresentation/opf-pptx/pull/165)). This is not released and the published set
+above does not include it.
+
+- Keynote native check of the 20 `m-*` decks on the new engine (pptxgenjs-plus 4.3.4, 2026-10-05): 20 WARN, 0 FAIL, every
+  native chart kept; the warnings are the same classes as in the 0.12.3 re-check (font substitution and text metrics).
+- Still open before release: the Windows PowerPoint a/b set ([opf#323](https://github.com/OpenPresentation/opf/issues/323),
+  Windows host, deferred by the owner). 0.13.0 does not ship without it.
+- Upstream: the bubble range fix is merged on the `next` branch of
+  [lofcz/pptxgenjs-plus#15](https://github.com/lofcz/pptxgenjs-plus/pull/15) and is not yet in a release of the fork.
