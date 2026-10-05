@@ -55,7 +55,8 @@
       "custom": {
         "signal": "#BE123C",
         "risk": "#B45309"
-      }
+      },
+      "accent5": "#CBD5E1"
     },
     "fontScheme": {
       "id": "traditional-arabic",
@@ -85,10 +86,6 @@
     "imageFill": "fit",
     "listBullet": "image",
     "logo": "asset:brand-logo",
-    "watermark": {
-      "src": "asset:watermark",
-      "opacity": 0.06
-    },
     "header": {
       "left": {
         "section": true
@@ -102,7 +99,7 @@
         "organization": true
       },
       "center": {
-        "text": "Decision review"
+        "text": "Developer conference"
       },
       "right": {
         "slideNumber": true
@@ -120,8 +117,8 @@
       "layout": "title",
       "tag": "Conference talk",
       "title": "Developer Conference Talk",
-      "subtitle": "VectorTrail Conference talk",
-      "notes": "Open by naming the decision: Teach builders how to design observable agent workflows."
+      "subtitle": "Designing observable agent workflows",
+      "notes": "Open with the problem: agents fail quietly unless the workflow is designed to be observed."
     },
     {
       "id": "s2",
@@ -129,28 +126,28 @@
       "layout": "text-3x",
       "title": "Why This Matters",
       "text": [
-        "VectorTrail should focus the next cycle on ",
+        "Agents fail quietly. VectorTrail helps builders ",
         {
-          "text": "teach builders how to design observable agent workflows",
+          "text": "design agent workflows they can observe",
           "bold": true,
           "color": "#0F172A"
         },
-        " while making the operating tradeoffs clear to conference talk stakeholders."
+        ": every step traced, every tool call measured, every regression caught before users notice."
       ]
     },
     {
       "id": "s3",
       "section": "Evidence",
-      "layout": "chart-3x",
+      "layout": "chart-1x",
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-area-2x",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
-            "Current",
-            "Baseline"
+            "Traced workflows (%)",
+            "Baseline (%)"
           ],
           "rows": [
             [
@@ -191,20 +188,20 @@
         ],
         "rows": [
           [
-            "Conference talk",
-            "Program lead",
-            "At risk",
-            "Continue"
+            "Tracing SDK",
+            "Platform",
+            "On track",
+            "Ship the public beta"
           ],
           [
-            "Data and reporting",
+            "Evaluation dashboards",
             "Analytics",
-            "On track",
+            "At risk",
             "Tighten metric definitions"
           ],
           [
-            "Field adoption",
-            "Operations",
+            "Docs and samples",
+            "Developer relations",
             "Watch",
             "Add weekly office hours"
           ]
@@ -218,11 +215,11 @@
       "title": "Execution Timeline",
       "type": "timeline",
       "timeline": {
-        "name": "Conference talk execution path",
-        "description": "Major milestones for VectorTrail.",
+        "name": "From pilot to default",
+        "description": "Milestones for VectorTrail tracing.",
         "events": [
           {
-            "when": "Oct",
+            "when": "Apr",
             "what": "Baseline",
             "description": "Confirm current state, owners, and constraints."
           },
@@ -251,15 +248,15 @@
       "title": "The Ask",
       "bullets": [
         {
-          "text": "Approve the next milestone for teach builders how to design observable agent workflows.",
+          "text": "Instrument one agent workflow end to end this week.",
           "level": 0
         },
         {
-          "text": "Assign an executive sponsor and one accountable owner.",
+          "text": "Pick one owner for traces, evaluations and alerts.",
           "level": 0
         },
         {
-          "text": "Review progress in the next operating meeting.",
+          "text": "Review the regressions you caught at your next retro.",
           "level": 0
         }
       ]
@@ -339,12 +336,6 @@
       "src": "./data/developer-conference-talk.csv",
       "format": "csv",
       "title": "Developer Conference Talk data"
-    },
-    "watermark": {
-      "src": "data:image/png;base64,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",
-      "alt": "VectorTrail watermark",
-      "mediaType": "image/png",
-      "description": "Original abstract demonstration artwork for this fictional organization. MIT licensed with OpenPresentation/opf; generated by scripts/gallery-artwork.mjs (v1). No fonts or external images are used."
     }
   },
   "extensions": {

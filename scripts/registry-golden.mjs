@@ -20,14 +20,27 @@ function canonical(value) {
   return value;
 }
 
-// Returns the absolute path of the lock's core golden when the installed core's examples are exactly the corpus that
-// baseline records, otherwise undefined (the renderer then uses its own baseline, which fails if it does not match
-// either). A golden in another repository is the renderer's own business and is never selected here.
-export function reviewedCoreGolden({ root, lock, digest }) {
+// Reviewed core baselines of an example corpus that a published core release ships, kept after the checkout's examples
+// moved on (the lock's golden always records this checkout's corpus). The registry run installs the release-plan core,
+// which can ship such an older corpus until the next core release; each file still compares every pixel hash exactly.
+// Remove an entry once no release-plan core ships its corpus.
+export const RETAINED_CORE_GOLDENS = [
+  // RR-41 corpus (digest 485b5c07..., core 0.12.1 and 0.12.2); RR-20 example decks moved the checkout to a new corpus.
+  'scripts/fixtures/opf-examples-png.audience-ids.sha256.json',
+];
+
+// Returns the absolute path of the reviewed core golden that records exactly the installed core's examples: the lock's
+// core golden, else a retained one (RETAINED_CORE_GOLDENS); otherwise undefined (the renderer then uses its own
+// baseline, which fails if it does not match either). A golden in another repository is the renderer's own business and
+// is never selected here.
+export function reviewedCoreGolden({ root, lock, digest, retained = RETAINED_CORE_GOLDENS }) {
   const golden = lock?.golden;
   if (!golden || golden.repository !== 'opf') return undefined;
-  const file = path.resolve(root, golden.path);
-  if (path.relative(root, file).startsWith('..') || path.isAbsolute(path.relative(root, file))) throw new Error(`Golden path leaves the checkout: ${golden.path}`);
-  const baseline = JSON.parse(readFileSync(file, 'utf8'));
-  return baseline.source?.sha256 === digest ? file : undefined;
+  for (const relative of [golden.path, ...retained]) {
+    const file = path.resolve(root, relative);
+    if (path.relative(root, file).startsWith('..') || path.isAbsolute(path.relative(root, file))) throw new Error(`Golden path leaves the checkout: ${relative}`);
+    const baseline = JSON.parse(readFileSync(file, 'utf8'));
+    if (baseline.source?.sha256 === digest) return file;
+  }
+  return undefined;
 }
