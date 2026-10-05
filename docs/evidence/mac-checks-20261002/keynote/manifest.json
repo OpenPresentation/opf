@@ -1,0 +1,1929 @@
+{
+  "generated": "by build.mjs",
+  "packages": {
+    "@openpresentation/opf": "0.12.0",
+    "@openpresentation/opf-pptx": "0.12.2",
+    "@openpresentation/opf-render": "0.12.0"
+  },
+  "decks": {
+    "01-latin-rich-text": {
+      "title": "Latin text and rich runs",
+      "checks": "Title, subtitle and tag keep their roles; bold/italic/underline/strike runs, a colored run, a hyperlink, superscript and subscript survive; line wrapping is not changed; the heading and body fonts are the Georgia/Aptos scheme named in the manifest (a substituted font is a finding).",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "CHECK 01",
+            "Keynote check: Latin text",
+            "Fonts, runs and wrapping"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Rich text runs",
+            "Plain, bold, italic, underlined, struck, blue and a link. Water is H2O and E = mc2."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "A long paragraph that must wrap in the same",
+            "places",
+            "Open Presentation Format keeps text editable. This sentence is long enough that it wraps",
+            "over several lines inside the text box, so any change of font metrics shows up as a different",
+            "line break or an overflow below the box."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Georgia"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "02-fonts-serif-mono-code": {
+      "title": "Serif body, monospace code, quote and metric",
+      "checks": "Georgia body, Courier New code lines (monospace, fixed line positions), a quote with attribution, a metric. Record every font Keynote reports as missing or substituted.",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "Code in a monospace face",
+            "total.js",
+            "javascript",
+            "function total(items) {",
+            "return items.reduce((a, b) => a + b, 0);",
+            "}"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "A quote",
+            "\"Make the work visible before it becomes urgent.\"",
+            "Ada Example - Operations review"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "A metric",
+            "98",
+            "%",
+            "Retention"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Roboto Mono",
+        "Times New Roman"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "03-cjk-japanese": {
+      "title": "Japanese (East Asian script)",
+      "checks": "Japanese text renders (no tofu boxes), uses the East Asian font named in the manifest (Meiryo; Keynote will substitute it, record what it picked), keeps line breaks, and the slide language is ja-JP.",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "市場参入の概要",
+            "日本市場における第一段階"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "優先事項",
+            "顧客の課題を特定する",
+            "現地パートナーと協力する",
+            "四半期ごとに成果を確認する"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "数値"
+          ],
+          "tables": [
+            {
+              "rows": 4,
+              "columns": 2,
+              "cells": [
+                "地域",
+                "売上",
+                "東京",
+                "120",
+                "大阪",
+                "86",
+                "名古屋",
+                "54"
+              ]
+            }
+          ],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Aptos",
+        "Aptos Display",
+        "Meiryo"
+      ],
+      "languages": [
+        "ja-JP"
+      ]
+    },
+    "04-devanagari-hindi": {
+      "title": "Hindi (Devanagari, complex script)",
+      "checks": "Devanagari conjuncts and matras shape correctly (no broken ligatures), the complex-script font in the manifest (Mangal) is used or replaced by a Devanagari-capable one, bullets still align.",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "ग्रामीण भुगतान परियोजना",
+            "पहला चरण"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "मुख्य बिंदु",
+            "किसानों के लिए सरल भुगतान",
+            "स्थानीय बैंकों के साथ साझेदारी",
+            "हर महीने प्रगति की समीक्षा"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "संक्षेप",
+            "यह स्लाइड संयुक्ताक्षर और मात्राओं की जाँच करती है: क्षत्रिय, ज्ञान, श्री, द्वारा।"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Aptos",
+        "Aptos Display",
+        "Mangal"
+      ],
+      "languages": [
+        "hi-IN"
+      ]
+    },
+    "05-rtl-arabic": {
+      "title": "Arabic (right-to-left)",
+      "checks": "Paragraph direction is RTL (bullets on the right, text right-aligned), Arabic letters join, the table columns run right to left, numbers keep their order. Fonts: Arabic Typesetting (substitution expected).",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "الخدمات الرقمية",
+            "ملخص تنفيذي"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "النقاط الرئيسية",
+            "تبسيط الخدمات للمواطنين",
+            "تقليل وقت المعالجة إلى 5 أيام",
+            "قياس الرضا كل ربع سنة"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "المؤشرات"
+          ],
+          "tables": [
+            {
+              "rows": 3,
+              "columns": 2,
+              "cells": [
+                "المؤشر",
+                "القيمة",
+                "الطلبات",
+                "1200",
+                "الرضا",
+                "92%"
+              ]
+            }
+          ],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Aptos",
+        "Aptos Display",
+        "Arabic Typesetting"
+      ],
+      "languages": [
+        "ar-SA"
+      ]
+    },
+    "06-rtl-hebrew": {
+      "title": "Hebrew (right-to-left)",
+      "checks": "RTL paragraph direction, bullets on the right, a Latin word and a number inside Hebrew text keep their visual order, font David or a Hebrew-capable substitute.",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "סקירת רבעון",
+            "תוצאות ותוכניות"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "נקודות עיקריות",
+            "ההכנסות עלו ב-18%",
+            "השקנו את OPF בשלושה שווקים",
+            "היעד הבא: 2027"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "ציטוט",
+            "\"התכנון הטוב ביותר הוא זה שנראה לעין.\"",
+            "דנה לוי"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "David",
+        "Tenorite",
+        "Tenorite Display"
+      ],
+      "languages": [
+        "en-US",
+        "he-IL"
+      ]
+    },
+    "07-bullets-numbered": {
+      "title": "Bullets, nesting and numbered lists",
+      "checks": "Bullet characters and indents per level; nested levels; native numbered lists keep their numbering style (1. / I. / a) / A.) and start values rather than literal text.",
+      "validationWarnings": 0,
+      "slideCount": 4,
+      "slides": [
+        {
+          "paragraphs": [
+            "Nested bullets",
+            "First level one",
+            "Second level under one",
+            "Third level",
+            "First level two"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Arabic numerals",
+            "Plan",
+            "Build",
+            "Ship"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Roman and alphabetic",
+            "Alpha",
+            "Beta",
+            "Gamma",
+            "One",
+            "Two",
+            "Three"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Numbering from 4",
+            "Fourth",
+            "Fifth",
+            "Sixth"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 4,
+      "fonts": [
+        "Arial",
+        "Arial Black"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "08-tables": {
+      "title": "Tables",
+      "checks": "Native tables (not pictures): header row styled, column count and row count, right-aligned numbers, cell text, column widths; second slide has a wider table with a long cell that must wrap.",
+      "validationWarnings": 0,
+      "slideCount": 2,
+      "slides": [
+        {
+          "paragraphs": [
+            "Quarter snapshot"
+          ],
+          "tables": [
+            {
+              "rows": 4,
+              "columns": 3,
+              "cells": [
+                "Metric",
+                "Q3",
+                "Q4",
+                "Revenue",
+                "$12.4M",
+                "$18.1M",
+                "Gross margin",
+                "68%",
+                "72%",
+                "Pipeline",
+                "$31M",
+                "$44M"
+              ]
+            }
+          ],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Wide table with wrapping"
+          ],
+          "tables": [
+            {
+              "rows": 4,
+              "columns": 4,
+              "cells": [
+                "Region",
+                "Owner",
+                "Risk",
+                "Mitigation",
+                "Americas",
+                "Ana",
+                "Hiring slips",
+                "Use contractors for the first two months while the permanent search finishes",
+                "EMEA",
+                "Ben",
+                "Regulation",
+                "Engage counsel early",
+                "APAC",
+                "Chi",
+                "FX",
+                "Hedge quarterly"
+              ]
+            }
+          ],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 2,
+      "fonts": [
+        "Calibri"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "09-charts-core": {
+      "title": "Native chart families (core)",
+      "checks": "Each slide holds a native chart object (not a picture): column, bar, line, pie, doughnut, area, scatter, radar. Keynote converts charts on import; record, per slide, whether the chart is still a chart, its type, category labels, series names, legend and axis titles. The first slide has axis titles, legend at the bottom and data labels.",
+      "validationWarnings": 0,
+      "slideCount": 8,
+      "slides": [
+        {
+          "paragraphs": [
+            "Column with options"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Bar"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:bar:clustered"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Line"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "line:standard"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Pie"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "pie"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Doughnut"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "doughnut"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Area"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "area:standard"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Scatter"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "scatter"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Radar"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "radar:standard"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 1,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 2,
+          "family": "native",
+          "kinds": [
+            "bar:bar:clustered"
+          ]
+        },
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "line:standard"
+          ]
+        },
+        {
+          "slide": 4,
+          "family": "native",
+          "kinds": [
+            "pie"
+          ]
+        },
+        {
+          "slide": 5,
+          "family": "native",
+          "kinds": [
+            "doughnut"
+          ]
+        },
+        {
+          "slide": 6,
+          "family": "native",
+          "kinds": [
+            "area:standard"
+          ]
+        },
+        {
+          "slide": 7,
+          "family": "native",
+          "kinds": [
+            "scatter"
+          ]
+        },
+        {
+          "slide": 8,
+          "family": "native",
+          "kinds": [
+            "radar:standard"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 8,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "10-charts-variants": {
+      "title": "Native chart variants (stacked, percent, markers, filled)",
+      "checks": "Stacked and 100% stacked columns keep their grouping, markers on the line, filled radar, stacked area, combo-style 2x/3x series. Record the series count and grouping Keynote reports.",
+      "validationWarnings": 4,
+      "slideCount": 6,
+      "slides": [
+        {
+          "paragraphs": [
+            "Stacked column"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:stacked"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "100% stacked column"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:percentStacked"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Line with markers"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "line:standard"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Stacked area"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "area:stacked"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Filled radar"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "radar:filled"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Clustered bar"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:bar:clustered"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 1,
+          "family": "native",
+          "kinds": [
+            "bar:col:stacked"
+          ]
+        },
+        {
+          "slide": 2,
+          "family": "native",
+          "kinds": [
+            "bar:col:percentStacked"
+          ]
+        },
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "line:standard"
+          ]
+        },
+        {
+          "slide": 4,
+          "family": "native",
+          "kinds": [
+            "area:stacked"
+          ]
+        },
+        {
+          "slide": 5,
+          "family": "native",
+          "kinds": [
+            "radar:filled"
+          ]
+        },
+        {
+          "slide": 6,
+          "family": "native",
+          "kinds": [
+            "bar:bar:clustered"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 6,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "11-charts-chartex": {
+      "title": "Office 2016 chartex families",
+      "checks": "Waterfall, funnel, treemap, histogram, Pareto and box-and-whisker are chartex (cx:) parts. Keynote has no such chart types: record per slide what survives (editable chart, picture of the chart, or nothing), the slide title and whether the PNG/graphic fallback is shown. This deck is expected to degrade; the finding is how.",
+      "validationWarnings": 0,
+      "slideCount": 6,
+      "slides": [
+        {
+          "paragraphs": [
+            "Waterfall"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            },
+            {
+              "family": "chartex",
+              "kinds": [
+                "waterfall"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Funnel"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            },
+            {
+              "family": "chartex",
+              "kinds": [
+                "funnel"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Treemap"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            },
+            {
+              "family": "chartex",
+              "kinds": [
+                "treemap"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Histogram"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            },
+            {
+              "family": "chartex",
+              "kinds": [
+                "clusteredColumn"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Pareto"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            },
+            {
+              "family": "chartex",
+              "kinds": [
+                "clusteredColumn",
+                "paretoLine"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Box and whisker"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            },
+            {
+              "family": "chartex",
+              "kinds": [
+                "boxWhisker"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 1,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 1,
+          "family": "chartex",
+          "kinds": [
+            "waterfall"
+          ]
+        },
+        {
+          "slide": 2,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 2,
+          "family": "chartex",
+          "kinds": [
+            "funnel"
+          ]
+        },
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 3,
+          "family": "chartex",
+          "kinds": [
+            "treemap"
+          ]
+        },
+        {
+          "slide": 4,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 4,
+          "family": "chartex",
+          "kinds": [
+            "clusteredColumn"
+          ]
+        },
+        {
+          "slide": 5,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 5,
+          "family": "chartex",
+          "kinds": [
+            "clusteredColumn",
+            "paretoLine"
+          ]
+        },
+        {
+          "slide": 6,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        },
+        {
+          "slide": 6,
+          "family": "chartex",
+          "kinds": [
+            "boxWhisker"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 6,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "12-svg-png-fallback": {
+      "title": "SVG picture with PNG fallback",
+      "checks": "The picture appears (PowerPoint stores a PNG fallback plus an SVG part). Keynote does not read the SVG extension, so it should show the PNG fallback: confirm that it is shown, crisp enough, with the right aspect ratio and alt text. A PNG picture and a caption follow.",
+      "validationWarnings": 0,
+      "slideCount": 2,
+      "slides": [
+        {
+          "paragraphs": [
+            "SVG picture"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 1,
+          "hasSvgPicture": true,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Captioned SVG",
+            "Figure 1. Shapes"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 1,
+          "hasSvgPicture": true,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 2,
+      "notesSlides": 2,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "13-header-footer-numbers": {
+      "title": "Native header, footer and slide numbers",
+      "checks": "Header (section name center, date right), footer (organization left, custom text center, slide number right) are present on slides 1-2, and absent on slide 3 (suppressed). Slide numbers are fields that count 1, 2, 3.",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "Furniture on",
+            "Header, footer and slide number are drawn.",
+            "Alpha",
+            "2026-10-02",
+            "Acme Corp",
+            "Confidential check deck",
+            "1"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Furniture again",
+            "The section name changes in the header",
+            "The slide number advances",
+            "Beta",
+            "2026-10-02",
+            "Acme Corp",
+            "Confidential check deck",
+            "2"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Furniture suppressed",
+            "No header or footer on this slide."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Calibri"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "14-speaker-notes": {
+      "title": "Speaker notes",
+      "checks": "Notes pages survive: slide 1 notes (two paragraphs), slide 2 notes with a leading tab and repeated spaces, slide 3 has none. Keynote exports presenter notes; compare the text exactly.",
+      "validationWarnings": 0,
+      "slideCount": 3,
+      "slides": [
+        {
+          "paragraphs": [
+            "Notes slide one",
+            "See the presenter notes."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [
+            "First paragraph of notes. Second paragraph, with a trailing sentence."
+          ],
+          "notesExact": [
+            "First paragraph of notes.\r\nSecond paragraph, with a trailing sentence."
+          ],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Notes slide two",
+            "Whitespace in notes."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [
+            "Indented note with double spaces."
+          ],
+          "notesExact": [
+            "\tIndented note  with  double spaces."
+          ],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "No notes here",
+            "This slide has no speaker notes."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 3,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "15-backgrounds": {
+      "title": "Slide backgrounds: solid, gradient, pattern, image",
+      "checks": "Slide 1 solid light blue, slide 2 two-stop gradient at 45 degrees, slide 3 hatched pattern (wdUpDiag), slide 4 pattern (smGrid), slide 5 image background. Keynote may flatten patterns to a picture or a solid color; record which. Text must stay readable.",
+      "validationWarnings": 0,
+      "slideCount": 5,
+      "slides": [
+        {
+          "paragraphs": [
+            "Solid background",
+            "A solid light blue fill."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Gradient background",
+            "Two stops at 45 degrees."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "gradient"
+        },
+        {
+          "paragraphs": [
+            "Pattern: wide upward diagonal",
+            "wdUpDiag, slate on white."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "pattern:wdUpDiag"
+        },
+        {
+          "paragraphs": [
+            "Pattern: small grid",
+            "smGrid, amber on cream."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "pattern:smGrid"
+        },
+        {
+          "paragraphs": [
+            "Image background",
+            "A picture fill behind the text."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "image"
+        }
+      ],
+      "charts": [],
+      "pictures": 0,
+      "notesSlides": 5,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "16-footnotes-captions": {
+      "title": "Footnotes, citations and captions",
+      "checks": "Superscript markers 1 and 2 after the runs, a footnote area at the bottom of slide 1 listing \"1 ...\" and \"2 ...\", the cited source listed. Slide 2: a chart caption below the chart and a table caption above the table.",
+      "validationWarnings": 0,
+      "slideCount": 2,
+      "slides": [
+        {
+          "paragraphs": [
+            "Claims with notes",
+            "Adoption doubled1 in 2025 and keeps growing.2 Churn fell.3",
+            "1 Example Research, Market Guide, 2026",
+            "2 Internal forecast, not audited.",
+            "3 Measured on paid accounts only."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Captions",
+            "Figure 1. Revenue by region",
+            "Table 1. Source figures"
+          ],
+          "tables": [
+            {
+              "rows": 3,
+              "columns": 2,
+              "cells": [
+                "Region",
+                "Revenue",
+                "Americas",
+                "42",
+                "EMEA",
+                "31"
+              ]
+            }
+          ],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:clustered"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 2,
+          "family": "native",
+          "kinds": [
+            "bar:col:clustered"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 2,
+      "fonts": [
+        "Georgia"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "17-gallery-bold": {
+      "title": "Gallery theme: bold",
+      "checks": "Gallery example \"seed-pitch-for-climate-risk-api\" (theme bold, pastel-red, Tahoma, 4:3, dark background, right-aligned titles). Compare colors, 4:3 slide size and chart slide.",
+      "validationWarnings": 1,
+      "slideCount": 4,
+      "slides": [
+        {
+          "paragraphs": [
+            "Seed pitch",
+            "Seed Pitch for Climate Risk",
+            "API",
+            "Climara Seed pitch"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [
+            "Open by naming the decision: Raise a seed round for climate risk intelligence."
+          ],
+          "notesExact": [
+            "Open by naming the decision: Raise a seed round for climate risk intelligence."
+          ],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Why This Matters",
+            "Climara should focus the next cycle on raise a seed round for",
+            "climate risk intelligence while making the operating tradeoffs",
+            "clear to seed pitch stakeholders."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Signal Trend"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:percentStacked"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Next Steps",
+            "Agree on the owner for seed pitch.",
+            "Confirm the reporting cadence.",
+            "Return with the first progress readout."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "bar:col:percentStacked"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 4,
+      "fonts": [
+        "Tahoma"
+      ],
+      "languages": [
+        "en-US"
+      ]
+    },
+    "18-gallery-classic": {
+      "title": "Gallery theme: classic",
+      "checks": "Gallery example \"monthly-board-update\" (theme classic). Compare colors, fonts and slide structure.",
+      "validationWarnings": 1,
+      "slideCount": 4,
+      "slides": [
+        {
+          "paragraphs": [
+            "Board update",
+            "Monthly Board Update",
+            "North Pier Health Board update"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [
+            "Open by naming the decision: Give directors the concise operating picture and needed decisions."
+          ],
+          "notesExact": [
+            "Open by naming the decision: Give directors the concise operating picture and needed decisions."
+          ],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Why This Matters",
+            "North Pier Health should focus the next cycle on give directors the concise",
+            "operating picture and needed decisions while making the operating tradeoffs",
+            "clear to board update stakeholders."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Signal Trend"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:col:percentStacked"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Next Steps",
+            "Agree on the owner for board",
+            "update.",
+            "Confirm the reporting cadence.",
+            "Return with the first progress",
+            "readout."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "bar:col:percentStacked"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 4,
+      "fonts": [
+        "Tenorite",
+        "Tenorite Display"
+      ],
+      "languages": [
+        "en-GB"
+      ]
+    },
+    "19-gallery-dark": {
+      "title": "Gallery theme: dark",
+      "checks": "Gallery example \"fy27-budget-tradeoff-deck\" (theme dark). Dark background must survive; text stays light on dark.",
+      "validationWarnings": 1,
+      "slideCount": 4,
+      "slides": [
+        {
+          "paragraphs": [
+            "Finance",
+            "FY27 Budget Tradeoff Deck",
+            "Morrow Labs Finance"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [
+            "Open by naming the decision: Align investment choices to margin and growth guardrails."
+          ],
+          "notesExact": [
+            "Open by naming the decision: Align investment choices to margin and growth guardrails."
+          ],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Why This Matters",
+            "Morrow Labs should focus the next cycle on align investment choices to margin and growth",
+            "guardrails while making the operating tradeoffs clear to finance stakeholders."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Signal Trend"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "scatter"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Next Steps",
+            "Agree on the owner for finance.",
+            "Confirm the reporting cadence.",
+            "Return with the first progress readout."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "scatter"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 4,
+      "fonts": [
+        "Meiryo"
+      ],
+      "languages": [
+        "en-CA"
+      ]
+    },
+    "20-gallery-minimal-indic": {
+      "title": "Gallery theme: minimal (international example)",
+      "checks": "Gallery example \"india-rural-payments-pilot\" (theme minimal, Aptos with Indic content). Check complex-script text and slide structure.",
+      "validationWarnings": 0,
+      "slideCount": 4,
+      "slides": [
+        {
+          "paragraphs": [
+            "Financial inclusion",
+            "India Rural Payments Pilot",
+            "Sahyog Pay Financial inclusion"
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [
+            "Open by naming the decision: Evaluate pilot results before expanding rural merchant coverage."
+          ],
+          "notesExact": [
+            "Open by naming the decision: Evaluate pilot results before expanding rural merchant coverage."
+          ],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Why This Matters",
+            "Sahyog Pay should focus the next cycle on evaluate pilot results before expanding rural",
+            "merchant coverage while making the operating tradeoffs clear to financial inclusion",
+            "stakeholders."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Signal Trend"
+          ],
+          "tables": [],
+          "charts": [
+            {
+              "family": "native",
+              "kinds": [
+                "bar:bar:clustered"
+              ]
+            }
+          ],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        },
+        {
+          "paragraphs": [
+            "Next Steps",
+            "Agree on the owner for financial inclusion.",
+            "Confirm the reporting cadence.",
+            "Return with the first progress readout."
+          ],
+          "tables": [],
+          "charts": [],
+          "pictures": 0,
+          "hasSvgPicture": false,
+          "notes": [],
+          "notesExact": [],
+          "background": "solid"
+        }
+      ],
+      "charts": [
+        {
+          "slide": 3,
+          "family": "native",
+          "kinds": [
+            "bar:bar:clustered"
+          ]
+        }
+      ],
+      "pictures": 0,
+      "notesSlides": 4,
+      "fonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "languages": [
+        "en-IN"
+      ]
+    }
+  }
+}
