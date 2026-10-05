@@ -101,3 +101,18 @@ SVG. The audit's FAIL is kept as measured. Whether to accept this as PowerPoint'
 - [decks.json](decks.json): the set manifest.
 
 The decks, the saved copies and the PNGs are not committed. Host paths are written as `<set>`.
+
+## Decision (2026-10-05, Windows supervisor, vetoable)
+
+**Accepted: PowerPoint's save form for SVG pictures.** After a PowerPoint save, an SVG picture keeps only its
+`asvg:svgBlip`. The control shows PowerPoint saves its own SVG pictures the same way, so this is PowerPoint's native
+form, outside OPF's control.
+
+The rest of the decision:
+- The opf-pptx export keeps writing the PNG fallback, which helps consumers that cannot draw SVG.
+- Re-import of the saved copy recovered the pictures.
+- The pictures row of opf#87 is met, with this behaviour documented. The audit's FAIL line stays as measured.
+
+The opf#87 rows "open, save and reopen pictures and furniture" and "furniture provenance through native edits" are
+covered by this evidence. The tab-position row moves to [opf#366](https://github.com/OpenPresentation/opf/issues/366),
+where the gate stays at 0.02 pt.
