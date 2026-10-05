@@ -98,3 +98,14 @@ the spec. These values already passed RR-42 on their own terms. Nothing here cha
 - [decks.json](decks.json): the set manifest (decks, sha256, expected field text, opf-pptx sizes).
 
 The decks and PNGs are not committed.
+
+## Decision on the slide-size differences (2026-10-05, Windows supervisor, vetoable)
+
+**Keep OPF's values.**
+- The schema says a preset chooses both aspect ratio and physical size: `a4` and `letter` are the paper sizes, which
+  suit print and PDF.
+- `16:9` is PowerPoint's Widescreen, the default for new decks.
+- Changing them would move every existing deck for no fidelity gain.
+
+The documentation follow-up, which explains that PowerPoint's "A4 Paper" and "Letter Paper" are smaller slide areas
+and that matching them takes custom inches, is [opf#365](https://github.com/OpenPresentation/opf/issues/365).
