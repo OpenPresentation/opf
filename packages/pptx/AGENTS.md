@@ -4,7 +4,7 @@
 
 ## Toolchain
 
-- Node `24.x` (`engines`, `.nvmrc`). This repo uses npm with `package-lock.json`; install with `npm ci`. Core uses pnpm.
+- Node 24 for development (`.nvmrc`). `engines.node` is the open-ended `>=22` (RR-20): never a closed range such as `24.x`, which makes npm on any other Node silently install an old release. CI runs Node 24, plus a `node-range` job on Node 22 and 26. This repo uses npm with `package-lock.json`; install with `npm ci`. Core uses pnpm.
 - Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:browser`, `npm run test:code`, `npm run test:font-variants`, and the offline native controls `npm run test:native-picture-edit-controls`, `npm run test:native-font-embed-controls`, `npm run test:native-mixed-edit-controls`.
 - CI (`.github/workflows/ci.yml`) runs one `package` job on `ubuntu-latest` (Playwright container) and `windows-latest`. It checks out core, opf-render and opf-editor at pinned SHAs, runs `test:packed` against published dependencies, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, the native controls, validate, test, font-variants, code, browser and core's coordinated packed-tarball checks. Windows CI also runs the harness checks and `-PureRegression` modes without Office.
 - `release.yml` publishes on `opf-pptx-v*` tags (or manual dispatch) with npm provenance, after rerunning the full check set.
