@@ -84,44 +84,65 @@ Validation:
 
 `chart.mapping` is `{ "category"?: string, "x"?: string, "series"?: string[] }`, naming columns after any `fields` selection:
 - `category`: the label column. Default: the first column.
-- `x`: the X column of an XY (scatter) chart. Default: the second column, today's rule. On a chart type without an X axis it is dropped with a `chart-mapping-adapted` warning.
+- `x`: the X column of an XY (scatter) chart. Default: the second column, today's rule (the first column when `category` names the second). A chart is XY when its type resolves (deprecated ids through their replacement) to the scatter construct of `chartOptionTarget`. An `x` equal to the category is a `chart-mapping-adapted` warning and the default is used. On a chart type without an X axis it is dropped with a `chart-mapping-adapted` warning.
 - `series`: the plotted columns, in order. Default: every column that is not `category` or `x`.
 
 An unknown name is a `chart-mapping-unknown-column` error. A series that repeats the category or X column is a `chart-mapping-adapted` warning and is dropped. Mapping only reorders and selects columns; pie, doughnut and single-series constructs still plot one series (`series-dropped`, as today).
 
 ## Core runtime API
 
-Exported from `@openpresentation/opf` and `@openpresentation/opf/data`:
+Exported from `@openpresentation/opf` and `@openpresentation/opf/data` (module `src/chart-data.ts`; the resolvers are also on `@openpresentation/opf/composition`). Inputs are typed `unknown` so engines can pass any parsed chart, table or document; the result types are exported (`ResolvedChartData`, `ResolvedTableData`, `DataDiagnostic`, `DataColumn`, `DataSourceRef`, `Dataset`, `DatasetRef`, `ChartMapping`, `DataCellValue`, `DataTableCell`, `DataTableHeader`, `DataStyledCell`).
 
 ```ts
 /** Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap). */
 export function chartNumber(value: unknown): number | null;
 /** Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). */
 export function formatDataNumber(value: number, format?: string): string;
-/** NumberFormat -> Excel format code ("General" when absent). Literal prefix/suffix text is quoted or escaped. */
+/** Why a NumberFormat is invalid (the number-format-invalid message), or undefined when it is valid or absent. */
+export function numberFormatError(format: unknown): string | undefined;
+/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped. */
 export function excelNumberFormat(format?: string): string;
 /** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General -> undefined). */
 export function numberFormatFromExcel(code: string): string | undefined;
-/** Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as DataColumn when a format applies, rows copied). `datasets` stays in place. Unknown ids are left as they are. */
+/** Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as DataColumn when a format applies, rows copied; a chart also takes the dataset's `source`). `datasets` stays in place. Unknown ids, and references naming an unknown field, are left as they are. */
 export function inlineDatasets<T>(document: T): T;
+/** One table or chart in inline form (a dataset reference copied from document.datasets); anything else is returned as is. */
+export function inlineTableData<T>(table: T, document?: unknown): T;
+export function inlineChartData<T>(chart: T, document?: unknown): T;
 /**
  * Resolve a chart's data to the canonical positional table: [category, (x,) ...series].
  * Category cells are kept as authored; X and series cells pass through chartNumber.
  * Inline ChartData, a DatasetRef (needs the document) and mapping are resolved here.
+ * options.path is the chart's JSON Pointer, the base of diagnostic paths (dataset cells report at /datasets/<id>/...).
  */
-export function resolveChartData(chart: Chart, document?: OPFDocument):
+export function resolveChartData(chart: unknown, document?: unknown, options?: { path?: string }):
   | { ok: true; columns: string[]; formats: (string | undefined)[]; rows: (string | number | boolean | null)[][]; source?: DataSourceRef; dataset?: string; diagnostics: DataDiagnostic[] }
   | { ok: false; reason: "data-not-inline" | "dataset-unknown" | "no-rows" | "no-columns"; message: string; diagnostics: DataDiagnostic[] };
 /** Resolve a table (inline or dataset-backed) to headers, rows and per-column formats. */
-export function resolveTableData(table: Table, document?: OPFDocument):
-  { columns: Table["columns"]; rows: TableCell[][]; formats: (string | undefined)[]; diagnostics: DataDiagnostic[] };
-/** Display value of a table cell: a number with a format (cell, else column) becomes formatted text; anything else is returned unchanged. */
-export function tableCellDisplayValue(cell: TableCell, columnFormat?: string): TableCell;
+export function resolveTableData(table: unknown, document?: unknown, options?: { path?: string }):
+  { columns?: DataTableHeader[]; rows: DataTableCell[][]; formats: (string | undefined)[]; dataset?: string; diagnostics: DataDiagnostic[] };
+/** Display value of a table cell: a number with a valid format (cell, else column) becomes formatted text (a styled cell keeps its style with the text as value); anything else is returned unchanged. */
+export function tableCellDisplayValue(cell: DataTableCell, columnFormat?: string): DataTableCell;
+/** Helpers: dataset-level diagnostics (duplicate names, invalid formats), unreferenced dataset ids, the XY test, the DatasetRef test. */
+export function datasetDiagnostics(document: unknown): DataDiagnostic[];
+export function unusedDatasets(document: unknown): string[];
+export function isXYChartType(type: unknown): boolean;
+export function isDatasetRef(value: unknown): value is DatasetRef;
 ```
 
-`DataDiagnostic` is `{ code, severity: "error" | "warning", path, message }`, with the codes above plus `chart-value-not-numeric`. `chartNumber` runs after variables are filled. Before filling, the validator does not warn on a `var:<id>` cell whose variable is a number.
+`DataDiagnostic` is `{ code, severity: "error" | "warning", path, message }`, with the codes above plus `chart-value-not-numeric`. `chartNumber` runs after variables are filled. Before filling, the validator does not warn on a `var:<id>` cell whose variable is a number. `chart-value-not-numeric` is reported for any value cell that `chartNumber` rejects (strings and booleans), never for `null` or `""`. An unknown `fields` entry is a `dataset-field-unknown` error and `resolveChartData`/`resolveTableData` leave that column out. `number-format-invalid` applies to `DataColumn.format` and `StyledTableCell.format`; `NumberVariable.format` keeps its existing check (`variable-format` where it is used), so no existing document gains an error.
 
-Core composition, table layout and pagination accept dataset-backed tables and charts by inlining first. Table layout measures the formatted text. Markdown conversion, diff, merge, patch, audit and format keep the new fields.
+The validator reports the codes as `params.code` on `errors` and `warnings`; lint keeps them as `opf/<code>` rule ids (errors as before, the three warnings now also) and adds `opf/unused-dataset`.
+
+Core composition, table layout and pagination accept dataset-backed tables and charts by inlining first. Table layout measures the formatted text. Markdown conversion, diff, merge, patch, audit and format keep the new fields. In detail:
+
+- `composeSlide` inlines a dataset-backed `table` or `chart` from `options.presentation.datasets`, so the composed item's `value` (and `payload`) is the inline copy; the item `path` still points at the authored field. `layoutTable(value, box, { presentation })` does the same, and each body cell's `TableCellLayout.value` is its display value (`tableCellDisplayValue`); `input` stays the authored cell. A DataColumn header shows its `name` (`path` ends in `.name`).
+- `paginateSlide`/`paginatePresentation` validate a slide with the deck's `datasets` (and `references`). A dataset table that has to be split is written to the continuation slides as inline tables (the slide that fits is returned unchanged, with its reference).
+- `convertContent` keeps a dataset reference between chart and table (`fields` too; `mapping` is reported as lost) and needs `options.document` to convert a dataset table to any other kind. Inline conversions keep DataColumn formats and report lost number formats and `source`. Slide-level conversions validate with the document's datasets; slide-only structure edits skip the dataset checks they cannot make.
+- Markdown writes the new fields in its embedded YAML form (lossless); `datasets` go to the front matter. `format` orders `datasets`, `mapping`, `source` and `DataColumn` keys by the schema. `diff` reports changes under `datasets` in their own category. The audit's chart rules read resolved chart data (DataColumn names, dataset charts).
+- Variables: `resolveVariables` walks `datasets` like any other content, so `{{id}}` tokens and whole `var:<id>` cells in dataset rows are filled before engines inline the reference.
+- `opf import-data --dataset <id>` (CLI) writes the imported columns and rows into `datasets.<id>` and references it.
+- The generated `Table` type now has `rows?` (a dataset table has none) and `dataset?`/`fields?`; TypeScript callers that read `table.rows` handle the dataset form (or call `resolveTableData`).
 
 ## Engines
 

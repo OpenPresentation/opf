@@ -20,7 +20,7 @@ When the project's CLI is installed, use `opf create deck.opf.json --title "Deci
 
 ## Tabular data
 
-Use `opf import-data source.csv --as table` or `--as chart` to ingest local CSV/TSV/JSON into valid inline content. The package API is `createDataContent(input, options)` from `@openpresentation/opf/data`. Select category/series explicitly when needed. Preserve identifiers as strings in tables; do not invent values for missing chart measures. Import embeds a snapshot; it does not establish live source refresh. Check installed command/API availability.
+Use `opf import-data source.csv --as table` or `--as chart` to ingest local CSV/TSV/JSON into valid inline content. The package API is `createDataContent(input, options)` from `@openpresentation/opf/data`. Select category/series explicitly when needed. Preserve identifiers as strings in tables; do not invent values for missing chart measures. Chart values must be numbers or strict decimal strings; put currency, percent and units in a column `format` and share data between charts and tables through top-level `datasets` ([content guide](references/content.md)). Import embeds a snapshot; it does not establish live source refresh. Check installed command/API availability.
 
 ## Markdown and outlines
 
