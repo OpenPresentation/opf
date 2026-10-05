@@ -1,0 +1,66 @@
+# RR-50: the one way every OpenPresentation repository's CI learns which commits of the other three to test against.
+#
+# It reads ecosystem.lock.json from the same commit as this action (core HEAD for core's own workflows, which use
+# `./opf/.github/actions/ecosystem-refs`; core main for the siblings, which use
+# `OpenPresentation/opf/.github/actions/ecosystem-refs@main`), so the lock and its reader always match. The lock is
+# written by the roller, never by hand (docs/ecosystem-development.md, "Coordinated CI: the ecosystem lock").
+#
+# On pull_request events it also honours `Depends-On: OpenPresentation/<repository>#<number>` lines in the pull
+# request body: that repository is checked out at the named pull request (its test merge commit while open, its merge
+# commit once merged) instead of the lock. It reads the current body through the REST API, so edit the body and
+# re-run the job. Other events (push, merge_group, workflow_dispatch, schedule) use the lock only.
+#
+# Needs only `node` on the runner (every GitHub-hosted runner and the pinned Playwright image have it); run it before
+# actions/setup-node if you like.
+name: OpenPresentation ecosystem refs
+description: Resolve the commits of opf, opf-render, opf-pptx and opf-editor (and the golden baseline) from ecosystem.lock.json.
+inputs:
+  consumer:
+    description: The repository whose CI runs this step (opf, opf-render, opf-pptx or opf-editor). It checks out its own head.
+    required: true
+  golden-override:
+    description: A workspace-relative baseline (<repository>/<path>) that replaces the lock's golden, e.g. for a renderer pull request that moves pixels. Empty uses the lock.
+    required: false
+    default: ''
+  export-golden:
+    description: "'true' exports OPF_GOLDEN_BASELINE (absolute path under GITHUB_WORKSPACE) to the later steps of the job."
+    required: false
+    default: 'false'
+  token:
+    description: Token for the GitHub REST API (reads only; the pull request body and its Depends-On pull requests).
+    required: false
+    default: ${{ github.token }}
+outputs:
+  opf:
+    description: Commit of OpenPresentation/opf to check out.
+    value: ${{ steps.resolve.outputs.opf }}
+  opf_render:
+    description: Commit of OpenPresentation/opf-render to check out.
+    value: ${{ steps.resolve.outputs.opf_render }}
+  opf_pptx:
+    description: Commit of OpenPresentation/opf-pptx to check out.
+    value: ${{ steps.resolve.outputs.opf_pptx }}
+  opf_editor:
+    description: Commit of OpenPresentation/opf-editor to check out.
+    value: ${{ steps.resolve.outputs.opf_editor }}
+  golden:
+    description: The golden baseline, relative to the workspace that holds the four checkouts side by side (<repository>/<path>).
+    value: ${{ steps.resolve.outputs.golden }}
+  lock_file:
+    description: Absolute path of the ecosystem.lock.json that was read.
+    value: ${{ steps.resolve.outputs.lock_file }}
+runs:
+  using: composite
+  steps:
+    - id: resolve
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        CONSUMER: ${{ inputs.consumer }}
+        GOLDEN_OVERRIDE: ${{ inputs.golden-override }}
+        EXPORT_GOLDEN: ${{ inputs.export-golden }}
+      run: |
+        args=(resolve --consumer "$CONSUMER" --github-output)
+        if [ -n "$GOLDEN_OVERRIDE" ]; then args+=(--golden-override "$GOLDEN_OVERRIDE"); fi
+        if [ "$EXPORT_GOLDEN" = true ]; then args+=(--github-env); fi
+        node "$GITHUB_ACTION_PATH/../../../scripts/ecosystem-lock.mjs" "${args[@]}"

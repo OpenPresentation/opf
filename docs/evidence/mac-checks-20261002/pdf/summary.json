@@ -1,0 +1,76 @@
+[
+ {
+  "deck": "contract-cycle-time-brief",
+  "slides": 6,
+  "pdfBytes": 47976,
+  "pptxBytes": 98354,
+  "embeddedFaces": [
+   "intos 400",
+   "intos 700",
+   "intos display 700"
+  ],
+  "pdfDiagnostics": {}
+ },
+ {
+  "deck": "chart-data-sources",
+  "slides": 3,
+  "pdfBytes": 19726,
+  "pptxBytes": 33578,
+  "embeddedFaces": [
+   "intos 400",
+   "intos display 700"
+  ],
+  "pdfDiagnostics": {}
+ },
+ {
+  "deck": "cjk",
+  "slides": 3,
+  "pdfBytes": 44084,
+  "pptxBytes": 26515,
+  "embeddedFaces": [
+   "intos 400",
+   "intos display 700",
+   "noto sans jp 400",
+   "noto sans jp 700",
+   "noto sans kr 400",
+   "noto sans kr 700",
+   "noto sans sc 400",
+   "noto sans sc 700"
+  ],
+  "pdfDiagnostics": {}
+ },
+ {
+  "deck": "rtl",
+  "slides": 2,
+  "pdfBytes": 36963,
+  "pptxBytes": 22921,
+  "embeddedFaces": [
+   "intos 400",
+   "noto naskh arabic 400",
+   "noto naskh arabic 700",
+   "noto sans hebrew 400",
+   "noto sans hebrew 700"
+  ],
+  "pdfDiagnostics": {}
+ },
+ {
+  "deck": "indic-sea",
+  "slides": 5,
+  "pdfBytes": 51639,
+  "pptxBytes": 33809,
+  "embeddedFaces": [
+   "intos 400",
+   "noto sans bengali 400",
+   "noto sans bengali 700",
+   "noto sans devanagari 400",
+   "noto sans devanagari 700",
+   "noto sans khmer 400",
+   "noto sans khmer 700",
+   "noto sans tamil 400",
+   "noto sans tamil 700",
+   "noto sans thai 400",
+   "noto sans thai 700"
+  ],
+  "pdfDiagnostics": {}
+ }
+]

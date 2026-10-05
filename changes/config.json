@@ -1,0 +1,8 @@
+{
+  "default": "opf",
+  "targets": {
+    "opf": "CHANGELOG.md",
+    "cli": "packages/cli/CHANGELOG.md"
+  },
+  "codePaths": ["packages/javascript/src/", "packages/cli/src/", "spec/schemas/", "spec/catalogs/"]
+}

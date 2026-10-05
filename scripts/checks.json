@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "description": "Which root scripts scripts/run-checks.mjs runs for `pnpm test` (RR-46). Every `check:*` script runs unless it is listed in exclude; include lists the other scripts that are part of `pnpm test`. A new check:* script needs no entry here. The excluded checks have their own CI steps.",
+  "include": [
+    "test:gallery-base-fonts",
+    "test:gallery-lazy-fonts",
+    "test:gallery-script-fonts"
+  ],
+  "exclude": [
+    "check:breaking",
+    "check:examples",
+    "check:quarantine"
+  ]
+}

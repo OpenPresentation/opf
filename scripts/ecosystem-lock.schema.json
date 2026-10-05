@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenPresentation/opf/blob/main/scripts/ecosystem-lock.schema.json",
+  "title": "OpenPresentation ecosystem lock (RR-50)",
+  "description": "The four OpenPresentation commits that passed the coordinated ecosystem checks together, and the golden baseline the locked renderer renders the core examples against. Written by the roller (scripts/ecosystem-roll.mjs); scripts/ecosystem-lock.mjs validates it with the same rules.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "repositories", "golden", "provenance"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "$comment": { "type": "string" },
+    "version": { "const": 1 },
+    "repositories": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opf", "opf-render", "opf-pptx", "opf-editor"],
+      "properties": {
+        "opf": { "$ref": "#/$defs/entry" },
+        "opf-render": { "$ref": "#/$defs/entry" },
+        "opf-pptx": { "$ref": "#/$defs/entry" },
+        "opf-editor": { "$ref": "#/$defs/entry" }
+      }
+    },
+    "golden": {
+      "description": "The OPF_GOLDEN_BASELINE selection: a baseline file or directory in one of the four checkouts. A pull request that moves goldens may change it (a reviewed golden decision); the SHAs are the roller's.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "path"],
+      "properties": {
+        "repository": { "enum": ["opf", "opf-render", "opf-pptx", "opf-editor"] },
+        "path": { "type": "string", "minLength": 1, "maxLength": 300, "pattern": "^(?![A-Za-z]:)(?!/)(?!.*\\\\)(?!.*//)(?!(?:.*/)?\\.{1,2}(?:/|$))(?!.*/$).+$" },
+        "note": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "at"],
+      "properties": {
+        "source": { "enum": ["migration", "roller"] },
+        "at": { "type": "string", "format": "date-time", "pattern": "^\\d{4}-\\d{2}-\\d{2}T" },
+        "run": { "type": "string", "pattern": "^https://github\\.com/OpenPresentation/[\\w.-]+/actions/runs/\\d+$" },
+        "note": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha"],
+      "properties": {
+        "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      }
+    }
+  }
+}

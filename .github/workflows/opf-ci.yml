@@ -5,11 +5,14 @@ on:
     branches:
       - main
   pull_request:
+  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
+  # pull_request payload (nothing here reads one), and it is never cancelled.
+  merge_group:
   workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 
 permissions:
   contents: read
@@ -51,8 +54,12 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # RR-46: the generated trackers are regenerated after merge (tracker-refresh.yml), so a pull request or a merge
+      # queue run only warns about a stale one; main, tags and a local run fail (scripts/tracker-staleness.mjs).
       - name: Test
         run: pnpm test
+        env:
+          OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
 
       - name: Validate examples
         run: pnpm run check:examples
@@ -74,3 +81,9 @@ jobs:
 
       - name: Verify developer quickstart from the npm registry
         run: pnpm test:developer-quickstart
+
+      # RR-46: a reminder, never a failure: package code or a schema or catalog changed without a changelog fragment.
+      - name: Changelog fragment
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}

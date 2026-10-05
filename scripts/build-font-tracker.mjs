@@ -17,6 +17,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { reportStale } from "./tracker-staleness.mjs";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = "docs/programs/font-fidelity-everywhere";
@@ -343,6 +344,23 @@ function parityUsage(parity) {
   return usage;
 }
 
+/**
+ * The per-family fixture evidence of every host as one lookup: the Latin families' and the script, emoji and math families'. A family in
+ * both files is an error (each family has one fixture model). Only a family a host's fixture passed for appears under that host.
+ */
+function mergeHostEvidence(latin, script) {
+  const hosts = {};
+  for (const [host, entry] of Object.entries(latin.hosts ?? {})) hosts[host] = { families: { ...entry.families } };
+  for (const [host, entry] of Object.entries(script?.hosts ?? {})) {
+    hosts[host] ??= { families: {} };
+    for (const [family, value] of Object.entries(entry.families)) {
+      if (hosts[host].families[family]) throw new Error(`${family} is in both the Latin and the script host fixture evidence (${host})`);
+      hosts[host].families[family] = value;
+    }
+  }
+  return { hosts };
+}
+
 // Mirror of the host verification defaults, so priority can be computed before the record is assembled.
 function hostVerificationOf(family, host, target, cards, overrides, hostEvidence) {
   // RR-17: per-family fixtures in a host (the evidence file assembled from the host tests) decide verified; the authored map covers the rest.
@@ -379,6 +397,12 @@ function appearanceOf(note) {
 }
 
 /** An accepted Latin family's next action is the native verification that remains; its authored action stays for every other family. */
+/** The sample ids the script fixture drew for a family (the same list in every host that recorded it). */
+function scriptSampleList(evidence, family) {
+  const found = Object.values(evidence.hosts).map((entry) => entry.families?.[family]?.samples).find((list) => list?.length);
+  return (found ?? []).join(", ");
+}
+
 function derivedNextAction(acceptance, status, authored, rules) {
   if (!acceptance.accepted || !rules.nextActions[status]) return authored;
   return rules.nextActions[status];
@@ -500,6 +524,11 @@ export function buildTracker({ root = ROOT } = {}) {
   const qualReport = readJson(root, overrides.qualificationReport);
   const qualByFamily = new Map(qualReport.results.map((row) => [row.family, row]));
   const hostEvidence = readJson(root, overrides.hostFixtureEvidence);
+  // RR-17 (FF-44, FF-45): the script, emoji and math families have their own per-host fixture evidence; the Latin evidence is untouched.
+  const scriptEvidence = overrides.scriptHostFixtureEvidence ? readJson(root, overrides.scriptHostFixtureEvidence) : null;
+  const scriptRules = overrides.scriptAcceptance ?? null;
+  if (scriptEvidence && !scriptRules) throw new Error("overrides.scriptHostFixtureEvidence needs overrides.scriptAcceptance");
+  const hostFixtureView = mergeHostEvidence(hostEvidence, scriptEvidence);
   const symbolSnapshot = readJson(root, overrides.symbolFontsSnapshot);
   const symbolEncodings = loadSymbolEncodings(root, overrides.symbolEncodings);
   const nativeEvidence = loadNativeEvidence(root, overrides.nativeEvidence);
@@ -718,8 +747,17 @@ export function buildTracker({ root = ROOT } = {}) {
     const qualification = qual
       ? { file: overrides.qualificationReport, date: qualReport.date, referenceAvailable: qual.referenceAvailable, ...(qual.referenceAvailable ? { stylesMeasured: qual.summary.stylesMeasured, meanAbsWidthDelta: qual.summary.meanAbsWidthDelta, maxAbsWidthDelta: qual.summary.maxAbsWidthDelta, widthBarMet: qual.summary.widthBarMet, lineBreaksIdenticalFraction: qual.summary.lineBreaksIdenticalFraction, verticalMetricsEqual: qual.summary.verticalMetricsEqual, xHeightRatio: qual.summary.xHeightRatio, capHeightRatio: qual.summary.capHeightRatio, ascentRatio: qual.summary.ascentRatio, identicalOutlinesBeyondPlainRectangles: qual.summary.identicalOutlinesBeyondPlainRectangles, latinCodepointsMissing: qual.summary.latinCodepointsMissing } : {}) }
       : null;
+    // Script, emoji and math families (not Latin-only): the same rule over their own fixture evidence. An open family that routes to itself
+    // is `real` once every host's fixture passed for it; a host whose fixture recorded a finding for it keeps it from the status.
+    const scriptFixtureHosts = scriptRules ? scriptRules.hosts.filter((host) => scriptEvidence.hosts?.[host]?.families?.[family]) : [];
+    const scriptFindingHosts = scriptRules ? scriptRules.hosts.filter((host) => scriptEvidence.hosts?.[host]?.findings?.[family]) : [];
     let derivedClass = null;
-    if (!accepted && target.yes && route.family && latinOnly && cls !== "special" && fixtureHosts.length === acceptRules.hosts.length) {
+    let derivedBy = null;
+    if (!accepted && scriptRules && !latinOnly && target.yes && route.family && cls === "open" && route.kind === "self" && scriptFixtureHosts.length === scriptRules.hosts.length) {
+      derivedClass = "real";
+      derivedBy = scriptRules;
+    } else if (!accepted && target.yes && route.family && latinOnly && cls !== "special" && fixtureHosts.length === acceptRules.hosts.length) {
+      derivedBy = acceptRules;
       if (cls === "open" && route.kind === "self") derivedClass = "real";
       else if (qual?.referenceAvailable && route.tier === "metric" && qual.summary.widthBarMet && qual.summary.lineBreaksIdenticalFraction >= acceptRules.lineBreakFloor) derivedClass = "metric";
       else if (qual?.referenceAvailable && route.tier === "visual") derivedClass = "visual";
@@ -728,11 +766,17 @@ export function buildTracker({ root = ROOT } = {}) {
       const q = qualification;
       const gaps = rec.explicitGaps.length ? ` Explicit style gaps (never synthesized): ${rec.explicitGaps.join(", ")}.` : "";
       const note = derivedClass === "real"
-        ? `The open family draws as itself in every host.${gaps}`
+        ? derivedBy === scriptRules
+          ? `The open family draws as itself in every host: in each, the family's package loads, every style resolves to the family, and samples of its script (${scriptSampleList(scriptEvidence, family)}) are drawn strictly in its own pinned file with no glyph fallback.${gaps}`
+          : `The open family draws as itself in every host.${gaps}`
         : derivedClass === "metric"
           ? `Metric route: width mean ${pct(q.meanAbsWidthDelta)} and maximum ${pct(q.maxAbsWidthDelta)} in ${q.stylesMeasured} styles, ${pct(q.lineBreaksIdenticalFraction)} of ${acceptRules.lineBreakCases} wrap cases break at the same words (floor ${pct(acceptRules.lineBreakFloor)}); vertical metrics ${q.verticalMetricsEqual ? "equal" : "differ (recorded; the baseline is placed from the font size, not the font's ascent)"}; x-height ${ratio(q.xHeightRatio)}, cap-height ${ratio(q.capHeightRatio)} of the original.${gaps}`
           : `Documented look-alike (tier visual): width mean ${pct(q.meanAbsWidthDelta)} and maximum ${pct(q.maxAbsWidthDelta)} in ${q.stylesMeasured} measured styles, ${pct(q.lineBreaksIdenticalFraction)} of ${acceptRules.lineBreakCases} wrap cases break at the same words; vertical metrics ${q.verticalMetricsEqual ? "equal" : "differ"}; x-height ${ratio(q.xHeightRatio)}, cap-height ${ratio(q.capHeightRatio)} of the original; ${q.latinCodepointsMissing ?? "n/a"} Latin code points missing; ${q.identicalOutlinesBeyondPlainRectangles ?? "n/a"} identical outlines beyond plain rectangles. Reflow against the real font is expected.${gaps}`;
-      acceptance = { fixture: acceptRules.fixture, accepted: true, date: acceptRules.date, evidence: resolveEvidence(acceptRules.evidence, overrides.evidence), note: `${note} Native PowerPoint verification is separate (FF-46).` };
+      acceptance = { fixture: derivedBy.fixture, accepted: true, date: derivedBy.date, evidence: resolveEvidence(derivedBy.evidence, overrides.evidence), note: `${note} Native PowerPoint verification is separate (FF-46).` };
+    } else if (!accepted && scriptFindingHosts.length) {
+      acceptance = { ...acceptance, note: `Not accepted: the fixture recorded a finding in ${scriptFindingHosts.join(", ")}, and the check stays as strict as for every other family. ${scriptFindingHosts.map((host) => `${host}: ${scriptEvidence.hosts[host].findings[family].reason}`).join(" ")}` };
+    } else if (!accepted && scriptRules && !latinOnly && scriptFixtureHosts.length > 0 && scriptFixtureHosts.length < scriptRules.hosts.length) {
+      acceptance = { ...acceptance, note: `Not accepted yet: the script fixture passes in ${scriptFixtureHosts.join(", ")} and is missing in ${scriptRules.hosts.filter((host) => !scriptFixtureHosts.includes(host)).join(", ")}.` };
     } else if (!accepted && acceptRules.reasons?.[family]) acceptance = { ...acceptance, note: acceptRules.reasons[family] };
     else if (!accepted && fixtureHosts.length > 0 && fixtureHosts.length < acceptRules.hosts.length) acceptance = { ...acceptance, note: `Not accepted yet: the fixture passes in ${fixtureHosts.join(", ")} and is missing in ${acceptRules.hosts.filter((host) => !fixtureHosts.includes(host)).join(", ")} (the host's pinned renderer or editor predates the family's route).` };
     else if (!accepted && qual && !qual.referenceAvailable && cls === "proprietary-latin") acceptance = { ...acceptance, note: "Not accepted: the real font is not available to measure (not installed on the measuring host); the fixture and qualification run when a reference is present." };
@@ -771,8 +815,8 @@ export function buildTracker({ root = ROOT } = {}) {
     const severity = def.severity + driftBonus;
     // Only values that are not already real or pass count, and hosts with per-family verification discount the rest.
     const valuesOpen = paritySignals.valuesAffected - paritySignals.fontResolution.pass;
-    const applicable = HOSTS.filter((host) => hostVerificationOf(family, host, target, cards, overrides, hostEvidence) !== "NA");
-    const verifiedHosts = applicable.filter((host) => hostVerificationOf(family, host, target, cards, overrides, hostEvidence) === "verified").length;
+    const applicable = HOSTS.filter((host) => hostVerificationOf(family, host, target, cards, overrides, hostFixtureView) !== "NA");
+    const verifiedHosts = applicable.filter((host) => hostVerificationOf(family, host, target, cards, overrides, hostFixtureView) === "verified").length;
     const hostFactor = applicable.length ? Math.max(0.25, (applicable.length - verifiedHosts) / applicable.length) : 1;
     const score = round(severity * (valuesOpen * hostFactor + 1), 1);
 
@@ -791,7 +835,7 @@ export function buildTracker({ root = ROOT } = {}) {
           : cls === "special" ? "no route" : "no self-hosted card preview";
         continue;
       }
-      hostVerification[host] = hostEvidence.hosts?.[host]?.families?.[family] ? "verified" : verified?.[host] ?? (target.yes || pending ? "unverified" : "NA");
+      hostVerification[host] = hostFixtureView.hosts?.[host]?.families?.[family] ? "verified" : verified?.[host] ?? (target.yes || pending ? "unverified" : "NA");
       hostLoading[host] = packModel ? packModel[host] : cls === "special" ? "no route" : pending ? `pending ${pending.prs.join(" and ")}: not in the pinned manifest` : "not bundled";
     }
 
@@ -805,7 +849,7 @@ export function buildTracker({ root = ROOT } = {}) {
     const nativeRecord = nativeRecordOf(nativeEvidence, overrides.nativeEvidence, family, native);
     for (const run of nativeRecord.runs ?? []) evidenceKeys.push({ label: run.label, url: run.readme });
     const appearance = appearanceOf(overrides.appearance?.[family]);
-    const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, acceptRules);
+    const baseAction = derivedNextAction(acceptance, status, item.extra ? item.extra.nextAction : overrides.families[family]?.nextAction, derivedBy ?? acceptRules);
     if (!baseAction) throw new Error(`no nextAction for ${family}`);
     const nativeSentence = !nativeRecord.runs?.length ? "" : nativeRecord.status === "verified" ? ` Native name read-back passed (${nativeRecord.runs.map((run) => run.run).join(", ")}), so any step above that only confirms the selected name is done; acceptance of the drawn look and metrics against PowerPoint remains.` : nativeRecord.status === "failed" ? ` Native name read-back FAILED (${nativeRecord.failures.map((item) => `${item.deck}: ${item.failing.join(", ")}`).join("; ")}); triage it (${nativeRecord.runs.map((run) => run.run).join(", ")}).` : nativeRecord.status === "partial" ? ` Native name read-back is partial (${nativeRecord.runs.map((run) => run.run).join(", ")}): ${nativeRecord.reason}.` : "";
     const nextAction = `${baseAction}${nativeSentence}`;
@@ -845,6 +889,7 @@ export function buildTracker({ root = ROOT } = {}) {
       measurements: rec.measurements,
       candidates,
       hostVerification,
+      ...(scriptFindingHosts.length ? { hostFixtureFindings: Object.fromEntries(scriptFindingHosts.map((host) => [host, scriptEvidence.hosts[host].findings[family]])) } : {}),
       hostLoading,
       nativeVerification: Object.fromEntries(Object.entries(nativeRecord).filter(([key]) => key !== "reason")),
       acceptance,
@@ -885,6 +930,7 @@ export function buildTracker({ root = ROOT } = {}) {
       symbolFonts: { file: overrides.symbolFontsSnapshot, ...symbolSnapshot.source, families: Object.keys(symbolSnapshot.previewFaces).length, encodings: overrides.symbolEncodings },
       nativeEvidence: nativeEvidence.runs.map((run) => ({ id: run.id, label: run.label, file: run.file, readme: run.readme, date: run.date, host: run.host, decks: run.decks, decksPassing: run.decksPassing, failingChecks: run.failingChecks })),
       qualification: { file: overrides.qualificationReport, corpusStrings: qualReport.corpus.strings, lineBreakCases: acceptRules.lineBreakCases },
+      ...(scriptEvidence ? { scriptHostFixtures: { file: overrides.scriptHostFixtureEvidence, date: scriptEvidence.date, hosts: Object.fromEntries(Object.entries(scriptEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length, findings: Object.keys(entry.findings ?? {}).length }])), lazyBudget: scriptEvidence.lazyBudget } } : {}),
       hostFixtures: { file: overrides.hostFixtureEvidence, date: hostEvidence.date, hosts: Object.fromEntries(Object.entries(hostEvidence.hosts).map(([host, entry]) => [host, { repository: entry.source.repository, test: entry.source.test, commit: entry.source.commit, families: Object.keys(entry.families).length }])), lazyBudget: hostEvidence.lazyBudget },
       overrides: { file: FILES.overrides },
     },
@@ -1107,6 +1153,19 @@ export function renderMarkdown(tracker) {
   }
   push("");
 
+  const scriptHosts = tracker.inputs.scriptHostFixtures;
+  if (scriptHosts) {
+    push("## Script, emoji and math host fixtures (RR-17)", "", `Per family fixtures for the open script, emoji and math families (${scriptHosts.file.split("/").pop()}): in each host the family's package loads, every style resolves to the family itself, and samples of its script (original FF-44 corpus text, FF-45 emoji and math) are drawn strictly in its own pinned file with no glyph fallback. A family appears under a host only when its fixture passed there; a failure is a recorded finding that keeps the family out of \`qualified\`, and the check is never relaxed.`, "", "| Host | Repository and test | Commit | Families passed | Findings |", "| --- | --- | --- | ---: | ---: |");
+    for (const [host, entry] of Object.entries(scriptHosts.hosts)) push(`| ${host} | ${entry.repository} \`${entry.test}\` | \`${entry.commit.slice(0, 12)}\` | ${entry.families} | ${entry.findings} |`);
+    push("");
+    const found = records.filter((rec) => Object.values(rec.hostFixtureFindings ?? {}).length);
+    if (found.length) {
+      push("| Family | Host | Finding |", "| --- | --- | --- |");
+      for (const rec of found) for (const [host, finding] of Object.entries(rec.hostFixtureFindings)) push(`| ${cell(rec.family)} | ${host} | ${cell(finding.reason)} |`);
+      push("");
+    }
+  }
+
   push(
     "## Method",
     "",
@@ -1176,8 +1235,8 @@ async function main() {
   if (args.includes("--check")) {
     const { drift } = checkTracker();
     if (drift.length) {
-      console.error(`Font tracker drift: ${drift.join(", ")}. Run node scripts/build-font-tracker.mjs and commit the result.`);
-      process.exit(1);
+      if (reportStale(`Font tracker drift: ${drift.join(", ")}. Run node scripts/build-font-tracker.mjs and commit the result.`)) process.exit(1);
+      return;
     }
     console.log("Font tracker is up to date.");
     return;

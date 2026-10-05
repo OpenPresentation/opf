@@ -209,3 +209,24 @@ slide tag colour rule, quote provenance) stay in the [font burndown](../font-fid
   main is in [rr-16-font-size-grid.md](rr-16-font-size-grid.md).
 - **Open items that close RR-20** (burndown): RR-02, RR-03, RR-04, RR-05, RR-14, RR-17, RR-18, RR-19, RR-22, RR-23,
   RR-28; run `pnpm report:release` for the current count.
+
+## 0.12.1 / 0.12.2 / 0.11.2 patch releases (addendum, 2026-10-03)
+
+After the 0.12.0 train three patches were published and verified (npm `latest`, `gitHead` = release merge commit, SLSA
+provenance, `npm audit signatures`):
+
+- `@openpresentation/opf-pptx` **0.12.2** (2026-10-02, `e4569ac`, [opf-pptx#155](https://github.com/OpenPresentation/opf-pptx/pull/155)):
+  writes the deck language's own Office script entry (Viet, Uigh) with the deck's font, so `Presentation.Fonts` lists no
+  extra name (the last case of the FF-05 class; [opf-pptx#154](https://github.com/OpenPresentation/opf-pptx/pull/154),
+  native re-run [rr-17-viet-supplement-native-20261002](../../evidence/rr-17-viet-supplement-native-20261002/README.md)).
+- `@openpresentation/opf-editor` **0.11.2** (2026-10-03, `c7ac1d7`, opf-editor#85): the slide-size and purpose switches
+  ([opf-editor#80](https://github.com/OpenPresentation/opf-editor/pull/80)).
+- `@openpresentation/opf` **0.12.1** (2026-10-03, `1f698c4`, [opf#338](https://github.com/OpenPresentation/opf/pull/338)):
+  the six plural audience ids (`executives`, `investors`, `customers`, `sales-team`, `marketing-team`, `regulators`) are
+  deprecated with `replacedBy` ([opf#309](https://github.com/OpenPresentation/opf/pull/309)); additive catalog data, no
+  geometry change (805 raster hashes unchanged), so `opf-render` stays at 0.12.0 and the packages keep `^0.12.0` floors. It
+  is the first release run through `scripts/release-train.mjs` ([RR-51](burndown.md)).
+
+The published set is core 0.12.1, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.2 and CLI 0.10.0. The numbers and
+findings above are for the 0.12.0 set; the re-audit in [opf#314](https://github.com/OpenPresentation/opf/pull/314) used
+core 0.12.0, which differs from 0.12.1 only in the audience catalog records.

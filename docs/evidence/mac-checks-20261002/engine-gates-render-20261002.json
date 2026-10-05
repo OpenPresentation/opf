@@ -1,0 +1,536 @@
+{
+ "date": "2026-10-02",
+ "opfRender": "0.12.0 (3b300a3)",
+ "results": [
+  {
+   "gate": "accepted-text-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 8
+  },
+  {
+   "gate": "accepted-text-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 6,
+   "tail": [
+    "    'wide-card-right-scalar: Advance differs: slides.0.tag \"Source\" 0.3515625',",
+    "    'wide-card-right-scalar: Origin differs: slides.0.tag',",
+    "    'wide-card-right-scalar: Advance differs: slides.0.title \"A measured title that wraps when space is narrow\" 3.69140625',",
+    "    'wide-card-right-scalar: Origin differs: slides.0.title',",
+    "    'wide-card-right-scalar: Advance differs: slides.0.subtitle \"Supporting text\" 0.7568359375',",
+    "    'wide-card-right-scalar: Origin differs: slides.0.subtitle',",
+    "    ... 188 more items",
+    "  ],"
+   ]
+  },
+  {
+   "gate": "rich-flow-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "rich-flow-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "node:internal/modules/run_main:107",
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "page.evaluate: Error: Accepted advance correction exceeds the bounded fixture allowance",
+    "    at test/rich-flow-browser.webkit.mjs:26:29 {",
+    "  log: []",
+    "}"
+   ]
+  },
+  {
+   "gate": "rich-spacing-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "rich-spacing-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: compliance-readiness-review: measured run spacing differs by 4.18756103515625px",
+    "    at test/rich-spacing-browser.webkit.mjs:74:39 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "rich-tab-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "rich-tab-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: tab end: -13.546594238281244",
+    "    at test/rich-tab-browser.webkit.mjs:43:386 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "rich-tab-estimated-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "rich-tab-estimated-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:",
+    "",
+    "  assert.ok(Math.abs(actual.tabToFollowing)<.1)",
+    "",
+    "    at test/rich-tab-estimated-browser.webkit.mjs:30:89 {",
+    "  generatedMessage: true,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "plain-whitespace-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "plain-whitespace-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "node:internal/modules/run_main:107",
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "page.evaluate: Error: Accepted scalar advance correction exceeds fixture bound",
+    "    at test/plain-whitespace-browser.webkit.mjs:19:27 {",
+    "  log: []",
+    "}"
+   ]
+  },
+  {
+   "gate": "shared-code-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "shared-code-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "image-placeholders-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "image-placeholders-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "player-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 41
+  },
+  {
+   "gate": "player-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 3,
+   "tail": [
+    "  ],",
+    "  expected: [",
+    "    'opf-deck>viewport',",
+    "    'opf-deck>previous',",
+    "    'opf-deck>next',",
+    "    'opf-deck>present',",
+    "    'opf-deck>thumb',",
+    "    'after'"
+   ]
+  },
+  {
+   "gate": "export-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 4
+  },
+  {
+   "gate": "export-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 3
+  },
+  {
+   "gate": "font-variants-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "font-variants-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Resolved Roboto advance differs",
+    "    at test/font-variants-browser.webkit.mjs:33:71 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "font-preparation-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "font-preparation-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Roboto/400/false: browser advance differs",
+    "    at test/font-preparation-browser.webkit.mjs:34:85 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "aptos-preview-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "aptos-preview-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Intos/400/false: browser advance differs",
+    "    at test/aptos-preview-browser.webkit.mjs:34:85 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "latin-family-hosts-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 4
+  },
+  {
+   "gate": "latin-family-hosts-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Aptos: \"Quarterly review\" advance 405.94921875 differs from accepted 404.446",
+    "    at test/latin-family-hosts-browser.webkit.mjs:100:14 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "lazy-fonts-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "lazy-fonts-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: before: Roboto 643.4384765625 vs 643.043",
+    "    at test/lazy-fonts-browser.webkit.mjs:114:115 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "lazy-face-fallback-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "lazy-face-fallback-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 1,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: aptos-japanese: Intos advance 207.97119140625 differs from accepted 207.336 for \"Revenue grew 12% \"",
+    "    at test/lazy-face-fallback-browser.webkit.mjs:128:14 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "extra-lazy-fonts-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 2
+  },
+  {
+   "gate": "extra-lazy-fonts-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: plain: Roboto advance 643.4384765625 differs from accepted 643.043",
+    "    at checkRuns (test/extra-lazy-fonts-browser.webkit.mjs:91:176)",
+    "    at test/extra-lazy-fonts-browser.webkit.mjs:116:3 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "script-fonts-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 4
+  },
+  {
+   "gate": "script-fonts-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 4,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: cyrillic: Roboto advance 626.37890625 differs from accepted 624.533",
+    "    at test/script-fonts-browser.webkit.mjs:83:14 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "script-fonts-auto-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 1
+  },
+  {
+   "gate": "script-fonts-auto-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 2,
+   "tail": [
+    "",
+    "AssertionError [ERR_ASSERTION]: mixed: Roboto advance 183.8056640625 differs from accepted 183.463",
+    "    at test/script-fonts-auto-browser.webkit.mjs:121:14",
+    "    at runNextTicks (node:internal/process/task_queues:65:5)",
+    "    at process.processImmediate (node:internal/timers:541:9) {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "script-corpora-browser",
+   "engine": "chromium",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 8,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: hans-punctuation: the browser draws 989.71875, the accepted advance is 1026 (font \"Noto Sans SC\", sans-serif at 54; characters not one em wide: [[\"\uff0c\",54.21875],[\"\u3002\",54.234375],[\"\uff01\",54.234375],[\"\uff1f\",54.234375],[\"\uff1b\",54.234375],[\"\uff1a\",54.21875],[\"\u5f15\",54.234375],[\"\u53f7\",54.21875",
+    "    at test/script-corpora-browser.chromium.mjs:112:46 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "script-corpora-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 7,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: Noto Sans JP 400 / jpan-prolonged: the browser measures 1856.813 px, HarfBuzz 1855.8",
+    "    at test/script-corpora-browser.webkit.mjs:80:12 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "script-corpora-slides-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 5
+  },
+  {
+   "gate": "script-corpora-slides-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 6,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: arab-joining: a right-to-left title line paints its first letter right of its last (882.0572509765625 against 1194.5927734375)",
+    "    at test/script-corpora-slides-browser.webkit.mjs:76:82 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  },
+  {
+   "gate": "symbol-fonts-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 3
+  },
+  {
+   "gate": "symbol-fonts-browser",
+   "engine": "webkit",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 4
+  },
+  {
+   "gate": "emoji-math-browser",
+   "engine": "chromium",
+   "status": "pass",
+   "exit": 0,
+   "seconds": 8
+  },
+  {
+   "gate": "emoji-math-browser",
+   "engine": "webkit",
+   "status": "fail",
+   "exit": 1,
+   "seconds": 29,
+   "tail": [
+    "    triggerUncaughtException(",
+    "    ^",
+    "",
+    "AssertionError [ERR_ASSERTION]: emoji-latin: Intos Display advance 178.189453125 differs from accepted 179.112 for \"Launch \"",
+    "    at test/emoji-math-browser.webkit.mjs:98:14 {",
+    "  generatedMessage: false,",
+    "  code: 'ERR_ASSERTION',",
+    "  actual: false,"
+   ]
+  }
+ ],
+ "host": {
+  "macos": "26.6.2",
+  "arch": "arm64",
+  "node": "v26.7.0",
+  "playwright": "1.63.0",
+  "chromium": "153.0.8010.12",
+  "webkit": "26.6"
+ }
+}
