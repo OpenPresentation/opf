@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { FULL_TIER_PATHS, ecosystemScope, isEcosystemIndependent, scopeForEvent, tierForEvent } from "./ecosystem-scope.mjs";
+import { FULL_TIER_PATHS, ecosystemScope, isEcosystemIndependent, isRegistryIndependent, registryForEvent, scopeForEvent, tierForEvent } from "./ecosystem-scope.mjs";
 
 test("program tracking and native evidence are independent of the ecosystem checks", () => {
   for (const file of [
@@ -103,4 +103,40 @@ test("the workflow runs the contract tier on pull requests and the full suites o
   for (const shard of ["model", "installed", "registry"]) assert.ok(core.includes(`matrix.shard == '${shard}'`), shard);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core model\n/);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core packed\n/);
+});
+
+// RR-45 (opf#368, item 3): the registry checks are skipped only on a pull request that changes nothing they read.
+test("the registry checks always run outside pull requests, and on a pull request unless every path is independent", () => {
+  for (const event of ["push", "merge_group", "schedule", "workflow_dispatch", "local"]) {
+    const decision = registryForEvent(event, { listChangedFiles: () => { throw new Error("must not list files for " + event); } });
+    assert.equal(decision.registry, true, event);
+  }
+  const pr = (files, labels = []) => registryForEvent("pull_request", { listChangedFiles: () => files, labels }).registry;
+  assert.equal(pr(["packages/javascript/src/composition.ts", "packages/cli/src/index.ts", "changes/x.md", "docs/live-editor.md", "spec/schemas/opf.schema.json"]), false);
+  assert.equal(pr(["packages/javascript/src/composition.ts"], ["ecosystem-full"]), true, "the label runs them");
+  assert.equal(pr([]), true, "an empty list is unclassified");
+  assert.equal(registryForEvent("pull_request", { listChangedFiles: () => { throw new Error("no parent"); } }).registry, true);
+  for (const file of [
+    "scripts/test-packed-ecosystem.mjs", "scripts/test-registry-fidelity.mjs", "scripts/registry-golden.mjs", "scripts/fixtures/opf-examples-png.audience-ids.sha256.json",
+    "release-plan.json", "ecosystem.lock.json", "package.json", "pnpm-lock.yaml", "packages/javascript/package.json", "packages/cli/package.json",
+    "packages/cli/test/packed.mjs", ".github/workflows/ecosystem-ci.yml", ".github/actions/ecosystem-refs/action.yml", "test/browser-suites.json",
+    "docs/evidence/payload-fit-gaps-2026-09-09.opf.json", "packages/javascript/tsup.config.ts",
+  ]) {
+    assert.equal(isRegistryIndependent(file), false, file);
+    assert.equal(pr(["packages/javascript/src/index.ts", file]), true, file);
+  }
+  for (const file of ["packages/javascript/test/composition.mjs", "packages/cli/test/files.mjs", "docs/programs/x.md", "README.md", ".github/workflows/opf-ci.yml", "skills/opf-author/SKILL.md"]) {
+    assert.equal(isRegistryIndependent(file), true, file);
+  }
+});
+
+test("the registry shard installs the registry consumer on every change and gates only the published-package checks", () => {
+  const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
+  const gated = [...workflow.matchAll(/steps\.scope\.outputs\.registry == 'true'/g)];
+  assert.equal(gated.length, 1, "exactly one step is path-filtered");
+  const step = workflow.slice(workflow.indexOf("      - name: Verify exact published registry packages and fidelity fixtures"));
+  const body = step.slice(0, step.indexOf("\n      - name:", 10));
+  assert.match(body, /steps\.scope\.outputs\.registry == 'true'/);
+  assert.doesNotMatch(body, /test:registry-ecosystem|test-quote-layout-geometry|test-code-layout|test-metric/);
+  assert.match(workflow, /name: Install the exact published registry packages and check the registry consumer\n        if: steps\.scope\.outputs\.run == 'true' && matrix\.shard == 'registry'\n/);
 });

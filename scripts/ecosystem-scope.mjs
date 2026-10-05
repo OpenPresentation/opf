@@ -85,6 +85,46 @@ export function tierForEvent(event, { listChangedFiles = () => [], headRef = "",
   return { tier: "contract", reason: "a pull request runs the siblings' contract suites; merge_group, main and the nightly run run the full suites" };
 }
 
+/**
+ * RR-45 (opf#368, item 3): whether a run executes the registry checks of the `ecosystem-core (registry)` shard, the ones
+ * that test what is already published on npm (layout contracts, the registry browser harness and its guards, the JSON
+ * editor, the registry fidelity fixtures and the registry CLI). They read the published packages, the release plan, the
+ * lock, the golden fixtures and the scripts and tooling that run them, never core's or the CLI's own sources. So a pull
+ * request skips them when every changed path is one they cannot read: core and CLI sources and tests (not the packed CLI
+ * test), schemas and catalogs, docs (not evidence decks), skills, changelog fragments and the other workflows. Anything
+ * else runs them (every script, package.json, the lockfile, release-plan.json, ecosystem.lock.json, scripts/fixtures, this
+ * workflow), and so does every non-PR event (push to main, merge_group, the nightly run, manual runs: the hard gate), a
+ * pull request with the label `ecosystem-full`, and any case this cannot classify. The registry consumer install and the
+ * current-checkout measurements that use it run on every change regardless.
+ */
+const REGISTRY_INDEPENDENT = [
+  /^packages\/javascript\/(src|test|scripts)\//,
+  /^packages\/cli\/src\//,
+  /^packages\/cli\/test\/(?!packed\.mjs$)/,
+  /^spec\//,
+  /^skills\//,
+  /^changes\//,
+  /^docs\/(?!evidence\/.*\.opf\.json$)/,
+  /^\.github\/workflows\/(?!ecosystem-ci\.yml$)[^/]+$/,
+  /^[^/]+\.md$/,
+];
+export const isRegistryIndependent = (file) => REGISTRY_INDEPENDENT.some((pattern) => pattern.test(file));
+
+export function registryForEvent(event, { listChangedFiles = () => [], labels = [] } = {}) {
+  if (event !== "pull_request") return { registry: true, reason: `${event} runs always run the registry checks` };
+  if (labels.includes("ecosystem-full")) return { registry: true, reason: "the pull request carries the label ecosystem-full" };
+  let files;
+  try {
+    files = listChangedFiles();
+  } catch (error) {
+    return { registry: true, reason: `could not list the changed paths (${error.message.split("\n")[0]})` };
+  }
+  if (files.length === 0) return { registry: true, reason: "no changed paths could be listed" };
+  const relevant = files.filter((file) => !isRegistryIndependent(file));
+  if (relevant.length > 0) return { registry: true, reason: `${relevant.length} of ${files.length} changed paths can affect them (${relevant.slice(0, 3).join(", ")}${relevant.length > 3 ? ", ..." : ""})`, relevant };
+  return { registry: false, reason: `none of the ${files.length} changed paths is read by them (core or CLI sources, schemas, docs); main, the merge queue and the nightly run run them` };
+}
+
 function pullRequestLabels() {
   try {
     return (JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, "utf8")).pull_request?.labels ?? []).map((label) => label.name);
@@ -101,6 +141,10 @@ function main(argv) {
   const tier = argv[0] === "--files" ? tierForEvent("pull_request", { listChangedFiles: () => argv.slice(1) }) : tierForEvent(event, { listChangedFiles: changedFiles, headRef: process.env.GITHUB_HEAD_REF ?? "", labels: pullRequestLabels() });
   console.log(`Sibling suites: ${tier.tier} (${tier.reason}).`);
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `tier=${tier.tier}\n`);
+  const registry = argv[0] === "--files" ? registryForEvent("pull_request", { listChangedFiles: () => argv.slice(1) }) : registryForEvent(event, { listChangedFiles: changedFiles, labels: pullRequestLabels() });
+  console.log(`Registry checks: ${registry.registry ? "run" : "skipped"} (${registry.reason}).`);
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `registry=${registry.registry}\n`);
+  if (process.env.GITHUB_STEP_SUMMARY && decision.run) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Registry checks: **${registry.registry ? "run" : "skipped"}** (${registry.reason}).\n`);
   if (process.env.GITHUB_STEP_SUMMARY && decision.run) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Sibling suites: **${tier.tier}** (${tier.reason}).\n`);
   if (decision.relevant) console.log(decision.relevant.slice(0, 20).join("\n"));
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `run=${decision.run}\n`);
