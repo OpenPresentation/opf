@@ -14,8 +14,8 @@ whenever an item changes hands or state, and delete it when the item closes. Las
 
 | ID | Owner | Working on | Blocked by | Next action |
 | --- | --- | --- | --- | --- |
-| CF-00 | supervisor | this program's README and burndown | none | review and merge |
-| CF-01 | supervisor | pilot PR openpresentation-site (`codex/cf-01-opennext-pilot`): builds and runs on the Workers runtime on localhost, e2e 46/46 | none | review and merge; then the owner's workers.dev deploy (CF-04) |
+| CF-00 | supervisor | this program's README and burndown ([opf#342](https://github.com/OpenPresentation/opf/pull/342)) | none | review and merge |
+| CF-01 | supervisor | [openpresentation-site#74](https://github.com/Data-Advantage/openpresentation-site/pull/74) (`codex/cf-01-opennext-pilot`): builds and runs on the Workers runtime on localhost, e2e 46/46 | none | review and merge; then the owner's workers.dev deploy (CF-04) |
 | CF-02 | owner | Cloudflare account ("Data Advantage") and Workers plan | owner decision | decide Free or Paid; confirm the pptx.dev zone is in the same account |
 | CF-03 | owner | analytics, AI provider, preview protection, Workers Builds | owner decision | answer the five decisions in the README |
 | CF-07 | none | pptx.dev spike | CF-02 | first deploy-free spike: OpenNext build and bundle size of pptx.dev on a branch |
@@ -24,8 +24,8 @@ whenever an item changes hands or state, and delete it when the item closes. Las
 
 | ID | Item | Repos | Depends | Status | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| CF-00 | Program opened: README (goal, scope, definition of done, invariants, owner decisions) and this burndown, linked from AGENTS.md | opf | none | review | this PR |
-| CF-01 | Phase 1. openpresentation.org builds for Cloudflare Workers with OpenNext, Vercel unchanged: `cf:build`, `cf:preview:local`, redirect and headers verified on workerd, pluggable analytics, `docs/cloudflare.md`, non-blocking CI job | openpresentation-site | none | review | openpresentation-site pilot PR. Measured 2026-10-04: Worker 22.2 MiB raw (4.95 MiB gzip, esbuild approximation) of 64 MiB; 14,225 static assets of 20,000 Free / 100,000 Paid; largest 23.95 MiB of 25 MiB; Playwright e2e 46/46 on the Workers runtime (localhost) and 46/46 on `next start`; `pnpm test` and `pnpm audit` clean. Not deployed. |
+| CF-00 | Program opened: README (goal, scope, definition of done, invariants, owner decisions) and this burndown, linked from AGENTS.md | opf | none | review | [opf#342](https://github.com/OpenPresentation/opf/pull/342) |
+| CF-01 | Phase 1. openpresentation.org builds for Cloudflare Workers with OpenNext, Vercel unchanged: `cf:build`, `cf:preview:local`, redirect and headers verified on workerd, pluggable analytics, `docs/cloudflare.md`, non-blocking CI job | openpresentation-site | none | review | [openpresentation-site#74](https://github.com/Data-Advantage/openpresentation-site/pull/74). Measured 2026-10-04: Worker 22.2 MiB raw (4.95 MiB gzip, esbuild approximation) of 64 MiB; 14,225 static assets of 20,000 Free / 100,000 Paid; largest 23.95 MiB of 25 MiB; Playwright e2e 46/46 on the Workers runtime (localhost) and 46/46 on `next start`; `pnpm test` and `pnpm audit` clean. Not deployed. |
 | CF-02 | Phase 0. Owner: Cloudflare account and plan. Use "Data Advantage" (`136efd25cc10afb20714b72b2eb41cf3`); decide Workers Free or Paid; confirm the pptx.dev zone (different name-server pair) is in the same account; an API token (Workers Scripts: Edit) for CI or Workers Builds | none (owner) | none | todo | |
 | CF-03 | Phase 0. Owner decisions: analytics replacement, pptx.dev AI provider, preview protection, Workers Builds Git integration (README, "Owner decisions needed") | none (owner) | none | todo | |
 | CF-04 | Phase 1. openpresentation.org go-live: deploy the Worker to its workers.dev URL, run the e2e suite and curl checks against it, attach `www` and the apex (route on the proxied record or custom domain), zone Redirect Rule apex to www except `/schema/*`, rehearse rollback | openpresentation-site | CF-01, CF-02, CF-03 | todo | |
@@ -89,7 +89,7 @@ Append-only. One dated line per state change.
   (`136efd25cc10afb20714b72b2eb41cf3`; pptx.dev's zone has a different name-server pair, to be confirmed); `www` records
   CNAME to Vercel; no OPF Worker exists yet; the `wrangler` login on the owner's Mac is another company's account and is
   not used.
-- 2026-10-04: CF-01 in review (openpresentation-site pilot PR). Local Workers runtime (workerd): e2e 46/46; Worker 22.2
+- 2026-10-04: CF-01 in review ([openpresentation-site#74](https://github.com/Data-Advantage/openpresentation-site/pull/74)). Local Workers runtime (workerd): e2e 46/46; Worker 22.2
   MiB of 64 MiB; 14,225 static assets of 20,000 Free; largest asset 23.95 MiB of 25 MiB. Findings: OpenNext matched the
   apex host regex against `www` and looped the canonical host (fixed by anchoring); static files bypass the Worker, so
   `headers()` rules are generated into `_headers` and apex static files need a zone Redirect Rule; `wrangler dev` on
