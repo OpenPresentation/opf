@@ -67,16 +67,20 @@ export const contentKeysOf = (payload: Obj): ContentKey[] => CONTENT_KEYS.filter
  * Validate a candidate payload, slide or run of slides as OPF. A block is validated inside a one-block
  * slide; a payload with slide-level fields is validated as the slide itself. Throws `invalid-output`.
  */
-export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "slides" = "block"): void {
+export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "slides" = "block", context: Obj = {}): void {
   const slides = as === "slides" ? (value as Obj[]) : as === "slide" ? [value as Obj] : [{ blocks: [value] }];
-  const result = validatePresentation({ slides });
-  if (!result.valid) {
-    const first = result.errors[0];
-    throw new OPFConversionError("invalid-output", `The converted content is not valid OPF: ${first?.message ?? "unknown error"}${first?.path ? ` (${first.path})` : ""}.`, { issues: result.errors });
+  // RR-54: a dataset-backed chart or table validates with the document's datasets. Without them (a slide-only
+  // edit) the dataset references cannot be checked here and are left to the caller's document validation.
+  const datasets = isRecord(context.datasets) ? context.datasets : undefined;
+  const result = validatePresentation({ ...(datasets ? { datasets } : {}), slides });
+  const errors = datasets ? result.errors : result.errors.filter((issue) => issue.params.code !== "dataset-unknown" && issue.params.code !== "dataset-field-unknown");
+  if (errors.length) {
+    const first = errors[0];
+    throw new OPFConversionError("invalid-output", `The converted content is not valid OPF: ${first?.message ?? "unknown error"}${first?.path ? ` (${first.path})` : ""}.`, { issues: errors });
   }
 }
 /** Validate an owner payload as a block, or as a slide when it carries slide fields. */
-export const assertValidOwner = (owner: Obj): void => assertValidOutput(owner, isSlideLike(owner) ? "slide" : "block");
+export const assertValidOwner = (owner: Obj, context: Obj = {}): void => assertValidOutput(owner, isSlideLike(owner) ? "slide" : "block", context);
 
 // --- text runs --------------------------------------------------------------------------------
 

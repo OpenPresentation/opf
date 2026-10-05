@@ -20,6 +20,10 @@ import {
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
+import { unusedDatasets } from './chart-data.js';
+
+// RR-54: chart and table data warnings keep their validator code as the rule id.
+const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
@@ -741,6 +745,19 @@ export function lintPresentation(
 	}
 	// Retain any existing reference warning not covered by the schema walk.
 	for (const issue of validation.warnings) {
+		if (typeof issue.params.code === 'string' && DATA_WARNING_CODES.has(issue.params.code)) {
+			diagnostics.push({
+				...schemaDiagnostic(issue),
+				ruleId: `opf/${issue.params.code}`,
+				severity: 'warning',
+				help: issue.params.code === 'chart-value-not-numeric'
+					? 'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.'
+					: issue.params.code === 'chart-data-source-unresolved'
+						? 'No engine loads chart data sources. Import the data inline (columns and rows, recording the origin in data.source) or reference a top-level dataset.'
+						: 'The mapping entry is ignored. Remove it, or name a different column.',
+			});
+			continue;
+		}
 		const kind = issue.params.kind as CatalogKind,
 			id = issue.params.id,
 			replacedBy = issue.params.replacedBy;
@@ -836,6 +853,18 @@ export function lintPresentation(
 			definition: schemas.presentation.$id + '#/$defs/Reference',
 			lookup: ['opf', 'schema', 'presentation', '/$defs/Reference'],
 			validation: issue,
+		});
+	// RR-54: a dataset no chart or table references is advisory; reference it or remove it.
+	for (const id of unusedDatasets(document))
+		diagnostics.push({
+			ruleId: 'opf/unused-dataset',
+			severity: 'warning',
+			scope: 'document',
+			path: `/datasets/${id.replaceAll('~', '~0').replaceAll('/', '~1')}`,
+			message: `Dataset ${JSON.stringify(id)} is never referenced; reference it from a chart ("data": { "dataset": ${JSON.stringify(id)} }) or a table ({ "dataset": ${JSON.stringify(id)} }), or remove it.`,
+			help: 'Reference the dataset from chart.data or a table so it is drawn, or remove the entry. Nothing is drawn for an unreferenced dataset.',
+			definition: schemas.presentation.$id + '#/$defs/Dataset',
+			lookup: ['opf', 'schema', 'presentation', '/$defs/Dataset'],
 		});
 	return report(diagnostics, validation.valid, 'not-applicable');
 }

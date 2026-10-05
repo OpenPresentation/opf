@@ -3,6 +3,7 @@ import addFormats from "ajv-formats";
 
 import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
+import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
@@ -645,6 +646,35 @@ function chartTypeWarnings(
   return issues;
 }
 
+// RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
+// chart-mapping-unknown-column, number-format-invalid. Warnings: chart-value-not-numeric (not for null, "" or a
+// 'var:<id>' cell whose variable is a number), chart-data-source-unresolved, chart-mapping-adapted.
+function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
+  const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
+  if (!isRecord(value) || !Array.isArray(value.slides)) return out;
+  const seen = new Set<string>();
+  const add = (diagnostics: readonly DataDiagnostic[]) => {
+    for (const diagnostic of diagnostics) {
+      const key = `${diagnostic.code}|${diagnostic.path}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
+    }
+  };
+  add(datasetDiagnostics(value));
+  const payload = (node: Record<string, unknown>, path: string): void => {
+    if (isRecord(node.chart)) add(resolveChartData(node.chart, value, { path: pathFor(path, "chart") }).diagnostics);
+    if (isRecord(node.table)) add(resolveTableData(node.table, value, { path: pathFor(path, "table") }).diagnostics);
+  };
+  value.slides.forEach((slide, index) => {
+    if (!isRecord(slide)) return;
+    const slidePath = `/slides/${index}`;
+    payload(slide, slidePath);
+    visitContentPayloads(slide, slidePath, payload);
+  });
+  return out;
+}
+
 const cellBorderEdges = ["top", "right", "bottom", "left"] as const;
 
 // Mirrors the id shape shared by ColorRef's 'var:<id>' form and the property
@@ -962,7 +992,10 @@ export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentat
   if (resolved.schemaName === "presentation") {
     errors.push(...validatePresentationSemantics(subject));
     errors.push(...variableIssues.errors);
+    const data = dataIssues(subject);
+    errors.push(...data.errors);
     warnings.push(...presentationReferenceWarnings(subject));
+    warnings.push(...data.warnings);
     warnings.push(...variableIssues.warnings);
   } else if (resolved.schemaName === "language") {
     errors.push(...validateLanguageSemantics(value));

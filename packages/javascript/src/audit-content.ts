@@ -80,8 +80,12 @@ export function textValues(slide: Rec, slidePath: string): TextValue[] {
 		if (Array.isArray(table.columns))
 			table.columns.forEach((cell: unknown, c: number) => {
 				const styled = rec(cell);
-				const value = Object.hasOwn(styled, 'value') ? styled.value : cell;
-				push(at('table', 'columns', c, ...(Object.hasOwn(styled, 'value') ? ['value'] : [])), value, 'table-header', 'table');
+				// RR-54: a DataColumn header ({ name, format }) shows its name.
+				if (!Object.hasOwn(styled, 'value') && typeof styled.name === 'string') push(at('table', 'columns', c, 'name'), styled.name, 'table-header', 'table');
+				else {
+					const value = Object.hasOwn(styled, 'value') ? styled.value : cell;
+					push(at('table', 'columns', c, ...(Object.hasOwn(styled, 'value') ? ['value'] : [])), value, 'table-header', 'table');
+				}
 			});
 		if (Array.isArray(table.rows))
 			table.rows.forEach((row: unknown, r: number) => {

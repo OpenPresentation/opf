@@ -130,6 +130,9 @@ export type { BundleReport, BundleResult } from './bundle.js';
 
 export { parseTabularData, createDataContent, OPFDataImportError } from './data.js';
 export type { DataCell, TabularData, DataImportOptions, DataContentOptions } from './data.js';
+// RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
+export { chartNumber, formatDataNumber, numberFormatError, excelNumberFormat, numberFormatFromExcel, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets } from './chart-data.js';
+export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData } from './chart-data.js';
 
 export { fitRichText } from './composition.js';
 export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichTextOptions } from './composition.js';

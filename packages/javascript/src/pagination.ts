@@ -55,6 +55,11 @@ function sliceRichText(value: any, start: number, end: number): any {
     return [typeof run === 'string' ? text.slice(left, right) : { ...run, text: text.slice(left, right) }];
   });
 }
+/** The deck-level fields a single slide needs to validate: the references it cites and the datasets it plots. */
+const deckContext = (presentation: unknown): Record<string, unknown> => {
+  const deck = isRecord(presentation) ? presentation : {};
+  return {...(Array.isArray(deck.references)?{references:deck.references}:{}),...(isRecord(deck.datasets)?{datasets:deck.datasets}:{})};
+};
 interface Leaf {
   path: string; field: string; value: any;
   boundaries?: number[]; unit?: 'utf16' | 'items';
@@ -89,9 +94,8 @@ function leafFor(path: string, field: string, value: any): Leaf {
 
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
-  // RR-34: a slide that cites references validates only with the deck's references list.
-  const deckReferences = (options.presentation as {references?: unknown} | undefined)?.references;
-  assertValidPresentation({...(Array.isArray(deckReferences)?{references:deckReferences}:{}),slides:[input]});
+  // RR-34: a slide that cites references validates only with the deck's references list (RR-54: and its datasets).
+  assertValidPresentation({...deckContext(options.presentation),slides:[input]});
   let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
@@ -199,9 +203,8 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const issues = fit(geometry(slide,slides.length).diagnostics);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     assignPageIds(slide,slides.length);
-    // RR-34: a page that cites references validates only with the deck's references list.
-    const references = (options.presentation as {references?: unknown} | undefined)?.references;
-    assertValidPresentation({...(Array.isArray(references)?{references}:{}),slides:[slide]});
+    // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
+    assertValidPresentation({...deckContext(options.presentation),slides:[slide]});
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     selected = new Map();
   };

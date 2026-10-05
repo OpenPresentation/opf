@@ -37,6 +37,7 @@ import {
   textLinesToTable,
   timelineToTable,
 } from "./tables.js";
+import { chartNumber, inlineTableData, isDatasetRef } from "../chart-data.js";
 import { fenceCode, levelsFromIndents, parseCodeFence, parseListLine, parseQuoteLines, splitWhen } from "./text-lines.js";
 
 export type ContentKind = "text" | "list" | "quote" | "metric" | "code" | "timeline" | "chart" | "table" | "image" | "video" | "group" | "metrics";
@@ -75,6 +76,8 @@ export const CONTENT_CONVERSIONS: Readonly<Record<string, readonly ContentKind[]
 });
 
 export interface ConvertOptions extends TableOptions {
+  /** RR-54: the document the payload belongs to. A dataset-backed chart or table needs it (its `datasets`) to convert to another kind or to validate. */
+  document?: unknown;
   /** Text to timeline: also read `label: text` with any short label as the date (default: only date-like labels). */
   looseWhen?: boolean;
   /** Code to text: `auto` (default) writes a fenced block when the code has a language or file name so nothing is lost; `never` writes the bare source and reports the loss. */
@@ -285,14 +288,25 @@ function timelineToList(timeline: Json, loss: Loss): Field {
 
 function chartToTable(chart: Json, loss: Loss): Field {
   const data = chart?.data;
+  if (chart?.mapping !== undefined) loss.note("series mapping");
+  // RR-54: a chart that plots a dataset becomes a table of the same dataset (and fields).
+  if (isDatasetRef(data)) {
+    if (chart.type) loss.note("chart type");
+    return { key: "table", value: { dataset: data.dataset, ...(Array.isArray(data.fields) ? { fields: clone(data.fields) } : {}) } };
+  }
   if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) throw refuse("This chart reads external data. Only a chart with inline columns and rows converts to a table.");
   if (chart.type) loss.note("chart type");
+  if (data.source !== undefined) loss.note("data source");
   return { key: "table", value: { columns: clone(data.columns), rows: clone(data.rows) } };
 }
 
 function tableToChart(table: Json): Field {
+  // RR-54: a dataset table becomes a chart of the same dataset (and fields).
+  if (isDatasetRef(table)) return { key: "chart", value: { type: "column", data: { dataset: table.dataset, ...(Array.isArray(table.fields) ? { fields: clone(table.fields) } : {}) } } };
   const { columns, rows } = table ?? {};
-  if (!Array.isArray(columns) || !columns.length || columns.some((label: unknown) => typeof label !== "string" || label === "")) throw refuse("A chart needs a plain text label for every column. Add column labels to the table first.");
+  // A DataColumn header ({ name, format }) keeps its format as the chart column's.
+  const label = (column: unknown): unknown => (isRecord(column) && !Object.hasOwn(column, "value") && typeof column.name === "string" ? column.name : column);
+  if (!Array.isArray(columns) || !columns.length || columns.some((column: unknown) => typeof label(column) !== "string" || label(column) === "")) throw refuse("A chart needs a plain text label for every column. Add column labels to the table first.");
   const body = rows.map((row: Json[], rowIndex: number) => {
     if (row.length !== columns.length) throw refuse(`Row ${rowIndex + 1} does not have ${columns.length} cells.`, { row: rowIndex });
     return row.map((cell, columnIndex) => {
@@ -300,12 +314,14 @@ function tableToChart(table: Json): Field {
       if (columnIndex === 0) return cell;
       if (cell === null || cell === "") return null;
       if (typeof cell === "number") return cell;
-      if (typeof cell === "string" && cell.trim() !== "" && Number.isFinite(Number(cell)) && String(Number(cell)) === cell.trim()) return Number(cell);
+      // RR-54: the one strict chart number rule.
+      const number = chartNumber(cell);
+      if (number !== null) return number;
       throw refuse(`Row ${rowIndex + 1}, column ${columnIndex + 1} ("${String(cell)}") is not a number, so it cannot be a chart value.`, { row: rowIndex, column: columnIndex });
     });
   });
   if (!body.length) throw refuse("A chart needs at least one row.");
-  return { key: "chart", value: { type: "column", data: { columns: [...columns], rows: body } } };
+  return { key: "chart", value: { type: "column", data: { columns: clone(columns), rows: body } } };
 }
 
 function convertField(from: ContentKind, to: ContentKind, content: Json, options: ConvertOptions, loss: Loss): Field {
@@ -370,7 +386,14 @@ export function convertContent(payload: unknown, to: ContentKind, options: Conve
     throw refuse(`${label} content cannot be converted to ${CONTENT_KIND_LABELS[to]?.toLowerCase() ?? to}. ${targets.length ? `It converts to: ${targets.map((target) => CONTENT_KIND_LABELS[target].toLowerCase()).join(", ")}.` : "It has no text to convert."}`, { from: info.kind, to });
   }
   const loss = new Loss();
-  const { key, value } = convertField(info.kind, to, info.content, options, loss);
+  // RR-54: a dataset table converts to anything but a chart from its inline copy, which needs the document.
+  let content = info.content;
+  if (info.kind === "table" && to !== "chart" && isDatasetRef(content)) {
+    content = inlineTableData(content, options.document);
+    if (isDatasetRef(content)) throw refuse(`This table shows dataset '${content.dataset}'. Pass the document (options.document) so its rows can be converted.`);
+    loss.note("dataset reference (the rows are copied)");
+  }
+  const { key, value } = convertField(info.kind, to, content, options, loss);
   const out: Obj = {};
   for (const [name, entry] of Object.entries(owner)) {
     if ((CONTENT_KEYS as readonly string[]).includes(name) || name === "type" || name === "blocks") continue;
@@ -382,7 +405,7 @@ export function convertContent(payload: unknown, to: ContentKind, options: Conve
   }
   if (owner.type !== undefined) out.type = TYPE_OF_KIND[to] ?? to;
   out[key] = value;
-  assertValidOwner(out);
+  assertValidOwner(out, isRecord(options.document) ? options.document : {});
   return { payload: out, from: info.kind, to, key, changed: true, ...report(loss.list) };
 }
 

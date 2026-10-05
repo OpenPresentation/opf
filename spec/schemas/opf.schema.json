@@ -213,6 +213,10 @@
       "description": "Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run cites is a lint warning (opf/unused-reference). referencesSlide() turns the cited references into an ordinary list slide.",
       "examples": [[{ "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "url": "https://www.gartner.com" }]]
     },
+    "datasets": {
+      "$ref": "#/$defs/Datasets",
+      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is a lint warning (opf/unused-dataset). See docs/chart-table-data.md."
+    },
     "assets": {
       "$ref": "#/$defs/Assets",
       "description": "Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings."
@@ -1588,18 +1592,24 @@
           "description": "Illustrative number shown in fill forms and used when a template is previewed with examples. Never written to output."
         },
         "format": {
-          "type": "string",
-          "description": "Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' required, '#' optional), and a '%' in the suffix scales by 100. English separators only. Absent: the shortest decimal form.",
-          "examples": [
-            "#,##0",
-            "0.0",
-            "$#,##0.00",
-            "0.#%",
-            "#,##0.0M"
-          ]
+          "$ref": "#/$defs/NumberFormat",
+          "description": "Display pattern used by '{{<id>}}' (the shared NumberFormat syntax). A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' required, '#' optional), and a '%' in the suffix scales by 100. English separators only. Absent: the shortest decimal form."
         }
       },
       "description": "A number. '{{<id>}}' inserts it as text using 'format'; 'var:<id>' as a whole field supplies the number itself (chart values, font sizes)."
+    },
+    "NumberFormat": {
+      "type": "string",
+      "description": "Number display pattern, shared by NumberVariable.format, data column formats (DataColumn.format) and table cell formats (StyledTableCell.format). An optional literal prefix, a numeric part of '#', '0', ',' and '.', and an optional literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' required, '#' optional), and a '%' in the prefix or suffix multiplies the value by 100. English separators only. A format applies only to number values; strings, booleans, null and rich runs display unchanged. A column or cell format that is not a valid pattern is a 'number-format-invalid' error. The PPTX export writes it as the equivalent Excel number format code.",
+      "examples": [
+        "#,##0",
+        "0.0",
+        "$#,##0.00",
+        "0.#%",
+        "0%",
+        "#,##0.0M",
+        "#,##0 units"
+      ]
     },
     "DateVariable": {
       "type": "object",
@@ -3202,9 +3212,14 @@
         "data": {
           "oneOf": [
             { "$ref": "#/$defs/ChartData" },
-            { "$ref": "#/$defs/ChartDataSource" }
+            { "$ref": "#/$defs/ChartDataSource" },
+            { "$ref": "#/$defs/DatasetRef" }
           ],
-          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally."
+          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. A ChartDataSource is not resolved by any engine (a 'chart-data-source-unresolved' warning; engines draw a placeholder); prefer inline data with a 'source'."
+        },
+        "mapping": {
+          "$ref": "#/$defs/ChartMapping",
+          "description": "Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, then the X column for scatter, every other column a series)."
         },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",
@@ -3267,11 +3282,16 @@
     },
     "Table": {
       "type": "object",
-      "description": "Table content. Columns are optional; rows are the only required field.",
+      "description": "Table content, inline or dataset-backed. An inline table has 'rows' (required) and optional 'columns'. A dataset-backed table has 'dataset' (required) and optional 'fields', and no 'rows' or 'columns': it takes its headers, rows and column formats from the dataset (per-cell styles need an inline table).",
       "additionalProperties": false,
-      "required": [
-        "rows"
-      ],
+      "if": { "required": ["dataset"] },
+      "then": {
+        "properties": { "rows": false, "columns": false }
+      },
+      "else": {
+        "required": ["rows"],
+        "properties": { "fields": false }
+      },
       "properties": {
         "columns": {
           "type": "array",
@@ -3290,11 +3310,14 @@
                 "$ref": "#/$defs/StyledTableCell"
               },
               {
+                "$ref": "#/$defs/DataColumn"
+              },
+              {
                 "type": "null"
               }
             ]
           },
-          "description": "Optional column labels. Labels may be strings, rich runs or styled cell objects. Null is an empty label or a placeholder covered by a preceding column span.",
+          "description": "Optional column labels. Labels may be strings, rich runs, styled cell objects or DataColumn objects ({ \"name\", \"format\" }). A header's 'format' (DataColumn or StyledTableCell) is the column's number format; a body cell's own format wins. Null is an empty label or a placeholder covered by a preceding column span.",
           "examples": [
             [
               "Region",
@@ -3329,21 +3352,34 @@
               ]
             ]
           ]
+        },
+        "dataset": {
+          "$ref": "#/$defs/DatasetId",
+          "description": "Id of a top-level dataset that supplies this table's headers, rows and column formats. Excludes 'rows' and 'columns'. An unknown id is a 'dataset-unknown' error."
+        },
+        "fields": {
+          "$ref": "#/$defs/DatasetFields",
+          "description": "Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error."
         }
       }
     },
     "ChartData": {
       "type": "object",
-      "description": "Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless a chart type or renderer maps them differently.",
+      "description": "Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$5', '(5)', '1,234') is a gap and a 'chart-value-not-numeric' warning.",
       "additionalProperties": false,
       "required": ["columns", "rows"],
       "properties": {
         "columns": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/$defs/DataColumn" }
+            ]
+          },
           "minItems": 1,
-          "description": "Ordered column labels for the chart data table.",
-          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"]]
+          "description": "Ordered column labels for the chart data table. A label is a string or a DataColumn ({ \"name\", \"format\" }) whose number format the data labels, value axis and exported workbook use.",
+          "examples": [["Quarter", "Revenue"], ["Quarter", "Revenue", "Costs"], ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]]
         },
         "rows": {
           "type": "array",
@@ -3354,8 +3390,185 @@
           "minItems": 1,
           "description": "Tabular chart rows. Each row aligns by index with columns.",
           "examples": [[["Q1", 12], ["Q2", 18], ["Q3", 24], ["Q4", 31]]]
+        },
+        "source": {
+          "$ref": "#/$defs/DataSourceRef",
+          "description": "Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import."
         }
       }
+    },
+    "DataColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "description": "A named data column with an optional number format. Anywhere a chart or dataset column is a string it may be a DataColumn; the string form is { \"name\": value } with no format. A table column header may also be a DataColumn.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Column label, used as the series name, the table header and the name 'fields' and 'chart.mapping' address.",
+          "examples": ["Revenue", "Margin"]
+        },
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form."
+        }
+      },
+      "examples": [{ "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }]
+    },
+    "DataSourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["src"],
+      "description": "Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.",
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path.",
+          "examples": ["./data/revenue.csv", "asset:revenue", "https://cdn.acme.com/data/revenue.csv"]
+        },
+        "sheet": {
+          "type": "string",
+          "description": "Sheet or table name inside a spreadsheet source.",
+          "examples": ["Sheet1"]
+        },
+        "range": {
+          "type": "string",
+          "description": "A1-style range inside a spreadsheet source.",
+          "examples": ["A1:D8"]
+        },
+        "fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The source fields the data was taken from, in order.",
+          "examples": [["Quarter", "Revenue"]]
+        },
+        "retrieved": {
+          "type": "string",
+          "anyOf": [{ "format": "date" }, { "format": "date-time" }],
+          "description": "When the data was taken from the source: an ISO 8601 date or date-time.",
+          "examples": ["2026-10-05", "2026-10-05T09:30:00Z"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-form note about the source.",
+          "examples": ["Finance export, unaudited"]
+        }
+      },
+      "examples": [{ "src": "./data/revenue.csv", "retrieved": "2026-10-05" }]
+    },
+    "DatasetId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+      "description": "Id of an entry in the top-level datasets map (the assets id pattern).",
+      "examples": ["revenue", "pipeline-2026"]
+    },
+    "DatasetFields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Dataset column names to use, in order. Selects and orders the dataset's columns; an unknown name is a 'dataset-field-unknown' error.",
+      "examples": [["Quarter", "Revenue"]]
+    },
+    "Datasets": {
+      "type": "object",
+      "description": "Shared data tables keyed by id (the assets id pattern). Charts reference one with 'chart.data': { \"dataset\": \"<id>\" } and tables with 'table': { \"dataset\": \"<id>\" }.",
+      "propertyNames": { "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/Dataset" },
+      "examples": [
+        {
+          "revenue": {
+            "title": "Revenue by quarter",
+            "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"],
+            "rows": [["Q1", 12, 8], ["Q2", 18, 11], ["Q3", 24, 15]],
+            "source": { "src": "./data/revenue.csv", "retrieved": "2026-10-05" }
+          }
+        }
+      ]
+    },
+    "Dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns", "rows"],
+      "description": "One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Human name of the dataset, shown by editors.",
+          "examples": ["Revenue by quarter"]
+        },
+        "description": {
+          "type": "string",
+          "description": "What the dataset holds.",
+          "examples": ["Quarterly revenue and costs, in $M."]
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "$ref": "#/$defs/DataColumn" }
+            ]
+          },
+          "minItems": 1,
+          "description": "Ordered, uniquely named columns.",
+          "examples": [["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, "Costs"]]
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/ChartDataCell" }
+          },
+          "description": "Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns.",
+          "examples": [[["Q1", 12, 8], ["Q2", 18, 11]]]
+        },
+        "source": {
+          "$ref": "#/$defs/DataSourceRef",
+          "description": "Optional provenance. Engines never read, fetch or refresh it."
+        }
+      }
+    },
+    "DatasetRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset"],
+      "description": "Chart data taken from a top-level dataset. Engines inline it before plotting; 'chart.mapping' names columns after the 'fields' selection.",
+      "properties": {
+        "dataset": {
+          "$ref": "#/$defs/DatasetId",
+          "description": "Id of the dataset. An unknown id is a 'dataset-unknown' error."
+        },
+        "fields": {
+          "$ref": "#/$defs/DatasetFields",
+          "description": "The dataset columns to use, by name and in order. Absent uses every column."
+        }
+      },
+      "examples": [{ "dataset": "revenue" }, { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }]
+    },
+    "ChartMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; pie, doughnut and other single-series constructs still plot one series. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a 'chart-mapping-adapted' warning.",
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "The label (category) column. Default: the first column.",
+          "examples": ["Quarter"]
+        },
+        "x": {
+          "type": "string",
+          "description": "The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column).",
+          "examples": ["Spend"]
+        },
+        "series": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "The plotted columns, in order. Default: every column that is not the category or the X column.",
+          "examples": [["Revenue", "Costs"]]
+        }
+      },
+      "examples": [{ "category": "Quarter", "series": ["Costs", "Revenue"] }, { "category": "Region", "x": "Spend", "series": ["Revenue"] }]
     },
     "ChartDataSource": {
       "type": "object",
@@ -3452,6 +3665,10 @@
           "type": "integer",
           "minimum": 1,
           "description": "Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1."
+        },
+        "format": {
+          "$ref": "#/$defs/NumberFormat",
+          "description": "Number format. On a body cell it formats that cell's number value (and wins over the column's format); on a header cell (in 'columns') it is the column's format, the same as a DataColumn header. Strings, booleans, null and rich runs display unchanged."
         }
       },
       "description": "A cell with explicit visual style or merged geometry. Its position remains its array column index; use null placeholders for every covered grid position."

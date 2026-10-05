@@ -1,4 +1,9 @@
 /** Local CSV/TSV/JSON ingestion. No file access or network requests. */
+import { chartNumber } from './chart-data.js';
+
+// RR-54: chart and table data (strict numbers, number formats, datasets, series mapping) are also on this entry.
+export { chartNumber, formatDataNumber, numberFormatError, excelNumberFormat, numberFormatFromExcel, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets } from './chart-data.js';
+export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData } from './chart-data.js';
 export type DataCell = string | number | boolean | null;
 export interface TabularData { columns: string[]; rows: DataCell[][] }
 export interface DataImportOptions {
@@ -89,12 +94,9 @@ export function parseTabularData(input: unknown, options: DataImportOptions = {}
   return data;
 }
 function measure(value: DataCell, location: string): number {
-  if (typeof value === 'number' && Number.isFinite(value)) return value;
-  // Strict decimal syntax: no implicit blank/null/boolean zero, currency, grouping, or percentages.
-  if (typeof value === 'string' && /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(value.trim())) {
-    const number = Number(value.trim());
-    if (Number.isFinite(number) && (!Number.isInteger(number) || Number.isSafeInteger(number))) return number;
-  }
+  // Strict decimal syntax (core chartNumber, RR-54): no implicit blank/null/boolean zero, currency, grouping, or percentages.
+  const number = chartNumber(value);
+  if (number !== null) return number;
   return fail(`${location}: expected a numeric chart value; found ${JSON.stringify(value)}. Clean the value or select another series.`);
 }
 export function createDataContent(input: unknown, options: DataContentOptions): { table: TabularData } | { chart: { type: string; data: TabularData } } {
