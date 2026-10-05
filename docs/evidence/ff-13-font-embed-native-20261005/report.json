@@ -1,0 +1,139 @@
+{
+    "schemaVersion":  1,
+    "kind":  "ff13-native-font-embed",
+    "startedAt":  "2026-10-05T19:07:31.1991868Z",
+    "source":  {
+                   "path":  "<set>\\fixture\\source.pptx",
+                   "sha256Before":  "fa0db6d03fa2755c64f24040267911712fd47df764e967f757c93713bee18858",
+                   "sha256After":  "fa0db6d03fa2755c64f24040267911712fd47df764e967f757c93713bee18858",
+                   "openedReadOnly":  true
+               },
+    "copy":  {
+                 "path":  "<set>\\attempts\\20261005T190730Z\\copy.pptx",
+                 "sha256":  "4320ff1d1087287ed2ea46f6aa5855d712a5328687948e16afcf632b036b25b0",
+                 "saveFormat":  24,
+                 "embedTrueTypeFonts":  -1,
+                 "attempted":  true,
+                 "completed":  true
+             },
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "fontsBeforeSave":  {
+                            "count":  1,
+                            "entries":  [
+                                            {
+                                                "index":  1,
+                                                "name":  "Carlito",
+                                                "embedded":  0,
+                                                "embeddable":  -1
+                                            }
+                                        ]
+                        },
+    "gate":  {
+                 "passed":  true,
+                 "allowedNames":  [
+                                      "Carlito",
+                                      "Carlito Bold",
+                                      "Carlito Italic",
+                                      "Carlito Bold Italic"
+                                  ],
+                 "countValid":  true,
+                 "baseFamilyPresent":  true,
+                 "unexpectedNames":  [
+
+                                     ],
+                 "unembeddableNames":  [
+
+                                       ]
+             },
+    "fontsAfterReopen":  {
+                             "count":  1,
+                             "entries":  [
+                                             {
+                                                 "index":  1,
+                                                 "name":  "Carlito",
+                                                 "embedded":  0,
+                                                 "embeddable":  -1
+                                             }
+                                         ],
+                             "scope":  "Diagnostic read of the saved copy, opened read-only after the save. Not a gate."
+                         },
+    "runFonts":  [
+                     {
+                         "slide":  1,
+                         "shape":  "OPF heading slides.0.title line 0",
+                         "text":  "FF-13 embed attempt",
+                         "name":  "Carlito",
+                         "bold":  -1,
+                         "italic":  0,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     },
+                     {
+                         "slide":  1,
+                         "shape":  "Text 1",
+                         "text":  "Regular 18 | ",
+                         "name":  "Carlito",
+                         "bold":  0,
+                         "italic":  0,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     },
+                     {
+                         "slide":  1,
+                         "shape":  "Text 1",
+                         "text":  "Bold 20",
+                         "name":  "Carlito",
+                         "bold":  -1,
+                         "italic":  0,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     },
+                     {
+                         "slide":  1,
+                         "shape":  "Text 1",
+                         "text":  " | ",
+                         "name":  "Carlito",
+                         "bold":  0,
+                         "italic":  0,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     },
+                     {
+                         "slide":  1,
+                         "shape":  "Text 1",
+                         "text":  "Italic 22",
+                         "name":  "Carlito",
+                         "bold":  0,
+                         "italic":  -1,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     },
+                     {
+                         "slide":  1,
+                         "shape":  "Text 1",
+                         "text":  " | ",
+                         "name":  "Carlito",
+                         "bold":  0,
+                         "italic":  0,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     },
+                     {
+                         "slide":  1,
+                         "shape":  "Text 1",
+                         "text":  "BoldItalic 24",
+                         "name":  "Carlito",
+                         "bold":  -1,
+                         "italic":  -1,
+                         "nameFarEast":  "Carlito",
+                         "nameComplexScript":  "+mn-cs"
+                     }
+                 ],
+    "closeCount":  2,
+    "stage":  "worker.complete/success",
+    "error":  null,
+    "finishedAt":  "2026-10-05T19:07:31.9866647Z"
+}

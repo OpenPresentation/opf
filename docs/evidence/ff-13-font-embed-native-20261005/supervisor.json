@@ -1,0 +1,160 @@
+{
+    "schemaVersion":  1,
+    "kind":  "ff13-native-font-embed-supervisor",
+    "attempt":  "20261005T190730Z",
+    "startedAt":  "2026-10-05T19:07:30.4318791Z",
+    "probeBefore":  [
+                        {
+                            "phase":  "before",
+                            "weight":  400,
+                            "italic":  false,
+                            "face":  "Arial",
+                            "fontDataSize":  1045720,
+                            "fileSize":  593908,
+                            "matchesRegisteredFile":  false
+                        },
+                        {
+                            "phase":  "before",
+                            "weight":  400,
+                            "italic":  true,
+                            "face":  "Arial",
+                            "fontDataSize":  721584,
+                            "fileSize":  580792,
+                            "matchesRegisteredFile":  false
+                        },
+                        {
+                            "phase":  "before",
+                            "weight":  700,
+                            "italic":  false,
+                            "face":  "Arial",
+                            "fontDataSize":  989780,
+                            "fileSize":  648128,
+                            "matchesRegisteredFile":  false
+                        },
+                        {
+                            "phase":  "before",
+                            "weight":  700,
+                            "italic":  true,
+                            "face":  "Arial",
+                            "fontDataSize":  724872,
+                            "fileSize":  745192,
+                            "matchesRegisteredFile":  false
+                        }
+                    ],
+    "probeRegistered":  [
+                            {
+                                "phase":  "registered",
+                                "weight":  400,
+                                "italic":  false,
+                                "face":  "Carlito",
+                                "fontDataSize":  593908,
+                                "fileSize":  593908,
+                                "matchesRegisteredFile":  true
+                            },
+                            {
+                                "phase":  "registered",
+                                "weight":  400,
+                                "italic":  true,
+                                "face":  "Carlito",
+                                "fontDataSize":  580792,
+                                "fileSize":  580792,
+                                "matchesRegisteredFile":  true
+                            },
+                            {
+                                "phase":  "registered",
+                                "weight":  700,
+                                "italic":  false,
+                                "face":  "Carlito",
+                                "fontDataSize":  648128,
+                                "fileSize":  648128,
+                                "matchesRegisteredFile":  true
+                            },
+                            {
+                                "phase":  "registered",
+                                "weight":  700,
+                                "italic":  true,
+                                "face":  "Carlito",
+                                "fontDataSize":  745192,
+                                "fileSize":  745192,
+                                "matchesRegisteredFile":  true
+                            }
+                        ],
+    "probeAfterRemoval":  [
+                              {
+                                  "phase":  "after-removal",
+                                  "weight":  400,
+                                  "italic":  false,
+                                  "face":  "Arial",
+                                  "fontDataSize":  1045720,
+                                  "fileSize":  593908,
+                                  "matchesRegisteredFile":  false
+                              },
+                              {
+                                  "phase":  "after-removal",
+                                  "weight":  400,
+                                  "italic":  true,
+                                  "face":  "Arial",
+                                  "fontDataSize":  721584,
+                                  "fileSize":  580792,
+                                  "matchesRegisteredFile":  false
+                              },
+                              {
+                                  "phase":  "after-removal",
+                                  "weight":  700,
+                                  "italic":  false,
+                                  "face":  "Arial",
+                                  "fontDataSize":  989780,
+                                  "fileSize":  648128,
+                                  "matchesRegisteredFile":  false
+                              },
+                              {
+                                  "phase":  "after-removal",
+                                  "weight":  700,
+                                  "italic":  true,
+                                  "face":  "Arial",
+                                  "fontDataSize":  724872,
+                                  "fileSize":  745192,
+                                  "matchesRegisteredFile":  false
+                              }
+                          ],
+    "registrations":  [
+                          {
+                              "file":  "node_modules/@expo-google-fonts/carlito/400Regular/Carlito_400Regular.ttf",
+                              "sha256":  "ca019755404c45627a8566915df99068949dc32ee2bce48d6aeee7542d2a0a89",
+                              "added":  1,
+                              "removed":  true
+                          },
+                          {
+                              "file":  "node_modules/@expo-google-fonts/carlito/400Regular_Italic/Carlito_400Regular_Italic.ttf",
+                              "sha256":  "074cd1b89d53765d90d0ed3b4bfe49523efaaf4f3f430c006bc3233778b0ebb5",
+                              "added":  1,
+                              "removed":  true
+                          },
+                          {
+                              "file":  "node_modules/@expo-google-fonts/carlito/700Bold/Carlito_700Bold.ttf",
+                              "sha256":  "51edbfa32d8af939913ae1f4ad0a5173e32083499218c133384638090295f0b0",
+                              "added":  1,
+                              "removed":  true
+                          },
+                          {
+                              "file":  "node_modules/@expo-google-fonts/carlito/700Bold_Italic/Carlito_700Bold_Italic.ttf",
+                              "sha256":  "25f5672c1985d168d6bc2973864fc5a7e374bb95fe8d0f91cff47ae17fa67691",
+                              "added":  1,
+                              "removed":  true
+                          }
+                      ],
+    "child":  {
+                  "pid":  26616,
+                  "startedAt":  "2026-10-05T19:07:30.9132090Z",
+                  "deadlineSeconds":  90,
+                  "timedOut":  false,
+                  "exitCode":  0,
+                  "finishedAt":  "2026-10-05T19:07:32.0137720Z"
+              },
+    "inputsUnchanged":  true,
+    "error":  null,
+    "finishedAt":  "2026-10-05T19:07:32.4668982Z",
+    "changedInputs":  [
+
+                      ]
+}
