@@ -22,7 +22,7 @@ pnpm add @openpresentation/opf
 # or: yarn add @openpresentation/opf
 ```
 
-Requires Node 24 starting with version 0.10.0. Earlier published versions retain their recorded runtime requirements.
+Requires Node 22 or later (`engines.node` `>=22`) from the release after 0.12.1. Versions 0.10.0 to 0.12.1 declared `24.x`, so npm on Node 22 or 26 silently installed an older release that matched (RR-20). Earlier published versions retain their recorded runtime requirements.
 
 ## Usage
 

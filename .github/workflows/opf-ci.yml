@@ -87,3 +87,51 @@ jobs:
         if: github.event_name == 'pull_request'
         continue-on-error: true
         run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
+
+  # RR-20: engines.node is the open-ended ">=22", so the range is tested. The verify job above stays on Node 24 (the
+  # development and evidence runtime); this job repeats install, build, the test suite and the packed installs on the
+  # oldest supported major and the current release.
+  node-range:
+    name: Node ${{ matrix.node }} (engines range)
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 26]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          node -e "console.log('Node', process.version)"
+          pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
+        env:
+          OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
+
+      - name: Verify packed package install
+        run: node packages/javascript/test/packed-install-smoke.mjs
+
+      - name: Verify packed CLI install
+        run: pnpm test:cli:packed
+
+      - name: Verify packed CLI with its optional render and PPTX peers
+        run: pnpm test:cli:packed:peers

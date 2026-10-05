@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Standalone consumer of the published OPF packages (RR-04, FF-10). Versions here must equal release-plan.json; prepare-consumer.mjs checks.",
   "engines": {
-    "node": "24.x"
+    "node": ">=22"
   },
   "dependencies": {
     "@expo-google-fonts/noto-color-emoji": "0.4.6",

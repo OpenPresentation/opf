@@ -1,5 +1,12 @@
 # Node 24 runtime migration
 
+> **Update (RR-20, 2026-10-05).** The `24.x` engine range was too narrow: npm's install picker skips a version
+> whose `engines.node` does not match the running Node and silently installs the newest one that does, so on Node 26
+> or 22 `npm i @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx` installed the 0.7.0
+> packages (no `export` or `render` command). The releases after core 0.12.1, CLI 0.10.0, opf-render 0.12.0,
+> opf-pptx 0.12.3 and opf-editor 0.11.2 declare `>=22` and are tested on Node 22, 24 and 26. Node 24 stays the
+> development and evidence runtime (`.nvmrc`); the rest of this page describes the original migration.
+
 The next coordinated releases require **Node 24 (`24.x`)**. This checkout uses
 the same runtime for development, CLI execution, package verification and site
 builds. Node 20 and 22 users must upgrade. Node 26 is outside the supported
