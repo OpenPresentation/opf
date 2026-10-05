@@ -87,8 +87,8 @@ export interface ResolvedScriptFonts extends ScriptFontSlots {
    * Supplemental theme font for the language's script. Present only when an explicit slot, the
    * design scheme's own script family or the language's font scheme supplies one; absent for
    * Latin, Cyrillic, Greek and for scripts with no script font. For Armenian, Georgian and
-   * Ethiopic (latin slot) a design `cs` scheme that serves the language replaces the language's
-   * own font scheme.
+   * Ethiopic (latin slot) an explicit `complexScript` slot or a design `cs` scheme that serves the
+   * language replaces the language's own font scheme.
    */
   supplement?: ScriptFontSupplement;
   sources: { eastAsian: ScriptFontSource; complexScript: ScriptFontSource };
@@ -419,13 +419,15 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   let supplement: ScriptFontSupplement | undefined;
   if (!latinSlotScripts.has(script)) {
     // A script the latin slot covers (Armenian, Georgian, Ethiopic) has no slot of its own, so its theme entry is the only
-    // place its script font is named, and the catalog labels the scheme of such a language `cs` (picker grouping). When the
-    // design font scheme is a `cs` scheme for the deck's language (its `languageFamily` is `cs` and its `languages` list is
-    // empty or names the language, source `schemeFamily`), the entry names that chosen family, not the language's catalog
-    // default (FF-46, opf#375: an Amharic deck on Ebrima wrote `Ethi` as Nyala, and PowerPoint listed Nyala in
-    // Presentation.Fonts). An explicit `complexScript` slot is not a choice for these scripts (it fills the Arabic, Indic and
-    // Thai text of any language), so it leaves the language's default in place.
-    const chosen = complexScript.source === "schemeFamily" ? complexScript : undefined;
+    // place its script font is named, and the catalog labels the scheme of such a language `cs` (picker grouping). The deck
+    // chooses the family for it through the complex-script slot, the only slot the catalog and the native FF-46 decks use for
+    // these scripts: an explicit `complexScript` pair (source `fontScheme`), or a `cs` scheme for the deck's language
+    // (its `languageFamily` is `cs` and its `languages` list is empty or names the language: `schemeFamily`). The entry then
+    // names that family, not the language's catalog default (FF-46, opf#375: an Amharic deck on Ebrima wrote `Ethi` as Nyala,
+    // and PowerPoint listed Nyala in Presentation.Fonts). A latin-only scheme, an `ea` slot and a `cs` scheme for another
+    // language name no family for these scripts, so the language's default stays. The `eastAsian` and `complexScript` scripts
+    // read their own resolved slot below, which already follows an explicit slot.
+    const chosen = complexScript.source === "fontScheme" || complexScript.source === "schemeFamily" ? complexScript : undefined;
     const families =
       scriptRole === "latin"
         ? (chosen ? { heading: chosen.heading, body: chosen.body } : languageFamilies)
