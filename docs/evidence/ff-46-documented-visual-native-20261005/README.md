@@ -86,3 +86,12 @@ These are scratch tools, outside the repository, built and run on the Windows ho
 - `compare.mjs`: this output. It reuses `compare-20261002.mjs` unchanged for the name checks.
 
 No Office application was opened by an agent.
+
+## Decisions and follow-up issues (2026-10-05, Windows supervisor, vetoable)
+
+| Finding | Decision | Issue |
+| --- | --- | --- |
+| Angsana New, DilleniaUPC, Sakkal Majalla and Traditional Arabic draw 40 to 68 % wider in the preview; Malgun Gothic, Nirmala UI, Ebrima and MS Gothic draw 4 to 8 % wider natively | RR-38 `sizeAdjust` rows (and `lineAscent` where the line height differs), measured in place and verified natively; never relabelled `metric` | [opf#361](https://github.com/OpenPresentation/opf/issues/361) |
+| The 11 passing families have no host fixtures of their own | Commission per-family fixtures in opf-render (node and browser), opf-editor and the gallery editor; the gate is unchanged | [opf#362](https://github.com/OpenPresentation/opf/issues/362) |
+| 27 families are not installed on the native host | The owner installs the Windows supplemental fonts, then the same deck set is re-run; until then the families stay unmeasured | [opf#363](https://github.com/OpenPresentation/opf/issues/363) |
+| 30 line boxes overflow in both the preview and PowerPoint (core's default measurement) | Composition uses the font registry's measurement by default when fonts are prepared; core's estimate stays the fallback | [opf#364](https://github.com/OpenPresentation/opf/issues/364) |
