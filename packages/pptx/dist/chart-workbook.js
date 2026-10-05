@@ -81,3 +81,44 @@ export function writeChartCategoryHeading(entries,chartPart,heading){
  }
  entries[context.workbookPart]=zipSync(workbook);
 }
+
+// PptxGenJS 4.0.1 writes broken range metadata into chart workbooks (upstream gitbrent/PptxGenJS#1531): the
+// category-chart branch (bar, line, area, pie, doughnut, radar, and the classic fallback of chartex charts) ends the
+// table ref with a stray apostrophe (ref="A1:C7'"), the bubble branch takes the table's last row from its column
+// count, and the category sheet dimension counts one label column (too narrow for multi-level categories). Keynote
+// drops every chart whose embedded table ref does not parse (opf-pptx#162); Excel repairs the workbook when the chart
+// data is opened. Each worksheet dimension and each table (and table autoFilter) ref that starts at the sheet's first
+// data cell is set to the cell range the sheet actually holds (a correct range is left as it is).
+// `workbook` maps the unzipped workbook part names to bytes and is changed in place.
+const columnNumber=letters=>[...letters].reduce((value,letter)=>value*26+letter.charCodeAt(0)-64,0);
+const columnName=number=>{let name='';for(let n=number;n>0;n=Math.floor((n-1)/26))name=String.fromCharCode(65+(n-1)%26)+name;return name;};
+export function usedRange(sheetXml){
+ let minColumn=Infinity,minRow=Infinity,maxColumn=0,maxRow=0;
+ for(const [,letters,digits]of sheetXml.matchAll(/<c\b[^>]*?\br="([A-Z]{1,3})(\d{1,7})"/g)){
+  const column=columnNumber(letters),row=Number(digits);
+  minColumn=Math.min(minColumn,column);minRow=Math.min(minRow,row);maxColumn=Math.max(maxColumn,column);maxRow=Math.max(maxRow,row);
+ }
+ return maxRow?{start:`${columnName(minColumn)}${minRow}`,end:`${columnName(maxColumn)}${maxRow}`,ref:`${columnName(minColumn)}${minRow}:${columnName(maxColumn)}${maxRow}`,columns:maxColumn-minColumn+1}:undefined;
+}
+export function repairChartWorkbookRanges(workbook){
+ for(const sheetPart of Object.keys(workbook)){
+  if(!/^xl\/worksheets\/[^/]+\.xml$/.test(sheetPart))continue;
+  const sheet=decoder.decode(workbook[sheetPart]),range=usedRange(sheet);
+  if(!range)continue;
+  const fixedSheet=sheet.replace(/(<dimension\b[^>]*\bref=")[^"]*(")/,(_match,prefix,suffix)=>`${prefix}${range.ref}${suffix}`);
+  if(fixedSheet!==sheet)workbook[sheetPart]=encoder.encode(fixedSheet);
+  const slash=sheetPart.lastIndexOf('/');
+  const relationships=xml(workbook,`${sheetPart.slice(0,slash+1)}_rels/${sheetPart.slice(slash+1)}.rels`);
+  for(const rel of array(relationships?.Relationships?.Relationship)){
+   const ref=relationship(workbook,sheetPart,rel.Id);
+   if(!ref?.type?.endsWith('/table')||!workbook[ref.path])continue;
+   const table=decoder.decode(workbook[ref.path]);
+   // Only a table anchored at the sheet's first data cell (every PptxGenJS chart table) is resized.
+   const start=/<table\b[^>]*\bref="\$?([A-Z]+)\$?(\d+)/.exec(table);
+   if(!start||`${start[1]}${start[2]}`!==range.start)continue;
+   const fixed=table.replace(/(<(?:table|autoFilter)\b[^>]*\bref=")[^"]*(")/g,(_match,prefix,suffix)=>`${prefix}${range.ref}${suffix}`);
+   if(fixed!==table)workbook[ref.path]=encoder.encode(fixed);
+  }
+ }
+ return workbook;
+}

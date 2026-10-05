@@ -4,7 +4,7 @@ import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {giveNotesMastersOwnThemes} from './master-themes.js';
-import {readChartCategoryHeading,writeChartCategoryHeading} from './chart-workbook.js';
+import {readChartCategoryHeading,writeChartCategoryHeading,repairChartWorkbookRanges} from './chart-workbook.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
@@ -3623,7 +3623,8 @@ function normalizePartReferences(value, renameMaps) {
 }
 
 function normalizeNestedZip(bytes, context) {
-  const entries = unzipSync(bytes);
+  // RR-17 (opf-pptx#162): valid table and dimension ranges, or Keynote drops the chart (see chart-workbook.js).
+  const entries = repairChartWorkbookRanges(unzipSync(bytes));
   const output = {};
   for (const path of Object.keys(entries).sort()) {
     // A gap in the chart data is a blank workbook cell, not a numeric cell with an empty value.
