@@ -105,6 +105,9 @@ function runChild(scenario) {
     ...(scenario.sandbox ? noFontsEnv : {}),
     OPF_MATRIX_ENGINES: engines,
     OPF_MATRIX_OUT: childOut,
+    // RR-45: every grid child verifies the decks in one thread. The sandbox scenario's permission model forbids worker
+    // threads, and the grid compares each child with the baseline, so all children take the same path.
+    OPF_MATRIX_WORKERS: '1',
     OPF_DET: JSON.stringify({clock: scenario.clock, stress: scenario.stress, audit: scenario.audit, sandbox: scenario.sandbox, fontDirectories}),
     ...(scenario.systemFonts ? {OPF_MATRIX_SYSTEM_FONTS: '1'} : {}),
     ...(scenario.decoys ? {OPF_MATRIX_FONT_DIRS: decoys} : {})
