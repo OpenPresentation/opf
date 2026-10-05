@@ -106,6 +106,16 @@ try {
   const beforeData=await readFile(path.join(temp,'data-deck.json'),'utf8');
   run(['import-data','-','--as','chart','--into','data-deck.json','--in-place'],{input:'x,y\nQ1,not-numeric',status:1});
   assert.equal(await readFile(path.join(temp,'data-deck.json'),'utf8'),beforeData);
+  // RR-54: --dataset writes the data into the top-level datasets map and references it.
+  const shared=run(['import-data','data.csv','--as','chart','--series','["Revenue"]','--dataset','revenue']).json;
+  assert.deepEqual(shared.slides[0].chart.data,{dataset:'revenue'});
+  assert.deepEqual(shared.datasets.revenue.rows,[['Q1',12],['Q2',18]]);
+  assert.equal(shared.datasets.revenue.source.src,'data.csv');
+  run(['import-data','data.csv','--as','table','--into','data-deck.json','--dataset','revenue','--in-place']);
+  const withDataset=JSON.parse(await readFile(path.join(temp,'data-deck.json'),'utf8'));
+  assert.deepEqual(withDataset.slides.at(-1).table,{dataset:'revenue'});
+  assert.deepEqual(withDataset.datasets.revenue.columns,['Quarter','Revenue','Cost']);
+  run(['import-data','data.csv','--as','table','--dataset','bad id'],{status:2});
   run(['import-data','data.csv','--as','table','--path','/slides/0/table'],{status:2});
   run(['import-data','data.csv','--as','chart','--series','Revenue'],{status:2});
   const styled={slides:[{table:{rows:[[{value:'Merged',rowSpan:2,colSpan:2,style:{fill:'#12345680',padding:{left:0},borders:{top:{color:'#ABCDEF',width:2,dash:'dot'}}}},null],[null,null]]}}]};
