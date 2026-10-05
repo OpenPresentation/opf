@@ -253,6 +253,13 @@ decision below), so a `cs` value would not be applied to their text. Their
 catalog font scheme is labelled `cs` for picker grouping only. FF-12 checks the
 classification natively.
 
+When the design font scheme is itself a `cs` scheme for the deck's language (its `languageFamily` is `cs` and its
+`languages` list is empty or names the language: source `schemeFamily`), that scheme's family is the script font for
+these three scripts too, and the per-script entry names it instead of the language's catalog default (FF-46, opf#375:
+an Amharic deck on Ebrima wrote `Ethi` as Nyala, and PowerPoint listed Nyala in `Presentation.Fonts`). A `cs` scheme
+for another language, a scheme without a `cs` label and the explicit `complexScript` / `eastAsian` slots do not name a
+family for these scripts, so the language's default stays.
+
 **Who implements what.**
 
 | Part | Implementation |
