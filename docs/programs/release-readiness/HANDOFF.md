@@ -1,6 +1,6 @@
-# Release readiness: handoff of 2026-10-03
+# Release readiness: handoff of 2026-10-05
 
-Written by the supervisor session on 2026-10-03. It replaces the handoff of 2026-10-02 (written before the old Windows
+Written by the supervisor session, refreshed 2026-10-05 (first written 2026-10-03). It replaces the handoff of 2026-10-02 (written before the old Windows
 machine was shut down). A new supervisor resumes from this file, [README.md](README.md) (goal, definition of done,
 invariants, decision log, resume protocol) and [burndown.md](burndown.md) (items, the **Now** work queue, progress log).
 Nothing in this file overrides the README's invariants.
@@ -12,15 +12,27 @@ Nothing in this file overrides the README's invariants.
   pull request a Now row links.
 - Published and verified (npm `latest`, `gitHead` = release merge commit, SLSA provenance, `npm audit signatures`):
   `@openpresentation/opf` **0.12.1** (2026-10-03, the first train run by `scripts/release-train.mjs`), `opf-render` 0.12.0,
-  `opf-pptx` **0.12.2**, `opf-editor` **0.11.2**, `@openpresentation/cli` 0.10.0. The three sites run this set
-  (pptx-gallery adopted core 0.12.1 in [pptx-gallery#94](https://github.com/Data-Advantage/pptx-gallery/pull/94)). The patch
-  releases are described in the addendum of [release-notes-0.12.0.md](release-notes-0.12.0.md).
+  `opf-pptx` **0.12.3** (2026-10-05, via `scripts/release-train.mjs`: gitHead `11889646` = the tag; it fixes the embedded
+  workbook table range that made Keynote drop category charts, opf-pptx#162 and opf-pptx#163), `opf-editor` **0.11.2**,
+  `@openpresentation/cli` 0.10.0. The three sites run this set (pptx-gallery#94 and #96, openpresentation-site#75 and #76,
+  pptx-dev#92; the opf-editor lockfile stays as it is by precedent, its CI links siblings through `ecosystem.lock.json`).
+  The patch releases up to 0.12.2 are described in the addendum of [release-notes-0.12.0.md](release-notes-0.12.0.md); 0.12.3
+  is not in it yet. Core's release plan records 0.12.3 in [opf#346](https://github.com/OpenPresentation/opf/pull/346).
+- Hosting: openpresentation.org and pptx.gallery run on Cloudflare Workers (cut over 2026-10-05 with zero downtime; rollback is
+  `proxied=false` on the DNS record); pptx.dev is still on Vercel. See
+  [docs/programs/cloudflare-hosting/](../cloudflare-hosting/README.md).
+- Upstream: PptxGenJS is dormant ([gitbrent/PptxGenJS#1537](https://github.com/gitbrent/PptxGenJS/pull/1537) submitted);
+  the migration to the maintained fork `pptxgenjs-plus` (MIT) is in progress for opf-pptx 0.13.0
+  ([opf-pptx#165](https://github.com/OpenPresentation/opf-pptx/pull/165), throwaway ecosystem run
+  [opf#344](https://github.com/OpenPresentation/opf/pull/344)).
 - Open pull requests (all repositories): [opf#335](https://github.com/OpenPresentation/opf/pull/335) (RR-53 core contract
-  tier, ready, parked), [opf#325](https://github.com/OpenPresentation/opf/pull/325) (draft, RR-20 release plan) and
-  [opf#308](https://github.com/OpenPresentation/opf/pull/308) (draft, an old RR-17 placeholder for script-face
-  documented-visual measurements; Windows host). The siblings and the three sites have none open.
+  tier, ready, parked), [opf#346](https://github.com/OpenPresentation/opf/pull/346) (RR-20 release plan for opf-pptx
+  0.12.3) and [opf#308](https://github.com/OpenPresentation/opf/pull/308) (draft, an old RR-17 placeholder for script-face
+  documented-visual measurements; Windows host). The opf-pptx migration PR (opf-pptx#165) is also open. opf#325 and the lock
+  roll (opf#345) are merged.
 - Native PowerPoint evidence is under `docs/evidence/` (`ff-46-native-0.12-20261002`, `rr-42-native-20261002`,
-  `rr-17-viet-supplement-native-20261002`, `ff-05-native-20261002`, `rr-05-cjk-native-20261002`, `rr-05b-native-20261002`).
+  `rr-17-viet-supplement-native-20261002`, `ff-05-native-20261002`, `rr-05-cjk-native-20261002`, `rr-05b-native-20261002`);
+  Keynote evidence (opf#341) is under `docs/evidence/mac-checks-20261002/keynote`.
 
 ## Open, and who it waits on
 
@@ -37,11 +49,10 @@ Owner actions:
   protection bypass secret and the `PREVIEW_SMOKE_ENABLED` variable.
 - RR-14 launch: Vercel flags (`UNDERSTAND_DECK_ENABLED`, `NEXT_PUBLIC_UNDERSTAND_DECK`, `UNDERSTAND_DECK_ALLOWLIST`), the AI
   Gateway with the $50 per month limit, rotate the old key if the removed `.env.example` value was real.
-- [opf#325](https://github.com/OpenPresentation/opf/pull/325): an OK on removing two obsolete gallery-tracker override rules
-  (the agent's edit was refused by the permission check). The PR also needs core 0.12.1 added to the release plan (example
-  ref `c7ac1d7`, opf ref `1f698c4`, opf-editor 0.11.2, opf-pptx 0.12.2).
+- Cloudflare: set the Worker secrets for pptx.dev (`scripts/cf-secrets.sh`) and provide a release build with the Clerk
+  publishable key and `CONVEX_DEPLOY_KEY`; the pptx.dev cutover waits on both (CF program).
 - Didot reroute decision (keep the Didone look-alike Playfair Display, or a metric-closer face; README open decisions).
-- Review of [release-notes-0.12.0.md](release-notes-0.12.0.md) with its 0.12.1 / 0.12.2 / 0.11.2 addendum.
+- Review of [release-notes-0.12.0.md](release-notes-0.12.0.md) with its 0.12.1 / 0.12.2 / 0.11.2 addendum (0.12.3 still to add).
 - RR-19 leftovers: the 19 kept worktrees with uncommitted or unpushed work (the list is in the supervisor's scratchpad
   `wt-kept.txt`; e.g. opf-pptx ff-32 rich-metadata, rich-source and extension worktrees, pptx-gallery gallery41/42/44-45
   reviews, pptx-dev app58 with 266 modified files), and the `archive-*`, `shared-furniture-*` and `claude/*` branches.
@@ -54,11 +65,11 @@ on the Mac mini): FF-12 re-run of `lang-ja-meiryo` and the missing sample decks 
 measurements ([opf#308](https://github.com/OpenPresentation/opf/pull/308)), FF-27 renumber observation (RR-03), and the
 native pass on the published set (RR-20).
 
-Mac mini: the **Keynote run is blocked on a dialog** that only the owner can dismiss. The 20-deck set is at
-`<scratchpad>/wt/ci-shards/keynote-set` (`RUN.md`, `manifest.json`, `decks/`, `compare.mjs`, `build.mjs`, and
-`keynote-one.sh`); it was built with opf-pptx 0.12.1 and should be rebuilt with 0.12.2 (change the version in
-`package.json`, `npm install`, `node build.mjs`). Keynote is opened read-only, never saved, only by the supervisor. Evidence
-then goes to `docs/evidence/mac-checks-<date>/keynote/`.
+Mac mini: the Keynote checks are done (2026-10-05, opf#341): the 20-deck set on opf-pptx 0.12.2 lost 6 native category charts; the
+fixed decks (built from the fix branch before the release) have 0 failures. The PowerPoint re-check of the fix goes with the
+Windows runs in opf#323. Keynote is opened read-only, never saved, only by the supervisor.
+
+Open observation: the openpresentation-site playground e2e `tests/e2e/code-editing.spec.ts` flaked twice (root cause open).
 
 Parked: [opf#335](https://github.com/OpenPresentation/opf/pull/335) (ready, not merged) until the merge queue is enabled.
 
@@ -67,7 +78,7 @@ Parked: [opf#335](https://github.com/OpenPresentation/opf/pull/335) (ready, not 
 - `scripts/release-train.mjs` (`plan`, `prep`, `tag`, `verify`, `run`; `verify --wait`) and the plan-only
   `release-train.yml` (RR-51); the release procedure stays in [docs/release-process.md](../../release-process.md).
 - `ecosystem.lock.json`, `scripts/ecosystem-lock.mjs` and `scripts/ecosystem-roll.mjs` (RR-50): the pins are bot-owned; roll
-  by dispatching the roller and open the PR yourself until the App exists; `Depends-On:` trailers for cross-repository PRs.
+  by dispatching the roller and open the PR yourself until the App exists (the 2026-10-05 roll, run 37284305990, is opf#345); `Depends-On:` trailers for cross-repository PRs.
 - `scripts/quarantine.mjs` and `test/QUARANTINE.md` (RR-47): flake quarantine with a supervisor approval note.
 - Changelog fragments: `changes/<slug>.md`, assembled by `node scripts/changelog-fragments.mjs assemble --version X.Y.Z` in
   the release-prep PR (RR-46); test files are globbed by `scripts/run-tests.mjs`.
