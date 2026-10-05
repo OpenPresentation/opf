@@ -14,9 +14,9 @@ The owner's direction (2026-10-03), restated:
 
 Sites in scope (the libraries and packages are not hosted and do not change):
 
-- openpresentation-site: openpresentation.org. The pilot (CF-01).
-- pptx-gallery: pptx.gallery (CF-02).
-- pptx-dev: pptx.dev, api.pptx.dev and mcp.pptx.dev. The hard one (CF-03).
+- [openpresentation-site](https://github.com/Data-Advantage/openpresentation-site): openpresentation.org. The pilot (CF-01).
+- [pptx-gallery](https://github.com/Data-Advantage/pptx-gallery): pptx.gallery (CF-02).
+- [pptx-dev](https://github.com/Data-Advantage/pptx-dev): pptx.dev, api.pptx.dev and mcp.pptx.dev. The hard one (CF-03).
 
 Target: Next.js on Cloudflare Workers through OpenNext (`@opennextjs/cloudflare`), static assets on Workers static
 assets, secrets as Worker secrets, DNS on the Cloudflare zones the domains already use. Vercel keeps serving each site
