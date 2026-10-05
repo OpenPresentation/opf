@@ -65,3 +65,10 @@ deck 03's findings changed (FAIL to WARN, exact text match).
   `node bisect/build.mjs`. Then run `for f in decks/*.pptx; do ./keynote-one.sh $(basename $f .pptx); done` on a Mac with
   Keynote, followed by `node compare.mjs` and `node bisect/judge.mjs`. `lib/decks.mjs` reads `examples/gallery` from this
   checkout; set `OPF_GALLERY` when the folder is copied elsewhere.
+
+## Re-check with the fix (2026-10-05, supervisor)
+
+The same 20 decks rebuilt with opf-pptx#163 (embedded workbook table refs repaired) were opened read-only in Keynote
+15.1.1, exported to PDF and PowerPoint, and closed without saving. Result: PASS 0, WARN 20, FAIL 0, MISSING 0; no
+"chart lost" finding. Every native chart survives (deck 09: 8 of 8, deck 10: 6 of 6, the gallery decks' charts); deck 11's
+chartex families still degrade as expected (no Keynote equivalent). Report: [compare-report-fix.md](compare-report-fix.md).
