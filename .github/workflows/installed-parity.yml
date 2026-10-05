@@ -28,7 +28,7 @@ on:
   workflow_dispatch:
     inputs:
       overrides:
-        description: 'Replace planned versions, e.g. "@openpresentation/opf-pptx@0.12.2" (default: release-plan.json)'
+        description: 'Replace planned versions, e.g. "@openpresentation/opf-pptx@0.12.3" (default: release-plan.json)'
         required: false
         default: ''
 permissions:
