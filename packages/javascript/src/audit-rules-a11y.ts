@@ -2,6 +2,7 @@ import { chartPaletteForFill } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
+import { timelineTextColor } from './timeline-status.js';
 import { resolveChartData } from './chart-data.js';
 import type { AuditDiagnostic, AuditFix } from './audit-types.js';
 import { type AuditContext, type AuditRule, type SlideContext, rule } from './audit-context.js';
@@ -128,7 +129,7 @@ function collectSamples(context: SlideContext): TextSample[] {
 				parts.push({
 					path: typeof part.path === 'string' && part.path.startsWith('slides.') ? pointerOfDotted(part.path) : itemPath,
 					sizePx: part.fit.fontSize / scale,
-					color: role === 'footer' ? design.colors.mutedText : role === 'value' && item.metricLayout ? design.colors.primary : design.colors.text,
+					color: role === 'footer' ? design.colors.mutedText : role === 'value' && item.metricLayout ? design.colors.primary : item.timelineLayout ? timelineTextColor(part as { status?: 'done' | 'current' | 'planned' }, { background: design.colors.background, primary: design.colors.primary, text: design.colors.text, mutedText: design.colors.mutedText }) : design.colors.text,
 					label: item.field === 'quote' ? (role === 'footer' ? 'Quote attribution' : 'Quote') : item.field === 'metric' ? (role === 'value' ? 'Metric value' : 'Metric label') : 'Timeline text',
 				});
 			}

@@ -1200,11 +1200,18 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
-export interface TimelineEvent { when?: string; what: string; description?: string }
+/** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
+export type TimelineStatus = 'done' | 'current' | 'planned';
+const TIMELINE_STATUS_VALUES: readonly string[] = ['done', 'current', 'planned'];
+/** The 'current' ring is this multiple of the marker radius. */
+const TIMELINE_RING_RATIO = 1.6;
+export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus }
 export interface TimelineContent { name?: string; description?: string; events: TimelineEvent[] }
 export interface TimelineTextPart {
   role: 'name' | 'description' | 'when' | 'what' | 'event-description';
   eventIndex?: number;
+  /** The event's status; absent for metadata parts and for events without a status. */
+  status?: TimelineStatus;
   path: string;
   text: string;
   sources: {path:string;start:number;end:number}[];
@@ -1227,7 +1234,12 @@ export interface TimelineLayout {
   textMeasurement: 'provided' | 'estimated';
   textOutlines: 'provided' | 'unavailable';
   parts: TimelineTextPart[];
-  markers: {path:string;eventIndex:number;x:number;y:number;radius:number}[];
+  /**
+   * One marker per event. `radius` is the marker's own radius; `status` repeats the event's status
+   * (absent without one). A 'current' marker also has `ring.radius`, the outer radius of the ring
+   * around it, and a 'current' or 'planned' marker has the `strokeWidth` of its outline and ring.
+   */
+  markers: {path:string;eventIndex:number;x:number;y:number;radius:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
   diagnostics: TimelineLayoutDiagnostic[];
   overflow: boolean;
@@ -1242,6 +1254,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     timeline.events.some(event=>!event||typeof event.what!=='string'||[event.when,event.description].some(field=>field!==undefined&&typeof field!=='string'))) {
     throw new TypeError('Timeline content requires ordered events with string labels and optional string metadata.');
   }
+  if(timeline.events.some(event=>event.status!==undefined&&!TIMELINE_STATUS_VALUES.includes(event.status)))throw new TypeError("Timeline event status must be 'done', 'current' or 'planned'.");
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale;
   if(![box.x,box.y,box.width,box.height,scale,minimum,padding].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding.');
   if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
@@ -1251,8 +1264,10 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const fonts=resolveFontFamilies(options.fonts),source:TimelineTextPart[]=[];
   const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,size:number,weight:number,eventIndex?:number)=>{
     if(text===undefined)return;
-    const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:weight,italic:false,path:partPath};
-    source.push({role,eventIndex,path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
+    // A current event's label is bold ("we are here"); every other part keeps its weight.
+    const status=eventIndex===undefined?undefined:timeline.events[eventIndex]!.status;
+    const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:status==='current'&&role==='what'?700:weight,italic:false,path:partPath};
+    source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
   timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,16,500,index);add('what',event.what,`${eventPath(index)}.what`,16,500,index);add('event-description',event.description,`${eventPath(index)}.description`,16,500,index);});
@@ -1299,25 +1314,34 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       let y=box.y;
       for(const part of metadata){const placed=place(part,box.x,y,box.width,'center');y+=placed.box.height+8*scale;}
       const available=box.y+box.height-y,count=events.length,radius=Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,available)*.04);
+      // Status geometry (FA-11): only a 'current' event gets a ring, and only a 'current' or 'planned' marker has an outline.
+      const statusOf=(index:number)=>timeline.events[index]!.status,ringRadius=radius*TIMELINE_RING_RATIO,strokeWidth=Math.min(2*scale,radius/2);
+      const hasRing=timeline.events.some(event=>event.status==='current');
+      const marker=(index:number,x:number,y:number):TimelineLayout['markers'][number]=>{
+        const status=statusOf(index);
+        return {path:eventPath(index),eventIndex:index,x,y,radius,...(status?{status}:{}),...(status==='current'?{ring:{radius:ringRadius}}:{}),...(status==='current'||status==='planned'?{strokeWidth}:{})};
+      };
       if(arrangement==='alternating'){
         const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
         const lineY=y+Math.max(scale,available)*.46;
         events.forEach((fields,index)=>{
           const x=start+(rtl?count-1-index:index)*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
-          markers.push({path:eventPath(index),eventIndex:index,x,y:lineY,radius});let cursor=top;
+          markers.push(marker(index,x,lineY));let cursor=top;
           for(const part of fields){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);}
         });
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
-        const x=rtl?box.x+box.width-radius:box.x+radius,textX=rtl?box.x:box.x+24*scale,width=box.width-24*scale;
+        // A ring widens the rail, and the text keeps its usual distance from the marker's edge.
+        const lead=hasRing?ringRadius:radius,gap=24*scale+(lead-radius);
+        const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;
           for(const part of fields){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;}
-          markers.push({path:eventPath(index),eventIndex:index,x,y:top+Math.min(first?.box.height??2*radius,2*radius)/2,radius});
+          markers.push(marker(index,x,top+Math.min(first?.box.height??2*radius,2*radius)/2));
           y+=16*scale;
         });
       }
-      for(const marker of markers)if(marker.x-marker.radius<box.x-.01||marker.y-marker.radius<box.y-.01||marker.x+marker.radius>box.x+box.width+.01||marker.y+marker.radius>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}
+      for(const marker of markers){const extent=marker.ring?.radius??marker.radius;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const first=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(first.x,last.x),y1:first.y,x2:Math.max(first.x,last.x),y2:last.y}:{x1:first.x,y1:first.y,x2:last.x,y2:last.y};
       const candidate={arrangement,parts,markers,connector,diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;

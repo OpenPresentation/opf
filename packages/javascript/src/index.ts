@@ -116,7 +116,7 @@ export type {CodeContent,CodeLineSegment,CodeLineSource,CodeTextFit,CodeTextPart
 export {layoutMetric} from './composition.js';
 export type {MetricContent,MetricTextSource,MetricTextPart,MetricLayoutDiagnostic,MetricLayout,MetricLayoutOptions} from './composition.js';
 export {layoutTimeline} from './composition.js';
-export type {TimelineEvent,TimelineContent,TimelineTextPart,TimelineLayoutDiagnostic,TimelineLayout,TimelineLayoutOptions} from './composition.js';
+export type {TimelineStatus,TimelineEvent,TimelineContent,TimelineTextPart,TimelineLayoutDiagnostic,TimelineLayout,TimelineLayoutOptions} from './composition.js';
 export type { FontSchemeDiagnostic, ResolvedFontScheme } from "./composition.js";
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Composition, LayoutBox, LayoutDiagnostic, TextFit, ComposedItem, ComposedSlideImage, SlideImageShape, ComposedGroup, ComposedFlow, CompositionTrack, CompositionPenalties, CompositionCandidate, CompositionDecision, CompositionExplanation, SlideComposition, ComposeSlideOptions } from "./composition.js";
 export { resolveLogo, PICTURE_BULLET_SCALE } from './composition.js';
@@ -190,6 +190,8 @@ export {
 export type { CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind } from './code-syntax.js';
 export { METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, metricTrendColor, metricTrendMark, metricTrendPoints } from './metric-trend.js';
 export type { MetricTrend, MetricTrendColorOptions, MetricTrendMark } from './metric-trend.js';
+export { TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor } from './timeline-status.js';
+export type { TimelineMarkerShape, TimelineStatusColors } from './timeline-status.js';
 export { PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitmap, patternRuns, resolvePatternPreset } from './pattern-fills.js';
 
 export { SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_FAMILIES, symbolFontEncodingFor, isSymbolEncodedFamily, symbolCodeOf, symbolUnicodeFor, symbolCodeForUnicode, mapSymbolText } from './symbol-font-encodings.js';

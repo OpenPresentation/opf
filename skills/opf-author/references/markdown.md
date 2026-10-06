@@ -49,7 +49,7 @@ Q2,18
 ````
 
 - Front matter is the deck (every property except `slides`); `---` lines separate slides.
-- `#` is the title and `##` the subtitle; paragraphs, lists, `>` quotes, fenced code, pipe tables, image lines (alt text, source, optional title) and the `chart`, `metric` and `timeline` fences are the content. One block becomes a root field (`text`, `items`, ...), several become `blocks`.
+- `#` is the title and `##` the subtitle; paragraphs, lists, `>` quotes, fenced code, pipe tables, image lines (alt text, source, optional title) and the `chart`, `metric` and `timeline` fences are the content (a timeline event line starts with `[x]`, `[>]` or `[ ]` for status done, current or planned). One block becomes a root field (`text`, `items`, ...), several become `blocks`.
 - `<!-- slide: id=... layout=... section=... tag=... hidden -->` sets slide fields; `<!-- block: id=... type=... as=bullets|video region=top:left -->` sets a block's id, type, storage or promoted region.
 - Anything else (design, composition, nested groups, extensions) goes in a fenced `opf-slide` or `opf-block` block of YAML, which is also what `to-md` writes for it.
 

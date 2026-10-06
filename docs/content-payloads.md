@@ -262,7 +262,7 @@ Quote-specific fields are grouped under `quote`. A string value is shorthand for
 
 ## Timeline
 
-Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, and `description`.
+Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
 
 ```json
 {
@@ -283,6 +283,19 @@ Timeline-specific fields are grouped under `timeline`. An array value is shortha
       }
     ]
   }
+}
+```
+
+A roadmap with progress states:
+
+```json
+{
+  "title": "Product roadmap",
+  "timeline": [
+    { "when": "Q1", "what": "Discovery", "status": "done" },
+    { "when": "Q2", "what": "Pilot", "status": "current" },
+    { "when": "Q3", "what": "Rollout", "status": "planned" }
+  ]
 }
 ```
 

@@ -16,7 +16,10 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Quote | `{"quote":{"text":"Quoted words","attribution":"Source speaker","source":"Source reference"}}` |
 | Code | `{"code":{"source":"const answer = 42;","language":"javascript"}}` |
 | Timeline | `{"timeline":[{"when":"Now","what":"Prototype"},{"when":"Next","what":"Review"}]}` |
+| Timeline with progress | `{"timeline":[{"when":"Q1","what":"Discovery","status":"done"},{"when":"Q2","what":"Pilot","status":"current"},{"when":"Q3","what":"Rollout","status":"planned"}]}` |
 | Nested group | `{"composition":{"mode":"column"},"blocks":[{"text":"One"},{"text":"Two"}]}` |
+
+Timeline `status` is progress only: `done` (filled marker), `current` ("we are here": ringed marker, bold label) and `planned` (hollow marker, muted text). Mark at most one event `current`, and write risk or blockers in the event text, not in a status. [A complete roadmap](../assets/roadmap-status.opf.json) shows all three.
 
 These numeric examples are illustrative; replace them only with supported data. Chart type strings must resolve to actual catalog IDs or supported chart types. A richer chart record does not guarantee the current renderer implements every visual detail. A chart takes optional `axisTitles` (`{"category":"Quarter","value":"Revenue ($M)"}`), `legend` (`none`, `top`, `bottom`, `left`, `right`) and `dataLabels` (`true`, or `{"content":["value"],"position":"outside-end"}`); omit them to keep the engine defaults, and see `docs/chart-options.md` for what each chart type supports (an option a type cannot show is dropped with a `chart-option-adapted` diagnostic).
 

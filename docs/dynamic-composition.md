@@ -237,6 +237,27 @@ Check `overflow` and `diagnostics` before accepting the parts. Invalid available
 
 Browser glyph bounds can extend slightly beyond advance-based part boxes into the reserved inset. Current loaded-font tests record those overhangs, verify glyph containment inside the full quote cell and check body/footer separation. Native PowerPoint fixtures separately verify text, sizes, cell containment, save/reopen and reimport. Neither test establishes universal pixel equivalence. Original requested-font provenance through host substitutions and non-quote payload internals remain open requirements.
 
+## Timeline internals
+
+`layoutTimeline(value, box, options)` (`timeline-flow-v1`) places an optional name and description, then the events as a marker on a connector with each event's `when`, `what` and `description` as separate text parts. It tries an alternating arrangement (labels above and below a horizontal connector) and a vertical one (a marker rail down the start edge, labels beside it), at most 50 candidates in all, and keeps the first that fits or the one with the fewest diagnostics. Right-to-left decks put the vertical rail on the right edge.
+
+### Event status (FA-11)
+
+`TimelineEvent.status` is `done`, `current` or `planned`. It is a progress state that the engines draw from the deck's own colors without judging it; schedule health (at risk, blocked) is deliberately not a status. Layout copies the status to `TimelineLayout.markers[i].status` and to each of that event's text parts (`TimelineTextPart.status`), and `timelineMarkerShapes(marker, colors)` and `timelineTextColor(part, colors)` turn it into the shapes and text color that both engines draw:
+
+| Status | Marker | Text |
+| --- | --- | --- |
+| absent | A filled circle in the primary color. | Normal text color. |
+| `done` | The same filled circle, so it looks like an event without a status. | Normal text color. |
+| `current` ("we are here") | The filled circle inside a ring: a 1.6 times larger circle with a primary-color outline over the slide background. | The label (`what`) is bold, in the normal text color. |
+| `planned` | A hollow-looking circle: a primary-color outline filled with the slide background. | All of the event's text is the muted secondary text color. |
+
+- **Geometry.** A marker's `radius` is its own radius. A `current` marker also has `ring.radius` (1.6 times the radius), and a `current` or `planned` marker has the `strokeWidth` of its outline (2 reference pixels at 720, at most half the radius). A ring that leaves the cell is reported as a `event-space` diagnostic like any marker. In the vertical arrangement a deck with a `current` event moves the rail and the text out by the ring's extra width so the text keeps its usual distance from the marker. Events without a status produce exactly the geometry and no extra keys they did before.
+- **Hollow means background-filled.** The outline of a hollow marker and the ring are drawn over the slide background color (in the SVG as the fill, in PPTX as a solid fill of the same color) so the connector does not cross them.
+- **Colors.** `timelineTextColor` returns `mutedText` for a planned event, lightened or darkened until it reaches 4.5:1 against the slide background (`TIMELINE_TEXT_MIN_CONTRAST`), and the normal text color otherwise. Outlines and rings are kept at 3:1 (`TIMELINE_OUTLINE_MIN_CONTRAST`); the filled marker keeps the primary color exactly.
+- **Bold label.** The weight is part of the layout, not a drawing detail: the `what` part of a `current` event is requested at weight 700, so line breaks and heights were measured bold.
+- **PPTX.** The marker is a native `ellipse` (solid primary fill for `done`, `current` and no status; background fill plus a primary line for `planned`), the ring is a second native `ellipse` (background fill plus a primary line), the bold label is a bold run, and planned text takes the muted color. The exporter records each event's status in the marker's `OPF_TIMELINE_V1` tag and the ring in a tag of its own, and the importer restores `status` from them; a deck whose marker or ring was edited away imports as ordinary text without status, like the rest of the timeline provenance. Status is also written in Markdown as a task-list prefix on the event line: `[x]` done, `[>]` current, `[ ]` planned.
+
 ## Resizing in the preview
 
 Choose **Arrange** in the editor to reveal track dividers. Drag a divider to redistribute the space between adjacent columns (row/grid) or rows (column), including nested groups. Arrow keys make small changes; Shift makes larger changes. Escape discards a pointer draft. One drag creates one undo step, and no content is removed. Strict overflow rejects a resize that violates its fit constraints.
