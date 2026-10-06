@@ -12,7 +12,7 @@ import { FileCommandError } from "./io.js";
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.12.0", [PPTX_PACKAGE]: "^0.12.0" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.12.2", [PPTX_PACKAGE]: "^0.12.4" } as const;
 
 export interface Diagnostic {
 	code: string;
