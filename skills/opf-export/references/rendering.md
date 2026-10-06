@@ -15,7 +15,7 @@ Each prints one JSON report (the `opf lint` shape: `ok`, `diagnostics` with `rul
 ## Prepared font inputs
 
 Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`
-(current coordinated set: core 0.12.0, renderer 0.12.0, PPTX 0.12.3, editor 0.11.2):
+(current coordinated set: core 0.13.0, renderer 0.13.1, PPTX 0.13.2, editor 0.12.1):
 
 ```js
 const {registry, options} = await prepareNodeFonts({

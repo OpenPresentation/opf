@@ -11,17 +11,17 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.12.1**,
-CLI **0.10.0**, renderer **0.12.0**, PPTX **0.12.3**, editor **0.11.2**). All of these packages declare
-`engines.node: 24.x`.
+Pin the coordinated set from `release-plan.json` (currently core **0.13.0**,
+CLI **0.11.0**, renderer **0.13.1**, PPTX **0.13.2**, editor **0.12.1**). All of these packages declare
+`engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
-node -v   # must be 24.x
-npm install @openpresentation/opf@0.12.1 \
-  @openpresentation/opf-render@0.12.0 \
-  @openpresentation/opf-editor@0.11.2 \
-  @openpresentation/opf-pptx@0.12.3 \
-  @openpresentation/cli@0.10.0
+node -v   # 24.x (verified); 22 and later are declared
+npm install @openpresentation/opf@0.13.0 \
+  @openpresentation/opf-render@0.13.1 \
+  @openpresentation/opf-editor@0.12.1 \
+  @openpresentation/opf-pptx@0.13.2 \
+  @openpresentation/cli@0.11.0
 ```
 
 Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)
@@ -70,7 +70,7 @@ import { prepareNodeFonts } from '@openpresentation/opf-render/fonts-node';
 const { options } = await prepareNodeFonts({ pack: 'base' });
 const fonts = resolveFontFamilies(fontSchemes.find(scheme => scheme.id === 'roboto'));
 const geometry = composeSlide(document.slides[0], { presentation: document, fonts, ...options });
-const { presentation, pages } = paginatePresentation(document, { fonts, ...options });
+const { presentation, pages } = paginatePresentation(document, options);
 ```
 
 `prepareNodeFonts({ pack: 'base' })` loads the bundled Roboto faces for
