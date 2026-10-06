@@ -1,0 +1,72 @@
+{
+  "chart1": [
+    {
+      "series": "<a:schemeClr val=\"accent1\"/>",
+      "points": []
+    },
+    {
+      "series": "<a:srgbClr val=\"4D5D7B\"/>",
+      "points": []
+    }
+  ],
+  "chart2": [
+    {
+      "series": "<a:srgbClr val=\"4D5D7B\"/>",
+      "points": [
+        {
+          "idx": 1,
+          "fill": "<a:schemeClr val=\"accent1\"/>"
+        }
+      ]
+    },
+    {
+      "series": "<a:srgbClr val=\"4D5D7B\"/>",
+      "points": [
+        {
+          "idx": 1,
+          "fill": "<a:schemeClr val=\"accent1\"/>"
+        }
+      ]
+    }
+  ],
+  "chart3": [
+    {
+      "series": "<a:schemeClr val=\"accent1\"/>",
+      "points": [
+        {
+          "idx": 0,
+          "fill": "<a:srgbClr val=\"4D5D7B\"/>"
+        },
+        {
+          "idx": 1,
+          "fill": "<a:schemeClr val=\"accent1\"/>"
+        },
+        {
+          "idx": 2,
+          "fill": "<a:srgbClr val=\"4D5D7B\"/>"
+        }
+      ]
+    }
+  ],
+  "chart4": [
+    {
+      "series": "<a:srgbClr val=\"4D5D7B\"/>",
+      "points": [
+        {
+          "idx": 2,
+          "fill": "<a:schemeClr val=\"accent1\"/>"
+        }
+      ]
+    },
+    {
+      "series": "<a:srgbClr val=\"4D5D7B\"/>",
+      "points": [
+        {
+          "idx": 2,
+          "fill": "<a:schemeClr val=\"accent1\"/>"
+        }
+      ]
+    }
+  ],
+  "muted": "4D5D7B"
+}

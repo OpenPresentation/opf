@@ -1,0 +1,60 @@
+{
+  "name": "FA-05 color roles and link colors",
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto",
+    "colorScheme": {
+      "id": "cool-horizon",
+      "hyperlink": "#AA3311"
+    }
+  },
+  "slides": [
+    {
+      "title": "Link with no color",
+      "text": [
+        {
+          "text": "Visit the "
+        },
+        {
+          "text": "OPF docs",
+          "link": "https://example.com/docs"
+        },
+        {
+          "text": " for details."
+        }
+      ]
+    },
+    {
+      "title": "Text on saturated red",
+      "design": {
+        "background": "#FF0000"
+      },
+      "text": [
+        {
+          "text": "Body text on red"
+        }
+      ]
+    },
+    {
+      "title": "Color roles",
+      "text": [
+        {
+          "text": "ref-accent ",
+          "color": "accent"
+        },
+        {
+          "text": "ref-accent3 ",
+          "color": "accent3"
+        },
+        {
+          "text": "ref-accent1 ",
+          "color": "accent1"
+        },
+        {
+          "text": "ref-primary ",
+          "color": "primary"
+        }
+      ]
+    }
+  ]
+}

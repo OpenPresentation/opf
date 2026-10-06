@@ -1,0 +1,7 @@
+{"item":"FA-13","check":"opens-read-only","expected":"opens, 3 slides","actual":"opened, 4 slides, ReadOnly=-1","pass":false,"note":"COM cannot report a silent repair directly; the per-slide shape checks below catch a repaired-away chart or shape"}
+{"item":"FA-13","check":"watermark-is-rotated-text-box","expected":"Rotation about 330 (= -30)","actual":"Rotation=330, HasTextFrame=-1, text=\"DRAFT\"","pass":true}
+{"item":"FA-13","check":"watermark-text-has-transparency","expected":"text fill Transparency about 0.85 (opacity 0.15)","actual":-2147483648,"pass":false,"note":"alpha 15000 in the run solidFill"}
+{"item":"FA-13","check":"watermark-behind-slide-content","expected":"ZOrderPosition lower than every other shape","actual":"watermark z=1, others min z=2","pass":true}
+{"item":"FA-13","check":"code-highlight-bands-are-rectangles","expected":"2 bands (lines 2-3 and line 5), each msoShapeRectangle (1)","actual":"bands=2, AutoShapeType 1,1","pass":true}
+{"item":"FA-13","check":"code-highlight-bands-behind-line-text","expected":"panel z \u003c every band z \u003c every body line z","actual":"panel z=3, band z=4,5, lowest line z=7","pass":true}
+{"item":"FA-13","check":"run-lang-sets-language-id","expected":"English run 1033, French run 1036, Japanese run 1041; French differs from the deck (English)","actual":"en=1033, fr=1036, ja=1041","pass":true,"note":"TextRange.LanguageID"}

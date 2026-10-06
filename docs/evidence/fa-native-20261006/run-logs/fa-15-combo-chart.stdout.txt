@@ -1,0 +1,8 @@
+{"item":"FA-15","check":"opens-read-only","expected":"opens, 1 slides","actual":"opened, 1 slides, ReadOnly=-1","pass":true,"note":"COM cannot report a silent repair directly; the per-slide shape checks below catch a repaired-away chart or shape"}
+{"item":"FA-15","check":"chart-present","expected":"a native chart on slide 1","actual":"HasChart=-1","pass":true}
+{"item":"FA-15","check":"two-series","expected":2,"actual":2,"pass":true}
+{"item":"FA-15","check":"series1-clustered-column","expected":"51 (xlColumnClustered)","actual":51,"pass":true}
+{"item":"FA-15","check":"series2-line-with-markers","expected":"65 (xlLineMarkers)","actual":65,"pass":true}
+{"item":"FA-15","check":"series2-secondary-axis-group","expected":"2 (xlSecondary)","actual":2,"pass":true}
+{"item":"FA-15","check":"secondary-value-axis-number-format-0pct","expected":"0%","actual":"0%","pass":true,"note":"Axes(xlValue=2, xlSecondary=2)"}
+{"item":"FA-15","check":"primary-value-axis-number-format-info","expected":"informational: primary axis uses the first column series format ($#,##0.0)","actual":"\\$#,##0.0","pass":null}

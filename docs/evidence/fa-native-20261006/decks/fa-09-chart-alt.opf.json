@@ -1,0 +1,161 @@
+{
+  "name": "FA-09 chart alt",
+  "design": {
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "Classic column with alt",
+      "chart": {
+        "type": "column",
+        "alt": "Revenue grew from 10 in Q1 to 20 in Q2 and fell to 15 in Q3.",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Waterfall (chartex) with alt",
+      "chart": {
+        "type": "waterfall",
+        "alt": "Waterfall from 10 up 20 down 8 to 22.",
+        "data": {
+          "columns": [
+            "Step",
+            "Value"
+          ],
+          "rows": [
+            [
+              "Start",
+              10
+            ],
+            [
+              "Up",
+              20
+            ],
+            [
+              "Down",
+              -8
+            ],
+            [
+              "End",
+              22
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Decorative column",
+      "chart": {
+        "type": "column",
+        "alt": "",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Existing extLst, alt text",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Existing extLst, decorative",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

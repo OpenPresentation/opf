@@ -1,0 +1,13 @@
+{
+  "name": "FA-13 preset 9:16",
+  "design": {
+    "fontScheme": "roboto",
+    "dimensions": "9:16"
+  },
+  "slides": [
+    {
+      "title": "Social 9:16",
+      "text": "A social-feed post."
+    }
+  ]
+}
