@@ -2,9 +2,10 @@
 // peers opf-render and opf-pptx (see peers.ts). The command reads the document, lints it with the same linter as
 // `opf lint`, prepares the bundled fonts, renders, and prints one JSON report. Nothing is written when the document is
 // invalid, a render error occurred or --strict found warnings.
-import { type PresentationPaginationOptions, lintSource, paginatePresentation } from "@openpresentation/opf";
+import { type PresentationPaginationOptions, paginatePresentation } from "@openpresentation/opf";
 import path from "node:path";
 import { createImageResolver } from "./assets.js";
+import { deckOf, inputFormatOf, lintText } from "./deck.js";
 import { embeddedFor, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
 import {
 	FileCommandError,
@@ -131,7 +132,8 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 
 	const { bytes } = await readBytes(input);
 	const raw = Buffer.from(bytes).toString("utf8"); // keeps a BOM, like opf lint, so hashes and offsets agree
-	const lint = lintSource(raw);
+	const inputFormat = inputFormatOf(input);
+	const lint = lintText(raw, inputFormat);
 	const reporter = new Reporter(lint.diagnostics);
 	const inputSha = sha256(raw);
 	const assetRoot = path.resolve(options["asset-dir"] === undefined ? (input === "-" ? "." : path.dirname(input)) : String(options["asset-dir"]));
@@ -156,7 +158,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		report({}, [], false);
 		return;
 	}
-	const prepared: Prepared = { deck: JSON.parse(raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw) as Record<string, unknown>, raw };
+	const prepared: Prepared = { deck: deckOf(raw, inputFormat), raw };
 	let deck: unknown = prepared.deck;
 	const resolver = createImageResolver(assetRoot, reporter);
 	const fonts = await prepareFonts(renderer, deck, userFonts, reporter);

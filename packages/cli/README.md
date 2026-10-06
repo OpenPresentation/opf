@@ -159,6 +159,12 @@ Bundle inlines every bundled catalog record the document references — includin
 ## Markdown and outlines
 
 `opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--strict]` converts Markdown in the OPF dialect (YAML front matter, `---` between slides, `#` title, lists, quotes, tables, `chart`, `metric` and `timeline` fences, `Note:` notes, `<!-- slide: ... -->` options) to a validated deck, and `opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]` writes a deck as that Markdown, which `from-md` reads back unchanged. Both print JSON reports and follow the exit codes above; Markdown errors carry `line` and `column`. Not in releases before the one that lists it in the changelog. See the [Markdown guide](../../docs/markdown.md).
+## OPF as YAML
+
+A deck can be written as YAML (`deck.opf.yaml`) and every command that reads a deck or a JSON Patch reads it: a file ending `.yaml` or `.yml` is YAML (strict JSON-compatible YAML 1.2, no anchors, tags or duplicate keys); stdin and other names are JSON unless `--input-format yaml` says otherwise. A YAML syntax error exits 2 with the line and column in the message, like invalid JSON; `lint`, `audit` and `render` report their findings at YAML lines. A deck is written as YAML when the output name ends `.yaml`/`.yml` or with `--format yaml` (`create`, `edit`, `merge`, `format`, `paginate`, `bundle`, `fill`, `import-data`, `from-md`, `import`); without either, a command writes the format it read, and JSON when it read none.
+
+`opf from-yaml <deck.yaml|-> [output.opf.json|-] [--aliases] [--force] [--strict]` converts YAML to a validated JSON deck (`--aliases` expands anchors, aliases and merge keys, capped at 100 aliases), and `opf to-yaml <deck.opf.json|-> [output.opf.yaml|-] [--schema-comment] [--force]` writes canonical YAML that `from-yaml` reads back unchanged; `--schema-comment` adds the `# yaml-language-server: $schema=...` line that gives editors validation and completion. Both print JSON reports and follow the exit codes above; YAML errors carry `line` and `column`. Commands that rewrite a YAML file do not preserve its comments and print a warning on stderr. Settings files (`--config`), `fill --data` and `import-data` sources stay JSON, CSV or TSV. See the [YAML guide](../../docs/yaml.md).
+
 ## Render, export and import
 
 ```sh

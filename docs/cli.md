@@ -102,6 +102,24 @@ warning. For PPTX it stops the export (`pptx/asset-unresolved`): opf-pptx would 
 pictures in a PPTX get their PNG fallback from the CLI's own opf-render install (`svgRasterizer`), so they export
 whichever way the packages were installed.
 
+## Markdown and YAML
+
+Two more groups of commands convert between a deck and text, with no renderer: they are core features (`@openpresentation/opf/markdown` and `@openpresentation/opf/yaml`) and need no optional peer.
+
+```sh
+opf from-md deck.md deck.opf.json            # Markdown in the OPF dialect to a validated deck
+opf to-md deck.opf.json deck.md              # a deck as Markdown that reads back unchanged
+opf from-yaml deck.opf.yaml deck.opf.json    # strict YAML to a validated deck (--aliases expands anchors)
+opf to-yaml deck.opf.json deck.opf.yaml --schema-comment
+opf validate deck.opf.yaml                   # every command that reads a deck reads .yaml and .yml files
+opf edit deck.opf.json --patch changes.json --output deck.opf.yaml   # or --format yaml
+opf validate - --input-format yaml < deck.txt
+```
+
+- `from-md` and `to-md` follow the Markdown dialect (YAML front matter, `---` between slides, `#` title, lists, tables, `chart`, `metric` and `timeline` fences, speaker notes): see [Markdown and outlines](markdown.md). `from-md --format yaml` or a `.yaml` output writes the deck as YAML.
+- `from-yaml` and `to-yaml` read and write a deck as JSON-compatible YAML 1.2, with canonical key order and an optional `# yaml-language-server` line for editor validation: see [OPF as YAML](yaml.md). A file ending `.yaml` or `.yml` is read as YAML by every command; stdin and other names are JSON unless `--input-format yaml` is given. Commands that write a deck write YAML for an output ending `.yaml`/`.yml` or with `--format yaml`. A YAML syntax error exits 2 with the line and column; commands that rewrite a YAML file do not preserve its comments and say so on stderr.
+- All of them print JSON reports (on stderr when stdout carries the document) and use the exit codes below: 0 success, 1 invalid content, an output conflict or a `--strict` failure, 2 usage, a read error or I/O.
+
 ## Diagnostics and exit codes
 
 The report is the [`opf lint`](lint.md) report with the written files added: `ok`, `valid`, `schemaValid`,
