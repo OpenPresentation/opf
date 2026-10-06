@@ -24,7 +24,7 @@
     },
     "filename": {
       "type": "string",
-      "description": "Optional base filename for exports (without extension). Engine strips a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and appends the target format's extension. When omitted, the engine slugifies name when present. See /docs/opf for full validation rules.",
+      "description": "Optional base filename for exports (without extension). The opf CLI (render, export) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted, they slugify name; with no usable name the CLI uses the input file name and the editor uses 'presentation'. See /docs/opf for full validation rules.",
       "examples": ["q4-2026-business-review", "acme-series-b-pitch"]
     },
     "organization": {
@@ -2232,7 +2232,7 @@
         },
         "hidden": {
           "type": "boolean",
-          "description": "Whether the slide is hidden from the presented sequence."
+          "description": "Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (opf CLI: --include-hidden; renderSvgDeck: skipHidden is opt-in). A slide named explicitly (opf render --slides, renderSvg slideIndex) is still rendered."
         },
         "composition": {
           "$ref": "#/$defs/Composition"

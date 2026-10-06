@@ -29,10 +29,12 @@ commands check the functions they call and name the version to install when an o
 ## `opf render`
 
 ```sh
-opf render deck.opf.json [--slides 1,3-5] [--format svg|png] [--scale N] [--out dir|file|-]
+opf render deck.opf.json [--slides 1,3-5] [--include-hidden] [--format svg|png] [--scale N] [--out dir|file|-]
 ```
 
-One file per slide: `<name>-001.svg` (or `.png`) in `--out` (default `<name>-slides/`). `--slides` takes one-based
+One file per slide: `<name>-001.svg` (or `.png`) in `--out` (default `<name>-slides/`). See [Output names](#output-names) for `<name>`.
+Slides marked `hidden: true` are skipped, as in the presenter, unless `--include-hidden`; the numbers in file names stay the
+slide numbers of the document, so skipping slide 2 writes `-001` and `-003`. `--slides` takes one-based
 numbers and ranges (`1,3-5`, `2-` to the end, `-3` from the start). `--format` defaults to `svg`. `--scale` (0.1 to 8,
 default 1) sets the PNG pixel density against the 1280 x 720 reference slide. `--out -` writes one slide to stdout.
 
@@ -43,7 +45,7 @@ output reads the same font files and embeds nothing.
 ## `opf export`
 
 ```sh
-opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--slides 1,3-5]
+opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--slides 1,3-5] [--include-hidden]
            [--pdf-mode vector|raster] [--chartex auto|native|fallback]
            [--provenance full|references-only|none] [--image-format compatible|preserve]
 ```
@@ -55,6 +57,8 @@ opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--sl
 | `png`, `svg` | a directory, one file (`--out x.png`, one slide), or a zip (`--out x.zip`) | As `render`. Zip entries are stored (not deflated) with a fixed timestamp, so the archive is byte-identical everywhere. |
 
 The format is taken from `--out`'s extension when `--format` is omitted (`.pptx`, `.pdf`, `.png`, `.svg`).
+
+The PDF and the `png` and `svg` outputs skip hidden slides unless `--include-hidden`. The `pptx` output always carries them, as hidden slides (`--include-hidden` is refused for it).
 
 ## `opf import`
 
@@ -70,8 +74,22 @@ AI reconstruction of third-party decks is not part of the CLI (it lives in pptx.
 
 ## Options shared by `render` and `export`
 
+### Output names
+
+Files are named by the deck: its root `filename` (a trailing `.pptx`, `.pdf`, `.png` or `.svg` is dropped, in any case), else
+its `name` slugified (`Q4 Review / 2026` becomes `Q4-Review-2026`), else the input file's stem (`deck.opf.json` gives `deck`).
+The same rule names the editor's downloads. An explicit `--out` is used as given.
+
+### Hidden slides
+
+`render` and `export` skip slides marked `hidden: true` when they write one file per slide, a zip or a PDF, because a hidden slide is
+not part of the presented sequence. `--include-hidden` writes them too. Slides named with `--slides` are always written, hidden or
+not. The report lists the slide numbers left out in `skippedHidden`. A deck whose every slide is hidden exits 1 and names the flag.
+
+
 | Option | Meaning |
 | --- | --- |
+| `--include-hidden` | Write hidden slides too (per-slide images, zips and PDF). See [Hidden slides](#hidden-slides). |
 | `--paginate` | Paginate with the same fonts first (as `opf paginate` does, but measured), so overflowing slides split instead of reporting `text-overflow`. `--slides` then counts the paginated slides. |
 | `--date YYYY-MM-DD` | The date for `date: true` header and footer fields. The CLI never reads a clock; without it a current date is reported as unresolved. |
 | `--font-dir <directory>` (repeatable) | Your own `.ttf`/`.otf` files, loaded in addition to the bundled pack, directly inside the directory, sorted by name. A face that repeats a bundled family, weight and style is refused. |

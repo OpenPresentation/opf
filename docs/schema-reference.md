@@ -15,7 +15,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `$schema` | no | `const:"https://openpresentation.org/schema/opf/v1"` | Optional OPF schema version. When omitted, validators and engines should assume the latest supported OPF schema. |
 | `name` | no | `string` | Display name of the presentation for GUI/TUI lists, library/search indexing, OS-level metadata, and default export filenames. This is deck identity, not slide content. Use slides[].title and slides[].subtitle for text... |
 | `description` | no | `string` | Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements purpose (the goal) and narrative (the structured storyline). Round-trips to OOXML 'docProps/co... |
-| `filename` | no | `string` | Optional base filename for exports (without extension). Engine strips a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and appends the target format's extension. When omitted, the engine slugifies name when pr... |
+| `filename` | no | `string` | Optional base filename for exports (without extension). The opf CLI (render, export) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted... |
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set... |
 | `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution. |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
@@ -750,7 +750,7 @@ _No named properties._
 | `top+middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. |
-| `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. |
+| `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
 | `composition` | no | `ref:Composition` |  |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at slide scope; ignored by the engine but preserved across read/write round-trips. Use for review state, generation provenance, or authoring conventions such as { "authoring... |
 

@@ -15,7 +15,7 @@ import {
 	parseSlideSelection,
 	readBytes,
 	sha256,
-	stemOf,
+	deckStem,
 	writeFiles,
 } from "./io.js";
 import { type Diagnostic, type PptxModule, type Renderer, PPTX_PACKAGE, RENDER_PACKAGE, loadPptx, loadRenderer } from "./peers.js";
@@ -32,7 +32,7 @@ const RASTER_FORMATS = ["svg", "png"] as const;
 const SPEC = {
 	values: ["slides", "format", "scale", "out", "date", "asset-dir", "svg-fonts"],
 	repeated: ["font-dir"],
-	flags: ["force", "strict", "json", "paginate"],
+	flags: ["force", "strict", "json", "paginate", "include-hidden"],
 };
 const EXPORT_SPEC = { ...SPEC, values: [...SPEC.values, "pdf-mode", "chartex", "provenance", "image-format"] };
 
@@ -113,6 +113,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	if ((options.chartex !== undefined || options.provenance !== undefined || options["image-format"] !== undefined) && format !== "pptx")
 		throw new FileCommandError("--chartex, --provenance and --image-format apply to --format pptx.");
 	if (options.scale !== undefined && format !== "png" && format !== "pdf") throw new FileCommandError("--scale applies to --format png (and raster PDF).");
+	if (options["include-hidden"] && format === "pptx") throw new FileCommandError("--include-hidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw new FileCommandError("--slides is not available for pptx: the whole presentation is exported.");
 	if (options["svg-fonts"] !== undefined && format !== "svg") throw new FileCommandError("--svg-fonts applies to --format svg.");
 	const pdfMode = oneOf("--pdf-mode", options["pdf-mode"], ["vector", "raster"] as const);
@@ -181,8 +182,21 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		}
 	}
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
-	const selected = format === "pptx" ? [] : options.slides === undefined ? Array.from({ length: slideCount }, (_, index) => index + 1) : parseSlideSelection(String(options.slides), slideCount);
-	if (format !== "pptx" && !selected.length) throw new FileCommandError("The presentation has no slides.", 1);
+	// Per-slide output and PDF skip hidden slides (the presenter's sequence) unless --include-hidden; slides named with --slides
+	// are exactly the slides written, hidden or not. The slide numbers in file names and reports stay the document's own.
+	const isHidden = (number: number) => (deck as { slides?: { hidden?: unknown }[] }).slides?.[number - 1]?.hidden === true;
+	const everySlide = Array.from({ length: slideCount }, (_, index) => index + 1);
+	const selected =
+		format === "pptx"
+			? []
+			: options.slides !== undefined
+				? parseSlideSelection(String(options.slides), slideCount)
+				: options["include-hidden"]
+					? everySlide
+					: everySlide.filter((number) => !isHidden(number));
+	const skippedHidden = format === "pptx" || options.slides !== undefined || options["include-hidden"] ? [] : everySlide.filter(isHidden);
+	if (format !== "pptx" && !selected.length)
+		throw new FileCommandError(skippedHidden.length ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "The presentation has no slides.", 1);
 	const onRender = (diagnostic: Diagnostic) => reporter.add("render", diagnostic);
 	const planned: { file: string; bytes: Uint8Array; entry: Record<string, unknown> }[] = [];
 	const finish = async (extra: Record<string, unknown>) => {
@@ -202,7 +216,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		report({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), ...extra }, outputs, true);
 	};
 
-	const stem = stemOf(input);
+	const stem = deckStem(prepared.deck, input);
 	const rasterOptions = { fontFiles: fonts.options.fontFiles, useBundledFonts: false, loadSystemFonts: false };
 	const svgOptions = (embedded: unknown[], index: number) => ({
 		textMeasurement: fonts.options.textMeasurement,
@@ -261,7 +275,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 				{ ...rasterOptions, scale, ...(pdfMode ? { mode: pdfMode } : {}), ...(mode === "vector" && title ? { metadata: { title } } : {}), onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pdf", diagnostic) },
 			);
 			planned.push({ file: out ?? `${stem}.pdf`, bytes, entry: { mediaType: "application/pdf", pages: svgs.length, slides: selected } });
-			return { pdf: { mode, vectorSupported: probe.supportsVector } };
+			return { pdf: { mode, vectorSupported: probe.supportsVector }, skippedHidden };
 		}
 
 		// svg or png: one file per slide in a directory, a single file, or a zip.
@@ -290,7 +304,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 			const directory = target ?? `${stem}-slides`;
 			for (const item of items) planned.push({ file: path.join(directory, name(item.slide, extension)), bytes: item.bytes, entry: item.entry });
 		}
-		return {};
+		return { skippedHidden };
 	};
 	let extra: Record<string, unknown>;
 	try {

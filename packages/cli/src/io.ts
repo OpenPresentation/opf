@@ -91,6 +91,24 @@ export function stemOf(input: string) {
 	return path.basename(input).replace(/\.opf\.json$/i, "").replace(/\.(json|pptx|potx)$/i, "") || "deck";
 }
 
+/**
+ * The base name of render and export output files: the deck's `filename` (a trailing .pptx, .pdf, .png or .svg is dropped, any
+ * case), else the slugified `name`, else the input file's stem. The same rule opf-editor names its downloads by. Characters a file
+ * system rejects are replaced, so the name is safe to write.
+ */
+export function deckStem(deck: unknown, input: string) {
+	const root = deck && typeof deck === "object" && !Array.isArray(deck) ? (deck as { filename?: unknown; name?: unknown }) : {};
+	const clean = (value: string) =>
+		value
+			.replace(/[\/:*?"<>|\u0000-\u001f]+/g, "-")
+			.replace(/\s+/g, "-")
+			.replace(/-{2,}/g, "-")
+			.replace(/^[-.\s]+|[-.\s]+$/g, "");
+	const text = (value: unknown) => (typeof value === "string" ? value : "");
+	const slug = (value: string) => value.replace(/[^\p{L}\p{N}_-]+/gu, "-").replace(/-{2,}/g, "-").replace(/^-|-$/g, "");
+	return clean(text(root.filename).trim().replace(/\.(pptx|pdf|png|svg)$/i, "")) || slug(text(root.name)) || stemOf(input);
+}
+
 export interface PlannedFile {
 	file: string;
 	bytes: Uint8Array;
