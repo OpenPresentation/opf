@@ -540,7 +540,7 @@ const chartAltRule = rule(
 	'info',
 	'A chart has no text alternative, or is marked decorative.',
 	'A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. The chart\'s alt field is that text alternative (the preview exposes it as the chart\'s accessible name and the PowerPoint export writes it as the frame\'s alternative text); a sentence or table beside the chart also serves. An empty alt marks a chart decorative, which is reported as info so the choice is reviewed: a chart rarely carries no message.',
-	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart\'s point (see audit/poor-alt-text for generic alt text). alt: \"\" is reported as a decorative chart, whatever else is on the slide.' },
+	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart\'s point (see audit/poor-alt-text for generic alt text). alt: "" is reported as a decorative chart, whatever else is on the slide.' },
 );
 
 const chartSkip = /(histogram|box|pareto|waterfall|world|map)/;

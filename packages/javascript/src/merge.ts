@@ -55,7 +55,7 @@ const ABSENT = Symbol("absent");
 type Maybe = unknown;
 
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
-const has = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+const has = (value: object, key: string) => Object.hasOwn(value, key);
 const same = (x: Maybe, y: Maybe) => (x === ABSENT || y === ABSENT ? x === y : jsonEqual(x, y));
 const kindOf = (value: Maybe) => (value === ABSENT ? "absent" : Array.isArray(value) ? "array" : value === null ? "null" : typeof value);
 

@@ -228,7 +228,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     while (true) {
       const make = (limit: number): Portion => ({leaf,start,end:limit,value:leaf.slice ? leaf.slice(start,limit) : leaf.value});
       let candidate = new Map(selected).set(leaf.path,make(end));
-      let issues = diagnosticsFor(candidate);
+      const issues = diagnosticsFor(candidate);
       if (!issues.length) { selected = candidate; break; }
       let best = start;
       if (leaf.slice && end > start) {

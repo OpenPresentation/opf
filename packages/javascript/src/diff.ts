@@ -121,7 +121,7 @@ function diffValue(a: unknown, b: unknown, aPath: (string | number)[], bPath: (s
 }
 
 function diffObject(a: Record<string, unknown>, b: Record<string, unknown>, aPath: (string | number)[], bPath: (string | number)[], ctx: Context): void {
-  const own = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+  const own = (value: object, key: string) => Object.hasOwn(value, key);
   for (const key of Object.keys(a)) {
     if (own(b, key)) continue;
     ctx.patch.push({ op: "remove", path: pointer([...bPath, key]) });

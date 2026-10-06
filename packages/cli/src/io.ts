@@ -100,7 +100,7 @@ export function deckStem(deck: unknown, input: string) {
 	const root = deck && typeof deck === "object" && !Array.isArray(deck) ? (deck as { filename?: unknown; name?: unknown }) : {};
 	const clean = (value: string) =>
 		value
-			.replace(/[\/:*?"<>|\u0000-\u001f]+/g, "-")
+			.replace(/[/:*?"<>|\u0000-\u001f]+/g, "-")
 			.replace(/\s+/g, "-")
 			.replace(/-{2,}/g, "-")
 			.replace(/^[-.\s]+|[-.\s]+$/g, "");

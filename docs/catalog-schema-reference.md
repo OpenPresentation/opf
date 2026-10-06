@@ -10,7 +10,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-audience/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field...
+- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field al...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -23,7 +23,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `seniority` | no | `enum:ic \| manager \| director \| vp \| c-suite \| mixed` | Typical seniority level of the audience. Engines use this as a hint for default depth and pacing. |
 | `technicalFluency` | no | `enum:low \| medium \| high \| mixed` | Typical technical fluency of the audience. AI generation uses this to decide whether to expand or assume technical terminology. |
 | `decisionPower` | no | `enum:informational \| advisory \| decision-maker` | Whether the audience is expected to be informed, to advise, or to actually decide. Shapes the strength of the closing ask. |
-| `attentionBudgetMinutes` | no | `number` | Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's durationRange. |
+| `attentionBudgetMinutes` | no | `number` | Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's duration range. |
 | `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids that work well for this audience. Used by picker UIs to suggest narratives once an audience is chosen. Validators warn on unknown ids; never error. |
 | `recommendedTones` | no | `array<string>` | Soft cross-link: tone-catalog ids that work well for this audience. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
@@ -52,7 +52,7 @@ OPF documents usually reference these records with string ids such as `design.th
 
 - Type: `object`
 - Required fields: `id`, `name`, `file`
-- Purpose: Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `durationRange`, `group`, `label`) are allowed and vary by catalog kind.
+- Purpose: Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `duration`, `group`, `label`) are allowed and vary by catalog kind.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -98,31 +98,21 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference a...
+- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition "mixed"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-chart-type/v1"` | Identifies this record as a chart type in the open presentation catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type. Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
-| `name` | yes | `string` | Stable display/programmatic name for this chart type. |
-| `label` | no | `string` | Human-readable label shown in chart pickers. |
+| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type (`chart.type`). Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
+| `name` | yes | `string` | Human-readable name of the chart type, as a chart picker shows it. |
 | `summary` | no | `string` | One-sentence positioning: when to reach for this chart variant. |
 | `description` | no | `string` | Longer prose describing the chart and ideal use cases. |
 | `mappings` | yes | `ref:ChartTypeMappings` | Canonical and optional renderer-specific mappings used by engines to render this chart type. |
-| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. Deprecated records stay resolvable so existing documents keep validating, but pickers and default listings exclude them, validators warn when a document references them, and... |
-| `group` | no | `string` | Top-level grouping in the chart picker (column, bar, line, area, pie, radar, etc.). |
+| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. A deprecated record stays resolvable so existing documents keep validating, validators warn when a document references it, and pickers and generators should not offer it. Th... |
+| `group` | no | `string` | Top-level grouping in the chart picker. |
 | `groupSort` | no | `integer` | Display ordering hint within the chart group. |
-| `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). |
-| `series` | no | `integer` | Number of data series this chart type expects. |
-| `categories` | no | `integer` | Number of category labels this chart type expects on the primary axis. |
-| `seriesGroups` | no | `integer` | Number of series groups (axis bands) this chart type uses; >1 for combo or banded charts. |
-| `useSecondaryCategories` | no | `boolean` | Whether the chart type uses a secondary category axis. |
-| `workbookRange` | no | `string` | A1 reference to the source range in the embedded workbook. |
-| `columns` | no | `array<string>` | Column header names of the embedded workbook, in left-to-right order. |
-| `dataColumns` | no | `array<ref:ChartDataColumn>` | Per-column metadata describing the role and position of each column in the workbook source. |
-| `helperColumns` | no | `array<string>` | Optional auxiliary column names used by calculated or banded charts (e.g., 'Excellent', 'Good', 'Fair', 'Poor' for a bullet chart). |
-| `sampleData` | no | `ref:ChartSampleData` | Inline sample dataset for previews and pickers. |
-| `slideNumber` | no | `integer` | Source slide number in the original chart-gallery deck. Carried for traceability. |
+| `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). The editor offers only 'simple' types... |
+| `series` | no | `integer` | Number of data series this chart type expects: exactly that many, except that a stacked or percent-stacked type and a combination (composition 'mixed', such as combo) expect at least that many. The editor offers a typ... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
@@ -167,30 +157,6 @@ OPF documents usually reference these records with string ids such as `design.th
 | `series` | no | `array<ref:OpenXmlChartMapping>` | Open XML chart elements used by mixed/composite chart types. |
 | `notes` | no | `string` | Short implementation note for mappings that need renderer interpretation. |
 
-#### ChartDataColumn
-
-- Type: `object`
-- Required fields: `name`, `role`, `type`
-- Purpose: One column of the embedded chart workbook, annotated with its role and grid position.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `name` | yes | `string` | Column header name (e.g. 'Series 1', 'Value', 'Level1', 'Level2'). |
-| `role` | yes | `enum:categoryLabel \| series \| helper` | Role this column plays: a category label (axis tick), a series (plotted values), or a helper (calculated/auxiliary). |
-| `type` | yes | `enum:string \| number` | Cell value type for the column. |
-| `position` | no | `string` | Grid position of the column header in the source workbook, as 'row<N>_col<M>' (zero-indexed). |
-
-#### ChartSampleData
-
-- Type: `object`
-- Required fields: `headers`, `rows`
-- Purpose: Inline sample dataset for previews. Mirrors a small workbook with header row plus data rows.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `headers` | yes | `array<string>` | Header row labels. The first cell typically labels the series column; the rest are category labels. |
-| `rows` | yes | `array<array<string \| number>>` | Two-dimensional sample data. Each row aligns by index with the headers first cell is the row label, remaining cells are values. |
-
 ## Color Scheme
 
 - File: `spec/schemas/color-scheme.schema.json`
@@ -207,20 +173,30 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this color scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and def... |
 | `summary` | no | `string` | One-sentence positioning of the palette what mood it evokes and where to use it. |
 | `description` | no | `string` | Longer prose describing the palette and its intended use. |
-| `accent1` | no | `string` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
-| `accent2` | no | `string` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
-| `accent3` | no | `string` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
-| `accent4` | no | `string` | Accent 4 color (hex). Mirrors the OOXML accent4 slot. |
-| `accent5` | no | `string` | Accent 5 color (hex). Mirrors the OOXML accent5 slot. |
-| `accent6` | no | `string` | Accent 6 color (hex). Mirrors the OOXML accent6 slot. |
-| `dark1` | no | `string` | Dark 1 color (hex). Typically the deepest neutral; OOXML dark1. |
-| `dark2` | no | `string` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
-| `light1` | no | `string` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
-| `light2` | no | `string` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
-| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. |
-| `followedHyperlink` | no | `string` | Followed-hyperlink color (hex). OOXML folHlink. |
+| `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
+| `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
+| `accent3` | no | `ref:HexColor` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
+| `accent4` | no | `ref:HexColor` | Accent 4 color (hex). Mirrors the OOXML accent4 slot. |
+| `accent5` | no | `ref:HexColor` | Accent 5 color (hex). Mirrors the OOXML accent5 slot. |
+| `accent6` | no | `ref:HexColor` | Accent 6 color (hex). Mirrors the OOXML accent6 slot. |
+| `dark1` | no | `ref:HexColor` | Dark 1 color (hex). Typically the deepest neutral; OOXML dark1. |
+| `dark2` | no | `ref:HexColor` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
+| `light1` | no | `ref:HexColor` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
+| `light2` | no | `ref:HexColor` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
+| `hyperlink` | no | `ref:HexColor` | Hyperlink color (hex). OOXML hlink. |
+| `followedHyperlink` | no | `ref:HexColor` | Followed-hyperlink color (hex). OOXML folHlink. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
+
+### Nested Types
+
+#### HexColor
+
+- Type: `string`
+- Required fields: none
+- Purpose: Hex color: '#RGB', '#RRGGBB' or '#RRGGBBAA'. The same definition as HexColor in opf.schema.json.
+
+_No named properties._
 
 ## Font Scheme
 
@@ -228,7 +204,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-font-scheme/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `major`, `minor`
-- Purpose: Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (PowerPoint or Google Slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) catalogs.fontSchemes.source the default catalog at...
+- Purpose: Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) catalogs.fontSchemes.source the default catalog at...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -238,12 +214,12 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this font scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and defa... |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
-| `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
+| `code` | no | `string` | Optional monospaced font family name for code blocks and for inline code runs (TextRun.code). It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchan... |
 | `eastAsian` | no | `object` | East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from t... |
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
-| `app` | no | `enum:PowerPoint \| Google Slides` | Target application this font pairing is intended for. |
-| `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script... |
+| `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
+| `languageFamily` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long... |
 | `languages` | no | `array<string>` | Optional list of languages catalog ids (see the languages catalog, https://www.pptx.gallery/languages) this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme... |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |
@@ -379,7 +355,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-narrative/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `beats`
-- Purpose: Schema for narrative template files in the openpresentation.org catalog. Each template describes a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats. Templates are referenced from OPF documents via narrative either as a bare id string (e.g. 'classic-story') or as an inline object whose shape matches this schema (sans '$schema').
+- Purpose: Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core lint warns about a 'slides[].beat' id the resolved narrati...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -390,7 +366,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
 | `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
 | `audienceFit` | no | `array<string>` | Audiences this narrative works well for, e.g. ['executive', 'investor', 'customer']. |
-| `durationRange` | no | `object` | Typical talk-length window this narrative suits. |
+| `duration` | no | `object` | Typical talk length this narrative suits, as a range in minutes. A deck's own target is the root 'duration' (one number); lint warns when that target lies outside this range, and when 'min' is greater than 'max'. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search, e.g. ['business', 'pitch', 'internal']. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 | `beats` | yes | `array<ref:Beat>` | Ordered list of beats that make up the narrative arc. |
@@ -401,7 +377,7 @@ OPF documents usually reference these records with string ids such as `design.th
 
 - Type: `object`
 - Required fields: `id`, `name`
-- Purpose: A single narrative beat a labeled segment of the story arc with a specific dramatic purpose. Mirrors the NarrativeBeat definition in opf.schema.json so library entries and inline OPF beats are interchangeable.
+- Purpose: A single narrative beat a labeled segment of the story arc with a specific dramatic purpose. One beat is one slide: 'type' is that slide's Slide.type and 'layout' is its Slide.layout, so a planner copies them straight into a skeleton deck. Split a heavy beat into several beats rather than giving it several slides.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -409,10 +385,9 @@ OPF documents usually reference these records with string ids such as `design.th
 | `name` | yes | `string` | Human-readable beat name, e.g. 'The Problem'. |
 | `description` | no | `string` | Curator-written prose that explains what this beat should accomplish. |
 | `instructions` | no | `string` | Short author-facing instruction for the beat typically one phrase. Complements 'description' with a concise directive. |
-| `slideCount` | no | `integer` | Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a hig... |
-| `slideType` | no | `enum:text \| list \| image \| shape \| chart \| table \| video \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide. Uses ContentPayload.type names to help engines choose a layout. The legacy shape value is retained for compatibility and requests an image representation; it is not a native... |
-| `layoutHint` | no | `string` | Suggested layout id for the beat's opening slide, e.g. 'section-divider', 'title-slide', 'text-left'. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/... |
-| `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues attached to the beat. Surfaced in presenter notes. |
+| `type` | no | `enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide: the same values as Slide.type. Helps engines and planners choose a layout when only the beat is known. |
+| `layout` | no | `string` | Suggested layout id for the beat's slide, e.g. 'section-divider', 'title-slide', 'text-left'. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/layouts. |
+| `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues for the beat: questions the slide should answer. A planner or author turns them into the slide's notes; no engine copies them there on its own. |
 
 ## Purpose
 
@@ -481,7 +456,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `colorScheme` | no | `string` | Catalog reference to the theme's default color scheme resolved against catalogs.colorSchemes the same way design.colorScheme or design.colorScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
 | `fontScheme` | no | `string` | Catalog reference to the theme's default font scheme resolved against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
 | `background` | no | `ref:ThemeBackground` |  |
-| `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
+| `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

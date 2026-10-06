@@ -296,7 +296,7 @@ async function main(argv: string[]) {
     let records: FillRecord[] = [{}];
     if (options.data !== undefined) {
       const data = String(options.data), raw = data === "-" ? await stdin() : await readFile(data, "utf8");
-      const format = options.format ?? (data.endsWith(".json") ? "json" : data.endsWith(".tsv") ? "tsv" : data.endsWith(".csv") ? "csv" : /^[\s\uFEFF]*[\[{]/.test(raw) ? "json" : "csv");
+      const format = options.format ?? (data.endsWith(".json") ? "json" : data.endsWith(".tsv") ? "tsv" : data.endsWith(".csv") ? "csv" : /^[\s\uFEFF]*[[{]/.test(raw) ? "json" : "csv");
       if (!["csv", "tsv", "json"].includes(String(format))) throw new CliError("Unknown data format.");
       records = recordsFromData(raw, format as "csv" | "tsv" | "json", { delimiter: options.delimiter as string | undefined, header: !options["no-header"] });
     }

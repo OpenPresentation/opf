@@ -215,7 +215,7 @@ describe("inline text", () => {
   });
 
   test("escapes make characters literal; intraword underscores and spaced stars are text; there is no entity", () => {
-    assert.equal(text("\\*not\\* \\[x\\] snake_case_name 2 * 3 * 4 a\\\\b \\`code\` &amp;"), "*not* [x] snake_case_name 2 * 3 * 4 a\\b `code` &amp;");
+    assert.equal(text("\\*not\\* \\[x\\] snake_case_name 2 * 3 * 4 a\\\\b \\`code` &amp;"), "*not* [x] snake_case_name 2 * 3 * 4 a\\b `code` &amp;");
     // A backtick pair is an inline code span (FA-13); an unpaired backtick is text.
     assert.deepEqual(text("run `x` now"), ["run ", { text: "x", code: true }, " now"]);
     assert.equal(text("one ` tick"), "one ` tick");

@@ -3,7 +3,7 @@
   "kind": "font-schemes",
   "version": "1",
   "description": "Catalog of font schemes available in the openpresentation.org catalog. Each entry is a lightweight summary; full font-scheme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "2ce5b033bb32b19f9afb7459220400ac4d8163037126cd64bc0f176bd80c2925",
+  "contentSha256": "184c652ed0973ee199fb17bc96dafc6b090a43c188ad5c217688ca335541354c",
   "records": [
     {
       "id": "consolas",
