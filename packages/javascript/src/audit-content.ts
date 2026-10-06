@@ -59,7 +59,7 @@ const isText = (value: unknown): value is string | readonly unknown[] => typeof 
 export function textValues(slide: Rec, slidePath: string): TextValue[] {
 	const out: TextValue[] = [];
 	for (const field of ['title', 'subtitle', 'tag'] as const)
-		if (typeof slide[field] === 'string') out.push({ path: pointer(...splitPointer(slidePath), field), value: slide[field], role: field, payload: slidePath, field });
+		if (isText(slide[field])) out.push({ path: pointer(...splitPointer(slidePath), field), value: slide[field], role: field, payload: slidePath, field });
 	for (const payload of slidePayloads(slide, slidePath)) {
 		const node = payload.node,
 			at = (...tail: (string | number)[]) => pointer(...splitPointer(payload.path), ...tail);

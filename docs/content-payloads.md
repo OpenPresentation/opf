@@ -2,6 +2,8 @@
 
 Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `left`, `center+right`, or `top:left`.
 
+The slide-level `title`, `subtitle` and `tag` are not payloads, but like `text` and `quote.text` they accept a string or `TextRun[]` (colored words, bold, links, `cite`/`footnote` markers); see [Rich text](rich-text.md#rich-headings-and-quotes).
+
 The optional payload `type` can make intent explicit, but OPF should usually infer the content kind from the field present:
 
 | Field | Inferred type | Notes |
@@ -15,7 +17,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
-| `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
+| `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
 ## Color references

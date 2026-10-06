@@ -1,8 +1,8 @@
 // OPF to Markdown: every part the dialect has syntax for is written natively and verified by reading it back; any
 // other part is embedded as YAML (`opf-slide`, `opf-block`) or, when embedding is off, dropped and reported. Internal module.
-import { type Obj, isRecord, same } from "../convert/shared.js";
+import { type Obj, type Run, isRecord, runText, same } from "../convert/shared.js";
 import { fenceCode } from "../convert/text-lines.js";
-import { canonContent } from "./canon.js";
+import { canonContent, canonText } from "./canon.js";
 import { escapeInline, serializeRuns } from "./inline.js";
 import { parseSlideText } from "./parse.js";
 import { OPFMarkdownError, csvField, scalarText, writeYaml } from "./support.js";
@@ -147,10 +147,22 @@ function metricLines(metric: unknown): string[] | undefined {
   return fenced("metric", body);
 }
 
+/** The paragraphs of a rich quote text: the runs cut at every blank line, each piece keeping its formatting. */
+function splitParagraphs(runs: Run[]): Run[][] {
+  const out: Run[][] = [[]];
+  for (const run of runs) {
+    runText(run).split("\n\n").forEach((part, index) => {
+      if (index > 0) out.push([]);
+      if (part !== "") out.at(-1)!.push(typeof run === "string" ? part : { ...run, text: part });
+    });
+  }
+  return out;
+}
+
 function quoteLines(quote: unknown): string[] | undefined {
   const value = typeof quote === "string" ? { text: quote } : (quote as Obj);
   const lines: string[] = [];
-  const paragraphs = String(value.text).split("\n\n");
+  const paragraphs: (string | Run[])[] = Array.isArray(value.text) ? splitParagraphs(value.text as Run[]) : String(value.text).split("\n\n");
   for (const [index, paragraph] of paragraphs.entries()) {
     const rows = serializeRuns(paragraph);
     if (!rows) return undefined;
@@ -312,17 +324,20 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
   for (const [key, mark] of [["title", "#"], ["subtitle", "##"]] as const) {
     const value = slide[key];
     if (value === undefined) continue;
-    if (oneLine(value)) {
+    // A string, or a TextRun[] whose formatting the dialect can write, as a single # / ## line.
+    const canon = canonText(value);
+    const row = canon === undefined ? undefined : typeof canon === "string" ? (oneLine(canon) ? escapeInline(canon) : undefined) : serializeRuns(canon)?.length === 1 ? serializeRuns(canon)![0] : undefined;
+    if (canon !== undefined && row) {
       // A trailing run of # would read as a closing sequence: escape its first #.
-      const line = `${mark} ${escapeInline(value).replace(/(^|\s)(#+)$/, "$1\\$2")}`;
+      const line = `${mark} ${row.replace(/(^|\s)(#+)$/, "$1\\$2")}`;
       const { slide: back, clean } = parseSlideText(line);
-      if (back && clean && back[key] === value) {
+      if (back && clean && same(back[key], canon)) {
         sections.push({ lines: [line] });
-        exp[key] = value;
+        exp[key] = canon;
         continue;
       }
     }
-    handle(`${path}/${key}`, `the ${key} is not a single line of plain text`, () => (extras[key] = value));
+    handle(`${path}/${key}`, `the ${key} has no single-line Markdown form`, () => (extras[key] = value));
   }
 
   // Content.

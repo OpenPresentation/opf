@@ -4,7 +4,7 @@ import type { LayoutBox, LayoutDiagnostic, RichTextFit, RichTextRun, TextFit, Te
  * Footnotes, citations and captions (RR-34).
  *
  * - A TextRun may `cite` one or more ids of the deck's top-level `references`, or carry an inline
- *   `footnote`. Markers are numbered per deck in reading order of first use (slides, then regions,
+ *   `footnote`. Markers are numbered per deck in reading order of first use (slides: the heading group tag, title, subtitle, then regions,
  *   blocks and runs); the same reference id keeps its number, every footnote takes a new one. A run's
  *   marker is a superscript fragment drawn directly after the run (`1`, or `1,2` for several ids);
  *   `richTextLayouter` emits it from `RichTextOptions.citationMarker`, so it wraps with its word and
@@ -54,6 +54,8 @@ const isRecord = (value: unknown): value is Record<string, unknown> => !!value &
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
 const regionKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
 const TEXT_FIELDS = ['text', 'items', 'bullets'] as const;
+/** Heading fields in reading order (the order composeSlide stacks them); each may be a string or TextRun[]. */
+const HEADING_FIELDS = ['tag', 'title', 'subtitle'] as const;
 
 /** Flatten a string or TextRun[] to its plain text. */
 export function annotationText(value: unknown): string {
@@ -75,8 +77,9 @@ export function captionSettings(value: unknown): CaptionSettings | undefined {
 export interface AnnotatedRun { path: string; run: RichTextRun; cite: string[]; footnote?: RichText }
 
 /**
- * Visit every rich-text run of a slide that can carry a citation (text, bullets and list item runs),
- * in reading order: promoted regions (sorted keys), then blocks (recursively), then the root payload.
+ * Visit every rich-text run of a slide that can carry a citation (the slide tag, title and subtitle, then
+ * text, bullets, list item and quote runs), in reading order: the heading group first (tag, title, subtitle),
+ * then promoted regions (sorted keys), then blocks (recursively), then the root payload.
  * `basePath` is the slide's dotted path (`slides.3`).
  */
 export function walkCitationRuns(slide: unknown, basePath: string, visit: (entry: AnnotatedRun) => void): void {
@@ -108,8 +111,11 @@ export function walkCitationRuns(slide: unknown, basePath: string, visit: (entry
       if (payload[field] === undefined) continue;
       if (field === 'text') runs(payload.text, `${path}.text`); else list(payload[field], `${path}.${field}`);
     }
+    if (isRecord(payload.quote)) runs(payload.quote.text, `${path}.quote.text`);
   };
   const value = record(slide);
+  // The heading group reads first: tag, title, then subtitle (the order composeSlide lays them out), before any body run.
+  for (const field of HEADING_FIELDS) runs(value[field], `${basePath}.${field}`);
   const regions = Object.keys(value).filter(key => regionKey.test(key)).sort();
   if (regions.length) { for (const key of regions) host(value[key], `${basePath}.${key}`, 0); return; }
   if (Array.isArray(value.blocks)) { value.blocks.forEach((block: unknown, index: number) => { host(block, `${basePath}.blocks.${index}`, 0); }); return; }

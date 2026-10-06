@@ -136,7 +136,7 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
     }
     case "quote": {
       const quote = typeof content === "string" ? { text: content } : content;
-      const lines = splitRuns([quote.text]);
+      const lines = splitRuns(runsOf(quote.text));
       if (quote.attribution) lines.push([`— ${quote.attribution}`]);
       if (quote.source) lines.push([quote.attribution ? `— ${quote.source}` : quote.source]);
       return lines;

@@ -93,12 +93,16 @@ const only = (value: Obj, keys: readonly string[]): boolean => Object.keys(value
 
 function canonQuote(value: unknown): unknown {
   if (typeof value === "string") return value;
-  if (!isRecord(value) || !only(value, ["text", "attribution", "source"]) || typeof value.text !== "string") return undefined;
+  if (!isRecord(value) || !only(value, ["text", "attribution", "source"])) return undefined;
+  // The quote text is a string or TextRun[] with formatting the dialect can write; attribution and source are plain strings.
+  const text = canonText(value.text);
+  if (text === undefined) return undefined;
   for (const key of ["attribution", "source"]) if (value[key] !== undefined && typeof value[key] !== "string") return undefined;
   // A source with no attribution has no line to stand on.
   if (value.source !== undefined && value.attribution === undefined) return undefined;
-  if (value.attribution === undefined) return value.text;
-  const out: Obj = { text: value.text, attribution: value.attribution };
+  // The string shorthand exists only for a plain string; a rich text stays in its { text } object.
+  if (value.attribution === undefined) return typeof text === "string" ? text : { text };
+  const out: Obj = { text, attribution: value.attribution };
   if (value.source !== undefined) out.source = value.source;
   return out;
 }

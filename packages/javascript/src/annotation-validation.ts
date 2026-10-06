@@ -6,7 +6,7 @@ import type { ValidationIssue } from './validator.js';
  * Semantic checks for footnotes, citations and captions (RR-34). Errors:
  * - `reference-id-duplicate`: two `references` entries share an id.
  * - `cite-unknown-reference`: a run cites an id the references list does not hold.
- * - `cite-unsupported-location`: `cite`/`footnote` on a run outside text, bullets and list items
+ * - `cite-unsupported-location`: `cite`/`footnote` on a run outside the slide title, subtitle and tag, text, bullets, list items and quote text
  *   (table cells, captions, reference and footnote texts), where no engine draws a marker.
  * Warnings (lint `opf/unused-reference`): a reference no run cites.
  */
@@ -30,7 +30,7 @@ export function annotationIssues(value: unknown): ValidationIssue[] {
     for (const runIndex of markedRuns(reference.text)) issues.push(issue(`/references/${index}/text/${runIndex}`, 'reference text cannot cite or carry a footnote', { code: 'cite-unsupported-location' }));
   });
   const unsupported = (runs: unknown, path: string, where: string) => {
-    for (const runIndex of markedRuns(runs)) issues.push(issue(`${path}/${runIndex}`, `cite and footnote are not supported in ${where}; markers are drawn only in text, bullets and list items`, { code: 'cite-unsupported-location' }));
+    for (const runIndex of markedRuns(runs)) issues.push(issue(`${path}/${runIndex}`, `cite and footnote are not supported in ${where}; markers are drawn only in the slide title, subtitle and tag, text, bullets, list items and quote text`, { code: 'cite-unsupported-location' }));
   };
   const cell = (entry: unknown, path: string) => {
     if (Array.isArray(entry)) unsupported(entry, path, 'table cells');

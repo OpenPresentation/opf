@@ -226,10 +226,37 @@ describe("inline text", () => {
     assert.equal(error.location.line, 1);
   });
 
-  test("title, quote and cell text is plain: formatting is dropped with a warning", () => {
-    const result = convert("# **Big** news\n\n> *quoted*");
-    assert.deepEqual(result.document.slides[0], { title: "Big news", quote: "quoted" });
-    assert.equal(result.diagnostics.filter((d) => d.ruleId === "markdown/formatting-dropped").length, 2);
+  test("title, subtitle and quote text keep inline formatting; attribution and source are plain and drop it with a warning", () => {
+    const result = convert("# **Big** news\n\n## a [b]{color=accent1} c\n\n> *quoted* words\n> — **Ada**");
+    assert.deepEqual(result.document.slides[0], {
+      title: [{ text: "Big", bold: true }, " news"],
+      subtitle: ["a ", { text: "b", color: "accent1" }, " c"],
+      quote: { text: [{ text: "quoted", italic: true }, " words"], attribution: "Ada" },
+    });
+    assert.deepEqual(result.diagnostics.map((d) => d.ruleId), ["markdown/formatting-dropped"]);
+    // A plain title or quote still reads as strings, and the quote shorthand stays a string.
+    assert.deepEqual(convert("# Plain\n\n> just text").document.slides[0], { title: "Plain", quote: "just text" });
+    // A formatted quote with no attribution stays in its { text } object: the shorthand is for a plain string.
+    assert.deepEqual(convert("> *quoted*").document.slides[0], { quote: { text: [{ text: "quoted", italic: true }] } });
+  });
+
+  test("rich titles and quotes write back natively and round-trip; a cite has no Markdown form and is embedded", () => {
+    const deck = {
+      references: [{ id: "r1", text: "Report" }],
+      slides: [
+        { title: ["Revenue grew ", { text: "28%", color: "accent1", bold: true }], subtitle: [{ text: "see", link: "https://example.com" }, " more"], quote: { text: ["One ", { text: "two", italic: true }, "\n\nThree"], attribution: "Ada" } },
+        { title: ["Cited", { text: " claim", cite: "r1" }], text: "x" },
+      ],
+    };
+    const first = opfToMarkdown(deck);
+    assert.match(first.markdown, /^# Revenue grew \*\*\[28%\]\{color=accent1\}\*\*$/m);
+    assert.match(first.markdown, /^> One \*two\*$/m);
+    assert.equal(first.report.embedded.length, 1);
+    assert.equal(first.report.embedded[0].path, "/slides/1/title");
+    const back = convert(first.markdown).document;
+    assert.deepEqual(back.slides[0], deck.slides[0]);
+    assert.deepEqual(back.slides[1], deck.slides[1]);
+    assert.equal(opfToMarkdown(back).markdown, first.markdown);
   });
 });
 
@@ -421,7 +448,6 @@ describe("round trips", () => {
     assert.deepEqual(result.document, expected);
     assert.equal(validatePresentation(expected).valid, true);
     assert.deepEqual(result.diagnostics.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
-      ["markdown/formatting-dropped", "warning", 11, 1],
       ["markdown/numbered-list", "warning", 23, 1],
       ["markdown/heading-demoted", "warning", 70, 1],
     ]);

@@ -682,9 +682,9 @@ _No named properties._
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more narrative beats (each value matches an id from narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers mu... |
 | `layout` | no | `string` | Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case,... |
-| `title` | no | `string` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. |
-| `subtitle` | no | `string` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. |
-| `tag` | no | `string` | Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. |
+| `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors... |
+| `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way... |
+| `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run co... |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Full-slide text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks. |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide text-style bullet payload. Presence of this field infers type 'text'. |
@@ -791,7 +791,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `text` | yes | `string` | Quoted text. |
+| `text` | yes | `oneOf:string / array<ref:TextRun>` | Quoted text: a string, or TextRun[] for inline rich text (a colored phrase, bold, a link, or a citation or footnote marker). The engine draws the surrounding quotation marks. |
 | `attribution` | no | `string` | Person or organization credited for the quote. |
 | `source` | no | `string` | Optional quote source, citation, or URL. |
 

@@ -37,15 +37,16 @@ code, metric, quote or timeline payload, on a group, or on a slide root with sev
 `cite-unsupported-location` (`cite`/`footnote` on a run in a table cell, a caption, a reference text or a
 footnote text, where no engine draws a marker). Lint (`lintPresentation`) reports each of those under its
 code as the rule id (`opf/cite-unknown-reference`) and adds the warning `opf/unused-reference` for a
-reference no run cites. Markers are supported in `text`, `bullets` and list item (`text`, `description`)
-runs only; that is the "unsupported location" boundary, chosen so the engines never silently drop a
-marker (vetoable).
+reference no run cites. Markers are supported in the slide `tag`, `title` and `subtitle` when they are
+`TextRun[]` (FA-10), and in `text`, `bullets`, list item (`text`, `description`) and `quote.text` runs; that is
+the "unsupported location" boundary, chosen so the engines never silently drop a marker (vetoable).
 
 ## Numbering
 
 `collectCitations(presentation)` numbers every marker per deck in reading order: slides in order, then
-inside a slide the promoted regions (sorted keys), the blocks (recursively) and the root payload, then the
-runs. The same reference id keeps its number wherever it is cited; every inline footnote takes a new
+inside a slide the heading group first (`tag`, `title`, `subtitle`, the order the slide stacks them), then the
+promoted regions (sorted keys), the blocks (recursively) and the root payload, then the runs. Headings read
+before the body, so a marker on a headline claim takes the lowest numbers of its slide (FA-10, vetoable). The same reference id keeps its number wherever it is cited; every inline footnote takes a new
 number. A run that cites several ids shows `1,2`. `slideCitations(slide, slideIndex, presentation)`
 gives one slide's markers and notes with the deck numbering (the slide object may be a paginated page or
 a copy); without a presentation the slide numbers from 1 and unresolved ids are listed by id with an

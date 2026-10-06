@@ -26,6 +26,8 @@ Choose one content structure per slide:
 
 Use catalog IDs from the installed package or supply inline records in `catalogs`. A gallery route is a stable identifier, but an extended gallery layout may need the inline record included in the copied document. Do not invent an unresolvable layout or assume a network lookup will happen.
 
+A headline or quote may carry inline formatting: `title`, `subtitle`, `tag` and `quote.text` accept a string or `TextRun[]`, for example `"title": ["Revenue grew ", { "text": "28%", "color": "accent1" }]` to color the word that carries the claim, or a `cite` marker on the claim. Use a plain string unless a run needs its own style.
+
 Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts put a `type` and the same tabular structure inside `chart.data`. Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
 
 ## Revision loop

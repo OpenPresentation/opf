@@ -72,8 +72,9 @@ function leafFor(path: string, field: string, value: any): Leaf {
   if (field === 'text') { text = textOf(value); leaf.slice = (a,b) => sliceRichText(value,a,b); }
   if (field === 'code' || field === 'quote') {
     const key = field === 'code' ? 'source' : 'text';
-    text = typeof value === 'string' ? value : value[key];
-    leaf.slice = (a,b) => typeof value === 'string' ? value.slice(a,b) : { ...value, [key]: text!.slice(a,b) };
+    // A quote text may be TextRun[] (FA-10): it slices like body text, keeping each run's formatting.
+    text = typeof value === 'string' ? value : field === 'quote' ? textOf(value[key]) : value[key];
+    leaf.slice = (a,b) => typeof value === 'string' ? value.slice(a,b) : { ...value, [key]: field === 'quote' ? sliceRichText(value[key],a,b) : text!.slice(a,b) };
   }
   if (text !== undefined) {
     leaf.unit = 'utf16';

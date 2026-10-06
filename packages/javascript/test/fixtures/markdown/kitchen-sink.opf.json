@@ -13,7 +13,14 @@
       "id": "one",
       "layout": "title",
       "section": "Part 1",
-      "title": "Title with a styled word",
+      "title": [
+        "Title with a ",
+        {
+          "text": "styled",
+          "italic": true
+        },
+        " word"
+      ],
       "subtitle": "Subtitle",
       "blocks": [
         {

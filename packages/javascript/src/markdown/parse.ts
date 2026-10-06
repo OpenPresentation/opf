@@ -183,8 +183,8 @@ class SlideParser {
   private slideOptions: Obj | undefined;
   private slideOptionsRange: Range | undefined;
   private pending: Pending | undefined;
-  private title: string | undefined;
-  private subtitle: string | undefined;
+  private title: string | Run[] | undefined;
+  private subtitle: string | Run[] | undefined;
   private notes: string | undefined;
   private extras: Obj | undefined;
   private notesRange: Range | undefined;
@@ -318,13 +318,13 @@ class SlideParser {
     if (level === 1) {
       if (this.title !== undefined) ctx.error("duplicate-title", "A slide has more than one # title.", "Use --- to start a new slide, or `##` for the subtitle.", range, `${this.path}/title`);
       else {
-        this.title = this.plain(text, range);
+        this.title = this.inline(text, range);
         ctx.ranges.set(`${this.path}/title`, range);
       }
     } else if (level === 2) {
       if (this.subtitle !== undefined) ctx.error("duplicate-subtitle", "A slide has more than one ## subtitle.", "A slide has one subtitle. Use a paragraph for further lines.", range, `${this.path}/subtitle`);
       else {
-        this.subtitle = this.plain(text, range);
+        this.subtitle = this.inline(text, range);
         ctx.ranges.set(`${this.path}/subtitle`, range);
       }
     } else {
@@ -365,7 +365,8 @@ class SlideParser {
       if (BLANK.test(row)) paragraphs.push([]);
       else paragraphs.at(-1)!.push(row);
     }
-    const text = this.plain(
+    // The quote text keeps inline formatting (a string, or TextRun[] when any run is formatted); attribution and source are plain strings.
+    const text = this.inline(
       paragraphs
         .filter((paragraph) => paragraph.length)
         .map(joinParagraph)
@@ -375,7 +376,8 @@ class SlideParser {
     const value: Obj = { text };
     if (parsed.attribution !== undefined) value.attribution = this.plain(parsed.attribution, range);
     if (parsed.source !== undefined) value.source = this.plain(parsed.source, range);
-    this.native("quote", Object.keys(value).length === 1 ? value.text : value, range);
+    // The string shorthand exists only for a plain string; a rich text stays in its { text } object.
+    this.native("quote", Object.keys(value).length === 1 && typeof value.text === "string" ? value.text : value, range);
   }
 
   // --- lists -----------------------------------------------------------------------------------

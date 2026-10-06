@@ -2139,18 +2139,36 @@
           "examples": ["title", "title-subtitle", "text-2x", "chart-3x", "image-bleed", "blank", "https://acme.com/decks/layouts/cover.json", "pkg:@acme/decks/layouts/cover"]
         },
         "title": {
-          "type": "string",
-          "description": "Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there.",
-          "examples": ["Quarterly Review", "Why Now", "Next Steps"]
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TextRun" }
+            }
+          ],
+          "description": "Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "examples": ["Quarterly Review", "Why Now", "Next Steps", ["Revenue grew ", { "text": "28%", "color": "accent1" }]]
         },
         "subtitle": {
-          "type": "string",
-          "description": "Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TextRun" }
+            }
+          ],
+          "description": "Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Prepared for the board", "Three signals changed this quarter"]
         },
         "tag": {
-          "type": "string",
-          "description": "Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TextRun" }
+            }
+          ],
+          "description": "Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Intro", "Confidential", "Appendix"]
         },
         "text": {
@@ -2765,9 +2783,15 @@
       "required": ["text"],
       "properties": {
         "text": {
-          "type": "string",
-          "description": "Quoted text.",
-          "examples": ["This changed how our team handles reviews."]
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/TextRun" }
+            }
+          ],
+          "description": "Quoted text: a string, or TextRun[] for inline rich text (a colored phrase, bold, a link, or a citation or footnote marker). The engine draws the surrounding quotation marks.",
+          "examples": ["This changed how our team handles reviews.", ["Cut review time by ", { "text": "40%", "bold": true }, { "text": " in a quarter", "cite": "acme-case-study" }]]
         },
         "attribution": {
           "type": "string",
@@ -3119,7 +3143,7 @@
                 { "type": "string", "minLength": 1 },
                 { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
               ],
-              "description": "One or more ids from the top-level references list that this run cites. Engines draw a superscript marker ('1', or '1,2' for several ids) directly after the run and list '<n> <reference text>' in the slide's footnote area; markers are numbered per deck in order of first use, and the same id keeps its number. An id missing from references is a validation error (cite-unknown-reference). Supported in text, bullets and list item runs.",
+              "description": "One or more ids from the top-level references list that this run cites. Engines draw a superscript marker ('1', or '1,2' for several ids) directly after the run and list '<n> <reference text>' in the slide's footnote area; markers are numbered per deck in order of first use, and the same id keeps its number. An id missing from references is a validation error (cite-unknown-reference). Supported in text, bullets and list item runs, in the slide title, subtitle and tag, and in the quote text.",
               "examples": ["gartner-2026", ["gartner-2026", "annual-report"]]
             },
             "footnote": {
@@ -3127,7 +3151,7 @@
                 { "type": "string", "minLength": 1 },
                 { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/TextRun" } }
               ],
-              "description": "An inline note for this run, without a references entry. Engines draw a superscript marker after the run and list the note in the slide's footnote area; every footnote takes a new number in the deck's marker sequence. Supported in text, bullets and list item runs.",
+              "description": "An inline note for this run, without a references entry. Engines draw a superscript marker after the run and list the note in the slide's footnote area; every footnote takes a new number in the deck's marker sequence. Supported in text, bullets and list item runs, in the slide title, subtitle and tag, and in the quote text.",
               "examples": ["Excludes the discontinued hardware line."]
             }
           }
