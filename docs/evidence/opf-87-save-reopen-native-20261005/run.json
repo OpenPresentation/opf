@@ -1,0 +1,52 @@
+{
+    "schemaVersion":  1,
+    "kind":  "save87-run",
+    "attempt":  "20261005T190851Z",
+    "startedAt":  "2026-10-05T19:08:51.6866766Z",
+    "workerSha256":  "c2f65624ab5baa584c8b9518479f2e4e32ee25abcfd184b866be545dc66b059e",
+    "runnerSha256":  "b809bedc201508204be39e6c09380e2f771fe2f0e40192494fe3277f62e9d999",
+    "manifestSha256":  "2b1a5a3eb4634b07fe0929b8b533596429727e7ed7b173b03374b8ce54516284",
+    "powerpointProcesses":  [
+                                8268
+                            ],
+    "runs":  [
+                 {
+                     "deck":  "pictures",
+                     "mode":  "control",
+                     "pid":  16024,
+                     "startedAt":  "2026-10-05T19:08:51.7067053Z",
+                     "timedOut":  false,
+                     "exitCode":  0,
+                     "finishedAt":  "2026-10-05T19:08:53.7384450Z"
+                 },
+                 {
+                     "deck":  "pictures",
+                     "mode":  "edit",
+                     "pid":  5480,
+                     "startedAt":  "2026-10-05T19:08:53.7609803Z",
+                     "timedOut":  false,
+                     "exitCode":  0,
+                     "finishedAt":  "2026-10-05T19:08:55.8126300Z"
+                 },
+                 {
+                     "deck":  "furniture",
+                     "mode":  "control",
+                     "pid":  22016,
+                     "startedAt":  "2026-10-05T19:08:55.8223819Z",
+                     "timedOut":  false,
+                     "exitCode":  0,
+                     "finishedAt":  "2026-10-05T19:08:57.3563798Z"
+                 },
+                 {
+                     "deck":  "furniture",
+                     "mode":  "edit",
+                     "pid":  6448,
+                     "startedAt":  "2026-10-05T19:08:57.3834120Z",
+                     "timedOut":  false,
+                     "exitCode":  0,
+                     "finishedAt":  "2026-10-05T19:08:59.0295134Z"
+                 }
+             ],
+    "finishedAt":  "2026-10-05T19:08:59.0315151Z",
+    "sourcesUnchanged":  true
+}

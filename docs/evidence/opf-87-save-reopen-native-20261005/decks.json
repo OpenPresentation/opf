@@ -1,0 +1,1513 @@
+{
+  "schemaVersion": 1,
+  "kind": "save87-set",
+  "builtAt": "2026-10-05T19:02:18.600Z",
+  "node": "v24.21.0",
+  "registryLockSha256": "128b7af7a776afc85416f98ea98584649946d2666e637bc0086c4c4cb045862b",
+  "bindings": {
+    "@openpresentation/opf": {
+      "version": "0.12.1",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.12.1.tgz",
+      "integrity": "sha512-C37WyTVnaxQjYNPNoTPDWlep4nuncXn+wOfJgzqYpxcRRVitQRePAojosyXUN62zBe+jug42NK27vj+oaQj5hg=="
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.12.3",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.12.3.tgz",
+      "integrity": "sha512-rdhRE1A2/yqpIsDhm6zSxLHa0Fs1TyPoI1IrA+SXqO4fMcjfiH5VF8UEO+rJQIa8bo8uQj8TWGf1jAC3QHHrBg=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.12.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.12.0.tgz",
+      "integrity": "sha512-oQgA4xeiiGsZoXkzPX2Ix9JxI/aBBOP8iZRC9jzgfhNHzkKpLMDxFb+bnCEqKK9BYkuAiNvixwWGyikV5F4rRQ=="
+    }
+  },
+  "exportOptions": {
+    "strictAssets": true,
+    "date": "2026-10-05"
+  },
+  "literals": {
+    "bodyOriginal": "ORIGINAL-RUN",
+    "bodyEdited": "EDITED-RUN",
+    "footerOriginal": "Footer original text",
+    "footerEdited": "Footer edited natively"
+  },
+  "decks": [
+    {
+      "id": "pictures",
+      "file": "decks/pictures.pptx",
+      "sha256": "a70c281af778f920ae0eadbba421fcdddedcf52dab8204356fea17259fc1930f",
+      "size": 68892,
+      "slides": 5,
+      "expect": {
+        "pictureSlides": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "svgSlides": [
+          4
+        ],
+        "croppedSlides": [
+          3
+        ]
+      },
+      "tagCount": 32,
+      "sourceSummary": {
+        "sha256": "a70c281af778f920ae0eadbba421fcdddedcf52dab8204356fea17259fc1930f",
+        "slides": [
+          {
+            "index": 0,
+            "part": "ppt/slides/slide1.xml",
+            "pictures": [],
+            "shapes": [
+              {
+                "name": "OPF heading slides.0.title line 0",
+                "ph": null,
+                "text": "Pictures: body",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "Text 1",
+                "ph": null,
+                "text": "Body with one ORIGINAL-RUN that PowerPoint edits.",
+                "fields": [],
+                "tags": []
+              },
+              {
+                "name": "OPF furniture 0 part 0 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 0 part 1 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 0 part 2 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "1",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "1"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2230222C22646566696E6974696F6E73223A7B22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3134372E352C313136342E382C3531322E325D7D2C226E6174697665223A7B22737472756374757265223A223132613066326531636431353162222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          },
+          {
+            "index": 1,
+            "part": "ppt/slides/slide2.xml",
+            "pictures": [
+              {
+                "name": "OPF image 1",
+                "descr": "Wide PNG picture",
+                "media": {
+                  "target": "ppt/media/image-2-1.png",
+                  "ext": "png",
+                  "sha256": "857ea5f0e0ef1c150e26dccd178b2ba6a16f538b9764289cfac0e4ef24e069dd"
+                },
+                "svg": null,
+                "srcRect": null,
+                "xfrm": {
+                  "x": 2193036,
+                  "y": 1404747,
+                  "cx": 7805928,
+                  "cy": 4878705
+                },
+                "tags": []
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.1.title line 0",
+                "ph": null,
+                "text": "PNG picture",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 1 part 0 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 1 part 1 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 1 part 2 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "2",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "2"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2231222C22646566696E6974696F6E73223A7B22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A312C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A22696D616765222C22626F78223A5B35372E362C3134372E352C313136342E382C3531322E325D7D2C226E6174697665223A7B22737472756374757265223A223063646565346561356563376239222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          },
+          {
+            "index": 2,
+            "part": "ppt/slides/slide3.xml",
+            "pictures": [
+              {
+                "name": "OPF image 2",
+                "descr": "Tall JPEG picture",
+                "media": {
+                  "target": "ppt/media/image-3-1.jpeg",
+                  "ext": "jpeg",
+                  "sha256": "a358339f39552b0ab8dbfeac66d698a39a7e73686d113005e3008b4987b49a14"
+                },
+                "svg": null,
+                "srcRect": null,
+                "xfrm": {
+                  "x": 4469765,
+                  "y": 1404747,
+                  "cx": 3252470,
+                  "cy": 4878705
+                },
+                "tags": []
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.2.title line 0",
+                "ph": null,
+                "text": "JPEG picture",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 2 part 0 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 2 part 1 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 2 part 2 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "3",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "3"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2232222C22646566696E6974696F6E73223A7B22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A322C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A22696D616765222C22626F78223A5B35372E362C3134372E352C313136342E382C3531322E325D7D2C226E6174697665223A7B22737472756374757265223A223033333336653631653336323738222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          },
+          {
+            "index": 3,
+            "part": "ppt/slides/slide4.xml",
+            "pictures": [
+              {
+                "name": "OPF image 3",
+                "descr": "Cropped PNG picture",
+                "media": {
+                  "target": "ppt/media/image-2-1.png",
+                  "ext": "png",
+                  "sha256": "857ea5f0e0ef1c150e26dccd178b2ba6a16f538b9764289cfac0e4ef24e069dd"
+                },
+                "svg": null,
+                "srcRect": {
+                  "l": 27288,
+                  "t": 0,
+                  "r": 27288,
+                  "b": 0
+                },
+                "xfrm": {
+                  "x": 8097520,
+                  "y": 1404747,
+                  "cx": 3545840,
+                  "cy": 4878705
+                },
+                "tags": []
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.3.title line 0",
+                "ph": null,
+                "text": "Cropped picture",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E332E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF text slides.3.left.text line 0",
+                "ph": null,
+                "text": "The picture on the right is ",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_TEXT_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E332E6C6566742E74657874222C226C696E65223A302C22636F756E74223A322C22626F756E64617279223A22736F6674222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF text slides.3.left.text line 1",
+                "ph": null,
+                "text": "cropped to fill its region.",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_TEXT_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E332E6C6566742E74657874222C226C696E65223A312C22636F756E74223A322C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 3 part 0 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2233222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 3 part 1 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2233222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 3 part 2 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "4",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "4"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2233222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2233222C22646566696E6974696F6E73223A7B22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A332C22636F6E74656E74223A7B22666F726D223A22726567696F6E73222C22726567696F6E73223A7B226C656674223A7B2274223A226C656166222C226B223A2274657874222C22626F78223A5B35372E362C3134372E352C3337322E332C3531322E325D7D2C227269676874223A7B2274223A226C656166222C226B223A22696D616765222C22626F78223A5B3835302E312C3134372E352C3337322E332C3531322E325D7D7D7D2C2264657369676E223A7B22696D61676546696C6C223A2263726F70227D2C226E6174697665223A7B22737472756374757265223A223030313835386161303962636166222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          },
+          {
+            "index": 4,
+            "part": "ppt/slides/slide5.xml",
+            "pictures": [
+              {
+                "name": "OPF image 4",
+                "descr": "SVG picture with PNG fallback",
+                "media": {
+                  "target": "ppt/media/image-5-1.png",
+                  "ext": "png",
+                  "sha256": "b273435b7096462e051b3d70b85c12e181cbada74618b29ec169222281aba4b3"
+                },
+                "svg": {
+                  "target": "ppt/media/svg-5-1.svg",
+                  "sha256": "b638cee8bb2b878fe89ad36f39abf05f1df97211185a103c18ca3cfe7b267088"
+                },
+                "srcRect": null,
+                "xfrm": {
+                  "x": 2193036,
+                  "y": 1404747,
+                  "cx": 7805928,
+                  "cy": 4878705
+                },
+                "tags": []
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.4.title line 0",
+                "ph": null,
+                "text": "SVG picture",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E342E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 4 part 0 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2234222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 4 part 1 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2234222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 4 part 2 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "5",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "5"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2234222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2234222C22646566696E6974696F6E73223A7B22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A342C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A22696D616765222C22626F78223A5B35372E362C3134372E352C313136342E382C3531322E325D7D2C226E6174697665223A7B22737472756374757265223A223063646565346561356563376239222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          }
+        ],
+        "masters": [
+          {
+            "part": "ppt/slideMasters/slideMaster1.xml",
+            "placeholders": [
+              "dt",
+              "ftr",
+              "sldNum"
+            ],
+            "hf": "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          }
+        ],
+        "layouts": [
+          {
+            "part": "ppt/slideLayouts/slideLayout1.xml",
+            "placeholders": [
+              "dt",
+              "ftr",
+              "sldNum"
+            ],
+            "hf": "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          }
+        ],
+        "parts": {
+          "[Content_Types].xml": "f4a4adcc36c8b64d9e6d3972c10baf17ffcc9c766b09eb626d89a5fc974d6a03",
+          "_rels/.rels": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+          "docProps/app.xml": "cc875428d1d7d45b5e5256668bebeb6afaa516b4b8bff223e32c5c0d980415a7",
+          "docProps/core.xml": "76f4759b13a0ca9081d61e90adf9dc8330d9d819c89a40c3434f9e6e233b65d2",
+          "ppt/_rels/presentation.xml.rels": "e9ff8dc72935a3222776c28f5c429ffd50ae15a1ee9b2d712ef8ac7e72b251eb",
+          "ppt/media/image-2-1.png": "857ea5f0e0ef1c150e26dccd178b2ba6a16f538b9764289cfac0e4ef24e069dd",
+          "ppt/media/image-3-1.jpeg": "a358339f39552b0ab8dbfeac66d698a39a7e73686d113005e3008b4987b49a14",
+          "ppt/media/image-5-1.png": "b273435b7096462e051b3d70b85c12e181cbada74618b29ec169222281aba4b3",
+          "ppt/media/svg-5-1.svg": "b638cee8bb2b878fe89ad36f39abf05f1df97211185a103c18ca3cfe7b267088",
+          "ppt/notesMasters/_rels/notesMaster1.xml.rels": "aa28ea0b8047e5c53ef232c7811d3b5ef01ac58b6cdd58a83d3ce0b6a39edcfe",
+          "ppt/notesMasters/notesMaster1.xml": "30b679d7ba224d98894bc533dc61f2277215c7309afa38e0bdd6c2f24b420453",
+          "ppt/notesSlides/_rels/notesSlide1.xml.rels": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+          "ppt/notesSlides/_rels/notesSlide2.xml.rels": "d9b0b8b9c1791837bed1ec75969ec1d34486b5e1606a0d739d3c35eeba590d06",
+          "ppt/notesSlides/_rels/notesSlide3.xml.rels": "578c28b0582eba439178176fb0b102c03bb1ec88abed3503f44bcd0f9a11783c",
+          "ppt/notesSlides/_rels/notesSlide4.xml.rels": "6de72adb9167a1c1aab19cda70f7d44ca6fc93d97f14b01e74a76a5a7197b958",
+          "ppt/notesSlides/_rels/notesSlide5.xml.rels": "9c83aa477a5a4c0f5108d5160fd45674eba6e6583f49c67b254b4ea715ddc83b",
+          "ppt/notesSlides/notesSlide1.xml": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+          "ppt/notesSlides/notesSlide2.xml": "bae0245bfeb4194074a5dfde0aa08b36a6fa527ddcaccca0bdbc37eee8b3a57c",
+          "ppt/notesSlides/notesSlide3.xml": "7ec927f72813271eb244cfe044facb5970f0e26e10a84b83b2cda218e56b92f5",
+          "ppt/notesSlides/notesSlide4.xml": "81b9ecb4086b52a4868a8f81f611012497f27933c28c9e5a24b05d6b5d891226",
+          "ppt/notesSlides/notesSlide5.xml": "a423384449d4f093ae59df5fb176af9078643d1c16262d7fdf35b9af8763483a",
+          "ppt/presProps.xml": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+          "ppt/presentation.xml": "c285e37e9b863c07c47bfedd08e141feb2433f72738fbe50c12fa4b9ce238fae",
+          "ppt/slideLayouts/_rels/slideLayout1.xml.rels": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+          "ppt/slideLayouts/slideLayout1.xml": "a2a33afdc1558c3f11bdfb4f44e399d50696a22dc002a7a05b41a8b313eaabf0",
+          "ppt/slideMasters/_rels/slideMaster1.xml.rels": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+          "ppt/slideMasters/slideMaster1.xml": "bf87b5c65b488f24cb0ed952914d8196f1e0ab58525d65dee46354cbf648668d",
+          "ppt/slides/_rels/slide1.xml.rels": "00971a3c2eacebeb54d751e715f7371a91c7b54a5115b838f75729b694b1fadf",
+          "ppt/slides/_rels/slide2.xml.rels": "d7c92276857f10c107ff87bf6fbfbf341e0e4961ca9b34d585be2c86869e0936",
+          "ppt/slides/_rels/slide3.xml.rels": "c2c8fd7000052eebb6512237a843d5f6c2ca6f2c4b4226e0fe81d3b16e5bdd2d",
+          "ppt/slides/_rels/slide4.xml.rels": "2d8cd16cee9422f5ae98283446bde8afb4e1056acee86d51915ad54310db64be",
+          "ppt/slides/_rels/slide5.xml.rels": "0fa2e685883f5c3b543944e60caf6c2aab8b0c935fbb4a9d21ed6b58301897de",
+          "ppt/slides/slide1.xml": "9cc1064a14f87e2314c5f6a498092f4e93e9fc63a32dfa409d35c7209f512f68",
+          "ppt/slides/slide2.xml": "2c7e7502eb632c5b4d97fc8d26b26e08f8a9449aa48315f2d7ae342e0a586641",
+          "ppt/slides/slide3.xml": "050d1dc6a44d018b5ffc217de3be4b943a4cb39ee67dc5870a24f91a707f3e7c",
+          "ppt/slides/slide4.xml": "8a0e07dcc335a1b25ddde72076bcc95a5a00daf006d260fb3c8b5a472d2e8882",
+          "ppt/slides/slide5.xml": "11ef0e5659bf1cd10e23d16d80a7023d669cf6da6e2a732d20b839ac5d1df6fd",
+          "ppt/tableStyles.xml": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+          "ppt/tags/opfDocument.xml": "849f89df189d3b3b89f03cd1c9488c36a85a0287bbe6bce581600716b4e65f01",
+          "ppt/tags/opfFurniture1.xml": "68b8199e6d4e1bdb94a84338fc7f9d9d73d805f4be8c99d96f0f0456c7a5fb7a",
+          "ppt/tags/opfFurniture10.xml": "db17204718f41c6b697d43b9cf17e5d4c84483253610171de463b2177cd70f48",
+          "ppt/tags/opfFurniture11.xml": "6246730bb38cd83745509eddaac22daf7390c50397f9ec9d09c5d0bcf8652fc4",
+          "ppt/tags/opfFurniture12.xml": "1aebd93faaeb7b0df9d0fabe7389d7e61da10992f80be74d22fcca665ede5bbe",
+          "ppt/tags/opfFurniture13.xml": "1867ddc7486f19e5fd9b4e406491204b0e0002413790add40398b786dc2e423e",
+          "ppt/tags/opfFurniture14.xml": "dc6d1333cfbca43b8c0b52ef532d8438de14c84f1148fc84ceefe44d491c91b3",
+          "ppt/tags/opfFurniture15.xml": "5d351bea6ccf75363dd5c7c3c3c3c0186f197e7451b8ec6693c18d5677e22f7b",
+          "ppt/tags/opfFurniture2.xml": "04b60ee51c09e19a3de2ed91a55d0bf3a6689734df792668e8bd43d1538131b8",
+          "ppt/tags/opfFurniture3.xml": "ac07ca6f9eff0457ed8236ad2bd2bc7d9608ce5ee03a512135ad3f02d5a02add",
+          "ppt/tags/opfFurniture4.xml": "7d7e86cb90cd2e9024477215b3e693c05d61df81c3c0807d386d71e5d6555b80",
+          "ppt/tags/opfFurniture5.xml": "b5adf0cb422d5002639075fcf898f8779368b7e82b2b6e62a1aa627ffb7492f2",
+          "ppt/tags/opfFurniture6.xml": "6cef1470b8dfb03b1094b5edd1b0af862daacfea9d56d85acd0a05d73ac0213a",
+          "ppt/tags/opfFurniture7.xml": "3a6cc4d751554a962e518018b46c48ddec74bf65575ac6e24a37f7235c1966e2",
+          "ppt/tags/opfFurniture8.xml": "5dcc0a19556dd303c9c9e88963a763ec22a20d2a8f6c6018c01944007f92823c",
+          "ppt/tags/opfFurniture9.xml": "dab39ea7404149b80d99508dc632f07cddc6be15dcfff6937bdd2444b07f86db",
+          "ppt/tags/opfFurnitureSlide0.xml": "32f56fabce65537c55c80387857dc600c1a460ac8e751f45fbefec36307da423",
+          "ppt/tags/opfFurnitureSlide1.xml": "66cf7ddbcffa3b00d3da3ff7738d38416fe8acba42fec5795ba1cea0e9292d00",
+          "ppt/tags/opfFurnitureSlide2.xml": "7257cf7c7f7480654e822a80d47e6f64063ca49ce368886d4817f57c4e10c238",
+          "ppt/tags/opfFurnitureSlide3.xml": "a661175cdcfba953990b5104283cfec290d28a0d3f56cac3d69bab3220b564b8",
+          "ppt/tags/opfFurnitureSlide4.xml": "cea7aa3cbbf15c04e301dcff48bbd570b263778989c9f0ad7d1d2dbdcdaaec50",
+          "ppt/tags/opfHeading1.xml": "a2c7c73c06624edc13cc7434e6758a412b7848bff62b7bf24ddd8ae91326e0bc",
+          "ppt/tags/opfHeading2.xml": "54bb8617266709b68cf47d564de51e84634dbfd641506808f6ae5688e00695d0",
+          "ppt/tags/opfHeading3.xml": "91c492bf7bb995d38bb6850a3514b90b9acd89a3195e6627412161c5bf7ed49f",
+          "ppt/tags/opfHeading4.xml": "6d1ef18cabd38a1ed839e185cb4b0e1f8d39b6e4ecd002bbb1e4dd9412413c32",
+          "ppt/tags/opfHeading5.xml": "fe9e2cc9416a5160b653cb24f6877fcd6df91cb750bdc099e4996a56398a0059",
+          "ppt/tags/opfText1.xml": "09f0b68cf4beff93390e7bdfbac007ccfbd3460c65884f72e230aae0dea9a0c2",
+          "ppt/tags/opfText2.xml": "1a078bcec9b2c7808e5d2efe6d2d26bc412120e6568f11270184e6feee864387",
+          "ppt/theme/theme1.xml": "13ed57cb9e13a93ca01d17dfc9a78b52e054a957ca3effc5d859aee497f65189",
+          "ppt/theme/theme2.xml": "13ed57cb9e13a93ca01d17dfc9a78b52e054a957ca3effc5d859aee497f65189",
+          "ppt/viewProps.xml": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8"
+        },
+        "presentationAttributes": "<p:presentation  saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
+      },
+      "sourceReimport": {
+        "valid": true,
+        "diagnostics": [
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.0.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.1.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.2.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.3.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.4.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.0",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.1",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.2",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.3",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "text-import-reflow",
+            "path": "slides.3",
+            "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text."
+          },
+          {
+            "code": "unsupported-image-crop",
+            "path": "slides.3.pictures.0",
+            "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.4",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          }
+        ],
+        "slides": [
+          {
+            "index": 0,
+            "title": "Pictures: body",
+            "text": "Body with one ORIGINAL-RUN that PowerPoint edits.",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": null,
+            "headerImage": null,
+            "images": []
+          },
+          {
+            "index": 1,
+            "title": "PNG picture",
+            "text": "",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": null,
+            "headerImage": null,
+            "images": [
+              {
+                "where": "slide.image",
+                "alt": "Wide PNG picture",
+                "mediaType": "image/png",
+                "sha256": "857ea5f0e0ef1c150e26dccd178b2ba6a16f538b9764289cfac0e4ef24e069dd",
+                "size": 6952,
+                "src": null
+              }
+            ]
+          },
+          {
+            "index": 2,
+            "title": "JPEG picture",
+            "text": "",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": null,
+            "headerImage": null,
+            "images": [
+              {
+                "where": "slide.image",
+                "alt": "Tall JPEG picture",
+                "mediaType": "image/jpeg",
+                "sha256": "a358339f39552b0ab8dbfeac66d698a39a7e73686d113005e3008b4987b49a14",
+                "size": 7040,
+                "src": null
+              }
+            ]
+          },
+          {
+            "index": 3,
+            "title": "Cropped picture",
+            "text": "",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": null,
+            "headerImage": null,
+            "images": [
+              {
+                "where": "slide.right.image",
+                "alt": "Cropped PNG picture",
+                "mediaType": "image/png",
+                "sha256": "857ea5f0e0ef1c150e26dccd178b2ba6a16f538b9764289cfac0e4ef24e069dd",
+                "size": 6952,
+                "src": null
+              }
+            ]
+          },
+          {
+            "index": 4,
+            "title": "SVG picture",
+            "text": "",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": null,
+            "headerImage": null,
+            "images": [
+              {
+                "where": "slide.image",
+                "alt": "SVG picture with PNG fallback",
+                "mediaType": "image/svg+xml",
+                "sha256": "b638cee8bb2b878fe89ad36f39abf05f1df97211185a103c18ca3cfe7b267088",
+                "size": 258,
+                "src": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "furniture",
+      "file": "decks/furniture.pptx",
+      "sha256": "2195120efe796d83988f20ffa5c67b0d2823c94f08a4fde5cf1ba0da388583b3",
+      "size": 34463,
+      "slides": 3,
+      "expect": {
+        "pictureSlides": [],
+        "svgSlides": [],
+        "croppedSlides": []
+      },
+      "tagCount": 23,
+      "sourceSummary": {
+        "sha256": "2195120efe796d83988f20ffa5c67b0d2823c94f08a4fde5cf1ba0da388583b3",
+        "slides": [
+          {
+            "index": 0,
+            "part": "ppt/slides/slide1.xml",
+            "pictures": [
+              {
+                "name": "OPF image 1",
+                "descr": "Footer logo",
+                "media": {
+                  "target": "ppt/media/image-1-1.png",
+                  "ext": "png",
+                  "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa"
+                },
+                "svg": null,
+                "srcRect": null,
+                "xfrm": {
+                  "x": 10995660,
+                  "y": 171450,
+                  "cx": 342900,
+                  "cy": 342900
+                },
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2230222C2270617274223A307D"
+                  }
+                ]
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.0.title line 0",
+                "ph": null,
+                "text": "Furniture: body",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "Text 1",
+                "ph": null,
+                "text": "Body with one ORIGINAL-RUN that PowerPoint edits.",
+                "fields": [],
+                "tags": []
+              },
+              {
+                "name": "OPF furniture 0 part 1 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 0 part 2 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 0 part 3 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "1",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "1"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2230222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          },
+          {
+            "index": 1,
+            "part": "ppt/slides/slide2.xml",
+            "pictures": [
+              {
+                "name": "OPF image 2",
+                "descr": "Footer logo",
+                "media": {
+                  "target": "ppt/media/image-1-1.png",
+                  "ext": "png",
+                  "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa"
+                },
+                "svg": null,
+                "srcRect": null,
+                "xfrm": {
+                  "x": 10995660,
+                  "y": 171450,
+                  "cx": 342900,
+                  "cy": 342900
+                },
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D"
+                  }
+                ]
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.1.title line 0",
+                "ph": null,
+                "text": "Second slide",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF text slides.1.text line 0",
+                "ph": null,
+                "text": "Footer, date field, slide number field and logo repeat here.",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_TEXT_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E312E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 1 part 1 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 1 part 2 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 1 part 3 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "2",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "2"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2231222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A312C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          },
+          {
+            "index": 2,
+            "part": "ppt/slides/slide3.xml",
+            "pictures": [
+              {
+                "name": "OPF image 3",
+                "descr": "Footer logo",
+                "media": {
+                  "target": "ppt/media/image-1-1.png",
+                  "ext": "png",
+                  "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa"
+                },
+                "svg": null,
+                "srcRect": null,
+                "xfrm": {
+                  "x": 10995660,
+                  "y": 171450,
+                  "cx": 342900,
+                  "cy": 342900
+                },
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2232222C2270617274223A307D"
+                  }
+                ]
+              }
+            ],
+            "shapes": [
+              {
+                "name": "OPF heading slides.2.title line 0",
+                "ph": null,
+                "text": "Third slide",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_HEADING_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF text slides.2.text line 0",
+                "ph": null,
+                "text": "And here.",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_TEXT_V1",
+                    "val": "7B2276223A312C2267726F7570223A22736C696465732E322E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 2 part 1 line 0",
+                "ph": {
+                  "type": "dt",
+                  "idx": "10"
+                },
+                "text": "10/5/2026",
+                "fields": [
+                  {
+                    "type": "datetime1",
+                    "text": "10/5/2026"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 2 part 2 line 0",
+                "ph": {
+                  "type": "ftr",
+                  "idx": "11"
+                },
+                "text": "Footer original text",
+                "fields": [],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              },
+              {
+                "name": "OPF furniture 2 part 3 line 0",
+                "ph": {
+                  "type": "sldNum",
+                  "idx": "12"
+                },
+                "text": "3",
+                "fields": [
+                  {
+                    "type": "slidenum",
+                    "text": "3"
+                  }
+                ],
+                "tags": [
+                  {
+                    "name": "OPF_FURNITURE_V1",
+                    "val": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                  }
+                ]
+              }
+            ],
+            "slideTags": [
+              {
+                "name": "OPF_FURNITURE_V1",
+                "val": "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2232222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+              },
+              {
+                "name": "OPF_SLIDE_V1",
+                "val": "7B2276223A312C22736C696465223A322C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+              }
+            ],
+            "layout": "ppt/slideLayouts/slideLayout1.xml"
+          }
+        ],
+        "masters": [
+          {
+            "part": "ppt/slideMasters/slideMaster1.xml",
+            "placeholders": [
+              "dt",
+              "ftr",
+              "sldNum"
+            ],
+            "hf": "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          }
+        ],
+        "layouts": [
+          {
+            "part": "ppt/slideLayouts/slideLayout1.xml",
+            "placeholders": [
+              "dt",
+              "ftr",
+              "sldNum"
+            ],
+            "hf": "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          }
+        ],
+        "parts": {
+          "[Content_Types].xml": "c238c373ab815953ff06aa97b5eb48ebd97a69533f1580fcd3ab14a88ae80290",
+          "_rels/.rels": "a73dc65f1cb1959ca09044852c3697385e6124853bf5a0fa3f0215f608e86b47",
+          "docProps/app.xml": "44ee8839277a79f66a442d338fe4c0adb187bcfc8f346738c01bdf6dd70e03cd",
+          "docProps/core.xml": "d4232c06fc4c31bf56ec73f40fcb4993e37542152209ed9e9e2feba6fca23e55",
+          "ppt/_rels/presentation.xml.rels": "8181ce8637c306d71a8bf74859714ae746b57ef2b0cd3c4fcc621984e6ebdb57",
+          "ppt/media/image-1-1.png": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+          "ppt/notesMasters/_rels/notesMaster1.xml.rels": "aa28ea0b8047e5c53ef232c7811d3b5ef01ac58b6cdd58a83d3ce0b6a39edcfe",
+          "ppt/notesMasters/notesMaster1.xml": "30b679d7ba224d98894bc533dc61f2277215c7309afa38e0bdd6c2f24b420453",
+          "ppt/notesSlides/_rels/notesSlide1.xml.rels": "4e7f04378558285258df490583e9ed0e8039b27df83bcdc2e5b4992cf47090f2",
+          "ppt/notesSlides/_rels/notesSlide2.xml.rels": "d9b0b8b9c1791837bed1ec75969ec1d34486b5e1606a0d739d3c35eeba590d06",
+          "ppt/notesSlides/_rels/notesSlide3.xml.rels": "578c28b0582eba439178176fb0b102c03bb1ec88abed3503f44bcd0f9a11783c",
+          "ppt/notesSlides/notesSlide1.xml": "a559bf003438191a2723e887544acb00d550c7a9d8a4fd36a41bd877d46e2be6",
+          "ppt/notesSlides/notesSlide2.xml": "bae0245bfeb4194074a5dfde0aa08b36a6fa527ddcaccca0bdbc37eee8b3a57c",
+          "ppt/notesSlides/notesSlide3.xml": "7ec927f72813271eb244cfe044facb5970f0e26e10a84b83b2cda218e56b92f5",
+          "ppt/presProps.xml": "4446069208ff4cd22879cccdfb0a2a302cb7e572e2c48d00b64066d25f026df1",
+          "ppt/presentation.xml": "7e5ab075ca2d645fc3f1463a99b9a19c47b16eb1bdcd21caf7595fdf69dc0a4d",
+          "ppt/slideLayouts/_rels/slideLayout1.xml.rels": "8246d333bf3764cd35563e3df1828c26bbc28890815a2987caf3e592791ba60d",
+          "ppt/slideLayouts/slideLayout1.xml": "a2a33afdc1558c3f11bdfb4f44e399d50696a22dc002a7a05b41a8b313eaabf0",
+          "ppt/slideMasters/_rels/slideMaster1.xml.rels": "066fd8f2e94608804160631c736d82e4c0b0784a1646489030092cc04888839a",
+          "ppt/slideMasters/slideMaster1.xml": "bf87b5c65b488f24cb0ed952914d8196f1e0ab58525d65dee46354cbf648668d",
+          "ppt/slides/_rels/slide1.xml.rels": "a3022009448ec0bfb9f7ff12bc6c81aeec91ba3795c26d41c92e80f23f0f7085",
+          "ppt/slides/_rels/slide2.xml.rels": "8b7e1501a896ae4e03f1d397650fc9fbae84a26a66bb9cdc408c842bbfdefb90",
+          "ppt/slides/_rels/slide3.xml.rels": "7ac9e84f53940f8b3197a31f9a77303f5efcd70fb40596e26f3995dcf8f955f2",
+          "ppt/slides/slide1.xml": "e436a006c93dfda5dcc4feda6b4a43f27112462c631b8b69f9546ec8ec6a4a88",
+          "ppt/slides/slide2.xml": "f4b754156271dc9df49c322b8a0106361a49708c7fcafe447c700f39bf89ea40",
+          "ppt/slides/slide3.xml": "483666ab9043daf6071e40cdccd84ae949c7b13efc58c77beaa56122c1ba68b2",
+          "ppt/tableStyles.xml": "0e7ac03251337ecbaf6c8ca13619db1caeda5c90c4e3210d45d6c3f5df4de103",
+          "ppt/tags/opfDocument.xml": "48ac6ca85e57a75f3240e19b9fc4cd8b226139dd18f6f1dfa17a934119e23ccf",
+          "ppt/tags/opfFurniture1.xml": "4d280ea60c9dedc521b12a3323b998182b8783d830725f5d854f9a8f0bdaa3d8",
+          "ppt/tags/opfFurniture10.xml": "5dcc0a19556dd303c9c9e88963a763ec22a20d2a8f6c6018c01944007f92823c",
+          "ppt/tags/opfFurniture11.xml": "dab39ea7404149b80d99508dc632f07cddc6be15dcfff6937bdd2444b07f86db",
+          "ppt/tags/opfFurniture12.xml": "1f7f338b7013a7bae927b11e8ccfed1d44c7ebc9c1decb832ce23927e9f07fff",
+          "ppt/tags/opfFurniture2.xml": "04b60ee51c09e19a3de2ed91a55d0bf3a6689734df792668e8bd43d1538131b8",
+          "ppt/tags/opfFurniture3.xml": "ac07ca6f9eff0457ed8236ad2bd2bc7d9608ce5ee03a512135ad3f02d5a02add",
+          "ppt/tags/opfFurniture4.xml": "f3773b5f0a7701d92249091ce98790c9cc6e9a90d82966a88316f2f498b8e36b",
+          "ppt/tags/opfFurniture5.xml": "9cd64f51af75326c2aa2035031b181f2a0d4ff3369763286bb3b6b4683ca895a",
+          "ppt/tags/opfFurniture6.xml": "b5adf0cb422d5002639075fcf898f8779368b7e82b2b6e62a1aa627ffb7492f2",
+          "ppt/tags/opfFurniture7.xml": "6cef1470b8dfb03b1094b5edd1b0af862daacfea9d56d85acd0a05d73ac0213a",
+          "ppt/tags/opfFurniture8.xml": "7271d506292299932e79f4c3a67a7ff161c66a9caf0c76d127d7330062f0cbfa",
+          "ppt/tags/opfFurniture9.xml": "393027fb293b580d6208d7151b53daa86cb4af658e12a835d18bd03e42c06e33",
+          "ppt/tags/opfFurnitureSlide0.xml": "4487f21c09a6d0e916f29f9a8461ca7834f1444ba5c25f98d3cff168f2d25ba3",
+          "ppt/tags/opfFurnitureSlide1.xml": "95f577026ecf5143b878513f4e9812f9f2fcebdfaa275d5f4ed6ac8e58ec2145",
+          "ppt/tags/opfFurnitureSlide2.xml": "65393d79cb3910c896d14bc81fe948498387fee166dea51b3e57d4edc3cd25b5",
+          "ppt/tags/opfHeading1.xml": "a2c7c73c06624edc13cc7434e6758a412b7848bff62b7bf24ddd8ae91326e0bc",
+          "ppt/tags/opfHeading2.xml": "54bb8617266709b68cf47d564de51e84634dbfd641506808f6ae5688e00695d0",
+          "ppt/tags/opfHeading3.xml": "91c492bf7bb995d38bb6850a3514b90b9acd89a3195e6627412161c5bf7ed49f",
+          "ppt/tags/opfText1.xml": "d1da589cda453379cd78d0b69731c3f8f91bbab7ff2e3d0232ed9d7b4c33fee7",
+          "ppt/tags/opfText2.xml": "9ec507f4c2fad410b1114d57b2b28709301bb0eee1e946a046af3d9487b2410e",
+          "ppt/theme/theme1.xml": "13ed57cb9e13a93ca01d17dfc9a78b52e054a957ca3effc5d859aee497f65189",
+          "ppt/theme/theme2.xml": "13ed57cb9e13a93ca01d17dfc9a78b52e054a957ca3effc5d859aee497f65189",
+          "ppt/viewProps.xml": "4cc12863620049069daeb39b14b4aba98a5e3048318be16a5af5879f6e4b2ac8"
+        },
+        "presentationAttributes": "<p:presentation  saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
+      },
+      "sourceReimport": {
+        "valid": true,
+        "diagnostics": [
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.0.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.1.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "furniture-import-reflow",
+            "path": "slides.2.design",
+            "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.0",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.1",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "text-import-reflow",
+            "path": "slides.1",
+            "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text."
+          },
+          {
+            "code": "heading-import-reflow",
+            "path": "slides.2",
+            "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Formatting and geometry are not reconstructed."
+          },
+          {
+            "code": "text-import-reflow",
+            "path": "slides.2",
+            "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text."
+          }
+        ],
+        "slides": [
+          {
+            "index": 0,
+            "title": "Furniture: body",
+            "text": "Body with one ORIGINAL-RUN that PowerPoint edits.",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": {
+              "right": {
+                "image": {
+                  "where": "header",
+                  "alt": "Footer logo",
+                  "mediaType": "image/png",
+                  "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+                  "size": 927,
+                  "src": null
+                }
+              }
+            },
+            "headerImage": {
+              "where": "header",
+              "alt": "Footer logo",
+              "mediaType": "image/png",
+              "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+              "size": 927,
+              "src": null
+            },
+            "images": []
+          },
+          {
+            "index": 1,
+            "title": "Second slide",
+            "text": "Footer, date field, slide number field and logo repeat here.",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": {
+              "right": {
+                "image": {
+                  "where": "header",
+                  "alt": "Footer logo",
+                  "mediaType": "image/png",
+                  "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+                  "size": 927,
+                  "src": null
+                }
+              }
+            },
+            "headerImage": {
+              "where": "header",
+              "alt": "Footer logo",
+              "mediaType": "image/png",
+              "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+              "size": 927,
+              "src": null
+            },
+            "images": []
+          },
+          {
+            "index": 2,
+            "title": "Third slide",
+            "text": "And here.",
+            "footer": {
+              "left": {
+                "dateFormat": "M/d/yyyy",
+                "date": true
+              },
+              "center": {
+                "text": "Footer original text"
+              },
+              "right": {
+                "slideNumber": true
+              }
+            },
+            "header": {
+              "right": {
+                "image": {
+                  "where": "header",
+                  "alt": "Footer logo",
+                  "mediaType": "image/png",
+                  "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+                  "size": 927,
+                  "src": null
+                }
+              }
+            },
+            "headerImage": {
+              "where": "header",
+              "alt": "Footer logo",
+              "mediaType": "image/png",
+              "sha256": "9bad51589e3ca2dc7830fd41f1900226482a4cdc97a0b1ac4e87d6a4c1909daa",
+              "size": 927,
+              "src": null
+            },
+            "images": []
+          }
+        ]
+      }
+    }
+  ]
+}
