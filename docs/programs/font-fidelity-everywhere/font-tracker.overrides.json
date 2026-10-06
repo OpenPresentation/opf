@@ -2881,6 +2881,24 @@
         "label": "pptx-gallery#90 (gallery editor script family fixture)",
         "url": "https://github.com/Data-Advantage/pptx-gallery/pull/90"
       }
+    ],
+    "ff46DocumentedVisual": [
+      {
+        "label": "FF-46 / RR-17 native visual comparison: script, visual and code-table families (2026-10-05)",
+        "url": "docs/evidence/ff-46-documented-visual-native-20261005/README.md"
+      },
+      {
+        "label": "opf#323 section 3 (native checks on the Windows host)",
+        "url": "https://github.com/OpenPresentation/opf/issues/323"
+      },
+      {
+        "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
+        "url": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md"
+      },
+      {
+        "label": "opf#363 (Windows supplemental fonts on the native host)",
+        "url": "https://github.com/OpenPresentation/opf/issues/363"
+      }
     ]
   },
   "galleryFontsSnapshot": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
@@ -3042,6 +3060,33 @@
     ],
     "nextActions": {
       "qualified": "Native verification (FF-46): the selected name read-back is recorded under nativeVerification; acceptance of the drawn look and metrics of this family's script against PowerPoint (the RR-17 native check decks) remains."
+    }
+  },
+  "visualAcceptance": {
+    "id": "ff-46-documented-visual-native-20261005-fonts",
+    "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
+    "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+    "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
+    "date": "2026-10-05",
+    "statuses": [
+      "script-gap",
+      "visual-gap",
+      "code-table"
+    ],
+    "hosts": [
+      "node",
+      "browser",
+      "editor",
+      "galleryEditor"
+    ],
+    "fixture": "The family's own fixture in every host (node, browser, editor, gallery editor; host evidence keyed by the family's name) plus the native visual comparison of opf#323 section 3: names read back, every exported line box reads one native line, no native overflow where the preview fits, the real font not wider than the replacement (native / preview ink width at most 1.01 on lines of at least 200 pt) and no gap of 20 % or more without a preview size adjustment, with the real font installed on the native host.",
+    "evidence": [
+      "ff46DocumentedVisual",
+      "scriptCorpora",
+      "scriptCorporaEvidence"
+    ],
+    "nextActions": {
+      "documented-visual": "Parity rerun (owner phase 5). The measured gaps and the native visual comparison are in the acceptance note and nativeVisual."
     }
   },
   "appearance": {
@@ -3313,6 +3358,22 @@
       "readme": "docs/evidence/ff-46-native-0.12-20261002/README.md",
       "date": "2026-10-02",
       "host": "PowerPoint 365, Windows"
+    },
+    {
+      "id": "ff-46-documented-visual-native-20261005",
+      "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
+      "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
+      "date": "2026-10-05",
+      "host": "PowerPoint 365, Windows"
+    },
+    {
+      "id": "ff-46-documented-visual-native-20261005-fonts",
+      "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+      "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
+      "date": "2026-10-05",
+      "host": "PowerPoint 365, Windows (supplemental fonts installed)"
     }
   ]
 }

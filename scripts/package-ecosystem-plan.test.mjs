@@ -33,8 +33,22 @@ test('sibling shards run only sibling suites and keep their order', () => {
   assert.deepEqual(shards.core, full.filter((step) => step.startsWith('opf: ')));
 });
 
+// RR-45 (opf#368, item 1): ecosystem-core is two core shards plus the registry shard; the two core halves partition core's list.
+test('the core parts partition the core shard, in order', () => {
+  const model = planEcosystem(['--skip-siblings', '--core', 'model']).map(key);
+  const packed = planEcosystem(['--skip-siblings', '--core=packed']).map(key);
+  assert.deepEqual(packed, ['opf: pnpm pack:ecosystem', 'opf: pnpm test:packed-ecosystem']);
+  assert.deepEqual(model, shards.core.filter((step) => !packed.includes(step)));
+  assert.deepEqual([...model, ...packed].sort(), [...shards.core].sort());
+  assert.equal(new Set([...model, ...packed]).size, shards.core.length);
+  assert.ok(model.includes('opf: pnpm test:fonts') && model.includes('opf: pnpm test:cli:packed'));
+  for (const tier of ['full', 'contract']) {
+    assert.deepEqual(planEcosystem(['--skip-siblings', '--core', 'model', '--tier', tier]).map(key), model);
+  }
+});
+
 test('bad arguments fail', () => {
-  for (const argv of [['--siblings'], ['--siblings', ''], ['--siblings', 'opf-nope'], ['--siblings', 'opf-render', '--skip-siblings'], ['--other'], ['--tier'], ['--tier', 'nightly'], ['--tier=fast']]) assert.throws(() => parseShardArguments(argv));
+  for (const argv of [['--core', 'model'], ['--skip-siblings', '--core'], ['--skip-siblings', '--core', 'registry'], ['--siblings', 'opf-render', '--core', 'packed'], ['--siblings'], ['--siblings', ''], ['--siblings', 'opf-nope'], ['--siblings', 'opf-render', '--skip-siblings'], ['--other'], ['--tier'], ['--tier', 'nightly'], ['--tier=fast']]) assert.throws(() => parseShardArguments(argv));
 });
 
 // RR-53: the contract tier swaps only each sibling's `npm run test` for `npm run test:contract`.

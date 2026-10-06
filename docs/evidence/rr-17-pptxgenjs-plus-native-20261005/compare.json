@@ -1,0 +1,663 @@
+{
+  "builds": {
+    "a": {
+      "checkout": "OpenPresentation/opf-pptx main bc97949",
+      "engine": "pptxgenjs 4.0.1"
+    },
+    "b": {
+      "checkout": "OpenPresentation/opf-pptx codex/rr-17-pptxgenjs-plus 0773be6",
+      "engine": "pptxgenjs-plus 4.3.4"
+    }
+  },
+  "counts": {
+    "PASS": 20,
+    "WARN": 0,
+    "FAIL": 0,
+    "MISSING": 0
+  },
+  "results": [
+    {
+      "id": "01-latin-rich-text",
+      "status": "PASS",
+      "fontsA": [
+        "Georgia"
+      ],
+      "fontsB": [
+        "Georgia"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "02-fonts-serif-mono-code",
+      "status": "PASS",
+      "fontsA": [
+        "Times New Roman",
+        "Roboto Mono"
+      ],
+      "fontsB": [
+        "Times New Roman",
+        "Roboto Mono"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "03-cjk-japanese",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "04-devanagari-hindi",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "05-rtl-arabic",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "06-rtl-hebrew",
+      "status": "PASS",
+      "fontsA": [
+        "Tenorite Display",
+        "Tenorite"
+      ],
+      "fontsB": [
+        "Tenorite Display",
+        "Tenorite"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "07-bullets-numbered",
+      "status": "PASS",
+      "fontsA": [
+        "Arial Black",
+        "Arial"
+      ],
+      "fontsB": [
+        "Arial Black",
+        "Arial"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.010 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "08-tables",
+      "status": "PASS",
+      "fontsA": [
+        "Calibri"
+      ],
+      "fontsB": [
+        "Calibri"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "09-charts-core",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 6 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 7 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 8 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "10-charts-variants",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 6 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "11-charts-chartex",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 6 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "12-svg-png-fallback",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "13-header-footer-numbers",
+      "status": "PASS",
+      "fontsA": [
+        "Calibri"
+      ],
+      "fontsB": [
+        "Calibri"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "14-speaker-notes",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "15-backgrounds",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "16-footnotes-captions",
+      "status": "PASS",
+      "fontsA": [
+        "Georgia"
+      ],
+      "fontsB": [
+        "Georgia"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "17-gallery-bold",
+      "status": "PASS",
+      "fontsA": [
+        "Tahoma"
+      ],
+      "fontsB": [
+        "Tahoma"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "18-gallery-classic",
+      "status": "PASS",
+      "fontsA": [
+        "Tenorite",
+        "Tenorite Display"
+      ],
+      "fontsB": [
+        "Tenorite",
+        "Tenorite Display"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "19-gallery-dark",
+      "status": "PASS",
+      "fontsA": [
+        "Meiryo"
+      ],
+      "fontsB": [
+        "Meiryo"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "20-gallery-minimal-indic",
+      "status": "PASS",
+      "fontsA": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "fontsB": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    }
+  ]
+}

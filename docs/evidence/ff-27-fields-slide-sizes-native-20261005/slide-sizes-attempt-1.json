@@ -1,0 +1,78 @@
+{
+    "deck":  "02-plain-16x9",
+    "startedAt":  "2026-10-05T19:01:23.3503830Z",
+    "stage":  "done",
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "sizes":  [
+                  {
+                      "key":  "baseline",
+                      "name":  "the deck as opened (opf-pptx 16:9)",
+                      "requested":  null,
+                      "slideSizeReadBack":  7,
+                      "widthPt":  960,
+                      "heightPt":  540,
+                      "widthEmu":  12192000,
+                      "heightEmu":  6858000,
+                      "widthIn":  13.3333,
+                      "heightIn":  7.5
+                  },
+                  {
+                      "key":  "a4",
+                      "name":  "ppSlideSizeA4Paper",
+                      "requested":  3,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "4:3",
+                      "name":  "ppSlideSizeOnScreen",
+                      "requested":  1,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "16:10",
+                      "name":  "ppSlideSizeOnScreen16x10",
+                      "requested":  16,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "letter",
+                      "name":  "ppSlideSizeLetterPaper",
+                      "requested":  2,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "16:9",
+                      "name":  "ppSlideSizeOnScreen16x9",
+                      "requested":  15,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "ref-9",
+                      "name":  "PpSlideSizeType 9 (ppSlideSizeA3Paper)",
+                      "requested":  9,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "ref-10",
+                      "name":  "PpSlideSizeType 10 (ppSlideSizeB4ISOPaper)",
+                      "requested":  10,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "key":  "widescreen",
+                      "name":  "custom 960 x 540 pt (Design \u003e Slide Size \u003e Widescreen)",
+                      "requested":  "custom",
+                      "slideSizeReadBack":  7,
+                      "widthPt":  960,
+                      "heightPt":  540,
+                      "widthEmu":  12192000,
+                      "heightEmu":  6858000,
+                      "widthIn":  13.3333,
+                      "heightIn":  7.5
+                  }
+              ],
+    "finishedAt":  "2026-10-05T19:01:23.8508340Z"
+}

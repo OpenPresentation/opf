@@ -1012,7 +1012,7 @@ slugs with no OPF canonical id (`gallery-only`; all 70 measured `partial`).
 
 Layouts only (audit A, ONLY=layouts), published engines (opf-render 0.11.4 `1a724a6`, opf-pptx 0.11.3 `ecdbb42`), one local core (`register-local-opf.mjs`), no Office:
 
-| Layouts (485) | Core `0f60d3d` (before FF-51) | Core `be4bd221` (main, FF-51 audit) | This change (core PR + [pptx-gallery#70](https://github.com/Data-Advantage/pptx-gallery/pull/70)) |
+| Layouts (485) | Core `0f60d3d` (before FF-51) | Core `be4bd221` (main, FF-51 audit) | This change (core PR + pptx-gallery#70) |
 | --- | --- | --- | --- |
 | `works` | 291 | 341 | 440 |
 | `partial` | 124 | 74 | 45 |
@@ -1264,7 +1264,7 @@ supports:
   records, one per supported Aspose.Slides `ChartType`. It deprecates the other 50 with a
   named replacement rather than deleting them. See
   [aspose-chart-types.md](aspose-chart-types.md).
-- **Gallery half, merged.** [pptx-gallery#40](https://github.com/Data-Advantage/pptx-gallery/pull/40) (`23f9216`) reduces
+- **Gallery half, merged.** pptx-gallery#40 (`23f9216`) reduces
   `data/charts.json` from 76 to the same 26 types; `b2238ac` (pptx-gallery#63) gives the snippets category-major data.
 - **Engines.** opf-render 0.11.3 previews the 19 classic constructs natively
   (`data-opf-chart` on the chart group); opf-render 0.11.4 also previews the seven chartex ids natively (#66); opf-pptx 0.11.2 exports the classic ones as native
@@ -1399,7 +1399,7 @@ at the first measurement, `partial` before pptx-gallery#42). Every id resolves i
   engine draws them. What renders and links is the profile URL. This is the
   recorded FF-34 decision; the social-platform schema description and the gallery
   `/socials` copy now say so ([opf#191](https://github.com/OpenPresentation/opf/pull/191),
-  [pptx-gallery#64](https://github.com/Data-Advantage/pptx-gallery/pull/64)).
+  pptx-gallery#64).
 - **Parity (FF-38).** 10 of 10 perfect.
 - **Fixes.** FF-34.
 

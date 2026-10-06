@@ -166,7 +166,7 @@ Accepted core107 `5bc0d3f89414b382b2ce48452c7e56e5d66aaf74` has reviewed tree
 retain earlier automatic premerge cancellations separately from the later automatic
 successful pair; no rerun or accepted checkpoint relabels them.
 
-[App47](https://github.com/Data-Advantage/pptx-dev/pull/47) corrects the pre-app47
+App47 corrects the pre-app47
 completion adapter's rejected layout choices while preserving unchanged source
 tokens and undo history. Accepted commit `0f35352a1445f56ad4bb7c9f4c5609e01f2dd9ae`
 has reviewed tree `203bdab509d05911f04f234d996f9c91f2b5e4f2`, green Linux/Windows
@@ -178,7 +178,7 @@ retain their evidence and unresolved causes.
 
 The [source audit](evidence/completion-acceptance-20260921/source-preservation-audit/REPORT.md)
 identified Author canvas/Copy/export and Inspector JSON-download normalization.
-Merged [App53](https://github.com/Data-Advantage/pptx-dev/pull/53) at
+Merged App53 at
 `e40c287b64fcbcfb85fb4a8a50641aea8e3e54a8` has the identical reviewed b33dc18
 tree and preserves those bounded raw-source
 paths and corrects order-only reimport history. A public Suggest-action guard
@@ -197,7 +197,7 @@ captured no post-fix stale-context overlap, so causal stress is inconclusive.
 The existing suggestion-details pane remains clipped; visibility is not legibility.
 The [postmerge trace diagnosis](evidence/author-source-acceptance-20260921/inspector-share-diagnosis/REPORT.md)
 proves wrong-document automatic share-hash publication during import.
-[App54](https://github.com/Data-Advantage/pptx-dev/pull/54) first corrected automatic
+App54 first corrected automatic
 publication at `60c91f6`: authoritative source/format is checked before and after
 encoding, load/navigation guards remain, and obsolete `import=hash:` is removed.
 URL transfer preserves semantics, not raw spelling. Local 659-unit/31-browser
@@ -220,7 +220,7 @@ fonts and traced schema inputs without changing dependencies or published pins.
 
 Local runtime checks pass **692 unit tests**, **7 standalone controls**, focused
 **8/8** and full **39/39** browser cases, zero retries, with visual review. The
-[immutable 93-file app bundle](https://github.com/Data-Advantage/pptx-dev/tree/57e5e59fddbc94346f142dc12d86a916228bf2ae/docs/evidence/inspector-action-snapshots-20260921)
+immutable 93-file app bundle
 retains stale-draft negative evidence and the initial candidate **7/8** result.
 The latter did not establish accepted pasted source before releasing mocked PDF 401;
 final visible-code preconditions change no product bytes or budgets. PDF/Deckchat
@@ -245,7 +245,7 @@ is READY, which is metadata only; at that 6df checkpoint App54 was unmerged and 
 The [current ledger](evidence/inspector-current-actions-20260921/README.md)
 retains the separate 60c readiness, 57e packaging and 6df startup failures. Production then remained App53 `e40c287`, with its original
 failed Linux postmerge gate preserved separately from canonical **29/29**.
-The [startup-link correction at 4338e57](https://github.com/Data-Advantage/pptx-dev/blob/4338e57b951c469d5c5f239b78a303fbad3c745e/docs/evidence/standalone-windows-links-20260921/README.md)
+The startup-link correction at 4338e57
 then reached all browser cases: Linux **39/39**, Windows **38/39** in first-attempt
 CI **35649707689**, with 692 units and 13 standalone controls passing per platform.
 The sole Windows failure was initial canvas-title visibility at five seconds,
@@ -260,7 +260,7 @@ warmup while readiness still waits for both. The offline converter barrier and a
 **33 faces / 9,317,044 bytes**, manifest, substitution/measurement policy and
 `document.fonts.ready` gate remain unchanged. Fresh local Node24.21.0 checks pass
 **704 units, 13 standalone controls and 39/39 browsers**, zero retries, including
-unchanged offline export/reimport. [Immutable app evidence](https://github.com/Data-Advantage/pptx-dev/tree/a4eb88ab7aa585c9efb91de4c190c1f1c0c7d0eb/docs/evidence/font-preparation-concurrency-20260921)
+unchanged offline export/reimport. Immutable app evidence
 retains reviewed images, exact source/output bindings and the original failed run.
 
 **The original a4eb gate failed:** first-attempt application **35654753237** passes
@@ -286,7 +286,7 @@ the real action, matching `page.goto` within the unchanged 45-second test and de
 five-second content budgets. It retains all oracles but deliberately removes the
 incidental five-second navigation deadline. Fresh local **39/39**, zero retries,
 passes in 112.780048s with reviewed source/images and prepared-tree build/typecheck.
-The [immutable app bundle](https://github.com/Data-Advantage/pptx-dev/tree/79ba0157984fce8405eeb786b8ede1a4e59ba138/docs/evidence/author-navigation-policy-20260921)
+The immutable app bundle
 retains original failures. Units/standalone controls were not repeated locally;
 fresh first-attempt application **35659187971 passes 704 units, 13 standalone
 controls and 39/39 browsers on both Linux and Windows**. Exact-head preview was
@@ -300,7 +300,7 @@ unknown. Three final action page-error assertions were not reached; the two shar
 cases passed theirs. The prior auth/config comparison is 28/29 identical, with only
 package scripts changed. Production is kept without a rollback, test change or
 rerun; the strict gate remains failed. Raw authentication-bearing diagnostics
-remain private. [Postmerge CI 35660464578](https://github.com/Data-Advantage/pptx-dev/actions/runs/35660464578)
+remain private. Postmerge CI 35660464578
 finishes failed: Linux 39/39 passes while Windows 38/39 fails, with 704 units/13 controls/typecheck/build
 passing on each. Windows fails initial gallery-rail title visibility after 5,000ms
 with correct source, clean schema and Loading slide fonts; later editing/export/
@@ -310,7 +310,7 @@ pass or general native/font acceptance is claimed. That September 21 checkpoint 
 
 Separate local negative controls confirmed that preset Undo all discarded New run
 and imported replacement documents. The guarded correction is now preserved in
-[draft app #58](https://github.com/Data-Advantage/pptx-dev/pull/58): independent
+draft app #58: independent
 review and local Node 24 checks passed (716 units, 13 standalone controls and
 49 browsers without retries). Original Linux/Windows CI could not start because
 of the account payment/spending-limit restriction; no application CI or production

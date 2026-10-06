@@ -90,7 +90,7 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 
 | Input | Source |
 | --- | --- |
-| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `2c7cc73`) |
+| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `04792cc`) |
 | pptx.gallery pages | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (Data-Advantage/pptx-gallery `555c1a1`, captured 2026-10-05) |
 | Editor switches | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (OpenPresentation/opf-editor 0.11.2 `c7ac1d7`, `src/switches.js` SWITCH_DIMENSIONS, tested by `test/switches.mjs`) |
 | Audits A and B | `docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json`, `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json` (opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, pptx-gallery `c349a61`) |

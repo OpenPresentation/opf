@@ -1,0 +1,274 @@
+{
+  "builds": {
+    "a": {
+      "checkout": "OpenPresentation/opf-pptx main bc97949",
+      "engine": "pptxgenjs 4.0.1"
+    },
+    "b": {
+      "checkout": "OpenPresentation/opf-pptx codex/rr-17-pptxgenjs-plus 0773be6",
+      "engine": "pptxgenjs-plus 4.3.4"
+    }
+  },
+  "decks": {
+    "01-latin-rich-text": {
+      "title": "Latin text and rich runs",
+      "a": {
+        "file": "a-01-latin-rich-text.pptx",
+        "sha256": "26ff4a2de650b8fe32d455ea0cfaf7e1c86317425ee377960bffe8d951cf45c8",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-01-latin-rich-text.pptx",
+        "sha256": "c959e41f0d3578f1ab557db603b33175052e1e6670d1670aa84c7976992ad4e6",
+        "slides": 3
+      }
+    },
+    "02-fonts-serif-mono-code": {
+      "title": "Serif body, monospace code, quote and metric",
+      "a": {
+        "file": "a-02-fonts-serif-mono-code.pptx",
+        "sha256": "2f63fe865650a40686d22576dfdfcee34f819d7153e9c1aed4ec0e36c3502a4e",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-02-fonts-serif-mono-code.pptx",
+        "sha256": "999bab49739f95a349db37c76970aac8b225d57d78cfe88916b850df07f6f999",
+        "slides": 3
+      }
+    },
+    "03-cjk-japanese": {
+      "title": "Japanese (East Asian script)",
+      "a": {
+        "file": "a-03-cjk-japanese.pptx",
+        "sha256": "e7df0e3ce6f86877627cf1f54867ed231dc543666c20c510cefaec59ebe3f26f",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-03-cjk-japanese.pptx",
+        "sha256": "9bed1500990feb4f59e335af4086ba3010f741419d15b25547f4e7845fafcba3",
+        "slides": 3
+      }
+    },
+    "04-devanagari-hindi": {
+      "title": "Hindi (Devanagari, complex script)",
+      "a": {
+        "file": "a-04-devanagari-hindi.pptx",
+        "sha256": "b93f2a52964753d84ac0f2c2422a35b6f5ad1d76b243b0cfa8a82ad6019f63cc",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-04-devanagari-hindi.pptx",
+        "sha256": "5a14ac61813964eec924d4118886c501f0dea0b7660b2b58de50c10fd61f6662",
+        "slides": 3
+      }
+    },
+    "05-rtl-arabic": {
+      "title": "Arabic (right-to-left)",
+      "a": {
+        "file": "a-05-rtl-arabic.pptx",
+        "sha256": "a1bc72e021c240ed2d5037d3e66b28c809be819446ee242bb7de8c44f1870e30",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-05-rtl-arabic.pptx",
+        "sha256": "9fd845a82aa315c0ad0989ee473c4a482b14fc0ba560658cec799d05416b605a",
+        "slides": 3
+      }
+    },
+    "06-rtl-hebrew": {
+      "title": "Hebrew (right-to-left)",
+      "a": {
+        "file": "a-06-rtl-hebrew.pptx",
+        "sha256": "4dab6f532738b2ba6477101b34ef97a7956e2b88fd38754efb712c5ea434a3da",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-06-rtl-hebrew.pptx",
+        "sha256": "d5284d93b8d59293d1142b6e3043867230bde20a5a3286b771e5e3ca147ae407",
+        "slides": 3
+      }
+    },
+    "07-bullets-numbered": {
+      "title": "Bullets, nesting and numbered lists",
+      "a": {
+        "file": "a-07-bullets-numbered.pptx",
+        "sha256": "1a5ec7f0c411ba2e08f7193c7992c32d37c2036463ee3531c80468c8dc7595a5",
+        "slides": 4
+      },
+      "b": {
+        "file": "b-07-bullets-numbered.pptx",
+        "sha256": "311d9ead3fa1acb2122ef5a63efa74d4596f508e06243a001bc4bdddcf3c5854",
+        "slides": 4
+      }
+    },
+    "08-tables": {
+      "title": "Tables",
+      "a": {
+        "file": "a-08-tables.pptx",
+        "sha256": "a41afdabb12fa610b9c25420b2db245411a34593fcf7e07b554585b03158231a",
+        "slides": 2
+      },
+      "b": {
+        "file": "b-08-tables.pptx",
+        "sha256": "63778c8b7351abd7313fecec6c0825cdc544739d3e822ae9fac42c238dde3b3e",
+        "slides": 2
+      }
+    },
+    "09-charts-core": {
+      "title": "Native chart families (core)",
+      "a": {
+        "file": "a-09-charts-core.pptx",
+        "sha256": "185c87ac1e5cb76821e9932e0c1af19771574100689f8bd7aea56f97642cf31d",
+        "slides": 8
+      },
+      "b": {
+        "file": "b-09-charts-core.pptx",
+        "sha256": "cd7f012bc0aacd4b6fdad88c2024cdb177d4e13b32ff1e7b6b9f4e227edcc1b0",
+        "slides": 8
+      }
+    },
+    "10-charts-variants": {
+      "title": "Native chart variants (stacked, percent, markers, filled)",
+      "a": {
+        "file": "a-10-charts-variants.pptx",
+        "sha256": "fe276acdff92452c5be808ace47dd7e5af216ed43f3f91d4718f75ac0630b459",
+        "slides": 6
+      },
+      "b": {
+        "file": "b-10-charts-variants.pptx",
+        "sha256": "69f60815e72e7e28ecd7eb197ae6759b9428e8bfd4dcdfe1f6a8e27360cf69e7",
+        "slides": 6
+      }
+    },
+    "11-charts-chartex": {
+      "title": "Office 2016 chartex families",
+      "a": {
+        "file": "a-11-charts-chartex.pptx",
+        "sha256": "7c5bf24bd41df0d4b6822f226e1151f1746b85bb1543aa91956e5338c6b6323a",
+        "slides": 6
+      },
+      "b": {
+        "file": "b-11-charts-chartex.pptx",
+        "sha256": "8094b95bc6a9429fdf8637ed817ac63d6bc2f9355ae9ab3e8992df7efa9150ed",
+        "slides": 6
+      }
+    },
+    "12-svg-png-fallback": {
+      "title": "SVG picture with PNG fallback",
+      "a": {
+        "file": "a-12-svg-png-fallback.pptx",
+        "sha256": "94e525533f8ab6e0da173e3b3b03e25bbe349f458ccc3d3e495f4209989576bb",
+        "slides": 2
+      },
+      "b": {
+        "file": "b-12-svg-png-fallback.pptx",
+        "sha256": "baf4650ad3d5531a9dd4a49c833d4a1ee50a3816d37b24c1317be8bd535480c4",
+        "slides": 2
+      }
+    },
+    "13-header-footer-numbers": {
+      "title": "Native header, footer and slide numbers",
+      "a": {
+        "file": "a-13-header-footer-numbers.pptx",
+        "sha256": "e619d1ec67159b8bb44b4b29aac3014e49965d057b861562a80e27802b4d9b2d",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-13-header-footer-numbers.pptx",
+        "sha256": "7f9f5a12fad72c3d9102058ec4c003fcd0484f9b13c23de6c2329ec04511688a",
+        "slides": 3
+      }
+    },
+    "14-speaker-notes": {
+      "title": "Speaker notes",
+      "a": {
+        "file": "a-14-speaker-notes.pptx",
+        "sha256": "92c340396f9f6a5e6edbce5a1b35c922c63dc6faf14a86d6a792eae32ae22d08",
+        "slides": 3
+      },
+      "b": {
+        "file": "b-14-speaker-notes.pptx",
+        "sha256": "56fba01db68e23b53c0e01453416a31f4136cbcb8b9c34779b6ee252fd9c0291",
+        "slides": 3
+      }
+    },
+    "15-backgrounds": {
+      "title": "Slide backgrounds: solid, gradient, pattern, image",
+      "a": {
+        "file": "a-15-backgrounds.pptx",
+        "sha256": "c487b895b5b5ecef0e9a7b16309afe406fcb7e4e7d1c7907edb004adac611565",
+        "slides": 5
+      },
+      "b": {
+        "file": "b-15-backgrounds.pptx",
+        "sha256": "5f4573fac7e0ada0cff6cd936e38f608c19686a0879edabbce83a18cfe06143c",
+        "slides": 5
+      }
+    },
+    "16-footnotes-captions": {
+      "title": "Footnotes, citations and captions",
+      "a": {
+        "file": "a-16-footnotes-captions.pptx",
+        "sha256": "b19b33288dbcfe0aadcc993853deef23fc6d272762cd023a47cf45f022129afc",
+        "slides": 2
+      },
+      "b": {
+        "file": "b-16-footnotes-captions.pptx",
+        "sha256": "a1e50f8b2de01ef2fc0b1d348672b185b6de359b8eaa79f304693be0ec42c951",
+        "slides": 2
+      }
+    },
+    "17-gallery-bold": {
+      "title": "Gallery theme: bold",
+      "a": {
+        "file": "a-17-gallery-bold.pptx",
+        "sha256": "14c7ee7e08c226cb0b7877a77b4335510911269d3e8b33dda50aae9bda8464b6",
+        "slides": 4
+      },
+      "b": {
+        "file": "b-17-gallery-bold.pptx",
+        "sha256": "0dd5478b07b0f070ddfe5801e24c5588adbbb55cbd9673c6b0cb3fb355b7842e",
+        "slides": 4
+      }
+    },
+    "18-gallery-classic": {
+      "title": "Gallery theme: classic",
+      "a": {
+        "file": "a-18-gallery-classic.pptx",
+        "sha256": "99aa9f97f6bc749e1b19663ffe109c634e22ee4649f27d94d6e6cac9dc967375",
+        "slides": 4
+      },
+      "b": {
+        "file": "b-18-gallery-classic.pptx",
+        "sha256": "1d23cc3cde5927da072615324f28ce6c1cbc67e61b1ee5befa28723d1c700455",
+        "slides": 4
+      }
+    },
+    "19-gallery-dark": {
+      "title": "Gallery theme: dark",
+      "a": {
+        "file": "a-19-gallery-dark.pptx",
+        "sha256": "2816e99502133e304a56dbb2c48d3575789624dc3aaaf9c834a1dbeffb894c01",
+        "slides": 4
+      },
+      "b": {
+        "file": "b-19-gallery-dark.pptx",
+        "sha256": "43e6cd0c61d65fd22439d2f68ec414b81527d8c6f03cb88fbe012be05a02424f",
+        "slides": 4
+      }
+    },
+    "20-gallery-minimal-indic": {
+      "title": "Gallery theme: minimal (international example)",
+      "a": {
+        "file": "a-20-gallery-minimal-indic.pptx",
+        "sha256": "f4048e5af178cdabc0b908fff0e61f4ceaa7b343b78a29a7fe84f8866fc2061d",
+        "slides": 4
+      },
+      "b": {
+        "file": "b-20-gallery-minimal-indic.pptx",
+        "sha256": "a442fa62da29ca4dde3290e7d46fb70e9bdda8de581f399c4dee442706e5d7d4",
+        "slides": 4
+      }
+    }
+  }
+}

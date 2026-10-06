@@ -1,0 +1,102 @@
+{
+    "attempt":  3,
+    "method":  "Presentations.Add(-1) (with a window), in memory, never saved",
+    "startedAt":  "2026-10-05T19:02:05.7247295Z",
+    "stage":  "done",
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "default":  {
+                    "slideSize":  7,
+                    "widthPt":  960,
+                    "heightPt":  540
+                },
+    "sizes":  [
+                  {
+                      "preset":  "a4",
+                      "constant":  "ppSlideSizeA4Paper",
+                      "value":  3,
+                      "slideSizeReadBack":  3,
+                      "widthPt":  780,
+                      "heightPt":  540,
+                      "widthEmu":  9906000,
+                      "heightEmu":  6858000,
+                      "widthIn":  10.8333,
+                      "heightIn":  7.5
+                  },
+                  {
+                      "preset":  "4:3",
+                      "constant":  "ppSlideSizeOnScreen",
+                      "value":  1,
+                      "slideSizeReadBack":  1,
+                      "widthPt":  720,
+                      "heightPt":  540,
+                      "widthEmu":  9144000,
+                      "heightEmu":  6858000,
+                      "widthIn":  10,
+                      "heightIn":  7.5
+                  },
+                  {
+                      "preset":  "16:10",
+                      "constant":  "ppSlideSizeOnScreen16x10",
+                      "value":  16,
+                      "slideSizeReadBack":  16,
+                      "widthPt":  720,
+                      "heightPt":  450,
+                      "widthEmu":  9144000,
+                      "heightEmu":  5715000,
+                      "widthIn":  10,
+                      "heightIn":  6.25
+                  },
+                  {
+                      "preset":  "letter",
+                      "constant":  "ppSlideSizeLetterPaper",
+                      "value":  2,
+                      "slideSizeReadBack":  2,
+                      "widthPt":  720,
+                      "heightPt":  540,
+                      "widthEmu":  9144000,
+                      "heightEmu":  6858000,
+                      "widthIn":  10,
+                      "heightIn":  7.5
+                  },
+                  {
+                      "preset":  "16:9",
+                      "constant":  "ppSlideSizeOnScreen16x9",
+                      "value":  15,
+                      "slideSizeReadBack":  15,
+                      "widthPt":  720,
+                      "heightPt":  405,
+                      "widthEmu":  9144000,
+                      "heightEmu":  5143500,
+                      "widthIn":  10,
+                      "heightIn":  5.625
+                  },
+                  {
+                      "preset":  "ref-9",
+                      "constant":  "ppSlideSizeA3Paper",
+                      "value":  9,
+                      "slideSizeReadBack":  9,
+                      "widthPt":  1008,
+                      "heightPt":  756,
+                      "widthEmu":  12801600,
+                      "heightEmu":  9601200,
+                      "widthIn":  14,
+                      "heightIn":  10.5
+                  },
+                  {
+                      "preset":  "ref-10",
+                      "constant":  "ppSlideSizeB4ISOPaper",
+                      "value":  10,
+                      "slideSizeReadBack":  10,
+                      "widthPt":  852.5,
+                      "heightPt":  639.375,
+                      "widthEmu":  10826750,
+                      "heightEmu":  8120062,
+                      "widthIn":  11.8403,
+                      "heightIn":  8.8802
+                  }
+              ],
+    "finishedAt":  "2026-10-05T19:02:06.3895063Z"
+}

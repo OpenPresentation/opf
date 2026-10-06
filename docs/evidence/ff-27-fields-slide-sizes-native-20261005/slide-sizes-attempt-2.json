@@ -1,0 +1,60 @@
+{
+    "attempt":  2,
+    "method":  "Presentations.Add(0), in memory, never saved",
+    "startedAt":  "2026-10-05T19:01:55.0241856Z",
+    "stage":  "done",
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "default":  {
+                    "slideSize":  7,
+                    "widthPt":  960,
+                    "heightPt":  540
+                },
+    "sizes":  [
+                  {
+                      "preset":  "a4",
+                      "constant":  "ppSlideSizeA4Paper",
+                      "value":  3,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "preset":  "4:3",
+                      "constant":  "ppSlideSizeOnScreen",
+                      "value":  1,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "preset":  "16:10",
+                      "constant":  "ppSlideSizeOnScreen16x10",
+                      "value":  16,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "preset":  "letter",
+                      "constant":  "ppSlideSizeLetterPaper",
+                      "value":  2,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "preset":  "16:9",
+                      "constant":  "ppSlideSizeOnScreen16x9",
+                      "value":  15,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "preset":  "ref-9",
+                      "constant":  "ppSlideSizeA3Paper",
+                      "value":  9,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  },
+                  {
+                      "preset":  "ref-10",
+                      "constant":  "ppSlideSizeB4ISOPaper",
+                      "value":  10,
+                      "error":  "PageSetup.SlideSize : Failed."
+                  }
+              ],
+    "finishedAt":  "2026-10-05T19:01:55.1960408Z"
+}

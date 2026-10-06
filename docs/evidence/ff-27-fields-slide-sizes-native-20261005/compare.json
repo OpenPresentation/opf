@@ -1,0 +1,382 @@
+{
+  "item": "FF-27 fields renumber and update (opf#323 section 2) and slide-size presets (opf#323 section 5)",
+  "built": {
+    "node": "24.21.0",
+    "zipDate": "2026-10-05",
+    "packages": {
+      "@openpresentation/opf": "0.12.1",
+      "@openpresentation/opf-pptx": "0.12.3",
+      "@openpresentation/opf-render": "0.12.0"
+    },
+    "note": "Published npm packages only, exact versions pinned in package.json."
+  },
+  "dateField": {
+    "optionsDate": "2026-01-15",
+    "dateFormat": "MMMM d, yyyy",
+    "exportedFieldType": "datetime4",
+    "cachedText": "January 15, 2026",
+    "nativeHeadersFootersFormat": 4,
+    "localeNote": "MMMM d, yyyy is an en-US field type (PowerPoint's ppDateTimeMMMMdyyyy). The exported run is lang en-US, so month names should read English whatever the host region; compare.mjs tolerates a locale-dependent rendering of the same day (WARN) and fails a read of the cached date.",
+    "why": "The cached date is a past date on purpose: a live field must read today (the clock), a static one would read the cached text."
+  },
+  "fields": {
+    "status": "PASS",
+    "findings": [],
+    "steps": [
+      {
+        "step": "initial",
+        "operation": "",
+        "order": [
+          "Alpha slide",
+          "Bravo slide",
+          "Charlie slide",
+          "Delta slide",
+          "Echo slide"
+        ],
+        "numbers": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "numbersBeforeRender": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "numbersFollowOrder": true
+      },
+      {
+        "step": "after-duplicate",
+        "operation": "Slides(1).Duplicate()",
+        "order": [
+          "Alpha slide",
+          "Alpha slide",
+          "Bravo slide",
+          "Charlie slide",
+          "Delta slide",
+          "Echo slide"
+        ],
+        "numbers": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "numbersBeforeRender": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "numbersFollowOrder": true
+      },
+      {
+        "step": "after-move",
+        "operation": "Slides(6).MoveTo(1)",
+        "order": [
+          "Echo slide",
+          "Alpha slide",
+          "Alpha slide",
+          "Bravo slide",
+          "Charlie slide",
+          "Delta slide"
+        ],
+        "numbers": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "numbersBeforeRender": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "numbersFollowOrder": true
+      }
+    ],
+    "rows": [
+      {
+        "step": "initial",
+        "position": 1,
+        "title": "Alpha slide",
+        "slideId": 256,
+        "numberText": "1",
+        "numberAfterRender": "1",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "initial",
+        "position": 2,
+        "title": "Bravo slide",
+        "slideId": 257,
+        "numberText": "2",
+        "numberAfterRender": "2",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "initial",
+        "position": 3,
+        "title": "Charlie slide",
+        "slideId": 258,
+        "numberText": "3",
+        "numberAfterRender": "3",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "initial",
+        "position": 4,
+        "title": "Delta slide",
+        "slideId": 259,
+        "numberText": "4",
+        "numberAfterRender": "4",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "initial",
+        "position": 5,
+        "title": "Echo slide",
+        "slideId": 260,
+        "numberText": "5",
+        "numberAfterRender": "5",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-duplicate",
+        "position": 1,
+        "title": "Alpha slide",
+        "slideId": 256,
+        "numberText": "1",
+        "numberAfterRender": "1",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-duplicate",
+        "position": 2,
+        "title": "Alpha slide",
+        "slideId": 261,
+        "numberText": "2",
+        "numberAfterRender": "2",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-duplicate",
+        "position": 3,
+        "title": "Bravo slide",
+        "slideId": 257,
+        "numberText": "3",
+        "numberAfterRender": "3",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-duplicate",
+        "position": 4,
+        "title": "Charlie slide",
+        "slideId": 258,
+        "numberText": "4",
+        "numberAfterRender": "4",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-duplicate",
+        "position": 5,
+        "title": "Delta slide",
+        "slideId": 259,
+        "numberText": "5",
+        "numberAfterRender": "5",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-duplicate",
+        "position": 6,
+        "title": "Echo slide",
+        "slideId": 260,
+        "numberText": "6",
+        "numberAfterRender": "6",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-move",
+        "position": 1,
+        "title": "Echo slide",
+        "slideId": 260,
+        "numberText": "1",
+        "numberAfterRender": "1",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-move",
+        "position": 2,
+        "title": "Alpha slide",
+        "slideId": 256,
+        "numberText": "2",
+        "numberAfterRender": "2",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-move",
+        "position": 3,
+        "title": "Alpha slide",
+        "slideId": 261,
+        "numberText": "3",
+        "numberAfterRender": "3",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-move",
+        "position": 4,
+        "title": "Bravo slide",
+        "slideId": 257,
+        "numberText": "4",
+        "numberAfterRender": "4",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-move",
+        "position": 5,
+        "title": "Charlie slide",
+        "slideId": 258,
+        "numberText": "5",
+        "numberAfterRender": "5",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      },
+      {
+        "step": "after-move",
+        "position": 6,
+        "title": "Delta slide",
+        "slideId": 259,
+        "numberText": "6",
+        "numberAfterRender": "6",
+        "dateText": "October 5, 2026",
+        "dateAfterRender": "October 5, 2026"
+      }
+    ],
+    "clock": {
+      "localDate": "2026-10-05",
+      "localTime": "12:01:21",
+      "expectedEnUS": "October 5, 2026",
+      "culture": "en-US",
+      "uiCulture": "en-US",
+      "shortDatePattern": "M/d/yyyy"
+    },
+    "powerpoint": {
+      "version": "16.0",
+      "build": "20430"
+    }
+  },
+  "slideSizes": {
+    "status": "FAIL",
+    "findings": [
+      {
+        "level": "FAIL",
+        "detail": "a4: PageSetup.SlideSize : Failed."
+      },
+      {
+        "level": "FAIL",
+        "detail": "4:3: PageSetup.SlideSize : Failed."
+      },
+      {
+        "level": "FAIL",
+        "detail": "16:10: PageSetup.SlideSize : Failed."
+      },
+      {
+        "level": "FAIL",
+        "detail": "letter: PageSetup.SlideSize : Failed."
+      },
+      {
+        "level": "FAIL",
+        "detail": "16:9: PageSetup.SlideSize : Failed."
+      },
+      {
+        "level": "FAIL",
+        "detail": "ref-9: PageSetup.SlideSize : Failed."
+      },
+      {
+        "level": "FAIL",
+        "detail": "ref-10: PageSetup.SlideSize : Failed."
+      }
+    ],
+    "rows": [
+      {
+        "key": "baseline",
+        "powerPoint": "the deck as opened (opf-pptx 16:9)",
+        "requested": null,
+        "readBack": 7,
+        "nativeEmu": [
+          12192000,
+          6858000
+        ],
+        "nativeIn": [
+          13.3333,
+          7.5
+        ],
+        "opfPreset": null,
+        "opfEmu": null,
+        "opfIn": null,
+        "deltaEmu": null,
+        "verdict": "reference"
+      },
+      {
+        "key": "widescreen",
+        "powerPoint": "custom 960 x 540 pt (Design > Slide Size > Widescreen)",
+        "requested": "custom",
+        "readBack": 7,
+        "nativeEmu": [
+          12192000,
+          6858000
+        ],
+        "nativeIn": [
+          13.3333,
+          7.5
+        ],
+        "opfPreset": "widescreen",
+        "opfEmu": [
+          12192000,
+          6858000
+        ],
+        "opfIn": [
+          13.3333,
+          7.5
+        ],
+        "deltaEmu": [
+          0,
+          0
+        ],
+        "verdict": "MATCH"
+      }
+    ],
+    "powerpoint": {
+      "version": "16.0",
+      "build": "20430"
+    }
+  }
+}

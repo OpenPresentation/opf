@@ -1,0 +1,1025 @@
+{
+    "schemaVersion":  1,
+    "kind":  "save87-native-save",
+    "deck":  "furniture",
+    "mode":  "control",
+    "startedAt":  "2026-10-05T19:08:56.0735602Z",
+    "source":  {
+                   "path":  "<set>\\decks\\furniture.pptx",
+                   "sha256Before":  "2195120efe796d83988f20ffa5c67b0d2823c94f08a4fde5cf1ba0da388583b3",
+                   "sha256After":  "2195120efe796d83988f20ffa5c67b0d2823c94f08a4fde5cf1ba0da388583b3"
+               },
+    "saved":  {
+                  "path":  "<set>\\out\\20261005T190851Z\\furniture-control.pptx",
+                  "sha256":  "39bece4ebf41bc5c820dbfac117d113c8bf63e722c802d5bcf306a905326cadb",
+                  "saveFormat":  24,
+                  "embedTrueTypeFonts":  0
+              },
+    "literals":  {
+                     "bodyOriginal":  "ORIGINAL-RUN",
+                     "bodyEdited":  "EDITED-RUN",
+                     "footerOriginal":  "Footer original text",
+                     "footerEdited":  "Footer edited natively"
+                 },
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "sourceRead":  {
+                       "label":  "source",
+                       "fonts":  [
+                                     "Calibri"
+                                 ],
+                       "slideWidth":  960,
+                       "slideHeight":  540,
+                       "slides":  [
+                                      {
+                                          "index":  1,
+                                          "slideId":  256,
+                                          "layout":  "DEFAULT",
+                                          "tags":  [
+                                                       {
+                                                           "name":  "OPF_FURNITURE_V1",
+                                                           "value":  "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2230222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+                                                       },
+                                                       {
+                                                           "name":  "OPF_SLIDE_V1",
+                                                           "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+                                                       }
+                                                   ],
+                                          "headersFooters":  {
+                                                                 "footerVisible":  -1,
+                                                                 "footerText":  "Footer original text",
+                                                                 "slideNumberVisible":  -1,
+                                                                 "dateVisible":  -1,
+                                                                 "dateUseFormat":  -1,
+                                                                 "dateFormat":  1
+                                                             },
+                                          "shapes":  [
+                                                         {
+                                                             "name":  "OPF heading slides.0.title line 0",
+                                                             "id":  2,
+                                                             "type":  1,
+                                                             "left":  43.200000762939453,
+                                                             "top":  49.5,
+                                                             "width":  873.5999755859375,
+                                                             "height":  49.409999847412109,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  null,
+                                                             "text":  "Furniture: body",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_HEADING_V1",
+                                                                              "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "Text 1",
+                                                             "id":  3,
+                                                             "type":  1,
+                                                             "left":  43.200000762939453,
+                                                             "top":  116.91000366210938,
+                                                             "width":  873.5999755859375,
+                                                             "height":  22.875040054321289,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  null,
+                                                             "text":  "Body with one ORIGINAL-RUN that PowerPoint edits.",
+                                                             "tags":  [
+
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF image 1",
+                                                             "id":  4,
+                                                             "type":  13,
+                                                             "left":  865.79998779296875,
+                                                             "top":  13.5,
+                                                             "width":  27,
+                                                             "height":  27,
+                                                             "rotation":  0,
+                                                             "alt":  "Footer logo",
+                                                             "placeholder":  null,
+                                                             "text":  null,
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2230222C2270617274223A307D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  {
+                                                                             "cropLeft":  0,
+                                                                             "cropTop":  0,
+                                                                             "cropRight":  0,
+                                                                             "cropBottom":  0
+                                                                         }
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 0 part 1 line 0",
+                                                             "id":  5,
+                                                             "type":  14,
+                                                             "left":  67.199996948242188,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  16,
+                                                             "text":  "10/5/2026",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 0 part 2 line 0",
+                                                             "id":  6,
+                                                             "type":  14,
+                                                             "left":  355.20001220703125,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  15,
+                                                             "text":  "Footer original text",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 0 part 3 line 0",
+                                                             "id":  7,
+                                                             "type":  14,
+                                                             "left":  643.20001220703125,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  13,
+                                                             "text":  "1",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         }
+                                                     ],
+                                          "png":  "furniture-control-source-slide01.png"
+                                      },
+                                      {
+                                          "index":  2,
+                                          "slideId":  257,
+                                          "layout":  "DEFAULT",
+                                          "tags":  [
+                                                       {
+                                                           "name":  "OPF_FURNITURE_V1",
+                                                           "value":  "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2231222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+                                                       },
+                                                       {
+                                                           "name":  "OPF_SLIDE_V1",
+                                                           "value":  "7B2276223A312C22736C696465223A312C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+                                                       }
+                                                   ],
+                                          "headersFooters":  {
+                                                                 "footerVisible":  -1,
+                                                                 "footerText":  "Footer original text",
+                                                                 "slideNumberVisible":  -1,
+                                                                 "dateVisible":  -1,
+                                                                 "dateUseFormat":  -1,
+                                                                 "dateFormat":  1
+                                                             },
+                                          "shapes":  [
+                                                         {
+                                                             "name":  "OPF heading slides.1.title line 0",
+                                                             "id":  2,
+                                                             "type":  1,
+                                                             "left":  43.200000762939453,
+                                                             "top":  49.5,
+                                                             "width":  873.5999755859375,
+                                                             "height":  49.409999847412109,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  null,
+                                                             "text":  "Second slide",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_HEADING_V1",
+                                                                              "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF text slides.1.text line 0",
+                                                             "id":  3,
+                                                             "type":  1,
+                                                             "left":  43.200000762939453,
+                                                             "top":  116.91000366210938,
+                                                             "width":  873.5999755859375,
+                                                             "height":  22.875040054321289,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  null,
+                                                             "text":  "Footer, date field, slide number field and logo repeat here.",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_TEXT_V1",
+                                                                              "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF image 2",
+                                                             "id":  4,
+                                                             "type":  13,
+                                                             "left":  865.79998779296875,
+                                                             "top":  13.5,
+                                                             "width":  27,
+                                                             "height":  27,
+                                                             "rotation":  0,
+                                                             "alt":  "Footer logo",
+                                                             "placeholder":  null,
+                                                             "text":  null,
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  {
+                                                                             "cropLeft":  0,
+                                                                             "cropTop":  0,
+                                                                             "cropRight":  0,
+                                                                             "cropBottom":  0
+                                                                         }
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 1 part 1 line 0",
+                                                             "id":  5,
+                                                             "type":  14,
+                                                             "left":  67.199996948242188,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  16,
+                                                             "text":  "10/5/2026",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 1 part 2 line 0",
+                                                             "id":  6,
+                                                             "type":  14,
+                                                             "left":  355.20001220703125,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  15,
+                                                             "text":  "Footer original text",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 1 part 3 line 0",
+                                                             "id":  7,
+                                                             "type":  14,
+                                                             "left":  643.20001220703125,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  13,
+                                                             "text":  "2",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         }
+                                                     ],
+                                          "png":  "furniture-control-source-slide02.png"
+                                      },
+                                      {
+                                          "index":  3,
+                                          "slideId":  258,
+                                          "layout":  "DEFAULT",
+                                          "tags":  [
+                                                       {
+                                                           "name":  "OPF_FURNITURE_V1",
+                                                           "value":  "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2232222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+                                                       },
+                                                       {
+                                                           "name":  "OPF_SLIDE_V1",
+                                                           "value":  "7B2276223A312C22736C696465223A322C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+                                                       }
+                                                   ],
+                                          "headersFooters":  {
+                                                                 "footerVisible":  -1,
+                                                                 "footerText":  "Footer original text",
+                                                                 "slideNumberVisible":  -1,
+                                                                 "dateVisible":  -1,
+                                                                 "dateUseFormat":  -1,
+                                                                 "dateFormat":  1
+                                                             },
+                                          "shapes":  [
+                                                         {
+                                                             "name":  "OPF heading slides.2.title line 0",
+                                                             "id":  2,
+                                                             "type":  1,
+                                                             "left":  43.200000762939453,
+                                                             "top":  49.5,
+                                                             "width":  873.5999755859375,
+                                                             "height":  49.409999847412109,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  null,
+                                                             "text":  "Third slide",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_HEADING_V1",
+                                                                              "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF text slides.2.text line 0",
+                                                             "id":  3,
+                                                             "type":  1,
+                                                             "left":  43.200000762939453,
+                                                             "top":  116.91000366210938,
+                                                             "width":  873.5999755859375,
+                                                             "height":  22.875040054321289,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  null,
+                                                             "text":  "And here.",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_TEXT_V1",
+                                                                              "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF image 3",
+                                                             "id":  4,
+                                                             "type":  13,
+                                                             "left":  865.79998779296875,
+                                                             "top":  13.5,
+                                                             "width":  27,
+                                                             "height":  27,
+                                                             "rotation":  0,
+                                                             "alt":  "Footer logo",
+                                                             "placeholder":  null,
+                                                             "text":  null,
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2232222C2270617274223A307D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  {
+                                                                             "cropLeft":  0,
+                                                                             "cropTop":  0,
+                                                                             "cropRight":  0,
+                                                                             "cropBottom":  0
+                                                                         }
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 2 part 1 line 0",
+                                                             "id":  5,
+                                                             "type":  14,
+                                                             "left":  67.199996948242188,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  16,
+                                                             "text":  "10/5/2026",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 2 part 2 line 0",
+                                                             "id":  6,
+                                                             "type":  14,
+                                                             "left":  355.20001220703125,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  15,
+                                                             "text":  "Footer original text",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         },
+                                                         {
+                                                             "name":  "OPF furniture 2 part 3 line 0",
+                                                             "id":  7,
+                                                             "type":  14,
+                                                             "left":  643.20001220703125,
+                                                             "top":  503.760009765625,
+                                                             "width":  249.60000610351563,
+                                                             "height":  14.640000343322754,
+                                                             "rotation":  0,
+                                                             "alt":  "",
+                                                             "placeholder":  13,
+                                                             "text":  "3",
+                                                             "tags":  [
+                                                                          {
+                                                                              "name":  "OPF_FURNITURE_V1",
+                                                                              "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                          }
+                                                                      ],
+                                                             "picture":  null
+                                                         }
+                                                     ],
+                                          "png":  "furniture-control-source-slide03.png"
+                                      }
+                                  ],
+                       "master":  [
+                                      {
+                                          "name":  "Date Placeholder 1",
+                                          "type":  14,
+                                          "placeholder":  16
+                                      },
+                                      {
+                                          "name":  "Footer Placeholder 2",
+                                          "type":  14,
+                                          "placeholder":  15
+                                      },
+                                      {
+                                          "name":  "Slide Number Placeholder 3",
+                                          "type":  14,
+                                          "placeholder":  13
+                                      }
+                                  ],
+                       "layouts":  [
+                                       {
+                                           "name":  "DEFAULT",
+                                           "placeholders":  [
+                                                                {
+                                                                    "name":  "Date Placeholder 1",
+                                                                    "placeholder":  16
+                                                                },
+                                                                {
+                                                                    "name":  "Footer Placeholder 2",
+                                                                    "placeholder":  15
+                                                                },
+                                                                {
+                                                                    "name":  "Slide Number Placeholder 3",
+                                                                    "placeholder":  13
+                                                                }
+                                                            ]
+                                       }
+                                   ]
+                   },
+    "edit":  null,
+    "savedRead":  {
+                      "label":  "saved",
+                      "fonts":  [
+                                    "Calibri"
+                                ],
+                      "slideWidth":  960,
+                      "slideHeight":  540,
+                      "slides":  [
+                                     {
+                                         "index":  1,
+                                         "slideId":  256,
+                                         "layout":  "DEFAULT",
+                                         "tags":  [
+                                                      {
+                                                          "name":  "OPF_FURNITURE_V1",
+                                                          "value":  "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2230222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+                                                      },
+                                                      {
+                                                          "name":  "OPF_SLIDE_V1",
+                                                          "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+                                                      }
+                                                  ],
+                                         "headersFooters":  {
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "Footer original text",
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  1
+                                                            },
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.0.title line 0",
+                                                            "id":  2,
+                                                            "type":  1,
+                                                            "left":  43.200000762939453,
+                                                            "top":  49.5,
+                                                            "width":  873.5999755859375,
+                                                            "height":  49.409999847412109,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  null,
+                                                            "text":  "Furniture: body",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_HEADING_V1",
+                                                                             "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "Text 1",
+                                                            "id":  3,
+                                                            "type":  1,
+                                                            "left":  43.200000762939453,
+                                                            "top":  116.91000366210938,
+                                                            "width":  873.5999755859375,
+                                                            "height":  22.875040054321289,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  null,
+                                                            "text":  "Body with one ORIGINAL-RUN that PowerPoint edits.",
+                                                            "tags":  [
+
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF image 1",
+                                                            "id":  4,
+                                                            "type":  13,
+                                                            "left":  865.79998779296875,
+                                                            "top":  13.5,
+                                                            "width":  27,
+                                                            "height":  27,
+                                                            "rotation":  0,
+                                                            "alt":  "Footer logo",
+                                                            "placeholder":  null,
+                                                            "text":  null,
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2230222C2270617274223A307D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  {
+                                                                            "cropLeft":  0,
+                                                                            "cropTop":  0,
+                                                                            "cropRight":  0,
+                                                                            "cropBottom":  0
+                                                                        }
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 1 line 0",
+                                                            "id":  5,
+                                                            "type":  14,
+                                                            "left":  67.199996948242188,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  16,
+                                                            "text":  "10/5/2026",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 2 line 0",
+                                                            "id":  6,
+                                                            "type":  14,
+                                                            "left":  355.20001220703125,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  15,
+                                                            "text":  "Footer original text",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 0 part 3 line 0",
+                                                            "id":  7,
+                                                            "type":  14,
+                                                            "left":  643.20001220703125,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  13,
+                                                            "text":  "1",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        }
+                                                    ],
+                                         "png":  "furniture-control-saved-slide01.png"
+                                     },
+                                     {
+                                         "index":  2,
+                                         "slideId":  257,
+                                         "layout":  "DEFAULT",
+                                         "tags":  [
+                                                      {
+                                                          "name":  "OPF_FURNITURE_V1",
+                                                          "value":  "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2231222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+                                                      },
+                                                      {
+                                                          "name":  "OPF_SLIDE_V1",
+                                                          "value":  "7B2276223A312C22736C696465223A312C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+                                                      }
+                                                  ],
+                                         "headersFooters":  {
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "Footer original text",
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  1
+                                                            },
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.1.title line 0",
+                                                            "id":  2,
+                                                            "type":  1,
+                                                            "left":  43.200000762939453,
+                                                            "top":  49.5,
+                                                            "width":  873.5999755859375,
+                                                            "height":  49.409999847412109,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  null,
+                                                            "text":  "Second slide",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_HEADING_V1",
+                                                                             "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.1.text line 0",
+                                                            "id":  3,
+                                                            "type":  1,
+                                                            "left":  43.200000762939453,
+                                                            "top":  116.91000366210938,
+                                                            "width":  873.5999755859375,
+                                                            "height":  22.875040054321289,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  null,
+                                                            "text":  "Footer, date field, slide number field and logo repeat here.",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_TEXT_V1",
+                                                                             "value":  "7B2276223A312C2267726F7570223A22736C696465732E312E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF image 2",
+                                                            "id":  4,
+                                                            "type":  13,
+                                                            "left":  865.79998779296875,
+                                                            "top":  13.5,
+                                                            "width":  27,
+                                                            "height":  27,
+                                                            "rotation":  0,
+                                                            "alt":  "Footer logo",
+                                                            "placeholder":  null,
+                                                            "text":  null,
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2231222C2270617274223A307D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  {
+                                                                            "cropLeft":  0,
+                                                                            "cropTop":  0,
+                                                                            "cropRight":  0,
+                                                                            "cropBottom":  0
+                                                                        }
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 1 line 0",
+                                                            "id":  5,
+                                                            "type":  14,
+                                                            "left":  67.199996948242188,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  16,
+                                                            "text":  "10/5/2026",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 2 line 0",
+                                                            "id":  6,
+                                                            "type":  14,
+                                                            "left":  355.20001220703125,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  15,
+                                                            "text":  "Footer original text",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 1 part 3 line 0",
+                                                            "id":  7,
+                                                            "type":  14,
+                                                            "left":  643.20001220703125,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  13,
+                                                            "text":  "2",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2231222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        }
+                                                    ],
+                                         "png":  "furniture-control-saved-slide02.png"
+                                     },
+                                     {
+                                         "index":  3,
+                                         "slideId":  258,
+                                         "layout":  "DEFAULT",
+                                         "tags":  [
+                                                      {
+                                                          "name":  "OPF_FURNITURE_V1",
+                                                          "value":  "7B2276223A312C22726F6C65223A22736C696465222C2267726F7570223A2232222C22646566696E6974696F6E73223A7B22686561646572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B227269676874223A7B22696D616765223A226E6174697665227D7D7D2C22666F6F746572223A7B2273636F7065223A22676C6F62616C222C2276616C7565223A7B226C656674223A7B2264617465223A747275657D2C2263656E746572223A7B2274657874223A226C69746572616C227D2C227269676874223A7B22736C6964654E756D626572223A747275657D7D7D7D2C22666F726D617473223A7B22666F6F7465722E6C656674223A7B2264617465466F726D6174223A224D2F642F79797979227D7D2C227061727473223A5B7B226B696E64223A22686561646572222C227A6F6E65223A227269676874222C226669656C64223A22696D616765222C2274797065223A22696D616765222C22636F756E74223A317D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A226C656674222C226669656C64223A2264617465222C2274797065223A2274657874222C22636F756E74223A312C227068223A226474227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A2263656E746572222C226669656C64223A2274657874222C2274797065223A2274657874222C22636F756E74223A312C227068223A22667472227D2C7B226B696E64223A22666F6F746572222C227A6F6E65223A227269676874222C226669656C64223A22736C6964654E756D626572222C2274797065223A2274657874222C22636F756E74223A312C227068223A22736C644E756D227D5D7D"
+                                                      },
+                                                      {
+                                                          "name":  "OPF_SLIDE_V1",
+                                                          "value":  "7B2276223A312C22736C696465223A322C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A2274657874222C22626F78223A5B35372E362C3135352E392C313136342E382C3530332E385D7D2C226E6174697665223A7B22737472756374757265223A223037626162323131386537303565222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223134666165646466343465303831227D7D"
+                                                      }
+                                                  ],
+                                         "headersFooters":  {
+                                                                "footerVisible":  -1,
+                                                                "footerText":  "Footer original text",
+                                                                "slideNumberVisible":  -1,
+                                                                "dateVisible":  -1,
+                                                                "dateUseFormat":  -1,
+                                                                "dateFormat":  1
+                                                            },
+                                         "shapes":  [
+                                                        {
+                                                            "name":  "OPF heading slides.2.title line 0",
+                                                            "id":  2,
+                                                            "type":  1,
+                                                            "left":  43.200000762939453,
+                                                            "top":  49.5,
+                                                            "width":  873.5999755859375,
+                                                            "height":  49.409999847412109,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  null,
+                                                            "text":  "Third slide",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_HEADING_V1",
+                                                                             "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF text slides.2.text line 0",
+                                                            "id":  3,
+                                                            "type":  1,
+                                                            "left":  43.200000762939453,
+                                                            "top":  116.91000366210938,
+                                                            "width":  873.5999755859375,
+                                                            "height":  22.875040054321289,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  null,
+                                                            "text":  "And here.",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_TEXT_V1",
+                                                                             "value":  "7B2276223A312C2267726F7570223A22736C696465732E322E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF image 3",
+                                                            "id":  4,
+                                                            "type":  13,
+                                                            "left":  865.79998779296875,
+                                                            "top":  13.5,
+                                                            "width":  27,
+                                                            "height":  27,
+                                                            "rotation":  0,
+                                                            "alt":  "Footer logo",
+                                                            "placeholder":  null,
+                                                            "text":  null,
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A22696D616765222C2267726F7570223A2232222C2270617274223A307D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  {
+                                                                            "cropLeft":  0,
+                                                                            "cropTop":  0,
+                                                                            "cropRight":  0,
+                                                                            "cropBottom":  0
+                                                                        }
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 1 line 0",
+                                                            "id":  5,
+                                                            "type":  14,
+                                                            "left":  67.199996948242188,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  16,
+                                                            "text":  "10/5/2026",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 2 line 0",
+                                                            "id":  6,
+                                                            "type":  14,
+                                                            "left":  355.20001220703125,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  15,
+                                                            "text":  "Footer original text",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        },
+                                                        {
+                                                            "name":  "OPF furniture 2 part 3 line 0",
+                                                            "id":  7,
+                                                            "type":  14,
+                                                            "left":  643.20001220703125,
+                                                            "top":  503.760009765625,
+                                                            "width":  249.60000610351563,
+                                                            "height":  14.640000343322754,
+                                                            "rotation":  0,
+                                                            "alt":  "",
+                                                            "placeholder":  13,
+                                                            "text":  "3",
+                                                            "tags":  [
+                                                                         {
+                                                                             "name":  "OPF_FURNITURE_V1",
+                                                                             "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2232222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                         }
+                                                                     ],
+                                                            "picture":  null
+                                                        }
+                                                    ],
+                                         "png":  "furniture-control-saved-slide03.png"
+                                     }
+                                 ],
+                      "master":  [
+                                     {
+                                         "name":  "Date Placeholder 1",
+                                         "type":  14,
+                                         "placeholder":  16
+                                     },
+                                     {
+                                         "name":  "Footer Placeholder 2",
+                                         "type":  14,
+                                         "placeholder":  15
+                                     },
+                                     {
+                                         "name":  "Slide Number Placeholder 3",
+                                         "type":  14,
+                                         "placeholder":  13
+                                     }
+                                 ],
+                      "layouts":  [
+                                      {
+                                          "name":  "DEFAULT",
+                                          "placeholders":  [
+                                                               {
+                                                                   "name":  "Date Placeholder 1",
+                                                                   "placeholder":  16
+                                                               },
+                                                               {
+                                                                   "name":  "Footer Placeholder 2",
+                                                                   "placeholder":  15
+                                                               },
+                                                               {
+                                                                   "name":  "Slide Number Placeholder 3",
+                                                                   "placeholder":  13
+                                                               }
+                                                           ]
+                                      }
+                                  ]
+                  },
+    "closeCount":  3,
+    "stage":  "worker.complete/success",
+    "error":  null,
+    "finishedAt":  "2026-10-05T19:08:57.3157068Z"
+}

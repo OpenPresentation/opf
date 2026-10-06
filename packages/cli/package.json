@@ -8,7 +8,7 @@
     "opf": "./dist/index.js"
   },
   "scripts": {
-    "build": "pnpm --filter @openpresentation/opf build && tsup",
+    "build": "pnpm --filter @openpresentation/opf build && (node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp))",
     "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
     "clean": "rm -rf dist",
     "test": "pnpm build && node ../../scripts/run-tests.mjs",

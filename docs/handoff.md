@@ -12,8 +12,8 @@ The coordinated ecosystem PRs were merged on September 8, 2026 UTC. Continue fro
 | opf-render | https://github.com/OpenPresentation/opf-render/pull/1 |
 | opf-editor | https://github.com/OpenPresentation/opf-editor/pull/1 |
 | opf-pptx | https://github.com/OpenPresentation/opf-pptx/pull/1 |
-| pptx-gallery | https://github.com/Data-Advantage/pptx-gallery/pull/9 |
-| openpresentation-site | https://github.com/Data-Advantage/openpresentation-site/pull/5 |
+| pptx-gallery | pptx-gallery#9 |
+| openpresentation-site | openpresentation-site#5 |
 
 Clone the six repositories into sibling directories. Use Node.js 24 and pnpm 10.33.2. From the parent directory:
 

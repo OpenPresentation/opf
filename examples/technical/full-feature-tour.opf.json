@@ -1,13 +1,10 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Full Feature Tour",
-  "description": "Technical fixture exercising every major surface of the OPF presentation schema in one document: intent metadata, organizations and speakers, narrative beats, design with slide overrides, assets, inline catalog records, all content payload kinds, blocks, regions, and extensions.",
+  "description": "Technical fixture exercising every major surface of the OPF presentation schema in one self-contained document: intent metadata, organizations and speakers, narrative beats, design with slide overrides, embedded assets, inline catalog records, all content payload kinds, blocks, regions, and extensions.",
   "filename": "full-feature-tour.pptx",
   "author": "OPF Maintainers",
-  "audience": [
-    "executive",
-    { "id": "engineering-team", "attentionBudgetMinutes": 30 }
-  ],
+  "audience": ["executive", { "id": "engineering-team", "attentionBudgetMinutes": 30 }],
   "purpose": "decide",
   "tone": "formal",
   "language": { "id": "english-us" },
@@ -56,7 +53,6 @@
     "dimensions": "widescreen",
     "titleAlignment": "left",
     "contentAlignment": "left",
-    "watermark": { "src": "asset:acme-logo", "opacity": 0.05 },
     "footer": {
       "left": { "organization": true },
       "center": { "section": true },
@@ -64,17 +60,30 @@
     }
   },
   "assets": {
-    "acme-logo": { "src": "./assets/acme-logo.svg", "alt": "Acme Corp logo" },
-    "alice-headshot": { "src": "./assets/alice.jpg", "alt": "Alice Chen headshot" },
-    "rollout-photo": {
-      "src": "https://cdn.example.com/rollout-floor.jpg",
-      "alt": "Distribution floor during the pilot rollout",
-      "title": "Pilot rollout floor"
+    "acme-logo": {
+      "src": "data:image/png;base64,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",
+      "alt": "Acme Corp logo",
+      "mediaType": "image/png",
+      "description": "Original artwork for this fictional organization, MIT licensed with OpenPresentation/opf. No fonts, photographs or external resources."
     },
-    "adoption-csv": {
-      "src": "./data/adoption.csv",
-      "mediaType": "text/csv",
-      "description": "Monthly active teams by region."
+    "acme-mark": {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAMAAAAJixmgAAABNVBMVEVMaXESSH8NSX8OTIAPTIAAAP8OS4EPTIAPS4IAM5kVVX8PTIAOTIEOS4APS4EOS4ESSH8PTIAPTIEOS4AOTIEAVaoOTIEPS4APS4EPTIAPS4EQS38OTIAOTIIAf38RS38OS4EPTIATTokOS4AQTYEMTH8OS4APTIAOTIAPTIAOS4EPTX8OS4AOTIAPS4EPS4ELUX8PS4IOTIERRIgQTX8OTYAOS4APTIEQS4AOTX8OS4EPTIINTX8PS4EPTIANSoEcVY0PTIEPTIETTn8PS4AZTH8OS4ENSoEMTH8OSoAAP38PTIEPTYAASJEMSIUOTIEOTYIRTH8PS4AOTIAPS4APS4EPS4INTIEPS4ENUIYOS4APTIANS38PTIAPS4EPTIAOSX8OS4EPS38AP38QTIEPS4EPTIFZOg+PAAAAZnRSTlMADia+zAF6/jMFDPjx8sucHKf7m+MDkJHrhXBOZ1oCLPOZDfZPFN7c8Mi9QtR7mP0WZrEPLlmyQ28k5WQ4pvo3Ce2GGmUK0UsobQj3YwcVv1Ye/FfKs2JuqBN5tErq19Y04UAEP4QYQnTKAAAACXBIWXMAABYlAAAWJQFJUiTwAAAFwUlEQVR42u2de3sSRxTGMWzIeoMgEYSEWmzUhhRq0sTQEhqLeKu23i9Vq9bL+f4foU0phU1mDzsMO3vm7Pn965md5/3Do88v7zPJZARBEARBEARBEARBEARBEARBEASBNvsHKQtc7KUr782fzy2nKnAfoJqmvDcuAPxyK0WBB/AP3RQFvn0Y+LvF1OTdg3/ZTE3g68PA22nJ++P3w8BLCykJXIH/KKcj76VvR4HP/pCKwDX4n04a8n51dRz4yvkUBF6HCVZTEDg7GbjJP+/FpcnAsMM+cCGQF0rc817+Jhj49DXmgVtwhBzvvCdXjgb+6STrwHU4xi7rwBvHA+c5590HBZyFbVEVuMdZzqoCMxa2fVBS5SxnVbAVtgMIoctZzqpgKmz3IJRNznJWxTZnOauCpbCtAEKZs5xVwVDY1gClw1nOqmAnbNdhCquc5ayKJms5q2KHs5xVUeIsZ1WwErYtiECOs5xVwUjY1iESu5zlrIo8aznLWdgWowbucZazjIVtHyJT5Sxn2QrbAWjQ5SxnmQrbPdBik7OcZSlsMTnLUthWQJMyZznLUNjWQJsOZznLTtiGy9n371gK23A5+6XKUdgictb/wFHYhsvZlcXFv/gJW0TOlrF/oZ0Vtoic/ZzJfGQnbBE5e+FTJnP+T27Ctj7lxyoFbsIWkbNvD//8DjNhi8jZs78eDvx2hpewReRscTjxipWwxeTso+HIU1bCFpGzp08MR07dZyRsMTn7fDT0hpGwxeTsi9HQA0bCFpGzT34fDf1xjo2wxeRsdjz2kI2wxeTsvfHYSy7CFm3OPh7PLS8xEbaYnH02OZjnIWxROft6cjLHQ9iicvbu5OQCC2GLytn3wdl3HIQt2pz9EpytcmjYos1ZPzj7gUHDFm3Orhz5DxQiL50RtgWtHw5WnG/Y4s3Zz0fHPzrfsEWbs4e6MggiL90QtnhztqT5N8ABYYs3Z98eP3DH8YYt2pwd6sogmLx0QNjizdmi6sgrpxu2eHP2kerIU5cbtnhzdqQrg2DykrywxZuzz9WH3rjbsJ3SnH2hPvXA3YYt3pwd68ogmLwkLmzx5mw27NhDVxu2U5qz98LOvXS1YYs3Zyd1ZZDlJTcbtlOas8/CT+bdbNhOac6+Dj+Zc7JhO605ezf86IKTDdsZmrNON2xnac463bBdhxhZdfFZAxOaTj5rYMKOi88amFBy8VkDE8gJ2xbETM7FZw1MICZs6xA7uy4+a2BC3slnDUw4cPFZAxN6Lj5rYAIhYdsHK1RdfNbABDLCdgCW6Lr4rIEJRITtHlhj08VnDUzYdvFZAxNICNsKWKTs4rMGJhAQtjWwSoeznCUpbNfBMquc5SxBYRuznKUnbAvW8yYrbOOWs+SEbQsSIMdZzhITtnVIhF3OcpaUsN2HhDjgLGcJCVs7cpaQsO1DYlQ5y1kywnYACdIlK2c93c96VIVtRDm7pfvdNarCNpqc/fqE7ndPnaEpbCPK2bb+lxs0hW1EOevrf9knKWwjyllvlm97FIVtLaaVpbG2OgTlrP7K0lhbVoVtRDnbnu3rDXrCNhvbytJYW01yctab9fseNWFbiHFlaaytEjE5O9vK0lhb1oRtK9aVpbG2crTkrD/7FT4pYRtRznomd3iUhO1GzCtLY23lCcnZ2VeWxtqyImyLsa8sjbXVoyNnfbNrfDLCtm9hZWmsrSoVObtletEaEWE7sLGydNZWl0Zztm1+U4NEwzZqc9Y3v8on0bC9bmllaaytbQrN2a15XLZGoGFbsbWydNZWOfnmbHs+1zUSb9jW7K0snbXVSbo5683rQi/hhm3U5uzWvC5cS7hhm7W5snTWVjPZ5mx7flc2Em3YFuyuLJ21VUqyOevN81IvwYZty/bK0llbueTk7PxWls7aikHYRm3Otud7bSOxhu2G/ZWls7ac/KVjgiAIgiAIgiAIgiAIgiAIgiAIAm3+Bl9j0jTf+vMxAAAAAElFTkSuQmCC",
+      "alt": "Acme Corp mark",
+      "mediaType": "image/png",
+      "description": "Original artwork for this fictional organization, MIT licensed with OpenPresentation/opf. No fonts, photographs or external resources."
+    },
+    "alice-headshot": {
+      "src": "data:image/png;base64,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",
+      "alt": "Alice Chen avatar",
+      "mediaType": "image/png",
+      "description": "Original artwork for this fictional organization, MIT licensed with OpenPresentation/opf. No fonts, photographs or external resources."
+    },
+    "rollout-photo": {
+      "src": "data:image/png;base64,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",
+      "alt": "Distribution floor during the pilot rollout",
+      "title": "Pilot rollout floor",
+      "mediaType": "image/png",
+      "description": "Original illustration, MIT licensed with OpenPresentation/opf. Not a photograph."
     },
     "walkthrough-clip": {
       "src": "https://cdn.example.com/walkthrough.mp4",
@@ -88,8 +97,15 @@
         {
           "id": "acme-night",
           "accent1": "#4FC3F7",
+          "accent2": "#81D4FA",
+          "accent3": "#F2C230",
+          "accent4": "#E07B39",
+          "accent5": "#2E4A63",
+          "accent6": "#A5D6A7",
           "light1": "#FFFFFF",
+          "light2": "#CFE3F2",
           "dark1": "#0B1B2B",
+          "dark2": "#13283D",
           "background": "#0B1B2B",
           "text": "#E8F1F8",
           "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
@@ -104,8 +120,9 @@
       "beat": "objectives",
       "title": "Full Feature Tour",
       "subtitle": "Q3 Business Review — Acme Corp",
-      "tag": "FIXTURE",
-      "notes": "Cover slide: title layout, beat reference, tag badge, footer furniture."
+      "tag": "Feature tour",
+      "notes": "Cover slide: title layout, beat reference, tag badge, organization logo, watermark and footer furniture.",
+      "section": "Overview"
     },
     {
       "layout": "text-1x",
@@ -119,7 +136,8 @@
         ", and ",
         { "text": "linked", "href": "https://openpresentation.org" },
         " segments."
-      ]
+      ],
+      "section": "Overview"
     },
     {
       "beat": "performance-headline",
@@ -136,10 +154,20 @@
       "center+right": {
         "chart": {
           "type": "line",
-          "data": { "src": "asset:adoption-csv", "columns": ["Month", "Active Teams"] }
+          "data": {
+            "columns": ["Month", "Active Teams"],
+            "rows": [
+              ["Apr", 96],
+              ["May", 112],
+              ["Jun", 131],
+              ["Jul", 188],
+              ["Aug", 236],
+              ["Sep", 288]
+            ]
+          }
         }
       },
-      "notes": "Regions plus asset-backed chart data."
+      "notes": "Promoted regions: a metric on the left, an inline-data line chart across center and right. Q3 active teams (712) are 2.1x Q2 (339)."
     },
     {
       "layout": "chart-1x",
@@ -150,11 +178,7 @@
         "type": "column",
         "data": {
           "columns": ["Region", "Q2", "Q3"],
-          "rows": [
-            ["Americas", 4.2, 5.1],
-            ["EMEA", 3.1, 3.9],
-            ["APAC", 1.8, 2.6]
-          ]
+          "rows": [["Americas", 4.2, 5.1], ["EMEA", 3.1, 3.9], ["APAC", 1.8, 2.6]]
         }
       }
     },
@@ -166,10 +190,7 @@
         {
           "table": {
             "columns": ["Customer", "Cycle Time", "Change"],
-            "rows": [
-              ["Globex", "11 days", "-48%"],
-              ["Initech", "9 days", "-52%"]
-            ]
+            "rows": [["Globex", "11 days", "-48%"], ["Initech", "9 days", "-52%"]]
           }
         },
         {
@@ -213,8 +234,18 @@
       "timeline": {
         "name": "Regional Rollout",
         "events": [
+          {
+            "when": "Q3 2025",
+            "what": "Americas pilot",
+            "description": "Twelve teams in two regions."
+          },
           { "when": "Q4 2025", "what": "Expand pilot", "description": "Add EMEA and APAC." },
-          { "when": "Q1 2026", "what": "General availability" }
+          { "when": "Q1 2026", "what": "General availability" },
+          {
+            "when": "Q2 2026",
+            "what": "Retire legacy tier",
+            "description": "Migrate the last accounts."
+          }
         ]
       }
     },
@@ -242,10 +273,10 @@
       "beat": "asks",
       "section": "Decision",
       "title": "The Ask",
-      "text": "Approve $1.2M to expand the rollout to all regions in Q4."
+      "text": "Approve $1.2M to expand the rollout to all regions in Q4.",
+      "design": { "watermark": { "src": "asset:acme-mark", "opacity": 0.05 } },
+      "notes": "Slide-level design: the watermark appears on this closing slide only."
     }
   ],
-  "extensions": {
-    "com.example.workflow": { "reviewState": "approved", "ticket": "OPS-1142" }
-  }
+  "extensions": { "com.example.workflow": { "reviewState": "approved", "ticket": "OPS-1142" } }
 }

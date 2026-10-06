@@ -4,6 +4,10 @@
 //   (no flag)            every step, in the original order: the local developer run and the unsharded reference.
 //   --siblings <a,b>     only the listed siblings' own suites (opf-render, opf-editor, opf-pptx), nothing of core's.
 //   --skip-siblings      everything except the siblings' own suites.
+//   --core model|packed  RR-45 (opf#368, item 1), with --skip-siblings: one half of core's own steps, for the two core
+//                        shards. `model` is the model, geometry, fonts and CLI suites; `packed` packs the tarballs, installs
+//                        and checks the local consumer that the installed-browser checks then use. Together they are exactly
+//                        the --skip-siblings list, in its order.
 //   --tier full|contract RR-53, consumer-driven contracts (ci-cd.md, section 3). `full` (the default) runs each sibling's
 //                        whole `npm run test`. `contract` runs its `npm run test:contract` instead: the part of its suite
 //                        that exercises core's APIs (test/suites.json `contractExclude` lists what it leaves out). Core's
@@ -28,15 +32,23 @@ function siblingSteps(name, tier = 'full') {
 }
 
 export const tiers = ['full', 'contract'];
+export const coreParts = ['model', 'packed'];
+const packedCommands = new Set(['pack:ecosystem', 'test:packed-ecosystem']);
+const corePartOf = (step) => (step.command === 'pnpm' && packedCommands.has(step.args[0]) ? 'packed' : 'model');
 
-/** Parse the shard flags: {siblings: string[] | null, skipSiblings: boolean, tier}. Throws on anything unknown. */
+/** Parse the shard flags: {siblings: string[] | null, skipSiblings: boolean, tier, core}. Throws on anything unknown. */
 export function parseShardArguments(argv) {
   let siblings = null;
   let skipSiblings = false;
   let tier = 'full';
+  let core = null;
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
     if (arg === '--skip-siblings') skipSiblings = true;
+    else if (arg === '--core' || arg.startsWith('--core=')) {
+      core = arg === '--core' ? argv[++index] : arg.slice('--core='.length);
+      if (!coreParts.includes(core)) throw new Error(`Unknown core part ${core}; expected ${coreParts.join(' or ')}`);
+    }
     else if (arg === '--tier' || arg.startsWith('--tier=')) {
       tier = arg === '--tier' ? argv[++index] : arg.slice('--tier='.length);
       if (!tiers.includes(tier)) throw new Error(`Unknown tier ${tier}; expected ${tiers.join(' or ')}`);
@@ -49,11 +61,12 @@ export function parseShardArguments(argv) {
     } else throw new Error(`Unknown argument ${arg}`);
   }
   if (siblings && skipSiblings) throw new Error('--siblings and --skip-siblings cannot be combined');
-  return { siblings, skipSiblings, tier };
+  if (core && !skipSiblings) throw new Error('--core needs --skip-siblings');
+  return { siblings, skipSiblings, tier, core };
 }
 
 export function planEcosystem(argv = []) {
-  const { siblings, skipSiblings, tier } = parseShardArguments(argv);
+  const { siblings, skipSiblings, tier, core } = parseShardArguments(argv);
   const runCore = siblings === null;
   const runSiblings = !skipSiblings;
   const steps = [];
@@ -72,7 +85,7 @@ export function planEcosystem(argv = []) {
       { command: 'pnpm', args: ['test:cli:packed'] },
     );
   }
-  return steps;
+  return core ? steps.filter((step) => !step.sibling && corePartOf(step) === core) : steps;
 }
 
 /**
