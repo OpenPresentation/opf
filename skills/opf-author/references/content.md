@@ -6,7 +6,11 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | --- | --- |
 | Plain text | `{"text":"A useful assertion"}` |
 | Rich text | `{"text":[{"text":"Important","bold":true}," detail"]}` |
+| Inline code | `{"text":["Run ",{"text":"pnpm install","code":true}]}` (the design's code font; Markdown `` `backticks` `` are the same thing) |
+| Run in another language | `{"text":["The word ",{"text":"Zeitgeist","lang":"de"}]}` (BCP-47 tag; sets proofing and script fonts for that run) |
 | List | `{"items":["First point","Second point"]}` |
+| Prose bullets | `{"bullets":["A talking point","Another one"]}` (a `text` payload; pick `items` instead when any entry needs supporting detail) |
+| List with detail | `{"items":[{"text":"Faster onboarding","description":"First value in under a day."}]}` (`description` exists only on `items`) |
 | Numbered list | `{"items":["First step","Second step"],"numbering":"arabic"}` (also `roman-upper`, `roman-lower`, `alpha-upper`, `alpha-lower`; `{"style":"alpha-lower","start":3,"suffix":"paren"}`; an array is one entry per level; works on `bullets` too) |
 | Image | `{"image":{"src":"asset:diagram","alt":"Description of the diagram"}}` |
 | Video | `{"video":{"src":"asset:demo","title":"Demo"}}` |
@@ -15,6 +19,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Chart | `{"chart":{"type":"column","alt":"Revenue rose from $12M in Q1 to $18M in Q2.","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}}` |
 | Quote | `{"quote":{"text":"Quoted words","attribution":"Source speaker","source":"Source reference"}}`; a testimonial adds `"role":"VP Operations, Acme"` (title and organization, drawn on its own line under the attribution) and `"photo":{"src":"asset:speaker","alt":"Name"}` (a circular headshot beside them; give it alt text) |
 | Code | `{"code":{"source":"const answer = 42;","language":"javascript"}}` |
+| Code with emphasized lines | `{"code":{"source":"a\nb\nc\nd","language":"javascript","highlight":[2,[3,4]]}}` (1-based lines and inclusive ranges; the rest is dimmed) |
 | Timeline | `{"timeline":[{"when":"Now","what":"Prototype"},{"when":"Next","what":"Review"}]}` |
 | Timeline with progress | `{"timeline":[{"when":"Q1","what":"Discovery","status":"done"},{"when":"Q2","what":"Pilot","status":"current"},{"when":"Q3","what":"Rollout","status":"planned"}]}` |
 | Nested group | `{"composition":{"mode":"column"},"blocks":[{"text":"One"},{"text":"Two"}]}` |

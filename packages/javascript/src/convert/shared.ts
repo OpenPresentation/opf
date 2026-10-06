@@ -84,7 +84,7 @@ export const assertValidOwner = (owner: Obj, context: Obj = {}): void => assertV
 
 // --- text runs --------------------------------------------------------------------------------
 
-export const FORMATTING = ["bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "link", "superscript", "subscript"] as const;
+export const FORMATTING = ["bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "link", "superscript", "subscript", "code", "lang"] as const;
 export type Run = string | Obj;
 export const isPlainRun = (run: Run): boolean => typeof run === "string" || (isRecord(run) && !FORMATTING.some((key) => run[key] !== undefined));
 export const runText = (run: Run): string => (typeof run === "string" ? run : (run.text ?? ""));

@@ -34,6 +34,8 @@ Theme defaults sit below explicit deck and slide design. Inline `id` plus overri
 
 That background flexibility applies to deck/slide design overrides. Catalog theme records use a theme-controlled object such as `{"type":"theme","slot":"light2"}`; the slot must be `light1`, `light2`, `dark1`, or `dark2`. Keep a fixed hex background in an explicit `design.background` override. Validate catalog records against their companion schemas, including required names, rather than relying only on presentation validation.
 
+`design.dimensions` takes a preset (`16:9`, `4:3`, `16:10`, the social-feed ratios `1:1`, `4:5` and `9:16`, `letter`, `a4`, and the aliases `widescreen` and `standard`) or custom inches. `design.watermark` is an image (`{"src":"asset:mark","opacity":0.08}`) or a text stamp (`{"text":"DRAFT","opacity":0.1}`): exactly one of `src` and `text`; the stamp is drawn centered and rotated 30 degrees counterclockwise in the heading font and the theme text color.
+
 Use font schemes for pair/role selection; load the actual font files separately. The core package contains font metadata, not every font binary. Rich text run overrides and schema-accepted design controls may exceed current SVG/PPTX visual coverage.
 
 ## Gallery reuse

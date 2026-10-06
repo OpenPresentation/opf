@@ -35,7 +35,9 @@ export interface LayoutDiagnostic {
 }
 /** Physical legacy-family selection supplied by a font provider, independently of its numeric weight. */
 export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
-export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection }
+export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection;
+  /** BCP-47 tag of a run that overrides the deck language (`TextRun.lang`); absent when the deck language applies. */
+  lang?: string }
 /** Role families. `accent` is present only when the scheme defines an accent role; the slide tag and quote body use it. */
 export interface FontFamilies { heading: string; body: string; code: string; accent?: string }
 /** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
@@ -1606,6 +1608,10 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
 export interface RichTextRun {
   text: string; bold?: boolean; italic?: boolean; underline?: boolean; strikethrough?: boolean;
   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
+  /** Inline code: the run takes the design's code font (`RichTextOptions.codeFontFamily`) unless it names its own `fontFamily`. */
+  code?: boolean;
+  /** BCP-47 tag that overrides the deck language for this run; it reaches the fragment style as `style.lang`. */
+  lang?: string;
   /** RR-34: reference ids this run cites (a marker follows the run; the deck's `references` list resolves them). */
   cite?: string | string[];
   /** RR-34: an inline footnote for this run (a marker follows the run; the note is listed in the slide's footnote area). */
@@ -1628,6 +1634,8 @@ export interface RichTextLine { fragments: RichTextFragment[]; width: number; y:
 export interface RichTextFit extends TextFit { richLines: RichTextLine[]; height: number }
 export interface RichTextOptions {
   style: TextStyle;
+  /** The design's code family for runs with `code: true`; `monospace` when absent. */
+  codeFontFamily?: string;
   textMeasurement?: TextMeasurement;
   /** Use one measured line advance for every line, as native table cells do. */
   uniformLineHeight?: boolean;
@@ -1663,7 +1671,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const run:RichTextRun=typeof value==='string'?{text:value}:value;
     if(typeof run?.text!=='string'||(run.fontSize!==undefined&&(!Number.isFinite(run.fontSize)||run.fontSize<=0))) throw new RangeError('Rich text runs need text and a positive finite font size.');
     const start=offset;offset+=run.text.length;
-    const style=resolveTextStyle({...options.style,fontFamily:run.fontFamily??options.style.fontFamily,fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
+    const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
+    // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
+    const style:TextStyle=typeof run.lang==='string'&&run.lang?{...resolvedStyle,lang:run.lang}:resolvedStyle;
     // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
     const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
@@ -1868,6 +1878,8 @@ export interface TableLayoutOptions {
   scale?: number;
   minFontSize?: number;
   fontFamily?: string;
+  /** The design's code family for cell runs with `code: true`. */
+  codeFontFamily?: string;
   textMeasurement?: TextMeasurement;
   path?: string;
   /** RR-54: the document, for a dataset-backed table (`{ dataset }`): its headers, rows and column formats come from `datasets`. */
@@ -1926,7 +1938,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
     return Array.isArray(cell.value)
-      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
+      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
       : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
@@ -1934,7 +1946,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(requested,floor):floor,floor);
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:scale};
     const fit=Array.isArray(cell.value)
-      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
+      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
       :fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
     return textHeight(fit)+(cell.padding.top+cell.padding.bottom)*scale;
   };
@@ -1971,7 +1983,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   return {rows,columnCount,height:sum(heights),overflow};
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
-  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -2070,7 +2082,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // whose runs cite or carry footnotes get a marker resolver and a footnote area; others are unchanged.
   const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
-  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
+  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
@@ -2428,7 +2440,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
 export function resolveCanvasDimensions(input: unknown): { width: number; height: number } {
   const presets: Record<string, [number, number]> = {
     widescreen: [40 / 3, 7.5], '16:9': [40 / 3, 7.5], standard: [10, 7.5],
-    '4:3': [10, 7.5], '16:10': [10, 6.25], letter: [11, 8.5], a4: [11.69, 8.27],
+    '4:3': [10, 7.5], '16:10': [10, 6.25], '1:1': [7.5, 7.5], '4:5': [7.5, 9.375], '9:16': [7.5, 40 / 3], letter: [11, 8.5], a4: [11.69, 8.27],
   };
   const value = record(input);
   const preset = presets[typeof input === 'string' ? input : value.preset] ?? presets.widescreen!;

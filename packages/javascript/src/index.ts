@@ -199,6 +199,13 @@ export {
   codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode,
 } from './code-syntax.js';
 export type { CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind } from './code-syntax.js';
+export {
+  CODE_HIGHLIGHT_BAND_TINT, CODE_HIGHLIGHT_DIM, codeHighlightBands, codeHighlightColors, codeHighlightContrast, codeHighlightLines, codeHighlightList,
+  codeHighlightSlice, codeLineCount, codeLineNumbers,
+} from './code-highlight.js';
+export type { CodeHighlightBand, CodeHighlightColors, CodeHighlightEntry, CodeHighlightIssue, CodeHighlightLines } from './code-highlight.js';
+export { WATERMARK_TEXT_MAX_HEIGHT, WATERMARK_TEXT_MAX_WIDTH, WATERMARK_TEXT_ROTATION, layoutWatermark } from './watermark.js';
+export type { WatermarkTextLayout, WatermarkTextOptions } from './watermark.js';
 export { METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, metricTrendColor, metricTrendMark, metricTrendPoints } from './metric-trend.js';
 export type { MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark } from './metric-trend.js';
 export { TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor } from './timeline-status.js';
