@@ -13,7 +13,7 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Table | `{"table":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}` |
 | Chart | `{"chart":{"type":"column","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}}` |
 | Metric | `{"metric":{"value":98,"unit":"%","label":"Retention"}}` |
-| Quote | `{"quote":{"text":"Quoted words","attribution":"Source speaker","source":"Source reference"}}` |
+| Quote | `{"quote":{"text":"Quoted words","attribution":"Source speaker","source":"Source reference"}}`; a testimonial adds `"role":"VP Operations, Acme"` (title and organization, drawn on its own line under the attribution) and `"photo":{"src":"asset:speaker","alt":"Name"}` (a circular headshot beside them; give it alt text) |
 | Code | `{"code":{"source":"const answer = 42;","language":"javascript"}}` |
 | Timeline | `{"timeline":[{"when":"Now","what":"Prototype"},{"when":"Next","what":"Review"}]}` |
 | Nested group | `{"composition":{"mode":"column"},"blocks":[{"text":"One"},{"text":"Two"}]}` |

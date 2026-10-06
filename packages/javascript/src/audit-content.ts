@@ -101,6 +101,7 @@ export function textValues(slide: Rec, slidePath: string): TextValue[] {
 		else if (quote && typeof quote === 'object') {
 			push(at('quote', 'text'), quote.text, 'quote', 'quote');
 			push(at('quote', 'attribution'), quote.attribution, 'quote-footer', 'quote');
+			push(at('quote', 'role'), quote.role, 'quote-footer', 'quote');
 			push(at('quote', 'source'), quote.source, 'quote-footer', 'quote');
 		}
 		const metric = node.metric;
@@ -166,7 +167,7 @@ export function countWords(text: string): number {
 export interface AssetRef {
 	path: string;
 	value: unknown;
-	kind: 'image' | 'video' | 'slide-image' | 'logo' | 'furniture' | 'speaker' | 'organization';
+	kind: 'image' | 'video' | 'slide-image' | 'logo' | 'furniture' | 'speaker' | 'organization' | 'quote-photo';
 }
 
 /** Alt text of an asset value: its own `alt`, else the registry entry an `asset:<id>` source points to. */
@@ -195,6 +196,7 @@ export function assetRefs(document: Rec, slide: Rec, slidePath: string, includeD
 		const at = (...tail: string[]) => pointer(...splitPointer(payload.path), ...tail);
 		if (payload.node.image !== undefined) out.push({ path: at('image'), value: payload.node.image, kind: 'image' });
 		if (payload.node.video !== undefined) out.push({ path: at('video'), value: payload.node.video, kind: 'video' });
+		if (rec(payload.node.quote).photo !== undefined) out.push({ path: at('quote', 'photo'), value: rec(payload.node.quote).photo, kind: 'quote-photo' });
 	}
 	const designRefs = (design: Rec, base: string) => {
 		const slideImage = design.slideImage;

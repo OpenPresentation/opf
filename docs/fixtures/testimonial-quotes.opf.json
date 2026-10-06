@@ -1,0 +1,65 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Testimonial quotes reference",
+  "description": "A quote can credit a person with a title and a face: quote.role and quote.photo (FA-12). One slide each for a testimonial with a headshot, a role without a photo, a long testimonial, and the plain attribution-and-source quote, which is unchanged. See docs/content-payloads.md.",
+  "language": "en-US",
+  "assets": {
+    "priya-raman": {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAACACAIAAAB7vvvtAAABgUlEQVR42u3aUXHEMAwEUKEplMIpkkIpjkK4706RFEFzycV2IunNLIL345F34/vxKxsJBIAAAQIECBAgQAIIECBAgAABAiSAAAECBAgQIEACCBAgQO2Bfr4+/0troA2X+0jF/WmuZYosNFcxRTqdxUaRUWelUSTVWWYUeXXWGAG6GmiqzgKjyK4z2wjQdUDLdKYaAQIEKCXQYp15RoAAAQIEqCGQZx4QIEC+OwBlB/LlCkiroThUPRsvmL90mb8MMeoywUsxL7vFiPO260QzYECAAAECBAjQtLy9f+xPF6BDKHfAikQul0hFUpplTJGaZgFTFKCZyhRlaCYxRT2dsUZRUmegUZSkGcgUtXXOG0V5nZNG0UHnjFE00XnZCNAEoKQ6rxlFK50XjKKbzlEjQOOAyugcMoqeOvuNAI0AKqmz0wjQaaDCOnuMAAGaClRe56kRIEDzgJrobBsBAgQIEKCMQK10NowAAQIECBAgQIAAAXJquMUAAQJUCUirAeg50B9iPvCTQ4ub0gAAAABJRU5ErkJggg==",
+      "alt": "Priya Raman, Head of Platform at Acme",
+      "mediaType": "image/png"
+    },
+    "marcus-oyelaran": {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAACACAIAAAB7vvvtAAABgklEQVR42u3aUXHEMAwEUMEpgOIojkIokkI6CAVQJEXQXHKxnUh6M4vg/Xjk3fj9echGAgEgQIAAAQIECJAAAgQIECBAgAAJIECAAAECBAiQAAIECFB7oO/Pj//SGmjD5T5ScX+aa5kiC81VTJFOZ7FRZNRZaRRJdZYZRV6dNUaArgaaqrPAKLLrzDYCdB3QMp2pRoAAAUoJtFhnnhEgQIAAAWoI5JkHBAiQ7w5A2YF8uQLSaigOVc/GC+YvXeYvQ4y6TPBSzMtuMeK87TrRDBgQIECAAAECNC1f72/70wXoEModsCKRyyVSkZRmGVOkplnAFAVopjJFGZpJTFFPZ6xRlNQZaBQlaQYyRW2d80ZRXuekUXTQOWMUTXReNgI0ASipzmtG0UrnBaPopnPUCNA4oDI6h4yip85+I0AjgErq7DQCdBqosM4eI0CApgKV13lqBAjQPKAmOttGgAABAgQoI1ArnQ0jQIAAAQIECBAgQICcGm4xQIAAVQLSagB6DvQHA4/+oeQpgVUAAAAASUVORK5CYII=",
+      "alt": "Marcus Oyelaran, Director of Support at Northwind",
+      "mediaType": "image/png"
+    }
+  },
+  "design": {
+    "theme": "classic"
+  },
+  "slides": [
+    {
+      "id": "testimonial",
+      "title": "What customers say",
+      "quote": {
+        "text": "We would rather spend a week on capacity than a month on an outage, and this is the first tool that made that trade visible.",
+        "attribution": "Priya Raman",
+        "role": "Head of Platform, Acme",
+        "photo": "asset:priya-raman",
+        "source": "Customer interview, March 2026"
+      }
+    },
+    {
+      "id": "role-only",
+      "title": "Role without a photo",
+      "quote": {
+        "text": "Exceptions became visible before they turned into escalations.",
+        "attribution": "Marcus Oyelaran",
+        "role": "Director of Support, Northwind"
+      }
+    },
+    {
+      "id": "long-testimonial",
+      "title": "A longer testimonial",
+      "quote": {
+        "text": "Before the rollout our reviews took three meetings and a spreadsheet nobody trusted. Now the owner, the numbers and the open questions are on one page, and the review ends when the page does.",
+        "attribution": "Marcus Oyelaran",
+        "role": "Director of Support, Northwind",
+        "photo": {
+          "src": "asset:marcus-oyelaran",
+          "alt": "Marcus Oyelaran, Director of Support at Northwind"
+        }
+      }
+    },
+    {
+      "id": "plain",
+      "title": "Attribution only",
+      "quote": {
+        "text": "The new workflow made exceptions visible before they became escalations.",
+        "attribution": "VP Operations, Acme Corp",
+        "source": "Customer interview"
+      }
+    }
+  ]
+}

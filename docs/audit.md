@@ -163,7 +163,7 @@ Default severity: **warning**. A picture has no alt text and is not marked decor
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts have no alt field in OPF; see audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
+**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts have no alt field in OPF; see audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
 
 ### `audit/poor-alt-text`
 

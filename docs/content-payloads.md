@@ -15,7 +15,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
-| `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
+| `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
 ## Color references
@@ -247,18 +247,35 @@ The `number-1x` through `number-6x` layout IDs declare one title placeholder and
 
 ## Quote
 
-Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters.
+Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters. `text` is a plain string.
 
 ```json
 {
   "title": "Customer Proof",
   "quote": {
     "text": "The new workflow made exceptions visible before they became escalations.",
-    "attribution": "VP Operations, Acme Corp",
+    "attribution": "Priya Raman",
     "source": "Customer interview"
   }
 }
 ```
+
+A testimonial attributes the quote to a person with a title and a face. `role` is the person's title and organization, and `photo` is their headshot, an `Asset` (a source string or an object with `src` and `alt`):
+
+```json
+{
+  "title": "Customer Proof",
+  "quote": {
+    "text": "The new workflow made exceptions visible before they became escalations.",
+    "attribution": "Priya Raman",
+    "role": "VP Operations, Acme",
+    "photo": { "src": "asset:priya-raman", "alt": "Priya Raman" },
+    "source": "Customer interview, March 2026"
+  }
+}
+```
+
+The footer under the quote is the attribution, then the role on its own line, then the source after ` - ` on the last line. Without a `role` it is the single line it always was (`attribution - source`). With a `photo`, the headshot is a circle at the start edge of the footer row (the left in a left-to-right deck, the right in a right-to-left one), three times the footer font size across, and the footer lines sit beside it, centered on it. The photo is cropped to fill the circle, and its size follows the footer's font size when the readability floor shrinks the footer. Without a `photo` nothing else changes. The preview draws it with the circular clip that `design.slideImage` uses for shape `circle`, and PowerPoint export writes a native picture with the `ellipse` geometry and the alt text as its description; importing that file restores `role` and `photo`. A photo needs alt text (the `missing-alt-text` audit rule checks `quote.photo`); an SVG photo exports as its PNG raster. A photo with no attribution, role or source still draws, alone in the footer row. The Markdown dialect has no native form for `role` and `photo`: a quote that carries them is written as an `opf` block, which round trips exactly, and a plain `> — Name, Title` line stays an attribution.
 
 ## Timeline
 
