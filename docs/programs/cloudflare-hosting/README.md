@@ -1,7 +1,8 @@
 # Program: Cloudflare hosting (CF)
 
-Status: **active** (opened 2026-10-04). All three sites serve production from Cloudflare Workers (cut over 2026-10-05); what
-remains is CI/CD (CF-04 to CF-06), the apex static-asset redirect (CF-07) and the Vercel retirement (CF-08). Tracker: [burndown.md](burndown.md).
+Status: **active** (opened 2026-10-04). All three sites serve production from Cloudflare Workers (cut over 2026-10-05); the apex
+static-asset redirect (CF-07), the gallery media on R2 (CF-09) and the self-hosted fonts (CF-10) are done; what remains is the
+CI/CD that waits for the owner's secrets (CF-04 to CF-06) and the Vercel retirement (CF-08). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for moving the three sites from Vercel to Cloudflare. Agents and people
 resuming work start here, not from chat history or local scratch files.
 
@@ -112,8 +113,9 @@ changes state):
 - **RR-49** (Vercel Ignored Build Step, `deployment_status` preview and production workflows, `vercel-gating.md`): the
   sites now serve production from Cloudflare, so the Vercel preview checks and the bypass secret
   ([opf#299](https://github.com/OpenPresentation/opf/issues/299)) no longer cover production. Production checks run after
-  the CF-04 deploy workflow (gallery) and a curl smoke (site). The supervisor proposes descoping the Vercel parts; that is
-  the owner's decision (RR README, Open decisions 5). The replacement previews are not built yet.
+  the CF-04 deploy workflow (gallery) and a curl smoke (site); pptx.dev has its own deploy workflow (CF-06). The supervisor
+  proposes descoping the Vercel parts; that is the owner's decision (RR README, Open decisions 5). The replacement previews are
+  not built yet.
 - **RR-14**: the feature runs on the Cloudflare Worker, so its flags are Worker variables / build variables and
   `AI_GATEWAY_API_KEY` is a Worker secret; the provider SDK change from the original plan was not needed to go live.
 - The sites' `vercel.json`, `@vercel/analytics`, `VERCEL_*` heuristics and the Vercel references in each site's docs go
@@ -124,8 +126,9 @@ changes state):
 - **Vercel retirement (CF-08).** When to remove the wildcard record, the Vercel projects and the Vercel code paths, after
   a stable period. Until then Vercel keeps the domains as a warm rollback for pptx.dev.
 - **RR-49 descope.** Whether to drop the Vercel preview and bypass-secret parts of RR-49 (RR README, Open decisions 5).
-- **CF-04 and CF-05 inputs.** The Actions secrets for the deploy-on-main workflows (two repositories) and a Clerk test user
-  with its secrets for the signed-in test.
+- **CF-04 to CF-06 inputs.** The Actions secrets for the deploy workflows (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` in the
+  three repositories; pptx-dev also `CONVEX_DEPLOY_KEY` and the `NEXT_PUBLIC_*` variables) and a Clerk test user with its secrets for
+  the signed-in test. All three deploy workflows and the signed-in suite are merged and stop at their gate until these exist.
 - **Production Clerk and Convex** for pptx.dev when real users arrive.
 
 ## Naming
