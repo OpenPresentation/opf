@@ -1,6 +1,6 @@
 ---
 type: added
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-54 (additive schema plus one behaviour change; lockstep with the renderer, PPTX and editor later): chart and table data. Contract: [docs/chart-table-data.md](docs/chart-table-data.md).
     - **Behaviour change (strict chart numbers):** core `chartNumber` is the one rule for chart values: a finite number, or a trimmed string in strict decimal syntax (`"12"`, `"-3.5"`, `"1e6"`). Anything else (`"12%"`, `"$5"`, `"(5)"`, `"1,234"`, `"Q1"`, booleans) is a gap and a `chart-value-not-numeric` validator warning, never a guessed value. Once the renderer and PPTX adopt it, a deck whose chart cells hold `"12%"` or `"$5"` previews and exports a gap where the exporter used to strip the characters and write 12 or 5. Data import (`createDataContent`, `opf import-data`) already used this rule and now calls `chartNumber`.
