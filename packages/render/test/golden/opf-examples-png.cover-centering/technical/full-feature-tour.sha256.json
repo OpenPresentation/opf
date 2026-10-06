@@ -2,48 +2,48 @@
   "deck": "technical/full-feature-tour.opf.json",
   "entries": {
     "technical/full-feature-tour.opf.json#0": {
-      "sha256": "79e43e0a60a48b6f6d48c9b1769053c4db05fb487cddceb41172391697cc9578",
-      "bytes": 4324
+      "sha256": "daa931496ef2dc0ec3f3c77c24c99bb06b8f2a8f9fdc609d8acbe6ca48bb9153",
+      "bytes": 3419
     },
     "technical/full-feature-tour.opf.json#1": {
-      "sha256": "84ad875bcf3b32e5fa050e8dbe6d351ae3cd0e7e107690c6aec96f17d3354c89",
-      "bytes": 3872
+      "sha256": "9790e6ee31fb538065c89c890167987a80165ac576b601faaae268e5c8d87311",
+      "bytes": 3437
     },
     "technical/full-feature-tour.opf.json#2": {
-      "sha256": "5b61369fbfb110ee8922cc9e7c56131156c1d7e95589776676db5b62112a7bd7",
-      "bytes": 4947
+      "sha256": "3840670fefb4fd1886e0bad9ab6fbcd84ba81c46ba9970f06c49a04f56588e86",
+      "bytes": 7237
     },
     "technical/full-feature-tour.opf.json#3": {
       "sha256": "8fa4f8fc8fcefd7303a14593498289bda069399315b548d4d33dbe58cb3fb3bc",
       "bytes": 4774
     },
     "technical/full-feature-tour.opf.json#4": {
-      "sha256": "4aa513e71820fa50ec44b0b7f5c12f8bc7b93a99f58533b80a9948cef973978e",
-      "bytes": 6792
+      "sha256": "f0552b68ecb9c4dedb35e168f4773a5ce3d2842a49f950e214d5f1c4413e0ee8",
+      "bytes": 6270
     },
     "technical/full-feature-tour.opf.json#5": {
-      "sha256": "60b9e5dbd46555e489fd996f739c4f2ac438d077733cac7c197338257d74f2e8",
-      "bytes": 6335
+      "sha256": "77289742f9ce4f2b3459d1771044e26e82d5e40e0098fcfacbd78573b11525b8",
+      "bytes": 5783
     },
     "technical/full-feature-tour.opf.json#6": {
       "sha256": "8fe8713936c5655d047ef58df279906ace3dd53f43b76b30e31cbaf37d23a0bf",
       "bytes": 4876
     },
     "technical/full-feature-tour.opf.json#7": {
-      "sha256": "57fd3a2392093024bba4233f06b89ae16b601a860af934f19787c61369d24d41",
-      "bytes": 4250
+      "sha256": "eb328eb08798e5383762ea01831ecc4cc8132a55dce09c75ebad889c313d3caa",
+      "bytes": 5002
     },
     "technical/full-feature-tour.opf.json#8": {
-      "sha256": "a1ca9068b8131dd340362495616022bf59897ecbb3d30a39d40d4d6b23f95772",
-      "bytes": 3424
+      "sha256": "6994881dbcb84b26d54068c519e3cc5a05c1559dcd530451ddc75d2dedf455de",
+      "bytes": 8352
     },
     "technical/full-feature-tour.opf.json#9": {
       "sha256": "d6c4700f96ed530f46873186c082d8297a66421bdc9369209c82da05c2f52341",
       "bytes": 3228
     },
     "technical/full-feature-tour.opf.json#10": {
-      "sha256": "0eb148d10e9e1c8b6e2da5634545320ef7f54f84e051bbd2d841e1fb26b093df",
-      "bytes": 3578
+      "sha256": "b6709e8abebb5ef9f541b4bf6c6ce4592ec741a684eb2ee74deabf5326ec5a9a",
+      "bytes": 3889
     }
   }
 }
