@@ -83,6 +83,21 @@ test("a pull request that can change what the contract tier trusts runs the full
   assert.equal(pr({ listChangedFiles: () => { throw new Error("no parent"); } }).tier, "full", "unclassifiable means full");
 });
 
+// RR-45 (opf#368, item 6): the Windows and macOS legs keep their required check names on every pull request, but take a
+// Windows or macOS runner only off pull requests or with the label ecosystem-full.
+test("the installed-candidate legs always report under their required names and run on their OS outside plain pull requests", () => {
+  const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
+  const job = workflow.slice(workflow.indexOf("\n  installed-portability:\n"), workflow.indexOf("\n  main-status:"));
+  const policy = "(github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full'))";
+  assert.ok(job.includes("    name: Installed candidates (${{ matrix.os }})\n"));
+  assert.ok(job.includes(`    runs-on: \${{ ${policy} && matrix.os || 'ubuntu-24.04' }}\n`));
+  assert.ok(job.includes(`      PORTABILITY: \${{ ${policy} && 'run' || 'policy-skip' }}\n`));
+  assert.match(job, /os: \[windows-latest, macos-latest\]/);
+  assert.doesNotMatch(job, /\n    if:/, "a skipped matrix job would not report the expanded required check names");
+  // A policy skip writes run=false and nothing else decides it; on the real runner the docs-only scope decides as before.
+  assert.match(job, /if \[ "\$PORTABILITY" = run \]; then\n            node scripts\/ecosystem-scope\.mjs\n          else\n            echo "run=false" >> "\$GITHUB_OUTPUT"/);
+});
+
 test("every tier-defining file exists, so a rename cannot silently lower the tier", () => {
   for (const file of FULL_TIER_PATHS) assert.ok(readFileSync(new URL(`../${file}`, import.meta.url)), file);
 });
@@ -103,19 +118,4 @@ test("the workflow runs the contract tier on pull requests and the full suites o
   for (const shard of ["model", "installed", "registry"]) assert.ok(core.includes(`matrix.shard == '${shard}'`), shard);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core model\n/);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core packed\n/);
-});
-
-// RR-45 (opf#368, item 6): the Windows and macOS legs keep their required check names on every pull request, but take a
-// Windows or macOS runner only off pull requests or with the label ecosystem-full.
-test("the installed-candidate legs always report under their required names and run on their OS outside plain pull requests", () => {
-  const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
-  const job = workflow.slice(workflow.indexOf("\n  installed-portability:\n"), workflow.indexOf("\n  main-status:"));
-  const policy = "(github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full'))";
-  assert.ok(job.includes("    name: Installed candidates (${{ matrix.os }})\n"));
-  assert.ok(job.includes(`    runs-on: \${{ ${policy} && matrix.os || 'ubuntu-24.04' }}\n`));
-  assert.ok(job.includes(`      PORTABILITY: \${{ ${policy} && 'run' || 'policy-skip' }}\n`));
-  assert.match(job, /os: \[windows-latest, macos-latest\]/);
-  assert.doesNotMatch(job, /\n    if:/, "a skipped matrix job would not report the expanded required check names");
-  // A policy skip writes run=false and nothing else decides it; on the real runner the docs-only scope decides as before.
-  assert.match(job, /if \[ "\$PORTABILITY" = run \]; then\n            node scripts\/ecosystem-scope\.mjs\n          else\n            echo "run=false" >> "\$GITHUB_OUTPUT"/);
 });
