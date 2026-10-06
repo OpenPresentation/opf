@@ -112,7 +112,7 @@ The reference below is generated from the rule registry (`auditRules`); `pnpm ch
 | [`audit/reading-order`](#auditreading-order) | warning | Accessibility | The order content is read differs from the order it appears on the slide. |
 | [`audit/link-text`](#auditlink-text) | warning | Accessibility | Link text does not say where the link goes. |
 | [`audit/chart-color-only`](#auditchart-color-only) | info | Accessibility | Chart series may be indistinguishable without colour vision. |
-| [`audit/chart-text-alternative`](#auditchart-text-alternative) | info | Accessibility | A chart is the only content on its slide besides the title. |
+| [`audit/chart-text-alternative`](#auditchart-text-alternative) | info | Accessibility | A chart has no text alternative, or is marked decorative. |
 | [`audit/missing-language`](#auditmissing-language) | info | Accessibility | The presentation does not declare its language. |
 | [`audit/text-overflow`](#audittext-overflow) | warning | Design | Text or a table does not fit its space at the smallest allowed size. |
 | [`audit/small-cell`](#auditsmall-cell) | info | Design | A content cell is too small for comfortable reading. |
@@ -164,7 +164,7 @@ Default severity: **warning**. A picture has no alt text and is not marked decor
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts have no alt field in OPF; see audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
+**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts carry `chart.alt` and are checked by audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
 
 ### `audit/poor-alt-text`
 
@@ -174,7 +174,7 @@ Default severity: **info**. Alt text is a file name, a URL, a generic word or ve
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. It cannot tell whether a plausible sentence is accurate.
+**Approximations.** Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. Chart alt text (chart.alt) is checked too: a bare chart word, a URL, a leading "chart of" or more than 250 characters. It cannot tell whether a plausible sentence is accurate.
 
 ### `audit/missing-slide-title`
 
@@ -228,13 +228,13 @@ Default severity: **info**. Chart series may be indistinguishable without colour
 
 ### `audit/chart-text-alternative`
 
-Default severity: **info**. A chart is the only content on its slide besides the title.
+Default severity: **info**. A chart has no text alternative, or is marked decorative.
 
-**Why.** A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. OPF has no alt field for charts, so a sentence or table next to the chart is the text alternative.
+**Why.** A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. The chart's alt field is that text alternative (the preview exposes it as the chart's accessible name and the PowerPoint export writes it as the frame's alternative text); a sentence or table beside the chart also serves. An empty alt marks a chart decorative, which is reported as info so the choice is reviewed: a chart rarely carries no message.
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** A chart passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether that text states the chart's point.
+**Approximations.** A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart's point (see audit/poor-alt-text for generic alt text). alt: "" is reported as a decorative chart, whatever else is on the slide.
 
 ### `audit/missing-language`
 

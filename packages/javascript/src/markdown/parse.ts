@@ -536,6 +536,14 @@ class SlideParser {
       ctx.error("chart-type", "A chart block names its type after `chart`.", "Write ```chart column (or line, pie, bar, ...), then the data.", range, this.path);
       return;
     }
+    // FA-09: ```chart column alt="What the data shows" (alt="" marks the chart decorative).
+    const { pairs, error } = parseAttributes(rest.slice(type.length));
+    const meta: Obj = {};
+    if (error) ctx.error("chart-attributes", error, 'Write ```chart column alt="What the data shows" (alt is optional).', range, this.path);
+    for (const [key, value] of pairs) {
+      if (key === "alt" && typeof value === "string") meta.alt = value;
+      else ctx.error("chart-attributes", `Unknown chart attribute ${JSON.stringify(key)}.`, "A chart fence takes alt, a text alternative in double quotes.", range, this.path);
+    }
     const trimmed = text.trim();
     if (!trimmed) {
       ctx.error("chart-data", "A chart block has no data.", "Write CSV with a header row, or a JSON object with columns and rows or a data source.", range, this.path);
@@ -545,7 +553,7 @@ class SlideParser {
       try {
         const data = JSON.parse(trimmed) as unknown;
         if (!isRecord(data)) throw new Error("not an object");
-        this.native("chart", { type, data }, range);
+        this.native("chart", { type, ...meta, data }, range);
       } catch (error) {
         ctx.error("chart-data", `Chart JSON is invalid: ${(error as Error).message}.`, "Write a JSON object: {\"columns\": [...], \"rows\": [[...]]} or {\"src\": ...}.", range, this.path);
       }
@@ -565,7 +573,7 @@ class SlideParser {
     const typed = (field: { value: string; quoted: boolean }): unknown => (field.quoted ? field.value : field.value === "" ? null : DECIMAL.test(field.value) ? Number(field.value) : field.value === "true" ? true : field.value === "false" ? false : field.value);
     const rows = body.map((row) => row.map((field, index) => (index === 0 ? field.value : typed(field))));
     if (rows.some((row) => row.length !== head.length)) ctx.warn("chart-ragged", `A chart row has a different number of values than the ${head.length} columns.`, "Give every row one value per column.", range, this.path);
-    this.native("chart", { type, data: { columns: head.map((field) => field.value), rows } }, range);
+    this.native("chart", { type, ...meta, data: { columns: head.map((field) => field.value), rows } }, range);
   }
 
   private metric(body: Line[], range: Range): void {

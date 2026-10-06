@@ -288,6 +288,41 @@ test('audit/chart-text-alternative: a chart needs words beside it', () => {
 	assert.ok(!has(deck([{ title: 'Revenue', text: 'x' }]), 'chart-text-alternative'));
 });
 
+test('audit/chart-text-alternative: chart.alt is the text alternative (FA-09)', () => {
+	const data = { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } };
+	const withAlt = (alt) => ({ ...data, alt });
+	// alt text alone satisfies the rule
+	assert.ok(!has(deck([{ title: 'Revenue', chart: withAlt('Revenue rose 12% to $18M in Q2.') }]), 'chart-text-alternative'));
+	// no alt and nothing beside: the finding points at the chart and offers to write alt first
+	const [missing] = only(deck([{ title: 'Revenue', chart: data }]), 'chart-text-alternative');
+	assert.equal(missing.path, '/slides/0/chart');
+	assert.deepEqual(missing.fixes.map((f) => [f.id, f.focus.field, f.focus.path]), [['focus-alt', 'alt', '/slides/0/chart'], ['focus-subtitle', 'text', '/slides/0/subtitle']]);
+	// whitespace-only alt counts as missing
+	assert.ok(has(deck([{ title: 'Revenue', chart: withAlt('   ') }]), 'chart-text-alternative'));
+	// text beside still serves when alt is absent
+	assert.ok(!has(deck([{ title: 'Revenue', text: 'x', chart: data }]), 'chart-text-alternative'));
+	// empty alt is a reviewed decorative choice, still reported as info, even with text beside
+	const [decorative] = only(deck([{ title: 'Revenue', text: 'x', chart: withAlt('') }]), 'chart-text-alternative');
+	assert.equal(decorative.severity, 'info');
+	assert.equal(decorative.path, '/slides/0/chart/alt');
+	assert.match(decorative.message, /decorative/);
+	// two charts: the one with alt is clean, the other is reported by number
+	const two = only(deck([{ title: 'T', blocks: [{ chart: withAlt('Q1 revenue by region.') }, { chart: data }] }]), 'chart-text-alternative');
+	assert.equal(two.length, 1);
+	assert.match(two[0].message, /chart 2/);
+});
+
+test('audit/poor-alt-text: chart.alt is checked for generic words (FA-09)', () => {
+	const chart = (alt) => deck([{ title: 'Revenue', chart: { type: 'column', alt, data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } } }]);
+	for (const alt of ['Chart', 'bar chart', 'A line graph', 'Chart of revenue by quarter', 'x'.repeat(300)]) {
+		const [finding] = only(chart(alt), 'poor-alt-text');
+		assert.ok(finding, alt);
+		assert.equal(finding.path, '/slides/0/chart/alt');
+	}
+	assert.ok(!has(chart('Revenue rose 12% to $18M in Q2.'), 'poor-alt-text'));
+	assert.ok(!has(chart(''), 'poor-alt-text'));
+});
+
 test('audit/missing-language: only the presentation-level language is checked', () => {
 	const found = only({ name: 'x', slides: [{ title: 'T', text: 'x' }] }, 'missing-language');
 	assert.equal(found.length, 1);

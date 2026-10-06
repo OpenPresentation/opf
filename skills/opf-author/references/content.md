@@ -11,8 +11,8 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Image | `{"image":{"src":"asset:diagram","alt":"Description of the diagram"}}` |
 | Video | `{"video":{"src":"asset:demo","title":"Demo"}}` |
 | Table | `{"table":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}` |
-| Chart | `{"chart":{"type":"column","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}}` |
 | Metric | `{"metric":{"value":98,"unit":"%","label":"Retention"}}`; `trend` (`up`, `down`, `flat`) draws an arrow, and `sentiment` (`positive`, `negative`, `neutral`) says whether the change is good news, so a falling churn is `"trend":"down","sentiment":"positive"` (absent: up green, down red, flat neutral) |
+| Chart | `{"chart":{"type":"column","alt":"Revenue rose from $12M in Q1 to $18M in Q2.","data":{"columns":["Quarter","Revenue"],"rows":[["Q1",12],["Q2",18]]}}}` |
 | Quote | `{"quote":{"text":"Quoted words","attribution":"Source speaker","source":"Source reference"}}` |
 | Code | `{"code":{"source":"const answer = 42;","language":"javascript"}}` |
 | Timeline | `{"timeline":[{"when":"Now","what":"Prototype"},{"when":"Next","what":"Review"}]}` |

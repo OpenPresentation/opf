@@ -118,7 +118,9 @@ function chartJson(data: Obj): string[] {
 function chartCandidates(chart: Obj): string[][] {
   if (!/^\S+$/.test(chart.type)) return [];
   const data = chart.data as Obj;
-  const info = `chart ${chart.type}`;
+  // FA-09: alt rides in the fence info; a backtick would end a backtick fence's info string, so such a chart is embedded instead.
+  if (typeof chart.alt === "string" && chart.alt.includes("`")) return [];
+  const info = `chart ${chart.type}${typeof chart.alt === "string" ? ` alt=${JSON.stringify(chart.alt)}` : ""}`;
   const json = fenced(info, chartJson(data));
   if (Array.isArray(data.columns) && Array.isArray(data.rows)) {
     const body = [(data.columns as unknown[]).map((column) => csvField(column, true)).join(","), ...(data.rows as unknown[][]).map((row) => row.map((value, index) => csvField(value, index === 0)).join(","))];
