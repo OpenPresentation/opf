@@ -108,6 +108,8 @@ runs:
         else
           base="$base/pnpm-bin"
         fi
+        tmproot="${RUNNER_TEMP:-${TMPDIR:-/tmp}}"
+        if [ "$os" = win ]; then tmproot="$(cygpath -u "$tmproot")"; fi
         dir="$base/$version/$platform"
         marker="$dir/.sha256"
 
@@ -130,15 +132,19 @@ runs:
           fi
         }
         sha256_of() {
-          if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | awk '{ print $1 }'
-          elif command -v shasum >/dev/null 2>&1; then shasum -a 256 "$1" | awk '{ print $1 }'
-          elif command -v openssl >/dev/null 2>&1; then openssl dgst -sha256 "$1" | awk '{ print $NF }'
+          local out
+          if command -v sha256sum >/dev/null 2>&1; then out="$(sha256sum "$1")"
+          elif command -v shasum >/dev/null 2>&1; then out="$(shasum -a 256 "$1")"
+          elif command -v openssl >/dev/null 2>&1; then out="$(openssl dgst -sha256 "$1")"; out="${out##* }"
           elif command -v node >/dev/null 2>&1; then
-            PNPM_SETUP_FILE="$1" node -e 'const h = require("crypto").createHash("sha256"); h.update(require("fs").readFileSync(process.env.PNPM_SETUP_FILE)); console.log(h.digest("hex"));'
+            out="$(PNPM_SETUP_FILE="$1" node -e 'const h = require("crypto").createHash("sha256"); h.update(require("fs").readFileSync(process.env.PNPM_SETUP_FILE)); console.log(h.digest("hex"));')"
           else
             echo "No sha256sum, shasum, openssl or node to verify with." >&2
             return 127
           fi
+          # GNU sha256sum prefixes the line with a backslash when the file name has one (Windows paths); drop it, CRs and case.
+          out="${out%% *}"
+          printf '%s' "$out" | tr -d '\\\r' | tr 'A-F' 'a-f'
         }
         extract_zip() {
           local zip="$1" out="$2"
@@ -158,7 +164,7 @@ runs:
           echo "pnpm $version ($platform) is already installed and verified at $dir"
         else
           echo "::group::Download pnpm $version ($asset)"
-          tmp="$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/setup-pnpm.XXXXXX")"
+          tmp="$(mktemp -d "$tmproot/setup-pnpm.XXXXXX")"
           trap 'rm -rf "$tmp"' EXIT
           file="$tmp/$asset"
           attempt=1
@@ -196,7 +202,7 @@ runs:
 
         # 6. On PATH, and prove it is the version asked for.
         if [ "$os" = win ]; then echo "$(cygpath -w "$dir")" >> "$GITHUB_PATH"; else echo "$dir" >> "$GITHUB_PATH"; fi
-        installed="$(cd "${RUNNER_TEMP:-/tmp}" && "$dir/$exe" --version 2>&1 | tr -d '\r' | tail -n 1)"
+        installed="$(cd "$tmproot" && "$dir/$exe" --version 2>&1 | tr -d '\r' | tail -n 1)"
         [ "$installed" = "$version" ] || fail "Installed pnpm reports '$installed', expected $version."
         echo "pnpm $installed ($platform) at $dir"
         { echo "version=$installed"; echo "path=$dir"; } >> "$GITHUB_OUTPUT"
