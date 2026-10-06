@@ -164,13 +164,14 @@ export function tableToTimeline(table: Obj, options: TableOptions, loss: Loss): 
 
 // --- metric blocks <-> table -------------------------------------------------------------------
 
-const COLUMN_LABELS = { label: "Label", value: "Value", unit: "Unit", delta: "Delta", trend: "Trend", description: "Description" } as const;
+const COLUMN_LABELS = { label: "Label", value: "Value", unit: "Unit", delta: "Delta", trend: "Trend", sentiment: "Sentiment", description: "Description" } as const;
 const METRIC_HEADINGS = {
   label: ["label", "metric", "name", "kpi", "measure", "indicator"],
   value: ["value", "amount", "number", "result", "actual", "current"],
   unit: ["unit", "units"],
   delta: ["delta", "change", "growth", "difference", "vs", "vs."],
   trend: ["trend", "direction"],
+  sentiment: ["sentiment"],
   description: ["description", "details", "detail", "notes", "note", "context"],
 } as const;
 
@@ -192,9 +193,9 @@ export function metricsToTable(blocks: Json[], options: TableOptions, loss: Loss
 
 export function tableToMetrics(table: Obj, loss: Loss): Json[] {
   const { columns, rows } = readCells(table, loss, "a set of metrics");
-  if (!columns) throw refuse('Metrics read their columns by their headings. Add a heading row that names a "Value" column, and optionally "Label", "Unit", "Delta", "Trend" and "Description".');
+  if (!columns) throw refuse('Metrics read their columns by their headings. Add a heading row that names a "Value" column, and optionally "Label", "Unit", "Delta", "Trend", "Sentiment" and "Description".');
   const roles = rolesFrom(columns, METRIC_HEADINGS, undefined);
-  if (roles.value === undefined) throw refuse('No column holds the metric value. Name one column "Value" (headings it understands: value, amount, number, result, label, unit, delta, change, trend, description).');
+  if (roles.value === undefined) throw refuse('No column holds the metric value. Name one column "Value" (headings it understands: value, amount, number, result, label, unit, delta, change, trend, sentiment, description).');
   if (!rows.length) throw refuse("A set of metrics needs at least one row, and this table has no rows.");
   const used = new Set(Object.values(roles));
   columns.forEach((value, index) => {
@@ -216,6 +217,11 @@ export function tableToMetrics(table: Obj, loss: Loss): Json[] {
       const trend = text(row[roles.trend]).trim().toLowerCase();
       if (trend === "up" || trend === "down" || trend === "flat") metric.trend = trend;
       else loss.note("trend values other than up, down or flat");
+    }
+    if (roles.sentiment !== undefined && !valueEmpty(row[roles.sentiment])) {
+      const sentiment = text(row[roles.sentiment]).trim().toLowerCase();
+      if (sentiment === "positive" || sentiment === "negative" || sentiment === "neutral") metric.sentiment = sentiment;
+      else loss.note("sentiment values other than positive, negative or neutral");
     }
     if (roles.description !== undefined && !valueEmpty(row[roles.description])) metric.description = text(row[roles.description]);
     return { metric };

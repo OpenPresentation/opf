@@ -2,6 +2,7 @@ import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {visualReadingOrder} from './reading-order.js';
+import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection} from './script-fonts.js';
@@ -988,11 +989,15 @@ export interface MetricContent {
   unit?: string;
   delta?: string | number;
   trend?: 'up' | 'down' | 'flat';
+  /** Whether the change is good news; colours the trend arrow, trend word and delta text (see metricTrendColor). */
+  sentiment?: MetricSentiment;
 }
+/** The text fields of a metric, each laid out as its own part. `sentiment` is metadata, not text. */
+type MetricTextRole = Exclude<keyof MetricContent, 'sentiment'>;
 /** Ranges address String(sourceValue), not the numeric token spelling in serialized JSON. */
 export interface MetricTextSource { path: string; value: string | number; start: number; end: number }
 export interface MetricTextPart {
-  role: keyof MetricContent;
+  role: MetricTextRole;
   path: string;
   text: string;
   sources: MetricTextSource[];
@@ -1017,6 +1022,8 @@ export interface MetricLayout {
   alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
   arrangement: 'inline-unit' | 'stacked';
+  /** The metric's `sentiment`, passed through for metricTrendMark; omitted when the content has none. */
+  sentiment?: MetricSentiment;
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -1042,7 +1049,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   if (!metric || Array.isArray(metric) || !isValue(metric.value) ||
       [metric.label,metric.description,metric.unit].some(field=>field!==undefined&&typeof field!=='string') ||
       metric.delta!==undefined&&!isValue(metric.delta) ||
-      metric.trend!==undefined&&!['up','down','flat'].includes(metric.trend)) {
+      metric.trend!==undefined&&!['up','down','flat'].includes(metric.trend)||
+      metric.sentiment!==undefined&&!['positive','negative','neutral'].includes(metric.sentiment)) {
     throw new TypeError('Metric content requires a finite numeric or string value and schema-valid display metadata.');
   }
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale);
@@ -1197,7 +1205,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface TimelineEvent { when?: string; what: string; description?: string }

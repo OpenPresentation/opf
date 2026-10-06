@@ -2207,7 +2207,7 @@
             { "type": "number" },
             { "$ref": "#/$defs/Metric" }
           ],
-          "description": "Full-slide metric payload. A string or number is shorthand for { \"value\": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display. Presence of this field infers type 'metric'."
+          "description": "Full-slide metric payload. A string or number is shorthand for { \"value\": value }; object form carries optional label, description, unit, delta, trend, and sentiment metadata. Numeric values remain numbers; renderers format them for display. Presence of this field infers type 'metric'."
         },
         "quote": {
           "oneOf": [
@@ -2509,7 +2509,7 @@
             { "type": "number" },
             { "$ref": "#/$defs/Metric" }
           ],
-          "description": "Metric payload. A string or number is shorthand for { \"value\": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display.",
+          "description": "Metric payload. A string or number is shorthand for { \"value\": value }; object form carries optional label, description, unit, delta, trend, and sentiment metadata. Numeric values remain numbers; renderers format them for display.",
           "examples": [
             "98%",
             42,
@@ -2806,7 +2806,7 @@
     },
     "Metric": {
       "type": "object",
-      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, and 'trend' for direction. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers.",
+      "description": "Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news. A string or number value in a metric field is shorthand for { \"value\": value }; numeric values remain numbers and are formatted by renderers.",
       "additionalProperties": false,
       "required": ["value"],
       "properties": {
@@ -2844,7 +2844,12 @@
         "trend": {
           "type": "string",
           "enum": ["up", "down", "flat"],
-          "description": "Metric trend direction."
+          "description": "Metric trend direction. The preview and the PowerPoint export draw an arrow beside the trend word that always points the way the trend does (up, down or flat) and colour the arrow, the trend word and the delta text by `sentiment`."
+        },
+        "sentiment": {
+          "type": "string",
+          "enum": ["positive", "negative", "neutral"],
+          "description": "Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide background. When absent the colour follows the trend: up is positive, down is negative and flat is neutral. Set it when the direction is not the verdict, for example positive on a falling churn, cost or latency trend. The arrow always keeps the direction of `trend`. Only the trend arrow and the trend and delta text take the colour, so sentiment has no visible effect on a metric without a trend."
         }
       }
     },

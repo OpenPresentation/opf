@@ -143,7 +143,7 @@ function timelineLines(timeline: unknown): string[] | undefined {
 function metricLines(metric: unknown): string[] | undefined {
   const value = typeof metric === "object" ? (metric as Obj) : { value: metric };
   const body: string[] = [];
-  for (const key of ["value", "label", "description", "unit", "delta", "trend"]) if (value[key] !== undefined) body.push(`${key}: ${scalarText(value[key])}`);
+  for (const key of ["value", "label", "description", "unit", "delta", "trend", "sentiment"]) if (value[key] !== undefined) body.push(`${key}: ${scalarText(value[key])}`);
   return fenced("metric", body);
 }
 

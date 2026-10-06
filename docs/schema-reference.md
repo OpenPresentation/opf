@@ -694,7 +694,7 @@ _No named properties._
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Full-slide code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
-| `metric` | no | `oneOf:string / number / ref:Metric` | Full-slide metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them... |
+| `metric` | no | `oneOf:string / number / ref:Metric` | Full-slide metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, trend, and sentiment metadata. Numeric values remain numbers; renderers... |
 | `quote` | no | `oneOf:string / ref:Quote` | Full-slide quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. Presence of this field infers type 'quote'. |
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
 | `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table or video payload. Valid only when the slide root holds exactly one of those payloads. |
@@ -775,7 +775,7 @@ _No named properties._
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
-| `metric` | no | `oneOf:string / number / ref:Metric` | Metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display. |
+| `metric` | no | `oneOf:string / number / ref:Metric` | Metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, trend, and sentiment metadata. Numeric values remain numbers; renderers format them... |
 | `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
 | `caption` | no | `ref:Caption` | Caption for an image, chart, table or video payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
@@ -813,7 +813,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `value`
-- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, and 'trend' for direction. A string or number value in a metric field is shorthand for { "value": value }; numeric values remain numbers and are formatted by renderers.
+- Purpose: Metric content with optional display metadata. Use 'value' for the primary value, 'label' for the metric name, 'description' for supporting context, 'unit' for a suffix/currency marker, 'delta' for change, 'trend' for direction, and 'sentiment' for whether the change is good news. A string or number value in a metric field is shorthand for { "value": value }; numeric values remain numbers and are formatted by renderers.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -822,7 +822,8 @@ _No named properties._
 | `description` | no | `string` | Optional supporting context for the metric. |
 | `unit` | no | `string` | Metric unit, suffix, or currency marker. |
 | `delta` | no | `oneOf:string / number` | Metric change value. |
-| `trend` | no | `enum:up \| down \| flat` | Metric trend direction. |
+| `trend` | no | `enum:up \| down \| flat` | Metric trend direction. The preview and the PowerPoint export draw an arrow beside the trend word that always points the way the trend does (up, down or flat) and colour the arrow, the trend word and the delta text by... |
+| `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide back... |
 
 
 ### Timeline

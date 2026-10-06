@@ -570,7 +570,7 @@ class SlideParser {
 
   private metric(body: Line[], range: Range): void {
     const { ctx } = this;
-    const allowed = ["value", "label", "description", "unit", "delta", "trend"];
+    const allowed = ["value", "label", "description", "unit", "delta", "trend", "sentiment"];
     const help = `A metric block is key: value lines. Keys: ${allowed.join(", ")}. A value is plain text, or a JSON string in double quotes.`;
     const out: Obj = {};
     for (const line of body) {
