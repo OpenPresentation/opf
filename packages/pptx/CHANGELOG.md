@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.13.2 (2026-10-06)
+
+- RR-20 (security): Sharp is pinned to 0.35.5 (libvips 1.3.4), which fixes GHSA-wq5f-xc86-pv6w (CVE-2026-96889, a librsvg vulnerability in Sharp before 0.35.5; `npm audit` reports it as high for installs that resolve Sharp 0.35.4). Exported bytes are unchanged: the determinism grid and the packed-consumer checks pass with the new Sharp.
+
 ## 0.13.1 (2026-10-06)
 
 - RR-20: opf-pptx bundles for the browser again. 0.13.0 failed in esbuild (`platform: 'browser'`) with `Could not resolve "events"` / `"buffer"` whenever the consumer's tree also held readable-stream (for example through jszip 3): the engine's ZIP dependency `@node-projects/jszip` 4.3.0 probes `require("readable-stream")` inside try/catch, and bundlers follow that literal. The browser field of `vendor/pptxgenjs/package.json` now points the engine's import at `vendor/jszip/index-min.js`, the package's own published bundle of the same code (exact bytes, hashes and archive integrity in `vendor/jszip/UPSTREAM.json`; it reproduces byte for byte from `lib/` with esbuild 0.28.2), which has no such require. Node is unchanged (it ignores the browser field). Export bytes are unchanged: the 976-deck corpus (126 core examples and 850 gallery documents) gives the same packages in Node and in Chromium, before and after. No Node built-in polyfills are needed. New checks: `test/zip-bundle-boundary.mjs` (offline, in `npm test`) and `test/packed-bundle-browser.mjs` (browser suite: the packed tarball next to readable-stream, bundled with esbuild and exported in Chromium byte-identical to Node).

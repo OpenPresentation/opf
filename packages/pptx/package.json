@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-pptx",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
   "license": "MIT",
   "type": "module",
@@ -73,7 +73,7 @@
     "sharp": "0.35.5"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.13.0"
+    "@openpresentation/opf-render": "^0.13.1"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
