@@ -1,0 +1,201 @@
+{
+  "item": "RR-54 slash probe: Excel format codes for literal text with / and other Excel special characters (opf#387 FAIL, fixed in core opf#376 d955d600)",
+  "build": {
+    "pptx": "b076bb6",
+    "core": "d955d600",
+    "coreVersion": "0.12.2"
+  },
+  "options": {
+    "seed": 1,
+    "timestamp": "2026-10-05T00:00:00Z",
+    "zipDate": "2026-10-05T00:00:00Z"
+  },
+  "file": {
+    "name": "decks/rr54-slash.pptx",
+    "bytes": 149195,
+    "sha256": "2d091e65e54918f4ff2e82e4feb475ef56c6d5e0c6fb4a3767e4a727f2514e30"
+  },
+  "pass": "Per slide, PowerPoint keeps the number format: read-deck.ps1 reports a data-label NumberFormat other than General that core numberFormatFromExcel maps back to the slide's format (PowerPoint may re-spell it, for example \\$ or \\ before a quote), and the slide PNG shows the labels below. No repair prompt.",
+  "slides": [
+    {
+      "index": 1,
+      "format": "$#,##0.0",
+      "note": "control (passed in opf#385)",
+      "chartPart": "ppt/charts/chart1.xml",
+      "excelCode": "$#,##0.0",
+      "labelCode": "$#,##0.0",
+      "axisCode": "$#,##0.0",
+      "mapsBack": true,
+      "labels": [
+        "$3.3",
+        "$4.8",
+        "$12.5"
+      ]
+    },
+    {
+      "index": 2,
+      "format": "0.0 m/s",
+      "note": "'/' (Excel's fraction bar) in a unit; failed in opf#387 as 0.0 \"m\"/\"s\"",
+      "chartPart": "ppt/charts/chart2.xml",
+      "excelCode": "0.0 \"m/s\"",
+      "labelCode": "0.0 \"m/s\"",
+      "axisCode": "0.0 \"m/s\"",
+      "mapsBack": true,
+      "labels": [
+        "3.3 m/s",
+        "4.8 m/s",
+        "12.5 m/s"
+      ]
+    },
+    {
+      "index": 3,
+      "format": "km/h 0",
+      "note": "'/' in a prefix",
+      "chartPart": "ppt/charts/chart3.xml",
+      "excelCode": "\"km/h \"0",
+      "labelCode": "\"km/h \"0",
+      "axisCode": "\"km/h \"0",
+      "mapsBack": true,
+      "labels": [
+        "km/h 3",
+        "km/h 5",
+        "km/h 13"
+      ]
+    },
+    {
+      "index": 4,
+      "format": "#,##0 items/day",
+      "note": "'/' in a longer unit",
+      "chartPart": "ppt/charts/chart4.xml",
+      "excelCode": "#,##0 \"items/day\"",
+      "labelCode": "#,##0 \"items/day\"",
+      "axisCode": "#,##0 \"items/day\"",
+      "mapsBack": true,
+      "labels": [
+        "3 items/day",
+        "5 items/day",
+        "13 items/day"
+      ]
+    },
+    {
+      "index": 5,
+      "format": "0.0 E+3 m",
+      "note": "'E+' (Excel's exponent) in a unit",
+      "chartPart": "ppt/charts/chart5.xml",
+      "excelCode": "0.0 \"E+3 m\"",
+      "labelCode": "0.0 \"E+3 m\"",
+      "axisCode": "0.0 \"E+3 m\"",
+      "mapsBack": true,
+      "labels": [
+        "3.3 E+3 m",
+        "4.8 E+3 m",
+        "12.5 E+3 m"
+      ]
+    },
+    {
+      "index": 6,
+      "format": "#,##0 @HQ",
+      "note": "'@' (Excel's text placeholder)",
+      "chartPart": "ppt/charts/chart6.xml",
+      "excelCode": "#,##0 \"@HQ\"",
+      "labelCode": "#,##0 \"@HQ\"",
+      "axisCode": "#,##0 \"@HQ\"",
+      "mapsBack": true,
+      "labels": [
+        "3 @HQ",
+        "5 @HQ",
+        "13 @HQ"
+      ]
+    },
+    {
+      "index": 7,
+      "format": "#,##0 *est",
+      "note": "'*' (Excel's repeat fill)",
+      "chartPart": "ppt/charts/chart7.xml",
+      "excelCode": "#,##0 \"*est\"",
+      "labelCode": "#,##0 \"*est\"",
+      "axisCode": "#,##0 \"*est\"",
+      "mapsBack": true,
+      "labels": [
+        "3 *est",
+        "5 *est",
+        "13 *est"
+      ]
+    },
+    {
+      "index": 8,
+      "format": "#,##0 net_rev",
+      "note": "'_' (Excel's skip-width)",
+      "chartPart": "ppt/charts/chart8.xml",
+      "excelCode": "#,##0 \"net_rev\"",
+      "labelCode": "#,##0 \"net_rev\"",
+      "axisCode": "#,##0 \"net_rev\"",
+      "mapsBack": true,
+      "labels": [
+        "3 net_rev",
+        "5 net_rev",
+        "13 net_rev"
+      ]
+    },
+    {
+      "index": 9,
+      "format": "#,##0 ok?",
+      "note": "'?' (Excel's digit placeholder)",
+      "chartPart": "ppt/charts/chart9.xml",
+      "excelCode": "#,##0 \"ok?\"",
+      "labelCode": "#,##0 \"ok?\"",
+      "axisCode": "#,##0 \"ok?\"",
+      "mapsBack": true,
+      "labels": [
+        "3 ok?",
+        "5 ok?",
+        "13 ok?"
+      ]
+    },
+    {
+      "index": 10,
+      "format": "0.0% p.a.",
+      "note": "'%' with a literal '.' after it",
+      "chartPart": "ppt/charts/chart10.xml",
+      "excelCode": "0.0% \"p.a.\"",
+      "labelCode": "0.0% \"p.a.\"",
+      "axisCode": "0.0% \"p.a.\"",
+      "mapsBack": true,
+      "labels": [
+        "325.0% p.a.",
+        "480.0% p.a.",
+        "1250.0% p.a."
+      ]
+    },
+    {
+      "index": 11,
+      "format": "#,##0 (est)",
+      "note": "parentheses around a unit (the '(' stays bare, the rest is quoted)",
+      "chartPart": "ppt/charts/chart11.xml",
+      "excelCode": "#,##0 (\"est)\"",
+      "labelCode": "#,##0 (\"est)\"",
+      "axisCode": "#,##0 (\"est)\"",
+      "mapsBack": true,
+      "labels": [
+        "3 (est)",
+        "5 (est)",
+        "13 (est)"
+      ]
+    },
+    {
+      "index": 12,
+      "format": "0 \"q\"",
+      "note": "literal double quotes (written as \\\" escapes)",
+      "chartPart": "ppt/charts/chart12.xml",
+      "excelCode": "0 \\\"\"q\"\\\"",
+      "labelCode": "0 \\\"\"q\"\\\"",
+      "axisCode": "0 \\\"\"q\"\\\"",
+      "mapsBack": true,
+      "labels": [
+        "3 \"q\"",
+        "5 \"q\"",
+        "13 \"q\""
+      ]
+    }
+  ]
+}

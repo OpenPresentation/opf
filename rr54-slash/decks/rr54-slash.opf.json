@@ -1,0 +1,377 @@
+{
+  "name": "RR-54 slash probe",
+  "slides": [
+    {
+      "title": "1. $#,##0.0",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "$#,##0.0"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "control (passed in opf#385)"
+    },
+    {
+      "title": "2. 0.0 m/s",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "0.0 m/s"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'/' (Excel's fraction bar) in a unit; failed in opf#387 as 0.0 \"m\"/\"s\""
+    },
+    {
+      "title": "3. km/h 0",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "km/h 0"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'/' in a prefix"
+    },
+    {
+      "title": "4. #,##0 items/day",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "#,##0 items/day"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'/' in a longer unit"
+    },
+    {
+      "title": "5. 0.0 E+3 m",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "0.0 E+3 m"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'E+' (Excel's exponent) in a unit"
+    },
+    {
+      "title": "6. #,##0 @HQ",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "#,##0 @HQ"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'@' (Excel's text placeholder)"
+    },
+    {
+      "title": "7. #,##0 *est",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "#,##0 *est"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'*' (Excel's repeat fill)"
+    },
+    {
+      "title": "8. #,##0 net_rev",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "#,##0 net_rev"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'_' (Excel's skip-width)"
+    },
+    {
+      "title": "9. #,##0 ok?",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "#,##0 ok?"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'?' (Excel's digit placeholder)"
+    },
+    {
+      "title": "10. 0.0% p.a.",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "0.0% p.a."
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "'%' with a literal '.' after it"
+    },
+    {
+      "title": "11. #,##0 (est)",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "#,##0 (est)"
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "parentheses around a unit (the '(' stays bare, the rest is quoted)"
+    },
+    {
+      "title": "12. 0 \"q\"",
+      "chart": {
+        "type": "column",
+        "dataLabels": true,
+        "data": {
+          "columns": [
+            "Item",
+            {
+              "name": "Value",
+              "format": "0 \"q\""
+            }
+          ],
+          "rows": [
+            [
+              "a",
+              3.25
+            ],
+            [
+              "b",
+              4.8
+            ],
+            [
+              "c",
+              12.5
+            ]
+          ]
+        }
+      },
+      "notes": "literal double quotes (written as \\\" escapes)"
+    }
+  ]
+}
