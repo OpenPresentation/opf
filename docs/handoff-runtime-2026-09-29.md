@@ -49,17 +49,17 @@ record each exact head, base, tree and accepted commit.
 
 | Accepted PR | Change and local evidence |
 | --- | --- |
-| [App52](https://github.com/Data-Advantage/pptx-dev/pull/52) | Nano ID 6; 704 unit tests, 13 standalone controls, 43 browser cases, SDK/CLI and app build/type checks, zero audit findings. |
-| [App57](https://github.com/Data-Advantage/pptx-dev/pull/57) | Six SDK/CLI workflow commands now have separate required steps, preserving Windows exit status. Structural negative controls and the same six local commands pass; no new PowerShell result is claimed. |
+| App52 | Nano ID 6; 704 unit tests, 13 standalone controls, 43 browser cases, SDK/CLI and app build/type checks, zero audit findings. |
+| App57 | Six SDK/CLI workflow commands now have separate required steps, preserving Windows exit status. Structural negative controls and the same six local commands pass; no new PowerShell result is claimed. |
 | [PPTX89](https://github.com/OpenPresentation/opf-pptx/pull/89) | Explicit native underline at four exporter sites. Source/current-installed controls, packed regressions and reviewed export comparisons pass; original failures and the published-core furniture limitation remain separate. |
-| [Gallery37](https://github.com/Data-Advantage/pptx-gallery/pull/37) | Dependency update with fast-uri security correction; 117 units, 7 browser cases, build/type/registry/editor checks and zero audit findings. |
-| [App58](https://github.com/Data-Advantage/pptx-dev/pull/58) | Exact-source preset history and synchronous accepted-replacement guards; 737 units, 13 standalone controls, 49 browser cases and build/type checks. |
-| [Site48](https://github.com/Data-Advantage/openpresentation-site/pull/48) | Dependency/security update plus compatible Lezer common deduplication. The first green browser run lost syntax highlighting; the corrected candidate passes the real highlighting regression and 27 browser cases, with visual review and zero audit findings. |
-| [App51](https://github.com/Data-Advantage/pptx-dev/pull/51) | TypeScript 6 with explicit SDK/CLI Node types, declaration-only tsup accommodation and one source-bound test-helper correction; 737 units, 13 standalone controls, 49 browser cases, SDK/CLI and app build/type checks pass. |
-| [Gallery48](https://github.com/Data-Advantage/pptx-gallery/pull/48) | Selected detail-page, registry and editor JSON agree, including legacy hash links; 135 units and 7 original plus 5 scoped browser cases pass. Supersedes closed Gallery45 without merging Gallery44. |
-| [App56](https://github.com/Data-Advantage/pptx-dev/pull/56) | Dependency update; 737 units, 13 standalone controls, 49 browser cases, SDK/CLI and app build/type checks, zero audit findings and eight bounded HTTP MCP limit cases in CJS and public ESM pass. Scoped visual differences were reviewed; live authentication/provider and production acceptance remain separate. |
+| Gallery37 | Dependency update with fast-uri security correction; 117 units, 7 browser cases, build/type/registry/editor checks and zero audit findings. |
+| App58 | Exact-source preset history and synchronous accepted-replacement guards; 737 units, 13 standalone controls, 49 browser cases and build/type checks. |
+| Site48 | Dependency/security update plus compatible Lezer common deduplication. The first green browser run lost syntax highlighting; the corrected candidate passes the real highlighting regression and 27 browser cases, with visual review and zero audit findings. |
+| App51 | TypeScript 6 with explicit SDK/CLI Node types, declaration-only tsup accommodation and one source-bound test-helper correction; 737 units, 13 standalone controls, 49 browser cases, SDK/CLI and app build/type checks pass. |
+| Gallery48 | Selected detail-page, registry and editor JSON agree, including legacy hash links; 135 units and 7 original plus 5 scoped browser cases pass. Supersedes closed Gallery45 without merging Gallery44. |
+| App56 | Dependency update; 737 units, 13 standalone controls, 49 browser cases, SDK/CLI and app build/type checks, zero audit findings and eight bounded HTTP MCP limit cases in CJS and public ESM pass. Scoped visual differences were reviewed; live authentication/provider and production acceptance remain separate. |
 | [PPTX90](https://github.com/OpenPresentation/opf-pptx/pull/90) | Supported current native body/list formatting survives import. All 16 portable stages, 42 body and 123 notes controls across source/registry-backed/installed contexts, seven source browser suites and 108 installed browser checks pass; six previews reviewed. |
-| [Gallery49](https://github.com/Data-Advantage/pptx-gallery/pull/49) | Metric values and labels remain readable; financial KPIs sit above the original chart. 144 units and 7 original plus 5 scoped browser cases pass, including edit/undo and all 15 pairs in native export. Four metric previews reviewed. |
+| Gallery49 | Metric values and labels remain readable; financial KPIs sit above the original chart. 144 units and 7 original plus 5 scoped browser cases pass, including edit/undo and all 15 pairs in native export. Four metric previews reviewed. |
 
 All application/gallery browser counts above are single runs with zero retries.
 Site48's original visually failing run is retained separately from its corrected
@@ -374,7 +374,7 @@ that an edited escaped token can be reconstructed with different JSON spelling.
 That finding is source-derived, not a new browser observation. Never merge only
 the site half or substitute the old geometry golden for current visual review.
 
-[App #58](https://github.com/Data-Advantage/pptx-dev/pull/58) is merged as
+App #58 is merged as
 `4613656add2ed810eb70a7dc3a8a995dd6618255`, at the exact locally reviewed tree.
 Its history guard binds preset undo to exact source, format and document
 generation, commits pending preview edits, and invalidates on accepted local,

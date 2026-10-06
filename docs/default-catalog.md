@@ -234,7 +234,7 @@ kind can be switched to `mirror` with a core release.
   manifest. A hand edit to `spec/catalogs/` fails here until `--rehash` (core
   first) or the sync (gallery first) has rewritten them.
 - Drift between the gallery and this snapshot is checked on the gallery side
-  (FF-37): pptx-gallery's `pnpm check:core-catalog` ([pptx-gallery#84](https://github.com/Data-Advantage/pptx-gallery/pull/84)) compares its
+  (FF-37): pptx-gallery's `pnpm check:core-catalog` compares its
   published `public/<kind>/` files with `spec/catalogs` of the
   `@openpresentation/opf` release it depends on, in its own CI. Core is the source
   of truth and the package is public, so no secret is needed. The core CI no longer

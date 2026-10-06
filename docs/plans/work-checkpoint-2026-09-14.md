@@ -9,13 +9,13 @@ while moving on to another feature.
 
 ## Merged and deployed
 
-- Website: [PR29](https://github.com/Data-Advantage/openpresentation-site/pull/29)
+- Website: PR29
   adds editable homepage JSON;
-  [PR30](https://github.com/Data-Advantage/openpresentation-site/pull/30)
+  PR30
   adds JSON/preview editing in both directions on `/` and `/playground`;
-  [PR32](https://github.com/Data-Advantage/openpresentation-site/pull/32)
+  PR32
   adds contextual catalog dropdowns; and
-  [PR33](https://github.com/Data-Advantage/openpresentation-site/pull/33)
+  PR33
   adds code-editor behavior. All are merged. Local `main` and remote `main`
   match at `8d8fc5ec30b3c61f7602b8ec6d5928981bc07efc`; its Vercel deployment
   status was freshly verified successful.
