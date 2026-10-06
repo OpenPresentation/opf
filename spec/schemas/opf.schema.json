@@ -3236,6 +3236,10 @@
             { "$ref": "#/$defs/ChartDataLabels" }
           ],
           "description": "Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator."
+        },
+        "highlight": {
+          "$ref": "#/$defs/ChartHighlight",
+          "description": "Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a light grey on a light chart panel, a dim grey on a dark one); there is no color field. A mark is highlighted when its series OR its category is named. Absent keeps today's colors exactly. Supported on column, bar and line charts (series and categories; on a line a category highlight marks that category's points), pie and doughnut charts (categories, one per slice), and area, scatter and radar charts (series); the histogram, pareto, waterfall, funnel, treemap, box-and-whisker and map constructs drop the option with a 'chart-option-adapted' diagnostic, as does a part the type cannot highlight. A name that matches no column or row label is a 'chart-highlight-unknown-name' error."
         }
       }
     },
@@ -3255,6 +3259,31 @@
           "examples": ["Revenue ($M)", "Customers"]
         }
       }
+    },
+    "ChartHighlight": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Which series and categories a chart emphasizes. Names are matched exactly: series by data column name (after any 'fields' selection; a series is a plotted value column), categories by row label (the first column, or mapping.category), as text. A category label shared by several rows highlights each of them.",
+      "properties": {
+        "series": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Series (value columns) to highlight: all marks of each named series. A name that is not a column is a 'chart-highlight-unknown-name' error; a column that is not plotted as a series (the category or X column, or one mapping.series leaves out) highlights nothing and is a 'chart-highlight-adapted' warning.",
+          "examples": [["Revenue"]]
+        },
+        "categories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Categories (row labels) to highlight: the marks of each named category (a column or bar of every series, a line's points, a pie or doughnut slice). A label no row has is a 'chart-highlight-unknown-name' error.",
+          "examples": [["Q3"]]
+        }
+      },
+      "examples": [{ "series": ["Revenue"] }, { "categories": ["Q3"] }]
     },
     "ChartDataLabels": {
       "type": "object",

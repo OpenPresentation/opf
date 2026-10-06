@@ -157,7 +157,7 @@ describe("report", () => {
 
 describe("patch correctness over the example decks", () => {
   const examples = loadExamples();
-  test("126 example decks are covered", () => assert.equal(examples.length, 126));
+  test("127 example decks are covered", () => assert.equal(examples.length, 127));
   for (const { file, raw } of examples) {
     test(file, () => {
       const deckA = JSON.parse(raw);

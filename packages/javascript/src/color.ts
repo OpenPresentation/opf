@@ -267,3 +267,40 @@ export function chartPaletteForFill(fill: string, palette: readonly string[]): s
   });
   return placed as string[];
 }
+
+// --------------------------------------------------------------- chart highlight (FA-14)
+
+/** Share of the text colour mixed into the surface to make the muted colour of a highlighted chart. */
+export const CHART_HIGHLIGHT_MUTED_MIX = 0.3;
+/** Smallest contrast the muted colour keeps against the surface: recessive, but still a visible mark. */
+export const CHART_HIGHLIGHT_MUTED_MIN_CONTRAST = 1.6;
+
+const mixChannels = (from: readonly number[], to: readonly number[], amount: number): string =>
+  hexOfChannels(from.map((channel, index) => channel + (to[index]! - channel) * amount));
+
+/**
+ * The two colours of a chart that highlights marks (`chart.highlight`), derived from the theme only: `accent` for the highlighted
+ * marks, `muted` for every other mark.
+ *
+ * - `accent` is the deck's primary colour, kept at >= 3:1 against the surface by `chartColorForFill` (a primary that already has
+ *   that contrast is returned unchanged).
+ * - `muted` is the surface mixed {@link CHART_HIGHLIGHT_MUTED_MIX} of the way towards the text colour: a light grey on a light surface
+ *   and a dim grey on a dark one, in the surface's own hue. When that falls below {@link CHART_HIGHLIGHT_MUTED_MIN_CONTRAST} against
+ *   the surface (a surface and text that are close together) the mix moves towards the text colour until it holds.
+ *
+ * Pure arithmetic on opaque colours: the preview and the PPTX export both call it with the chart panel, the primary and the label
+ * colour, so they draw and write the same two colours. An unresolved colour is replaced by white (surface), the surface's own
+ * best contrast partner (text) or black (primary).
+ */
+export function chartHighlightColors(surface: string, primary: string, text: string): { accent: string; muted: string } {
+  const fill = normalizeHexColor(surface) ?? '#FFFFFF';
+  const accent = chartColorForFill(fill, normalizeHexColor(primary) ?? '#000000');
+  const ink = normalizeHexColor(text) ?? textColorForFill(fill, '#000000');
+  const from = opaqueChannels(fill)!, to = opaqueChannels(ink)!;
+  let muted = mixChannels(from, to, CHART_HIGHLIGHT_MUTED_MIX);
+  for (let amount = CHART_HIGHLIGHT_MUTED_MIX; (colorContrast(muted, fill) ?? Infinity) < CHART_HIGHLIGHT_MUTED_MIN_CONTRAST && amount < 1; ) {
+    amount = Math.min(1, amount + 0.02);
+    muted = mixChannels(from, to, amount);
+  }
+  return { accent, muted };
+}

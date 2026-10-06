@@ -191,7 +191,7 @@ All three engines read core's functions when they exist and fall back to their p
 - **Embedded workbook:** custom `numFmt` entries from id 164, with cell styles on every value cell, so Edit Data shows the formats.
 - **Tables:** tables export core layout's display text.
 - **Datasets and mapping:** a chart that uses them exports exactly like its inline equivalent.
-- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form, plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
+- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form (and, FA-14, a chart's `highlight`, which then also records its inline `data`; see [chart-options.md](chart-options.md)), plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
 
 ### PPTX import (opf-pptx)
 

@@ -485,7 +485,7 @@ describe("round trips", () => {
   }
 
   test("property: every example deck survives OPF to Markdown to OPF with all text and block kinds", () => {
-    assert.equal(examples.length, 126);
+    assert.equal(examples.length, 127);
     let nativeSlides = 0;
     let total = 0;
     const reasons = new Map();
@@ -505,8 +505,9 @@ describe("round trips", () => {
       total += deck.slides.length;
       for (const entry of report.embedded) reasons.set(entry.reason.replace(/"[^"]*"/g, '"key"'), (reasons.get(entry.reason.replace(/"[^"]*"/g, '"key"')) ?? 0) + 1);
     }
-    // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML.
-    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|"key" has no Markdown form|a block with several fields)/, reason);
+    // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML. (FA-14: a chart with options such as
+    // `highlight` keeps them in an embedded block, because the chart fence holds only the type and the data.)
+    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|chart content|"key" has no Markdown form|a block with several fields)/, reason);
     assert.ok(nativeSlides / total > 0.9, `${nativeSlides} of ${total} slides are plain Markdown`);
   });
 

@@ -941,6 +941,7 @@ _No named properties._
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
 | `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
+| `highlight` | no | `ref:ChartHighlight` | Optional emphasis: series and/or categories drawn in the primary (accent) color while every other mark is muted from the theme. A mark is highlighted when its series OR its category is named. Absent keeps today's colors. Types that cannot highlight drop it with a `chart-option-adapted` diagnostic; an unknown name is a `chart-highlight-unknown-name` error. See docs/chart-options.md. |
 
 
 ### ChartAxisTitles
@@ -952,6 +953,18 @@ _No named properties._
 | --- | --- | --- | --- |
 | `category` | no | `string` | Title of the category (X) axis. |
 | `value` | no | `string` | Title of the value (Y) axis. |
+
+
+### ChartHighlight
+
+- Type: `object`
+- Required fields: at least one of `series`, `categories`
+- Purpose: Which series and categories a chart emphasizes. Names match data column names (series) and row labels (categories) exactly, as text.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `series` | no | `array<string>` | Series (value columns) whose marks take the accent color. An unknown column is a `chart-highlight-unknown-name` error; a column that is not plotted as a series is a `chart-highlight-adapted` warning. |
+| `categories` | no | `array<string>` | Categories (row labels) whose marks take the accent color: a column or bar of every series, a line's points, a pie or doughnut slice. A label no row has is a `chart-highlight-unknown-name` error. |
 
 
 ### ChartDataLabels

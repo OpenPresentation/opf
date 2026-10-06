@@ -39,6 +39,8 @@ export type DataDiagnosticCode =
   | 'data-column-duplicate'
   | 'chart-mapping-unknown-column'
   | 'chart-mapping-adapted'
+  | 'chart-highlight-unknown-name'
+  | 'chart-highlight-adapted'
   | 'number-format-invalid';
 
 export interface DataDiagnostic {
@@ -555,6 +557,27 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     }
     return number;
   }));
+  // FA-14: chart.highlight names plotted series (columns) and category labels (row label values).
+  const highlight = record(chart) && record(chart.highlight) ? chart.highlight : undefined;
+  if (highlight) {
+    const plotted = order.slice(order.length - series.length).map(index => names[index]!);
+    const labels = lone ? undefined : new Set(out.map(row => (row[0] === null || row[0] === undefined ? '' : String(row[0]))));
+    const listed = (value: unknown): unknown[] => Array.isArray(value) ? value : [];
+    const highlightPath = at(base, 'highlight');
+    listed(highlight.series).forEach((name, index) => {
+      const path = at(highlightPath, 'series', index);
+      if (typeof name !== 'string' || !names.includes(name)) {
+        diagnostics.push({ code: 'chart-highlight-unknown-name', severity: 'error', path, message: `highlight names series ${JSON.stringify(name)}, which the chart data does not have as a column; use one of ${names.map(entry => JSON.stringify(entry)).join(', ')}` });
+      } else if (!plotted.includes(name)) {
+        diagnostics.push({ code: 'chart-highlight-adapted', severity: 'warning', path, message: `highlight names column ${JSON.stringify(name)}, which is not plotted as a series (it is the category or X column, or the mapping leaves it out); it highlights nothing` });
+      }
+    });
+    listed(highlight.categories).forEach((name, index) => {
+      if (typeof name === 'string' && labels?.has(name)) return;
+      const shown = labels ? [...labels].slice(0, 12).map(entry => JSON.stringify(entry)).join(', ') : '';
+      diagnostics.push({ code: 'chart-highlight-unknown-name', severity: 'error', path: at(highlightPath, 'categories', index), message: `highlight names category ${JSON.stringify(name)}, which no row of the chart data has as its label${shown ? `; the labels are ${shown}${labels!.size > 12 ? ', ...' : ''}` : ''}` });
+    });
+  }
   return {
     ok: true,
     columns: order.map(index => names[index]!),

@@ -25,7 +25,7 @@ import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import type { AuditFix } from './audit-types.js';
 
 // RR-54: chart and table data warnings keep their validator code as the rule id.
-const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
+const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted', 'chart-highlight-adapted']);
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
