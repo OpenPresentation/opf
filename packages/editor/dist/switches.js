@@ -2,6 +2,7 @@
 // dimension that turns "switch this dimension to X" into a validated JSON Patch, and applies
 // it to an editor session as one undoable transaction. The preview recomposes and the PPTX
 // export follows from the same document, so no dimension needs a special refresh path.
+import * as core from "@openpresentation/opf";
 import { catalogSchemaNames, catalogs as bundledCatalogs, schemas } from "@openpresentation/opf";
 import {
   OPFEditorError,
@@ -251,7 +252,7 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
       throw fail("path-slide-mismatch", "options.path is not on the slide named by options.slideIndex.", { slideIndex, path: options.path });
     const chart = owner && getValueAtPath(document, [...owner, "chart"]);
     if (!chart || typeof chart !== "object") throw fail("chart-not-found", "This slide has no chart to switch. Insert a chart block first.", { slideIndex, path: options.path });
-    patches = [...catalogRecordPatches(document, dimension, options), ...(chart.type === value ? [] : createValuePatch(document, [...owner, "chart", "type"], value))];
+    patches = [...catalogRecordPatches(document, dimension, options), ...(chart.type === value ? [] : [...createValuePatch(document, [...owner, "chart", "type"], value), ...staleMappingPatches(document, owner, chart, value)])];
   } else if (dimension === "blocks") {
     if (options.path === undefined) throw fail("missing-path", "Choose the block to replace with options.path.");
     // convert: true moves the block's own text into the new kind (block-convert.js) instead of replacing it.
@@ -394,11 +395,27 @@ const SINGLE_SERIES_ONLY = new Set(["pieChart", "doughnutChart", "funnelChart", 
 const MULTI_SERIES_CAPABLE = new Set(["barChart", "lineChart", "areaChart", "radarChart"]);
 const DISTRIBUTION_ELEMENTS = new Set(["histogramChart", "boxWhiskerChart", "mapChart"]);
 
-function chartDataShape(chart) {
-  const data = chart?.data;
-  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) return undefined;
-  // The renderers read the first column as the category label and every further column as a series.
-  return { series: Math.max(0, data.columns.length - 1), categories: data.rows.length };
+// RR-54: `mapping.x` names the X column of an XY chart; a type without an X axis ignores it (core warns chart-mapping-adapted). Switching to such a
+// type removes it, and the whole mapping when nothing else is left, so the document does not keep a warning it cannot act on.
+function staleMappingPatches(document, owner, chart, type) {
+  const mapping = chart.mapping;
+  if (!mapping || typeof mapping !== "object" || Array.isArray(mapping) || mapping.x === undefined) return [];
+  if (typeof core.isXYChartType !== "function" || core.isXYChartType(type)) return [];
+  const { x: _x, ...rest } = mapping;
+  const parts = [...owner, "chart", "mapping"];
+  return Object.keys(rest).length ? createValuePatch(document, parts, rest) : [{ op: "remove", path: opfPathToJsonPointer(parts) }];
+}
+
+function chartDataShape(chart, document) {
+  // RR-54: inline data, a dataset reference and a series mapping all resolve to the columns the renderers read: the first column labels
+  // the categories and every further column is a series.
+  if (typeof core.resolveChartData !== "function") {
+    const data = chart?.data;
+    return data && Array.isArray(data.columns) && Array.isArray(data.rows) ? { series: Math.max(0, data.columns.length - 1), categories: data.rows.length } : undefined;
+  }
+  const resolved = core.resolveChartData(chart, document);
+  if (!resolved.ok) return undefined;
+  return { series: Math.max(0, resolved.columns.length - 1), categories: resolved.rows.length };
 }
 
 /**
@@ -415,7 +432,7 @@ export function compatibleChartTypes(document, options = {}) {
   const owner = options.path ? splitOpfPath(options.path) : document.slides?.[slideIndex] ? findChartOwner(document, slideIndex) : undefined;
   const chart = owner && getValueAtPath(document, [...owner, "chart"]);
   if (!chart || typeof chart !== "object") return [];
-  const shape = chartDataShape(chart);
+  const shape = chartDataShape(chart, document);
   const result = [];
   for (const option of listSwitchOptions(document, "charts", options)) {
     const record = option.record;

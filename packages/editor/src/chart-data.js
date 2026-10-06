@@ -99,3 +99,4 @@ export function renameChartSeries(editor, chartPath, column, name, options = {})
 export function renameChartCategory(editor, chartPath, row, name, options = {}) {
   return setGridCells(editor, chartPath, [{ section: "body", row, column: 0, value: name === "" || name === null ? null : String(name) }], { ...options, kind: "chart" });
 }
+export { describeChartMapping, prepareChartMapping, setChartMapping, prepareDetachDataset, detachGridDataset } from "./grid-model.js";

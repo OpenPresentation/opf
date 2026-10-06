@@ -97,14 +97,16 @@ function payloadFields(fields, state, base, payload, prefix = "") {
   const chart = payload.chart;
   if (isObject(chart) && isObject(chart.data)) {
     const { columns, rows } = chart.data;
-    if (Array.isArray(columns)) columns.forEach((value, index) => field(fields, state, at("chart", "data", "columns", String(index)), value, `${prefix}Chart label ${index + 1}`, "chart"));
+    // A column name that `mapping` addresses is not replaced: the mapping would stop finding it.
+    if (Array.isArray(columns) && !isObject(chart.mapping))
+      columns.forEach((value, index) => (isObject(value) ? field(fields, state, at("chart", "data", "columns", String(index), "name"), value.name, `${prefix}Chart label ${index + 1}`, "chart") : field(fields, state, at("chart", "data", "columns", String(index)), value, `${prefix}Chart label ${index + 1}`, "chart")));
     if (Array.isArray(rows)) rows.forEach((row, r) => Array.isArray(row) && row.forEach((value, c) => {
       if (typeof value === "string") field(fields, state, at("chart", "data", "rows", String(r), String(c)), value, `${prefix}Chart row ${r + 1}, column ${c + 1}`, "chart");
     }));
   }
   const table = payload.table;
   if (isObject(table)) {
-    if (Array.isArray(table.columns)) table.columns.forEach((cell, c) => cellFields(fields, state, at("table", "columns", String(c)), cell, `${prefix}Table header ${c + 1}`));
+    if (Array.isArray(table.columns)) table.columns.forEach((cell, c) => (isObject(cell) && !("value" in cell) ? field(fields, state, at("table", "columns", String(c), "name"), cell.name, `${prefix}Table header ${c + 1}`, "table") : cellFields(fields, state, at("table", "columns", String(c)), cell, `${prefix}Table header ${c + 1}`)));
     if (Array.isArray(table.rows)) table.rows.forEach((row, r) => Array.isArray(row) && row.forEach((cell, c) => cellFields(fields, state, at("table", "rows", String(r), String(c)), cell, `${prefix}Table row ${r + 1}, column ${c + 1}`)));
   }
   if (isObject(payload.image)) field(fields, state, at("image", "alt"), payload.image.alt, `${prefix}Image alt text`, "alt");
@@ -138,6 +140,16 @@ export function collectSearchFields(document, options = {}) {
     field(fields, deck, ["name"], document.name, "Presentation name", "deck");
     field(fields, deck, ["description"], document.description, "Presentation description", "deck");
     furnitureFields(fields, deck, [], document.design);
+  }
+  // RR-54: the text cells of a shared dataset belong to the deck. Its column names are left alone (`fields` and `mapping` address them).
+  if (only === undefined && isObject(document.datasets)) {
+    const deck = { slideIndex: -1 };
+    for (const [id, dataset] of Object.entries(document.datasets)) {
+      if (!isObject(dataset) || !Array.isArray(dataset.rows)) continue;
+      dataset.rows.forEach((row, r) => Array.isArray(row) && row.forEach((value, c) => {
+        if (typeof value === "string") field(fields, deck, ["datasets", id, "rows", String(r), String(c)], value, `Dataset ${id}, row ${r + 1}, column ${c + 1}`, "dataset");
+      }));
+    }
   }
   (Array.isArray(document.slides) ? document.slides : []).forEach((slide, slideIndex) => {
     if (only !== undefined && slideIndex !== only) return;

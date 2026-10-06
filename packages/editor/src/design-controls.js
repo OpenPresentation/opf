@@ -1009,9 +1009,11 @@ export function createDesignControls(container, options = {}) {
       const tablePath = parsed?.tablePath ?? (content?.key === "table" ? `${blockPath}.table` : undefined);
       dynamic.tablePath = tablePath;
       dynamic.cell = parsed?.cell;
-      tableUi.details.hidden = !tablePath;
-      if (tablePath) {
-        const table = editor.get(tablePath);
+      // A table that shows a shared dataset (RR-54) has no cell styles or merges: the table panel is for inline tables.
+      const tableValue = tablePath ? editor.get(tablePath) : undefined;
+      tableUi.details.hidden = !tablePath || !Array.isArray(tableValue?.rows);
+      if (tablePath && !tableUi.details.hidden) {
+        const table = tableValue;
         tableUi.summary.textContent = `Table (${tablePath})`;
         const style = readTableStyle(document_, tablePath);
         dynamic.tableStyle = style.preset === "custom" ? { header: "theme", banding: false, borders: "theme" } : { header: style.header, banding: style.banding, borders: style.borders };

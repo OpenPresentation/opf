@@ -30,3 +30,5 @@ export declare function transposeChart(editor: EditorSession, chartPath: string,
 export declare function renameChartSeries(editor: EditorSession, chartPath: string, column: number, name: string, options?: { meta?: Record<string, unknown> }): GridChange;
 /** Rename a category: the first-column label of body row `row`. An empty name leaves it blank. */
 export declare function renameChartCategory(editor: EditorSession, chartPath: string, row: number, name: string, options?: { meta?: Record<string, unknown> }): GridChange;
+export { describeChartMapping, prepareChartMapping, setChartMapping, prepareDetachDataset, detachGridDataset } from "./grid-model.js";
+export type { ChartMappingColumns, ChartMappingDescription } from "./grid-model.js";

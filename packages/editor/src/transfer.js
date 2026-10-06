@@ -187,6 +187,30 @@ export function prepareOpfImport(
     assetIds.add(next);
     assetMap.set(id, next);
   }
+  // RR-54: a chart or table that shows a shared dataset (`{ dataset: id }`) brings that dataset along. A dataset the deck already holds
+  // with the same content is shared; one with the same id and other content is stored under a free id and the references follow it.
+  const datasetMap = new Map();
+  const usedDatasets = new Set();
+  const collectDatasets = (value, key = "") => {
+    if (Array.isArray(value)) value.forEach((child) => collectDatasets(child, key));
+    else if (value && typeof value === "object") for (const [childKey, child] of Object.entries(value)) collectDatasets(child, childKey);
+    else if (key === "dataset" && typeof value === "string") usedDatasets.add(value);
+  };
+  collectDatasets(incoming.slides);
+  const datasetIds = new Set(Object.keys(document.datasets ?? {}));
+  for (const id of usedDatasets) {
+    const mine = incoming.datasets && Object.hasOwn(incoming.datasets, id) ? incoming.datasets[id] : undefined;
+    if (mine === undefined) continue;
+    if (datasetIds.has(id) && JSON.stringify(document.datasets[id]) === JSON.stringify(mine)) {
+      datasetMap.set(id, id);
+      continue;
+    }
+    let next = id,
+      n = 2;
+    while (datasetIds.has(next)) next = `${id}-${n++}`;
+    datasetIds.add(next);
+    datasetMap.set(id, next);
+  }
   const rewrite = (value, key = "") => {
     if (Array.isArray(value)) return value.map((child) => rewrite(child, key));
     if (value && typeof value === "object") {
@@ -210,6 +234,7 @@ export function prepareOpfImport(
       return result;
     }
     if (typeof value === "string") {
+      if (key === "dataset" && datasetMap.has(value)) return datasetMap.get(value);
       if (mappings[key]?.has(value)) return mappings[key].get(value);
       if (
         ["src", "image", "video", "poster"].includes(key) &&
@@ -242,6 +267,11 @@ export function prepareOpfImport(
         assetMap.has(asset.slice(6))
           ? `asset:${assetMap.get(asset.slice(6))}`
           : asset;
+  }
+  for (const [id, next] of datasetMap) {
+    if (document.datasets && Object.hasOwn(document.datasets, next)) continue;
+    document.datasets ??= {};
+    document.datasets[next] = clone(incoming.datasets[id]);
   }
   const ids = new Set(collectReservedPresentationIds(document));
   for (const slide of rewritten.slides) remapSlideTreeIds(slide, ids);

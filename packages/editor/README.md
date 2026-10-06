@@ -411,6 +411,19 @@ sortTableRows(editor, "slides.4.blocks.1.table", 1, { direction: "desc" });     
 setChartCells(editor, "slides.3.blocks.0.chart", [{ section: "body", row: 0, column: 1, text: "12,5" }], { decimal: "," });
 ```
 
+Chart columns and table headers may be `DataColumn` objects (`{ name, format }`; the grid keeps the format and shows a formatted column's numbers as the slide draws them, while editing and copy use the raw value), a chart or table may show a shared top-level dataset (the grid edits `/datasets/<id>` through `fields` and says how many items share it), each column has a number format field and each chart a category, X and series mapping (RR-54):
+
+```js
+import { setGridColumnFormat, setChartMapping, detachGridDataset } from "@openpresentation/opf-editor/data-grid";
+import { prepareDatasetImport, createDataContent } from "@openpresentation/opf-editor/data";
+
+setGridColumnFormat(editor, "slides.3.blocks.0.chart", 1, "$#,##0.0");   // header "Revenue" becomes { name: "Revenue", format }; null clears it
+setChartMapping(editor, "slides.3.blocks.0.chart", { category: "Region", series: ["Revenue"] });
+detachGridDataset(editor, "slides.3.blocks.1.table");                   // its own copy instead of the shared dataset
+const stored = prepareDatasetImport(editor.document, createDataContent(csv, { as: "chart" }), { id: "revenue" });
+editor.applyPatch([...stored.patches, { op: "add", path: "/slides/-", value: { id: "rev", title: "Revenue", ...stored.content } }]);
+```
+
 The number rules, paste and copy format, merged-cell behaviour, sorting, keyboard and accessibility are in [docs/data-grid.md](docs/data-grid.md).
 
 ## Design controls panel (RR-06)

@@ -8,12 +8,19 @@
 // Keyboard: arrows move (Shift extends), Home/End, Ctrl+Home/End, PageUp/PageDown, Enter or F2 edits, typing replaces the text,
 // Enter/Shift+Enter and Tab/Shift+Tab commit and move, Escape cancels, Delete clears, Ctrl+C/X/V copy, cut and paste TSV, Ctrl+A selects
 // all, Ctrl+Z / Ctrl+Y undo and redo. Outside an edit Tab leaves the grid. Row and column operations are in the toolbar.
+//
+// RR-54: a header may be a DataColumn (the grid shows its name and keeps its number format); the column format field sets or
+// clears the selected column's format; a chart's "Chart columns" panel sets the category, X and series columns (`chart.mapping`);
+// and a chart or table that shows a shared dataset edits the dataset (the status line says how many items share it).
 import {
+  columnFormatError,
   columnLabel,
   deleteGridColumns,
   deleteGridRows,
   describeAddress,
+  describeChartMapping,
   describeDataGrid,
+  detachGridDataset,
   gridCellIssues,
   insertGridColumns,
   insertGridRows,
@@ -21,9 +28,12 @@ import {
   moveGridRows,
   pasteGridText,
   resolveDataGridTarget,
+  setChartMapping,
   setGridCells,
+  setGridColumnFormat,
   setGridHeader,
   sortGridRows,
+  supportsChartTableData,
   transposeGridData,
 } from "./grid-model.js";
 import { NUMBER_FORMATS, parseDelimited, resolveNumberFormat, toDelimited } from "./grid-text.js";
@@ -66,6 +76,17 @@ const CSS = `
 .opf-grid-status{margin:6px 0 0;font-size:11px;color:#3d5e47;min-height:1.2em}.opf-grid-error{margin:6px 0 0;font-size:11px;color:var(--g-error)}.opf-grid-error:empty{display:none}
 .opf-grid details{margin:6px 0 0;font-size:11px}.opf-grid details summary{cursor:pointer}.opf-grid details textarea{display:block;width:100%;box-sizing:border-box;min-height:64px;margin:4px 0;font:11px ui-monospace,monospace}
 .opf-grid-help{margin:6px 0 0;font-size:10px;color:var(--g-muted)}
+.opf-grid-dataset,.opf-grid-format{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 6px;font-size:11px;color:var(--g-muted)}
+.opf-grid-dataset[hidden],.opf-grid-format[hidden],.opf-grid-mapping[hidden]{display:none!important}
+.opf-grid-dataset strong{color:var(--g-text)}
+.opf-grid-dataset button,.opf-grid-format button,.opf-grid-format input,.opf-grid-mapping select{font:inherit;min-height:28px;border:1px solid var(--g-border);border-radius:4px;background:#fff;color:inherit;padding:2px 8px}
+.opf-grid-dataset button,.opf-grid-format button{cursor:pointer}.opf-grid-dataset button:hover,.opf-grid-format button:hover{background:#f1effa}
+.opf-grid-format [aria-disabled=true]{opacity:.45;cursor:default}
+.opf-grid-format input{width:150px}.opf-grid-format input[aria-invalid=true]{border-color:var(--g-error)}
+.opf-grid-format-error{color:var(--g-error)}.opf-grid-format-error:empty{display:none}
+.opf-grid-mapping{margin:6px 0 0;font-size:11px}.opf-grid-mapping label{display:inline-flex;gap:4px;align-items:center;margin:0 10px 4px 0}
+.opf-grid-mapping fieldset{border:1px solid var(--g-border);border-radius:4px;margin:4px 0 0;padding:4px 8px}.opf-grid-mapping legend{font-size:11px;color:var(--g-muted)}
+.opf-grid-mapping p{margin:4px 0 0;color:var(--g-muted)}
 @media (forced-colors:active){.opf-grid td.opf-grid-active{outline:3px solid Highlight}.opf-grid td[aria-selected=true]{outline:1px solid Highlight}.opf-grid td[aria-invalid=true]{outline:2px solid LinkText}}
 `;
 
@@ -142,7 +163,22 @@ export function createDataGrid(container, options = {}) {
   const pasteButton = h("button", { type: "button", "aria-disabled": "false" }, "Paste at selected cell");
   const pasteBox = h("details", { class: "opf-grid-paste" }, h("summary", {}, "Paste text"), h("label", { for: `${uid}-paste` }, "Text from a spreadsheet or CSV file"), pasteArea, pasteButton);
   table.setAttribute("aria-describedby", help.id);
-  root.append(h("div", { class: "opf-grid-title" }, titleText, pathText), unavailable, toolbar, scroll, notes, help, pasteBox, statusEl, errorEl);
+  // A shared dataset: which one, how many items use it, and a way to stop sharing.
+  const datasetText = h("span", { "data-role": "dataset-note" });
+  const detachButton = h("button", { type: "button", "data-action": "detach-dataset", title: "Give this item its own copy of the data. The shared dataset stays for the other items." }, "Use a copy of the data");
+  const datasetRow = h("div", { class: "opf-grid-dataset", role: "note", hidden: true }, datasetText, detachButton);
+  // The number format of the selected column.
+  const formatInput = h("input", { type: "text", id: `${uid}-format`, "data-role": "column-format", list: `${uid}-formats`, autocomplete: "off", spellcheck: "false", placeholder: "General" });
+  const formatList = h("datalist", { id: `${uid}-formats` }, ["#,##0", "#,##0.0", "#,##0.00", "0%", "0.0%", "$#,##0", "$#,##0.00", "0.00"].map((value) => h("option", { value })));
+  const formatLabel = h("label", { for: formatInput.id }, "Column format");
+  const formatApply = h("button", { type: "button", "data-action": "apply-format", "aria-disabled": "false" }, "Apply");
+  const formatClear = h("button", { type: "button", "data-action": "clear-format", "aria-disabled": "false" }, "Clear");
+  const formatError = h("span", { class: "opf-grid-format-error", role: "alert", "data-role": "format-error" });
+  const formatRow = h("div", { class: "opf-grid-format", hidden: true }, formatLabel, formatInput, formatList, formatApply, formatClear, formatError);
+  // A chart's category, X and series columns.
+  const mappingBody = h("div", { "data-role": "mapping-body" });
+  const mappingBox = h("details", { class: "opf-grid-mapping", hidden: true }, h("summary", {}, "Chart columns"), mappingBody);
+  root.append(h("div", { class: "opf-grid-title" }, titleText, pathText), unavailable, datasetRow, toolbar, formatRow, scroll, mappingBox, notes, help, pasteBox, statusEl, errorEl);
   container.append(root);
   scroll.style.setProperty("--opf-grid-max-height", options.maxHeight ?? "320px");
 
@@ -306,7 +342,9 @@ export function createDataGrid(container, options = {}) {
     rulerRow.append(corner);
     for (let c = 0; c < grid.columnCount; c += 1) {
       const role = roles[c];
-      const hint = role === "category" ? "categories" : role === "series" ? "series" : role === "x" ? "x values" : role === "label" ? "labels" : "";
+      const role_ = role === "category" ? "categories" : role === "series" ? "series" : role === "x" ? "x values" : role === "label" ? "labels" : role === "other" ? "not plotted" : "";
+      const format = grid.columnFormats?.[c];
+      const hint = [role_, format ? `format ${format}` : ""].filter(Boolean).join(" · ");
       const th = h("th", { role: "columnheader", scope: "col", "aria-colindex": c + 2, "data-ruler": "column", "data-column": c, "aria-label": `Column ${columnLabel(c)}${hint ? `, ${hint}` : ""}` }, columnLabel(c), hint ? h("span", { class: "opf-grid-role" }, hint) : null);
       rulerRow.append(th);
     }
@@ -320,7 +358,7 @@ export function createDataGrid(container, options = {}) {
       for (const cell of line) {
         if (cell.covered) continue;
         const merged = cell.rowSpan > 1 || cell.colSpan > 1;
-        const numeric = target.kind === "chart" && !header && roles[cell.column] !== "category" && roles[cell.column] !== "label";
+        const numeric = target.kind === "chart" && !header && roles[cell.column] !== "category" && roles[cell.column] !== "label" && roles[cell.column] !== "other";
         const classes = ["opf-grid-cell"];
         if (header) classes.push("opf-grid-header");
         if (numeric) classes.push("opf-grid-number");
@@ -345,7 +383,12 @@ export function createDataGrid(container, options = {}) {
           title: cell.warning,
         });
         if (cell.runs) renderRuns(td, cell.runs);
-        else td.textContent = cell.text;
+        else if (cell.display !== undefined) {
+          // The number as the slide draws it; the raw value is what editing and copying use.
+          td.textContent = cell.display;
+          td.classList.add("opf-grid-formatted");
+          if (!cell.warning) td.title = `Stored as ${cell.text}`;
+        } else td.textContent = cell.text;
         tr.append(td);
       }
       tbody.append(tr);
@@ -394,12 +437,14 @@ export function createDataGrid(container, options = {}) {
       transpose: target.kind !== "chart" || grid.columnCount < 2,
     };
     for (const [name, button] of buttons) button.setAttribute("aria-disabled", String(Boolean(disabled[name])));
-    buttons.get("transpose").hidden = target.kind !== "chart";
+    const shared = Boolean(target.dataset);
+    buttons.get("transpose").hidden = target.kind !== "chart" || shared;
     // The toolbar stays one tab stop even when the button that held it is hidden for this kind of content.
     const visible = [...toolbar.querySelectorAll("button")].filter((button) => !button.hidden);
     if (!visible.some((button) => button.tabIndex === 0) && visible.length) visible[0].tabIndex = 0;
-    headerLabel.hidden = target.kind !== "table";
+    headerLabel.hidden = target.kind !== "table" || shared;
     headerBox.checked = grid.hasHeader;
+    updateFormatRow();
     const nameRows = count > 1 ? `${count} rows` : "row";
     buttons.get("delete-rows").textContent = count > 1 ? `Delete ${count} rows` : "Delete rows";
     buttons.get("insert-row-above").setAttribute("aria-label", `Insert ${nameRows === "row" ? "row" : nameRows} above`);
@@ -437,11 +482,14 @@ export function createDataGrid(container, options = {}) {
     scroll.hidden = toolbar.hidden = notes.hidden = pasteBox.hidden = help.hidden = next.editable === false;
     if (next.editable === false) {
       unavailable.textContent = next.reason;
+      datasetRow.hidden = formatRow.hidden = mappingBox.hidden = true;
       grid = undefined;
       return;
     }
     grid = describeDataGrid(editor.document, next.path, opts());
     buildTable();
+    buildDatasetRow();
+    buildMapping();
     const clamped = clampCell(selection.focus.u, selection.focus.c);
     const anchor = clampCell(selection.anchor.u, selection.anchor.c);
     const f = anchorOf(clamped.u, clamped.c);
@@ -457,7 +505,7 @@ export function createDataGrid(container, options = {}) {
   function dataSignature() {
     if (!target || target.editable === false) return "";
     try {
-      return JSON.stringify([target.path, editor.get(target.path), numberFormat]);
+      return JSON.stringify([target.path, editor.get(target.path), target.dataset ? editor.document.datasets?.[target.dataset.id] : undefined, numberFormat]);
     } catch {
       return "";
     }
@@ -487,6 +535,128 @@ export function createDataGrid(container, options = {}) {
     rebuild();
   }
   const unsubscribe = editor.subscribe(() => sync());
+
+  // --- shared dataset, number format, mapping (RR-54) -----------------------------------------------
+  function buildDatasetRow() {
+    const info = target?.dataset;
+    datasetRow.hidden = !info;
+    if (!info) return;
+    const used = info.count === 1 ? "used by 1 item" : `used by ${info.count} items`;
+    datasetText.replaceChildren("Shared dataset \u2018", h("strong", {}, info.id), `\u2019 \u2014 ${used}.${info.fields ? ` Showing ${info.fields.join(", ")}.` : ""} Edits change the dataset for every item that uses it.`);
+    datasetRow.setAttribute("aria-label", `Shared dataset ${info.id}, ${used}`);
+  }
+
+  const formatColumn = () => activeCell()?.column ?? 0;
+  // The column the field is for. It follows the selected column, but not while someone types in the field: a click on another cell
+  // moves the selection before the field's change event fires, and the format typed for one column must not land on the next.
+  let formatBound = 0;
+  function updateFormatRow() {
+    const visible = Boolean(grid?.hasHeader) && target?.editable !== false && supportsChartTableData;
+    formatRow.hidden = !visible;
+    if (!visible) return;
+    if (doc.activeElement !== formatInput) {
+      formatBound = formatColumn();
+      formatInput.value = grid.columnFormats?.[formatBound] ?? "";
+      formatInput.removeAttribute("aria-invalid");
+      formatError.textContent = "";
+    }
+    const column = formatBound;
+    const name = grid.columnNames?.[column];
+    formatLabel.textContent = `Format of column ${columnLabel(column)}${name ? ` (${name})` : ""}${target?.dataset ? " in the shared dataset" : ""}`;
+    formatClear.setAttribute("aria-disabled", String(grid.columnFormats?.[column] === undefined));
+  }
+  formatInput.addEventListener("input", () => {
+    const error = columnFormatError(formatInput.value);
+    formatError.textContent = error ?? "";
+    if (error) formatInput.setAttribute("aria-invalid", "true");
+    else formatInput.removeAttribute("aria-invalid");
+  });
+  function applyFormat(value) {
+    const column = formatBound;
+    const error = columnFormatError(value);
+    if (error) {
+      formatInput.setAttribute("aria-invalid", "true");
+      formatError.textContent = error;
+      return;
+    }
+    formatError.textContent = "";
+    formatInput.removeAttribute("aria-invalid");
+    if ((grid.columnFormats?.[column] ?? "") === value) return;
+    const cleared = value === "";
+    attempt(() => setGridColumnFormat(editor, target.path, column, cleared ? null : value, {}), cleared ? `Column ${columnLabel(column)} shows numbers as they are.` : `Column ${columnLabel(column)} shows numbers as ${value}.`, (failure) => {
+      formatError.textContent = messageOf(failure);
+    });
+  }
+  formatInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      applyFormat(formatInput.value);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      formatInput.value = grid?.columnFormats?.[formatBound] ?? "";
+      formatError.textContent = "";
+      formatInput.removeAttribute("aria-invalid");
+    }
+  });
+  formatInput.addEventListener("change", () => applyFormat(formatInput.value));
+  formatApply.addEventListener("click", () => applyFormat(formatInput.value));
+  formatClear.addEventListener("click", () => {
+    if (formatClear.getAttribute("aria-disabled") === "true") return;
+    formatInput.value = "";
+    applyFormat("");
+  });
+  detachButton.addEventListener("click", () => {
+    if (!target?.dataset) return;
+    const id = target.dataset.id;
+    attempt(() => detachGridDataset(editor, target.path, {}), `This ${target.kind} now has its own copy of dataset \u2018${id}\u2019.`);
+  });
+
+  function buildMapping() {
+    mappingBody.replaceChildren();
+    mappingBox.hidden = !grid || target?.kind !== "chart" || !supportsChartTableData;
+    if (mappingBox.hidden) return;
+    let view;
+    try {
+      view = describeChartMapping(editor.document, target.path);
+    } catch {
+      mappingBox.hidden = true;
+      return;
+    }
+    const names = view.columns.map((column) => column.name);
+    const selectOf = (label, value, onChange, allowed) => {
+      const select = h("select", { "aria-label": label }, names.map((name, index) => (allowed(index) ? h("option", { value: name }, name || `(column ${columnLabel(index)})`) : null)));
+      select.value = value;
+      select.addEventListener("change", () => onChange(select.value));
+      return h("label", {}, label, select);
+    };
+    const category = names.indexOf(view.category);
+    mappingBody.append(selectOf(view.xy ? "Label column" : "Category column", view.category, (name) => setMapping({ category: name }, `The category column is now ${JSON.stringify(name)}.`), () => true));
+    if (view.xy) mappingBody.append(selectOf("X column", view.x ?? "", (name) => setMapping({ x: name }, `The X column is now ${JSON.stringify(name)}.`), (index) => index !== category));
+    const plotted = new Set(view.series);
+    const boxes = view.columns.map((column, index) => {
+      if (column.name === view.category || column.name === view.x) return null;
+      const input = h("input", { type: "checkbox", value: column.name, checked: plotted.has(column.name) || undefined });
+      input.checked = plotted.has(column.name);
+      input.addEventListener("change", () => {
+        const wanted = [...view.series.filter((name) => name !== column.name), ...(input.checked ? [column.name] : [])];
+        // Series that run in column order stay in column order; series someone arranged keep their order and a column switched on goes after them.
+        const inColumnOrder = view.series.every((name, at) => at === 0 || names.indexOf(view.series[at - 1]) < names.indexOf(name));
+        const ordered = inColumnOrder ? names.filter((name) => wanted.includes(name)) : [...view.series.filter((name) => wanted.includes(name)), ...names.filter((name) => wanted.includes(name) && !view.series.includes(name))];
+        setMapping({ series: ordered }, input.checked ? `${column.name || `Column ${columnLabel(index)}`} is now plotted.` : `${column.name || `Column ${columnLabel(index)}`} is no longer plotted.`, () => {
+          input.checked = !input.checked;
+        });
+      });
+      return h("label", {}, input, column.name || `(column ${columnLabel(index)})`);
+    });
+    mappingBody.append(h("fieldset", {}, h("legend", {}, "Series (plotted columns)"), boxes));
+    mappingBody.append(h("p", {}, view.authored ? "This chart has its own column mapping. Choosing the default columns removes it." : "Default: the first column labels the categories and every other column is a series."));
+  }
+  function setMapping(wanted, message, onFail) {
+    attempt(() => setChartMapping(editor, target.path, wanted, {}), message, (failure) => {
+      onFail?.(failure);
+      buildMapping();
+    });
+  }
 
   // --- editing --------------------------------------------------------------------------------------
   function mountEditor(u, c, text, caret) {

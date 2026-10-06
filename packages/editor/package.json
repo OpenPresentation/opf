@@ -230,6 +230,8 @@
     "test:template-panel-browser": "node test/template-panel-browser.mjs",
     "test:design-gaps-browser": "node test/design-gaps-browser.mjs",
     "test:data-grid-browser": "node test/data-grid-browser.mjs",
+    "test:data-grid-datasets-browser": "node test/data-grid-datasets-browser.mjs",
+    "test:data-import-dataset-browser": "node test/data-import-dataset-browser.mjs",
     "test:slides-browser": "node test/slides-browser.mjs",
     "test:persistence-browser": "node test/persistence-browser.mjs",
     "test:find-browser": "node test/find-replace-browser.mjs",

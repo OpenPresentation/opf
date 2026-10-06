@@ -103,7 +103,8 @@ export function metricGroupForSelection(document, selectedPath) {
  */
 export function blockConversionTargets(document, path, options = {}) {
   const found = readBlockContent(document, path);
-  return found ? contentConversionTargets(found.owner, options) : [];
+  // RR-54: a table that shows a shared dataset needs the document's datasets to convert to anything but a chart.
+  return found ? contentConversionTargets(found.owner, { document, ...options }) : [];
 }
 
 /**
@@ -116,7 +117,7 @@ export function prepareBlockConversion(document, path, kind, options = {}) {
   if (!found) throw refuse(CHOOSE, { path });
   const pointer = opfPathToJsonPointer(found.path);
   const from = found.kind;
-  const result = convertOwner(found.owner, kind, options);
+  const result = convertOwner(found.owner, kind, { document, ...options });
   if (!result.changed) return { document: structuredClone(document), patches: [], path: found.path.join("."), changed: false, lossless: true, loss: [], from, to: kind };
   const patches = [
     { op: "test", path: pointer, value: structuredClone(found.owner) },

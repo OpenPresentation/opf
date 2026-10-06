@@ -32,7 +32,11 @@ const RULE_COLOR = "textSecondary";
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const isStyled = (cell) => isObject(cell) && Object.hasOwn(cell, "value");
-const valueOf = (cell) => (isStyled(cell) ? cell.value : cell);
+// RR-54: a header may be a DataColumn `{ name, format? }`. Styling or merging it makes it the equivalent styled header `{ value: name, format?, ... }`
+// (a styled header's `format` is the column's format, the same as a DataColumn's).
+const isColumnObject = (cell) => isObject(cell) && Object.hasOwn(cell, "name") && !Object.hasOwn(cell, "value");
+const asStyled = (cell) => (isColumnObject(cell) ? { value: cell.name, ...(typeof cell.format === "string" ? { format: cell.format } : {}) } : cell);
+const valueOf = (cell) => (isStyled(cell) ? cell.value : isColumnObject(cell) ? cell.name : cell);
 const isEmptyValue = (value) => value === null || value === undefined || value === "" || (Array.isArray(value) && value.every((run) => (typeof run === "string" ? run === "" : run?.text === "")));
 const clone = (value) => structuredClone(value);
 
@@ -58,6 +62,8 @@ export function parseTableCellPath(path) {
 function tableAt(document, tablePath) {
   const parts = splitOpfPath(tablePath);
   const table = getValueAtPath(document, parts);
+  if (isObject(table) && !Array.isArray(table.rows) && typeof table.dataset === "string")
+    throw fail("table-dataset-backed", `This table shows the shared dataset '${table.dataset}', which holds no cell styles or merged cells. Use a copy of the data (in the data grid) to style it.`, { tablePath, dataset: table.dataset });
   if (!isObject(table) || !Array.isArray(table.rows)) throw fail("table-not-found", "Choose a table (a path ending in .table).", { tablePath });
   return { parts, table };
 }
@@ -143,14 +149,17 @@ function joinedValue(values) {
   return parts.map(plainText).join(" ");
 }
 
-function withCell(raw, patch) {
+function withCell(cell, patch) {
   // A styled cell with no style and no spans collapses back to the plain value.
+  const raw = asStyled(cell);
   const merged = isStyled(raw) ? { ...raw } : { value: raw };
   for (const [key, value] of Object.entries(patch)) {
     if (value === undefined || value === null || (key === "style" && isObject(value) && !Object.keys(value).length)) delete merged[key];
     else merged[key] = value;
   }
   const keys = Object.keys(merged);
+  // A DataColumn header that gained no style or span stays a DataColumn.
+  if (isColumnObject(cell) && keys.every((key) => key === "value" || key === "format")) return cell;
   return keys.length === 1 && keys[0] === "value" ? merged.value : merged;
 }
 
@@ -226,7 +235,8 @@ export function prepareTableMerge(document, tablePath, cell, span, options = {})
     for (const entry of covered) entry.line[entry.column] = null;
     const anchorLine = lineOf(table, target);
     const raw = anchorLine[target.column];
-    anchorLine[target.column] = withCell(isStyled(raw) ? { ...raw, value: anchorValue } : anchorValue, { colSpan: colSpan > 1 ? colSpan : undefined, rowSpan: rowSpan > 1 ? rowSpan : undefined });
+    const base = asStyled(raw);
+    anchorLine[target.column] = withCell(isStyled(base) ? { ...base, value: anchorValue } : anchorValue, { colSpan: colSpan > 1 ? colSpan : undefined, rowSpan: rowSpan > 1 ? rowSpan : undefined });
     return { merged: true, joined: filled.length > 0 };
   }, { action: "merge", cell, span: { colSpan, rowSpan } });
 }

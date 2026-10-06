@@ -1,26 +1,46 @@
 // The data model behind the data grid (RR-24): one table-shaped view of a chart's inline data and of a
 // table, and every edit to it as one validated, undoable patch.
 //
-// A chart is `{ type, data: { columns, rows } }`: `columns` are labels, `rows` are arrays aligned to them. The
-// first column holds the categories (the x axis, or the slice names) and every further column is one series,
-// named by its column label, in the order the renderer draws them. (A scatter chart reads its x values from the
-// second column when it has three or more; a chart type that needs one column only reads the first.) A table is
-// `{ columns?, rows }` whose cells are plain values, rich runs or styled cells with spans, as table-options.js
-// describes.
+// A chart is `{ type, data: { columns, rows }, mapping? }`: `columns` are labels (a string, or a `DataColumn`
+// `{ name, format? }`), `rows` are arrays aligned to them. By default the first column holds the categories (the x axis, or
+// the slice names) and every further column is one series, named by its column label, in the order the renderer draws them.
+// (A scatter chart reads its x values from the second column; a chart type that needs one column only reads the first.)
+// `mapping` names the category, X and series columns instead. A table is `{ columns?, rows }` whose cells are plain values,
+// rich runs or styled cells with spans, as table-options.js describes.
+//
+// RR-54: a chart (`data: { dataset, fields? }`) or table (`{ dataset, fields? }`) may take its data from a shared top-level
+// dataset. The grid then edits `/datasets/<id>` through the `fields` selection: edits map back to the dataset's own column
+// indices, a column added while `fields` is set goes to the dataset and to `fields`, and a deleted column leaves `fields` (the
+// dataset keeps it). Renaming a column keeps every `fields` and `mapping` that names it in step.
 //
 // Both are read as "lines": the header line (when there is one) followed by the body rows. The operations below
 // change lines and columns, keep merged cells whole or refuse with a reason, and return a `{ document, patches,
 // changed }` description like table-options.js does. Nothing here touches a DOM.
+import * as core from "@openpresentation/opf";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath, validateOpfDocument } from "./index.js";
-import { checkedDocument, fail } from "./edit-helpers.js";
+import { checkedDocument, fail, same } from "./edit-helpers.js";
+import { datasetUsage, isDatasetRef, walkDatasetItems } from "./dataset-refs.js";
 import { richTextContent, updateRichTextInput } from "./rich-text.js";
 import { formatGridNumber, isCanonicalNumber, parseDelimited, parseGridNumber, resolveNumberFormat, toDelimited } from "./grid-text.js";
 import { applyTableStyleToTable, readTableStyleOfTable } from "./table-options.js";
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const isStyled = (cell) => isObject(cell) && Object.hasOwn(cell, "value");
-const valueOf = (cell) => (isStyled(cell) ? cell.value : cell);
+// A header may be a DataColumn `{ name, format? }`: its text is `name`.
+const isColumnObject = (cell) => isObject(cell) && Object.hasOwn(cell, "name") && !Object.hasOwn(cell, "value");
+const valueOf = (cell) => (isStyled(cell) ? cell.value : isColumnObject(cell) ? cell.name : cell);
+const withValue = (raw, value) => (isStyled(raw) ? { ...raw, value } : isColumnObject(raw) ? { ...raw, name: value === null || value === undefined ? "" : String(value) } : value);
+const formatOf = (raw) => ((isStyled(raw) || isColumnObject(raw)) && typeof raw.format === "string" ? raw.format : undefined);
 const clone = (value) => structuredClone(value);
+const columnNameOf = (column) => (typeof column === "string" ? column : isObject(column) && typeof column.name === "string" ? column.name : "");
+// A body row remembers which dataset row it came from, so a row that moves, sorts or is deleted keeps the columns `fields` hides.
+const LINE_ORIGIN = Symbol("opf.grid.row");
+const cloneLines = (lines) =>
+  lines.map((line) => {
+    const copy = clone(line);
+    if (line[LINE_ORIGIN] !== undefined) copy[LINE_ORIGIN] = line[LINE_ORIGIN];
+    return copy;
+  });
 const spansOf = (raw) => ({ rs: isStyled(raw) ? (raw.rowSpan ?? 1) : 1, cs: isStyled(raw) ? (raw.colSpan ?? 1) : 1 });
 
 /** Spreadsheet column letters: 0 is A, 25 is Z, 26 is AA. */
@@ -38,10 +58,33 @@ const decimalOf = (options = {}) => (options.decimal === "," || options.decimal 
 
 // --- locating ----------------------------------------------------------------------------------
 
+const datasetsOf = (document) => (isObject(document) && isObject(document.datasets) ? document.datasets : {});
+
+/** The dataset a chart or table reference points at, and the dataset columns its `fields` select (by index). */
+function datasetOf(document, ref, path, refParts) {
+  const id = ref.dataset;
+  const datasets = datasetsOf(document);
+  const data = Object.hasOwn(datasets, id) ? datasets[id] : undefined;
+  if (!isObject(data) || !Array.isArray(data.columns) || !Array.isArray(data.rows))
+    throw fail("dataset-unavailable", `This item uses the shared dataset '${id}', which the document does not hold.`, { path, dataset: id });
+  const names = data.columns.map(columnNameOf);
+  const fields = Array.isArray(ref.fields) ? ref.fields : undefined;
+  let indices = names.map((_, index) => index);
+  if (fields) {
+    indices = fields.map((field) => names.indexOf(field));
+    const missing = fields.find((_, index) => indices[index] < 0);
+    if (missing !== undefined) throw fail("dataset-unavailable", `This item selects the column ${JSON.stringify(missing)}, which dataset '${id}' does not have.`, { path, dataset: id, field: missing });
+  }
+  return { data, dataset: { id, fields, indices, refParts, ref } };
+}
+
 /**
  * Find the data a path points at. A chart path ends in `chart` (or `chart.data`) and a table path in `table`.
- * Throws `grid-target-not-found`, `table-not-found` or `chart-data-source` (a chart that reads its data from a source
- * has no inline data to edit).
+ * Throws `grid-target-not-found`, `table-not-found`, `chart-data-source` (a chart that reads its data from a source
+ * has no inline data to edit) or `dataset-unavailable` (the shared dataset or one of its `fields` is missing).
+ * A chart or table that takes its data from a dataset (RR-54) is located at the dataset: `data` is the dataset, `dataParts`
+ * is `["datasets", id]` and `dataset` is `{ id, fields, indices, refParts, ref }` (`indices` maps each shown column to the
+ * dataset's own column).
  */
 export function locateGridData(document, path) {
   let parts;
@@ -55,21 +98,32 @@ export function locateGridData(document, path) {
   if (parts.at(-1) === "chart") {
     if (!isObject(owner) || !isObject(owner.data)) throw fail("grid-target-not-found", "This chart has no data.", { path });
     const data = owner.data;
+    const chartType = typeof owner.type === "string" ? owner.type : undefined;
+    if (isDatasetRef(data)) {
+      const found = datasetOf(document, data, path, [...parts, "data"]);
+      return { kind: "chart", parts, dataParts: ["datasets", data.dataset], data: found.data, chartType, owner, dataset: found.dataset };
+    }
     if (!Array.isArray(data.columns) || !Array.isArray(data.rows))
       throw fail("chart-data-source", "This chart reads its data from a source (src), not from inline columns and rows. The data grid edits inline chart data.", { path });
-    return { kind: "chart", parts, dataParts: [...parts, "data"], data, chartType: typeof owner.type === "string" ? owner.type : undefined };
+    return { kind: "chart", parts, dataParts: [...parts, "data"], data, chartType, owner };
   }
   if (parts.at(-1) === "table") {
+    if (isObject(owner) && isDatasetRef(owner) && !Array.isArray(owner.rows)) {
+      const found = datasetOf(document, owner, path, parts);
+      return { kind: "table", parts, dataParts: ["datasets", owner.dataset], data: found.data, owner, dataset: found.dataset };
+    }
     if (!isObject(owner) || !Array.isArray(owner.rows)) throw fail("table-not-found", "Choose a table (a path ending in .table).", { path });
-    return { kind: "table", parts, dataParts: parts, data: owner };
+    return { kind: "table", parts, dataParts: parts, data: owner, owner };
   }
   throw fail("grid-target-not-found", "Choose a chart or a table (a path ending in .chart or .table).", { path });
 }
 
 /**
  * The chart or table a selection path belongs to: `{ kind, path }` for `…chart`, `…chart.data.rows.1.0`, `…table`,
- * `…table.rows.1.2.value`, and so on. A chart whose data comes from a source is `{ kind: "chart", path, editable: false,
- * reason }`. Returns undefined when the path is not inside a chart or table.
+ * `…table.rows.1.2.value`, and so on. A chart whose data comes from a source (or from a dataset the document lacks) is
+ * `{ kind: "chart", path, editable: false, reason }`. A chart or table that takes its data from a shared dataset also has
+ * `dataset: { id, fields, count, items }` (`items` are the paths of every chart and table that uses the dataset).
+ * Returns undefined when the path is not inside a chart or table.
  */
 export function resolveDataGridTarget(document, selectedPath) {
   let parts;
@@ -83,9 +137,14 @@ export function resolveDataGridTarget(document, selectedPath) {
     const head = parts.slice(0, index + 1);
     try {
       const found = locateGridData(document, head);
-      return { kind: found.kind, path: head.join(".") };
+      const target = { kind: found.kind, path: head.join(".") };
+      if (found.dataset) {
+        const items = datasetUsage(document, found.dataset.id).map((entry) => entry.path);
+        target.dataset = { id: found.dataset.id, ...(found.dataset.fields ? { fields: [...found.dataset.fields] } : {}), count: items.length, items };
+      }
+      return target;
     } catch (error) {
-      if (error.code === "chart-data-source") return { kind: "chart", path: head.join("."), editable: false, reason: error.message };
+      if (error.code === "chart-data-source" || error.code === "dataset-unavailable") return { kind: parts[index], path: head.join("."), editable: false, reason: error.message };
     }
   }
   return undefined;
@@ -94,12 +153,27 @@ export function resolveDataGridTarget(document, selectedPath) {
 // --- lines -------------------------------------------------------------------------------------
 
 function toModel(found) {
-  const { kind, data } = found;
-  const hasHeader = kind === "chart" ? true : Array.isArray(data.columns);
-  const lines = [...(hasHeader ? [clone(data.columns)] : []), ...clone(data.rows).map((row) => (Array.isArray(row) ? row : [row]))];
-  const model = { kind, hasHeader, lines, width: 0, chartType: found.chartType };
+  const { kind, data, dataset } = found;
+  const hasHeader = kind === "chart" || Boolean(dataset) ? true : Array.isArray(data.columns);
+  let lines;
+  if (dataset) {
+    // The dataset as the item shows it: only the columns `fields` selects, in that order. Each body row remembers its dataset row.
+    const pick = (row) => dataset.indices.map((index) => (Array.isArray(row) && index < row.length ? clone(row[index]) : null));
+    lines = [clone(dataset.indices.map((index) => data.columns[index])), ...data.rows.map((row, r) => Object.assign(pick(row), { [LINE_ORIGIN]: r }))];
+  } else lines = [...(hasHeader ? [clone(data.columns)] : []), ...clone(data.rows).map((row) => (Array.isArray(row) ? row : [row]))];
+  const mapping = kind === "chart" && isObject(found.owner?.mapping) ? clone(found.owner.mapping) : undefined;
+  // `datasetNames` are every column of the shared dataset, also the ones `fields` hides: a new column's name must differ from them.
+  const model = { kind, hasHeader, lines, width: 0, chartType: found.chartType, dataset, mapping, colOrigin: [], origNames: [], datasetNames: dataset ? data.columns.map(columnNameOf) : [] };
   model.width = widthOf(model);
+  // Where each column came from, so renames, deletions and moves can be followed after an operation (null: a new column).
+  model.colOrigin = Array.from({ length: model.width }, (_, index) => index);
+  model.origNames = namesOfModel(model);
   return model;
+}
+
+/** The header texts of a model (the column names `fields` and `mapping` address). */
+function namesOfModel(model) {
+  return model.hasHeader ? Array.from({ length: model.width }, (_, column) => String(valueOf(model.lines[0]?.[column]) ?? "")) : [];
 }
 
 function fromModel(model, original) {
@@ -113,13 +187,25 @@ function fromModel(model, original) {
 const widthOf = (model) => model.lines.reduce((most, line) => Math.max(most, line.length), 0);
 const offset = (model) => (model.hasHeader ? 1 : 0);
 const bodyCount = (model) => model.lines.length - offset(model);
-const filler = (model, u) => (model.kind === "chart" && !(model.hasHeader && u === 0) ? null : "");
+// Column names must be unique where a dataset, `fields` or a chart `mapping` addresses them, so a new column of such a
+// target gets a distinct placeholder name instead of "".
+const needsNames = (model) => Boolean(model.dataset) || model.mapping !== undefined;
+function uniqueName(model, taken = []) {
+  const used = new Set([...namesOfModel(model), ...model.datasetNames, ...taken]);
+  let n = 1;
+  while (used.has(n === 1 ? "New column" : `New column ${n}`)) n += 1;
+  return n === 1 ? "New column" : `New column ${n}`;
+}
+// What a new, empty cell holds: a chart's and a dataset's cells are null (a gap), a table's are "".
+const emptyCell = (model) => (model.kind === "chart" || model.dataset ? null : "");
+const filler = (model, u) => (model.hasHeader && u === 0 ? (needsNames(model) ? uniqueName(model) : "") : emptyCell(model));
 
 function padLines(model) {
   model.width = widthOf(model);
   model.lines.forEach((line, u) => {
     while (line.length < model.width) line.push(filler(model, u));
   });
+  while (model.colOrigin.length < model.width) model.colOrigin.push(null);
 }
 
 const addressOf = (model, u) => (model.hasHeader && u === 0 ? { section: "header", row: 0 } : { section: "body", row: u - offset(model) });
@@ -208,17 +294,94 @@ export function cellText(raw, kind, decimal = ".") {
   return String(value);
 }
 
-const looksNumeric = (value) => typeof value === "number" ? Number.isFinite(value) : typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value));
 const isScatter = (type) => typeof type === "string" && /^(scatter|bubble)/.test(type);
 
-/** What each column of a chart is for: "category" (column A), "series", and for a scatter chart with three or more columns "label" and "x". */
-export function chartColumnRoles(columnCount, chartType) {
+// RR-54: core's strict chart number and XY test. A core that predates them (the installed range still allows one) keeps the
+// editor working on documents that use none of the new fields: numbers and scatter-like type ids read as the editor always read them.
+const chartNumber = (value) =>
+  typeof core.chartNumber === "function" ? core.chartNumber(value) : typeof value === "number" ? (Number.isFinite(value) ? value : null) : typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value)) ? Number(value) : null;
+/** Whether the installed core has the RR-54 chart and table data contract (number formats, datasets, `chartNumber`); an older core edits documents that use none of it. */
+export const supportsChartTableData = ["chartNumber", "numberFormatError", "inlineChartData", "inlineTableData", "isXYChartType"].every((name) => typeof core[name] === "function");
+const isXYType = (type) => (typeof core.isXYChartType === "function" ? core.isXYChartType(type) : isScatter(type));
+
+/**
+ * A number as the slide draws it: the column's format (a table body cell's own format wins) through core's `formatDataNumber`, or undefined when
+ * the cell is not a number, has no valid format, or the format changes nothing. A chart cell is read by `chartNumber`, as the renderer does, and
+ * only in a column the chart plots as numbers; a table cell is formatted only when it holds a number. The cell's `text` (the raw value) is never
+ * replaced: editing and copying use it.
+ */
+function displayText(model, raw, column, role, text) {
+  if (!supportsChartTableData || typeof core.formatDataNumber !== "function") return undefined;
+  const format = (model.kind === "table" ? formatOf(raw) : undefined) ?? (model.hasHeader ? formatOf(model.lines[0]?.[column]) : undefined);
+  if (format === undefined || core.numberFormatError(format) !== undefined) return undefined;
+  const value = valueOf(raw);
+  let number = null;
+  if (model.kind === "chart") number = isNumericRole(role) && (typeof value === "number" || typeof value === "string") ? chartNumber(value) : null;
+  else if (typeof value === "number" && Number.isFinite(value)) number = value;
+  if (number === null) return undefined;
+  const shown = core.formatDataNumber(number, format);
+  return shown === text ? undefined : shown;
+}
+
+/**
+ * The default X column of an XY chart (core's rule): the second column, or the first when the category is the second, and only
+ * with three or more columns. With two, the second column is the one series, plotted against row numbers.
+ */
+const defaultX = (category, count) => (count > 2 ? (category === 1 ? 0 : 1) : undefined);
+
+/**
+ * The columns a chart plots, by index: `{ category, x, series }`. `mapping` names them (`{ category?, x?, series? }`); a missing or
+ * unknown name falls back to core's positional default. `x` is only set for an XY chart.
+ */
+function mappingColumns(count, xy, mapping, names) {
+  const known = (name) => (typeof name === "string" ? names.indexOf(name) : -1);
+  const map = isObject(mapping) ? mapping : {};
+  let category = known(map.category);
+  if (category < 0) category = 0;
+  let x;
+  if (xy) {
+    x = known(map.x);
+    if (x < 0 || x === category) x = defaultX(category, count);
+    if (x !== undefined && (x >= count || x === category)) x = undefined;
+  }
+  let series;
+  if (Array.isArray(map.series)) {
+    series = [];
+    for (const name of map.series) {
+      const index = known(name);
+      if (index >= 0 && index !== category && index !== x && !series.includes(index)) series.push(index);
+    }
+  } else series = Array.from({ length: count }, (_, index) => index).filter((index) => index !== category && index !== x);
+  // An X column needs a series beside it; otherwise core plots it as the series against row numbers.
+  if (x !== undefined && !series.length) {
+    series = [x];
+    x = undefined;
+  }
+  return { category, x, series };
+}
+
+/**
+ * What each column of a chart is for: "category" (column A), "series", and for a scatter chart with three or more columns
+ * "label" and "x". With a `mapping` (and the column `names` it addresses) the roles follow it: "category" (the label column of a
+ * chart with no X axis), "label" and "x" for an XY chart, "series" for a plotted column and "other" for a column nothing plots.
+ */
+export function chartColumnRoles(columnCount, chartType, mapping, names) {
+  if (isObject(mapping) && Array.isArray(names) && columnCount > 0) {
+    const xy = isXYType(chartType);
+    const { category, x, series } = mappingColumns(columnCount, xy, mapping, names);
+    const roles = Array(columnCount).fill("other");
+    for (const index of series) roles[index] = "series";
+    roles[category] = xy ? "label" : "category";
+    if (x !== undefined) roles[x] = "x";
+    return roles;
+  }
   if (columnCount <= 1) return Array(columnCount).fill("series");
   if (isScatter(chartType) && columnCount >= 3) return ["label", "x", ...Array(columnCount - 2).fill("series")];
   return ["category", ...Array(columnCount - 1).fill("series")];
 }
 
-const isNumericColumn = (model, column) => model.kind === "chart" && !["category", "label"].includes(chartColumnRoles(model.width, model.chartType)[column] ?? "series");
+const rolesOf = (model) => (model.kind === "chart" ? chartColumnRoles(model.width, model.chartType, model.mapping, namesOfModel(model)) : []);
+const isNumericRole = (role) => role === undefined || role === "series" || role === "x";
 
 // --- describing --------------------------------------------------------------------------------
 
@@ -234,7 +397,7 @@ export function describeDataGrid(document, path, options = {}) {
   const model = toModel(found);
   padLines(model);
   const owners = ownersOf(model);
-  const roles = model.kind === "chart" ? chartColumnRoles(model.width, model.chartType) : [];
+  const roles = rolesOf(model);
   const warnings = [];
   const names = new Map();
   const lines = model.lines.map((line, u) =>
@@ -256,21 +419,27 @@ export function describeDataGrid(document, path, options = {}) {
       };
       if (Array.isArray(value)) cell.runs = value;
       if (isStyled(raw) && raw.style) cell.style = raw.style;
+      if (!owner && address.section === "body") {
+        const display = displayText(model, raw, column, roles[column], cell.text);
+        if (display !== undefined) cell.display = display;
+      }
+      if (address.section === "header" && formatOf(raw) !== undefined) cell.format = formatOf(raw);
       if (owner) cell.owner = { line: owner.u, column: owner.c };
       if (model.kind === "chart") {
         let warning;
         if (u === 0) {
           const name = String(value ?? "");
-          if (column > 0 || model.width === 1) {
+          if (roles[column] !== "category" && roles[column] !== "label") {
             if (name.trim() === "") warning = "This series has no name.";
             else if (names.has(name)) warning = `Another series is also named "${name}".`;
             names.set(name, column);
           }
         } else if (roles[column] === "category" || roles[column] === "label") {
           if (roles[column] === "category" && (value === null || value === undefined || value === "")) warning = "This row has no category label.";
+        } else if (roles[column] === "other") {
+          // A column the chart does not plot may hold anything.
         } else if (typeof value === "boolean") warning = "A yes/no value is not a number, so the chart draws a gap here.";
-        else if (value !== null && value !== undefined && !(typeof value === "number" || looksNumeric(value)) && String(value).trim() !== "")
-          warning = "This is not a number, so the chart draws a gap here.";
+        else if (value !== null && value !== undefined && chartNumber(value) === null && String(value).trim() !== "") warning = "This is not a number, so the chart draws a gap here.";
         if (warning) {
           cell.warning = warning;
           warnings.push({ section: address.section, row: address.row, column, message: `${describeAddress({ ...address, column })}: ${warning}` });
@@ -287,6 +456,10 @@ export function describeDataGrid(document, path, options = {}) {
     rowCount: bodyCount(model),
     columnCount: model.width,
     columnRoles: roles,
+    columnFormats: Array.from({ length: model.width }, (_, column) => (model.hasHeader ? formatOf(model.lines[0]?.[column]) : undefined)),
+    ...(model.hasHeader ? { columnNames: namesOfModel(model) } : {}),
+    ...(found.dataset ? { dataset: { id: found.dataset.id, ...(found.dataset.fields ? { fields: [...found.dataset.fields] } : {}), items: datasetUsage(document, found.dataset.id).map((entry) => entry.path) } } : {}),
+    ...(model.mapping ? { mapping: clone(model.mapping) } : {}),
     lines,
     warnings,
     merges: rectsOf(model).map((rect) => ({ ...addressOf(model, rect.u), column: rect.c, rowSpan: rect.rs, colSpan: rect.cs })),
@@ -336,24 +509,164 @@ export function gridPatches(parts, before, after) {
   return patches;
 }
 
+/** Like {@link gridPatches}, and also for a value that is added (`before` is undefined) or removed (`after` is undefined). */
+function valuePatches(parts, before, after) {
+  if (before === undefined && after === undefined) return [];
+  const pointer = opfPathToJsonPointer(parts);
+  if (before === undefined) return [{ op: "add", path: pointer, value: clone(after) }];
+  if (after === undefined) return [{ op: "test", path: pointer, value: clone(before) }, { op: "remove", path: pointer }];
+  return gridPatches(parts, before, after);
+}
+
+// --- following columns across an operation -------------------------------------------------------
+
+/** The column renames an operation made: a Map from the old name to the new one, for the columns that survived with another name. */
+function renamesOf(model) {
+  const names = namesOfModel(model);
+  const renames = new Map();
+  model.colOrigin.forEach((origin, column) => {
+    if (origin === null || origin === undefined) return;
+    const from = model.origNames[origin];
+    const to = names[column];
+    if (from !== undefined && to !== undefined && from !== to) renames.set(from, to);
+  });
+  return renames;
+}
+
+/**
+ * A chart `mapping` after an operation: a renamed column keeps its role, a column that no longer exists leaves the mapping
+ * (an emptied `series` is dropped, which restores "every other column"). A name the data never had is left alone. Returns
+ * undefined when nothing is left.
+ */
+function reconcileMapping(mapping, renames, before, after) {
+  if (!isObject(mapping)) return mapping;
+  const keep = (name) => {
+    const next = renames.has(name) ? renames.get(name) : name;
+    if (after.includes(next)) return next;
+    return before.includes(name) ? undefined : name;
+  };
+  const out = {};
+  for (const key of ["category", "x"]) {
+    if (typeof mapping[key] !== "string") continue;
+    const name = keep(mapping[key]);
+    if (name !== undefined) out[key] = name;
+  }
+  if (Array.isArray(mapping.series)) {
+    const series = mapping.series.map(keep).filter((name) => name !== undefined);
+    if (series.length) out.series = series;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+/** The changes to an inline chart or table: its data object, and the chart's `mapping` when a rename or deletion touches it. */
+function inlineChanges(found, model, style) {
+  const after = fromModel(model, found.data);
+  if (style && style.preset !== "custom") applyTableStyleToTable(after, style.preset);
+  const changes = [{ parts: found.dataParts, before: found.data, after }];
+  if (found.kind === "chart" && found.owner.mapping !== undefined) {
+    const next = reconcileMapping(found.owner.mapping, renamesOf(model), model.origNames, namesOfModel(model));
+    if (!same(found.owner.mapping, next)) changes.push({ parts: [...found.parts, "mapping"], before: found.owner.mapping, after: next });
+  }
+  return changes;
+}
+
+/**
+ * The changes to a chart or table that shows a dataset: the dataset itself (the shown columns mapped back to its own column
+ * indices, each row to the dataset row it came from, so columns `fields` hides keep their data), the item's `fields` and `mapping`,
+ * and the `fields` and `mapping` of every other item that shares the dataset when a column is renamed. A column that
+ * `fields` selects leaves only `fields` when deleted; without `fields` it leaves the dataset, which another item's `fields` or
+ * `mapping` that names it forbids.
+ */
+function datasetChanges(document, found, model) {
+  const { dataset, data } = found;
+  padLines(model);
+  const header = model.lines[0];
+  const names = namesOfModel(model);
+  const body = model.lines.slice(1);
+  const origin = model.colOrigin;
+  let columns;
+  let rows;
+  if (!dataset.fields) {
+    columns = header.map((raw) => raw);
+    rows = body.map((line) => line.map((raw) => raw));
+  } else {
+    const survivors = new Map();
+    origin.forEach((o, column) => {
+      if (o !== null && o !== undefined) survivors.set(dataset.indices[o], column);
+    });
+    columns = data.columns.map((column, index) => (survivors.has(index) ? header[survivors.get(index)] : column));
+    const position = new Map();
+    origin.forEach((o, column) => {
+      if (o !== null && o !== undefined) position.set(column, dataset.indices[o]);
+      else {
+        position.set(column, columns.length);
+        columns.push(header[column]);
+      }
+    });
+    rows = body.map((line) => {
+      const source = line[LINE_ORIGIN] !== undefined && Array.isArray(data.rows[line[LINE_ORIGIN]]) ? [...data.rows[line[LINE_ORIGIN]]] : [];
+      while (source.length < columns.length) source.push(null);
+      line.forEach((raw, column) => {
+        source[position.get(column)] = raw;
+      });
+      return source;
+    });
+  }
+  const renames = renamesOf(model);
+  const others = [];
+  const ownPath = found.parts.join(".");
+  walkDatasetItems(document, (entry) => {
+    if (entry.id === dataset.id && entry.parts.join(".") !== ownPath) others.push(entry);
+  });
+  if (!dataset.fields) {
+    const gone = model.origNames.filter((_, index) => !origin.includes(index));
+    for (const name of gone) {
+      const users = others.filter((entry) => (Array.isArray(entry.ref.fields) && entry.ref.fields.includes(name)) || (isObject(entry.item.mapping) && [entry.item.mapping.category, entry.item.mapping.x, ...(entry.item.mapping.series ?? [])].includes(name)));
+      if (users.length)
+        throw fail("dataset-column-in-use", `The column ${JSON.stringify(name)} is used by ${users.length === 1 ? "another chart or table" : `${users.length} other charts and tables`} that share the dataset '${dataset.id}'. Remove it there first, or use a copy of the data here.`, { column: name, items: users.map((entry) => entry.parts.join(".")) });
+    }
+  }
+  const changes = [{ parts: found.dataParts, before: data, after: { ...data, columns, rows } }];
+  if (dataset.fields) changes.push({ parts: [...dataset.refParts, "fields"], before: dataset.ref.fields, after: names });
+  if (found.kind === "chart" && found.owner.mapping !== undefined) {
+    const next = reconcileMapping(found.owner.mapping, renames, model.origNames, names);
+    if (!same(found.owner.mapping, next)) changes.push({ parts: [...found.parts, "mapping"], before: found.owner.mapping, after: next });
+  }
+  if (renames.size) {
+    for (const entry of others) {
+      if (Array.isArray(entry.ref.fields) && entry.ref.fields.some((name) => renames.has(name)))
+        changes.push({ parts: [...entry.refParts, "fields"], before: entry.ref.fields, after: entry.ref.fields.map((name) => (renames.has(name) ? renames.get(name) : name)) });
+      if (entry.kind === "chart" && isObject(entry.item.mapping)) {
+        const mapping = entry.item.mapping;
+        const rename = (name) => (renames.has(name) ? renames.get(name) : name);
+        const next = { ...mapping };
+        if (typeof mapping.category === "string") next.category = rename(mapping.category);
+        if (typeof mapping.x === "string") next.x = rename(mapping.x);
+        if (Array.isArray(mapping.series)) next.series = mapping.series.map(rename);
+        if (!same(mapping, next)) changes.push({ parts: [...entry.parts, "mapping"], before: mapping, after: next });
+      }
+    }
+  }
+  return changes;
+}
+
 function transact(document, path, action, mutate, extra = {}) {
   const found = locateGridData(document, path);
   if (extra.kind && extra.kind !== found.kind) throw fail("grid-wrong-kind", `This operation works on a ${extra.kind}, and the path points at a ${found.kind}.`, { path });
   const model = toModel(found);
   const problemsBefore = mergeProblems(model).length;
   const info = mutate(model, found) ?? {};
-  const style = info.restyle && found.kind === "table" ? readTableStyleOfTable(found.data) : undefined;
+  const style = info.restyle && found.kind === "table" && !found.dataset ? readTableStyleOfTable(found.data) : undefined;
   if (info.touchesStructure) assertMerges(model, problemsBefore, info.what ?? "This change");
   if (style && style.preset !== "custom") padLines(model);
-  const after = fromModel(model, found.data);
-  if (style && style.preset !== "custom") applyTableStyleToTable(after, style.preset);
-  const patches = gridPatches(found.dataParts, found.data, after);
+  const changes = found.dataset ? datasetChanges(document, found, model) : inlineChanges(found, model, style);
+  const patches = changes.flatMap((entry) => valuePatches(entry.parts, entry.before, entry.after));
   const changed = patches.length > 0;
   const before = validateOpfDocument(document);
   const result = changed ? checkedDocument(document, patches, before) : document;
   // `restyle`, `touchesStructure` and `what` steer this function only; the rest of what the operation reports is the caller's.
   const { restyle: _restyle, touchesStructure: _structure, what: _what, ...summary } = info;
-  return { action, ...summary, kind: found.kind, path: found.parts.join("."), document: clone(result), patches, changed };
+  return { action, ...summary, kind: found.kind, path: found.parts.join("."), ...(found.dataset ? { dataset: found.dataset.id } : {}), document: clone(result), patches, changed };
 }
 
 // --- row and column structure ------------------------------------------------------------------
@@ -370,7 +683,7 @@ function insertRows(model, at, count) {
   const u = at + offset(model);
   const crossing = rectsOf(model).filter((rect) => rect.u < u && u < rect.u + rect.rs);
   const reference = u - 1 >= offset(model) ? model.lines[u - 1] : u < model.lines.length ? model.lines[u] : undefined;
-  const fresh = Array.from({ length: count }, () => Array.from({ length: model.width }, (_, column) => (model.kind === "chart" ? null : referenceCell(model, reference, column))));
+  const fresh = Array.from({ length: count }, () => Array.from({ length: model.width }, (_, column) => (model.kind === "chart" || model.dataset ? null : referenceCell(model, reference, column))));
   model.lines.splice(u, 0, ...fresh);
   for (const rect of crossing) {
     model.lines[rect.u][rect.c] = withSpans(model.lines[rect.u][rect.c], rect.rs + count, rect.cs);
@@ -403,10 +716,14 @@ function insertColumns(model, at, count) {
   if (!Number.isInteger(at) || at < 0 || at > model.width) throw fail("grid-column-out-of-range", `A column can be inserted at positions 1 to ${model.width + 1}.`, { at });
   const crossing = rectsOf(model).filter((rect) => rect.c < at && at < rect.c + rect.cs);
   const reference = at - 1 >= 0 ? at - 1 : at < model.width ? at : -1;
+  // New columns of a dataset (or of a chart with a mapping) are named at once: names must stay unique.
+  const named = [];
+  if (model.hasHeader && needsNames(model)) for (let i = 0; i < count; i += 1) named.push(uniqueName(model, named));
   model.lines.forEach((line, u) => {
-    const fresh = Array.from({ length: count }, () => (model.kind === "chart" || (model.hasHeader && u === 0) ? filler(model, u) : referenceCell(model, line, reference)));
+    const fresh = Array.from({ length: count }, (_, i) => (model.hasHeader && u === 0 && needsNames(model) ? named[i] : model.kind === "chart" || model.dataset || (model.hasHeader && u === 0) ? filler(model, u) : referenceCell(model, line, reference)));
     line.splice(at, 0, ...fresh);
   });
+  model.colOrigin.splice(at, 0, ...Array(count).fill(null));
   for (const rect of crossing) {
     model.lines[rect.u][rect.c] = withSpans(model.lines[rect.u][rect.c], rect.rs, rect.cs + count);
     for (let y = rect.u; y < rect.u + rect.rs; y += 1) for (let i = 0; i < count; i += 1) model.lines[y][at + i] = null;
@@ -422,6 +739,7 @@ function deleteColumn(model, x) {
     else model.lines[rect.u][x + 1] = withSpans(anchor, rect.rs, rect.cs - 1);
   }
   for (const line of model.lines) line.splice(x, 1);
+  model.colOrigin.splice(x, 1);
   model.width -= 1;
 }
 
@@ -453,6 +771,7 @@ function moveColumns(model, from, count, to) {
     throw fail("grid-column-out-of-range", "That move leaves the table.", { from, count, to });
   if (from === to) return;
   for (const line of model.lines) moveBlock(line, from, count, to);
+  moveBlock(model.colOrigin, from, count, to);
 }
 
 // --- sorting -----------------------------------------------------------------------------------
@@ -529,6 +848,7 @@ function sortRows(model, column, options) {
 
 function setHeader(model, enabled, options) {
   if (model.kind !== "table") throw fail("grid-wrong-kind", "Only a table has a header row to turn on or off. A chart's first line always names its series.", {});
+  if (model.dataset) throw fail("grid-dataset-shared", `A table that shows the dataset '${model.dataset.id}' always has a header row: the dataset's column names.`, { dataset: model.dataset.id });
   if (enabled === model.hasHeader) return {};
   padLines(model);
   if (enabled) {
@@ -547,17 +867,23 @@ function setHeader(model, enabled, options) {
     model.hasHeader = true;
     return { header: true, use, restyle: true, touchesStructure: true, what: "A header row" };
   }
+  // A DataColumn header (`{ name, format }`) is not a body cell: it becomes its name. Its column format has nowhere to go and is dropped.
+  const dropped = model.lines[0].filter((raw) => isColumnObject(raw) && formatOf(raw) !== undefined).length;
+  model.lines[0] = model.lines[0].map((raw) => (isColumnObject(raw) ? raw.name : raw));
   model.hasHeader = false;
-  return { header: false, restyle: true };
+  return { header: false, restyle: true, ...(dropped ? { droppedFormats: dropped } : {}) };
 }
 
 // --- transpose ---------------------------------------------------------------------------------
 
 function transposeChart(model) {
   if (model.kind !== "chart") throw fail("grid-wrong-kind", "Only chart data can be transposed.", {});
+  if (model.dataset) throw fail("grid-dataset-shared", `Swapping categories and series would reshape the shared dataset '${model.dataset.id}' for every chart and table that uses it. Use a copy of the data first.`, { dataset: model.dataset.id });
   padLines(model);
   if (model.width < 2) throw fail("chart-transpose-empty", "Transposing needs at least one series column besides the categories.", {});
-  const [names, ...rows] = model.lines;
+  const [headers, ...rows] = model.lines;
+  // A column's number format belongs to its numbers: the old series names become category labels, as text.
+  const names = headers.map((cell) => String(valueOf(cell) ?? ""));
   let relabelled = 0;
   const categories = rows.map((row) => {
     const category = row[0];
@@ -568,6 +894,8 @@ function transposeChart(model) {
   const lines = [[names[0], ...categories], ...names.slice(1).map((name, index) => [name, ...rows.map((row) => row[index + 1] ?? null)])];
   model.lines = lines;
   model.width = widthOf(model);
+  // Every column is new: a mapping that named the old columns no longer applies.
+  model.colOrigin = Array(model.width).fill(null);
   return { rowsBefore: rows.length, columnsBefore: names.length, relabelled };
 }
 
@@ -575,20 +903,29 @@ function transposeChart(model) {
 
 function growTo(model, lines, width) {
   padLines(model);
-  while (model.lines.length < lines) model.lines.push(Array.from({ length: model.width }, () => (model.kind === "chart" ? null : "")));
+  while (model.lines.length < lines) model.lines.push(Array.from({ length: model.width }, () => emptyCell(model)));
   while (model.width < width) {
     model.lines.forEach((line, u) => line.push(filler(model, u)));
     model.width += 1;
+    model.colOrigin.push(null);
   }
 }
 
-function newRaw(model, raw, text, decimal, address) {
+// The column names of a shared dataset (and of a chart with a mapping) are how `fields` and `mapping` address columns: never blank.
+const blankNameError = (model, address, text) =>
+  address.section === "header" && model.hasHeader && needsNames(model) && String(text ?? "").trim() === ""
+    ? `A column name cannot be empty here: ${model.dataset ? "the shared dataset" : "the chart's column mapping"} addresses columns by name.`
+    : undefined;
+
+function newRaw(model, raw, text, decimal, address, roles) {
   const value = valueOf(raw);
+  const blank = blankNameError(model, address, text);
+  if (blank) return { error: blank };
   // Text that is already what the cell shows is left alone: a number kept as text stays text, runs keep their styling.
   const shown = cellText(raw, model.kind, decimal);
   if (Array.isArray(value)) {
     if (text.replace(/\r\n?/g, "\n") === shown.replace(/\r\n?/g, "\n")) return { skip: true };
-    return { raw: isStyled(raw) ? { ...raw, value: updateRichTextInput(value, text) } : updateRichTextInput(value, text) };
+    return { raw: withValue(raw, updateRichTextInput(value, text)) };
   }
   if (text === shown) return { skip: true };
   let next;
@@ -596,17 +933,21 @@ function newRaw(model, raw, text, decimal, address) {
     if (model.hasHeader && address.section === "header") next = text;
     else next = text === "" ? "" : isCanonicalNumber(text) ? Number(text) : text;
   } else if (address.section === "header") next = text;
-  else if (isNumericColumn(model, address.column)) {
+  else if (isNumericRole(roles[address.column])) {
+    // A chart number is read in the grid's number format and kept as a number. Text that is not a number is refused with
+    // a reason; it is never stored as a guess (core's chartNumber would draw it as a gap).
     const parsed = parseGridNumber(text, { decimal });
     if (parsed.error) return { error: parsed.error };
     next = parsed.empty ? null : parsed.value;
     if (next === null && (value === null || value === undefined)) return { skip: true };
-  } else next = text === "" ? null : text;
-  return { raw: isStyled(raw) ? { ...raw, value: next } : next };
+  } else if (roles[address.column] === "other") next = text === "" ? null : isCanonicalNumber(text) ? Number(text) : text;
+  else next = text === "" ? null : text;
+  return { raw: withValue(raw, next) };
 }
 
 function applyEdits(model, edits, decimal, owners) {
   const issues = [];
+  const roles = rolesOf(model);
   for (const edit of edits) {
     const address = { section: edit.section, row: edit.row ?? 0, column: edit.column };
     try {
@@ -620,11 +961,14 @@ function applyEdits(model, edits, decimal, owners) {
         const value = edit.value;
         if (model.kind === "chart" && !(value === null || ["string", "number", "boolean"].includes(typeof value))) throw fail("invalid-grid-value", "A chart cell is text, a number, true or false, or empty.", { cell: address });
         if (typeof value === "number" && !Number.isFinite(value)) throw fail("invalid-grid-value", "A cell cannot hold Infinity or NaN.", { cell: address });
-        model.lines[u][address.column] = isStyled(raw) ? { ...raw, value } : value;
+        if (model.dataset && address.section === "header" && typeof value !== "string") throw fail("invalid-grid-value", "A dataset column name is text.", { cell: address });
+        const blank = blankNameError(model, address, value);
+        if (blank && !(valueOf(raw) === "" && value === "")) throw fail("invalid-grid-value", blank, { cell: address });
+        model.lines[u][address.column] = withValue(raw, value);
         continue;
       }
       if (typeof edit.text !== "string") throw fail("invalid-grid-value", "Give the cell's new text.", { cell: address });
-      const outcome = newRaw(model, raw, edit.text, decimal, address);
+      const outcome = newRaw(model, raw, edit.text, decimal, address, roles);
       if (outcome.error) issues.push({ ...address, message: `${describeAddress(address)}: ${outcome.error}` });
       else if (!outcome.skip) model.lines[u][address.column] = outcome.raw;
     } catch (error) {
@@ -651,7 +995,7 @@ function pasteRows(model, anchor, matrix, options) {
   if (!Array.isArray(matrix) || !matrix.length) throw fail("invalid-grid-value", "There is nothing to paste.", {});
   const first = decimalOf(options);
   const attempt = (decimal) => {
-    const trial = { ...model, lines: clone(model.lines) };
+    const trial = { ...model, lines: cloneLines(model.lines), colOrigin: [...model.colOrigin] };
     const u0 = lineIndex(trial, anchor);
     const width = matrix.reduce((most, row) => Math.max(most, row.length), 0);
     growTo(trial, u0 + matrix.length, anchor.column + width);
@@ -678,6 +1022,7 @@ function pasteRows(model, anchor, matrix, options) {
   if (result.issues.length) throw refuse(result.issues);
   model.lines = result.trial.lines;
   model.width = result.trial.width;
+  model.colOrigin = result.trial.colOrigin;
   return { cells: result.cells, decimal, rows: matrix.length, restyle: true, touchesStructure: model.kind === "table", what: "Pasting" };
 }
 
@@ -781,6 +1126,141 @@ export function prepareTranspose(document, path) {
   return transact(document, path, "transpose", (model) => transposeChart(model), { kind: "chart" });
 }
 
+// --- number format of a column (RR-54) ---------------------------------------------------------
+
+/** Why `format` is not a valid number format ("#,##0", "0.0%", "$#,##0.00"), or undefined when it is valid or empty (empty clears the format). */
+export function columnFormatError(format) {
+  if (format === undefined || format === null || format === "") return undefined;
+  if (!supportsChartTableData) return "This version of OPF has no number formats; update @openpresentation/opf.";
+  return core.numberFormatError(format);
+}
+
+/** The header `raw` with `format` set, or cleared (`undefined`). A string header becomes `{ name, format }` and goes back to a string when the format is cleared. */
+function withColumnFormat(raw, format) {
+  if (isColumnObject(raw)) {
+    const next = { ...raw };
+    if (format === undefined) delete next.format;
+    else next.format = format;
+    return Object.keys(next).length === 1 ? next.name : next;
+  }
+  if (isStyled(raw)) {
+    const next = { ...raw };
+    if (format === undefined) delete next.format;
+    else next.format = format;
+    return Object.keys(next).length === 1 ? next.value : next;
+  }
+  if (format === undefined) return raw;
+  if (Array.isArray(raw)) return { value: raw, format };
+  return { name: raw === null || raw === undefined ? "" : String(raw), format };
+}
+
+function setColumnFormat(model, column, format) {
+  if (!model.hasHeader) throw fail("grid-no-header", "This table has no header row, so there is no column heading to hold a number format. Turn on the header row first.", {});
+  padLines(model);
+  if (!Number.isInteger(column) || column < 0 || column >= model.width) throw fail("grid-column-out-of-range", "Choose a column.", { column });
+  if (format !== undefined && format !== null && typeof format !== "string") throw fail("number-format-invalid", 'A number format is text such as "#,##0" or "0.0%".', { format });
+  const next = typeof format === "string" && format !== "" ? format : undefined;
+  const error = columnFormatError(next);
+  if (error) throw fail("number-format-invalid", error, { format: next });
+  if (ownersOf(model).has(`0:${column}`)) throw fail("table-cell-covered", `${describeAddress({ section: "header", row: 0, column })} is covered by a merged cell. Choose the merged heading.`, { column });
+  model.lines[0][column] = withColumnFormat(model.lines[0][column], next);
+  return { column, format: next ?? null };
+}
+
+/** Set or clear (`null` or "") the number format of column `column` (its header cell). A string header becomes `{ name, format }` and returns to a string when the format is cleared. Refused with the reason when the format is invalid or the table has no header row. */
+export function prepareGridColumnFormat(document, path, column, format, options = {}) {
+  return transact(document, path, "set-column-format", (model) => setColumnFormat(model, column, format), kindOf(options));
+}
+
+// --- chart mapping (RR-54) -----------------------------------------------------------------------
+
+/**
+ * The columns a chart plots and how they got that role: `{ path, xy, columns: [{ name, format?, role }], category, x?, series,
+ * authored? }`. `category`, `x` and `series` are column names (the mapping's, or core's positional default); `xy` is true for a chart
+ * with an X axis (scatter); `authored` is the chart's own `mapping`, when it has one. Roles are "category", "label", "x", "series"
+ * and "other" (a column nothing plots).
+ */
+export function describeChartMapping(document, path) {
+  const found = locateGridData(document, path);
+  if (found.kind !== "chart") throw fail("grid-wrong-kind", "Only a chart has a series mapping.", { path });
+  const model = toModel(found);
+  padLines(model);
+  const names = namesOfModel(model);
+  const xy = isXYType(found.chartType);
+  const { category, x, series } = mappingColumns(names.length, xy, model.mapping, names);
+  const roles = chartColumnRoles(names.length, found.chartType, { ...(model.mapping ?? {}) }, names);
+  return {
+    path: found.parts.join("."),
+    xy,
+    columns: names.map((name, index) => ({ name, ...(formatOf(model.lines[0][index]) ? { format: formatOf(model.lines[0][index]) } : {}), role: roles[index] })),
+    category: names[category],
+    ...(x === undefined ? {} : { x: names[x] }),
+    series: series.map((index) => names[index]),
+    ...(model.mapping ? { authored: clone(model.mapping) } : {}),
+  };
+}
+
+/**
+ * Set a chart's category, X and series columns by name. `wanted` is `{ category?, x?, series? }`; what it leaves out keeps its
+ * current value. A field that equals the default (the first column is the category, the second the X column, every other column a
+ * series, in order) is not written, and `chart.mapping` is removed when nothing is left. One patch.
+ */
+export function prepareChartMapping(document, path, wanted = {}) {
+  const found = locateGridData(document, path);
+  if (found.kind !== "chart") throw fail("grid-wrong-kind", "Only a chart has a series mapping.", { path });
+  const model = toModel(found);
+  padLines(model);
+  const names = namesOfModel(model);
+  const xy = isXYType(found.chartType);
+  const current = mappingColumns(names.length, xy, model.mapping, names);
+  const pick = (name, what) => {
+    const index = typeof name === "string" ? names.indexOf(name) : -1;
+    if (index < 0) throw fail("chart-mapping-unknown-column", `The ${what} column ${JSON.stringify(name)} is not a column of this chart's data. Choose ${names.map((entry) => JSON.stringify(entry)).join(", ")}.`, { column: name });
+    return index;
+  };
+  if (wanted.x !== undefined && !xy) throw fail("chart-mapping-x-unsupported", `A '${found.chartType ?? "chart"}' chart has no X axis, so it has no X column. Only a scatter chart does.`, { x: wanted.x });
+  const category = wanted.category !== undefined ? pick(wanted.category, "category") : current.category;
+  let x;
+  if (xy) x = wanted.x !== undefined ? pick(wanted.x, "X") : current.x === category || current.x === undefined ? defaultX(category, names.length) : current.x;
+  if (xy && x === category) throw fail("chart-mapping-conflict", "The X column and the category column must be different columns.", { category: names[category] });
+  if (xy && x !== undefined && x >= names.length) throw fail("chart-mapping-conflict", "An XY chart needs a column for X besides the category.", {});
+  const defaultSeries = names.map((_, index) => index).filter((index) => index !== category && index !== x);
+  // Without its own `series`, a chart plots every other column: that follows a new category or X column.
+  let series = wanted.series !== undefined ? wanted.series.map((name) => pick(name, "series")) : Array.isArray(model.mapping?.series) ? current.series : defaultSeries;
+  series = series.filter((index, position) => index !== category && index !== x && series.indexOf(index) === position);
+  if (!series.length) throw fail("chart-mapping-no-series", "Choose at least one series column to plot.", {});
+  const next = {};
+  if (category !== 0) next.category = names[category];
+  if (xy && x !== undefined && x !== defaultX(category, names.length)) next.x = names[x];
+  if (series.length !== defaultSeries.length || series.some((index, position) => index !== defaultSeries[position])) next.series = series.map((index) => names[index]);
+  const after = Object.keys(next).length ? next : undefined;
+  const before = validateOpfDocument(document);
+  const patches = valuePatches([...found.parts, "mapping"], found.owner.mapping, after);
+  const changed = patches.length > 0;
+  const result = changed ? checkedDocument(document, patches, before) : document;
+  return { action: "set-mapping", kind: "chart", path: found.parts.join("."), mapping: after ? clone(after) : null, document: clone(result), patches, changed };
+}
+
+// --- shared datasets (RR-54) -----------------------------------------------------------------------
+
+/**
+ * Replace a chart's or table's dataset reference with its own inline copy of the data (the columns `fields` selects, formats and
+ * the dataset's `source` kept). The dataset stays in the document for the other items. One patch; after it the item's edits no longer
+ * reach the shared dataset.
+ */
+export function prepareDetachDataset(document, path) {
+  const found = locateGridData(document, path);
+  if (!found.dataset) throw fail("grid-not-dataset", "This chart or table does not use a shared dataset.", { path });
+  if (!supportsChartTableData) throw fail("grid-core-too-old", "This version of OPF cannot copy a shared dataset; update @openpresentation/opf.", { path });
+  const inline = found.kind === "chart" ? core.inlineChartData(found.owner, document).data : core.inlineTableData(found.owner, document);
+  const pointer = opfPathToJsonPointer(found.dataset.refParts);
+  const patches = [{ op: "test", path: pointer, value: clone(found.dataset.ref) }, { op: "replace", path: pointer, value: clone(inline) }];
+  const result = checkedDocument(document, patches, validateOpfDocument(document));
+  return { action: "detach-dataset", kind: found.kind, path: found.parts.join("."), dataset: found.dataset.id, document: clone(result), patches, changed: true };
+}
+
+export { datasetUsage };
+
 // --- copy --------------------------------------------------------------------------------------
 
 /**
@@ -834,3 +1314,9 @@ export const moveGridColumns = (editor, path, from, to, count = 1, options = {})
 export const sortGridRows = (editor, path, column, options = {}) => run(editor, (document) => prepareSortRows(document, path, column, options), options);
 export const setGridHeader = (editor, path, enabled, options = {}) => run(editor, (document) => prepareSetHeader(document, path, enabled, options), options);
 export const transposeGridData = (editor, path, options = {}) => run(editor, (document) => prepareTranspose(document, path), options);
+/** Set (or clear, with `null` or "") the number format of a column's header as one undoable transaction. Throws `number-format-invalid` with the reason. See {@link columnFormatError}. */
+export const setGridColumnFormat = (editor, path, column, format, options = {}) => run(editor, (document) => prepareGridColumnFormat(document, path, column, format, options), options);
+/** Set a chart's category, X and series columns as one undoable transaction. See {@link prepareChartMapping}. */
+export const setChartMapping = (editor, path, wanted, options = {}) => run(editor, (document) => prepareChartMapping(document, path, wanted), options);
+/** Give a chart or table its own copy of a shared dataset's data, as one undoable transaction. See {@link prepareDetachDataset}. */
+export const detachGridDataset = (editor, path, options = {}) => run(editor, (document) => prepareDetachDataset(document, path), options);
