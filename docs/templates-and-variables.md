@@ -99,6 +99,45 @@ Which fields can use variables is decided by the schema of the *resolved* deck, 
 
 **Compatibility.** A deck that declares no content variable and is not a template is resolved by identity: nothing is searched, `{{` and `\{{` in its text keep their meaning (a Handlebars snippet in a code block is safe), and its color variables behave as before. Escapes are only processed in a deck that uses content variables.
 
+## Built-in variables
+
+Built-ins are read-only variables that come from the deck's own metadata, so a cover can say `{{speaker.name}}, {{speaker.title}} · {{organization.name}}` without declaring anything. Their names are dotted. A user-defined id matches `^[a-z][a-z0-9-]*` and never contains a dot, so a built-in can never collide with a user variable. (The one built-in without a dot, `speakers`, is a reserved id: declaring a variable named `speakers` is a validation error.)
+
+| Built-in | Kind | Source |
+| --- | --- | --- |
+| `deck.name`, `deck.description` | text | root `name`, `description` |
+| `deck.author` | text | root `author` (an array is joined with `, `) |
+| `speaker.name`, `.title`, `.email`, `.phone`, `.bio` | text | the first speaker |
+| `speaker.photo` | image | the first speaker |
+| `speakers` | list | every speaker's name, in order |
+| `speaker.<id>.<field>` | as above | the speaker with that id |
+| `organization.name`, `.legalName`, `.tagline`, `.domain`, `.email`, `.phone` | text | the primary organization |
+| `organization.logo` | image | the primary organization |
+| `organization.<id>.<field>` | as above | the organization with that id |
+
+The primary organization is the one with `role: 'primary'`, else the first (the rule the deck logo and the `organization` furniture field use). The speaker and organization fields may be an object or an array. A two-segment name (`speaker.name`) always means the first speaker or the primary organization; a three-segment name (`speaker.ada.name`) addresses an entry by its `id`.
+
+They use the two forms above and work wherever the same kind of user variable works: `{{speaker.name}}` inside any string (`{{speakers|; }}` takes a separator, like any list), and `var:speaker.photo` or `var:organization.logo` as a whole field. `var:speakers` splices every name into an array.
+
+```json
+{
+  "speaker": { "id": "ada", "name": "Ada Lovelace", "title": "CTO", "photo": "asset:ada" },
+  "organization": { "id": "acme", "name": "Acme Corp", "tagline": "Build the future" },
+  "design": { "footer": { "left": { "text": "{{organization.tagline}}" } } },
+  "slides": [{ "id": "cover", "title": "Quarterly review", "subtitle": "{{speaker.name}}, {{speaker.title}} · {{organization.name}}", "image": "var:speaker.photo" }]
+}
+```
+
+- **Unknown path.** `{{speaker.nickname}}`, `var:organization.nobody.name` or `{{deck.owner}}` is a validation error (`variable-unknown-builtin`) and stays as written in a resolved deck. A `speaker.<id>` or `organization.<id>` path whose id does not exist is the same error.
+- **Known path, no source value.** The built-in resolves to an empty string (a whole-field reference is omitted) and validation warns (`variable-builtin-missing`), as for an unfilled optional variable.
+- **Templates.** A template preview (`examples: true`) uses the document's real metadata for built-ins. When the document has none, the token or reference stays visible, the way an unfilled variable with no example does. Filling the template for real resolves a missing built-in to nothing.
+- **Nested tokens.** A built-in text that itself carries a token (`"name": "Review for {{client}}"`) is resolved once; a built-in that refers back to itself stays as written.
+- **Not overridable.** `values` cannot set a built-in; change the document field instead.
+- **Resolved before composition,** like user variables, so every engine draws the same text. `listBuiltinVariables(presentation)` returns each built-in with its kind, label, current value, whether the document has a source value, and where it is used (pickers and agents; the editor's Fill template panel lists them read-only).
+- The speaker and organization fields that are *not* built-ins are never drawn automatically: a speaker appears only through these variables and the `speaker` header/footer field, and `Organization.tagline`, `legalName`, `domain`, `email` and `phone` appear only through their built-ins. Per-slide values (slide number, total, section, date) stay header/footer fields: they need composition-time resolution and native PPTX fields.
+
+The `speaker: true` header/footer field draws the first speaker's name and title ("Ada Lovelace, CTO") as generated text in that zone, after `organization` in the stack order. See [dynamic composition](dynamic-composition.md).
+
 ## Templates
 
 A template is an OPF document that is allowed to be incomplete.
@@ -186,7 +225,7 @@ The editor package exposes the fill model (`@openpresentation/opf-editor/templat
 
 Each is vetoable; the alternative says what changing it would cost.
 
-1. **Token syntax `{{id}}` with ids matching the existing variable id pattern.** Familiar from Mustache, Handlebars and Jinja, readable in JSON, and not a valid identifier in prose. Alternatives: `${id}` (collides with template literals in code), `[[id]]`, dotted paths such as `{{client.name}}` (no nesting exists in the variable model; nested records are a follow-up).
+1. **Token syntax `{{id}}` with ids matching the existing variable id pattern.** Familiar from Mustache, Handlebars and Jinja, readable in JSON, and not a valid identifier in prose. Alternatives: `${id}` (collides with template literals in code), `[[id]]`, dotted paths such as `{{client.name}}` for user variables (no nesting exists in the variable model; nested records are a follow-up). Dotted names are reserved for the [built-in variables](#built-in-variables), which is why a user id can never contain a dot.
 2. **Escape `\{{`.** One rule with one sequence. `{{{{` doubling was rejected because it is ambiguous next to a real token.
 3. **Whole-field `var:id` carries typed values; inline `{{id}}` always makes text.** One reason each: a chart cell needs a number, a title needs a string. `var:` already existed for colors.
 4. **No `{ "var": "id" }` TextRun form.** Tokens inside a run's `text` give the same styling (`{ "text": "{{client}}", "bold": true }`) without a schema change to `TextRun`, and rich values travel through `var:id`. A second form would double the surface every consumer must handle.
@@ -200,6 +239,9 @@ Each is vetoable; the alternative says what changing it would cost.
 12. **`opf fill`: a deck per record, plus `--combine`; no `repeat` construct yet.** A slide marked `repeat` (one instance per row inside one deck, with shared slides emitted once) is the natural next step but needs a schema addition and a per-record scope; `--combine` covers "one slide group per record" without it.
 13. **English number and date formats only.** Separators and names are fixed so output never depends on host locale; a `locale` field is a follow-up.
 14. **Optional unfilled variables vanish; required ones never do.** The resolver does not guess a replacement for a missing value.
+
+15. **Built-ins are dotted and read from the document, not declared.** A dot can never appear in a user id, so there is no collision rule to learn. The cost is one non-dotted name, `speakers`, which is reserved. Per-slide values are not built-ins because they need composition-time resolution and native PPTX fields.
+16. **A missing built-in source resolves to nothing with a warning (previews of a template keep the token).** An unknown path is an error because it is a typo, not missing data.
 
 ## Limits
 

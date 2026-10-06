@@ -353,7 +353,7 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
@@ -575,7 +575,7 @@ export function resolveLogo(presentation: unknown, slide: unknown, options: Reso
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'logo' | 'organization' | 'socials' | 'section' | 'slideNumber' | 'date';
+  field: 'text' | 'image' | 'logo' | 'organization' | 'speaker' | 'socials' | 'section' | 'slideNumber' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
   /** String/asset source, when different from a generated field's flag. */
@@ -681,6 +681,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
   const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
+  const speakers=Array.isArray(options.presentation?.speaker)?options.presentation.speaker:[options.presentation?.speaker],speaker=record(speakers[0]),speakerRoot=Array.isArray(options.presentation?.speaker)?'speaker.0':'speaker';
   const inlinePlatforms=record(record(options.presentation?.catalogs).socialPlatforms).records,platformRecords=[...(Array.isArray(inlinePlatforms)?inlinePlatforms:[]),...(options.socialPlatforms??[])];
   const fontFamily=options.fonts?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
@@ -737,6 +738,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       }
       add('text',content.text);
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
+      if(content.speaker===true){if(typeof speaker.name==='string'&&speaker.name.trim())add('speaker',typeof speaker.title==='string'&&speaker.title.trim()?`${speaker.name}, ${speaker.title}`:speaker.name,true,`${speakerRoot}.name`);else error(`${path}.speaker`,'Generated speaker needs a named speaker in the presentation.','unresolved-content');}
       if(content.socials===true){
         const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,platformRecords,'organization')}));
         if(links.length)add('socials',links.map(link=>link.text).join('\n'),true,`${organizationRoot}.socials`,{links});else error(`${path}.socials`,'Generated social profiles need a primary organization with socials.','unresolved-content');

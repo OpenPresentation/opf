@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf]
+---
+FA-04: built-in variables read from the deck's own metadata: `deck.name|description|author`, `speaker.name|title|email|phone|bio|photo` (first speaker), `speakers` (a list of every name), `organization.name|legalName|tagline|domain|email|phone|logo` (primary organization), and `speaker.<id>.<field>` / `organization.<id>.<field>` by id. They use the existing `{{...}}` and `var:` syntax and resolve in `resolveVariables` before composition; an unknown path is a validation error, a missing source value resolves to nothing with a `variable-builtin-missing` warning, and template previews keep an absent built-in visible. New `listBuiltinVariables(presentation)` export; the id `speakers` is reserved for variables. `HeaderFooterItem.speaker` draws the first speaker's name and title (stacked after `organization`). The validator rejects duplicate speaker ids, duplicate organization ids and a `Speaker.organizationId` that names no organization. Speaker and Organization descriptions now say what is actually drawn.

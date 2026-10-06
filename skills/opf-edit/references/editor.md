@@ -58,7 +58,7 @@ Slide copies retain design/catalog/asset context. Insertion namespaces inline ca
 
 ## Fill template panel
 
-For a template or any deck with content variables, `@openpresentation/opf-editor/templates` lists the variables with typed inputs (text, number, date, color, URL, list, image source), shows required and unfilled state and where each is used, and re-renders the preview as values change. Values stay in the panel until applied: applying fills the variables through the session as one validated, undoable replacement, so a template can be filled and restored by undo. Inserting a variable token into a text field is an ordinary session edit.
+For a template or any deck with content variables, `@openpresentation/opf-editor/templates` lists the variables with typed inputs (text, number, date, color, URL, list, image source), shows required and unfilled state and where each is used, and re-renders the preview as values change. Values stay in the panel until applied: applying fills the variables through the session as one validated, undoable replacement, so a template can be filled and restored by undo. The panel also lists the deck's built-in variables (`speaker.*`, `organization.*`, `deck.*`, `speakers`) read-only, with the value each currently has and where it is used; they are filled from the document, not in the panel. Inserting a variable token into a text field is an ordinary session edit.
 
 ## Rich text ranges
 

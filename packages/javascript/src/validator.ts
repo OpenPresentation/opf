@@ -473,6 +473,33 @@ function validateSlideRegions(slide: Record<string, unknown>, slidePath: string)
   return issues;
 }
 
+// Speaker and organization ids are cross-referenced (Speaker.organizationId) and addressed by built-in variables
+// (`speaker.<id>.name`), so each set must be unique and a reference must resolve.
+function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const entries = (key: "speaker" | "organization"): { entry: Record<string, unknown>; path: string }[] => {
+    const field = value[key];
+    if (Array.isArray(field)) return field.flatMap((entry, index) => (isRecord(entry) ? [{ entry, path: `/${key}/${index}` }] : []));
+    return isRecord(field) ? [{ entry: field, path: `/${key}` }] : [];
+  };
+  const organizationIds = new Set<string>();
+  for (const key of ["organization", "speaker"] as const) {
+    const seen = new Set<string>();
+    for (const { entry, path } of entries(key)) {
+      if (typeof entry.id !== "string") continue;
+      if (seen.has(entry.id)) issues.push(semanticIssue(`${path}/id`, `${key} ids must be unique within a presentation`, { id: entry.id }));
+      seen.add(entry.id);
+      if (key === "organization") organizationIds.add(entry.id);
+    }
+  }
+  for (const { entry, path } of entries("speaker")) {
+    if (typeof entry.organizationId === "string" && !organizationIds.has(entry.organizationId)) {
+      issues.push(semanticIssue(`${path}/organizationId`, `organizationId '${entry.organizationId}' names no organization in the presentation; use the id of an entry in organization`, { id: entry.organizationId }));
+    }
+  }
+  return issues;
+}
+
 function validatePresentationSemantics(value: unknown): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
@@ -488,6 +515,12 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
     issues.push(semanticIssue("/language/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
       replacement: "en-GB",
     }));
+  }
+
+  issues.push(...deckMetadataIssues(value));
+  // 'speakers' is the one built-in variable name without a dot, so a declared variable may not take it.
+  if (isRecord(value.variables) && hasOwn(value.variables, "speakers")) {
+    issues.push(semanticIssue("/variables/speakers", "'speakers' is reserved for the built-in list of speaker names; choose another variable id", { id: "speakers" }));
   }
 
   // Slide and payload ids share one namespace, so the origin of the id already
