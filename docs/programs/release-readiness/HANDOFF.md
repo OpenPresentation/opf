@@ -7,8 +7,8 @@ invariants.
 
 ## State
 
-- Tracker: `pnpm report:release` prints the item counts (45 of 54 closed at this handoff; the open items are RR-14, RR-17,
-  RR-19, RR-20, RR-48, RR-49, RR-51, RR-53 and RR-54, which is in review). RR-03 and RR-05 closed on 2026-10-06 on the Windows
+- Tracker: `pnpm report:release` prints the item counts (46 of 54 closed at this handoff; the open items are RR-14, RR-17,
+  RR-19, RR-20, RR-48, RR-51, RR-53 and RR-54, which is in review). RR-03 and RR-05 closed on 2026-10-06 on the Windows
   native evidence; RR-54 (chart and table data) is new. Run `pnpm report:release -- --live` for the live state of every pull
   request a Now row links.
 - Published and verified (npm `latest`, `gitHead` = release merge commit, SLSA provenance, `npm audit signatures`):
@@ -79,9 +79,12 @@ Owner actions:
   (`UNDERSTAND_DECK_ENABLED`, `UNDERSTAND_DECK_ALLOWLIST` as Worker variables, `NEXT_PUBLIC_UNDERSTAND_DECK` as a build variable,
   which needs a rebuild); `AI_GATEWAY_API_KEY` is already a Worker secret. Left: confirm the AI Gateway $50 per month limit and
   rotate the old key if the removed `.env.example` value was real.
-- RR-49 descope decision (README, Open decisions 5): whether to drop the Vercel parts (the preview `deployment_status`
-  checks, the bypass secret [opf#299](https://github.com/OpenPresentation/opf/issues/299) and `PREVIEW_SMOKE_ENABLED`) now that
-  production is on Cloudflare. No Vercel setting needs to be made while this is open.
+- RR-49 is closed as `descoped` (owner, 2026-10-06: "we don't need Vercel only checks"; README, Open decisions 5): the Vercel-only checks are
+  removed in [openpresentation-site#83](https://github.com/Data-Advantage/openpresentation-site/pull/83), [pptx-gallery#103](https://github.com/Data-Advantage/pptx-gallery/pull/103) and [pptx-dev#107](https://github.com/Data-Advantage/pptx-dev/pull/107). Close-out: [opf#299](https://github.com/OpenPresentation/opf/issues/299) (the bypass secret) can be
+  closed, and no Vercel secret or `PREVIEW_SMOKE_ENABLED` variable is needed (delete them if they were ever set). Vercel still builds as a
+  warm rollback, so `vercel.json`, the Ignored Build Step and its test stay until the Vercel projects are removed (CF-08). The
+  CF-04 deploy secrets (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) are what makes the production checks run, and stay in the
+  Cloudflare program.
 - RR-19 leftovers: the 19 kept worktrees with uncommitted or unpushed work (the list is in the supervisor's scratchpad
   `wt-kept.txt`; e.g. opf-pptx ff-32 rich-metadata, rich-source and extension worktrees, pptx-gallery gallery41/42/44-45
   reviews, pptx-dev app58 with 266 modified files), and the `archive-*`, `shared-furniture-*` and `claude/*` branches.
@@ -138,7 +141,7 @@ Parked: [opf#335](https://github.com/OpenPresentation/opf/pull/335) (ready, not 
 
 ## Decisions taken on the owner's behalf
 
-All are vetoable and dated in the README decision log. The latest (2026-10-05 / 06): RR-05 and FF-12 accepted as met on the
+All are vetoable and dated in the README decision log. The latest (2026-10-05 / 06): RR-49 descoped by the owner (Vercel-only checks removed; the Ignored Build Step stays while Vercel builds); RR-05 and FF-12 accepted as met on the
 12-deck sample (the stricter script rule's one FAIL is kept as evidence); FF-13 done on the corrected audit; FF-27 and RR-03
 closed on the native renumber observation (the missing `datetime*` gallery snippet is treated as a coverage observation);
 slide-size presets keep OPF's values; FF-46 findings go through `sizeAdjust` rows and per-family host fixtures; RR-54 added with
