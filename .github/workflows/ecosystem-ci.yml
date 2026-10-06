@@ -391,23 +391,31 @@ jobs:
         run: |
           node --test scripts/metric-outline-ink.test.mjs
           node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
-      - name: Verify exact published registry packages and fidelity fixtures
+      # The registry consumer (and its own packed checks) is installed on every change: the current-checkout measurements
+      # below use its fonts.
+      - name: Install the exact published registry packages and check the registry consumer
         if: steps.scope.outputs.run == 'true' && matrix.shard == 'registry'
         working-directory: opf
+        run: pnpm test:registry-ecosystem
+      # RR-45 (opf#368, item 3): these test what is already on npm. A pull request that changes none of the paths they read
+      # (only core or CLI sources, schemas, docs; scripts/ecosystem-scope.mjs, registryForEvent) skips them; push to main,
+      # merge_group, the nightly run, manual runs and the label ecosystem-full always run them, so they stay a hard gate.
+      - name: Verify exact published registry packages and fidelity fixtures
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 'registry' && steps.scope.outputs.registry == 'true'
+        working-directory: opf
         run: |
-          pnpm test:registry-ecosystem
           pnpm test:layout-contracts:registry
           pnpm test:packed-browser registry
           node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-registry.json artifacts/npm/registry-consumer
           node scripts/test-packed-browser-guards.mjs
           node scripts/test-installed-code-guards.mjs --registry
           pnpm test:registry-fidelity
-          node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node packages/cli/test/packed.mjs --registry
-      - name: Measure current checkout code internals with registry fonts
+      - name: Measure current checkout quote and code internals with registry fonts
         if: steps.scope.outputs.run == 'true' && matrix.shard == 'registry'
         working-directory: opf
         run: |
+          node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
           node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
           node scripts/test-code-layout-browser.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json artifacts/code-layout-browser.json
       - name: Measure current checkout metric internals with registry fonts
