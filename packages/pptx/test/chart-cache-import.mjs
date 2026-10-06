@@ -242,9 +242,12 @@ for (const element of ['barChart', 'scatterChart']) {
         assert.deepEqual(bytes, before, 'failed import must not alter the package');
       }
     });
-    test(`${role}/${kind}: malformed exponents and non-exponent text retain the separate legacy policy`, async () => {
-      const pairs = [['1e', 1], ['1e+', 1], ['1e2tail', 12], ['1.2.3e4', 1.2],
-        ['1,200', 1200], ['$2.50', 2.5], ['text', 0], ['Infinity', 0], ['NaN', 0], ['  ', null]];
+    // RR-54: core's strict chart number rule replaces the legacy character stripping ('1e2tail' was 12, '$2.50' 2.5 and
+    // 'text' 0): a value that is not a number is a gap, never a guessed value. XML decimal forms ('+5', '007', '.5') stay numbers.
+    test(`${role}/${kind}: malformed exponents and non-numeric text are gaps under the strict chart number rule`, async () => {
+      const pairs = [['1e', null], ['1e+', null], ['1e2tail', null], ['1.2.3e4', null],
+        ['1,200', null], ['$2.50', null], ['text', null], ['Infinity', null], ['NaN', null], ['  ', null],
+        ['+5', 5], ['007', 7], ['.5', 0.5], ['-.25', -0.25], ['5.', 5], [' 12 ', 12]];
       const chart = await imported({element, labels: cache([], pairs.length, 'strRef'),
         values: [cache(pairs.map(([token], index) => point(index, token)), pairs.length, kind)],
       });

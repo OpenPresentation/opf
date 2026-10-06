@@ -113,18 +113,20 @@ for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.797693134
   assert.ok(Number.isInteger(count) && count >= 1, `finite bin count ${count}`);
   assert.doesNotMatch(result.chartex, /NaN|Infinity/, 'finite markup');
 }
-// One-column paths parse numbers as multi-column charts do ("12%", "$5", "1,234"), and skip cells that hold none.
+// One-column paths parse numbers as multi-column charts do (RR-54: core chartNumber, strict decimal strings only; "12%",
+// "$5" and "1,234" hold no number), and skip cells that hold none.
 {
-  const rows = [['12%'], ['$5'], ['1,234'], ['n/a'], [''], [null], [7]];
+  const rows = [['12'], ['-5'], ['1e3'], ['12%'], ['$5'], ['1,234'], ['n/a'], [''], [null], [7]];
   const histogram = await exported('histogram', {columns: ['Value'], rows});
-  assert.deepEqual(chartexValues(histogram.chartex), [['12', '5', '1234', '7']], 'four cells hold numbers');
-  assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '7']], 'the fallback keeps the row numbers');
+  assert.deepEqual(chartexValues(histogram.chartex), [['12', '-5', '1000', '7']], 'four cells hold numbers');
+  assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '10']], 'the fallback keeps the row numbers');
   const dots = await exported('dot-plot', {columns: ['V'], rows});
-  assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3', '7']], 'skipped rows leave gaps in the row numbers');
-  assert.deepEqual(numbers(dots.chart, 'yVal'), [['12', '5', '1234', '7']], 'skipped cells are not plotted as 0');
-  assert.match(dots.chartDiagnostics[0].message, /its 4 values \(3 non-numeric cells were skipped\)/);
-  const multi = await exported('column', {columns: ['Cat', 'V'], rows: [['a', '12%'], ['b', '$5'], ['c', '1,234']]});
-  assert.deepEqual(numbers(multi.chart, 'val'), [['12', '5', '1234']], 'multi-column charts parse the same way');
+  assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3', '10']], 'skipped rows leave gaps in the row numbers');
+  assert.deepEqual(numbers(dots.chart, 'yVal'), [['12', '-5', '1000', '7']], 'skipped cells are not plotted as 0');
+  assert.match(dots.chartDiagnostics.find((diagnostic) => diagnostic.code === 'chart-data-adapted').message, /its 4 values \(6 non-numeric cells were skipped\)/);
+  assert.equal(dots.chartDiagnostics.find((diagnostic) => diagnostic.code === 'chart-value-not-numeric').count, 4, '"12%", "$5", "1,234" and "n/a" are reported; "" and null are gaps');
+  const multi = await exported('column', {columns: ['Cat', 'V'], rows: [['a', '12'], ['b', '12%'], ['c', '1,234']]});
+  assert.deepEqual(numbers(multi.chart, 'val'), [['12']], 'multi-column charts parse the same way');
 }
 // A placeholder is plain words: no raw JSON, data or source URL in slide text.
 for (const data of [{columns: ['Category'], rows: [['a'], ['b']]}, {src: 'https://example.invalid/data.csv?token=secret'}]) {

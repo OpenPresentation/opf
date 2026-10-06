@@ -82,6 +82,41 @@ export function writeChartCategoryHeading(entries,chartPart,heading){
  entries[context.workbookPart]=zipSync(workbook);
 }
 
+// RR-54: the number formats of a generated chart's value cells, so Edit Data in PowerPoint shows them as the chart does.
+// `ranges` are the chart's numeric series ranges with their Excel codes ([{formula: "Sheet1!$B$2:$B$5", code}]). Each
+// distinct code becomes a custom numFmt (ids from 164) and a cellXfs entry; every cell of its range (blank gap cells too)
+// takes that style. PptxGenJS writes no cellXfs, so the default style 0 is written with them. A chart without formats is
+// never passed here, and its workbook keeps its bytes.
+export function writeChartWorkbookFormats(entries,chartPart,ranges){
+ if(!ranges.length)return;
+ const chart=xml(entries,chartPart)?.chartSpace;
+ const ref=relationship(entries,chartPart,chart?.externalData?.id);
+ if(!ref?.type?.endsWith('/package')||!entries[ref.path])throw Error('Generated chart has no embedded workbook.');
+ const workbook=unzipSync(entries[ref.path]);
+ const stylesPart='xl/styles.xml';
+ let styles=workbook[stylesPart]&&decoder.decode(workbook[stylesPart]);
+ if(!styles||/<cellXfs\b/.test(styles)||!/<numFmts count="\d+">/.test(styles)||!/<dxfs\b/.test(styles))throw Error('Generated chart workbook styles are not in the expected form.');
+ const codes=[...new Set(ranges.map(range=>range.code))];
+ const numFmts=codes.map((code,index)=>`<numFmt numFmtId="${164+index}" formatCode="${escape(code)}"/>`).join('');
+ styles=styles.replace(/<numFmts count="(\d+)">([\s\S]*?)<\/numFmts>/,(_match,count,body)=>`<numFmts count="${Number(count)+codes.length}">${body}${numFmts}</numFmts>`);
+ const xfs=codes.map((_code,index)=>`<xf numFmtId="${164+index}" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>`).join('');
+ // CT_Stylesheet order: numFmts, fonts, fills, borders, cellStyleXfs, cellXfs, cellStyles, dxfs.
+ styles=styles.replace(/<dxfs\b/,`<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="${codes.length+1}"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>${xfs}</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles><dxfs`);
+ workbook[stylesPart]=encoder.encode(styles);
+ const sheets=array(xml(workbook,'xl/workbook.xml')?.workbook?.sheets?.sheet);
+ for(const {formula,code}of ranges){
+  const range=/^(?:'((?:[^']|'')+)'|([^'!]+))!\$?([A-Z]+)\$?(\d+):\$?([A-Z]+)\$?(\d+)$/i.exec(formula);
+  if(!range||range[3].toUpperCase()!==range[5].toUpperCase())throw Error('Generated chart series range is not one column.');
+  const name=range[1]?.replaceAll("''","'")??range[2];
+  const sheetRef=relationship(workbook,'xl/workbook.xml',sheets.find(sheet=>sheet.name===name)?.id);
+  if(!sheetRef?.type?.endsWith('/worksheet')||!workbook[sheetRef.path])throw Error('Generated chart series sheet is missing.');
+  const column=range[3].toUpperCase(),first=Number(range[4]),last=Number(range[6]),style=codes.indexOf(code)+1;
+  const sheet=decoder.decode(workbook[sheetRef.path]).replace(/<c r="([A-Z]+)(\d+)"(?![^>]*\bs=)/g,(cell,letters,row)=>letters===column&&Number(row)>=first&&Number(row)<=last?`<c r="${letters}${row}" s="${style}"`:cell);
+  workbook[sheetRef.path]=encoder.encode(sheet);
+ }
+ entries[ref.path]=zipSync(workbook);
+}
+
 // PptxGenJS 4.0.1 wrote broken range metadata into chart workbooks (upstream gitbrent/PptxGenJS#1531). pptxgenjs-plus
 // 4.3.4 (vendored) fixed the category and scatter tables; its bubble table still takes its last row from the column
 // count (lofcz/pptxgenjs-plus#15). The 4.0.1 shapes: the

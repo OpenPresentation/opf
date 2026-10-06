@@ -69,14 +69,16 @@ for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'radar']
   const two = type === 'pie' || type === 'doughnut' ? ['Category', 'One'] : ['Category', 'One', 'Two'];
   const data = two.length === 2
     ? [['a', 1], ['b', null], ['c', 0], ['d', 'n/a'], ['e', '12%'], ['f', true]]
-    : [['a', 1, 2], ['b', null, 3], ['c', 0, null], ['d', 'n/a', ''], ['e', '12%', 5], ['f', true, 6]];
+    : [['a', 1, 2], ['b', null, 3], ['c', 0, null], ['d', 'n/a', ''], ['e', '12', 5], ['f', true, 6]];
+  if (two.length === 2) data[4] = ['e', '12'];
   const {chart, sheet, rows} = await chartRows(type, data, two);
   const points = [...chart.matchAll(/<c:numCache>[\s\S]*?<\/c:numCache>/g)][0][0];
   assert.match(points, /<c:ptCount val="6"\/>/, `${type}: the cache keeps its row count`);
   assert.ok(!/<c:pt idx="\d+"><c:v><\/c:v>/.test(points), `${type}: no empty point`);
   assert.ok(!/<c:pt idx="1">/.test(points), `${type}: the null cell has no point`);
   assert.match(points, /<c:pt idx="2"><c:v>0<\/c:v><\/c:pt>/, `${type}: a real zero is a zero`);
-  assert.match(points, /<c:pt idx="4"><c:v>12<\/c:v><\/c:pt>/, `${type}: numeric strings still parse`);
+  // RR-54: a strict decimal string is a number (core chartNumber); '12%' would be a gap, see test/rr-54-chart-table-data.mjs.
+  assert.match(points, /<c:pt idx="4"><c:v>12<\/c:v><\/c:pt>/, `${type}: strict decimal strings parse`);
   assert.ok(!/<v><\/v>/.test(sheet), `${type}: no empty numeric workbook cell`);
   assert.match(sheet, /<c r="B3"\/>/, `${type}: the null cell is blank in the workbook`);
   assert.deepEqual(rows.map(row => row[1]), [1, null, 0, null, 12, null], `${type}: gaps and zeros import as authored`);

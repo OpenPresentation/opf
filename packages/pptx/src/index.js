@@ -5,7 +5,9 @@ import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
 import {legacyVendorOutput} from './vendor-compat.js';
-import {readChartCategoryHeading,writeChartCategoryHeading,repairChartWorkbookRanges} from './chart-workbook.js';
+import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
+import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
+import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
@@ -262,6 +264,11 @@ export async function toPptx(input, options = {}) {
   context.chartFonts = new Map();
   context.chartPalettes = new Map();
   context.chartex = new Map();
+  // RR-54: the authored data form of charts and tables (OPF_DATA_V1) and the datasets map (OPF_DATASETS_V1), `full` mode only.
+  context.dataRecords = new Map();
+  context.dataRecordPaths = new Map();
+  context.datasets = presentation.datasets;
+  context.reportDiagnostic = options.onDiagnostic;
   context.imageFormat = options.imageFormat ?? "compatible";
   // Chartex export mode (FF-22b): 'auto' (default) writes native chartex parts for the constructs the native PowerPoint
   // check confirmed (treemap, histogram, pareto, box-and-whisker, waterfall, funnel) and the clustered column fallback
@@ -378,11 +385,15 @@ export async function fromPptx(input, options = {}) {
   if (Object.keys(furniture.design).length) imported.design = {...imported.design, ...furniture.design};
   if (furniture.organization) imported.organization = furniture.organization;
 
+  // RR-54: the datasets recorded at export (OPF_DATASETS_V1). Chart and table frames restore their dataset references against
+  // them, so the document carries them before document provenance validates the restored document.
+  const datasets = readDatasetsTag(entries, presentationRoot, presentationRels, options.onDiagnostic);
   const mediaRegistry = Object.create(null);
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage)}, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
   }
+  if (datasets) imported.datasets = datasets;
   // Native sections (PowerPoint's own section list, `Default Section` = none)
   // are reconciled with the footer text and the stored value in restoreDocumentProvenance.
   const slideSections = nativeSections(presentationRoot, slideIdsInOrder(presentationRoot, presentationRels, entries, slidePaths));
@@ -806,8 +817,10 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     ? importTableFrames(slidePath, {
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
+  // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
+  const dataContext = label => ({datasets: options.dataProvenance?.datasets, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
   for (const [index, frame] of frames.entries()) {
-    const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`));
+    const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
     if (item) items.push({...item, sources: [`frame:${index}`]});
   }
   // A chartex chart is an mc:AlternateContent: the choice frame references the cx:chartSpace part; the fallback is a classic chart frame
@@ -815,8 +828,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [alternateIndex, alternate] of asArray(tree?.["mc:AlternateContent"]).entries()) {
     const choice = asArray(alternate?.["mc:Choice"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
     const fallback = asArray(alternate?.["mc:Fallback"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);
-    const chosen = choice ? importGraphicFrame(entries, choice, slidePath, relationships, undefined, chartReport(`charts.alt${alternateIndex}`)) : null;
-    const item = chosen?.payload?.type === "chart" ? chosen : fallback ? importGraphicFrame(entries, fallback, slidePath, relationships, undefined, chartReport(`charts.alt${alternateIndex}`)) : chosen;
+    const chosen = choice ? importGraphicFrame(entries, choice, slidePath, relationships, undefined, chartReport(`charts.alt${alternateIndex}`), dataContext(`alt${alternateIndex}`)) : null;
+    const item = chosen?.payload?.type === "chart" ? chosen : fallback ? importGraphicFrame(entries, fallback, slidePath, relationships, undefined, chartReport(`charts.alt${alternateIndex}`), dataContext(`alt${alternateIndex}`)) : chosen;
     if (item && item.kind !== "unknown") items.push({...item, sources: [`alt:${alternateIndex}`]});
   }
 
@@ -858,19 +871,39 @@ function importShape(shape, dimensions, paragraphs = readParagraphs(shape["p:txB
   };
 }
 
-function importGraphicFrame(entries, frame, slidePath, relationships, importedTable, report) {
+function importGraphicFrame(entries, frame, slidePath, relationships, importedTable, report, data = {}) {
   const bounds = shapeBounds(frame["p:xfrm"]);
   const name = scalarText(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]?.name).trim();
   const graphicData = frame["a:graphic"]?.["a:graphicData"];
   const table = graphicData?.["a:tbl"];
+  // RR-54: the frame's chart or table data record (src/data-provenance.js); an unreadable record is reported and ignored.
+  const record = kind => {
+    try {
+      const value = readDataTag(entries, frame, relationships);
+      return value?.kind === kind ? value : undefined;
+    } catch (error) {
+      data.report?.(kind, {code: 'invalid-data-provenance', message: `${errorMessage(error)} The ${kind} imports the values it shows.`});
+      return undefined;
+    }
+  };
+  // A record that passed its checks but cannot be restored (it fails validation in a way that throws) is reported too.
+  const restore = (kind, imported, apply) => {
+    try {
+      return apply();
+    } catch (error) {
+      data.report?.(kind, {code: 'invalid-data-provenance', message: `${errorMessage(error)} The ${kind} imports the values it shows.`});
+      return imported;
+    }
+  };
   if (table) {
+    const stored = importedTable && record('table');
     return {
       kind: "table",
       bounds,
       name,
       payload: {
         type: "table",
-        table: importedTable
+        table: stored ? restore('table', importedTable, () => restoreTableData(importedTable, stored, {datasets: data.datasets, report: diagnostic => data.report?.('table', diagnostic)})) : importedTable
       }
     };
   }
@@ -878,9 +911,14 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   const chartExRelId = graphicData?.uri === CHARTEX_GRAPHIC_DATA_URI ? graphicData?.["cx:chart"]?.["r:id"] : undefined;
   const chartRelId = graphicData?.["c:chart"]?.["r:id"] ?? chartExRelId;
   if (chartRelId) {
-    const chart = chartExRelId
+    const imported = chartExRelId
       ? chartexFromRelationship(entries, relationships, chartExRelId, report)
       : chartFromRelationship(entries, slidePath, relationships, chartRelId, report);
+    const stored = imported && record('chart');
+    const part = relationships.get(chartRelId)?.path;
+    const chart = stored && part && entries[part]
+      ? restore('chart', imported, () => restoreChartData(imported, stored, chartEvidence(decodeText(entries[part])), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
+      : imported;
     return {
       kind: "chart",
       bounds,
@@ -1183,18 +1221,22 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
 
   const budget = { cells: 0 };
   const cachePath = (index, role) => `${relationship.path}#c:ser[${index}]/${role}`;
+  // RR-54: each series' number format code (c:numCache or c:numLit formatCode); core maps the codes it can back to column formats.
+  const valueCodes = series.map(entry => cacheFormatCode(entry?.["c:val"] ?? entry?.["c:yVal"]));
+  const xCode = chartNode.type === 'scatter' ? cacheFormatCode(series[0]?.["c:xVal"]) : undefined;
   // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
   const withOptions = chart => {
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter'});
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes});
     for (const note of notes) report?.(note);
+    if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
     return chart && Object.keys(options).length ? {...chart, ...options} : chart;
   };
-  if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath));
+  if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
   const values = series.map((entry, index) => {
     const role = entry?.["c:val"] !== undefined ? 'c:val' : 'c:yVal';
-    return cachedValues(entry?.[role], cachePath(index, role), budget, numericCacheValue);
+    return cachedValues(entry?.[role], cachePath(index, role), budget, strictCacheValue(budget));
   });
   const rowCount = values.reduce((count, row) => Math.max(count, row.length), labels.length);
   if (rowCount === 0) return null;
@@ -1213,21 +1255,39 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   return withOptions({
     type: chartNode.type,
     data: {
-      columns: [readChartCategoryHeading(entries,relationship.path) ?? "Category", ...names],
+      columns: formattedColumns([readChartCategoryHeading(entries,relationship.path) ?? "Category", ...names], [undefined, ...valueCodes], report),
       rows
     }
   });
 }
 
+// The format code of a numeric cache (c:numRef/c:numCache or c:numLit), or undefined.
+function cacheFormatCode(node) {
+  const cache = node?.["c:numRef"]?.["c:numCache"] ?? node?.["c:numLit"];
+  const code = cache?.["c:formatCode"];
+  return code === undefined ? undefined : scalarText(code);
+}
+
+// RR-54: a cached value is a number in strict decimal syntax (core chartNumber) or another XML number form (a leading '+',
+// leading zeros, '.5'); anything else is a gap, counted for one chart-value-not-numeric diagnostic. Exponent tokens keep their
+// own range checks (numericCacheValue).
+function strictCacheValue(budget) {
+  return (value, path) => {
+    const number = numericCacheValue(value, path);
+    if (number === null && value !== null && value.trim() !== '') (budget.rejected ??= []).push(path);
+    return number;
+  };
+}
+
 // Scatter charts share X values (c:xVal) across Y series (c:yVal). OPF keeps
 // them category-major: [point label, X, Y1, Y2, ...]; native charts carry no
 // point labels, so points are numbered.
-function scatterFromSeries(entries, chartPart, series, budget, cachePath) {
+function scatterFromSeries(entries, chartPart, series, budget, cachePath, {codes = [], xCode, report} = {}) {
   // The same cache helpers as every other chart: bounded, indexed by c:pt@idx, with gaps kept as null (never plotted as 0).
   const xRole = series[0]?.["c:xVal"];
-  const xs = cachedValues(xRole, cachePath(0, "c:xVal"), budget, numericCacheValue);
+  const xs = cachedValues(xRole, cachePath(0, "c:xVal"), budget, strictCacheValue(budget));
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, "c:tx"), budget) ?? `Series ${index + 1}`);
-  const values = series.map((entry, index) => cachedValues(entry?.["c:yVal"], cachePath(index, "c:yVal"), budget, numericCacheValue));
+  const values = series.map((entry, index) => cachedValues(entry?.["c:yVal"], cachePath(index, "c:yVal"), budget, strictCacheValue(budget)));
   const rowCount = values.reduce((count, row) => Math.max(count, row.length), xs.length);
   if (rowCount === 0) return null;
   if (rowCount * (series.length + 2) > MAX_CHART_CACHE_CELLS) {
@@ -1236,7 +1296,7 @@ function scatterFromSeries(entries, chartPart, series, budget, cachePath) {
   const rows = [];
   // A chart without c:xVal plots against 1..n natively; a c:xVal gap stays a gap.
   for (let index = 0; index < rowCount; index += 1) rows.push([String(index + 1), xRole === undefined ? index + 1 : xs[index] ?? null, ...values.map((row) => row[index] ?? null)]);
-  return { type: "scatter", data: { columns: ["Point", readChartCategoryHeading(entries, chartPart) ?? "X", ...names], rows } };
+  return { type: "scatter", data: { columns: formattedColumns(["Point", readChartCategoryHeading(entries, chartPart) ?? "X", ...names], [undefined, xCode, ...codes], report), rows } };
 }
 
 // A chartex part (cx:chartSpace): the series layoutIds name the kept OPF chart
@@ -1269,13 +1329,17 @@ function firstChartNode(plotArea) {
 const MAX_CHART_CACHE_POINTS = 100_000;
 const MAX_CHART_CACHE_CELLS = 1_000_000;
 
-// Import complete decimal exponent tokens without the exporter's legacy
-// character stripping. Other numeric strings deliberately retain that policy.
+// Import complete decimal exponent tokens with their range checks. RR-54: every other token is an XML decimal (xsd:double
+// without an exponent: a leading '+', leading zeros, '.5', '5.', and any number of digits, so 1e20, which the exporter
+// writes as "100000000000000000000", reads back); anything else is a gap, never a stripped or guessed value.
 function numericCacheValue(value, path) {
   if (value === null || value.trim() === '') return null;
   const token = value.trim();
   const exponent = /^([+-]?(?:\d+(?:\.\d*)?|\.\d+))[eE][+-]?\d+$/.exec(token);
-  if (!exponent) return numericValue(value);
+  if (!exponent) {
+    const number = /^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(token) ? Number(token) : NaN;
+    return Number.isFinite(number) ? number : null;
+  }
   const parsed = Number(token);
   if (!Number.isFinite(parsed) || (parsed === 0 && /[1-9]/.test(exponent[1]))) {
     const reason = Number.isFinite(parsed) ? 'underflows to zero' : 'overflows';
@@ -1833,10 +1897,10 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addMediaPayload(slide, presentation, payload.video, region, path, context, options);
       break;
     case "chart":
-      addChartPayload(slide, payload.chart, region, context, options, path);
+      addChartPayload(slide, payload.chart, region, context, options, path, presentation);
       break;
     case "table":
-      addTablePayload(slide, payload.table, region, context, options, path);
+      addTablePayload(slide, payload.table, region, context, options, path, presentation);
       break;
     case "code":
       addCodePayload(slide, payload.code, codeLayout, region, context, path, options);
@@ -2120,14 +2184,17 @@ function applyChartTextSize(xml, size) {
     `<a:defRPr${/\bsz="[^"]*"/.test(attributes) ? attributes.replace(/\bsz="[^"]*"/, `sz="${size}"`) : `${attributes} sz="${size}"`}${close}>`));
 }
 
-function addChartPayload(slide, chart, region, context, options = {}, path = "chart") {
-  const chartData = toPptxChartData(chart, context.chartexMode);
+function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation) {
+  const chartData = toPptxChartData(chart, context.chartexMode, presentation);
   if (!chartData.series) {
     // Never lose a chart silently: the placeholder frame stands in for it, and a diagnostic names the reason.
     options.onDiagnostic?.({code: "chart-data-unplottable", path, message: chartData.message, reason: chartData.reason});
     addPlaceholderPayload(slide, "Chart", chartData.summary, region, context);
     return;
   }
+  // RR-54: one strict-number diagnostic per chart, and core's mapping warnings (chart-mapping-adapted) on the chart's path.
+  if (chartData.notNumeric) options.onDiagnostic?.({code: "chart-value-not-numeric", path, message: chartData.notNumeric.message, count: chartData.notNumeric.count});
+  for (const entry of chartData.diagnostics ?? []) options.onDiagnostic?.({code: entry.code, path, message: entry.message, pointer: entry.path});
   for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
   // RR-35: axis titles, legend position and data labels (core resolves them against what the chart type can show).
   const chartOptions = resolveChartOptionsFor(chart);
@@ -2142,8 +2209,13 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
   const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
   const textSize = chartTextSize(context);
-  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading ?? chart.data.columns[0],labelColor,spec:chartData.spec,textSize,
-    options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chart.data.rows.length});
+  // RR-54: the columns' number formats (Excel codes per exported series) for the caches, labels, value axis and workbook.
+  // The value axis shows the first plotted series' format (General when it has none), as the preview does.
+  const numberFormats = chartData.formats && {...chartData.formats, axis: chartData.spec.grouping === 'percentStacked' ? undefined : chartData.formats.series[0],
+    labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
+  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,spec:chartData.spec,textSize,
+    options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
+  recordPayloadData(context, objectName, 'chart', presentation, path);
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   const preferredPalette = CHART_COLORS.map(color=>`#${color}`);
   const palette = (typeof opfComposition.chartPaletteForFill === "function" ? opfComposition.chartPaletteForFill(panelFill, preferredPalette) : preferredPalette.map(color=>chartColorForFill(panelFill,color))).map(color=>normalizeHex(color));
@@ -2152,7 +2224,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette, textSize, options: chartOptions});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -2202,7 +2274,25 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   });
 }
 
-function addTablePayload(slide, table, region, context, options, path) {
+// RR-54: a chart or table that uses a dataset, DataColumn objects, a mapping, a data source or number formats records its
+// authored data form on its native frame (src/data-provenance.js), in `full` provenance mode only. `path` is the composed
+// item's path ("slides.0.blocks.1.chart"), which names the authored value (composition hands over the inline copy).
+function recordPayloadData(context, objectName, kind, presentation, path, layout) {
+  if (context.provenanceMode !== 'full' || !context.dataRecords || !presentation) return;
+  let authored = presentation;
+  for (const key of String(path).split('.')) authored = authored !== null && typeof authored === 'object' ? authored[Array.isArray(authored) ? Number(key) : key] : undefined;
+  const record = kind === 'chart' ? chartDataRecord(authored, presentation.datasets) : tableDataRecord(authored, layout);
+  if (record) {
+    context.dataRecords.set(objectName, record);
+    context.dataRecordPaths.set(objectName, String(path));
+  }
+}
+
+function addTablePayload(slide, authoredTable, region, context, options, path, presentation) {
+  // RR-54: a dataset-backed table is laid out as its inline copy (composition normally hands that over already); core's
+  // layout gives each body cell its display text (a number with a format becomes its formatted text) and each DataColumn
+  // header its name.
+  const table = inlineTableData(authoredTable, presentation);
   const scale = Math.min(context.dimensions.widthInches * 96, context.dimensions.heightInches * 96) / 720;
   const hasHeaders = Array.isArray(table?.columns) && table.columns.length > 0;
   const sourceRows = [...(hasHeaders ? [table.columns] : []), ...(table?.rows ?? [])];
@@ -2214,7 +2304,7 @@ function addTablePayload(slide, table, region, context, options, path) {
 
   const layout = layoutTable(table, {x:region.x*96,y:region.y*96,width:region.w*96,height:region.h*96}, {
     scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path,
-    ...(context.direction === 'rtl' ? {direction: 'rtl'} : {})
+    ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {})
   });
   const columnCount = layout.columnCount;
   const rows = layout.rows.map(row => row.cells.map(cell => {
@@ -2277,6 +2367,7 @@ function addTablePayload(slide, table, region, context, options, path) {
   }));
   const objectName = `OPF table ${context.tableHeaders.size + 1}`;
   context.tableHeaders.set(objectName, hasHeaders);
+  recordPayloadData(context, objectName, 'table', presentation, path, layout);
   if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:"accent5",width:1/scale}});
   slide.addTable(rows, {
     objectName,
@@ -2754,15 +2845,31 @@ function textRuns(value, context, fallbackFontSize) {
  * (histogram, dot plot) have no category column, so their values are plotted directly: a histogram is binned
  * into equal-width bins and exported as a column chart of the counts, every other type plots the values against
  * their row numbers. `adapted` names that transformation so it is reported, never silent.
+ *
+ * RR-54: the data is resolved by core (`resolveChartData`, docs/chart-table-data.md): a dataset reference, DataColumn
+ * objects and `chart.mapping` become the canonical positional table [category, (x,) ...series], and every value cell
+ * goes through core's strict `chartNumber` (a string that is not a plain decimal is a gap, reported once per chart as
+ * `chart-value-not-numeric`). `formats` holds the Excel codes of the columns' number formats per exported series.
  */
-function toPptxChartData(chart, chartexMode = 'auto') {
-  const data = chart?.data;
+function toPptxChartData(chart, chartexMode = 'auto', presentation) {
   const unplottable = (reason, summary, message) => ({reason, summary, message: `${message} No native chart was exported; a placeholder frame stands in for it.`});
-  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) {
+  // A dataset reference is inlined from the document first (composition normally hands over the inline copy already).
+  const source = isDatasetRef(chart?.data) ? inlineChartData(chart, presentation) : chart;
+  const authored = source?.data;
+  if (isDatasetRef(authored)) {
+    return unplottable("dataset-unknown", "The chart's dataset is missing, so it cannot be drawn here.", `The chart references dataset '${stringifyText(authored.dataset)}', which the document does not hold (or a field it names).`);
+  }
+  if (!authored || !Array.isArray(authored.columns) || !Array.isArray(authored.rows)) {
     return unplottable("data-not-inline", "Chart data is not inline, so it cannot be drawn here.", "The chart data is not inline columns and rows (for example an external data source). Supply inline columns and rows.");
   }
-  if (data.rows.length === 0) return unplottable("no-rows", "The chart has no data rows.", "The chart data has no rows.");
-  if (data.columns.length === 0) return unplottable("no-columns", "The chart has no data columns.", "The chart data has no columns.");
+  if (authored.rows.length === 0) return unplottable("no-rows", "The chart has no data rows.", "The chart data has no rows.");
+  if (authored.columns.length === 0) return unplottable("no-columns", "The chart has no data columns.", "The chart data has no columns.");
+  const resolvedData = resolveChartData(source, presentation);
+  if (!resolvedData.ok) return unplottable(resolvedData.reason, "The chart data cannot be drawn here.", resolvedData.message);
+  const data = {columns: resolvedData.columns, rows: resolvedData.rows};
+  const columnCodes = (resolvedData.formats ?? []).map(excelCode);
+  const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');
+  const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
   const resolved = resolveChartType(chart.type).spec;
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
   // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
@@ -2780,61 +2887,94 @@ function toPptxChartData(chart, chartexMode = 'auto') {
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
     adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart ${reason}; its data is exported as a native clustered column chart instead.`});
   }
-  const mapped = {type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined};
+  const mapped = {type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, diagnostics, heading: data.columns[0], pointCount: data.rows.length};
+  // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
+  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined ? {...result, formats} : result;
   if (data.columns.length === 1) {
-    const heading = stringifyText(data.columns[0]);
-    const cell = (row) => Array.isArray(row) ? row[0] : row;
-    // The same parsing as multi-column charts (`numericValue`: "12%", "$5", "1,234"); a cell that holds no number is skipped, never plotted as 0.
-    const points = data.rows.map((row, index) => ({row: index + 1, value: parsedNumber(cell(row))})).filter((point) => point.value !== null);
-    if (points.length === 0) {
+    const heading = data.columns[0];
+    // The lone column holds the chart's values. Core (opf#376) already reads it with chartNumber and reports each
+    // non-numeric cell; a core without RR-54 hands it over as authored, so it is read (and its rejects counted) here. A
+    // cell that holds no number is skipped, never plotted as 0.
+    const points = data.rows.map((row, index) => ({row: index + 1, value: chartNumber(row?.[0]), cell: row?.[0]}));
+    for (const point of points) if (point.value === null && point.cell !== null && point.cell !== undefined && point.cell !== '') rejected.push({path: `/data/rows/${point.row - 1}/0`, cell: point.cell});
+    const plottedPoints = points.filter((point) => point.value !== null);
+    const notNumeric = notNumericDiagnostic(rejected);
+    if (plottedPoints.length === 0) {
       return unplottable("single-column-not-numeric", "The chart's data column has no numbers.", `The only chart data column '${heading}' holds no numbers, and a chart needs values to plot.`);
     }
-    const skipped = data.rows.length - points.length;
+    const skipped = data.rows.length - plottedPoints.length;
     const skippedNote = skipped ? ` (${skipped} non-numeric ${skipped === 1 ? "cell was" : "cells were"} skipped)` : "";
     if (!native && String(chart.type ?? "").toLowerCase() === "histogram") {
-      const bins = histogramBins(points.map((point) => point.value));
+      const bins = histogramBins(plottedPoints.map((point) => point.value));
       return {
-        type: "bar", spec: CHARTEX_FALLBACK, barDir: "col", barGrouping: "clustered", heading: "Bin",
+        type: "bar", spec: CHARTEX_FALLBACK, barDir: "col", barGrouping: "clustered", heading: "Bin", diagnostics, notNumeric, pointCount: bins.length,
         series: [{name: "Frequency", labels: bins.map((bin) => bin.label), values: bins.map((bin) => bin.count)}],
         adaptations: [{
           adaptation: "histogram-binned",
-          message: `The histogram's single data column '${heading}' (${points.length} values${skippedNote}) was binned into ${bins.length} equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.`
+          message: `The histogram's single data column '${heading}' (${plottedPoints.length} values${skippedNote}) was binned into ${bins.length} equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.`
         }]
       };
     }
     // Rows keep their own row numbers, so a skipped cell leaves a gap in the numbering.
-    const labels = points.map((point) => String(point.row));
-    const numbers = points.map((point) => point.value);
-    const series = mapped.type === "scatter"
-      ? [{name: "Row", labels, values: points.map((point) => point.row)}, {name: heading, labels, values: numbers}]
+    const labels = plottedPoints.map((point) => String(point.row));
+    const numbers = plottedPoints.map((point) => point.value);
+    const scatter = mapped.type === "scatter";
+    const series = scatter
+      ? [{name: "Row", labels, values: plottedPoints.map((point) => point.row)}, {name: heading, labels, values: numbers}]
       : [{name: heading, labels, values: numbers}];
+    const formats = {series: [columnCodes[0]]};
     // A native histogram or Pareto chart bins the values themselves (PowerPoint's automatic bins); only its classic fallback plots them against row numbers.
-    if (chartex?.binning) return {...mapped, series, heading: "Row", hasCategories: false, adaptations};
-    adaptations.push({adaptation: "row-numbers", message: `The chart's single data column '${heading}' has no category column, so its ${points.length} values${skippedNote} are plotted against their row numbers.`});
-    return {...mapped, series, heading: "Row", hasCategories: true, adaptations};
+    if (chartex?.binning) return withFormats({...mapped, series, heading: "Row", hasCategories: false, adaptations, notNumeric}, formats);
+    adaptations.push({adaptation: "row-numbers", message: `The chart's single data column '${heading}' has no category column, so its ${plottedPoints.length} values${skippedNote} are plotted against their row numbers.`});
+    return withFormats({...mapped, series, heading: "Row", hasCategories: true, adaptations, notNumeric}, formats);
   }
 
   const labels = data.rows.map((row) => stringifyText(row?.[0]));
   let series = data.columns.slice(1).map((name, seriesIndex) => ({
-    name: stringifyText(name),
+    name,
     labels,
     // A cell that holds no number (null, an empty or non-numeric string, a boolean) is a gap, as in the preview and the single-column
-    // path above: it is neither plotted as a zero nor written into the cache as one.
-    values: data.rows.map((row) => parsedNumber(row?.[seriesIndex + 1]))
+    // path above: it is neither plotted as a zero nor written into the cache as one. Core already passed it through chartNumber.
+    values: data.rows.map((row) => row?.[seriesIndex + 1] ?? null)
   }));
+  let codes = columnCodes.slice(1);
   const plotted = spec.family === 'circular' ? 1 : chartex ? chartex.series : Infinity;
   if (series.length > plotted) {
     // A pie, doughnut or single-series chartex construct plots one series; name the ones left out instead of dropping them silently.
     const dropped = series.slice(plotted).map((entry) => `'${entry.name}'`);
     adaptations.push({adaptation: "series-dropped", message: `The ${typeName} chart plots one series, so its first series '${series[0].name}' is exported and the other ${dropped.length} (${dropped.join(", ")}) ${dropped.length === 1 ? "is" : "are"} not.`});
     series = series.slice(0, plotted);
+    codes = codes.slice(0, plotted);
   }
+  // Only the exported cells count. Core reports a cell at its authored column, which is its resolved position (1 for the
+  // first series) unless a mapping reorders the columns; a series that a pie or a single-series construct drops is not counted.
+  const position = (entry) => {
+    const column = Number(/\/(\d+)$/.exec(entry.path ?? '')?.[1]);
+    return source.mapping === undefined ? column : data.columns.indexOf(dataColumnName(authored.columns[column]));
+  };
+  const notNumeric = notNumericDiagnostic(rejected.filter((entry) => !(position(entry) > plotted)));
   if (spec.family === 'xy' && series.length === 1) {
     // [Point, X, Y...] carries its own X column; a lone value column is plotted against the row numbers.
     series = [{name: 'X', labels, values: data.rows.map((_, index) => index + 1)}, ...series];
+    codes = [undefined, ...codes];
     adaptations.push({adaptation: "row-numbers", message: `The scatter chart has no X column (a point label column and one value column), so its ${data.rows.length} values are plotted against their row numbers.`});
   }
-  return {...mapped, series, hasCategories: true, adaptations};
+  // A scatter chart's first series is its X values (PptxGenJS writes one c:ser per Y series, each with c:xVal).
+  const formats = spec.family === 'xy' ? {series: codes.slice(1), x: codes[0]} : {series: codes};
+  return withFormats({...mapped, series, hasCategories: true, adaptations, notNumeric}, formats);
+}
+
+/** A chart column's name: the string, or a DataColumn's `name`. */
+function dataColumnName(column) {
+  return typeof column === 'string' ? column : column !== null && typeof column === 'object' && typeof column.name === 'string' ? column.name : undefined;
+}
+
+/** One chart-value-not-numeric diagnostic per chart (core reports one per cell), or undefined. */
+function notNumericDiagnostic(rejected) {
+  if (!rejected.length) return undefined;
+  const first = rejected[0];
+  const shown = Object.hasOwn(first, 'cell') ? JSON.stringify(first.cell) : /chart value (.*) is not a number/.exec(first.message ?? '')?.[1] ?? 'a value';
+  return {count: rejected.length, pointer: first.path, message: `${rejected.length} chart ${rejected.length === 1 ? 'value is' : 'values are'} not ${rejected.length === 1 ? 'a number' : 'numbers'} (first: ${shown} at ${first.path}) and ${rejected.length === 1 ? 'is' : 'are'} exported as ${rejected.length === 1 ? 'a gap' : 'gaps'}. Chart values are numbers, or strings in plain decimal syntax (12, -3.5, 1e6); put units, currency and percent in the column's number format.`};
 }
 
 
@@ -3240,6 +3380,13 @@ async function normalizePptxZip(raw, context) {
       // RR-35: data labels last, so their own text colours (contrast inside a mark) are not normalized away.
       const {options:chartOptions,kind:optionKind,pointCount}=context.chartHeadings.get(name);
       if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount}));
+      // RR-54: the columns' number formats, after the labels: caches, label and value-axis formats, then the workbook cells.
+      const numberFormats=context.chartHeadings.get(name).numberFormats;
+      if(numberFormats){
+        entries[chartPart]=encodeText(applyChartNumberFormats(decodeText(entries[chartPart]),numberFormats));
+        try{writeChartWorkbookFormats(entries,chartPart,numericRanges(decodeText(entries[chartPart]),numberFormats));}
+        catch(error){throw new OPFPptxError('packaging-failed',`Chart workbook number formats could not be written: ${errorMessage(error)}`);}
+      }
     }
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);
@@ -3357,6 +3504,15 @@ async function normalizePptxZip(raw, context) {
       attachDocumentProvenance(parts, context.documentProvenance);
     } catch (error) {
       throw new OPFPptxError("packaging-failed", "Document provenance tags could not be attached.", {cause: errorMessage(error)});
+    }
+    // RR-54: chart and table data records (on the final chart parts, so their cache evidence is what import reads) and the
+    // datasets map beside the document tag.
+    if (context.provenanceMode === 'full') {
+      try {
+        attachDataProvenance(parts, {records: context.dataRecords, paths: context.dataRecordPaths, datasets: context.datasets, parseRelationships, report: context.reportDiagnostic});
+      } catch (error) {
+        throw new OPFPptxError("packaging-failed", "Chart and table data tags could not be attached.", {cause: errorMessage(error)});
+      }
     }
     for (const [path, bytes] of Object.entries(parts)) output[path] = [bytes, {level: context.compressionLevel, mtime: context.zipDate}];
   }
@@ -3783,21 +3939,10 @@ function stringifyText(value) {
   return String(value);
 }
 
-/** The number a chart cell holds ("12%", "$5" and "1,234" parse), or null when it holds none. */
-function parsedNumber(value) {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  const parsed = Number.parseFloat(String(value ?? "").replace(/[^0-9.-]/g, ""));
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 // PptxGenJS writes a gap (null) as `<c:pt idx="n"><c:v></c:v></c:pt>`. A native gap is a numeric cache with no point at that
 // index (ptCount keeps the row count); an empty value is not a number, so drop those points, leaving the index unwritten.
 function omitEmptyNumberPoints(xml) {
   return xml.replace(/<c:numCache>[\s\S]*?<\/c:numCache>/g, cache => cache.replace(/<c:pt idx="\d+"><c:v><\/c:v><\/c:pt>/g, ""));
-}
-
-function numericValue(value) {
-  return parsedNumber(value) ?? 0;
 }
 
 function normalizeAuthor(author) {

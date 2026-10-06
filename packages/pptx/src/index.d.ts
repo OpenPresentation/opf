@@ -36,7 +36,7 @@ export interface ImageResolverContext {
 export interface FontSchemeDiagnostic { code: "unresolved-font-scheme"; path: string; message: string; id: string; fallback: string }
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
-export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "data-not-inline" | "no-rows" | "no-columns" | "single-column-not-numeric" }
+export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "data-not-inline" | "dataset-unknown" | "no-rows" | "no-columns" | "single-column-not-numeric" }
 /** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
 /**
@@ -63,6 +63,12 @@ export interface WatermarkNotExportedDiagnostic { code: "watermark-not-exported"
 export interface ChartDataAdaptedDiagnostic { code: "chart-data-adapted"; path: string; message: string; adaptation: "histogram-binned" | "row-numbers" | "series-dropped" | "chartex-fallback" }
 /** With `chartex: "native"`, a map chart (`world`) is exported as a chartex regionMap (`Requires="cx4"`) without cached geography: PowerPoint must fetch the region shapes from its online map service and shows "There was a problem getting the information for your map chart" with an empty chart until it does. */
 export interface ChartMapGeodataDiagnostic { code: "chart-map-geodata"; path: string; message: string }
+/** RR-54: chart values that core `chartNumber` rejects (not a number or a plain decimal string) were exported as gaps; one per chart, with their count. */
+export interface ChartValueNotNumericDiagnostic { code: "chart-value-not-numeric"; path: string; message: string; count: number }
+/** RR-54: core adapted a `chart.mapping` (an X column on a chart without an X axis, a series that repeats the category or X column); `pointer` is core's JSON Pointer. */
+export interface ChartMappingAdaptedDiagnostic { code: "chart-mapping-adapted"; path: string; message: string; pointer: string }
+/** RR-54 (`full` provenance): a chart or table data record, or the datasets map (`path: "datasets"`), is over the 16 MiB tag limit and is not stored; the native values still export. */
+export interface DataProvenanceOmittedDiagnostic { code: "data-provenance-omitted"; path: string; message: string }
 
 /** A template variable was unfilled and its `example` was used (template export only). */
 export interface VariableExampleUsedDiagnostic {
@@ -110,7 +116,7 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | WatermarkNotExportedDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;

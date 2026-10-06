@@ -17,6 +17,7 @@
 // cached dimensions restore the category-major data.
 import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
+import {formattedColumns} from './chart-data.js';
 
 const NS = Object.freeze({
   a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -131,16 +132,20 @@ const CX_POSITION = Object.freeze({center: 'ctr', 'inside-end': 'inEnd', 'inside
 
 // RR-35: an explicit dataLabels option writes the selected content, position and separator for every construct that takes it;
 // `dataLabels: false` removes the labels a treemap or funnel carries by default. Without the option the defaults are unchanged.
-function dataLabels(spec, text, options) {
+// RR-54: a value label of a series with a number format (not a binned construct, whose labels are counts) shows it.
+const labelFormat = (spec, code) => code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
+
+function dataLabels(spec, text, options, code) {
   if (options?.dataLabelsOff) return '';
   const labels = options?.dataLabels;
   if (labels) {
     const has = part => labels.content.includes(part) ? 1 : 0;
     const position = labels.position === null ? (spec.layoutId === 'treemap' || spec.layoutId === 'funnel' ? 'ctr' : undefined) : CX_POSITION[labels.position];
-    return `<cx:dataLabels${position ? ` pos="${position}"` : ''}>${text}<cx:visibility seriesName="0" categoryName="${has('category')}" value="${has('value')}"/><cx:separator>${escapeXml(labels.separator)}</cx:separator></cx:dataLabels>`;
+    // CT_DataLabels: numFmt precedes spPr and txPr.
+    return `<cx:dataLabels${position ? ` pos="${position}"` : ''}>${has('value') ? labelFormat(spec, code) : ''}${text}<cx:visibility seriesName="0" categoryName="${has('category')}" value="${has('value')}"/><cx:separator>${escapeXml(labels.separator)}</cx:separator></cx:dataLabels>`;
   }
   if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/></cx:dataLabels>`;
-  if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabels>`;
+  if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${labelFormat(spec, code)}${text}<cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabels>`;
   return '';
 }
 
@@ -164,14 +169,16 @@ const axisTitle = (value, text, run) => {
     `<a:p><a:pPr algn="ctr"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(value)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 };
 
-function axes(spec, gridColor, text, titles = {}, run = {}) {
+function axes(spec, gridColor, text, titles = {}, run = {}, code) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"><a:alpha val="70000"/></a:srgbClr></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
   // CT_Axis order: scaling, units, majorGridlines, tickLabels, spPr, txPr.
   const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/>${axisTitle(titles.category, text, run)}<cx:tickLabels/>${text}</cx:axis>`;
   if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${text}</cx:axis>`;
-  const value = `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${text}</cx:axis>`;
+  // RR-54: the value axis shows the first series' number format (none when that series has none) (CT_Axis: numFmt follows tickLabels); a binned axis counts.
+  const numberFormat = code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
+  const value = `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
   const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
@@ -183,7 +190,7 @@ function axes(spec, gridColor, text, titles = {}, run = {}) {
  * layout is PptxGenJS's: Sheet1, headings in row 1, categories in column A and
  * one series per following column.
  */
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette, textSize, options}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette, textSize, options, formats = []}) {
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -191,7 +198,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     : '';
   const data = series.map((entry, index) => {
     const points = entry.values.map((value, row) => value === null || !Number.isFinite(value) ? '' : `<cx:pt idx="${row}">${numberText(value)}</cx:pt>`).join('');
-    return `<cx:data id="${index}">${categories}<cx:numDim type="${spec.dimension}"><cx:f>${range(columnLetters(index + 2))}</cx:f><cx:lvl ptCount="${rows}" formatCode="General">${points}</cx:lvl></cx:numDim></cx:data>`;
+    return `<cx:data id="${index}">${categories}<cx:numDim type="${spec.dimension}"><cx:f>${range(columnLetters(index + 2))}</cx:f><cx:lvl ptCount="${rows}" formatCode="${escapeXml(formats[index] ?? 'General')}">${points}</cx:lvl></cx:numDim></cx:data>`;
   }).join('');
   const text = textProperties(labelColor, font, textSize);
   const plotted = series.map((entry, index) => {
@@ -203,7 +210,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, text, options)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, text, options, formats[index])}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {
@@ -219,7 +226,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize})}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, formats[0])}</cx:plotArea>${legend}</cx:chart>` +
     `<cx:spPr>${solidFill(fill.color, alpha)}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';
 }
@@ -396,7 +403,7 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     return result;
   };
   let labels = null;
-  const names = [], values = [];
+  const names = [], values = [], codes = [];
   plotted.forEach((series, index) => {
     const data = dataById.get(String(series['cx:dataId'].val));
     if (!data) invalid('series data is missing', `${path}#cx:series[${index}]/cx:dataId`);
@@ -405,6 +412,9 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
     if (categories && !labels) labels = level(categories, `${location}/cx:strDim`, false);
     const numeric = asArray(data['cx:numDim'])[0];
     values.push(numeric ? level(numeric, `${location}/cx:numDim`, true) : []);
+    // RR-54: the series' number format code (cx:lvl formatCode); core maps the codes it can back to column formats.
+    const code = asArray(numeric?.['cx:lvl'])[0]?.formatCode;
+    codes.push(typeof code === 'string' ? code : undefined);
     const name = series['cx:tx']?.['cx:txData']?.['cx:v'];
     names.push(name === undefined ? `Series ${index + 1}` : scalar(name));
   });
@@ -415,8 +425,8 @@ export function chartFromChartex(doc, {heading, limits, invalid, path, report}) 
   // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
   const {options, notes} = chartOptionsFromChartex(space, {type, seriesCount: plotted.length});
   for (const note of notes) report?.(note);
-  if (!labels) return {type, data: {columns: [names[0]], rows: values[0].slice(0, rowCount).map((value, index) => [values[0][index] ?? null])}, ...options};
+  if (!labels) return {type, data: {columns: formattedColumns([names[0]], [codes[0]], report), rows: values[0].slice(0, rowCount).map((value, index) => [values[0][index] ?? null])}, ...options};
   const rows = [];
   for (let index = 0; index < rowCount; index += 1) rows.push([labels[index] ?? null, ...values.map(row => row[index] ?? null)]);
-  return {type, data: {columns: [heading ?? 'Category', ...names], rows}, ...options};
+  return {type, data: {columns: formattedColumns([heading ?? 'Category', ...names], [undefined, ...codes], report), rows}, ...options};
 }

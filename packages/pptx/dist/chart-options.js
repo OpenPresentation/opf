@@ -133,7 +133,7 @@ function titleString(title) {
  * plus `notes` naming what the three fields cannot express. `defaults` is what an export writes without the field:
  * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind.
  */
-export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter}) {
+export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = []}) {
   // An older core's schema has no such fields (additionalProperties is false), so nothing is added to the imported chart.
   if (!coreKnowsChartOptions()) return {options: {}, notes: []};
   const chart = chartSpace?.['c:chart'];
@@ -164,12 +164,12 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     if (!(defaultLegend && position === 'right')) out.legend = position;
   } else if (defaultLegend) out.legend = 'none';
 
-  const dataLabels = classicDataLabels(chartNode, target, notes);
+  const dataLabels = classicDataLabels(chartNode, target, notes, seriesFormats);
   if (dataLabels !== undefined) out.dataLabels = dataLabels;
   return {options: out, notes};
 }
 
-function classicDataLabels(chartNode, target, notes) {
+function classicDataLabels(chartNode, target, notes, seriesFormats = []) {
   const series = asArray(chartNode?.['c:ser']);
   // The labels the chart shows: the first series' block when it has one (PptxGenJS writes pie and doughnut visibility as per
   // point overrides), else the chart group's block.
@@ -188,7 +188,8 @@ function classicDataLabels(chartNode, target, notes) {
   }
   const support = target && typeof opfCore.chartOptionSupport === 'function' ? opfCore.chartOptionSupport(target) : undefined;
   const numberFormat = source['c:numFmt']?.formatCode ?? block['c:numFmt']?.formatCode;
-  if (numberFormat && numberFormat !== 'General' && numberFormat !== '#,##0' && numberFormat !== '0%') notes.push({option: 'dataLabels', message: `The label number format '${numberFormat}' cannot be expressed; labels import in the General format.`});
+  // RR-54: a label format that is a series' own number format imports with that column's format (or its own note).
+  if (numberFormat && numberFormat !== 'General' && numberFormat !== '#,##0' && numberFormat !== '0%' && !seriesFormats.includes(numberFormat)) notes.push({option: 'dataLabels', message: `The label number format '${numberFormat}' cannot be expressed; labels import in the General format.`});
   const out = {};
   const position = DLBL_POS_BACK[source['c:dLblPos']?.val ?? block['c:dLblPos']?.val];
   const supported = support?.dataLabels.positions ?? [];
