@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { after, describe, test } from "node:test";
 
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const CLI_BIN = path.resolve(here, "../dist/index.js");
@@ -22,7 +22,7 @@ describe("opf from-md", () => {
     assert.equal(result.status, 0, result.stderr);
     const document = JSON.parse(result.stdout);
     assert.deepEqual(document, { name: "Demo", slides: [{ title: "One", items: ["a", "b"] }] });
-    assert.equal(validatePresentation(document).valid, true);
+    assert.equal(validate(document, { only: ["format"] }).valid, true);
     const report = JSON.parse(result.stderr);
     assert.equal(report.valid, true);
     assert.equal(report.slides, 1);
@@ -51,16 +51,18 @@ describe("opf from-md", () => {
     assert.equal(result.stdout, "");
     const error = JSON.parse(result.stderr);
     assert.equal(error.error, "Markdown conversion failed.");
-    const [first] = error.markdown.diagnostics;
+    const [first] = error.markdown.findings;
     assert.equal(first.ruleId, "markdown/options-unknown-key");
     assert.deepEqual([first.location.line, first.location.column], [3, 1]);
     assert.equal(existsSync(output), false);
   });
 
-  test("--strict fails on a warning, --split headings reads an outline, --title sets the name", () => {
+  test("--fail-on warning fails on a warning, --split headings reads an outline, --title sets the name", () => {
     const warning = "1. one\n2. two\n";
     assert.equal(run(["from-md", "-"], warning).status, 0);
-    assert.equal(run(["from-md", "-", "--strict"], warning).status, 1);
+    assert.equal(run(["from-md", "-", "--fail-on", "warning"], warning).status, 1);
+    assert.equal(run(["from-md", "-", "--fail-on", "never"], warning).status, 2);
+    assert.equal(run(["from-md", "-", "--strict"], warning).status, 2);
     const outline = run(["from-md", "-", "--split", "headings", "--title", "Outline deck"], "# One\n- a\n# Two\nText\n");
     assert.equal(outline.status, 0, outline.stderr);
     assert.deepEqual(JSON.parse(outline.stdout), { name: "Outline deck", slides: [{ title: "One", items: ["a"] }, { title: "Two", text: "Text" }] });
@@ -99,14 +101,14 @@ describe("opf to-md", () => {
     assert.match(report.loss[0], /^\/slides\/1\/design:/);
   });
 
-  test("--strict fails when anything needed embedding; a file output needs --force to be replaced", () => {
-    const strict = run(["to-md", "-", "--strict"], JSON.stringify(deck));
+  test("--fail-on warning fails when anything needed embedding; a file output needs --force to be replaced", () => {
+    const strict = run(["to-md", "-", "--fail-on", "warning"], JSON.stringify(deck));
     assert.equal(strict.status, 1);
     assert.equal(JSON.parse(strict.stderr).markdown.native, false);
     const input = path.join(temp, "plain.opf.json");
     const output = path.join(temp, "plain.md");
     writeFileSync(input, JSON.stringify({ slides: [{ title: "Plain" }] }));
-    assert.equal(run(["to-md", input, output, "--strict"]).status, 0);
+    assert.equal(run(["to-md", input, output, "--fail-on", "warning"]).status, 0);
     assert.equal(readFileSync(output, "utf8"), "# Plain\n");
     assert.equal(run(["to-md", input, output]).status, 1);
     assert.equal(run(["to-md", input, output, "--force"]).status, 0);
@@ -127,9 +129,9 @@ describe("the dialect examples", () => {
       const args = name.startsWith("outline") ? ["--split", "headings"] : [];
       const converted = run(["from-md", "-", ...args], source);
       assert.equal(converted.status, 0, `${name}: ${converted.stderr}`);
-      assert.deepEqual(JSON.parse(converted.stderr).diagnostics, [], name);
-      assert.equal(validatePresentation(JSON.parse(converted.stdout)).valid, true, name);
-      const back = run(["to-md", "-", "--strict"], converted.stdout);
+      assert.deepEqual(JSON.parse(converted.stderr).findings, [], name);
+      assert.equal(validate(JSON.parse(converted.stdout), { only: ["format"] }).valid, true, name);
+      const back = run(["to-md", "-", "--fail-on", "warning"], converted.stdout);
       assert.equal(back.status, 0, `${name}: ${back.stderr}`);
       if (!name.startsWith("outline")) assert.equal(back.stdout, source, name);
     }

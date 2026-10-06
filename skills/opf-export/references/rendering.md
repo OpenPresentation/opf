@@ -10,7 +10,7 @@ opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|x.zip] [--pdf
 opf import deck.pptx [--out deck.opf.json] [--signals signals.json]
 ```
 
-Each prints one JSON report (the `opf lint` shape: `ok`, `diagnostics` with `ruleId`/`severity`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on warnings with `--strict` (nothing is written then). The CLI uses the same `prepareNodeFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). `--pdf-mode vector` and `--signals` need an opf-render and opf-pptx that have them; the CLI refuses them otherwise. Full reference: `docs/cli.md` in the core repository.
+Each prints one JSON report (the `opf validate` shape: `ok`, `findings` with `ruleId`/`severity`/`category`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on findings at or above `--fail-on` (nothing is written then). The CLI uses the same `prepareNodeFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). `--pdf-mode vector` and `--signals` need an opf-render and opf-pptx that have them; the CLI refuses them otherwise. Full reference: `docs/cli.md` in the core repository.
 
 ## Prepared font inputs
 

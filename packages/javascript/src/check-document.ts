@@ -1,96 +1,25 @@
 import {
-	getNodePath,
-	parseTree,
-	printParseErrorCode,
-	type Node,
-	type ParseError,
-} from 'jsonc-parser';
-import {
 	catalogEntries,
 	catalogKinds,
 	catalogSchemaNames,
 	type CatalogKind,
 } from './catalogs.js';
 import { schemaEntries, schemas, type SchemaName } from './schemas.js';
-import {
-	validateCatalogRecord,
-	validatePresentation,
-	type ValidationIssue,
-} from './validator.js';
+import { validateAgainstSchema, type SchemaCheckResult, type ValidationIssue } from './schema-check.js';
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
-import type { AuditFix } from './audit-types.js';
+import { ruleInfo } from './validation-rules.js';
+import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
+import type { Contract, ValidateOptions } from './validation-types.js';
 
-// RR-54: chart and table data warnings keep their validator code as the rule id.
-const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
-
-export type LintSeverity = 'error' | 'warning' | 'info';
-export interface LintLocation {
-	offset: number;
-	length: number;
-	line: number;
-	column: number;
-}
-export interface LintSuggestion {
-	value: JsonPrimitive;
-	label: string;
-	origin: 'schema' | 'built-in' | 'loaded' | 'document' | 'contract';
-	definition: string;
-}
-export interface LintDiagnostic {
-	ruleId: string;
-	severity: LintSeverity;
-	/** JSON Pointer into the document, or the explicitly supplied lint context. */
-	path: string;
-	scope: 'document' | 'context';
-	message: string;
-	help: string;
-	definition?: string;
-	lookup?: string[];
-	suggestions?: LintSuggestion[];
-	/** Full validation issue retained, including errors inside union alternatives. */
-	validation?: ValidationIssue;
-	/** Original-source UTF-16 offsets and one-based line/column. */
-	location?: LintLocation;
-	/**
-	 * Suggested repairs (the audit fix shape: JSON Patch that core never applies). RR-54: an
-	 * `opf/chart-value-not-numeric` cell whose column is written in one display style carries the column's fix.
-	 */
-	fixes?: AuditFix[];
-}
-export interface LintContract {
-	/** JSON Pointer pattern; a complete '*' segment matches one path segment. */
-	path: string;
-	allowedValues: JsonPrimitive[];
-	severity?: LintSeverity;
-	message?: string;
-	documentation?: string;
-}
-export interface LintOptions {
-	/** Records already loaded by the host. This API never fetches catalog URLs. */
-	catalogs?: Partial<Record<CatalogKind, readonly unknown[]>>;
-	/** Explicit host policy. Document metadata is never interpreted as policy. */
-	contracts?: readonly LintContract[];
-}
-export interface LintReport {
-	valid: boolean;
-	schemaValid: boolean | null;
-	diagnostics: LintDiagnostic[];
-	counts: Record<LintSeverity, number>;
-	checks: {
-		syntax: 'checked' | 'not-applicable';
-		schema: 'checked' | 'not-run';
-		catalogReferences: 'local-context' | 'not-run';
-		assetReferences: 'registry-only' | 'not-run';
-		contracts: 'checked' | 'not-run';
-		layout: 'not-checked';
-		fonts: 'not-checked';
-		nativeExport: 'not-checked';
-	};
-}
+/**
+ * The format, references and policy checks of `validate`: the schema and semantic issues of the engine as findings,
+ * and the checks that need the document's schema walked (catalog ids, assets, datasets, citations) or a host's
+ * contracts. Internal module; `validator.ts` decides which of them run.
+ */
 
 const own = (value: object, key: string) => Object.hasOwn(value, key);
 const object = (value: unknown): value is Record<string, unknown> =>
@@ -100,17 +29,17 @@ const primitive = (value: unknown): value is JsonPrimitive =>
 	typeof value === 'string' ||
 	typeof value === 'boolean' ||
 	(typeof value === 'number' && Number.isFinite(value));
-const pointer = (parts: readonly (string | number)[]) =>
+export const pointer = (parts: readonly (string | number)[]) =>
 	parts.length
 		? '/' +
 			parts
 				.map((part) => String(part).replaceAll('~', '~0').replaceAll('/', '~1'))
 				.join('/')
 		: '';
-function parts(path: string): string[] {
+export function parts(path: string): string[] {
 	if (path === '') return [];
 	if (!path.startsWith('/') || /~(?![01])/.test(path))
-		throw new TypeError(`Invalid lint contract JSON Pointer: ${path}`);
+		throw new TypeError(`Invalid contract JSON Pointer: ${path}`);
 	return path
 		.slice(1)
 		.split('/')
@@ -127,12 +56,8 @@ function at(value: unknown, path: string): unknown {
 		value,
 	);
 }
-function optionsChecked(options: LintOptions) {
-	if (
-		!object(options) ||
-		Object.keys(options).some((key) => !['catalogs', 'contracts'].includes(key))
-	)
-		throw new TypeError('Lint options accept only catalogs and contracts.');
+/** Check the shape of the options only this module reads. Unknown option keys are rejected by `validate` itself. */
+export function checkDocumentOptions(options: ValidateOptions) {
 	if (
 		options.catalogs !== undefined &&
 		(!object(options.catalogs) ||
@@ -143,10 +68,10 @@ function optionsChecked(options: LintOptions) {
 			))
 	)
 		throw new TypeError(
-			'Lint catalogs must map known catalog kinds to arrays of loaded records.',
+			'Validate catalogs must map known catalog kinds to arrays of loaded records.',
 		);
 	if (options.contracts !== undefined && !Array.isArray(options.contracts))
-		throw new TypeError('Lint contracts must be an array.');
+		throw new TypeError('Validate contracts must be an array.');
 	for (const contract of options.contracts ?? []) {
 		if (
 			!object(contract) ||
@@ -172,41 +97,36 @@ function optionsChecked(options: LintOptions) {
 				typeof contract.documentation !== 'string')
 		)
 			throw new TypeError(
-				'Invalid lint contract: provide a path and primitive allowedValues, with optional severity, message and documentation.',
+				'Invalid contract: provide a path and primitive allowedValues, with optional severity, message and documentation.',
 			);
 		parts(contract.path);
 	}
 }
-function report(
-	diagnostics: LintDiagnostic[],
-	schemaValid: boolean | null,
-	syntax: LintReport['checks']['syntax'],
-): LintReport {
-	const counts = { error: 0, warning: 0, info: 0 };
-	for (const diagnostic of diagnostics) counts[diagnostic.severity]++;
-	return {
-		valid: counts.error === 0,
-		schemaValid,
-		diagnostics,
-		counts,
-		checks: {
-			syntax,
-			schema: schemaValid === null ? 'not-run' : 'checked',
-			catalogReferences: schemaValid === null ? 'not-run' : 'local-context',
-			assetReferences: schemaValid === null ? 'not-run' : 'registry-only',
-			contracts: schemaValid === null ? 'not-run' : 'checked',
-			layout: 'not-checked',
-			fonts: 'not-checked',
-			nativeExport: 'not-checked',
-		},
-	};
+
+type FindingData = Omit<Finding, 'ruleId' | 'category' | 'severity' | 'scope'> & {
+	severity?: FindingSeverity;
+	scope?: Finding['scope'];
+};
+/** A finding of a registered rule: category and default severity come from the registry. */
+export function finding(ruleId: string, data: FindingData): Finding {
+	const info = ruleInfo(ruleId);
+	const { severity, scope, ...rest } = data;
+	return { ruleId, severity: severity ?? info.severity, category: info.category, scope: scope ?? 'document', ...rest };
 }
-function schemaDiagnostic(
+
+/** The rule an engine issue reports under: its semantic code when it names one, else the schema rule. */
+export const issueRuleId = (issue: ValidationIssue): string =>
+	typeof issue.params.code === 'string' && issue.keyword === 'opf' ? `opf/${issue.params.code}` : 'opf/schema';
+
+/** An engine issue as a finding: the path (an additional property is named), the exact schema definition, and what the schema allows. */
+export function issueFinding(
 	issue: ValidationIssue,
+	ruleId = issueRuleId(issue),
 	schemaName: SchemaName = 'presentation',
 	prefix = '',
-	scope: LintDiagnostic['scope'] = 'document',
-): LintDiagnostic {
+	scope: Finding['scope'] = 'document',
+	severity?: FindingSeverity,
+): Finding {
 	const path =
 			prefix +
 			(issue.path === '/' ? '' : issue.path) +
@@ -220,7 +140,7 @@ function schemaDiagnostic(
 	const definition =
 		precise?.uri ??
 		(issue.keyword === 'opf'
-			? 'packages/javascript/src/validator.ts'
+			? 'packages/javascript/src/schema-check.ts'
 			: issue.schemaPath.startsWith('#')
 				? entry.schema.$id + issue.schemaPath
 				: issue.schemaPath);
@@ -248,9 +168,8 @@ function schemaDiagnostic(
 	const allowed = Array.isArray(issue.params.allowedValues)
 		? issue.params.allowedValues.filter(primitive)
 		: [];
-	return {
-		ruleId: 'opf/schema',
-		severity: 'error',
+	return finding(ruleId, {
+		...(severity ? { severity } : {}),
 		path,
 		scope,
 		message: issue.message,
@@ -268,7 +187,7 @@ function schemaDiagnostic(
 					})),
 				}
 			: {}),
-	};
+	});
 }
 
 interface Cursor {
@@ -505,16 +424,16 @@ function fields(document: unknown): Field[] {
 	}
 	return result;
 }
-type Catalogs = Map<CatalogKind, Map<string, LintSuggestion>>;
+type Catalogs = Map<CatalogKind, Map<string, FindingSuggestion>>;
 function catalogContext(
 	document: unknown,
-	options: LintOptions,
-	diagnostics: LintDiagnostic[],
+	options: ValidateOptions,
+	findings: Finding[],
 ): Catalogs {
 	const result: Catalogs = new Map();
 	for (const entry of catalogEntries) {
 		const kind = entry.kind,
-			map = new Map<string, LintSuggestion>();
+			map = new Map<string, FindingSuggestion>();
 		result.set(kind, map);
 		for (const record of entry.records)
 			map.set(record.id, {
@@ -532,14 +451,13 @@ function catalogContext(
 				? (document.catalogs[kind] as Record<string, unknown>)
 				: {};
 		if (local.source !== undefined)
-			diagnostics.push({
-				ruleId: 'opf/catalog-source',
-				severity: 'info',
-				scope: 'document',
-				path: `/catalogs/${kind}/source`,
-				message: 'External catalog source was not fetched.',
-				help: 'This lint run checks built-in, supplied and inline records only. Load external catalogs in the host and pass their records explicitly to verify that context.',
-			});
+			findings.push(
+				finding('opf/catalog-source', {
+					path: `/catalogs/${kind}/source`,
+					message: 'External catalog source was not fetched.',
+					help: 'This run checks built-in, supplied and inline records only. Load external catalogs in the host and pass their records explicitly to verify that context.',
+				}),
+			);
 		for (const group of [
 			{
 				records: options.catalogs?.[kind] ?? [],
@@ -561,22 +479,19 @@ function catalogContext(
 					record = object(value)
 						? { $schema: schemas[schemaName].$id, ...value }
 						: value;
-				const validation = validateCatalogRecord(kind, record);
+				const validation = validateAgainstSchema(record, kind);
 				for (const issue of validation.errors)
-					diagnostics.push({
-						...schemaDiagnostic(issue, schemaName, path, group.scope),
-						ruleId: 'opf/catalog-record',
-					});
+					findings.push(issueFinding(issue, 'opf/catalog-record', schemaName, path, group.scope));
 				if (!object(value) || typeof value.id !== 'string') return;
 				if (seen.has(value.id))
-					diagnostics.push({
-						ruleId: 'opf/catalog-record',
-						severity: 'error',
-						scope: group.scope,
-						path: `${path}/id`,
-						message: `Duplicate ${kind} record id ${JSON.stringify(value.id)} in this catalog.`,
-						help: 'Give distinct records distinct IDs, or combine the intended override explicitly. Preserve their authored content.',
-					});
+					findings.push(
+						finding('opf/catalog-record', {
+							scope: group.scope,
+							path: `${path}/id`,
+							message: `Duplicate ${kind} record id ${JSON.stringify(value.id)} in this catalog.`,
+							help: 'Give distinct records distinct IDs, or combine the intended override explicitly. Preserve their authored content.',
+						}),
+					);
 				seen.add(value.id);
 				if (!validation.valid) {
 					map.delete(value.id);
@@ -613,7 +528,7 @@ function distance(a: string, b: string): number {
 	return row[b.length] ?? Math.max(a.length, b.length);
 }
 
-/** Read-only lint with actionable schema, local catalog and explicit policy context. */
+
 function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 	const byCell = new Map<string, ChartNumberFix>();
 	if (!isRecord(document) || !Array.isArray(document.slides)) return byCell;
@@ -629,19 +544,71 @@ function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
 	return byCell;
 }
 
-export function lintPresentation(
-	document: unknown,
-	options: LintOptions = {},
-): LintReport {
-	optionsChecked(options);
-	const validation = validatePresentation(document),
-		// A semantic issue that names its code (RR-34: cite-unknown-reference, caption-unsupported-payload, ...) keeps it as the rule id.
-		diagnostics = validation.errors.map((issue) =>
-			typeof issue.params.code === 'string' && issue.keyword === 'opf'
-				? { ...schemaDiagnostic(issue), ruleId: `opf/${issue.params.code}` }
-				: schemaDiagnostic(issue),
-		);
-	const catalogs = catalogContext(document, options, diagnostics),
+const HELP: Record<string, string> = {
+	'chart-value-not-numeric':
+		'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.',
+	'chart-data-source-unresolved':
+		'No engine loads chart data sources. Import the data inline (columns and rows, recording the origin in data.source) or reference a top-level dataset.',
+	'chart-mapping-adapted': 'The mapping entry is ignored. Remove it, or name a different column.',
+	'chart-option-adapted': 'Remove the option, or choose a chart type that can show it; every engine draws the adapted result.',
+	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
+	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
+	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
+	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
+	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
+};
+
+/**
+ * The engine's issues as findings. Errors are `format` findings (the schema rule, or the semantic rule that names its
+ * code); warnings that name a code (data, chart options, variables, numbering, colours) are findings of that rule.
+ * The catalog-id warnings are left to `referenceFindings`, which resolves them against the full local context.
+ * `enabled` lets a caller skip work for a rule it will not report.
+ */
+export function engineFindings(document: unknown, engine: SchemaCheckResult, enabled: (ruleId: string) => boolean): Finding[] {
+	const findings: Finding[] = [];
+	for (const issue of engine.errors) {
+		const ruleId = issueRuleId(issue);
+		if (enabled(ruleId)) findings.push(issueFinding(issue, ruleId));
+	}
+	// RR-54: the migration fix of each chart value column whose text cells share one display style, by cell path.
+	let numberFixes: Map<string, ChartNumberFix> | undefined;
+	for (const issue of engine.warnings) {
+		const code = issue.params.code;
+		if (typeof code !== 'string') continue;
+		const ruleId = `opf/${code}`;
+		if (!enabled(ruleId)) continue;
+		if (code === 'chart-value-not-numeric') {
+			numberFixes ??= chartNumberFixPaths(document);
+			const fix = numberFixes.get(issue.path);
+			if (fix) {
+				findings.push({
+					...issueFinding(issue, ruleId, 'presentation', '', 'document', 'warning'),
+					help: `Every text value of column ${JSON.stringify(fix.name)} is written in one display style. Store the numbers and give the column the format ${JSON.stringify(fix.format)}, which shows the same text: apply fixes[0] (core suggestChartNumberFix). Until then the value is plotted as a gap.`,
+					fixes: [{ id: 'store-chart-numbers', title: `Store ${JSON.stringify(fix.name)} as numbers with the format ${JSON.stringify(fix.format)}`, kind: 'patch', safe: false, patch: fix.patches }],
+				});
+				continue;
+			}
+		}
+		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', 'warning');
+		const help = HELP[code];
+		if (help) found.help = help;
+		findings.push(found);
+	}
+	return findings;
+}
+
+/** True when the document names an external source for a catalog kind (a URL or package, or an ordered search path of them). */
+function hasExternalSource(document: unknown, kind: CatalogKind): boolean {
+	if (!object(document) || !object(document.catalogs)) return false;
+	const entry = document.catalogs[kind];
+	return object(entry) && (typeof entry.source === 'string' || (Array.isArray(entry.source) && entry.source.length > 0));
+}
+
+/** Catalog ids, assets, citations and datasets: everything the document points at, resolved without fetching anything. */
+export function referenceFindings(document: unknown, engine: SchemaCheckResult, options: ValidateOptions): Finding[] {
+	const findings: Finding[] = [];
+	const catalogs = catalogContext(document, options, findings),
 		seen = new Set<string>();
 	const assetValues =
 		object(document) && object(document.assets) ? document.assets : {};
@@ -653,29 +620,28 @@ export function lintPresentation(
 		) {
 			const id = field.value.slice(6);
 			if (!own(assetValues, id))
-				diagnostics.push({
-					ruleId: 'opf/asset-reference',
-					severity: 'error',
-					scope: 'document',
-					path: field.path,
-					message: `Asset ${JSON.stringify(id)} is missing from the document registry.`,
-					help: 'Supply the intended asset in document.assets or choose the correct existing asset ID. External files and URLs are not fetched or verified.',
-					definition: schemas.presentation.$id + '#/$defs/Assets',
-					lookup: ['opf', 'schema', 'presentation', '/$defs/Assets'],
-					suggestions: Object.keys(assetValues)
-						.sort(
-							(a, b) =>
-								distance(id, a) - distance(id, b) ||
-								(a < b ? -1 : a > b ? 1 : 0),
-						)
-						.slice(0, 5)
-						.map((id) => ({
-							value: `asset:${id}`,
-							label: id,
-							origin: 'document',
-							definition: `document#${pointer(['assets', id])}`,
-						})),
-				});
+				findings.push(
+					finding('opf/asset-reference', {
+						path: field.path,
+						message: `Asset ${JSON.stringify(id)} is missing from the document registry.`,
+						help: 'Supply the intended asset in document.assets or choose the correct existing asset ID. External files and URLs are not fetched or verified.',
+						definition: schemas.presentation.$id + '#/$defs/Assets',
+						lookup: ['opf', 'schema', 'presentation', '/$defs/Assets'],
+						suggestions: Object.keys(assetValues)
+							.sort(
+								(a, b) =>
+									distance(id, a) - distance(id, b) ||
+									(a < b ? -1 : a > b ? 1 : 0),
+							)
+							.slice(0, 5)
+							.map((id) => ({
+								value: `asset:${id}`,
+								label: id,
+								origin: 'document',
+								definition: `document#${pointer(['assets', id])}`,
+							})),
+					}),
+				);
 		}
 		if (!field.path || !field.kind) continue;
 		const { kind } = field;
@@ -707,6 +673,9 @@ export function lintPresentation(
 		)
 			continue;
 		seen.add(path);
+		// A custom source may define ids the bundled catalogs do not know about. Unless the host loaded that source's
+		// records (`catalogs`), the id cannot be judged; `opf/catalog-source` already says it was not fetched.
+		if (!options.catalogs?.[kind]?.length && hasExternalSource(document, kind)) continue;
 		const suggestions = [...(catalogs.get(kind)?.values() ?? [])]
 			.sort(
 				(a, b) =>
@@ -719,20 +688,19 @@ export function lintPresentation(
 			)
 			.slice(0, 5);
 		const definition = String(field.cursor.root.$id) + `#${field.cursor.path}`;
-		diagnostics.push({
-			ruleId: 'opf/catalog-reference',
-			severity: 'warning',
-			scope: 'document',
-			path,
-			message: `Unknown ${kind} catalog id ${JSON.stringify(value)} in the available local context.`,
-			help:
-				kind === 'layouts'
-					? 'Choose an available layout or supply the intended custom record. Engine-defined layouts may be valid; preview with the target renderer before changing content.'
-					: 'Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.',
-			definition,
-			lookup: ['opf', 'catalog', kind],
-			suggestions,
-		});
+		findings.push(
+			finding('opf/catalog-reference', {
+				path,
+				message: `Unknown ${kind} catalog id ${JSON.stringify(value)} in the available local context.`,
+				help:
+					kind === 'layouts'
+						? 'Choose an available layout or supply the intended custom record. Engine-defined layouts may be valid; preview with the target renderer before changing content.'
+						: 'Choose an available record or supply the intended custom catalog context. External references and native rendering are not verified by this check.',
+				definition,
+				lookup: ['opf', 'catalog', kind],
+				suggestions,
+			}),
+		);
 	}
 	const reportedCycles = new Set<string>();
 	for (const id of Object.keys(assetValues)) {
@@ -744,14 +712,13 @@ export function lintPresentation(
 				const cycle = chain.slice(chain.indexOf(current));
 				if (!cycle.some((id) => reportedCycles.has(id))) {
 					for (const id of cycle) reportedCycles.add(id);
-					diagnostics.push({
-						ruleId: 'opf/asset-cycle',
-						severity: 'error',
-						scope: 'document',
-						path: pointer(['assets', current]),
-						message: `Asset references form a cycle: ${[...cycle, current].map((id) => JSON.stringify(id)).join(' → ')}.`,
-						help: 'Replace one link with the intended concrete source. Preserve the original asset metadata; no files or URLs were fetched.',
-					});
+					findings.push(
+						finding('opf/asset-cycle', {
+							path: pointer(['assets', current]),
+							message: `Asset references form a cycle: ${[...cycle, current].map((id) => JSON.stringify(id)).join(' → ')}.`,
+							help: 'Replace one link with the intended concrete source. Preserve the original asset metadata; no files or URLs were fetched.',
+						}),
+					);
 				}
 				break;
 			}
@@ -765,43 +732,17 @@ export function lintPresentation(
 					: undefined;
 		}
 	}
-	// RR-54: the migration fix of each chart value column whose text cells share one display style, by cell path.
-	const numberFixes = validation.warnings.some((issue) => issue.params.code === 'chart-value-not-numeric') ? chartNumberFixPaths(document) : new Map<string, ChartNumberFix>();
-	// Retain any existing reference warning not covered by the schema walk.
-	for (const issue of validation.warnings) {
-		if (typeof issue.params.code === 'string' && DATA_WARNING_CODES.has(issue.params.code)) {
-			const fix = issue.params.code === 'chart-value-not-numeric' ? numberFixes.get(issue.path) : undefined;
-			if (fix) {
-				diagnostics.push({
-					...schemaDiagnostic(issue),
-					ruleId: 'opf/chart-value-not-numeric',
-					severity: 'warning',
-					help: `Every text value of column ${JSON.stringify(fix.name)} is written in one display style. Store the numbers and give the column the format ${JSON.stringify(fix.format)}, which shows the same text: apply fixes[0] (core suggestChartNumberFix). Until then the value is plotted as a gap.`,
-					fixes: [{ id: 'store-chart-numbers', label: `Store ${JSON.stringify(fix.name)} as numbers with the format ${JSON.stringify(fix.format)}`, kind: 'patch', safe: false, patch: fix.patches }],
-				});
-				continue;
-			}
-			diagnostics.push({
-				...schemaDiagnostic(issue),
-				ruleId: `opf/${issue.params.code}`,
-				severity: 'warning',
-				help: issue.params.code === 'chart-value-not-numeric'
-					? 'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.'
-					: issue.params.code === 'chart-data-source-unresolved'
-						? 'No engine loads chart data sources. Import the data inline (columns and rows, recording the origin in data.source) or reference a top-level dataset.'
-						: 'The mapping entry is ignored. Remove it, or name a different column.',
-			});
-			continue;
-		}
-		const kind = issue.params.kind as CatalogKind,
+	// The engine only knows the bundled catalogs. Keep its warnings that the local context (inline, loaded) does not explain away.
+	for (const issue of engine.warnings) {
+		if (typeof issue.params.code === 'string') continue;
+		const kind = issue.params.kind as CatalogKind | undefined,
 			id = issue.params.id,
 			replacedBy = issue.params.replacedBy;
+		if (kind === undefined) continue;
 		if (typeof replacedBy === 'string' && typeof id === 'string') {
 			const target = catalogs.get(kind)?.get(replacedBy);
-			diagnostics.push({
-				...schemaDiagnostic(issue),
-				ruleId: 'opf/deprecated-catalog-id',
-				severity: 'warning',
+			findings.push({
+				...issueFinding(issue, 'opf/deprecated-catalog-id'),
 				message: `Deprecated ${kind} catalog id ${JSON.stringify(id)}; use ${JSON.stringify(replacedBy)} instead.`,
 				help: 'The deprecated id still resolves to its original record, so nothing breaks. Switch to the replacement when you next edit this reference.',
 				lookup: ['opf', 'catalog', kind],
@@ -814,14 +755,45 @@ export function lintPresentation(
 			(typeof id === 'string' && catalogs.get(kind)?.has(id))
 		)
 			continue;
-		diagnostics.push({
-			...schemaDiagnostic(issue),
-			ruleId: 'opf/catalog-reference',
-			severity: 'warning',
+		const dir = catalogEntries.find((entry) => entry.kind === kind)?.dir;
+		findings.push({
+			...issueFinding(issue, 'opf/catalog-reference'),
+			message: `Unknown ${kind} catalog id ${JSON.stringify(id)} in the available local context.`,
 			help: 'Inspect the referenced catalog and supply the intended record if this is a custom context.',
+			...(dir ? { definition: `spec/${dir}/index.json` } : {}),
+			lookup: ['opf', 'catalog', kind],
 		});
 	}
-	for (const [index, contract] of (options.contracts ?? []).entries()) {
+	// RR-34: a reference no run cites is advisory; cite it or remove it.
+	for (const issue of unusedReferenceWarnings(document))
+		findings.push(
+			finding('opf/unused-reference', {
+				path: issue.path,
+				message: issue.message,
+				help: "Cite the reference from a text, bullet or list item run ({ text, cite: id }) so it is listed in that slide's footnote area, or remove the entry. Nothing is drawn for an uncited reference.",
+				definition: schemas.presentation.$id + '#/$defs/Reference',
+				lookup: ['opf', 'schema', 'presentation', '/$defs/Reference'],
+				validation: issue,
+			}),
+		);
+	// RR-54: a dataset no chart or table references is advisory; reference it or remove it.
+	for (const id of unusedDatasets(document))
+		findings.push(
+			finding('opf/unused-dataset', {
+				path: `/datasets/${id.replaceAll('~', '~0').replaceAll('/', '~1')}`,
+				message: `Dataset ${JSON.stringify(id)} is never referenced; reference it from a chart ("data": { "dataset": ${JSON.stringify(id)} }) or a table ({ "dataset": ${JSON.stringify(id)} }), or remove it.`,
+				help: 'Reference the dataset from chart.data or a table so it is drawn, or remove the entry. Nothing is drawn for an unreferenced dataset.',
+				definition: schemas.presentation.$id + '#/$defs/Dataset',
+				lookup: ['opf', 'schema', 'presentation', '/$defs/Dataset'],
+			}),
+		);
+	return findings;
+}
+
+/** Host policy: every field a contract names must hold one of its allowed values. */
+export function contractFindings(document: unknown, contracts: readonly Contract[]): Finding[] {
+	const findings: Finding[] = [];
+	for (const [index, contract] of contracts.entries()) {
 		const pattern = parts(contract.path),
 			stack = [{ value: document, path: [] as string[], depth: 0 }];
 		while (stack.length) {
@@ -849,21 +821,21 @@ export function lintPresentation(
 					/\{\{(path|value|allowed|file)\}\}/g,
 					(_, key: keyof typeof values) => values[key] ?? '',
 				);
-				diagnostics.push({
-					ruleId: 'opf/contract',
-					severity: contract.severity ?? 'error',
-					scope: 'document',
-					path,
-					message,
-					help: `Use one of the configured values: ${values.allowed}. This is an explicit host policy; no source was changed.`,
-					definition,
-					suggestions: contract.allowedValues.map((value) => ({
-						value,
-						label: String(value),
-						origin: 'contract',
+				findings.push(
+					finding('opf/contract', {
+						severity: contract.severity ?? 'error',
+						path,
+						message,
+						help: `Use one of the configured values: ${values.allowed}. This is an explicit host policy; no source was changed.`,
 						definition,
-					})),
-				});
+						suggestions: contract.allowedValues.map((value) => ({
+							value,
+							label: String(value),
+							origin: 'contract',
+							definition,
+						})),
+					}),
+				);
 			} else if (object(entry.value) || Array.isArray(entry.value)) {
 				const key = pattern[entry.depth];
 				for (const [name, value] of Object.entries(entry.value))
@@ -876,130 +848,5 @@ export function lintPresentation(
 			}
 		}
 	}
-	// RR-34: a reference no run cites is advisory; cite it or remove it.
-	for (const issue of unusedReferenceWarnings(document))
-		diagnostics.push({
-			ruleId: 'opf/unused-reference',
-			severity: 'warning',
-			scope: 'document',
-			path: issue.path,
-			message: issue.message,
-			help: "Cite the reference from a text, bullet or list item run ({ text, cite: id }) so it is listed in that slide's footnote area, or remove the entry. Nothing is drawn for an uncited reference.",
-			definition: schemas.presentation.$id + '#/$defs/Reference',
-			lookup: ['opf', 'schema', 'presentation', '/$defs/Reference'],
-			validation: issue,
-		});
-	// RR-54: a dataset no chart or table references is advisory; reference it or remove it.
-	for (const id of unusedDatasets(document))
-		diagnostics.push({
-			ruleId: 'opf/unused-dataset',
-			severity: 'warning',
-			scope: 'document',
-			path: `/datasets/${id.replaceAll('~', '~0').replaceAll('/', '~1')}`,
-			message: `Dataset ${JSON.stringify(id)} is never referenced; reference it from a chart ("data": { "dataset": ${JSON.stringify(id)} }) or a table ({ "dataset": ${JSON.stringify(id)} }), or remove it.`,
-			help: 'Reference the dataset from chart.data or a table so it is drawn, or remove the entry. Nothing is drawn for an unreferenced dataset.',
-			definition: schemas.presentation.$id + '#/$defs/Dataset',
-			lookup: ['opf', 'schema', 'presentation', '/$defs/Dataset'],
-		});
-	return report(diagnostics, validation.valid, 'not-applicable');
-}
-
-/** Lint strict JSON source without normalizing whitespace or duplicate keys. */
-export function lintSource(
-	source: string,
-	options: LintOptions = {},
-): LintReport {
-	optionsChecked(options);
-	const errors: ParseError[] = [],
-		tree = parseTree(
-			source.startsWith('\uFEFF') ? ' ' + source.slice(1) : source,
-			errors,
-			{
-				disallowComments: true,
-				allowTrailingComma: false,
-				allowEmptyContent: false,
-			},
-		);
-	const lineStarts = [0];
-	for (let i = 0; i < source.length; i++) {
-		if (source[i] === '\r') {
-			if (source[i + 1] === '\n') i++;
-			lineStarts.push(i + 1);
-		} else if (source[i] === '\n') lineStarts.push(i + 1);
-	}
-	const location = (offset: number, length: number): LintLocation => {
-		let lo = 0,
-			hi = lineStarts.length;
-		while (lo + 1 < hi) {
-			const mid = (lo + hi) >> 1;
-			if ((lineStarts[mid] ?? 0) <= offset) lo = mid;
-			else hi = mid;
-		}
-		return {
-			offset,
-			length,
-			line: lo + 1,
-			column: offset - (lineStarts[lo] ?? 0) + 1,
-		};
-	};
-	if (errors.length || !tree)
-		return report(
-			errors.map((error) => ({
-				ruleId: 'json/syntax',
-				severity: 'error',
-				scope: 'document',
-				path: '',
-				message: printParseErrorCode(error.error),
-				help: 'Repair the JSON syntax at this source range. No content or whitespace has been rewritten.',
-				location: location(error.offset, error.length),
-			})),
-			null,
-			'checked',
-		);
-	const diagnostics: LintDiagnostic[] = [],
-		stack: Node[] = [tree];
-	while (stack.length) {
-		const node = stack.pop();
-		if (!node) break;
-		if (node.type === 'object') {
-			const keys = new Set<string>();
-			for (const property of node.children ?? []) {
-				const key = property.children?.[0];
-				if (!key) continue;
-				if (keys.has(key.value))
-					diagnostics.push({
-						ruleId: 'json/duplicate-key',
-						severity: 'error',
-						scope: 'document',
-						path: pointer(getNodePath(key)),
-						message: `Duplicate JSON property ${JSON.stringify(key.value)}.`,
-						help: 'Resolve the duplicate explicitly, preserving the intended content from both occurrences. JSON.parse would otherwise hide an earlier value.',
-						location: location(key.offset, key.length),
-					});
-				keys.add(key.value);
-			}
-		}
-		stack.push(...(node.children ?? []));
-	}
-	const result = lintPresentation(
-		JSON.parse(source.replace(/^\uFEFF/, '')),
-		options,
-	);
-	for (const diagnostic of result.diagnostics) {
-		if (diagnostic.scope === 'document') {
-			let node: Node | undefined = tree;
-			for (const part of parts(diagnostic.path))
-				node =
-					node?.type === 'array'
-						? node.children?.[Number(part)]
-						: node?.type === 'object'
-							? node.children?.find(
-									(property) => property.children?.[0]?.value === part,
-								)?.children?.[1]
-							: undefined;
-			if (node) diagnostic.location = location(node.offset, node.length);
-		}
-		diagnostics.push(diagnostic);
-	}
-	return report(diagnostics, result.schemaValid, 'checked');
+	return findings;
 }

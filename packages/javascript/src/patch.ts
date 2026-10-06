@@ -8,13 +8,12 @@
 //   key is data), and only ever reads own properties.
 // - Inverse patches: `applyPatchWithInverse` returns the patch that restores
 //   the input exactly, for undo stacks.
-import { validatePresentation } from "./validator.js";
+import type { Finding, FindingReport, JsonPatchOperation } from "./generated/types/finding.js";
+import { validate } from "./validator.js";
+
+export type { JsonPatchOperation };
 
 export type JsonPointer = string;
-export type JsonPatchOperation =
-  | { op: "add" | "replace" | "test"; path: JsonPointer; value: unknown }
-  | { op: "remove"; path: JsonPointer }
-  | { op: "move" | "copy"; from: JsonPointer; path: JsonPointer };
 
 export type PatchErrorCode =
   | "invalid-patch"
@@ -57,11 +56,9 @@ export class PatchValidationError extends PatchError {
   }
 }
 
-export interface PatchValidationResult {
-  valid: boolean;
-  errors?: unknown[];
-  warnings?: unknown[];
-  [key: string]: unknown;
+/** What a validator hook returns: a `validate` report, or anything with `valid` (and `findings` for `strict` to read). */
+export interface PatchValidationResult extends Pick<FindingReport, "valid"> {
+  findings?: Finding[];
 }
 
 export interface ApplyPatchOptions {
@@ -327,9 +324,9 @@ export function applyPatchWithInverse(document: unknown, patch: unknown, options
   }
   const result: PatchResult = { document: working, inverse, patch: operations };
   if (options.validate) {
-    const validator = typeof options.validate === "function" ? options.validate : (value: unknown) => validatePresentation(value) as PatchValidationResult;
+    const validator = typeof options.validate === "function" ? options.validate : (value: unknown) => validate(value, { only: options.strict ? ["format", "references"] : ["format"] });
     const validation = validator(working);
-    if (!validation.valid || (options.strict && Array.isArray(validation.warnings) && validation.warnings.length)) throw new PatchValidationError(validation);
+    if (!validation.valid || (options.strict && validation.findings?.some((entry) => entry.severity === "warning"))) throw new PatchValidationError(validation);
     result.validation = validation;
   }
   return result;

@@ -2,7 +2,7 @@ import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
 import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference, type FontSchemeDiagnostic, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
 import { visitContentPayloads } from './content-walk.js';
-import { assertValidPresentation } from './validator.js';
+import { assertValid } from './validator.js';
 import { sliceNumberedItems } from './numbering.js';
 
 export interface PaginationOptions extends ComposeSlideOptions {
@@ -95,7 +95,7 @@ function leafFor(path: string, field: string, value: any): Leaf {
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
   // RR-34: a slide that cites references validates only with the deck's references list (RR-54: and its datasets).
-  assertValidPresentation({...deckContext(options.presentation),slides:[input]});
+  assertValid({...deckContext(options.presentation),slides:[input]}, { only: ['format'] });
   let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
@@ -204,7 +204,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     assignPageIds(slide,slides.length);
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
-    assertValidPresentation({...deckContext(options.presentation),slides:[slide]});
+    assertValid({...deckContext(options.presentation),slides:[slide]}, { only: ['format'] });
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     selected = new Map();
   };
@@ -276,7 +276,7 @@ const usesSlideTotal = (presentation: Record<string, any>): boolean => [presenta
 
 /** Resolve local catalogs and paginate a complete presentation without mutating it. */
 export function paginatePresentation(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
-  assertValidPresentation(input);
+  assertValid(input, { only: ['format'] });
   const presentation = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
@@ -322,6 +322,6 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
   }
   const {output,pages} = result;
   presentation.slides=output;
-  assertValidPresentation(presentation);
+  assertValid(presentation, { only: ['format'] });
   return {presentation,pages};
 }

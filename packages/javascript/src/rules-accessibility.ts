@@ -3,8 +3,8 @@ import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasu
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
 import { resolveChartData } from './chart-data.js';
-import type { AuditDiagnostic, AuditFix } from './audit-types.js';
-import { type AuditContext, type AuditRule, type SlideContext, rule } from './audit-context.js';
+import type { Finding, FindingFix } from './generated/types/finding.js';
+import { type SlideContext, type ValidationContext, type ValidationRule, rule } from './rule-context.js';
 import {
 	altOf,
 	assetRefs,
@@ -16,7 +16,7 @@ import {
 	sourceOfAsset,
 	splitPointer,
 	textValues,
-} from './audit-content.js';
+} from './rule-content.js';
 import {
 	type BackdropSample,
 	type Rec,
@@ -28,7 +28,7 @@ import {
 	simulateVision,
 	visionModels,
 	worstContrast,
-} from './audit-design.js';
+} from './rule-design.js';
 
 // ----------------------------------------------------------------- contrast
 
@@ -166,6 +166,7 @@ const contrastRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
+		cost: 'composition',
 		approximations:
 			'Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview\'s (the scheme\'s dark1 or light1 chosen from the background luminance, where a gradient background counts as light), so a default can fail on a dark gradient.',
 	},
@@ -179,19 +180,20 @@ const onImageRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
+		cost: 'composition',
 		approximations:
 			'Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.slideImage.overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
 	},
 );
 
-const contrastRules: AuditRule[] = [
+const contrastRules: ValidationRule[] = [
 	{
 		info: contrastRule,
 		also: [onImageRule],
 		run(context) {
 			const { thresholds } = context;
 			for (const slide of context.slides) {
-				const aggregated = new Map<string, { diagnostic: AuditDiagnostic; extra: number }>();
+				const aggregated = new Map<string, { diagnostic: Finding; extra: number }>();
 				const imageReported = { done: false };
 				for (const sample of collectSamples(slide)) {
 					const large = isLarge(sample.sizePx, sample.bold),
@@ -217,12 +219,12 @@ const contrastRules: AuditRule[] = [
 						known.extra++;
 						continue;
 					}
-					const fixes: AuditFix[] = [];
+					const fixes: FindingFix[] = [];
 					if (sample.colorPath) {
 						const preferred = readableColor([slide.design.colors.text], sample.backdrop, needed);
 						if (preferred !== undefined) {
 							const value = preferred.toUpperCase() === slide.design.colors.text.toUpperCase() ? 'text' : preferred;
-							fixes.push({ id: 'use-readable-color', label: value === 'text' ? 'Use the slide text colour' : `Use ${preferred}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path: sample.colorPath, value }] });
+							fixes.push({ id: 'use-readable-color', title: value === 'text' ? 'Use the slide text colour' : `Use ${preferred}`, kind: 'patch', safe: true, patch: [{ op: 'replace', path: sample.colorPath, value }] });
 						}
 					}
 					const diagnostic = context.report(contrastRule, {
@@ -261,7 +263,7 @@ const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts have no alt field in OPF; see audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
+			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts have no alt field in OPF; see opf/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
 	},
 );
 const poorAltRule = rule(
@@ -278,15 +280,15 @@ const FILE_ALT = /(\.(png|jpe?g|gif|svg|webp|bmp|tiff?|heic|avif)$)|^(img|dsc|im
 const kindLabel = (kind: string) =>
 	({ image: 'Image', video: 'Video', 'slide-image': 'Slide image', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', organization: 'Organization logo' })[kind] ?? 'Picture';
 
-function altFixes(path: string, value: unknown): AuditFix[] {
-	const decorative: AuditFix =
+function altFixes(path: string, value: unknown): FindingFix[] {
+	const decorative: FindingFix =
 		typeof value === 'string'
-			? { id: 'mark-decorative', label: 'Mark as decorative (empty alt)', kind: 'patch', safe: false, patch: [{ op: 'replace', path, value: { src: value, alt: '' } }] }
-			: { id: 'mark-decorative', label: 'Mark as decorative (empty alt)', kind: 'patch', safe: false, patch: [{ op: 'add', path: `${path}/alt`, value: '' }] };
-	return [{ id: 'focus-alt', label: 'Write alt text', kind: 'focus', safe: true, focus: { path, field: 'alt', value } }, decorative];
+			? { id: 'mark-decorative', title: 'Mark as decorative (empty alt)', kind: 'patch', safe: false, patch: [{ op: 'replace', path, value: { src: value, alt: '' } }] }
+			: { id: 'mark-decorative', title: 'Mark as decorative (empty alt)', kind: 'patch', safe: false, patch: [{ op: 'add', path: `${path}/alt`, value: '' }] };
+	return [{ id: 'focus-alt', title: 'Write alt text', kind: 'focus', safe: true, focus: { path, field: 'alt', value } }, decorative];
 }
 
-const altRules: AuditRule[] = [
+const altRules: ValidationRule[] = [
 	{
 		info: altRule,
 		run(context) {
@@ -331,7 +333,7 @@ const altRules: AuditRule[] = [
 						slide: ref.path.startsWith('/slides/') ? slide : undefined,
 						message: `${kindLabel(ref.kind)} alt text ${JSON.stringify(alt.length > 60 ? `${alt.slice(0, 57)}...` : alt)} ${problem}.`,
 						help: 'Write what a person who cannot see the picture needs to know, in plain words and without a leading "image of".',
-						fixes: [{ id: 'focus-alt', label: 'Edit alt text', kind: 'focus', safe: true, focus: { path: ref.path, field: 'alt', value: ref.value } }],
+						fixes: [{ id: 'focus-alt', title: 'Edit alt text', kind: 'focus', safe: true, focus: { path: ref.path, field: 'alt', value: ref.value } }],
 					});
 				}
 			});
@@ -357,7 +359,7 @@ const duplicateTitleRule = rule(
 	'Identical titles make slides indistinguishable in an outline or a screen reader\'s slide list.',
 	{ approximations: 'Titles are compared case-insensitively with whitespace collapsed. Slides that continue one another are not exempt; give a continuation a distinct title such as "(continued)".' },
 );
-const titleRules: AuditRule[] = [
+const titleRules: ValidationRule[] = [
 	{
 		info: missingTitleRule,
 		run(context) {
@@ -369,7 +371,7 @@ const titleRules: AuditRule[] = [
 					slide,
 					message: `Slide ${slide.index + 1} has no title.`,
 					help: 'Give the slide a short, specific title. If the design has no room for a visible title, keep it short; the title also names the slide for assistive technology.',
-					fixes: [{ id: 'focus-title', label: 'Write a title', kind: 'focus', safe: true, focus: { path: `${slide.path}/title`, field: 'title' } }],
+					fixes: [{ id: 'focus-title', title: 'Write a title', kind: 'focus', safe: true, focus: { path: `${slide.path}/title`, field: 'title' } }],
 				});
 			}
 		},
@@ -389,7 +391,7 @@ const titleRules: AuditRule[] = [
 						slide,
 						message: `Slide ${slide.index + 1} has the same title as slide ${earlier + 1}: ${JSON.stringify(String(slide.slide.title).trim())}.`,
 						help: 'Make the titles distinct so each slide can be told apart in an outline or by assistive technology.',
-						fixes: [{ id: 'focus-title', label: 'Edit the title', kind: 'focus', safe: true, focus: { path: `${slide.path}/title`, field: 'title' } }],
+						fixes: [{ id: 'focus-title', title: 'Edit the title', kind: 'focus', safe: true, focus: { path: `${slide.path}/title`, field: 'title' } }],
 					});
 			}
 		},
@@ -406,12 +408,13 @@ const readingOrderRule = rule(
 	'Screen readers, keyboard focus and PowerPoint\'s selection pane follow the composed order. When it differs from the visual order (top to bottom, then start to end of the reading direction), the slide is read out of sequence.',
 	{
 		standard: 'WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")',
+		cost: 'composition',
 		approximations:
 			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed.',
 	},
 );
 
-const readingOrderRules: AuditRule[] = [
+const readingOrderRules: ValidationRule[] = [
 	{
 		info: readingOrderRule,
 		run(context) {
@@ -467,7 +470,7 @@ const linkRule = rule(
 	{ standard: 'WCAG 2.2 SC 2.4.4 Link Purpose (In Context), level A; PowerPoint: "Hyperlink text is not meaningful"', approximations: 'Matches a short list of generic phrases in English (after lower-casing and removing punctuation), blank link text, and raw URLs longer than 40 characters. Adjacent runs sharing one link are read as one link.' },
 );
 const GENERIC_LINKS = new Set(['click here', 'click', 'here', 'link', 'this link', 'this', 'read more', 'more', 'learn more', 'see more', 'more info', 'more information', 'details', 'download', 'url', 'website', 'web site', 'page', 'this page', 'visit', 'go']);
-const linkRules: AuditRule[] = [
+const linkRules: ValidationRule[] = [
 	{
 		info: linkRule,
 		run(context) {
@@ -491,7 +494,7 @@ const linkRules: AuditRule[] = [
 							slide,
 							message: `Link text ${JSON.stringify(text.trim().slice(0, 50))} ${problem}; the destination is ${link.length > 60 ? `${link.slice(0, 57)}...` : link}.`,
 							help: 'Use text that names the destination or action, for example "Q3 financial results (PDF)", instead of "click here".',
-							fixes: [{ id: 'focus-link', label: 'Edit the text', kind: 'focus', safe: true, focus: { path: run.valuePath, field: 'link', value: link } }],
+							fixes: [{ id: 'focus-link', title: 'Edit the text', kind: 'focus', safe: true, focus: { path: run.valuePath, field: 'link', value: link } }],
 						});
 					}
 				}
@@ -511,7 +514,7 @@ const chartColorRule = rule(
 		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
 		thresholds: ['minSeriesColorDifference'],
 		approximations:
-			'Uses the engine\'s series palette (AuditOptions.chartPalette; default the opf-render/opf-pptx palette, adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.',
+			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default the opf-render/opf-pptx palette, adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.',
 	},
 );
 const chartAltRule = rule(
@@ -526,7 +529,7 @@ const chartAltRule = rule(
 const chartSkip = /(histogram|box|pareto|waterfall|world|united-|canada|australia|map|sparkline|dot-plot|bullet|progress|dumbbell)/;
 const perCategory = /(pie|doughnut|treemap|funnel)/;
 
-const chartRules: AuditRule[] = [
+const chartRules: ValidationRule[] = [
 	{
 		info: chartColorRule,
 		run(context) {
@@ -586,7 +589,7 @@ const chartRules: AuditRule[] = [
 					slide,
 					message: `The chart on slide ${slide.index + 1} has no text beside it that states what it shows.`,
 					help: 'Add a subtitle or text block with the chart\'s takeaway (and key numbers), or a table with the data, so the message does not depend on seeing the chart.',
-					fixes: [{ id: 'focus-subtitle', label: 'Write a subtitle', kind: 'focus', safe: true, focus: { path: `${slide.path}/subtitle`, field: 'text' } }],
+					fixes: [{ id: 'focus-subtitle', title: 'Write a subtitle', kind: 'focus', safe: true, focus: { path: `${slide.path}/subtitle`, field: 'text' } }],
 				});
 			}
 		},
@@ -601,7 +604,7 @@ const languageRule = rule(
 	'Screen readers and text-to-speech choose pronunciation and hyphenation from the declared language; spell checkers and translation tools use it too.',
 	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (OPF has no per-run language).' },
 );
-const languageRules: AuditRule[] = [
+const languageRules: ValidationRule[] = [
 	{
 		info: languageRule,
 		run(context) {
@@ -610,13 +613,13 @@ const languageRules: AuditRule[] = [
 				path: '',
 				message: 'The presentation has no language set.',
 				help: 'Set `language` to a language id from the languages catalog or a BCP 47 tag, for example "en-US".',
-				fixes: [{ id: 'focus-language', label: 'Set the language', kind: 'focus', safe: true, focus: { path: '/language', field: 'language' } }],
+				fixes: [{ id: 'focus-language', title: 'Set the language', kind: 'focus', safe: true, focus: { path: '/language', field: 'language' } }],
 			});
 		},
 	},
 ];
 
-export const accessibilityRules: AuditRule[] = [
+export const accessibilityRules: ValidationRule[] = [
 	...contrastRules,
 	...altRules,
 	...titleRules,
@@ -626,5 +629,5 @@ export const accessibilityRules: AuditRule[] = [
 	...languageRules,
 ];
 
-export type { AuditContext, SlideContext };
+export type { ValidationContext, SlideContext };
 export { plainText };

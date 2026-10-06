@@ -1,6 +1,6 @@
 # OPF format card
 
-A self-contained authoring reference for agents and humans writing `*.opf.json` documents, sized for pasting into a model's context. The canonical contract is the JSON Schema (`https://openpresentation.org/schema/opf/v1`, in [`spec/schemas/opf.schema.json`](../spec/schemas/opf.schema.json)); this card compresses it. Validate with `validatePresentation` from `@openpresentation/opf` or `opf validate <file>`.
+A self-contained authoring reference for agents and humans writing `*.opf.json` documents, sized for pasting into a model's context. The canonical contract is the JSON Schema (`https://openpresentation.org/schema/opf/v1`, in [`spec/schemas/opf.schema.json`](../spec/schemas/opf.schema.json)); this card compresses it. Validate with `validate` from `@openpresentation/opf` or `opf validate <file>` ([validate](validate.md)).
 
 ## Document shape
 

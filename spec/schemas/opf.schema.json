@@ -210,12 +210,12 @@
     "references": {
       "type": "array",
       "items": { "$ref": "#/$defs/Reference" },
-      "description": "Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run cites is a lint warning (opf/unused-reference). referencesSlide() turns the cited references into an ordinary list slide.",
+      "description": "Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run cites is the warning opf/unused-reference. referencesSlide() turns the cited references into an ordinary list slide.",
       "examples": [[{ "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "url": "https://www.gartner.com" }]]
     },
     "datasets": {
       "$ref": "#/$defs/Datasets",
-      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is a lint warning (opf/unused-dataset). See docs/chart-table-data.md."
+      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is the warning opf/unused-dataset. See docs/chart-table-data.md."
     },
     "assets": {
       "$ref": "#/$defs/Assets",

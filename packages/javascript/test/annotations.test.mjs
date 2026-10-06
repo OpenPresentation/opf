@@ -3,10 +3,10 @@
 // without the new fields keep their geometry.
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { composeSlide, validatePresentation, collectCitations, slideCitations, referencesSlide, walkCitationRuns, CITATION_MARKER_SCALE, CITATION_MARKER_RAISE, fitRichText, fitList, captionSettings } from '../dist/index.js';
-import { lintPresentation } from '../dist/lint.js';
+import { composeSlide, validate, collectCitations, slideCitations, referencesSlide, walkCitationRuns, CITATION_MARKER_SCALE, CITATION_MARKER_RAISE, fitRichText, fitList, captionSettings } from '../dist/index.js';
 import { paginateSlide } from '../dist/pagination.js';
 import { examples } from '../dist/examples.js';
+import { check, errorsOf } from './support/validation.mjs';
 
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=';
 const references = [
@@ -32,31 +32,31 @@ describe('validation', () => {
     const document = deck();
     document.slides.push({ title: 'Captions', blocks: [{ image: png, caption: 'Figure 1' }, { chart: { type: 'bar', data: { columns: ['a', 's'], rows: [['x', 1]] } }, caption: { text: ['Rich ', { text: 'caption', italic: true }], position: 'above', align: 'center' } }, { table: { columns: ['A'], rows: [[1]] }, caption: [{ text: 'runs' }] }, { video: 'https://example.com/v.mp4', caption: 'Clip' }] });
     document.slides.push({ title: 'Root caption', image: png, caption: 'Root figure' });
-    const result = validatePresentation(document);
-    assert.deepEqual(result.errors, []);
+    const result = check(document);
+    assert.deepEqual(errorsOf(result), []);
     assert.equal(result.valid, true);
   });
   test('an unknown cited id is a cite-unknown-reference error at the cite field', () => {
     const document = deck();
     document.slides[0].text[0].cite = 'missing';
     document.slides[0].text[2].cite = ['gartner', 'gone'];
-    const errors = validatePresentation(document).errors;
-    assert.deepEqual(errors.map(error => [error.path, error.params.code, error.params.id]), [
-      ['/slides/0/text/0/cite', 'cite-unknown-reference', 'missing'],
-      ['/slides/0/text/2/cite/1', 'cite-unknown-reference', 'gone'],
+    const errors = errorsOf(check(document));
+    assert.deepEqual(errors.map(error => [error.path, error.ruleId, error.validation.params.id]), [
+      ['/slides/0/text/0/cite', 'opf/cite-unknown-reference', 'missing'],
+      ['/slides/0/text/2/cite/1', 'opf/cite-unknown-reference', 'gone'],
     ]);
   });
   test('reference ids must be unique and reference text cannot cite', () => {
     const document = deck();
     document.references.push({ id: 'gartner', text: [{ text: 'dup', cite: 'annual' }] });
-    const codes = validatePresentation(document).errors.map(error => `${error.params.code} ${error.path}`);
-    assert.deepEqual(codes, ['reference-id-duplicate /references/3/id', 'cite-unsupported-location /references/3/text/0']);
+    const codes = errorsOf(check(document)).map(error => `${error.ruleId} ${error.path}`);
+    assert.deepEqual(codes, ['opf/reference-id-duplicate /references/3/id', 'opf/cite-unsupported-location /references/3/text/0']);
   });
   test('cite and footnote outside text, bullets and list items are cite-unsupported-location errors', () => {
     const document = deck();
     document.slides[1] = { title: 'Table', blocks: [{ table: { columns: [[{ text: 'H', cite: 'gartner' }]], rows: [[{ value: [{ text: 'c', footnote: 'n' }] }]] }, caption: [{ text: 'cap', cite: 'gartner' }] }] };
     document.slides[0].text[3].footnote = [{ text: 'nested', cite: 'gartner' }];
-    const paths = validatePresentation(document).errors.filter(error => error.params.code === 'cite-unsupported-location').map(error => error.path).sort();
+    const paths = errorsOf(check(document)).filter(error => error.ruleId === 'opf/cite-unsupported-location').map(error => error.path).sort();
     assert.deepEqual(paths, ['/slides/0/text/3/footnote/0', '/slides/1/blocks/0/caption/0', '/slides/1/blocks/0/table/columns/0/0', '/slides/1/blocks/0/table/rows/0/0/value/0']);
   });
   test('a caption needs exactly one image, chart, table or video payload', () => {
@@ -67,7 +67,7 @@ describe('validation', () => {
       [{ title: 'quote', blocks: [{ quote: 'q', caption: 'no' }] }, '/slides/0/blocks/0/caption'],
     ];
     for (const [slide, path] of cases) {
-      const errors = validatePresentation({ slides: [slide] }).errors.filter(error => error.params.code === 'caption-unsupported-payload');
+      const errors = errorsOf(check({ slides: [slide] })).filter(error => error.ruleId === 'opf/caption-unsupported-payload');
       assert.deepEqual(errors.map(error => error.path), [path], JSON.stringify(slide));
     }
   });
@@ -76,21 +76,22 @@ describe('validation', () => {
       { text: [{ text: 'a', cite: [] }] },
       { text: [{ text: 'a', footnote: '' }] },
       { image: png, caption: { text: 'c', position: 'left' } },
-    ]) assert.equal(validatePresentation({ slides: [{ title: 't', ...slide }] }).valid, false, JSON.stringify(slide));
-    assert.equal(validatePresentation({ references: [{ id: 'a', text: 'b', extra: 1 }], slides: [{ title: 't' }] }).valid, false);
-    assert.equal(validatePresentation({ references: [{ id: 'a' }], slides: [{ title: 't' }] }).valid, false);
+    ]) assert.equal(check({ slides: [{ title: 't', ...slide }] }).valid, false, JSON.stringify(slide));
+    assert.equal(check({ references: [{ id: 'a', text: 'b', extra: 1 }], slides: [{ title: 't' }] }).valid, false);
+    assert.equal(check({ references: [{ id: 'a' }], slides: [{ title: 't' }] }).valid, false);
   });
-  test('lint reports an unused reference as a warning and keeps semantic codes as rule ids', () => {
+  test('validate reports an unused reference as a warning and keeps semantic codes as rule ids', () => {
     const document = deck();
-    const report = lintPresentation(document);
+    const options = { only: ['format', 'references'] };
+    const report = validate(document, options);
     assert.equal(report.valid, true);
-    assert.deepEqual(report.diagnostics.map(d => [d.ruleId, d.severity, d.path]), [['opf/unused-reference', 'warning', '/references/2']]);
+    assert.deepEqual(report.findings.map(d => [d.ruleId, d.severity, d.category, d.path]), [['opf/unused-reference', 'warning', 'references', '/references/2']]);
     document.slides[0].text[0].cite = 'nope';
-    const bad = lintPresentation(document);
+    const bad = validate(document, options);
     assert.equal(bad.valid, false);
-    assert.ok(bad.diagnostics.some(d => d.ruleId === 'opf/cite-unknown-reference' && d.path === '/slides/0/text/0/cite' && d.severity === 'error'));
+    assert.ok(bad.findings.some(d => d.ruleId === 'opf/cite-unknown-reference' && d.path === '/slides/0/text/0/cite' && d.severity === 'error'));
     delete document.references;
-    assert.deepEqual(lintPresentation({ ...document, slides: [{ title: 'plain', text: 'x' }] }).diagnostics, []);
+    assert.deepEqual(validate({ ...document, slides: [{ title: 'plain', text: 'x' }] }, options).findings, []);
   });
 });
 
@@ -310,7 +311,7 @@ describe('referencesSlide', () => {
       ['1. ', 'Gartner, Market Guide, 2026', ' ', { text: 'https://example.com/gartner', link: 'https://example.com/gartner' }],
       ['2. ', 'Annual report ', { text: '2025', bold: true }],
     ] });
-    assert.equal(validatePresentation({ ...document, slides: [...document.slides, slide] }).valid, true);
+    assert.equal(check({ ...document, slides: [...document.slides, slide] }).valid, true);
     assert.deepEqual(referencesSlide({ ...document, slides: [document.slides[1]] }, { title: 'Sources' }), { title: 'Sources' });
     assert.deepEqual(referencesSlide({ references: [{ id: 'a', text: 'Plain' }], slides: [{ text: [{ text: 'x', cite: 'a' }] }] }).items, ['1. Plain']);
   });

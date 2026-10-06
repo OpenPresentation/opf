@@ -58,20 +58,23 @@ export async function checkPackedTypes(directory, {downstream = false} = {}) {
   }).join('\n');
   await writeFile(path.join(directory, 'types-smoke.ts'), `${imports}
 import type {Presentation} from '@openpresentation/opf/types';
-import {validatePresentation} from '@openpresentation/opf/validator';
+import {validate, type ValidationReport} from '@openpresentation/opf/validator';
+import type {Finding} from '@openpresentation/opf/types';
 import {composeSlide} from '@openpresentation/opf/composition';
 import type {FontFaceSelection, TextStyle} from '@openpresentation/opf/composition';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createDataContent} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
-import {markdownToOpf, opfToMarkdown, type MarkdownDiagnostic} from '@openpresentation/opf/markdown';
+import {markdownToOpf, opfToMarkdown} from '@openpresentation/opf/markdown';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
 // @ts-expect-error Physical style-link flags are booleans, independent of weight.
 const invalidFace: FontFaceSelection = {family: 'Roboto', bold: 600, italic: false};
 void measuredStyle; void invalidFace;
-const valid: boolean = validatePresentation(deck).valid;
+const report: ValidationReport = validate(deck, {only: ['format']});
+const valid: boolean = report.valid;
+const firstFinding: Finding | undefined = report.findings[0];
 const pages = paginatePresentation(deck).presentation;
 composeSlide(pages.slides[0]);
 createDataContent('Name,Value\\nA,1', {as: 'table'});
@@ -82,11 +85,11 @@ convertContent({text: 'a'}, 'unsupported');
 void lossless;
 const fromMarkdown = markdownToOpf('# Typed\\n');
 const slides: Presentation['slides'] = fromMarkdown.document.slides;
-const firstDiagnostic: MarkdownDiagnostic | undefined = fromMarkdown.diagnostics[0];
+const firstMarkdownFinding: Finding | undefined = fromMarkdown.findings[0];
 const markdown: string = opfToMarkdown(deck).markdown;
 // @ts-expect-error unsupported mode must be rejected
 opfToMarkdown(deck, {unsupported: 'maybe'});
-void slides; void firstDiagnostic; void markdown;
+void slides; void firstMarkdownFinding; void firstFinding; void markdown;
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected

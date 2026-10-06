@@ -1,17 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import {
-  chartLabelText,
-  chartOptionSupport,
-  chartOptionTarget,
-  formatChartLabelNumber,
-  formatChartLabelPercent,
-  resolveChartOptions,
-  validatePresentation,
-} from "../dist/index.js";
+import { chartLabelText, chartOptionSupport, chartOptionTarget, formatChartLabelNumber, formatChartLabelPercent, resolveChartOptions } from "../dist/index.js";
 import { resolveChartOptions as fromComposition } from "../dist/composition.js";
 import { chartTypes } from "../dist/catalogs.js";
+import { check, errorsOf } from './support/validation.mjs';
+
+const adapted = (document) => check(document, { only: ['opf/chart-option-adapted'] });
 
 const data = { columns: ["Quarter", "A", "B"], rows: [["Q1", 1, 2], ["Q2", 3, 4]] };
 const deck = (chart) => ({ slides: [{ title: "Chart", chart: { type: "column", data, ...chart } }] });
@@ -164,45 +159,50 @@ describe("resolveChartOptions", () => {
 
 describe("schema and validator", () => {
   test("the three fields are valid on a chart", () => {
-    const result = validatePresentation(deck({
+    const result = check(deck({
       axisTitles: { category: "Quarter", value: "Revenue ($M)" },
       legend: "bottom",
       dataLabels: { content: ["category", "value"], position: "outside-end", separator: "; " },
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.deepEqual(result.warnings, []);
-    assert.equal(validatePresentation(deck({ dataLabels: true })).valid, true);
-    assert.equal(validatePresentation(deck({ dataLabels: false })).valid, true);
-    assert.equal(validatePresentation(deck({ legend: "none" })).valid, true);
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    assert.deepEqual(adapted(deck({
+      axisTitles: { category: "Quarter", value: "Revenue ($M)" },
+      legend: "bottom",
+      dataLabels: { content: ["category", "value"], position: "outside-end", separator: "; " },
+    })).findings, []);
+    assert.equal(check(deck({ dataLabels: true })).valid, true);
+    assert.equal(check(deck({ dataLabels: false })).valid, true);
+    assert.equal(check(deck({ legend: "none" })).valid, true);
   });
 
   test("invalid values are schema errors", () => {
-    assert.equal(validatePresentation(deck({ legend: "middle" })).valid, false);
-    assert.equal(validatePresentation(deck({ axisTitles: { category: 3 } })).valid, false);
-    assert.equal(validatePresentation(deck({ axisTitles: { x: "a" } })).valid, false);
-    assert.equal(validatePresentation(deck({ dataLabels: { position: "sideways" } })).valid, false);
-    assert.equal(validatePresentation(deck({ dataLabels: { content: [] } })).valid, false);
-    assert.equal(validatePresentation(deck({ dataLabels: { content: ["value", "value"] } })).valid, false);
-    assert.equal(validatePresentation(deck({ dataLabels: { show: true } })).valid, false);
+    assert.equal(check(deck({ legend: "middle" })).valid, false);
+    assert.equal(check(deck({ axisTitles: { category: 3 } })).valid, false);
+    assert.equal(check(deck({ axisTitles: { x: "a" } })).valid, false);
+    assert.equal(check(deck({ dataLabels: { position: "sideways" } })).valid, false);
+    assert.equal(check(deck({ dataLabels: { content: [] } })).valid, false);
+    assert.equal(check(deck({ dataLabels: { content: ["value", "value"] } })).valid, false);
+    assert.equal(check(deck({ dataLabels: { show: true } })).valid, false);
   });
 
   test("an option the chart type cannot show is a warning naming the option path", () => {
-    const result = validatePresentation({ slides: [{ title: "Pie", chart: { type: "pie", data, axisTitles: { value: "Revenue" }, dataLabels: { position: "above" } } }] });
+    const result = check({ slides: [{ title: "Pie", chart: { type: "pie", data, axisTitles: { value: "Revenue" }, dataLabels: { position: "above" } } }] });
     assert.equal(result.valid, true);
-    const paths = result.warnings.map((warning) => warning.path);
+    const found = adapted({ slides: [{ title: "Pie", chart: { type: "pie", data, axisTitles: { value: "Revenue" }, dataLabels: { position: "above" } } }] });
+    const paths = found.findings.map((warning) => warning.path);
     assert.ok(paths.includes("/slides/0/chart/axisTitles/value"), paths.join());
     assert.ok(paths.includes("/slides/0/chart/dataLabels/position"), paths.join());
-    assert.ok(result.warnings.every((warning) => warning.params.code === "chart-option-adapted"));
+    assert.ok(found.findings.every((warning) => warning.ruleId === "opf/chart-option-adapted" && warning.severity === "warning" && warning.category === "layout"));
   });
 
   test("the warning also covers a chart inside a block", () => {
-    const result = validatePresentation({ slides: [{ title: "Blocks", blocks: [{ chart: { type: "radar", data, dataLabels: { position: "above" } } }, { text: "x" }] }] });
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.ok(result.warnings.some((warning) => warning.path === "/slides/0/blocks/0/chart/dataLabels/position"), JSON.stringify(result.warnings));
+    const result = check({ slides: [{ title: "Blocks", blocks: [{ chart: { type: "radar", data, dataLabels: { position: "above" } } }, { text: "x" }] }] });
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    const found = adapted({ slides: [{ title: "Blocks", blocks: [{ chart: { type: "radar", data, dataLabels: { position: "above" } } }, { text: "x" }] }] });
+    assert.ok(found.findings.some((warning) => warning.path === "/slides/0/blocks/0/chart/dataLabels/position"), JSON.stringify(found.findings));
   });
 
   test("a deck without the fields validates with the same warnings as before", () => {
-    const result = validatePresentation(deck({}));
-    assert.deepEqual(result.warnings, []);
+    assert.deepEqual(adapted(deck({})).findings, []);
   });
 });

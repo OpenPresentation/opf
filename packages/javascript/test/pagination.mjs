@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {paginateSlide, OPFPaginationError} from '../dist/pagination.js';
 import {composeSlide,wrapText} from '../dist/composition.js';
-import {validatePresentation} from '../dist/index.js';
+import { check } from './support/validation.mjs';
+
 const original='Keep every word, space, and emoji 👨‍👩‍👧‍👦.\n'.repeat(100);
 const slide={id:'source',title:'A long explanation',notes:'Notes belong to the original slide.',composition:{overflow:'error'},text:original};
 const before=structuredClone(slide);
@@ -11,7 +12,7 @@ assert.deepEqual(slide,before);
 assert.equal(result.slides.map(page=>page.text).join(''),original);
 assert.equal(result.slides[0].id,'source');assert.equal(result.slides[1].id,'source--3');
 assert.equal(result.slides[1].notes,undefined);
-assert.equal(validatePresentation({slides:result.slides}).valid,true);
+assert.equal(check({slides:result.slides}).valid,true);
 for(const page of result.slides) assert.equal(composeSlide(page).diagnostics.length,0);
 assert.deepEqual(result,paginateSlide(slide,{reservedIds:['source--2']}));
 let offset=0;

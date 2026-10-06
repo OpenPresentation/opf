@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validatePresentation } from '../packages/javascript/dist/index.js';
+import { validate } from '../packages/javascript/dist/index.js';
 import { resolveCanvasDimensions } from '../packages/javascript/dist/composition.js';
 import { renderSvgDeck, resolvePresentation, svgToPng, svgToPdf, renderSvg } from '../../opf-render/dist/index.js';
 import { toPptx, fromPptx } from '../../opf-pptx/dist/index.js';
@@ -15,7 +15,7 @@ const { XMLParser } = require('fast-xml-parser');
 const parser = new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const array = value => Array.isArray(value) ? value : value ? [value] : [];
 const deck = JSON.parse(await readFile(new URL('../examples/technical/dynamic-composition.opf.json',import.meta.url),'utf8'));
-assert.equal(validatePresentation(deck).valid,true);
+assert.equal(validate(deck,{ only: ['format'] }).valid,true);
 const editor = createEditorSession(deck,{rejectInvalid:true});
 const original = editor.composeSlide(0);
 editor.setComposition(0,{mode:'column',weights:[2,1]});
@@ -69,7 +69,7 @@ for (let index=0;index<deck.slides.length;index++) {
   });
 }
 const imported = await fromPptx(bytes);
-assert.equal(validatePresentation(imported).valid,true);
+assert.equal(validate(imported,{ only: ['format'] }).valid,true);
 assert.equal(imported.slides.length,deck.slides.length);
 for(const [index,slide]of imported.slides.entries()) {
   const items=resolved.slides[index].geometry.items;

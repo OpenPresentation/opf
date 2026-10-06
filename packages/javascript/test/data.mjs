@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseTabularData,createDataContent} from '../dist/data.js';
-import {validatePresentation} from '../dist/index.js';
+import { check } from './support/validation.mjs';
+
 let checks=0;
 const equal=(a,b)=>{assert.deepEqual(a,b);checks++;};
 const bad=(input,options,pattern)=>{assert.throws(()=>createDataContent(input,{as:'table',...options}),pattern);checks++;};
@@ -17,7 +18,7 @@ equal(parseTabularData('A,B,C\n1,2,3',{columns:['C','A']}),{columns:['C','A'],ro
 equal(parseTabularData(JSON.parse('[{"__proto__":"safe","constructor":"own"}]')).rows,[['safe','own']]);
 const chart=createDataContent('Quarter,Revenue,Cost\nQ1,12,4\nQ2,18,7',{as:'chart',category:'Quarter',series:['Cost','Revenue'],chartType:'line'});
 equal(chart.chart.data,{columns:['Quarter','Cost','Revenue'],rows:[['Q1',4,12],['Q2',7,18]]});
-assert.ok(validatePresentation({slides:[chart]}).valid);checks++;
+assert.ok(check({slides:[chart]}).valid);checks++;
 for(const input of ['a,b\n1','a,a\n1,2','a,b\n"broken,2','a,b\n"ok"junk,2','a,b\nq"x,2','a,b\n1,2,3','', 'a,\n1,2'])bad(input,{},/./);
 for(const input of [[{a:{nested:1}}],[{a:[1]}],{columns:['a'],rows:[[1,2]]},[{a:Infinity}],[1,2],[]])bad(input,{format:'json'},/./);
 for(const value of ['', 'null','true','1,000','12%','NaN','9007199254740993'])bad({columns:['x','y'],rows:[['Q1',value]]},{as:'chart',format:'json'},/numeric chart value/);

@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { paginateSlide, paginatePresentation, validatePresentation } from "../dist/index.js";
+import { paginateSlide, paginatePresentation } from "../dist/index.js";
+import { check, errorsOf } from './support/validation.mjs';
 
 const regionKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
 const items = Array.from({ length: 60 }, (_, index) => `Point ${index}: ${"detail ".repeat(11)}`);
@@ -27,8 +28,8 @@ const documentIds = (slides) =>
 /** Paginate, then hold the output to the contract paginatePresentation promises. */
 const paginated = (deck) => {
   const { presentation } = paginatePresentation(deck);
-  const result = validatePresentation(presentation);
-  assert.equal(result.valid, true, JSON.stringify(result.errors));
+  const result = check(presentation);
+  assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   assert.ok(presentation.slides.length > 1, "the fixture must overflow onto continuation pages");
   const ids = documentIds(presentation.slides);
   assert.equal(new Set(ids).size, ids.length, `duplicate ids: ${ids.join(", ")}`);

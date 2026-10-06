@@ -8,7 +8,7 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { validatePresentation } from '../packages/javascript/dist/index.js';
+import { validate } from '../packages/javascript/dist/index.js';
 import { composeSlide } from '../packages/javascript/dist/composition.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -25,7 +25,7 @@ const emu = value => Math.round(value / 96 * 914400);
 const attr = (tag, name) => tag?.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 
 const deck = JSON.parse(await readFile(new URL('../docs/fixtures/image-treatments.opf.json', import.meta.url), 'utf8'));
-assert.equal(validatePresentation(deck).valid, true);
+assert.equal(validate(deck, { only: ['format'] }).valid, true);
 assert.equal(deck.slides.length, 15);
 // The 14 slide-image treatments are distinct OPF; collage-grid is composed from content blocks.
 const treatments = deck.slides.filter(slide => slide.design?.slideImage).map(slide => JSON.stringify(slide.design));

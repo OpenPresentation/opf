@@ -30,7 +30,7 @@ Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts p
 
 ## Revision loop
 
-1. Validate with `validatePresentation`. Fix errors at their returned JSON paths. Check warnings for unknown catalog IDs.
+1. Validate with `validate` (or `opf validate`). Fix error findings at their returned JSON paths, then read the warnings: unknown catalog IDs, missing alt text, low contrast, overflow and placeholder text each have a rule id and a suggested fix ([validate](validate.md)).
 2. Render with `onDiagnostic` and inspect `text-overflow` / `small-cell` paths. Shorten text, reduce the number of blocks, change composition, or explicitly split the slide. Revalidate after edits.
 3. Use `composition.overflow: "error"` for a strict text-layout gate. It does not certify chart readability, font availability, or exact PowerPoint rendering.
 4. Inspect the actual preview and exported PPTX. Geometry is shared; font substitution and specialized objects can still differ. Previews draw an open look-alike where the license-restricted font cannot be bundled (metric-compatible where one exists, for example Carlito for Calibri; Intos for Aptos), but the exported PPTX keeps the font name the user selected.

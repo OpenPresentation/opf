@@ -8,23 +8,24 @@
  * No renderer, fonts, DOM, network or model calls. The same input always gives the same output.
  */
 import { type Obj, same } from "./convert/shared.js";
-import { lintPresentation } from "./lint.js";
-import type { LintSeverity } from "./lint.js";
 import type { Presentation } from "./types.js";
-import { validatePresentation } from "./validator.js";
+import type { Finding, FindingLocation, FindingReport } from "./generated/types/finding.js";
+import { type ValidateOptions, validate } from "./validator.js";
 import { type EmbeddedPart, emitSlide } from "./markdown/emit.js";
 import { type ParseOptions, emptySegment, frontMatter, parseSlide, readYamlMapping, splitSegments } from "./markdown/parse.js";
-import { Ctx, type MarkdownDiagnostic, OPFMarkdownError, lineRange, splitLines, writeYaml } from "./markdown/support.js";
+import { Ctx, OPFMarkdownError, lineRange, splitLines, writeYaml } from "./markdown/support.js";
 
 export { OPFMarkdownError } from "./markdown/support.js";
-export type { MarkdownDiagnostic } from "./markdown/support.js";
 export type { EmbeddedPart } from "./markdown/emit.js";
 
 export interface MarkdownToOpfOptions extends ParseOptions {
   /** Deck properties used when the front matter does not set them (for example `{ name: "Title" }`). The front matter wins. */
   defaults?: Record<string, unknown>;
-  /** Run the OPF lint over the result and map its findings to Markdown line and column (default true). */
-  validate?: boolean;
+  /**
+   * Check the result with `validate` and map its findings to Markdown line and column: `true` (the default) checks
+   * `format` and `references`; options pick other rules or categories; `false` skips the check.
+   */
+  validate?: boolean | ValidateOptions;
 }
 
 export interface MarkdownToOpfResult {
@@ -32,12 +33,12 @@ export interface MarkdownToOpfResult {
   document: Presentation;
   /** True when there are no errors (Markdown syntax errors and OPF validation errors both count). */
   valid: boolean;
-  /** Lint-shaped diagnostics, in source order, each with `location` (UTF-16 offset and length, one-based line and column). */
-  diagnostics: MarkdownDiagnostic[];
-  counts: Record<LintSeverity, number>;
+  /** Findings (the shared Finding format), in source order, each with `location` (UTF-16 offset and length, one-based line and column). */
+  findings: (Finding & { location: FindingLocation })[];
+  counts: FindingReport["counts"];
 }
 
-/** Convert Markdown in the OPF dialect to an OPF document. Never throws for malformed content; read `valid` and `diagnostics`. */
+/** Convert Markdown in the OPF dialect to an OPF document. Never throws for malformed content; read `valid` and `findings`. */
 export function markdownToOpf(markdown: string, options: MarkdownToOpfOptions = {}): MarkdownToOpfResult {
   if (typeof markdown !== "string") throw new TypeError("markdownToOpf expects a string.");
   const source = markdown;
@@ -81,15 +82,16 @@ export function markdownToOpf(markdown: string, options: MarkdownToOpfOptions = 
 
   if (!slides.length) ctx.error("no-slides", "The Markdown has no slides.", "Write at least one slide: a # title or any content, with --- between slides.", { start: 0, end: Math.min(1, source.length) }, "/slides");
   else if (options.validate !== false) {
-    for (const found of lintPresentation(document).diagnostics) {
+    const checked = validate(document, options.validate === true || options.validate === undefined ? { only: ["format", "references"] } : options.validate);
+    for (const found of checked.findings) {
       const range = ctx.rangeOf(found.path) ?? ctx.rangeOf("") ?? { start: 0, end: 0 };
-      ctx.diagnostics.push({ ...found, location: ctx.location(range) });
+      ctx.findings.push({ ...found, location: ctx.location(range) });
     }
   }
-  const diagnostics = [...ctx.diagnostics].sort((a, b) => a.location.offset - b.location.offset);
-  const counts: Record<LintSeverity, number> = { error: 0, warning: 0, info: 0 };
-  for (const diagnostic of diagnostics) counts[diagnostic.severity]++;
-  return { document: document as unknown as Presentation, valid: counts.error === 0, diagnostics, counts };
+  const findings = [...ctx.findings].sort((a, b) => a.location.offset - b.location.offset);
+  const counts: FindingReport["counts"] = { error: 0, warning: 0, info: 0 };
+  for (const entry of findings) counts[entry.severity]++;
+  return { document: document as unknown as Presentation, valid: counts.error === 0, findings, counts };
 }
 
 export interface OpfToMarkdownOptions {
@@ -121,10 +123,11 @@ export interface OpfToMarkdownResult {
  * itself byte for byte. Throws `OPFMarkdownError` (`invalid-document`) when the input is not valid OPF.
  */
 export function opfToMarkdown(document: unknown, options: OpfToMarkdownOptions = {}): OpfToMarkdownResult {
-  const checked = validatePresentation(document);
+  const checked = validate(document, { only: ["format"] });
   if (!checked.valid) {
-    const first = checked.errors[0];
-    throw new OPFMarkdownError("invalid-document", `The document is not valid OPF: ${first?.message ?? "unknown error"}${first?.path ? ` (${first.path})` : ""}.`, { issues: checked.errors });
+    const errors = checked.findings.filter((entry) => entry.severity === "error");
+    const first = errors[0];
+    throw new OPFMarkdownError("invalid-document", `The document is not valid OPF: ${first?.message ?? "unknown error"}${first?.path ? ` (${first.path})` : ""}.`, { issues: errors });
   }
   const mode = options.unsupported === "drop" ? "drop" : "embed";
   const { slides, ...rest } = document as Obj;

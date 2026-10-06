@@ -2,14 +2,15 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {composeSlide, fitList, formatListNumber, listNumbers, resolveNumbering, sliceNumberedItems, MAX_NUMBERING_VALUE} from '../dist/composition.js';
 import {paginateSlide} from '../dist/pagination.js';
-import {validatePresentation} from '../dist/validator.js';
+
 import * as root from '../dist/index.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const measure = {measure: (text, size, style) => Array.from(text).length * size * (style.fontWeight === 700 ? .6 : .5)};
 const options = {style: {fontFamily: 'Base', fontWeight: 400, path: 'slides.0.items'}, textMeasurement: measure};
 const box = {x: 40, y: 30, width: 600, height: 900};
 const doc = slides => ({slides});
-const errors = value => validatePresentation(doc([value])).errors;
+const errors = value => errorsOf(check(doc([value])));
 
 test('formatListNumber draws every style and suffix as PowerPoint does', () => {
   assert.equal(formatListNumber(7), '7.');
@@ -194,11 +195,12 @@ test('validation: numbering needs a list, and counts stay inside the native rang
 });
 
 test('validation: an entry start without numbering is a warning', () => {
-  const result = validatePresentation(doc([{items: [{text: 'a', start: 2}]}]));
+  const result = check(doc([{items: [{text: 'a', start: 2}]}]));
   assert.equal(result.valid, true);
-  assert.deepEqual(result.warnings.map(w => w.path), ['/slides/0/items']);
-  assert.match(result.warnings[0].message, /no effect without a 'numbering'/);
-  assert.deepEqual(validatePresentation(doc([{items: [{text: 'a', start: 2}], numbering: 'arabic'}])).warnings, []);
+  assert.deepEqual(warningsOf(result).map(w => w.path), ['/slides/0/items']);
+  assert.equal(warningsOf(result)[0].ruleId, 'opf/numbering-start-ignored');
+  assert.match(warningsOf(result)[0].message, /no effect without a 'numbering'/);
+  assert.deepEqual(warningsOf(check(doc([{items: [{text: 'a', start: 2}], numbering: 'arabic'}]))), []);
 });
 
 test('pagination keeps the numbers of a numbered list across continuation pages', () => {
@@ -212,7 +214,7 @@ test('pagination keeps the numbers of a numbered list across continuation pages'
   assert.equal(paged.slides[0].items.some(item => item.start !== undefined), false, 'the first page needs no overrides');
   assert.ok(paged.slides.slice(1).every(page => page.numbering === slide.numbering || JSON.stringify(page.numbering) === JSON.stringify(slide.numbering)));
   assert.deepEqual(paged.slides.flatMap(page => page.items.map(item => typeof item === 'string' ? item : item.text)), items.map(item => item.text));
-  for (const page of paged.slides) assert.equal(validatePresentation(doc([page])).valid, true);
+  for (const page of paged.slides) assert.equal(check(doc([page])).valid, true);
   // An unnumbered list paginates as before: no field, no overrides.
   const plain = paginateSlide({title: 'Plan', items});
   assert.deepEqual(plain.slides.flatMap(page => page.items), items);
@@ -223,16 +225,16 @@ test('the package root exports the numbering helpers', () => {
     assert.notEqual(root[name], undefined, name);
 });
 
-test('the fixture is valid and lint suggests the numbering styles', async () => {
+test('the fixture is valid and validate suggests the numbering styles', async () => {
   const {readFileSync} = await import('node:fs');
-  const {lintSource} = await import('../dist/lint.js');
+  const {validate} = await import('../dist/index.js');
   const text = readFileSync(new URL('../../../docs/fixtures/numbered-lists.opf.json', import.meta.url), 'utf8');
-  assert.deepEqual(lintSource(text).counts, {error: 0, warning: 0, info: 0});
+  assert.deepEqual(validate(text, {only: ['format', 'references']}).counts, {error: 0, warning: 0, info: 0});
   const fixture = JSON.parse(text);
   const kinds = fixture.slides.flatMap(slide => [slide, ...(slide.blocks ?? []), slide.left, slide.right].filter(Boolean)).map(block => block.numbering).filter(value => value !== undefined);
   assert.ok(kinds.some(value => Array.isArray(value)) && kinds.some(value => typeof value === 'string') && kinds.some(value => value?.start !== undefined), 'the fixture covers every spelling');
-  const report = lintSource(JSON.stringify({slides: [{items: ['a'], numbering: 'roman'}]}));
+  const report = validate(JSON.stringify({slides: [{items: ['a'], numbering: 'roman'}]}), {only: ['format', 'references']});
   assert.equal(report.valid, false);
-  const suggested = report.diagnostics.flatMap(diagnostic => (diagnostic.suggestions ?? []).map(suggestion => suggestion.value));
+  const suggested = report.findings.flatMap(finding => (finding.suggestions ?? []).map(suggestion => suggestion.value));
   assert.deepEqual(suggested, ['arabic', 'roman-upper', 'roman-lower', 'alpha-upper', 'alpha-lower']);
 });

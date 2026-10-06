@@ -88,7 +88,7 @@ describe("catalog entries validate", () => {
     test(`catalog '${entry.kind}' has records and its first record validates`, () => {
       assert.ok(entry.records.length > 0, `${entry.kind} should have records`);
       const result = validateCatalogRecord(entry.kind, entry.records[0]);
-      assert.equal(result.valid, true, `${entry.kind}: ${JSON.stringify(result.errors, null, 2)}`);
+      assert.equal(result.valid, true, `${entry.kind}: ${JSON.stringify(result.findings, null, 2)}`);
     });
   }
 });
@@ -102,9 +102,9 @@ describe("catalog cross-links resolve", () => {
       test(`${kind}/${record.id} has no broken cross-links`, () => {
         const result = validateCatalogRecord(kind, record);
         assert.equal(
-          result.warnings.length,
+          result.counts.warning,
           0,
-          `${kind}/${record.id} has broken cross-links: ${JSON.stringify(result.warnings, null, 2)}`,
+          `${kind}/${record.id} has broken cross-links: ${JSON.stringify(result.findings, null, 2)}`,
         );
       });
     }
@@ -119,8 +119,8 @@ describe("catalog cross-links resolve", () => {
     });
     assert.equal(invalidLanguageResult.valid, false, "expected en-UK language catalog record to be invalid");
     assert.ok(
-      invalidLanguageResult.errors.some((error) => error.message.includes("Use 'en-GB' for UK English")),
-      JSON.stringify(invalidLanguageResult.errors, null, 2),
+      invalidLanguageResult.findings.some((error) => error.severity === "error" && error.message.includes("Use 'en-GB' for UK English")),
+      JSON.stringify(invalidLanguageResult.findings, null, 2),
     );
   });
 
@@ -131,8 +131,9 @@ describe("catalog cross-links resolve", () => {
       recommendedNarratives: ["no-such-narrative", "classic-story"],
     });
     assert.equal(brokenAudienceResult.valid, true, "broken cross-links must warn, never error");
-    assert.equal(brokenAudienceResult.warnings.length, 1, JSON.stringify(brokenAudienceResult.warnings, null, 2));
-    assert.equal(brokenAudienceResult.warnings[0].path, "/recommendedNarratives/0");
+    assert.equal(brokenAudienceResult.counts.warning, 1, JSON.stringify(brokenAudienceResult.findings, null, 2));
+    assert.equal(brokenAudienceResult.findings[0].path, "/recommendedNarratives/0");
+    assert.equal(brokenAudienceResult.findings[0].ruleId, "opf/catalog-reference");
   });
 });
 

@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import path from 'node:path';
-import {validatePresentation} from '../packages/javascript/dist/index.js';
+import {validate} from '../packages/javascript/dist/index.js';
 import {toPptx, fromPptx} from '../../opf-pptx/dist/index.js';
 import {prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
 
@@ -78,14 +78,14 @@ const cases = [
 ];
 const results = [];
 for (const fixture of cases) {
-  assert.equal(validatePresentation(fixture.source).valid, true, fixture.id);
+  assert.equal(validate(fixture.source, { only: ['format'] }).valid, true, fixture.id);
   const sourceBefore = JSON.stringify(fixture.source);
   const original = await toPptx(fixture.source, {...options, strictAssets: true});
   const bytes = fixture.edit ? fixture.edit(original) : original;
   const diagnostics = [];
   const imported = await fromPptx(bytes, {onDiagnostic: issue => diagnostics.push(issue)});
   assert.equal(JSON.stringify(fixture.source), sourceBefore, `${fixture.id}: export mutated source`);
-  assert.equal(validatePresentation(imported).valid, true, fixture.id);
+  assert.equal(validate(imported, { only: ['format'] }).valid, true, fixture.id);
   assert.equal(imported.slides.length, fixture.source.slides.length, fixture.id);
   const checks = fixture.checks(imported);
   const failures = Object.keys(checks).filter(key => !checks[key]);

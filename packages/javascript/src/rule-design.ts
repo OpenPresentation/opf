@@ -10,10 +10,10 @@ import {
 } from './composition.js';
 
 /**
- * Design resolution and colour maths for `auditPresentation`.
+ * Design resolution and colour maths for the accessibility and layout rules of `validate`.
  *
  * The resolution mirrors what the opf-render preview and the PPTX export draw (slide design, then deck
- * design, then theme, then engine default, per field), because an audit that reasons about a different
+ * design, then theme, then engine default, per field), because a check that reasons about a different
  * colour than the one on screen is worse than none. Internal module.
  */
 
@@ -427,7 +427,7 @@ export function readableColor(candidates: readonly string[], sample: BackdropSam
 
 /**
  * The series palette opf-render and opf-pptx draw charts with (`CHART_COLORS`), in series order. A host with
- * its own palette passes `AuditOptions.chartPalette`.
+ * its own palette passes `ValidateOptions.chartPalette`.
  */
 export const DEFAULT_CHART_PALETTE: readonly string[] = [
 	'#2874A6', '#1B4F72', '#5499C7', '#7BDBB2', '#3AC67A', '#24A89E',

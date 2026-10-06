@@ -1,8 +1,8 @@
 import { visitContentPayloads } from './content-walk.js';
-import { type Rec, rec } from './audit-design.js';
+import { type Rec, rec } from './rule-design.js';
 
 /**
- * Typed walks over a slide's content for the audit rules. Everything returns JSON Pointer paths so a finding
+ * Typed walks over a slide's content for the validation rules. Everything returns JSON Pointer paths so a finding
  * can be located in the source and patched without translation. Internal module.
  */
 
@@ -150,17 +150,6 @@ export function runsOf(tv: TextValue): Run[] {
 		index,
 		valuePath: tv.path,
 	}));
-}
-
-const segmenter = typeof Intl !== 'undefined' && 'Segmenter' in Intl ? new Intl.Segmenter(undefined, { granularity: 'word' }) : undefined;
-/** Words in a string: UAX #29 word segments where `Intl.Segmenter` exists (so CJK counts by word), else whitespace runs. */
-export function countWords(text: string): number {
-	if (segmenter) {
-		let count = 0;
-		for (const part of segmenter.segment(text)) if (part.isWordLike) count++;
-		return count;
-	}
-	return text.split(/\s+/).filter((word) => /[\p{L}\p{N}]/u.test(word)).length;
 }
 
 export interface AssetRef {

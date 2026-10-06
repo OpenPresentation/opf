@@ -13,7 +13,7 @@ export interface ReadingBox {
  * The boxes are read as given: pass them in logical (unmirrored) coordinates and the order is the reading
  * order of both a left-to-right and a right-to-left deck, because mirroring a deck moves where an item is
  * drawn and where a line starts together. For boxes that are already mirrored, pass `direction: 'rtl'` to
- * order each row from right to left. composeSlide uses this for promoted regions and `opf audit` uses it to
+ * order each row from right to left. composeSlide uses this for promoted regions and `opf/reading-order` uses it to
  * check the composed order, so the two cannot drift apart.
  */
 export function visualReadingOrder<T extends ReadingBox>(items: readonly T[], direction: 'ltr' | 'rtl' = 'ltr'): T[] {

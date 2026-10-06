@@ -5,12 +5,12 @@
 - **Write a deck as text.** YAML front matter holds the deck, `---` separates slides, `#` is the title, `##` the subtitle, and lists, quotes, tables, images, code, charts, metrics, timelines and speaker notes have their own syntax.
 - **Read a deck as text.** `opfToMarkdown` writes any valid OPF document as that dialect. What the dialect has no syntax for (a design, nested groups, a styled table cell) is embedded as YAML in a fenced block, so nothing is lost; or it is left out and reported, on request.
 - **Round trip.** The Markdown the writer produces converts back to the same deck and to itself, byte for byte. Markdown written by hand converts to a deck whose canonical Markdown is the same text, apart from layout the dialect treats as equivalent (the examples in `examples/markdown/` are canonical).
-- **Errors have places.** Diagnostics use the shape of [OPF lint](lint.md) and carry the source offset, length, line and column of the Markdown that caused them, including OPF validation errors mapped back to the Markdown that produced the field.
+- **Errors have places.** Findings use the shared [Finding format](finding-schema-reference.md) and carry the source offset, length, line and column of the Markdown that caused them, including OPF validation errors mapped back to the Markdown that produced the field.
 
 ```js
 import { markdownToOpf, opfToMarkdown } from "@openpresentation/opf/markdown";
 
-const { document, valid, diagnostics } = markdownToOpf(markdown);
+const { document, valid, findings } = markdownToOpf(markdown);
 const { markdown: text, report } = opfToMarkdown(document);
 ```
 
@@ -148,20 +148,20 @@ The writer's canonical form: front matter, then slides joined by a blank line, `
 - Shorthand and object forms collapse to the shorter one: a metric with only `value`, a code object with only `source`, an image with only `src`, a quote with only `text`, a timeline array with no name, a list item with level 0 and no description.
 - Adjacent runs with the same formatting merge and `false` flags drop.
 
-## Diagnostics
+## Findings
 
-`markdownToOpf(markdown, options)` never throws for malformed content. It returns `{ document, valid, diagnostics, counts }`; `document` is a best effort when `valid` is false. Each diagnostic is a lint diagnostic (`ruleId`, `severity`, `path`, `scope`, `message`, `help`) plus `location` (`offset`, `length` in UTF-16 units, one-based `line` and `column`). Rule ids starting `markdown/` come from the Markdown; ids starting `opf/` are the OPF lint findings of the converted deck, located by the Markdown of the field they name. Options: `split` (`"rules"` or `"headings"`), `defaults`, `validate` (false skips the OPF lint).
+`markdownToOpf(markdown, options)` never throws for malformed content. It returns `{ document, valid, findings, counts }`; `document` is a best effort when `valid` is false. Each finding is a [Finding](finding-schema-reference.md) (`ruleId`, `severity`, `category` `format`, `path`, `scope`, `message`, `help`) plus `location` (`offset`, `length` in UTF-16 units, one-based `line` and `column`). Rule ids starting `markdown/` come from the Markdown; ids starting `opf/` are the [`validate`](validate.md) findings of the converted deck, located by the Markdown of the field they name. Options: `split` (`"rules"` or `"headings"`), `defaults`, `validate` (`true`, the default, checks `format` and `references`; a `ValidateOptions` object such as `{ only: ["content"] }` picks other rules; `false` skips the check).
 
 Errors: `front-matter`, `front-matter-not-mapping`, `front-matter-unterminated`, `front-matter-slides`, `no-slides`, `options-syntax`, `options-unknown-key`, `options-value`, `options-duplicate`, `options-orphan`, `options-trailing`, `options-embedded`, `comment-unterminated`, `duplicate-title`, `duplicate-subtitle`, `empty-heading`, `empty-quote`, `image-source`, `fence-unterminated`, `code-fence`, `chart-type`, `chart-data`, `metric-block`, `timeline-attributes`, `timeline-description`, `timeline-events`, `opf-slide`, `opf-slide-not-mapping`, `opf-block`, `opf-block-not-mapping`, `slide-property-conflict`, `span-attributes`. Warnings: `front-matter-comments`, `empty-slide`, `heading-demoted`, `numbered-list`, `table-ragged`, `chart-ragged`, `formatting-dropped`.
 
 ## Command line
 
 ```text
-opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--strict]
-opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]
+opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--fail-on <level>]
+opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--fail-on <level>]
 ```
 
-Both write to stdout by default and print a JSON report (on stderr when stdout carries the document). Exit codes follow the other commands: 0 success, 1 invalid content, an output conflict or `--strict` failure, 2 usage, JSON or I/O error. `from-md` exits 1 with `markdown.diagnostics` (line and column) on a Markdown or OPF error, and writes nothing; `--strict` also fails on warnings. `to-md --strict` fails when anything had to be embedded or dropped, which keeps a deck inside the plain dialect.
+Both write to stdout by default and print a JSON report (on stderr when stdout carries the document). Exit codes follow the other commands: 0 success, 1 invalid content, an output conflict or a `--fail-on` failure, 2 usage, JSON or I/O error. `from-md` exits 1 with `markdown.findings` (line and column) on a Markdown or OPF error, and writes nothing; `--fail-on warning` also fails on warnings. `to-md --fail-on warning` fails when anything had to be embedded or dropped (such parts count as warnings), which keeps a deck inside the plain dialect.
 
 ## Decisions and limits
 

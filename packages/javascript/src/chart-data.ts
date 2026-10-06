@@ -693,7 +693,7 @@ export function suggestChartNumberFix(chart: unknown, document?: unknown, option
   return undefined;
 }
 
-/** Every column fix of one chart, by the path of each text cell it rewrites (for lint). */
+/** Every column fix of one chart, by the path of each text cell it rewrites (for the migration fix of opf/chart-value-not-numeric). */
 export function chartNumberFixesByCell(chart: unknown, document: unknown, options: DataResolveOptions): Map<string, ChartNumberFix> {
   const byCell = new Map<string, ChartNumberFix>();
   for (const fix of chartNumberFixes(chart, document, options).values()) for (const patch of fix.patches.slice(0, -1)) byCell.set(patch.path, fix);

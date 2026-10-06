@@ -10,6 +10,7 @@ New to the format? Read [`docs/how-opf-works.md`](../docs/how-opf-works.md) firs
 |---|---|
 | [`schemas/opf.schema.json`](./schemas/opf.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents (`$id: https://openpresentation.org/schema/opf/v1`). |
 | [`schemas/*.schema.json`](./schemas) | Companion schemas for catalog records. Each has a stable `$id` of the form `https://openpresentation.org/schema/opf-<kind>/v1` (e.g. `opf-narrative`, `opf-theme`, `opf-chart-type`). Three schemas in this directory — `catalog-index.schema.json`, `catalog-manifest.schema.json`, and `layout-preview-index.schema.json` — describe repo-internal index and manifest files instead (see rows below); they are not OPF document or catalog-record schemas and are intentionally excluded from the package's published/typed schema surface (`schemaNames` / generated types). |
+| [`schemas/finding.schema.json`](./schemas/finding.schema.json) | The report format every OPF tool shares (`$id: https://openpresentation.org/schema/opf-finding/v1`): a finding is one thing a checker found at one place in a presentation, and a report lists them. `validate`, the Markdown and YAML converters, the editor's Review panel and hosted reviewers produce it. It is not a catalog-record schema, but unlike the three index schemas it is part of the published, typed schema surface (`schemaNames`, `Finding`, `FindingReport`). See [`docs/validate.md`](../docs/validate.md). |
 | [`catalogs/<kind>/`](./catalogs) | Bundled catalog records, one JSON file per record plus an `index.json` per kind. They are a pinned snapshot of the default catalog that pptx.gallery publishes at `https://www.pptx.gallery/<kind>/index.json`: engines resolve the default catalog from these files and never fetch it at run time. Every `index.json` validates against `schemas/catalog-index.schema.json` (`$id: https://openpresentation.org/schema/opf-catalog-index/v1`), a generic shape shared across all 11 kinds, and carries a `contentSha256` of its records. Do not edit these files by hand; change the gallery and run `scripts/sync-gallery-catalog.mjs` (see [`docs/default-catalog.md`](../docs/default-catalog.md)). |
 | [`catalogs/manifest.json`](./catalogs/manifest.json) | Pins the snapshot: the pptx-gallery commit it came from and, per kind, `mirror`/`subset` mode, record count and content hash. Validates against `schemas/catalog-manifest.schema.json` (`$id: https://openpresentation.org/schema/opf-catalog-manifest/v1`). `check:spec` fails when the bundled records no longer match it. |
 | [`previews/layouts/`](./previews/layouts) | Vendored HTML previews for the **slide archetype gallery** (e.g. `swot-analysis`, `agenda`, `org-chart`) — see "Preview gallery vs. layout catalog" below. Its `index.json` validates against `schemas/layout-preview-index.schema.json` (`$id: https://openpresentation.org/schema/opf-layout-preview-index/v1`). |
@@ -36,12 +37,12 @@ Without that sibling checkout, treat `spec/previews/layouts/*.html` and `index.j
 Validate a document and load catalog records without touching the files directly:
 
 ```ts
-import { validatePresentation, narratives } from "@openpresentation/opf";
+import { validate, narratives } from "@openpresentation/opf";
 
-const result = validatePresentation(deck);
-// result.valid    — schema correctness
-// result.errors   — structural problems
-// result.warnings — advisory issues such as unknown catalog ids
+const report = validate(deck);
+// report.valid    — no finding has severity "error"
+// report.findings — every finding: rule id, severity, category, JSON Pointer path, message, fixes
+// report.counts   — { error, warning, info }
 ```
 
 Import the raw files when an engine, resolver, or non-JavaScript toolchain needs them:

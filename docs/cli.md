@@ -1,8 +1,8 @@
 # The `opf` CLI: producing and reading files
 
-The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, lints, edits, paginates and bundles documents (see
-[its README](../packages/cli/README.md)). Three commands produce and read files: `opf render`, `opf export` and
-`opf import`. They are in the CLI after RR-27 of the [release readiness program](programs/release-readiness/README.md)
+The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, edits, paginates and bundles documents (see
+[its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Three commands
+produce and read files: `opf render`, `opf export` and `opf import`. They are in the CLI after RR-27 of the [release readiness program](programs/release-readiness/README.md)
 and ship in CLI 0.10.0, the first CLI release after 0.9.2.
 
 All three are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
@@ -76,7 +76,7 @@ AI reconstruction of third-party decks is not part of the CLI (it lives in pptx.
 | `--date YYYY-MM-DD` | The date for `date: true` header and footer fields. The CLI never reads a clock; without it a current date is reported as unresolved. |
 | `--font-dir <directory>` (repeatable) | Your own `.ttf`/`.otf` files, loaded in addition to the bundled pack, directly inside the directory, sorted by name. A face that repeats a bundled family, weight and style is refused. |
 | `--asset-dir <directory>` | The folder relative image paths resolve against and the only folder read. Default: the document's folder (the working directory for stdin). |
-| `--strict` | Warnings fail like errors, and nothing is written. |
+| `--fail-on <error\|warning\|info>` | Findings at or above this severity fail, and nothing is written (default `error`). `--fail-on warning` fails on warnings; every command that checks a document takes it. |
 | `--force` | Replace existing outputs. Without it any existing destination exits 1 before anything is written. |
 | `--json` | Accepted for scripts that pass it everywhere. Reports are always JSON; this is the default. |
 
@@ -104,18 +104,21 @@ whichever way the packages were installed.
 
 ## Diagnostics and exit codes
 
-The report is the [`opf lint`](lint.md) report with the written files added: `ok`, `valid`, `schemaValid`,
-`diagnostics` (`ruleId`, `severity`, JSON Pointer `path`, `scope`, `message`, `help`), `counts`, `checks`, `sha256` and
-`opfVersion`. The document is linted first; an invalid one exits 1 and nothing is rendered. Library diagnostics are
-added with the prefix `render/`, `pptx/`, `pdf/`, `fonts/`, `import/` or `cli/`, for example `render/text-overflow`.
-Notes (`font-glyph-fallback`, `pdf-font-embedded`, `svg-sanitized`) are `info`; everything else a library reports is a
-`warning`; a failed render, export or import is an `error`.
+The report is the [`opf validate`](validate.md) report with the written files added: `ok`, `valid`, `schemaValid`,
+`findings` (`ruleId`, `severity`, `category`, JSON Pointer `path`, `scope`, `message`, `help`), `counts`, `checks`, `sha256` and
+`opfVersion`. The document's format and references are checked first (not accessibility or layout rules: a contrast
+warning never blocks a write); an invalid one exits 1 and nothing is rendered. Library findings are added with the
+prefix `render/`, `pptx/`, `pdf/`, `fonts/`, `import/` or `cli/` (the same word is their category), for example
+`render/text-overflow`. Notes (`font-glyph-fallback`, `pdf-font-embedded`, `svg-sanitized`) are `info`; everything else a
+library reports is a `warning`; a failed render, export or import is an `error`. `checks.layout` is `measured`: the
+CLI measures text with the fonts it loaded.
 
 `outputs` lists each file with `sha256`, `bytes`, `mediaType`, and for slides `slide`, `id`, `width`, `height`.
 `renderer` and `pptx` give the package versions used. With `--out -` the file goes to stdout and the report to stderr.
 
-Exit `0`: success (warnings allowed). Exit `1`: invalid document, error diagnostic, `--strict` warning, or an existing
-output. Exit `2`: usage, I/O, a missing or too-old peer, a font directory problem.
+Exit `0`: success (warnings allowed). Exit `1`: invalid document, error finding, a finding at or above `--fail-on`, or an
+existing output. Exit `2`: usage, I/O, a missing or too-old peer, a font directory problem. (`opf validate` has the
+same codes; text that is not valid JSON is an invalid document, exit `1`, with an `opf/json-syntax` finding.)
 
 ## Decisions (RR-27, vetoable)
 

@@ -2,7 +2,7 @@
 
 A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, bundle catalog references for offline use, inspect the bundled schemas and catalogs, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 22 or later on macOS, Linux, or Windows is required (`engines.node` `>=22` from the release after 0.10.0; 0.10.0 and earlier 24.x-only releases make npm on Node 22 or 26 silently install the 0.7.0 CLI, which has no `export` or `render` command).
 
-The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. Validation, lint and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
+The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. Validation and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
 
 ## Install
 
@@ -48,7 +48,17 @@ opf create - --title "Launch decision" | opf validate -
 opf create imported.opf.json --from - < authored.opf.json
 ```
 
-Validation prints the complete result, including errors, warnings, and the input's SHA-256 digest. `--strict` fails when there are warnings, even when `valid` is true. Reference warnings do not cover every possible unresolved reference: free-form layout IDs can pass without warnings.
+`opf validate` is the one checker: it reads the file as strict JSON text and prints the report (`valid`, `schemaValid`, `findings`, `counts`, `checks`), the input's SHA-256 digest and the bundled core version. Each finding has a stable `opf/<rule>` id, a severity, a category (`format`, `references`, `policy`, `accessibility`, `layout`, `content`), a JSON Pointer path, the source line and column, a hint and sometimes suggested fixes. Only format, references and policy findings are errors by default (plus an unfilled variable in a deck that is not a template), so `valid` keeps meaning "correct OPF"; accessibility, layout and content findings are warnings and info. Reference warnings do not cover every possible unresolved reference: free-form layout IDs can pass without warnings.
+
+```sh
+opf validate deck.opf.json                                    # everything, JSON report
+opf validate deck.opf.json --format text                      # one line per finding
+opf validate deck.opf.json --only format,references --fail-on warning
+opf validate deck.opf.json --ignore layout --config house-rules.json
+opf validate --list-rules
+```
+
+`--only` and `--ignore` take comma-separated rule ids (`opf/text-contrast`), bare names (`text-contrast`) or category names, and may be repeated. `--fail-on <error|warning|info>` picks the exit threshold (default `error`); it is the one way to say "fail on warnings" (`--fail-on warning`) on every command that checks a document. `--config` is an explicit local JSON file of `{ catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette }`: host policy and loaded catalog records, never read from the document, which can only carry data. Exit `0`: nothing at or above `--fail-on`. Exit `1`: findings at or above it, or text that is not valid JSON (an `opf/json-syntax` finding). Exit `2`: usage, configuration or I/O error. Validation is read-only, fetches nothing and never rewrites the file. See [the validate guide](../../docs/validate.md).
 
 ## Edit with JSON Patch
 
@@ -150,15 +160,15 @@ Bundle inlines every bundled catalog record the document references — includin
 
 - Reports and errors are JSON; only help text is plain text.
 - `validate` reports to stdout, including for invalid documents.
-- Commands emitting a document to stdout send validation diagnostics to stderr, so pipes remain valid JSON.
-- File-writing commands report the absolute output path, output SHA-256, and warnings to stdout.
-- Exit `0`: success, possibly with warnings. Exit `1`: invalid document, failed patch/test, strict warning failure, or file conflict. Exit `2`: usage, malformed JSON, or I/O failure.
-- File-writing commands accept `--strict`. Use `--` before positional filenames that start with `--`.
+- Commands emitting a document to stdout send their findings to stderr, so pipes remain valid JSON.
+- File-writing commands report the absolute output path, output SHA-256, and `findings` (format and references only) to stdout.
+- Exit `0`: success, possibly with warnings. Exit `1`: invalid document, failed patch/test, a finding at or above `--fail-on`, or file conflict. Exit `2`: usage, malformed JSON input to a command other than `validate`, or I/O failure.
+- Commands that check a document before writing it take `--fail-on <error|warning|info>` (default `error`). Use `--` before positional filenames that start with `--`.
 - No telemetry, automatic uploads, or execution of instructions inside document text.
 
 ## Markdown and outlines
 
-`opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--strict]` converts Markdown in the OPF dialect (YAML front matter, `---` between slides, `#` title, lists, quotes, tables, `chart`, `metric` and `timeline` fences, `Note:` notes, `<!-- slide: ... -->` options) to a validated deck, and `opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]` writes a deck as that Markdown, which `from-md` reads back unchanged. Both print JSON reports and follow the exit codes above; Markdown errors carry `line` and `column`. Not in releases before the one that lists it in the changelog. See the [Markdown guide](../../docs/markdown.md).
+`opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>] [--force] [--fail-on <level>]` converts Markdown in the OPF dialect (YAML front matter, `---` between slides, `#` title, lists, quotes, tables, `chart`, `metric` and `timeline` fences, `Note:` notes, `<!-- slide: ... -->` options) to a validated deck, and `opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--fail-on <level>]` writes a deck as that Markdown, which `from-md` reads back unchanged. Both print JSON reports and follow the exit codes above; Markdown findings carry `line` and `column`. Not in releases before the one that lists it in the changelog. See the [Markdown guide](../../docs/markdown.md).
 ## Render, export and import
 
 ```sh
@@ -170,25 +180,10 @@ opf export deck.opf.json --format svg --out slides.zip
 opf import deck.pptx --out deck.opf.json --signals signals.json
 ```
 
-These commands write files; every other command only prints JSON. They lint the document first and print the `opf lint` report (`diagnostics`, `counts`, exit 1 on errors, `--strict` also on warnings, in which case nothing is written) plus an `outputs` list with each file's SHA-256. Output is deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's bundled open pack plus the `.ttf`/`.otf` files in each `--font-dir`; relative images are read only from the document's folder (`--asset-dir`); URLs are never fetched. Existing outputs need `--force`.
+These commands write files; every other command only prints JSON. They check the document's format and references first and print the `opf validate` report (`findings`, `counts`, exit 1 on errors, or on findings at or above `--fail-on`, in which case nothing is written) plus an `outputs` list with each file's SHA-256. Output is deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's bundled open pack plus the `.ttf`/`.otf` files in each `--font-dir`; relative images are read only from the document's folder (`--asset-dir`); URLs are never fetched. Existing outputs need `--force`.
 
 opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer exits 2 with the install command. `--pdf-mode vector` and `--signals` need renderer and PPTX releases that have them and are refused otherwise. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
 
 ## Development checks
 
 `pnpm test:cli` runs command-level regression checks, including `test/files.mjs` for render, export and import against the workspace's pinned opf-render and opf-pptx (set `UPDATE_GOLDEN=1` to refresh the pinned SVG digests after a renderer or core bump). `pnpm test:cli:packed:peers` installs the packed CLI with both peers from the npm registry and repeats those checks against the installed binary and through `npm exec`. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
-
-## Audit design and accessibility
-
-```sh
-opf audit deck.opf.json
-opf audit deck.opf.json --json --fail-on warning
-opf audit deck.opf.json --rule text-contrast --rule missing-alt-text
-opf audit --list-rules
-```
-
-`opf audit` checks what a schema cannot: text contrast against the resolved background (WCAG 2.x AA, gradients and patterns included), overflow and minimum type size from the shared composition, missing alt text, slide titles, reading order, link text, fonts outside the scheme, placeholder text, low-resolution embedded images and more. Findings use lint's report shape with stable `audit/<rule>` ids, source ranges and suggested fixes; `--json` prints the report, otherwise one readable line per finding. It exits 0 when nothing is at or above `--fail-on` (default `error`), 1 otherwise and 2 for usage errors. It is read-only and fetches nothing. See [the audit guide](../../docs/audit.md).
-
-## OPF lint
-
-CLI 0.8.0 added `opf lint <file|-> [--config <local-json-file>] [--strict]`; CLI **0.10.0** still includes it and bundles core 0.12.0. It reports source ranges, schema constraints, local catalog alternatives, asset registry errors and explicit design contracts without modifying the document or fetching resources. JSON reports include source/configuration hashes and distinguish structural checks from unperformed layout/font/native checks. Earlier CLI versions than 0.8.0 do not include this command. See [the lint guide](../../docs/lint.md).

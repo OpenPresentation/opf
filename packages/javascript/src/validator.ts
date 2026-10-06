@@ -1,1088 +1,414 @@
-import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
-import addFormats from "ajv-formats";
+import type { CatalogKind } from './catalogs.js';
+import { catalogKinds } from './catalogs.js';
+import {
+	checkDocumentOptions,
+	contractFindings,
+	engineFindings,
+	issueFinding,
+	issueRuleId,
+	referenceFindings,
+} from './check-document.js';
+import { parseSource, type ParsedSource } from './check-source.js';
+import type { Finding, FindingSeverity } from './generated/types/finding.js';
+import { createLookup, type Rec } from './rule-design.js';
+import { splitPointer } from './rule-content.js';
+import type { FindingInput, ValidationContext, VariableState } from './rule-context.js';
+import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
+import { buildSlides } from './slide-context.js';
+import type { Presentation } from './types.js';
+import {
+	DEFAULT_VALIDATION_THRESHOLDS,
+	findValidationRule,
+	ruleImplementations,
+	validationRules,
+} from './validation-rules.js';
+import {
+	validationCategories,
+	type ValidateOptions,
+	type ValidationCategory,
+	type ValidationChecks,
+	type ValidationReport,
+	type ValidationRuleInfo,
+	type ValidationThresholds,
+} from './validation-types.js';
+import { DEFAULT_CHART_PALETTE } from './rule-design.js';
 
-import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
-import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
-import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
-import { MAX_COMPOSITION_DEPTH } from "./composition.js";
-import { annotationIssues } from "./annotation-validation.js";
-import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
-import {tableGrid} from "./table.js";
-import { numberingFindings } from "./numbering.js";
-import { catalogIds, deprecatedCatalogIds } from "./generated/catalog-ids.js";
-import type { JsonSchema } from "./json.js";
-import { schemas, type SchemaName } from "./schemas.js";
-import { rememberValidationDefinition } from './validation-definitions.js';
-import type { Presentation } from "./types.js";
-import { VARIABLE_KINDS, hasContentVariables, instantiateForValidation, isTemplate, type VariableValues } from "./variables.js";
+export { DEFAULT_CHART_PALETTE } from './rule-design.js';
+export { DEFAULT_VALIDATION_THRESHOLDS, findValidationRule, validationRules } from './validation-rules.js';
+export { validationCategories } from './validation-types.js';
+export type {
+	Contract,
+	ValidateFonts,
+	ValidateOptions,
+	ValidationCategory,
+	ValidationChecks,
+	ValidationReport,
+	ValidationRuleCost,
+	ValidationRuleInfo,
+	ValidationThresholds,
+} from './validation-types.js';
+export { promotedRegionKeys } from './schema-check.js';
 
-export interface ValidationIssue {
-  path: string;
-  message: string;
-  keyword: string;
-  schemaPath: string;
-  params: Record<string, unknown>;
-}
+/**
+ * `validate(input, options?)`: one checker for an OPF presentation. It reads a parsed presentation or strict JSON text and
+ * returns one list of findings, each with a stable `opf/<rule>` id, a severity and one of six categories:
+ *
+ * - `format`: is it well-formed OPF (JSON syntax, duplicate keys, schema and semantic rules);
+ * - `references`: does everything it points at resolve (catalog ids, assets, citations, datasets);
+ * - `policy`: does it follow the host's `contracts`;
+ * - `accessibility`: WCAG 2.2 and PowerPoint accessibility checker rules;
+ * - `layout`: will it present as authored (fit, minimum size, image resolution, fonts);
+ * - `content`: is anything left unfinished (placeholders, empty slides, unfilled variables).
+ *
+ * Only `format`, `references` and `policy` produce errors by default (plus `opf/variable-unfilled` for a deck that is not a
+ * template), so `valid` keeps meaning "correct OPF". The check is read-only, local and deterministic: it fetches nothing,
+ * reads no clock and calls no model. It is lazy: `only: ['format']` runs the schema check and builds no layout.
+ */
 
-export interface ValidationResult {
-  valid: boolean;
-  errors: ValidationIssue[];
-  /** Advisory issues such as unknown catalog ids. Warnings never affect `valid`. */
-  warnings: ValidationIssue[];
-  schemaName?: SchemaName;
-  catalogKind?: CatalogKind;
-  /**
-   * Presentations only, when the document declares content variables or is a
-   * template: whether it was validated as a template, and which required
-   * variables have no value. A template reports them without failing.
-   */
-  template?: boolean;
-  unfilledVariables?: string[];
-}
+const SEVERITIES: readonly string[] = ['error', 'warning', 'info'];
+const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values'];
+const DOCS = 'https://github.com/OpenPresentation/opf/blob/main/docs/validate.md';
 
-export interface ValidateOptions {
-  /** Validate as a template (true) or a normal deck (false), overriding the root `template` marker. */
-  template?: boolean;
-  /** Values to fill variables with before checking, keyed by variable id. */
-  values?: VariableValues;
-}
-
-export type SchemaOrKind = SchemaName | CatalogKind | JsonSchema;
+const isObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
 export class OPFValidationError extends Error {
-  readonly issues: ValidationIssue[];
-  readonly result: ValidationResult;
+	/** The full report that failed. */
+	readonly report: ValidationReport;
+	/** The error-severity findings of the report. */
+	readonly findings: Finding[];
 
-  constructor(result: ValidationResult) {
-    const first = result.errors[0];
-    super(first ? `OPF validation failed at ${first.path}: ${first.message}` : "OPF validation failed");
-    this.name = "OPFValidationError";
-    this.issues = result.errors;
-    this.result = result;
-  }
+	constructor(report: ValidationReport) {
+		const errors = report.findings.filter((entry) => entry.severity === 'error');
+		const first = errors[0];
+		super(first ? `OPF validation failed at ${first.path || '/'}: ${first.message}` : 'OPF validation failed');
+		this.name = 'OPFValidationError';
+		this.report = report;
+		this.findings = errors;
+	}
 }
 
-const schemaNameByCatalogKind = catalogSchemaNames as Record<CatalogKind, SchemaName>;
-
-let ajv: Ajv2020 | undefined;
-const dynamicSchemaCache = new WeakMap<JsonSchema, ValidateFunction>();
-
-export { promotedRegionKeys } from "./content-walk.js";
-
-const promotedRegionKeySet = new Set<string>(promotedRegionKeys);
-
-const rootPayloadFields = [
-  "type",
-  "text",
-  "items",
-  "bullets",
-  "image",
-  "video",
-  "chart",
-  "table",
-  "code",
-  "metric",
-  "quote",
-  "timeline",
-  "blocks",
-] as const;
-
-type ContentKind =
-  | "text"
-  | "list"
-  | "image"
-  | "chart"
-  | "table"
-  | "video"
-  | "code"
-  | "metric"
-  | "quote"
-  | "timeline";
-
-interface ContentKindSpec {
-  fields: readonly string[];
-  required: readonly string[];
-  requireAny?: readonly string[];
+interface Names {
+	rules: Set<string>;
+	categories: Set<ValidationCategory>;
 }
 
-const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
-  text: {
-    fields: ["text", "bullets"],
-    required: [],
-    requireAny: ["text", "bullets"],
-  },
-  list: {
-    fields: ["items"],
-    required: ["items"],
-  },
-  image: {
-    fields: ["image"],
-    required: ["image"],
-  },
-  chart: {
-    fields: ["chart"],
-    required: ["chart"],
-  },
-  table: {
-    fields: ["table"],
-    required: ["table"],
-  },
-  video: {
-    fields: ["video"],
-    required: ["video"],
-  },
-  code: {
-    fields: ["code"],
-    required: ["code"],
-  },
-  metric: {
-    fields: ["metric"],
-    required: ["metric"],
-  },
-  quote: {
-    fields: ["quote"],
-    required: ["quote"],
-  },
-  timeline: {
-    fields: ["timeline"],
-    required: ["timeline"],
-  },
+interface Resolved {
+	options: ValidateOptions;
+	enabled(info: ValidationRuleInfo): boolean;
+	/** True when the rule was switched off by name (`ignore`, or severity `off`) rather than left out by `only`. */
+	off(info: ValidationRuleInfo): boolean;
+	severity(info: ValidationRuleInfo): FindingSeverity | undefined;
+	ignored(info: ValidationRuleInfo, path: string[]): boolean;
+	thresholds: ValidationThresholds;
+	chartPalette: readonly string[];
+}
+
+function ruleFor(name: string, what: string): ValidationRuleInfo | ValidationCategory {
+	if ((validationCategories as readonly string[]).includes(name)) return name as ValidationCategory;
+	const found = findValidationRule(name);
+	if (!found) throw new TypeError(`Unknown validation rule or category ${JSON.stringify(name)} in ${what}. Categories: ${validationCategories.join(', ')}. Rules: ${validationRules.map((info) => info.id).join(', ')}.`);
+	return found;
+}
+
+function names(list: unknown, what: string): Names | undefined {
+	if (list === undefined) return undefined;
+	if (!Array.isArray(list) || !list.every((entry) => typeof entry === 'string')) throw new TypeError(`Validate ${what} must be an array of rule ids or category names.`);
+	const result: Names = { rules: new Set(), categories: new Set() };
+	for (const name of list) {
+		const found = ruleFor(name, what);
+		if (typeof found === 'string') result.categories.add(found);
+		else result.rules.add(found.id);
+	}
+	return result;
+}
+
+function resolveOptions(options: ValidateOptions): Resolved {
+	if (!isObject(options)) throw new TypeError('Validate options must be an object.');
+	for (const key of Object.keys(options)) if (!OPTION_KEYS.includes(key)) throw new TypeError(`Unknown validate option ${JSON.stringify(key)}. Options: ${OPTION_KEYS.join(', ')}.`);
+	checkDocumentOptions(options);
+	const only = names(options.only, 'only');
+	const ignore = names(options.ignore, 'ignore');
+	const severity = new Map<string, FindingSeverity | 'off'>();
+	if (options.severity !== undefined) {
+		if (!isObject(options.severity)) throw new TypeError('Validate severity must map rule ids or category names to a severity or "off".');
+		for (const [name, value] of Object.entries(options.severity)) {
+			if (typeof value !== 'string' || (value !== 'off' && !SEVERITIES.includes(value))) throw new TypeError(`Validate severity for ${JSON.stringify(name)} must be error, warning, info or off.`);
+			const found = ruleFor(name, 'severity');
+			severity.set(typeof found === 'string' ? found : found.id, value as FindingSeverity | 'off');
+		}
+	}
+	const ignorePaths: { match: (info: ValidationRuleInfo) => boolean; path: string[] }[] = [];
+	if (options.ignorePaths !== undefined) {
+		if (!Array.isArray(options.ignorePaths)) throw new TypeError('Validate ignorePaths must be an array of {rule, path}.');
+		for (const entry of options.ignorePaths) {
+			if (!isObject(entry) || typeof entry.rule !== 'string' || typeof entry.path !== 'string' || (entry.path !== '' && !entry.path.startsWith('/')))
+				throw new TypeError('Each validate ignorePaths entry needs a rule id, category name or "*", and a JSON Pointer path.');
+			const found = entry.rule === '*' ? '*' : ruleFor(entry.rule, 'ignorePaths');
+			ignorePaths.push({
+				match: (info) => found === '*' || (typeof found === 'string' ? found === info.category : found.id === info.id),
+				path: splitPointer(entry.path),
+			});
+		}
+	}
+	const thresholds = { ...DEFAULT_VALIDATION_THRESHOLDS } as ValidationThresholds;
+	if (options.thresholds !== undefined) {
+		if (!isObject(options.thresholds)) throw new TypeError('Validate thresholds must be an object.');
+		for (const [key, value] of Object.entries(options.thresholds)) {
+			if (!(key in DEFAULT_VALIDATION_THRESHOLDS)) throw new TypeError(`Unknown validate threshold ${JSON.stringify(key)}. Thresholds: ${Object.keys(DEFAULT_VALIDATION_THRESHOLDS).join(', ')}.`);
+			if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) throw new TypeError(`Validate threshold ${key} must be a positive number.`);
+			(thresholds as unknown as Record<string, number>)[key] = value;
+		}
+	}
+	if (options.fonts !== undefined) {
+		if (!isObject(options.fonts)) throw new TypeError('Validate fonts must be a fonts object with a textMeasurement.');
+		const measurement = options.fonts.textMeasurement;
+		if (measurement !== undefined && typeof measurement !== 'function' && !isObject(measurement)) throw new TypeError('Validate fonts.textMeasurement must be a text measurement, or a function of the slide index.');
+	}
+	if (options.chartPalette !== undefined && (!Array.isArray(options.chartPalette) || !options.chartPalette.every((color) => typeof color === 'string' && /^#[0-9a-fA-F]{6}$/.test(color))))
+		throw new TypeError('Validate chartPalette must be an array of #RRGGBB colours.');
+	if (options.template !== undefined && typeof options.template !== 'boolean') throw new TypeError('Validate template must be true or false.');
+	if (options.values !== undefined && !isObject(options.values)) throw new TypeError('Validate values must be an object keyed by variable id.');
+	const level = (info: ValidationRuleInfo) => severity.get(info.id) ?? severity.get(info.category);
+	const off = (info: ValidationRuleInfo) => level(info) === 'off' || !!ignore?.rules.has(info.id) || !!ignore?.categories.has(info.category);
+	return {
+		options,
+		off,
+		enabled: (info) => !off(info) && (!only || only.rules.has(info.id) || only.categories.has(info.category)),
+		severity: (info) => {
+			const value = level(info);
+			return value === 'off' ? undefined : value;
+		},
+		ignored: (info, path) => ignorePaths.some((entry) => entry.match(info) && entry.path.every((part, index) => path[index] === part)),
+		thresholds,
+		chartPalette: options.chartPalette ?? DEFAULT_CHART_PALETTE,
+	};
+}
+
+const order = new Map(validationRules.map((info, index) => [info.id, index]));
+const categoryOrder = (category: string) => {
+	const index = (validationCategories as readonly string[]).indexOf(category);
+	return index < 0 ? validationCategories.length : index;
 };
 
-// RR-34: payload kinds whose blocks may carry a caption.
-const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video"]);
+const auditInfos = ruleImplementations.flatMap((entry) => [entry.info, ...(entry.also ?? [])]);
+const isLayoutRule = (info: ValidationRuleInfo) => info.category === 'layout' && info.cost === 'composition';
 
-const columnSpans: Record<string, readonly number[]> = {
-  left: [0],
-  center: [1],
-  right: [2],
-  "left+center": [0, 1],
-  "center+right": [1, 2],
-  "left+center+right": [0, 1, 2],
-};
-
-const rowSpans: Record<string, readonly number[]> = {
-  top: [0],
-  middle: [1],
-  bottom: [2],
-  "top+middle": [0, 1],
-  "middle+bottom": [1, 2],
-  "top+middle+bottom": [0, 1, 2],
-};
-
-function getAjv(): Ajv2020 {
-  if (ajv) {
-    return ajv;
-  }
-
-  const instance = new Ajv2020({
-    allErrors: true,
-    verbose: true,
-    strict: false,
-    allowUnionTypes: true,
-  });
-  addFormats(instance);
-
-  for (const schema of Object.values(schemas)) {
-    instance.addSchema(schema);
-  }
-
-  ajv = instance;
-  return instance;
+function slideOf(path: string): number | undefined {
+	const match = /^\/slides\/(\d+)(?:\/|$)/.exec(path);
+	return match ? Number(match[1]) : undefined;
 }
 
-function isSchemaName(value: unknown): value is SchemaName {
-  return typeof value === "string" && value in schemas;
+function counts(findings: readonly Finding[]) {
+	const result = { error: 0, warning: 0, info: 0 };
+	for (const entry of findings) result[entry.severity]++;
+	return result;
 }
 
-function isCatalogKind(value: unknown): value is CatalogKind {
-  return typeof value === "string" && value in schemaNameByCatalogKind;
+/** What each check did not do, in the report. Fixed facts of this checker; see docs/validate.md. */
+const FIXED = { backgroundPixels: 'not-read', imageBytes: 'embedded-only', nativeExport: 'not-checked' } as const;
+
+function syntaxReport(parsed: ParsedSource, run: Resolved): ValidationReport {
+	const findings: Finding[] = [];
+	for (const entry of parsed.syntax) {
+		const info = findValidationRule(entry.ruleId);
+		if (info && run.off(info)) continue;
+		const severity = info ? run.severity(info) : undefined;
+		findings.push(severity ? { ...entry, severity } : entry);
+	}
+	const checks: ValidationChecks = {
+		syntax: 'checked',
+		schema: 'not-run',
+		references: 'not-run',
+		policy: 'not-run',
+		accessibility: 'not-run',
+		content: 'not-run',
+		layout: 'not-run',
+		...FIXED,
+	};
+	const tally = counts(findings);
+	return { valid: tally.error === 0, schemaValid: null, findings, counts: tally, checks };
 }
 
-function resolveValidator(schemaOrKind: SchemaOrKind): {
-  validate: ValidateFunction;
-  schemaName?: SchemaName;
-  catalogKind?: CatalogKind;
-} {
-  const instance = getAjv();
+function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSource): ValidationReport {
+	const engine = validateAgainstSchema(document, 'presentation', { template: run.options.template, values: run.options.values });
+	const schemaValid = engine.errors.length === 0;
+	const slides = isObject(document) && Array.isArray(document.slides) ? document.slides : [];
+	const auditWanted = auditInfos.some((info) => run.enabled(info));
+	// A document the schema rejects is never audited. Say why instead of reporting nothing: its format errors are reported
+	// whenever a rule that needed a valid document was asked for, unless the host switched them off.
+	const explainFormat = !schemaValid && auditWanted;
+	const enabledRule = (info: ValidationRuleInfo | undefined) => (info ? run.enabled(info) || (explainFormat && info.category === 'format' && !run.off(info)) : true);
+	const findings: Finding[] = [];
 
-  if (isSchemaName(schemaOrKind)) {
-    const schema = schemas[schemaOrKind];
-    const validator = instance.getSchema(schema.$id as string) ?? instance.compile(schema);
-    return { validate: validator, schemaName: schemaOrKind };
-  }
+	// format: the engine's errors and the coded warnings of every category (cheap; the schema check runs in any case).
+	findings.push(...engineFindings(document, engine, (ruleId) => enabledRule(findValidationRule(ruleId))));
+	if (parsed) {
+		findings.push(...parsed.duplicates.filter((entry) => enabledRule(findValidationRule(entry.ruleId))));
+	}
 
-  if (isCatalogKind(schemaOrKind)) {
-    const schemaName = schemaNameByCatalogKind[schemaOrKind];
-    const schema = schemas[schemaName];
-    const validator = instance.getSchema(schema.$id as string) ?? instance.compile(schema);
-    return { validate: validator, schemaName, catalogKind: schemaOrKind };
-  }
+	// references: a walk of the schema over the document; skipped unless a references rule is wanted.
+	const referencesWanted = validationRules.some((info) => info.category === 'references' && run.enabled(info));
+	if (referencesWanted) {
+		findings.push(...referenceFindings(document, engine, run.options).filter((entry) => enabledRule(findValidationRule(entry.ruleId))));
+	}
 
-  const cached = dynamicSchemaCache.get(schemaOrKind);
-  if (cached) {
-    return { validate: cached };
-  }
+	// policy: the host's contracts.
+	const contracts = run.options.contracts ?? [];
+	const contractRule = findValidationRule('opf/contract');
+	const policyRan = contracts.length > 0 && !!contractRule && enabledRule(contractRule);
+	if (policyRan && contractRule) {
+		findings.push(...contractFindings(document, contracts));
+	}
 
-  const validator = instance.compile(schemaOrKind);
-  dynamicSchemaCache.set(schemaOrKind, validator);
-  return { validate: validator };
+	// accessibility, layout, content: only for a document that passes the format check; composition is built on first use.
+	const auditRan = new Set<string>();
+	if (schemaValid && auditWanted) {
+		const doc = document as Rec;
+		const lookup = createLookup(doc, run.options.catalogs);
+		const variables: VariableState = {
+			...(engine.template !== undefined ? { template: engine.template } : {}),
+			unfilledVariables: engine.unfilledVariables ?? [],
+			issues: engine.unfilled,
+			processed: engine.template !== undefined,
+		};
+		const context: ValidationContext = {
+			document: doc,
+			slides: buildSlides(doc, run.options, lookup),
+			thresholds: run.thresholds,
+			options: run.options,
+			lookup,
+			chartPalette: run.chartPalette,
+			variables,
+			report(info: ValidationRuleInfo, input: FindingInput): Finding {
+				const severity = run.severity(info) ?? input.severity ?? info.severity;
+				const entry: Finding = {
+					ruleId: info.id,
+					severity,
+					category: info.category,
+					scope: 'document',
+					path: input.path,
+					message: input.message,
+					help: input.help,
+					definition: `${DOCS}#${info.id.replace('/', '')}`,
+					...(input.slide ? { slide: input.slide.index, ...(input.slide.id ? { slideId: input.slide.id } : {}) } : {}),
+					...(input.measured ? { measured: input.measured } : {}),
+					...(input.fixes?.length ? { fixes: input.fixes } : {}),
+					...(input.suggestions ? { suggestions: input.suggestions } : {}),
+				};
+				if (run.enabled(info)) findings.push(entry);
+				return entry;
+			},
+		};
+		for (const entry of ruleImplementations) {
+			const all = [entry.info, ...(entry.also ?? [])];
+			if (!all.some((info) => run.enabled(info))) continue;
+			for (const info of all) if (run.enabled(info)) auditRan.add(info.id);
+			entry.run(context);
+		}
+	}
+
+	// Finish: severity overrides, exceptions by path, slide numbers, source ranges, order.
+	const finished: Finding[] = [];
+	for (const entry of findings) {
+		const info = findValidationRule(entry.ruleId);
+		const override = info ? run.severity(info) : undefined;
+		const next: Finding = override && override !== entry.severity ? { ...entry, severity: override } : entry;
+		if (info && run.ignored(info, splitPointer(next.path))) continue;
+		const index = slideOf(next.path);
+		if (next.slide === undefined && index !== undefined && next.scope !== 'context') {
+			const id = isObject(slides[index]) ? (slides[index] as Rec).id : undefined;
+			next.slide = index;
+			if (typeof id === 'string') next.slideId = id;
+		}
+		if (parsed && next.location === undefined && next.scope !== 'context') {
+			const location = parsed.locate(next.path);
+			if (location) next.location = location;
+		}
+		finished.push(next);
+	}
+	finished.sort(
+		(a, b) =>
+			(a.slide ?? -1) - (b.slide ?? -1) ||
+			categoryOrder(a.category) - categoryOrder(b.category) ||
+			(order.get(a.ruleId) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.ruleId) ?? Number.MAX_SAFE_INTEGER),
+	);
+
+	const tally = counts(finished);
+	const ranCategory = (category: ValidationCategory) => auditInfos.some((info) => info.category === category && auditRan.has(info.id));
+	const layoutRan = auditInfos.some((info) => isLayoutRule(info) && auditRan.has(info.id));
+	const checks: ValidationChecks = {
+		syntax: parsed ? 'checked' : 'not-applicable',
+		schema: 'checked',
+		references: referencesWanted ? 'checked' : 'not-run',
+		policy: policyRan ? 'checked' : 'not-run',
+		accessibility: ranCategory('accessibility') ? 'checked' : 'not-run',
+		content: ranCategory('content') ? 'checked' : 'not-run',
+		layout: layoutRan || ranCategory('layout') ? (run.options.fonts?.textMeasurement !== undefined ? 'measured' : 'estimated') : 'not-run',
+		...FIXED,
+	};
+	return {
+		valid: tally.error === 0,
+		schemaValid,
+		findings: finished,
+		counts: tally,
+		checks,
+		...(engine.template !== undefined ? { template: engine.template, unfilledVariables: engine.unfilledVariables } : {}),
+	};
 }
 
-function toIssue(error: ErrorObject): ValidationIssue {
-  const issue: ValidationIssue = {
-    path: error.instancePath || "/",
-    message: error.message ?? "failed validation",
-    keyword: error.keyword,
-    schemaPath: error.schemaPath,
-    params: error.params as Record<string, unknown>,
-  };
-  rememberValidationDefinition(issue, error.parentSchema, error.keyword);
-  return issue;
+/**
+ * Check a presentation. `input` is a parsed presentation (an object) or the text of one, which is read as strict JSON and nothing
+ * else: syntax errors and duplicate keys come back with line and column, and findings carry the range of the value they are
+ * about. YAML and Markdown go through `fromYaml` and `fromMarkdown`, which call this for you.
+ *
+ * Never throws for a bad document, only for bad options (a `TypeError` naming the unknown rule, threshold or option, so a
+ * typo cannot silently disable a check).
+ */
+export function validate(input: unknown, options: ValidateOptions = {}): ValidationReport {
+	const run = resolveOptions(options);
+	if (typeof input === 'string') {
+		const parsed = parseSource(input);
+		return parsed.syntax.length ? syntaxReport(parsed, run) : validateDocument(parsed.value, run, parsed);
+	}
+	return validateDocument(input, run);
 }
 
-function semanticIssue(path: string, message: string, params: Record<string, unknown> = {}): ValidationIssue {
-  return {
-    path,
-    message,
-    keyword: "opf",
-    schemaPath: "#/x-opf-semantics",
-    params,
-  };
+/**
+ * Throw `OPFValidationError` (carrying the `report`) unless `validate(value, options)` is valid; afterwards TypeScript
+ * knows `value` is a `Presentation`. It takes a parsed value, not text. Pass `{ only: ['format'] }` for the cheap check.
+ */
+export function assertValid(value: unknown, options: ValidateOptions = {}): asserts value is Presentation {
+	if (typeof value === 'string') throw new TypeError('assertValid takes a parsed presentation. Use validate(text) for JSON text.');
+	const report = validate(value, options);
+	if (!report.valid) throw new OPFValidationError(report);
 }
 
-function hasOwn(value: Record<string, unknown>, key: string): boolean {
-  return Object.hasOwn(value, key);
-}
-
-function isEnUkTag(value: unknown): boolean {
-  return typeof value === "string" && value.toLowerCase() === "en-uk";
-}
-
-function presentFields(value: Record<string, unknown>, fields: readonly string[]): string[] {
-  return fields.filter((field) => hasOwn(value, field));
-}
-
-function isContentKind(value: unknown): value is ContentKind {
-  return typeof value === "string" && value in contentKindSpecs;
-}
-
-function inferredKinds(value: Record<string, unknown>): ContentKind[] {
-  const kinds: ContentKind[] = [];
-
-  if (presentFields(value, contentKindSpecs.text.fields).length > 0) kinds.push("text");
-  if (hasOwn(value, "items")) kinds.push("list");
-  if (hasOwn(value, "image")) kinds.push("image");
-  if (hasOwn(value, "video")) kinds.push("video");
-  if (hasOwn(value, "chart")) kinds.push("chart");
-  if (hasOwn(value, "table")) kinds.push("table");
-  if (hasOwn(value, "code")) kinds.push("code");
-  if (hasOwn(value, "metric")) kinds.push("metric");
-  if (hasOwn(value, "quote")) kinds.push("quote");
-  if (hasOwn(value, "timeline")) kinds.push("timeline");
-
-  return kinds;
-}
-
-function isImplicitBlocksComposition(
-  value: Record<string, unknown>,
-  inferred: readonly ContentKind[],
-  options: { slideRoot?: boolean },
-): boolean {
-  if (options.slideRoot !== true || hasOwn(value, "blocks")) {
-    return false;
-  }
-
-  return inferred.length > 1;
-}
-
-function validateContentPayload(
-  value: Record<string, unknown>,
-  path: string,
-  options: { slideRoot?: boolean } = {},
-): ValidationIssue[] {
-  const issues: ValidationIssue[] = [];
-  const explicitType = value.type;
-  const payloadFields = presentFields(value, rootPayloadFields);
-  const hasBlocks = hasOwn(value, "blocks");
-  // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
-  const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
-  if (hasBlocks || explicitType === "group") {
-    if (hasOwn(value, "caption")) issues.push(captionIssue("a group cannot carry one"));
-    if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
-    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
-    if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
-    if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
-    if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {
-      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`));
-    });
-    return issues;
-  }
-  if (hasOwn(value, "composition") && !options.slideRoot) issues.push(semanticIssue(pathFor(path, "composition"), "composition is only valid on a group containing blocks"));
-
-  if (explicitType !== undefined && !isContentKind(explicitType)) {
-    return issues;
-  }
-
-  const kind = isContentKind(explicitType) ? explicitType : undefined;
-  const inferred = kind ? [kind] : inferredKinds(value);
-
-  if (!kind && inferred.length === 0) {
-    if (payloadFields.length > 0 || path !== "/") {
-      issues.push(semanticIssue(path, "content payload must include concrete content fields", {
-        fields: payloadFields,
-      }));
-    }
-    return issues;
-  }
-
-  if (!kind && inferred.length > 1) {
-    if (isImplicitBlocksComposition(value, inferred, options)) {
-      if (hasOwn(value, "caption")) issues.push(captionIssue("a slide root with several payloads cannot carry one; put the caption on a block", { inferredTypes: inferred }));
-      return issues;
-    }
-
-    issues.push(semanticIssue(path, "content payload mixes fields from incompatible content types", {
-      inferredTypes: inferred,
-    }));
-    return issues;
-  }
-
-  const resolvedKind = inferred[0];
-  if (!resolvedKind) {
-    return issues;
-  }
-  const spec = contentKindSpecs[resolvedKind];
-  if (hasOwn(value, "caption") && !captionableKinds.has(resolvedKind)) issues.push(captionIssue(`this payload is '${resolvedKind}'`, { type: resolvedKind }));
-  const allowedFields = new Set<string>([
-    "type",
-    ...spec.fields,
-  ]);
-
-  for (const required of spec.required) {
-    if (!hasOwn(value, required)) {
-      issues.push(semanticIssue(path, `content payload type '${resolvedKind}' requires '${required}'`, {
-        type: resolvedKind,
-        required,
-      }));
-    }
-  }
-
-  if (spec.requireAny && presentFields(value, spec.requireAny).length === 0) {
-    issues.push(semanticIssue(path, `content payload type '${resolvedKind}' requires one of: ${spec.requireAny.join(", ")}`, {
-      type: resolvedKind,
-      requiredAny: spec.requireAny,
-    }));
-  }
-
-  const incompatible = payloadFields.filter((field) => !allowedFields.has(field));
-  if (incompatible.length > 0) {
-    issues.push(semanticIssue(path, `content payload type '${resolvedKind}' cannot include incompatible fields: ${incompatible.join(", ")}`, {
-      type: resolvedKind,
-      incompatible,
-    }));
-  }
-
-  return issues;
-}
-
-interface SlideRegion {
-  rows: readonly number[];
-  columns: readonly number[];
-}
-
-function slideRegion(key: string): SlideRegion | undefined {
-  if (key.includes(":")) {
-    const [rowPart, columnPart] = key.split(":");
-    if (!rowPart || !columnPart) return undefined;
-    const rows = rowSpans[rowPart];
-    const columns = columnSpans[columnPart];
-    return rows && columns ? { rows, columns } : undefined;
-  }
-
-  if (key in columnSpans) {
-    const columns = columnSpans[key];
-    return columns ? { rows: [0, 1, 2], columns } : undefined;
-  }
-
-  if (key in rowSpans) {
-    const rows = rowSpans[key];
-    return rows ? { rows, columns: [0, 1, 2] } : undefined;
-  }
-
-  return undefined;
-}
-
-function intersects(left: readonly number[], right: readonly number[]): boolean {
-  return left.some((value) => right.includes(value));
-}
-
-function regionsOverlap(left: SlideRegion, right: SlideRegion): boolean {
-  return intersects(left.rows, right.rows) && intersects(left.columns, right.columns);
-}
-
-function validateSlideRegions(slide: Record<string, unknown>, slidePath: string): ValidationIssue[] {
-  const issues: ValidationIssue[] = [];
-  const regionKeys = Object.keys(slide).filter((key) => promotedRegionKeySet.has(key));
-  const rootFields = presentFields(slide, rootPayloadFields);
-
-  if (regionKeys.length > 0 && rootFields.length > 0) {
-    issues.push(semanticIssue(slidePath, "root content payload fields cannot be mixed with promoted region keys", {
-      rootFields,
-      regionKeys,
-    }));
-  }
-
-  if (regionKeys.length === 0 && rootFields.length > 0) {
-    issues.push(...validateContentPayload(slide, slidePath, { slideRoot: true }));
-  }
-
-  for (const key of regionKeys) {
-    const value = slide[key];
-    if (isRecord(value)) {
-      issues.push(...validateContentPayload(value, pathFor(slidePath, key)));
-    }
-  }
-
-  for (let leftIndex = 0; leftIndex < regionKeys.length; leftIndex += 1) {
-    const leftKey = regionKeys[leftIndex];
-    if (!leftKey) continue;
-    const leftRegion = slideRegion(leftKey);
-    if (!leftRegion) continue;
-
-    for (let rightIndex = leftIndex + 1; rightIndex < regionKeys.length; rightIndex += 1) {
-      const rightKey = regionKeys[rightIndex];
-      if (!rightKey) continue;
-      const rightRegion = slideRegion(rightKey);
-      if (!rightRegion) continue;
-
-      if (regionsOverlap(leftRegion, rightRegion)) {
-        issues.push(semanticIssue(slidePath, `promoted region keys '${leftKey}' and '${rightKey}' overlap`, {
-          regionKeys: [leftKey, rightKey],
-        }));
-      }
-    }
-  }
-
-  return issues;
-}
-
-function validatePresentationSemantics(value: unknown): ValidationIssue[] {
-  if (!isRecord(value) || !Array.isArray(value.slides)) {
-    return [];
-  }
-
-  const issues: ValidationIssue[] = [];
-
-  if (isEnUkTag(value.language)) {
-    issues.push(semanticIssue("/language", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  } else if (isRecord(value.language) && isEnUkTag(value.language.bcp47)) {
-    issues.push(semanticIssue("/language/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    }));
-  }
-
-  // Slide and payload ids share one namespace, so the origin of the id already
-  // seen decides which message describes the collision truthfully.
-  const documentIds = new Map<string, "slide" | "payload">();
-  value.slides.forEach((slide, index) => {
-    if (isRecord(slide)) {
-      const slidePath = `/slides/${index}`;
-      if (typeof slide.id === "string") {
-        const seen = documentIds.get(slide.id);
-        if (seen === "slide") issues.push(semanticIssue(`${slidePath}/id`, "slide ids must be unique within a presentation", { id: slide.id }));
-        else if (seen === "payload") issues.push(semanticIssue(`${slidePath}/id`, "slide id duplicates a content payload id; ids must be unique among slide and payload ids within a presentation", { id: slide.id }));
-        else documentIds.set(slide.id, "slide");
-      }
-      visitContentPayloads(slide, slidePath, (payload, path) => {
-        if (typeof payload.id === "string") {
-          if (documentIds.has(payload.id)) issues.push(semanticIssue(`${path}/id`, "content payload ids must be unique among slide and payload ids within a presentation", { id: payload.id }));
-          else documentIds.set(payload.id, "payload");
-        }
-      });
-      issues.push(...validateSlideRegions(slide, slidePath));
-      const payloadTableIssues = (payload: Record<string, unknown>, path: string): void => {
-        if (isRecord(payload.table)) for(const issue of tableGrid(payload.table).issues) issues.push(semanticIssue(pathFor(path,'table')+issue.path.slice(5).replaceAll('.','/'),issue.message));
-      };
-      payloadTableIssues(slide, slidePath);
-      visitContentPayloads(slide, slidePath, payloadTableIssues);
-      const payloadNumberingIssues = (payload: Record<string, unknown>, path: string): void => {
-        for (const finding of numberingFindings(payload).errors) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
-      };
-      payloadNumberingIssues(slide, slidePath);
-      visitContentPayloads(slide, slidePath, payloadNumberingIssues);
-    }
-  });
-  // RR-34: reference ids, cited ids and where cite/footnote may appear.
-  issues.push(...annotationIssues(value));
-
-  return issues;
-}
-
-interface CatalogReferenceContext {
-  document: Record<string, unknown>;
-}
-
-function inlineCatalogEntry(context: CatalogReferenceContext, kind: CatalogKind): Record<string, unknown> | undefined {
-  const catalogsField = context.document.catalogs;
-  if (!isRecord(catalogsField)) {
-    return undefined;
-  }
-  const entry = catalogsField[kind];
-  return isRecord(entry) ? entry : undefined;
-}
-
-function unknownIdWarning(
-  kind: CatalogKind,
-  value: unknown,
-  path: string,
-  context?: CatalogReferenceContext,
-): ValidationIssue | undefined {
-  if (typeof value !== "string" || !bareIdPattern.test(value)) {
-    return undefined;
-  }
-
-  if (context) {
-    const entry = inlineCatalogEntry(context, kind);
-    if (entry) {
-      const inline = Array.isArray(entry.records)
-        ? entry.records.find((record) => isRecord(record) && record.id === value)
-        : undefined;
-      if (isRecord(inline)) {
-        // Inline records may deprecate an id the same way bundled ones do.
-        const replacedBy = isRecord(inline.deprecation) ? inline.deprecation.replacedBy : undefined;
-        return typeof replacedBy === "string" ? deprecatedIdWarning(kind, value, replacedBy, path) : undefined;
-      }
-      // A custom catalog source may define ids the bundled catalogs don't know
-      // about. 'source' is a single source or an ordered search path of them.
-      if (typeof entry.source === "string" || (Array.isArray(entry.source) && entry.source.length > 0)) {
-        return undefined;
-      }
-    }
-  }
-
-  if ((catalogIds[kind] as readonly string[]).includes(value)) {
-    const replacedBy = deprecatedCatalogIds[`${kind}/${value}`];
-    return replacedBy === undefined ? undefined : deprecatedIdWarning(kind, value, replacedBy, path);
-  }
-
-  return semanticIssue(path, `unknown ${kind} catalog id '${value}'`, { kind, id: value });
-}
-
-// A record with `deprecation` stays resolvable: the id keeps resolving to that
-// record, and authors are pointed at `deprecation.replacedBy`.
-function deprecatedIdWarning(kind: CatalogKind, id: string, replacedBy: string, path: string): ValidationIssue {
-  return semanticIssue(path, `deprecated ${kind} catalog id '${id}'; use '${replacedBy}'`, { kind, id, replacedBy });
-}
-
-function referenceObjectWarning(
-  kind: CatalogKind,
-  value: unknown,
-  path: string,
-  context: CatalogReferenceContext,
-): ValidationIssue | undefined {
-  if (typeof value === "string") {
-    return unknownIdWarning(kind, value, path, context);
-  }
-  if (isRecord(value)) {
-    return unknownIdWarning(kind, value.id, pathFor(path, "id"), context);
-  }
-  return undefined;
-}
-
-function pushIfDefined(issues: ValidationIssue[], issue: ValidationIssue | undefined): void {
-  if (issue) {
-    issues.push(issue);
-  }
-}
-
-function designReferenceWarnings(
-  design: unknown,
-  path: string,
-  context: CatalogReferenceContext,
-): ValidationIssue[] {
-  if (!isRecord(design)) {
-    return [];
-  }
-
-  const issues: ValidationIssue[] = [];
-  pushIfDefined(issues, referenceObjectWarning("themes", design.theme, pathFor(path, "theme"), context));
-  pushIfDefined(issues, referenceObjectWarning("colorSchemes", design.colorScheme, pathFor(path, "colorScheme"), context));
-  pushIfDefined(issues, referenceObjectWarning("fontSchemes", design.fontScheme, pathFor(path, "fontScheme"), context));
-
-  if (isRecord(design.theme)) {
-    const themePath = pathFor(path, "theme");
-    pushIfDefined(issues, referenceObjectWarning("colorSchemes", design.theme.colorScheme, pathFor(themePath, "colorScheme"), context));
-    pushIfDefined(issues, referenceObjectWarning("fontSchemes", design.theme.fontScheme, pathFor(themePath, "fontScheme"), context));
-  }
-
-  return issues;
-}
-
-function chartTypeWarnings(
-  payload: unknown,
-  path: string,
-  context: CatalogReferenceContext,
-): ValidationIssue[] {
-  if (!isRecord(payload)) {
-    return [];
-  }
-
-  const issues: ValidationIssue[] = [];
-  if (isRecord(payload.chart)) {
-    pushIfDefined(issues, unknownIdWarning("chartTypes", payload.chart.type, `${pathFor(path, "chart")}/type`, context));
-    // RR-35: an axis title, legend or data label option the chart type cannot show is adapted by every engine; say so.
-    for (const diagnostic of resolveChartOptions(payload.chart, chartOptionTarget(payload.chart.type)).diagnostics) {
-      issues.push(semanticIssue(diagnostic.option.split(".").reduce(pathFor, pathFor(path, "chart")), diagnostic.message, { code: diagnostic.code, option: diagnostic.option, reason: diagnostic.reason }));
-    }
-  }
-  if (Array.isArray(payload.blocks)) {
-    payload.blocks.forEach((block, index) => {
-      issues.push(...chartTypeWarnings(block, `${pathFor(path, "blocks")}/${index}`, context));
-    });
-  }
-  return issues;
-}
-
-// RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
-// chart-mapping-unknown-column, number-format-invalid. Warnings: chart-value-not-numeric (not for null, "" or a
-// 'var:<id>' cell whose variable is a number), chart-data-source-unresolved, chart-mapping-adapted.
-function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
-  const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
-  if (!isRecord(value) || !Array.isArray(value.slides)) return out;
-  const seen = new Set<string>();
-  const add = (diagnostics: readonly DataDiagnostic[]) => {
-    for (const diagnostic of diagnostics) {
-      const key = `${diagnostic.code}|${diagnostic.path}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      (diagnostic.severity === "error" ? out.errors : out.warnings).push(semanticIssue(diagnostic.path, diagnostic.message, { code: diagnostic.code }));
-    }
-  };
-  add(datasetDiagnostics(value));
-  const payload = (node: Record<string, unknown>, path: string): void => {
-    if (isRecord(node.chart)) add(resolveChartData(node.chart, value, { path: pathFor(path, "chart") }).diagnostics);
-    if (isRecord(node.table)) add(resolveTableData(node.table, value, { path: pathFor(path, "table") }).diagnostics);
-  };
-  value.slides.forEach((slide, index) => {
-    if (!isRecord(slide)) return;
-    const slidePath = `/slides/${index}`;
-    payload(slide, slidePath);
-    visitContentPayloads(slide, slidePath, payload);
-  });
-  return out;
-}
-
-const cellBorderEdges = ["top", "right", "bottom", "left"] as const;
-
-// Mirrors the id shape shared by ColorRef's 'var:<id>' form and the property
-// names of the variables map: the one id an author could actually declare.
-const variableIdPattern = /^[a-z][a-z0-9-]*$/;
-
-// The forms TextRun.color documents. The schema keeps run colors open strings
-// so imported decks with unrecognized colors stay valid (coordinated
-// exporters fall back to the theme); the validator warns instead.
-const hexColorPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
-const schemeColorNames = new Set([
-  "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
-  "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
-  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary",
-]);
-
-// Visit exactly the schema's ColorRef positions. A key-name walk would also
-// reach 'color' keys the engine never resolves as a ColorRef — background and
-// gradient colors, chart series colors — and 'extensions' passthrough data,
-// whose shape and depth are the author's business, not the validator's.
-function variableReferenceWarnings(value: Record<string, unknown>): ValidationIssue[] {
-  if (!Array.isArray(value.slides)) {
-    return [];
-  }
-
-  const variables = isRecord(value.variables) ? value.variables : {};
-  const issues: ValidationIssue[] = [];
-
-  const colorRef = (entry: unknown, path: string): void => {
-    if (typeof entry !== "string" || !entry.startsWith("var:")) return;
-    const id = entry.slice("var:".length);
-    // A reference the schema rejects already reports an error; advising the
-    // author to declare an id the variables map cannot hold would dead-end.
-    if (!variableIdPattern.test(id) || hasOwn(variables, id)) return;
-    issues.push(semanticIssue(path, `unknown variable '${id}'; declare it in the top-level variables map`, { id }));
-  };
-  // Run colors are open strings: warn on anything that is none of the
-  // documented forms, since renderers will fall back to the theme color.
-  const runColor = (entry: unknown, path: string): void => {
-    if (typeof entry !== "string") return;
-    if (hexColorPattern.test(entry) || schemeColorNames.has(entry)) return;
-    if (entry.startsWith("var:") && variableIdPattern.test(entry.slice("var:".length))) {
-      colorRef(entry, path);
-      return;
-    }
-    issues.push(semanticIssue(
-      path,
-      `run color '${entry}' is not a hex color, a color-scheme name, or a 'var:' reference; renderers fall back to the theme color`,
-      { color: entry },
-    ));
-  };
-  // string | TextRun[]: only the object run form carries a color.
-  const richText = (entry: unknown, path: string): void => {
-    if (!Array.isArray(entry)) return;
-    entry.forEach((run, index) => {
-      if (isRecord(run)) runColor(run.color, `${path}/${index}/color`);
-    });
-  };
-  const cellStyle = (style: unknown, path: string): void => {
-    if (!isRecord(style)) return;
-    colorRef(style.fill, pathFor(path, "fill"));
-    colorRef(style.color, pathFor(path, "color"));
-    if (!isRecord(style.borders)) return;
-    const bordersPath = pathFor(path, "borders");
-    for (const edge of cellBorderEdges) {
-      const border = style.borders[edge];
-      if (isRecord(border)) colorRef(border.color, `${pathFor(bordersPath, edge)}/color`);
-    }
-  };
-  // TableCell/column label: scalar, TextRun[], or a StyledTableCell object.
-  const tableCell = (cell: unknown, path: string): void => {
-    if (Array.isArray(cell)) {
-      richText(cell, path);
-      return;
-    }
-    if (!isRecord(cell)) return;
-    richText(cell.value, pathFor(path, "value"));
-    cellStyle(cell.style, pathFor(path, "style"));
-  };
-  const table = (node: unknown, path: string): void => {
-    if (!isRecord(node)) return;
-    if (Array.isArray(node.columns)) {
-      const columnsPath = pathFor(path, "columns");
-      node.columns.forEach((column, index) => { tableCell(column, `${columnsPath}/${index}`); });
-    }
-    if (Array.isArray(node.rows)) {
-      const rowsPath = pathFor(path, "rows");
-      node.rows.forEach((row, rowIndex) => {
-        if (!Array.isArray(row)) return;
-        row.forEach((cell, cellIndex) => { tableCell(cell, `${rowsPath}/${rowIndex}/${cellIndex}`); });
-      });
-    }
-  };
-  // ListItem/BulletItem: string, TextRun[], or an object whose text and
-  // (list items only) description may themselves be TextRun[].
-  const textEntries = (entries: unknown, path: string): void => {
-    if (!Array.isArray(entries)) return;
-    entries.forEach((entry, index) => {
-      const entryPath = `${path}/${index}`;
-      if (Array.isArray(entry)) {
-        richText(entry, entryPath);
-        return;
-      }
-      if (!isRecord(entry)) return;
-      richText(entry.text, pathFor(entryPath, "text"));
-      richText(entry.description, pathFor(entryPath, "description"));
-    });
-  };
-  const payload = (node: Record<string, unknown>, path: string): void => {
-    richText(node.text, pathFor(path, "text"));
-    textEntries(node.items, pathFor(path, "items"));
-    textEntries(node.bullets, pathFor(path, "bullets"));
-    table(node.table, pathFor(path, "table"));
-  };
-
-  value.slides.forEach((slide, index) => {
-    if (!isRecord(slide)) return;
-    const slidePath = `/slides/${index}`;
-    payload(slide, slidePath);
-    visitContentPayloads(slide, slidePath, payload);
-  });
-  return issues;
-}
-
-function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
-  if (!isRecord(value) || !Array.isArray(value.slides)) {
-    return [];
-  }
-
-  const context: CatalogReferenceContext = { document: value };
-  const issues: ValidationIssue[] = [];
-
-  // String shorthand only: an inline narrative object with an unknown id is a
-  // legitimate fully-custom narrative, not a broken reference.
-  if (typeof value.narrative === "string") {
-    pushIfDefined(issues, unknownIdWarning("narratives", value.narrative, "/narrative", context));
-  }
-
-  // Audience strings are often free-form ('Series B investors'); only a bare
-  // kebab-case id reads as a catalog reference, and unknownIdWarning skips
-  // everything else. An inline Audience object's 'id' is always a catalog
-  // reference (a custom audience uses 'name'), so it is checked too.
-  if (Array.isArray(value.audience)) {
-    value.audience.forEach((entry, index) => {
-      pushIfDefined(issues, referenceObjectWarning("audiences", entry, `/audience/${index}`, context));
-    });
-  } else {
-    pushIfDefined(issues, unknownIdWarning("audiences", value.audience, "/audience", context));
-  }
-
-  issues.push(...designReferenceWarnings(value.design, "/design", context));
-  issues.push(...variableReferenceWarnings(value));
-
-  value.slides.forEach((slide, index) => {
-    if (!isRecord(slide)) {
-      return;
-    }
-    const slidePath = `/slides/${index}`;
-    issues.push(...designReferenceWarnings(slide.design, pathFor(slidePath, "design"), context));
-    issues.push(...chartTypeWarnings(slide, slidePath, context));
-    const numberingWarnings = (payload: Record<string, unknown>, path: string): void => {
-      for (const finding of numberingFindings(payload).warnings) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
-    };
-    numberingWarnings(slide, slidePath);
-    visitContentPayloads(slide, slidePath, numberingWarnings);
-    for (const key of Object.keys(slide)) {
-      if (promotedRegionKeySet.has(key)) {
-        issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));
-      }
-    }
-  });
-
-  return issues;
-}
-
-const catalogCrossLinkFields: Partial<Record<SchemaName, Record<string, CatalogKind>>> = {
-  audience: { recommendedNarratives: "narratives", recommendedTones: "tones" },
-  purpose: { recommendedNarratives: "narratives", recommendedTones: "tones" },
-  tone: { recommendedNarratives: "narratives" },
-};
-
-function catalogCrossLinkWarnings(schemaName: SchemaName, value: unknown): ValidationIssue[] {
-  const fields = catalogCrossLinkFields[schemaName];
-  if (!fields || !isRecord(value)) {
-    return [];
-  }
-
-  const issues: ValidationIssue[] = [];
-  for (const [field, kind] of Object.entries(fields)) {
-    const links = value[field];
-    if (!Array.isArray(links)) {
-      continue;
-    }
-    links.forEach((link, index) => {
-      pushIfDefined(issues, unknownIdWarning(kind, link, `${pathFor("/", field)}/${index}`));
-    });
-  }
-  return issues;
-}
-
-function validateLanguageSemantics(value: unknown): ValidationIssue[] {
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  if (isEnUkTag(value.bcp47)) {
-    return [semanticIssue("/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
-      replacement: "en-GB",
-    })];
-  }
-
-  return [];
-}
-
-// Guard recursive payloads before AJV or recursive semantic/reference traversal.
-function contentDepthIssues(value: unknown): ValidationIssue[] {
-  if (!isRecord(value) || !Array.isArray(value.slides)) return [];
-  const stack: { value: unknown; path: string; depth: number; ancestors: unknown[] }[] = [];
-  value.slides.forEach((slide, index) => {
-    if (!isRecord(slide)) return;
-    if (Array.isArray(slide.blocks)) slide.blocks.forEach((block, i) => { stack.push({ value: block, path: `/slides/${index}/blocks/${i}`, depth: 0, ancestors: [] }); });
-    for (const key of promotedRegionKeys) if (hasOwn(slide, key)) stack.push({ value: slide[key], path: `/slides/${index}/${key}`, depth: 0, ancestors: [] });
-  });
-  while (stack.length) {
-    const entry = stack.pop()!;
-    if (!isRecord(entry.value) || !Array.isArray(entry.value.blocks)) continue;
-    if (entry.ancestors.includes(entry.value) || entry.depth >= MAX_COMPOSITION_DEPTH) return [semanticIssue(entry.path, `content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels`)];
-    const ancestors = [...entry.ancestors, entry.value];
-    entry.value.blocks.forEach((block, i) => { stack.push({ value: block, path: `${entry.path}/blocks/${i}`, depth: entry.depth + 1, ancestors }); });
-  }
-  return [];
-}
-
-const variableTypeList = VARIABLE_KINDS.join(", ");
-
-function variableIssue(id: string, suffix: string, keyword: string, message: string, params: Record<string, unknown>): ErrorObject {
-  return {
-    instancePath: `/variables/${id.replaceAll("~", "~0").replaceAll("/", "~1")}${suffix}`,
-    schemaPath: "#/$defs/Variable/oneOf",
-    keyword,
-    params,
-    message,
-  } as ErrorObject;
-}
-
-// Variable is a oneOf of a hex string and seven typed objects, so Ajv would report every
-// branch. Replace its errors with those of the one branch the entry's own 'type' selects.
-function typedVariableErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
-  if (!isRecord(value) || !isRecord(value.variables)) return errors;
-  if (!errors.some((error) => error.instancePath.startsWith("/variables/"))) return errors;
-  const variables = value.variables;
-  const kept = errors.filter((error) => !error.instancePath.startsWith("/variables/"));
-  const schemaId = schemas.presentation.$id as string;
-  for (const [id, entry] of Object.entries(variables)) {
-    if (typeof entry === "string") {
-      if (!hexColorPattern.test(entry)) kept.push(variableIssue(id, "", "type", "must be a hex color string or a variable object", {}));
-      continue;
-    }
-    if (!isRecord(entry)) {
-      kept.push(variableIssue(id, "", "type", "must be a hex color string or a variable object", {}));
-      continue;
-    }
-    const kind = entry.type;
-    if (typeof kind !== "string" || !(VARIABLE_KINDS as readonly string[]).includes(kind)) {
-      kept.push(variableIssue(id, "/type", "enum", `must be one of: ${variableTypeList} (a hex string is shorthand for a color variable)`, { allowedValues: [...VARIABLE_KINDS] }));
-      continue;
-    }
-    const definition = `${kind.charAt(0).toUpperCase()}${kind.slice(1)}Variable`;
-    const check = getAjv().getSchema(`${schemaId}#/$defs/${definition}`);
-    if (!check || check(entry) === true) continue;
-    for (const error of check.errors ?? []) {
-      kept.push({ ...error, instancePath: `/variables/${id.replaceAll("~", "~0").replaceAll("/", "~1")}${error.instancePath}`, schemaPath: `#/$defs/${definition}${error.schemaPath.replace(/^#/, "")}` });
-    }
-  }
-  return kept;
-}
-
-function pointerValue(root: unknown, pointer: string): unknown {
-  let current = root;
-  for (const token of pointer.split("/").slice(1)) {
-    const key = token.replaceAll("~1", "/").replaceAll("~0", "~");
-    if (Array.isArray(current)) current = current[Number(key)];
-    else if (isRecord(current) && hasOwn(current, key)) current = current[key];
-    else return undefined;
-  }
-  return current;
-}
-
-// RR-54: 'chart.data' is a oneOf of ChartData, ChartDataSource and DatasetRef, and a table column header a oneOf of a
-// string, runs, a StyledTableCell, a DataColumn and null, so Ajv reports the errors of every branch. When the value
-// names its form ('dataset', 'src' or 'rows'; 'value' or 'name'), keep only the errors of that branch. The
-// dataset/inline table exclusions ('if'/'then'/'else' with false schemas) get a message that names the field.
-const datasetTableMessage = (field: string) => `'${field}' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset`;
-function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
-  let kept = errors;
-  const schemaId = schemas.presentation.$id as string;
-  for (const union of errors) {
-    if (union.keyword !== "oneOf") continue;
-    const chartData = /\/chart\/data$/.test(union.instancePath) && /\/properties\/data\/oneOf$/.test(union.schemaPath);
-    const header = /\/table\/columns\/\d+$/.test(union.instancePath) && /\/properties\/columns\/items\/oneOf$/.test(union.schemaPath);
-    if (!chartData && !header) continue;
-    const target = pointerValue(value, union.instancePath);
-    if (!isRecord(target)) continue;
-    const branch = chartData
-      ? hasOwn(target, "dataset") ? "DatasetRef" : hasOwn(target, "src") ? "ChartDataSource" : hasOwn(target, "rows") ? "ChartData" : undefined
-      : hasOwn(target, "value") ? "StyledTableCell" : hasOwn(target, "name") ? "DataColumn" : undefined;
-    const check = branch ? getAjv().getSchema(`${schemaId}#/$defs/${branch}`) : undefined;
-    if (!check || check(target) === true) continue;
-    const branchErrors = (check.errors ?? []).map((error) => ({ ...error, instancePath: `${union.instancePath}${error.instancePath}`, schemaPath: `#/$defs/${branch}${error.schemaPath.replace(/^#/, "")}` }));
-    const prefix = `${union.instancePath}/`;
-    kept = [...kept.filter((error) => error.instancePath !== union.instancePath && !error.instancePath.startsWith(prefix)), ...branchErrors];
-  }
-  const exclusions = kept.filter((error) => error.keyword === "false schema" && /\/table\/(rows|columns|fields)$/.test(error.instancePath) && /\/(then|else)\/properties\/(rows|columns|fields)\//.test(`${error.schemaPath}/`));
-  if (!exclusions.length) return kept;
-  const tables = new Set(exclusions.map((error) => error.instancePath.replace(/\/[^/]+$/, "")));
-  return kept
-    .filter((error) => !(error.keyword === "if" && tables.has(error.instancePath)))
-    .map((error) => {
-      if (!exclusions.includes(error)) return error;
-      const field = error.instancePath.slice(error.instancePath.lastIndexOf("/") + 1);
-      return { ...error, message: field === "fields" ? "'fields' applies only to a dataset-backed table; add 'dataset' or remove 'fields'" : datasetTableMessage(field) };
-    });
-}
-
-export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentation", options: ValidateOptions = {}): ValidationResult {
-  const resolved = resolveValidator(schemaOrKind);
-  if (resolved.schemaName === "presentation") {
-    const errors = contentDepthIssues(value);
-    if (errors.length) return { valid: false, errors, warnings: [], schemaName: resolved.schemaName };
-  }
-  // A deck that declares content variables, or a template, is checked as the deck it
-  // resolves to: tokens and 'var:' references are replaced by their value, example or a
-  // type sample (the declarations stay), so paths match the source and a template is
-  // an incomplete OPF file rather than an invalid one.
-  const variableIssues: { errors: ValidationIssue[]; warnings: ValidationIssue[] } = { errors: [], warnings: [] };
-  let subject: unknown = value;
-  let template: boolean | undefined;
-  let unfilledVariables: string[] | undefined;
-  if (resolved.schemaName === "presentation" && isRecord(value) && (hasContentVariables(value) || options.values !== undefined || options.template !== undefined)) {
-    template = options.template ?? isTemplate(value);
-    const view = instantiateForValidation(value, options.values ?? {}, template);
-    subject = view.presentation;
-    unfilledVariables = view.unfilled;
-    for (const entry of view.diagnostics) {
-      if (entry.code === "variable-example-used" || entry.code === "variable-rich-flattened" || entry.code === "variable-unfilled") continue;
-      const issue = semanticIssue(entry.path, entry.message, { id: entry.id, code: entry.code });
-      (entry.severity === "error" ? variableIssues.errors : variableIssues.warnings).push(issue);
-    }
-    if (!template) {
-      const declared = isRecord(value.variables) ? value.variables : {};
-      for (const id of view.unfilled) {
-        // A value the schema already rejects is reported there, not as a missing value.
-        if (isRecord(declared[id]) && declared[id].value !== undefined) continue;
-        variableIssues.errors.push(semanticIssue(`/variables/${id}`, `required variable '${id}' has no value; give it a value, fill it before use, or mark the document as a template ("template": true)`, { id, code: "variable-unfilled" }));
-      }
-    }
-  }
-  const valid = resolved.validate(subject) === true;
-  const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
-  const errors = (resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors).map(toIssue);
-  const warnings: ValidationIssue[] = [];
-
-  if (resolved.schemaName === "presentation") {
-    errors.push(...validatePresentationSemantics(subject));
-    errors.push(...variableIssues.errors);
-    const data = dataIssues(subject);
-    errors.push(...data.errors);
-    warnings.push(...presentationReferenceWarnings(subject));
-    warnings.push(...data.warnings);
-    warnings.push(...variableIssues.warnings);
-  } else if (resolved.schemaName === "language") {
-    errors.push(...validateLanguageSemantics(value));
-  }
-
-  if (resolved.schemaName) {
-    warnings.push(...catalogCrossLinkWarnings(resolved.schemaName, value));
-  }
-
-  return {
-    valid: errors.length === 0,
-    errors,
-    warnings,
-    schemaName: resolved.schemaName,
-    catalogKind: resolved.catalogKind,
-    ...(template !== undefined ? { template, unfilledVariables } : {}),
-  };
-}
-
-export function assertValid<T = unknown>(value: T, schemaOrKind: SchemaOrKind = "presentation", options: ValidateOptions = {}): T {
-  const result = validate(value, schemaOrKind, options);
-  if (!result.valid) {
-    throw new OPFValidationError(result);
-  }
-  return value;
-}
-
-export function validatePresentation(value: unknown, options: ValidateOptions = {}): ValidationResult {
-  return validate(value, "presentation", options);
-}
-
-export function assertValidPresentation(value: unknown, options: ValidateOptions = {}): asserts value is Presentation {
-  assertValid(value, "presentation", options);
-}
-
-export function validateCatalogRecord(kind: CatalogKind, value: unknown): ValidationResult {
-  return validate(value, kind);
+/**
+ * Check one catalog record (an audience, theme, layout, font scheme and so on) against its schema. The report has the same
+ * shape as `validate`'s; every finding is `format` and a record that links to an unknown id warns.
+ */
+export function validateCatalogRecord(kind: CatalogKind, value: unknown): ValidationReport {
+	if (!(catalogKinds as readonly string[]).includes(kind)) throw new TypeError(`Unknown catalog kind ${JSON.stringify(kind)}. Kinds: ${catalogKinds.join(', ')}.`);
+	const engine: SchemaCheckResult = validateAgainstSchema(value, kind);
+	const findings: Finding[] = [
+		...engine.errors.map((issue) => issueFinding(issue, issueRuleId(issue), engine.schemaName)),
+		...engine.warnings.map((issue) => issueFinding(issue, 'opf/catalog-reference', engine.schemaName, '', 'document', 'warning')),
+	];
+	const tally = counts(findings);
+	const checks: ValidationChecks = {
+		syntax: 'not-applicable',
+		schema: 'checked',
+		references: 'not-run',
+		policy: 'not-run',
+		accessibility: 'not-run',
+		content: 'not-run',
+		layout: 'not-run',
+		...FIXED,
+	};
+	return { valid: tally.error === 0, schemaValid: engine.valid, findings, counts: tally, checks };
 }
 
 export function assertValidCatalogRecord(kind: CatalogKind, value: unknown): void {
-  assertValid(value, kind);
+	const report = validateCatalogRecord(kind, value);
+	if (!report.valid) throw new OPFValidationError(report);
 }

@@ -168,8 +168,15 @@ describe("optional schema validation", () => {
     assert.deepEqual(deck.slides, [{ id: "a", title: "A" }]);
   });
   test("a custom validator and strict mode", () => {
-    assert.throws(() => applyPatch(deck, [], { validate: () => ({ valid: true, warnings: [{ message: "w" }] }), strict: true }), error => error instanceof PatchValidationError);
-    assert.doesNotThrow(() => applyPatch(deck, [], { validate: () => ({ valid: true, warnings: [{ message: "w" }] }) }));
+    const warning = { ruleId: "test/warning", severity: "warning", category: "format", path: "", message: "w" };
+    assert.throws(() => applyPatch(deck, [], { validate: () => ({ valid: true, findings: [warning] }), strict: true }), error => error instanceof PatchValidationError);
+    assert.doesNotThrow(() => applyPatch(deck, [], { validate: () => ({ valid: true, findings: [warning] }) }));
+  });
+  test("the built-in check is validate: the format rules, plus the references rules in strict mode", () => {
+    const unknownTheme = { ...deck, design: { theme: "no-such-theme" } };
+    assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.valid, true);
+    assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.findings.length, 0, "a catalog warning is not part of the format check");
+    assert.throws(() => applyPatch(unknownTheme, [], { validate: true, strict: true }), error => error instanceof PatchValidationError && error.validation.findings.some(entry => entry.ruleId === "opf/catalog-reference"));
   });
   test("intermediate invalid states are allowed when the result is valid", () => {
     const patch = [{ op: "replace", path: "/slides", value: "bad" }, { op: "replace", path: "/slides", value: [{ id: "z" }] }];

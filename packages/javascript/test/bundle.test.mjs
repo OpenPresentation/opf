@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { bundlePresentation, validatePresentation } from "../dist/index.js";
+import { bundlePresentation } from "../dist/index.js";
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const deck = () => ({
   name: "Bundle Fixture",
@@ -25,8 +26,8 @@ describe("bundlePresentation", () => {
     for (const kind of ["narratives", "tones", "audiences", "themes", "layouts", "chartTypes", "socialPlatforms"]) {
       assert.ok(report.added[kind]?.length, `expected ${kind} to be inlined: ${JSON.stringify(report.added)}`);
     }
-    const validation = validatePresentation(presentation);
-    assert.equal(validation.valid, true, JSON.stringify(validation.errors));
+    const validation = check(presentation);
+    assert.equal(validation.valid, true, JSON.stringify(errorsOf(validation)));
     const catalogs = presentation.catalogs;
     assert.ok(catalogs.themes.records.some((record) => record.id === "classic"));
     assert.ok(catalogs.themes.records.every((record) => record.$schema === undefined));
@@ -289,9 +290,12 @@ describe("bundlePresentation", () => {
 
     for (const [label, presentation] of Object.entries(cases)) {
       const warned = {};
-      for (const warning of validatePresentation(presentation).warnings) {
-        const { kind, id } = warning.params ?? {};
-        if (!warning.message.includes(" catalog id ") || !kind || !id) continue;
+      for (const warning of warningsOf(check(presentation, { only: ['opf/catalog-reference'] }))) {
+        const kind = warning.lookup?.[2];
+        const id = /catalog id ['"]([^'"]+)['"]/i.exec(warning.message)?.[1];
+        // The bundler resolves design references, chart types and string narratives and audiences; a layout, tone or
+        // language it does not inline is not "unresolved" to it.
+        if (!kind || !id || ["layouts", "tones", "languages", "purposes", "socialPlatforms"].includes(kind)) continue;
         if (!warned[kind]) warned[kind] = [];
         if (!warned[kind].includes(id)) warned[kind].push(id);
       }

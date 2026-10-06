@@ -43,7 +43,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 ## Start in three steps
 
 1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.12.1, renderer 0.12.0, editor 0.11.2, PPTX 0.12.3 and CLI 0.10.0.
-2. **Author, lint, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validatePresentation` / `opf validate` is local schema checking, not visual verification.
+2. **Author, validate, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
 Your deck can live in git from the first commit. After installing dependencies and supplying referenced assets, these commands run locally without a model provider, account or hosted OPF API.
@@ -96,7 +96,7 @@ import {
   audiences,
   purposes,
   tones,
-  validatePresentation,
+  validate,
 } from "@openpresentation/opf";
 
 import type { Presentation } from "@openpresentation/opf";
@@ -106,9 +106,9 @@ const deck: Presentation = {
   slides: [{ title: "Quarterly Review", items: ["Revenue", "Product", "Hiring"] }],
 };
 
-const result = validatePresentation(deck);
-console.log(result.valid); // schema correctness
-console.log(result.warnings); // advisory issues, e.g. unknown catalog ids
+const report = validate(deck);
+console.log(report.valid); // no finding has severity "error"
+console.log(report.findings); // every finding: rule id, severity, category, JSON Pointer path, message, fixes
 console.log(audiences.length, purposes.length, tones.length);
 ```
 

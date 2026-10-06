@@ -35,7 +35,7 @@ import {
   tones,
   catalogs,
   validate,
-  validatePresentation,
+  validateCatalogRecord,
 } from "@openpresentation/opf";
 
 import type { Presentation } from "@openpresentation/opf";
@@ -46,8 +46,8 @@ const deck: Presentation = {
 };
 
 console.log(presentation.$id);
-console.log(validatePresentation(deck).valid);
-console.log(validate(tones[0], "tones").valid);
+console.log(validate(deck).valid);
+console.log(validateCatalogRecord("tones", tones[0]).valid);
 console.log(audiences.map((audience) => audience.id));
 console.log(Object.keys(catalogs));
 ```
@@ -58,7 +58,7 @@ Use focused imports when you only need one surface:
 import { presentation, audience } from "@openpresentation/opf/schemas";
 import { audiences, tones } from "@openpresentation/opf/catalogs";
 import { specFileEntries } from "@openpresentation/opf/spec-files";
-import { validate, assertValid } from "@openpresentation/opf/validator";
+import { validate, assertValid, validationRules } from "@openpresentation/opf/validator";
 import {
   layoutPreviews,
   getLayoutPreview,
@@ -77,15 +77,9 @@ The root entry exports every schema, catalog, and validation helper for convenie
 
 `@openpresentation/opf/markdown` reads and writes a deck as Markdown in a small documented dialect (YAML front matter, `---` between slides, `#` title, `##` subtitle, lists, quotes, tables, images, `chart`, `metric` and `timeline` fences, `Note:` speaker notes). `markdownToOpf(markdown, { split, defaults, validate })` returns `{ document, valid, diagnostics, counts }` with lint-shaped diagnostics that carry the line and column of the Markdown; `opfToMarkdown(document, { unsupported })` writes any valid deck, embedding what the dialect has no syntax for as YAML (or dropping it into `report.loss`), and the Markdown it writes converts back to the same deck. Deterministic and offline. Reads front matter with the `yaml` package. See the [Markdown guide](../../docs/markdown.md). Not in releases before the one that lists it in the changelog.
 
-### Design and accessibility audit
+### Validate (0.14.0)
 
-`@openpresentation/opf/audit` exports `auditPresentation(document, options)`, `auditSource(source, options)` and `auditRules`: contrast, overflow, type size, alt text, reading order, fonts, links, charts and more, with stable `audit/<rule>` ids in lint's report shape. Read-only and deterministic; see [the audit guide](../../docs/audit.md).
-
-### Contextual lint (0.10.0)
-
-Version 0.10.0 adds `lintSource(source, options)` and `lintPresentation(document, options)` from `@openpresentation/opf/lint` and the root API. They report strict JSON syntax, duplicate keys, schema constraints, local catalog alternatives, asset registry errors, and explicit host contracts. Source diagnostics retain original UTF-16 ranges without rewriting the document. Options accept already loaded `catalogs` and `contracts`; no remote resources are fetched.
-
-Earlier versions do not include these APIs. See the [lint guide](../../docs/lint.md) for configuration and the source CLI. Passing lint does not certify layout, fonts, or native export fidelity.
+`validate(input, options?)` is the one checker, from the root and from `@openpresentation/opf/validator`. `input` is a parsed presentation or strict JSON text; the result is a `ValidationReport` whose `findings` (the shared `Finding` format, `spec/schemas/finding.schema.json`) each have a stable `opf/<rule>` id, a severity and one of six categories: `format` (JSON syntax, duplicate keys, schema), `references` (catalog ids, assets, citations, datasets), `policy` (host `contracts`), `accessibility` (contrast, alt text, reading order, links), `layout` (overflow, type size, image resolution, fonts) and `content` (placeholders, empty slides, unfilled variables). `valid` means no finding has severity `error`, which by default only `format`, `references` and `policy` findings can have. Text input adds line and column; `only`, `ignore` and `severity` pick and promote rules or categories; composition is lazy, so `validate(deck, { only: ["format"] })` costs what a schema check costs. Read-only and deterministic: no remote resources are fetched. See [the validate guide](../../docs/validate.md) and the [0.14.0 migration](../../docs/migrations/0.14.0.md). A clean report does not certify layout, fonts, or native export fidelity.
 
 ### Patch, diff, merge and format (0.12.0)
 
@@ -173,17 +167,18 @@ import { repoReadme } from "@openpresentation/opf/repo-readme";
 console.log(repoReadme.split("\n").slice(0, 3).join("\n"));
 ```
 
-Validation results carry `errors` (structural problems that make `valid`
-false) and `warnings` (advisory issues such as unknown catalog ids in
-`narrative`, `design`, or chart `type` references — these never affect
-`valid`). Documents that declare matching inline `catalogs.<kind>.records[]`
-or a custom `catalogs.<kind>.source` are exempt from unknown-id warnings for
-that kind.
+Validation reports carry `findings`. A finding with severity `error` is a
+structural problem that makes `valid` false; `warning` and `info` findings are
+advisory, such as an unknown catalog id in `narrative`, `design`, or a chart
+`type` reference (`opf/catalog-reference`) or a missing alt text. An id that a
+matching inline `catalogs.<kind>.records[]` entry defines is known, and a custom
+`catalogs.<kind>.source` exempts that kind's ids from unknown-id warnings
+unless the host loads the source's records and passes them as `catalogs`.
 
 ```ts
-const result = validatePresentation(deck);
-if (!result.valid) console.error(result.errors);
-for (const warning of result.warnings) console.warn(warning.path, warning.message);
+const report = validate(deck);
+if (!report.valid) console.error(report.findings.filter((finding) => finding.severity === "error"));
+for (const finding of report.findings) console.warn(finding.ruleId, finding.path, finding.message);
 ```
 
 Validate catalog records locally:
@@ -194,7 +189,7 @@ import { audiences, validateCatalogRecord } from "@openpresentation/opf";
 for (const record of audiences) {
   const result = validateCatalogRecord("audiences", record);
   if (!result.valid) {
-    console.error(result.errors);
+    console.error(result.findings);
   }
 }
 ```

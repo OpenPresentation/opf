@@ -1,8 +1,8 @@
 import { intrinsicImageSize } from './image-aspect.js';
-import type { AuditRule } from './audit-context.js';
-import { rule } from './audit-context.js';
-import { countWords, plainText, pointer, pointerOfDotted, runsOf, slidePayloads, splitPointer } from './audit-content.js';
-import { type Rec, rec } from './audit-design.js';
+import type { ValidationRule } from './rule-context.js';
+import { rule } from './rule-context.js';
+import { plainText, pointer, pointerOfDotted, runsOf, slidePayloads, splitPointer } from './rule-content.js';
+import { type Rec, rec } from './rule-design.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
@@ -11,61 +11,57 @@ const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 
 
 const overflowRule = rule(
 	'text-overflow',
-	'design',
+	'layout',
 	'warning',
 	'Text or a table does not fit its space at the smallest allowed size.',
 	'Core composition shrinks text to the readable minimum and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.',
 	{
+		cost: 'composition',
 		approximations:
-			'Uses composeSlide at the deck\'s slide size with the fonts of the resolved font scheme. Without a host-supplied text measurement (AuditOptions.textMeasurement) widths are core\'s portable estimate, which can differ from the real font by a few percent; pass the renderer\'s measurement for font-exact results. Content in a composition that sets overflow: "error" is reported as an error, as the author asked.',
+			'Uses composeSlide at the deck\'s slide size with the fonts of the resolved font scheme. Without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core\'s portable estimate, which can differ from the real font by a few percent; pass the renderer\'s measurement for font-exact results. A composition that sets overflow: "error" is reported as a warning here, so that `valid` never depends on font metrics; rendering and export still refuse such a slide when it does not fit.',
 	},
-);
-const smallCellRule = rule(
-	'small-cell',
-	'design',
-	'info',
-	'A content cell is too small for comfortable reading.',
-	'Cells narrower than about 100 px or shorter than 60 px (at 720 px slide height) leave no room for readable content.',
-	{ approximations: 'The composeSlide threshold, in reference pixels scaled to the slide size.' },
 );
 const unresolvedRule = rule(
 	'unresolved-content',
-	'design',
+	'layout',
 	'warning',
 	'Content cannot be drawn as authored.',
 	'composeSlide reports content it cannot place or an effect it does not support (for example a picture bullet without a logo, a date field without a date, or an unsupported image treatment). The preview and the export fall back.',
+	{ cost: 'composition' },
 );
 const layoutFailedRule = rule(
 	'layout-failed',
-	'design',
+	'layout',
 	'warning',
 	'The slide layout could not be computed.',
 	'Composition threw for a slide that passed schema validation, so geometry-based rules (contrast, overflow, reading order, resolution) were skipped for it.',
+	{ cost: 'composition' },
 );
 const minFontRule = rule(
 	'min-font-size',
-	'design',
+	'layout',
 	'warning',
 	'Text is drawn smaller than the readable minimum.',
 	'Small type is unreadable from the back of a room and on a phone. The engine\'s own default floor is 12 pt (16 px); anything much below that was lowered on purpose or by a composition that could not fit the text.',
 	{
+		cost: 'composition',
 		standard: 'Common presentation guidance (12 pt minimum for body text; 18 pt or more is easier to read from a distance).',
 		thresholds: ['minFontSizePt'],
 		approximations: 'Sizes are those composeSlide fitted, expressed on the 13.33 x 7.5 in reference slide (96 px per inch, so 1 px is 0.75 pt; a smaller canvas scales type down with it) and explicit run fontSize values in points. Per payload, the smallest part (a metric label or a quote attribution) is reported. Table cell text (default 11.25 pt), code and header/footer furniture are not checked.',
 	},
 );
 
-const layoutRules: AuditRule[] = [
+const layoutRules: ValidationRule[] = [
 	{
 		info: overflowRule,
-		also: [smallCellRule, unresolvedRule, layoutFailedRule, minFontRule],
+		also: [unresolvedRule, layoutFailedRule, minFontRule],
 		run(context) {
 			// Diagnostics about deck-level settings (header, footer, design) repeat on every slide; report each once.
 			const deckLevel = new Set<string>();
 			for (const slide of context.slides) {
 				if (slide.layoutError)
-					context.report(layoutFailedRule, { path: slide.path, slide, message: `Layout failed: ${slide.layoutError}`, help: 'Fix the composition settings or content structure named in the message; geometry-based audit rules were skipped for this slide.' });
-				for (const { diagnostic, strict } of slide.layoutDiagnostics) {
+					context.report(layoutFailedRule, { path: slide.path, slide, message: `Layout failed: ${slide.layoutError}`, help: 'Fix the composition settings or content structure named in the message; geometry-based rules were skipped for this slide.' });
+				for (const { diagnostic } of slide.layoutDiagnostics) {
 					const path = pointerOfDotted(diagnostic.path);
 					if (!path.startsWith('/slides/')) {
 						const key = `${diagnostic.code}|${path}|${diagnostic.message}`;
@@ -73,9 +69,9 @@ const layoutRules: AuditRule[] = [
 						deckLevel.add(key);
 					}
 					if (diagnostic.code === 'text-overflow')
-						context.report(overflowRule, { path, slide, message: diagnostic.message, help: 'Shorten the text, give it more space (fewer blocks, a different composition) or split the slide (paginate); raising the readable minimum makes it worse.', severity: strict ? 'error' : undefined });
-					else if (diagnostic.code === 'small-cell')
-						context.report(smallCellRule, { path, slide, message: diagnostic.message, help: 'Use fewer blocks on the slide or a layout with larger cells.' });
+						context.report(overflowRule, { path, slide, message: diagnostic.message, help: 'Shorten the text, give it more space (fewer blocks, a different composition) or split the slide (paginate); raising the readable minimum makes it worse.' });
+					// A cell narrower than composition's comfort threshold is a taste judgment, not a finding.
+					else if (diagnostic.code === 'small-cell') continue;
 					else context.report(unresolvedRule, { path, slide: path.startsWith('/slides/') ? slide : undefined, message: diagnostic.message, help: 'Supply what the message asks for, or remove the setting that cannot be honoured.' });
 				}
 				for (const tv of slide.texts)
@@ -87,7 +83,7 @@ const layoutRules: AuditRule[] = [
 								message: `Text run is set to ${run.style.fontSize} pt, below the ${context.thresholds.minFontSizePt} pt minimum.`,
 								help: 'Remove the size override so the text uses the fitted size, or raise it.',
 								measured: { sizePt: run.style.fontSize, minimumPt: context.thresholds.minFontSizePt },
-								fixes: [{ id: 'focus-font-size', label: 'Edit the size', kind: 'focus', safe: true, focus: { path: `${run.path}/fontSize`, field: 'fontSize' } }],
+								fixes: [{ id: 'focus-font-size', title: 'Edit the size', kind: 'focus', safe: true, focus: { path: `${run.path}/fontSize`, field: 'fontSize' } }],
 							});
 				const composition = slide.composition;
 				if (!composition) continue;
@@ -121,21 +117,13 @@ const layoutRules: AuditRule[] = [
 
 const outsideRule = rule(
 	'font-outside-scheme',
-	'design',
+	'layout',
 	'warning',
 	'Text uses a font family that is not in the deck\'s font scheme.',
 	'The font scheme is the deck\'s font choice. A run that names another family will not follow a font-scheme change, may be missing on the viewer\'s machine, and breaks the deck\'s typographic consistency.',
 	{ approximations: 'Compares the run\'s fontFamily (case-insensitively) with the heading, body, code and accent families of the slide\'s resolved font scheme and the scheme\'s major/minor fonts. Families that the host substitutes are still different names here.' },
 );
-const countRule = rule(
-	'font-family-count',
-	'design',
-	'info',
-	'The deck uses more font families than the recommended maximum.',
-	'More than two or three families (heading, body, plus code where used) makes a deck look unplanned and increases the font bytes a viewer needs.',
-	{ thresholds: ['maxFontFamilies'], approximations: 'Counts the distinct heading and body families of every slide\'s resolved scheme, the code family on slides with code, the accent family on slides with a tag, and every run fontFamily.' },
-);
-const fontRules: AuditRule[] = [
+const fontRules: ValidationRule[] = [
 	{
 		info: outsideRule,
 		run(context) {
@@ -156,111 +144,9 @@ const fontRules: AuditRule[] = [
 							slide,
 							message: `Text uses ${JSON.stringify(family)}, which is not in the font scheme (${[...new Set([slide.design.fonts.heading, slide.design.fonts.body])].join(' / ')}).`,
 							help: 'Remove the fontFamily override to use the scheme font, or change the deck\'s font scheme so the family is part of it.',
-							fixes: [{ id: 'remove-font-family', label: 'Use the scheme font', kind: 'patch', safe: false, patch: [{ op: 'remove', path: `${run.path}/fontFamily` }] }],
+							fixes: [{ id: 'remove-font-family', title: 'Use the scheme font', kind: 'patch', safe: false, patch: [{ op: 'remove', path: `${run.path}/fontFamily` }] }],
 						});
 					}
-			}
-		},
-	},
-	{
-		info: countRule,
-		run(context) {
-			const families = new Map<string, string>();
-			const add = (family: unknown) => {
-				if (typeof family === 'string' && family.trim()) families.set(family.trim().toLowerCase(), family.trim());
-			};
-			for (const slide of context.slides) {
-				add(slide.design.fonts.heading);
-				add(slide.design.fonts.body);
-				if (slide.payloads.some((p) => p.node.code !== undefined)) add(slide.design.fonts.code);
-				if (typeof slide.slide.tag === 'string') add(slide.design.fonts.accent);
-				for (const tv of slide.texts) for (const run of runsOf(tv)) add(run.style.fontFamily);
-			}
-			if (families.size <= context.thresholds.maxFontFamilies) return;
-			context.report(countRule, {
-				path: '/design',
-				message: `The deck uses ${families.size} font families (${[...families.values()].join(', ')}); the recommended maximum is ${context.thresholds.maxFontFamilies}.`,
-				help: 'Use one heading and one body family, add a code family only where code appears, and remove run-level fontFamily overrides.',
-				measured: { families: families.size, maximum: context.thresholds.maxFontFamilies },
-			});
-		},
-	},
-];
-
-// ------------------------------------------------------------- consistency
-
-const titlePositionRule = rule(
-	'title-position',
-	'design',
-	'info',
-	'Titles of slides with the same layout sit in different places.',
-	'A title that jumps between slides of one layout looks like a mistake when the deck is clicked through. Slides of one layout should hold their titles still.',
-	{
-		thresholds: ['titlePositionTolerance'],
-		approximations: 'Compares the composed title box origin of slides that share a layout id, a header presence and a slide-image position; covers (no body content) are skipped because their heading group is centred on purpose. The reference is the most common position, ties going to the earliest slide.',
-	},
-);
-const titleRules: AuditRule[] = [
-	{
-		info: titlePositionRule,
-		run(context) {
-			const groups = new Map<string, { slide: (typeof context.slides)[number]; x: number; y: number }[]>();
-			for (const slide of context.slides) {
-				const composition = slide.composition;
-				const title = composition?.items.find((item) => item.field === 'title');
-				if (!composition || !title) continue;
-				if (!composition.items.some((item) => !['title', 'subtitle', 'tag'].includes(item.field))) continue;
-				const key = [slide.layout?.id ?? (typeof slide.slide.layout === 'string' ? slide.slide.layout : '(inferred)'), (composition.furniture?.headerBottom ?? 0) > 0, composition.slideImage?.position ?? '-'].join('|');
-				const list = groups.get(key) ?? [];
-				list.push({ slide, x: title.box.x / composition.width, y: title.box.y / composition.height });
-				groups.set(key, list);
-			}
-			const tolerance = context.thresholds.titlePositionTolerance;
-			for (const [key, members] of groups) {
-				if (members.length < 2) continue;
-				const counts: { x: number; y: number; n: number }[] = [];
-				for (const member of members) {
-					const near = counts.find((c) => Math.abs(c.x - member.x) <= tolerance && Math.abs(c.y - member.y) <= tolerance);
-					if (near) near.n++;
-					else counts.push({ x: member.x, y: member.y, n: 1 });
-				}
-				const reference = counts.reduce((best, c) => (c.n > best.n ? c : best));
-				for (const member of members)
-					if (Math.abs(member.x - reference.x) > tolerance || Math.abs(member.y - reference.y) > tolerance)
-						context.report(titlePositionRule, {
-							path: `${member.slide.path}/title`,
-							slide: member.slide,
-							message: `The title is ${round(Math.abs(member.x - reference.x) * 100)}% (across) and ${round(Math.abs(member.y - reference.y) * 100)}% (down) away from where other "${key.split('|')[0]}" slides place it.`,
-							help: 'Slides of one layout should hold the title in the same place: check the header, the slide image, the layout and composition overrides on this slide.',
-							measured: { offsetX: round(member.x - reference.x, 3), offsetY: round(member.y - reference.y, 3) },
-						});
-			}
-		},
-	},
-];
-
-const wordRule = rule(
-	'slide-word-count',
-	'design',
-	'info',
-	'A slide holds a lot of text.',
-	'Slides that carry a page of prose are read instead of presented, and are hard to scan on a screen reader or a phone. Split them or move detail to notes.',
-	{ thresholds: ['maxWordsPerSlide'], approximations: 'Counts word-like segments (Unicode word boundaries, so Chinese and Japanese count by word) in the title, subtitle, tag, text, lists, tables, quotes, metrics and timelines. Code and speaker notes are excluded.' },
-);
-const wordRules: AuditRule[] = [
-	{
-		info: wordRule,
-		run(context) {
-			for (const slide of context.slides) {
-				const words = slide.texts.reduce((sum, tv) => sum + countWords(plainText(tv.value)), 0);
-				if (words <= context.thresholds.maxWordsPerSlide) continue;
-				context.report(wordRule, {
-					path: slide.path,
-					slide,
-					message: `Slide ${slide.index + 1} has ${words} words; more than ${context.thresholds.maxWordsPerSlide} is hard to read as a slide.`,
-					help: 'Cut it to the points that matter, split it over several slides, or move the detail into speaker notes or a handout.',
-					measured: { words, maximum: context.thresholds.maxWordsPerSlide },
-				});
 			}
 		},
 	},
@@ -270,17 +156,18 @@ const wordRules: AuditRule[] = [
 
 const resolutionRule = rule(
 	'image-resolution',
-	'design',
+	'layout',
 	'warning',
 	'An image has too few pixels for the size it is shown at.',
 	'An image stretched beyond its pixel size looks blurry or blocky on a projector or a high-density screen.',
 	{
+		cost: 'composition',
 		thresholds: ['minImagePpi'],
 		approximations:
 			'Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed box (cropped images are measured as the cover scale, fitted ones as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.',
 	},
 );
-const resolutionRules: AuditRule[] = [
+const resolutionRules: ValidationRule[] = [
 	{
 		info: resolutionRule,
 		run(context) {
@@ -350,7 +237,7 @@ const PLACEHOLDERS: { pattern: RegExp; label: string }[] = [
 ];
 const VARIABLE_TOKEN = /\\\{\{|\{\{\s*([a-z][a-z0-9-]*)\s*(?:\|[^{}]*)?\}\}/g;
 
-const contentRules: AuditRule[] = [
+const contentRules: ValidationRule[] = [
 	{
 		info: placeholderRule,
 		run(context) {
@@ -364,7 +251,7 @@ const contentRules: AuditRule[] = [
 						slide,
 						message: `Text looks like ${hit.label}: ${JSON.stringify(text.length > 60 ? `${text.slice(0, 57)}...` : text)}.`,
 						help: 'Replace it with the real content, or delete the element.',
-						fixes: [{ id: 'focus-text', label: 'Edit the text', kind: 'focus', safe: true, focus: { path: tv.path, field: 'text' } }],
+						fixes: [{ id: 'focus-text', title: 'Edit the text', kind: 'focus', safe: true, focus: { path: tv.path, field: 'text' } }],
 					});
 				}
 		},
@@ -381,7 +268,7 @@ const contentRules: AuditRule[] = [
 						slide,
 						message: `The ${tv.role === 'list' ? 'list item' : tv.role === 'body' ? 'text' : tv.role} is empty.`,
 						help: 'Write the text, or remove the field so the slide does not carry an empty element.',
-						fixes: [{ id: 'focus-text', label: 'Edit the text', kind: 'focus', safe: true, focus: { path: tv.path, field: 'text' } }],
+						fixes: [{ id: 'focus-text', title: 'Edit the text', kind: 'focus', safe: true, focus: { path: tv.path, field: 'text' } }],
 					});
 				}
 		},
@@ -405,31 +292,44 @@ const contentRules: AuditRule[] = [
 // ---------------------------------------------------------------- variables
 
 const variableRule = rule(
-	'unfilled-variable',
+	'variable-unfilled',
 	'content',
-	'warning',
-	'A template variable was never filled in.',
-	'`{{name}}` tokens, `var:` colour references to undeclared variables and declared variables without a value are template scaffolding. In a finished deck they show up literally, or fall back to a default colour.',
+	'error',
+	'A template variable has no value.',
+	'A variable a deck declares as required, with no value, is template scaffolding: `{{name}}` tokens show up literally and colour variables fall back to a default. A normal deck must be filled, so this is an error; a template (`template: true`) is incomplete on purpose, so it is a warning.',
 	{
 		approximations:
-			'Feature-detected from the document alone: `{{id}}` / `{{id|format}}` tokens (the RR-32 template syntax; `\\{{` escapes) in any string outside `variables`, `extensions` and `catalogs`; `var:<id>` references with no declaration in `variables`; and declared non-colour variables with no value that are not `required: false`. A template (`template: true`) reports its tokens as findings too: ignore the rule for a template on purpose, or fill it first. Core\'s `resolveVariables` (RR-32) is the authority once it is released; this check needs no import of it.',
+			'Required variables are those the variable machinery reports as unfilled for the document (declared, no value, not `required: false`, not given by the `values` option): an error in a normal deck, a warning in a template. For a document that declares no content variables, `{{id}}` / `{{id|format}}` tokens (`\{{` escapes) left in any string outside `variables`, `extensions`, `catalogs` and `assets` are reported as warnings. `var:` colour references with no declaration are reported as `opf/variable-reference-unknown`. Fill a template with `opf fill` or `resolveVariables` to clear the findings.',
 	},
 );
-const variableRules: AuditRule[] = [
+const variableRules: ValidationRule[] = [
 	{
 		info: variableRule,
 		run(context) {
 			const doc = context.document;
-			const declared = rec(doc.variables);
-			const found: { path: string; message: string }[] = [];
+			const state = context.variables;
+			const slideOf = (path: string) => {
+				const parts = splitPointer(path);
+				return parts[0] === 'slides' ? context.slides[Number(parts[1])] : undefined;
+			};
+			if (state.template === true) {
+				for (const id of state.unfilledVariables)
+					context.report(variableRule, {
+						path: pointer('variables', id),
+						message: `Template variable ${JSON.stringify(id)} has no value.`,
+						help: 'This document is a template: fill it with its values (opf fill, or resolveVariables) before using it as a deck.',
+						severity: 'warning',
+					});
+			} else {
+				for (const issue of state.issues) context.report(variableRule, { path: issue.path, slide: slideOf(issue.path), message: issue.message, help: 'Give the variable a value, fill the deck before use (opf fill, or resolveVariables), or mark the document as a template ("template": true).' });
+			}
+			if (state.processed) return;
 			const walk = (value: unknown, path: string[], depth: number) => {
 				if (depth > 64) return;
 				if (typeof value === 'string') {
 					if (value.startsWith('data:')) return;
-					const reference = /^var:([a-z][a-z0-9-]*)$/.exec(value);
-					if (reference && !(reference[1] as string in declared)) found.push({ path: pointer(...path), message: `Colour reference ${JSON.stringify(value)} names a variable that is not declared in variables.` });
 					for (const match of value.matchAll(VARIABLE_TOKEN))
-						if (match[1]) found.push({ path: pointer(...path), message: `Template variable ${JSON.stringify(match[0])} is still in the text.` });
+						if (match[1]) context.report(variableRule, { path: pointer(...path), slide: slideOf(pointer(...path)), message: `Template variable ${JSON.stringify(match[0])} is still in the text.`, help: 'Declare the variable and fill it, or replace the token with the real value.', severity: 'warning' });
 					return;
 				}
 				if (Array.isArray(value)) {
@@ -445,31 +345,13 @@ const variableRules: AuditRule[] = [
 					}
 			};
 			walk(doc, [], 0);
-			for (const [id, entry] of Object.entries(declared)) {
-				const declaration = rec(entry);
-				if (typeof entry === 'object' && entry !== null && declaration.type !== undefined && declaration.type !== 'color' && declaration.value === undefined && declaration.required !== false)
-					found.push({ path: pointer('variables', id), message: `Variable ${JSON.stringify(id)} (${String(declaration.type)}) has no value.` });
-			}
-			const slides = context.slides;
-			for (const finding of found) {
-				const parts = splitPointer(finding.path);
-				const slide = parts[0] === 'slides' ? slides[Number(parts[1])] : undefined;
-				context.report(variableRule, {
-					path: finding.path,
-					slide,
-					message: finding.message,
-					help: doc.template === true ? 'This document is a template: fill it with its values (opf fill, or resolveVariables) before auditing, or ignore this rule for templates.' : 'Fill the variable (or declare it), or replace the token with the real value.',
-				});
-			}
 		},
 	},
 ];
 
-export const designRules: AuditRule[] = [
+export const layoutContentRules: ValidationRule[] = [
 	...layoutRules,
 	...fontRules,
-	...titleRules,
-	...wordRules,
 	...resolutionRules,
 	...contentRules,
 	...variableRules,

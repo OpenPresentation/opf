@@ -80,7 +80,7 @@ Validation:
 - an unknown dataset id is a `dataset-unknown` error;
 - an unknown field is a `dataset-field-unknown` error;
 - duplicate column names in a dataset, or in chart data that a `mapping` or `fields` addresses, are a `data-column-duplicate` error;
-- a dataset nothing references is the lint warning `opf/unused-dataset`.
+- a dataset nothing references is the warning `opf/unused-dataset` (category `references`).
 
 ### Series mapping
 
@@ -139,11 +139,11 @@ export function isDatasetRef(value: unknown): value is DatasetRef;
 
 `DataDiagnostic` is `{ code, severity: "error" | "warning", path, message }`, with the codes above plus `chart-value-not-numeric`. `chartNumber` runs after variables are filled. Before filling, the validator does not warn on a `var:<id>` cell whose variable is a number. `chart-value-not-numeric` is reported for any value cell that `chartNumber` rejects (strings and booleans), never for `null` or `""`. An unknown `fields` entry is a `dataset-field-unknown` error and `resolveChartData`/`resolveTableData` leave that column out. `number-format-invalid` applies to `DataColumn.format` and `StyledTableCell.format`; `NumberVariable.format` keeps its existing check (`variable-format` where it is used), so no existing document gains an error.
 
-The validator reports the codes as `params.code` on `errors` and `warnings`; lint keeps them as `opf/<code>` rule ids (errors as before, the three warnings now also) and adds `opf/unused-dataset`.
+`validate` reports the codes as `opf/<code>` rule ids: the errors are `format` findings, `opf/chart-value-not-numeric` and `opf/chart-mapping-adapted` are `content` warnings, `opf/chart-data-source-unresolved` is a `references` warning, and `references` adds `opf/unused-dataset`. The raw schema issue of a finding is in its `validation` field (`validation.params.code`).
 
 ### Migration help
 
-Decks written before the strict rule often hold display text in chart cells. When every text cell of a value column (an X or series column, or a lone column) is written in one display style that a NumberFormat reproduces exactly, `suggestChartNumberFix` returns the fix, and lint attaches it to each of the column's `opf/chart-value-not-numeric` warnings as `fixes: [{ id: "store-chart-numbers", kind: "patch", safe: false, patch }]` (the audit fix shape; core never applies it):
+Decks written before the strict rule often hold display text in chart cells. When every text cell of a value column (an X or series column, or a lone column) is written in one display style that a NumberFormat reproduces exactly, `suggestChartNumberFix` returns the fix, and `validate` attaches it to each of the column's `opf/chart-value-not-numeric` warnings as `fixes: [{ id: "store-chart-numbers", title, kind: "patch", safe: false, patch }]` (a [finding fix](finding-schema-reference.md); core never applies it):
 
 - `"12%"`, `"8.5%"` become 0.12 and 0.085 with the column format `0.#%`;
 - `"$1,234"`, `"$56"` become 1234 and 56 with `$#,##0` (also `€`, `£`, `¥`);

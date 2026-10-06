@@ -1,6 +1,6 @@
 import { collectCitations, walkCitationRuns } from './annotations.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
-import type { ValidationIssue } from './validator.js';
+import type { ValidationIssue } from './generated/types/finding.js';
 
 /**
  * Semantic checks for footnotes, citations and captions (RR-34). Errors:
@@ -8,7 +8,7 @@ import type { ValidationIssue } from './validator.js';
  * - `cite-unknown-reference`: a run cites an id the references list does not hold.
  * - `cite-unsupported-location`: `cite`/`footnote` on a run outside text, bullets and list items
  *   (table cells, captions, reference and footnote texts), where no engine draws a marker.
- * Warnings (lint `opf/unused-reference`): a reference no run cites.
+ * Warnings (`opf/unused-reference`): a reference no run cites.
  */
 
 const issue = (path: string, message: string, params: Record<string, unknown>): ValidationIssue => ({ path, message, keyword: 'opf', schemaPath: '#/x-opf-semantics', params });
@@ -64,7 +64,7 @@ export function annotationIssues(value: unknown): ValidationIssue[] {
   return issues;
 }
 
-/** References no run cites, as advisory issues (lint reports them as `opf/unused-reference`). */
+/** References no run cites, as advisory issues (reported as `opf/unused-reference`). */
 export function unusedReferenceWarnings(value: unknown): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.references) || !Array.isArray(value.slides)) return [];
   const { unused } = collectCitations(value);

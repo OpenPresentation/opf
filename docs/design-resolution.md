@@ -167,7 +167,7 @@ A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-su
 2. The engine reports one `unresolved-font-scheme` diagnostic: `{ code, path, id, fallback: "aptos", message }`. `path` is where the id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the `slides.N.design.theme` / `design.theme` reference whose record names it.
 3. An object without `id` is an inline scheme on the same base and reports nothing.
 
-`resolveFontSchemeReference(reference, lookup, path)` in `@openpresentation/opf` implements this rule. `resolveFontFamilies()` also falls back to the default scheme's families (Aptos Display, Aptos) when a scheme names no heading or body family, instead of Roboto. Authoring-time `lintPresentation()` already warns about the unknown id (`opf/catalog-reference`).
+`resolveFontSchemeReference(reference, lookup, path)` in `@openpresentation/opf` implements this rule. `resolveFontFamilies()` also falls back to the default scheme's families (Aptos Display, Aptos) when a scheme names no heading or body family, instead of Roboto. Authoring-time `validate()` already warns about the unknown id (`opf/catalog-reference`).
 
 | Engine | Diagnostic channel | Reported |
 | --- | --- | --- |

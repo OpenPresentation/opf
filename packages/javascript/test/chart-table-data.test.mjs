@@ -1,31 +1,12 @@
 // RR-54: chart and table data (docs/chart-table-data.md): strict numbers, number formats and Excel codes, datasets,
-// series mapping, and their validation, lint and core integration.
+// series mapping, and their validation, findings and core integration.
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, test } from "node:test";
 
-import {
-  auditPresentation,
-  chartNumber,
-  createDataContent,
-  excelNumberFormat,
-  formatDataNumber,
-  formatVariableNumber,
-  inlineDatasets,
-  lintPresentation,
-  numberFormatFromExcel,
-  paginatePresentation,
-  presentation,
-  validate,
-  resolveChartData,
-  resolveTableData,
-  resolveVariables,
-  tableCellDisplayValue,
-  validatePresentation,
-  suggestChartNumberFix,
-} from "../dist/index.js";
+import { chartNumber, createDataContent, excelNumberFormat, formatDataNumber, formatVariableNumber, inlineDatasets, numberFormatFromExcel, paginatePresentation, presentation, validate, resolveChartData, resolveTableData, resolveVariables, tableCellDisplayValue, suggestChartNumberFix } from "../dist/index.js";
 import * as dataEntry from "../dist/data.js";
 import { composeSlide, layoutTable } from "../dist/composition.js";
 import { convertContent } from "../dist/convert.js";
@@ -33,9 +14,24 @@ import { diffPresentations } from "../dist/diff.js";
 import { formatPresentation } from "../dist/format.js";
 import { applyPatch } from "../dist/patch.js";
 import { markdownToOpf, opfToMarkdown } from "../dist/markdown.js";
+import { createRequire } from "node:module";
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
+
+const require = createRequire(import.meta.url);
+const Ajv2020 = require("ajv/dist/2020.js").default;
+const addFormats = require("ajv-formats").default;
+// The schema definitions are checked with Ajv directly: core exposes no generic schema validator.
+const ajv = new Ajv2020({ allErrors: true, strict: false, allowUnionTypes: true });
+addFormats(ajv);
+ajv.addSchema(presentation);
+const matches = (schema, value) => ajv.validate(schema, value);
+// The data findings of a presentation: every format finding, plus the data advisories of the references and content categories.
+const DATA_ADVISORIES = ["chart-value-not-numeric", "chart-data-source-unresolved", "chart-mapping-adapted"];
+const dataReport = (document) => validate(document, { only: ["format", ...DATA_ADVISORIES.map((code) => `opf/${code}`)] });
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const codes = (issues) => issues.map((issue) => issue.params.code).filter(Boolean);
+const ruleCodes = (findings) => findings.map((finding) => finding.ruleId.slice(4));
 const deck = (extra) => ({ name: "Data", ...extra });
 
 const revenue = () => ({
@@ -170,7 +166,7 @@ describe("inlineDatasets", () => {
     assert.deepEqual(out.datasets, input.datasets, "datasets stay in place");
     out.slides[1].blocks[0].table.rows[0][1] = 99;
     assert.equal(input.datasets.revenue.rows[0][1], 12, "rows are copies");
-    assert.deepEqual(validatePresentation(out).errors.map((issue) => issue.params.code), ["dataset-unknown"], "only the unknown reference remains");
+    assert.deepEqual(ruleCodes(errorsOf(check(out))), ["dataset-unknown"], "only the unknown reference remains");
   });
 
   test("a document without datasets comes back equal", () => {
@@ -320,10 +316,11 @@ describe("resolveTableData and display values", () => {
   });
 });
 
-describe("validation and lint", () => {
+describe("validation findings", () => {
   const issues = (document) => {
-    const result = validatePresentation(document);
-    return { valid: result.valid, errors: result.errors.map((issue) => [issue.params.code, issue.path]), warnings: result.warnings.map((issue) => [issue.params.code, issue.path]) };
+    const result = dataReport(document);
+    const pairs = (list) => list.map((finding) => [finding.ruleId.slice(4), finding.path]);
+    return { valid: result.valid, errors: pairs(errorsOf(result)), warnings: pairs(warningsOf(result)) };
   };
 
   test("a deck using every new field validates cleanly", () => {
@@ -337,9 +334,9 @@ describe("validation and lint", () => {
       ],
     });
     assert.deepEqual(issues(document), { valid: true, errors: [], warnings: [] });
-    const lint = lintPresentation(document);
-    assert.equal(lint.valid, true);
-    assert.deepEqual(lint.diagnostics, []);
+    const full = validate(document, { only: ["format", "references", "content"] });
+    assert.equal(full.valid, true);
+    assert.deepEqual(full.findings, []);
   });
 
   test("the new schema definitions' examples validate", () => {
@@ -349,14 +346,14 @@ describe("validation and lint", () => {
       const schema = { $ref: `${presentation.$id}#/$defs/${name}` };
       const examples = [...(defs[name].examples ?? []), ...Object.values(defs[name].properties ?? {}).flatMap((property) => property.$ref ? [] : (property.examples ?? []).map((example) => ({ property, example })))];
       for (const entry of defs[name].examples ?? []) {
-        assert.equal(validate(entry, schema).valid, true, `${name}: ${JSON.stringify(entry)}`);
+        assert.equal(matches(schema, entry), true, `${name}: ${JSON.stringify(entry)}`);
         checked++;
       }
       assert.ok(examples.length > 0, `${name} has examples`);
     }
     for (const [name, property] of [["ChartData", "columns"], ["Dataset", "columns"], ["Dataset", "rows"]]) {
       for (const entry of defs[name].properties[property].examples) {
-        assert.equal(validate(entry, { $ref: `${presentation.$id}#/$defs/${name}/properties/${property}` }).valid, true, `${name}.${property}`);
+        assert.equal(matches({ $ref: `${presentation.$id}#/$defs/${name}/properties/${property}` }, entry), true, `${name}.${property}`);
         checked++;
       }
     }
@@ -364,13 +361,13 @@ describe("validation and lint", () => {
   });
 
   test("schema: inline and dataset-backed tables are exclusive", () => {
-    assert.equal(validatePresentation(deck({ datasets: { r: revenue() }, slides: [{ table: { dataset: "r", rows: [["x"]] } }] })).valid, false);
-    assert.equal(validatePresentation(deck({ datasets: { r: revenue() }, slides: [{ table: { dataset: "r", columns: ["x"] } }] })).valid, false);
-    assert.equal(validatePresentation(deck({ slides: [{ table: { rows: [["x"]], fields: ["x"] } }] })).valid, false);
-    assert.equal(validatePresentation(deck({ slides: [{ table: { columns: ["x"] } }] })).valid, false, "an inline table still needs rows");
-    assert.equal(validatePresentation(deck({ datasets: { "bad id": revenue() }, slides: [{ title: "x" }] })).valid, false);
-    assert.equal(validatePresentation(deck({ slides: [{ chart: { type: "column", data: { dataset: "r", rows: [] } } }] })).valid, false);
-    assert.equal(validatePresentation(deck({ slides: [{ chart: { type: "column", data: { columns: ["a"], rows: [["x"]], source: { src: "a", retrieved: "yesterday" } } } }] })).valid, false);
+    assert.equal(check(deck({ datasets: { r: revenue() }, slides: [{ table: { dataset: "r", rows: [["x"]] } }] })).valid, false);
+    assert.equal(check(deck({ datasets: { r: revenue() }, slides: [{ table: { dataset: "r", columns: ["x"] } }] })).valid, false);
+    assert.equal(check(deck({ slides: [{ table: { rows: [["x"]], fields: ["x"] } }] })).valid, false);
+    assert.equal(check(deck({ slides: [{ table: { columns: ["x"] } }] })).valid, false, "an inline table still needs rows");
+    assert.equal(check(deck({ datasets: { "bad id": revenue() }, slides: [{ title: "x" }] })).valid, false);
+    assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { dataset: "r", rows: [] } } }] })).valid, false);
+    assert.equal(check(deck({ slides: [{ chart: { type: "column", data: { columns: ["a"], rows: [["x"]], source: { src: "a", retrieved: "yesterday" } } } }] })).valid, false);
   });
 
   test("every error code", () => {
@@ -399,15 +396,15 @@ describe("validation and lint", () => {
       ["number-format-invalid", "/slides/3/table/columns/0/format"],
       ["number-format-invalid", "/slides/3/table/rows/0/0/format"],
     ].sort());
-    const lint = lintPresentation(document);
-    const ruleIds = new Set(lint.diagnostics.map((entry) => entry.ruleId));
+    const full = validate(document, { only: ["format", "references"] });
+    const ruleIds = new Set(full.findings.map((entry) => entry.ruleId));
     for (const code of ["dataset-unknown", "dataset-field-unknown", "data-column-duplicate", "chart-mapping-unknown-column", "number-format-invalid"]) {
       assert.ok(ruleIds.has(`opf/${code}`), code);
-      assert.ok(lint.diagnostics.filter((entry) => entry.ruleId === `opf/${code}`).every((entry) => entry.severity === "error"), code);
+      assert.ok(full.findings.filter((entry) => entry.ruleId === `opf/${code}`).every((entry) => entry.severity === "error" && entry.category === "format"), code);
     }
   });
 
-  test("every warning code, and lint opf/unused-dataset", () => {
+  test("every warning code, and opf/unused-dataset", () => {
     const document = deck({
       datasets: { spare: { columns: ["A"], rows: [] }, used: revenue() },
       slides: [
@@ -425,21 +422,22 @@ describe("validation and lint", () => {
       ["chart-mapping-adapted", "/slides/2/chart/mapping/x"],
       ["chart-mapping-adapted", "/slides/2/chart/mapping/series/0"],
     ]);
-    const lint = lintPresentation(document);
-    assert.deepEqual(lint.diagnostics.map((entry) => [entry.ruleId, entry.severity, entry.path]), [
-      ["opf/chart-value-not-numeric", "warning", "/slides/0/chart/data/rows/0/1"],
-      ["opf/chart-data-source-unresolved", "warning", "/slides/1/chart/data/src"],
-      ["opf/chart-mapping-adapted", "warning", "/slides/2/chart/mapping/x"],
-      ["opf/chart-mapping-adapted", "warning", "/slides/2/chart/mapping/series/0"],
-      ["opf/unused-dataset", "warning", "/datasets/spare"],
+    const full = validate(document, { only: ["format", "references", "content"] });
+    // Findings are ordered by slide (document-level ones first), then category, then rule.
+    assert.deepEqual(full.findings.map((entry) => [entry.ruleId, entry.severity, entry.category, entry.path]), [
+      ["opf/unused-dataset", "warning", "references", "/datasets/spare"],
+      ["opf/chart-value-not-numeric", "warning", "content", "/slides/0/chart/data/rows/0/1"],
+      ["opf/chart-data-source-unresolved", "warning", "references", "/slides/1/chart/data/src"],
+      ["opf/chart-mapping-adapted", "warning", "content", "/slides/2/chart/mapping/x"],
+      ["opf/chart-mapping-adapted", "warning", "content", "/slides/2/chart/mapping/series/0"],
     ]);
   });
 
   test("a template's number variable in a chart cell does not warn", () => {
     const template = JSON.parse(readFileSync(path.join(repoRoot, "docs/fixtures/template-quarterly-review.opf.json"), "utf8"));
-    const result = validatePresentation(template);
+    const result = dataReport(template);
     assert.equal(result.valid, true);
-    assert.deepEqual(codes(result.warnings).filter((code) => code === "chart-value-not-numeric"), []);
+    assert.deepEqual(ruleCodes(warningsOf(result)).filter((code) => code === "chart-value-not-numeric"), []);
     const filled = resolveVariables(template, { client: "Acme", revenue: 1500000, kickoff: "2026-10-01", wins: ["A"], headline: "x" });
     const chart = filled.presentation.slides.find((slide) => slide.id === "revenue").chart;
     assert.deepEqual(resolveChartData(chart).rows, [["Previous", 1100000], ["This quarter", 1500000]]);
@@ -451,7 +449,7 @@ describe("validation and lint", () => {
       datasets: { r: { title: "Revenue ({{unit}})", columns: ["Q", "R"], rows: [["Q3", 24], ["Q4", "var:q4"]] } },
       slides: [{ title: "x", chart: { type: "column", data: { dataset: "r" } } }],
     });
-    assert.deepEqual(codes(validatePresentation(document).warnings), []);
+    assert.deepEqual(ruleCodes(warningsOf(dataReport(document))), []);
     const filled = resolveVariables(document).presentation;
     assert.deepEqual(filled.datasets.r.rows[1], ["Q4", 31]);
     assert.equal(filled.datasets.r.title, "Revenue (USD)");
@@ -472,8 +470,8 @@ describe("validation and lint", () => {
     assert.ok(files.length > 50);
     const dataCodes = new Set(["dataset-unknown", "dataset-field-unknown", "data-column-duplicate", "chart-mapping-unknown-column", "number-format-invalid", "chart-value-not-numeric", "chart-mapping-adapted"]);
     for (const file of files) {
-      const result = validatePresentation(JSON.parse(readFileSync(file, "utf8")));
-      assert.deepEqual([...result.errors, ...result.warnings].filter((issue) => dataCodes.has(issue.params.code)), [], path.relative(repoRoot, file));
+      const result = dataReport(JSON.parse(readFileSync(file, "utf8")));
+      assert.deepEqual(result.findings.filter((entry) => dataCodes.has(entry.ruleId.slice(4))).filter((entry) => entry.severity !== "info"), [], path.relative(repoRoot, file));
     }
   });
 });
@@ -516,7 +514,7 @@ describe("core integration", () => {
     assert.ok(tables.length > 1, "the table is split");
     assert.deepEqual(tables.flatMap((table) => table.rows), rows);
     assert.ok(tables.every((table) => table.columns[1].format === "$#,##0.0"));
-    assert.equal(validatePresentation(result.presentation).valid, true);
+    assert.equal(check(result.presentation).valid, true);
   });
 
   test("markdown keeps datasets, formats, mapping and source", () => {
@@ -566,7 +564,7 @@ describe("core integration", () => {
     assert.deepEqual(Object.keys(parsed.datasets.r), ["title", "columns", "rows"]);
   });
 
-  test("audit reads DataColumn names and dataset charts", () => {
+  test("the chart colour rule reads DataColumn names and dataset charts", () => {
     const columns = ["Quarter", ...Array.from({ length: 12 }, (_, index) => ({ name: `Series ${index + 1}`, format: "0" }))];
     const document = deck({
       datasets: { wide: { columns, rows: [["Q1", ...Array(12).fill(1)]] } },
@@ -576,11 +574,11 @@ describe("core integration", () => {
         { title: "Table", table: { columns: [{ name: "Region" }, "Value"], rows: [["EMEA", 1]] } },
       ],
     });
-    const report = auditPresentation(document);
-    const colour = report.diagnostics.filter((entry) => entry.ruleId === "audit/chart-color-only");
-    assert.ok(colour.some((entry) => entry.path === "/slides/0/chart" && entry.message.includes('"Series 2"')), JSON.stringify(report.diagnostics.map((entry) => entry.ruleId)));
+    const report = validate(document, { only: ["opf/chart-color-only"] });
+    const colour = report.findings.filter((entry) => entry.ruleId === "opf/chart-color-only");
+    assert.ok(colour.some((entry) => entry.path === "/slides/0/chart" && entry.message.includes('"Series 2"')), JSON.stringify(report.findings.map((entry) => entry.ruleId)));
     assert.ok(colour.some((entry) => entry.path === "/slides/1/chart"));
-    assert.ok(!report.diagnostics.some((entry) => /object Object/.test(entry.message)));
+    assert.ok(!report.findings.some((entry) => /object Object/.test(entry.message)));
   });
 
   test("diff reports dataset changes in their own category", () => {
@@ -605,7 +603,8 @@ describe("RR-54 review", () => {
   });
 
   test("schema errors name the one form the value chose", () => {
-    const errors = (document) => validatePresentation(document).errors.map((issue) => [issue.path, issue.message]);
+    // The raw schema path: a finding's own path also names the offending property.
+    const errors = (document) => errorsOf(check(document)).map((issue) => [issue.validation.path, issue.message]);
     const datasets = { r: revenue() };
     // chart.data: a 'dataset' key selects DatasetRef, a 'src' key ChartDataSource, 'rows' ChartData ('columns' alone is either).
     assert.deepEqual(errors(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", fields: [] } } }] })), [
@@ -635,7 +634,7 @@ describe("RR-54 review", () => {
 
   test("fields name each dataset column at most once", () => {
     const datasets = { r: revenue() };
-    const fields = (document) => validatePresentation(document).errors.map((issue) => [issue.path, issue.message]);
+    const fields = (document) => errorsOf(check(document)).map((issue) => [issue.validation.path, issue.message]);
     assert.deepEqual(fields(deck({ datasets, slides: [{ table: { dataset: "r", fields: ["Quarter", "Quarter"] } }] })), [
       ["/slides/0/table/fields", "must NOT have duplicate items (items ## 1 and 0 are identical)"],
     ]);
@@ -691,7 +690,7 @@ describe("suggestChartNumberFix: migration help for the strict number rule", () 
     assert.equal(suggestChartNumberFix({ type: "column", data: { src: "x.csv" } }), undefined);
   });
 
-  test("columns, mapping, datasets and lint", () => {
+  test("columns, mapping, datasets and findings", () => {
     const two = chart([["Q1", "5%", "$1"], ["Q2", "6%", "$2"]], ["Q", "A", "B"]);
     assert.equal(suggestChartNumberFix(two).name, "A");
     assert.equal(suggestChartNumberFix(two, undefined, { column: "B" }).format, "$0");
@@ -710,10 +709,10 @@ describe("suggestChartNumberFix: migration help for the strict number rule", () 
     const before = layoutTable(document.slides[1].table, { x: 0, y: 0, width: 800, height: 400 }, { presentation: document }).rows.map((row) => row.cells.map((cell) => cell.value));
     const after = applyPatch(document, fix.patches);
     assert.deepEqual(layoutTable(after.slides[1].table, { x: 0, y: 0, width: 800, height: 400 }, { presentation: after }).rows.map((row) => row.cells.map((cell) => cell.value)), before, "a table of the same dataset shows the same text");
-    // Lint carries the fix on every cell of the column, and none where there is no exact fix.
+    // validate carries the fix on every cell of the column, and none where there is no exact fix.
     const lintDocument = deck({ slides: [{ title: "x", chart: chart([["Q1", "12%"], ["Q2", "8.5%"], ["Q3", "n/a"]]) }, { title: "y", chart: chart([["Q1", "12%"], ["Q2", "8.5%"]]) }] });
-    const lint = lintPresentation(lintDocument);
-    const warnings = lint.diagnostics.filter((entry) => entry.ruleId === "opf/chart-value-not-numeric");
+    const fixed = validate(lintDocument, { only: ["opf/chart-value-not-numeric"] });
+    const warnings = fixed.findings.filter((entry) => entry.ruleId === "opf/chart-value-not-numeric");
     assert.deepEqual(warnings.map((entry) => [entry.path, entry.fixes?.[0]?.id]), [
       ["/slides/0/chart/data/rows/0/1", undefined],
       ["/slides/0/chart/data/rows/1/1", undefined],
@@ -723,10 +722,11 @@ describe("suggestChartNumberFix: migration help for the strict number rule", () 
     ]);
     const [lintFix] = warnings[3].fixes;
     assert.equal(lintFix.kind, "patch");
+    assert.ok(lintFix.title.length > 0);
     assert.equal(lintFix.safe, false);
     assert.match(warnings[3].help, /"0\.#%"/);
     const repaired = applyPatch(lintDocument, lintFix.patch);
-    assert.deepEqual(lintPresentation(repaired).diagnostics.filter((entry) => entry.ruleId === "opf/chart-value-not-numeric").map((entry) => entry.path), warnings.slice(0, 3).map((entry) => entry.path));
+    assert.deepEqual(validate(repaired, { only: ["opf/chart-value-not-numeric"] }).findings.map((entry) => entry.path), warnings.slice(0, 3).map((entry) => entry.path));
     assert.equal(dataEntry.suggestChartNumberFix, suggestChartNumberFix);
   });
 });

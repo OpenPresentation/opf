@@ -92,10 +92,6 @@
       "types": "./dist/symbol-font-encodings.d.ts",
       "import": "./dist/symbol-font-encodings.js"
     },
-    "./lint": {
-      "types": "./dist/lint.d.ts",
-      "import": "./dist/lint.js"
-    },
     "./markdown": {
       "types": "./dist/markdown.d.ts",
       "import": "./dist/markdown.js"
@@ -115,10 +111,6 @@
     "./convert": {
       "types": "./dist/convert.d.ts",
       "import": "./dist/convert.js"
-    },
-    "./audit": {
-      "types": "./dist/audit.d.ts",
-      "import": "./dist/audit.js"
     }
   },
   "files": [

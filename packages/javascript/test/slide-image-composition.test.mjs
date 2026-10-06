@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { composeSlide } from '../dist/composition.js';
-import { validatePresentation } from '../dist/index.js';
+import { check } from './support/validation.mjs';
+
 
 const photo = 'data:image/png;base64,iVBORw0KGgo=';
 const within = (box, area) => box.x >= area.x - 1e-6 && box.y >= area.y - 1e-6
@@ -86,5 +87,5 @@ test('slide image documents validate against the published schema', () => {
   const deck = { $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Slide image', assets: { hero: { src: photo, alt: 'Harbor' } },
     design: { slideImage: { src: 'asset:hero', position: 'background' }, imageFill: 'crop' },
     slides: [{ title: 'Heading', image: 'asset:hero', design: { slideImage: { src: 'asset:hero', position: 'right' } } }] };
-  assert.equal(validatePresentation(deck).valid, true);
+  assert.equal(check(deck).valid, true);
 });

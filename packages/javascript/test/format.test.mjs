@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { FormatError, formatPresentation, isFormatted, sortPresentationKeys } from "../dist/format.js";
-import { validatePresentation } from "../dist/validator.js";
+
 import { loadExamples } from "./diff-support.mjs";
+import { check } from './support/validation.mjs';
 
 const examples = loadExamples();
 
@@ -20,7 +21,7 @@ describe("formatPresentation over the example decks", () => {
       assert.deepEqual(JSON.parse(once), JSON.parse(raw));
       assert.equal(JSON.stringify(sortPresentationKeys(JSON.parse(raw)).slides?.map(slide => slide.id)), JSON.stringify(JSON.parse(raw).slides?.map(slide => slide.id)));
       // Formatting never changes validity.
-      assert.equal(validatePresentation(JSON.parse(once)).valid, validatePresentation(JSON.parse(raw)).valid);
+      assert.equal(check(JSON.parse(once)).valid, check(JSON.parse(raw)).valid);
       // Layout: two-space indent, LF only, exactly one trailing newline, no BOM.
       assert.ok(once.endsWith("}\n") && !once.endsWith("\n\n"));
       assert.equal(once.includes("\r"), false);

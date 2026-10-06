@@ -104,7 +104,7 @@ Changes in different places merge automatically; the same change on both sides i
 
 The merge result is not schema-validated by the library; `opf merge` validates it before writing, because two valid documents can merge into an invalid one (for example duplicate ids).
 
-CLI: `opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer ours|theirs] [--report <file>] [--dry-run] [--threshold <0-1>] [--strict]`. With conflicts and no `--prefer`, nothing is written, the conflict report goes to stderr as JSON and the exit code is 1. With `--prefer`, the chosen side's value is written, the report lists every conflict, and the exit code is 0. `--report <file>` saves the `{clean, conflicts, applied}` summary. `--in-place` rewrites the *ours* file (like `git merge-file`) with the same hash guard as `opf edit`. The usual output rules apply: stdout without an output option, `--force` to replace a file.
+CLI: `opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer ours|theirs] [--report <file>] [--dry-run] [--threshold <0-1>] [--fail-on <level>]`. With conflicts and no `--prefer`, nothing is written, the conflict report goes to stderr as JSON and the exit code is 1. With `--prefer`, the chosen side's value is written, the report lists every conflict, and the exit code is 0. `--report <file>` saves the `{clean, conflicts, applied}` summary. `--in-place` rewrites the *ours* file (like `git merge-file`) with the same hash guard as `opf edit`. The usual output rules apply: stdout without an output option, `--force` to replace a file.
 
 ## Format
 

@@ -1,7 +1,16 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
+import { validate } from '../dist/index.js';
+import { errorsOf, warningsOf } from './support/validation.mjs';
 
-import { validatePresentation } from "../dist/index.js";
+// The format and references findings and unfilled variables of a presentation, with the
+// findings split by severity as `errors` and `warnings`.
+const checked = (document, options = {}) => {
+  const report = validate(document, { only: ['format', 'references', 'opf/variable-unfilled'], ...options });
+  return { ...report, errors: errorsOf(report), warnings: warningsOf(report) };
+};
+
+
 
 const deck = (overrides = {}) => ({ name: "Reference Layer", slides: [{ title: "Base" }], ...overrides });
 
@@ -10,29 +19,29 @@ const run = (color) => ({ title: "Run", items: [["Lead ", { text: "emphasis", co
 describe("content color references", () => {
   test("TextRun.color accepts hex, slot names, role names, and var references", () => {
     for (const color of ["#0F172A", "#0f172aff", "accent2", "dark1", "followedHyperlink", "primary", "textSecondary"]) {
-      const result = validatePresentation(deck({ slides: [run(color)] }));
-      assert.equal(result.valid, true, `${color}: ${JSON.stringify(result.errors)}`);
+      const result = checked(deck({ slides: [run(color)] }));
+      assert.equal(result.valid, true, `${color}: ${JSON.stringify(errorsOf(result))}`);
     }
-    const withVar = validatePresentation(deck({ variables: { risk: "#B42318" }, slides: [run("var:risk")] }));
-    assert.equal(withVar.valid, true, JSON.stringify(withVar.errors));
+    const withVar = checked(deck({ variables: { risk: "#B42318" }, slides: [run("var:risk")] }));
+    assert.equal(withVar.valid, true, JSON.stringify(errorsOf(withVar)));
   });
 
   test("TextRun.color warns on strings that are neither hex, name, nor var reference", () => {
     // Run colors stay open strings so imported decks keep validating —
     // coordinated exporters fall back to the theme color for these.
     for (const color of ["reddish", "rgb(1,2,3)", "var:Bad_Id", "accent7", "#12345"]) {
-      const result = validatePresentation(deck({ slides: [run(color)] }));
-      assert.equal(result.valid, true, `${color}: ${JSON.stringify(result.errors)}`);
+      const result = checked(deck({ slides: [run(color)] }));
+      assert.equal(result.valid, true, `${color}: ${JSON.stringify(errorsOf(result))}`);
       const fallbacks = result.warnings.filter((warning) => warning.message.includes("renderers fall back"));
-      assert.equal(fallbacks.length, 1, `${color}: ${JSON.stringify(result.warnings)}`);
-      assert.equal(fallbacks[0].params.color, color);
+      assert.equal(fallbacks.length, 1, `${color}: ${JSON.stringify(warningsOf(result))}`);
+      assert.equal(fallbacks[0].validation.params.color, color);
     }
   });
 
   test("the pinned exporter contract: invalid run colors validate and only warn", () => {
     // Mirrors opf-pptx's rich-table fixture, which asserts a deck containing
     // color:'invalid' validates and renders with the theme fallback.
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{
         table: {
           rows: [[[
@@ -43,15 +52,15 @@ describe("content color references", () => {
         },
       }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.deepEqual(
-      result.warnings.filter((warning) => warning.message.includes("renderers fall back")).map((warning) => warning.params.color),
+      result.warnings.filter((warning) => warning.message.includes("renderers fall back")).map((warning) => warning.validation.params.color),
       ["invalid"],
     );
   });
 
   test("styled table cells and borders accept color references", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       variables: { risk: { type: "color", value: "#B42318", description: "Risk emphasis." } },
       slides: [{
         table: {
@@ -70,7 +79,7 @@ describe("content color references", () => {
         },
       }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
 
   test("styled cell fills, text colors, and border colors reject non-ColorRef strings", () => {
@@ -83,26 +92,26 @@ describe("content color references", () => {
       { borders: { top: { color: "rgb(1,2,3)", width: 1 } } },
       { borders: { bottom: { color: "accent7", width: 1 } } },
     ]) {
-      assert.equal(validatePresentation(styled(style)).valid, false, JSON.stringify(style));
+      assert.equal(checked(styled(style)).valid, false, JSON.stringify(style));
     }
   });
 
   test("unknown var references warn without invalidating the document", () => {
-    const result = validatePresentation(deck({ slides: [run("var:missing")] }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    const result = checked(deck({ slides: [run("var:missing")] }));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.ok(
       result.warnings.some((warning) => warning.message.includes("unknown variable 'missing'")),
-      JSON.stringify(result.warnings),
+      JSON.stringify(warningsOf(result)),
     );
   });
 
   test("declared var references do not warn", () => {
-    const result = validatePresentation(deck({ variables: { risk: "#B42318" }, slides: [run("var:risk")] }));
+    const result = checked(deck({ variables: { risk: "#B42318" }, slides: [run("var:risk")] }));
     assert.equal(result.warnings.filter((warning) => warning.message.includes("variable")).length, 0);
   });
 
   test("var references inside groups and regions are checked", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{
         left: { table: { rows: [[{ value: "x", style: { fill: "var:ghost" } }]] } },
         "center+right": {
@@ -175,18 +184,18 @@ const variableWarnings = (result) =>
 
 describe("color reference positions", () => {
   test("unknown var references warn once per ColorRef position, with an exact path", () => {
-    const result = validatePresentation(deck({ slides: [colorRefSlide] }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    const result = checked(deck({ slides: [colorRefSlide] }));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.deepEqual(
-      variableWarnings(result).map((warning) => [warning.path, warning.params.id]),
+      variableWarnings(result).map((warning) => [warning.path, warning.validation.params.id]),
       colorRefPositions,
     );
   });
 
   test("declared variables silence every ColorRef position", () => {
     const variables = Object.fromEntries(colorRefPositions.map(([, id]) => [id, "#B42318"]));
-    const result = validatePresentation(deck({ variables, slides: [colorRefSlide] }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    const result = checked(deck({ variables, slides: [colorRefSlide] }));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.deepEqual(variableWarnings(result), []);
   });
 
@@ -194,7 +203,7 @@ describe("color reference positions", () => {
     // The id could not be declared in the variables map, so an
     // unknown-variable warning would dead-end; the fallback warning applies.
     for (const color of ["var:Risk", "var:", "var:risk_id", "var:-risk"]) {
-      const result = validatePresentation(deck({ slides: [{ text: [{ text: "x", color }] }] }));
+      const result = checked(deck({ slides: [{ text: [{ text: "x", color }] }] }));
       assert.equal(result.valid, true, color);
       assert.deepEqual(variableWarnings(result), [], color);
       assert.equal(result.warnings.filter((warning) => warning.message.includes("renderers fall back")).length, 1, color);
@@ -202,7 +211,7 @@ describe("color reference positions", () => {
   });
 
   test("slide root payloads are checked like any other payload", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{ text: [{ text: "root", color: "var:ghost" }] }],
     }));
     assert.deepEqual(
@@ -212,29 +221,29 @@ describe("color reference positions", () => {
   });
 
   test("extensions passthrough is never read as a color reference", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{
         title: "Passthrough",
         extensions: { review: { color: "var:ghost", palette: [{ fill: "var:x" }] } },
         left: { text: "Body", extensions: { gen: { fill: "var:x", nested: { color: "var:ghost" } } } },
       }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.deepEqual(variableWarnings(result), []);
   });
 
   test("deeply nested extensions data never exhausts the stack", () => {
     let nested = { color: "var:ghost" };
     for (let depth = 0; depth < 50_000; depth += 1) nested = { child: [nested] };
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{ title: "Deep", extensions: { data: nested } }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors.slice(0, 1)));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result).slice(0, 1)));
     assert.deepEqual(variableWarnings(result), []);
   });
 
   test("background and gradient colors are not color reference positions", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       design: {
         background: {
           type: "gradient",
@@ -243,32 +252,32 @@ describe("color reference positions", () => {
       },
       slides: [{ title: "Backdrop", design: { background: { type: "solid", color: "var:brand" } } }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.deepEqual(variableWarnings(result), []);
   });
 });
 
 describe("variables map", () => {
   test("accepts hex shorthand and explicit color objects", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       variables: {
         risk: "#B42318",
         highlight: { type: "color", value: "#0F4C81", description: "Brand highlight." },
       },
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
 
   test("rejects non-kebab-case ids and non-hex values", () => {
-    assert.equal(validatePresentation(deck({ variables: { Bad_Key: "#fff" } })).valid, false);
-    assert.equal(validatePresentation(deck({ variables: { risk: "crimson" } })).valid, false);
-    assert.equal(validatePresentation(deck({ variables: { risk: { type: "color", value: "crimson" } } })).valid, false);
+    assert.equal(checked(deck({ variables: { Bad_Key: "#fff" } })).valid, false);
+    assert.equal(checked(deck({ variables: { risk: "crimson" } })).valid, false);
+    assert.equal(checked(deck({ variables: { risk: { type: "color", value: "crimson" } } })).valid, false);
   });
 });
 
 describe("ids and extensions below slide level", () => {
   test("payloads, groups, and slides carry ids and extensions", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{
         id: "headline",
         title: "Adoption Doubled",
@@ -279,18 +288,18 @@ describe("ids and extensions below slide level", () => {
         ],
       }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
 
   test("region payloads carry ids", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{ left: { id: "sidebar", text: "x" }, "center+right": { id: "main", text: "y" } }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
 
   test("duplicate payload ids are an error", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{ blocks: [{ id: "dup", text: "a" }, { type: "group", blocks: [{ id: "dup", text: "b" }] }] }],
     }));
     assert.equal(result.valid, false);
@@ -298,17 +307,17 @@ describe("ids and extensions below slide level", () => {
   });
 
   test("payload ids share the namespace with slide ids", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{ id: "ask", title: "The Ask" }, { title: "Detail", left: { id: "ask", text: "x" } }],
     }));
     assert.equal(result.valid, false);
   });
 
   test("distinct ids across slides and payloads stay valid", () => {
-    const result = validatePresentation(deck({
+    const result = checked(deck({
       slides: [{ id: "one", title: "A" }, { id: "two", left: { id: "three", text: "x" } }],
     }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   });
 
   test("each duplicate id names the collision it actually found", () => {
@@ -340,10 +349,10 @@ describe("ids and extensions below slide level", () => {
     ];
 
     for (const { label, slides, path, message } of cases) {
-      const result = validatePresentation(deck({ slides }));
+      const result = checked(deck({ slides }));
       assert.equal(result.valid, false, label);
       assert.deepEqual(
-        result.errors.map((error) => [error.path, error.message, error.params.id]),
+        result.errors.map((error) => [error.path, error.message, error.validation.params.id]),
         [[path, message, "ask"]],
         label,
       );
@@ -354,23 +363,25 @@ describe("ids and extensions below slide level", () => {
 describe("catalog sources", () => {
   test("a custom source suppresses unknown-id warnings as a string or a search path", () => {
     const unknownId = "house-narrative-arc";
-    const bare = validatePresentation(deck({ narrative: unknownId }));
+    const bare = checked(deck({ narrative: unknownId }));
     assert.ok(
-      bare.warnings.some((warning) => warning.message.includes(`unknown narratives catalog id '${unknownId}'`)),
-      JSON.stringify(bare.warnings),
+      bare.warnings.some((warning) => warning.ruleId === "opf/catalog-reference" && warning.path === "/narrative" && warning.message.includes(`narratives catalog id "${unknownId}"`)),
+      JSON.stringify(warningsOf(bare)),
     );
 
     for (const source of ["https://a.example/x", ["https://a.example/x"], ["https://a.example/x", "pkg:@acme/decks"]]) {
-      const result = validatePresentation(deck({
+      const result = checked(deck({
         catalogs: { narratives: { source } },
         narrative: unknownId,
       }));
-      assert.equal(result.valid, true, JSON.stringify(result.errors));
+      assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
       assert.deepEqual(
         result.warnings.filter((warning) => warning.message.includes("narratives catalog id")),
         [],
         JSON.stringify(source),
       );
+      // The source is reported as not fetched, so the id is unverified rather than wrong.
+      assert.deepEqual(result.findings.map((entry) => [entry.ruleId, entry.severity]), [["opf/catalog-source", "info"]]);
     }
   });
 });
@@ -380,8 +391,8 @@ describe("color references docs fixture", () => {
     const { readFile } = await import("node:fs/promises");
     const url = new URL("../../../docs/fixtures/color-references.opf.json", import.meta.url);
     const fixture = JSON.parse(await readFile(url, "utf8"));
-    const result = validatePresentation(fixture);
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    const result = checked(fixture);
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
     assert.deepEqual(result.warnings, []);
   });
 });

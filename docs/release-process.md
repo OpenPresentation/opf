@@ -254,7 +254,7 @@ Spot-check the validator API from a clean project or temporary directory:
 
 ```sh
 npm install @openpresentation/opf@X.Y.Z
-node --input-type=module -e "import {validatePresentation} from '@openpresentation/opf'; console.log(validatePresentation({name:'t', narrative:'not-a-real-id', slides:[{title:'t'}]}).warnings)"
+node --input-type=module -e "import {validate} from '@openpresentation/opf'; console.log(validate({name:'t', narrative:'not-a-real-id', slides:[{title:'t'}]}, {only:['format','references']}).findings)"
 ```
 
 The expected result is one warning about an unknown narratives catalog id.

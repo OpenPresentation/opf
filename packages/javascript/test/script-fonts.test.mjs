@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
-import {DEFAULT_FONT_SCHEME, fontSchemes, languages, paragraphDirection, resolveScriptFonts, scriptFontRole, validatePresentation} from '../dist/index.js';
+import { DEFAULT_FONT_SCHEME, fontSchemes, languages, paragraphDirection, resolveScriptFonts, scriptFontRole } from '../dist/index.js';
+import { check, errorsOf } from './support/validation.mjs';
 
 // Fixtures choose openly licensed families (Carlito for the Calibri class,
 // Noto for CJK, Arabic, Hebrew, Devanagari and Thai). The resolver only
@@ -486,16 +487,16 @@ describe('bundled catalogs', () => {
 describe('schema', () => {
   test('design font schemes accept eastAsian and complexScript slots', () => {
     const document = deck('japanese', {id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}, complexScript: {minor: 'Noto Naskh Arabic'}});
-    assert.equal(validatePresentation(document).valid, true, JSON.stringify(validatePresentation(document).errors));
+    assert.equal(check(document).valid, true, JSON.stringify(errorsOf(check(document))));
     for (const bad of [{eastAsian: {}}, {eastAsian: {major: 'Noto Sans JP', typeface: 'x'}}, {complexScript: 'Noto Naskh Arabic'}]) {
-      assert.equal(validatePresentation(deck('japanese', {id: 'aptos', ...bad})).valid, false, JSON.stringify(bad));
+      assert.equal(check(deck('japanese', {id: 'aptos', ...bad})).valid, false, JSON.stringify(bad));
     }
   });
 
   test('documents without script slots or language scripts stay valid', () => {
-    assert.equal(validatePresentation(deck('japanese', 'meiryo')).valid, true);
-    assert.equal(validatePresentation(deck({id: 'english', bcp47: 'en-US', fontScheme: 'aptos', googleFontScheme: 'roboto'})).valid, true);
-    assert.equal(validatePresentation(deck({id: 'malay', ooxmlLang: 'ms-MY'})).valid, true);
+    assert.equal(check(deck('japanese', 'meiryo')).valid, true);
+    assert.equal(check(deck({id: 'english', bcp47: 'en-US', fontScheme: 'aptos', googleFontScheme: 'roboto'})).valid, true);
+    assert.equal(check(deck({id: 'malay', ooxmlLang: 'ms-MY'})).valid, true);
   });
 });
 

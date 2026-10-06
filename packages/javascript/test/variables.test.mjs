@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {
-  OPFVariableError,
-  coerceVariableValue,
-  formatVariableNumber,
-  isTemplate,
-  listVariables,
-  resolveVariables,
-  validatePresentation,
-} from '../dist/index.js';
+import { OPFVariableError, coerceVariableValue, formatVariableNumber, isTemplate, listVariables, resolveVariables, validate } from '../dist/index.js';
+import { errorsOf, warningsOf } from './support/validation.mjs';
+
+// The format findings and every variable rule, with the findings split by severity as `errors` and `warnings`.
+const VARIABLE_RULES = ['opf/variable-unfilled', 'opf/variable-unknown', 'opf/variable-unknown-value', 'opf/variable-unused', 'opf/variable-reference-unknown'];
+const checked = (document, options = {}) => {
+  const report = validate(document, { only: ['format', ...VARIABLE_RULES], ...options });
+  return { ...report, errors: errorsOf(report), warnings: warningsOf(report) };
+};
 
 const deepFreeze = (value) => {
   if (value && typeof value === 'object' && !Object.isFrozen(value)) {
@@ -69,7 +69,7 @@ test('a template plus values resolves to the hand-written deck and never mutates
   assert.deepEqual(result.unfilled, []);
   assert.equal('template' in result.presentation, false);
   assert.deepEqual(result.presentation, handWritten());
-  assert.equal(validatePresentation(result.presentation).valid, true, JSON.stringify(validatePresentation(result.presentation).errors));
+  assert.equal(checked(result.presentation).valid, true, JSON.stringify(errorsOf(checked(result.presentation))));
   // Idempotent: a resolved deck declares no content variables, so resolving it again is a no-op.
   const again = resolveVariables(result.presentation, {});
   assert.deepEqual(again.presentation, result.presentation);
@@ -81,9 +81,11 @@ test('decks without content variables resolve by identity and keep color variabl
   const result = resolveVariables(plain);
   assert.equal(result.presentation, plain);
   assert.deepEqual(result.diagnostics, []);
-  assert.equal(validatePresentation(plain).valid, true);
-  // Literal braces in a deck that never declared content variables are left alone, with no warning.
-  assert.equal(validatePresentation(plain).warnings.length, 0);
+  assert.equal(checked(plain).valid, true);
+  // Literal braces in a deck that never declared content variables are plain text to the format and references checks.
+  assert.equal(validate(plain, {only: ['format', 'references']}).findings.length, 0);
+  // The content check still notes a token that looks like scaffolding, as a warning that never makes the deck invalid.
+  assert.deepEqual(checked(plain).warnings.map((entry) => [entry.ruleId, entry.path]), [['opf/variable-unfilled', '/slides/0/text']]);
   // A value for a color variable overrides it while keeping the 'var:' references valid.
   const recolored = resolveVariables(plain, {risk: '#112233'});
   assert.deepEqual(recolored.presentation.variables.risk, {type: 'color', value: '#112233'});
@@ -91,15 +93,17 @@ test('decks without content variables resolve by identity and keep color variabl
 });
 
 test('validation treats a template as an incomplete deck and a normal deck as an error', () => {
-  const asTemplate = validatePresentation(template());
-  assert.equal(asTemplate.valid, true, JSON.stringify(asTemplate.errors));
+  const asTemplate = checked(template());
+  assert.equal(asTemplate.valid, true, JSON.stringify(errorsOf(asTemplate)));
   assert.equal(asTemplate.template, true);
   assert.deepEqual(asTemplate.unfilledVariables, ['client-name', 'revenue', 'review-date', 'wins', 'logo']);
+  // A template reports its unfilled variables as warnings (a normal deck reports them as errors, below).
+  assert.deepEqual(asTemplate.warnings.map((entry) => [entry.ruleId, entry.path]), asTemplate.unfilledVariables.map((id) => ['opf/variable-unfilled', `/variables/${id}`]));
   assert.equal(isTemplate(template()), true);
 
   const normal = template();
   delete normal.template;
-  const asDeck = validatePresentation(normal);
+  const asDeck = checked(normal);
   assert.equal(asDeck.valid, false);
   assert.equal(asDeck.template, false);
   assert.deepEqual(asDeck.errors.map((error) => error.path), ['/variables/client-name', '/variables/revenue', '/variables/review-date', '/variables/wins', '/variables/logo']);
@@ -108,9 +112,9 @@ test('validation treats a template as an incomplete deck and a normal deck as an
   assert.equal(asDeck.errors.some((error) => error.path.endsWith('/site') || error.path.endsWith('/risk')), false);
 
   // The validate options override the marker, and values fill the deck before it is checked.
-  assert.equal(validatePresentation(normal, {template: true}).valid, true);
-  assert.equal(validatePresentation(normal, {values}).valid, true);
-  assert.equal(validatePresentation(template(), {template: false}).valid, false);
+  assert.equal(checked(normal, {template: true}).valid, true);
+  assert.equal(checked(normal, {values}).valid, true);
+  assert.equal(checked(template(), {template: false}).valid, false);
 });
 
 test('a filled variable in a typed position is checked as the value it becomes, with source paths', () => {
@@ -118,24 +122,24 @@ test('a filled variable in a typed position is checked as the value it becomes, 
   delete deck.template;
   Object.assign(deck.variables['client-name'], {value: 'Acme'});
   Object.assign(deck.variables.revenue, {value: 'not a number'});
-  const result = validatePresentation(deck, {values: {revenue: 'abc', 'review-date': '2026-10-01', wins: ['a'], logo: 'asset:x'}});
+  const result = checked(deck, {values: {revenue: 'abc', 'review-date': '2026-10-01', wins: ['a'], logo: 'asset:x'}});
   assert.equal(result.valid, false);
-  assert.ok(result.errors.some((error) => error.path === '/variables/revenue' && /number/.test(error.message)), JSON.stringify(result.errors));
+  assert.ok(result.errors.some((error) => error.path === '/variables/revenue' && /number/.test(error.message)), JSON.stringify(errorsOf(result)));
 });
 
 test('variable declaration errors name the declared kind only', () => {
-  const bad = validatePresentation({variables: {n: {type: 'number', value: 'text'}, o: {type: 'sparkle'}, d: {type: 'date', value: '10/01/2026'}}, slides: [{id: 's', title: 'x'}]});
+  const bad = checked({variables: {n: {type: 'number', value: 'text'}, o: {type: 'sparkle'}, d: {type: 'date', value: '10/01/2026'}}, slides: [{id: 's', title: 'x'}]});
   assert.equal(bad.valid, false);
   const paths = bad.errors.map((error) => error.path);
   assert.ok(paths.includes('/variables/n/value'));
   assert.ok(paths.includes('/variables/o/type'));
   assert.ok(paths.includes('/variables/d/value'));
-  assert.ok(bad.errors.length === 3, JSON.stringify(bad.errors));
-  assert.ok(bad.errors.every((error) => error.keyword !== 'oneOf'), JSON.stringify(bad.errors));
+  assert.ok(bad.errors.length === 3, JSON.stringify(errorsOf(bad)));
+  assert.ok(bad.errors.every((error) => error.validation.keyword !== 'oneOf'), JSON.stringify(errorsOf(bad)));
   const unknown = bad.errors.find((error) => error.path === '/variables/o/type');
   assert.match(unknown.message, /color, text, number, date, image, url, list/);
   // Hex shorthand and the original color object stay valid.
-  assert.equal(validatePresentation({variables: {a: '#fff', b: {type: 'color', value: '#112233', description: 'x'}}, slides: [{id: 's', title: 'x'}]}).valid, true);
+  assert.equal(checked({variables: {a: '#fff', b: {type: 'color', value: '#112233', description: 'x'}}, slides: [{id: 's', title: 'x'}]}).valid, true);
 });
 
 test('previews of a template use examples, never invent content, and mark what was used', () => {
@@ -227,7 +231,7 @@ test('rich text is kept by a whole-field reference and flattened inline', () => 
   assert.equal(result.presentation.slides[0].subtitle, 'Say: Hello world');
   assert.deepEqual(result.presentation.slides[0].bullets, [{text: runs}]);
   assert.ok(result.diagnostics.some((entry) => entry.code === 'variable-rich-flattened'));
-  assert.equal(validatePresentation(result.presentation).valid, true);
+  assert.equal(checked(result.presentation).valid, true);
 });
 
 test('values are coerced per kind and rejected with a precise diagnostic', () => {
@@ -285,7 +289,7 @@ test('image variables supply a string or an Asset object, and list variables spl
   assert.deepEqual(slide.bullets, ['first', 'x', 'y', 'last']);
   assert.deepEqual(slide.items, ['x', 'y']);
   assert.equal(slide.subtitle, 'https://example.com/a.png');
-  assert.equal(validatePresentation(resolveVariables(doc).presentation).valid, true);
+  assert.equal(checked(resolveVariables(doc).presentation).valid, true);
 });
 
 test('listVariables reports kind, state and every use for fill forms', () => {
@@ -305,7 +309,7 @@ test('listVariables reports kind, state and every use for fill forms', () => {
 
 test('declared but unused content variables and undeclared tokens warn once the deck uses variables', () => {
   const doc = {variables: {unused: {type: 'text', value: 'x'}, used: {type: 'text', value: 'y'}}, slides: [{id: 's', title: '{{used}} {{ghost}}'}]};
-  const result = validatePresentation(doc);
+  const result = checked(doc);
   assert.equal(result.valid, true);
   const messages = result.warnings.map((warning) => warning.message).join('\n');
   assert.match(messages, /'unused' is declared but never used/);
@@ -324,16 +328,16 @@ test('the documented quarterly review template validates, fills, and previews fr
   const read = async (name) => JSON.parse(await readFile(new URL(`../../../docs/fixtures/${name}`, import.meta.url), 'utf8'));
   const quarterly = await read('template-quarterly-review.opf.json');
   const data = await read('template-quarterly-review.values.json');
-  const asTemplate = validatePresentation(quarterly);
-  assert.equal(asTemplate.valid, true, JSON.stringify(asTemplate.errors));
+  const asTemplate = checked(quarterly);
+  assert.equal(asTemplate.valid, true, JSON.stringify(errorsOf(asTemplate)));
   assert.deepEqual(asTemplate.unfilledVariables, ['client', 'headline', 'revenue', 'kickoff', 'wins']);
-  assert.equal(asTemplate.warnings.length, 0, JSON.stringify(asTemplate.warnings));
+  assert.deepEqual(asTemplate.warnings.map((entry) => entry.ruleId), asTemplate.unfilledVariables.map(() => 'opf/variable-unfilled'), JSON.stringify(warningsOf(asTemplate)));
 
   const filled = resolveVariables(quarterly, data);
   assert.equal(filled.complete, true);
   assert.deepEqual(filled.diagnostics, []);
   const deck = filled.presentation;
-  assert.equal(validatePresentation(deck).valid, true, JSON.stringify(validatePresentation(deck).errors));
+  assert.equal(checked(deck).valid, true, JSON.stringify(errorsOf(checked(deck))));
   assert.equal(deck.name, 'Quarterly review for Globex');
   assert.equal(deck.slides[0].subtitle, 'Kickoff October 1, 2026');
   assert.equal('image' in deck.slides[0], false, 'an unfilled optional image omits its field');
@@ -347,5 +351,5 @@ test('the documented quarterly review template validates, fills, and previews fr
   assert.equal(preview.complete, true);
   assert.equal(preview.presentation.slides[0].title, 'Quarterly review: Acme Corp');
   assert.deepEqual(preview.presentation.slides[2].bullets[1], 'Faster onboarding');
-  assert.equal(validatePresentation(preview.presentation).valid, true);
+  assert.equal(checked(preview.presentation).valid, true);
 });

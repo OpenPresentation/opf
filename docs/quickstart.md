@@ -1,7 +1,7 @@
 # Developer quickstart
 
 A new developer can install the **published** OPF packages into a fresh Node 24
-project and author, lint, compose, paginate, edit with undo, preview and export
+project and author, validate, compose, paginate, edit with undo, preview and export
 a representative deck. No account, model call, or sibling repository checkout
 is required.
 
@@ -35,15 +35,15 @@ current source contract. `opf bundle` can inline resolved catalog records for
 portable offline authoring; it does not download remote assets. Keep the
 ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
-## Author, validate and lint
+## Author and validate
 
 ```sh
 npx --no-install opf --version
 npx --no-install opf validate deck.opf.json
-npx --no-install opf lint deck.opf.json
+npx --no-install opf validate deck.opf.json --format text
 ```
 
-The CLI bundles schema, catalogs and lint. Validation and lint never render; `opf render`, `opf export` and
+The CLI bundles schema, catalogs and the checker. Validation never renders; `opf render`, `opf export` and
 `opf import` produce and read files through the optional peers `@openpresentation/opf-render` and
 `@openpresentation/opf-pptx` (see [the CLI reference](cli.md)).
 `opf --version` reports the CLI and bundled core. Successful validation is not
@@ -53,12 +53,12 @@ Library equivalents:
 
 ```js
 import { readFile } from 'node:fs/promises';
-import { validatePresentation, lintSource } from '@openpresentation/opf';
+import { validate } from '@openpresentation/opf';
 
 const source = await readFile('deck.opf.json', 'utf8');
 const document = JSON.parse(source);
-console.log(validatePresentation(document));
-console.log(lintSource(source));
+console.log(validate(document));   // a parsed document: findings of every category
+console.log(validate(source));     // JSON text: the same findings with line and column
 ```
 
 ## Offline fonts, composition, pagination
@@ -147,7 +147,7 @@ node scripts/test-developer-quickstart.mjs
 ```
 
 That script creates an empty temp project, installs the published versions from
-the npm registry, copies this example, and asserts validate, lint, offline
+the npm registry, copies this example, and asserts validate, offline
 fonts, furniture composition, pagination, undo, SVG, PNG, PDF and PPTX.
 It fails if any package is a `file:` or workspace link.
 

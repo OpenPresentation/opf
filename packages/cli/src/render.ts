@@ -1,8 +1,8 @@
 // `opf render` and `opf export`: per-slide SVG and PNG, PDF and PPTX from an OPF document, through the optional
-// peers opf-render and opf-pptx (see peers.ts). The command reads the document, lints it with the same linter as
-// `opf lint`, prepares the bundled fonts, renders, and prints one JSON report. Nothing is written when the document is
-// invalid, a render error occurred or --strict found warnings.
-import { type PresentationPaginationOptions, lintSource, paginatePresentation } from "@openpresentation/opf";
+// peers opf-render and opf-pptx (see peers.ts). The command reads the document, checks its format and references with
+// `validate` (the check of `opf validate`), prepares the bundled fonts, renders, and prints one JSON report. Nothing is
+// written when the document is invalid, a render error occurred or a finding reaches --fail-on.
+import { type PresentationPaginationOptions, paginatePresentation, validate } from "@openpresentation/opf";
 import path from "node:path";
 import { createImageResolver } from "./assets.js";
 import { embeddedFor, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
@@ -19,6 +19,7 @@ import {
 	writeFiles,
 } from "./io.js";
 import { type Diagnostic, type PptxModule, type Renderer, PPTX_PACKAGE, RENDER_PACKAGE, loadPptx, loadRenderer } from "./peers.js";
+import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
 import { Reporter, finishReport, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
@@ -30,9 +31,9 @@ export interface Host {
 type Format = "svg" | "png" | "pdf" | "pptx";
 const RASTER_FORMATS = ["svg", "png"] as const;
 const SPEC = {
-	values: ["slides", "format", "scale", "out", "date", "asset-dir", "svg-fonts"],
+	values: ["slides", "format", "scale", "out", "date", "asset-dir", "svg-fonts", "fail-on"],
 	repeated: ["font-dir"],
-	flags: ["force", "strict", "json", "paginate"],
+	flags: ["force", "json", "paginate"],
 };
 const EXPORT_SPEC = { ...SPEC, values: [...SPEC.values, "pdf-mode", "chartex", "provenance", "image-format"] };
 
@@ -122,7 +123,8 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	const svgFonts = oneOf("--svg-fonts", options["svg-fonts"], ["used", "none"] as const, "used") as "used" | "none";
 	const scale = checkScale(options.scale);
 	const date = checkDate(options.date);
-	const strict = !!options.strict;
+	const failOn = parseFailOn(options["fail-on"]);
+	if (!failOn) throw new FileCommandError(FAIL_ON_MESSAGE);
 
 	// Peers load before the document is read, so a missing install is reported at once.
 	const renderer = await loadRenderer();
@@ -130,9 +132,9 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	const userFonts = await listFontDirectories(repeated["font-dir"] ?? []);
 
 	const { bytes } = await readBytes(input);
-	const raw = Buffer.from(bytes).toString("utf8"); // keeps a BOM, like opf lint, so hashes and offsets agree
-	const lint = lintSource(raw);
-	const reporter = new Reporter(lint.diagnostics);
+	const raw = Buffer.from(bytes).toString("utf8"); // keeps a BOM, like opf validate, so hashes and offsets agree
+	const lint = validate(raw, WRITE_CHECK);
+	const reporter = new Reporter(lint.findings);
 	const inputSha = sha256(raw);
 	const assetRoot = path.resolve(options["asset-dir"] === undefined ? (input === "-" ? "." : path.dirname(input)) : String(options["asset-dir"]));
 	const identity = {
@@ -145,8 +147,8 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	};
 	const toStdout = out === "-";
 	const report = (extra: Record<string, unknown>, outputs: unknown[], written: boolean) => {
-		const finished = finishReport(lint, reporter, strict);
-		const body = { command, format, ok: finished.ok, valid: finished.valid, schemaValid: finished.schemaValid, written, ...identity, ...extra, outputs, diagnostics: finished.diagnostics, counts: finished.counts, checks: { ...finished.checks, layout: "checked", fonts: "checked", nativeExport: format === "pptx" ? "checked" : "not-checked" } };
+		const finished = finishReport(lint, reporter, failOn);
+		const body = { command, format, ok: finished.ok, valid: finished.valid, schemaValid: finished.schemaValid, written, ...identity, ...extra, outputs, findings: finished.findings, counts: finished.counts, checks: { ...finished.checks, layout: "measured", fonts: "checked", nativeExport: format === "pptx" ? "checked" : "not-checked" } };
 		(toStdout && written ? process.stderr : process.stdout).write(json(body));
 		if (!finished.ok) process.exitCode = 1;
 		return finished.ok;
@@ -187,7 +189,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	const planned: { file: string; bytes: Uint8Array; entry: Record<string, unknown> }[] = [];
 	const finish = async (extra: Record<string, unknown>) => {
 		const outputs = planned.map((item) => ({ file: item.file === "-" ? "-" : path.resolve(item.file), ...item.entry, sha256: sha256(item.bytes), bytes: item.bytes.length }));
-		const finished = finishReport(lint, reporter, strict);
+		const finished = finishReport(lint, reporter, failOn);
 		if (!finished.ok) {
 			report({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), ...extra }, outputs.map((item) => ({ ...item, planned: true })), false);
 			return;

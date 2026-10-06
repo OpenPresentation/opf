@@ -6,7 +6,8 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { CONTENT_CONVERSIONS, OPFConversionError, convertContent, convertListForm, demoteListItems, promoteListItems } from "../dist/convert.js";
-import { validatePresentation } from "../dist/index.js";
+import { check } from './support/validation.mjs';
+
 
 function rng(seed) {
   let state = seed >>> 0;
@@ -113,8 +114,8 @@ describe("conversions never invent or silently lose text", () => {
           assert.deepEqual(source, before, "input unchanged");
           assert.deepEqual(convertContent(source, to), result, "deterministic");
           assert.equal(result.lossless, result.loss.length === 0);
-          if (to !== "metrics") assert.ok(validatePresentation({ slides: [{ blocks: [result.payload] }] }).valid, context);
-          else assert.ok(validatePresentation({ slides: [{ blocks: [result.payload] }] }).valid, context);
+          if (to !== "metrics") assert.ok(check({ slides: [{ blocks: [result.payload] }] }).valid, context);
+          else assert.ok(check({ slides: [{ blocks: [result.payload] }] }).valid, context);
           // A table's heading words name a role (when, what, value...) for timeline and metrics: the role is kept, so the heading words are structure.
           const input = tokens(source, new Map(), "", from === "table" && (to === "timeline" || to === "metrics") ? "columns" : "");
           const output = tokens(result.payload);

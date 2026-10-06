@@ -4,7 +4,7 @@ import { ratio, type CliContext } from "./context.js";
 
 /** `opf merge <base> <ours> <theirs>`: three-way merge with conflict reporting. */
 export async function mergeCommand(args: string[], cli: CliContext): Promise<void> {
-  const { positional, options } = cli.parse(args, ["output", "in-place", "force", "prefer", "report", "dry-run", "threshold", "strict"]);
+  const { positional, options } = cli.parse(args, ["output", "in-place", "force", "prefer", "report", "dry-run", "threshold", "fail-on"]);
   cli.arity(positional, 3);
   const [baseFile, oursFile, theirsFile] = positional as [string, string, string];
   if (positional.filter(file => file === "-").length > 1) throw cli.fail("stdin can supply only one input.");

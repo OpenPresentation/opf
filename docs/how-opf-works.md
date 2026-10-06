@@ -223,7 +223,7 @@ A document can carry its own records or point at a private registry, which also 
   "design": { "colorScheme": "acme-brand" },
   "catalogs": {
     "colorSchemes": {
-      "records": [{ "id": "acme-brand", "accent1": "#0F4C81", "light1": "#FFFFFF", "dark1": "#0B1B2B" }]
+      "records": [{ "id": "acme-brand", "name": "Acme Brand", "accent1": "#0F4C81", "light1": "#FFFFFF", "dark1": "#0B1B2B" }]
     },
     "narratives": { "source": "https://catalogs.example.com/narratives" }
   },
@@ -316,7 +316,7 @@ Two layers, with a deliberate split:
 - **Schema errors** for structural problems: wrong types, overlapping region keys, payloads mixing incompatible content kinds, a region payload missing concrete content, duplicate slide or payload ids.
 - **Warnings** for advisory drift: unknown catalog ids, unknown `var:` variable references and unrecognized run colors, narrative/slide mismatches. These never make a document invalid.
 
-`validatePresentation` from `@openpresentation/opf` applies both layers locally.
+`validate` from `@openpresentation/opf` applies both layers locally and, beyond them, checks references, accessibility, layout and content ([validate](validate.md)).
 
 ## Where to go next
 

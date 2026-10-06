@@ -1,13 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { DEFAULT_AUDIT_THRESHOLDS, auditPresentation, auditRules, auditSource, findAuditRule } from '../dist/audit.js';
-import { lintSource } from '../dist/lint.js';
-import { renderRuleReference } from '../../../scripts/build-audit-docs.mjs';
+import { DEFAULT_VALIDATION_THRESHOLDS, findValidationRule, validate, validationRules } from '../dist/index.js';
+import { renderRuleReference } from '../../../scripts/build-validate-docs.mjs';
 
-const deck = (slides, extra = {}) => ({ name: 'Audit fixture', language: 'en-US', ...extra, slides });
-const ids = (report) => report.diagnostics.map((d) => d.ruleId);
-const only = (document, rule, options = {}) => auditPresentation(document, { ...options, only: [rule] }).diagnostics;
+const deck = (slides, extra = {}) => ({ name: 'Rules fixture', language: 'en-US', ...extra, slides });
+const ids = (report) => report.findings.map((d) => d.ruleId);
+const only = (document, rule, options = {}) => validate(document, { ...options, only: [rule] }).findings;
 const has = (document, rule, options) => only(document, rule, options).length > 0;
 const white = { background: { type: 'solid', color: '#FFFFFF' } };
 const freeze = (value) => {
@@ -28,76 +27,88 @@ const png = (width, height) => {
 	return `data:image/png;base64,${bytes.toString('base64')}`;
 };
 
-test('every rule has a stable id, a rationale and an entry in docs/audit.md', () => {
-	const doc = readFileSync(new URL('../../../docs/audit.md', import.meta.url), 'utf8');
-	assert.ok(auditRules.length >= 25);
+test('every rule has a stable id, a category, a cost, a rationale and an entry in docs/validate.md', () => {
+	const doc = readFileSync(new URL('../../../docs/validate.md', import.meta.url), 'utf8');
+	assert.equal(validationRules.length, 54);
 	const seen = new Set();
-	for (const info of auditRules) {
-		assert.match(info.id, /^audit\/[a-z][a-z0-9-]*$/);
-		assert.equal(info.id, `audit/${info.name}`);
+	for (const info of validationRules) {
+		assert.match(info.id, /^opf\/[a-z][a-z0-9-]*$/);
+		assert.equal(info.id, `opf/${info.name}`);
 		assert.ok(!seen.has(info.id), `duplicate ${info.id}`);
 		seen.add(info.id);
 		assert.ok(info.summary.length > 10 && info.rationale.length > 20, info.id);
 		assert.ok(['error', 'warning', 'info'].includes(info.severity));
-		assert.ok(['accessibility', 'design', 'content'].includes(info.category));
-		assert.ok(doc.includes(`### \`${info.id}\``), `docs/audit.md lacks ${info.id}`);
-		assert.equal(findAuditRule(info.name), info);
+		assert.ok(['format', 'references', 'policy', 'accessibility', 'layout', 'content'].includes(info.category), info.id);
+		assert.ok(['syntax', 'structure', 'composition'].includes(info.cost), info.id);
+		assert.ok(doc.includes(`### \`${info.id}\``), `docs/validate.md lacks ${info.id}`);
+		assert.equal(findValidationRule(info.name), info);
+		assert.equal(findValidationRule(info.id), info);
 	}
+	// The objective accessibility, layout and content rules are the 21 that remain; the four taste rules are gone.
+	assert.equal(validationRules.filter((info) => ['accessibility', 'layout', 'content'].includes(info.category) && !['opf/chart-option-adapted', 'opf/chart-value-not-numeric', 'opf/chart-mapping-adapted'].includes(info.id)).length, 21);
+	for (const gone of ['font-family-count', 'slide-word-count', 'title-position', 'small-cell', 'unfilled-variable', 'invalid-document'])
+		assert.equal(findValidationRule(gone), undefined, gone);
+	// Only the composition-cost rules build layouts.
+	assert.deepEqual(validationRules.filter((info) => info.cost === 'composition').map((info) => info.name).sort(), ['image-resolution', 'layout-failed', 'min-font-size', 'reading-order', 'text-contrast', 'text-on-image', 'text-overflow', 'unresolved-content']);
 });
 
-test('docs/audit.md carries the current generated rule reference', () => {
-	const doc = readFileSync(new URL('../../../docs/audit.md', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
-	assert.ok(doc.includes(renderRuleReference(auditRules, DEFAULT_AUDIT_THRESHOLDS)), 'run: node scripts/build-audit-docs.mjs');
+test('docs/validate.md carries the current generated rule reference', () => {
+	const doc = readFileSync(new URL('../../../docs/validate.md', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+	assert.ok(doc.includes(renderRuleReference(validationRules, DEFAULT_VALIDATION_THRESHOLDS)), 'run: node scripts/build-validate-docs.mjs');
 });
 
 test('a clean deck has no findings and the report states what was and was not measured', () => {
-	const report = auditPresentation(
+	const report = validate(
 		deck([
 			{ title: 'Revenue grew', subtitle: 'Three quarters in a row', text: 'Revenue grew in every quarter of the year.' },
 			{ title: 'Next steps', items: ['Hire two engineers', 'Ship the beta'] },
 		]),
 	);
-	assert.deepEqual(report.diagnostics, []);
+	assert.deepEqual(report.findings, []);
 	assert.equal(report.valid, true);
-	assert.equal(report.documentValid, true);
-	assert.equal(report.slideCount, 2);
-	assert.equal(report.checks.textMeasurement, 'estimated');
+	assert.equal(report.schemaValid, true);
+	assert.equal(report.checks.layout, 'estimated');
+	assert.equal(report.checks.accessibility, 'checked');
+	assert.equal(report.checks.content, 'checked');
 	assert.equal(report.checks.backgroundPixels, 'not-read');
 	assert.equal(report.checks.imageBytes, 'embedded-only');
 	assert.equal(report.checks.nativeExport, 'not-checked');
-	assert.deepEqual(report.thresholds, DEFAULT_AUDIT_THRESHOLDS);
-	assert.ok(report.rulesRun.includes('audit/text-contrast'));
 });
 
-test('findings have lint\'s shape, are deterministic and never mutate the input', () => {
+test('findings have the shared Finding shape, are deterministic and never mutate the input', () => {
 	const input = freeze(deck([{ text: [{ text: 'faint', color: '#CCCCCC' }] }], { language: undefined, design: white }));
-	const a = auditPresentation(input),
-		b = auditPresentation(input);
+	const a = validate(input),
+		b = validate(input);
 	assert.deepEqual(a, b);
-	assert.ok(a.diagnostics.length >= 2);
-	for (const d of a.diagnostics) {
-		assert.match(d.ruleId, /^audit\//);
+	assert.ok(a.findings.length >= 2);
+	for (const d of a.findings) {
+		assert.match(d.ruleId, /^opf\//);
+		assert.ok(['format', 'references', 'policy', 'accessibility', 'layout', 'content'].includes(d.category));
 		assert.ok(['error', 'warning', 'info'].includes(d.severity));
 		assert.equal(d.scope, 'document');
 		assert.equal(typeof d.path, 'string');
 		assert.ok(d.message && d.help);
-		assert.match(d.definition, /docs\/audit\.md#audit/);
+		assert.match(d.definition, /docs\/validate\.md#opf/);
 	}
-	assert.equal(a.counts.warning + a.counts.info + a.counts.error, a.diagnostics.length);
+	assert.equal(a.counts.warning + a.counts.info + a.counts.error, a.findings.length);
 });
 
-test('audit/invalid-document: a document that fails the schema is reported, not audited', () => {
-	const report = auditPresentation({ name: 'bad', slides: [{ title: 5 }] });
-	assert.equal(report.documentValid, false);
+test('a document that fails the schema reports why, and its accessibility, layout and content rules do not run', () => {
+	const report = validate({ name: 'bad', slides: [{ title: 5 }] });
+	assert.equal(report.schemaValid, false);
 	assert.equal(report.valid, false);
-	assert.deepEqual([...new Set(ids(report))], ['audit/invalid-document']);
-	assert.deepEqual(report.rulesRun, []);
-	assert.equal(auditPresentation(undefined).documentValid, false);
+	assert.deepEqual([...new Set(ids(report))], ['opf/schema']);
+	assert.equal(report.checks.accessibility, 'not-run');
+	assert.equal(report.checks.layout, 'not-run');
+	// Asking only for accessibility still says why nothing ran: the format errors are reported unless switched off.
+	assert.deepEqual([...new Set(ids(validate({ name: 'bad', slides: [{ title: 5 }] }, { only: ['accessibility'] })))], ['opf/schema']);
+	assert.deepEqual(validate({ name: 'bad', slides: [{ title: 5 }] }, { only: ['accessibility'], ignore: ['format'] }).findings, []);
+	assert.equal(validate(undefined).schemaValid, false);
 });
 
 // ------------------------------------------------------------ text-contrast
 
-test('audit/text-contrast: explicit light text on a white background', () => {
+test('opf/text-contrast: explicit light text on a white background', () => {
 	const slides = [{ title: 'T', text: ['Readable and ', { text: 'faint', color: '#CCCCCC' }] }];
 	const found = only(deck(slides, { design: white }), 'text-contrast');
 	assert.equal(found.length, 1);
@@ -113,7 +124,7 @@ test('audit/text-contrast: explicit light text on a white background', () => {
 	assert.ok(!has(deck([{ title: 'T', text: ['Readable and ', { text: 'dark', color: '#222222' }] }], { design: white }), 'text-contrast'));
 });
 
-test('audit/text-contrast: large text needs 3:1, normal text 4.5:1', () => {
+test('opf/text-contrast: large text needs 3:1, normal text 4.5:1', () => {
 	// #949494 on white is about 3.03:1
 	const grey = '#949494';
 	const run = (extra) => deck([{ title: 'T', text: [{ text: 'Some text', color: grey, ...extra }] }], { design: white });
@@ -129,7 +140,7 @@ test('audit/text-contrast: large text needs 3:1, normal text 4.5:1', () => {
 	assert.equal(only(run({ fontSize: 14 }), 'text-contrast', { thresholds: { contrastNormal: 3 } }).length, 0);
 });
 
-test('audit/text-contrast: a dark gradient behind default text, and a gradient that is fine', () => {
+test('opf/text-contrast: a dark gradient behind default text, and a gradient that is fine', () => {
 	const gradient = (a, b) => ({ background: { type: 'gradient', gradient: { angle: 0, stops: [{ color: a, position: 0 }, { color: b, position: 1 }] } } });
 	const bad = only(deck([{ title: 'Gradient', text: 'Body' }], { design: gradient('#000000', '#10103A') }), 'text-contrast');
 	assert.equal(bad.length, 1);
@@ -138,7 +149,7 @@ test('audit/text-contrast: a dark gradient behind default text, and a gradient t
 	assert.ok(!has(deck([{ title: 'Gradient', text: 'Body' }], { design: gradient('#FFFFFF', '#F0F0FF') }), 'text-contrast'));
 });
 
-test('audit/text-contrast: only the part of a gradient under the text counts', () => {
+test('opf/text-contrast: only the part of a gradient under the text counts', () => {
 	// light on the left, black on the right: the left-aligned title never reaches the dark half
 	const design = { background: { type: 'gradient', gradient: { angle: 0, stops: [{ color: '#FFFFFF', position: 0 }, { color: '#FFFFFF', position: 0.5 }, { color: '#000000', position: 1 }] } } };
 	const found = only(deck([{ title: 'Short', layout: 'title' }], { design }), 'text-contrast');
@@ -147,7 +158,7 @@ test('audit/text-contrast: only the part of a gradient under the text counts', (
 	assert.ok(has(deck([{ title: 'A title long enough to cross the middle of the slide and keep going to the right edge', layout: 'title' }], { design }), 'text-contrast'));
 });
 
-test('audit/text-contrast: pattern backgrounds are measured against both colours; table cell colours are measured against the cell', () => {
+test('opf/text-contrast: pattern backgrounds are measured against both colours; table cell colours are measured against the cell', () => {
 	const pattern = { background: { type: 'pattern', pattern: { preset: 'ltDnDiag', foregroundColor: '#222222', backgroundColor: '#FFFFFF' } } };
 	assert.ok(has(deck([{ title: 'Pattern', text: [{ text: 'dark', color: '#2A2A2A' }] }], { design: pattern }), 'text-contrast'));
 	const table = (color, fill) => deck([{ title: 'T', table: { columns: ['A'], rows: [[{ value: 'x', style: { color, fill } }]] } }], { design: white });
@@ -158,19 +169,19 @@ test('audit/text-contrast: pattern backgrounds are measured against both colours
 	assert.ok(!has(table('#000000', '#FFFFFF'), 'text-contrast'));
 });
 
-test('audit/text-contrast: ignores charts, images and code, and honours severity, ignore and ignorePaths', () => {
+test('opf/text-contrast: ignores charts, images and code, and honours severity, ignore and ignorePaths', () => {
 	const slides = [{ title: 'T', text: [{ text: 'faint', color: '#DDDDDD' }] }];
 	const d = deck(slides, { design: white });
-	assert.equal(auditPresentation(d, { rules: { 'text-contrast': 'error' } }).diagnostics.find((x) => x.ruleId === 'audit/text-contrast').severity, 'error');
-	assert.ok(!ids(auditPresentation(d, { ignore: ['text-contrast'] })).includes('audit/text-contrast'));
-	assert.ok(!ids(auditPresentation(d, { rules: { 'audit/text-contrast': 'off' } })).includes('audit/text-contrast'));
-	assert.ok(!ids(auditPresentation(d, { ignorePaths: [{ rule: 'audit/text-contrast', path: '/slides/0' }] })).includes('audit/text-contrast'));
-	assert.ok(ids(auditPresentation(d, { ignorePaths: [{ rule: 'audit/text-contrast', path: '/slides/1' }] })).includes('audit/text-contrast'));
+	assert.equal(validate(d, { severity: { 'text-contrast': 'error' } }).findings.find((x) => x.ruleId === 'opf/text-contrast').severity, 'error');
+	assert.ok(!ids(validate(d, { ignore: ['text-contrast'] })).includes('opf/text-contrast'));
+	assert.ok(!ids(validate(d, { severity: { 'opf/text-contrast': 'off' } })).includes('opf/text-contrast'));
+	assert.ok(!ids(validate(d, { ignorePaths: [{ rule: 'opf/text-contrast', path: '/slides/0' }] })).includes('opf/text-contrast'));
+	assert.ok(ids(validate(d, { ignorePaths: [{ rule: 'opf/text-contrast', path: '/slides/1' }] })).includes('opf/text-contrast'));
 });
 
 // ------------------------------------------------------------ text-on-image
 
-test('audit/text-on-image: a picture background cannot be measured; a strong full-frame overlay can', () => {
+test('opf/text-on-image: a picture background cannot be measured; a strong full-frame overlay can', () => {
 	const slide = (overlay) => ({ title: 'On a picture', design: { slideImage: { src: 'https://example.com/hero.jpg', alt: '', position: 'background', ...(overlay ? { overlay } : {}) } } });
 	const bare = only(deck([slide()], { design: white }), 'text-on-image');
 	assert.equal(bare.length, 1);
@@ -184,7 +195,7 @@ test('audit/text-on-image: a picture background cannot be measured; a strong ful
 
 // ------------------------------------------------------------ alt text
 
-test('audit/missing-alt-text: images, video, logos, header images; "" is the decorative opt-out', () => {
+test('opf/missing-alt-text: images, video, logos, header images; "" is the decorative opt-out', () => {
 	const found = only(
 		deck(
 			[
@@ -210,7 +221,7 @@ test('audit/missing-alt-text: images, video, logos, header images; "" is the dec
 	assert.deepEqual(objectImage.fixes[1].patch, [{ op: 'add', path: '/slides/3/blocks/0/image/alt', value: '' }]);
 });
 
-test('audit/missing-alt-text: asset registry alt text and the slide image count', () => {
+test('opf/missing-alt-text: asset registry alt text and the slide image count', () => {
 	const registry = { assets: { hero: { src: 'https://example.com/hero.jpg', alt: 'Team at the offsite' }, bare: 'https://example.com/bare.jpg' } };
 	assert.ok(!has(deck([{ title: 'A', image: 'asset:hero' }], registry), 'missing-alt-text'));
 	assert.ok(has(deck([{ title: 'A', image: 'asset:bare' }], registry), 'missing-alt-text'));
@@ -218,7 +229,7 @@ test('audit/missing-alt-text: asset registry alt text and the slide image count'
 	assert.ok(!has(deck([{ title: 'A', text: 'x', design: { slideImage: { src: 'https://example.com/s.jpg', position: 'left', alt: 'Sunrise' } } }]), 'missing-alt-text'));
 });
 
-test('audit/poor-alt-text: file names, generic words, URLs, "image of" and very long text', () => {
+test('opf/poor-alt-text: file names, generic words, URLs, "image of" and very long text', () => {
 	const alt = (text) => deck([{ title: 'A', image: { src: 'https://example.com/a.png', alt: text } }]);
 	for (const bad of ['IMG_2041.png', 'image', 'Photo', 'https://example.com/a.png', 'Image of a chart', 'x'.repeat(300)]) assert.ok(has(alt(bad), 'poor-alt-text'), bad);
 	for (const good of ['Quarterly revenue by region, EMEA leading', '', 'A team photo of five people at a whiteboard']) assert.ok(!has(alt(good), 'poor-alt-text'), good);
@@ -226,7 +237,7 @@ test('audit/poor-alt-text: file names, generic words, URLs, "image of" and very 
 
 // ------------------------------------------------------------ titles
 
-test('audit/missing-slide-title and audit/duplicate-slide-title', () => {
+test('opf/missing-slide-title and opf/duplicate-slide-title', () => {
 	const missing = only(deck([{ title: 'Has one', text: 'x' }, { text: 'No title' }, { title: '   ', text: 'blank' }]), 'missing-slide-title');
 	assert.deepEqual(missing.map((d) => d.path), ['/slides/1', '/slides/2']);
 	assert.equal(missing[0].fixes[0].focus.field, 'title');
@@ -238,7 +249,7 @@ test('audit/missing-slide-title and audit/duplicate-slide-title', () => {
 
 // ------------------------------------------------------------ reading order
 
-test('audit/reading-order: promoted regions are composed in visual order, blocks in order', () => {
+test('opf/reading-order: promoted regions are composed in visual order, blocks in order', () => {
 	// composeSlide used to compose region keys alphabetically (center, left, right); it now follows the layout (RR-29)
 	assert.ok(!has(deck([{ title: 'T', left: { text: 'L' }, center: { text: 'C' }, right: { text: 'R' } }]), 'reading-order'));
 	assert.ok(!has(deck([{ title: 'T', top: { text: 'T' }, middle: { text: 'M' }, bottom: { text: 'B' } }]), 'reading-order'));
@@ -250,7 +261,7 @@ test('audit/reading-order: promoted regions are composed in visual order, blocks
 
 // ------------------------------------------------------------ links
 
-test('audit/link-text: generic, blank and raw-URL link text', () => {
+test('opf/link-text: generic, blank and raw-URL link text', () => {
 	const link = (text, href = 'https://example.com/report') => deck([{ title: 'T', text: ['See ', { text, link: href }] }]);
 	for (const bad of ['click here', 'Here', 'Read more', 'https://example.com/a/very/long/path/that/goes/on/and/on/forever']) assert.ok(has(link(bad), 'link-text'), bad);
 	assert.ok(has(link('  '), 'link-text'));
@@ -263,7 +274,7 @@ test('audit/link-text: generic, blank and raw-URL link text', () => {
 
 // ------------------------------------------------------------ charts
 
-test('audit/chart-color-only: many series repeat colours; two distinct series are fine; one series is skipped', () => {
+test('opf/chart-color-only: many series repeat colours; two distinct series are fine; one series is skipped', () => {
 	const chart = (type, series) => deck([{ title: 'T', chart: { type, data: { columns: ['Quarter', ...Array.from({ length: series }, (_, i) => `S${i + 1}`)], rows: [['Q1', ...Array.from({ length: series }, (_, i) => i + 1)]] } } }], { design: white });
 	assert.ok(has(chart('line', 14), 'chart-color-only'));
 	const crowded = only(chart('line', 14), 'chart-color-only');
@@ -280,7 +291,7 @@ test('audit/chart-color-only: many series repeat colours; two distinct series ar
 	assert.ok(has(pie, 'chart-color-only', { chartPalette: ['#336699', '#336699', '#000000'] }));
 });
 
-test('audit/chart-text-alternative: a chart needs words beside it', () => {
+test('opf/chart-text-alternative: a chart needs words beside it', () => {
 	const data = { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1]] } };
 	assert.ok(has(deck([{ title: 'Revenue', chart: data }]), 'chart-text-alternative'));
 	assert.ok(!has(deck([{ title: 'Revenue', subtitle: 'Up 12% on last year', chart: data }]), 'chart-text-alternative'));
@@ -288,7 +299,7 @@ test('audit/chart-text-alternative: a chart needs words beside it', () => {
 	assert.ok(!has(deck([{ title: 'Revenue', text: 'x' }]), 'chart-text-alternative'));
 });
 
-test('audit/missing-language: only the presentation-level language is checked', () => {
+test('opf/missing-language: only the presentation-level language is checked', () => {
 	const found = only({ name: 'x', slides: [{ title: 'T', text: 'x' }] }, 'missing-language');
 	assert.equal(found.length, 1);
 	assert.equal(found[0].path, '');
@@ -298,67 +309,76 @@ test('audit/missing-language: only the presentation-level language is checked', 
 
 // ------------------------------------------------------------ layout
 
-test('audit/text-overflow, audit/small-cell and strict composition', () => {
+test('opf/text-overflow and strict composition', () => {
 	const long = 'word '.repeat(600);
 	const tight = (extra = {}) => deck([{ title: 'T', composition: { minFontSize: 16, ...extra }, blocks: [{ text: long }, { text: 'b' }] }]);
 	const found = only(tight(), 'text-overflow');
 	assert.ok(found.length >= 1);
 	assert.equal(found[0].severity, 'warning');
-	// overflow: "error" is the author's own severity
+	// overflow: "error" fails composition, but valid never depends on font metrics: the finding stays a warning
 	const strict = only(tight({ overflow: 'error' }), 'text-overflow');
 	assert.ok(strict.length >= 1);
-	assert.equal(strict[0].severity, 'error');
-	assert.equal(auditPresentation(tight({ overflow: 'error' })).valid, false);
+	assert.equal(strict[0].severity, 'warning');
+	assert.equal(validate(tight({ overflow: 'error' })).valid, true);
+	// a host that wants it to fail promotes the rule
+	assert.equal(validate(tight({ overflow: 'error' }), { severity: { 'opf/text-overflow': 'error' } }).valid, false);
 	assert.ok(!has(deck([{ title: 'T', text: 'short' }]), 'text-overflow'));
+	// a cell below composition's comfort threshold is a taste judgment, so there is no rule for it
 	const many = deck([{ title: 'T', composition: { mode: 'row' }, blocks: Array.from({ length: 12 }, (_, i) => ({ text: `Item ${i}` })) }]);
-	assert.ok(has(many, 'small-cell'));
-	assert.ok(!has(deck([{ title: 'T', blocks: [{ text: 'a' }, { text: 'b' }] }]), 'small-cell'));
+	assert.ok(!validate(many).findings.some((d) => d.ruleId === 'opf/unresolved-content' && /cell/i.test(d.message)));
 });
 
-test('audit/text-overflow: a host text measurement replaces the estimate', () => {
+test('opf/text-overflow: a host text measurement replaces the estimate', () => {
 	const slide = { title: 'T', blocks: [{ text: 'A reasonably short sentence that fits at the default size.' }, { text: 'b' }] };
 	assert.ok(!has(deck([slide]), 'text-overflow'));
 	const widths = [];
 	const measurement = { measure: (text, size) => (widths.push(text), text.length * size * 3) };
-	const report = auditPresentation(deck([slide]), { textMeasurement: measurement });
-	assert.equal(report.checks.textMeasurement, 'provided');
+	const report = validate(deck([slide]), { fonts: { textMeasurement: measurement } });
+	assert.equal(report.checks.layout, 'measured');
 	assert.ok(widths.length > 0, 'the supplied measurement was used');
 });
 
-test('audit/layout-failed: a composition error is a finding, and the rest of the audit still runs', () => {
+test('opf/layout-failed: a composition error is a finding, and the rest of the rules still run', () => {
 	const catalogs = { layouts: [{ id: 'broken', name: 'Broken', placeholders: [{ type: 'title' }], composition: { padding: 5 } }] };
 	const found = only(deck([{ title: 'T', layout: 'broken', text: 'x' }, { title: 'U', text: 'y' }]), 'layout-failed', { catalogs });
 	assert.equal(found.length, 1);
 	assert.equal(found[0].path, '/slides/0');
 	assert.match(found[0].message, /Invalid composition\.padding/);
 	assert.ok(!has(deck([{ title: 'T', text: 'x' }]), 'layout-failed'));
-	const all = auditPresentation(deck([{ title: 'T', layout: 'broken', text: [{ text: 'x', fontSize: 6 }] }]), { catalogs });
-	assert.ok(all.diagnostics.some((d) => d.ruleId === 'audit/min-font-size'));
+	const all = validate(deck([{ title: 'T', layout: 'broken', text: [{ text: 'x', fontSize: 6 }] }]), { catalogs });
+	assert.ok(all.findings.some((d) => d.ruleId === 'opf/min-font-size'));
 });
 
-test('textMeasurement may be a function of the slide index', () => {
+test('fonts.textMeasurement may be a function of the slide index', () => {
 	const seen = [];
 	const measurement = { measure: (text, size) => text.length * size * 0.5 };
-	const report = auditPresentation(deck([{ title: 'One', text: 'a' }, { title: 'Two', text: 'b' }]), {
-		textMeasurement: (index) => (seen.push(index), measurement),
+	const report = validate(deck([{ title: 'One', text: 'a' }, { title: 'Two', text: 'b' }]), {
+		fonts: { textMeasurement: (index) => (seen.push(index), measurement) },
 	});
-	assert.equal(report.checks.textMeasurement, 'provided');
+	assert.equal(report.checks.layout, 'measured');
 	assert.deepEqual([...new Set(seen)], [0, 1]);
 });
 
-test('the root entry point re-exports the audit API', async () => {
+test('the root entry point exports the checker, and the old subpaths are gone', async () => {
 	const root = await import('../dist/index.js');
-	assert.equal(root.auditPresentation, auditPresentation);
-	assert.equal(root.auditSource, auditSource);
-	assert.equal(root.auditRules, auditRules);
+	assert.equal(root.validate, validate);
+	assert.equal(root.validationRules, validationRules);
+	assert.equal(root.findValidationRule, findValidationRule);
+	assert.equal(root.DEFAULT_VALIDATION_THRESHOLDS, DEFAULT_VALIDATION_THRESHOLDS);
+	const validator = await import('../dist/validator.js');
+	assert.equal(validator.validate, validate);
+	const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+	assert.equal(manifest.exports['./lint'], undefined);
+	assert.equal(manifest.exports['./audit'], undefined);
+	assert.ok(manifest.exports['./validator']);
 });
 
-test('audit/unresolved-content: composeSlide diagnostics are surfaced', () => {
+test('opf/unresolved-content: composeSlide diagnostics are surfaced', () => {
 	assert.ok(has(deck([{ title: 'T', items: ['a', 'b'] }], { design: { listBullet: 'image' } }), 'unresolved-content'));
 	assert.ok(!has(deck([{ title: 'T', items: ['a', 'b'] }]), 'unresolved-content'));
 });
 
-test('audit/min-font-size: explicit small runs and a lowered composition floor', () => {
+test('opf/min-font-size: explicit small runs and a lowered composition floor', () => {
 	const small = only(deck([{ title: 'T', text: [{ text: 'tiny', fontSize: 8 }, ' ok'] }]), 'min-font-size');
 	assert.equal(small.length, 1);
 	assert.equal(small[0].path, '/slides/0/text/0/fontSize');
@@ -371,7 +391,7 @@ test('audit/min-font-size: explicit small runs and a lowered composition floor',
 
 // ------------------------------------------------------------ fonts
 
-test('audit/font-outside-scheme and audit/font-family-count', () => {
+test('opf/font-outside-scheme', () => {
 	const run = (family) => deck([{ title: 'T', text: [{ text: 'x', fontFamily: family }] }], { design: { fontScheme: 'aptos' } });
 	assert.ok(has(run('Comic Sans MS'), 'font-outside-scheme'));
 	const found = only(run('Comic Sans MS'), 'font-outside-scheme');
@@ -379,40 +399,11 @@ test('audit/font-outside-scheme and audit/font-family-count', () => {
 	assert.deepEqual(found[0].fixes[0].patch, [{ op: 'remove', path: '/slides/0/text/0/fontFamily' }]);
 	assert.ok(!has(run('Aptos'), 'font-outside-scheme'));
 	assert.ok(!has(run('aptos display'), 'font-outside-scheme'));
-	const many = deck([{ title: 'T', text: [{ text: 'a', fontFamily: 'Georgia' }, { text: 'b', fontFamily: 'Impact' }, { text: 'c', fontFamily: 'Verdana' }] }]);
-	assert.ok(has(many, 'font-family-count'));
-	assert.ok(!has(many, 'font-family-count', { thresholds: { maxFontFamilies: 6 } }));
-	assert.ok(!has(deck([{ title: 'T', text: 'x' }]), 'font-family-count'));
-});
-
-// ------------------------------------------------------------ consistency
-
-test('audit/title-position: same-layout slides that move the title; covers and different layouts are skipped', () => {
-	const slide = (padding, layout = 'text-1x') => ({ title: `Slide ${padding}`, layout, composition: { padding }, text: 'Body' });
-	const found = only(deck([slide(0.08), slide(0.08), slide(0.2)]), 'title-position');
-	assert.equal(found.length, 1);
-	assert.equal(found[0].path, '/slides/2/title');
-	assert.ok(!has(deck([slide(0.08), slide(0.08), slide(0.08)]), 'title-position'));
-	assert.ok(!has(deck([slide(0.08, 'text-1x'), slide(0.2, 'text-2x')]), 'title-position'));
-	assert.ok(!has(deck([{ title: 'Cover A', layout: 'title' }, { title: 'Cover B', layout: 'title', subtitle: 'with a subtitle' }]), 'title-position'));
-	assert.ok(!has(deck([slide(0.08), slide(0.2)]), 'title-position', { thresholds: { titlePositionTolerance: 0.5 } }));
-});
-
-test('audit/slide-word-count: counts words, and CJK text by word', () => {
-	const words = (n) => Array.from({ length: n }, (_, i) => `word${i}`).join(' ');
-	assert.ok(has(deck([{ title: 'T', text: words(150) }]), 'slide-word-count'));
-	assert.ok(!has(deck([{ title: 'T', text: words(60) }]), 'slide-word-count'));
-	assert.ok(has(deck([{ title: 'T', text: words(60) }]), 'slide-word-count', { thresholds: { maxWordsPerSlide: 50 } }));
-	// title, list entries, tables and quotes count; code does not
-	const spread = { title: 'T', blocks: [{ items: [words(40)] }, { quote: { text: words(40) } }, { table: { columns: ['A'], rows: [[words(40)]] } }, { code: { source: words(500) } }] };
-	const found = only(deck([spread]), 'slide-word-count');
-	assert.equal(found.length, 1);
-	assert.equal(found[0].measured.words, 122);
 });
 
 // ------------------------------------------------------------ images
 
-test('audit/image-resolution: embedded images measured at their displayed size; URLs and SVG are not read', () => {
+test('opf/image-resolution: embedded images measured at their displayed size; URLs and SVG are not read', () => {
 	const small = png(100, 100),
 		big = png(4000, 3000);
 	const image = (src, extra = {}) => deck([{ title: 'T', image: { src, alt: 'x' }, ...extra }]);
@@ -431,7 +422,7 @@ test('audit/image-resolution: embedded images measured at their displayed size; 
 
 // ------------------------------------------------------------ content
 
-test('audit/placeholder-text, audit/empty-text and audit/empty-slide', () => {
+test('opf/placeholder-text, opf/empty-text and opf/empty-slide', () => {
 	for (const text of ['Lorem ipsum dolor sit amet', 'Click to add title', 'Your title here', '[Insert company name]', 'TBD', 'See TODO list', 'Title', 'Untitled presentation'])
 		assert.ok(has(deck([{ title: 'T', text }]), 'placeholder-text'), text);
 	for (const text of ['A normal sentence about the title of the book.', 'The todo app ships Monday', 'Subtitle quality improved'])
@@ -447,65 +438,92 @@ test('audit/placeholder-text, audit/empty-text and audit/empty-slide', () => {
 	assert.ok(!has(deck([{ design: { slideImage: { src: 'https://e.com/a.jpg', alt: '', position: 'background' } } }]), 'empty-slide'));
 });
 
-test('audit/unfilled-variable: tokens, undeclared colour variables and unset declarations', () => {
-	assert.ok(has(deck([{ title: 'Hello {{name}}', text: 'x' }]), 'unfilled-variable'));
-	assert.ok(has(deck([{ title: 'T', text: 'Total: {{ total | #,##0 }}' }]), 'unfilled-variable'));
-	assert.ok(!has(deck([{ title: 'T', text: 'Escaped \\{{name}} stays' }]), 'unfilled-variable'));
-	assert.ok(!has(deck([{ title: 'T', text: 'Braces { } are fine, and {{Upper}} is not a token' }]), 'unfilled-variable'));
+test('opf/variable-unfilled: a normal deck errors, a template warns, tokens left in a plain deck warn', () => {
+	// A deck that declares no content variables: a token left in the text, or a colour variable nobody declared.
+	assert.ok(has(deck([{ title: 'Hello {{name}}', text: 'x' }]), 'variable-unfilled'));
+	assert.ok(has(deck([{ title: 'T', text: 'Total: {{ total | #,##0 }}' }]), 'variable-unfilled'));
+	assert.equal(only(deck([{ title: 'Hello {{name}}', text: 'x' }]), 'variable-unfilled')[0].severity, 'warning');
+	assert.ok(!has(deck([{ title: 'T', text: 'Escaped \\{{name}} stays' }]), 'variable-unfilled'));
+	assert.ok(!has(deck([{ title: 'T', text: 'Braces { } are fine, and {{Upper}} is not a token' }]), 'variable-unfilled'));
 	const colour = deck([{ title: 'T', text: [{ text: 'x', color: 'var:brand' }] }]);
-	assert.ok(has(colour, 'unfilled-variable'));
-	assert.ok(!has({ ...colour, variables: { brand: '#0F4C81' } }, 'unfilled-variable'));
-	// Content-variable declarations (RR-32) are only audited once the schema of this checkout accepts them.
-	const declared = auditPresentation({ ...deck([{ title: 'T', text: 'x' }]), variables: { who: { type: 'text', label: 'Who' } } }, { only: ['unfilled-variable'] });
-	if (declared.documentValid) assert.deepEqual(declared.diagnostics.map((d) => d.path), ['/variables/who']);
+	assert.ok(has(colour, 'variable-reference-unknown'));
+	assert.ok(!has({ ...colour, variables: { brand: '#0F4C81' } }, 'variable-reference-unknown'));
+	// A declared required variable with no value: an error in a normal deck, a warning in a template.
+	const declared = { ...deck([{ title: 'T', text: 'Hello {{who}}' }]), variables: { who: { type: 'text', label: 'Who' } } };
+	const asDeck = validate(declared, { only: ['variable-unfilled'] });
+	assert.deepEqual(asDeck.findings.map((d) => [d.path, d.severity, d.category]), [['/variables/who', 'error', 'content']]);
+	assert.equal(asDeck.valid, false);
+	assert.equal(asDeck.schemaValid, true);
+	const asTemplate = validate({ ...declared, template: true }, { only: ['variable-unfilled'] });
+	assert.deepEqual(asTemplate.findings.map((d) => [d.path, d.severity]), [['/variables/who', 'warning']]);
+	assert.equal(asTemplate.valid, true);
+	assert.deepEqual(asTemplate.unfilledVariables, ['who']);
+	// Values fill the deck before it is checked.
+	assert.deepEqual(validate(declared, { only: ['variable-unfilled'], values: { who: 'Ada' } }).findings, []);
+	// The format check does not include the rule, so a hot path that only needs well-formed OPF stays valid.
+	assert.equal(validate(declared, { only: ['format'] }).valid, true);
 });
 
 // ------------------------------------------------------------ options and source
 
-test('options: unknown rules, thresholds and options are rejected; only/ignore select rules', () => {
+test('options: unknown rules, thresholds and options are rejected; only/ignore select rules and categories', () => {
 	const d = deck([{ title: 'T', text: 'x' }]);
-	assert.throws(() => auditPresentation(d, { rules: { 'text-contrats': 'off' } }), /Unknown audit rule/);
-	assert.throws(() => auditPresentation(d, { ignore: ['nope'] }), /Unknown audit rule/);
-	assert.throws(() => auditPresentation(d, { only: ['audit/nope'] }), /Unknown audit rule/);
-	assert.throws(() => auditPresentation(d, { rules: { 'text-contrast': 'fatal' } }), /severity/);
-	assert.throws(() => auditPresentation(d, { thresholds: { contrastNormal: -1 } }), /positive number/);
-	assert.throws(() => auditPresentation(d, { thresholds: { nope: 1 } }), /Unknown audit threshold/);
-	assert.throws(() => auditPresentation(d, { nope: 1 }), /Unknown audit option/);
-	assert.throws(() => auditPresentation(d, { ignorePaths: [{ rule: 'text-contrast', path: 'slides' }] }), /JSON Pointer/);
-	assert.throws(() => auditPresentation(d, { chartPalette: ['red'] }), /chartPalette/);
-	const report = auditPresentation(deck([{ text: 'No title' }], { language: undefined }), { only: ['missing-slide-title'] });
-	assert.deepEqual(report.rulesRun, ['audit/missing-slide-title']);
-	assert.deepEqual(ids(report), ['audit/missing-slide-title']);
-	const without = auditPresentation(deck([{ text: 'No title' }], { language: undefined }), { ignore: ['missing-slide-title', 'missing-language'] });
-	assert.ok(!ids(without).includes('audit/missing-slide-title'));
-	assert.ok(!without.rulesRun.includes('audit/missing-slide-title'));
+	assert.throws(() => validate(d, { severity: { 'text-contrats': 'off' } }), /Unknown validation rule or category/);
+	assert.throws(() => validate(d, { ignore: ['nope'] }), /Unknown validation rule or category/);
+	assert.throws(() => validate(d, { only: ['opf/nope'] }), /Unknown validation rule or category/);
+	assert.throws(() => validate(d, { only: 'format' }), /array/);
+	assert.throws(() => validate(d, { severity: { 'text-contrast': 'fatal' } }), /severity/);
+	assert.throws(() => validate(d, { thresholds: { contrastNormal: -1 } }), /positive number/);
+	assert.throws(() => validate(d, { thresholds: { nope: 1 } }), /Unknown validate threshold/);
+	assert.throws(() => validate(d, { thresholds: { maxWordsPerSlide: 50 } }), /Unknown validate threshold/);
+	assert.throws(() => validate(d, { nope: 1 }), /Unknown validate option/);
+	assert.throws(() => validate(d, { rules: {} }), /Unknown validate option/);
+	assert.throws(() => validate(d, { textMeasurement: {} }), /Unknown validate option/);
+	assert.throws(() => validate(d, { ignorePaths: [{ rule: 'text-contrast', path: 'slides' }] }), /JSON Pointer/);
+	assert.throws(() => validate(d, { chartPalette: ['red'] }), /chartPalette/);
+	assert.throws(() => validate(d, { fonts: 'roboto' }), /fonts/);
+	const report = validate(deck([{ text: 'No title' }], { language: undefined }), { only: ['missing-slide-title'] });
+	assert.deepEqual(ids(report), ['opf/missing-slide-title']);
+	assert.equal(report.checks.accessibility, 'checked');
+	assert.equal(report.checks.layout, 'not-run');
+	assert.equal(report.checks.content, 'not-run');
+	const without = validate(deck([{ text: 'No title' }], { language: undefined }), { ignore: ['missing-slide-title', 'missing-language'] });
+	assert.ok(!ids(without).includes('opf/missing-slide-title'));
+	assert.ok(!ids(without).includes('opf/missing-language'));
+	// a category name selects all of its rules
+	const accessibility = validate(deck([{ text: 'No title' }], { language: undefined }), { only: ['accessibility'] });
+	assert.ok(accessibility.findings.length >= 2 && accessibility.findings.every((d) => d.category === 'accessibility'));
+	assert.deepEqual(ids(validate(deck([{ text: 'No title' }], { language: undefined }), { ignore: ['accessibility'] })).filter((id) => id === 'opf/missing-slide-title'), []);
 });
 
-test('auditSource: findings carry source ranges; syntax and schema errors stop the audit', () => {
-	const source = `{\n  "name": "x",\n  "language": "en-US",\n  "slides": [\n    {"title": "T", "image": "https://example.com/a.png"}\n  ]\n}\n`;
-	const report = auditSource(source, { only: ['missing-alt-text'] });
-	assert.equal(report.diagnostics.length, 1);
-	const { location } = report.diagnostics[0];
-	assert.equal(location.line, 5);
-	assert.equal(source.slice(location.offset, location.offset + location.length), '"https://example.com/a.png"');
-	// a finding about a missing field is located at the object that lacks it
-	const missing = auditSource(`{"name":"x","language":"en","slides":[{"text":"no title"}]}`, { only: ['missing-slide-title'] });
-	assert.equal(missing.diagnostics[0].location.line, 1);
-	assert.ok(missing.diagnostics[0].location.length > 5);
-	const broken = auditSource('{"slides": [}');
-	assert.equal(broken.documentValid, false);
-	assert.equal(broken.valid, false);
-	assert.equal(broken.diagnostics[0].ruleId, 'audit/invalid-document');
-	assert.ok(broken.diagnostics[0].location);
-	const invalid = auditSource('{"name":"x","slides":[{"title":3}]}');
-	assert.equal(invalid.documentValid, false);
-	assert.equal(lintSource('{"name":"x","slides":[{"title":3}]}').valid, false);
-	assert.ok(auditSource('﻿' + source).diagnostics.every((d) => d.location));
+test('severity overrides promote or demote a rule or a whole category; off silences it', () => {
+	const d = deck([{ text: 'No title' }], { language: undefined });
+	assert.equal(validate(d, { only: ['missing-slide-title'] }).valid, true, 'an accessibility finding never makes a deck invalid by default');
+	const promoted = validate(d, { severity: { 'opf/missing-slide-title': 'error' } });
+	assert.equal(promoted.valid, false);
+	assert.equal(promoted.findings.find((x) => x.ruleId === 'opf/missing-slide-title').severity, 'error');
+	assert.equal(promoted.counts.error, 1);
+	const category = validate(d, { severity: { accessibility: 'warning', 'missing-language': 'info' } });
+	assert.ok(category.findings.filter((x) => x.category === 'accessibility').every((x) => ['warning', 'info'].includes(x.severity)));
+	assert.equal(category.findings.find((x) => x.ruleId === 'opf/missing-language').severity, 'info', 'a rule beats its category');
+	assert.ok(!ids(validate(d, { severity: { 'text-contrast': 'off', 'missing-slide-title': 'off' } })).includes('opf/missing-slide-title'));
 });
 
-test('the bundled examples audit without throwing and keep their rule ids stable', () => {
+test('ignorePaths suppresses a rule, a category or everything below a pointer, by whole segments', () => {
+	const d = deck([{ title: 'One', image: 'https://example.com/a.png' }, { title: 'Two', image: 'https://example.com/b.png' }]);
+	assert.deepEqual(only(d, 'missing-alt-text').map((x) => x.path), ['/slides/0/image', '/slides/1/image']);
+	assert.deepEqual(only(d, 'missing-alt-text', { ignorePaths: [{ rule: 'opf/missing-alt-text', path: '/slides/0' }] }).map((x) => x.path), ['/slides/1/image']);
+	assert.deepEqual(only(d, 'missing-alt-text', { ignorePaths: [{ rule: 'accessibility', path: '/slides/1' }] }).map((x) => x.path), ['/slides/0/image']);
+	assert.deepEqual(only(d, 'missing-alt-text', { ignorePaths: [{ rule: '*', path: '' }] }), []);
+	assert.equal(only(d, 'missing-alt-text', { ignorePaths: [{ rule: '*', path: '/slides/1' }] }).length, 1);
+	// '/slides/1' does not cover '/slides/10'
+	const twelve = deck(Array.from({ length: 11 }, (_, i) => ({ title: `S${i}`, image: 'https://example.com/x.png' })));
+	assert.ok(only(twelve, 'missing-alt-text', { ignorePaths: [{ rule: '*', path: '/slides/1' }] }).some((x) => x.path === '/slides/10/image'));
+});
+
+test('the bundled examples validate without throwing and keep their rule ids stable', () => {
 	const sample = JSON.parse(readFileSync(new URL('../../../examples/technical/full-feature-tour.opf.json', import.meta.url), 'utf8'));
-	const report = auditPresentation(sample);
-	assert.equal(report.documentValid, true);
-	for (const d of report.diagnostics) assert.ok(findAuditRule(d.ruleId) || d.ruleId === 'audit/invalid-document', d.ruleId);
+	const report = validate(sample);
+	assert.equal(report.schemaValid, true);
+	for (const d of report.findings) assert.ok(findValidationRule(d.ruleId) || false, d.ruleId);
 });

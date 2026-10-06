@@ -107,8 +107,7 @@ Aliases use it too, for example an old plural audience id kept next to its
 canonical singular id. The record stays for backward compatibility:
 
 - the old id keeps resolving to its own record, unchanged;
-- `validatePresentation` warns (`deprecated <kind> catalog id '<id>'; use '<replacedBy>'`);
-- `lintPresentation` reports `opf/deprecated-catalog-id` and suggests the replacement;
+- `validate` warns with `opf/deprecated-catalog-id` (`Deprecated <kind> catalog id "<id>"; use "<replacedBy>" instead.`) and suggests the replacement;
 - pickers and generators should offer only non-deprecated records. Index entries
   carry `"deprecated": true` and `replacedBy`, so a picker can hide the old id
   without loading records.

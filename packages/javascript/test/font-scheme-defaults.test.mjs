@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import {DEFAULT_FONT_SCHEME,fontSchemes,resolveFontSchemeReference,themes,validatePresentation} from '../dist/index.js';
+import { DEFAULT_FONT_SCHEME, fontSchemes, resolveFontSchemeReference, themes } from '../dist/index.js';
 import {resolveFontFamilies} from '../dist/composition.js';
 import {paginatePresentation} from '../dist/pagination.js';
+import { check } from './support/validation.mjs';
 
 // FF-17 (font-fidelity-everywhere): the code role follows the chosen scheme,
 // with Roboto Mono as the documented fallback.
@@ -50,7 +51,7 @@ test('pagination measures code in the chosen scheme family',()=>{
 test('inline catalog records may carry the code role and still validate',()=>{
   const custom={$schema:'https://openpresentation.org/schema/opf-font-scheme/v1',id:'team-mono',name:'Team Mono',major:'Inter',minor:'Inter',code:{family:'JetBrains Mono',weight:400}};
   const presentation={name:'Inline code font',design:{fontScheme:'team-mono'},catalogs:{fontSchemes:{records:[custom]}},slides:[codeSlide]};
-  assert.equal(validatePresentation(presentation).valid,true);
+  assert.equal(check(presentation).valid,true);
   const families=measuredFamilies(presentation);
   assert.ok(families.has('JetBrains Mono')&&!families.has('Roboto Mono'));
 });
@@ -103,7 +104,7 @@ const unknownDeck=({design,slideDesign,catalogs})=>({name:'Unknown font scheme',
 test('an unresolved font scheme falls back to the shared default with one diagnostic',()=>{
   for(const [name,input,families,path] of unknownCases){
     const deck=unknownDeck(input),diagnostics=[],measured=new Set();
-    assert.equal(validatePresentation(deck).valid,true,name);
+    assert.equal(check(deck).valid,true,name);
     paginatePresentation(structuredClone(deck),{onDiagnostic:diagnostic=>diagnostics.push(diagnostic),textMeasurement:{measure:(text,size,style)=>{measured.add(style.fontFamily);return text.length*size*.5;}}});
     assert.deepEqual([...measured].sort(),families,name);
     assert.deepEqual(diagnostics,path?[{code:'unresolved-font-scheme',path,id:'no-such-scheme',fallback:DEFAULT_FONT_SCHEME,message:`Font scheme 'no-such-scheme' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.`}]:[],name);

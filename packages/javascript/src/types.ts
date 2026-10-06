@@ -12,4 +12,15 @@ export type { ColorScheme } from "./generated/types/color-scheme.js";
 export type { FontScheme } from "./generated/types/font-scheme.js";
 export type { CatalogKind } from "./generated/catalogs.js";
 export type { SchemaName } from "./generated/schemas.js";
-export type { ValidationIssue, ValidationResult } from "./validator.js";
+export type {
+  Finding,
+  FindingCategory,
+  FindingFix,
+  FindingFocus,
+  FindingLocation,
+  FindingReport,
+  FindingSeverity,
+  FindingSuggestion,
+  JsonPatchOperation,
+  ValidationIssue,
+} from "./generated/types/finding.js";

@@ -43,15 +43,28 @@ export type {
 } from "./catalogs.js";
 
 export {
+  DEFAULT_CHART_PALETTE,
+  DEFAULT_VALIDATION_THRESHOLDS,
   OPFValidationError,
   assertValid,
   assertValidCatalogRecord,
-  assertValidPresentation,
+  findValidationRule,
   validate,
   validateCatalogRecord,
-  validatePresentation,
+  validationCategories,
+  validationRules,
 } from "./validator.js";
-export type { ValidateOptions } from "./validator.js";
+export type {
+  Contract,
+  ValidateFonts,
+  ValidateOptions,
+  ValidationCategory,
+  ValidationChecks,
+  ValidationReport,
+  ValidationRuleCost,
+  ValidationRuleInfo,
+  ValidationThresholds,
+} from "./validator.js";
 
 export {
   VARIABLE_KINDS,
@@ -98,10 +111,6 @@ export type {
 } from "./previews.js";
 
 export type * from "./types.js";
-export {lintPresentation, lintSource} from './lint.js';
-export type {LintSeverity, LintLocation, LintSuggestion, LintDiagnostic, LintContract, LintOptions, LintReport} from './lint.js';
-export {auditPresentation, auditSource, auditRules, findAuditRule, DEFAULT_AUDIT_THRESHOLDS, DEFAULT_CHART_PALETTE} from './audit.js';
-export type {AuditSeverity, AuditCategory, AuditDiagnostic, AuditFix, AuditPatchOperation, AuditOptions, AuditReport, AuditRuleInfo, AuditThresholds} from './audit.js';
 export type {
   SpecFileEntry,
   SpecFilePath,

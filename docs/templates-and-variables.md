@@ -34,11 +34,11 @@ opf fill quarterly.opf.json --data one.json --output globex.opf.json
 ```
 
 ```js
-import { resolveVariables, validatePresentation } from '@openpresentation/opf';
+import { resolveVariables, validate } from '@openpresentation/opf';
 
-validatePresentation(template);          // valid: { template: true, unfilledVariables: [...] }
+validate(template);                      // valid: { template: true, unfilledVariables: [...] }
 const { presentation, diagnostics } = resolveVariables(template, { client: 'Globex', revenue: 1250000, kickoff: '2026-10-01', wins: ['Shipped v2'] });
-// presentation is a concrete deck: validatePresentation(presentation).valid === true
+// presentation is a concrete deck: validate(presentation).valid === true
 ```
 
 A fuller template (rich text, an optional image, a link, a percentage) with matching values is in [fixtures/template-quarterly-review.opf.json](fixtures/template-quarterly-review.opf.json) and [fixtures/template-quarterly-review.values.json](fixtures/template-quarterly-review.values.json); a test fills it, validates the result and previews it from its examples.
@@ -104,14 +104,14 @@ Which fields can use variables is decided by the schema of the *resolved* deck, 
 A template is an OPF document that is allowed to be incomplete.
 
 - The root `template: true` marks it. Without the marker a deck is a normal deck.
-- Validation of a template reports instead of fails. `validatePresentation(doc)` returns `valid: true` with `template: true` and `unfilledVariables: ['client', ...]`.
+- Validation of a template reports instead of fails. `validate(doc)` returns `valid: true` with `template: true` and `unfilledVariables: ['client', ...]`, and one `opf/variable-unfilled` warning per unfilled variable. A normal deck with an unfilled required variable gets the same finding as an error (category `content`, so `validate(doc, { only: ['format'] })` does not report it).
 - Validation of a normal deck with an unfilled required variable is an error (`required variable 'client' has no value`) at the declaration's path, so a half-filled deck can never be exported by accident.
 - Both are checked as the deck they would become: every variable is replaced by its value, its `example`, or a type sample (`Sample text`, `0`, `2000-01-01`, a placeholder image URL, one list entry), and the declarations stay. Errors therefore carry the source's own paths and a template is held to the whole schema: a `number` variable in a text field, a `date` value that is not a date, or a chart cell that resolves to a list are all reported.
-- `validatePresentation(doc, { template: true | false })` overrides the marker, and `validatePresentation(doc, { values })` fills before checking.
+- `validate(doc, { template: true | false })` overrides the marker, and `validate(doc, { values })` fills before checking.
 - Unused variables warn (`declared but never used`), as do tokens naming undeclared ids.
 - A variable with a `value` is a default: filling overrides it, leaving it blank in a data row keeps it.
 
-A template is a normal OPF file for everything else: the editor opens it, `opf lint` and `opf edit` accept it, pagination and bundling work on it, and renderers preview it.
+A template is a normal OPF file for everything else: the editor opens it, `opf validate` and `opf edit` accept it, pagination and bundling work on it, and renderers preview it.
 
 ### Placeholder content
 
@@ -169,7 +169,7 @@ The PPTX file contains the resolved text. The template form is not stored in the
 opf fill <template|-> [--data <values.json|data.csv|data.tsv|->] [--format csv|tsv|json]
          [--delimiter <c>] [--no-header]
          [--output <file|-> | --out-dir <dir> [--name <pattern>] | --combine --output <file|->]
-         [--partial] [--examples] [--force] [--strict]
+         [--partial] [--examples] [--force] [--fail-on <level>]
 ```
 
 - **Records.** A JSON object is one record. A JSON array of objects, a CSV or TSV file, `{columns, rows}` and a row matrix give one record per row; CSV and TSV columns are matched to variable ids by header name. JSON keeps rich values (text runs, lists, Asset objects); CSV and TSV cells are strings that coerce per kind. A blank cell keeps the declared value.

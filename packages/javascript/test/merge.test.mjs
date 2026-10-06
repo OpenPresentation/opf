@@ -2,8 +2,9 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import { mergePresentations } from "../dist/diff.js";
-import { validatePresentation } from "../dist/validator.js";
+
 import { loadExamples, mutate } from "./diff-support.mjs";
+import { check } from './support/validation.mjs';
 
 const slide = (id, title, extra = {}) => ({ id, title, ...extra });
 const deck = (slides, extra = {}) => ({ $schema: "https://openpresentation.org/schema/opf/v1", name: "Deck", slides, ...extra });
@@ -292,7 +293,7 @@ describe("merge laws over the example decks", () => {
       assert.deepEqual(forward.merged, backward.merged, file);
       assert.equal(forward.merged.slides[0].notes, `ours note ${file}`);
       assert.equal(forward.merged.slides.at(-1).notes, `theirs note ${file}`);
-      if (validatePresentation(start).valid) { assert.equal(validatePresentation(forward.merged).valid, true, file); validated++; }
+      if (check(start).valid) { assert.equal(check(forward.merged).valid, true, file); validated++; }
     }
     assert.ok(validated > 100, `validated ${validated} merged decks`);
   });

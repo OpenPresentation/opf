@@ -6,9 +6,10 @@ import { describe, test } from "node:test";
 
 import { composeSlide } from "../dist/composition.js";
 import { examples } from "../dist/examples.js";
-import { validatePresentation } from "../dist/index.js";
+
 import { OPFMarkdownError, markdownToOpf, opfToMarkdown } from "../dist/markdown.js";
 import { paginatePresentation } from "../dist/pagination.js";
+import { check } from './support/validation.mjs';
 
 const markdownExamples = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../examples/markdown");
 
@@ -16,15 +17,15 @@ const convert = (source, options) => markdownToOpf(source, options);
 const slides = (source, options) => {
   const result = convert(source, options);
   assert.deepEqual(
-    result.diagnostics.filter((d) => d.severity === "error"),
+    result.findings.filter((d) => d.severity === "error"),
     [],
     source,
   );
   return result.document.slides;
 };
 const one = (source, options) => slides(source, options)[0];
-const errors = (source, options) => convert(source, options).diagnostics.filter((d) => d.severity === "error");
-const rule = (source, id, options) => convert(source, options).diagnostics.find((d) => d.ruleId === id);
+const errors = (source, options) => convert(source, options).findings.filter((d) => d.severity === "error");
+const rule = (source, id, options) => convert(source, options).findings.find((d) => d.ruleId === id);
 /** Text of the source at a diagnostic location. */
 const at = (source, diagnostic) => source.slice(diagnostic.location.offset, diagnostic.location.offset + diagnostic.location.length);
 
@@ -59,7 +60,7 @@ describe("deck structure", () => {
   test("empty segments are skipped; an empty slide in the middle warns, <!-- slide --> keeps one", () => {
     const result = convert("# One\n\n---\n\n---\n\n# Three\n\n---\n");
     assert.deepEqual(result.document.slides.map((s) => s.title), ["One", "Three"]);
-    assert.equal(result.diagnostics.find((d) => d.ruleId === "markdown/empty-slide")?.severity, "warning");
+    assert.equal(result.findings.find((d) => d.ruleId === "markdown/empty-slide")?.severity, "warning");
     assert.deepEqual(slides("<!-- slide -->\n\n---\n\n# B"), [{}, { title: "B" }]);
   });
 
@@ -100,7 +101,7 @@ describe("blocks", () => {
   test("numbers in a list are dropped with a warning", () => {
     const result = convert("1. one\n2. two");
     assert.deepEqual(result.document.slides[0], { items: ["one", "two"] });
-    assert.equal(result.diagnostics[0].ruleId, "markdown/numbered-list");
+    assert.equal(result.findings[0].ruleId, "markdown/numbered-list");
     assert.equal(result.valid, true);
   });
 
@@ -132,7 +133,7 @@ describe("blocks", () => {
   test("a short or long table row warns and is padded", () => {
     const result = convert("| a | b |\n| - | - |\n| 1 |\n| 1 | 2 | 3 |");
     assert.deepEqual(result.document.slides[0].table.rows, [["1", null], ["1", "2", "3"]]);
-    assert.equal(result.diagnostics.filter((d) => d.ruleId === "markdown/table-ragged").length, 2);
+    assert.equal(result.findings.filter((d) => d.ruleId === "markdown/table-ragged").length, 2);
   });
 
   test("images take alt text and title; video is an image line with as=video", () => {
@@ -173,7 +174,7 @@ describe("blocks", () => {
   test("a level 3 or deeper heading becomes a bold paragraph with a warning", () => {
     const result = convert("### Side note");
     assert.deepEqual(result.document.slides[0], { text: [{ text: "Side note", bold: true }] });
-    assert.equal(result.diagnostics[0].ruleId, "markdown/heading-demoted");
+    assert.equal(result.findings[0].ruleId, "markdown/heading-demoted");
   });
 
   test("slide and block options come from HTML comments; ordinary comments are ignored", () => {
@@ -229,18 +230,18 @@ describe("inline text", () => {
   test("title, quote and cell text is plain: formatting is dropped with a warning", () => {
     const result = convert("# **Big** news\n\n> *quoted*");
     assert.deepEqual(result.document.slides[0], { title: "Big news", quote: "quoted" });
-    assert.equal(result.diagnostics.filter((d) => d.ruleId === "markdown/formatting-dropped").length, 2);
+    assert.equal(result.findings.filter((d) => d.ruleId === "markdown/formatting-dropped").length, 2);
   });
 });
 
-describe("errors carry line and column in the lint shape", () => {
-  test("every diagnostic has the lint fields and a location that points at the source", () => {
+describe("findings carry line and column in the shared Finding format", () => {
+  test("every finding has the Finding fields and a location that points at the source", () => {
     const source = "# One\n\n<!-- slide: bogus=1 -->\n\n```chart\nA\n```\n";
     const result = convert(source);
     assert.equal(result.valid, false);
     assert.ok(result.counts.error >= 2);
-    for (const d of result.diagnostics) {
-      for (const key of ["ruleId", "severity", "path", "scope", "message", "help", "location"]) assert.ok(key in d, `${key} in ${JSON.stringify(d)}`);
+    for (const d of result.findings) {
+      for (const key of ["ruleId", "severity", "category", "path", "scope", "message", "help", "location"]) assert.ok(key in d, `${key} in ${JSON.stringify(d)}`);
       assert.deepEqual(Object.keys(d.location).sort(), ["column", "length", "line", "offset"]);
     }
     const options = rule(source, "markdown/options-unknown-key");
@@ -248,7 +249,7 @@ describe("errors carry line and column in the lint shape", () => {
     assert.equal(at(source, options), "<!-- slide: bogus=1 -->");
     const chart = rule(source, "markdown/chart-type");
     assert.deepEqual([chart.location.line, chart.location.column], [5, 1]);
-    assert.ok(result.diagnostics.every((d, i, all) => i === 0 || all[i - 1].location.offset <= d.location.offset));
+    assert.ok(result.findings.every((d, i, all) => i === 0 || all[i - 1].location.offset <= d.location.offset));
   });
 
   test("front matter errors point inside the YAML", () => {
@@ -280,17 +281,23 @@ describe("errors carry line and column in the lint shape", () => {
 
   test("OPF validation errors are mapped back to the Markdown that produced them", () => {
     const source = "# A\n\n---\n\n<!-- slide: type=bogus -->\n# B\n";
-    const bad = convert(source).diagnostics.find((d) => d.ruleId.startsWith("opf/") && d.severity === "error");
-    assert.ok(bad, "lint error present");
+    const bad = convert(source).findings.find((d) => d.ruleId.startsWith("opf/") && d.severity === "error");
+    assert.ok(bad, "an OPF validation error is present");
     assert.equal(bad.path, "/slides/1/type");
     assert.equal(bad.location.line, 5);
     assert.equal(at(source, bad), "<!-- slide: type=bogus -->");
-    const table = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n```chart bar\n{\"src\":\"asset:missing\"}\n```").diagnostics.find((d) => d.ruleId === "opf/asset-reference");
+    const table = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n```chart bar\n{\"src\":\"asset:missing\"}\n```").findings.find((d) => d.ruleId === "opf/asset-reference");
     assert.equal(table.location.line, 7);
   });
 
-  test("validate:false skips the OPF lint, a non-string input throws", () => {
+  test("validate:false skips the OPF check, validate options pick other rules, a non-string input throws", () => {
     assert.equal(convert("<!-- slide: type=bogus -->\n# A", { validate: false }).valid, true);
+    // The default checks format and references; a ValidateOptions object picks others, here the content rules.
+    const placeholder = "# A\n\nLorem ipsum";
+    assert.deepEqual(convert(placeholder).findings, []);
+    const more = convert(placeholder, { validate: { only: ["content"] } });
+    assert.deepEqual(more.findings.map((d) => [d.ruleId, d.category, d.location.line]), [["opf/placeholder-text", "content", 3]]);
+    assert.equal(more.valid, true);
     assert.throws(() => markdownToOpf(42), TypeError);
   });
 });
@@ -369,7 +376,7 @@ describe("OPF to Markdown", () => {
   test("a leading --- line whose block holds only comments warns that the slide was not read", () => {
     const result = convert("---\n# Not a deck property\n---\n# Real title\n");
     assert.deepEqual(result.document.slides, [{ title: "Real title" }]);
-    assert.equal(result.diagnostics.find((d) => d.ruleId === "markdown/front-matter-comments")?.severity, "warning");
+    assert.equal(result.findings.find((d) => d.ruleId === "markdown/front-matter-comments")?.severity, "warning");
   });
 
   test("an empty slide keeps a slide marker, and content that cannot be written natively falls back one part at a time", () => {
@@ -398,8 +405,8 @@ describe("round trips", () => {
       const source = readFileSync(path.join(markdownExamples, name), "utf8");
       const split = name.startsWith("outline") ? "headings" : "rules";
       const result = convert(source, { split });
-      assert.deepEqual(result.diagnostics, [], name);
-      assert.equal(validatePresentation(result.document).valid, true, name);
+      assert.deepEqual(result.findings, [], name);
+      assert.equal(check(result.document).valid, true, name);
       const pages = paginatePresentation(result.document).presentation.slides;
       assert.ok(pages.length >= result.document.slides.length, name);
       for (const slide of pages) assert.ok(composeSlide(slide).items.length > 0, `${name}: ${slide.title}`);
@@ -419,8 +426,8 @@ describe("round trips", () => {
     const canonical = readFileSync(path.join(fixtures, "kitchen-sink.canonical.md"), "utf8");
     const result = convert(source);
     assert.deepEqual(result.document, expected);
-    assert.equal(validatePresentation(expected).valid, true);
-    assert.deepEqual(result.diagnostics.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
+    assert.equal(check(expected).valid, true);
+    assert.deepEqual(result.findings.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
       ["markdown/formatting-dropped", "warning", 11, 1],
       ["markdown/numbered-list", "warning", 23, 1],
       ["markdown/heading-demoted", "warning", 70, 1],
@@ -449,7 +456,7 @@ describe("round trips", () => {
     assert.deepEqual(convert(/````md\n([\s\S]*?)\n````/.exec(guide)[1]).document, shown);
     const skill = readFileSync(path.join(repo, "skills/opf-author/references/markdown.md"), "utf8");
     const result = convert(/````md\n([\s\S]*?)\n````/.exec(skill)[1]);
-    assert.deepEqual(result.diagnostics, []);
+    assert.deepEqual(result.findings, []);
     assert.equal(result.document.slides.length, 2);
   });
 
@@ -492,8 +499,8 @@ describe("round trips", () => {
     for (const { slug, deck } of examples) {
       const { markdown, report } = opfToMarkdown(deck);
       const back = convert(markdown);
-      assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), [], slug);
-      assert.equal(validatePresentation(back.document).valid, true, slug);
+      assert.deepEqual(back.findings.filter((d) => d.severity === "error"), [], slug);
+      assert.equal(check(back.document).valid, true, slug);
       assert.deepEqual(facts(back.document), facts(deck), `${slug}: text and block kinds`);
       assert.deepEqual({ ...back.document, slides: undefined }, { ...deck, slides: undefined }, `${slug}: deck properties`);
       assert.equal(back.document.slides.length, deck.slides.length, slug);
@@ -535,7 +542,7 @@ describe("round trips", () => {
     assert.match(markdown, /^---\n(?:.*\n)*?template: true\n/);
     assert.match(markdown, /\{\{client\}\}/);
     const back = convert(markdown);
-    assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), []);
+    assert.deepEqual(back.findings.filter((d) => d.severity === "error"), []);
     assert.equal(back.document.template, true);
     assert.deepEqual(back.document.variables, template.variables);
     assert.deepEqual(facts(back.document), facts(template));
@@ -597,7 +604,7 @@ describe("robustness", () => {
       ][i % 8];
       const { markdown, report } = opfToMarkdown({ slides: [slide] });
       const back = convert(markdown);
-      assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), [], markdown);
+      assert.deepEqual(back.findings.filter((d) => d.severity === "error"), [], markdown);
       total++;
       if (!report.native) embedded++;
       // Whether native or embedded, the text is the text that went in.
@@ -612,7 +619,7 @@ describe("robustness", () => {
     const started = performance.now();
     for (const source of ["*".repeat(20000), "[".repeat(5000), "**a ".repeat(3000), "_a ".repeat(3000), `${"- x\n".repeat(5000)}`, "| a |\n| - |\n" + "| x |\n".repeat(5000), "<!--".repeat(2000), "```".repeat(3000), "[a](".repeat(2000), "> ".repeat(5000), `${"[".repeat(3000)}x${"](y)".repeat(3000)}`]) {
       const result = convert(source);
-      assert.ok(Array.isArray(result.diagnostics));
+      assert.ok(Array.isArray(result.findings));
     }
     assert.ok(performance.now() - started < 5000, "bounded time");
   });
