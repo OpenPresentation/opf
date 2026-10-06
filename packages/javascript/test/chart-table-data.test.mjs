@@ -51,7 +51,7 @@ describe("chartNumber: one strict rule", () => {
     ["(5)", null], ["1.234,5", null], ["1,234", null], ["Q1", null], ["12%", null], ["$5", null], ["", null], ["  ", null],
     ["+5", null], [".5", null], ["05", null], ["0x10", null], ["Infinity", null], ["NaN", null],
     [true, null], [false, null], [null, null], [undefined, null], [Number.NaN, null], [Number.POSITIVE_INFINITY, null],
-    ["9007199254740993", null], [{}, null], [[1], null],
+    ["9007199254740993", null], ["1e20", 1e20], ["-2.5e300", -2.5e300], ["1e400", null], [{}, null], [[1], null],
   ];
   for (const [input, expected] of cases) {
     test(`${JSON.stringify(input) ?? String(input)} -> ${String(expected)}`, () => {

@@ -104,8 +104,9 @@ const STRICT_DECIMAL = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
 
 /**
  * Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap):
- * `"12%"`, `"$5"`, `"(5)"`, `"1,234"`, `"1.234,5"`, `"Q1"`, `""`, booleans and null. An integer string beyond the safe
- * integer range is a gap too, as in data import.
+ * `"12%"`, `"$5"`, `"(5)"`, `"1,234"`, `"1.234,5"`, `"Q1"`, `""`, booleans and null. A plain digit string beyond the safe
+ * integer range is a gap too, as in data import (it is usually an identifier that would lose digits); a decimal or exponent
+ * form such as `"1e20"` is a number.
  */
 export function chartNumber(value: unknown): number | null {
   if (typeof value === 'number') return Number.isFinite(value) ? value : null;
@@ -113,7 +114,7 @@ export function chartNumber(value: unknown): number | null {
   const text = value.trim();
   if (!STRICT_DECIMAL.test(text)) return null;
   const number = Number(text);
-  if (!Number.isFinite(number) || (Number.isInteger(number) && !Number.isSafeInteger(number))) return null;
+  if (!Number.isFinite(number) || (/^-?\d+$/.test(text) && !Number.isSafeInteger(number))) return null;
   return number;
 }
 

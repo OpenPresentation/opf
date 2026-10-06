@@ -96,7 +96,7 @@ An unknown name is a `chart-mapping-unknown-column` error. A series that repeats
 Exported from `@openpresentation/opf` and `@openpresentation/opf/data` (module `src/chart-data.ts`; the resolvers are also on `@openpresentation/opf/composition`). Inputs are typed `unknown` so engines can pass any parsed chart, table or document; the result types are exported (`ResolvedChartData`, `ResolvedTableData`, `DataDiagnostic`, `DataColumn`, `DataSourceRef`, `Dataset`, `DatasetRef`, `ChartMapping`, `DataCellValue`, `DataTableCell`, `DataTableHeader`, `DataStyledCell`).
 
 ```ts
-/** Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap), including "+5", ".5", "5.", "007" and integer strings beyond the safe integer range. */
+/** Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap), including "+5", ".5", "5.", "007" and plain digit strings beyond the safe integer range (usually identifiers that would lose digits); a decimal or exponent form such as "1e20" is a number. */
 export function chartNumber(value: unknown): number | null;
 /** Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). */
 export function formatDataNumber(value: number, format?: string): string;
