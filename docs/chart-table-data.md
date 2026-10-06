@@ -100,9 +100,9 @@ export function chartNumber(value: unknown): number | null;
 export function formatDataNumber(value: number, format?: string): string;
 /** Why a NumberFormat is invalid (the number-format-invalid message), or undefined when it is valid or absent. */
 export function numberFormatError(format: unknown): string | undefined;
-/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped. */
+/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped; placeholders are written '#' before '0' ("0#" -> "#0"). */
 export function excelNumberFormat(format?: string): string;
-/** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General -> undefined). */
+/** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General, sections, scaling commas, and placeholder orders Excel reads by position such as "0#" or "0.#0"). */
 export function numberFormatFromExcel(code: string): string | undefined;
 /** Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as DataColumn when a format applies, rows copied; a chart also takes the dataset's `source`). `datasets` stays in place. Unknown ids, and references naming an unknown field, are left as they are. */
 export function inlineDatasets<T>(document: T): T;

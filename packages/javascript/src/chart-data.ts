@@ -158,11 +158,18 @@ function excelLiteral(text: string, percent: { used: boolean }): string {
   return out;
 }
 
-/** The integer placeholders in Excel form: commas only between placeholders (Excel reads a trailing comma as a scale). */
+/**
+ * The integer placeholders in Excel form: '#' before '0' (NumberFormat counts the zeros; Excel reads placeholders by
+ * position, so `0#` would pad to two digits there), and commas only between placeholders (Excel reads a trailing comma
+ * as a scale).
+ */
 function excelInteger(integer: string): string {
   const grouping = integer.includes(',');
   const digits = integer.replaceAll(',', '');
-  if (!grouping) return digits;
+  if (!grouping) {
+    const zeros = [...digits].filter(char => char === '0').length;
+    return '#'.repeat(digits.length - zeros) + '0'.repeat(zeros);
+  }
   // Canonical grouping: at least four placeholders so one comma sits between them, zeros on the right.
   const zeros = [...digits].filter(char => char === '0').length;
   const width = Math.max(4, digits.length);
@@ -170,7 +177,7 @@ function excelInteger(integer: string): string {
   return placeholders.replace(/\B(?=(.{3})+$)/g, ',');
 }
 
-/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped. */
+/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped; placeholders are written '#' before '0' ("0#" -> "#0"). */
 export function excelNumberFormat(format?: string): string {
   if (format === undefined || format === '') return 'General';
   const parts = formatParts(format);
@@ -215,7 +222,7 @@ function excelTokens(code: string): ExcelToken[] | undefined {
   return tokens;
 }
 
-/** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General -> undefined). */
+/** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General, sections, scaling commas, and placeholder orders Excel reads by position such as "0#" or "0.#0"). */
 export function numberFormatFromExcel(code: string): string | undefined {
   if (typeof code !== 'string') return undefined;
   const trimmed = code.trim();
@@ -235,6 +242,9 @@ export function numberFormatFromExcel(code: string): string | undefined {
   const integer = match[1] ?? '';
   if (/^,|,$/.test(integer) || integer.includes(',,')) return undefined;
   if (/,/.test(integer) && !/[#0]/.test(integer)) return undefined;
+  // Excel reads placeholders by position and NumberFormat counts zeros: they agree only when every '#' precedes every
+  // '0' in the integer part and every '0' precedes every '#' in the decimals. Other orders ('0#', '0.#0') are not mapped.
+  if (/0[#,]*#/.test(integer) || /#0/.test(match[2] ?? '')) return undefined;
   const percentTokens = tokens.filter(token => token.kind === 'percent').length;
   const literalText = (list: ExcelToken[]) => list.map(token => token.kind === 'percent' ? '%' : token.kind === 'literal' ? token.text : '').join('');
   const quotedPercent = tokens.some(token => token.kind === 'literal' && token.quoted && token.text.includes('%'));

@@ -571,3 +571,15 @@ describe("core integration", () => {
     assert.ok(diff.changes.every((change) => change.category === "datasets"));
   });
 });
+
+describe("RR-54 review", () => {
+  test("Excel placeholders: '#' before '0' on export; ambiguous orders are not imported", () => {
+    // NumberFormat counts zeros; Excel reads placeholders by position, so '0#' is written as '#0'.
+    assert.equal(excelNumberFormat("0#"), "#0");
+    assert.equal(excelNumberFormat("0#0"), "#00");
+    assert.equal(formatDataNumber(5, "0#"), formatDataNumber(5, "#0"));
+    assert.equal(numberFormatFromExcel(excelNumberFormat("0#")), "#0");
+    for (const code of ["0#", "#0#", "0.#0", "0,0#", "#,##0.0#0"]) assert.equal(numberFormatFromExcel(code), undefined, code);
+    for (const code of ["#,##0", "0", "#", "0.##", "#,##0.00", "0.0%", "###0", ".00"]) assert.equal(numberFormatFromExcel(code), code, code);
+  });
+});
