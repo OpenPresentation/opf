@@ -23,7 +23,9 @@
     "Cohorts",
     "Retention"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/heatmap-cohort.svg"
+  },
   "composition": {
     "padding": 0.04
   }

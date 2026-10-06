@@ -19,5 +19,7 @@
     "Message",
     "Focus"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/key-takeaway.svg"
+  }
 }

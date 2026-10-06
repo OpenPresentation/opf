@@ -5,8 +5,8 @@
   "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Bengali",
-    "Chittagonian"
+    "bengali",
+    "chittagonian"
   ],
   "major": "Shonar Bangla",
   "minor": "Shonar Bangla",

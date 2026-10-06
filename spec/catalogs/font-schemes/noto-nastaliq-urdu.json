@@ -5,8 +5,8 @@
   "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Urdu",
-    "Punjabi (Shahmukhi)"
+    "urdu",
+    "punjabi-shahmukhi"
   ],
   "major": "Noto Nastaliq Urdu",
   "minor": "Noto Nastaliq Urdu",

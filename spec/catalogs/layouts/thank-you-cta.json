@@ -22,5 +22,7 @@
     "Action",
     "Contact"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/thank-you-cta.svg"
+  }
 }

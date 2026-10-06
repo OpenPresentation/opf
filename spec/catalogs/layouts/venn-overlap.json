@@ -23,5 +23,7 @@
     "Positioning",
     "Framework"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/venn-overlap.svg"
+  }
 }

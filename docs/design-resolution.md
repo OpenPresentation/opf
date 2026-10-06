@@ -232,7 +232,8 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
   eastAsian      1. design.fontScheme.eastAsian      explicit slot
   complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs (or eastAsian /
                                                      complexScript, the same values) and its
-                                                     languages list is empty or names the language
+                                                     languages list (language ids) is empty or
+                                                     names the language
                  3. the language's font scheme       when the language's script uses the slot
                  4. the latin family                 otherwise
 ```

@@ -27,5 +27,7 @@
     "Organization",
     "Credibility"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/team-bio.svg"
+  }
 }

@@ -23,5 +23,7 @@
     "Matrix",
     "Evaluation"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/feature-comparison-matrix.svg"
+  }
 }

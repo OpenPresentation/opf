@@ -27,5 +27,7 @@
     "Demo",
     "UI"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/screenshot-walkthrough.svg"
+  }
 }

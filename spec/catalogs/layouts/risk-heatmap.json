@@ -23,5 +23,7 @@
     "Probability",
     "Impact"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/risk-heatmap.svg"
+  }
 }

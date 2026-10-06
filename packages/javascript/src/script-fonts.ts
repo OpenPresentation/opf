@@ -323,21 +323,15 @@ function pairFamilies(value: unknown): { heading: string; body: string } | undef
 }
 
 /**
- * Whether a font scheme's `languages` list (human-readable names) admits the
+ * Whether a font scheme's `languages` list (languages catalog ids) admits the
  * language: an empty list admits every language; otherwise an entry must equal
- * the record's name, or its name without a trailing parenthetical qualifier,
- * case-insensitively.
+ * the language record's id.
  */
 function schemeServesLanguage(scheme: Record<string, unknown>, language: Record<string, unknown>): boolean {
   const entries = Array.isArray(scheme.languages) ? scheme.languages.filter((entry): entry is string => typeof entry === "string") : [];
   if (entries.length === 0) return true;
-  const name = text(language.name)?.toLowerCase();
-  if (!name) return false;
-  const base = name.replace(/\s*\([^)]*\)\s*$/, "");
-  return entries.some((entry) => {
-    const value = entry.trim().toLowerCase();
-    return value === name || value === base;
-  });
+  const id = text(language.id);
+  return id !== undefined && entries.includes(id);
 }
 
 /**

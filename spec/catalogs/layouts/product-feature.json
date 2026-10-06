@@ -27,5 +27,7 @@
     "Showcase",
     "Detail"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/product-feature.svg"
+  }
 }

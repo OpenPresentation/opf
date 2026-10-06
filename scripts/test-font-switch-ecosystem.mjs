@@ -193,7 +193,7 @@ const TEXT = {
 // Scripts outside the pairwise array use the catalog's own text sample for their language.
 for (const id of CHAIN_LANGUAGES) {
   const language = byId('languages', id);
-  const scheme = catalogs.fontSchemes.find((entry) => entry.textSample && entry.languages?.some((name) => name.toLowerCase() === language.name.toLowerCase()));
+  const scheme = catalogs.fontSchemes.find((entry) => entry.textSample && entry.languages?.includes(language.id));
   assert.ok(scheme, `the catalog has a text sample for ${language.name}`);
   const sample = scheme.textSample;
   TEXT[id] = {title: sample, subtitle: sample, body: `${sample} ${sample}`, items: [sample, sample, sample], cells: [sample, sample, sample, sample]};

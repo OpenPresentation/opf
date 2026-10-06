@@ -23,5 +23,7 @@
     "Explanation",
     "Body Copy"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/one-column-explainer.svg"
+  }
 }

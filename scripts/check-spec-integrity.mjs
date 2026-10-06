@@ -495,6 +495,19 @@ async function checkLayoutDesignHints(opfSchema) {
   }
 }
 
+// (j) A font scheme's `languages` entries are languages catalog ids (FA-16), so the list joins that catalog: every
+// entry must be the id of a bundled language record.
+async function checkFontSchemeLanguages() {
+  const languageIds = new Set((await listJsonRecordFiles(path.join(catalogsRoot, "languages"))).map((file) => file.replace(/.json$/, "")));
+  const dir = path.join(catalogsRoot, "font-schemes");
+  for (const file of await listJsonRecordFiles(dir)) {
+    const record = await readJson(path.join(dir, file));
+    for (const entry of record.languages ?? []) {
+      if (!languageIds.has(entry)) fail(`[j] font-schemes/${file}: languages entry '${entry}' is not a bundled language id`);
+    }
+  }
+}
+
 async function main() {
   const opfSchema = await readJson(path.join(schemasRoot, "opf.schema.json"));
 
@@ -507,6 +520,7 @@ async function main() {
   await checkSnapshotManifest();
   await checkDeprecationLinks();
   await checkLayoutDesignHints(opfSchema);
+  await checkFontSchemeLanguages();
 
   if (failures.length > 0) {
     process.stderr.write(`spec integrity check failed: ${failures.length} problem(s) found\n\n`);

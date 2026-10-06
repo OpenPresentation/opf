@@ -27,5 +27,7 @@
     "Visual",
     "Scannable"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/icon-grid.svg"
+  }
 }

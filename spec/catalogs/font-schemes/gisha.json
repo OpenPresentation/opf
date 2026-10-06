@@ -5,8 +5,8 @@
   "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Hebrew",
-    "Arabic"
+    "hebrew",
+    "arabic"
   ],
   "major": "Gisha",
   "minor": "Gisha",

@@ -5,10 +5,10 @@
   "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Russian",
-    "Ukrainian",
-    "Serbian (Cyrillic)",
-    "Tajik"
+    "russian",
+    "ukrainian",
+    "serbian-cyrillic",
+    "tajik"
   ],
   "major": "Noto Sans",
   "minor": "Noto Sans",

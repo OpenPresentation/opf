@@ -36,7 +36,9 @@
     "Visual",
     "Collection"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/photo-grid.svg"
+  },
   "composition": {
     "mode": "grid",
     "columns": 2

@@ -2,6 +2,14 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "list-2x",
   "name": "List 2x",
+  "summary": "Reach for it when two lists contrast or complement each other, such as pros and cons.",
+  "description": "A title above two lists side by side. Use it for two categories of equal weight, such as strengths and risks, or what is in scope and what is not.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "listBullet": "character"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -15,5 +23,13 @@
   ],
   "composition": {
     "mode": "row"
+  },
+  "tags": [
+    "List",
+    "Comparison",
+    "Balance"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/list-2x.svg"
   }
 }

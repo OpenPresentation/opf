@@ -23,7 +23,9 @@
     "Progress",
     "Milestones"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+  },
   "composition": {
     "padding": 0.04
   }

@@ -27,5 +27,7 @@
     "Segments",
     "Customers"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/persona-grid.svg"
+  }
 }

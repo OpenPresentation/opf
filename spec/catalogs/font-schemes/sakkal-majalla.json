@@ -5,9 +5,9 @@
   "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Arabic",
-    "Urdu",
-    "Persian"
+    "arabic",
+    "urdu",
+    "persian"
   ],
   "major": "Sakkal Majalla",
   "minor": "Sakkal Majalla",

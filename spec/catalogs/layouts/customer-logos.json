@@ -23,7 +23,9 @@
     "Logos",
     "Proof"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/customer-logos.svg"
+  },
   "composition": {
     "padding": 0.04
   }

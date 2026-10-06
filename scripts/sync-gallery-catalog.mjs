@@ -9,6 +9,8 @@
 //   node scripts/sync-gallery-catalog.mjs --verify                     offline: snapshot matches its manifest
 //   node scripts/sync-gallery-catalog.mjs --rehash                     after a core-first edit of spec/catalogs: rewrite
 //                                                                       the index and manifest hashes and counts
+//   node scripts/sync-gallery-catalog.mjs --rehash --match-gallery     the same, and set the gallery block of mirrored kinds to the new
+//                                                                       hash (for a core-first edit that the gallery PR publishes identically)
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --report     per-kind divergence summary
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --include layouts:<id>[,<id>...]
 //                                                                       add published ids to a subset kind (repeatable)
@@ -366,8 +368,12 @@ export function parseIncludes(argv, flag = "--include") {
  * records on disk, for a core-first catalog edit (core is the source of truth since the FF-37 decision, so
  * a record can change here before the gallery publishes it). The manifest `source` and each `gallery` block
  * keep describing the pinned gallery commit, so they are never touched. Returns the files it changed.
+ *
+ * With `matchGallery`, a mirrored kind's `gallery` block is set to the new records too. Use it only when the
+ * gallery change that publishes the same records is in review (FA-16): a mirrored kind must match the gallery
+ * hash, and the pin then names the commit before that change.
  */
-export async function rehashSnapshot(catalogsRoot) {
+export async function rehashSnapshot(catalogsRoot, { matchGallery = false } = {}) {
   const manifestFile = path.join(catalogsRoot, "manifest.json");
   const manifest = await readJson(manifestFile);
   const changed = [];
@@ -385,6 +391,10 @@ export async function rehashSnapshot(catalogsRoot) {
       entry.records = records.length;
       changed.push(`manifest.json (${kind})`);
     }
+    if (matchGallery && entry.mode === "mirror" && (entry.gallery?.contentSha256 !== contentSha256 || entry.gallery?.records !== records.length)) {
+      entry.gallery = { records: records.length, contentSha256 };
+      if (!changed.includes(`manifest.json (${kind})`)) changed.push(`manifest.json (${kind})`);
+    }
   }
   if (changed.some((name) => name.startsWith("manifest.json"))) await writeFile(manifestFile, serializeJson(manifest), "utf8");
   return changed;
@@ -401,7 +411,7 @@ export async function main(argv = process.argv.slice(2)) {
   }
 
   if (argv.includes("--rehash")) {
-    const changed = await rehashSnapshot(catalogsRoot);
+    const changed = await rehashSnapshot(catalogsRoot, { matchGallery: argv.includes("--match-gallery") });
     const problems = await verifySnapshot(catalogsRoot);
     if (problems.length > 0) throw new Error(`Default-catalog snapshot is still inconsistent after rehashing:\n${problems.join("\n")}`);
     process.stdout.write(changed.length > 0 ? `Rehashed:\n${changed.join("\n")}\n` : "Hashes already match the records.\n");

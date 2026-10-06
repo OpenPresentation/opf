@@ -23,5 +23,7 @@
     "Health",
     "RAG"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/status-rag.svg"
+  }
 }
