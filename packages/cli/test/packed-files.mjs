@@ -32,14 +32,21 @@ function run(command, args, cwd, env = {}) {
 try {
   await mkdir(out, {recursive: true});
   run('pnpm', ['build'], pkg);
-  const cache = path.join(temp, 'npm-cache');
+  // RR-45 (opf#368, item 5): CI keeps the npm cache of the peers between runs (OPF_NPM_CACHE, restored by actions/cache) and
+  // then prefers it to the registry's metadata; the versions are exact, and npm checks every tarball's integrity either way.
+  const sharedCache = process.env.OPF_NPM_CACHE ? path.resolve(process.env.OPF_NPM_CACHE) : undefined;
+  const cache = sharedCache ?? path.join(temp, 'npm-cache');
+  const offline = sharedCache ? ['--prefer-offline'] : [];
+  // npm exec keeps its installs under <cache>/_npx, keyed by the package specs: the CLI tarball's path does not change
+  // between runs, so a restored _npx could hold an earlier CLI. Only the content-addressed downloads are reused.
+  if (sharedCache) await rm(path.join(sharedCache, '_npx'), {recursive: true, force: true});
   const packed = JSON.parse(run('npm', ['pack', '--json', '--ignore-scripts', '--pack-destination', out, '--cache', cache], pkg))[0];
   const tarball = path.join(out, packed.filename);
   // The published tarball stays small: no font packs, no native engines.
   assert.ok(packed.size < 3 * 1024 * 1024, `CLI tarball is ${packed.size} bytes`);
 
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
-  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, tarball, ...peers], temp);
+  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, ...peers], temp);
   const modules = path.join(temp, process.platform === 'win32' ? 'node_modules' : 'lib/node_modules');
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
   assert.equal(Object.keys(installed.dependencies ?? {}).length, 0);
@@ -51,7 +58,7 @@ try {
   // npx-style: one run with the CLI and both peers in a single temporary install.
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
-  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...[tarball, ...peers].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
+  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, ...peers].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');
   assert.equal(rendered.ok, true);
   assert.deepEqual(await readdir(path.join(work, 'png')), ['deck-001.png']);

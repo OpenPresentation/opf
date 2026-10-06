@@ -133,7 +133,7 @@
   "scripts": {
     "clean": "rm -rf dist src/generated",
     "generate": "node scripts/generate.mjs && node scripts/generate-previews.mjs && node scripts/generate-content.mjs",
-    "build": "pnpm run generate && tsup && node scripts/copy-spec.mjs",
+    "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
     "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build && node ../../scripts/run-tests.mjs",
     "test:packed": "node test/packed-install-smoke.mjs",
