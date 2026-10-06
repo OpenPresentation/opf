@@ -7,7 +7,7 @@ import { validatePresentation } from './validator.js';
 import { accessibilityRules } from './audit-rules-a11y.js';
 import type { AuditContext, AuditRule, FindingInput, SlideContext } from './audit-context.js';
 import { pointer, slidePayloads, splitPointer, textValues } from './audit-content.js';
-import { DEFAULT_CHART_PALETTE, type Rec, createLookup, rec, resolveDesign } from './audit-design.js';
+import { DEFAULT_CHART_PALETTE, type Rec, createLookup, resolveDesign } from './audit-design.js';
 import { designRules } from './audit-rules-design.js';
 import type {
 	AuditDiagnostic,
@@ -130,8 +130,7 @@ function resolveOptions(options: AuditOptions): Resolved {
 const measurementFor = (options: AuditOptions, index: number) =>
 	typeof options.textMeasurement === 'function' ? options.textMeasurement(index) : options.textMeasurement;
 
-const slideCompositionOptions = (document: Rec, slide: Rec, index: number, count: number, design: ReturnType<typeof resolveDesign>, layout: Rec | undefined, options: AuditOptions) => {
-	const merged = { ...rec(document.design), ...rec(slide.design) };
+const slideCompositionOptions = (document: Rec, index: number, count: number, design: ReturnType<typeof resolveDesign>, layout: Rec | undefined, options: AuditOptions) => {
 	return {
 		...design.dimensions,
 		layout,
@@ -140,9 +139,6 @@ const slideCompositionOptions = (document: Rec, slide: Rec, index: number, count
 		slideNumber: index + 1,
 		slideCount: count,
 		fonts: design.fonts,
-		contentAlignment: merged.contentAlignment,
-		titleAlignment: merged.titleAlignment,
-		contentBox: merged.contentBox,
 		textMeasurement: measurementFor(options, index),
 		socialPlatforms: bundledCatalogs.socialPlatforms as never,
 		// Core never consults a clock; a fixed date only lets `date: true` furniture be measured.
@@ -191,7 +187,7 @@ function buildSlides(document: Rec, options: AuditOptions): SlideContext[] {
 			// A language that cannot be resolved leaves the deck left to right, like the renderer.
 		}
 		const compose = (input: Rec, withLayout: Rec | undefined): SlideComposition =>
-			composeSlide(input, slideCompositionOptions(document, input, index, slides.length, design, withLayout, options) as never);
+			composeSlide(input, slideCompositionOptions(document, index, slides.length, design, withLayout, options) as never);
 		let composition: SlideComposition | undefined;
 		try {
 			composition = compose(slide, layout);

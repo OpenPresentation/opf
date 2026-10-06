@@ -142,6 +142,7 @@ export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichText
 export {fitList} from './composition.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 export type {ListText,ListValue,ListEntryLayout,ListFit} from './composition.js';
+export {resolveDesignHints,DESIGN_HINT_KEYS,type DesignHints,type DesignHintKey,type DesignHintSource,type ResolvedDesignHints,type ResolveDesignHintsOptions} from './design-hints.js';
 export {layoutContent,LAYOUT_BODY_KINDS,type LayoutContent,type LayoutBodyKind} from './layout-content.js';
 
 // RR-34: footnotes, citations and captions (annotations.ts; also on the composition entry).

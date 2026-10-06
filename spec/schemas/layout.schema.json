@@ -74,7 +74,7 @@
     },
     "design": {
       "$ref": "#/$defs/DesignHints",
-      "description": "The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Core composition applies chartPrimary, contentDirection and slideImage.position from the layout record, below the slide's design and the deck's design (a layout's composition.mode still ranks above contentDirection). titleAlignment, contentAlignment, contentBox, imageFill and listBullet are not applied from the record by composition or by the render and PPTX engines: they describe how the layout is meant to be drawn, and a host that wants them applies them by copying them into design."
+      "description": "The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Every key is applied from the record as the lowest-precedence default, per key: the slide's design, then the deck's design, then this record's design, then the engine default, so a layout value nobody overrides is honored without copying it anywhere (a layout's composition.mode still ranks above contentDirection; slideImage.position is the fallback position of a slide image the layout reserves). Composition, the renderer and the PPTX exporter all read the one result."
     },
     "placeholders": {
       "type": "array",

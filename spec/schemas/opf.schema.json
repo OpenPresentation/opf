@@ -769,16 +769,16 @@
         "titleAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for title placeholders in resolved layouts."
+          "description": "Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.titleAlignment, then the engine default."
         },
         "contentAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for body/content regions in resolved layouts."
+          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.contentAlignment, then the engine default. A cover's tag and subtitle follow titleAlignment unless the slide's own design sets contentAlignment."
         },
         "contentBox": {
           "type": "boolean",
-          "description": "Whether body/content regions are rendered inside a visible card or surface."
+          "description": "Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the layout record's design.contentBox, then the engine default."
         },
         "slideImage": {
           "oneOf": [
@@ -885,7 +885,7 @@
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then this value (slide design, then deck design), then the layout record's design.contentDirection, then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
+          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then the effective value (slide design, then deck design, then the layout record's design.contentDirection), then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",
@@ -895,12 +895,12 @@
         "imageFill": {
           "type": "string",
           "enum": ["crop", "fit"],
-          "description": "How images fill their allocated region: crop covers the region, fit shows the whole image."
+          "description": "How images fill their allocated region: crop covers the region, fit shows the whole image. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFill, then the engine default."
         },
         "listBullet": {
           "type": "string",
           "enum": ["character", "image"],
-          "description": "Marker style for items and bullets lists. 'character' (the default) draws the glyph marker. 'image' draws the deck's icon logo (a slide's design.logo, then design.logo, then the primary organization's logo; light variants on dark backgrounds) as a picture bullet: a square of the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
+          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the deck's icon logo (a slide's design.logo, then design.logo, then the primary organization's logo; light variants on dark backgrounds) as a picture bullet: a square of the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
         }
       }
     },

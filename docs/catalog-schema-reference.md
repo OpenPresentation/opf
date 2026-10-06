@@ -10,7 +10,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-audience/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field al...
+- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -98,21 +98,31 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition "mixed"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference...
+- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-chart-type/v1"` | Identifies this record as a chart type in the open presentation catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type (`chart.type`). Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
-| `name` | yes | `string` | Human-readable name of the chart type, as a chart picker shows it. |
+| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type. Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
+| `name` | yes | `string` | Stable display/programmatic name for this chart type. |
+| `label` | no | `string` | Human-readable label shown in chart pickers. |
 | `summary` | no | `string` | One-sentence positioning: when to reach for this chart variant. |
 | `description` | no | `string` | Longer prose describing the chart and ideal use cases. |
 | `mappings` | yes | `ref:ChartTypeMappings` | Canonical and optional renderer-specific mappings used by engines to render this chart type. |
-| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. A deprecated record stays resolvable so existing documents keep validating, validators warn when a document references it, and pickers and generators should not offer it. Th... |
-| `group` | no | `string` | Top-level grouping in the chart picker. |
+| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. Deprecated records stay resolvable so existing documents keep validating, but pickers and default listings exclude them, validators warn when a document references them, and... |
+| `group` | no | `string` | Top-level grouping in the chart picker (column, bar, line, area, pie, radar, etc.). |
 | `groupSort` | no | `integer` | Display ordering hint within the chart group. |
-| `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). The editor offers only 'simple' types... |
-| `series` | no | `integer` | Number of data series this chart type expects: exactly that many, except that a stacked or percent-stacked type and a combination (composition 'mixed', such as combo) expect at least that many. The editor offers a typ... |
+| `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). |
+| `series` | no | `integer` | Number of data series this chart type expects. |
+| `categories` | no | `integer` | Number of category labels this chart type expects on the primary axis. |
+| `seriesGroups` | no | `integer` | Number of series groups (axis bands) this chart type uses; >1 for combo or banded charts. |
+| `useSecondaryCategories` | no | `boolean` | Whether the chart type uses a secondary category axis. |
+| `workbookRange` | no | `string` | A1 reference to the source range in the embedded workbook. |
+| `columns` | no | `array<string>` | Column header names of the embedded workbook, in left-to-right order. |
+| `dataColumns` | no | `array<ref:ChartDataColumn>` | Per-column metadata describing the role and position of each column in the workbook source. |
+| `helperColumns` | no | `array<string>` | Optional auxiliary column names used by calculated or banded charts (e.g., 'Excellent', 'Good', 'Fair', 'Poor' for a bullet chart). |
+| `sampleData` | no | `ref:ChartSampleData` | Inline sample dataset for previews and pickers. |
+| `slideNumber` | no | `integer` | Source slide number in the original chart-gallery deck. Carried for traceability. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
@@ -156,6 +166,30 @@ OPF documents usually reference these records with string ids such as `design.th
 | `extension` | no | `string` | Optional Open XML extension namespace or element hint for extension charts. |
 | `series` | no | `array<ref:OpenXmlChartMapping>` | Open XML chart elements used by mixed/composite chart types. |
 | `notes` | no | `string` | Short implementation note for mappings that need renderer interpretation. |
+
+#### ChartDataColumn
+
+- Type: `object`
+- Required fields: `name`, `role`, `type`
+- Purpose: One column of the embedded chart workbook, annotated with its role and grid position.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `name` | yes | `string` | Column header name (e.g. 'Series 1', 'Value', 'Level1', 'Level2'). |
+| `role` | yes | `enum:categoryLabel \| series \| helper` | Role this column plays: a category label (axis tick), a series (plotted values), or a helper (calculated/auxiliary). |
+| `type` | yes | `enum:string \| number` | Cell value type for the column. |
+| `position` | no | `string` | Grid position of the column header in the source workbook, as 'row<N>_col<M>' (zero-indexed). |
+
+#### ChartSampleData
+
+- Type: `object`
+- Required fields: `headers`, `rows`
+- Purpose: Inline sample dataset for previews. Mirrors a small workbook with header row plus data rows.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `headers` | yes | `array<string>` | Header row labels. The first cell typically labels the series column; the rest are category labels. |
+| `rows` | yes | `array<array<string \| number>>` | Two-dimensional sample data. Each row aligns by index with the headers first cell is the row label, remaining cells are values. |
 
 ## Color Scheme
 
@@ -204,7 +238,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this font scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and defa... |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
-| `code` | no | `object` | Optional monospaced font for code blocks and for inline code runs (TextRun.code). It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXM... |
+| `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
 | `eastAsian` | no | `object` | East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from t... |
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
@@ -288,22 +322,8 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this layout is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default l... |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
-| `contentType` | no | `enum:Title \| Text \| List \| Image \| Number \| Metric \| Chart \| Table \| Code \| Video \| Quote \| Timeline` | Primary kind of content the layout holds. Drives pickers and AI placement decisions. Metric is the canonical numeric/KPI category; Number remains an accepted legacy label. |
-| `contentMultiple` | no | `enum:None \| 1x \| 2x \| 3x \| 4x \| 5x \| 6x` | How many parallel content blocks the layout exposes ('2x' = two-column, '3x' = three-up, etc.). |
-| `contentAlignment` | no | `enum:None \| Left \| Center` | Default horizontal alignment of the content area. |
-| `contentBox` | no | `boolean` | Whether the content area is rendered inside a visible box / card. |
-| `contentTypeChartPrimary` | no | `enum:None \| Top \| Bottom \| Left \| Right` | For chart layouts, where the primary chart sits relative to the rest of the content. |
-| `contentTypeImageFill` | no | `enum:None \| Crop \| Fit` | For image layouts, how the image fills its slot. |
-| `contentTypeListBullet` | no | `enum:None \| Character \| Image` | For list layouts, how bullets are rendered. |
-| `contentTypeListHeading` | no | `boolean` | For list layouts, whether each list item carries a heading. |
-| `slideTag` | no | `boolean` | Whether the layout includes a small slide-level tag / label region above or near the title. |
-| `slideTitle` | no | `boolean` | Whether the layout includes a slide title region. |
-| `slideSubtitle` | no | `boolean` | Whether the layout includes a slide-level subtitle or supporting-description region. When placeholders is present, this is true exactly when the layout exposes a placeholder with type 'subtitle'. |
-| `slideTitleAlignment` | no | `enum:None \| Left \| Center` | Horizontal alignment of the slide title region. |
-| `slideImage` | no | `boolean` | Whether the layout includes a dedicated slide-level image region (separate from any content image). |
-| `slideImageAlignment` | no | `enum:None \| Top \| Bottom \| Left \| Right \| Background` | Where the slide-level image sits relative to the content. |
-| `slideLayoutDirection` | no | `enum:None \| Horizontal \| Vertical` | Axis along which the layout's primary regions are arranged. |
-| `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. The engine fills 'title', 'subtitle', and 'tag' placeholders from Slide.title, Slide.subtitle, and Slide.tag. Other placeholders are content-kind hints for renderers and pickers. Sl... |
+| `design` | no | `ref:DesignHints` | The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Eve... |
+| `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutCon... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 | `composition` | no | `ref:Composition` |  |
@@ -314,11 +334,28 @@ OPF documents usually reference these records with string ids such as `design.th
 
 - Type: `object`
 - Required fields: `type`
-- Purpose: A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; other placeholders describe the intended content kind for that region. The array order in the surrounding 'placeholders' field preserves layout region order.
+- Purpose: A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; every other placeholder describes the content kind that region holds. The array order in the surrounding 'placeholders' field preserves layout region order.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:title \| subtitle \| tag \| text \| metric \| quote \| timeline \| list \| chart \| picture \| table \| media \| diagram \| code` | OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' is a numeric/KPI content region filled by a metric payload, including its optional label, description, unit, delta, and trend. The... |
+| `type` | yes | `enum:title \| subtitle \| tag \| text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' a... |
+
+#### DesignHints
+
+- Type: `object`
+- Required fields: none
+- Purpose: Design hints a layout carries. The keys and lowercase values are those of the deck's design and a slide's design in opf.schema.json (Design), so a slide overrides a layout by the same name and layout.design can be copied into slide.design unchanged. An absent key means the layout has no opinion. Only the keys the layout sets are stored. scripts/check-spec-integrity.mjs verifies that every key here has the same typ...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title placeholder. |
+| `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
+| `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
+| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Composition applies it when neither the slide nor this layout's composition sets a mode, below the slide's and the deck's... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. |
+| `imageFill` | no | `enum:crop \| fit` | How images fill their region: 'crop' covers the region, 'fit' shows the whole image. |
+| `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
+| `slideImage` | no | `object` | A slide-level image region the layout reserves, separate from any content image. Its presence is what lets a deck-wide design.slideImage apply to slides on this layout. The image itself comes from the slide or the dec... |
 
 #### Composition
 
@@ -447,7 +484,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `colorScheme` | no | `string` | Catalog reference to the theme's default color scheme resolved against catalogs.colorSchemes the same way design.colorScheme or design.colorScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
 | `fontScheme` | no | `string` | Catalog reference to the theme's default font scheme resolved against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
 | `background` | no | `ref:ThemeBackground` |  |
-| `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
+| `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

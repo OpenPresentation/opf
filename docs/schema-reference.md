@@ -241,17 +241,17 @@ _No named properties._
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, im... |
 | `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
-| `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp (see Watermark). Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value } at opacity 0.08. |
+| `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }. |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
-| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. |
-| `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. |
-| `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. |
-| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a dec... |
+| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.titleAlignment, then the engine default. |
+| `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.contentAlignment, then the engine default. A cove... |
+| `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the layout record's design.contentBox, then the engine default. |
+| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout record sets design.slideImage or whose root image is the same source as a... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' i... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's contentTypeChartPrimary. When the slide has no promoted regions and no composition... |
-| `imageFill` | no | `enum:crop \| fit` | How picture placeholders fill their allocated region. |
-| `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. 'character' (the default) draws the glyph marker. 'image' draws the deck's icon logo (a slide's design.logo, then design.logo, then the primary organization's logo; light vari... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mod... |
+| `imageFill` | no | `enum:crop \| fit` | How images fill their allocated region: crop covers the region, fit shows the whole image. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFill, then the engine default. |
+| `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'i... |
 
 
 ### Theme
@@ -323,7 +323,7 @@ _No named properties._
 | `heading` | no | `ref:Font` | Abstract role: font used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
 | `body` | no | `ref:Font` | Abstract role: font used for body copy. Maps onto the OOXML minor slot when serializing. |
 | `accent` | no | `ref:Font` | Abstract role: font used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent... |
-| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the con... |
+| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the... |
 
 
 ### Font
@@ -342,9 +342,9 @@ _No named properties._
 
 ### DimensionPreset
 
-- Type: `enum:16:9 | 4:3 | 16:10 | 1:1 | 4:5 | 9:16 | letter | a4 | widescreen | standard`
+- Type: `enum:16:9 | 4:3 | 16:10 | letter | a4 | widescreen | standard`
 - Required fields: none
-- Purpose: Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size. The social-feed ratios keep the widescreen short edge of 7.5 in: 1:1 is 7.5 x 7.5 in, 4:5 is 7.5 x 9.375 in and 9:16 is 7.5 x 13.333 in (portrait).
+- Purpose: Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size.
 
 _No named properties._
 
@@ -627,14 +627,13 @@ _No named properties._
 
 ### Watermark
 
-- Type: `object` (exactly one of `src` and `text`)
+- Type: `object`
 - Required fields: `opacity`
-- Purpose: Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in the middle 40% of the slide. A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and at most 30% of the shorter slide edge in height; it is drawn be...
+- Purpose: Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `src` | no | `string` | Source for the watermark image. Exactly one of src and text is set. |
-| `text` | no | `string` | Text for a text watermark, such as DRAFT or CONFIDENTIAL; line breaks are drawn as spaces. Exactly one of src and text is set. |
+| `src` | no | `string` | Source for the watermark image. |
 | `opacity` | yes | `number` | Watermark opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
@@ -801,14 +800,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `source`
-- Purpose: Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, 'filename' when the rendered block should show a file label, and 'highlight' to emphasize lines. A string value in a code field is shorthand for { "source": value }.
+- Purpose: Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, and 'filename' when the rendered block should show a file label. A string value in a code field is shorthand for { "source": value }.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `source` | yes | `string` | Source code text to display. |
 | `language` | no | `string` | Language identifier used for syntax highlighting. |
 | `filename` | no | `string` | Optional file label shown with the code block. |
-| `highlight` | no | `array<oneOf:integer / array<integer>>` | Source lines to emphasize, 1-based: each entry is a line number or an inclusive [start, end] range, so [3, [5, 7]] marks lines 3 and 5 to 7. Lines are counted by line break in 'source', so a line that wraps stays one... |
 
 
 ### Metric
@@ -847,7 +845,6 @@ _No named properties._
 | `when` | no | `string` | Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones. |
 | `what` | yes | `string` | Short event label. |
 | `description` | no | `string` | Optional event detail. |
-| `status` | no | `enum:done \| current \| planned` | Progress of the event, drawn from the deck's own colors by both the SVG renderer and the PPTX exporter. Absent means no status and the event is drawn as a plain filled marker with normal text, which is also how 'done'... |
 
 
 ### ListItem
@@ -905,25 +902,7 @@ _No named properties._
 - Required fields: none
 - Purpose: A contiguous run of text. Strings cover unformatted spans; object form adds character formatting.
 
-Object form fields:
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `text` | yes | `string` | Text for this run. |
-| `bold` | no | `boolean` | Whether the run is rendered in bold. |
-| `italic` | no | `boolean` | Whether the run is rendered in italic. |
-| `underline` | no | `boolean` | Whether the run is underlined. |
-| `strikethrough` | no | `boolean` | Whether the run is rendered with a strikethrough line. |
-| `color` | no | `string` | Run text color. Documented forms: a hex string ('#RGB', '#RRGGBB', '#RRGGBBAA'), a color-scheme slot or role name resolved through the effective color scheme ('accent2', 'text'), or a 'var:<id>' reference into the top-level variables map. Prefer names over hex so runs survive re-theming. Any other string stays schem... |
-| `fontSize` | no | `number` | Requested run font size in points. |
-| `fontFamily` | no | `string` | Run font family override. It wins over the code font a run with 'code' takes. |
-| `code` | no | `boolean` | Whether the run is an inline code span: it is drawn in the design's code font (design.fontScheme.code, else the resolved font scheme's code family, else Roboto Mono), unless the run names its own fontFamily. Only the font changes; there is no background, because a PPTX run cannot have one. Markdown backticks read an... |
-| `lang` | no | `string` | BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follow... |
-| `link` | no | `string` | URL to link the run text to. |
-| `superscript` | no | `boolean` | Whether the run is rendered as superscript. |
-| `subscript` | no | `boolean` | Whether the run is rendered as subscript. |
-| `cite` | no | `oneOf:string / array<string>` | One or more ids from the top-level references list that this run cites. Engines draw a superscript marker ('1', or '1,2' for several ids) directly after the run and list '<n> <reference text>' in the slide's footnote area; markers are numbered per deck in order of first use, and the same id keeps its number. An id m... |
-| `footnote` | no | `oneOf:string / array<ref:TextRun>` | An inline note for this run, without a references entry. Engines draw a superscript marker after the run and list the note in the slide's footnote area; every footnote takes a new number in the deck's marker sequence. Supported in text, bullets and list item runs. |
+_No named properties._
 
 
 ### Caption
@@ -959,36 +938,20 @@ _No named properties._
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
 | `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource / ref:DatasetRef` | Chart data: inline columns/rows, a dataset reference (`{ "dataset": "<id>", "fields"? }`), or a ChartDataSource, which no engine loads (`chart-data-source-unresolved` warning, placeholder drawn). |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name (category, scatter X, series). Absent keeps the positional rule. See docs/chart-table-data.md. |
-| `line` | no | `array<string>` | Combo charts only: the plotted series, by name, drawn as lines with markers; the others are clustered columns. Absent: the last series is the line; at least one series stays columns. See docs/chart-options.md#combo-charts. |
-| `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by name, on a secondary value axis at the right with its own scale and its first series' column format. Absent: one value axis. |
-| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category, value and, on a combo chart with a secondary axis, secondary). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
+| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
 | `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
-| `highlight` | no | `ref:ChartHighlight` | Optional emphasis: series and/or categories drawn in the primary (accent) color while every other mark is muted from the theme. A mark is highlighted when its series OR its category is named. Absent keeps today's colors. Types that cannot highlight drop it with a `chart-option-adapted` diagnostic; an unknown name is a `chart-highlight-unknown-name` error. See docs/chart-options.md. |
 
 
 ### ChartAxisTitles
 
 - Type: `object`
-- Purpose: Titles for the axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis; 'secondary' is the secondary value axis of a combo chart.
+- Purpose: Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `category` | no | `string` | Title of the category (X) axis. |
-| `value` | no | `string` | Title of the value (Y) axis. On a combo chart, the primary (left) value axis. |
-| `secondary` | no | `string` | Combo charts only: title of the secondary value axis at the right, rotated like the primary value title. Dropped with a `chart-option-adapted` diagnostic on any other type and on a combo chart without `secondaryAxis`. |
-
-
-### ChartHighlight
-
-- Type: `object`
-- Required fields: at least one of `series`, `categories`
-- Purpose: Which series and categories a chart emphasizes. Names match data column names (series) and row labels (categories) exactly, as text.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `series` | no | `array<string>` | Series (value columns) whose marks take the accent color. An unknown column is a `chart-highlight-unknown-name` error; a column that is not plotted as a series is a `chart-highlight-adapted` warning. |
-| `categories` | no | `array<string>` | Categories (row labels) whose marks take the accent color: a column or bar of every series, a line's points, a pie or doughnut slice. A label no row has is a `chart-highlight-unknown-name` error. |
+| `value` | no | `string` | Title of the value (Y) axis. |
 
 
 ### ChartDataLabels
