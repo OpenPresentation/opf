@@ -1,0 +1,346 @@
+{
+  "set": "per-slide-script-fonts",
+  "builds": {
+    "before": {
+      "checkout": "opf-pptx codex/rr-17-pptxgenjs-plus 3fb1387"
+    },
+    "after": {
+      "checkout": "opf-pptx codex/rr-17-per-slide-script-fonts d65390a"
+    }
+  },
+  "decks": [
+    {
+      "deck": "a-three-profiles-before",
+      "id": "a-three-profiles",
+      "side": "before",
+      "file": "a-three-profiles-before.pptx",
+      "bytes": 25266,
+      "sha256": "a80005aa5461a0da79548ab8e5ea03492d378f0a85973697aa6f9f0232631003",
+      "slideMasters": 1,
+      "fontsUsed": [
+        "Arial",
+        "Meiryo"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Meiryo"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Office Theme",
+            "minor": {
+              "latin": "Arial",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "deck": "a-three-profiles-after",
+      "id": "a-three-profiles",
+      "side": "after",
+      "file": "a-three-profiles-after.pptx",
+      "bytes": 35090,
+      "sha256": "adf0265e24da879ebbdd5389c1122524bd6065a8307b655b0d8582947ad484ea",
+      "slideMasters": 3,
+      "fontsUsed": [
+        "Arial",
+        "Meiryo",
+        "Nirmala UI",
+        "Traditional Arabic"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Meiryo"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Office Theme",
+            "minor": {
+              "latin": "Arial",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          },
+          {
+            "index": 2,
+            "name": "1_Office Theme",
+            "minor": {
+              "latin": "Arial",
+              "complexScript": "Traditional Arabic",
+              "eastAsian": "Meiryo"
+            }
+          },
+          {
+            "index": 3,
+            "name": "2_Office Theme",
+            "minor": {
+              "latin": "Arial",
+              "complexScript": "Nirmala UI",
+              "eastAsian": "Meiryo"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "deck": "a2-thai-repro-before",
+      "id": "a2-thai-repro",
+      "side": "before",
+      "file": "a2-thai-repro-before.pptx",
+      "bytes": 21410,
+      "sha256": "941c760f2d7f618e9b06c90e9bac98e59a0c7042e60b2c30cb4f0a3f579de05f",
+      "slideMasters": 1,
+      "fontsUsed": [
+        "Angsana New",
+        "DilleniaUPC"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Angsana New",
+          "DilleniaUPC"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Classic",
+            "minor": {
+              "latin": "Angsana New",
+              "complexScript": "Angsana New",
+              "eastAsian": "Angsana New"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "deck": "a2-thai-repro-after",
+      "id": "a2-thai-repro",
+      "side": "after",
+      "file": "a2-thai-repro-after.pptx",
+      "bytes": 26311,
+      "sha256": "21aea590365edb8325019fc8017c62dbaca2aff4563ea6718d2c99892d837bd6",
+      "slideMasters": 2,
+      "fontsUsed": [
+        "Angsana New",
+        "DilleniaUPC"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Angsana New",
+          "DilleniaUPC"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Classic",
+            "minor": {
+              "latin": "Angsana New",
+              "complexScript": "Angsana New",
+              "eastAsian": "Angsana New"
+            }
+          },
+          {
+            "index": 2,
+            "name": "1_Classic",
+            "minor": {
+              "latin": "Angsana New",
+              "complexScript": "DilleniaUPC",
+              "eastAsian": "Angsana New"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "deck": "b-single-profile-before",
+      "id": "b-single-profile",
+      "side": "before",
+      "file": "b-single-profile-before.pptx",
+      "bytes": 25154,
+      "sha256": "b09a366fd1e3cf7954b9cdd8e3f8d97fa4d5f5574f1ba9bc635799890ccd72f0",
+      "slideMasters": 1,
+      "fontsUsed": [
+        "Aptos",
+        "Aptos Display",
+        "Georgia",
+        "Meiryo"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Aptos Display",
+          "Aptos",
+          "Georgia",
+          "Meiryo"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Office Theme",
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "deck": "b-single-profile-after",
+      "id": "b-single-profile",
+      "side": "after",
+      "file": "b-single-profile-after.pptx",
+      "bytes": 25154,
+      "sha256": "b09a366fd1e3cf7954b9cdd8e3f8d97fa4d5f5574f1ba9bc635799890ccd72f0",
+      "slideMasters": 1,
+      "fontsUsed": [
+        "Aptos",
+        "Aptos Display",
+        "Georgia",
+        "Meiryo"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Aptos Display",
+          "Aptos",
+          "Georgia",
+          "Meiryo"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Office Theme",
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "deck": "c-mixed-default-after",
+      "id": "c-mixed-default",
+      "side": "after",
+      "file": "c-mixed-default-after.pptx",
+      "bytes": 33919,
+      "sha256": "3acce7469ff87cad51d05af94d00613457b9eadcd6f3231bfd546ec0573f8220",
+      "slideMasters": 2,
+      "fontsUsed": [
+        "Aptos",
+        "Aptos Display",
+        "Meiryo",
+        "MS Mincho"
+      ],
+      "runEaCs": 0,
+      "read": {
+        "stage": "done",
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        },
+        "presentationFonts": [
+          "Aptos Display",
+          "Aptos",
+          "MS Mincho"
+        ],
+        "designs": [
+          {
+            "index": 1,
+            "name": "Office Theme",
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          },
+          {
+            "index": 2,
+            "name": "1_Office Theme",
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "",
+              "eastAsian": "MS Mincho"
+            }
+          }
+        ],
+        "slideDesigns": [
+          1,
+          2,
+          1,
+          2
+        ]
+      }
+    }
+  ]
+}

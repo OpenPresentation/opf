@@ -1,0 +1,69 @@
+{
+  "a-three-profiles-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "slide 2: nameComplexScript reads \"+mn-cs\", expected \"Traditional Arabic\"",
+      "slide 3: nameComplexScript reads \"+mn-cs\", expected \"Nirmala UI\""
+    ],
+    "notes": [
+      "slide 2 notes ea/cs Meiryo/+mn-cs",
+      "fonts [\"Meiryo\"]",
+      "designs 1:Office Theme ea=Meiryo cs="
+    ]
+  },
+  "a-three-profiles-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "slide 2 notes ea/cs Meiryo/+mn-cs",
+      "fonts [\"Meiryo\"]",
+      "designs 1:Office Theme ea=Meiryo cs=; 2:1_Office Theme ea=Meiryo cs=Traditional Arabic; 3:2_Office Theme ea=Meiryo cs=Nirmala UI"
+    ]
+  },
+  "a2-thai-repro-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "slide 2: nameComplexScript reads \"Angsana New\", expected \"DilleniaUPC\""
+    ],
+    "notes": [
+      "fonts [\"Angsana New\",\"DilleniaUPC\"]",
+      "designs 1:Classic ea=Angsana New cs=Angsana New"
+    ]
+  },
+  "a2-thai-repro-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Angsana New\",\"DilleniaUPC\"]",
+      "designs 1:Classic ea=Angsana New cs=Angsana New; 2:1_Classic ea=Angsana New cs=DilleniaUPC"
+    ]
+  },
+  "b-single-profile-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "slide 1 notes ea/cs Meiryo/+mn-cs",
+      "fonts [\"Aptos Display\",\"Aptos\",\"Georgia\",\"Meiryo\"]",
+      "designs 1:Office Theme ea=Meiryo cs="
+    ]
+  },
+  "b-single-profile-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "slide 1 notes ea/cs Meiryo/+mn-cs",
+      "fonts [\"Aptos Display\",\"Aptos\",\"Georgia\",\"Meiryo\"]",
+      "designs 1:Office Theme ea=Meiryo cs="
+    ]
+  },
+  "c-mixed-default-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "slide 1 notes ea/cs Meiryo/+mn-cs",
+      "slide 3 notes ea/cs Meiryo/+mn-cs",
+      "fonts [\"Aptos Display\",\"Aptos\",\"MS Mincho\"]",
+      "designs 1:Office Theme ea=Meiryo cs=; 2:1_Office Theme ea=MS Mincho cs="
+    ]
+  }
+}
