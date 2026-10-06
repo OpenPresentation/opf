@@ -270,9 +270,9 @@ Hosts pass their own background luminance test as `composeSlide(..., { darkBackg
 
 > **Decision, 2026-09-30 (agent decision, vetoable).** 84 of the 126 bundled example decks carry a `design.logo` or an `organization.logo`, so 81 cover slides gain a logo and their heading group moves down. The placement (top-left, 56 px, lockup) and the content-slide exclusion are the reference-engine defaults; a layout-driven logo slot is a separate design.
 
-### `speaker.photo` is authoring metadata (vetoable)
+### `speaker.photo` is a built-in image variable (vetoable)
 
-No reference engine draws a speaker photo: the schema has no speaker slot on any slide and no slide-to-speaker link, and a speaker block on covers would be a separate design. The field stays authoring metadata for hosts and layouts, and it round-trips through PPTX provenance.
+No reference engine draws a speaker photo by itself: the schema has no speaker slot on any slide and no slide-to-speaker link, and a speaker block on covers would be a separate design. The author places it explicitly with the built-in image variable (`"image": "var:speaker.photo"`, see [templates and variables](templates-and-variables.md#built-in-variables)); the field also round-trips through PPTX provenance.
 
 ### `contentDirection`
 

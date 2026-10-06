@@ -14,12 +14,12 @@
     },
     "name": {
       "type": "string",
-      "description": "Display name of the presentation for GUI/TUI lists, library/search indexing, OS-level metadata, and default export filenames. This is deck identity, not slide content. Use slides[].title and slides[].subtitle for text that should appear on presented slides.",
+      "description": "Display name of the presentation for GUI/TUI lists, library/search indexing, OS-level metadata, and default export filenames. This is deck identity, not slide content. Use slides[].title and slides[].subtitle for text that should appear on presented slides. Also the built-in variable 'deck.name'.",
       "examples": ["Q4 2026 Business Review", "Series B Pitch — Acme", "The Future of Agentic Workflows"]
     },
     "description": {
       "type": "string",
-      "description": "Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements purpose (the goal) and narrative (the structured storyline). Round-trips to OOXML 'docProps/core.xml' as '<dc:description>' (PowerPoint surfaces this as the 'Comments' field in File → Properties).",
+      "description": "Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements purpose (the goal) and narrative (the structured storyline). Round-trips to OOXML 'docProps/core.xml' as '<dc:description>' (PowerPoint surfaces this as the 'Comments' field in File → Properties). Also the built-in variable 'deck.description'.",
       "examples": ["Quarterly business review covering revenue, product, and hiring milestones for the executive team."]
     },
     "filename": {
@@ -36,7 +36,7 @@
           "minItems": 1
         }
       ],
-      "description": "Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set, the first item) drives default branding such as cover-slide logo."
+      "description": "Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (Organization.role 'primary', else the first item) supplies the default deck logo, the 'organization' and 'socials' header/footer fields and the 'organization.<field>' built-in variables; the others are available by id as 'organization.<id>.<field>' and are not drawn automatically."
     },
     "speaker": {
       "oneOf": [
@@ -47,7 +47,7 @@
           "minItems": 1
         }
       ],
-      "description": "Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution."
+      "description": "Person presenting the deck. Array form supports panels and multi-speaker decks. The first speaker is the primary speaker: the built-in variables 'speaker.<field>' and the 'speaker' header/footer field read it, 'speakers' lists every name, and 'speaker.<id>.<field>' addresses one by id. A speaker is drawn nowhere else."
     },
     "author": {
       "oneOf": [
@@ -58,7 +58,7 @@
           "minItems": 1
         }
       ],
-      "description": "Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined when multiple) and seeds '<cp:lastModifiedBy>' on first write; subsequent edits in PowerPoint overwrite '<cp:lastModifiedBy>' with the editing user.",
+      "description": "Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined when multiple) and seeds '<cp:lastModifiedBy>' on first write; subsequent edits in PowerPoint overwrite '<cp:lastModifiedBy>' with the editing user. Also the built-in variable 'deck.author' (an array joined with ', ').",
       "examples": ["Bob Lee", ["Bob Lee", "Carla Diaz"]]
     },
     "audience": {
@@ -178,7 +178,7 @@
     },
     "variables": {
       "$ref": "#/$defs/Variables",
-      "description": "Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables are what makes a deck a fillable template when combined with 'template': true. Color variables complement the color scheme: scheme slots and roles stay the primary vocabulary; variables cover deck-specific named colors that have no scheme slot."
+      "description": "Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables are what makes a deck a fillable template when combined with 'template': true. Color variables complement the color scheme: scheme slots and roles stay the primary vocabulary; variables cover deck-specific named colors that have no scheme slot. Built-in variables ('{{speaker.name}}', 'var:organization.logo', 'deck.name', ...) need no declaration; see Variables."
     },
     "template": {
       "type": "boolean",
@@ -526,28 +526,28 @@
     },
     "Organization": {
       "type": "object",
-      "description": "An organization associated with the presentation — typically the presenting company, but also hosts, partners, clients, or sponsors. Surfaced on cover slides, footers, and brand bars; the primary organization's logo is the default deck logo unless overridden by design.logo.",
+      "description": "An organization associated with the presentation, typically the presenting company, but also hosts, partners, clients, or sponsors. The primary organization (role 'primary', else the first one) supplies the default deck logo (unless design.logo overrides it), the 'organization' header/footer field (its name) and the 'socials' field (its socials). Every field is also a built-in variable ('{{organization.name}}', 'var:organization.logo', 'organization.<id>.<field>'). Nothing else about an organization is drawn automatically. See docs/templates-and-variables.md.",
       "required": ["id", "name"],
       "properties": {
         "id": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Stable identifier for the organization, used to reference it from Speaker.organizationId. Must be unique within the deck.",
+          "description": "Stable identifier for the organization, used to reference it from Speaker.organizationId and to address it in built-in variables as 'organization.<id>.<field>'. Must be unique among organizations (a duplicate is a validation error).",
           "examples": ["acme", "acme-corp", "devconf-2026"]
         },
         "name": {
           "type": "string",
-          "description": "Display name shown on slides.",
+          "description": "Display name. Drawn by the 'organization' header/footer field for the primary organization; the built-in variable 'organization.name' (or 'organization.<id>.name') carries it into any string.",
           "examples": ["Acme Corp", "DevConf 2026", "Beta Industries"]
         },
         "legalName": {
           "type": "string",
-          "description": "Optional legal entity name when it differs from the display name.",
+          "description": "Optional legal entity name when it differs from the display name. Never drawn automatically; available as the built-in variable 'organization.legalName'.",
           "examples": ["Acme Corporation, Inc.", "Beta Industries, LLC"]
         },
         "logo": {
           "$ref": "#/$defs/Asset",
-          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo (role 'primary', else the first organization) is the fallback source wherever the deck logo is drawn: a slide's design.logo, then design.logo, then this value. It is therefore drawn on cover and section slides and by header/footer zones with logo: true, exactly as design.logo would be (see design.logo and docs/design-resolution.md).",
+          "description": "Source for the organization's logo image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are SVG (preferred for vector logos), PNG (with transparency), or JPG. The primary organization's logo (role 'primary', else the first organization) is the fallback source wherever the deck logo is drawn: a slide's design.logo, then design.logo, then this value. It is therefore drawn on cover and section slides and by header/footer zones with logo: true, exactly as design.logo would be (see design.logo and docs/design-resolution.md). It is also the built-in image variable 'organization.logo' (or 'organization.<id>.logo'), placed with 'var:organization.logo' in an image field.",
           "examples": [
             "https://cdn.acme.com/logo.svg",
             "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=",
@@ -557,29 +557,29 @@
         },
         "domain": {
           "type": "string",
-          "description": "Bare internet domain for the organization. Used for footers, contact slides, and engine-driven asset lookups (e.g., favicon-based brand defaults).",
+          "description": "Bare internet domain for the organization. Never drawn automatically and not used to look up assets; available as the built-in variable 'organization.domain'.",
           "examples": ["acme.com", "beta-industries.io", "devconf.org"]
         },
         "email": {
           "type": "string",
           "format": "email",
-          "description": "General contact email for the organization. Used on contact slides and footer attribution.",
+          "description": "General contact email for the organization. Never drawn automatically; available as the built-in variable 'organization.email'.",
           "examples": ["hello@acme.com", "sales@acme.com", "info@beta-industries.io"]
         },
         "phone": {
           "type": "string",
-          "description": "Main contact phone number for the organization. E.164 format is recommended.",
+          "description": "Main contact phone number for the organization. E.164 format is recommended. Never drawn automatically; available as the built-in variable 'organization.phone'.",
           "examples": ["+14155551234", "+442071838750"]
         },
         "tagline": {
           "type": "string",
-          "description": "Short tagline rendered alongside the organization name on cover slides.",
+          "description": "Short tagline. Never drawn automatically (cover slides do not show it); available as the built-in variable 'organization.tagline', for example in a footer 'text' of '{{organization.tagline}}'.",
           "examples": ["Build the future of work", "Infrastructure for AI agents", "Where teams ship faster"]
         },
         "role": {
           "type": "string",
           "enum": ["primary", "partner", "client", "sponsor", "host"],
-          "description": "Role of the organization relative to the presentation. When omitted, the single organization or first organization in array form is treated as primary."
+          "description": "Role of the organization relative to the presentation. Only 'primary' has behavior: it selects the primary organization (deck logo, 'organization' and 'socials' header/footer fields, and the 'organization.<field>' built-ins). When no organization has role 'primary', the first one is primary. 'partner', 'client', 'sponsor' and 'host' are descriptive labels that change nothing."
         },
         "socials": {
           "$ref": "#/$defs/Socials",
@@ -589,28 +589,28 @@
     },
     "Speaker": {
       "type": "object",
-      "description": "A person presenting the deck. Used for cover slides, bio/intro slides, footer attribution, and panel formats with multiple presenters.",
+      "description": "A person presenting the deck. A speaker is drawn only through built-in variables ('{{speaker.name}}' inside any string, 'var:speaker.photo' as a whole image field) and the 'speaker' header/footer field (the first speaker's name and title). No layout, cover or bio slide places a speaker on its own. See docs/templates-and-variables.md.",
       "required": ["id", "name"],
       "properties": {
         "id": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9_-]+$",
-          "description": "Stable identifier for the speaker, used for cross-references within the deck. Must be unique within the deck.",
+          "description": "Stable identifier for the speaker. Must be unique among speakers (a duplicate is a validation error). Addresses this speaker in built-in variables as 'speaker.<id>.<field>', such as '{{speaker.alice.title}}'.",
           "examples": ["alice", "alice-chen", "speaker-1"]
         },
         "name": {
           "type": "string",
-          "description": "Display name.",
+          "description": "Display name. Built-in variable 'speaker.name' (first speaker) or 'speaker.<id>.name'; the first speaker's name is also drawn by the 'speaker' header/footer field and every name is listed by 'speakers'.",
           "examples": ["Alice Chen", "Bob Lee", "Dr. Carla Diaz"]
         },
         "title": {
           "type": "string",
-          "description": "Role or title. Often paired with the speaker's organization on cover slides.",
+          "description": "Role or title. Built-in variable 'speaker.title'; the 'speaker' header/footer field draws it after the name ('Alice Chen, VP of Engineering').",
           "examples": ["VP of Engineering", "Founder & CEO", "Chief Product Officer", "Senior Staff Engineer"]
         },
         "photo": {
           "$ref": "#/$defs/Asset",
-          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Authoring metadata for hosts and layouts (cover and bio slides built by a host): the reference renderer and exporter do not draw it, because no slide field or layout slot places a speaker; it round-trips through PPTX provenance.",
+          "description": "Source for the speaker's headshot image. Accepts an HTTPS URL, data URI, relative path (resolved against the OPF file location), local path, or 'asset:<id>' reference. Common formats are JPG or PNG; SVG is not appropriate for photographic content. Never drawn automatically: it is the built-in image variable 'speaker.photo' (or 'speaker.<id>.photo'), placed with 'var:speaker.photo' in a slide's image field. It also round-trips through PPTX provenance.",
           "examples": [
             "https://cdn.acme.com/headshots/alice.jpg",
             "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAr/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ//2Q==",
@@ -621,29 +621,29 @@
         "email": {
           "type": "string",
           "format": "email",
-          "description": "Contact email, used on contact slides or footer attribution when appropriate.",
+          "description": "Contact email. Never drawn automatically; available as the built-in variable 'speaker.email'.",
           "examples": ["alice@acme.com", "alice.chen@acme.com"]
         },
         "phone": {
           "type": "string",
-          "description": "Contact phone number for the speaker. E.164 format is recommended.",
+          "description": "Contact phone number for the speaker. E.164 format is recommended. Never drawn automatically; available as the built-in variable 'speaker.phone'.",
           "examples": ["+14155551234", "+442071838750"]
         },
         "bio": {
           "type": "string",
-          "description": "Short biographical paragraph for bio or 'about the speaker' slides.",
+          "description": "Short biographical paragraph. Never drawn automatically; available as the built-in variable 'speaker.bio', for a bio or 'about the speaker' slide you write.",
           "examples": [
             "Alice leads engineering at Acme, where she's spent the last six years scaling distributed systems from prototype to billions of requests per day. Previously, she was a staff engineer at Google."
           ]
         },
         "organizationId": {
           "type": "string",
-          "description": "Reference to an Organization.id in organization. Lets a speaker be attributed to their org in panel or multi-org decks without repeating organization details.",
+          "description": "Reference to an Organization.id in organization; it must name an existing organization (a validation error otherwise). Attribution metadata for hosts: no engine draws it or changes which organization is primary because of it.",
           "examples": ["acme", "beta", "devconf-2026"]
         },
         "socials": {
           "$ref": "#/$defs/Socials",
-          "description": "Optional social media handles or URLs for the speaker. Authoring metadata: no header/footer field renders speaker socials yet."
+          "description": "Optional social media handles or URLs for the speaker. Authoring metadata only: nothing draws speaker socials and there is no built-in variable for them (the 'socials' header/footer field draws the primary organization's socials)."
         }
       }
     },
@@ -1390,7 +1390,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/Variable"
       },
-      "description": "Named variables, keyed by stable kebab-case id. A variable is a typed, named value the deck declares once and uses in many places: a color ('var:<id>' in color fields, the original use), or content that fills a template (text, number, date, image, url, list). Content is referenced inline as '{{<id>}}' inside any string, or whole as 'var:<id>' in a field of the matching type; '\\{{' writes a literal '{{'. A hex string is shorthand for a color variable. A variable with no 'value' is unfilled: expected in a template (root 'template': true), an error in a normal deck. Engines resolve variables with resolveVariables() before composing, rendering or exporting, so a template plus its values previews and exports exactly like the equivalent hand-written deck. See docs/templates-and-variables.md.",
+      "description": "Named variables, keyed by stable kebab-case id. A variable is a typed, named value the deck declares once and uses in many places: a color ('var:<id>' in color fields, the original use), or content that fills a template (text, number, date, image, url, list). Content is referenced inline as '{{<id>}}' inside any string, or whole as 'var:<id>' in a field of the matching type; '\\{{' writes a literal '{{'. A hex string is shorthand for a color variable. A variable with no 'value' is unfilled: expected in a template (root 'template': true), an error in a normal deck. Engines resolve variables with resolveVariables() before composing, rendering or exporting, so a template plus its values previews and exports exactly like the equivalent hand-written deck. Read-only built-in variables come from the deck's own metadata and use dotted names that a user id can never take: 'deck.name', 'deck.description', 'deck.author', 'speaker.name|title|email|phone|bio|photo' (first speaker), 'speakers' (every speaker's name, a list), 'organization.name|legalName|tagline|domain|email|phone|logo' (primary organization), and 'speaker.<id>.<field>' / 'organization.<id>.<field>' by id. They are written the same two ways ('{{speaker.name}}', 'var:speaker.photo'), are never declared, and an unknown built-in path is a validation error; a known one with no source value resolves to nothing with a warning. The id 'speakers' is reserved. See docs/templates-and-variables.md.",
       "examples": [
         {
           "risk": "#B42318",
@@ -2054,7 +2054,7 @@
     },
     "HeaderFooterItem": {
       "type": "object",
-      "description": "One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, organization, socials, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.",
+      "description": "One header/footer zone. Every configured field renders; fields in one zone stack top to bottom in the order logo, image, text, organization, speaker, socials, section, slide number, date. Put a date and a slide number in different zones to keep each on the zone's single line.",
       "properties": {
         "logo": {
           "type": "boolean",
@@ -2096,7 +2096,11 @@
         },
         "organization": {
           "type": "boolean",
-          "description": "Whether to render the primary organization name from organization."
+          "description": "Whether to render the primary organization's name from organization (role 'primary', else the first organization)."
+        },
+        "speaker": {
+          "type": "boolean",
+          "description": "Whether to render the primary (first) speaker's name and title from speaker, joined as 'Ada Lovelace, CTO' (just the name when the speaker has no title). It is generated text: without a named speaker the engine reports unresolved-content at this field. PPTX export writes it as static text and import restores the flag from the file's furniture provenance."
         },
         "section": {
           "type": "boolean",

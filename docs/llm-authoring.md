@@ -28,6 +28,10 @@ Use catalog IDs from the installed package or supply inline records in `catalogs
 
 Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts put a `type` and the same tabular structure inside `chart.data`. Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
 
+## Deck facts: built-in variables
+
+Do not retype the speaker, organization or deck name into slide text. Put them in the root `speaker`, `organization`, `name`, `description` and `author` once and reference them: `{{speaker.name}}`, `{{speaker.title}}`, `{{organization.name}}`, `{{organization.tagline}}`, `{{deck.name}}` inside any string, and `var:speaker.photo` or `var:organization.logo` as a whole image field. `{{speakers}}` joins every speaker name, and `speaker.<id>.<field>` / `organization.<id>.<field>` address one entry by id. Nothing about a speaker is drawn unless you reference it (or set the `speaker` header/footer field); the organization's tagline, legal name, domain, email and phone are likewise only available this way. A built-in whose source field is missing resolves to nothing and warns; an unknown path is a validation error. Speaker ids and organization ids must each be unique and `Speaker.organizationId` must name an organization. See [templates and variables](templates-and-variables.md#built-in-variables).
+
 ## Revision loop
 
 1. Validate with `validatePresentation`. Fix errors at their returned JSON paths. Check warnings for unknown catalog IDs.
