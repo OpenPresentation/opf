@@ -46,9 +46,10 @@ jobs:
           export-golden: 'true'
           # A renderer pull request that moves pixels selects its own baseline directory here, e.g.
           # opf-render/test/golden/<name> (regenerate-goldens writes into it; scripts/ecosystem-pins.mjs reads it).
-          # Empty selects the lock's golden. RR-20: the renderer's own baseline, re-recorded for the core 0.12.2 examples
-          # (the corpus the publish workflow installs); the roller makes it the lock's golden again.
-          golden-override: 'opf-render/test/golden/opf-examples-png.cover-centering'
+          # Empty selects the lock's golden. The roller makes a non-empty value the lock's golden, so set it only for a
+          # baseline that records core main's examples: core's registry run selects a reviewed core golden (or a retained
+          # one, scripts/registry-golden.mjs) only while the lock's golden lives in core.
+          golden-override: ''
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
@@ -205,7 +206,7 @@ jobs:
           consumer: opf-render
           export-golden: 'true'
           # Keep equal to the package job's golden-override (scripts/ecosystem-pins.mjs reads the first one).
-          golden-override: 'opf-render/test/golden/opf-examples-png.cover-centering'
+          golden-override: ''
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
