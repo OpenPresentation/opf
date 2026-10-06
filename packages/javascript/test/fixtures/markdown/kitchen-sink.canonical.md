@@ -9,7 +9,7 @@ variables:
 ---
 
 <!-- slide: id=one layout=title section="Part 1" -->
-# Title with a styled word
+# Title with a *styled* word
 
 ## Subtitle
 

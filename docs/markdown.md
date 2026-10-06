@@ -86,8 +86,8 @@ A deck without front matter starts with its first slide, so a file never begins 
 | Part | Syntax | OPF |
 | --- | --- | --- |
 | Options | `<!-- slide: id=cover layout=title section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`. Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
-| Title | `# Title` | `title`. One per slide; closing `#` characters are dropped |
-| Subtitle | `## Subtitle` | `subtitle`. One per slide |
+| Title | `# Title` | `title`: a string, or `TextRun[]` when the line has [inline formatting](#inline-text). One per slide; closing `#` characters are dropped |
+| Subtitle | `## Subtitle` | `subtitle`, a string or `TextRun[]` like the title. One per slide |
 | Deeper headings | `### Text` | A bold paragraph, with a `heading-demoted` warning |
 | Notes | `Note: ...` or `Notes: ...` at the start of a line | `notes`: plain text, every following line of the slide verbatim (blank lines, `#`, `-` and fences included), ending at the next `---` |
 | Content | The blocks below, top to bottom | One block with no `id`/`type`/`region`: a root field (`text`, `items`, `chart`, ...). Otherwise `blocks` |
@@ -130,11 +130,11 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `lang` (a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
-Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. Fields that hold plain text (the title, the subtitle, and a quote's text, attribution and source) drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
+Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. The title, the subtitle and a quote's text keep inline formatting (a string when nothing is formatted, `TextRun[]` otherwise); a quote with formatted text and no attribution stays `{ text: [...] }`, because the string shorthand is for plain text. A quote's attribution and source are plain strings and drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. `cite` and `footnote` have no inline syntax: a heading or quote that carries one is written in an `opf-slide` fence. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
 
 ## Writing OPF as Markdown
 
-`opfToMarkdown(document, { unsupported })` first validates the document (`OPFMarkdownError`, `code: "invalid-document"`, when it is not valid OPF). Every part is written in the dialect and **read back before it is kept**: a part whose text could not be read back as the same value (a table cell that is not text, a title that ends in ` #`, notes with a `---` line, formatting next to punctuation that CommonMark cannot open) takes the fallback instead of being written wrongly.
+`opfToMarkdown(document, { unsupported })` first validates the document (`OPFMarkdownError`, `code: "invalid-document"`, when it is not valid OPF). Every part is written in the dialect and **read back before it is kept**: a part whose text could not be read back as the same value (a table cell that is not text, a title that ends in ` #`, a title or quote run with `cite` or `footnote`, notes with a `---` line, formatting next to punctuation that CommonMark cannot open) takes the fallback instead of being written wrongly.
 
 | `unsupported` | Behaviour |
 | --- | --- |

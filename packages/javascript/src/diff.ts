@@ -5,6 +5,7 @@
 // and as an RFC 6902 patch that turns A into B. Moves are detected, not
 // reported as a remove plus an add. The report is a pure function of the two
 // documents: no timestamps, no randomness, no network.
+import { annotationText } from "./annotations.js";
 import { formatPointer, jsonEqual, type JsonPatchOperation } from "./patch.js";
 import { matchArrays, idOf, DEFAULT_MATCH_THRESHOLD, type MatchedBy, type MatchOptions } from "./diff-match.js";
 
@@ -94,7 +95,8 @@ interface Context {
 }
 
 const pointer = (tokens: readonly (string | number)[]) => formatPointer(tokens);
-const titleOf = (slide: unknown): string | undefined => (isObject(slide) && typeof slide.title === "string" ? slide.title : undefined);
+// A title is a string or TextRun[] (FA-10): a run array is labelled by its plain text.
+const titleOf = (slide: unknown): string | undefined => (isObject(slide) ? annotationText(slide.title) || undefined : undefined);
 const slideRef = (slide: unknown, aIndex?: number, bIndex?: number): DiffSlideRef => {
   const ref: DiffSlideRef = {};
   const id = idOf(slide), title = titleOf(slide);

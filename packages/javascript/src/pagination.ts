@@ -73,10 +73,11 @@ function leafFor(path: string, field: string, value: any): Leaf {
   if (field === 'text') { text = textOf(value); leaf.slice = (a,b) => sliceRichText(value,a,b); }
   if (field === 'code' || field === 'quote') {
     const key = field === 'code' ? 'source' : 'text';
-    text = typeof value === 'string' ? value : value[key];
+    // A quote text may be TextRun[] (FA-10): it slices like body text, keeping each run's formatting.
+    text = typeof value === 'string' ? value : field === 'quote' ? textOf(value[key]) : value[key];
     leaf.slice = (a,b) => {
       if (typeof value === 'string') return value.slice(a,b);
-      const piece: Record<string, any> = { ...value, [key]: text!.slice(a,b) };
+      const piece: Record<string, any> = { ...value, [key]: field === 'quote' ? sliceRichText(value[key],a,b) : text!.slice(a,b) };
       // code.highlight lines are numbered per code block: a page keeps the marked lines it holds, renumbered from 1.
       if (field === 'code' && value.highlight !== undefined) {
         const highlight = codeHighlightSlice(value.highlight, text!, a, b);

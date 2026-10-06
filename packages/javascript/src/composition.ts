@@ -841,7 +841,8 @@ function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,reques
 }
 /** Photo diameter as a multiple of the footer font size, and the gap beside it as a multiple of that size (FA-12). */
 const PHOTO_RATIO = 3, PHOTO_GAP = .75;
-export interface QuoteContent { text: string; attribution?: string; role?: string; photo?: unknown; source?: string }
+/** `text` is a string or TextRun[] (FA-10); attribution, role and source stay plain strings. */
+export interface QuoteContent { text: string | readonly (string | RichTextRun)[]; attribution?: string; role?: string; photo?: unknown; source?: string }
 /** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
 export interface QuoteTextSource {
   path: string;
@@ -861,8 +862,13 @@ export interface QuoteTextPart {
   minFontSize: number;
   requestedStyle: TextStyle;
   style: TextStyle;
-  /** Absent when the available box is invalid; never fit against an invented one-pixel box. */
-  fit?: TextFit;
+  /**
+   * The displayed runs of a rich quote body (FA-10): the quote's TextRun[] with the quotation marks joined to its first and
+   * last run, so a run's index and a citation marker's position never shift. Absent for a string body and for the footer.
+   */
+  runs?: (string | RichTextRun)[];
+  /** Absent when the available box is invalid; never fit against an invented one-pixel box. A rich body reports a RichTextFit. */
+  fit?: TextFit | RichTextFit;
 }
 export interface QuoteLayoutDiagnostic extends LayoutDiagnostic {
   reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap' | 'photo-fit';
@@ -903,6 +909,17 @@ export interface QuoteLayoutOptions {
   textMeasurement?: TextMeasurement;
   /** Deck direction; in a right-to-left deck every part fit reports its paragraphs' directions (RR-05). */
   direction?: TextDirection;
+  /** Marker text for a rich body run by its dotted path (`<path>.text.<runIndex>`); composeSlide supplies the deck numbering. */
+  citationMarker?: (runPath: string) => string | undefined;
+}
+/** The displayed runs of a rich quote body: the quotation marks join the first and last run. */
+function quoteBodyRuns(runs: readonly (string | RichTextRun)[]): (string | RichTextRun)[] {
+  if (!runs.length) return ['""'];
+  const last = runs.length - 1;
+  return runs.map((run, index) => {
+    const before = index === 0 ? '"' : '', after = index === last ? '"' : '';
+    return typeof run === 'string' ? before + run + after : {...run, text: before + run.text + after};
+  });
 }
 /**
  * Allocate and measure quote body/footer space for composition, rendering and export. Callers must
@@ -912,11 +929,13 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const shorthand = typeof value === 'string';
   const quote = shorthand ? {text:value} : value;
   const photoValue = (quote as QuoteContent | null)?.photo;
-  if (!quote || Array.isArray(quote) || typeof quote.text !== 'string' ||
+  if (!quote || Array.isArray(quote) || (typeof quote.text !== 'string' && !Array.isArray(quote.text)) ||
     [quote.attribution, quote.role, quote.source].some(field => field !== undefined && typeof field !== 'string') ||
     photoValue !== undefined && typeof photoValue !== 'string' && !(typeof photoValue === 'object' && photoValue !== null && typeof (photoValue as {src?:unknown}).src === 'string')) {
-    throw new TypeError('Quote content must be a string or a text object with optional string attribution/role/source and an asset photo.');
+    throw new TypeError('Quote content must be a string or a text object (text a string or TextRun[]) with optional string attribution/role/source and an asset photo.');
   }
+  const richBody = Array.isArray(quote.text) ? quote.text as readonly (string | RichTextRun)[] : undefined;
+  const quoteText = richBody ? annotationText(richBody) : quote.text as string;
   const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) ||
     box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) {
@@ -929,12 +948,12 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     diagnostics.push({code:'text-overflow',reason,path:diagnosticPath,parts:roles,message});
   const source = (sourcePath:string, text:string, outputStart:number):QuoteTextSource =>
     ({path:sourcePath,start:0,end:text.length,outputStart,outputEnd:outputStart+text.length});
-  const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string) => {
+  const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string, runs?:(string|RichTextRun)[]) => {
     const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath};
     const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
     // An explicit readability floor can raise the nominal size.
     const requestedFontSize = gridFontSize(fontSize * scale, minimum);
-    const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style};
+    const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style,...(runs?{runs}:{})};
     parts.push(part);
     return part;
   };
@@ -951,17 +970,20 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const hasPhoto = photoValue !== undefined, hasFooter = footer !== '', hasBlock = hasPhoto || hasFooter;
   const photoPath = `${path}.photo`, rtl = options.direction === 'rtl';
   const bodyPath = shorthand ? path : `${path}.text`;
-  const body = add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
+  const body = add('body',`"${quoteText}"`,[source(bodyPath,quoteText,1)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
-    28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath);
+    28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody):undefined);
   const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
     17,options.fonts?.body??'sans-serif',500,path) : undefined;
   // A photo with no footer text still sizes from the nominal footer size.
   const footerRequested = attribution?.requestedFontSize ?? gridFontSize(17 * scale, minimum);
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
-  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum) => usable(area)
-    ? fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction) : undefined;
+  // A rich body fits through the rich-text layouter (the one body text uses); every other part keeps the plain fitter.
+  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => !usable(area) ? undefined
+    : part.runs ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{})})
+    : fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
+  const heightOf = (fit:TextFit|RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length*fit.lineHeight;
   const inner = {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
   let photo: QuotePhoto | undefined, photoFits = true;
   if (!hasBlock) body.fit=fit(body,body.box);
@@ -969,9 +991,9 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     const available=inner.height-18;
     const preferredBody=fit(body,inner,body.requestedFontSize,body.requestedFontSize)!;
     const minimumBody=body.requestedFontSize===minimum ? preferredBody : fit(body,inner,minimum,minimum)!;
-    const preferredBodyHeight=preferredBody.lines.length*preferredBody.lineHeight;
-    const minimumBodyHeight=minimumBody.lines.length*minimumBody.lineHeight;
-    interface Selection {bodyBox:LayoutBox;footerBox:LayoutBox;textBox?:LayoutBox;photoBox?:LayoutBox;bodyFit?:TextFit;footerFit?:TextFit;score:number;overflow:boolean;photoFits:boolean}
+    const preferredBodyHeight=heightOf(preferredBody);
+    const minimumBodyHeight=heightOf(minimumBody);
+    interface Selection {bodyBox:LayoutBox;footerBox:LayoutBox;textBox?:LayoutBox;photoBox?:LayoutBox;bodyFit?:TextFit|RichTextFit;footerFit?:TextFit;score:number;overflow:boolean;photoFits:boolean}
     let selected:Selection|undefined;
     // At most two footer sizes: its nominal request and the readability floor. Retain
     // the fitting pair with the least total font reduction. A 40px footer is only a
@@ -1026,10 +1048,10 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   if (hasPhoto && !photoFits) report('photo-fit',photoPath,['footer'],'Quote photo does not fit beside the attribution at the readability floor; increase the cell size, shorten the text or remove the photo.');
   // Conservative occupied line rectangles, not actual glyph outlines. Reserved boxes alone
   // are insufficient: an overflowing body's rendered lines can reach an otherwise fitting footer.
-  if (body?.fit && attribution?.fit && body.box.y+body.fit.lines.length*body.fit.lineHeight > attribution.box.y+.01 &&
+  if (body?.fit && attribution?.fit && body.box.y+heightOf(body.fit) > attribution.box.y+.01 &&
     attribution.box.y+attribution.fit.lines.length*attribution.fit.lineHeight > body.box.y+.01) {
     report('part-overlap',path,['body','footer'],'Quote body and footer line boxes overlap; do not accept this layout without more space.');
-  } else if (body?.fit && photo && body.box.y+body.fit.lines.length*body.fit.lineHeight > photo.box.y+.01) {
+  } else if (body?.fit && photo && body.box.y+heightOf(body.fit) > photo.box.y+.01) {
     report('part-overlap',path,['body','footer'],'Quote body and photo overlap; do not accept this layout without more space.');
   }
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
@@ -2088,7 +2110,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
   const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
-    const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
+    const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
     const alignment=explicitAlignment??alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,richOptions(style),minimum):undefined;
@@ -2185,12 +2207,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
   const headingItems: ComposedItem[] = [];
   for (const field of ["tag", "title", "subtitle"]) {
-    if (!slide[field]) continue;
+    if (!slide[field] || (Array.isArray(slide[field]) && !annotationText(slide[field]))) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
     const box = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: maxHeight };
-    const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
-    box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
+    // A TextRun[] heading wraps and fits like rich body text (richTextLayouter); a string keeps the plain fitter.
+    const text = fitPlacedText(field,slide[field],annotationText(slide[field]),box,requested,minSize,`${path}.${field}`);
+    box.height = Math.min(maxHeight, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
     const item: ComposedItem = { path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) };
     headingItems.push(item);
@@ -2259,6 +2282,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
+    ...(citationMarker?{citationMarker}:{}),
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,

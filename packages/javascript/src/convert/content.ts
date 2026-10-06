@@ -136,7 +136,7 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
     }
     case "quote": {
       const quote = typeof content === "string" ? { text: content } : content;
-      const lines = splitRuns([quote.text]);
+      const lines = splitRuns(runsOf(quote.text));
       // A text quote has one attribution line, `— Name, Title`: the role joins the attribution after a comma.
       const credit = [quote.attribution, quote.role].filter(Boolean).join(", ");
       if (quote.photo !== undefined) loss.note("quote photo");

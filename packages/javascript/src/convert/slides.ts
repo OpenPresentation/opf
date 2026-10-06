@@ -214,7 +214,9 @@ function joinSlices(field: string, slices: Json[]): Json {
     case "code":
     case "quote": {
       const key = field === "code" ? "source" : "text";
-      const text = slices.map((slice) => (typeof slice === "string" ? slice : slice[key]) as string).join("");
+      const parts = slices.map((slice) => (typeof slice === "string" ? slice : slice[key]) as Json);
+      // A quote text may be TextRun[] (FA-10): the pieces join like body text, keeping each run's formatting.
+      const text = field === "quote" ? parts.slice(1).reduce((joined, part) => concatText(joined, part), clone(parts[0]!)) : (parts as string[]).join("");
       return typeof first === "string" ? text : { ...clone(first), [key]: text };
     }
     case "table":

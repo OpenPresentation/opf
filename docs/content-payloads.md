@@ -2,6 +2,8 @@
 
 Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `left`, `center+right`, or `top:left`.
 
+The slide-level `title`, `subtitle` and `tag` are not payloads, but like `text` and `quote.text` they accept a string or `TextRun[]` (colored words, bold, links, `cite`/`footnote` markers); see [Rich text](rich-text.md#rich-headings-and-quotes).
+
 The optional payload `type` can make intent explicit, but OPF should usually infer the content kind from the field present:
 
 | Field | Inferred type | Notes |
@@ -15,7 +17,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, `trend`, and `sentiment`. |
-| `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, `role`, `photo`, and `source`. |
+| `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
 ## Items versus bullets
@@ -277,7 +279,7 @@ A falling value that is good news keeps its downward arrow and takes the green:
 
 ## Quote
 
-Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters. `text` is a plain string.
+Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters. `text` is a string or `TextRun[]` with inline formatting; `attribution`, `role` and `source` are plain strings.
 
 ```json
 {

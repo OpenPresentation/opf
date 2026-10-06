@@ -93,7 +93,7 @@ Which fields can use variables is decided by the schema of the *resolved* deck, 
 
 **Escaping.** Write `\{{` for a literal `{{` (in JSON, `"\\{{"`). Only that sequence is special. A token whose id is not declared is left as written, and the validator warns when the deck uses variables (`'{{ghost}}' names no declared variable`).
 
-**Rich text.** A `text` variable whose value is `TextRun[]` keeps its runs through a whole-field reference (`"text": "var:greeting"`). Inside a larger string it is flattened to plain text with an informational `variable-rich-flattened` diagnostic. To style an inline value, put the token in a run: `{ "text": "{{client}}", "bold": true }`.
+**Rich text.** A `text` variable whose value is `TextRun[]` keeps its runs through a whole-field reference in any field that accepts string or `TextRun[]`: `"text": "var:greeting"`, and the slide `"title"`, `"subtitle"`, `"tag"` and a quote's `"text"` (FA-10). A `{{id}}` token inside a heading run resolves like one in a body run. Inside a larger string it is flattened to plain text with an informational `variable-rich-flattened` diagnostic. To style an inline value, put the token in a run: `{ "text": "{{client}}", "bold": true }`.
 
 **Untouched content.** `extensions`, inline `catalogs`, `$schema`, and the declarations themselves are never searched.
 

@@ -382,7 +382,8 @@ const titleRules: AuditRule[] = [
 		run(context) {
 			for (const slide of context.slides) {
 				const title = slide.slide.title;
-				if (typeof title === 'string' && title.trim() !== '') continue;
+				// A title is a string or TextRun[]; either counts by its plain text.
+				if ((typeof title === 'string' || Array.isArray(title)) && plainText(title).trim() !== '') continue;
 				context.report(missingTitleRule, {
 					path: slide.path,
 					slide,
@@ -398,7 +399,7 @@ const titleRules: AuditRule[] = [
 		run(context) {
 			const first = new Map<string, number>();
 			for (const slide of context.slides) {
-				const title = typeof slide.slide.title === 'string' ? slide.slide.title.trim().replace(/\s+/g, ' ').toLowerCase() : '';
+				const title = typeof slide.slide.title === 'string' || Array.isArray(slide.slide.title) ? plainText(slide.slide.title).trim().replace(/\s+/g, ' ').toLowerCase() : '';
 				if (!title) continue;
 				const earlier = first.get(title);
 				if (earlier === undefined) first.set(title, slide.index);
@@ -406,7 +407,7 @@ const titleRules: AuditRule[] = [
 					context.report(duplicateTitleRule, {
 						path: `${slide.path}/title`,
 						slide,
-						message: `Slide ${slide.index + 1} has the same title as slide ${earlier + 1}: ${JSON.stringify(String(slide.slide.title).trim())}.`,
+						message: `Slide ${slide.index + 1} has the same title as slide ${earlier + 1}: ${JSON.stringify(plainText(slide.slide.title).trim())}.`,
 						help: 'Make the titles distinct so each slide can be told apart in an outline or by assistive technology.',
 						fixes: [{ id: 'focus-title', label: 'Edit the title', kind: 'focus', safe: true, focus: { path: `${slide.path}/title`, field: 'title' } }],
 					});
@@ -598,7 +599,7 @@ const chartRules: AuditRule[] = [
 				const charts = payloads.filter((p) => p.node.chart !== undefined);
 				if (!charts.length) continue;
 				const textual = (p: { node: Rec }) => ['text', 'items', 'bullets', 'table', 'quote', 'metric', 'timeline'].some((field) => p.node[field] !== undefined && p.node[field] !== '' && !(Array.isArray(p.node[field]) && p.node[field].length === 0));
-				const textBeside = payloads.some(textual) || (typeof slide.slide.subtitle === 'string' && slide.slide.subtitle.trim() !== '');
+				const textBeside = payloads.some(textual) || ((typeof slide.slide.subtitle === 'string' || Array.isArray(slide.slide.subtitle)) && plainText(slide.slide.subtitle).trim() !== '');
 				const where = (chart: (typeof charts)[number]) => (charts.length > 1 ? `chart ${charts.indexOf(chart) + 1} on slide ${slide.index + 1}` : `chart on slide ${slide.index + 1}`);
 				const focusAlt = (chart: (typeof charts)[number]): AuditFix => ({ id: 'focus-alt', label: 'Write alt text', kind: 'focus', safe: true, focus: { path: `${chart.path}/chart`, field: 'alt', value: rec(chart.node.chart).alt } });
 				let reported = false;

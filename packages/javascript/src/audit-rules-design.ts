@@ -174,7 +174,7 @@ const fontRules: AuditRule[] = [
 				add(slide.design.fonts.heading);
 				add(slide.design.fonts.body);
 				if (slide.payloads.some((p) => p.node.code !== undefined)) add(slide.design.fonts.code);
-				if (typeof slide.slide.tag === 'string') add(slide.design.fonts.accent);
+				if (typeof slide.slide.tag === 'string' || Array.isArray(slide.slide.tag)) add(slide.design.fonts.accent);
 				for (const tv of slide.texts) for (const run of runsOf(tv)) add(run.style.fontFamily);
 			}
 			if (families.size <= context.thresholds.maxFontFamilies) return;
