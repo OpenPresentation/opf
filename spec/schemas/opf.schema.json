@@ -3130,7 +3130,7 @@
             "lang": {
               "type": "string",
               "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
-              "description": "BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follows the deck language. The preview and the export both honor it; line breaking and measurement keep the deck language's rules.",
+              "description": "BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follows the deck language.",
               "examples": ["fr-FR", "ja-JP", "de"]
             },
             "link": {

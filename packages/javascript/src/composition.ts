@@ -1593,7 +1593,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const run:RichTextRun=typeof value==='string'?{text:value}:value;
     if(typeof run?.text!=='string'||(run.fontSize!==undefined&&(!Number.isFinite(run.fontSize)||run.fontSize<=0))) throw new RangeError('Rich text runs need text and a positive finite font size.');
     const start=offset;offset+=run.text.length;
-    const style=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':options.style.fontFamily),...(typeof run.lang==='string'&&run.lang?{lang:run.lang}:{}),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
+    const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
+    // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
+    const style:TextStyle=typeof run.lang==='string'&&run.lang?{...resolvedStyle,lang:run.lang}:resolvedStyle;
     // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
     const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
