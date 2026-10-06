@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "description": "Which root scripts scripts/run-checks.mjs runs for `pnpm test` (RR-46). Every `check:*` script runs unless it is listed in exclude; include lists the other scripts that are part of `pnpm test`. A new check:* script needs no entry here. The excluded checks have their own CI steps.",
+  "description": "Which root scripts scripts/run-checks.mjs runs for `pnpm test` (RR-46). Every `check:*` script runs unless it is listed in exclude; include lists the other scripts that are part of `pnpm test`. A new check:* script needs no entry here. The excluded checks have their own CI steps. RR-57: check:changed is excluded because it runs a selection of these checks for `pnpm check:changed`; its \"changed\" section maps changed paths to the checks to run: always (every run), and rules {match: path prefixes ending in / or exact files, run: check scripts}. A check:* script whose command names a changed file also runs.",
   "include": [
     "test:gallery-base-fonts",
     "test:gallery-lazy-fonts",
@@ -8,7 +8,24 @@
   ],
   "exclude": [
     "check:breaking",
+    "check:changed",
     "check:examples",
     "check:quarantine"
-  ]
+  ],
+  "changed": {
+    "always": ["check:changes"],
+    "rules": [
+      {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-docs", "check:core-golden", "check:registry-golden", "check:examples", "check:text"]},
+      {"match": ["spec/catalogs/"], "run": ["check:spec", "check:catalog", "check:core-golden", "check:registry-golden", "check:text"]},
+      {"match": ["spec/"], "run": ["check:spec"]},
+      {"match": ["examples/"], "run": ["check:examples", "check:text"]},
+      {"match": ["docs/", "README.md", "PRODUCT.md", "AGENTS.md", "skills/", "llms.txt"], "run": ["check:text"]},
+      {"match": ["docs/programs/release-readiness/"], "run": ["check:release-report", "check:gallery-tracker"]},
+      {"match": ["docs/programs/font-fidelity-everywhere/"], "run": ["check:font-tracker", "check:works-percent"]},
+      {"match": ["packages/javascript/"], "run": ["check:font-hotlinks", "check:text"]},
+      {"match": ["scripts/checks.json", "scripts/run-checks.mjs", "scripts/run-tests.mjs"], "run": ["check:runners"]},
+      {"match": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "packages/javascript/package.json", "packages/cli/package.json"], "run": ["check:engines-range", "check:runners"]},
+      {"match": ["scripts/agent-slot.mjs", "scripts/agent-format.mjs", "scripts/check-changed.mjs", ".claude/settings.json"], "run": ["check:agent-tools"]}
+    ]
+  }
 }

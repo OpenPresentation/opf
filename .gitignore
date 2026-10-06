@@ -11,3 +11,6 @@ packages/cli/dist
 
 # Local review artifacts from ecosystem verification.
 artifacts/
+
+# Claude Code per-machine settings; .claude/settings.json is committed.
+.claude/settings.local.json
