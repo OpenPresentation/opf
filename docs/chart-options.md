@@ -68,9 +68,9 @@ The preview (opf-render) and the PPTX export (opf-pptx) both read `resolveChartO
 
 `Chart.alt` (FA-09) is a string: what the chart shows, in a sentence or two (the point and the key numbers), not "a chart". Unlike the three options above it changes no geometry.
 
-- **Preview.** The chart's SVG group carries `role="img"` and `aria-label`; the drawn marks inside are hidden from assistive technology so the label is the chart's one announcement.
+- **Preview.** The chart's SVG group carries `role="img"` and `aria-label`; the role makes the drawn marks inside presentational, so the label is the chart's one announcement.
 - **PPTX.** The value is the chart frame's `p:nvGraphicFramePr/p:cNvPr/@descr`, the same attribute pictures use, on classic charts and on chartex (Office 2016) frames. `fromPptx` reads it back into `alt`.
-- **Empty string.** `""` marks the chart decorative, like an empty `Asset.alt`: the preview writes no label and hides the group, the PPTX frame gets `descr=""`. A chart nearly always carries a message, so `audit/chart-text-alternative` reports it as info.
+- **Empty string.** `""` marks the chart decorative, like an empty `Asset.alt`: the preview writes no label and hides the group (`aria-hidden`), and the PPTX frame carries PowerPoint's own "Mark as decorative" marker (the `adec:decorative` extension of `p:cNvPr`), not `descr=""`, which PowerPoint writes for any shape without alt text. Import reads the marker back as `alt: ""`. A chart nearly always carries a message, so `audit/chart-text-alternative` reports it as info.
 - **Audit.** `audit/chart-text-alternative` passes a chart with a non-blank `alt`. Without `alt` it still passes when text, a table or a subtitle sits beside the chart; otherwise it reports the chart and offers a quick fix that focuses the `alt` field. `audit/poor-alt-text` flags a bare "chart", a URL, a leading "chart of" and alt text over 250 characters.
 
 ## Defaults and geometry
