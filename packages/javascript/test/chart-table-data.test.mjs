@@ -611,4 +611,15 @@ describe("RR-54 review", () => {
     // A malformed value with no form key keeps every alternative.
     assert.ok(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })).some(([, message]) => message === "must match exactly one schema in oneOf"));
   });
+
+  test("fields name each dataset column at most once", () => {
+    const datasets = { r: revenue() };
+    const fields = (document) => validatePresentation(document).errors.map((issue) => [issue.path, issue.message]);
+    assert.deepEqual(fields(deck({ datasets, slides: [{ table: { dataset: "r", fields: ["Quarter", "Quarter"] } }] })), [
+      ["/slides/0/table/fields", "must NOT have duplicate items (items ## 1 and 0 are identical)"],
+    ]);
+    assert.deepEqual(fields(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", fields: ["Quarter", "Revenue", "Revenue"] } } }] })), [
+      ["/slides/0/chart/data/fields", "must NOT have duplicate items (items ## 2 and 1 are identical)"],
+    ]);
+  });
 });

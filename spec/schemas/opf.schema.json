@@ -3466,7 +3466,8 @@
       "type": "array",
       "items": { "type": "string" },
       "minItems": 1,
-      "description": "Dataset column names to use, in order. Selects and orders the dataset's columns; an unknown name is a 'dataset-field-unknown' error.",
+      "uniqueItems": true,
+      "description": "Dataset column names to use, in order, each at most once. Selects and orders the dataset's columns; an unknown name is a 'dataset-field-unknown' error.",
       "examples": [["Quarter", "Revenue"]]
     },
     "Datasets": {

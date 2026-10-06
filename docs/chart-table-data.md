@@ -70,7 +70,7 @@ Top-level `datasets` maps ids (the `assets` id pattern) to a `Dataset`:
 }
 ```
 
-Rows hold `ChartDataCell` scalars (string, number, boolean, null). A `DatasetRef` is `{ "dataset": "<id>", "fields"?: string[] }`; `fields` selects and orders columns by name.
+Rows hold `ChartDataCell` scalars (string, number, boolean, null). A `DatasetRef` is `{ "dataset": "<id>", "fields"?: string[] }`; `fields` selects and orders columns by name, each at most once (a repeated name is a schema error).
 - **Chart:** `chart.data` may be a `DatasetRef`. It is the third `oneOf` branch beside `ChartData` and `ChartDataSource`.
 - **Table:** a table is either inline (`rows` required, optional `columns`) or dataset-backed (`dataset` required, optional `fields`, and no `rows` or `columns`). Dataset tables take their headers and column formats from the dataset; per-cell styles need an inline table.
 

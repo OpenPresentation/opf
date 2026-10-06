@@ -1057,7 +1057,7 @@ _No named properties._
 
 - Type: `array<string>`
 - Required fields: none
-- Purpose: Dataset column names to use, in order (at least one).
+- Purpose: Dataset column names to use, in order, each at most once (at least one).
 
 _No named properties._
 
