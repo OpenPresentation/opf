@@ -941,6 +941,7 @@ _No named properties._
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
 | `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
+| `alt` | no | `string` | Text alternative for the chart: what the data shows (the point and the key numbers), not "a chart". Preview: `role="img"` + `aria-label`; PPTX: the chart frame's `descr`, read back on import. `""` marks the chart decorative (a reviewed choice; the audit still reports it as info). See docs/chart-options.md. |
 
 
 ### ChartAxisTitles

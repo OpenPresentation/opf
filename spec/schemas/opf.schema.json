@@ -3236,6 +3236,11 @@
             { "$ref": "#/$defs/ChartDataLabels" }
           ],
           "description": "Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator."
+        },
+        "alt": {
+          "type": "string",
+          "description": "Text alternative for the chart: what the data shows (the point and the key numbers), not 'a chart' or 'bar chart'. The preview exposes it as the chart's accessible name (role img with aria-label) and the PowerPoint export writes it as the chart frame's alternative text (descr); import reads it back. An empty string marks the chart decorative, with the same meaning as an empty Asset alt, but it is a reviewed choice that audit/chart-text-alternative still reports as info (a chart almost always carries a message). When absent, the audit accepts text beside the chart instead.",
+          "examples": ["Revenue grew from $12M in Q1 to $18M in Q2, with the steepest rise in the West region."]
         }
       }
     },

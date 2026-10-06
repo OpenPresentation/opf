@@ -261,7 +261,7 @@ const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts have no alt field in OPF; see audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
+			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts carry `chart.alt` and are checked by audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
 	},
 );
 const poorAltRule = rule(
@@ -270,13 +270,14 @@ const poorAltRule = rule(
 	'info',
 	'Alt text is a file name, a URL, a generic word or very long.',
 	'Alt text such as "image", "IMG_2041.png" or a 400-character paragraph does not do the job of describing a picture: it is read out and adds noise without information.',
-	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. It cannot tell whether a plausible sentence is accurate.' },
+	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. Chart alt text (chart.alt) is checked too: a bare chart word, a URL, a leading "chart of" or more than 250 characters. It cannot tell whether a plausible sentence is accurate.' },
 );
 
 const GENERIC_ALT = /^(image|picture|photo|photograph|graphic|img|icon|figure|screenshot|untitled|alt|alt text|logo)$/i;
 const FILE_ALT = /(\.(png|jpe?g|gif|svg|webp|bmp|tiff?|heic|avif)$)|^(img|dsc|image|screenshot|screen shot|photo|pic)[ _-]?\d+/i;
+const GENERIC_CHART_ALT = /^((a|an|the)\s+)?([a-z-]+\s+){0,2}(chart|graph|plot|diagram|figure)$/i;
 const kindLabel = (kind: string) =>
-	({ image: 'Image', video: 'Video', 'slide-image': 'Slide image', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', organization: 'Organization logo' })[kind] ?? 'Picture';
+	({ chart: 'Chart', image: 'Image', video: 'Video', 'slide-image': 'Slide image', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', organization: 'Organization logo' })[kind] ?? 'Picture';
 
 function altFixes(path: string, value: unknown): AuditFix[] {
 	const decorative: AuditFix =
@@ -332,6 +333,23 @@ const altRules: AuditRule[] = [
 						message: `${kindLabel(ref.kind)} alt text ${JSON.stringify(alt.length > 60 ? `${alt.slice(0, 57)}...` : alt)} ${problem}.`,
 						help: 'Write what a person who cannot see the picture needs to know, in plain words and without a leading "image of".',
 						fixes: [{ id: 'focus-alt', label: 'Edit alt text', kind: 'focus', safe: true, focus: { path: ref.path, field: 'alt', value: ref.value } }],
+					});
+				}
+				for (const payload of slidePayloads(slide.slide, slide.path)) {
+					const chart = rec(payload.node.chart);
+					const alt = typeof chart.alt === 'string' ? chart.alt.trim() : '';
+					if (!alt) continue;
+					const problem = GENERIC_ALT.test(alt) || GENERIC_CHART_ALT.test(alt) ? 'is a generic word, not what the data shows' : /^(https?:\/\/|data:|www\.)/i.test(alt) ? 'is a URL' : /^(image|picture|photo|graphic|chart|graph) of\b/i.test(alt) ? 'starts with "chart of" or "image of", which a screen reader already announces' : alt.length > 250 ? `is ${alt.length} characters long; aim for a sentence or two` : undefined;
+					if (!problem) continue;
+					const path = `${payload.path}/chart/alt`;
+					if (seen.has(path)) continue;
+					seen.add(path);
+					context.report(poorAltRule, {
+						path,
+						slide,
+						message: `Chart alt text ${JSON.stringify(alt.length > 60 ? `${alt.slice(0, 57)}...` : alt)} ${problem}.`,
+						help: 'State what the chart shows: its point and the key numbers, in a sentence or two.',
+						fixes: [{ id: 'focus-alt', label: 'Edit alt text', kind: 'focus', safe: true, focus: { path: `${payload.path}/chart`, field: 'alt', value: chart.alt } }],
 					});
 				}
 			});
@@ -518,9 +536,9 @@ const chartAltRule = rule(
 	'chart-text-alternative',
 	'accessibility',
 	'info',
-	'A chart is the only content on its slide besides the title.',
-	'A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. OPF has no alt field for charts, so a sentence or table next to the chart is the text alternative.',
-	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether that text states the chart\'s point.' },
+	'A chart has no text alternative, or is marked decorative.',
+	'A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. The chart\'s alt field is that text alternative (the preview exposes it as the chart\'s accessible name and the PowerPoint export writes it as the frame\'s alternative text); a sentence or table beside the chart also serves. An empty alt marks a chart decorative, which is reported as info so the choice is reviewed: a chart rarely carries no message.',
+	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart\'s point (see audit/poor-alt-text for generic alt text). alt: \"\" is reported as a decorative chart, whatever else is on the slide.' },
 );
 
 const chartSkip = /(histogram|box|pareto|waterfall|world|united-|canada|australia|map|sparkline|dot-plot|bullet|progress|dumbbell)/;
@@ -579,15 +597,33 @@ const chartRules: AuditRule[] = [
 				const charts = payloads.filter((p) => p.node.chart !== undefined);
 				if (!charts.length) continue;
 				const textual = (p: { node: Rec }) => ['text', 'items', 'bullets', 'table', 'quote', 'metric', 'timeline'].some((field) => p.node[field] !== undefined && p.node[field] !== '' && !(Array.isArray(p.node[field]) && p.node[field].length === 0));
-				if (payloads.some(textual) || (typeof slide.slide.subtitle === 'string' && slide.slide.subtitle.trim())) continue;
-				const chart = charts[0]!;
-				context.report(chartAltRule, {
-					path: `${chart.path}/chart`,
-					slide,
-					message: `The chart on slide ${slide.index + 1} has no text beside it that states what it shows.`,
-					help: 'Add a subtitle or text block with the chart\'s takeaway (and key numbers), or a table with the data, so the message does not depend on seeing the chart.',
-					fixes: [{ id: 'focus-subtitle', label: 'Write a subtitle', kind: 'focus', safe: true, focus: { path: `${slide.path}/subtitle`, field: 'text' } }],
-				});
+				const textBeside = payloads.some(textual) || (typeof slide.slide.subtitle === 'string' && slide.slide.subtitle.trim() !== '');
+				const where = (chart: (typeof charts)[number]) => (charts.length > 1 ? `chart ${charts.indexOf(chart) + 1} on slide ${slide.index + 1}` : `chart on slide ${slide.index + 1}`);
+				const focusAlt = (chart: (typeof charts)[number]): AuditFix => ({ id: 'focus-alt', label: 'Write alt text', kind: 'focus', safe: true, focus: { path: `${chart.path}/chart`, field: 'alt', value: rec(chart.node.chart).alt } });
+				let reported = false;
+				for (const chart of charts) {
+					const alt = rec(chart.node.chart).alt;
+					if (typeof alt === 'string' && alt.trim() !== '') continue;
+					if (alt === '') {
+						context.report(chartAltRule, {
+							path: `${chart.path}/chart/alt`,
+							slide,
+							message: `The ${where(chart)} is marked decorative (empty alt), so assistive technology skips it.`,
+							help: 'Keep the empty alt only if the chart adds nothing the slide text does not already say. Otherwise describe what it shows: its point and the key numbers.',
+							fixes: [focusAlt(chart)],
+						});
+						continue;
+					}
+					if (textBeside || reported) continue;
+					reported = true;
+					context.report(chartAltRule, {
+						path: `${chart.path}/chart`,
+						slide,
+						message: `The ${where(chart)} has no alt text and no text beside it that states what it shows.`,
+						help: "Set chart.alt to a sentence with the chart's point and key numbers, or add a subtitle, text block or table with them, so the message does not depend on seeing the chart.",
+						fixes: [focusAlt(chart), { id: 'focus-subtitle', label: 'Write a subtitle', kind: 'focus', safe: true, focus: { path: `${slide.path}/subtitle`, field: 'text' } }],
+					});
+				}
 			}
 		},
 	},

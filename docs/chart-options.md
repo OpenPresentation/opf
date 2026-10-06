@@ -64,6 +64,15 @@ The preview (opf-render) and the PPTX export (opf-pptx) both read `resolveChartO
 - **PPTX, chartex** (histogram, pareto, waterfall, funnel, treemap, box and whisker): `cx:axis/cx:title`, `cx:legend pos`, and `cx:dataLabels pos` with `cx:visibility` and `cx:separator`. The classic fallback chart that precedes every chartex part carries the same classic options.
 - **Import.** `fromPptx` reads the same parts back into `axisTitles`, `legend` and `dataLabels`. A legend equal to the default for that chart (right for multi-series, pie and doughnut; none otherwise) is not recorded, so decks that never set the field import unchanged. Anything the three fields cannot express (per-series label overrides, number formats, rich-text titles, manual layouts) is reported with a diagnostic and not invented.
 
+## Text alternative
+
+`Chart.alt` (FA-09) is a string: what the chart shows, in a sentence or two (the point and the key numbers), not "a chart". Unlike the three options above it changes no geometry.
+
+- **Preview.** The chart's SVG group carries `role="img"` and `aria-label`; the drawn marks inside are hidden from assistive technology so the label is the chart's one announcement.
+- **PPTX.** The value is the chart frame's `p:nvGraphicFramePr/p:cNvPr/@descr`, the same attribute pictures use, on classic charts and on chartex (Office 2016) frames. `fromPptx` reads it back into `alt`.
+- **Empty string.** `""` marks the chart decorative, like an empty `Asset.alt`: the preview writes no label and hides the group, the PPTX frame gets `descr=""`. A chart nearly always carries a message, so `audit/chart-text-alternative` reports it as info.
+- **Audit.** `audit/chart-text-alternative` passes a chart with a non-blank `alt`. Without `alt` it still passes when text, a table or a subtitle sits beside the chart; otherwise it reports the chart and offers a quick fix that focuses the `alt` field. `audit/poor-alt-text` flags a bare "chart", a URL, a leading "chart of" and alt text over 250 characters.
+
 ## Defaults and geometry
 
 A chart that sets none of the three fields renders and exports byte-for-byte as before; the preview tests and the PPTX goldens assert it. Because a chart with options reserves space for its legend and titles, the geometry of that chart (and only that chart) differs from a chart without them, so this change is part of the next lockstep release: raise the renderer's, the exporter's and the editor's core floor together.

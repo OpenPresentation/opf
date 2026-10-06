@@ -166,14 +166,16 @@ function canonTable(value: unknown): unknown {
 }
 
 function canonChart(value: unknown): unknown {
-  if (!isRecord(value) || !only(value, ["type", "data"]) || typeof value.type !== "string" || !isRecord(value.data)) return undefined;
+  if (!isRecord(value) || !only(value, ["type", "alt", "data"]) || typeof value.type !== "string" || !isRecord(value.data)) return undefined;
+  if (value.alt !== undefined && typeof value.alt !== "string") return undefined;
+  const alt = value.alt === undefined ? {} : { alt: value.alt };
   const data = value.data;
   if (Array.isArray(data.columns) && Array.isArray(data.rows) && only(data, ["columns", "rows"])) {
     if (!data.columns.every((column) => typeof column === "string") || data.columns.length === 0 || data.rows.length === 0) return undefined;
     for (const row of data.rows) if (!Array.isArray(row) || !row.every((cell) => cell === null || ["string", "number", "boolean"].includes(typeof cell))) return undefined;
-    return { type: value.type, data: { columns: data.columns, rows: data.rows } };
+    return { type: value.type, ...alt, data: { columns: data.columns, rows: data.rows } };
   }
-  if (typeof data.src === "string" && only(data, ["src", "sheet", "range", "columns"])) return { type: value.type, data };
+  if (typeof data.src === "string" && only(data, ["src", "sheet", "range", "columns"])) return { type: value.type, ...alt, data };
   return undefined;
 }
 

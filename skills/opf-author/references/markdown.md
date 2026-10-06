@@ -41,7 +41,7 @@ Note: Speaker notes run to the end of the slide.
 | --- | --- |
 | Approve the plan | Platform |
 
-```chart column
+```chart column alt="Revenue rose from 12 in Q1 to 18 in Q2."
 Quarter,Revenue
 Q1,12
 Q2,18

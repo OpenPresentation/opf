@@ -137,6 +137,8 @@ Chart-specific fields are grouped under `chart`. Do not put loose chart data dir
 
 Inline chart data is tabular by default. Renderers convert `columns` and `rows` into series, axes, legends, and workbook data internally.
 
+Give every chart an `alt`: one or two sentences that say what the data shows (the point and the key numbers), not "a chart" or "bar chart". The preview names the chart with it (`role="img"`, `aria-label`) and the PowerPoint export writes it as the chart frame's alternative text (`descr`), which `fromPptx` reads back. `"alt": ""` marks a chart decorative, as an empty image `alt` does; the audit (`audit/chart-text-alternative`) still reports it as info so the choice is reviewed. Without `alt`, text beside the chart (a subtitle, text or table) satisfies the audit. See [chart options](chart-options.md#text-alternative).
+
 Value cells are numbers. A string is read only in strict decimal syntax (`"12"`, `" -3.5 "`, `"1e6"`); anything else (`"12%"`, `"$5"`, `"(5)"`, `"1,234"`, `"Q1"`) is a gap in the preview and the export and a `chart-value-not-numeric` warning, never a guessed value. `null` and `""` are gaps without a warning. Core `chartNumber` is the one rule every engine uses (RR-54; before it the PPTX exporter stripped non-numeric characters, so `"12%"` exported as 12).
 
 A column is a string or a `DataColumn` with a number format, which the data labels, the value axis and the exported workbook use:

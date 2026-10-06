@@ -366,6 +366,20 @@ describe("OPF to Markdown", () => {
     assert.deepEqual(markdownToOpf(opfToMarkdown(years).markdown).document, years);
   });
 
+  test("a chart fence takes alt after the type, and the writer puts it back (FA-09)", () => {
+    assert.deepEqual(one('```chart column alt="Revenue rose 50% in Q2."\nQuarter,Revenue\nQ1,12\nQ2,18\n```').chart, { type: "column", alt: "Revenue rose 50% in Q2.", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18]] } });
+    assert.deepEqual(one('```chart bar alt=""\n{"columns":["a"],"rows":[[1]]}\n```').chart, { type: "bar", alt: "", data: { columns: ["a"], rows: [[1]] } });
+    assert.ok(rule('```chart bar colour="red"\nA,B\nx,1\n```', "markdown/chart-attributes"));
+    const deck = { slides: [{ chart: { type: "line", alt: 'Sales: "up" 2024 to 2025', data: { columns: ["Year", "Sales"], rows: [["2024", 5], ["2025", 6.5]] } } }] };
+    const { markdown, report } = opfToMarkdown(deck);
+    assert.equal(report.native, true);
+    assert.equal(markdown, '```chart line alt="Sales: \\"up\\" 2024 to 2025"\nYear,Sales\n2024,5\n2025,6.5\n```\n');
+    assert.deepEqual(markdownToOpf(markdown).document, deck);
+    // An alt with a backtick cannot sit in a backtick fence's info string: the chart is embedded and still round-trips.
+    const ticks = { slides: [{ chart: { type: "line", alt: "Uses `code`", data: { columns: ["Year", "Sales"], rows: [["2024", 5]] } } }] };
+    assert.deepEqual(markdownToOpf(opfToMarkdown(ticks).markdown).document, ticks);
+  });
+
   test("a leading --- line whose block holds only comments warns that the slide was not read", () => {
     const result = convert("---\n# Not a deck property\n---\n# Real title\n");
     assert.deepEqual(result.document.slides, [{ title: "Real title" }]);
