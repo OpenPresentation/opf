@@ -207,6 +207,26 @@ describe("rehashSnapshot (core-first edits)", () => {
   });
 });
 
+describe("rehashSnapshot --match-gallery", () => {
+  test("sets the gallery block of a mirrored kind to the rehashed records", async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), "opf-catalog-match-"));
+    try {
+      await cp(catalogsRoot, dir, { recursive: true });
+      const file = path.join(dir, "tones", "formal.json");
+      const record = JSON.parse(await readFile(file, "utf8"));
+      await writeFile(file, `${JSON.stringify({ ...record, summary: "Edited in core first." }, null, 2)}
+`);
+      const changed = await rehashSnapshot(dir, { matchGallery: true });
+      assert.deepEqual(changed.sort(), ["manifest.json (tones)", "tones/index.json"]);
+      assert.deepEqual(await verifySnapshot(dir), []);
+      const manifest = await readJson(path.join(dir, "manifest.json"));
+      assert.equal(manifest.kinds.tones.gallery.contentSha256, manifest.kinds.tones.contentSha256);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});
+
 describe("snapshot source provenance", () => {
   let workdir;
   let galleryDir;

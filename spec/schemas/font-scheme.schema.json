@@ -198,15 +198,16 @@
     "languages": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
       },
-      "description": "Optional list of human-readable language names this scheme is curated for. Useful for picker UIs that group fonts by language coverage.",
+      "description": "Optional list of languages catalog ids (see the languages catalog, https://www.pptx.gallery/languages) this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme, an 'ea' or 'cs' scheme fills its script slot only when this list is empty or names the presentation language by id.",
       "examples": [
         [
-          "Chinese (simplified)",
-          "Chinese (traditional)",
-          "Japanese",
-          "Korean"
+          "chinese-simplified",
+          "chinese-traditional",
+          "japanese",
+          "korean"
         ]
       ]
     },

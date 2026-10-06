@@ -2,6 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "quote-1x",
   "name": "Quote 1x",
+  "summary": "Reach for it when one quotation, with its attribution, is the slide.",
+  "description": "A title above one quote. Use it for a customer testimonial, an expert statement or a line you want the audience to remember.",
   "placeholders": [
     {
       "type": "title"
@@ -9,5 +11,13 @@
     {
       "type": "quote"
     }
-  ]
+  ],
+  "tags": [
+    "Quote",
+    "Testimonial",
+    "Social Proof"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/quote-1x.svg"
+  }
 }

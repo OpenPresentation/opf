@@ -27,5 +27,7 @@
     "Network",
     "Graph"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/network-dependency-map.svg"
+  }
 }

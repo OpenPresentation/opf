@@ -5,10 +5,10 @@
   "app": "PowerPoint",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (simplified)",
-    "Chinese (traditional)",
-    "Japanese",
-    "Korean"
+    "chinese-simplified",
+    "chinese-traditional",
+    "japanese",
+    "korean"
   ],
   "major": "Microsoft YaHei",
   "minor": "Microsoft YaHei",

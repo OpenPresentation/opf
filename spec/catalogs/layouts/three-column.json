@@ -29,7 +29,9 @@
     "Balance",
     "Triads"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/three-column.svg"
+  },
   "composition": {
     "mode": "row",
     "gap": 0.06

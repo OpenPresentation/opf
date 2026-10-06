@@ -22,5 +22,7 @@
     "Pacing",
     "Recap"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chapter-recap.svg"
+  }
 }

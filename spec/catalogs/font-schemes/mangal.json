@@ -5,10 +5,9 @@
   "app": "PowerPoint",
   "languageFamily": "cs",
   "languages": [
-    "Hindi",
-    "Sanskrit",
-    "Marathi",
-    "Nepali"
+    "hindi",
+    "marathi",
+    "nepali"
   ],
   "major": "Mangal",
   "minor": "Mangal",

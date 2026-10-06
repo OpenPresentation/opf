@@ -244,7 +244,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
 | `app` | no | `enum:PowerPoint \| Google Slides` | Target application this font pairing is intended for. |
 | `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script... |
-| `languages` | no | `array<string>` | Optional list of human-readable language names this scheme is curated for. Useful for picker UIs that group fonts by language coverage. |
+| `languages` | no | `array<string>` | Optional list of languages catalog ids (see the languages catalog, https://www.pptx.gallery/languages) this scheme is curated for. Useful for picker UIs that group fonts by language coverage. As the design font scheme... |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |
 | `description` | no | `string` | Longer prose describing the font scheme and where it shines. |
@@ -443,7 +443,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-social-platform/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform its base URL, profile-URL pattern, handle prefix, brand color, and themed icons. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and engines use the catalog record's URL patterns and handle prefix to format and link the profile URL. The brand color and the themed icons are ca...
+- Purpose: Schema for social-platform records in the pptx.gallery library. Each record describes a single social-media platform its base URL, profile-URL pattern, handle prefix, and brand color. Records are referenced from OPF documents indirectly: the property keys of any Socials object (Organization.socials, Speaker.socials) match record ids, and engines use the catalog record's URL patterns and handle prefix to format and link the profile URL. The brand color is catalog metadata for authoring UIs: en...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -459,9 +459,6 @@ OPF documents usually reference these records with string ids such as `design.th
 | `handlePrefix` | no | `string` | Conventional prefix character displayed before the handle (e.g. '@' for X / Mastodon / Threads / TikTok). Empty string when no prefix is used. Renderers strip it before substituting into URL patterns. |
 | `handleExample` | no | `string` | Example handle in its conventional rendered form, used by picker UIs and validation hints. |
 | `brandColor` | no | `string` | Brand color (hex) for branded icon chips, link styling, or section accents in authoring UIs. Catalog metadata: engines do not draw it. |
-| `icon` | no | `string` | Default icon source. Accepts an HTTPS URL, data URI, relative path, or asset reference. Used as the fallback when a themed (Light/Dark) variant isn't set. Catalog metadata for authoring UIs: engines do not draw icons. |
-| `iconLight` | no | `string` | Light-colored icon variant intended for authoring UIs that draw the icon on dark backgrounds (engines do not draw icons). |
-| `iconDark` | no | `string` | Dark-colored icon variant intended for authoring UIs that draw the icon on light backgrounds (engines do not draw icons). |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

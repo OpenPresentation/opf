@@ -23,7 +23,9 @@
     "Schedule",
     "Projects"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/gantt-project-plan.svg"
+  },
   "composition": {
     "padding": 0.04
   }

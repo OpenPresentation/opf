@@ -26,7 +26,9 @@
     "Proof",
     "Impact"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/before-after.svg"
+  },
   "composition": {
     "mode": "row"
   }

@@ -26,7 +26,9 @@
     "Balance",
     "Content"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+  },
   "composition": {
     "mode": "row",
     "gap": 0.06

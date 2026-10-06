@@ -2,6 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "image-2x",
   "name": "Image 2x",
+  "summary": "Reach for it when two pictures are shown together, each with a note.",
+  "description": "A title above two images, each followed by a text block, in two columns. Use it for a before and after, two options or two views of the same thing.",
   "placeholders": [
     {
       "type": "title"
@@ -22,5 +24,13 @@
   "composition": {
     "mode": "grid",
     "columns": 2
+  },
+  "tags": [
+    "Visual",
+    "Gallery",
+    "Comparison"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-2x.svg"
   }
 }

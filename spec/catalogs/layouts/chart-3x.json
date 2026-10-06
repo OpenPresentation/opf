@@ -2,6 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "chart-3x",
   "name": "Chart 3x",
+  "summary": "Reach for it when three charts tell one story, each with its own note.",
+  "description": "A title above three charts, each followed by a text block, in three columns. Use it for a small-multiples view of three metrics, regions or cohorts.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -28,5 +35,13 @@
   "composition": {
     "mode": "grid",
     "columns": 3
+  },
+  "tags": [
+    "Charts",
+    "Multi-chart",
+    "Triads"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-3x.svg"
   }
 }

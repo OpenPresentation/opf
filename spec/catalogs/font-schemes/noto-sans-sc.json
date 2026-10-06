@@ -5,10 +5,10 @@
   "app": "Google Slides",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (simplified)",
-    "Chinese (traditional)",
-    "Japanese",
-    "Korean"
+    "chinese-simplified",
+    "chinese-traditional",
+    "japanese",
+    "korean"
   ],
   "major": "Noto Sans SC",
   "minor": "Noto Sans SC",

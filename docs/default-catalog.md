@@ -152,7 +152,9 @@ node scripts/sync-gallery-catalog.mjs --rehash   # index contentSha256, manifest
 `--rehash` leaves the manifest `source` and each kind's `gallery` block alone,
 because they describe the pinned gallery commit, and it does not touch `mode`. A
 mirrored kind must also match the gallery hash, so a core-first change to a mirror
-kind needs the gallery to publish it first, or the kind to move to `subset`. The
+kind needs the gallery to publish it first, or the kind to move to `subset`; when the gallery change that
+publishes the same records is already in review, `--rehash --match-gallery` also sets that kind's `gallery`
+block to the new hash. The
 gallery adopts a core-first change with the next `@openpresentation/opf` release
 (its `check:core-catalog` reads that release).
 

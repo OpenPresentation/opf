@@ -23,7 +23,9 @@
     "Conversion",
     "Hierarchy"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/funnel-pyramid.svg"
+  },
   "composition": {
     "padding": 0.12
   }

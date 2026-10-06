@@ -23,5 +23,7 @@
     "Dependencies",
     "Risk"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/assumptions-dependencies.svg"
+  }
 }

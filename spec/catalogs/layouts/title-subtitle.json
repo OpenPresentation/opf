@@ -2,6 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "title-subtitle",
   "name": "Title Subtitle",
+  "summary": "Reach for it when a headline needs one supporting line, as on a cover or a section opener.",
+  "description": "A title with a subtitle beneath it. Use it for the cover slide, for section openers, or for a closing slide with a headline and a short follow-up line.",
   "placeholders": [
     {
       "type": "title"
@@ -9,5 +11,13 @@
     {
       "type": "subtitle"
     }
-  ]
+  ],
+  "tags": [
+    "Opening",
+    "Headline",
+    "Message"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-subtitle.svg"
+  }
 }

@@ -5,9 +5,9 @@
   "app": "Google Slides",
   "languageFamily": "cs",
   "languages": [
-    "Arabic",
-    "Pashto",
-    "Punjabi (Shahmukhi)"
+    "arabic",
+    "pashto",
+    "punjabi-shahmukhi"
   ],
   "major": "Noto Naskh Arabic",
   "minor": "Noto Naskh Arabic",

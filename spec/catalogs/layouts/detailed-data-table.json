@@ -26,7 +26,9 @@
     "Table",
     "Reference"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/detailed-data-table.svg"
+  },
   "composition": {
     "mode": "row"
   }

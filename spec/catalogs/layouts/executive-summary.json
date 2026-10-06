@@ -23,7 +23,9 @@
     "Leadership",
     "Brief"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/executive-summary.svg"
+  },
   "composition": {
     "padding": 0.12
   }
