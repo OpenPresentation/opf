@@ -144,7 +144,7 @@
     "fontkit": "^2.0.4",
     "pako": "1.0.11",
     "pdf-lib": "^1.17.1",
-    "sharp": "0.35.4"
+    "sharp": "0.35.5"
   },
   "peerDependencies": {
     "@expo-google-fonts/noto-color-emoji": "0.4.6",
