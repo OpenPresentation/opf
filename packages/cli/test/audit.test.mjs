@@ -47,7 +47,7 @@ describe("opf audit", () => {
     assert.equal(contrast.fixes[0].patch[0].path, "/slides/0/text/0/color");
     assert.equal(chart.severity, "info");
     assert.match(report.sha256, /^[a-f0-9]{64}$/);
-    assert.match(report.opfVersion, /^\d+\.\d+\.\d+$/);
+    assert.match(report.opfVersion, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
     assert.deepEqual(report.counts, { error: 0, warning: 1, info: 1 });
     assert.equal(run(["audit", file, "--fail-on", "warning"]).status, 1);
     assert.equal(run(["audit", file, "--fail-on", "info"]).status, 1);
