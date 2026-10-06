@@ -1,0 +1,107 @@
+{
+  "node": "v24.21.0",
+  "wanted": {
+    "@openpresentation/opf": "0.13.0",
+    "@openpresentation/opf-pptx": "0.13.1",
+    "@openpresentation/opf-render": "0.13.0"
+  },
+  "problems": [],
+  "sets": {
+    "rr17-set": {
+      "decks": 20,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "20 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "ff12-set": {
+      "decks": 12,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "12 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "ff27-set": {
+      "decks": 2,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "2 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "save87-set": {
+      "decks": 2,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "2 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "ff13-set": {
+      "decks": 1,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "1 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "rr54-recheck": {
+      "decks": 3,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "3 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "rr54-slash": {
+      "decks": 1,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "1 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    },
+    "per-slide-script-fonts": {
+      "decks": 4,
+      "checks": [
+        "manifest records {\"@openpresentation/opf\":\"0.13.0\",\"@openpresentation/opf-pptx\":\"0.13.1\",\"@openpresentation/opf-render\":\"0.13.0\"}",
+        "4 deck(s) sha256 + unzip + XML + rels + content types checked"
+      ],
+      "versions": {
+        "@openpresentation/opf": "0.13.0",
+        "@openpresentation/opf-pptx": "0.13.1",
+        "@openpresentation/opf-render": "0.13.0"
+      }
+    }
+  }
+}

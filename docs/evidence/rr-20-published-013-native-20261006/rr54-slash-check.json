@@ -1,0 +1,191 @@
+{
+  "verdict": "PASS",
+  "shaOk": true,
+  "stage": "done",
+  "powerpoint": {
+    "version": "16.0",
+    "build": "20430"
+  },
+  "rows": [
+    {
+      "slide": 1,
+      "format": "$#,##0.0",
+      "exported": "$#,##0.0",
+      "powerpoint": [
+        "\\$#,##0.0"
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "$3.3",
+        "$4.8",
+        "$12.5"
+      ],
+      "png": "rr54-slash-slide01.png"
+    },
+    {
+      "slide": 2,
+      "format": "0.0 m/s",
+      "exported": "0.0 \"m/s\"",
+      "powerpoint": [
+        "0.0 \"m/s\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3.3 m/s",
+        "4.8 m/s",
+        "12.5 m/s"
+      ],
+      "png": "rr54-slash-slide02.png"
+    },
+    {
+      "slide": 3,
+      "format": "km/h 0",
+      "exported": "\"km/h \"0",
+      "powerpoint": [
+        "\"km/h \"0"
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "km/h 3",
+        "km/h 5",
+        "km/h 13"
+      ],
+      "png": "rr54-slash-slide03.png"
+    },
+    {
+      "slide": 4,
+      "format": "#,##0 items/day",
+      "exported": "#,##0 \"items/day\"",
+      "powerpoint": [
+        "#,##0 \"items/day\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 items/day",
+        "5 items/day",
+        "13 items/day"
+      ],
+      "png": "rr54-slash-slide04.png"
+    },
+    {
+      "slide": 5,
+      "format": "0.0 E+3 m",
+      "exported": "0.0 \"E+3 m\"",
+      "powerpoint": [
+        "0.0 \"E+3 m\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3.3 E+3 m",
+        "4.8 E+3 m",
+        "12.5 E+3 m"
+      ],
+      "png": "rr54-slash-slide05.png"
+    },
+    {
+      "slide": 6,
+      "format": "#,##0 @HQ",
+      "exported": "#,##0 \"@HQ\"",
+      "powerpoint": [
+        "#,##0 \"@HQ\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 @HQ",
+        "5 @HQ",
+        "13 @HQ"
+      ],
+      "png": "rr54-slash-slide06.png"
+    },
+    {
+      "slide": 7,
+      "format": "#,##0 *est",
+      "exported": "#,##0 \"*est\"",
+      "powerpoint": [
+        "#,##0 \"*est\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 *est",
+        "5 *est",
+        "13 *est"
+      ],
+      "png": "rr54-slash-slide07.png"
+    },
+    {
+      "slide": 8,
+      "format": "#,##0 net_rev",
+      "exported": "#,##0 \"net_rev\"",
+      "powerpoint": [
+        "#,##0 \"net_rev\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 net_rev",
+        "5 net_rev",
+        "13 net_rev"
+      ],
+      "png": "rr54-slash-slide08.png"
+    },
+    {
+      "slide": 9,
+      "format": "#,##0 ok?",
+      "exported": "#,##0 \"ok?\"",
+      "powerpoint": [
+        "#,##0 \"ok?\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 ok?",
+        "5 ok?",
+        "13 ok?"
+      ],
+      "png": "rr54-slash-slide09.png"
+    },
+    {
+      "slide": 10,
+      "format": "0.0% p.a.",
+      "exported": "0.0% \"p.a.\"",
+      "powerpoint": [
+        "0.0% \"p.a.\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "325.0% p.a.",
+        "480.0% p.a.",
+        "1250.0% p.a."
+      ],
+      "png": "rr54-slash-slide10.png"
+    },
+    {
+      "slide": 11,
+      "format": "#,##0 (est)",
+      "exported": "#,##0 (\"est)\"",
+      "powerpoint": [
+        "#,##0 (\"est)\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 (est)",
+        "5 (est)",
+        "13 (est)"
+      ],
+      "png": "rr54-slash-slide11.png"
+    },
+    {
+      "slide": 12,
+      "format": "0 \"q\"",
+      "exported": "0 \\\"\"q\"\\\"",
+      "powerpoint": [
+        "0 \\\"\"q\"\\\""
+      ],
+      "result": "PASS",
+      "expectedLabels": [
+        "3 \"q\"",
+        "5 \"q\"",
+        "13 \"q\""
+      ],
+      "png": "rr54-slash-slide12.png"
+    }
+  ]
+}
