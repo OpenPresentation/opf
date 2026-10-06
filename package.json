@@ -15,7 +15,7 @@
     "test:flake-repeat": "node scripts/flake-repeat.mjs",
     "check:engines-range": "node --test scripts/check-engines-range.test.mjs && node scripts/check-engines-range.mjs",
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
-    "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs scripts/published-matrix/compare-parity.test.mjs",
+    "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs scripts/published-matrix/compare-parity.test.mjs scripts/published-matrix/installed-parity.test.mjs",
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs scripts/qualify-latin-fonts.test.mjs && node scripts/build-font-tracker.mjs --check",
     "build:font-tracker": "node scripts/build-font-tracker.mjs",
     "check:gallery-tracker": "node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check",
