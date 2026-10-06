@@ -1,0 +1,88 @@
+{
+  "name": "FA-11 timeline status",
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "Where the rollout stands",
+      "timeline": {
+        "name": "Regional rollout",
+        "events": [
+          {
+            "when": "Q1",
+            "what": "Discovery",
+            "description": "Interviews and requirements.",
+            "status": "done"
+          },
+          {
+            "when": "Q2",
+            "what": "Pilot",
+            "description": "One operations team.",
+            "status": "done"
+          },
+          {
+            "when": "Q3",
+            "what": "Rollout",
+            "description": "All regions, in waves.",
+            "status": "current"
+          },
+          {
+            "when": "Q4",
+            "what": "Scale",
+            "description": "Automate exception reporting.",
+            "status": "planned"
+          },
+          {
+            "when": "Q1 next year",
+            "what": "Review",
+            "description": "Measure the results.",
+            "status": "planned"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Same roadmap on a dark slide",
+      "design": {
+        "background": "#10151C"
+      },
+      "timeline": {
+        "name": "Regional rollout",
+        "events": [
+          {
+            "when": "Q1",
+            "what": "Discovery",
+            "description": "Interviews and requirements.",
+            "status": "done"
+          },
+          {
+            "when": "Q2",
+            "what": "Pilot",
+            "description": "One operations team.",
+            "status": "done"
+          },
+          {
+            "when": "Q3",
+            "what": "Rollout",
+            "description": "All regions, in waves.",
+            "status": "current"
+          },
+          {
+            "when": "Q4",
+            "what": "Scale",
+            "description": "Automate exception reporting.",
+            "status": "planned"
+          },
+          {
+            "when": "Q1 next year",
+            "what": "Review",
+            "description": "Measure the results.",
+            "status": "planned"
+          }
+        ]
+      }
+    }
+  ]
+}

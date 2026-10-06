@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "what": "Discovery",
+      "status": "done"
+    },
+    {
+      "what": "Pilot",
+      "status": "done"
+    },
+    {
+      "what": "Rollout",
+      "status": "current"
+    },
+    {
+      "what": "Scale",
+      "status": "planned"
+    },
+    {
+      "what": "Review",
+      "status": "planned"
+    }
+  ]
+}

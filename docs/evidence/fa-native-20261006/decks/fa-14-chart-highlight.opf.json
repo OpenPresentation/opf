@@ -1,0 +1,159 @@
+{
+  "name": "FA-14 chart highlight",
+  "design": {
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "title": "Series highlight (North)",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ],
+            [
+              "Q4",
+              22,
+              9
+            ]
+          ]
+        },
+        "highlight": {
+          "series": [
+            "North"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Category highlight (Q2)",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ],
+            [
+              "Q4",
+              22,
+              9
+            ]
+          ]
+        },
+        "highlight": {
+          "categories": [
+            "Q2"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Pie highlight (APAC)",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "Region",
+            "Share"
+          ],
+          "rows": [
+            [
+              "EMEA",
+              40
+            ],
+            [
+              "APAC",
+              35
+            ],
+            [
+              "AMER",
+              25
+            ]
+          ]
+        },
+        "highlight": {
+          "categories": [
+            "APAC"
+          ]
+        }
+      }
+    },
+    {
+      "title": "Line, category highlight (Q3)",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South"
+          ],
+          "rows": [
+            [
+              "Q1",
+              10,
+              5
+            ],
+            [
+              "Q2",
+              20,
+              8
+            ],
+            [
+              "Q3",
+              15,
+              12
+            ],
+            [
+              "Q4",
+              22,
+              9
+            ]
+          ]
+        },
+        "highlight": {
+          "categories": [
+            "Q3"
+          ]
+        }
+      }
+    }
+  ]
+}

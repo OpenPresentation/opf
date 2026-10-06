@@ -1,0 +1,13 @@
+{
+  "name": "FA-13 preset 4:5",
+  "design": {
+    "fontScheme": "roboto",
+    "dimensions": "4:5"
+  },
+  "slides": [
+    {
+      "title": "Social 4:5",
+      "text": "A social-feed post."
+    }
+  ]
+}

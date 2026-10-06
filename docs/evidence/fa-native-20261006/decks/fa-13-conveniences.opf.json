@@ -1,0 +1,55 @@
+{
+  "name": "FA-13 conveniences",
+  "language": "en-US",
+  "design": {
+    "fontScheme": "roboto",
+    "watermark": {
+      "text": "DRAFT",
+      "opacity": 0.15
+    }
+  },
+  "slides": [
+    {
+      "title": "Text watermark",
+      "text": "The watermark sits behind this slide."
+    },
+    {
+      "title": "Code highlight",
+      "code": {
+        "source": "const a = 1;\nconst b = 2;\nconst c = a + b;\n\nconsole.log(c);\nreturn c;",
+        "language": "ts",
+        "highlight": [
+          2,
+          [
+            3,
+            3
+          ],
+          5
+        ]
+      }
+    },
+    {
+      "title": "Per-run language",
+      "text": [
+        {
+          "text": "Default English. "
+        },
+        {
+          "text": "Bonjour le monde. ",
+          "lang": "fr-FR"
+        },
+        {
+          "text": "こんにちは",
+          "lang": "ja-JP"
+        }
+      ]
+    },
+    {
+      "title": "Watermark on white",
+      "text": "White background slide.",
+      "design": {
+        "background": "#FFFFFF"
+      }
+    }
+  ]
+}

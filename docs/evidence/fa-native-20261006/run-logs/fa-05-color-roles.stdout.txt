@@ -1,0 +1,10 @@
+{"item":"FA-05","check":"opens-read-only","expected":"opens, 3 slides","actual":"opened, 3 slides, ReadOnly=-1","pass":true,"note":"COM cannot report a silent repair directly; the per-slide shape checks below catch a repaired-away chart or shape"}
+{"item":"FA-05","check":"link-run-has-hyperlink","expected":"https://example.com/docs","actual":"https://example.com/docs","pass":true}
+{"item":"FA-05","check":"theme-hyperlink-color-is-AA3311","expected":"#AA3311","actual":"#AA3311","pass":true,"note":"ThemeColorScheme.Colors(11) is the theme hlink slot"}
+{"item":"FA-05","check":"link-run-reads-as-hyperlink-colored","expected":"theme hyperlink #AA3311","actual":"RGB #AA3311, ObjectThemeColor 11, Type 2","pass":true,"note":"the run has no OPF color, so the export writes schemeClr hlink; PowerPoint draws hyperlink runs in the theme hlink color"}
+{"item":"FA-05","check":"slide2-background-is-FF0000","expected":"#FF0000","actual":"#FF0000, FollowMasterBackground=0","pass":true}
+{"item":"FA-05","check":"text-on-red-is-dark-body","expected":"WCAG relative luminance \u003c 0.179 (dark text)","actual":"#000000 luminance 0","pass":true}
+{"item":"FA-05","check":"text-on-red-is-dark-title","expected":"WCAG relative luminance \u003c 0.179 (dark text)","actual":"#000000 luminance 0","pass":true}
+{"item":"FA-05","check":"accent-role-is-accent3","expected":"accent3 #5499C7 (not accent1 #2874A6)","actual":"#000000, ObjectThemeColor ","pass":false,"note":"msoThemeColorAccent3 = 7"}
+{"item":"FA-05","check":"accent3-ref-is-accent3","expected":"accent3 #5499C7","actual":"#000000","pass":false}
+{"item":"FA-05","check":"primary-role-is-accent1","expected":"accent1 #2874A6","actual":"#000000","pass":false,"note":"supporting check, not in the FA-05 list"}
