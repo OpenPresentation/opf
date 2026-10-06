@@ -1,3 +1,7 @@
+// Generates docs/schema-reference.md, docs/catalog-schema-reference.md and docs/examples.md from spec/schemas/ and
+// examples/. The three files are generated output: change this script (or the schemas), never the files by hand.
+//   node scripts/generate-schema-docs.mjs           write the three files
+//   node scripts/generate-schema-docs.mjs --check   fail when a committed file differs from a fresh build (drift)
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -64,6 +68,19 @@ function table(rows) {
   return `${lines.join("\n")}\n`;
 }
 
+// An if/then/else whose branches require fields, such as Table: `dataset` when present, otherwise `rows`.
+function conditionalRequirement(schema) {
+  const when = schema.if?.required;
+  if (!Array.isArray(when) || when.length === 0) return "";
+  const fields = (list) => list.map((field) => `\`${field}\``).join(" and ");
+  const then = Array.isArray(schema.then?.required) ? schema.then.required : [];
+  const otherwise = Array.isArray(schema.else?.required) ? schema.else.required : [];
+  if (then.length === 0 && otherwise.length === 0) return "";
+  const parts = [then.length > 0 ? `${fields(then)} when ${fields(when)} is present` : fields(when)];
+  if (otherwise.length > 0) parts.push(`otherwise ${fields(otherwise)}`);
+  return parts.join(", or ");
+}
+
 function definitionDoc(name, schema) {
   const lines = [];
   lines.push(`### ${name}`);
@@ -75,6 +92,8 @@ function definitionDoc(name, schema) {
   lines.push(`- Required fields: ${required}`);
   const description = clean(schema.description, 500);
   if (description) lines.push(`- Purpose: ${description}`);
+  const conditional = conditionalRequirement(schema);
+  if (conditional) lines.push(`- Conditional requirement: ${conditional}`);
   if (schema.anyOf) {
     const options = schema.anyOf
       .map((option) => option.required?.map((field) => `\`${field}\``).join(" and "))
@@ -91,7 +110,7 @@ async function loadSchema(file) {
   return JSON.parse(await readFile(path.join(schemaRoot, file), "utf8"));
 }
 
-async function writePresentationReference() {
+async function presentationReference() {
   const schema = await loadSchema("opf.schema.json");
   const lines = [
     "# OPF Presentation Schema Reference",
@@ -116,10 +135,10 @@ async function writePresentationReference() {
     lines.push("");
   }
 
-  await writeFile(path.join(docsRoot, "schema-reference.md"), `${lines.join("\n").trimEnd()}\n`, "utf8");
+  return { file: "schema-reference.md", content: `${lines.join("\n").trimEnd()}\n` };
 }
 
-async function writeCatalogReference() {
+async function catalogReference() {
   const files = (await readdir(schemaRoot))
     .filter((file) => file.endsWith(".schema.json") && file !== "opf.schema.json")
     .sort((a, b) => a.localeCompare(b));
@@ -170,7 +189,7 @@ async function writeCatalogReference() {
     }
   }
 
-  await writeFile(path.join(docsRoot, "catalog-schema-reference.md"), `${lines.join("\n").trimEnd()}\n`, "utf8");
+  return { file: "catalog-schema-reference.md", content: `${lines.join("\n").trimEnd()}\n` };
 }
 
 async function countExampleDecks() {
@@ -187,7 +206,7 @@ async function countExampleDecks() {
   return count;
 }
 
-async function writeExamplesGuide() {
+async function examplesGuide() {
   const deckCount = await countExampleDecks();
   const lines = [
     "# OPF Examples Guide",
@@ -197,6 +216,7 @@ async function writeExamplesGuide() {
     "- `examples/technical/` contains compact fixtures that isolate one or two schema behaviors.",
     "- `examples/gallery/` contains scenario-oriented decks that show OPF working across industries, functions, education, government, international, presentation-type, and design/media use cases.",
     `- The representative deck for [the published-package quickstart](quickstart.md) lives at [\`docs/quickstart/developer-quickstart.opf.json\`](quickstart/developer-quickstart.opf.json), outside the catalog, so \`@openpresentation/opf/examples\` stays at the published example count (currently ${deckCount} decks); the renderer golden corpus tracks that catalog on its own release cadence.`,
+    "- `examples/markdown/` holds decks written in the [Markdown dialect](markdown.md) (`.md`, not `.opf.json`, so they are outside the catalog count): `quarterly-review.md` uses every block kind and is canonical, `outline.md` is a plain outline read with `opf from-md --split headings`. The tests convert, validate, compose and round trip them.",
     "- The examples root is kept as an organizing directory rather than a home for standalone OPF files.",
     "",
     "## Technical Fixtures",
@@ -241,13 +261,26 @@ async function writeExamplesGuide() {
     "The script walks every OPF document under `examples/` and reports schema or semantic validation issues with file paths.",
   ];
 
-  await writeFile(path.join(docsRoot, "examples.md"), `${lines.join("\n")}\n`, "utf8");
+  return { file: "examples.md", content: `${lines.join("\n")}\n` };
 }
 
 async function main() {
-  await writePresentationReference();
-  await writeCatalogReference();
-  await writeExamplesGuide();
+  const docs = [await presentationReference(), await catalogReference(), await examplesGuide()];
+  if (process.argv.includes("--check")) {
+    const stale = [];
+    for (const { file, content } of docs) {
+      const committed = await readFile(path.join(docsRoot, file), "utf8").catch(() => null);
+      if (committed?.replace(/\r\n/g, "\n") !== content) stale.push(`docs/${file}`);
+    }
+    if (stale.length > 0) {
+      console.error(`generated docs differ from scripts/generate-schema-docs.mjs: ${stale.join(", ")}`);
+      console.error("These files are generated. Change the generator or the schemas, then run node scripts/generate-schema-docs.mjs");
+      process.exit(1);
+    }
+    console.log("schema and examples docs match scripts/generate-schema-docs.mjs");
+    return;
+  }
+  for (const { file, content } of docs) await writeFile(path.join(docsRoot, file), content, "utf8");
   console.log("wrote schema and examples docs");
 }
 

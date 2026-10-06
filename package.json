@@ -54,6 +54,7 @@
     "test:lists": "node --import ./scripts/register-local-opf.mjs scripts/test-list-ecosystem.mjs",
     "lint": "biome check .",
     "check:spec": "node scripts/check-spec-integrity.mjs",
+    "check:schema-docs": "node scripts/generate-schema-docs.mjs --check",
     "check:catalog": "node --test scripts/sync-gallery-catalog.test.mjs && node scripts/sync-gallery-catalog.mjs --verify",
     "sync:catalog": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
     "check:examples": "node scripts/validate-examples.mjs && node scripts/inspect-lint-examples.mjs && node scripts/check-generated-examples.mjs",
