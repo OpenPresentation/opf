@@ -318,7 +318,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "canada",
+            "type": "world",
             "data": {
               "columns": [
                 "Quarter",

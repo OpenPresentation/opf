@@ -2,17 +2,9 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "audiences",
   "version": "1",
-  "description": "Catalog of presentation audiences available in the openpresentation.org catalog. Each entry is a lightweight summary; full audience records (seniority, technical fluency, decision power, attention budget, recommended narratives and tones) live in the per-id JSON files alongside this index. Audiences are referenced from OPF documents via audience. The singular ids from executive onward match the audience pages on pptx.gallery and carry its recommendations. The older plural ids (executives, investors, customers, sales-team, marketing-team, regulators) are deprecated aliases: they stay resolvable for existing documents, point at their singular replacement through replacedBy, and are excluded from default listings.",
-  "contentSha256": "bfb44226b533a2da04c92077eb39c689dde43181e0b9979fb15c247dfaba1f98",
+  "description": "Catalog of presentation audiences available in the openpresentation.org catalog. Each entry is a lightweight summary; full audience records (seniority, technical fluency, decision power, attention budget, recommended narratives and tones) live in the per-id JSON files alongside this index. Audiences are referenced from OPF documents via audience. The singular ids from executive onward match the audience pages on pptx.gallery and carry its recommendations.",
+  "contentSha256": "7d09863ea2357493b038341aabeea9aa7648b7062205249a0d6726aa5e362314",
   "records": [
-    {
-      "id": "executives",
-      "name": "Executives",
-      "summary": "Senior leaders who need the recommendation up front, the evidence behind it, and the ask.",
-      "file": "executives.json",
-      "deprecated": true,
-      "replacedBy": "executive"
-    },
     {
       "id": "board",
       "name": "Board of Directors",
@@ -26,38 +18,6 @@
       "file": "engineering-team.json"
     },
     {
-      "id": "investors",
-      "name": "Investors",
-      "summary": "Capital allocators evaluating fit, traction, and risk-adjusted return.",
-      "file": "investors.json",
-      "deprecated": true,
-      "replacedBy": "investor"
-    },
-    {
-      "id": "customers",
-      "name": "Customers",
-      "summary": "Buyers and users — outcome-focused, allergic to jargon, sensitive to time.",
-      "file": "customers.json",
-      "deprecated": true,
-      "replacedBy": "customer"
-    },
-    {
-      "id": "sales-team",
-      "name": "Sales Team",
-      "summary": "Quota-carrying reps who want talk tracks, objection handling, and crisp proof.",
-      "file": "sales-team.json",
-      "deprecated": true,
-      "replacedBy": "sales"
-    },
-    {
-      "id": "marketing-team",
-      "name": "Marketing Team",
-      "summary": "Brand and demand-gen practitioners aligning on positioning, messaging, and campaigns.",
-      "file": "marketing-team.json",
-      "deprecated": true,
-      "replacedBy": "marketing"
-    },
-    {
       "id": "all-hands",
       "name": "All Hands",
       "summary": "The full company — mixed roles, mixed seniority, looking for context, signal, and inclusion.",
@@ -68,14 +28,6 @@
       "name": "Candidates",
       "summary": "Potential hires evaluating company, role, and people.",
       "file": "candidates.json"
-    },
-    {
-      "id": "regulators",
-      "name": "Regulators",
-      "summary": "Government, agency, and policy reviewers evaluating compliance, risk, and impact.",
-      "file": "regulators.json",
-      "deprecated": true,
-      "replacedBy": "regulatory"
     },
     {
       "id": "executive",

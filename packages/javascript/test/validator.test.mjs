@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { validatePresentation } from "../dist/index.js";
+import { catalogs, validatePresentation } from "../dist/index.js";
 import { assertValid, validate, validateCatalogRecord } from "../dist/validator.js";
 
 const doc = {
@@ -912,52 +912,38 @@ describe("catalog-id warning behavior", () => {
     );
   });
 
-  test("deprecated chart type id stays valid but warns with its replacement", () => {
+  test("the bundled catalog holds no deprecated records and the retired chart type and audience ids are unknown", () => {
+    for (const [kind, records] of Object.entries(catalogs)) {
+      assert.deepEqual(records.filter((record) => record.deprecation).map((record) => record.id), [], `bundled ${kind} records carry no deprecation`);
+    }
+    const retired = ["bullet-column", "clustered-column", "sparkline", "dot-plot", "australia", "stacked-column-3x", "stacked-column-2x"];
     const result = validatePresentation({
-      name: "Deprecated Chart Type",
+      name: "Retired Ids",
+      audience: ["executives", "sales-team", "executive"],
       slides: [
-        { title: "Bullet", chart: { type: "bullet-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
-        { title: "Column", chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+        ...retired.map((type) => ({ title: type, chart: { type, data: { columns: ["A", "B"], rows: [["x", 1]] } } })),
+        { title: "Stacked column", chart: { type: "stacked-column", data: { columns: ["A", "B", "C"], rows: [["x", 1, 2]] } } },
       ],
     });
-    assert.equal(result.valid, true);
-    const warning = result.warnings.find((candidate) => candidate.path === "/slides/0/chart/type");
-    assert.ok(warning, JSON.stringify(result.warnings, null, 2));
-    assert.equal(warning.message, "deprecated chartTypes catalog id 'bullet-column'; use 'column'");
-    assert.equal(warning.params.replacedBy, "column");
-    assert.equal(result.warnings.some((candidate) => candidate.path === "/slides/1/chart/type"), false);
+    assert.equal(result.valid, true, "an unknown catalog id warns, never errors");
+    assert.deepEqual(
+      result.warnings.map((warning) => warning.message),
+      [
+        "unknown audiences catalog id 'executives'",
+        "unknown audiences catalog id 'sales-team'",
+        ...retired.map((id) => `unknown chartTypes catalog id '${id}'`),
+      ],
+    );
   });
 
-  test("the six plural audience ids stay valid but warn with their singular replacement", () => {
-    const replacements = {
-      executives: "executive",
-      investors: "investor",
-      customers: "customer",
-      "sales-team": "sales",
-      "marketing-team": "marketing",
-      regulators: "regulatory",
-    };
-    const plural = Object.keys(replacements);
+  test("an inline chart type record can still deprecate an id", () => {
     const result = validatePresentation({
-      name: "Plural Audiences",
-      audience: [...plural, ...Object.values(replacements), "candidates", "engineering-team"],
-      slides: [{ title: "Slide Title" }],
+      name: "Inline Deprecated Chart Type",
+      catalogs: { chartTypes: { records: [{ id: "my-column", name: "My column", deprecation: { replacedBy: "column" } }] } },
+      slides: [{ title: "Old", chart: { type: "my-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } }],
     });
-    assert.equal(result.valid, true, "deprecated ids must warn, never error");
-    assert.deepEqual(result.errors, []);
-    assert.deepEqual(
-      result.warnings.map((warning) => [warning.path, warning.message]),
-      plural.map((id, index) => [`/audience/${index}`, `deprecated audiences catalog id '${id}'; use '${replacements[id]}'`]),
-    );
-    for (const warning of result.warnings) assert.equal(warning.params.replacedBy, replacements[warning.params.id]);
-
-    const object = validatePresentation({
-      name: "Plural Audience Override",
-      audience: [{ id: "sales-team", attentionBudgetMinutes: 20 }],
-      slides: [{ title: "Slide Title" }],
-    });
-    assert.equal(object.valid, true);
-    assert.deepEqual(object.warnings.map((warning) => warning.message), ["deprecated audiences catalog id 'sales-team'; use 'sales'"]);
+    assert.equal(result.valid, true);
+    assert.deepEqual(result.warnings.map((warning) => warning.message), ["deprecated chartTypes catalog id 'my-column'; use 'column'"]);
   });
 
   test("inline catalog record legitimizes an id the bundled catalogs don't know", () => {

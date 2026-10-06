@@ -162,7 +162,7 @@ const chartMembers = new Map(CHART_LEVELS.map((level) => {
 }));
 assert.equal(CHART_CLASSES.size, CHART_LEVELS.length, `the catalog has ${CHART_CLASSES.size} chart export paths: ${[...CHART_CLASSES.keys()]}`);
 const chartData = (record) => {
-  const width = Math.max(record.columns.length, 2);
+  const width = Math.max(record.series + 1, 2);
   return {columns: ['Quarter', ...Array.from({length: width - 1}, (_, index) => `Series ${index + 1}`)], rows: ['Q1', 'Q2', 'Q3', 'Q4'].map((quarter, row) => [quarter, ...Array.from({length: width - 1}, (_, column) => (row + 1) * (column + 2) + column)])};
 };
 
@@ -1115,7 +1115,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
 {
   const id = 'single-series-histogram-chart';
   const histogram = byId('chartTypes', 'histogram');
-  assert.equal(histogram.columns.length, 1, 'the catalog histogram has one data column');
+  assert.equal(histogram.series, 1, 'the catalog histogram expects one series');
   const deck = {name: id, language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
   const exportDiagnostics = [];
   const bytes = await toPptx(deck, {...engineOptions(deck), onDiagnostic: (diagnostic) => exportDiagnostics.push(diagnostic)});

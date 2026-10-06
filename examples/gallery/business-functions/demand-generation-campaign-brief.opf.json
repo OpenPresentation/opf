@@ -165,7 +165,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "clustered-bar-2x",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",

@@ -53,7 +53,7 @@ Three optional fields on the `Chart` object:
 | box and whisker | category, value | yes | none | none |
 | world (region map) | none | none | none | none |
 
-Deprecated catalog ids resolve through their replacement (`chartOptionTarget('clustered-column')` is the column target). A chart type outside the catalog is never adapted.
+A chart type outside the catalog is never adapted.
 
 ## How the engines draw and write them
 

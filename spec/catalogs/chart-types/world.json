@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "world",
-  "name": "WORLD",
-  "label": "Map",
+  "name": "Map",
   "mappings": {
     "openxml": {
       "element": "mapChart",
@@ -15,69 +14,8 @@
       }
     }
   },
-  "categories": 14,
-  "columns": [
-    "Country",
-    "Value"
-  ],
   "group": "Map",
   "groupSort": 12,
   "series": 1,
-  "seriesGroups": 1,
-  "slideNumber": 66,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$O$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Country",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Value",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Country",
-      "Cat 1",
-      "Cat 2",
-      "Cat 3",
-      "Cat 4",
-      "Cat 5",
-      "Cat 6",
-      "Cat 7",
-      "Cat 8",
-      "Cat 9",
-      "Cat 10",
-      "Cat 11",
-      "Cat 12",
-      "Cat 13",
-      "Cat 14"
-    ],
-    "rows": [
-      [
-        "Value",
-        70305,
-        57428,
-        21551,
-        67240,
-        23875,
-        41891,
-        67104,
-        87184,
-        62487,
-        78676,
-        20308,
-        61873,
-        50668,
-        54500
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

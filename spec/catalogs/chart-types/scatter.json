@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "scatter",
-  "name": "SCATTER",
-  "label": "Scatter",
+  "name": "Scatter",
   "mappings": {
     "openxml": {
       "element": "scatterChart",
@@ -15,78 +14,8 @@
       }
     }
   },
-  "categories": 9,
-  "columns": [
-    "Category",
-    "X-Values",
-    "Y-Values"
-  ],
   "group": "XY (Scatter)",
   "groupSort": 6,
   "series": 2,
-  "seriesGroups": 1,
-  "slideNumber": 33,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$M$3",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Category",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "X-Values",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    },
-    {
-      "name": "Y-Values",
-      "role": "series",
-      "type": "number",
-      "position": "row2_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Category",
-      "Q1 2024",
-      "Q2 2024",
-      "Q3 2024",
-      "Q4 2024",
-      "Q1 2025",
-      "Q2 2025",
-      "Q3 2025",
-      "Q4 2025",
-      "Q1 2026"
-    ],
-    "rows": [
-      [
-        "X-Values",
-        38760,
-        45774,
-        67125,
-        73654,
-        13804,
-        60968,
-        54057,
-        97670,
-        99016
-      ],
-      [
-        "Y-Values",
-        62994,
-        31632,
-        71261,
-        26728,
-        91560,
-        80008,
-        13534,
-        61645,
-        87580
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

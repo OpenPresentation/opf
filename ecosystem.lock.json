@@ -10,8 +10,8 @@
   },
   "golden": {
     "repository": "opf",
-    "path": "scripts/fixtures/opf-examples-png.example-decks.sha256.json",
-    "note": "RR-20: launch-quality playground decks (full-feature-tour, developer-conference-talk) move 14 slides; this core fixture is the RR-41 baseline with those 14 hashes and the new corpus digest (scripts/fixtures/README.md). The RR-41 file stays as a retained golden for published core 0.12.1/0.12.2 (scripts/registry-golden.mjs). Select the renderer's own baseline again once the renderer adopts the core release that ships these examples."
+    "path": "scripts/fixtures/opf-examples-png.chart-ids.sha256.json",
+    "note": "FA-03: the examples name the clean chart type ids (no -3x suffix, no deprecated aliases) and move no pixel; this core fixture is the RR-20 baseline with the new corpus digest (scripts/fixtures/README.md). The RR-20 file stays as a retained golden for published core 0.13.0, and the RR-41 file for 0.12.1/0.12.2 (scripts/registry-golden.mjs). Select the renderer's own baseline again once the renderer adopts the core release that ships these examples."
   },
   "provenance": {
     "source": "roller",

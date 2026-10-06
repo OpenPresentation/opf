@@ -99,12 +99,16 @@ puts its presentation metadata (page URL, mood tags, contrast notes, font stacks
 in `x-gallery`. Consumers ignore `x-*` members, and the snapshot never carries
 them.
 
-## Deprecated aliases
+## Deprecation
 
-Any record may carry `deprecation: { "replacedBy": "<id>", "reason"?, "removal"? }`.
-This is the chart-type mechanism from FF-22, now available on every kind.
-Aliases use it too, for example an old plural audience id kept next to its
-canonical singular id. The record stays for backward compatibility:
+The bundled catalog holds **no deprecated records**. Before v1 an id is renamed or
+removed outright (the FA-03 cleanup deleted 50 chart-type aliases and 6 audience
+aliases and dropped the `-3x` suffix from the chart-type ids), so a document that
+names a retired id gets an `unknown <kind> catalog id` warning, not a redirect.
+
+The mechanism stays in the record schemas, the validator and lint for after v1.
+Any record may carry `deprecation: { "replacedBy": "<id>", "reason"?, "removal"? }`
+(FF-22). The record stays for backward compatibility:
 
 - the old id keeps resolving to its own record, unchanged;
 - `validatePresentation` warns (`deprecated <kind> catalog id '<id>'; use '<replacedBy>'`);
@@ -137,7 +141,19 @@ other kind. Inline `catalogs.<kind>.records` may use the same field.
   reconciled for bundling yet (for example the gallery's extra layouts).
 
 The snapshot never loses an id. Removing a catalog record is a breaking change,
-so the sync refuses a publisher that stopped serving a bundled id.
+so the sync refuses a publisher that stopped serving a bundled id. The one waiver
+is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) lets
+the sync drop exactly those ids from the snapshot and delete their files, and
+rejects an id the snapshot does not hold. It exists for removals and renames
+decided on purpose before v1 (the FA-03 chart-type cleanup), for example when the
+gallery adopts a core change first:
+
+```sh
+node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery --allow-removed chart-types:<old-id> --include chart-types:<new-id>
+```
+
+A core-first removal needs no waiver: delete the records and index entries, then
+run `--rehash`.
 
 ### Updating it
 
