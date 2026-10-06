@@ -477,10 +477,17 @@ jobs:
         if: always() && steps.scope.outputs.run == 'true'
         run: |
           echo 'Shard ${{ matrix.shard }} of ecosystem-core. Together the three shards test coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
+  # RR-45 (opf#368, item 6): the Windows and macOS legs run on their own runners for push to main, merge_group, the nightly
+  # run, manual runs and pull requests labelled `ecosystem-full`. On any other pull request each leg runs on an Ubuntu
+  # runner instead and skips every step by policy, so the required checks `Installed candidates (windows-latest)` and
+  # `Installed candidates (macos-latest)` (ruleset 24382980) still report, under their own names, without taking a Windows
+  # or macOS runner. The push to main after merge runs them in full; main-status opens the main-red issue if they fail.
   installed-portability:
     name: Installed candidates (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full')) && matrix.os || 'ubuntu-24.04' }}
     timeout-minutes: 25
+    env:
+      PORTABILITY: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full')) && 'run' || 'policy-skip' }}
     strategy:
       fail-fast: false
       matrix:
@@ -498,7 +505,14 @@ jobs:
       # checks below and reports success; scripts/ecosystem-scope.mjs lists the rule. Pushes to main always run.
       - name: Decide whether this change needs the ecosystem checks
         id: scope
-        run: node scripts/ecosystem-scope.mjs
+        shell: bash
+        run: |
+          if [ "$PORTABILITY" = run ]; then
+            node scripts/ecosystem-scope.mjs
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request (runner $RUNNER_OS). Push to main, merge_group, the nightly run and pull requests labelled ecosystem-full run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
       # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
