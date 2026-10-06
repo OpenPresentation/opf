@@ -20,6 +20,8 @@ try {
   for (const name of ['pptxgen.es.js', 'LICENSE', 'UPSTREAM.json', 'package.json']) {
     assert.ok(shipped.has(`vendor/pptxgenjs/${name}`), `Missing shipped vendor file: ${name}`);
   }
+  // RR-20: the engine's browser ZIP bundle (vendor/jszip/UPSTREAM.json).
+  for (const name of ['index-min.js', 'LICENSE.md', 'UPSTREAM.json']) assert.ok(shipped.has(`vendor/jszip/${name}`), `Missing shipped vendor file: jszip/${name}`);
   const consumer = path.join(temporary, 'consumer');
   await mkdir(consumer);
   await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module' }));

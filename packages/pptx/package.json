@@ -46,7 +46,7 @@
     "test:packed": "node test/packed-install.mjs && node test/provenance-interop.mjs",
     "test:compare-published": "node test/compare-published.mjs",
     "test:published-import": "node test/provenance-interop.mjs",
-    "test:browser": "npm run build:browser-check && node test/browser-check.mjs",
+    "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/packed-bundle-browser.mjs",
     "prepack": "npm run build",
     "build:browser-check": "node scripts/build-browser-check.mjs",
     "test:styled-table": "node test/styled-table.mjs && node test/styled-table-import.mjs",

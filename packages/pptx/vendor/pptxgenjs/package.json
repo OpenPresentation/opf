@@ -3,6 +3,7 @@
   "type": "module",
   "browser": {
     "node:fs": false,
-    "node:https": false
+    "node:https": false,
+    "@node-projects/jszip": "../jszip/index-min.js"
   }
 }

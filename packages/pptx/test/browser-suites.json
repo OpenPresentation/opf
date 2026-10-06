@@ -5,7 +5,8 @@
       "description": "npm run test:browser in package.json: the bundled importer and renderer checked in the pinned browser.",
       "setup": ["npm run build:browser-check"],
       "tests": [
-        { "id": "browser:browser-check", "command": "node test/browser-check.mjs" }
+        { "id": "browser:browser-check", "command": "node test/browser-check.mjs" },
+        { "id": "browser:packed-bundle", "command": "node test/packed-bundle-browser.mjs" }
       ]
     }
   }

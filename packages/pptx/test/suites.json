@@ -62,6 +62,7 @@
     "webp-fallback.mjs"
   ],
   "contractExclude": {
-    "dependency-boundary.mjs": "Proves the vendored pptxgenjs does not load image-size (packaging boundary); no core input."
+    "dependency-boundary.mjs": "Proves the vendored pptxgenjs does not load image-size (packaging boundary); no core input.",
+    "zip-bundle-boundary.mjs": "Proves browser bundles use the vendored JSZip bundle and never import readable-stream (packaging boundary, RR-20); no core input."
   }
 }
