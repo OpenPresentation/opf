@@ -36,7 +36,7 @@ A payload is a block, a slide or region that holds one content field, or a group
 | list | text | when plain, no descriptions, levels in order | `list nesting levels (renumbered...)` for gaps in levels; `list item descriptions (kept as indented lines)`. Levels are written as 2-space indentation |
 | list | timeline | no when the list nests or is rich | `list nesting levels`, `text formatting`. `2024 — Launch` gives `when`; an item's description is the event's description |
 | list | table | yes without nesting | `list nesting levels`. One column, or text and description when any item has one; no headings are invented |
-| quote | text | yes | text, then `— attribution`, then `— source` (the source line is plain when there is no attribution) |
+| quote | text | yes | text, then `— attribution, role` (the role joins the attribution after a comma), then `— source` (the source line is plain when there is no attribution or role); loses the `quote photo` |
 | metric | text | no with a trend or sentiment | `metric trend`, `metric sentiment` |
 | code | text | yes with `fences: "auto"` (default) | A fenced block keeps the language and file name; with `fences: "never"` the loss is `code language`, `code filename` |
 | timeline | text | yes | `timeline name`, `timeline description` for the metadata a text cannot hold; `when: what`, then the description indented |

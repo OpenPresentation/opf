@@ -261,7 +261,7 @@ const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts carry `chart.alt` and are checked by audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
+			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts carry `chart.alt` and are checked by audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
 	},
 );
 const poorAltRule = rule(
@@ -277,7 +277,7 @@ const GENERIC_ALT = /^(image|picture|photo|photograph|graphic|img|icon|figure|sc
 const FILE_ALT = /(\.(png|jpe?g|gif|svg|webp|bmp|tiff?|heic|avif)$)|^(img|dsc|image|screenshot|screen shot|photo|pic)[ _-]?\d+/i;
 const GENERIC_CHART_ALT = /^((a|an|the)\s+)?([a-z-]+\s+){0,2}(chart|graph|plot|diagram|figure)$/i;
 const kindLabel = (kind: string) =>
-	({ chart: 'Chart', image: 'Image', video: 'Video', 'slide-image': 'Slide image', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', organization: 'Organization logo' })[kind] ?? 'Picture';
+	({ chart: 'Chart', image: 'Image', video: 'Video', 'slide-image': 'Slide image', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', 'quote-photo': 'Quote photo', organization: 'Organization logo' })[kind] ?? 'Picture';
 
 function altFixes(path: string, value: unknown): AuditFix[] {
 	const decorative: AuditFix =

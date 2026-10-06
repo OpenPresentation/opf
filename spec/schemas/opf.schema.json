@@ -2370,7 +2370,7 @@
             { "type": "string" },
             { "$ref": "#/$defs/Quote" }
           ],
-          "description": "Quote payload. A string is shorthand for { \"text\": value }; object form carries optional attribution and source metadata.",
+          "description": "Quote payload. A string is shorthand for { \"text\": value }; object form carries optional attribution, role, photo and source metadata.",
           "examples": [
             "This changed how our team handles reviews.",
             {
@@ -2603,7 +2603,7 @@
     },
     "Quote": {
       "type": "object",
-      "description": "Quote content with optional attribution metadata. Use 'text' for the quoted text, 'attribution' for the credited person or organization, and 'source' for a citation or URL. A string value in a quote field is shorthand for { \"text\": value }.",
+      "description": "Quote content with optional attribution metadata. Use 'text' for the quoted text, 'attribution' for the credited person or organization, 'role' for that person's title and organization, 'photo' for their headshot and 'source' for a citation or URL. A string value in a quote field is shorthand for { \"text\": value }. The text is a plain string.",
       "additionalProperties": false,
       "required": ["text"],
       "properties": {
@@ -2614,12 +2614,22 @@
         },
         "attribution": {
           "type": "string",
-          "description": "Person or organization credited for the quote.",
-          "examples": ["VP Operations, Acme Corp"]
+          "description": "Person or organization credited for the quote. Drawn after the quote text, in the muted text color.",
+          "examples": ["Priya Raman", "Acme Corp"]
+        },
+        "role": {
+          "type": "string",
+          "description": "Title and organization of the attributed person. Drawn on its own line under the attribution; without an attribution it stands alone. It does not replace the attribution, so the person's name belongs in 'attribution'.",
+          "examples": ["VP Operations, Acme", "Head of Platform"]
+        },
+        "photo": {
+          "$ref": "#/$defs/Asset",
+          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (the audit's missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the circular mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
+          "examples": ["./assets/priya-raman.jpg", {"src": "asset:priya-raman", "alt": "Priya Raman"}]
         },
         "source": {
           "type": "string",
-          "description": "Optional quote source, citation, or URL.",
+          "description": "Optional quote source, citation, or URL. Follows the attribution and role after ' - '.",
           "examples": ["Customer interview, March 2026", "https://acme.com/case-study"]
         }
       }

@@ -137,8 +137,11 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
     case "quote": {
       const quote = typeof content === "string" ? { text: content } : content;
       const lines = splitRuns([quote.text]);
-      if (quote.attribution) lines.push([`— ${quote.attribution}`]);
-      if (quote.source) lines.push([quote.attribution ? `— ${quote.source}` : quote.source]);
+      // A text quote has one attribution line, `— Name, Title`: the role joins the attribution after a comma.
+      const credit = [quote.attribution, quote.role].filter(Boolean).join(", ");
+      if (quote.photo !== undefined) loss.note("quote photo");
+      if (credit) lines.push([`— ${credit}`]);
+      if (quote.source) lines.push([credit ? `— ${quote.source}` : quote.source]);
       return lines;
     }
     case "metric": {

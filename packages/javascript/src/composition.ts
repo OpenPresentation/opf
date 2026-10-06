@@ -830,7 +830,9 @@ function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,reques
   }
   throw new Error('Text fitting did not evaluate its bounded floor trial.');
 }
-export interface QuoteContent { text: string; attribution?: string; source?: string }
+/** Photo diameter as a multiple of the footer font size, and the gap beside it as a multiple of that size (FA-12). */
+const PHOTO_RATIO = 3, PHOTO_GAP = .75;
+export interface QuoteContent { text: string; attribution?: string; role?: string; photo?: unknown; source?: string }
 /** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
 export interface QuoteTextSource {
   path: string;
@@ -854,13 +856,30 @@ export interface QuoteTextPart {
   fit?: TextFit;
 }
 export interface QuoteLayoutDiagnostic extends LayoutDiagnostic {
-  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap';
+  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap' | 'photo-fit';
   parts: QuoteTextPart['role'][];
+}
+/**
+ * The attributed person's headshot (FA-12): a circle at the start edge of the footer row, beside the
+ * attribution and role lines (the left in a left-to-right deck, the right in a right-to-left one). Its diameter is
+ * three times the footer font size, so it follows the text when the footer shrinks toward the readability floor.
+ */
+export interface QuotePhoto {
+  /** Path of the photo value, `<quote path>.photo`. */
+  path: string;
+  /** Asset value (string or Asset object) that engines resolve like any other image; crop to cover the frame. */
+  value: unknown;
+  /** Square frame, in reference pixels. */
+  box: LayoutBox;
+  /** Circle mask: the `ellipse` DrawingML preset and the same outline as an SVG path, as design.slideImage shape 'circle'. */
+  shape: SlideImageShape;
 }
 export interface QuoteLayout {
   algorithm: 'quote-flow-v1';
   textMeasurement: 'estimated' | 'provided';
   parts: QuoteTextPart[];
+  /** Present when the quote has a photo; absent otherwise, and then the layout is the footer-only layout. */
+  photo?: QuotePhoto;
   diagnostics: QuoteLayoutDiagnostic[];
   overflow: boolean;
 }
@@ -883,9 +902,11 @@ export interface QuoteLayoutOptions {
 export function layoutQuote(value: string | QuoteContent, box: LayoutBox, options: QuoteLayoutOptions = {}): QuoteLayout {
   const shorthand = typeof value === 'string';
   const quote = shorthand ? {text:value} : value;
+  const photoValue = (quote as QuoteContent | null)?.photo;
   if (!quote || Array.isArray(quote) || typeof quote.text !== 'string' ||
-    [quote.attribution, quote.source].some(field => field !== undefined && typeof field !== 'string')) {
-    throw new TypeError('Quote content must be a string or a text object with optional string attribution/source.');
+    [quote.attribution, quote.role, quote.source].some(field => field !== undefined && typeof field !== 'string') ||
+    photoValue !== undefined && typeof photoValue !== 'string' && !(typeof photoValue === 'object' && photoValue !== null && typeof (photoValue as {src?:unknown}).src === 'string')) {
+    throw new TypeError('Quote content must be a string or a text object with optional string attribution/role/source and an asset photo.');
   }
   const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) ||
@@ -908,61 +929,80 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     parts.push(part);
     return part;
   };
+  // Footer lines: the attribution, the role on its own line below it, and the source after ' - ' on the last line.
   let footer = '';
   const footerSources:QuoteTextSource[] = [];
-  for (const field of ['attribution','source'] as const) {
+  for (const field of ['attribution','role','source'] as const) {
     const text = quote[field];
     if (!text) continue;
-    if (footer) footer += ' - ';
+    if (footer) footer += field === 'role' ? '\n' : ' - ';
     footerSources.push(source(`${path}.${field}`,text,footer.length));
     footer += text;
   }
+  const hasPhoto = photoValue !== undefined, hasFooter = footer !== '', hasBlock = hasPhoto || hasFooter;
+  const photoPath = `${path}.photo`, rtl = options.direction === 'rtl';
   const bodyPath = shorthand ? path : `${path}.text`;
   const body = add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
-    {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(footer?94:36)},
+    {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
     28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath);
-  const attribution = footer ? add('footer',footer,footerSources,
+  const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
     17,options.fonts?.body??'sans-serif',500,path) : undefined;
+  // A photo with no footer text still sizes from the nominal footer size.
+  const footerRequested = attribution?.requestedFontSize ?? gridFontSize(17 * scale, minimum);
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
   const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum) => usable(area)
     ? fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction) : undefined;
   const inner = {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
-  if (!attribution) body.fit=fit(body,body.box);
+  let photo: QuotePhoto | undefined, photoFits = true;
+  if (!hasBlock) body.fit=fit(body,body.box);
   else if (usable(inner) && inner.height>18) {
     const available=inner.height-18;
     const preferredBody=fit(body,inner,body.requestedFontSize,body.requestedFontSize)!;
     const minimumBody=body.requestedFontSize===minimum ? preferredBody : fit(body,inner,minimum,minimum)!;
     const preferredBodyHeight=preferredBody.lines.length*preferredBody.lineHeight;
     const minimumBodyHeight=minimumBody.lines.length*minimumBody.lineHeight;
-    let selected:{bodyBox:LayoutBox;footerBox:LayoutBox;bodyFit?:TextFit;footerFit?:TextFit;score:number;overflow:boolean}|undefined;
+    interface Selection {bodyBox:LayoutBox;footerBox:LayoutBox;textBox?:LayoutBox;photoBox?:LayoutBox;bodyFit?:TextFit;footerFit?:TextFit;score:number;overflow:boolean;photoFits:boolean}
+    let selected:Selection|undefined;
     // At most two footer sizes: its nominal request and the readability floor. Retain
     // the fitting pair with the least total font reduction. A 40px footer is only a
     // whitespace preference; it must not cause unnecessary shrinking or grid movement.
-    for (const size of new Set([attribution.requestedFontSize,minimum])) {
-      const natural=fit(attribution,inner,size,size)!;
-      const naturalHeight=natural.lines.length*natural.lineHeight;
-      const preferredHeight=Math.max(40,naturalHeight);
-      const bodyReservation=Math.min(minimumBodyHeight,Math.max(minimumBody.lineHeight,available-natural.lineHeight));
+    // A photo is three times the footer font size and sits beside the text, which takes the remaining width.
+    for (const size of new Set([footerRequested,minimum])) {
+      const diameter=hasPhoto ? PHOTO_RATIO*size : 0, gap=hasPhoto ? PHOTO_GAP*size : 0;
+      const textArea={...inner,width:inner.width-diameter-gap,x:rtl?inner.x:inner.x+diameter+gap};
+      const natural=attribution ? fit(attribution,textArea,size,size) : undefined;
+      const naturalHeight=natural ? natural.lines.length*natural.lineHeight : 0;
+      const blockHeight=Math.max(naturalHeight,diameter);
+      const lineHeight=natural?.lineHeight ?? size*1.22;
+      const preferredHeight=Math.max(40,blockHeight);
+      const bodyReservation=Math.min(minimumBodyHeight,Math.max(minimumBody.lineHeight,available-lineHeight));
       const footerHeight=preferredBodyHeight+preferredHeight<=available+.01 ? preferredHeight
-        : Math.min(naturalHeight,Math.max(0,available-bodyReservation));
+        : Math.min(blockHeight,Math.max(0,available-bodyReservation));
       const bodyBox={...inner,height:available-footerHeight};
       const footerBox={...inner,y:inner.y+inner.height-footerHeight,height:footerHeight};
       const bodyFit=fit(body,bodyBox);
-      const footerFit=usable(footerBox) ? {...natural,overflow:natural.overflow||naturalHeight>footerHeight+.01} : undefined;
-      const overflow=!bodyFit||!footerFit||bodyFit.overflow||footerFit.overflow;
-      const score=(body.requestedFontSize-(bodyFit?.fontSize??minimum)+attribution.requestedFontSize-size)/scale;
+      const photoBox=hasPhoto ? {x:rtl?inner.x+inner.width-diameter:inner.x,y:footerBox.y+(footerHeight-diameter)/2,width:diameter,height:diameter} : undefined;
+      // Beside a photo the text block is centered against it; alone, it starts at the top of the footer.
+      const textBox=attribution ? hasPhoto ? {...textArea,y:footerBox.y+Math.max(0,footerHeight-naturalHeight)/2,height:Math.min(naturalHeight,footerHeight)} : footerBox : undefined;
+      const footerFit=attribution && natural && usable(footerBox) ? {...natural,overflow:natural.overflow||naturalHeight>footerHeight+.01} : undefined;
+      const fitsPhoto=!hasPhoto || diameter<=footerHeight+.01 && (!attribution || usable(textArea));
+      const overflow=!bodyFit||bodyFit.overflow||(attribution?!footerFit||footerFit.overflow:false)||!fitsPhoto;
+      const score=(body.requestedFontSize-(bodyFit?.fontSize??minimum)+footerRequested-size)/scale;
       // When neither size fits, retain the floor-size trial so failure diagnostics
       // describe the irreducible result, not a rejected larger-font attempt.
       if (!selected || !overflow && (selected.overflow||score<selected.score) || overflow && selected.overflow) {
-        selected={bodyBox,footerBox,bodyFit,footerFit,score,overflow};
+        selected={bodyBox,footerBox,textBox,photoBox,bodyFit,footerFit,score,overflow,photoFits:fitsPhoto};
       }
     }
     if (selected) {
       body.box=selected.bodyBox;body.fit=selected.bodyFit;
-      attribution.box=selected.footerBox;attribution.fit=selected.footerFit;
+      if (attribution) {attribution.box=selected.textBox ?? selected.footerBox;attribution.fit=selected.footerFit;}
+      if (selected.photoBox) photo={path:photoPath,value:photoValue,box:selected.photoBox,shape:slideImageShape('circle',selected.photoBox)};
+      photoFits=selected.photoFits;
     }
   }
+  if (hasPhoto && !photo) photoFits=false;
   for (const part of parts) {
     const area=part.box;
     if (!part.fit) {
@@ -974,14 +1014,17 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
       report('part-outside-cell',part.path,[part.role],`Quote ${part.role} extends outside its cell; increase the cell size or change the arrangement.`);
     }
   }
+  if (hasPhoto && !photoFits) report('photo-fit',photoPath,['footer'],'Quote photo does not fit beside the attribution at the readability floor; increase the cell size, shorten the text or remove the photo.');
   // Conservative occupied line rectangles, not actual glyph outlines. Reserved boxes alone
   // are insufficient: an overflowing body's rendered lines can reach an otherwise fitting footer.
   if (body?.fit && attribution?.fit && body.box.y+body.fit.lines.length*body.fit.lineHeight > attribution.box.y+.01 &&
     attribution.box.y+attribution.fit.lines.length*attribution.fit.lineHeight > body.box.y+.01) {
     report('part-overlap',path,['body','footer'],'Quote body and footer line boxes overlap; do not accept this layout without more space.');
+  } else if (body?.fit && photo && body.box.y+body.fit.lines.length*body.fit.lineHeight > photo.box.y+.01) {
+    report('part-overlap',path,['body','footer'],'Quote body and photo overlap; do not accept this layout without more space.');
   }
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface MetricContent {
