@@ -79,12 +79,12 @@ export function drawAxisTitles(c) {
 
 const INSIDE = new Set(["center", "inside-end", "inside-base"]);
 
-/** The label text for one mark: the selected parts, General number format, integer percent. */
-export function labelString(c, { category, value, share }) {
+/** The label text for one mark: the selected parts, the series' number format (General when it has none), integer percent. */
+export function labelString(c, { category, value, share, format }) {
   const labels = c.dataLabels;
   const parts = {};
   if (category !== undefined && category !== null) parts.category = String(category);
-  if (typeof value === "number" && Number.isFinite(value)) parts.value = core.formatChartLabelNumber(value);
+  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined && typeof core.formatDataNumber === "function" ? core.formatDataNumber(value, format) : core.formatChartLabelNumber(value);
   if (typeof share === "number" && Number.isFinite(share)) parts.percent = core.formatChartLabelPercent(share);
   return core.chartLabelText(parts, labels.content, labels.separator);
 }

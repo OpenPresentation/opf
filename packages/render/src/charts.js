@@ -140,11 +140,9 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const id = resolveChartType(item.value?.type);
   const spec = id && CHART_TYPES[id];
   const render = spec && RENDERERS[spec.kind];
-  const data = item.value?.data;
-  const rows = Array.isArray(data?.rows) ? data.rows.map((row) => Array.isArray(row) ? row : [row]) : [];
-  const columns = Array.isArray(data?.columns) ? data.columns : [];
-  if (!render || !rows.length || columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
-  const c = chartContext(item, box, bound, options, svg, rows, columns);
+  const data = render ? chartData(item, bound) : null;
+  if (!data || !data.rows.length || data.columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
+  const c = chartContext(item, box, bound, options, svg, data);
   c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface, stroke: bound.design.colors.border, "stroke-width": 1 }, item.path);
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
   // with none of them skips this block entirely, so its output is unchanged.
@@ -161,7 +159,62 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   return svg.tag("g", { ...svg.traceAttrs(options, item.path), "data-opf-chart": options.trace ? id : undefined }, c.children.join("\n"));
 }
 
-function chartContext(item, box, bound, options, svg, rows, columns) {
+// RR-54: the chart's data as the renderers plot it, from core's resolveChartData: inline columns (names or DataColumn objects),
+// a dataset reference and chart.mapping all resolve to one positional table, [category, (x,) ...series], with each column's number
+// format. Series cells have already gone through core's strict chartNumber. Returns null when the data does not resolve (an
+// external data source, an unknown dataset, no rows or columns), so the caller keeps its placeholder. A core without the resolver
+// reads the inline data as before.
+export function chartData(item, bound) {
+  const chart = item.value;
+  if (typeof opfComposition.resolveChartData === "function") {
+    const resolved = opfComposition.resolveChartData(chart, bound?.presentation, { path: item.path });
+    if (!resolved.ok) return null;
+    const formats = resolved.formats.map((format) => typeof format === "string" && format !== "" && !opfComposition.numberFormatError?.(format) ? format : undefined);
+    return { columns: resolved.columns, rows: resolved.rows, formats, trace: tracePaths(item, bound, resolved) };
+  }
+  const data = chart?.data;
+  const rows = Array.isArray(data?.rows) ? data.rows.map((row) => Array.isArray(row) ? row : [row]) : [];
+  const columns = Array.isArray(data?.columns) ? data.columns : [];
+  return { columns, rows, formats: [], trace: null };
+}
+
+// The authored object at a composed path ("slides.0.blocks.1.chart"), or undefined.
+function authoredAt(presentation, path) {
+  let value = presentation;
+  for (const key of String(path).split(".")) {
+    if (value === null || typeof value !== "object") return undefined;
+    value = value[key];
+  }
+  return value;
+}
+
+/** True when the chart's authored data is a dataset reference: its parts then report the chart's own path. */
+export function isDatasetChart(item, bound) {
+  const authored = authoredAt(bound?.presentation, item.path);
+  const data = authored && typeof authored === "object" ? authored.data : undefined;
+  return Boolean(data) && typeof data === "object" && typeof data.dataset === "string";
+}
+
+/** True when the table's authored form is a dataset reference (`{ dataset, fields }`): its cells then report the table's own path. */
+export function isDatasetTable(item, bound) {
+  const authored = authoredAt(bound?.presentation, item.path);
+  return Boolean(authored) && typeof authored === "object" && typeof authored.dataset === "string";
+}
+
+// Where a mark's trace path points. A dataset-backed chart has no `data.rows` or `data.columns` of its own, so every part reports
+// the chart's authored path; a chart with `mapping` reports the authored column index of each plotted column (the resolved
+// order is category, X, then the mapped series).
+function tracePaths(item, bound, resolved) {
+  if (isDatasetChart(item, bound)) return { collapse: true };
+  const authored = authoredAt(bound?.presentation, item.path);
+  const authoredData = authored && typeof authored === "object" ? authored.data : undefined;
+  if (!authored || typeof authored !== "object" || !authored.mapping || !Array.isArray(authoredData?.columns)) return null;
+  const names = authoredData.columns.map((column) => column !== null && typeof column === "object" ? column.name : column);
+  const columnMap = resolved.columns.map((name, index) => { const found = names.indexOf(name); return found < 0 ? index : found; });
+  return columnMap.every((column, index) => column === index) ? null : { columnMap };
+}
+
+function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace }) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   const requested = 14, fontPx = Math.max(requested, composition.minFontSize ?? 16) * u;
@@ -172,8 +225,14 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
   const children = [];
   const n = svg.stableNumber;
   const numericAttrs = new Set(["x", "y", "width", "height", "cx", "cy", "r", "x1", "x2", "y1", "y2", "stroke-width"]);
+  const prefix = `${item.path}.data.`;
+  const tracePath = !trace ? (path) => path : (path) => {
+    if (typeof path !== "string" || !path.startsWith(prefix)) return path;
+    if (trace.collapse) return item.path;
+    return path.replace(/^(.*\.data\.(?:columns\.|rows\.\d+\.))(\d+)$/, (whole, head, column) => `${head}${trace.columnMap[Number(column)] ?? column}`);
+  };
   const c = {
-    item, box, bound, options, svg, rows, columns, children, u, fontPx, surface, labelColor,
+    item, box, bound, options, svg, rows, columns, formats, children, u, fontPx, surface, labelColor,
     path: item.path,
     pt: u * 4 / 3,
     pad: 10 * u,
@@ -192,12 +251,12 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
     mark(name, attrs, path) {
       const out = {};
       for (const [key, value] of Object.entries(attrs)) out[key] = numericAttrs.has(key) && typeof value === "number" ? n(value) : value;
-      children.push(svg.tag(name, { ...out, ...(path ? svg.traceAttrs(options, path) : {}) }));
+      children.push(svg.tag(name, { ...out, ...(path ? svg.traceAttrs(options, tracePath(path)) : {}) }));
     },
     textElement(value, rect, path, align = "center", fill = labelColor) {
       if (!(rect.width > 0 && rect.height > 0)) return "";
       return svg.renderTextBox(String(value), rect, bound, {
-        path, fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: 400,
+        path: tracePath(path), fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: 400,
         fill, options, align, verticalAlign: "middle"
       });
     },
@@ -208,6 +267,7 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
     series(first = 1) {
       return columns.slice(first).map((name, offset) => ({
         name: c.label(name), column: first + offset, index: offset,
+        ...(formats[first + offset] !== undefined ? { format: formats[first + offset] } : {}),
         values: rows.map((row) => chartNumber(row[first + offset]))
       }));
     }
@@ -215,13 +275,22 @@ function chartContext(item, box, bound, options, svg, rows, columns) {
   return c;
 }
 
+// RR-54: core's strict chart number (finite numbers and strict decimal strings; everything else is a gap), so the preview, the PPTX
+// export and the validator agree on which cells are numbers. A core without it keeps the previous lenient read.
 export function chartNumber(value) {
+  if (typeof opfComposition.chartNumber === "function") return opfComposition.chartNumber(value);
   if (typeof value === "number") return Number.isFinite(value) ? value : null;
   if (typeof value === "string" && value.trim()) {
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : null;
   }
   return null;
+}
+
+/** A number as its column's format shows it (core's formatDataNumber); without a format, the General form the preview always drew. */
+export function formatChartValue(value, format) {
+  if (format === undefined || typeof opfComposition.formatDataNumber !== "function") return String(clean(value));
+  return opfComposition.formatDataNumber(clean(value), format);
 }
 
 // ---------------------------------------------------------------------------
@@ -308,10 +377,28 @@ function clean(value) {
   return Object.is(rounded, -0) ? 0 : rounded;
 }
 
-/** Office General / 0% tick labels. */
-export function formatTick(value, percent = false) {
+/** Office General / 0% tick labels; a value axis takes its first plotted series' number format (RR-54). */
+export function formatTick(value, percent = false, format = undefined) {
   if (percent) return `${clean(value * 100)}%`;
-  return String(clean(value));
+  return format === undefined ? String(clean(value)) : formatChartValue(value, format);
+}
+
+// RR-54: a formatted horizontal axis (horizontal bars, the scatter X axis) can have end tick labels far wider than the margin the layout
+// leaves beside the plot (a General label is a few characters, a long format code is not). Pull the plot in until the first and
+// last labels, centred on their ticks, stay inside the chart, and lay the ticks out again for the new width. Only formatted axes call it,
+// so a General axis keeps its placement.
+function insetForEndLabels(c, x, width, format, scaleFor) {
+  const left = c.box.x + c.pad, right = c.box.x + c.box.width - c.pad;
+  let scale = scaleFor(width);
+  for (let pass = 0; pass < 3; pass++) {
+    const ticks = scale.ticks;
+    if (!ticks.length) break;
+    const first = c.width(formatTick(ticks[0], false, format)) / 2, last = c.width(formatTick(ticks[ticks.length - 1], false, format)) / 2;
+    const nextX = Math.max(x, left + first), nextWidth = Math.max(1, Math.min(x + width, right - last) - nextX);
+    if (nextX === x && nextWidth === width) break;
+    x = nextX; width = nextWidth; scale = scaleFor(width);
+  }
+  return { x, width, scale };
 }
 
 function legendMetrics(c, entries) {
@@ -352,7 +439,7 @@ function legendSource(c, spec) {
   switch (spec.kind) {
     case "pie":
     case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: c.colors[i % c.colors.length], path: `${c.path}.data.rows.${i}.0` }));
-    case "scatter": return fromSeries(scatterSeries(c.rows, c.columns).series, "marker");
+    case "scatter": return fromSeries(scatterSeries(c.rows, c.columns, c.formats).series, "marker");
     case "line": return fromSeries(c.series(), "line", spec.markers);
     case "radar": return fromSeries(c.series(), spec.style === "filled" ? undefined : "line", spec.markers);
     case "box": return fromSeries(c.columns.length === 1 ? [{ name: c.label(c.columns[0]), column: 0, index: 0 }] : c.series());
@@ -661,6 +748,7 @@ function renderCategoryChart(c, spec) {
   const horizontal = spec.kind === "bar" && spec.dir === "bar";
   const percent = spec.grouping === "percentStacked";
   const series = c.series();
+  const valueFormat = series[0]?.format;
   const categories = c.rows.map((row) => c.label(row[0]));
   const count = categories.length;
   // Right to left (RR-05): column, line and area charts run their category axis from the right (PowerPoint's reversed categories,
@@ -680,11 +768,14 @@ function renderCategoryChart(c, spec) {
   let plot, scale, valueTickWidth;
   if (horizontal) {
     const categoryWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
-    const x = box.x + pad + categoryWidth + c.pad / 2;
+    let x = box.x + pad + categoryWidth + c.pad / 2;
     const bottom = box.y + box.height - pad - c.lineHeight;
-    const width = Math.max(1, right - x - fontPx);
-    const tickWidth = Math.max(c.width(formatTick(dataMax, percent)), c.width(formatTick(dataMin, percent)), c.width("100%")) + fontPx;
-    scale = niceScale(dataMin, dataMax, maxIntervalsFor(width, tickWidth), { percent });
+    let width = Math.max(1, right - x - fontPx);
+    const tickWidth = Math.max(c.width(formatTick(dataMax, percent, valueFormat)), c.width(formatTick(dataMin, percent, valueFormat)), c.width("100%")) + fontPx;
+    const scaleFor = (w) => niceScale(dataMin, dataMax, maxIntervalsFor(w, tickWidth), { percent });
+    scale = scaleFor(width);
+    // RR-54: a formatted value axis keeps its end labels inside the chart.
+    if (valueFormat !== undefined && !percent) ({ x, width, scale } = insetForEndLabels(c, x, width, valueFormat, scaleFor));
     plot = { x, y: top, width, height: Math.max(1, bottom - top) };
     // Office bar charts draw the first category nearest the origin (bottom).
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
@@ -696,7 +787,7 @@ function renderCategoryChart(c, spec) {
     const axis = planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
       const fitted = niceScale(dataMin, dataMax, maxIntervalsFor(height, c.lineHeight * 1.2), { percent });
-      const tickWidth = Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent)))) + fontPx * 0.5;
+      const tickWidth = Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
       if (rtl) {
         const x = box.x + pad + fontPx / 2;
         return { scale: fitted, plot: { x, y: top, width: Math.max(1, right - tickWidth - x), height }, tickWidth };
@@ -713,7 +804,7 @@ function renderCategoryChart(c, spec) {
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
   for (const tick of scale.ticks) {
-    const position = at(tick), label = formatTick(tick, percent);
+    const position = at(tick), label = formatTick(tick, percent, valueFormat);
     if (horizontal) {
       gridline(c, position, plot.y, position, plot.y + plot.height);
       const width = c.width(label) + fontPx;
@@ -771,7 +862,7 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
         rect = { x, y: Math.min(a, b), width: geometry.width, height: Math.abs(b - a) };
         c.mark("rect", { ...rect, fill: color }, path);
       }
-      if (c.dataLabels) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i] }) });
+      if (c.dataLabels) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }) });
     });
   });
   // RR-35: data labels sit on top of every bar.
@@ -798,7 +889,7 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
   });
   // RR-35: data labels sit beside each point, over every line.
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
-    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i] }), [plot.x + (i + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
+    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), [plot.x + (i + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
   }));
 }
 
@@ -813,7 +904,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (!point) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
-    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i] }), plot.x + (i + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, c.colors[j % c.colors.length]);
+    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (i + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, c.colors[j % c.colors.length]);
   }));
 }
 
@@ -832,7 +923,7 @@ function renderCircularChart(c, spec) {
   const total = values.reduce((sum, value) => sum + value, 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "slice total");
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
-  const sliceTexts = c.dataLabels ? values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][1]) ?? 0, share: total ? value / total : 0 })) : null;
+  const sliceTexts = c.dataLabels ? values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][1]) ?? 0, share: total ? value / total : 0, format: c.formats[1] })) : null;
   const outside = sliceTexts && spec.kind === "pie" && (c.dataLabels.position ?? "outside-end") === "outside-end";
   const reserve = outside ? outsideLabelReserve(c, sliceTexts) : { x: 0, y: 0 };
   const r = outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
@@ -884,12 +975,13 @@ function slicePath(c, cx, cy, r, inner, start, end) {
 // ---------------------------------------------------------------------------
 // Scatter: X from columns[1], Y series from columns[2..], markers only.
 
-export function scatterSeries(rows, columns) {
+export function scatterSeries(rows, columns, formats = []) {
   const numericX = columns.length > 2;
   const xs = rows.map((row, i) => numericX ? chartNumber(row[1]) : i + 1);
   const first = numericX ? 2 : 1;
   const series = columns.slice(first).map((name, offset) => ({
     name: name === null || name === undefined ? "" : String(name), column: first + offset, index: offset,
+    ...(formats[first + offset] !== undefined ? { format: formats[first + offset] } : {}),
     points: rows.map((row, i) => ({ row: i, x: xs[i], y: chartNumber(row[first + offset]) })).filter((p) => p.x !== null && p.y !== null)
   }));
   return { series, xs };
@@ -897,28 +989,32 @@ export function scatterSeries(rows, columns) {
 
 function renderScatterChart(c) {
   const { box, pad, fontPx } = c;
-  const { series } = scatterSeries(c.rows, c.columns);
+  const { series } = scatterSeries(c.rows, c.columns, c.formats);
+  const yFormat = series[0]?.format, xFormat = c.columns.length > 2 ? c.formats[1] : undefined;
   const points = series.flatMap((s) => s.points);
   const xs = points.map((p) => p.x), ys = points.map((p) => p.y);
   const legendWidth = seriesLegend(c, series, "marker");
   const top = box.y + pad + c.lineHeight / 2, bottom = box.y + box.height - pad - c.lineHeight;
   const height = Math.max(1, bottom - top);
   const yScale = niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, maxIntervalsFor(height, c.lineHeight * 1.2));
-  const tickWidth = Math.max(...yScale.ticks.map((tick) => c.width(formatTick(tick)))) + fontPx * 0.5;
+  const tickWidth = Math.max(...yScale.ticks.map((tick) => c.width(formatTick(tick, false, yFormat)))) + fontPx * 0.5;
   const plot = { x: box.x + pad + tickWidth, y: top, height };
   plot.width = Math.max(1, box.x + box.width - pad - legendWidth - fontPx - plot.x);
-  const xLabelWidth = Math.max(c.width(formatTick(xs.length ? Math.max(...xs) : 1)), c.width(formatTick(xs.length ? Math.min(...xs) : 0))) + fontPx;
-  const xScale = niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, maxIntervalsFor(plot.width, xLabelWidth));
+  const xLabelWidth = Math.max(c.width(formatTick(xs.length ? Math.max(...xs) : 1, false, xFormat)), c.width(formatTick(xs.length ? Math.min(...xs) : 0, false, xFormat))) + fontPx;
+  const scaleForX = (w) => niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, maxIntervalsFor(w, xLabelWidth));
+  let xScale = scaleForX(plot.width);
+  // RR-54: a formatted X axis keeps its end labels inside the chart.
+  if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, scaleForX));
   c.plotArea = plot;
   const xAt = (v) => plot.x + axisFraction(v, xScale) * plot.width;
   const yAt = (v) => plot.y + axisFraction(v, yScale, true) * plot.height;
   for (const tick of yScale.ticks) {
     const y = yAt(tick);
     gridline(c, plot.x, y, plot.x + plot.width, y);
-    c.text(formatTick(tick), { x: box.x + pad, y: y - c.lineHeight / 2, width: plot.x - box.x - pad - fontPx * 0.35, height: c.lineHeight }, c.path, "right");
+    c.text(formatTick(tick, false, yFormat), { x: box.x + pad, y: y - c.lineHeight / 2, width: plot.x - box.x - pad - fontPx * 0.35, height: c.lineHeight }, c.path, "right");
   }
   for (const tick of xScale.ticks) {
-    const label = formatTick(tick), width = c.width(label) + fontPx;
+    const label = formatTick(tick, false, xFormat), width = c.width(label) + fontPx;
     c.text(label, { x: xAt(tick) - width / 2, y: plot.y + plot.height, width, height: c.lineHeight }, c.path);
   }
   const yCross = yAt(Math.min(yScale.max, Math.max(yScale.min, 0))), xCross = xAt(Math.min(xScale.max, Math.max(xScale.min, 0)));
@@ -930,7 +1026,7 @@ function renderScatterChart(c) {
   });
   // RR-35: a scatter label shows the Y value, and the X value as its category.
   if (c.dataLabels) series.forEach((s) => {
-    for (const point of s.points) drawPointLabel(c, labelString(c, { category: String(clean(point.x)), value: point.y }), [xAt(point.x), yAt(point.y)], `${c.path}.data.rows.${point.row}.${s.column}`);
+    for (const point of s.points) drawPointLabel(c, labelString(c, { category: formatChartValue(point.x, xFormat), value: point.y, format: s.format }), [xAt(point.x), yAt(point.y)], `${c.path}.data.rows.${point.row}.${s.column}`);
   });
 }
 
@@ -940,6 +1036,7 @@ function renderScatterChart(c) {
 function renderRadarChart(c, spec) {
   const { box, pad, fontPx } = c;
   const series = c.series();
+  const valueFormat = series[0]?.format;
   const categories = c.rows.map((row) => c.label(row[0]));
   const count = categories.length;
   const values = series.flatMap((s) => s.values).filter((v) => v !== null);
@@ -1018,12 +1115,12 @@ function renderRadarChart(c, spec) {
   });
   // Value axis labels sit on top of filled series, as in PowerPoint.
   for (const tick of scale.ticks) {
-    const label = formatTick(tick), width = c.width(label) + fontPx * 0.5;
+    const label = formatTick(tick, false, valueFormat), width = c.width(label) + fontPx * 0.5;
     c.text(label, { x: cx - width - fontPx * 0.2, y: cy - rAt(tick) - c.lineHeight / 2, width, height: c.lineHeight }, c.path, "right");
   }
   // RR-35: radar data labels sit above each point (PowerPoint has no position choice for a radar).
   if (c.dataLabels) series.forEach((s) => s.values.forEach((v, i) => {
-    if (v !== null) drawPointLabel(c, labelString(c, { category: categories[i], value: v }), point(i, v), `${c.path}.data.rows.${i}.${s.column}`);
+    if (v !== null) drawPointLabel(c, labelString(c, { category: categories[i], value: v, format: s.format }), point(i, v), `${c.path}.data.rows.${i}.${s.column}`);
   }));
 }
 
@@ -1104,12 +1201,12 @@ function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentA
   return { plot, band: plot.width / Math.max(1, categories.length) };
 }
 
-function valueAxis(c, plot, scale) {
+function valueAxis(c, plot, scale, format) {
   const at = (value) => plot.y + axisFraction(value, scale, true) * plot.height;
   for (const tick of scale.ticks) {
     const y = at(tick);
     gridline(c, plot.x, y, plot.x + plot.width, y);
-    c.text(formatTick(tick), { x: c.box.x + c.pad, y: y - c.lineHeight / 2, width: plot.x - c.box.x - c.pad - c.fontPx * 0.35, height: c.lineHeight }, c.path, "right");
+    c.text(formatTick(tick, false, format), { x: c.box.x + c.pad, y: y - c.lineHeight / 2, width: plot.x - c.box.x - c.pad - c.fontPx * 0.35, height: c.lineHeight }, c.path, "right");
   }
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
   axisLine(c, plot.x, plot.y, plot.x, plot.y + plot.height);
@@ -1121,6 +1218,8 @@ function valueAxis(c, plot, scale) {
 function renderHistogramChart(c, spec) {
   const pareto = spec.kind === "pareto";
   const { hasCategories, column, values, categories } = chartexValues(c.rows, c.columns);
+  // A histogram of a lone column plots bin counts, which carry no number format; with categories the bars are the column's values.
+  const format = hasCategories ? c.formats[column] : undefined;
   let bars;
   if (hasCategories) {
     bars = values.map((value, i) => ({ value, name: categories[i], path: `${c.path}.data.rows.${i}.${column}`, labelPath: `${c.path}.data.rows.${i}.0` })).filter((bar) => bar.value !== null);
@@ -1132,9 +1231,9 @@ function renderHistogramChart(c, spec) {
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "cumulative total");
   const dataMax = bars.length ? Math.max(...bars.map((bar) => bar.value)) : 1, dataMin = bars.length ? Math.min(0, ...bars.map((bar) => bar.value)) : 0;
   const probe = niceScale(dataMin, dataMax, 10);
-  const { plot, band } = chartexPlot(c, { categories: bars.map((bar) => ({ name: bar.name, path: bar.labelPath })), tickLabels: probe.ticks.map((tick) => formatTick(tick)), percentAxis: pareto });
+  const { plot, band } = chartexPlot(c, { categories: bars.map((bar) => ({ name: bar.name, path: bar.labelPath })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)), percentAxis: pareto });
   const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
-  const { at, crossing } = valueAxis(c, plot, scale);
+  const { at, crossing } = valueAxis(c, plot, scale, format);
   const width = band / 1.06, offset = (band - width) / 2;
   bars.forEach((bar, i) => {
     const y = at(bar.value);
@@ -1143,7 +1242,7 @@ function renderHistogramChart(c, spec) {
   // RR-35: data labels on the columns (a histogram label is the bin's count).
   if (c.dataLabels) bars.forEach((bar, i) => {
     const y = at(bar.value);
-    drawBarLabel(c, labelString(c, { category: bar.name, value: bar.value }), { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y) }, bar.value >= 0 ? "up" : "down", bar.path, c.colors[0]);
+    drawBarLabel(c, labelString(c, { category: bar.name, value: bar.value, format }), { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y) }, bar.value >= 0 ? "up" : "down", bar.path, c.colors[0]);
   });
   if (pareto && bars.length) {
     // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
@@ -1167,6 +1266,7 @@ function renderHistogramChart(c, spec) {
 // Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connector lines between bars.
 function renderWaterfallChart(c) {
   const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const format = c.formats[column];
   let running = 0;
   const bars = values.map((value, i) => {
     if (value === null) return null;
@@ -1178,9 +1278,9 @@ function renderWaterfallChart(c) {
   const extents = bars.flatMap((bar) => [bar.from, bar.to]);
   const dataMin = extents.length ? Math.min(0, ...extents) : 0, dataMax = extents.length ? Math.max(0, ...extents) : 1;
   const probe = niceScale(dataMin, dataMax, 10);
-  const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick)) });
+  const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)) });
   const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
-  const { at } = valueAxis(c, plot, scale);
+  const { at } = valueAxis(c, plot, scale, format);
   const width = band / 1.5, offset = (band - width) / 2;
   bars.forEach((bar, k) => {
     const a = at(bar.from), b = at(bar.to);
@@ -1192,7 +1292,7 @@ function renderWaterfallChart(c) {
   // RR-35: data labels show each step's value (not the running total) on the floating bars.
   if (c.dataLabels) bars.forEach((bar) => {
     const a = at(bar.from), b = at(bar.to);
-    drawBarLabel(c, labelString(c, { category: categories[bar.i], value: bar.value }), { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, c.colors[bar.value < 0 ? 1 : 0]);
+    drawBarLabel(c, labelString(c, { category: categories[bar.i], value: bar.value, format }), { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, c.colors[bar.value < 0 ? 1 : 0]);
   });
 }
 
@@ -1200,6 +1300,7 @@ function renderWaterfallChart(c) {
 function renderFunnelChart(c) {
   const { box, pad, fontPx } = c;
   const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const format = c.formats[column];
   const count = categories.length;
   const max = Math.max(0, ...values.filter((value) => value !== null));
   const labelWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
@@ -1217,7 +1318,7 @@ function renderFunnelChart(c) {
     c.mark("rect", { x, y: y + offset, width, height, fill: c.colors[0] }, `${c.path}.data.rows.${i}.${column}`);
     // RR-35: the funnel labels its bars with values by default; dataLabels picks the content, false removes them.
     if (c.dataLabelsOff) return;
-    c.text(c.dataLabels ? labelString(c, { category: name, value }) : formatTick(value), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`);
+    c.text(c.dataLabels ? labelString(c, { category: name, value, format }) : formatTick(value, false, format), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`);
   });
 }
 
@@ -1271,6 +1372,7 @@ export function squarify(items, x, y, width, height) {
 function renderTreemapChart(c) {
   const { box, pad, fontPx } = c;
   const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const format = c.formats[column];
   const items = values.map((value) => ({ value: value !== null && value > 0 ? value : 0 }));
   const total = items.reduce((sum, item) => sum + item.value, 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "tile total");
@@ -1286,7 +1388,7 @@ function renderTreemapChart(c) {
     // RR-35: the treemap labels its tiles with category names by default; dataLabels picks the content, false removes them. PowerPoint
     // draws the label at the bottom left of its tile whatever the position attribute says (native check 2026-10-01), so the preview does.
     if (!c.dataLabelsOff && rect.width >= fontPx * 2 && rect.height >= c.lineHeight) {
-      c.text(c.dataLabels ? labelString(c, { category: categories[i], value: values[i] }) : categories[i], { x: rect.x + fontPx * 0.25, y: rect.y + rect.height - c.lineHeight - fontPx * 0.2, width: rect.width - fontPx * 0.5, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, "left");
+      c.text(c.dataLabels ? labelString(c, { category: categories[i], value: values[i], format }) : categories[i], { x: rect.x + fontPx * 0.25, y: rect.y + rect.height - c.lineHeight - fontPx * 0.2, width: rect.width - fontPx * 0.5, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, "left");
     }
   });
 }
@@ -1319,7 +1421,8 @@ export function boxStatistics(values) {
 function renderBoxWhiskerChart(c) {
   // A lone value column has no category column: like the exporter, its values plot against their row numbers (one box per row).
   const lone = c.columns.length === 1;
-  const series = lone ? [{ name: c.label(c.columns[0]), column: 0, index: 0, values: c.rows.map((row) => chartNumber(row[0])) }] : c.series();
+  const series = lone ? [{ name: c.label(c.columns[0]), column: 0, index: 0, ...(c.formats[0] !== undefined ? { format: c.formats[0] } : {}), values: c.rows.map((row) => chartNumber(row[0])) }] : c.series();
+  const format = series[0]?.format;
   const groups = [];
   c.rows.forEach((row, i) => {
     const name = lone ? String(i + 1) : c.label(row[0]);
@@ -1332,9 +1435,9 @@ function renderBoxWhiskerChart(c) {
   const dataMin = all.length ? Math.min(...all) : 0, dataMax = all.length ? Math.max(...all) : 1;
   const legendWidth = seriesLegend(c, series);
   const probe = niceScale(dataMin, dataMax, 10);
-  const { plot, band } = chartexPlot(c, { categories: groups.map((group) => ({ name: group.name, path: lone ? c.path : `${c.path}.data.rows.${group.first}.0` })), legendWidth, tickLabels: probe.ticks.map((tick) => formatTick(tick)) });
+  const { plot, band } = chartexPlot(c, { categories: groups.map((group) => ({ name: group.name, path: lone ? c.path : `${c.path}.data.rows.${group.first}.0` })), legendWidth, tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)) });
   const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
-  const { at } = valueAxis(c, plot, scale);
+  const { at } = valueAxis(c, plot, scale, format);
   const group = band / 2, width = group / series.length, offset = (band - group) / 2;
   series.forEach((s, j) => {
     const color = c.colors[j % c.colors.length], path = `${c.path}.data.columns.${s.column}`;
@@ -1373,6 +1476,7 @@ export function mixHex(from, to, t) {
 function renderRegionMapChart(c) {
   const { box, pad, fontPx } = c;
   const { column, values, categories } = chartexValues(c.rows, c.columns);
+  const format = c.formats[column];
   const count = categories.length;
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad), height: Math.max(1, box.height - 2 * pad) };
   const columns = Math.max(1, Math.min(count, Math.round(Math.sqrt(count * area.width / Math.max(1, area.height)))));
@@ -1389,7 +1493,7 @@ function renderRegionMapChart(c) {
     const inset = { x: x + fontPx * 0.25, width: Math.max(1, tileWidth - fontPx * 0.5) };
     if (tileHeight >= c.lineHeight * 2) {
       c.text(name, { ...inset, y: y + tileHeight / 2 - c.lineHeight, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);
-      if (value !== null) c.text(formatTick(value), { ...inset, y: y + tileHeight / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.${column}`);
+      if (value !== null) c.text(formatTick(value, false, format), { ...inset, y: y + tileHeight / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.${column}`);
     } else if (tileHeight >= c.lineHeight) {
       c.text(name, { ...inset, y: y + (tileHeight - c.lineHeight) / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);
     }

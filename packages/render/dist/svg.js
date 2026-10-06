@@ -10,7 +10,7 @@ import * as opfCore from "@openpresentation/opf";
 import { adjustedFontSize, baselineShift, createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { fontPolicyFor } from "./font-policy.js";
-import { renderCatalogChart } from "./charts.js";
+import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
 
 export const packageName = "@openpresentation/opf-render";
@@ -737,6 +737,8 @@ function bindSlide(presentation, slide, layout, index, context) {
     textMeasurement,
     geometry,
     assets: presentation.assets ?? {},
+    // RR-54: the whole document, so a chart reads its dataset and a trace path can tell a dataset-backed chart from an inline one.
+    presentation,
     index,
     path: slidePath,
     slide,
@@ -1429,8 +1431,10 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
   const children = [];
+  // RR-54: a dataset table has no rows or columns of its own to point at; every cell reports the table's authored path.
+  const own = isDatasetTable(item, bound) ? () => item.path : (path) => path;
   const separateBorders = layout.rows.some(row => row.cells.some(cell => cell.style?.borders));
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
@@ -1448,19 +1452,19 @@ function renderTable(item, box, bound, options) {
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
       fill,
       stroke: separateBorders ? undefined : bound.design.colors.border, "stroke-width":separateBorders ? undefined : 1,
-      ...traceAttrs(options, cell.sourcePath ?? cell.path)
+      ...traceAttrs(options, own(cell.sourcePath ?? cell.path))
     }));
     if (separateBorders) {
       const {x, y, width, height} = cell.box;
       const edges = {top:[x,y,x+width,y],right:[x+width,y,x+width,y+height],bottom:[x,y+height,x+width,y+height],left:[x,y,x,y+height]};
       for (const [edge, coordinates] of Object.entries(edges)) {
         const border = style.borders?.[edge];
-        (border ? explicitEdges : defaultEdges).push({coordinates, border, path:`${cell.sourcePath ?? cell.path}.style.borders.${edge}`});
+        (border ? explicitEdges : defaultEdges).push({coordinates, border, path:own(`${cell.sourcePath ?? cell.path}.style.borders.${edge}`)});
       }
     }
     // Core layout has already applied vertical alignment to cell.textBox.y.
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
-      path:cell.path, fontSize:15, fontFamily:bound.design.fonts.body,
+      path:own(cell.path), fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
       fill:textFill, align:style.align, options
     }));
@@ -1514,7 +1518,9 @@ function renderChart(item, box, bound, options) {
   if (rendered) return rendered;
   const chart = item.value ?? {};
   const chartType = chart.type ?? engineDefaults.chartTypes[0];
-  const data = inlineChartRows(chart.data);
+  const data = inlineChartRows(legacyChartData(chart, bound));
+  // A dataset-backed chart has no data.rows of its own: its parts report the chart's authored path.
+  const part = isDatasetChart(item, bound) ? () => item.path : (path) => path;
   const plot = inset(box, 28);
   const max = Math.max(1, ...data.map((row) => Math.abs(row.value)));
   const panelFill = bound.design.colors.surface;
@@ -1559,14 +1565,14 @@ function renderChart(item, box, bound, options) {
       fill: "none",
       stroke: primary,
       "stroke-width": 4,
-      ...traceAttrs(options, `${item.path}.data`)
+      ...traceAttrs(options, part(`${item.path}.data`))
     }));
     points.forEach(([x, y], index) => children.push(tag("circle", {
       cx: stableNumber(x),
       cy: stableNumber(y),
       r: 5,
       fill: primary,
-      ...traceAttrs(options, `${item.path}.data.rows.${index}`)
+      ...traceAttrs(options, part(`${item.path}.data.rows.${index}`))
     })));
   } else {
     const gap = 10;
@@ -1581,7 +1587,7 @@ function renderChart(item, box, bound, options) {
         width: stableNumber(barWidth),
         height: stableNumber(barHeight),
         fill: index % 2 === 0 ? primary : secondary,
-        ...traceAttrs(options, `${item.path}.data.rows.${index}`)
+        ...traceAttrs(options, part(`${item.path}.data.rows.${index}`))
       }));
     });
   }
@@ -1592,7 +1598,7 @@ function renderChart(item, box, bound, options) {
     width: plot.width,
     height: 24
   }, bound, {
-    path: `${item.path}.data`,
+    path: part(`${item.path}.data`),
     fontSize: 12,
     fontFamily: bound.design.fonts.body,
     fontWeight: 400,
@@ -1604,11 +1610,21 @@ function renderChart(item, box, bound, options) {
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
 }
 
+// RR-54: the legacy sketch reads the same resolved rows as the catalog charts (mapping, datasets and strict numbers). Data that does
+// not resolve, or a core without the resolver, is read as authored.
+function legacyChartData(chart, bound) {
+  if (typeof opfCore.resolveChartData !== "function") return chart.data;
+  const resolved = opfCore.resolveChartData(chart, bound.presentation);
+  return resolved.ok ? { rows: resolved.rows, resolved: true } : chart.data;
+}
+
 function inlineChartRows(data) {
   const rows = Array.isArray(data?.rows) ? data.rows : [];
   return rows.map((row, index) => {
     const cells = Array.isArray(row) ? row : [row];
-    const value = cells.find((cell) => typeof cell === "number") ?? Number(cells.find((cell) => Number.isFinite(Number(cell))) ?? 0);
+    // Resolved rows already hold strict numbers (a gap is null), so only a number cell is a value: reading a numeric-looking label
+    // ("2020") or a boolean as the value of a gap would plot it.
+    const value = cells.find((cell) => typeof cell === "number") ?? (data?.resolved ? 0 : Number(cells.find((cell) => Number.isFinite(Number(cell))) ?? 0));
     return {
       label: flattenText(cells.find((cell) => typeof cell === "string") ?? `Row ${index + 1}`),
       value: Number.isFinite(value) ? value : 0
