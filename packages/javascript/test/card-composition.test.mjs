@@ -44,9 +44,9 @@ test('card padding participates in automatic score, strict overflow and whole-do
   const auto={blocks:[{text:'Long content '.repeat(50)},{text:'More content '.repeat(20)}]};
   assert.notDeepEqual(composeSlide(auto,{...options,explain:true}).explanation.decisions,composeSlide(auto,{...options,contentBox:true,explain:true}).explanation.decisions);
   const document={design:{contentBox:true,dimensions:{widthInches:6.25,heightInches:1.875}},slides:[{text:'Exact content and spacing.\n'.repeat(30),notes:'Source notes'}]},before=structuredClone(document);
-  const result=paginatePresentation(document,{textMeasurement:measurement,minFontSize:25});
+  const result=paginatePresentation(document,{fonts:{textMeasurement:measurement},minFontSize:25});
   assert.ok(result.presentation.slides.length>1);assert.deepEqual(document,before);
   assert.equal(result.presentation.slides.map(s=>s.text).join(''),document.slides[0].text);
   for(const page of result.presentation.slides)assert.deepEqual(composeSlide(page,{...options,contentBox:true}).diagnostics,[]);
-  assert.deepEqual(paginatePresentation(result.presentation,{textMeasurement:measurement,minFontSize:25}).presentation,result.presentation);
+  assert.deepEqual(paginatePresentation(result.presentation,{fonts:{textMeasurement:measurement},minFontSize:25}).presentation,result.presentation);
 });

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import {DEFAULT_FONT_SCHEME,fontSchemes,resolveFontSchemeReference,themes,validatePresentation} from '../dist/index.js';
+import { fontSchemes, themes, validatePresentation } from '../dist/index.js'; import { DEFAULT_FONT_SCHEME, resolveFontSchemeReference } from '../dist/composition.js';
 import {resolveFontFamilies} from '../dist/composition.js';
 import {paginatePresentation} from '../dist/pagination.js';
 
@@ -14,7 +14,7 @@ const record=id=>fontSchemes.find(scheme=>scheme.id===id);
 const codeSlide={id:'code',layout:'code-1x',title:'Rule',code:{source:'const score = urgency * confidence;',language:'ts'}};
 function measuredFamilies(presentation){
   const families=new Set();
-  paginatePresentation(structuredClone(presentation),{textMeasurement:{measure:(text,size,style)=>{families.add(style.fontFamily);return text.length*size*.5;}}});
+  paginatePresentation(structuredClone(presentation),{fonts:{textMeasurement:{measure:(text,size,style)=>{families.add(style.fontFamily);return text.length*size*.5;}}}});
   return families;
 }
 
@@ -104,7 +104,7 @@ test('an unresolved font scheme falls back to the shared default with one diagno
   for(const [name,input,families,path] of unknownCases){
     const deck=unknownDeck(input),diagnostics=[],measured=new Set();
     assert.equal(validatePresentation(deck).valid,true,name);
-    paginatePresentation(structuredClone(deck),{onDiagnostic:diagnostic=>diagnostics.push(diagnostic),textMeasurement:{measure:(text,size,style)=>{measured.add(style.fontFamily);return text.length*size*.5;}}});
+    paginatePresentation(structuredClone(deck),{onDiagnostic:diagnostic=>diagnostics.push(diagnostic),fonts:{textMeasurement:{measure:(text,size,style)=>{measured.add(style.fontFamily);return text.length*size*.5;}}}});
     assert.deepEqual([...measured].sort(),families,name);
     assert.deepEqual(diagnostics,path?[{code:'unresolved-font-scheme',path,id:'no-such-scheme',fallback:DEFAULT_FONT_SCHEME,message:`Font scheme 'no-such-scheme' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.`}]:[],name);
   }

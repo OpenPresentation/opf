@@ -34,7 +34,7 @@ Three optional fields on the `Chart` object:
 
 ## What each chart type supports
 
-`chartOptionSupport(target)` in `@openpresentation/opf` returns this table; the validator, the preview, the exporter and the importer all follow it. An option a type cannot show is **adapted** (dropped, or reset to the default) and reported as a `chart-option-adapted` diagnostic by the validator (a warning), the renderer and the exporter (`onDiagnostic`). It is never silently lost and never fails the render.
+`chartOptionSupport(target)` in `@openpresentation/opf/composition` returns this table; the validator, the preview, the exporter and the importer all follow it. An option a type cannot show is **adapted** (dropped, or reset to the default) and reported as a `chart-option-adapted` diagnostic by the validator (a warning), the renderer and the exporter (`onDiagnostic`). It is never silently lost and never fails the render.
 
 | Type (catalog ids) | Axis titles | Legend | Data label content | Data label positions (default) |
 | --- | --- | --- | --- | --- |

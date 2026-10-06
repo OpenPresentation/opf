@@ -7,7 +7,7 @@ test('accepted code uses rounded cells and preserves body compatibility without 
   const code={source:'  const value = "two  spaces";\r\n\treturn value;  \n',filename:'src/CaseSensitive.ts',language:'TypeScript'};
   const slide={composition:{mode:'column',minFontSize:24},blocks:[{blocks:[{code}]}]},before=structuredClone(slide);
   let calls=0;
-  const options={width:731.2345678,height:1280,fonts:{code:'Source Code'},textMeasurement:{measure:(text,size)=>{calls++;assert.ok(!text.includes('\t'));return text.length*size*.5;}}};
+  const options={width:731.2345678,height:1280,fontFamilies:{code:'Source Code'},textMeasurement:{measure:(text,size)=>{calls++;assert.ok(!text.includes('\t'));return text.length*size*.5;}}};
   const ordinary=composeSlide(slide,options),count=calls;
   calls=0;
   const {explanation,...explained}=composeSlide(slide,{...options,explain:true});

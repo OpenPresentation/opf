@@ -61,7 +61,7 @@ try {
 
   await writeFile(path.join(projectDir, 'workflow.mjs'), `import assert from 'node:assert/strict';
 import {readFile, writeFile} from 'node:fs/promises';
-import {validatePresentation, lintSource, composeSlide, paginatePresentation, fontSchemes, resolveFontFamilies} from '@openpresentation/opf';
+import { validatePresentation, lintSource, paginatePresentation, fontSchemes } from '@openpresentation/opf'; import { composeSlide, resolveFontFamilies } from '@openpresentation/opf/composition';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
 import {renderSvgDeck, svgToPng, svgToPdf} from '@openpresentation/opf-render';

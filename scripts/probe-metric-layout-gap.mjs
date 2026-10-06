@@ -50,7 +50,7 @@ const cases=[
 ];
 const results=[];const decode=t=>t.replace(/&(amp|lt|gt|quot|apos);/g,(_,n)=>({amp:'&',lt:'<',gt:'>',quot:'"',apos:"'"})[n]);
 for(const c of cases){assert.equal(validatePresentation(c.document).valid,true);const before=JSON.stringify(c.document);const bound=resolvePresentation(c.document,{textMeasurement:fonts.textMeasurement}).slides[0];
- const composed=composeSlide(c.document.slides[0],{...bound.design.dimensions,fonts:bound.design.fonts,textMeasurement:fonts.textMeasurement,explain:true});
+ const composed=composeSlide(c.document.slides[0],{...bound.design.dimensions,fontFamilies:bound.design.fonts,textMeasurement:fonts.textMeasurement,explain:true});
  const result={id:c.id,compositionDiagnostics:bound.geometry.diagnostics,unmeasured:composed.explanation.unmeasuredPayloads};
  try{const svg=renderSvg(c.document,{trace:true,textMeasurement:fonts.textMeasurement});result.svgText=[...svg.matchAll(/<text\b([^>]*)>([^<]*)<\/text>/g)].map(m=>({text:decode(m[2]),fontSize:Number(/font-size="([^"]+)"/.exec(m[1])[1]),path:/data-opf-path="([^"]+)"/.exec(m[1])?.[1]}));}
  catch(e){result.renderError={code:e.code,message:e.message};}

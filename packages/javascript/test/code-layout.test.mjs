@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {layoutCode,OPFCompositionError} from '../dist/composition.js';
-import {layoutCode as rootLayoutCode} from '../dist/index.js';
+import { layoutCode as rootLayoutCode } from '../dist/composition.js';
 
 const cell={x:40,y:60,width:800,height:400};
 const restore=part=>part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join('');
@@ -85,7 +85,7 @@ test('tabs use measured space stops and never send control tabs to the font-widt
   const seen=[],resolved=[];
   const measurement={resolveStyle:style=>{resolved.push(style);return {...style,fontFamily:'Resolved Code'};},
     measure:(text,size,style)=>{assert.equal(text.includes('\t'),false);seen.push(style);return [...text].length*size*.5;}};
-  const result=layoutCode({source:'a\tb\naaaa\tb',language:'ts'},cell,{fonts:{code:'Requested Code'},textMeasurement:measurement,path:'slides.1.code'});
+  const result=layoutCode({source:'a\tb\naaaa\tb',language:'ts'},cell,{fontFamilies:{code:'Requested Code'},textMeasurement:measurement,path:'slides.1.code'});
   const body=result.parts.at(-1);
   assert.equal(result.textMeasurement,'provided');
   assert.equal(resolved.length,result.parts.length);

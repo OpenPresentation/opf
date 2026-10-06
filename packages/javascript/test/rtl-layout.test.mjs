@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 import {composeSlide, fitList, fitRichText, fitText, layoutFurniture, layoutMetric, layoutTable, layoutTimeline, placeTextLines, physicalAlignment, paragraphDirectionAt} from '../dist/composition.js';
-import {resolveSlideDirection} from '../dist/index.js';
+import { resolveSlideDirection } from '../dist/composition.js';
 
 // RR-05: right-to-left layout. Alignment is logical (`left` is the start edge), the arrangement mirrors, lists put markers at the
 // right, tables run right to left, and every wrapped line shares its paragraph's direction. Left-to-right decks are untouched.

@@ -9,8 +9,8 @@ export {renderSvgDeck, svgToPng} from '../../../opf-render/dist/index.js';
 export {checkPptxTypefaces, fromPptx, toPptx} from '../../../opf-pptx/dist/index.js';
 export {createEditorSession} from '../../../opf-editor/dist/index.js';
 export {catalogs} from '@openpresentation/opf/catalogs';
-export {resolveFontFamilies, resolveFontSchemeReference} from '@openpresentation/opf/composition';
-export {resolveScriptFonts, validatePresentation} from '@openpresentation/opf';
+export {resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts} from '@openpresentation/opf/composition';
+export {validatePresentation} from '@openpresentation/opf';
 
 const require = createRequire(new URL('../../../opf-pptx/package.json', import.meta.url));
 export const {strToU8, unzipSync, zipSync} = require('fflate');

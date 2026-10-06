@@ -158,7 +158,7 @@ test('fontScheme.accent resolves only when defined and styles the tag and the qu
   assert.equal(resolveFontFamilies({accent: ''}).accent, undefined);
   const fonts = {heading: 'Heading Face', body: 'Body Face', code: 'Code Face', accent: 'Accent Face'};
   const slide = {tag: 'Eyebrow', title: 'Title', subtitle: 'Sub', blocks: [{text: 'Body'}, {quote: {text: 'Quoted', attribution: 'Someone'}}, {code: 'x = 1'}]};
-  const result = composeSlide(slide, {fonts});
+  const result = composeSlide(slide, {fontFamilies:fonts});
   const family = field => result.items.find(item => item.field === field).textStyle.fontFamily;
   assert.equal(family('tag'), 'Accent Face');
   assert.equal(family('title'), 'Heading Face');
@@ -168,9 +168,9 @@ test('fontScheme.accent resolves only when defined and styles the tag and the qu
   const quote = result.items.find(item => item.field === 'quote').quoteLayout;
   assert.equal(quote.parts.find(part => part.role === 'body').style.fontFamily, 'Accent Face');
   assert.equal(quote.parts.find(part => part.role === 'footer').style.fontFamily, 'Body Face');
-  assert.equal(layoutQuote('Q', {x: 0, y: 0, width: 400, height: 200}, {fonts}).parts[0].requestedStyle.fontFamily, 'Accent Face');
+  assert.equal(layoutQuote('Q', {x: 0, y: 0, width: 400, height: 200}, {fontFamilies:fonts}).parts[0].requestedStyle.fontFamily, 'Accent Face');
   // Without an accent family nothing changes.
-  const plain = composeSlide(slide, {fonts: {heading: 'Heading Face', body: 'Body Face', code: 'Code Face'}});
+  const plain = composeSlide(slide, {fontFamilies: {heading: 'Heading Face', body: 'Body Face', code: 'Code Face'}});
   assert.equal(plain.items.find(item => item.field === 'tag').textStyle.fontFamily, 'Body Face');
   assert.equal(plain.items.find(item => item.field === 'quote').quoteLayout.parts[0].style.fontFamily, 'Heading Face');
   assert.deepEqual(plain.items.map(item => item.box), result.items.map(item => item.box), 'estimated geometry is font-independent');

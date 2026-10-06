@@ -21,7 +21,7 @@ Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`
 const {registry, options} = await prepareNodeFonts({
   pack: 'office', substitutionPolicy: 'visual',
 });
-const {presentation} = paginatePresentation(document, options);
+const {presentation} = paginatePresentation(document, {fonts: options});
 const slides = renderSvgDeck(presentation, options);
 const png = await svgToPng(slides[0], options);
 const pptx = await toPptx(presentation, options);

@@ -191,7 +191,7 @@ await mkdir('artifacts',{recursive:true});
 await writeFile('artifacts/font-preparation.json',JSON.stringify({systemFontDiscovery:false,bundledFallback:false,fonts:await Promise.all(options.fontFiles.map(async file=>({file,sha256:createHash('sha256').update(await readFile(file)).digest('hex')})))},null,2)+'\\n');` : ''}
 const source={design:{fontScheme:'roboto'},slides:[{id:'fonts',title:'Prepared installed fonts',text:'A measured local document preserves its content.'}]};
 const original=JSON.stringify(source);
-const {presentation}=paginatePresentation(source,options);
+const {presentation}=paginatePresentation(source,{fonts:options});
 const editor=createEditorSession(presentation);
 assert.deepEqual(editor.composeSlide(0,options),resolvePresentation(presentation,options).slides[0].geometry);
 editor.set('slides.0.title','Editable prepared fonts');editor.undo();
@@ -261,7 +261,7 @@ const selected:FontFaceSelection|undefined=measured.fontFace;
 void selected;
 // @ts-expect-error Native style flags must be booleans, independent of numeric CSS weights.
 const invalid:FontFaceSelection={family:'Roboto SemiBold',bold:600,italic:false};
-const {presentation}=paginatePresentation({slides:[{title:'Prepared type consumer'}]},prepared.options);
+const {presentation}=paginatePresentation({slides:[{title:'Prepared type consumer'}]},{fonts:prepared.options});
 const editor=createEditorSession(presentation);
 editor.composeSlide(0,prepared.options);
 await svgToPng(renderSvgDeck(presentation,prepared.options)[0],prepared.options);

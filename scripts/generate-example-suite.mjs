@@ -1,7 +1,7 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { colorContrast } from "../packages/javascript/dist/index.js";
+import { colorContrast } from "../packages/javascript/dist/composition.js";
 import { galleryArtwork } from './gallery-artwork.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");

@@ -67,7 +67,13 @@ import {
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
 
-The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+The root entry holds the application-level API: schemas, catalogs, validation, variables, pagination, data helpers, font policy, `stats` and `resolveSlideContext`. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+
+The layout engine's names are not on the root. `composeSlide`, `fitText`, `layoutQuote` and the other `layoutX`/`fitX` functions, numbering, footnotes and citations, colour contrast, code syntax, pattern fills, metric trends, chart options, script fonts and text direction come from `@openpresentation/opf/composition`; the symbol-font tables come from `@openpresentation/opf/symbol-font-encodings`.
+
+### Facts, slide context and the fonts handle
+
+`stats(presentation, options?)` reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets, citations, variables, assets, fonts) without composing, measuring or validating; see [the stats guide](../../docs/stats.md). `resolveSlideContext(presentation, index, { fonts })` resolves one slide's canvas, layout, theme and font families (slide design, then deck design, then theme, then the default font scheme) into the `ComposeSlideOptions` that `composeSlide` takes, with `unresolved-font-scheme`, `unresolved-layout` and `unresolved-theme` diagnostics. Deck-level verbs take `{ fonts }`, a handle whose `textMeasurement` is how wide the host's real fonts draw text (`paginatePresentation(deck, { fonts })`); the renderer's font loader returns a richer handle that extends it. `composeSlide` itself is engine-level and takes `textMeasurement` and `fontFamilies` (`{ heading, body, code, accent? }`) directly.
 
 ### Content conversions
 

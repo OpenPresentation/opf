@@ -1,11 +1,13 @@
 import {tableRowBoundaries} from './table.js';
-import { catalogs } from "./catalogs.js";
-import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference, type FontSchemeDiagnostic, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
+import { composeSlide, type ComposeSlideOptions, type FontSchemeDiagnostic, type Fonts, type LayoutDiagnostic } from './composition.js';
+import { resolveSlideContext } from './slide-context.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValidPresentation } from './validator.js';
 import { sliceNumberedItems } from './numbering.js';
 
-export interface PaginationOptions extends ComposeSlideOptions {
+export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasurement'> {
+  /** The fonts handle: page breaks are chosen with its `textMeasurement`. Without it core uses its portable estimate. */
+  fonts?: Fonts;
   /** Readability floor used while choosing page breaks. Default 24 reference pixels. */
   minFontSize?: number;
   /** All-or-nothing resource limit. Defaults to 100 output slides. */
@@ -92,8 +94,14 @@ function leafFor(path: string, field: string, value: any): Leaf {
   return leaf;
 }
 
+/** Pagination takes its measurement through `{ fonts }`; a stray top-level `textMeasurement` would be ignored and pages would silently break at estimated widths. */
+function rejectTextMeasurement(options: object): void {
+  if ((options as { textMeasurement?: unknown }).textMeasurement !== undefined) throw new TypeError('Pagination options have no textMeasurement: pass the fonts handle as { fonts }, whose textMeasurement is used.');
+}
+
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
 export function paginateSlide(input: unknown, options: PaginationOptions = {}): PaginationResult {
+  rejectTextMeasurement(options);
   // RR-34: a slide that cites references validates only with the deck's references list (RR-54: and its datasets).
   assertValidPresentation({...deckContext(options.presentation),slides:[input]});
   let source = clone(input) as Record<string, any>;
@@ -119,9 +127,11 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   // footer measured at 24px during pagination would render at its old 17px nominal size.
   source = withReadability(source);
   let evaluations = 0;
+  const {fonts,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
+  const composeOptions: ComposeSlideOptions = {...engineOptions,...(fonts?.textMeasurement?{textMeasurement:fonts.textMeasurement}:{})};
   const geometry = (slide: Record<string, any>, pageIndex = 0) => {
     if (++evaluations > 20000) throw new OPFPaginationError('Pagination exceeded its layout evaluation limit. Split the input into smaller sections.');
-    return composeSlide(withReadability(slide,true), {...options,slideNumber:(options.slideNumber??sourceIndex+1)+pageIndex});
+    return composeSlide(withReadability(slide,true), {...composeOptions,slideNumber:(options.slideNumber??sourceIndex+1)+pageIndex});
   };
   const initial = geometry(source);
   // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
@@ -251,15 +261,14 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
 }
 
 export interface PresentationPaginationOptions {
-  textMeasurement?: TextMeasurement;
+  /** The fonts handle: page breaks are chosen with its `textMeasurement`. Without it core uses its portable estimate. */
+  fonts?: Fonts;
   /** Unscaled reference-pixel clearance for supplied vector text outlines. */
   textRasterPadding?: number;
   minFontSize?: number;
   maxSlides?: number;
   /** Host-supplied current calendar date (ISO YYYY-MM-DD) for `date: true` header/footer fields. */
   date?: string;
-  /** Optional host-resolved layout/canvas overrides for each source slide. */
-  slideOptions?: (slide: Record<string, any>, index: number) => ComposeSlideOptions;
   /** Receives `unresolved-font-scheme` once per reference path when a font-scheme id matches no record. */
   onDiagnostic?: (diagnostic: FontSchemeDiagnostic) => void;
 }
@@ -276,6 +285,7 @@ const usesSlideTotal = (presentation: Record<string, any>): boolean => [presenta
 
 /** Resolve local catalogs and paginate a complete presentation without mutating it. */
 export function paginatePresentation(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
+  rejectTextMeasurement(options);
   assertValidPresentation(input);
   const presentation = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
@@ -283,26 +293,19 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
   // Reserve every id already in the document — slide and payload alike — so a
   // generated continuation id can never collide with one an author chose.
   const authoredIds: string[] = presentation.slides.flatMap((slide: Record<string,unknown>)=>slideIds(slide));
-  const resolve = (kind: 'layouts' | 'themes' | 'fontSchemes', id: string) => presentation.catalogs?.[kind]?.records?.find((record: any)=>record.id===id) ?? catalogs[kind].find(record=>record.id===id);
   // Outside run(): a {total} retry must not repeat font-scheme diagnostics.
   const reported = new Set<string>();
   const run = (slideCount: number) => {
     const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [], reservedIds = [...authoredIds];
     presentation.slides.forEach((slide: Record<string,any>, index: number) => {
-      const overrides = options.slideOptions?.(slide,index) ?? {};
-      const layout = overrides.layout ?? (slide.layout ? resolve('layouts',slide.layout) : undefined);
-      if (slide.layout && !layout) throw new OPFPaginationError(`Layout '${slide.layout}' must be supplied inline or resolved by the host before pagination.`);
-      const design = {...presentation.design,...slide.design};
-      const reference = design.theme ?? 'minimal';
-      const theme = typeof reference==='string' ? resolve('themes',reference) : {...resolve('themes',reference.id),...reference};
-      if (!theme) throw new OPFPaginationError(`Theme '${reference}' must be supplied inline before pagination.`);
+      const context = resolveSlideContext(presentation,index,{slideNumber:output.length+1,slideCount,date:options.date});
+      for (const diagnostic of context.diagnostics) {
+        if (diagnostic.code === 'unresolved-layout') throw new OPFPaginationError(`Layout '${diagnostic.id}' must be supplied inline or resolved by the host before pagination.`);
+        if (diagnostic.code === 'unresolved-theme') throw new OPFPaginationError(`Theme '${diagnostic.id}' must be supplied inline before pagination.`);
+        if (diagnostic.code === 'unresolved-font-scheme' && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
+      }
       if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-      const fontReference = design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME;
-      const fontPath = slide.design?.fontScheme !== undefined ? `slides.${index}.design.fontScheme` : presentation.design?.fontScheme !== undefined ? 'design.fontScheme' : slide.design?.theme !== undefined ? `slides.${index}.design.theme` : 'design.theme';
-      const {scheme:fontScheme,diagnostic} = resolveFontSchemeReference(fontReference,id=>resolve('fontSchemes',id),fontPath);
-      if (diagnostic && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
-      const fonts = resolveFontFamilies(fontScheme);
-      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,socialPlatforms:catalogs.socialPlatforms,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
+      const result = paginateSlide(slide,{...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds} as PaginationOptions);
       const outputStart = output.length;
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});

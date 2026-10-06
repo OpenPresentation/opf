@@ -3,7 +3,7 @@
 // without the new fields keep their geometry.
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { composeSlide, validatePresentation, collectCitations, slideCitations, referencesSlide, walkCitationRuns, CITATION_MARKER_SCALE, CITATION_MARKER_RAISE, fitRichText, fitList, captionSettings } from '../dist/index.js';
+import { validatePresentation } from '../dist/index.js'; import { composeSlide, collectCitations, slideCitations, referencesSlide, walkCitationRuns, CITATION_MARKER_SCALE, CITATION_MARKER_RAISE, fitRichText, fitList, captionSettings } from '../dist/composition.js';
 import { lintPresentation } from '../dist/lint.js';
 import { paginateSlide } from '../dist/pagination.js';
 import { examples } from '../dist/examples.js';
@@ -271,7 +271,7 @@ describe('captions', () => {
     }
   });
   test('position above puts the band at the top; align and rich text are kept', () => {
-    const slide = composeSlide(block(payloads.image, { text: ['Rich ', { text: 'caption', italic: true }], position: 'above', align: 'center' }), { fonts: { body: 'Roboto' } });
+    const slide = composeSlide(block(payloads.image, { text: ['Rich ', { text: 'caption', italic: true }], position: 'above', align: 'center' }), { fontFamilies: { body: 'Roboto' } });
     const item = slide.items[1], caption = item.caption;
     const region = composeSlide(block(payloads.image)).items[1].box;
     assert.equal(caption.position, 'above'); assert.equal(caption.alignment, 'center');

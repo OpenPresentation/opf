@@ -99,6 +99,16 @@ opf format decks/*.opf.json --check                     # CI: exit 1 if any file
 
 `diff` matches slides by `id`, then identical content, then content similarity, and reports additions, removals, moves and field, block, design and metadata changes; `--format json` adds the structured changes and `--format patch` prints only the patch, which `opf edit --patch` applies. `merge` combines two edits of a base: changes in different places merge, and conflicts are listed with the base, our and their values and **block the write** (exit 1, report on stderr) unless `--prefer ours|theirs` picks a side, in which case every conflict is still reported. The merged document is validated before it is written. `format` rewrites a file with canonical key order (the schema's property order), two-space indentation, LF endings (`--eol crlf|preserve`) and one trailing newline; it is idempotent and does not validate. `opf edit`, `diff` and `merge` share one RFC 6902 implementation with the editor.
 
+## Facts about a deck
+
+```sh
+opf stats deck.opf.json                  # JSON
+opf stats deck.opf.json --format text    # a readable block per topic
+opf stats - --per-slide < deck.opf.json  # adds a row per slide
+```
+
+`opf stats <file|-> [--format <json|text>] [--per-slide]` reports neutral facts: slides, hidden slides and sections, layouts, payload kinds, words in content and in notes, notes coverage, images with and without alt text, charts, tables, datasets, citations, variables, assets, header and footer, fonts, colour variables and an estimated speaking time from the notes. It never validates, composes or loads fonts and never rates anything (no severities or thresholds), so it works on a deck that fails `opf validate`. Not a JSON document the other commands read: invalid JSON exits 2 and a JSON value that is not an object exits 1. See [the stats guide](../../docs/stats.md).
+
 ## Import CSV and JSON data
 
 ```sh

@@ -1,5 +1,4 @@
 import { type Node, parseTree } from 'jsonc-parser';
-import { catalogs as bundledCatalogs } from './catalogs.js';
 import { OPFCompositionError, composeSlide, type LayoutDiagnostic, type SlideComposition } from './composition.js';
 import { lintSource } from './lint.js';
 import { resolveScriptFonts } from './script-fonts.js';
@@ -7,7 +6,8 @@ import { validatePresentation } from './validator.js';
 import { accessibilityRules } from './audit-rules-a11y.js';
 import type { AuditContext, AuditRule, FindingInput, SlideContext } from './audit-context.js';
 import { pointer, slidePayloads, splitPointer, textValues } from './audit-content.js';
-import { DEFAULT_CHART_PALETTE, type Rec, createLookup, rec, resolveDesign } from './audit-design.js';
+import { DEFAULT_CHART_PALETTE, type Rec, createLookup, resolveDesign } from './audit-design.js';
+import { resolveSlideContext } from './slide-context.js';
 import { designRules } from './audit-rules-design.js';
 import type {
 	AuditDiagnostic,
@@ -130,24 +130,11 @@ function resolveOptions(options: AuditOptions): Resolved {
 const measurementFor = (options: AuditOptions, index: number) =>
 	typeof options.textMeasurement === 'function' ? options.textMeasurement(index) : options.textMeasurement;
 
-const slideCompositionOptions = (document: Rec, slide: Rec, index: number, count: number, design: ReturnType<typeof resolveDesign>, layout: Rec | undefined, options: AuditOptions) => {
-	const merged = { ...rec(document.design), ...rec(slide.design) };
-	return {
-		...design.dimensions,
-		layout,
-		presentation: document,
-		slideIndex: index,
-		slideNumber: index + 1,
-		slideCount: count,
-		fonts: design.fonts,
-		contentAlignment: merged.contentAlignment,
-		titleAlignment: merged.titleAlignment,
-		contentBox: merged.contentBox,
-		textMeasurement: measurementFor(options, index),
-		socialPlatforms: bundledCatalogs.socialPlatforms as never,
-		// Core never consults a clock; a fixed date only lets `date: true` furniture be measured.
-		date: '2000-01-01',
-	};
+/** The options `composeSlide` takes for slide `index`: core's one resolution, at the deck's size, with a fixed date so `date: true` furniture can be measured. */
+const slideContext = (document: Rec, index: number, options: AuditOptions) => {
+	const textMeasurement = measurementFor(options, index);
+	// Core never consults a clock; a fixed date only lets `date: true` furniture be measured.
+	return resolveSlideContext(document, index, { catalogs: options.catalogs, ...(textMeasurement ? { fonts: { textMeasurement } } : {}), date: '2000-01-01' });
 };
 
 /** The same slide with every `overflow: "error"` relaxed, so geometry still exists when a strict composition fails. */
@@ -166,11 +153,11 @@ function relax<T>(value: T): T {
 }
 
 function buildSlides(document: Rec, options: AuditOptions): SlideContext[] {
-	const lookup = createLookup(document, options.catalogs);
 	const slides = (Array.isArray(document.slides) ? document.slides : []) as Rec[];
 	return slides.map((slide, index) => {
-		const design = resolveDesign(document, slide, index, lookup);
-		const layout = typeof slide.layout === 'string' ? lookup('layouts', slide.layout) : undefined;
+		const composeContext = slideContext(document, index, options);
+		const design = resolveDesign(document, index, composeContext);
+		const layout = composeContext.options.layout as Rec | undefined;
 		const path = pointer('slides', index);
 		const context: SlideContext = {
 			index,
@@ -191,7 +178,7 @@ function buildSlides(document: Rec, options: AuditOptions): SlideContext[] {
 			// A language that cannot be resolved leaves the deck left to right, like the renderer.
 		}
 		const compose = (input: Rec, withLayout: Rec | undefined): SlideComposition =>
-			composeSlide(input, slideCompositionOptions(document, input, index, slides.length, design, withLayout, options) as never);
+			composeSlide(input, { ...composeContext.options, layout: withLayout });
 		let composition: SlideComposition | undefined;
 		try {
 			composition = compose(slide, layout);

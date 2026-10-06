@@ -2,7 +2,7 @@
 // peers opf-render and opf-pptx (see peers.ts). The command reads the document, lints it with the same linter as
 // `opf lint`, prepares the bundled fonts, renders, and prints one JSON report. Nothing is written when the document is
 // invalid, a render error occurred or --strict found warnings.
-import { type PresentationPaginationOptions, lintSource, paginatePresentation } from "@openpresentation/opf";
+import { type Fonts, lintSource, paginatePresentation } from "@openpresentation/opf";
 import path from "node:path";
 import { createImageResolver } from "./assets.js";
 import { embeddedFor, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
@@ -171,7 +171,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	let pagination: Record<string, unknown> | undefined;
 	if (options.paginate) {
 		try {
-			const result = paginatePresentation(deck, { textMeasurement: fonts.options.textMeasurement } as PresentationPaginationOptions);
+			const result = paginatePresentation(deck, { fonts: fonts.options as Fonts });
 			deck = result.presentation;
 			pagination = { pages: result.pages };
 		} catch (error) {

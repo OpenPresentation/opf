@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {describe, test} from 'node:test';
-import {DEFAULT_FONT_SCHEME, fontSchemes, languages, paragraphDirection, resolveScriptFonts, scriptFontRole, validatePresentation} from '../dist/index.js';
+import { fontSchemes, languages, validatePresentation } from '../dist/index.js'; import { DEFAULT_FONT_SCHEME, paragraphDirection, resolveScriptFonts, scriptFontRole } from '../dist/composition.js';
 
 // Fixtures choose openly licensed families (Carlito for the Calibri class,
 // Noto for CJK, Arabic, Hebrew, Devanagari and Thai). The resolver only

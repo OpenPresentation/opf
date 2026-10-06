@@ -4,6 +4,7 @@ import {composeSlide, fitList, formatListNumber, listNumbers, resolveNumbering, 
 import {paginateSlide} from '../dist/pagination.js';
 import {validatePresentation} from '../dist/validator.js';
 import * as root from '../dist/index.js';
+import * as composition from '../dist/composition.js';
 
 const measure = {measure: (text, size, style) => Array.from(text).length * size * (style.fontWeight === 700 ? .6 : .5)};
 const options = {style: {fontFamily: 'Base', fontWeight: 400, path: 'slides.0.items'}, textMeasurement: measure};
@@ -218,9 +219,9 @@ test('pagination keeps the numbers of a numbered list across continuation pages'
   assert.deepEqual(plain.slides.flatMap(page => page.items), items);
 });
 
-test('the package root exports the numbering helpers', () => {
+test('the composition entry exports the numbering helpers and the package root does not', () => {
   for (const name of ['formatListNumber', 'listNumbers', 'resolveNumbering', 'numberingAtLevel', 'sliceNumberedItems', 'NUMBERING_STYLES', 'NUMBERING_SUFFIXES', 'MAX_NUMBERING_VALUE', 'MAX_ROMAN_VALUE'])
-    assert.notEqual(root[name], undefined, name);
+    { assert.notEqual(composition[name], undefined, name); assert.equal(root[name], undefined, name); }
 });
 
 test('the fixture is valid and lint suggests the numbering styles', async () => {

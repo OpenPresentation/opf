@@ -64,22 +64,27 @@ console.log(lintSource(source));
 ## Offline fonts, composition, pagination
 
 ```js
-import { composeSlide, paginatePresentation, fontSchemes, resolveFontFamilies } from '@openpresentation/opf';
+import { paginatePresentation, resolveSlideContext } from '@openpresentation/opf';
+import { composeSlide } from '@openpresentation/opf/composition';
 import { prepareNodeFonts } from '@openpresentation/opf-render/fonts-node';
 
-const { options } = await prepareNodeFonts({ pack: 'base' });
-const fonts = resolveFontFamilies(fontSchemes.find(scheme => scheme.id === 'roboto'));
-const geometry = composeSlide(document.slides[0], { presentation: document, fonts, ...options });
-const { presentation, pages } = paginatePresentation(document, { fonts, ...options });
+const { options: fonts } = await prepareNodeFonts({ pack: 'base' });
+const { options } = resolveSlideContext(document, 0, { fonts });
+const geometry = composeSlide(document.slides[0], options);
+const { presentation, pages } = paginatePresentation(document, { fonts });
 ```
 
 `prepareNodeFonts({ pack: 'base' })` loads the bundled Roboto faces for
-`design.fontScheme: 'roboto'`. Pass `fonts` from that scheme into `composeSlide`
-when you also pass `textMeasurement`; otherwise furniture falls back to
-`sans-serif` and the registry has no matching face. `paginatePresentation`
-resolves catalog font schemes itself. The helper does not install system fonts
-or change the authored scheme. Reuse the same `options` for SVG preview and
-PPTX export.
+`design.fontScheme: 'roboto'`. Its `options` is the fonts handle: deck-level
+verbs such as `paginatePresentation` take it as `{ fonts }` and read its
+`textMeasurement`. `resolveSlideContext(document, index, { fonts })` resolves
+one slide's layout, canvas, theme and font families (slide design, then deck
+design, then theme, then the default font scheme) into the options `composeSlide`
+takes, so you never look up a font scheme yourself; an unknown font-scheme id
+comes back as an `unresolved-font-scheme` diagnostic. `paginatePresentation`
+does the same for every slide. The helper does not install system fonts or
+change the authored scheme. Reuse the same `fonts` for SVG preview and PPTX
+export.
 
 Shared headers and footers use `furniture-flow-v2`. Body content stays between
 `geometry.furniture.headerBottom` and `geometry.furniture.footerTop`.

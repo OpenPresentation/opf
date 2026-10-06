@@ -74,7 +74,7 @@ assert.equal(fixtureTab.fontSize,24);
 assert.equal(fixtureTab.style.fontWeight,400);
 
 const before=JSON.stringify(fixtureRuns);
-const composed=composeSlide({composition:{mode:'row'},blocks:[{text:fixtureRuns}]},{width:960,height:540,textMeasurement:measurement,fonts:{body:'Carlito'}});
+const composed=composeSlide({composition:{mode:'row'},blocks:[{text:fixtureRuns}]},{width:960,height:540,textMeasurement:measurement,fontFamilies:{body:'Carlito'}});
 assert.equal(JSON.stringify(fixtureRuns),before);
 assert.ok(composed.items[0].text.richLines.flatMap(line=>line.fragments).some(fragment=>fragment.kind==='tab'));
 

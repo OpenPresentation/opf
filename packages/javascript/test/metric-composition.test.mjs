@@ -7,7 +7,7 @@ test('composition accepts complete metric geometry against its rounded cell and 
   for (const metric of [0,{value:42,unit:'ms',label:'Latency',description:'All source',delta:0,trend:'flat'}]) {
     const slide={composition:{mode:'column',minFontSize:32},blocks:[{blocks:[{metric}]}]},before=structuredClone(slide);
     let calls=0;
-    const options={width:731.2345678,height:1280,fonts:{heading:'Heading',body:'Body'},textMeasurement:{measure:(text,size)=>{calls++;return text.length*size*.5;}}};
+    const options={width:731.2345678,height:1280,fontFamilies:{heading:'Heading',body:'Body'},textMeasurement:{measure:(text,size)=>{calls++;return text.length*size*.5;}}};
     const ordinary=composeSlide(slide,options),count=calls;calls=0;
     const {explanation,...explained}=composeSlide(slide,{...options,explain:true});
     assert.deepEqual(explained,ordinary);assert.equal(calls,count);assert.deepEqual(slide,before);

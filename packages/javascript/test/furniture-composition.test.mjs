@@ -19,7 +19,7 @@ test('furniture preserves inherited/local sources, whitespace and generated meta
   for(const [width,height] of [[1280,720],[720,1280]])for(const minFontSize of [16,32])for(const textMeasurement of [undefined,outlined]){
     const presentation={organization:[{id:'secondary',name:'Secondary'},{id:'primary',name:' Primary ',role:'primary'}],design:{header:{left:{text:' A\t B \r\n\r\n'},center:{organization:true},right:{section:true}},footer:{left:{text:''},center:{date:' 2026-09-10 '},right:{slideNumber:true}}}};
     const slide={section:'Current section',composition:{minFontSize,overflow:'error'},text:'Body'};
-    const before=structuredClone({presentation,slide}),options={width,height,presentation,slideIndex:4,slideNumber:11,textMeasurement,fonts:{body:'Fixture'}};
+    const before=structuredClone({presentation,slide}),options={width,height,presentation,slideIndex:4,slideNumber:11,textMeasurement,fontFamilies:{body:'Fixture'}};
     const geometry=composeSlide(slide,options),layout=geometry.furniture;
     assert.deepEqual({presentation,slide},before);assert.deepEqual(geometry.diagnostics,[]);
     assert.deepEqual(geometry,composeSlide(slide,options));
@@ -91,7 +91,7 @@ test('pagination repeats furniture and retains exact body source and mappings',(
   const input={design:{header:{left:{text:'Repeated heading'}},footer:{right:{slideNumber:true}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
   const before=structuredClone(input),numbers=[];
   const textMeasurement={measure:(text,size,style)=>{if(style.path?.endsWith('.slideNumber'))numbers.push(text);return measure(text,size);}};
-  const result=paginatePresentation(input,{minFontSize:24,textMeasurement});
+  const result=paginatePresentation(input,{minFontSize:24,fonts:{textMeasurement}});
   assert.deepEqual(input,before);assert.ok(result.presentation.slides.length>2);
   assert.equal(result.presentation.slides.slice(0,-1).map(slide=>slide.text).join(''),source);
   assert.ok(numbers.includes(String(result.presentation.slides.length)),'The last source slide must use its actual output number.');
@@ -106,7 +106,7 @@ test('a continuation whose wider number cannot fit fails atomically',()=>{
   const slide={design:{footer:{right:{slideNumber:true}}},text:'Content with words. '.repeat(200)};
   const before=structuredClone(slide),seen=new Set();
   const textMeasurement={measure:(text,size,style)=>{if(style.path?.endsWith('.slideNumber')){seen.add(text);return text==='9'?size/2:2000;}return measure(text,size);}};
-  assert.throws(()=>paginateSlide(slide,{slideNumber:9,textMeasurement}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path==='slides.0.design.footer.right.slideNumber'));
+  assert.throws(()=>paginateSlide(slide,{slideNumber:9,fonts:{textMeasurement}}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path==='slides.0.design.footer.right.slideNumber'));
   assert.ok(seen.has('9')&&seen.has('10'));assert.deepEqual(slide,before);
 });
 test('slide-number formats keep {current} live and resolve {total} from the displayed deck',()=>{
@@ -180,7 +180,7 @@ test('a {total} retry reports each unknown font scheme once',()=>{
 });
 test('generated socials format the primary organization profiles through platform records',async()=>{
   const {socialPlatforms}=await import('../dist/catalogs.js');
-  const {resolveSocialProfile}=await import('../dist/index.js');
+  const {resolveSocialProfile}=await import('../dist/composition.js');
   const organization={id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',github:'acme',mastodon:'@acme@hachyderm.io',bluesky:'https://bsky.app/profile/acme.bsky.social',custom:' Visit  us ',blank:'  '}};
   const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{right:{organization:true,socials:true}}}};
   const before=structuredClone(presentation);

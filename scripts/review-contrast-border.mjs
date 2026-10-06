@@ -4,7 +4,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {renderSvg} from '../../opf-render/dist/index.js';
 import {loadBundledFontRegistry} from '../../opf-render/dist/fonts-node.js';
-import {colorContrast} from '../packages/javascript/dist/index.js';
+import { colorContrast } from '../packages/javascript/dist/composition.js';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const sharp=require('sharp'),{chromium}=require('playwright'),hash=b=>createHash('sha256').update(b).digest('hex');
 const root=new URL('../artifacts/contrast-border/',import.meta.url);

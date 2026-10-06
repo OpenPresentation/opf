@@ -98,7 +98,7 @@ assert.throws(()=>composeSlide({blocks:[cyclic]}),RangeError);
 console.log('Nested groups: containment, source paths, region composition, inheritance, strict overflow and depth guards passed.');
 const calls=[];
 const measurement={measure:(text,size,style)=>{calls.push(style);return text.length*size;},resolveStyle:style=>({...style,fontFamily:'Measured Family'})};
-const measured=composeSlide({title:'Font roles',text:'A measured text line.'},{fonts:{heading:'Heading',body:'Body'},textMeasurement:measurement});
+const measured=composeSlide({title:'Font roles',text:'A measured text line.'},{fontFamilies:{heading:'Heading',body:'Body'},textMeasurement:measurement});
 assert.equal(measured.items[0].textStyle.fontFamily,'Measured Family');
 assert.ok(calls.some(style=>style.fontWeight===700)&&calls.some(style=>style.fontWeight===400));
 assert.throws(()=>composeSlide({text:'x'},{textMeasurement:{measure:()=>NaN}}),RangeError);

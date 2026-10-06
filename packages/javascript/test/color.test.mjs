@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {readFile} from 'node:fs/promises';
-import {colorContrast,textColorForFill,chartColorForFill,chartPaletteForFill,resolveColorRef,normalizeHexColor} from '../dist/index.js';
+import { colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, resolveColorRef, normalizeHexColor } from '../dist/composition.js';
 import {colorSchemes} from '../dist/index.js';
 
 const forestGreen = colorSchemes.find((scheme) => scheme.id === 'forest-green');

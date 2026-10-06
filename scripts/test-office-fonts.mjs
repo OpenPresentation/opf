@@ -22,7 +22,7 @@ const source={name:'Open-source Office font compatibility',slides:pairs.map(([re
   blocks:[{text:'The words should keep their rhythm. Actual glyph advances determine wrapping, so previews and exports share the same measured layout. AVATAR office affine 0123456789. '.repeat(3)},
   {text:'Regular and bold, serif and sans serif: use the same font bytes and make every substitution visible.'}]
 }))};
-const {presentation}=paginatePresentation(source,options);
+const {presentation}=paginatePresentation(source,{fonts:options});
 const editor=createEditorSession(presentation);
 const resolved=resolvePresentation(presentation,options);
 for(let i=0;i<presentation.slides.length;i++) assert.deepEqual(editor.composeSlide(i,options),resolved.slides[i].geometry);

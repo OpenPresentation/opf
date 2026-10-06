@@ -55,7 +55,7 @@ Core composes the marker, the preview draws it and the exporter writes it; none 
 - The hanging indent is one value for the whole list: the larger of 1.1 em (the bullet indent) and the widest marker in the list plus 0.3 em. Wide markers (`viii.`, `10.`, `(iv)`) therefore never reach their text, and every level steps by that same indent. An unnumbered list keeps 1.1 em.
 - A numbered list draws numbers even when `design.listBullet` is `image`; the picture bullet is for bulleted lists.
 
-`formatListNumber(value, style, suffix)`, `listNumbers(items, numbering)`, `resolveNumbering` and `numberingAtLevel` are exported (`@openpresentation/opf` and the `composition` subpath) so hosts, the exporter and tests compute the same numbers.
+`formatListNumber(value, style, suffix)`, `listNumbers(items, numbering)`, `resolveNumbering` and `numberingAtLevel` are exported (`@openpresentation/opf/composition`) so hosts, the exporter and tests compute the same numbers.
 
 ## PowerPoint
 

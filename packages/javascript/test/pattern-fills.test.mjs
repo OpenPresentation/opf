@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {PATTERN_PRESETS,PATTERN_PRESET_ALIASES,PATTERN_TILE_SIZE,patternBitmap,patternRuns,resolvePatternPreset} from '../dist/index.js';
+import { PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitmap, patternRuns, resolvePatternPreset } from '../dist/composition.js';
 
 const density=preset=>patternBitmap(preset).reduce((sum,row)=>sum+row.toString(2).replace(/0/g,'').length,0);
 const mirror=row=>parseInt(row.toString(2).padStart(8,'0').split('').reverse().join(''),2);

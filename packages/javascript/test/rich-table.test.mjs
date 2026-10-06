@@ -17,7 +17,7 @@ test('table overflow uses run metrics and pagination preserves whole rich cells'
  assert.ok(composeSlide(styled,{textMeasurement}).diagnostics.some(d=>d.code==='text-overflow'));
  assert.equal(composeSlide({table:{rows:[['W'.repeat(30)]]}},{textMeasurement}).diagnostics.length,0);
  const table={columns:[['Rich ',{text:'header',bold:true}],'Number'],rows:Array.from({length:45},(_,i)=>[[{text:'Row '+i,bold:i%2===0,link:'https://example.com/'+i}],i])};
- const before=structuredClone(table),result=paginateSlide({table},{textMeasurement});
+ const before=structuredClone(table),result=paginateSlide({table},{fonts:{textMeasurement}});
  assert.ok(result.slides.length>1);
  assert.deepEqual(result.slides.flatMap(slide=>slide.table.rows),table.rows);
  for(const slide of result.slides){assert.deepEqual(slide.table.columns,table.columns);assert.equal(composeSlide(slide,{textMeasurement}).diagnostics.length,0);}

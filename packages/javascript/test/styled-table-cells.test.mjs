@@ -116,7 +116,7 @@ test('pagination preserves vertical merge groups, rich styles, headers and sourc
     : [null, `Row ${i}`]);
   const table = {columns: [{value: 'Groups', style}, 'Details'], rows};
   const source = {blocks: [{table}]}, before = structuredClone(source);
-  const result = paginateSlide(source, {textMeasurement: measurement, slideIndex: 2});
+  const result = paginateSlide(source, {fonts:{textMeasurement:measurement}, slideIndex: 2});
   assert.ok(result.slides.length > 1);
   assert.deepEqual(result.slides.flatMap(slide => slide.blocks[0].table.rows), rows);
   for (const [i, slide] of result.slides.entries()) {
@@ -134,5 +134,5 @@ test('overlapping merge groups are atomic, and oversized groups fail without par
   const table = {rows: [[{value: 'A', rowSpan: 2}, 'B'], [null, {value: 'C', rowSpan: 2}], ['D', null], ['E', 'F']]};
   assert.deepEqual(tableRowBoundaries(table), [0, 3, 4]);
   const huge = {rows: [[{value: 'word\n'.repeat(100), rowSpan: 2}], [null]]};
-  assert.throws(() => paginateSlide({table: huge}, {textMeasurement: measurement}), OPFPaginationError);
+  assert.throws(() => paginateSlide({table: huge}, {fonts:{textMeasurement:measurement}}), OPFPaginationError);
 });

@@ -13,7 +13,7 @@ const array=v=>Array.isArray(v)?v:v?[v]:[];
 const {registry:fonts,options}=await prepareNodeFonts();
 const text='Wide letters WWW and narrow letters iii occupy different amounts of space. Actual fonts keep the layout honest. '.repeat(24);
 const source={name:'Measured font verification',design:{fontScheme:'roboto',theme:'classic'},slides:[{id:'metrics',title:'Use the actual font to fit the words',composition:{mode:'row',weights:[2,1]},blocks:[{text:'AVATAR office affinity. WWW iii. '.repeat(22)},{text:'Every preview and export starts from the same measured boxes.'}]},{id:'draft',title:'Continue at a readable size',text}]};
-const {presentation}=paginatePresentation(source,options);
+const {presentation}=paginatePresentation(source,{fonts:options});
 assert.equal(presentation.slides.filter(slide=>slide.id.startsWith('draft')).map(slide=>slide.text).join(''),text);
 const editor=createEditorSession(presentation);
 const resolved=resolvePresentation(presentation,options);

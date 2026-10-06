@@ -1,15 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import {
-  chartLabelText,
-  chartOptionSupport,
-  chartOptionTarget,
-  formatChartLabelNumber,
-  formatChartLabelPercent,
-  resolveChartOptions,
-  validatePresentation,
-} from "../dist/index.js";
+import { validatePresentation } from "../dist/index.js";
+import { chartLabelText, chartOptionSupport, chartOptionTarget, formatChartLabelNumber, formatChartLabelPercent, resolveChartOptions } from "../dist/composition.js";
 import { resolveChartOptions as fromComposition } from "../dist/composition.js";
 import { chartTypes } from "../dist/catalogs.js";
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {CODE_HIGHLIGHT_LANGUAGES,CODE_HIGHLIGHT_MAX_LENGTH,CODE_PANEL_BACKGROUND,CODE_SYNTAX_MIN_CONTRAST,codeLineRuns,codeSyntaxPalette,colorContrast,colorSchemes,resolveCodeLanguage,tokenizeCode} from '../dist/index.js';
+import { colorSchemes } from '../dist/index.js'; import { CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, colorContrast, resolveCodeLanguage, tokenizeCode } from '../dist/composition.js';
 
 const SAMPLES={
   python:'import os\n\n@cache\ndef greet(name: str) -> str:\n    """Doc\n    string"""\n    # note\n    return f"Hello, {name}!" if name else None  # tail\n\nclass Box(Base):\n    size = 0x1F + 3.5e2\n',

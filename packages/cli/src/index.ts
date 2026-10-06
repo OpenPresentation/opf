@@ -6,6 +6,7 @@ import { applyPatch, getAtPointer, parsePointer, PatchError } from "@openpresent
 import { diffCommand } from "./diff.js";
 import { mergeCommand } from "./merge.js";
 import { formatCommand } from "./format.js";
+import { statsCommand } from "./stats.js";
 import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
@@ -30,6 +31,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
            [--report <file>] [--dry-run] [--threshold <0-1>] [--strict]
   opf format <file|->... [--check | --in-place | --output <file|->]
            [--indent <0-8>] [--eol <lf|crlf|preserve>]
+  opf stats <file|-> [--format <json|text>] [--per-slide]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
@@ -68,6 +70,9 @@ when they differ). Merge combines two edits of a base; non-overlapping changes
 merge, conflicts are listed (exit 1, nothing written) unless --prefer picks a
 side. Format rewrites a file with canonical key order and layout; --check
 exits 1 if any file would change.
+Stats reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets,
+citations, variables, assets, fonts, an estimated speaking time) without validating, composing or loading
+fonts; it never rates anything. --per-slide adds a row per slide.
 Bundle inlines the bundled catalog records a document references (kinds with a
 custom source are left untouched) so the file resolves every catalog reference
 offline. Remote media and data assets are not inlined.
@@ -234,6 +239,7 @@ async function main(argv: string[]) {
   if (command === "diff") { await diffCommand(args, cli); return; }
   if (command === "merge") { await mergeCommand(args, cli); return; }
   if (command === "format") { await formatCommand(args, cli); return; }
+  if (command === "stats") { await statsCommand(args, cli); return; }
   if (command === "import-data") {
     const { positional, options } = parse(args, ["as", "format", "into", "path", "output", "in-place", "category", "series", "columns", "chart-type", "no-header", "delimiter", "title", "dataset", "force", "strict"]); arity(positional, 1);
     if (options.as !== 'table' && options.as !== 'chart') throw new CliError('import-data requires --as table or --as chart.');

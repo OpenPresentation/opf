@@ -61,7 +61,7 @@ test('readability settings and mixed-font metrics govern row fitting',()=>{
 
 test('pagination retains complete multiline rows and repeated headers',()=>{
  const table={columns:[['Rich ',{text:'header',bold:true}],'Index'],rows:Array.from({length:30},(_,i)=>[[{text:`Row ${i}\nDetail\nMore`,bold:true}],i])};
- const result=paginateSlide({table},{textMeasurement:measurement});
+ const result=paginateSlide({table},{fonts:{textMeasurement:measurement}});
  assert.ok(result.slides.length>1);
  assert.deepEqual(result.slides.flatMap(slide=>slide.table.rows),table.rows);
  for(const slide of result.slides){assert.deepEqual(slide.table.columns,table.columns);assert.equal(composeSlide(slide,{textMeasurement:measurement}).diagnostics.length,0);}

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide, layoutFurniture, resolveLogo} from '../dist/composition.js';
-import {resolveLogo as rootResolveLogo} from '../dist/index.js';
+import { resolveLogo as rootResolveLogo } from '../dist/composition.js';
 import {OPFPaginationError, paginatePresentation, paginateSlide} from '../dist/pagination.js';
 
 // Logos: resolveLogo precedence and variant chains, the cover logo box, furniture logo parts and

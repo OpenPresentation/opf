@@ -39,7 +39,7 @@ window.mount = async ({deck, faces, date, paginate}) => {
     data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), c => c.charCodeAt(0))
   })), {substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
   window.renderOptions = {textMeasurement: fonts.textMeasurement, trace: true, date};
-  window.pagination = paginate ? paginatePresentation(deck, {...renderOptions, minFontSize: 24}) : null;
+  window.pagination = paginate ? paginatePresentation(deck, {fonts: renderOptions, date, minFontSize: 24}) : null;
   window.editor = createEditorSession(pagination?.presentation ?? deck, {rejectInvalid: true});
   window.unsubscribe = editor.subscribe(event => events.push({type: event.type, patches: event.patches}));
   window.canvasEditor = createCanvasEditor(document.querySelector('#canvas'), {
