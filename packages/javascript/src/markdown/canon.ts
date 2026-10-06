@@ -116,10 +116,10 @@ function canonCode(value: unknown): unknown {
 
 function canonMetric(value: unknown): unknown {
   if (typeof value === "string" || typeof value === "number") return value;
-  if (!isRecord(value) || !only(value, ["value", "label", "description", "unit", "delta", "trend"])) return undefined;
+  if (!isRecord(value) || !only(value, ["value", "label", "description", "unit", "delta", "trend", "sentiment"])) return undefined;
   if (typeof value.value !== "string" && typeof value.value !== "number") return undefined;
   const out: Obj = { value: value.value };
-  for (const key of ["label", "description", "unit", "delta", "trend"]) {
+  for (const key of ["label", "description", "unit", "delta", "trend", "sentiment"]) {
     const entry = value[key];
     if (entry === undefined) continue;
     if (typeof entry !== "string" && !(key === "delta" && typeof entry === "number")) return undefined;

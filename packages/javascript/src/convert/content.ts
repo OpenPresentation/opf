@@ -147,6 +147,7 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
       const lines: Run[][] = [[value]];
       for (const part of [metric.label, metric.description, metric.delta === undefined ? undefined : String(metric.delta)]) if (part !== undefined && part !== "") lines.push(...splitRuns([part]));
       if (metric.trend) loss.note("metric trend");
+      if (metric.sentiment) loss.note("metric sentiment");
       return lines;
     }
     case "code": {

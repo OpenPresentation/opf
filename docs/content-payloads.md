@@ -14,7 +14,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
-| `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
+| `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, `trend`, and `sentiment`. |
 | `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 
@@ -228,7 +228,7 @@ Code-specific fields are grouped under `code`. A string value is shorthand for `
 
 ## Metric
 
-Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, or trends matter. A `trend` (`up`, `down`, `flat`) draws an arrow beside its word, coloured with the delta text, in the preview and the PowerPoint export; the word stays editable text and the arrow carries "Trend: up" as its alternative text (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
+Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, trends, or sentiment matter. A `trend` (`up`, `down`, `flat`) draws an arrow beside its word, coloured with the delta text, in the preview and the PowerPoint export; the arrow always points the way the trend does, and its colour follows `sentiment` (`positive` green, `negative` red, `neutral` the neutral text colour). When `sentiment` is absent up is positive, down is negative and flat is neutral, so set it when the direction is not the verdict: a falling churn, cost or latency is `"trend": "down", "sentiment": "positive"`. Only the trend arrow and the trend and delta text take the colour, so `sentiment` has no visible effect on a metric without a `trend`; the word stays editable text and the arrow carries "Trend: up" as its alternative text (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
 
 The `number-1x` through `number-6x` layout IDs declare one title placeholder and one through six `metric` placeholders. The IDs retain their existing names; the content kind and payload key are `metric`, not `number` or `text`. For several metrics, use separate `{ "metric": ... }` entries in `blocks`. Choosing a layout does not reinterpret existing text as numeric data.
 
@@ -241,6 +241,21 @@ The `number-1x` through `number-6x` layout IDs declare one title placeholder and
     "description": "Median reduction across customer review workflows.",
     "delta": "+11 pts",
     "trend": "up"
+  }
+}
+```
+
+A falling value that is good news keeps its downward arrow and takes the green:
+
+```json
+{
+  "title": "Churn",
+  "metric": {
+    "value": "3.1%",
+    "label": "Monthly churn",
+    "delta": "-0.6 pts",
+    "trend": "down",
+    "sentiment": "positive"
   }
 }
 ```

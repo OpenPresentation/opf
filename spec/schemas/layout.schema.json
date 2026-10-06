@@ -161,7 +161,7 @@
             "quote",
             "timeline"
           ],
-          "description": "The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' and 'tag' are the heading kinds and bind to Slide.title, Slide.subtitle and Slide.tag. 'text' holds text and bullets; 'list' holds items. 'image' is filled by an image payload and 'video' by a video payload. 'metric', 'quote', 'timeline', 'chart', 'table' and 'code' are filled by the payload of the same name."
+          "description": "The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' and 'tag' are the heading kinds and bind to Slide.title, Slide.subtitle and Slide.tag. 'text' holds text and bullets; 'list' holds items. 'image' is filled by an image payload and 'video' by a video payload. 'metric', 'quote', 'timeline', 'chart', 'table' and 'code' are filled by the payload of the same name; a metric region shows the metric payload with its optional label, description, unit, delta, trend and sentiment."
         }
       }
     },
