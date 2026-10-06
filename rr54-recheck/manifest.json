@@ -1,0 +1,484 @@
+{
+  "item": "RR-54 native re-check: format re-spelling on save (opf-pptx#171 b076bb6) and zero values in the chart workbook (opf-pptx#172)",
+  "builds": {
+    "c4-after": {
+      "commit": "b076bb6",
+      "core": "0.12.2",
+      "coreCommit": "11317237"
+    },
+    "c4-before": {
+      "commit": "f0ea480",
+      "core": "0.12.2",
+      "coreCommit": "11317237"
+    },
+    "c2-after": {
+      "commit": "4baa171",
+      "core": "0.12.0",
+      "coreCommit": "npm"
+    },
+    "c2-before": {
+      "commit": "7c93a1b",
+      "core": "0.12.0",
+      "coreCommit": "npm"
+    }
+  },
+  "options": {
+    "seed": 1,
+    "timestamp": "2026-10-05T00:00:00Z",
+    "zipDate": "2026-10-05T00:00:00Z"
+  },
+  "decks": {
+    "c4-formats": {
+      "check": "C4",
+      "document": "decks/c4-formats.opf.json",
+      "files": {
+        "c4-formats-after.pptx": {
+          "build": "c4-after",
+          "commit": "b076bb6",
+          "bytes": 86174,
+          "sha256": "40529530c4326b01c230beb4935e5bf92f9c1fd533e3726f612d8853c67ff137",
+          "reimport": {
+            "datasets": null,
+            "payloadsSha256": "497be10719401efd580f81b997afa644159a48bd63302c5a790184b9d16672ca",
+            "dataDiagnostics": []
+          }
+        },
+        "c4-formats-before.pptx": {
+          "build": "c4-before",
+          "commit": "f0ea480",
+          "bytes": 86161,
+          "sha256": "4eccc46530c2b5084bc11fb8facb65b673e50e80f3ba7768a098a63b72f9e94e",
+          "reimport": {
+            "datasets": null,
+            "payloadsSha256": "497be10719401efd580f81b997afa644159a48bd63302c5a790184b9d16672ca",
+            "dataDiagnostics": []
+          }
+        }
+      }
+    },
+    "c4-datasets": {
+      "check": "C4",
+      "document": "decks/c4-datasets.opf.json",
+      "files": {
+        "c4-datasets-after.pptx": {
+          "build": "c4-after",
+          "commit": "b076bb6",
+          "bytes": 78841,
+          "sha256": "a9b3ce26095e504e39af25c00967fbeff9e970fb637a20eea298f8384404ed24",
+          "reimport": {
+            "datasets": {
+              "sales": {
+                "title": "Sales by region",
+                "columns": [
+                  "Region",
+                  {
+                    "name": "Sales",
+                    "format": "$#,##0"
+                  },
+                  {
+                    "name": "Units",
+                    "format": "#,##0 units"
+                  },
+                  {
+                    "name": "Share",
+                    "format": "0.0%"
+                  }
+                ],
+                "rows": [
+                  [
+                    "EMEA",
+                    4200,
+                    120,
+                    0.33
+                  ],
+                  [
+                    "APAC",
+                    3100,
+                    80,
+                    0.24
+                  ],
+                  [
+                    "AMER",
+                    5600,
+                    150,
+                    0.43
+                  ]
+                ],
+                "source": {
+                  "src": "./sales.csv",
+                  "retrieved": "2026-10-05"
+                }
+              },
+              "spare": {
+                "columns": [
+                  "a",
+                  "b"
+                ],
+                "rows": [
+                  [
+                    "x",
+                    1
+                  ]
+                ]
+              }
+            },
+            "payloadsSha256": "25bdf86a00acd7d59adcfb0cf0c0d15747ef1b8bdf3f43fc73ccfc280304be40",
+            "dataDiagnostics": []
+          }
+        },
+        "c4-datasets-before.pptx": {
+          "build": "c4-before",
+          "commit": "f0ea480",
+          "bytes": 78833,
+          "sha256": "b9bff60f7a1b6d4f800180e452569fe9a1c7af269469ff7786fd4f2f954c058c",
+          "reimport": {
+            "datasets": {
+              "sales": {
+                "title": "Sales by region",
+                "columns": [
+                  "Region",
+                  {
+                    "name": "Sales",
+                    "format": "$#,##0"
+                  },
+                  {
+                    "name": "Units",
+                    "format": "#,##0 units"
+                  },
+                  {
+                    "name": "Share",
+                    "format": "0.0%"
+                  }
+                ],
+                "rows": [
+                  [
+                    "EMEA",
+                    4200,
+                    120,
+                    0.33
+                  ],
+                  [
+                    "APAC",
+                    3100,
+                    80,
+                    0.24
+                  ],
+                  [
+                    "AMER",
+                    5600,
+                    150,
+                    0.43
+                  ]
+                ],
+                "source": {
+                  "src": "./sales.csv",
+                  "retrieved": "2026-10-05"
+                }
+              },
+              "spare": {
+                "columns": [
+                  "a",
+                  "b"
+                ],
+                "rows": [
+                  [
+                    "x",
+                    1
+                  ]
+                ]
+              }
+            },
+            "payloadsSha256": "25bdf86a00acd7d59adcfb0cf0c0d15747ef1b8bdf3f43fc73ccfc280304be40",
+            "dataDiagnostics": []
+          }
+        }
+      }
+    },
+    "c2-zeros": {
+      "check": "C2",
+      "document": "decks/c2-zeros.opf.json",
+      "files": {
+        "c2-zeros-after.pptx": {
+          "build": "c2-after",
+          "commit": "4baa171",
+          "bytes": 97084,
+          "sha256": "56d206a1e9efd5bfe533eec4fa3992627825b876c102e0041a81c33856fb9b5b",
+          "workbook": [
+            {
+              "slide": 1,
+              "chart": "chart1.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 2,
+              "chart": "chart2.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 3,
+              "chart": "chart3.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 4,
+              "chart": "chart4.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 5,
+              "chart": "chart5.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 6,
+              "chart": "chart6.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 3
+              }
+            },
+            {
+              "slide": 7,
+              "chart": "chart7.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 3
+              }
+            },
+            {
+              "slide": 8,
+              "chart": "chart8.xml",
+              "scatter": true,
+              "cells": {
+                "A2": 1,
+                "A3": 0,
+                "A4": null,
+                "A5": 3,
+                "A6": 4,
+                "B2": 5,
+                "B3": 0,
+                "B4": 2,
+                "B5": 0,
+                "B6": 0
+              }
+            }
+          ]
+        },
+        "c2-zeros-before.pptx": {
+          "build": "c2-before",
+          "commit": "7c93a1b",
+          "bytes": 100197,
+          "sha256": "ad671b96d0381616e740c06d6632396cac86e74e4db9279392670228daa9507b",
+          "workbook": [
+            {
+              "slide": 1,
+              "chart": "chart1.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 2,
+              "chart": "chart2.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 3,
+              "chart": "chart3.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 4,
+              "chart": "chart4.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 5,
+              "chart": "chart5.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 0,
+                "B5": null,
+                "B6": null,
+                "B7": 3,
+                "C2": 1,
+                "C3": 0,
+                "C4": 0,
+                "C5": 2,
+                "C6": 3,
+                "C7": 0
+              }
+            },
+            {
+              "slide": 6,
+              "chart": "chart6.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 3
+              }
+            },
+            {
+              "slide": 7,
+              "chart": "chart7.xml",
+              "scatter": false,
+              "cells": {
+                "B2": 5,
+                "B3": 0,
+                "B4": 3
+              }
+            },
+            {
+              "slide": 8,
+              "chart": "chart8.xml",
+              "scatter": true,
+              "cells": {
+                "A2": 1,
+                "A3": 0,
+                "A4": null,
+                "A5": 3,
+                "A6": 4,
+                "B2": 5,
+                "B3": 0,
+                "B4": 2,
+                "B5": 0,
+                "B6": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

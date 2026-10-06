@@ -7,3 +7,5 @@ Windows host can rebuild the decks instead of copying binaries. Not for merging;
 - `ff46-ethiopic-supplement/` — opf#377 (opf#375). `node --import <core>/scripts/register-local-opf.mjs build.mjs before <opf-pptx main checkout>` with core at b66ea0c0, then `... build.mjs after <opf-pptx>` with core at d9d7880, then `node build.mjs manifest b66ea0c0 d9d7880`. See RUN.md in each folder.
 
 Compare your rebuilt decks' sha256 with `manifest.json`.
+
+- `rr54-recheck/` — RR-54 native re-check (opf-pptx#171 b076bb6 format re-spelling fix; opf-pptx#173 4baa171 workbook zeros). See its RUN.md; `node build.mjs` needs the #171 builds with core opf#376 linked and #173. Compare sha256 with manifest.json.
