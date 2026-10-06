@@ -1236,8 +1236,9 @@ export interface TimelineLayout {
   parts: TimelineTextPart[];
   /**
    * One marker per event. `radius` is the marker's own radius; `status` repeats the event's status
-   * (absent without one). A 'current' marker also has `ring.radius`, the outer radius of the ring
-   * around it, and a 'current' or 'planned' marker has the `strokeWidth` of its outline and ring.
+   * (absent without one). A 'current' marker also has `ring.radius`, 1.6 times `radius`, and a
+   * 'current' or 'planned' marker has the `strokeWidth` of its outline and ring. Every radius is that
+   * of the drawn ellipse; an outline is centered on the ellipse edge, so it reaches half a stroke beyond.
    */
   markers: {path:string;eventIndex:number;x:number;y:number;radius:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
@@ -1332,7 +1333,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
         // A ring widens the rail, and the text keeps its usual distance from the marker's edge.
-        const lead=hasRing?ringRadius:radius,gap=24*scale+(lead-radius);
+        const lead=hasRing?ringRadius+strokeWidth/2:radius,gap=24*scale+(lead-radius);
         const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;
@@ -1341,7 +1342,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
           y+=16*scale;
         });
       }
-      for(const marker of markers){const extent=marker.ring?.radius??marker.radius;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
+      for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const first=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(first.x,last.x),y1:first.y,x2:Math.max(first.x,last.x),y2:last.y}:{x1:first.x,y1:first.y,x2:last.x,y2:last.y};
       const candidate={arrangement,parts,markers,connector,diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;

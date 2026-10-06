@@ -58,13 +58,15 @@ test('the vertical rail makes room for the ring and keeps the text distance from
   const plain = layoutTimeline(base, narrow), status = layoutTimeline(value, narrow);
   assert.equal(plain.arrangement, 'vertical'); assert.equal(status.arrangement, 'vertical');
   const ring = status.markers[1].ring.radius, radius = status.markers[1].radius;
-  assert.ok(status.markers[0].x - ring >= narrow.x - 0.01);
+  const stroke = status.markers[1].strokeWidth;
+  assert.ok(status.markers[0].x - ring - stroke / 2 >= narrow.x - 0.01);
+  assert.equal(ring, 1.6 * radius);
   const gap = (layout) => layout.parts.find((part) => part.eventIndex === 0).box.x - (layout.markers[0].x + layout.markers[0].radius);
   assert.ok(Math.abs(gap(status) - gap(plain)) < 1e-9);
   assert.ok(status.parts.find((part) => part.eventIndex === 0).box.x > plain.parts.find((part) => part.eventIndex === 0).box.x);
   assert.ok(radius < ring);
   const rtl = layoutTimeline(value, narrow, { direction: 'rtl' });
-  assert.ok(rtl.markers[0].x + ring <= narrow.x + narrow.width + 0.01);
+  assert.ok(rtl.markers[0].x + ring + stroke / 2 <= narrow.x + narrow.width + 0.01);
 });
 
 test('a ring that does not fit reports the marker as out of space instead of drawing outside the box', () => {
@@ -85,10 +87,12 @@ test('marker shapes: filled for done and unset, ring plus filled dot for current
   assert.deepEqual(current.map((shape) => shape.role), ['ring', 'marker']);
   assert.equal(current[0].fill, colors.background); assert.equal(current[0].stroke.color, colors.primary);
   assert.equal(current[1].fill, colors.primary); assert.equal(current[1].stroke, undefined);
-  assert.ok(current[0].radius + current[0].stroke.width / 2 <= layout.markers[1].ring.radius + 1e-9);
+  // One rule: the drawn ellipse of the ring is exactly 1.6 times the marker's, and every marker ellipse has the marker radius.
+  assert.equal(current[0].radius, layout.markers[1].ring.radius); assert.equal(current[0].radius, 1.6 * layout.markers[1].radius);
+  assert.equal(current[1].radius, layout.markers[1].radius);
   assert.equal(planned.length, 1);
   assert.equal(planned[0].fill, colors.background); assert.equal(planned[0].stroke.color, colors.primary);
-  assert.ok(planned[0].radius + planned[0].stroke.width / 2 <= layout.markers[2].radius + 1e-9);
+  assert.equal(planned[0].radius, layout.markers[2].radius); assert.equal(planned[0].radius, done[0].radius);
 });
 
 test('planned text is the muted color kept at 4.5:1; other text keeps the normal color', () => {

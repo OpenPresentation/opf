@@ -37,7 +37,7 @@ export interface TimelineMarkerShape {
   shape: 'ellipse';
   cx: number;
   cy: number;
-  /** Radius of the drawn path; a stroked shape's outer edge is `radius` plus half the stroke. */
+  /** Radius of the drawn ellipse (the marker's `radius`, or the ring's `ring.radius`, 1.6 times it). An outline is centered on the edge, so it reaches half its width beyond. */
   radius: number;
   /** Fill color; undefined means no fill (nothing draws inside the shape). */
   fill?: string;
@@ -53,10 +53,10 @@ export function timelineMarkerShapes(marker: TimelineLayout['markers'][number], 
   const width = marker.strokeWidth ?? 0;
   // The ring and the hollow marker are filled with the slide background so the connector does not show through them.
   if (marker.status === 'current' && marker.ring) {
-    shapes.push({ role: 'ring', shape: 'ellipse', cx: marker.x, cy: marker.y, radius: marker.ring.radius - width / 2, fill: colors.background, stroke: { color: outline, width } });
+    shapes.push({ role: 'ring', shape: 'ellipse', cx: marker.x, cy: marker.y, radius: marker.ring.radius, fill: colors.background, stroke: { color: outline, width } });
   }
   if (marker.status === 'planned') {
-    shapes.push({ role: 'marker', shape: 'ellipse', cx: marker.x, cy: marker.y, radius: marker.radius - width / 2, fill: colors.background, stroke: { color: outline, width } });
+    shapes.push({ role: 'marker', shape: 'ellipse', cx: marker.x, cy: marker.y, radius: marker.radius, fill: colors.background, stroke: { color: outline, width } });
   } else {
     shapes.push({ role: 'marker', shape: 'ellipse', cx: marker.x, cy: marker.y, radius: marker.radius, fill: colors.primary });
   }
