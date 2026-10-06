@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "kind": "ff13-embed-audit",
+  "attempt": "20261005T190730Z",
+  "verdict": "PASS",
+  "failures": [],
+  "warnings": [
+    "diagnostic reopen: PowerPoint does not report Carlito as embedded ([{\"index\":1,\"name\":\"Carlito\",\"embedded\":0,\"embeddable\":-1}])"
+  ],
+  "nativeFonts": {
+    "beforeSave": [
+      {
+        "index": 1,
+        "name": "Carlito",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ],
+    "afterReopen": [
+      {
+        "index": 1,
+        "name": "Carlito",
+        "embedded": 0,
+        "embeddable": -1
+      }
+    ]
+  },
+  "powerpoint": {
+    "version": "16.0",
+    "build": "20430"
+  },
+  "opc": {
+    "failures": [],
+    "typefaces": [
+      "Carlito"
+    ],
+    "parts": [
+      {
+        "name": "ppt/fonts/font1.fntdata",
+        "size": 46474,
+        "sha256": "56adfcb4be87327a742f102c8af87f8141b488be2afb3750e9d08006e0406c9e",
+        "contentType": "application/x-fontdata",
+        "style": "p:regular",
+        "typeface": "Carlito",
+        "relId": "rId4",
+        "identity": {
+          "format": "eot",
+          "version": "0x20002",
+          "flags": 5,
+          "fontDataSize": 46266,
+          "weight": 400,
+          "italic": false,
+          "fsType": 0,
+          "family": "Carlito",
+          "familyRaw": "\"Carlito\\u0000\""
+        }
+      },
+      {
+        "name": "ppt/fonts/font2.fntdata",
+        "size": 51205,
+        "sha256": "0c80f6b1f3c4ae18fc97492e99089acdac402aeb0c775a29407235b7e62c8b2b",
+        "contentType": "application/x-fontdata",
+        "style": "p:bold",
+        "typeface": "Carlito",
+        "relId": "rId5",
+        "identity": {
+          "format": "eot",
+          "version": "0x20002",
+          "flags": 5,
+          "fontDataSize": 51009,
+          "weight": 700,
+          "italic": false,
+          "fsType": 0,
+          "family": "Carlito",
+          "familyRaw": "\"Carlito\\u0000\""
+        }
+      },
+      {
+        "name": "ppt/fonts/font3.fntdata",
+        "size": 46780,
+        "sha256": "691dca703e5de194662359487aa2cd465e0094f04f15c051b2836881f6e985c1",
+        "contentType": "application/x-fontdata",
+        "style": "p:italic",
+        "typeface": "Carlito",
+        "relId": "rId6",
+        "identity": {
+          "format": "eot",
+          "version": "0x20002",
+          "flags": 5,
+          "fontDataSize": 46576,
+          "weight": 400,
+          "italic": false,
+          "fsType": 0,
+          "family": "Carlito",
+          "familyRaw": "\"Carlito\\u0000\""
+        }
+      },
+      {
+        "name": "ppt/fonts/font4.fntdata",
+        "size": 46192,
+        "sha256": "92dd8e5e36d7fc98c8d62465c2d21fe9efd26de8fca6267a92993243dc931f61",
+        "contentType": "application/x-fontdata",
+        "style": "p:boldItalic",
+        "typeface": "Carlito",
+        "relId": "rId7",
+        "identity": {
+          "format": "eot",
+          "version": "0x20002",
+          "flags": 5,
+          "fontDataSize": 45968,
+          "weight": 700,
+          "italic": false,
+          "fsType": 0,
+          "family": "Carlito",
+          "familyRaw": "\"Carlito\\u0000\""
+        }
+      }
+    ],
+    "presentationAttributes": {
+      "embedTrueTypeFonts": "1",
+      "saveSubsetFonts": "1",
+      "autoCompressPictures": "0"
+    },
+    "packageSha256": "4320ff1d1087287ed2ea46f6aa5855d712a5328687948e16afcf632b036b25b0",
+    "partCount": 28
+  },
+  "hashes": {
+    "request.json": "aad2399d7630af89c3dbfb5012357ee0e11b05bd4fda557455f3f450c674ac7e",
+    "supervisor.json": "63ceaa8aba953829bf5360a8795d4fa43a7fd7a481be785416c7b8419a38848b",
+    "report.json": "a0534c5ddfe7903a3cf0f824bb7b8258bd622a60fe8ded9cefaa174ee5f6fc40",
+    "font-registration.json": "ac359c4f2aa98983194f275db7c41a87337ea2f0788733184e760f91b50861fb",
+    "stages.jsonl": "0f26857d955ebc524b163778098eddbe0cf46aabb97c983f980fb8d392069439",
+    "copy.pptx": "4320ff1d1087287ed2ea46f6aa5855d712a5328687948e16afcf632b036b25b0"
+  },
+  "scope": "Offline audit of one attempt: lifecycle records, the native Presentation.Fonts gate and the OPC font parts of copy.pptx. Embedded part identity is read from EOT/sfnt headers where readable; it does not prove which face drew each glyph."
+}
