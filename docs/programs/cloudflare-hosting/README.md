@@ -125,7 +125,7 @@ changes state):
 
 - **Vercel retirement (CF-08).** When to remove the wildcard record, the Vercel projects and the Vercel code paths, after
   a stable period. Until then Vercel keeps the domains as a warm rollback for pptx.dev.
-- **RR-49 descope.** Whether to drop the Vercel preview and bypass-secret parts of RR-49 (RR README, Open decisions 5).
+- **RR-49 descope.** Settled 2026-10-06 (owner): the Vercel-only checks are removed and RR-49 is `descoped` (RR README, Open decisions 5); only the Ignored Build Step, its test and `vercel.json` remain, until CF-08.
 - **CF-04 to CF-06 inputs.** The Actions secrets for the deploy workflows (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` in the
   three repositories; pptx-dev also `CONVEX_DEPLOY_KEY` and the `NEXT_PUBLIC_*` variables) and a Clerk test user with its secrets for
   the signed-in test. All three deploy workflows and the signed-in suite are merged and stop at their gate until these exist.
