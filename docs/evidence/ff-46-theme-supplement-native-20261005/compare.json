@@ -1,0 +1,188 @@
+{
+  "ethi-amharic-ebrima-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "Presentation.Fonts lists \"Nyala\" outside the deck's fonts"
+    ],
+    "notes": [
+      "fonts [\"Ebrima\",\"Nyala\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "ethi-amharic-ebrima-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Ebrima\"]",
+      "file Ethi entry major/minor Ebrima/Ebrima"
+    ]
+  },
+  "ethi-amharic-ebrima-inline-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "Presentation.Fonts lists \"Nyala\" outside the deck's fonts"
+    ],
+    "notes": [
+      "fonts [\"Ebrima\",\"Nyala\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "ethi-amharic-ebrima-inline-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Ebrima\"]",
+      "file Ethi entry major/minor Ebrima/Ebrima"
+    ]
+  },
+  "jpan-japanese-msgothic-inline-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"MS Gothic\"]",
+      "file Jpan entry major/minor MS Gothic/MS Gothic"
+    ]
+  },
+  "jpan-japanese-msgothic-inline-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"MS Gothic\"]",
+      "file Jpan entry major/minor MS Gothic/MS Gothic"
+    ]
+  },
+  "ethi-amharic-noto-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "Presentation.Fonts lists \"Nyala\" outside the deck's fonts"
+    ],
+    "notes": [
+      "fonts [\"Noto Sans Ethiopic\",\"Nyala\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "ethi-amharic-noto-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Noto Sans Ethiopic\"]",
+      "file Ethi entry major/minor Noto Sans Ethiopic/Noto Sans Ethiopic"
+    ]
+  },
+  "armn-armenian-noto-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "Presentation.Fonts lists \"Sylfaen\" outside the deck's fonts"
+    ],
+    "notes": [
+      "fonts [\"Noto Sans Armenian\",\"Sylfaen\"]",
+      "file Armn entry major/minor Sylfaen/Sylfaen"
+    ]
+  },
+  "armn-armenian-noto-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Noto Sans Armenian\"]",
+      "file Armn entry major/minor Noto Sans Armenian/Noto Sans Armenian"
+    ]
+  },
+  "geor-georgian-noto-before": {
+    "status": "BASELINE (expected fail)",
+    "problems": [
+      "Presentation.Fonts lists \"Sylfaen\" outside the deck's fonts"
+    ],
+    "notes": [
+      "fonts [\"Noto Sans Georgian\",\"Sylfaen\"]",
+      "file Geor entry major/minor Sylfaen/Sylfaen"
+    ]
+  },
+  "geor-georgian-noto-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Noto Sans Georgian\"]",
+      "file Geor entry major/minor Noto Sans Georgian/Noto Sans Georgian"
+    ]
+  },
+  "ethi-amharic-default-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Aptos Display\",\"Nyala\",\"Aptos\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "ethi-amharic-default-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Aptos Display\",\"Nyala\",\"Aptos\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "ethi-amharic-nyala-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Nyala\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "ethi-amharic-nyala-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Nyala\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "armn-armenian-sylfaen-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Sylfaen\"]",
+      "file Armn entry major/minor Sylfaen/Sylfaen"
+    ]
+  },
+  "armn-armenian-sylfaen-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Sylfaen\"]",
+      "file Armn entry major/minor Sylfaen/Sylfaen"
+    ]
+  },
+  "geor-georgian-sylfaen-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Sylfaen\"]",
+      "file Geor entry major/minor Sylfaen/Sylfaen"
+    ]
+  },
+  "geor-georgian-sylfaen-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Sylfaen\"]",
+      "file Geor entry major/minor Sylfaen/Sylfaen"
+    ]
+  },
+  "latin-english-control-before": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Aptos Display\",\"Aptos\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  },
+  "latin-english-control-after": {
+    "status": "PASS",
+    "problems": [],
+    "notes": [
+      "fonts [\"Aptos Display\",\"Aptos\"]",
+      "file Ethi entry major/minor Nyala/Nyala"
+    ]
+  }
+}
