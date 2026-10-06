@@ -102,7 +102,7 @@ export function chartNumber(value: unknown): number | null;
 export function formatDataNumber(value: number, format?: string): string;
 /** Why a NumberFormat is invalid (the number-format-invalid message), or undefined when it is valid or absent. */
 export function numberFormatError(format: unknown): string | undefined;
-/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped; placeholders are written '#' before '0' ("0#" -> "#0"). */
+/** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted as one run ("0.0 m/s" -> '0.0 "m/s"'), so '/' (Excel's fraction bar), 'E+', '@', '*', '_' and '?' are never bare (native check opf#387); placeholders are written '#' before '0' ("0#" -> "#0"). */
 export function excelNumberFormat(format?: string): string;
 /** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General, sections, scaling commas, and placeholder orders Excel reads by position such as "0#" or "0.#0"). */
 export function numberFormatFromExcel(code: string): string | undefined;

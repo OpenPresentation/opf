@@ -147,8 +147,10 @@ function formatParts(format: string): FormatParts | undefined {
   return { prefix: match[1] ?? '', integer, decimals, suffix: match[3] ?? '' };
 }
 
-// Characters Excel displays as themselves without quotes. Everything else in literal text is quoted.
-const EXCEL_SAFE = new Set([...'$-+/():!^&\'~{}<>= ']);
+// Characters Excel displays as themselves without quotes. Everything else in literal text is quoted. '/' is not one of
+// them: unquoted it is Excel's fraction bar, and PowerPoint drops a code such as `0.0 "m"/"s"` to General on load (native
+// check opf#387). Excel's other special characters ('E+', '@', '*', '_', '?', '\', letters) are quoted too.
+const EXCEL_SAFE = new Set([...'$-+():!^&\'~{}<>= ']);
 
 function excelLiteral(text: string, percent: { used: boolean }): string {
   let out = '';
@@ -157,7 +159,9 @@ function excelLiteral(text: string, percent: { used: boolean }): string {
   for (const char of text) {
     if (char === '%' && !percent.used) { flush(); out += '%'; percent.used = true; continue; }
     if (char === '"') { flush(); out += '\\"'; continue; }
-    if (EXCEL_SAFE.has(char)) { flush(); out += char; continue; }
+    // Once literal text is quoted, the run stays in one quoted string ("m/s", "items/day", "km/h "), so a safe character
+    // between letters never splits it; a safe character before any quoted text stays bare ("$", " ").
+    if (EXCEL_SAFE.has(char) && quoted === '') { out += char; continue; }
     quoted += char;
   }
   flush();

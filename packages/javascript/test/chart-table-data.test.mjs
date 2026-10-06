@@ -110,6 +110,25 @@ describe("number formats", () => {
     assert.equal(excelNumberFormat("0,"), "#,##0", "a trailing grouping comma is not an Excel scale");
   });
 
+  test("Excel codes: a literal run stays in one quoted string, so '/' and Excel's special characters are never bare", () => {
+    // Native check opf#387: `0.0 "m"/"s"` leaves '/' bare (Excel's fraction bar) and PowerPoint drops the code to General.
+    const cases = [
+      ["0.0 m/s", '0.0 "m/s"'], ["km/h 0", '"km/h "0'], ["#,##0 items/day", '#,##0 "items/day"'],
+      ["0.0 E+3 m", '0.0 "E+3 m"'], ["#,##0 @HQ", '#,##0 "@HQ"'], ["#,##0 *est", '#,##0 "*est"'],
+      ["#,##0 net_rev", '#,##0 "net_rev"'], ["#,##0 ok?", '#,##0 "ok?"'], ["0.0% p.a.", '0.0% "p.a."'],
+      ["+0.0 pts", '+0.0 "pts"'], ["$#,##0k", '$#,##0"k"'],
+    ];
+    // Outside quoted strings and backslash escapes only placeholders and characters Excel shows as themselves may remain.
+    const bare = (code) => code.replace(/\\./g, "").replace(/"[^"]*"/g, "");
+    for (const [format, code] of cases) {
+      assert.equal(excelNumberFormat(format), code, format);
+      assert.match(bare(code), /^[#0,.%$\-+():!^&'~{}<>= ]*$/, `${code} has no bare special character`);
+      assert.equal(numberFormatFromExcel(code), format, `${code} maps back`);
+    }
+    // A bare '/' is a fraction bar, so a code that has one has no NumberFormat equivalent.
+    assert.equal(numberFormatFromExcel('0.0 "m"/"s"'), undefined);
+  });
+
   test("numberFormatFromExcel maps exact equivalents only", () => {
     assert.equal(numberFormatFromExcel("General"), undefined);
     assert.equal(numberFormatFromExcel(""), undefined);
