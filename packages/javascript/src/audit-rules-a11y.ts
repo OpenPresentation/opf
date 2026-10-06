@@ -2,6 +2,7 @@ import { chartPaletteForFill } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
+import { resolveChartData } from './chart-data.js';
 import type { AuditDiagnostic, AuditFix } from './audit-types.js';
 import { type AuditContext, type AuditRule, type SlideContext, rule } from './audit-context.js';
 import {
@@ -532,8 +533,10 @@ const chartRules: AuditRule[] = [
 			for (const slide of context.slides)
 				for (const payload of slidePayloads(slide.slide, slide.path)) {
 					const chart = rec(payload.node.chart);
-					const data = rec(chart.data);
-					if (!Array.isArray(data.columns) || !Array.isArray(data.rows)) continue;
+					// RR-54: inline data, a dataset reference and the series mapping resolve to [category, (x,) ...series].
+					const resolved = resolveChartData(chart, context.document);
+					if (!resolved.ok) continue;
+					const data = { columns: resolved.columns.filter((_, index) => !(resolved.hasX && index === 1)), rows: resolved.rows };
 					const type = String(chart.type ?? '').toLowerCase();
 					if (chartSkip.test(type)) continue;
 					const slices = perCategory.test(type);

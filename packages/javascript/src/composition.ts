@@ -1,4 +1,5 @@
 import {tableGrid,type TableCellStyle} from './table.js';
+import {inlineChartData,inlineTableData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {visualReadingOrder} from './reading-order.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
@@ -352,7 +353,7 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
@@ -1791,6 +1792,8 @@ export interface TableLayoutOptions {
   fontFamily?: string;
   textMeasurement?: TextMeasurement;
   path?: string;
+  /** RR-54: the document, for a dataset-backed table (`{ dataset }`): its headers, rows and column formats come from `datasets`. */
+  presentation?: { datasets?: unknown };
   /**
    * Deck direction. A right-to-left deck lays the columns out right to left: the first column is the rightmost
    * and each cell's text reports its paragraph direction (RR-05).
@@ -1824,8 +1827,16 @@ export interface TableLayout { rows: TableRowLayout[]; columnCount: number; heig
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
   const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(15 * scale,minimum);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
-  const grid = tableGrid(value,options.path ?? 'table');
+  // RR-54: dataset tables are laid out from their inline copy, and a body cell measures its formatted number text.
+  const inline = inlineTableData(value, options.presentation);
+  const grid = tableGrid(inline,options.path ?? 'table');
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
+  const formats = resolveTableData(inline).formats;
+  for (const row of grid.rows) for (const cell of row) {
+    if (cell.header) continue;
+    const shown = tableCellDisplayValue(cell.input as DataTableCell, formats[cell.column]);
+    if (shown !== cell.input) cell.value = typeof shown === 'object' && shown !== null && !Array.isArray(shown) ? shown.value : shown;
+  }
   const columnCount=grid.columnCount,cellWidth=box.width/columnCount;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
@@ -1882,7 +1893,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   return {rows,columnCount,height:sum(heights),overflow};
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
-  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,textMeasurement:options.textMeasurement,path}).overflow;
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -2118,7 +2129,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: host[field], path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: host[field], ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
+    // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
+    const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
+    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -2347,3 +2360,6 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
 }
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartOptions} from './chart-options.js';
+// RR-54: chart and table data resolution, for engines that import the composition entry.
+export {chartNumber,formatDataNumber,numberFormatError,excelNumberFormat,numberFormatFromExcel,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';
+export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';

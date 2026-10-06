@@ -15,7 +15,7 @@ export type { ArrayMatch, MatchPair, MatchedBy, MatchOptions } from "./diff-matc
 
 export type DiffChangeType = "added" | "removed" | "changed" | "moved";
 /** What kind of thing changed. */
-export type DiffCategory = "slide" | "block" | "field" | "design" | "metadata" | "assets" | "catalogs" | "variables" | "narrative" | "extensions";
+export type DiffCategory = "slide" | "block" | "field" | "design" | "metadata" | "assets" | "datasets" | "catalogs" | "variables" | "narrative" | "extensions";
 
 export interface DiffSlideRef {
   id?: string;
@@ -68,7 +68,7 @@ export type DiffOptions = MatchOptions;
 
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
 const REGION_KEY = /^(top|middle|bottom|left|center|right)([:+].*)?$/u;
-const ROOT_CATEGORIES: Record<string, DiffCategory> = { design: "design", assets: "assets", catalogs: "catalogs", variables: "variables", narrative: "narrative", extensions: "extensions" };
+const ROOT_CATEGORIES: Record<string, DiffCategory> = { design: "design", assets: "assets", datasets: "datasets", catalogs: "catalogs", variables: "variables", narrative: "narrative", extensions: "extensions" };
 
 /** The category a change at `tokens` belongs to. */
 export function categoryOf(tokens: readonly string[]): DiffCategory {
@@ -268,7 +268,7 @@ function changeLine(change: DiffChange, prefixLength: number): string {
 }
 
 const SECTION_TITLES: Record<DiffCategory, string> = {
-  metadata: "Metadata", design: "Design", variables: "Variables", narrative: "Narrative", assets: "Assets", catalogs: "Catalogs", extensions: "Extensions", slide: "Slides", block: "Slides", field: "Slides",
+  metadata: "Metadata", design: "Design", variables: "Variables", narrative: "Narrative", assets: "Assets", datasets: "Datasets", catalogs: "Catalogs", extensions: "Extensions", slide: "Slides", block: "Slides", field: "Slides",
 };
 
 /** Render a diff as a plain-text report (no colour, stable ordering). */
@@ -279,13 +279,13 @@ export function formatDiffReport(diff: PresentationDiff): string {
   const headline: string[] = [];
   const slideParts = ([[s.added, "added"], [s.removed, "removed"], [s.moved, "moved"], [s.modified, "modified"]] as Array<[number, string]>).filter(([n]) => n > 0).map(([n, label]) => `${n} ${label}`);
   if (slideParts.length) headline.push(`slides: ${slideParts.join(", ")}`);
-  for (const category of ["metadata", "design", "variables", "narrative", "assets", "catalogs", "extensions"] as const) {
+  for (const category of ["metadata", "design", "variables", "narrative", "assets", "datasets", "catalogs", "extensions"] as const) {
     const count = diff.summary.byCategory[category];
     if (count) headline.push(`${category}: ${count}`);
   }
   lines.push(`${diff.summary.total} change${diff.summary.total === 1 ? "" : "s"} (${headline.join("; ")})`, "");
 
-  for (const category of ["metadata", "design", "variables", "narrative", "assets", "catalogs", "extensions"] as const) {
+  for (const category of ["metadata", "design", "variables", "narrative", "assets", "datasets", "catalogs", "extensions"] as const) {
     const section = diff.changes.filter(change => change.category === category);
     if (!section.length) continue;
     lines.push(SECTION_TITLES[category]);

@@ -7,7 +7,7 @@ node packages/cli/dist/index.js lint deck.opf.json
 node packages/cli/dist/index.js lint deck.opf.json --config brand-lint.json --strict
 ```
 
-Lint is read-only and local. It returns JSON diagnostics with stable rule IDs, severity, JSON Pointer paths, original-source UTF-16 ranges, one-based line/column, explanations, contextual suggestions, and schema/catalog definitions. The CLI includes the original file SHA-256 and the bundled core version. A supplied configuration file has its own path and hash. No AI call, account, remote catalog fetch, source normalization, or automatic fix is involved.
+Lint is read-only and local. It returns JSON diagnostics with stable rule IDs, severity, JSON Pointer paths, original-source UTF-16 ranges, one-based line/column, explanations, contextual suggestions, and schema/catalog definitions. The CLI includes the original file SHA-256 and the bundled core version. A supplied configuration file has its own path and hash. No AI call, account, remote catalog fetch, source normalization, or automatic fix is involved; a diagnostic may carry suggested `fixes` (JSON Patch, in the audit fix shape) that only the host applies.
 
 | Check | Behavior |
 | --- | --- |
@@ -18,6 +18,7 @@ Lint is read-only and local. It returns JSON diagnostics with stable rule IDs, s
 | Catalog definitions | Validates supplied and inline records; rejects duplicate IDs within one catalog and reports invalid overrides |
 | Asset references | Reports missing document registry IDs and cyclic `asset:` references; does not fetch resource bytes |
 | Explicit contracts | Reports existing fields outside the allowed values in a host-supplied policy |
+| Chart and table data | Data errors and warnings keep their code as the rule id (`opf/dataset-unknown`, `opf/chart-value-not-numeric`, ...); an unreferenced dataset is the warning `opf/unused-dataset`. A `opf/chart-value-not-numeric` cell whose column is written in one display style (`"12%"`, `"$1,234"`) carries `fixes`: a JSON Patch that stores the numbers and gives the column the format that shows the same text ([chart and table data](chart-table-data.md#migration-help)) |
 | Citations and captions | Semantic errors keep their code as the rule id (`opf/cite-unknown-reference`, `opf/reference-id-duplicate`, `opf/cite-unsupported-location`, `opf/caption-unsupported-payload`); a reference no run cites is the warning `opf/unused-reference` |
 
 Free-form audience/purpose descriptions and arbitrary extension data do not become catalog references because of their spelling. An inline custom tone/narrative remains distinct from a string catalog reference. External catalog sources remain visible as informational diagnostics; URL and `pkg:` records are not resolved by this local lint pass. Suggestions name records actually present in the supplied context and never silently replace authored values.

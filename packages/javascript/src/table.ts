@@ -33,11 +33,13 @@ export function tableGrid(value:unknown,path='table'):TableGrid {
       continue;
     }
     const object=record(input),styled=Object.hasOwn(object,'value');
+    // RR-54: a DataColumn header ({name, format}) shows its name.
+    const column=!styled&&hasHeaders&&r===0&&typeof object.name==='string';
     const rowSpan=styled?(object.rowSpan??1):1,colSpan=styled?(object.colSpan??1):1;
     if(!Number.isSafeInteger(rowSpan)||!Number.isSafeInteger(colSpan)||rowSpan<1||colSpan<1||r+rowSpan>rowCount||c+colSpan>columnCount||(hasHeaders&&r===0&&rowSpan>1)) {
       issues.push({path:cellPath,message:'Cell spans must be positive integers within the table grid and cannot cross from headers into body rows.'});continue;
     }
-    const cell:TableGridCell={input,value:styled?object.value:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':cellPath};
+    const cell:TableGridCell={input,value:styled?object.value:column?object.name:input,style:styled?record(object.style):{},row:r,column:c,rowSpan,colSpan,header:hasHeaders&&r===0,path:cellPath,valuePath:styled?cellPath+'.value':column?cellPath+'.name':cellPath};
     rows[r]!.push(cell);
     for(let y=r;y<r+rowSpan;y++) for(let x=c;x<c+colSpan;x++) {
       if(owners[y]![x])issues.push({path:cellPath,message:'Cell spans cannot overlap another spanning cell.'});

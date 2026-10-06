@@ -19,11 +19,15 @@ export interface CellInfo {
   value: Json;
   styled: boolean;
   merged: boolean;
+  /** RR-54: the cell (or DataColumn header) carries a number format. */
+  formatted?: boolean;
 }
 export function cellOf(raw: Json): CellInfo {
   if (isRecord(raw) && Object.hasOwn(raw, "value")) {
-    return { value: raw.value, styled: isRecord(raw.style) && Object.keys(raw.style).length > 0, merged: (raw.colSpan ?? 1) > 1 || (raw.rowSpan ?? 1) > 1 };
+    return { value: raw.value, styled: isRecord(raw.style) && Object.keys(raw.style).length > 0, merged: (raw.colSpan ?? 1) > 1 || (raw.rowSpan ?? 1) > 1, formatted: typeof raw.format === "string" };
   }
+  // RR-54: a DataColumn header ({ name, format }) reads as its name.
+  if (isRecord(raw) && typeof raw.name === "string") return { value: raw.name, styled: false, merged: false, formatted: typeof raw.format === "string" };
   return { value: raw, styled: false, merged: false };
 }
 /** A cell value as list or timeline text: a string, or the runs when the cell is rich. */
@@ -48,6 +52,7 @@ function readCells(table: Obj, loss: Loss, purpose: string, allowMerged = false)
         loss.note("merged cells");
       }
       if (cell.styled) loss.note("cell styles");
+      if (cell.formatted) loss.note("number formats");
     }
   }
   return { columns: Array.isArray(table.columns) ? table.columns.map((cell: Json) => cellOf(cell).value) : undefined, rows: rows.map((row: Json[]) => row.map((cell) => cellOf(cell).value)) };

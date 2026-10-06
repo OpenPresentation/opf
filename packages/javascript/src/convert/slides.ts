@@ -100,7 +100,7 @@ export function splitSlide(presentation: unknown, slideIndex: number, options: S
     slide.blocks = clone(blocks.slice(from, bounds[part + 1]));
     return slide;
   });
-  assertValidOutput(slides, "slides");
+  assertValidOutput(slides, "slides", presentation as Obj);
   return { presentation: replaceSlides(presentation as Obj, slideIndex, 1, slides), slides, range: { start: slideIndex, deleteCount: 1 }, changed: true, ...report(loss.list) };
 }
 
@@ -156,7 +156,7 @@ export function splitSlideOnOverflow(presentation: unknown, slideIndex: number, 
     mappings: page.mappings.map((mapping) => ({ ...mapping, sourcePath: remapPath(mapping.sourcePath, 0, slideIndex), outputPath: remapPath(mapping.outputPath, 0, slideIndex + (page.slideIndex as number)) })),
     ...(page.repeatedMappings ? { repeatedMappings: page.repeatedMappings.map((mapping) => ({ ...mapping, sourcePath: remapPath(mapping.sourcePath, 0, slideIndex), outputPath: remapPath(mapping.outputPath, 0, slideIndex + (page.slideIndex as number)) })) } : {}),
   }));
-  assertValidOutput(paginated, "slides");
+  assertValidOutput(paginated, "slides", presentation as Obj);
   return { presentation: replaceSlides(whole, slideIndex, 1, paginated), slides: paginated, range: { start: slideIndex, deleteCount: 1 }, changed: true, pages, ...report([]) };
 }
 
@@ -192,7 +192,7 @@ export function mergeSlides(presentation: unknown, start: number, count = 2): Sl
   if (blocks.length) merged.blocks = blocks;
   const notes = slides.map((slide) => slide.notes).filter((note): note is string => typeof note === "string" && note !== "");
   if (notes.length) merged.notes = notes.join("\n\n");
-  assertValidOutput(merged, "slide");
+  assertValidOutput(merged, "slide", presentation as Obj);
   return { presentation: replaceSlides(presentation as Obj, start, count, [merged]), slides: [merged], range: { start, deleteCount: count }, changed: true, ...report(loss.list) };
 }
 
@@ -260,7 +260,7 @@ export function unpaginate(presentation: unknown, pages: readonly (PaginatedPage
     end = Math.max(end, indexes[0]! + indexes.length);
     removed += indexes.length - 1;
   }
-  assertValidOutput(current.slides, "slides");
+  assertValidOutput(current.slides, "slides", presentation as Obj);
   // The old slides from the first page of the first split slide to the last page of the last one are replaced as one range.
   const deleteCount = end - first;
   return { presentation: current, slides: current.slides.slice(first, first + deleteCount - removed), range: { start: first, deleteCount }, changed: true, ...report([]) };

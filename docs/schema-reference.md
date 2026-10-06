@@ -32,6 +32,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `narrative` | no | `oneOf:string / ref:Narrative` | Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record. Accepts two forms: - String shorthand for the common case: 'narrative = "classic-story"'. Accepts a bare... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
+| `datasets` | no | `ref:Datasets` | Shared data tables keyed by id. A chart (`chart.data`: `{ "dataset": "<id>" }`) or a table (`{ "dataset": "<id>" }`) references one; engines inline it before composing. An unreferenced dataset is the lint warning `opf/unused-dataset`. See docs/chart-table-data.md. |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
 | `catalogs` | no | `ref:Catalogs` | Optional per-kind catalog overrides. Each kind may declare a non-default 'source' and/or inline 'records' that override or supplement the default catalog at https://www.pptx.gallery/<kind>. References elsewhere in the... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
@@ -452,7 +453,7 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `number` | Illustrative number shown in fill forms and used when a template is previewed with examples. Never written to output. |
-| `format` | no | `string` | Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' requi... |
+| `format` | no | `ref:NumberFormat` | Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' requi... |
 
 
 ### DateVariable
@@ -935,7 +936,8 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
-| `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. |
+| `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource / ref:DatasetRef` | Chart data: inline columns/rows, a dataset reference (`{ "dataset": "<id>", "fields"? }`), or a ChartDataSource, which no engine loads (`chart-data-source-unresolved` warning, placeholder drawn). |
+| `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name (category, scatter X, series). Absent keeps the positional rule. See docs/chart-table-data.md. |
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
 | `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
@@ -967,13 +969,15 @@ _No named properties._
 ### Table
 
 - Type: `object`
-- Required fields: `rows`
-- Purpose: Table content. Columns are optional; rows are the only required field.
+- Required fields: `rows` (inline table) or `dataset` (dataset-backed table)
+- Purpose: Table content, inline or dataset-backed. An inline table has `rows` and optional `columns`; a dataset-backed table has `dataset` and optional `fields`, and no `rows` or `columns`.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / null>` | Optional column labels. Labels may be strings, rich runs or styled cell objects. Null is an empty label or a placeholder covered by a preceding column span. |
-| `rows` | yes | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
+| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels: strings, rich runs, styled cell objects or DataColumn objects. A header's `format` is the column's number format. Null is an empty label or a placeholder covered by a preceding column span. |
+| `rows` | inline | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
+| `dataset` | dataset | `ref:DatasetId` | Id of a top-level dataset that supplies the headers, rows and column formats. Unknown: `dataset-unknown` error. |
+| `fields` | no | `ref:DatasetFields` | Dataset tables only: the columns to show, by name and in order. Unknown: `dataset-field-unknown` error. |
 
 
 ### ChartData
@@ -984,8 +988,9 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | yes | `array<string>` | Ordered column labels for the chart data table. |
-| `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. |
+| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels; a DataColumn carries a number format. |
+| `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. Value cells are numbers or strict decimal strings; anything else is a gap and a `chart-value-not-numeric` warning. |
+| `source` | no | `ref:DataSourceRef` | Optional provenance. Engines never read, fetch or refresh it. |
 
 
 ### ChartDataSource
@@ -1000,6 +1005,110 @@ _No named properties._
 | `sheet` | no | `string` | Optional sheet name or table name for spreadsheet-like assets. |
 | `range` | no | `string` | Optional A1-style range or engine-defined range selector for spreadsheet-like assets. |
 | `columns` | no | `array<string>` | Optional ordered columns or fields to read from the source. When omitted, renderers may use the source's own header row or schema. |
+
+
+### NumberFormat
+
+- Type: `string`
+- Required fields: none
+- Purpose: Number display pattern shared by NumberVariable.format, DataColumn.format and StyledTableCell.format: an optional literal prefix, a numeric part of '#', '0', ',' and '.', and an optional literal suffix; a '%' multiplies by 100. A column or cell format that is not a valid pattern is a `number-format-invalid` error. Examples: `#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`.
+
+_No named properties._
+
+
+### DataColumn
+
+- Type: `object`
+- Required fields: `name`
+- Purpose: A named data column with an optional number format, wherever a chart, dataset or table column header may be a string.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `name` | yes | `string` | Column label: the series name, the table header and the name `fields` and `chart.mapping` address. |
+| `format` | no | `ref:NumberFormat` | Number format of the column's number values. Absent: the General form. |
+
+
+### DataSourceRef
+
+- Type: `object`
+- Required fields: `src`
+- Purpose: Provenance of inline data or a dataset. Engines never read, fetch or refresh it; they keep it through editing, export and re-import.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a path. |
+| `sheet` | no | `string` | Sheet or table name inside a spreadsheet source. |
+| `range` | no | `string` | A1-style range inside a spreadsheet source. |
+| `fields` | no | `array<string>` | The source fields the data was taken from, in order. |
+| `retrieved` | no | `string` | ISO 8601 date or date-time the data was taken. |
+| `description` | no | `string` | Free-form note about the source. |
+
+
+### DatasetId
+
+- Type: `string`
+- Required fields: none
+- Purpose: Id of an entry in the top-level datasets map (the assets id pattern `^[a-zA-Z0-9][a-zA-Z0-9._-]*$`).
+
+_No named properties._
+
+
+### DatasetFields
+
+- Type: `array<string>`
+- Required fields: none
+- Purpose: Dataset column names to use, in order, each at most once (at least one).
+
+_No named properties._
+
+
+### Datasets
+
+- Type: `object map`
+- Required fields: none
+- Purpose: Shared data tables keyed by id (the assets id pattern); each value is a Dataset.
+
+_No named properties._
+
+
+### Dataset
+
+- Type: `object`
+- Required fields: `columns`, `rows`
+- Purpose: One shared data table. Column names are unique (`data-column-duplicate` error).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `title` | no | `string` | Human name shown by editors. |
+| `description` | no | `string` | What the dataset holds. |
+| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
+| `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells aligned with columns. |
+| `source` | no | `ref:DataSourceRef` | Optional provenance. |
+
+
+### DatasetRef
+
+- Type: `object`
+- Required fields: `dataset`
+- Purpose: Chart data taken from a top-level dataset; engines inline it before plotting.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. Unknown: `dataset-unknown` error. |
+| `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. |
+
+
+### ChartMapping
+
+- Type: `object`
+- Required fields: none
+- Purpose: Series mapping by column name, after any `fields` selection. Unknown names are `chart-mapping-unknown-column` errors; a series that repeats the category or X column, and an X column on a chart without an X axis, are dropped with a `chart-mapping-adapted` warning.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `category` | no | `string` | The label column. Default: the first column. |
+| `x` | no | `string` | The X column of a scatter chart. Default: the second column (the first when the category is the second column), only with three or more columns; with two, the second column is the series against row numbers. |
+| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or X. |
 
 
 ### ChartDataCell
@@ -1041,6 +1150,7 @@ _No named properties._
 | `style` | no | `ref:TableCellStyle` |  |
 | `colSpan` | no | `integer` | Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1. |
 | `rowSpan` | no | `integer` | Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1. |
+| `format` | no | `ref:NumberFormat` | Number format: of this body cell's number (wins over the column's), or of the column on a header cell. |
 
 
 ### TableCellStyle

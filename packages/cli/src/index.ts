@@ -34,7 +34,7 @@ const usage = `OPF — local presentation files for agents (Node 24)
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
            [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]
-           [--force] [--strict]
+           [--dataset <id>] [--force] [--strict]
   opf fill <template.opf.json|-> [--data <values.json|data.csv|data.tsv|->] [--format <csv|tsv|json>]
            [--delimiter <character>] [--no-header] [--output <file|-> | --out-dir <dir> [--name <pattern>]
            | --combine --output <file|->] [--partial] [--examples] [--force] [--strict]
@@ -101,7 +101,7 @@ const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory", "config", "data", "out-dir", "name"]);
-const extraValueOptions = new Set(["prefer", "threshold", "report", "indent", "eol"]);
+const extraValueOptions = new Set(["prefer", "threshold", "report", "indent", "eol", "dataset"]);
 function parse(args: string[], allowed: string[]) {
   const positional: string[] = [], options: Record<string, string | boolean> = Object.create(null);
   let literal = false;
@@ -235,7 +235,7 @@ async function main(argv: string[]) {
   if (command === "merge") { await mergeCommand(args, cli); return; }
   if (command === "format") { await formatCommand(args, cli); return; }
   if (command === "import-data") {
-    const { positional, options } = parse(args, ["as", "format", "into", "path", "output", "in-place", "category", "series", "columns", "chart-type", "no-header", "delimiter", "title", "force", "strict"]); arity(positional, 1);
+    const { positional, options } = parse(args, ["as", "format", "into", "path", "output", "in-place", "category", "series", "columns", "chart-type", "no-header", "delimiter", "title", "dataset", "force", "strict"]); arity(positional, 1);
     if (options.as !== 'table' && options.as !== 'chart') throw new CliError('import-data requires --as table or --as chart.');
     if (options.path && !options.into) throw new CliError('--path requires --into <deck>.');
     if (options["in-place"] && (!options.into || options.into === '-' || options.output !== undefined || options.force)) throw new CliError('--in-place requires a file --into and cannot combine with --output or --force.');
@@ -249,16 +249,37 @@ async function main(argv: string[]) {
     const format = options.format ?? (positional[0].endsWith('.json') ? 'json' : positional[0].endsWith('.tsv') ? 'tsv' : undefined);
     if (format !== undefined && !['csv','tsv','json'].includes(String(format))) throw new CliError('Unknown data format.');
     const raw = positional[0] === '-' ? await stdin() : await readFile(positional[0], 'utf8');
-    const content = createDataContent(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:options['chart-type'] as string|undefined});
+    const imported = createDataContent(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:options['chart-type'] as string|undefined});
+    // RR-54: --dataset <id> writes the data into the top-level datasets map (replacing that dataset's columns and rows,
+    // keeping its title, description and source) and references it from the table or chart.
+    const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
+    if (datasetId !== undefined && (options.dataset === true || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(datasetId))) throw new CliError('--dataset requires an id of letters, digits, ".", "_" or "-".');
+    const data = 'table' in imported ? imported.table : imported.chart.data;
+    const content = datasetId === undefined ? imported : 'table' in imported ? {table:{dataset:datasetId}} : {chart:{type:imported.chart.type,data:{dataset:datasetId}}};
+    const withDataset = (deck: unknown): unknown => {
+      if (datasetId === undefined) return deck;
+      const record = deck && typeof deck === 'object' && !Array.isArray(deck) ? deck as Record<string, unknown> : {};
+      const datasets = record.datasets && typeof record.datasets === 'object' && !Array.isArray(record.datasets) ? record.datasets as Record<string, unknown> : {};
+      const previous = datasets[datasetId] && typeof datasets[datasetId] === 'object' ? datasets[datasetId] as Record<string, unknown> : {};
+      const origin = positional[0] === '-' ? undefined : {src: positional[0].split(path.sep).join('/'), retrieved: new Date().toISOString().slice(0, 10)};
+      // A column that keeps its name keeps its number format. The source describes the new origin only: its other
+      // fields (sheet, range, description) survive a re-import of the same file, and data from stdin has none.
+      const formats = new Map((Array.isArray(previous.columns) ? previous.columns : []).flatMap((column: unknown) => column && typeof column === 'object' && typeof (column as {name?: unknown}).name === 'string' && typeof (column as {format?: unknown}).format === 'string' ? [[(column as {name: string}).name, (column as {format: string}).format] as const] : []));
+      const columns = data.columns.map(name => formats.has(name) ? {name, format: formats.get(name)!} : name);
+      const before = previous.source && typeof previous.source === 'object' ? previous.source as Record<string, unknown> : {};
+      const {source: _source, ...kept} = previous;
+      const entry = {...kept, columns, rows: data.rows, ...(origin ? {source: before.src === origin.src ? {...before, ...origin} : origin} : {})};
+      return {...record, datasets: {...datasets, [datasetId]: entry}};
+    };
     const source = options.into ? await readJson(String(options.into)) : undefined;
     let document: unknown;
     if (source) {
       if (options.path) {
         const parts = parsePointer(options.path);
         if (parts.at(-1) !== options.as) throw new CliError('--path must end in /table or /chart matching --as.');
-        document = applyPatch(source.value, [{op:'add',path:options.path,value:'table' in content ? content.table : content.chart}]);
-      } else document = applyPatch(source.value, [{op:'add',path:'/slides/-',value:{id:`data-${randomUUID()}`,title:options.title ?? 'Imported data',...content}}]);
-    } else document = {slides:[{id:'data-1',title:options.title ?? 'Imported data',...content}]};
+        document = applyPatch(withDataset(source.value), [{op:'add',path:options.path,value:'table' in content ? content.table : content.chart}]);
+      } else document = applyPatch(withDataset(source.value), [{op:'add',path:'/slides/-',value:{id:`data-${randomUUID()}`,title:options.title ?? 'Imported data',...content}}]);
+    } else document = withDataset({slides:[{id:'data-1',title:options.title ?? 'Imported data',...content}]});
     const output = options['in-place'] ? String(options.into) : String(options.output ?? '-');
     const sameFile = source && options.into !== '-' && output !== '-' && path.resolve(String(options.into)) === path.resolve(output);
     await emit(document, output, options, sameFile ? {file:String(options.into),raw:source.raw} : undefined); return;

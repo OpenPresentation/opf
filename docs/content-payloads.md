@@ -137,19 +137,27 @@ Chart-specific fields are grouped under `chart`. Do not put loose chart data dir
 
 Inline chart data is tabular by default. Renderers convert `columns` and `rows` into series, axes, legends, and workbook data internally.
 
-Asset-backed data is still table-oriented:
+Value cells are numbers. A string is read only in strict decimal syntax (`"12"`, `" -3.5 "`, `"1e6"`); anything else (`"12%"`, `"$5"`, `"(5)"`, `"1,234"`, `"Q1"`) is a gap in the preview and the export and a `chart-value-not-numeric` warning, never a guessed value. `null` and `""` are gaps without a warning. Core `chartNumber` is the one rule every engine uses (RR-54; before it the PPTX exporter stripped non-numeric characters, so `"12%"` exported as 12).
+
+A column is a string or a `DataColumn` with a number format, which the data labels, the value axis and the exported workbook use:
 
 ```json
 {
   "chart": {
     "type": "column",
     "data": {
-      "src": "asset:revenue-csv",
-      "columns": ["Quarter", "Revenue"]
-    }
+      "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }],
+      "rows": [["Q1", 12.4, 0.31], ["Q2", 18.1, 0.34]],
+      "source": { "src": "./data/revenue.csv", "retrieved": "2026-10-05" }
+    },
+    "mapping": { "category": "Quarter", "series": ["Revenue"] }
   }
 }
 ```
+
+Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behaviour, is [Chart and table data](chart-table-data.md).
+
+The `ChartDataSource` form (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is still valid, but no engine loads it: the preview and the export draw a placeholder and the validator warns `chart-data-source-unresolved`. Import the data inline (with a `source`) or into a dataset instead.
 
 ## Table
 
@@ -167,6 +175,8 @@ Table-specific fields are grouped under `table`. Do not put loose `columns` or `
   }
 }
 ```
+
+A table may instead show a dataset: `"table": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }` (no `rows` or `columns`); it takes its headers, rows and column formats from the dataset, and per-cell styles need an inline table. A column header may be a `DataColumn` (`{ "name": "Revenue", "format": "$#,##0.0" }`) and a styled header or body cell takes a `format`; a number cell displays formatted (the body cell's own format wins over the column's), and `layoutTable` measures the formatted text. See [Chart and table data](chart-table-data.md).
 
 Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0, a cell or column header also accepts the same `TextRun[]` used by rich text:
 
