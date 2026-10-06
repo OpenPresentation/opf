@@ -173,20 +173,30 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this color scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and def... |
 | `summary` | no | `string` | One-sentence positioning of the palette what mood it evokes and where to use it. |
 | `description` | no | `string` | Longer prose describing the palette and its intended use. |
-| `accent1` | no | `string` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
-| `accent2` | no | `string` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
-| `accent3` | no | `string` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
-| `accent4` | no | `string` | Accent 4 color (hex). Mirrors the OOXML accent4 slot. |
-| `accent5` | no | `string` | Accent 5 color (hex). Mirrors the OOXML accent5 slot. |
-| `accent6` | no | `string` | Accent 6 color (hex). Mirrors the OOXML accent6 slot. |
-| `dark1` | no | `string` | Dark 1 color (hex). Typically the deepest neutral; OOXML dark1. |
-| `dark2` | no | `string` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
-| `light1` | no | `string` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
-| `light2` | no | `string` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
-| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. |
-| `followedHyperlink` | no | `string` | Followed-hyperlink color (hex). OOXML folHlink. |
+| `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
+| `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
+| `accent3` | no | `ref:HexColor` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
+| `accent4` | no | `ref:HexColor` | Accent 4 color (hex). Mirrors the OOXML accent4 slot. |
+| `accent5` | no | `ref:HexColor` | Accent 5 color (hex). Mirrors the OOXML accent5 slot. |
+| `accent6` | no | `ref:HexColor` | Accent 6 color (hex). Mirrors the OOXML accent6 slot. |
+| `dark1` | no | `ref:HexColor` | Dark 1 color (hex). Typically the deepest neutral; OOXML dark1. |
+| `dark2` | no | `ref:HexColor` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
+| `light1` | no | `ref:HexColor` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
+| `light2` | no | `ref:HexColor` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
+| `hyperlink` | no | `ref:HexColor` | Hyperlink color (hex). OOXML hlink. |
+| `followedHyperlink` | no | `ref:HexColor` | Followed-hyperlink color (hex). OOXML folHlink. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
+
+### Nested Types
+
+#### HexColor
+
+- Type: `string`
+- Required fields: none
+- Purpose: Hex color: '#RGB', '#RRGGBB' or '#RRGGBBAA'. The same definition as HexColor in opf.schema.json.
+
+_No named properties._
 
 ## Font Scheme
 
@@ -194,7 +204,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-font-scheme/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `major`, `minor`
-- Purpose: Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (PowerPoint or Google Slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) catalogs.fontSchemes.source the default catalog at...
+- Purpose: Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) catalogs.fontSchemes.source the default catalog at...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -204,12 +214,12 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this font scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and defa... |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
-| `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
+| `code` | no | `string` | Optional monospaced font family name for code blocks. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so expor... |
 | `eastAsian` | no | `object` | East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from t... |
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
-| `app` | no | `enum:PowerPoint \| Google Slides` | Target application this font pairing is intended for. |
-| `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script... |
+| `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
+| `languageFamily` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long... |
 | `languages` | no | `array<string>` | Optional list of human-readable language names this scheme is curated for. Useful for picker UIs that group fonts by language coverage. |
 | `textSample` | no | `string` | Short specimen string used by picker UIs to preview the scheme. |
 | `summary` | no | `string` | One-sentence positioning of the font pairing. |

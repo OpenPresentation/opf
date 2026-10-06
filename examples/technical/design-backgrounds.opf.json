@@ -13,14 +13,8 @@
     },
     "fontScheme": {
       "id": "aptos",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos"
     },
     "dimensions": "widescreen",
     "background": "light1",

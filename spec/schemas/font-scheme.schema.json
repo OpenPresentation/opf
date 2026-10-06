@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "title": "Font Scheme",
-  "description": "Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (PowerPoint or Google Slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) → catalogs.fontSchemes.source → the default catalog at https://www.pptx.gallery/font-schemes. Role overrides on design.fontScheme (heading, body, accent, code) take precedence over the resolved scheme.",
+  "description": "Schema for font-scheme records in the pptx.gallery library. Each scheme pairs a major (heading) and minor (body) font family in the OOXML majorFont/minorFont sense, scoped to a target app (powerpoint or google-slides) and a language family (Latin, East Asian, or Complex Script). Font schemes are referenced from OPF documents via design.fontScheme or design.fontScheme.id; the engine resolves the reference against catalogs.fontSchemes (inline) → catalogs.fontSchemes.source → the default catalog at https://www.pptx.gallery/font-schemes. Role overrides on design.fontScheme (heading, body, accent, code), each a font family name, take precedence over the resolved scheme.",
   "type": "object",
   "required": [
     "$schema",
@@ -80,41 +80,11 @@
       ]
     },
     "code": {
-      "type": "object",
-      "description": "Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so exporters write this family on code runs. When neither design.fontScheme nor the resolved record defines 'code', engines fall back to Roboto Mono.",
-      "required": [
-        "family"
-      ],
-      "properties": {
-        "family": {
-          "type": "string",
-          "description": "Monospaced font family name.",
-          "examples": [
-            "Consolas",
-            "Courier New"
-          ]
-        },
-        "weight": {
-          "type": "number",
-          "description": "Numeric font weight (e.g., 400 for regular, 700 for bold)."
-        },
-        "style": {
-          "type": "string",
-          "enum": [
-            "normal",
-            "italic"
-          ],
-          "description": "Font style."
-        },
-        "letterSpacing": {
-          "type": "number",
-          "description": "Letter spacing (tracking) in ems."
-        }
-      },
+      "type": "string",
+      "description": "Optional monospaced font family name for code blocks. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so exporters write this family on code runs. When neither design.fontScheme nor the resolved record defines 'code', engines fall back to Roboto Mono.",
       "examples": [
-        {
-          "family": "Consolas"
-        }
+        "Consolas",
+        "Courier New"
       ]
     },
     "eastAsian": {
@@ -181,19 +151,21 @@
     "app": {
       "type": "string",
       "enum": [
-        "PowerPoint",
-        "Google Slides"
+        "powerpoint",
+        "google-slides"
       ],
-      "description": "Target application this font pairing is intended for."
+      "description": "Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it."
     },
     "languageFamily": {
       "type": "string",
       "enum": [
         "latin",
         "ea",
-        "cs"
+        "cs",
+        "eastAsian",
+        "complexScript"
       ],
-      "description": "OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script slot with its own major/minor families when its languages list is empty or names the presentation language."
+      "description": "Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long names match the 'eastAsian' and 'complexScript' slot keys; the short names match the OOXML a:ea and a:cs elements; core reads both spellings as one value. As the design font scheme, an 'ea'/'eastAsian' or 'cs'/'complexScript' scheme also fills that script slot with its own major/minor families when its languages list is empty or names the presentation language."
     },
     "languages": {
       "type": "array",

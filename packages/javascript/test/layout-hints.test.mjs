@@ -153,8 +153,8 @@ test('fontScheme.accent resolves only when defined and styles the tag and the qu
   assert.equal(resolveFontFamilies({major: 'Aptos Display', minor: 'Aptos'}).accent, undefined);
   assert.equal('accent' in resolveFontFamilies({}), false);
   assert.equal(resolveFontFamilies({accent: 'Impact'}).accent, 'Impact');
-  assert.equal(resolveFontFamilies({accent: {family: 'Impact', weight: 700}}).accent, 'Impact');
-  assert.equal(resolveFontFamilies({accent: {weight: 700}}).accent, undefined);
+  // A role is a family name: a Font object is not part of the format and names no family.
+  assert.equal(resolveFontFamilies({accent: {family: 'Impact', weight: 700}}).accent, undefined);
   assert.equal(resolveFontFamilies({accent: ''}).accent, undefined);
   const fonts = {heading: 'Heading Face', body: 'Body Face', code: 'Code Face', accent: 'Accent Face'};
   const slide = {tag: 'Eyebrow', title: 'Title', subtitle: 'Sub', blocks: [{text: 'Body'}, {quote: {text: 'Quoted', attribution: 'Someone'}}, {code: 'x = 1'}]};

@@ -2,14 +2,12 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "courier-new",
   "name": "Courier New",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Courier New",
   "minor": "Courier New",
-  "code": {
-    "family": "Courier New"
-  },
+  "code": "Courier New",
   "textSample": "Typed letter look",
   "type": "monospace",
   "description": "Courier New is a monospace OPF font scheme for Latin presentations, using Courier New for both headings and body text."

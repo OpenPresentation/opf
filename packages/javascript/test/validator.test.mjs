@@ -199,11 +199,12 @@ describe("presentation shapes that must validate", () => {
     });
   });
 
-  test("Chart Data Source", () => {
-    assertPresentationValid({
-      name: "Chart Data Source",
+  test("Removed Chart Data Source", () => {
+    // ChartDataSource (opf#240, descoped) is not part of the format: data is inline columns and rows, or a dataset.
+    assertPresentationInvalid({
+      name: "Removed Chart Data Source",
       assets: {
-        "revenue-csv": { src: "./data/revenue.csv", format: "csv" },
+        "revenue-csv": { src: "./data/revenue.csv", mediaType: "text/csv" },
       },
       slides: [{
         title: "Revenue From Asset",
@@ -215,7 +216,7 @@ describe("presentation shapes that must validate", () => {
           },
         },
       }],
-    });
+    }, "must NOT have additional properties");
   });
 
   test("Grid", () => {
@@ -550,7 +551,7 @@ describe("presentation shapes that must be rejected", () => {
           },
         },
       }],
-    }, "must have required property 'src'");
+    }, "must NOT have additional properties");
   });
 
   test("Image Array Rejected", () => {

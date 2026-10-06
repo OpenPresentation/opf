@@ -325,7 +325,7 @@ function assetsFor(spec, index) {
     },
     "metric-data": {
       src: `./data/${slug(spec.title)}.csv`,
-      format: "csv",
+      mediaType: "text/csv",
       title: `${spec.title} data`,
     },
     watermark: {
@@ -357,18 +357,14 @@ function designFor(spec, index, catalogs, density) {
           dark2: '#334155',
           light1: '#FFFFFF',
           light2: '#F8FAFC',
-          custom: {
-            signal: color(index, 5),
-            risk: color(index, 4),
-          },
         },
     fontScheme: compact
       ? pick(catalogs.fontSchemes, index)
       : {
           id: pick(catalogs.fontSchemes, index),
-          heading: { family: "Aptos Display", weight: 700 },
-          body: { family: "Aptos", weight: 400 },
-          code: { family: "Consolas", weight: 400 },
+          heading: "Aptos Display",
+          body: "Aptos",
+          code: "Consolas",
         },
     dimensions: index % 9 === 0
       ? { preset: "16:10", widthInches: 13.333, heightInches: 8.333 }
@@ -428,17 +424,6 @@ function chartRows(index) {
 
 function chartPayload(spec, index, catalogs, density) {
   const chartType = pick(catalogs.chartTypes, index);
-  if (density === "dense" && index % 4 === 0) {
-    return {
-      type: chartType,
-      data: {
-        src: "asset:metric-data",
-        sheet: "Summary",
-        range: "A1:C8",
-        columns: ["Quarter", "Current", "Baseline"],
-      },
-    };
-  }
   return {
     type: chartType,
     data: {

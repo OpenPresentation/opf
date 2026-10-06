@@ -157,7 +157,7 @@ A column is a string or a `DataColumn` with a number format, which the data labe
 
 Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behaviour, is [Chart and table data](chart-table-data.md).
 
-The `ChartDataSource` form (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is still valid, but no engine loads it: the preview and the export draw a placeholder and the validator warns `chart-data-source-unresolved`. Import the data inline (with a `source`) or into a dataset instead.
+Chart data is inline columns and rows or a dataset. A data source by file or asset (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is not part of the format: no engine loaded it, and the validator rejects it. Import the data inline (with a `source`) or into a dataset instead.
 
 ## Table
 

@@ -294,7 +294,7 @@ function chartToTable(chart: Json, loss: Loss): Field {
     if (chart.type) loss.note("chart type");
     return { key: "table", value: { dataset: data.dataset, ...(Array.isArray(data.fields) ? { fields: clone(data.fields) } : {}) } };
   }
-  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) throw refuse("This chart reads external data. Only a chart with inline columns and rows converts to a table.");
+  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) throw refuse("This chart has no inline columns and rows. Only a chart with inline columns and rows, or a dataset, converts to a table.");
   if (chart.type) loss.note("chart type");
   if (data.source !== undefined) loss.note("data source");
   return { key: "table", value: { columns: clone(data.columns), rows: clone(data.rows) } };

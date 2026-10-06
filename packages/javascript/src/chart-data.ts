@@ -33,7 +33,6 @@ export type DataTableHeader = DataTableCell | DataColumn;
 
 export type DataDiagnosticCode =
   | 'chart-value-not-numeric'
-  | 'chart-data-source-unresolved'
   | 'dataset-unknown'
   | 'dataset-field-unknown'
   | 'data-column-duplicate'
@@ -75,7 +74,7 @@ export type ResolvedChartData =
     }
   | {
       ok: false;
-      reason: 'data-not-inline' | 'dataset-unknown' | 'no-rows' | 'no-columns';
+      reason: 'dataset-unknown' | 'no-rows' | 'no-columns';
       message: string;
       diagnostics: DataDiagnostic[];
     };
@@ -448,7 +447,7 @@ function numberVariable(document: unknown, cell: unknown): boolean {
 export function resolveChartData(chart: unknown, document?: unknown, options: DataResolveOptions = {}): ResolvedChartData {
   const base = options.path ?? '';
   const diagnostics: DataDiagnostic[] = [];
-  const fail = (reason: 'data-not-inline' | 'dataset-unknown' | 'no-rows' | 'no-columns', message: string): ResolvedChartData => ({ ok: false, reason, message, diagnostics });
+  const fail = (reason: 'dataset-unknown' | 'no-rows' | 'no-columns', message: string): ResolvedChartData => ({ ok: false, reason, message, diagnostics });
   const data = record(chart) ? chart.data : undefined;
   if (!record(data)) return fail('no-columns', 'The chart has no data.');
   let columns: unknown[];
@@ -474,9 +473,6 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     selected = selection.indices;
     rows = dataset.rows;
     if (record(dataset.source)) source = dataset.source as DataSourceRef;
-  } else if (typeof data.src === 'string') {
-    diagnostics.push({ code: 'chart-data-source-unresolved', severity: 'warning', path: at(base, 'data', 'src'), message: `chart data source '${data.src}' is not loaded by any engine; the preview and export draw a placeholder. Import the data inline (columns and rows, with a 'source' for provenance) or reference a dataset` });
-    return fail('data-not-inline', 'The chart reads an external data source, which no engine resolves.');
   } else {
     if (!Array.isArray(data.columns)) return fail('no-columns', 'The chart data has no columns.');
     columns = data.columns;

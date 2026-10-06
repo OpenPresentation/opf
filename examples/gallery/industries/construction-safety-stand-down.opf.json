@@ -51,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F59E0B",
-        "risk": "#E2E8F0"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "gautami",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "a4",
     "background": "dark1",
@@ -486,7 +473,7 @@
     },
     "metric-data": {
       "src": "./data/construction-safety-stand-down.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Construction Safety Stand Down data"
     },
     "watermark": {

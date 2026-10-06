@@ -173,7 +173,6 @@ function canonChart(value: unknown): unknown {
     for (const row of data.rows) if (!Array.isArray(row) || !row.every((cell) => cell === null || ["string", "number", "boolean"].includes(typeof cell))) return undefined;
     return { type: value.type, data: { columns: data.columns, rows: data.rows } };
   }
-  if (typeof data.src === "string" && only(data, ["src", "sheet", "range", "columns"])) return { type: value.type, data };
   return undefined;
 }
 

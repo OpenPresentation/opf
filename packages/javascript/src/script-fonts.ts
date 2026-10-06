@@ -22,8 +22,22 @@ import { catalogs } from "./generated/catalogs.js";
 /** OOXML script slot a writing system uses: `a:latin`, `a:ea` or `a:cs`. */
 export type ScriptRole = "latin" | "eastAsian" | "complexScript";
 
+/** FontScheme.languageFamily as written: the short OOXML names and the long slot names are one value. */
+export type LanguageFamilyName = "latin" | "ea" | "cs" | "eastAsian" | "complexScript";
+
+/**
+ * Read a FontScheme `languageFamily` as one of three values. `eastAsian` is `ea` and `complexScript` is
+ * `cs`; anything that is not one of the five names returns undefined.
+ */
+export function normalizeLanguageFamily(value: unknown): "latin" | "ea" | "cs" | undefined {
+  if (value === "latin") return "latin";
+  if (value === "ea" || value === "eastAsian") return "ea";
+  if (value === "cs" || value === "complexScript") return "cs";
+  return undefined;
+}
+
 /** Target application whose language font-scheme defaults apply. */
-export type ScriptFontApp = "PowerPoint" | "Google Slides";
+export type ScriptFontApp = "powerpoint" | "google-slides";
 
 /** Font family per OOXML script slot for one theme font (major or minor). */
 export interface ScriptFontSlots {
@@ -51,7 +65,7 @@ export interface ScriptFontSupplement {
 }
 
 export interface ResolveScriptFontsOptions {
-  /** Which language font-scheme default applies. Defaults to `PowerPoint` (`language.fontScheme`). */
+  /** Which language font-scheme default applies. Defaults to `powerpoint` (`language.fontScheme`); `google-slides` prefers `language.googleFontScheme`. */
   app?: ScriptFontApp;
   /** Merge `slides[slideIndex].design` over the deck design, per field, before resolving the font scheme. */
   slideIndex?: number;
@@ -396,9 +410,9 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   const direction: "ltr" | "rtl" =
     declaredDirection === "rtl" || declaredDirection === "ltr" ? declaredDirection : rtlScripts.has(script) ? "rtl" : "ltr";
 
-  const app = options.app ?? "PowerPoint";
-  const preferred = app === "Google Slides" ? record.googleFontScheme : record.fontScheme;
-  const alternate = app === "Google Slides" ? record.fontScheme : record.googleFontScheme;
+  const app = options.app ?? "powerpoint";
+  const preferred = app === "google-slides" ? record.googleFontScheme : record.fontScheme;
+  const alternate = app === "google-slides" ? record.fontScheme : record.googleFontScheme;
   const languageScheme = resolveReference(lookup, "fontSchemes", preferred) ?? resolveReference(lookup, "fontSchemes", alternate);
   const languageFamilies = pairFamilies(languageScheme);
   const schemeAdmitsLanguage = schemeServesLanguage(scheme, record);
@@ -406,7 +420,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
   const slot = (role: Exclude<ScriptRole, "latin">, family: "ea" | "cs") => {
     const explicit = pairFamilies(scheme[role]);
     if (explicit) return { ...explicit, source: "fontScheme" as const };
-    if (scheme.languageFamily === family && schemeAdmitsLanguage) return { ...latin, source: "schemeFamily" as const };
+    if (normalizeLanguageFamily(scheme.languageFamily) === family && schemeAdmitsLanguage) return { ...latin, source: "schemeFamily" as const };
     if (scriptRole === role && languageFamilies) return { ...languageFamilies, source: "language" as const };
     return { heading: latin.heading, body: latin.body, source: "latin" as const };
   };

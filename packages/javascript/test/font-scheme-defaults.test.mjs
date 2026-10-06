@@ -23,7 +23,7 @@ test('catalog records carry code only for monospace schemes, and it matches thei
   const monospace=fontSchemes.filter(scheme=>scheme.type==='monospace').map(scheme=>scheme.id).sort();
   assert.deepEqual(withCode,['consolas','courier-new']);
   assert.deepEqual(withCode,monospace);
-  for(const id of withCode)assert.deepEqual(record(id).code,{family:record(id).minor});
+  for(const id of withCode)assert.deepEqual(record(id).code,record(id).minor);
 });
 
 test('the code role resolves from the scheme, else the documented Roboto Mono fallback',()=>{
@@ -32,7 +32,7 @@ test('the code role resolves from the scheme, else the documented Roboto Mono fa
   for(const id of ['roboto','aptos','calibri','meiryo'])assert.equal(resolveFontFamilies(record(id)).code,'Roboto Mono');
   assert.equal(resolveFontFamilies(undefined).code,'Roboto Mono');
   // A design override on the same object still wins over the record.
-  assert.equal(resolveFontFamilies({...record('consolas'),code:{family:'JetBrains Mono'}}).code,'JetBrains Mono');
+  assert.equal(resolveFontFamilies({...record('consolas'),code:'JetBrains Mono'}).code,'JetBrains Mono');
   // Heading and body families never become the code fallback.
   assert.equal(resolveFontFamilies({major:'Consolas',minor:'Consolas',type:'monospace'}).code,'Roboto Mono');
 });
@@ -43,12 +43,12 @@ test('pagination measures code in the chosen scheme family',()=>{
     assert.ok(families.has(family),`${fontScheme} measures ${family}`);
     assert.ok(!families.has(absent),`${fontScheme} does not measure ${absent}`);
   }
-  const override=measuredFamilies({name:'Code font',design:{fontScheme:{id:'consolas',code:{family:'JetBrains Mono'}}},slides:[codeSlide]});
+  const override=measuredFamilies({name:'Code font',design:{fontScheme:{id:'consolas',code:'JetBrains Mono'}},slides:[codeSlide]});
   assert.ok(override.has('JetBrains Mono')&&!override.has('Roboto Mono'));
 });
 
 test('inline catalog records may carry the code role and still validate',()=>{
-  const custom={$schema:'https://openpresentation.org/schema/opf-font-scheme/v1',id:'team-mono',name:'Team Mono',major:'Inter',minor:'Inter',code:{family:'JetBrains Mono',weight:400}};
+  const custom={$schema:'https://openpresentation.org/schema/opf-font-scheme/v1',id:'team-mono',name:'Team Mono',major:'Inter',minor:'Inter',code:'JetBrains Mono'};
   const presentation={name:'Inline code font',design:{fontScheme:'team-mono'},catalogs:{fontSchemes:{records:[custom]}},slides:[codeSlide]};
   assert.equal(validatePresentation(presentation).valid,true);
   const families=measuredFamilies(presentation);
@@ -96,7 +96,7 @@ const unknownCases=[
   ['slide design',{slideDesign:{fontScheme:'no-such-scheme'}},['Aptos','Aptos Display'],'slides.0.design.fontScheme'],
   ['theme record',{design:{theme:'bare-unknown'},catalogs:{themes:{records:[{$schema:'https://openpresentation.org/schema/opf-theme/v1',id:'bare-unknown',name:'Bare',fontScheme:'no-such-scheme'}]}}},['Aptos','Aptos Display'],'design.theme'],
   ['inline scheme without id',{design:{fontScheme:{major:'Inter',minor:'Inter'}}},['Inter'],undefined],
-  ['inline code role without id',{design:{fontScheme:{code:{family:'JetBrains Mono'}}}},['Aptos','Aptos Display'],undefined],
+  ['inline code role without id',{design:{fontScheme:{code:'JetBrains Mono'}}},['Aptos','Aptos Display'],undefined],
 ];
 const unknownDeck=({design,slideDesign,catalogs})=>({name:'Unknown font scheme',...(design?{design}:{}),...(catalogs?{catalogs}:{}),slides:[{id:'t',title:'Title',text:'Body',...(slideDesign?{design:slideDesign}:{})},{id:'u',title:'Second',text:'Body'}]});
 
@@ -116,8 +116,8 @@ test('resolveFontSchemeReference and resolveFontFamilies share the default base'
   assert.deepEqual(resolveFontFamilies({}),{heading:'Aptos Display',body:'Aptos',code:'Roboto Mono'});
   assert.deepEqual(resolveFontSchemeReference('roboto',lookup),{scheme:record('roboto')});
   assert.deepEqual(resolveFontSchemeReference({id:'consolas',minor:'Consolas'},lookup).scheme,{...record('consolas'),id:'consolas',minor:'Consolas'});
-  const unresolved=resolveFontSchemeReference({id:'nope',code:{family:'JetBrains Mono'}},lookup,'slides.2.design.fontScheme');
-  assert.deepEqual(unresolved.scheme,{...record(DEFAULT_FONT_SCHEME),id:'nope',code:{family:'JetBrains Mono'}});
+  const unresolved=resolveFontSchemeReference({id:'nope',code:'JetBrains Mono'},lookup,'slides.2.design.fontScheme');
+  assert.deepEqual(unresolved.scheme,{...record(DEFAULT_FONT_SCHEME),id:'nope',code:'JetBrains Mono'});
   assert.equal(unresolved.diagnostic.path,'slides.2.design.fontScheme');
   assert.deepEqual(resolveFontFamilies(unresolved.scheme),{heading:'Aptos Display',body:'Aptos',code:'JetBrains Mono'});
   // A host that cannot supply even the default record still gets the default families.

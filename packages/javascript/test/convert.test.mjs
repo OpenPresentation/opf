@@ -364,7 +364,7 @@ describe("chart and table", () => {
     assert.deepEqual(back.payload.chart, { type: "column", data: chart.chart.data });
     assert.equal(back.lossless, true);
     assert.deepEqual(convert({ table: { columns: ["Q", "Sales"], rows: [["Q1", "5"], ["Q2", ""]] } }, "chart").payload.chart.data.rows, [["Q1", 5], ["Q2", null]]);
-    refused({ chart: { type: "bar", data: { src: "data.csv" } } }, "table", /external data/);
+    refused({ chart: { type: "bar", data: { columns: ["A"] } } }, "table", /no inline columns and rows/);
     refused({ table: { rows: [["a", 1]] } }, "chart", /plain text label/);
     refused({ table: { columns: ["A", "B"], rows: [["x", "many"]] } }, "chart", /not a number/);
     refused({ table: { columns: ["A", "B"], rows: [["x"]] } }, "chart", /does not have 2 cells/);

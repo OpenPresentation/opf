@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "roboto",
   "name": "Roboto",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "latin",
   "languages": [],
   "major": "Roboto",

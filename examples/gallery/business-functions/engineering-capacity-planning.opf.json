@@ -51,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#E2E8F0",
-        "risk": "#F8FAFC"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "malgun-gothic",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": {
@@ -153,13 +140,32 @@
       "chart": {
         "type": "column",
         "data": {
-          "src": "asset:metric-data",
-          "sheet": "Summary",
-          "range": "A1:C8",
           "columns": [
             "Quarter",
             "Current",
             "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              16,
+              10
+            ],
+            [
+              "Q3",
+              21,
+              13
+            ],
+            [
+              "Q4",
+              26,
+              15
+            ]
           ]
         }
       }
@@ -484,7 +490,7 @@
     },
     "metric-data": {
       "src": "./data/engineering-capacity-planning.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Engineering Capacity Planning data"
     },
     "watermark": {

@@ -148,7 +148,8 @@ describe("blocks", () => {
     // The first column is the category labels and stays text; the other columns are typed.
     assert.deepEqual(one("```chart line\nYear,Sales\n2024,5\n2025,6.5\n```").chart.data.rows, [["2024", 5], ["2025", 6.5]]);
     assert.deepEqual(one("```chart bar\n{\"columns\":[\"a\"],\"rows\":[[1]]}\n```").chart, { type: "bar", data: { columns: ["a"], rows: [[1]] } });
-    assert.deepEqual(one("```chart column\n{\"src\":\"data.csv\",\"columns\":[\"a\"]}\n```", {}).chart.data, { src: "data.csv", columns: ["a"] });
+    // A data source by file or asset is not part of the format: the fence is read as written and the OPF validation reports it.
+    assert.ok(errors("```chart column\n{\"src\":\"data.csv\",\"columns\":[\"a\"]}\n```").some((d) => d.ruleId.startsWith("opf/") && d.path === "/slides/0/chart/data"));
   });
 
   test("metric fences are key: value lines; a bare number is a number, a quoted value is text", () => {
@@ -202,15 +203,15 @@ describe("inline text", () => {
       { text: "b", bold: true }, " ", { text: "i", italic: true }, " ", { text: "i2", italic: true }, " ", { text: "b2", bold: true }, " ",
       { text: "s", strikethrough: true }, " ", { text: "u", underline: true }, " x", { text: "2", superscript: true }, " H", { text: "2", subscript: true }, "O",
     ]);
-    assert.deepEqual(text("[a](https://x.y/z_1) and <https://auto.link> and [b](<a b>)"), [
-      { text: "a", link: "https://x.y/z_1" }, " and ", { text: "https://auto.link", link: "https://auto.link" }, " and ", { text: "b", link: "a b" },
+    assert.deepEqual(text("[a](https://x.y/z_1) and <https://auto.link> and [b](<mailto:a@b.co>) and [c](tel:+15551234567)"), [
+      { text: "a", link: "https://x.y/z_1" }, " and ", { text: "https://auto.link", link: "https://auto.link" }, " and ", { text: "b", link: "mailto:a@b.co" }, " and ", { text: "c", link: "tel:+15551234567" },
     ]);
     assert.deepEqual(text("[red]{color=#FF0000 size=24 font=\"Open Sans\" bold}"), [{ text: "red", bold: true, color: "#FF0000", fontSize: 24, fontFamily: "Open Sans" }]);
   });
 
   test("nesting merges into one run per style and ***both*** is bold italic", () => {
     assert.deepEqual(text("***both*** **a *b* c**"), [{ text: "both", bold: true, italic: true }, " ", { text: "a ", bold: true }, { text: "b", bold: true, italic: true }, { text: " c", bold: true }]);
-    assert.deepEqual(text("[**bold link**](u)"), [{ text: "bold link", bold: true, link: "u" }]);
+    assert.deepEqual(text("[**bold link**](https://u.example)"), [{ text: "bold link", bold: true, link: "https://u.example" }]);
   });
 
   test("escapes make characters literal; intraword underscores and spaced stars are text; there is no inline code or entity", () => {
@@ -285,8 +286,8 @@ describe("errors carry line and column in the lint shape", () => {
     assert.equal(bad.path, "/slides/1/type");
     assert.equal(bad.location.line, 5);
     assert.equal(at(source, bad), "<!-- slide: type=bogus -->");
-    const table = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n```chart bar\n{\"src\":\"asset:missing\"}\n```").diagnostics.find((d) => d.ruleId === "opf/asset-reference");
-    assert.equal(table.location.line, 7);
+    const image = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n![alt](asset:missing)").diagnostics.find((d) => d.ruleId === "opf/asset-reference");
+    assert.equal(image.location.line, 7);
   });
 
   test("validate:false skips the OPF lint, a non-string input throws", () => {

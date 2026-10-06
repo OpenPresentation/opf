@@ -43,10 +43,9 @@ describe("every bundled example validates cleanly", () => {
       // The published example corpus is pinned by the renderer golden baseline,
       // so examples still referencing FF-22 deprecated chart types migrate with
       // the coordinated 0.12.0 removal (docs/migrations/0.12.0.md). Until then
-      // only deprecation warnings that name a replacement are tolerated. RR-54: so is the documented
-      // 'chart-data-source-unresolved' advisory of the examples that show the ChartDataSource form.
+      // only deprecation warnings that name a replacement are tolerated.
       const unexpected = result.warnings.filter(
-        (warning) => !(warning.params?.kind === "chartTypes" && typeof warning.params?.replacedBy === "string") && warning.params?.code !== "chart-data-source-unresolved",
+        (warning) => !(warning.params?.kind === "chartTypes" && typeof warning.params?.replacedBy === "string"),
       );
       assert.equal(
         unexpected.length,
@@ -141,8 +140,7 @@ describe("fenced JSON presentation examples embedded in docs", () => {
         true,
         `doc ${doc.slug} has an invalid presentation example: ${JSON.stringify(result.errors, null, 2)}`,
       );
-      // RR-54: a ChartDataSource example carries the documented 'chart-data-source-unresolved' advisory.
-      const unexpected = result.warnings.filter((warning) => warning.params?.code !== "chart-data-source-unresolved");
+      const unexpected = result.warnings;
       assert.equal(
         unexpected.length,
         0,

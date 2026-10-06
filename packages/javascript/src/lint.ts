@@ -32,7 +32,7 @@ import {
 } from './narrative-plan.js';
 
 // RR-54: chart and table data warnings keep their validator code as the rule id.
-const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
+const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-mapping-adapted', 'slide-theme-dimensions']);
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
@@ -787,8 +787,8 @@ export function lintPresentation(
 				severity: 'warning',
 				help: issue.params.code === 'chart-value-not-numeric'
 					? 'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.'
-					: issue.params.code === 'chart-data-source-unresolved'
-						? 'No engine loads chart data sources. Import the data inline (columns and rows, recording the origin in data.source) or reference a top-level dataset.'
+					: issue.params.code === 'slide-theme-dimensions'
+						? 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.'
 						: 'The mapping entry is ignored. Remove it, or name a different column.',
 			});
 			continue;

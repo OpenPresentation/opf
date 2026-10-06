@@ -40,16 +40,9 @@
     },
     "fontScheme": {
       "id": "fixture-fonts",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos"
-      },
-      "code": {
-        "family": "Consolas"
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     }
   },
   "slides": [

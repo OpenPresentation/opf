@@ -147,6 +147,8 @@ function collectDocumentReferences(collector: Collector, document: Record<string
   // Audience object's id; free-form descriptions never match a bare id.
   if (Array.isArray(document.audience)) {
     for (const entry of document.audience) addReference(collector, "audiences", entry, true);
+  } else if (isRecord(document.audience)) {
+    addReference(collector, "audiences", document.audience, true);
   } else {
     addReference(collector, "audiences", document.audience, typeof document.audience === "string");
   }

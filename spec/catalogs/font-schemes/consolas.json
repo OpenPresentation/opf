@@ -2,14 +2,12 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "consolas",
   "name": "Consolas",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Consolas",
   "minor": "Consolas",
-  "code": {
-    "family": "Consolas"
-  },
+  "code": "Consolas",
   "textSample": "Code block view",
   "type": "monospace",
   "description": "Consolas is a monospace OPF font scheme for Latin presentations, using Consolas for both headings and body text."

@@ -57,7 +57,7 @@ const data = parseTabularData(csv); // {columns, rows}, with CSV strings preserv
 
 The functions also accept already-parsed JSON and are re-exported by `@openpresentation/opf-editor/data`. They are synchronous and browser-safe. Hosts read files with `File.text()` or Node's file APIs and pass their contents in. Neither function fetches URLs, resolves asset references, or reads files automatically.
 
-This is an embedded data snapshot, not a live file link. Record the origin with `source` (see above). OPF's older `ChartDataSource` (`"data": { "src": ... }`) is still valid, but no engine loads it: it draws a placeholder and validates with a `chart-data-source-unresolved` warning ([opf#240](https://github.com/OpenPresentation/opf/issues/240) is descoped). Tables use inline `columns`/`rows` or a dataset; there is no `table.src` field. Re-import after a source changes.
+This is an embedded data snapshot, not a live file link. Record the origin with `source` (see above). OPF has no chart data source by file or asset (`"data": { "src": ... }`); it was removed because no engine loaded it ([opf#240](https://github.com/OpenPresentation/opf/issues/240) is descoped), and the validator rejects it. Tables use inline `columns`/`rows` or a dataset; there is no `table.src` field. Re-import after a source changes.
 
 `parseTabularData` and `createDataContent` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `excelNumberFormat`, `numberFormatFromExcel`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
 
