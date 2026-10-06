@@ -428,7 +428,7 @@ class SlideParser {
     let end = last;
     while (end > first && BLANK.test(lines[end]!.text)) end--;
     const range = lineRange(lines[first]!, lines[end]!);
-    if (numbered) ctx.warn("numbered-list", "Numbers in a list are not kept: an OPF list has no numbering, so each item became a bullet.", "Write the numbers into the text if they matter, or use a bulleted list.", range, this.path);
+    if (numbered) ctx.warn("numbered-list", "Numbers in a list are not kept: the Markdown dialect does not read them as `numbering`, so each item became a bullet.", "Add `numbering` to the slide or block in an opf-slide or opf-block fence (docs/numbered-lists.md), write the numbers into the text, or use a bulleted list.", range, this.path);
     const levels = levelsFromIndents(entries.map((entry) => entry.indent));
     const items = entries.map((entry, k) => {
       const text = this.inline(joinParagraph(entry.rows), range);

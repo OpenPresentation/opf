@@ -1,21 +1,28 @@
 // Shared CLI plumbing that command modules receive from index.ts, so a command
 // can live in its own file without importing the entry point.
+import type { DeckSource } from "./deck.js";
 export type CliOptions = Record<string, string | boolean>;
-export interface CliSource { raw: string; value: unknown }
+export type CliSource = DeckSource;
 export interface CliContext {
   parse(args: string[], allowed: string[]): { positional: string[]; options: CliOptions };
   arity(args: string[], min: number, max?: number): void;
-  readJson(file: string): Promise<CliSource>;
+  /** A JSON-only input (a settings or data file). */
+  readJson(file: string): Promise<{ raw: string; value: unknown }>;
+  /** A deck or patch, JSON or YAML. `rewrite` warns when YAML comments would be lost. */
+  readDeck(file: string, rewrite?: boolean, kind?: "deck" | "patch"): Promise<CliSource>;
   stdin(): Promise<string>;
-  /** Validate and write a document (stdout for `-`/dry-run, a file otherwise) and print the JSON report. */
-  emit(document: unknown, output: string, options: CliOptions, original?: { file: string; raw: string }, extra?: object): Promise<void>;
+  /**
+   * Validate and write a document (stdout for `-`/dry-run, a file otherwise) and print the JSON report. It is written as YAML for an output
+   * ending .yaml/.yml or `--format yaml`, else as JSON; `source` (the deck that was read) decides when the output is stdout.
+   */
+  emit(document: unknown, output: string, options: CliOptions, original?: { file: string; raw: string }, extra?: object, source?: CliSource): Promise<void>;
   /** Atomically write text to a file; `overwrite` must be true to replace an existing file. */
   saveText(file: string, text: string, overwrite: boolean, original?: { file: string; raw: string }): Promise<void>;
   print(value: unknown): void;
   hash(text: string): string;
   json(value: unknown): string;
   /** An error the CLI reports as JSON on stderr. Code 1 = invalid/conflict, 2 = usage/I-O. */
-  fail(message: string, code?: number, details?: unknown): Error;
+  fail(message: string, code?: number, details?: unknown, key?: string): Error;
 }
 
 /** Parse an optional 0..1 option value. */

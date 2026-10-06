@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     lint: "src/lint.ts",
     markdown: "src/markdown.ts",
+    yaml: "src/yaml.ts",
     patch: "src/patch.ts",
     diff: "src/diff.ts",
     format: "src/format.ts",

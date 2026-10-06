@@ -100,6 +100,10 @@
       "types": "./dist/markdown.d.ts",
       "import": "./dist/markdown.js"
     },
+    "./yaml": {
+      "types": "./dist/yaml.d.ts",
+      "import": "./dist/yaml.js"
+    },
     "./patch": {
       "types": "./dist/patch.d.ts",
       "import": "./dist/patch.js"

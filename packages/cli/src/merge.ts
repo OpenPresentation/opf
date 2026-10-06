@@ -4,7 +4,7 @@ import { ratio, type CliContext } from "./context.js";
 
 /** `opf merge <base> <ours> <theirs>`: three-way merge with conflict reporting. */
 export async function mergeCommand(args: string[], cli: CliContext): Promise<void> {
-  const { positional, options } = cli.parse(args, ["output", "in-place", "force", "prefer", "report", "dry-run", "threshold", "strict"]);
+  const { positional, options } = cli.parse(args, ["output", "in-place", "force", "prefer", "report", "dry-run", "threshold", "format", "strict"]);
   cli.arity(positional, 3);
   const [baseFile, oursFile, theirsFile] = positional as [string, string, string];
   if (positional.filter(file => file === "-").length > 1) throw cli.fail("stdin can supply only one input.");
@@ -14,7 +14,7 @@ export async function mergeCommand(args: string[], cli: CliContext): Promise<voi
   const report = options.report === undefined ? undefined : String(options.report);
   if (report !== undefined && (report === "-" || (output !== "-" && path.resolve(report) === path.resolve(output)))) throw cli.fail("--report must be a file different from the merged output.");
 
-  const base = await cli.readJson(baseFile), ours = await cli.readJson(oursFile), theirs = await cli.readJson(theirsFile);
+  const base = await cli.readDeck(baseFile, true), ours = await cli.readDeck(oursFile, true), theirs = await cli.readDeck(theirsFile, true);
   const result = mergePresentations(base.value, ours.value, theirs.value, { prefer: options.prefer as "ours" | "theirs" | undefined, threshold: ratio(cli, options.threshold) });
   const summary = { clean: result.clean, conflicts: result.conflicts, applied: result.applied, ...(result.clean ? {} : { resolvedWith: options.prefer ?? null }) };
   // The report is a scratch artifact, so it may replace an earlier one.
@@ -28,5 +28,5 @@ export async function mergeCommand(args: string[], cli: CliContext): Promise<voi
     return;
   }
   const sameFile = oursFile !== "-" && output !== "-" && path.resolve(oursFile) === path.resolve(output);
-  await cli.emit(result.merged, output, options, sameFile ? { file: oursFile, raw: ours.raw } : undefined, { merge: summary });
+  await cli.emit(result.merged, output, options, sameFile ? { file: oursFile, raw: ours.raw } : undefined, { merge: summary }, ours);
 }

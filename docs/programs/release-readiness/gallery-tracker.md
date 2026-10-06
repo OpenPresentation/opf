@@ -101,5 +101,5 @@ None: every gap is linked to an open RR item or a pull request, or is descoped w
 | Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
 | Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
 | Native run (RR-42) | `docs/evidence/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
-| Links | `docs/programs/release-readiness/burndown.md` (54 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
+| Links | `docs/programs/release-readiness/burndown.md` (56 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
 

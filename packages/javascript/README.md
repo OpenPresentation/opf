@@ -77,6 +77,10 @@ The root entry exports every schema, catalog, and validation helper for convenie
 
 `@openpresentation/opf/markdown` reads and writes a deck as Markdown in a small documented dialect (YAML front matter, `---` between slides, `#` title, `##` subtitle, lists, quotes, tables, images, `chart`, `metric` and `timeline` fences, `Note:` speaker notes). `markdownToOpf(markdown, { split, defaults, validate })` returns `{ document, valid, diagnostics, counts }` with lint-shaped diagnostics that carry the line and column of the Markdown; `opfToMarkdown(document, { unsupported })` writes any valid deck, embedding what the dialect has no syntax for as YAML (or dropping it into `report.loss`), and the Markdown it writes converts back to the same deck. Deterministic and offline. Reads front matter with the `yaml` package. See the [Markdown guide](../../docs/markdown.md). Not in releases before the one that lists it in the changelog.
 
+### OPF as YAML
+
+`@openpresentation/opf/yaml` reads and writes a deck as YAML, the authoring form of the same data (JSON stays canonical). `fromYaml(text, { aliases, validate })` reads strict JSON-compatible YAML 1.2 (one document, a mapping at the root, no custom tags, duplicate keys or non-finite numbers; anchors, aliases and merge keys only with `aliases: true`) and returns `{ document, valid, diagnostics, counts }` with lint-shaped diagnostics that carry the line and column of the YAML, OPF lint findings included; `toYaml(document, { schemaComment })` writes canonical YAML (schema key order, block style, ambiguous strings quoted) that reads back to the same deck, and throws `OPFYamlError` for an invalid one. `lintYamlSource`, `parseYamlData`, `yamlLocator` and `scanYamlComments` are the helpers. See [the YAML guide](../../docs/yaml.md).
+
 ### Design and accessibility audit
 
 `@openpresentation/opf/audit` exports `auditPresentation(document, options)`, `auditSource(source, options)` and `auditRules`: contrast, overflow, type size, alt text, reading order, fonts, links, charts and more, with stable `audit/<rule>` ids in lint's report shape. Read-only and deterministic; see [the audit guide](../../docs/audit.md).

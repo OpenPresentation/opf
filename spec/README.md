@@ -53,6 +53,10 @@ import qbr from "@openpresentation/opf/spec/catalogs/narratives/qbr.json" with {
 
 The same paths work for any validator in any language: point a JSON Schema draft 2020-12 implementation at `schemas/opf.schema.json` and validate `.opf.json` files against it. Catalog records validate against their kind's companion schema.
 
+## YAML
+
+JSON is the canonical form of an OPF document. A `.opf.yaml` file is an authoring serialization of the same data: JSON-compatible YAML 1.2 (one document, no tags or duplicate keys, finite numbers) whose parsed data is the document, and the schema validates that parsed data exactly as it validates JSON; YAML adds no field. A first line `# yaml-language-server: $schema=https://openpresentation.org/schema/opf/v1` gives editors validation and completion. See [`docs/yaml.md`](../docs/yaml.md).
+
 ## Stability
 
 The presentation schema `$id` is pinned to `/v1` and the package is pre-stable (0.x): expect breaking changes between minor versions until 1.0, tracked in [`CHANGELOG.md`](../CHANGELOG.md) with migration notes under [`docs/migrations/`](../docs/migrations).
