@@ -96,4 +96,11 @@ test("the workflow runs the contract tier on pull requests and the full suites o
   assert.doesNotMatch(workflow, /--tier (contract|full)\b/);
   // The required names stay: `packages` aggregates exactly the three shards, and runs even when one fails.
   assert.match(workflow, /\n  packages:\n    needs: \[ecosystem-render, ecosystem-pptx-editor, ecosystem-core\]\n    if: always\(\)/);
+  // RR-45 (opf#368, item 1): ecosystem-core runs as exactly these three shards, none of which can be dropped by fail-fast.
+  const core = workflow.slice(workflow.indexOf("\n  ecosystem-core:\n"), workflow.indexOf("\n  installed-portability:\n"));
+  assert.match(core, /\n    strategy:\n      fail-fast: false\n      matrix:\n        shard: \[model, installed, registry\]\n/);
+  assert.doesNotMatch(core, /\n    if:/, "no job-level condition can skip the core shards");
+  for (const shard of ["model", "installed", "registry"]) assert.ok(core.includes(`matrix.shard == '${shard}'`), shard);
+  assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core model\n/);
+  assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core packed\n/);
 });
