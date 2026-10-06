@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "kind": "rr54-recheck-decks",
+  "probeSet": "probes/sets/rr54-recheck at codex/probe-sets-20261005 184045f5",
+  "builds": {
+    "c4-after": {
+      "commit": "b076bb6",
+      "core": "0.12.2",
+      "coreCommit": "11317237"
+    },
+    "c4-before": {
+      "commit": "f0ea480",
+      "core": "0.12.2",
+      "coreCommit": "11317237"
+    },
+    "c2-after": {
+      "commit": "4baa171",
+      "core": "0.12.0",
+      "coreCommit": "npm"
+    },
+    "c2-before": {
+      "commit": "7c93a1b",
+      "core": "0.12.0",
+      "coreCommit": "npm"
+    }
+  },
+  "options": {
+    "seed": 1,
+    "timestamp": "2026-10-05T00:00:00Z",
+    "zipDate": "2026-10-05T00:00:00Z"
+  },
+  "files": [
+    {
+      "deck": "c4-formats",
+      "check": "C4",
+      "file": "c4-formats-after.pptx",
+      "build": "c4-after",
+      "commit": "b076bb6",
+      "bytes": 86174,
+      "sha256": "40529530c4326b01c230beb4935e5bf92f9c1fd533e3726f612d8853c67ff137",
+      "savedCopy": {
+        "method": "SaveCopyAs (format 24) of a work copy opened read-only",
+        "sha256": "a1073fb685d44fa4f393dab0396b6822237ffa34a65c1295f590f0d6f4083a44",
+        "sourceUnchanged": true,
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      }
+    },
+    {
+      "deck": "c4-formats",
+      "check": "C4",
+      "file": "c4-formats-before.pptx",
+      "build": "c4-before",
+      "commit": "f0ea480",
+      "bytes": 86161,
+      "sha256": "4eccc46530c2b5084bc11fb8facb65b673e50e80f3ba7768a098a63b72f9e94e",
+      "savedCopy": {
+        "method": "SaveCopyAs (format 24) of a work copy opened read-only",
+        "sha256": "f4d47f8c3c680bf294dcdd97fb8d01ce690235c2ef3a1d61d2f280f07bf4ec20",
+        "sourceUnchanged": true,
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      }
+    },
+    {
+      "deck": "c4-datasets",
+      "check": "C4",
+      "file": "c4-datasets-after.pptx",
+      "build": "c4-after",
+      "commit": "b076bb6",
+      "bytes": 78841,
+      "sha256": "a9b3ce26095e504e39af25c00967fbeff9e970fb637a20eea298f8384404ed24",
+      "savedCopy": {
+        "method": "SaveCopyAs (format 24) of a work copy opened read-only",
+        "sha256": "db6afedc273bff4dfae3ceac610087f9d6012d9b4676dc1419a0894a004ea7ec",
+        "sourceUnchanged": true,
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      }
+    },
+    {
+      "deck": "c4-datasets",
+      "check": "C4",
+      "file": "c4-datasets-before.pptx",
+      "build": "c4-before",
+      "commit": "f0ea480",
+      "bytes": 78833,
+      "sha256": "b9bff60f7a1b6d4f800180e452569fe9a1c7af269469ff7786fd4f2f954c058c",
+      "savedCopy": {
+        "method": "SaveCopyAs (format 24) of a work copy opened read-only",
+        "sha256": "83c98d8a9f5ebfec5d08e112a2e97cc73929472442752be67d0f386e2de560c9",
+        "sourceUnchanged": true,
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      }
+    },
+    {
+      "deck": "c2-zeros",
+      "check": "C2",
+      "file": "c2-zeros-after.pptx",
+      "build": "c2-after",
+      "commit": "4baa171",
+      "bytes": 97084,
+      "sha256": "56d206a1e9efd5bfe533eec4fa3992627825b876c102e0041a81c33856fb9b5b"
+    },
+    {
+      "deck": "c2-zeros",
+      "check": "C2",
+      "file": "c2-zeros-before.pptx",
+      "build": "c2-before",
+      "commit": "7c93a1b",
+      "bytes": 100197,
+      "sha256": "ad671b96d0381616e740c06d6632396cac86e74e4db9279392670228daa9507b"
+    }
+  ]
+}
