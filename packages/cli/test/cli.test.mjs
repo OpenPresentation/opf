@@ -96,23 +96,23 @@ describe("opf catalogs", () => {
 
 describe("opf catalog", () => {
   const chartTypes = catalogEntries.find((entry) => entry.kind === "chartTypes").records;
-  const deprecated = chartTypes.filter((record) => record.deprecation);
 
-  test("leaves deprecated chart types out of the default listing", () => {
-    assert.ok(deprecated.length > 0);
+  test("the bundled chart types carry no deprecated records, so the default listing is the whole catalog", () => {
+    assert.equal(chartTypes.filter((record) => record.deprecation).length, 0);
     const result = runCli(["catalog", "chartTypes"]);
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const ids = JSON.parse(result.stdout).map((record) => record.id);
-    assert.equal(ids.length, chartTypes.length - deprecated.length);
+    assert.equal(ids.length, chartTypes.length);
     assert.ok(ids.includes("column"));
+    assert.ok(ids.includes("stacked-column"));
     assert.equal(ids.includes("bullet-column"), false);
   });
 
-  test("--all includes deprecated records and exact ids still resolve", () => {
+  test("--all lists the same records and an exact id resolves", () => {
     const all = JSON.parse(runCli(["catalog", "chartTypes", "--all"]).stdout);
     assert.equal(all.length, chartTypes.length);
-    const record = JSON.parse(runCli(["catalog", "chartTypes", "bullet-column"]).stdout);
-    assert.equal(record.deprecation.replacedBy, "column");
+    const record = JSON.parse(runCli(["catalog", "chartTypes", "stacked-column"]).stdout);
+    assert.equal(record.name, "Stacked Column");
   });
 });
 

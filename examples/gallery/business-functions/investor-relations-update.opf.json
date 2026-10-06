@@ -335,7 +335,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "sparkline-6x",
+            "type": "line",
             "data": {
               "columns": [
                 "Quarter",

@@ -12,17 +12,23 @@
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --report     per-kind divergence summary
 //   node scripts/sync-gallery-catalog.mjs --gallery <dir> --include layouts:<id>[,<id>...]
 //                                                                       add published ids to a subset kind (repeatable)
+//   node scripts/sync-gallery-catalog.mjs --gallery <dir> --allow-removed chart-types:<id>[,<id>...]
+//                                                                       drop snapshot ids on purpose (repeatable)
 //
 // Every gallery record is validated against the companion schemas in
 // spec/schemas/ before anything is written. Publisher `x-*` members are
 // dropped. A mirrored kind takes every gallery record; a subset kind keeps the
 // ids already in the snapshot (the gallery may publish more). The snapshot
-// never loses an id: removing a record is a breaking change. `--include` adds
-// published ids to a subset kind once; the snapshot keeps them from then on.
+// never loses an id: removing a record is a breaking change, so a gallery that
+// stopped publishing a bundled id is refused. The one waiver is explicit and per
+// id: `--allow-removed <kind>:<id>` drops that id from the snapshot (and deletes
+// its file), for a removal or rename decided on purpose, such as the FA-03 pre-v1
+// cleanup of chart-type aliases. `--include` adds published ids to a subset kind
+// once; the snapshot keeps them from then on.
 
 import { execFileSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -167,8 +173,10 @@ export function checkGalleryKind(kind, galleryKind, validators) {
  * @param {object} input.source Manifest `source` block.
  * @param {Record<string, string[]>} [input.include] Published ids to add to a subset kind (`--include`). A mirror kind
  *   already takes every published record, and an id the gallery does not publish is a problem.
+ * @param {Record<string, string[]>} [input.allowRemoved] Snapshot ids to drop on purpose (`--allow-removed`). The waiver
+ *   of the never-lose-an-id rule: only the listed ids may disappear, and an id the snapshot does not hold is a problem.
  */
-export function planSnapshot({ gallery, current, manifest, validators, source, include = {} }) {
+export function planSnapshot({ gallery, current, manifest, validators, source, include = {}, allowRemoved = {} }) {
   const problems = [];
   const kinds = {};
   for (const { kind } of SNAPSHOT_KINDS) {
@@ -179,8 +187,12 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
     const galleryIds = published.index.records.map((entry) => entry.id);
     const galleryIdSet = new Set(galleryIds);
 
+    const waived = new Set(allowRemoved[kind] ?? []);
+    for (const id of waived) {
+      if (!currentIds.has(id)) problems.push(`${kind}: --allow-removed '${id}' is not in the snapshot`);
+    }
     for (const id of currentIds) {
-      if (!galleryIdSet.has(id)) {
+      if (!galleryIdSet.has(id) && !waived.has(id)) {
         problems.push(`${kind}: the gallery no longer publishes '${id}', which the snapshot must keep (removing a catalog id is breaking); restore it in the gallery`);
       }
     }
@@ -188,7 +200,8 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
     for (const id of include[kind] ?? []) {
       if (!galleryIdSet.has(id)) problems.push(`${kind}: --include '${id}' is not published by the gallery`);
     }
-    const keep = mode === "mirror" ? galleryIdSet : new Set([...currentIds, ...(include[kind] ?? [])]);
+    const keep = mode === "mirror" ? new Set(galleryIdSet) : new Set([...currentIds, ...(include[kind] ?? [])]);
+    for (const id of waived) keep.delete(id);
     const selected = [];
     published.index.records.forEach((entry, position) => {
       if (keep.has(entry.id)) selected.push({ entry, record: stripExtensions(published.records[position]) });
@@ -209,6 +222,7 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
       mode,
       index,
       records,
+      removed: [...waived].filter((id) => currentIds.has(id)),
       galleryOnly,
       manifestEntry: {
         mode,
@@ -248,6 +262,9 @@ export async function diffSnapshot(catalogsRoot, plan) {
         changes.push(`${kind}/${record.id}.json`);
       }
     }
+    for (const id of planned.removed) {
+      if (existsSync(path.join(catalogsRoot, kind, `${id}.json`))) changes.push(`${kind}/${id}.json (removed)`);
+    }
     if (!(await currentFileMatches(path.join(catalogsRoot, kind, "index.json"), planned.index))) {
       changes.push(`${kind}/index.json`);
     }
@@ -277,6 +294,9 @@ export async function applySnapshot(catalogsRoot, plan) {
       const target = path.join(catalogsRoot, relative);
       const next = existsSync(target) ? inExistingKeyOrder(JSON.parse(await readFile(target, "utf8")), record) : record;
       await writeFile(target, serializeJson(next), "utf8");
+    }
+    for (const id of planned.removed) {
+      await rm(path.join(catalogsRoot, kind, `${id}.json`), { force: true });
     }
     if (pending.has(`${kind}/index.json`)) {
       await writeFile(path.join(catalogsRoot, kind, "index.json"), serializeJson(planned.index), "utf8");
@@ -325,16 +345,16 @@ function option(argv, name) {
 }
 
 /** Parses every `--include <kind>:<id>[,<id>...]` into { kind: [ids] }. */
-export function parseIncludes(argv) {
+export function parseIncludes(argv, flag = "--include") {
   const include = {};
   argv.forEach((arg, at) => {
-    if (arg !== "--include") return;
+    if (arg !== flag) return;
     const value = argv[at + 1] ?? "";
     const split = value.indexOf(":");
     const kind = value.slice(0, split);
     const ids = value.slice(split + 1).split(",").filter(Boolean);
     if (split < 1 || ids.length === 0 || !SNAPSHOT_KINDS.some((entry) => entry.kind === kind)) {
-      throw new Error("--include needs <kind>:<id>[,<id>...] with a snapshot kind, for example --include layouts:two-column,faq.");
+      throw new Error(`${flag} needs <kind>:<id>[,<id>...] with a snapshot kind, for example ${flag} layouts:two-column,faq.`);
     }
     include[kind] = [...(include[kind] ?? []), ...ids];
   });
@@ -413,7 +433,7 @@ export async function main(argv = process.argv.slice(2)) {
     source = manifest?.source ?? { repository: GALLERY_REPOSITORY, commit: "unpinned", path: GALLERY_PUBLISHED_PATH };
   }
 
-  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source, include: parseIncludes(argv) });
+  const plan = planSnapshot({ gallery, current, manifest, validators: await loadValidators(), source, include: parseIncludes(argv), allowRemoved: parseIncludes(argv, "--allow-removed") });
   if (plan.problems.length > 0) throw new Error(`Gallery catalog cannot be snapshotted:\n${plan.problems.join("\n")}`);
 
   if (argv.includes("--report")) {

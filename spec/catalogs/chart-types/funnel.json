@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "funnel",
-  "name": "FUNNEL",
-  "label": "Funnel",
+  "name": "Funnel",
   "mappings": {
     "openxml": {
       "element": "funnelChart",
@@ -15,51 +14,8 @@
       }
     }
   },
-  "categories": 5,
-  "columns": [
-    "Category",
-    "Series1"
-  ],
   "group": "Other",
   "groupSort": 13,
   "series": 1,
-  "seriesGroups": 1,
-  "slideNumber": 75,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$F$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Category",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Series1",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Category",
-      "Q1 2024",
-      "Q2 2024",
-      "Q3 2024",
-      "Q4 2024",
-      "Q1 2025"
-    ],
-    "rows": [
-      [
-        "Series1",
-        15726,
-        63852,
-        57749,
-        98652,
-        41133
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

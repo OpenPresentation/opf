@@ -27,8 +27,8 @@
   },
 
   "chartTypes": [
-    "stacked-column-3x",
-    "stacked-area-3x",
+    "stacked-column",
+    "stacked-area",
     "line-with-markers"
   ]
 }

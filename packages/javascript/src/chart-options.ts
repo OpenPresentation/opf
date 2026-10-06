@@ -6,7 +6,6 @@
 // show is adapted the same way everywhere and reported with the same
 // `chart-option-adapted` diagnostic. Decks that carry none of the three fields
 // resolve to `active: false` and nothing in any engine changes.
-import {deprecatedCatalogIds} from './generated/catalog-ids.js';
 
 /** The chart constructs the engines draw. Every catalog chart type id resolves to one (see `chartOptionTarget`). */
 export type ChartOptionKind = 'bar' | 'line' | 'area' | 'pie' | 'doughnut' | 'scatter' | 'radar' | 'treemap' | 'histogram' | 'pareto' | 'box' | 'waterfall' | 'funnel' | 'map';
@@ -105,22 +104,21 @@ export function chartOptionSupport(target: ChartOptionTarget): ChartOptionSuppor
   };
 }
 
-// The catalog chart types that have a preview and a native export (the same set opf-render's CHART_TYPES keeps). Deprecated ids
-// resolve through the catalog's replacedBy first.
+// The catalog chart types that have a preview and a native export (the same set opf-render's CHART_TYPES keeps).
 const KEPT: Readonly<Record<string, ChartOptionTarget>> = {
   column: {kind: 'bar'},
-  'stacked-column-3x': {kind: 'bar', stacked: true},
-  '100pct-stacked-column-3x': {kind: 'bar', stacked: true},
+  'stacked-column': {kind: 'bar', stacked: true},
+  '100pct-stacked-column': {kind: 'bar', stacked: true},
   bar: {kind: 'bar'},
-  'stacked-bar-3x': {kind: 'bar', stacked: true},
-  '100pct-stacked-bar-3x': {kind: 'bar', stacked: true},
+  'stacked-bar': {kind: 'bar', stacked: true},
+  '100pct-stacked-bar': {kind: 'bar', stacked: true},
   line: {kind: 'line'},
   'line-with-markers': {kind: 'line'},
-  'stacked-line-3x': {kind: 'line', stacked: true},
-  'stacked-line-with-markers-3x': {kind: 'line', stacked: true},
+  'stacked-line': {kind: 'line', stacked: true},
+  'stacked-line-with-markers': {kind: 'line', stacked: true},
   area: {kind: 'area'},
-  'stacked-area-3x': {kind: 'area', stacked: true},
-  '100pct-stacked-area-3x': {kind: 'area', stacked: true},
+  'stacked-area': {kind: 'area', stacked: true},
+  '100pct-stacked-area': {kind: 'area', stacked: true},
   pie: {kind: 'pie'},
   doughnut: {kind: 'doughnut'},
   scatter: {kind: 'scatter'},
@@ -136,13 +134,12 @@ const KEPT: Readonly<Record<string, ChartOptionTarget>> = {
   world: {kind: 'map'},
 };
 
-/** The option target for a catalog chart type id (deprecated ids resolve to their replacement); undefined for an id outside the catalog. */
+/** The option target for a catalog chart type id; undefined for an id outside the catalog. */
 export function chartOptionTarget(typeId: unknown): ChartOptionTarget | undefined {
   if (typeof typeId !== 'string') return undefined;
   const raw = typeId.trim().toLowerCase();
   const id = raw === 'donut' ? 'doughnut' : raw;
-  const kept = deprecatedCatalogIds[`chartTypes/${id}`] ?? id;
-  const target = Object.hasOwn(KEPT, kept) ? KEPT[kept] : undefined;
+  const target = Object.hasOwn(KEPT, id) ? KEPT[id] : undefined;
   return target ? {...target} : undefined;
 }
 

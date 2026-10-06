@@ -172,7 +172,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-bar-3x",
+        "type": "100pct-stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -342,7 +342,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bullet-bar",
+            "type": "bar",
             "data": {
               "columns": [
                 "Quarter",

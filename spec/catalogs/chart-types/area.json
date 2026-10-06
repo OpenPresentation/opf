@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "area",
-  "name": "AREA",
-  "label": "Area",
+  "name": "Area",
   "mappings": {
     "openxml": {
       "element": "areaChart",
@@ -14,65 +13,8 @@
       }
     }
   },
-  "categories": 12,
-  "columns": [
-    "Series 1",
-    "Value"
-  ],
   "group": "Area",
   "groupSort": 5,
   "series": 1,
-  "seriesGroups": 1,
-  "slideNumber": 28,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$M$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Series 1",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Value",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Series 1",
-      "Q1 2024",
-      "Q2 2024",
-      "Q3 2024",
-      "Q4 2024",
-      "Q1 2025",
-      "Q2 2025",
-      "Q3 2025",
-      "Q4 2025",
-      "Q1 2026",
-      "Q2 2026",
-      "Q3 2026",
-      "Q4 2026"
-    ],
-    "rows": [
-      [
-        "Value",
-        90676,
-        84593,
-        49446,
-        63225,
-        81819,
-        10053,
-        49829,
-        47606,
-        37549,
-        66346,
-        86019,
-        89516
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

@@ -523,7 +523,7 @@ const chartAltRule = rule(
 	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether that text states the chart\'s point.' },
 );
 
-const chartSkip = /(histogram|box|pareto|waterfall|world|united-|canada|australia|map|sparkline|dot-plot|bullet|progress|dumbbell)/;
+const chartSkip = /(histogram|box|pareto|waterfall|world|map)/;
 const perCategory = /(pie|doughnut|treemap|funnel)/;
 
 const chartRules: AuditRule[] = [
