@@ -1,0 +1,1712 @@
+{
+  "item": "RR-05 / FF-12 bounded native font sample (opf#323 section 1)",
+  "built": {
+    "node": "24.21.0",
+    "zipDate": "2026-10-05",
+    "packages": {
+      "@openpresentation/opf": "0.12.1",
+      "@openpresentation/opf-pptx": "0.12.3",
+      "@openpresentation/opf-render": "0.12.0"
+    },
+    "note": "Published npm packages only, exact versions pinned in package.json."
+  },
+  "maxDecks": 12,
+  "passRule": "Presentation.Fonts names only expectedFonts (case-insensitive), lists every requiredFonts entry, the master theme slots read the manifest theme values, every run and slot name read back is an expected family, and the read reached stage done.",
+  "decks": {
+    "01-carlito-code-chart-table-notes": {
+      "title": "Carlito with code, chart, table and speaker notes",
+      "covers": "FF-12 sample item 1. design.fontScheme {major, minor} = Carlito; no code role, so code runs use the documented code fallback Roboto Mono (core docs/design-resolution.md, \"Code font\").",
+      "notes": "Roboto Mono is the documented code fallback and counts as a chosen family here. Deck 02 sets code.family to Carlito so the same content names Carlito only. Carlito may not be installed on the host: PowerPoint still reports the selected name.",
+      "file": "decks/01-carlito-code-chart-table-notes.pptx",
+      "bytes": 43647,
+      "sha256": "5d37879c0ac7172d9960f23c7592382d3bc3775f97129f94e0accdba0de6b2ec",
+      "slides": 5,
+      "notesSlides": 5,
+      "slidesWithNotesText": 3,
+      "charts": 1,
+      "tables": 1,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Carlito",
+        "Roboto Mono"
+      ],
+      "requiredFonts": [
+        "Carlito",
+        "Roboto Mono"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Carlito"
+        ],
+        "2": [
+          "Carlito"
+        ],
+        "3": [
+          "Carlito",
+          "Roboto Mono"
+        ],
+        "4": [
+          "Carlito"
+        ],
+        "5": [
+          "Carlito"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Carlito",
+          "Roboto Mono"
+        ],
+        "bullets": [
+          "Carlito"
+        ],
+        "charts": [
+          "Carlito"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Carlito"
+        ]
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Carlito",
+        "Roboto Mono",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4",
+        "Slide 5"
+      ],
+      "diagnostics": []
+    },
+    "02-carlito-code-family-carlito": {
+      "title": "Carlito with the code role also set to Carlito",
+      "covers": "Variant of item 1: code.family Carlito, so every run, table cell, chart label and note names Carlito only.",
+      "notes": null,
+      "file": "decks/02-carlito-code-family-carlito.pptx",
+      "bytes": 39830,
+      "sha256": "139f39bf9bededc09f44758497c2c336fc337de01b3598b634c3d12c60cdbb95",
+      "slides": 4,
+      "notesSlides": 4,
+      "slidesWithNotesText": 1,
+      "charts": 1,
+      "tables": 1,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Carlito"
+      ],
+      "requiredFonts": [
+        "Carlito"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Carlito",
+          "ea": "Carlito",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Carlito"
+        ],
+        "2": [
+          "Carlito"
+        ],
+        "3": [
+          "Carlito"
+        ],
+        "4": [
+          "Carlito"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Carlito"
+        ],
+        "bullets": [],
+        "charts": [
+          "Carlito"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Carlito"
+        ]
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Carlito",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4"
+      ],
+      "diagnostics": []
+    },
+    "03-default-aptos": {
+      "title": "Default font scheme (aptos), no design block",
+      "covers": "FF-12 sample item 2. No design.fontScheme: the engine default aptos (Aptos Display / Aptos).",
+      "notes": "Roboto Mono is the code fallback; the code slide makes it a chosen family (aptos has no code role).",
+      "file": "decks/03-default-aptos.pptx",
+      "bytes": 43528,
+      "sha256": "610b9aa9573888356be0032a0d89c4b106fd3b9b82bce4c55764a7c162be47e4",
+      "slides": 5,
+      "notesSlides": 5,
+      "slidesWithNotesText": 2,
+      "charts": 1,
+      "tables": 1,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Aptos",
+        "Aptos Display",
+        "Roboto Mono"
+      ],
+      "requiredFonts": [
+        "Aptos",
+        "Aptos Display",
+        "Roboto Mono"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "2": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "3": [
+          "Aptos Display",
+          "Roboto Mono"
+        ],
+        "4": [
+          "Aptos Display"
+        ],
+        "5": [
+          "Aptos",
+          "Aptos Display"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Aptos",
+          "Aptos Display",
+          "Roboto Mono"
+        ],
+        "bullets": [
+          "Aptos"
+        ],
+        "charts": [
+          "Aptos"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Aptos"
+        ]
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Aptos",
+        "Aptos Display",
+        "Roboto Mono",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4",
+        "Slide 5"
+      ],
+      "diagnostics": []
+    },
+    "04-ja-meiryo": {
+      "title": "Japanese with Meiryo (re-run of lang-ja-meiryo)",
+      "covers": "FF-12 sample item 3. Re-runs `lang-ja-meiryo` of rr-05-cjk-native-20261002, which failed Presentation.Fonts with an extra Aptos before opf-pptx 0.12.1 (FF-05, opf-pptx#152). Same recipe: language japanese, design.fontScheme meiryo, 7 slides, one chart, speaker notes on one slide, no table, all text Japanese.",
+      "notes": "The original deck document is not in the repository (the 2026-10-02 scratch set was lost); this is a reconstruction from its recorded properties (7 slides, 1 chart, 1 notes slide, 0 tables, 21 text shapes, 32 paragraphs, Meiryo in every theme slot). Pass here = no Aptos and no other name beside Meiryo.",
+      "file": "decks/04-ja-meiryo.pptx",
+      "bytes": 50302,
+      "sha256": "0c6aad5d9f534674606ef7e1ff56b5dc31876f876c1400fbc028e23acda385f6",
+      "slides": 7,
+      "notesSlides": 7,
+      "slidesWithNotesText": 1,
+      "charts": 1,
+      "tables": 0,
+      "runLangs": [
+        "ja-JP"
+      ],
+      "expectedFonts": [
+        "Meiryo"
+      ],
+      "requiredFonts": [
+        "Meiryo"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Meiryo",
+          "ea": "Meiryo",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Meiryo",
+          "ea": "Meiryo",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Meiryo",
+          "ea": "Meiryo",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Meiryo",
+          "ea": "Meiryo",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Meiryo"
+        ],
+        "2": [
+          "Meiryo"
+        ],
+        "3": [
+          "Meiryo"
+        ],
+        "4": [
+          "Meiryo"
+        ],
+        "5": [
+          "Meiryo"
+        ],
+        "6": [
+          "Meiryo"
+        ],
+        "7": [
+          "Meiryo"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Meiryo"
+        ],
+        "bullets": [
+          "Meiryo"
+        ],
+        "charts": [
+          "Meiryo"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Meiryo"
+        ]
+      },
+      "ownScriptSupplements": [
+        "Jpan"
+      ],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Meiryo",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4",
+        "Slide 5",
+        "Slide 6",
+        "Slide 7"
+      ],
+      "diagnostics": []
+    },
+    "05-ar-rtl": {
+      "title": "Arabic right-to-left",
+      "covers": "FF-12 sample item 4. language arabic: Latin slots keep the default Aptos scheme, cs = Arabic Typesetting, paragraphs rtl.",
+      "notes": "Arabic Typesetting is selected in the theme cs slot. In rr-05b-native (0.12.0 exports) Presentation.Fonts listed only Aptos Display and Aptos and not the cs family, so Arabic Typesetting is \"soft\": allowed, not required.",
+      "file": "decks/05-ar-rtl.pptx",
+      "bytes": 37773,
+      "sha256": "6fa744ca67b8b07ea6240c19b220ed77bb8396444facadf74f29b90caf4f4d9c",
+      "slides": 4,
+      "notesSlides": 4,
+      "slidesWithNotesText": 1,
+      "charts": 1,
+      "tables": 1,
+      "runLangs": [
+        "ar-SA"
+      ],
+      "expectedFonts": [
+        "Aptos",
+        "Aptos Display",
+        "Arabic Typesetting"
+      ],
+      "requiredFonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "softFonts": [
+        "Arabic Typesetting"
+      ],
+      "theme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": "Arabic Typesetting"
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": "Arabic Typesetting"
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": "Arabic Typesetting"
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": "Arabic Typesetting"
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "2": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "3": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "4": [
+          "Aptos Display"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "bullets": [
+          "Aptos"
+        ],
+        "charts": [
+          "Aptos",
+          "Arabic Typesetting"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Aptos"
+        ]
+      },
+      "ownScriptSupplements": [
+        "Arab"
+      ],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Aptos",
+        "Aptos Display",
+        "Arabic Typesetting",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4"
+      ],
+      "diagnostics": []
+    },
+    "06-monospace-consolas": {
+      "title": "Monospace scheme (Consolas)",
+      "covers": "FF-12 sample item 5. design.fontScheme consolas (type monospace; code role Consolas): every run, code line, table cell and chart label.",
+      "notes": null,
+      "file": "decks/06-monospace-consolas.pptx",
+      "bytes": 43204,
+      "sha256": "b4794044e9f4d2e8ecf838eec2ba8a23bb8e6c2944e0a809935c7c55cf2cfcc4",
+      "slides": 5,
+      "notesSlides": 5,
+      "slidesWithNotesText": 1,
+      "charts": 1,
+      "tables": 1,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Consolas"
+      ],
+      "requiredFonts": [
+        "Consolas"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Consolas",
+          "ea": "Consolas",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Consolas",
+          "ea": "Consolas",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Consolas",
+          "ea": "Consolas",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Consolas",
+          "ea": "Consolas",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Consolas"
+        ],
+        "2": [
+          "Consolas"
+        ],
+        "3": [
+          "Consolas"
+        ],
+        "4": [
+          "Consolas"
+        ],
+        "5": [
+          "Consolas"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Consolas"
+        ],
+        "bullets": [
+          "Consolas"
+        ],
+        "charts": [
+          "Consolas"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Consolas"
+        ]
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Consolas",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4",
+        "Slide 5"
+      ],
+      "diagnostics": []
+    },
+    "07-per-slide-override": {
+      "title": "Per-slide font scheme override",
+      "covers": "FF-12 sample item 6. Deck scheme calibri; slide 2 overrides to georgia, slide 4 to courier-new. Slides 1 and 3 follow the deck.",
+      "notes": "Since FF-49 only the first slide / deck scheme reaches the theme; the overrides are explicit run-level latin typefaces on their slides.",
+      "file": "decks/07-per-slide-override.pptx",
+      "bytes": 30329,
+      "sha256": "8a12c17d06ad608346832b6a64b93cf1af4595a16ceedaf4af5cdbfa1b3b7dac",
+      "slides": 4,
+      "notesSlides": 4,
+      "slidesWithNotesText": 2,
+      "charts": 0,
+      "tables": 0,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Calibri",
+        "Courier New",
+        "Georgia"
+      ],
+      "requiredFonts": [
+        "Calibri",
+        "Courier New",
+        "Georgia"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Calibri",
+          "ea": "Calibri",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Calibri",
+          "ea": "Calibri",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Calibri",
+          "ea": "Calibri",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Calibri",
+          "ea": "Calibri",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Calibri"
+        ],
+        "2": [
+          "Georgia"
+        ],
+        "3": [
+          "Calibri"
+        ],
+        "4": [
+          "Courier New"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Calibri",
+          "Courier New",
+          "Georgia"
+        ],
+        "bullets": [
+          "Calibri"
+        ],
+        "charts": [],
+        "masters": [],
+        "workbooks": []
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Calibri",
+        "Courier New",
+        "Georgia",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4"
+      ],
+      "diagnostics": []
+    },
+    "08-cjk-in-latin": {
+      "title": "Japanese and Chinese text inside a Latin deck",
+      "covers": "FF-12 sample item 7. language english-us, scheme aptos with design.fontScheme.eastAsian = Meiryo; slides mix English, Japanese and Chinese Han text.",
+      "notes": "The theme ea slot is Meiryo; the Jpan/Hans/... script supplements of the Office theme list stay as written (Yu Gothic and others) and must NOT appear in Presentation.Fonts. FF-05 probes (ff-05-native-20261002, final rows) read [\"Meiryo\"] for an English deck with Japanese runs, so the Latin families are \"soft\": allowed, not required.",
+      "file": "decks/08-cjk-in-latin.pptx",
+      "bytes": 30882,
+      "sha256": "4b5a2ad71d3316893d506ee9b80357b04507f53fa015233da1e201adea6ce497",
+      "slides": 4,
+      "notesSlides": 4,
+      "slidesWithNotesText": 1,
+      "charts": 0,
+      "tables": 1,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Aptos",
+        "Aptos Display",
+        "Meiryo"
+      ],
+      "requiredFonts": [
+        "Meiryo"
+      ],
+      "softFonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "theme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Meiryo",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Meiryo",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Meiryo",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Meiryo",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "2": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "3": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "4": [
+          "Aptos",
+          "Aptos Display"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "bullets": [
+          "Aptos"
+        ],
+        "charts": [],
+        "masters": [],
+        "workbooks": []
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Aptos",
+        "Aptos Display",
+        "Meiryo",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4"
+      ],
+      "diagnostics": []
+    },
+    "09-ko-malgun": {
+      "title": "Korean with Malgun Gothic",
+      "covers": "Filler: language korean (scheme malgun-gothic).",
+      "notes": null,
+      "file": "decks/09-ko-malgun.pptx",
+      "bytes": 33649,
+      "sha256": "ea3577b7e3e212a7031e86bfc9992565833301f2d08e33d7c259078eed55da56",
+      "slides": 3,
+      "notesSlides": 3,
+      "slidesWithNotesText": 1,
+      "charts": 1,
+      "tables": 0,
+      "runLangs": [
+        "ko-KR"
+      ],
+      "expectedFonts": [
+        "Malgun Gothic"
+      ],
+      "requiredFonts": [
+        "Malgun Gothic"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Malgun Gothic",
+          "ea": "Malgun Gothic",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Malgun Gothic",
+          "ea": "Malgun Gothic",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Malgun Gothic",
+          "ea": "Malgun Gothic",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Malgun Gothic",
+          "ea": "Malgun Gothic",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Malgun Gothic"
+        ],
+        "2": [
+          "Malgun Gothic"
+        ],
+        "3": [
+          "Malgun Gothic"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Malgun Gothic"
+        ],
+        "bullets": [
+          "Malgun Gothic"
+        ],
+        "charts": [
+          "Malgun Gothic"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Malgun Gothic"
+        ]
+      },
+      "ownScriptSupplements": [
+        "Hang"
+      ],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Malgun Gothic",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3"
+      ],
+      "diagnostics": []
+    },
+    "10-hi-mangal": {
+      "title": "Hindi (Devanagari) with Mangal",
+      "covers": "Filler: language hindi, complex-script slot Mangal; Latin slots keep the default Aptos scheme.",
+      "notes": "Mangal is selected in the theme cs slot; like Arabic Typesetting it is \"soft\" (allowed, not required).",
+      "file": "decks/10-hi-mangal.pptx",
+      "bytes": 26954,
+      "sha256": "8981a44eba38444535ab1c3ece17fde1cd0c8f2eb6c551ce35bf6ff325d83be7",
+      "slides": 3,
+      "notesSlides": 3,
+      "slidesWithNotesText": 1,
+      "charts": 0,
+      "tables": 0,
+      "runLangs": [
+        "hi-IN"
+      ],
+      "expectedFonts": [
+        "Aptos",
+        "Aptos Display",
+        "Mangal"
+      ],
+      "requiredFonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "softFonts": [
+        "Mangal"
+      ],
+      "theme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": "Mangal"
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": "Mangal"
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": "Mangal"
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": "Mangal"
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "2": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "3": [
+          "Aptos",
+          "Aptos Display"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "bullets": [
+          "Aptos"
+        ],
+        "charts": [],
+        "masters": [],
+        "workbooks": []
+      },
+      "ownScriptSupplements": [
+        "Deva"
+      ],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Aptos",
+        "Aptos Display",
+        "Mangal",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3"
+      ],
+      "diagnostics": []
+    },
+    "11-he-rtl": {
+      "title": "Hebrew right-to-left with David",
+      "covers": "Filler: language hebrew (cs slot David), right-to-left paragraphs, a table and a chart.",
+      "notes": "David is the theme cs slot; \"soft\" for the same reason as Arabic Typesetting.",
+      "file": "decks/11-he-rtl.pptx",
+      "bytes": 37647,
+      "sha256": "fbd2b0b080fb5d3f6079b480b3c078da39c09a4510a476abd6bac5cfdbedbf4f",
+      "slides": 4,
+      "notesSlides": 4,
+      "slidesWithNotesText": 1,
+      "charts": 1,
+      "tables": 1,
+      "runLangs": [
+        "en-US",
+        "he-IL"
+      ],
+      "expectedFonts": [
+        "Aptos",
+        "Aptos Display",
+        "David"
+      ],
+      "requiredFonts": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "softFonts": [
+        "David"
+      ],
+      "theme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": "David"
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": "David"
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Aptos Display",
+          "ea": "Aptos Display",
+          "cs": "David"
+        },
+        "minor": {
+          "latin": "Aptos",
+          "ea": "Aptos",
+          "cs": "David"
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "2": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "3": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "4": [
+          "Aptos Display"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "bullets": [
+          "Aptos"
+        ],
+        "charts": [
+          "Aptos",
+          "David"
+        ],
+        "masters": [],
+        "workbooks": [
+          "Aptos"
+        ]
+      },
+      "ownScriptSupplements": [
+        "Hebr"
+      ],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Aptos",
+        "Aptos Display",
+        "David",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4"
+      ],
+      "diagnostics": []
+    },
+    "12-serif-georgia": {
+      "title": "Serif scheme (Georgia)",
+      "covers": "Filler: design.fontScheme georgia (serif) with a quote, a metric, a table and notes.",
+      "notes": null,
+      "file": "decks/12-serif-georgia.pptx",
+      "bytes": 32142,
+      "sha256": "270d3ad2ad6766272088c75fe7e8fae68bd5e61d1a30a3e9ddb8359712d087b3",
+      "slides": 4,
+      "notesSlides": 4,
+      "slidesWithNotesText": 1,
+      "charts": 0,
+      "tables": 1,
+      "runLangs": [
+        "en-US"
+      ],
+      "expectedFonts": [
+        "Georgia"
+      ],
+      "requiredFonts": [
+        "Georgia"
+      ],
+      "softFonts": [],
+      "theme": {
+        "major": {
+          "latin": "Georgia",
+          "ea": "Georgia",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Georgia",
+          "ea": "Georgia",
+          "cs": ""
+        }
+      },
+      "notesTheme": {
+        "major": {
+          "latin": "Georgia",
+          "ea": "Georgia",
+          "cs": ""
+        },
+        "minor": {
+          "latin": "Georgia",
+          "ea": "Georgia",
+          "cs": ""
+        }
+      },
+      "expectedSlideRunFonts": {
+        "1": [
+          "Georgia"
+        ],
+        "2": [
+          "Georgia"
+        ],
+        "3": [
+          "Georgia"
+        ],
+        "4": [
+          "Georgia"
+        ]
+      },
+      "fontsByPart": {
+        "runs": [
+          "Georgia"
+        ],
+        "bullets": [],
+        "charts": [],
+        "masters": [],
+        "workbooks": []
+      },
+      "ownScriptSupplements": [],
+      "supplementFacesNotChosen": [
+        "Angsana New",
+        "Arial",
+        "Cordia New",
+        "DaunPenh",
+        "DokChampa",
+        "Ebrima",
+        "Estrangelo Edessa",
+        "Euphemia",
+        "Gautami",
+        "Iskoola Pota",
+        "Javanese Text",
+        "Kalinga",
+        "Kartika",
+        "Latha",
+        "Leelawadee UI",
+        "Mangal",
+        "Microsoft Himalaya",
+        "Microsoft JhengHei",
+        "Microsoft New Tai Lue",
+        "Microsoft Tai Le",
+        "Microsoft Uighur",
+        "Microsoft Yi Baiti",
+        "Mongolian Baiti",
+        "MoolBoran",
+        "MV Boli",
+        "Myanmar Text",
+        "Nirmala UI",
+        "Nyala",
+        "Phagspa",
+        "Plantagenet Cherokee",
+        "Raavi",
+        "Segoe UI",
+        "Shruti",
+        "Sylfaen",
+        "Times New Roman",
+        "Tunga",
+        "Vrinda",
+        "맑은 고딕",
+        "新細明體",
+        "游ゴシック",
+        "游ゴシック Light",
+        "等线",
+        "等线 Light"
+      ],
+      "appXmlTitles": [
+        "Fonts Used",
+        "Theme",
+        "Slide Titles",
+        "Georgia",
+        "Office Theme",
+        "Office Theme",
+        "Slide 1",
+        "Slide 2",
+        "Slide 3",
+        "Slide 4"
+      ],
+      "diagnostics": []
+    }
+  }
+}
