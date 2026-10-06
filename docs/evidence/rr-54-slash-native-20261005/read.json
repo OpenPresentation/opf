@@ -1,0 +1,206 @@
+{
+    "deck":  "rr54-slash",
+    "sha256Before":  "2d091e65e54918f4ff2e82e4feb475ef56c6d5e0c6fb4a3767e4a727f2514e30",
+    "startedAt":  "2026-10-06T03:36:18.1944258Z",
+    "stage":  "done",
+    "powerpoint":  {
+                       "version":  "16.0",
+                       "build":  "20430"
+                   },
+    "slides":  [
+                   {
+                       "index":  1,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 1",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "\\$#,##0.0"
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide01.png"
+                   },
+                   {
+                       "index":  2,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 2",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "0.0 \"m/s\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide02.png"
+                   },
+                   {
+                       "index":  3,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 3",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "\"km/h \"0"
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide03.png"
+                   },
+                   {
+                       "index":  4,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 4",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "#,##0 \"items/day\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide04.png"
+                   },
+                   {
+                       "index":  5,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 5",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "0.0 \"E+3 m\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide05.png"
+                   },
+                   {
+                       "index":  6,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 6",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "#,##0 \"@HQ\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide06.png"
+                   },
+                   {
+                       "index":  7,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 7",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "#,##0 \"*est\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide07.png"
+                   },
+                   {
+                       "index":  8,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 8",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "#,##0 \"net_rev\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide08.png"
+                   },
+                   {
+                       "index":  9,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 9",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "#,##0 \"ok?\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide09.png"
+                   },
+                   {
+                       "index":  10,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 10",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "0.0% \"p.a.\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide10.png"
+                   },
+                   {
+                       "index":  11,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 11",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "#,##0 (\"est)\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide11.png"
+                   },
+                   {
+                       "index":  12,
+                       "charts":  [
+                                      {
+                                          "shape":  "OPF chart 12",
+                                          "chartType":  51,
+                                          "series":  [
+                                                         {
+                                                             "name":  "Value",
+                                                             "labelFormat":  "0 \\\"\"q\"\\\""
+                                                         }
+                                                     ]
+                                      }
+                                  ],
+                       "png":  "rr54-slash-slide12.png"
+                   }
+               ],
+    "sha256After":  "2d091e65e54918f4ff2e82e4feb475ef56c6d5e0c6fb4a3767e4a727f2514e30",
+    "finishedAt":  "2026-10-06T03:36:19.1544954Z"
+}
