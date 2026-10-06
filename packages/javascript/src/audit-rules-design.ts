@@ -304,8 +304,8 @@ const resolutionRules: AuditRule[] = [
 			};
 			for (const slide of context.slides) {
 				const composition = slide.composition;
-				const fill = rec(slide.slide.design).imageFill ?? rec(context.document.design).imageFill;
 				if (composition) {
+					const fill = composition.design.imageFill;
 					for (const item of composition.items) if (item.field === 'image') check(pointerOfDotted(item.path), item.value, item.box, fill === 'crop', slide);
 					if (composition.slideImage) check(pointerOfDotted(composition.slideImage.sourcePath), composition.slideImage.value, composition.slideImage.box, composition.slideImage.fill === 'crop', slide);
 				}

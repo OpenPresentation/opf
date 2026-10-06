@@ -1,6 +1,7 @@
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
 import {intrinsicImageAspect} from './image-aspect.js';
+import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
@@ -218,8 +219,8 @@ export interface ComposedItem {
   composition: Composition;
   /**
    * Resolved horizontal text alignment for this item: titleAlignment for the
-   * title, contentAlignment for every other item (slide design, then host
-   * option, then left). Engines anchor native and preview text to this value.
+   * title, contentAlignment for every other item (slide design, deck design, layout design,
+   * then left). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
 }
@@ -338,6 +339,12 @@ export interface SlideComposition {
   composition: Composition;
   /** Repeated furniture is measured separately from body pagination leaves. */
   furniture?: FurnitureLayout;
+  /**
+   * Effective shared design hints of this slide: slide design, then deck design, then the layout record's design,
+   * per key. Renderers and exporters read titleAlignment, contentAlignment, contentBox, imageFill and
+   * listBullet here instead of re-deriving them from the document.
+   */
+  design: ResolvedDesignHints;
   /** Active slide-level image; absent when design.slideImage does not apply to this slide. */
   slideImage?: ComposedSlideImage;
   /** Deck logo on a cover or section slide; absent on content slides and when no logo resolves. */
@@ -353,7 +360,7 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
@@ -383,12 +390,12 @@ export interface ComposeSlideOptions {
    * reports each paragraph's direction. Alignment stays logical: `left` is the start edge.
    */
   direction?: TextDirection;
-  /** Host-resolved alignment for shared content; slide design can override it. */
+  /** Deck-level alignment a host resolved itself. It ranks with `presentation.design`, above the layout record's design and below the slide's own design; hosts normally omit it because composition reads `presentation.design` and the layout. */
   contentAlignment?: 'left' | 'center' | 'right';
   titleAlignment?: 'left' | 'center' | 'right';
   /** Unscaled reference pixels around provided vector outlines; defaults to 1 for body text and 2 for furniture. Explicit values apply to both. */
   textRasterPadding?: number;
-  /** Host-resolved body cards. A slide's explicit design.contentBox overrides this value. */
+  /** Deck-level body cards a host resolved itself, ranked like contentAlignment. A slide's explicit design.contentBox overrides this value. */
   contentBox?: boolean;
   textMeasurement?: TextMeasurement;
   width?: number;
@@ -1957,7 +1964,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const scale = Math.min(width, height) / 720;
   const deckDirection: TextDirection = options.direction ?? resolveSlideDirection(options.presentation, options.slideIndex);
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
-  const hasCards = record(slide.design).contentBox ?? options.contentBox ?? false;
+  // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the layout record's design.
+  const hints = resolveDesignHints({ slide, layout, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
+  const hasCards = hints.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
@@ -1970,19 +1979,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // follow titleAlignment; only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
   let coverGroup = false;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && record(slide.design).contentAlignment === undefined)
-      ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
+    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && hints.sources.contentAlignment !== 'slide')
+      ? hints.titleAlignment : hints.contentAlignment) ?? 'left';
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : field === "tag" ? options.fonts?.accent ?? options.fonts?.body : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
-  // Effective design hints: slide design, then deck design (per field).
-  const slideDesign = record(slide.design), deckDesign = record(record(options.presentation).design);
-  const designHint = (field: 'contentDirection' | 'chartPrimary' | 'listBullet'): { value: unknown; path: string } | undefined =>
-    slideDesign[field] !== undefined ? { value: slideDesign[field], path: `slides.${options.slideIndex ?? 0}.design.${field}` }
-    : deckDesign[field] !== undefined ? { value: deckDesign[field], path: `design.${field}` } : undefined;
-  const listBullet = designHint('listBullet');
+  const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
   const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
     const resolved = resolveLogo(options.presentation, slide, { slot: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
     return resolved ? { source: resolved.source, path: resolved.path } : undefined;
@@ -2281,26 +2285,23 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // The root image drawn as the slide image no longer needs its content slot.
   if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'image'); if (picture >= 0) placeholders.splice(picture, 1); }
   // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
-  // geometry contract), then design.contentDirection (slide, then deck), then the layout record's
-  // design.contentDirection, then auto. The slide and deck value rank with the layout's own direction, so
-  // the hint never flattens a layout's own grid.
+  // geometry contract), then the effective design.contentDirection (slide, then deck, then the layout record's
+  // own), then auto. The hint ranks with the layout's own direction, so it never flattens a layout's own grid.
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
-  const direction = designHint('contentDirection')?.value;
-  const directionMode: Composition['mode'] | undefined = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : undefined;
-  const layoutDirection = record(layout.design).contentDirection;
-  const layoutDirectionMode: Composition['mode'] = layoutDirection === "vertical" ? "column" : layoutDirection === "horizontal" ? "row" : "auto";
-  // design.chartPrimary (slide, deck, then the layout's design.chartPrimary) splits the root into a
+  const direction = hints.contentDirection;
+  const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
+  // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
   // Unlike contentDirection it is an author opt-in (no bundled layout derives it), so it overrides the
   // layout record's composition, including its columns and weights.
-  const chartHint = designHint('chartPrimary')?.value ?? record(layout.design).chartPrimary;
+  const chartHint = hints.chartPrimary;
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
   const rootSettings: Composition = chartPrimary
     ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', columns: undefined, weights: chartPrimary === 'left' || chartPrimary === 'top' ? [3, 2] : [2, 3] }
-    : { ...composition, mode: composition.mode ?? directionMode ?? layoutDirectionMode };
+    : { ...composition, mode: composition.mode ?? directionMode };
   if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const container: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
@@ -2343,7 +2344,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
@@ -2365,4 +2366,5 @@ export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDia
 export {chartNumber,formatDataNumber,numberFormatError,excelNumberFormat,numberFormatFromExcel,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';
 export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 
+export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
