@@ -9,9 +9,9 @@
     "stakeholders",
     "partners"
   ],
-  "durationRange": {
-    "minMinutes": 15,
-    "maxMinutes": 45
+  "duration": {
+    "min": 15,
+    "max": 45
   },
   "tags": [
     "postmortem",
@@ -25,80 +25,80 @@
       "name": "Opening Remark",
       "description": "Set an empathetic, accountable tone before any analysis. Acknowledge the impact on the people in the room and the customers affected. Authenticity here earns you the credibility you'll need for the rest of the deck.",
       "instructions": "Set an empathetic tone",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "incident-breakdown",
       "name": "Incident Breakdown",
       "description": "Walk through what happened, in time order. Stick to facts: what systems, what users, what timeline. No causal claims yet — just an accurate, neutral reconstruction the audience can trust.",
       "instructions": "Detail the failure",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "impact-analysis",
       "name": "Impact Analysis",
       "description": "Quantify the damage. Customer-hours lost, revenue at risk, SLA breaches, downstream knock-ons. Be specific and direct; vague impact statements undermine the rest of the post-mortem.",
       "instructions": "Describe failure's effects",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "root-cause",
       "name": "Root Cause",
       "description": "Trace the failure to its underlying cause, not the most visible symptom. Use a 'five whys' or fishbone framing if useful. Distinguish between the proximate trigger and the systemic conditions that allowed it.",
       "instructions": "Analyze underlying reasons",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "proposed-solutions",
       "name": "Proposed Solutions",
       "description": "Present the corrective actions you're taking. Lead with the highest-leverage fix; sequence the rest. For each action, name an owner and a date — solutions without owners are aspirations.",
       "instructions": "Suggest corrective measures",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "action-plan",
       "name": "Action Plan",
       "description": "Lay out the rollout: what ships when, how it's verified, who signs off. Show that 'fixed' has a definition and a deadline, not just intent.",
       "instructions": "Map out steps",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "evaluate-outcome",
       "name": "Evaluate Outcome",
       "description": "Define the metrics that will tell you the fix worked. Pre/post comparisons, monitoring SLOs, error budgets — whatever proves the failure mode is closed and not just deferred.",
       "instructions": "Assess corrective actions",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "lessons-learned",
       "name": "Lessons Learned",
       "description": "Distill the broader lessons that outlive this specific incident. What does the team or organization now know that it didn't before? What patterns will you watch for elsewhere?",
       "instructions": "Reflect on failure lessons",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "preventive-measures",
       "name": "Preventive Measures",
       "description": "List the systemic safeguards being added — process changes, automated checks, on-call procedures, review gates. Show how this category of failure becomes harder to recur, not just this specific instance.",
       "instructions": "List safeguards",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "closing-thoughts",
       "name": "Closing Thoughts",
       "description": "Close with humility and forward momentum. Re-affirm accountability, thank the audience for their patience, and signal confidence in the path forward without overclaiming.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Empathize, trust, and encourage",
-      "slideType": "text"
+      "type": "text"
     }
   ]
 }

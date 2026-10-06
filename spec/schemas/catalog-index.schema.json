@@ -56,7 +56,7 @@
   "$defs": {
     "IndexRecord": {
       "type": "object",
-      "description": "Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `durationRange`, `group`, `label`) are allowed and vary by catalog kind.",
+      "description": "Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `duration`, `group`, `label`) are allowed and vary by catalog kind.",
       "required": ["id", "name", "file"],
       "additionalProperties": true,
       "properties": {

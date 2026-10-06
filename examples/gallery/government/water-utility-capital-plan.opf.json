@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "strategic-advisory",
-    "description": "Water Utility Capital Plan uses a compact evidence-to-decision arc for Lakehaven Water District.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "water-utility-capital-plan-arc",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -558,24 +535,25 @@
           "id": "water-utility-capital-plan-arc",
           "name": "Public Utilities Decision Arc",
           "summary": "A custom arc for Lakehaven Water District.",
+          "description": "Water Utility Capital Plan uses a compact evidence-to-decision arc for Lakehaven Water District.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

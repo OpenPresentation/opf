@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "performance-review",
-    "description": "Airline Disruption Recovery Review uses a compact evidence-to-decision arc for AeroVista Airlines.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "airline-disruption-recovery-review-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -559,24 +536,25 @@
           "id": "airline-disruption-recovery-review-arc",
           "name": "Air Travel Decision Arc",
           "summary": "A custom arc for AeroVista Airlines.",
+          "description": "Airline Disruption Recovery Review uses a compact evidence-to-decision arc for AeroVista Airlines.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

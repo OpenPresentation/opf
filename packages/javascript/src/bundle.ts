@@ -25,13 +25,12 @@ export interface BundleReport {
   /**
    * Referenced bare ids that resolve nowhere locally, per kind — listed for
    * exactly the positions the validator warns about, so `unresolved` means
-   * "the validator would warn about this": the string shorthand of
-   * `narrative`, bare-id `audience` entries (string or `{ id }` form), the
+   * "the validator would warn about this": the `narrative` string, bare-id `audience` entries (string or `{ id }` form), the
    * design references `themes`, `colorSchemes` and `fontSchemes` (string or
    * `{ id }` form, at deck and slide level), and `chart.type`.
    *
    * Every other reference — tones, purposes, languages, layouts,
-   * social platforms, object-form narratives, and anything reached through a
+   * social platforms, and anything reached through a
    * record rather than written by the author — is still resolved and inlined
    * when it is found, and skipped in silence when it is not, because the
    * validator does not warn there either.
@@ -121,12 +120,12 @@ function collectSocialReferences(collector: Collector, holder: unknown): void {
   }
 }
 
-// A beat's layout hint is the narrative's business rather than the author's:
+// A beat's layout is the narrative's business rather than the author's:
 // resolve it when it resolves, never report it when it does not.
 function collectBeatReferences(collector: Collector, narrative: unknown): void {
   if (!isRecord(narrative) || !Array.isArray(narrative.beats)) return;
   for (const beat of narrative.beats) {
-    if (isRecord(beat)) addReference(collector, "layouts", beat.layoutHint, false);
+    if (isRecord(beat)) addReference(collector, "layouts", beat.layout, false);
   }
 }
 
@@ -140,11 +139,7 @@ function collectLanguageReferences(collector: Collector, language: unknown): voi
 }
 
 function collectDocumentReferences(collector: Collector, document: Record<string, unknown>): void {
-  // String shorthand only: an inline narrative object with an unknown id is a
-  // legitimate fully-custom narrative, which is why the validator stays quiet
-  // about it too.
   addReference(collector, "narratives", document.narrative, typeof document.narrative === "string");
-  collectBeatReferences(collector, document.narrative);
   addReference(collector, "tones", document.tone, false);
   addReference(collector, "purposes", document.purpose, false);
   collectLanguageReferences(collector, document.language);
@@ -175,7 +170,7 @@ function collectDocumentReferences(collector: Collector, document: Record<string
 
 // References that live inside a catalog record — resolved or already inline —
 // so a bundled record never dangles: a theme names its color and font
-// schemes, a narrative beat may hint a layout, a language names font schemes.
+// schemes, a narrative beat may name a layout, a language names font schemes.
 // None of them is author-written, so none of them is reportable.
 function collectRecordReferences(collector: Collector, kind: CatalogKind, record: Record<string, unknown>): void {
   if (kind === "themes") {

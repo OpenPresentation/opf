@@ -207,7 +207,7 @@ async function writeExamplesGuide() {
     "- promoted region keys and span combinations",
     "- asset string/object forms and asset-backed chart data",
     "- design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides",
-    "- metadata array forms, language metadata, narrative beats, and catalog overrides",
+    "- metadata array forms, language metadata, custom narrative records, and catalog overrides",
     "",
     "## Gallery Folders",
     "",

@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "business-narrative",
-    "description": "Broadband Public Hearing Deck uses a compact evidence-to-decision arc for Rural Connectivity Office.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "broadband-public-hearing-deck-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -546,24 +523,25 @@
           "id": "broadband-public-hearing-deck-arc",
           "name": "Public Engagement Decision Arc",
           "summary": "A custom arc for Rural Connectivity Office.",
+          "description": "Broadband Public Hearing Deck uses a compact evidence-to-decision arc for Rural Connectivity Office.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

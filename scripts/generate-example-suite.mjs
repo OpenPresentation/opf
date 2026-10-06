@@ -767,10 +767,11 @@ function catalogOverrides(spec, index, catalogs) {
           id: customId,
           name: `${titleCase(spec.area)} Decision Arc`,
           summary: `A custom arc for ${spec.org}.`,
+          description: `${spec.title} uses a compact evidence-to-decision arc for ${spec.org}.`,
           beats: [
-            { id: "context", name: "Context", slideType: "text", layoutHint: "text-1x" },
-            { id: "evidence", name: "Evidence", slideType: "chart", layoutHint: "chart-1x" },
-            { id: "decision", name: "Decision", slideType: "list", layoutHint: "list-3x" },
+            { id: "context", name: "Context", type: "text", layout: "text-1x" },
+            { id: "evidence", name: "Evidence", type: "chart", layout: "chart-1x" },
+            { id: "decision", name: "Decision", type: "list", layout: "list-3x" },
           ],
         },
       ],
@@ -906,17 +907,8 @@ function deckFor(rawSpec, index, catalogs) {
             "Do not over-explain obvious context.",
           ],
         },
-    narrative: density === "dense"
-      ? {
-          id: narrative,
-          description: `${title} uses a compact evidence-to-decision arc for ${org}.`,
-          beats: [
-            { id: "context", name: "Context", slideType: "text", layoutHint: "text-1x" },
-            { id: "evidence", name: "Evidence", slideType: "chart", layoutHint: "chart-1x" },
-            { id: "commitment", name: "Commitment", slideType: "list", layoutHint: "list-3x" },
-          ],
-        }
-      : narrative,
+    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
   } : {
@@ -955,17 +947,8 @@ function deckFor(rawSpec, index, catalogs) {
         "Do not over-explain obvious context.",
       ],
     },
-    narrative: density === "dense"
-      ? {
-          id: narrative,
-          description: `${title} uses a compact evidence-to-decision arc for ${org}.`,
-          beats: [
-            { id: "context", name: "Context", slideType: "text", layoutHint: "text-1x" },
-            { id: "evidence", name: "Evidence", slideType: "chart", layoutHint: "chart-1x" },
-            { id: "commitment", name: "Commitment", slideType: "list", layoutHint: "list-3x" },
-          ],
-        }
-      : narrative,
+    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
   };

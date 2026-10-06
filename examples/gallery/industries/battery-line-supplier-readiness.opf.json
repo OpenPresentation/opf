@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "marketing-strategy",
-    "description": "Battery Line Supplier Readiness uses a compact evidence-to-decision arc for Voltcrest Components.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "battery-line-supplier-readiness-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -526,24 +503,25 @@
           "id": "battery-line-supplier-readiness-arc",
           "name": "Automotive Supply Decision Arc",
           "summary": "A custom arc for Voltcrest Components.",
+          "description": "Battery Line Supplier Readiness uses a compact evidence-to-decision arc for Voltcrest Components.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

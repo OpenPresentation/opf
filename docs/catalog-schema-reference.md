@@ -10,7 +10,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-audience/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field...
+- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field al...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -23,7 +23,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `seniority` | no | `enum:ic \| manager \| director \| vp \| c-suite \| mixed` | Typical seniority level of the audience. Engines use this as a hint for default depth and pacing. |
 | `technicalFluency` | no | `enum:low \| medium \| high \| mixed` | Typical technical fluency of the audience. AI generation uses this to decide whether to expand or assume technical terminology. |
 | `decisionPower` | no | `enum:informational \| advisory \| decision-maker` | Whether the audience is expected to be informed, to advise, or to actually decide. Shapes the strength of the closing ask. |
-| `attentionBudgetMinutes` | no | `number` | Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's durationRange. |
+| `attentionBudgetMinutes` | no | `number` | Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's duration range. |
 | `recommendedNarratives` | no | `array<string>` | Soft cross-link: narrative-catalog ids that work well for this audience. Used by picker UIs to suggest narratives once an audience is chosen. Validators warn on unknown ids; never error. |
 | `recommendedTones` | no | `array<string>` | Soft cross-link: tone-catalog ids that work well for this audience. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
@@ -52,7 +52,7 @@ OPF documents usually reference these records with string ids such as `design.th
 
 - Type: `object`
 - Required fields: `id`, `name`, `file`
-- Purpose: Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `durationRange`, `group`, `label`) are allowed and vary by catalog kind.
+- Purpose: Lightweight summary of one catalog record. Additional per-kind fields (e.g. `summary`, `tags`, `bcp47`, `duration`, `group`, `label`) are allowed and vary by catalog kind.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -376,7 +376,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-narrative/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `beats`
-- Purpose: Schema for narrative template files in the openpresentation.org catalog. Each template describes a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats. Templates are referenced from OPF documents via narrative either as a bare id string (e.g. 'classic-story') or as an inline object whose shape matches this schema (sans '$schema').
+- Purpose: Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core lint warns about a 'slides[].beat' id the resolved narrati...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -387,7 +387,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
 | `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
 | `audienceFit` | no | `array<string>` | Audiences this narrative works well for, e.g. ['executive', 'investor', 'customer']. |
-| `durationRange` | no | `object` | Typical talk-length window this narrative suits. |
+| `duration` | no | `object` | Typical talk length this narrative suits, as a range in minutes. A deck's own target is the root 'duration' (one number); lint warns when that target lies outside this range, and when 'min' is greater than 'max'. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search, e.g. ['business', 'pitch', 'internal']. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 | `beats` | yes | `array<ref:Beat>` | Ordered list of beats that make up the narrative arc. |
@@ -398,7 +398,7 @@ OPF documents usually reference these records with string ids such as `design.th
 
 - Type: `object`
 - Required fields: `id`, `name`
-- Purpose: A single narrative beat a labeled segment of the story arc with a specific dramatic purpose. Mirrors the NarrativeBeat definition in opf.schema.json so library entries and inline OPF beats are interchangeable.
+- Purpose: A single narrative beat a labeled segment of the story arc with a specific dramatic purpose. One beat is one slide: 'type' is that slide's Slide.type and 'layout' is its Slide.layout, so a planner copies them straight into a skeleton deck. Split a heavy beat into several beats rather than giving it several slides.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -406,10 +406,9 @@ OPF documents usually reference these records with string ids such as `design.th
 | `name` | yes | `string` | Human-readable beat name, e.g. 'The Problem'. |
 | `description` | no | `string` | Curator-written prose that explains what this beat should accomplish. |
 | `instructions` | no | `string` | Short author-facing instruction for the beat typically one phrase. Complements 'description' with a concise directive. |
-| `slideCount` | no | `integer` | Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a hig... |
-| `slideType` | no | `enum:text \| list \| image \| shape \| chart \| table \| video \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide. Uses ContentPayload.type names to help engines choose a layout. The legacy shape value is retained for compatibility and requests an image representation; it is not a native... |
-| `layoutHint` | no | `string` | Suggested layout id for the beat's opening slide, e.g. 'section-divider', 'title-slide', 'text-left'. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/... |
-| `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues attached to the beat. Surfaced in presenter notes. |
+| `type` | no | `enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide: the same values as Slide.type. Helps engines and planners choose a layout when only the beat is known. |
+| `layout` | no | `string` | Suggested layout id for the beat's slide, e.g. 'section-divider', 'title-slide', 'text-left'. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/layouts. |
+| `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues for the beat: questions the slide should answer. A planner or author turns them into the slide's notes; no engine copies them there on its own. |
 
 ## Purpose
 

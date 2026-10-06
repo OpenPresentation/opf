@@ -19,20 +19,20 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set... |
 | `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution. |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
-| `audience` | no | `oneOf:string / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts either: - A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference. - An arr... |
+| `audience` | no | `oneOf:string / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts either: - A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference. - An arra... |
 | `purpose` | no | `oneOf:string / ref:Purpose` | Primary goal of the presentation. Accepts either: - A string shorthand: free-form goal ('Raise a Series B round of $30M'), a purposes catalog id ('decide', 'align'), an HTTPS URL, or a 'pkg:' reference. - An inline Pu... |
 | `language` | no | `oneOf:string / ref:Language` | Language for the presentation content. Accepts either: - A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference... |
 | `tone` | no | `oneOf:string / ref:Tone` | Desired tone for the presentation. Accepts either: - A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference. - An inline Tone object for custom tone metadata or catalog-backed overrides... |
 | `takeaway` | no | `oneOf:string / array<string>` | Audience-facing takeaway the presentation should leave behind. Array form supports multiple takeaways. Deck-level intent used by AI to seed and pressure-test slide content. |
-| `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. Used by AI to set pace and depth, and to compare against the resolved narrative's durationRange. |
+| `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core lint warns when it lies outside the resolved narrative's 'duration' range. Agen... |
 | `tags` | no | `array<string>` | Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library. |
 | `design` | no | `ref:Design` | Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration. |
 | `variables` | no | `ref:Variables` | Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables a... |
 | `template` | no | `boolean` | Marks this document as a template: an incomplete OPF file. A template declares variables (top-level 'variables') and references them from content, and may leave required variables unfilled; validation then reports the... |
-| `narrative` | no | `oneOf:string / ref:Narrative` | Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record. Accepts two forms: - String shorthand for the common case: 'narrative = "classic-story"'. Accepts a bare... |
+| `narrative` | no | `string` | The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the p... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
-| `datasets` | no | `ref:Datasets` | Shared data tables keyed by id. A chart (`chart.data`: `{ "dataset": "<id>" }`) or a table (`{ "dataset": "<id>" }`) references one; engines inline it before composing. An unreferenced dataset is the lint warning `opf/unused-dataset`. See docs/chart-table-data.md. |
+| `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
 | `catalogs` | no | `ref:Catalogs` | Optional per-kind catalog overrides. Each kind may declare a non-default 'source' and/or inline 'records' that override or supplement the default catalog at https://www.pptx.gallery/<kind>. References elsewhere in the... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
@@ -188,43 +188,6 @@ _No named properties._
 - Purpose: Social media handles or URLs, keyed by platform id from the 'socialPlatforms' catalog. Each value is a string either a full URL or a platform handle (e.g., '@acme'). The catalog record for each platform carries the URL pattern and handle prefix that engines use to render and link the profile URL, plus brand color and themed icons as catalog metadata for authoring UIs (engines render the profile URL, not icons or brand colors). Keys resolve to the 'id' of a 'socialPlatforms' catalog record. Re...
 
 _No named properties._
-
-
-### Narrative
-
-- Type: `object`
-- Required fields: none
-- Purpose: Structured storyline used by AI to shape generated content. Mirrors the OPF Narrative Template record at https://openpresentation.org/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable. Narrative declares the deck's intended story arc; slides may opt into beats via Slide.beat. The narrative does not constrain slide structure validators warn on drift (orphan slides, unused beats) but never error. Slides are the source of truth; narrative i...
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `id` | no | `string` | Stable slug identifying this narrative. When it matches a record in the resolved 'narratives' catalog, the catalog record's beats and metadata seed this narrative; inline fields override per-key. When it doesn't match... |
-| `name` | no | `string` | Human-readable narrative name. |
-| `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
-| `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
-| `audienceFit` | no | `array<string>` | Audiences this narrative works well for. Free-form strings or 'audiences' catalog ids. |
-| `durationRange` | no | `object` | Typical talk-length window this narrative suits. Compared by validators against duration. |
-| `tags` | no | `array<string>` | Free-form labels for filtering and search. |
-| `preview` | no | `object` | Visual previews of the narrative, used by picker UIs and inline rendering. All sub-fields are optional. |
-| `beats` | no | `array<ref:NarrativeBeat>` | Ordered list of beats that make up the narrative arc. When 'id' matches a catalog record, beats here override or extend matching catalog beats by their own 'id'. Beat IDs must be unique within the narrative. |
-
-
-### NarrativeBeat
-
-- Type: `object`
-- Required fields: `id`, `name`
-- Purpose: A single narrative beat a labeled segment of the story arc with a specific dramatic purpose (e.g. 'hook', 'problem', 'evidence', 'ask'). Slides reference beats via Slide.beat. Beats may also carry slide-blueprint hints (slideType, layoutHint, thoughtCues, instructions) that guide the assigned slide. Mirrors the Beat definition in narrative.schema.json (https://openpresentation.org/schema/opf-narrative/v1) so library entries and inline OPF beats are interchangeable.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `id` | yes | `string` | Stable slug used by Slide.beat to reference this beat. Lowercase kebab-case. |
-| `name` | yes | `string` | Human-readable beat name. |
-| `description` | no | `string` | Curator-written prose that explains what this beat should accomplish. |
-| `instructions` | no | `string` | Short author-facing instruction for the beat typically one phrase. Complements 'description' with a concise directive. |
-| `slideCount` | no | `integer` | Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a hig... |
-| `slideType` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified. |
-| `layoutHint` | no | `string` | Suggested layout id for the beat's opening slide. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/layouts. |
-| `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues attached to the beat. Surfaced in presenter notes. |
 
 
 ### Design
@@ -453,7 +416,16 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `number` | Illustrative number shown in fill forms and used when a template is previewed with examples. Never written to output. |
-| `format` | no | `ref:NumberFormat` | Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' requi... |
+| `format` | no | `ref:NumberFormat` | Display pattern used by '{{<id>}}' (the shared NumberFormat syntax). A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits afte... |
+
+
+### NumberFormat
+
+- Type: `string`
+- Required fields: none
+- Purpose: Number display pattern, shared by NumberVariable.format, data column formats (DataColumn.format) and table cell formats (StyledTableCell.format). An optional literal prefix, a numeric part of '#', '0', ',' and '.', and an optional literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' required, '#' optional), and a '%' in the prefix or suffix multiplies the value by 100. English separators only. A format applies only to number values; st...
+
+_No named properties._
 
 
 ### DateVariable
@@ -680,7 +652,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
-| `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more narrative beats (each value matches an id from narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers mu... |
+| `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `string` | Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case,... |
 | `title` | no | `string` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. |
 | `subtitle` | no | `string` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. |
@@ -936,16 +908,17 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
-| `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource / ref:DatasetRef` | Chart data: inline columns/rows, a dataset reference (`{ "dataset": "<id>", "fields"? }`), or a ChartDataSource, which no engine loads (`chart-data-source-unresolved` warning, placeholder drawn). |
-| `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name (category, scatter X, series). Absent keeps the positional rule. See docs/chart-table-data.md. |
-| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
-| `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
-| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
+| `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. A ChartDataSource is not resolved b... |
+| `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
+| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
+| `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position... |
+| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator. |
 
 
 ### ChartAxisTitles
 
 - Type: `object`
+- Required fields: none
 - Purpose: Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.
 
 | Field | Required | Type | Notes |
@@ -957,40 +930,136 @@ _No named properties._
 ### ChartDataLabels
 
 - Type: `object`
+- Required fields: none
 - Purpose: Data label settings. A label shows the selected content parts in the fixed order category, value, percent, joined by the separator.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `content` | no | `array<string>` | Which parts a label shows: `value`, `percent`, `category` (default `['value']`). 'percent' exists only on pie and doughnut charts; a part a type cannot show is dropped with a `chart-option-adapted` diagnostic. |
-| `position` | no | `string` | `auto` (default), `center`, `inside-end`, `inside-base`, `outside-end`, `above`, `below`, `left`, `right`. The positions a chart type accepts are in docs/chart-options.md; an unsupported position falls back to `auto`. |
+| `content` | no | `array<enum:value \| percent \| category>` | Which parts a label shows. Defaults to ['value']. 'percent' is the share of the total and exists only on pie and doughnut charts; 'category' shows the category name (the X value on a scatter chart). A part a chart typ... |
+| `position` | no | `enum:auto \| center \| inside-end \| inside-base \| outside-end \| above \| below \| left \| right` | Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked column... |
 | `separator` | no | `string` | Text between the parts of a label that shows more than one. Defaults to ', '. |
 
 
 ### Table
 
 - Type: `object`
-- Required fields: `rows` (inline table) or `dataset` (dataset-backed table)
-- Purpose: Table content, inline or dataset-backed. An inline table has `rows` and optional `columns`; a dataset-backed table has `dataset` and optional `fields`, and no `rows` or `columns`.
+- Required fields: none
+- Purpose: Table content, inline or dataset-backed. An inline table has 'rows' (required) and optional 'columns'. A dataset-backed table has 'dataset' (required) and optional 'fields', and no 'rows' or 'columns': it takes its headers, rows and column formats from the dataset (per-cell styles need an inline table).
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels: strings, rich runs, styled cell objects or DataColumn objects. A header's `format` is the column's number format. Null is an empty label or a placeholder covered by a preceding column span. |
-| `rows` | inline | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
-| `dataset` | dataset | `ref:DatasetId` | Id of a top-level dataset that supplies the headers, rows and column formats. Unknown: `dataset-unknown` error. |
-| `fields` | no | `ref:DatasetFields` | Dataset tables only: the columns to show, by name and in order. Unknown: `dataset-field-unknown` error. |
+| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels. Labels may be strings, rich runs, styled cell objects or DataColumn objects ({ "name", "format" }). A header's 'format' (DataColumn or StyledTableCell) is the column's number format; a body cel... |
+| `rows` | no | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
+| `dataset` | no | `ref:DatasetId` | Id of a top-level dataset that supplies this table's headers, rows and column formats. Excludes 'rows' and 'columns'. An unknown id is a 'dataset-unknown' error. |
+| `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 
 
 ### ChartData
 
 - Type: `object`
 - Required fields: `columns`, `rows`
-- Purpose: Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless a chart type or renderer maps them differently.
+- Purpose: Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$5', '(5)', '1,234') is a gap and a 'chart-value-not-numeric' warning.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels; a DataColumn carries a number format. |
-| `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. Value cells are numbers or strict decimal strings; anything else is a gap and a `chart-value-not-numeric` warning. |
+| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels for the chart data table. A label is a string or a DataColumn ({ "name", "format" }) whose number format the data labels, value axis and exported workbook use. |
+| `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. |
+| `source` | no | `ref:DataSourceRef` | Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. |
+
+
+### DataColumn
+
+- Type: `object`
+- Required fields: `name`
+- Purpose: A named data column with an optional number format. Anywhere a chart or dataset column is a string it may be a DataColumn; the string form is { "name": value } with no format. A table column header may also be a DataColumn.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `name` | yes | `string` | Column label, used as the series name, the table header and the name 'fields' and 'chart.mapping' address. |
+| `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
+
+
+### DataSourceRef
+
+- Type: `object`
+- Required fields: `src`
+- Purpose: Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path. |
+| `sheet` | no | `string` | Sheet or table name inside a spreadsheet source. |
+| `range` | no | `string` | A1-style range inside a spreadsheet source. |
+| `fields` | no | `array<string>` | The source fields the data was taken from, in order. |
+| `retrieved` | no | `anyOf:schema / schema` | When the data was taken from the source: an ISO 8601 date or date-time. |
+| `description` | no | `string` | Free-form note about the source. |
+
+
+### DatasetId
+
+- Type: `string`
+- Required fields: none
+- Purpose: Id of an entry in the top-level datasets map (the assets id pattern).
+
+_No named properties._
+
+
+### DatasetFields
+
+- Type: `array<string>`
+- Required fields: none
+- Purpose: Dataset column names to use, in order, each at most once. Selects and orders the dataset's columns; an unknown name is a 'dataset-field-unknown' error.
+
+_No named properties._
+
+
+### Datasets
+
+- Type: `object`
+- Required fields: none
+- Purpose: Shared data tables keyed by id (the assets id pattern). Charts reference one with 'chart.data': { "dataset": "<id>" } and tables with 'table': { "dataset": "<id>" }.
+
+_No named properties._
+
+
+### Dataset
+
+- Type: `object`
+- Required fields: `columns`, `rows`
+- Purpose: One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `title` | no | `string` | Human name of the dataset, shown by editors. |
+| `description` | no | `string` | What the dataset holds. |
+| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
+| `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns. |
 | `source` | no | `ref:DataSourceRef` | Optional provenance. Engines never read, fetch or refresh it. |
+
+
+### DatasetRef
+
+- Type: `object`
+- Required fields: `dataset`
+- Purpose: Chart data taken from a top-level dataset. Engines inline it before plotting; 'chart.mapping' names columns after the 'fields' selection.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
+| `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. Absent uses every column. |
+
+
+### ChartMapping
+
+- Type: `object`
+- Required fields: none
+- Purpose: Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; pie, doughnut and other single-series constructs still plot one series. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a 'chart-mapping-adapted' warning.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `category` | no | `string` | The label (category) column. Default: the first column. |
+| `x` | no | `string` | The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column), and only when there are three or more columns: with two, the second column is the one series, plot... |
+| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column. |
 
 
 ### ChartDataSource
@@ -1005,110 +1074,6 @@ _No named properties._
 | `sheet` | no | `string` | Optional sheet name or table name for spreadsheet-like assets. |
 | `range` | no | `string` | Optional A1-style range or engine-defined range selector for spreadsheet-like assets. |
 | `columns` | no | `array<string>` | Optional ordered columns or fields to read from the source. When omitted, renderers may use the source's own header row or schema. |
-
-
-### NumberFormat
-
-- Type: `string`
-- Required fields: none
-- Purpose: Number display pattern shared by NumberVariable.format, DataColumn.format and StyledTableCell.format: an optional literal prefix, a numeric part of '#', '0', ',' and '.', and an optional literal suffix; a '%' multiplies by 100. A column or cell format that is not a valid pattern is a `number-format-invalid` error. Examples: `#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`.
-
-_No named properties._
-
-
-### DataColumn
-
-- Type: `object`
-- Required fields: `name`
-- Purpose: A named data column with an optional number format, wherever a chart, dataset or table column header may be a string.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `name` | yes | `string` | Column label: the series name, the table header and the name `fields` and `chart.mapping` address. |
-| `format` | no | `ref:NumberFormat` | Number format of the column's number values. Absent: the General form. |
-
-
-### DataSourceRef
-
-- Type: `object`
-- Required fields: `src`
-- Purpose: Provenance of inline data or a dataset. Engines never read, fetch or refresh it; they keep it through editing, export and re-import.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a path. |
-| `sheet` | no | `string` | Sheet or table name inside a spreadsheet source. |
-| `range` | no | `string` | A1-style range inside a spreadsheet source. |
-| `fields` | no | `array<string>` | The source fields the data was taken from, in order. |
-| `retrieved` | no | `string` | ISO 8601 date or date-time the data was taken. |
-| `description` | no | `string` | Free-form note about the source. |
-
-
-### DatasetId
-
-- Type: `string`
-- Required fields: none
-- Purpose: Id of an entry in the top-level datasets map (the assets id pattern `^[a-zA-Z0-9][a-zA-Z0-9._-]*$`).
-
-_No named properties._
-
-
-### DatasetFields
-
-- Type: `array<string>`
-- Required fields: none
-- Purpose: Dataset column names to use, in order, each at most once (at least one).
-
-_No named properties._
-
-
-### Datasets
-
-- Type: `object map`
-- Required fields: none
-- Purpose: Shared data tables keyed by id (the assets id pattern); each value is a Dataset.
-
-_No named properties._
-
-
-### Dataset
-
-- Type: `object`
-- Required fields: `columns`, `rows`
-- Purpose: One shared data table. Column names are unique (`data-column-duplicate` error).
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `title` | no | `string` | Human name shown by editors. |
-| `description` | no | `string` | What the dataset holds. |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
-| `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells aligned with columns. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance. |
-
-
-### DatasetRef
-
-- Type: `object`
-- Required fields: `dataset`
-- Purpose: Chart data taken from a top-level dataset; engines inline it before plotting.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `dataset` | yes | `ref:DatasetId` | Id of the dataset. Unknown: `dataset-unknown` error. |
-| `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. |
-
-
-### ChartMapping
-
-- Type: `object`
-- Required fields: none
-- Purpose: Series mapping by column name, after any `fields` selection. Unknown names are `chart-mapping-unknown-column` errors; a series that repeats the category or X column, and an X column on a chart without an X axis, are dropped with a `chart-mapping-adapted` warning.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `category` | no | `string` | The label column. Default: the first column. |
-| `x` | no | `string` | The X column of a scatter chart. Default: the second column (the first when the category is the second column), only with three or more columns; with two, the second column is the series against row numbers. |
-| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or X. |
 
 
 ### ChartDataCell
@@ -1150,7 +1115,7 @@ _No named properties._
 | `style` | no | `ref:TableCellStyle` |  |
 | `colSpan` | no | `integer` | Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1. |
 | `rowSpan` | no | `integer` | Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1. |
-| `format` | no | `ref:NumberFormat` | Number format: of this body cell's number (wins over the column's), or of the column on a header cell. |
+| `format` | no | `ref:NumberFormat` | Number format. On a body cell it formats that cell's number value (and wins over the column's format); on a header cell (in 'columns') it is the column's format, the same as a DataColumn header. Strings, booleans, nul... |
 
 
 ### TableCellStyle
@@ -1204,7 +1169,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `narratives` | no | `ref:CatalogEntry` | Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. Default source: https://www.pptx.gallery/narratives. |
+| `narratives` | no | `ref:CatalogEntry` | Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative goes in 'catalogs.narratives.records' and is referenced by its id from the root 'narrat... |
 | `themes` | no | `ref:CatalogEntry` | Catalog of themes. Records validate against https://openpresentation.org/schema/opf-theme/v1. Default source: https://www.pptx.gallery/themes. |
 | `colorSchemes` | no | `ref:CatalogEntry` | Catalog of color schemes. Records validate against https://openpresentation.org/schema/opf-color-scheme/v1. Default source: https://www.pptx.gallery/color-schemes. |
 | `fontSchemes` | no | `ref:CatalogEntry` | Catalog of font schemes. Records validate against https://openpresentation.org/schema/opf-font-scheme/v1. Default source: https://www.pptx.gallery/font-schemes. |

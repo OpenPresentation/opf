@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "early-startup-pitch",
-    "description": "Boutique Hotel Revenue Recovery uses a compact evidence-to-decision arc for Harbor & Loom Hotels.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "boutique-hotel-revenue-recovery-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -526,24 +503,25 @@
           "id": "boutique-hotel-revenue-recovery-arc",
           "name": "Hospitality Decision Arc",
           "summary": "A custom arc for Harbor & Loom Hotels.",
+          "description": "Boutique Hotel Revenue Recovery uses a compact evidence-to-decision arc for Harbor & Loom Hotels.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Full Feature Tour",
-  "description": "Technical fixture exercising every major surface of the OPF presentation schema in one self-contained document: intent metadata, organizations and speakers, narrative beats, design with slide overrides, embedded assets, inline catalog records, all content payload kinds, blocks, regions, and extensions.",
+  "description": "Technical fixture exercising every major surface of the OPF presentation schema in one self-contained document: intent metadata, organizations and speakers, a custom narrative record and slide beat links, design with slide overrides, embedded assets, inline catalog records, all content payload kinds, blocks, regions, and extensions.",
   "filename": "full-feature-tour.pptx",
   "author": "OPF Maintainers",
   "audience": ["executive", { "id": "engineering-team", "attentionBudgetMinutes": 30 }],
@@ -36,16 +36,7 @@
     },
     { "id": "ben", "name": "Ben Ortiz", "title": "Principal Engineer", "organizationId": "acme" }
   ],
-  "narrative": {
-    "id": "qbr",
-    "beats": [
-      {
-        "id": "asks",
-        "name": "The Ask",
-        "instructions": "Close on the single budget decision; everything else is appendix."
-      }
-    ]
-  },
+  "narrative": "board-qbr",
   "design": {
     "theme": { "id": "classic", "background": "light2" },
     "colorScheme": { "id": "forest-green", "accent1": "#0F4C81" },
@@ -92,6 +83,67 @@
     }
   },
   "catalogs": {
+    "narratives": {
+      "records": [
+        {
+          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+          "id": "board-qbr",
+          "name": "Board QBR",
+          "summary": "The quarterly business review arc, closing on one budget decision.",
+          "duration": {
+            "min": 15,
+            "max": 40
+          },
+          "beats": [
+            {
+              "id": "objectives",
+              "name": "Objectives"
+            },
+            {
+              "id": "recap",
+              "name": "Recap"
+            },
+            {
+              "id": "performance-headline",
+              "name": "Performance Headline"
+            },
+            {
+              "id": "performance-detail",
+              "name": "Performance Detail"
+            },
+            {
+              "id": "wins",
+              "name": "Wins"
+            },
+            {
+              "id": "challenges",
+              "name": "Challenges"
+            },
+            {
+              "id": "insights",
+              "name": "Insights"
+            },
+            {
+              "id": "priorities",
+              "name": "Next-Quarter Priorities"
+            },
+            {
+              "id": "sequencing",
+              "name": "Sequencing"
+            },
+            {
+              "id": "risks",
+              "name": "Risks"
+            },
+            {
+              "id": "asks",
+              "name": "The Ask",
+              "instructions": "Close on the single budget decision; everything else is appendix."
+            }
+          ]
+        }
+      ]
+    },
     "colorSchemes": {
       "records": [
         {

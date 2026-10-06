@@ -9,6 +9,10 @@
 // --check writes nothing: it re-derives every imported narrative's beats from the gallery data and
 // the layout map, and fails when a committed record or the per-beat table disagrees.
 //
+// FA-02: records are written in the current narrative shape (duration {min,max}, beat type and layout, no
+// slideCount); the gallery fields it reads (durationRange, slideType, layoutHint, slideCount) are the names the
+// gallery data used at the pinned commit f17e9ae.
+//
 // The gallery checkout defaults to a sibling of this repository (../pptx-gallery); it is not
 // available in CI, so this script is a maintenance tool rather than a gate.
 import { readFile, writeFile } from "node:fs/promises";
@@ -126,8 +130,8 @@ function mapBeat(layoutMap, beat) {
   if (!rule) throw new Error(`gallery layout '${beat.layoutHint}' has no entry in gallery-layout-map.json`);
   const n = Number.parseInt(beat.options?.multiple ?? "1x", 10) || 1;
   const subtitle = beat.placeholders?.subtitle === true;
-  const template = subtitle && rule.withSubtitle ? rule.withSubtitle : rule.layoutHint;
-  return { slideType: rule.slideType, layoutHint: template.replace("{n}", String(n)) };
+  const template = subtitle && rule.withSubtitle ? rule.withSubtitle : rule.layout;
+  return { type: rule.type, layout: template.replace("{n}", String(n)) };
 }
 
 function narrativeRecord(layoutMap, gallery) {
@@ -139,14 +143,13 @@ function narrativeRecord(layoutMap, gallery) {
     summary: gallery.summary,
     description: prose.description,
     audienceFit: prose.audienceFit,
-    durationRange: gallery.durationRange,
+    duration: { min: gallery.durationRange.minMinutes, max: gallery.durationRange.maxMinutes },
     tags: gallery.tags,
     beats: gallery.beats.map((beat) => ({
       id: beat.id,
       name: beat.name,
       description: beat.description,
       instructions: beat.instructions,
-      ...(beat.slideCount > 1 ? { slideCount: beat.slideCount } : {}),
       ...mapBeat(layoutMap, beat),
     })),
   };
@@ -175,7 +178,7 @@ function indexEntry(record) {
     `      "name": ${q(record.name)},`,
     `      "summary": ${q(record.summary)},`,
     `      "audienceFit": ${inlineArray(record.audienceFit)},`,
-    `      "durationRange": { "minMinutes": ${record.durationRange.minMinutes}, "maxMinutes": ${record.durationRange.maxMinutes} },`,
+    `      "duration": { "min": ${record.duration.min}, "max": ${record.duration.max} },`,
     `      "tags": ${inlineArray(record.tags)},`,
     `      "file": ${q(`${record.id}.json`)}`,
     "    },",

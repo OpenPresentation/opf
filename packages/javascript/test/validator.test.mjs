@@ -872,13 +872,28 @@ describe("catalog-id warning behavior", () => {
     }).warnings.length, 0);
   });
 
-  test("object-form narrative with unknown id is a custom inline narrative, not a broken reference", () => {
-    // Object form with an unknown id is a fully custom inline narrative, not a broken reference.
+  test("a custom narrative is an inline catalog record, and the narrative field is a string only", () => {
     assert.equal(validatePresentation({
       name: "Custom Inline Narrative",
-      narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
+      narrative: "my-own-arc",
+      catalogs: { narratives: { records: [{ id: "my-own-arc", name: "My Own Arc", beats: [{ id: "hook", name: "Hook" }] }] } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
+    const object = validatePresentation({
+      name: "Inline Narrative Object",
+      narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
+      slides: [{ title: "Slide Title" }],
+    });
+    assert.equal(object.valid, false, "an inline narrative object is no longer part of the format");
+    const narrativeRecord = (extra) => validateCatalogRecord("narratives", {
+      $schema: "https://openpresentation.org/schema/opf-narrative/v1",
+      id: "x", name: "X", beats: [{ id: "a", name: "A", ...extra.beat }], ...extra.record,
+    });
+    assert.equal(narrativeRecord({ record: { duration: { min: 5, max: 10 } }, beat: { type: "video", layout: "title" } }).valid, true);
+    assert.equal(narrativeRecord({ beat: { type: "shape" } }).valid, false, "shape is not a content kind");
+    assert.equal(narrativeRecord({ beat: { type: "title" } }).valid, false, "beat type is Slide.type");
+    assert.equal(narrativeRecord({ record: { duration: { min: 0, max: 10 } } }).valid, false, "duration is greater than zero");
+    assert.equal(narrativeRecord({ record: { duration: { minMinutes: 5, maxMinutes: 10 } } }).valid, false, "durationRange names are gone");
   });
 
   test("unknown design references warn at their respective paths", () => {
