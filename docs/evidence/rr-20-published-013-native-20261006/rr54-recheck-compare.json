@@ -1,0 +1,107 @@
+{
+  "builds": {
+    "published": {
+      "commit": "npm @openpresentation/opf-pptx 0.13.1",
+      "core": "0.13.0",
+      "coreCommit": "npm",
+      "packages": {
+        "@openpresentation/opf": {
+          "version": "0.13.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.13.0.tgz",
+          "integrity": "sha512-k6379hqDvq9zZlm42HnX7eiHIVrYlBDgj11CCPIo1lY/BA5I27rhIdZsv6Hs0v9XVmGAq6p/VOZcmdEaJec0PQ=="
+        },
+        "@openpresentation/opf-pptx": {
+          "version": "0.13.1",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.13.1.tgz",
+          "integrity": "sha512-On2tkUH3+3o05uN2n7/DvL8ExuDzhYzNfu40wjEEyKTnBJM++Wpn2+lKRIxFD+jcVUfyDN56EIPqLmOUFoQ++g=="
+        },
+        "@openpresentation/opf-render": {
+          "version": "0.13.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.13.0.tgz",
+          "integrity": "sha512-MChOzUDEySP/yAdCuDUFzg1xNPwyJHMi7DspseFyrGOXOnCEdQroS2Uz9c6bJkuqGxCw9ILK7XrTvJUWYwXmZw=="
+        }
+      },
+      "node": "v24.21.0"
+    }
+  },
+  "rows": [
+    {
+      "file": "c4-formats-after.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 6 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c4-formats-after.pptx",
+      "check": "C4 save copy",
+      "status": "PASS",
+      "detail": "payloads equal true, datasets equal true; data diagnostics: none; scatter names a, b, c; re-spelled codes: ppt/charts/chart1.xml: \\$#,##0.0 ; ppt/charts/chart1.xml:  ; ppt/charts/chart1.xml: #,##0\\ &quot;units&quot; ; ppt/charts/chart1.xml: #,##0\\  ; ppt/charts/chart2.xml:  ; ppt/charts/chart3.xml: \\$#,##0 ; ppt/charts/chart3.xml: 0.0\\  ; ppt/charts/chart3.xml:  ; ppt/charts/chart3.xml: 0.0\\ &quot;kg&quot; ; ppt/charts/chart4.xml: \\$#,##0 ; ppt/charts/chart4.xml:  ; ppt/charts/chart6.xml:  ; ppt/charts/chart6.xml: 0.0\\ &quot;m/s&quot; ; ppt/charts/chart6.xml: 0.0\\  ; ppt/charts/chart6.xml: \\+0.0\\ &quot;pts&quot; ; ppt/charts/chart6.xml: \\+0.0\\ "
+    },
+    {
+      "file": "c4-datasets-after.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 6 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c4-datasets-after.pptx",
+      "check": "C4 save copy",
+      "status": "PASS",
+      "detail": "payloads equal true, datasets equal true; data diagnostics: none; scatter names -; re-spelled codes: ppt/charts/chart1.xml: \\$#,##0 ; ppt/charts/chart1.xml:  ; ppt/charts/chart2.xml: #,##0\\  ; ppt/charts/chart2.xml:  ; ppt/charts/chart2.xml: \\$#,##0 ; ppt/charts/chart2.xml: #,##0\\ &quot;units&quot; ; ppt/charts/chart3.xml: #,##0\\  ; ppt/charts/chart3.xml:  ; ppt/charts/chart4.xml: "
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 8 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 1",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 2",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 3",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 4",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 5",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 6",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3; used range A1:B4)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 7",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3; used range A1:B4)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 8 (scatter)",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros A3, B3, B5, B6; used range A1:B6)"
+    }
+  ]
+}
