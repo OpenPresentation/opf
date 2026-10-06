@@ -2890,6 +2890,14 @@
       {
         "label": "opf#323 section 3 (native checks on the Windows host)",
         "url": "https://github.com/OpenPresentation/opf/issues/323"
+      },
+      {
+        "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
+        "url": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md"
+      },
+      {
+        "label": "opf#363 (Windows supplemental fonts on the native host)",
+        "url": "https://github.com/OpenPresentation/opf/issues/363"
       }
     ]
   },
@@ -3055,10 +3063,10 @@
     }
   },
   "visualAcceptance": {
-    "id": "ff-46-documented-visual-native-20261005",
-    "label": "FF-46 native visual run: script, visual and code-table families, one family per deck (2026-10-05)",
-    "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
-    "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
+    "id": "ff-46-documented-visual-native-20261005-fonts",
+    "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
+    "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+    "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
     "date": "2026-10-05",
     "statuses": [
       "script-gap",
@@ -3358,6 +3366,14 @@
       "readme": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
       "date": "2026-10-05",
       "host": "PowerPoint 365, Windows"
+    },
+    {
+      "id": "ff-46-documented-visual-native-20261005-fonts",
+      "label": "FF-46 native visual run with the Windows supplemental fonts installed: script, visual and code-table families (2026-10-05)",
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+      "readme": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
+      "date": "2026-10-05",
+      "host": "PowerPoint 365, Windows (supplemental fonts installed)"
     }
   ]
 }

@@ -534,7 +534,7 @@ test("Symbol, Wingdings and Webdings carry the code-table route from the pinned 
     // Nothing is claimed beyond what is verified: the FF-46 native runs read the name back, the 2026-10-05 run compared the drawn lines
     // (nativeVisual: pass), and acceptance stays pending until the family's own fixture is in every host.
     assert.equal(item.nativeVerification.status, "verified", name);
-    assert.deepEqual(item.nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"], name);
+    assert.deepEqual(item.nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"], name);
     assert.equal(item.nativeVisual.outcome, "pass", name);
     assert.equal(item.acceptance.accepted, false, name);
     assert.match(item.statusReason, /native PowerPoint name read-back passed/, name);
@@ -579,7 +579,7 @@ test("native verification comes from committed comparison output, and only for f
   assert.deepEqual(committed.summary.nativeVerification, { verified: committed.records.length, partial: 0, failed: 0, unverified: 0, NA: 0 });
   assert.deepEqual(committed.summary.nativeFailedFamilies, []);
   assert.equal(committed.summary.nativeVerification.verified, verified.length);
-  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"]);
+  assert.deepEqual(committed.inputs.nativeEvidence.map((run) => run.id), ["rr-05b-native-20261002", "rr-05-cjk-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"]);
   const runs = Object.fromEntries(committed.inputs.nativeEvidence.map((run) => [run.id, run]));
   assert.equal(runs["rr-05b-native-20261002"].decks, 4);
   assert.equal(runs["rr-05b-native-20261002"].decksPassing, 4);
@@ -595,6 +595,10 @@ test("native verification comes from committed comparison output, and only for f
   assert.equal(runs["ff-46-documented-visual-native-20261005"].decks, 48);
   assert.equal(runs["ff-46-documented-visual-native-20261005"].decksPassing, 47);
   assert.deepEqual(runs["ff-46-documented-visual-native-20261005"].failingChecks, [{ deck: "scripts-40-amharic-ebrima", failing: ["presentationFonts"], detail: ["presentation-fonts-extra"] }]);
+  // opf#363: the same 48 decks re-run with the Windows supplemental fonts installed read the same names (Ebrima's Nyala included).
+  assert.equal(runs["ff-46-documented-visual-native-20261005-fonts"].decks, 48);
+  assert.equal(runs["ff-46-documented-visual-native-20261005-fonts"].decksPassing, 47);
+  assert.deepEqual(runs["ff-46-documented-visual-native-20261005-fonts"].failingChecks, runs["ff-46-documented-visual-native-20261005"].failingChecks);
   assert.match(record("Ebrima").nativeVerification.caveat, /scripts-40-amharic-ebrima \(presentationFonts\)/);
   for (const name of verified) {
     const item = record(name);
@@ -608,10 +612,10 @@ test("native verification comes from committed comparison output, and only for f
     assert.match(item.nextAction, /Native name read-back passed/, name);
   }
   // Which family came from which deck.
-  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"]);
+  assert.deepEqual(record("Arabic Typesetting").nativeVerification.runs.map((run) => run.run), ["rr-05b-native-20261002", "ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"]);
   assert.deepEqual(record("David").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-he", "rtl-structures-he"]);
   assert.deepEqual(record("Mangal").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-hi"]);
-  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["ff-46-documented-visual-native-20261005", "ff-46-native-0.12-20261002", "rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
+  assert.deepEqual(record("Aptos").nativeVerification.runs.map((run) => run.run).sort(), ["ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts", "ff-46-native-0.12-20261002", "rr-05-cjk-native-20261002", "rr-05b-native-20261002"]);
   // lang-ja-meiryo failed only the Presentation.Fonts check (FF-05); Meiryo is verified by the decks that pass and the failure is a caveat.
   assert.deepEqual(record("Meiryo").nativeVerification.runs[0].decks.map((deck) => deck.deck), ["lang-ja", "size-4x3-japanese"]);
   assert.match(record("Meiryo").nativeVerification.caveat, /lang-ja-meiryo \(presentationFonts\)/);
@@ -622,7 +626,7 @@ test("native verification comes from committed comparison output, and only for f
   }
   // The 2026-10-05 run reads back its own families and the Calibri and Aptos of its symbol and emoji decks.
   for (const name of ["Calibri", "Wingdings", "Cambria Math", "Segoe UI Emoji"]) {
-    assert.deepEqual(record(name).nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005"], name);
+    assert.deepEqual(record(name).nativeVerification.runs.map((run) => run.run), ["ff-46-native-0.12-20261002", "ff-46-documented-visual-native-20261005", "ff-46-documented-visual-native-20261005-fonts"], name);
   }
   assert.match(record("Arial").nativeVerification.note, /Passed in ff-46-native-0.12-20261002/);
   // Evidence is committed without absolute user paths.
