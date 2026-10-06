@@ -98,6 +98,7 @@ export function timelineToTable(timeline: Json, options: TableOptions, loss: Los
     if (timeline.name) loss.note("timeline name");
     if (timeline.description) loss.note("timeline description");
   }
+  if (events.some((event) => event.status)) loss.note("timeline event status");
   const hasWhen = events.some((event) => event.when);
   const hasDescription = events.some((event) => event.description);
   const columns = [...(hasWhen ? ["When"] : []), "What", ...(hasDescription ? ["Description"] : [])];

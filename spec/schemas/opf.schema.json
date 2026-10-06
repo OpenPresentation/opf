@@ -2759,6 +2759,12 @@
           "type": "string",
           "description": "Optional event detail.",
           "examples": ["Launch with the first operations team."]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["done", "current", "planned"],
+          "description": "Progress of the event, drawn from the deck's own colors by both the SVG renderer and the PPTX exporter. Absent means no status and the event is drawn as a plain filled marker with normal text, which is also how 'done' looks. 'done' is a filled marker in the primary color with normal text. 'current' marks 'we are here': the filled marker is surrounded by a ring and the event label (`what`) is bold. 'planned' is an outlined, hollow marker (primary-color outline over the slide background) with muted secondary text. Text colors keep a 4.5:1 contrast against the slide background. In PPTX the markers are native ellipses (the ring is a second ellipse), and PPTX import restores the status the export recorded. Status describes progress only; schedule health such as at risk or blocked belongs in the event text.",
+          "examples": ["done", "current", "planned"]
         }
       }
     },

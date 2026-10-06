@@ -179,12 +179,14 @@ function canonChart(value: unknown): unknown {
 }
 
 function canonEvent(event: unknown): unknown {
-  if (!isRecord(event) || !only(event, ["when", "what", "description"]) || typeof event.what !== "string") return undefined;
+  if (!isRecord(event) || !only(event, ["when", "what", "description", "status"]) || typeof event.what !== "string") return undefined;
   for (const key of ["when", "description"]) if (event[key] !== undefined && typeof event[key] !== "string") return undefined;
+  if (event.status !== undefined && !["done", "current", "planned"].includes(event.status as string)) return undefined;
   const out: Obj = {};
   if (event.when !== undefined) out.when = event.when;
   out.what = event.what;
   if (event.description !== undefined) out.description = event.description;
+  if (event.status !== undefined) out.status = event.status;
   return out;
 }
 

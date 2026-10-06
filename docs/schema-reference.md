@@ -845,6 +845,7 @@ _No named properties._
 | `when` | no | `string` | Event time, date, or sequence label. Use ISO-like values when possible, but human labels are allowed for quarters, eras, and relative milestones. |
 | `what` | yes | `string` | Short event label. |
 | `description` | no | `string` | Optional event detail. |
+| `status` | no | `enum:done \| current \| planned` | Progress of the event, drawn from the deck's own colors by both the SVG renderer and the PPTX exporter. Absent means no status and the event is drawn as a plain filled marker with normal text, which is also how 'done'... |
 
 
 ### ListItem

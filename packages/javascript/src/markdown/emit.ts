@@ -129,6 +129,8 @@ function chartCandidates(chart: Obj): string[][] {
   return [json];
 }
 
+const TIMELINE_STATUS_MARKS: Obj = { done: "[x] ", current: "[>] ", planned: "[ ] " };
+
 function timelineLines(timeline: unknown): string[] | undefined {
   const events = (Array.isArray(timeline) ? timeline : (timeline as Obj).events) as Obj[];
   const meta = Array.isArray(timeline) ? {} : (timeline as Obj);
@@ -136,7 +138,10 @@ function timelineLines(timeline: unknown): string[] | undefined {
   const body: string[] = [];
   for (const event of events) {
     for (const key of ["when", "what", "description"]) if (typeof event[key] === "string" && (/[\r\n]/.test(event[key]) || event[key] !== event[key].trim() || event[key] === "")) return undefined;
-    body.push(event.when === undefined ? event.what : `${event.when} — ${event.what}`);
+    const line = event.when === undefined ? event.what : `${event.when} — ${event.what}`;
+    // Text that already starts like a status mark cannot be told apart from one, so it stays embedded JSON.
+    if (event.status === undefined && /^\[[x> ]\]\s+\S/.test(line)) return undefined;
+    body.push(event.status === undefined ? line : `${TIMELINE_STATUS_MARKS[event.status as string]}${line}`);
     if (event.description !== undefined) body.push(`  ${event.description}`);
   }
   return fenced(info, body);

@@ -15,6 +15,8 @@ export const BLOCK_OPTION_KEYS = ["id", "type", "as", "region"] as const;
 // --- line classes ------------------------------------------------------------------------------
 
 const BLANK = /^\s*$/;
+const TIMELINE_STATUS_PREFIX = /^\[([x> ])\]\s+(?=\S)/;
+const TIMELINE_STATUS_OF_MARK: Record<string, string> = { x: "done", ">": "current", " ": "planned" };
 const FENCE_OPEN = /^( {0,3})(`{3,}|~{3,})(.*)$/;
 const SEPARATOR = /^-{3,}[ \t]*$/;
 const HEADING = /^ {0,3}(#{1,6})(?:[ \t]+(.*?))?[ \t]*$/;
@@ -623,7 +625,7 @@ class SlideParser {
       if ((key === "name" || key === "description") && typeof value === "string") meta[key] = value;
       else ctx.error("timeline-attributes", `Unknown timeline attribute ${JSON.stringify(key)}.`, "A timeline fence takes name and description.", range, this.path);
     }
-    const events: Obj[] = [];
+    const events: Obj[] = [], statuses: (string | undefined)[] = [];
     for (const line of body) {
       if (BLANK.test(line.text)) continue;
       if (/^[ \t]+\S/.test(line.text)) {
@@ -635,12 +637,19 @@ class SlideParser {
         event.description = event.description === undefined ? line.text.trim() : `${event.description} ${line.text.trim()}`;
         continue;
       }
-      const text = line.text.trim();
+      let text = line.text.trim();
+      // A task-list style prefix sets the event's status: [x] done, [>] current, [ ] planned.
+      const marked = TIMELINE_STATUS_PREFIX.exec(text);
+      const status = marked ? TIMELINE_STATUS_OF_MARK[marked[1]!] : undefined;
+      if (marked) text = text.slice(marked[0].length).trim();
       // `when — what` (a spaced em dash) is the dialect's separator; the date rules of the conversions module also apply.
       const dash = text.indexOf(" — ");
       const split = dash > 0 && text.slice(dash + 3).trim() ? { when: text.slice(0, dash).trim(), what: text.slice(dash + 3).trim() } : splitWhen(text);
       events.push(split ? { when: split.when, what: split.what } : { what: text });
+      statuses.push(status);
     }
+    // The status key goes last, after any description, which is the canonical key order.
+    events.forEach((event, index) => { if (statuses[index]) event.status = statuses[index]; });
     if (!events.length) {
       ctx.error("timeline-events", "A timeline has no events.", "Write one event per line: `2024 Q1 — Pilot`.", range, this.path);
       return;

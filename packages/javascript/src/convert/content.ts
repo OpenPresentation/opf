@@ -166,6 +166,7 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
         if (content.name) loss.note("timeline name");
         if (content.description) loss.note("timeline description");
       }
+      if (events.some((event) => event.status)) loss.note("timeline event status");
       const lines: Run[][] = [];
       for (const event of events) {
         lines.push([event.when ? `${event.when}: ${event.what}` : event.what]);
@@ -281,6 +282,7 @@ function timelineToList(timeline: Json, loss: Loss): Field {
     if (timeline.name) loss.note("timeline name");
     if (timeline.description) loss.note("timeline description");
   }
+  if (events.some((event) => event.status)) loss.note("timeline event status");
   return {
     key: "items",
     value: events.map((event) => {

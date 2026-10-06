@@ -20,7 +20,7 @@ Write a complete JSON document with `name` and `slides`. Put visible words in sl
 
 Choose one content structure per slide:
 
-- Root payloads for a simple slide: `text`, `items`, `image`, `chart`, `table`, `code`, `metric`, `quote`, or `timeline`.
+- Root payloads for a simple slide: `text`, `items`, `image`, `chart`, `table`, `code`, `metric`, `quote`, or `timeline`. Mark a roadmap's progress with `status` on the timeline events (`done`, `current`, `planned`); the engines draw it, so do not add color or schedule-health words to fake it.
 - `blocks` for a sequence that should reflow. Set `composition` only when an arrangement matters. Omit it to let the engine choose.
 - Promoted regions such as `left`, `center+right`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
 
