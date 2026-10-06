@@ -3558,7 +3558,7 @@
         },
         "x": {
           "type": "string",
-          "description": "The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column).",
+          "description": "The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column), and only when there are three or more columns: with two, the second column is the one series, plotted against row numbers. An X that leaves no series is plotted as the series with a 'chart-mapping-adapted' warning.",
           "examples": ["Spend"]
         },
         "series": {

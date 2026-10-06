@@ -711,3 +711,20 @@ describe("suggestChartNumberFix: migration help for the strict number rule", () 
     assert.equal(dataEntry.suggestChartNumberFix, suggestChartNumberFix);
   });
 });
+
+describe("XY charts with two columns", () => {
+  test("the second column is the one series against row numbers; X needs three or more columns", () => {
+    const two = resolveChartData({ type: "scatter", data: { columns: ["Point", "Revenue"], rows: [["A", 10], ["B", "20"]] } });
+    assert.deepEqual([two.columns, two.hasX, two.rows], [["Point", "Revenue"], false, [["A", 10], ["B", 20]]]);
+    assert.deepEqual(two.diagnostics, []);
+    const three = resolveChartData({ type: "scatter", data: { columns: ["Point", "Spend", "Revenue"], rows: [["A", 1, 10]] } });
+    assert.deepEqual([three.columns, three.hasX], [["Point", "Spend", "Revenue"], true]);
+    assert.equal(resolveChartData({ type: "column", data: { columns: ["Q", "A", "B"], rows: [["Q1", 1, 2]] } }).hasX, false);
+    // An explicit X that leaves no series is plotted as the series, with a warning.
+    const mapped = resolveChartData({ type: "scatter", data: { columns: ["Point", "Revenue"], rows: [["A", 10]] }, mapping: { x: "Revenue" } });
+    assert.deepEqual([mapped.columns, mapped.hasX], [["Point", "Revenue"], false]);
+    assert.deepEqual(mapped.diagnostics.map((entry) => [entry.code, entry.path]), [["chart-mapping-adapted", "/mapping/x"]]);
+    const onlyX = resolveChartData({ type: "scatter", data: { columns: ["Point", "Spend", "Revenue"], rows: [["A", 1, 10]] }, mapping: { x: "Spend", series: ["Spend"] } });
+    assert.deepEqual([onlyX.columns, onlyX.hasX], [["Point", "Spend"], false]);
+  });
+});

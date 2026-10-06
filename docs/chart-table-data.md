@@ -86,7 +86,7 @@ Validation:
 
 `chart.mapping` is `{ "category"?: string, "x"?: string, "series"?: string[] }`, naming columns after any `fields` selection:
 - `category`: the label column. Default: the first column.
-- `x`: the X column of an XY (scatter) chart. Default: the second column, today's rule (the first column when `category` names the second). A chart is XY when its type resolves (deprecated ids through their replacement) to the scatter construct of `chartOptionTarget`. An `x` equal to the category is a `chart-mapping-adapted` warning and the default is used. On a chart type without an X axis it is dropped with a `chart-mapping-adapted` warning.
+- `x`: the X column of an XY (scatter) chart. Default, today's rule: the second column (the first when `category` names the second), and only when the chart has three or more columns. With two columns there is no X column: the second column is the one series, plotted against row numbers. An `x` that leaves no series (two columns, or every series dropped) is a `chart-mapping-adapted` warning and that column is plotted as the series. A chart is XY when its type resolves (deprecated ids through their replacement) to the scatter construct of `chartOptionTarget`. An `x` equal to the category is a `chart-mapping-adapted` warning and the default is used. On a chart type without an X axis it is dropped with a `chart-mapping-adapted` warning.
 - `series`: the plotted columns, in order. Default: every column that is not `category` or `x`.
 
 An unknown name is a `chart-mapping-unknown-column` error. A series that repeats the category or X column is a `chart-mapping-adapted` warning and is dropped. Mapping only reorders and selects columns; pie, doughnut and single-series constructs still plot one series (`series-dropped`, as today).
@@ -112,14 +112,15 @@ export function inlineDatasets<T>(document: T): T;
 export function inlineTableData<T>(table: T, document?: unknown): T;
 export function inlineChartData<T>(chart: T, document?: unknown): T;
 /**
- * Resolve a chart's data to the canonical positional table: [category, (x,) ...series].
+ * Resolve a chart's data to the canonical positional table: [category, (x,) ...series]. hasX is true when columns[1] is the X
+ * column: an XY chart with three or more resolved columns (with two, the second column is the series against row numbers).
  * Category cells are kept as authored; X and series cells pass through chartNumber. Data with a single column has no
  * category: that column is the chart's values and passes through chartNumber too (with chart-value-not-numeric per cell).
  * Inline ChartData, a DatasetRef (needs the document) and mapping are resolved here.
  * options.path is the chart's JSON Pointer, the base of diagnostic paths (dataset cells report at /datasets/<id>/...).
  */
 export function resolveChartData(chart: unknown, document?: unknown, options?: { path?: string }):
-  | { ok: true; columns: string[]; formats: (string | undefined)[]; rows: (string | number | boolean | null)[][]; source?: DataSourceRef; dataset?: string; diagnostics: DataDiagnostic[] }
+  | { ok: true; columns: string[]; hasX: boolean; formats: (string | undefined)[]; rows: (string | number | boolean | null)[][]; source?: DataSourceRef; dataset?: string; diagnostics: DataDiagnostic[] }
   | { ok: false; reason: "data-not-inline" | "dataset-unknown" | "no-rows" | "no-columns"; message: string; diagnostics: DataDiagnostic[] };
 /** Resolve a table (inline or dataset-backed) to headers, rows and per-column formats. */
 export function resolveTableData(table: unknown, document?: unknown, options?: { path?: string }):

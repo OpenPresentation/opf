@@ -1107,7 +1107,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `category` | no | `string` | The label column. Default: the first column. |
-| `x` | no | `string` | The X column of a scatter chart. Default: the second column (the first when the category is the second column). |
+| `x` | no | `string` | The X column of a scatter chart. Default: the second column (the first when the category is the second column), only with three or more columns; with two, the second column is the series against row numbers. |
 | `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or X. |
 
 

@@ -59,6 +59,11 @@ export type ResolvedChartData =
       ok: true;
       /** Column names in canonical order: category, then (scatter only) X, then every series. */
       columns: string[];
+      /**
+       * True when `columns[1]` is the X column: an XY chart with three or more resolved columns. An XY chart with two
+       * columns has no X column; its second column is the one series, plotted against row numbers (the legacy rule).
+       */
+      hasX: boolean;
       /** The number format of each column (from its DataColumn), aligned with `columns`. */
       formats: (string | undefined)[];
       /** Category cells as authored; X and series cells (and a lone column, which has no category) passed through `chartNumber` (null is a gap). */
@@ -500,8 +505,10 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
       diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(mappingPath, 'x'), message: `the X column ${JSON.stringify(names[category])} is also the category column; the default X column is used` });
       mapped = undefined;
     }
-    x = mapped ?? (category === 1 ? 0 : 1);
-    if (x >= names.length || x === category) x = undefined;
+    // The default X column needs three or more columns (the legacy rule of both engines): with two, the second column
+    // is the one series, plotted against row numbers. An X that leaves no series is adapted below.
+    x = mapped ?? (names.length > 2 ? (category === 1 ? 0 : 1) : undefined);
+    if (x !== undefined && (x >= names.length || x === category)) x = undefined;
   } else if (mapping?.x !== undefined) {
     diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(mappingPath, 'x'), message: `a '${String(record(chart) ? chart.type : '')}' chart has no X value axis; mapping.x is ignored` });
   }
@@ -523,6 +530,12 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
       series.push(found);
     });
   } else series = names.map((_, index) => index).filter(index => index !== category && index !== x);
+  // An X column needs at least one series beside it; otherwise it is plotted as the series against row numbers.
+  if (x !== undefined && !series.length) {
+    diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(mappingPath, mapping?.x !== undefined ? 'x' : 'series'), message: `no series is left beside the X column ${JSON.stringify(names[x])}; it is plotted as the series against row numbers` });
+    series = [x];
+    x = undefined;
+  }
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
   // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.
@@ -540,6 +553,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
   return {
     ok: true,
     columns: order.map(index => names[index]!),
+    hasX: x !== undefined,
     formats: order.map(index => formats[index]),
     rows: out,
     ...(source ? { source } : {}),
