@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.12.4 (2026-10-06)
+
+- RR-20 (install fix, no API or output change): `engines.node` is now the open-ended `>=22` instead of `24.x`. npm's install picker skips a version whose `engines.node` does not match the running Node and silently installs the newest one that does, so on Node 26 (current) or Node 22 `npm i @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx` installed the 0.7.0 packages with core 0.9.0 instead of the latest release. The unit suite and the published-dependency check pass on Node 22, 24 and 26, and CI runs them on Node 22 and 26 (job `node-range`) next to the Node 24 package job; browser, golden and native gates stay on Node 24.
+
 ## 0.12.3 (2026-10-05)
 
 - RR-53 (tooling, no package change): `npm run test:contract` runs the contract suite, the part of `npm test` that exercises core's APIs; core's pull-request checks run it instead of the full suite, while core's merge queue, pushes to main and nightly run `npm test`. `test/suites.json` `contractExclude` lists, with a reason each, the tests it leaves out, and `node scripts/run-tests.mjs --suite contract` selects it.
