@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.12.2 (2026-10-06)
+
+- RR-20: the renderer's default golden baseline records the examples of core 0.12.2 (the core floor), so the publish workflow's golden gate accepts the registry core again. Only the corpus digest changes; all 805 raster hashes are identical. 0.12.1 was tagged but not published because that gate failed on the digest of the core 0.12.0 examples.
+
 ## 0.12.1 (2026-10-05)
 
 - RR-53 (tooling, no package change): `npm run test:contract` runs the contract suite, the part of `npm test` that exercises core's APIs; core's pull-request checks run it instead of the full suite, while core's merge queue, pushes to main and nightly run `npm test`. `test/suites.json` `contractExclude` lists, with a reason each, the tests it leaves out, and `node scripts/run-tests.mjs --suite contract` selects it.
