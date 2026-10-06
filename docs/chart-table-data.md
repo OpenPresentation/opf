@@ -20,6 +20,8 @@ A document that uses none of the new fields validates, previews and exports byte
 
 `NumberFormat` is a string with the `NumberVariable.format` syntax: an optional literal prefix, a numeric part made of `#`, `0`, `,` (grouping) and `.` (decimals), and an optional literal suffix. A `%` in the prefix or suffix multiplies the value by 100. Examples: `#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`. An invalid pattern is a `number-format-invalid` error. A format applies only to number values; strings, booleans, `null` and rich runs display unchanged.
 
+Two spellings display differently in Excel, so prefer the alternatives in charts that are exported: optional decimals only (`0.##`) show a whole number as `5` in core and the preview but as `5.` (with a trailing point) in Excel, and an all-`#` integer part (`#`, `#,###`) shows zero as `0` in core but as nothing in Excel. Use `0.0#`-style decimals with at least one `0`, or a whole-number format, and an integer part that ends in `0`.
+
 ### Columns
 
 `DataColumn` is `{ "name": string, "format"?: NumberFormat }`. Anywhere a chart or dataset column is a string, it may be a `DataColumn`; the string form is `{ "name": value }` with no format.
@@ -94,7 +96,7 @@ An unknown name is a `chart-mapping-unknown-column` error. A series that repeats
 Exported from `@openpresentation/opf` and `@openpresentation/opf/data` (module `src/chart-data.ts`; the resolvers are also on `@openpresentation/opf/composition`). Inputs are typed `unknown` so engines can pass any parsed chart, table or document; the result types are exported (`ResolvedChartData`, `ResolvedTableData`, `DataDiagnostic`, `DataColumn`, `DataSourceRef`, `Dataset`, `DatasetRef`, `ChartMapping`, `DataCellValue`, `DataTableCell`, `DataTableHeader`, `DataStyledCell`).
 
 ```ts
-/** Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap). */
+/** Strict chart number: finite numbers, and strings in strict decimal syntax (trimmed). Everything else is null (a gap), including "+5", ".5", "5.", "007" and integer strings beyond the safe integer range. */
 export function chartNumber(value: unknown): number | null;
 /** Format a number with a NumberFormat; an absent or invalid format prints the General form (String(value)). */
 export function formatDataNumber(value: number, format?: string): string;
@@ -219,7 +221,8 @@ Wanted before release:
 - formatted data labels and value axes;
 - Edit Data shows the workbook cell formats with no repair prompt;
 - no repair prompt for the frame `custDataLst`;
-- after a plain save in PowerPoint, the data tags and cache hash survive.
+- after a plain save in PowerPoint, the data tags and cache hash survive;
+- the two spellings above (`0.##` on a whole number, `#` on zero) show as described.
 
 Sample decks are written by the PPTX branch under `artifacts/rr-54-native/`.
 

@@ -24,7 +24,7 @@ Chart values are numbers. A string counts only in strict decimal syntax (`"12"`,
 
 Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. Promoted region values are content payloads, for example `"left":{"text":"Context"}`.
 
-The presentation root accepts identity, organizations, speakers, author, audience, purpose, language, tone, takeaway, duration, tags, design, narrative, slides, assets, catalogs, and extensions. Query the schema for object alternatives and required fields. Do not put old `version`/`meta` wrappers into the current canonical document.
+The presentation root accepts identity, organizations, speakers, author, audience, purpose, language, tone, takeaway, duration, tags, design, variables, template, narrative, slides, references, datasets, assets, catalogs, and extensions. Query the schema for object alternatives and required fields. Do not put old `version`/`meta` wrappers into the current canonical document.
 
 Assets may be source strings or asset metadata objects. Reusable references use `asset:<id>`. Inline catalog records live in `catalogs.<kind>.records`; record `$schema` identifies its companion schema. Asset and catalog sources are declarations, not evidence that a renderer fetched them.
 
