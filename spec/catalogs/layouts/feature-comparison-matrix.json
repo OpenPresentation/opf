@@ -4,20 +4,12 @@
   "name": "Feature_Comparison_Matrix",
   "summary": "Rows of features vs. columns of options with check/X marks. The no-argument way to show what wins on paper.",
   "description": "Rows of features vs. columns of options with check/X marks. The no-argument way to show what wins on paper.",
-  "contentType": "Table",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

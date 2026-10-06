@@ -4,20 +4,12 @@
   "name": "Quote_Highlight",
   "summary": "Large typography for testimonials or key statements. Add authority and emphasis to your message.",
   "description": "Large typography for testimonials or key statements. Add authority and emphasis to your message.",
-  "contentType": "Quote",
-  "contentMultiple": "1x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

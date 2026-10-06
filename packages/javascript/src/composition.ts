@@ -225,8 +225,8 @@ export interface ComposedItem {
 }
 /**
  * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
- * design.slideImage, or when the deck sets one and either the slide's layout record declares
- * slideImage: true or the slide's root image is the same source.
+ * design.slideImage, or when the deck sets one and either the slide's layout record sets
+ * design.slideImage, or the slide's root image is the same source.
  * Content composes in the part of the slide the image does not occupy; 'background' leaves the whole slide.
  */
 export interface ComposedSlideImage {
@@ -455,8 +455,8 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const configured: unknown = local ? own.slideImage : deck.slideImage;
   if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
   const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
-  const alignment = typeof layout.slideImageAlignment === 'string' ? layout.slideImageAlignment.toLowerCase() : undefined;
-  const authoredPosition = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
+  const layoutImage = record(record(layout.design).slideImage), layoutPosition = layoutImage.position;
+  const authoredPosition = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === layoutPosition) ?? 'background') as SlideImagePosition;
   if (!SLIDE_IMAGE_POSITIONS.includes(authoredPosition)) return undefined;
   // A right-to-left deck mirrors a banded image: `left` is the start side, drawn at the right.
   const mirrorSide = <T extends string>(side: T): T => !rtl ? side : side === 'left' ? 'right' as T : side === 'right' ? 'left' as T : side;
@@ -466,7 +466,7 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
   // A deck-wide slide image applies where the layout reserves one, or where the slide's own image is that
   // same source. Other slides keep their geometry, so existing decks with an unused deck value are unchanged.
-  if (!local && layout.slideImage !== true && !sameSource) return undefined;
+  if (!local && record(layout.design).slideImage === undefined && !sameSource) return undefined;
   const replacesContent = root !== undefined && (designSource === undefined || sameSource);
   const value = replacesContent ? root : designSource;
   const source = assetSource(value);
@@ -2279,21 +2279,22 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
   // The root image drawn as the slide image no longer needs its content slot.
-  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'picture'); if (picture >= 0) placeholders.splice(picture, 1); }
+  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'image'); if (picture >= 0) placeholders.splice(picture, 1); }
   // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
   // geometry contract), then design.contentDirection (slide, then deck), then the layout record's
-  // slideLayoutDirection, then auto. pptx.gallery derives contentDirection from slideLayoutDirection, so
-  // the hint ranks with that direction and never flattens a layout's own grid.
+  // design.contentDirection, then auto. The slide and deck value rank with the layout's own direction, so
+  // the hint never flattens a layout's own grid.
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = designHint('contentDirection')?.value;
   const directionMode: Composition['mode'] | undefined = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : undefined;
-  const layoutDirectionMode: Composition['mode'] = layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto";
-  // design.chartPrimary (slide, deck, then the layout's contentTypeChartPrimary) splits the root into a
+  const layoutDirection = record(layout.design).contentDirection;
+  const layoutDirectionMode: Composition['mode'] = layoutDirection === "vertical" ? "column" : layoutDirection === "horizontal" ? "row" : "auto";
+  // design.chartPrimary (slide, deck, then the layout's design.chartPrimary) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
   // Unlike contentDirection it is an author opt-in (no bundled layout derives it), so it overrides the
   // layout record's composition, including its columns and weights.
-  const chartHint = designHint('chartPrimary')?.value ?? (typeof layout.contentTypeChartPrimary === 'string' ? layout.contentTypeChartPrimary.toLowerCase() : undefined);
+  const chartHint = designHint('chartPrimary')?.value ?? record(layout.design).chartPrimary;
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;

@@ -130,7 +130,7 @@ test('content slides never get an automatic logo', () => {
     [{title: 'Only a title'}, text1x],
     [{title: 'Blocks', blocks: [{text: 'a'}, {text: 'b'}]}, undefined],
     [{title: 'Regions', left: {text: 'a'}, right: {text: 'b'}}, undefined],
-    [{title: 'Image', image: asset('photo')}, {id: 'image-1x', placeholders: [{type: 'title'}, {type: 'picture'}]}],
+    [{title: 'Image', image: asset('photo')}, {id: 'image-1x', placeholders: [{type: 'title'}, {type: 'image'}]}],
   ];
   for (const [slide, layout] of cases) {
     const result = composeSlide(slide, {layout, presentation});

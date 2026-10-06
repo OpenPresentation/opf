@@ -4,20 +4,12 @@
   "name": "One_Column_Explainer",
   "summary": "A single block of body text with a headline. Use when a concept needs paragraph-length explanation, not bullets.",
   "description": "A single block of body text with a headline. Use when a concept needs paragraph-length explanation, not bullets.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

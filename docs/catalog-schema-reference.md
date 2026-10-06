@@ -322,22 +322,8 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this layout is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and default l... |
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
-| `contentType` | no | `enum:Title \| Text \| List \| Image \| Number \| Metric \| Chart \| Table \| Code \| Video \| Quote \| Timeline` | Primary kind of content the layout holds. Drives pickers and AI placement decisions. Metric is the canonical numeric/KPI category; Number remains an accepted legacy label. |
-| `contentMultiple` | no | `enum:None \| 1x \| 2x \| 3x \| 4x \| 5x \| 6x` | How many parallel content blocks the layout exposes ('2x' = two-column, '3x' = three-up, etc.). |
-| `contentAlignment` | no | `enum:None \| Left \| Center` | Default horizontal alignment of the content area. |
-| `contentBox` | no | `boolean` | Whether the content area is rendered inside a visible box / card. |
-| `contentTypeChartPrimary` | no | `enum:None \| Top \| Bottom \| Left \| Right` | For chart layouts, where the primary chart sits relative to the rest of the content. |
-| `contentTypeImageFill` | no | `enum:None \| Crop \| Fit` | For image layouts, how the image fills its slot. |
-| `contentTypeListBullet` | no | `enum:None \| Character \| Image` | For list layouts, how bullets are rendered. |
-| `contentTypeListHeading` | no | `boolean` | For list layouts, whether each list item carries a heading. |
-| `slideTag` | no | `boolean` | Whether the layout includes a small slide-level tag / label region above or near the title. |
-| `slideTitle` | no | `boolean` | Whether the layout includes a slide title region. |
-| `slideSubtitle` | no | `boolean` | Whether the layout includes a slide-level subtitle or supporting-description region. When placeholders is present, this is true exactly when the layout exposes a placeholder with type 'subtitle'. |
-| `slideTitleAlignment` | no | `enum:None \| Left \| Center` | Horizontal alignment of the slide title region. |
-| `slideImage` | no | `boolean` | Whether the layout includes a dedicated slide-level image region (separate from any content image). |
-| `slideImageAlignment` | no | `enum:None \| Top \| Bottom \| Left \| Right \| Background` | Where the slide-level image sits relative to the content. |
-| `slideLayoutDirection` | no | `enum:None \| Horizontal \| Vertical` | Axis along which the layout's primary regions are arranged. |
-| `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. The engine fills 'title', 'subtitle', and 'tag' placeholders from Slide.title, Slide.subtitle, and Slide.tag. Other placeholders are content-kind hints for renderers and pickers. Sl... |
+| `design` | no | `ref:DesignHints` | The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Cor... |
+| `placeholders` | no | `array<ref:Placeholder>` | Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutCon... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 | `composition` | no | `ref:Composition` |  |
@@ -348,11 +334,28 @@ OPF documents usually reference these records with string ids such as `design.th
 
 - Type: `object`
 - Required fields: `type`
-- Purpose: A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; other placeholders describe the intended content kind for that region. The array order in the surrounding 'placeholders' field preserves layout region order.
+- Purpose: A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; every other placeholder describes the content kind that region holds. The array order in the surrounding 'placeholders' field preserves layout region order.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `enum:title \| subtitle \| tag \| text \| metric \| quote \| timeline \| list \| chart \| picture \| table \| media \| diagram \| code` | OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' is a numeric/KPI content region filled by a metric payload, including its optional label, description, unit, delta, and trend. The... |
+| `type` | yes | `enum:title \| subtitle \| tag \| text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' a... |
+
+#### DesignHints
+
+- Type: `object`
+- Required fields: none
+- Purpose: Design hints a layout carries. The keys and lowercase values are those of the deck's design and a slide's design in opf.schema.json (Design), so a slide overrides a layout by the same name and layout.design can be copied into slide.design unchanged. An absent key means the layout has no opinion. Only the keys the layout sets are stored. scripts/check-spec-integrity.mjs verifies that every key here has the same typ...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `titleAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the title placeholder. |
+| `contentAlignment` | no | `enum:left \| center \| right` | Horizontal alignment of the body regions. |
+| `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
+| `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Composition applies it when neither the slide nor this layout's composition sets a mode, below the slide's and the deck's... |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. |
+| `imageFill` | no | `enum:crop \| fit` | How images fill their region: 'crop' covers the region, 'fit' shows the whole image. |
+| `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
+| `slideImage` | no | `object` | A slide-level image region the layout reserves, separate from any content image. Its presence is what lets a deck-wide design.slideImage apply to slides on this layout. The image itself comes from the slide or the dec... |
 
 #### Composition
 

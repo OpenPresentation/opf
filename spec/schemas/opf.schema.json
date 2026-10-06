@@ -1018,22 +1018,22 @@
               }
             }
           ],
-          "description": "Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a deck-level value. A root image with the same source becomes the slide image instead of a content item. Blur, shadows, soft edges, background removal and device artwork are not part of the treatment vocabulary; see docs/image-treatments.md."
+          "description": "Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout record sets design.slideImage or whose root image is the same source as a deck-level value. A root image with the same source becomes the slide image instead of a content item. Blur, shadows, soft edges, background removal and device artwork are not part of the treatment vocabulary; see docs/image-treatments.md."
         },
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
-          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then this value (slide design, then deck design), then the layout record's slideLayoutDirection, then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
+          "description": "Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' is row. Precedence: composition.mode (the slide's own, else the layout record's geometry contract), then this value (slide design, then deck design), then the layout record's design.contentDirection, then automatic selection. A layout that carries a composition.mode keeps its grid or direction whatever this value says. Promoted regions (left, top:left, ...) keep their explicit geometry and nested groups keep their own composition."
         },
         "chartPrimary": {
           "type": "string",
           "enum": ["none", "top", "bottom", "left", "right"],
-          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's contentTypeChartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight."
+          "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight."
         },
         "imageFill": {
           "type": "string",
           "enum": ["crop", "fit"],
-          "description": "How picture placeholders fill their allocated region."
+          "description": "How images fill their allocated region: crop covers the region, fit shows the whole image."
         },
         "listBullet": {
           "type": "string",

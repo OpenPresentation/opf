@@ -72,157 +72,14 @@
         "Two equal-width columns under a left-aligned slide title. Use when comparing two ideas, before/after pairs, or paired text + image content."
       ]
     },
-    "contentType": {
-      "type": "string",
-      "enum": [
-        "Title",
-        "Text",
-        "List",
-        "Image",
-        "Number",
-        "Metric",
-        "Chart",
-        "Table",
-        "Code",
-        "Video",
-        "Quote",
-        "Timeline"
-      ],
-      "description": "Primary kind of content the layout holds. Drives pickers and AI placement decisions. Metric is the canonical numeric/KPI category; Number remains an accepted legacy label."
-    },
-    "contentMultiple": {
-      "type": "string",
-      "enum": [
-        "None",
-        "1x",
-        "2x",
-        "3x",
-        "4x",
-        "5x",
-        "6x"
-      ],
-      "description": "How many parallel content blocks the layout exposes ('2x' = two-column, '3x' = three-up, etc.)."
-    },
-    "contentAlignment": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Left",
-        "Center"
-      ],
-      "description": "Default horizontal alignment of the content area."
-    },
-    "contentBox": {
-      "type": "boolean",
-      "description": "Whether the content area is rendered inside a visible box / card.",
-      "examples": [
-        false,
-        true
-      ]
-    },
-    "contentTypeChartPrimary": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Top",
-        "Bottom",
-        "Left",
-        "Right"
-      ],
-      "description": "For chart layouts, where the primary chart sits relative to the rest of the content."
-    },
-    "contentTypeImageFill": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Crop",
-        "Fit"
-      ],
-      "description": "For image layouts, how the image fills its slot."
-    },
-    "contentTypeListBullet": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Character",
-        "Image"
-      ],
-      "description": "For list layouts, how bullets are rendered."
-    },
-    "contentTypeListHeading": {
-      "type": "boolean",
-      "description": "For list layouts, whether each list item carries a heading.",
-      "examples": [
-        false,
-        true
-      ]
-    },
-    "slideTag": {
-      "type": "boolean",
-      "description": "Whether the layout includes a small slide-level tag / label region above or near the title.",
-      "examples": [
-        false,
-        true
-      ]
-    },
-    "slideTitle": {
-      "type": "boolean",
-      "description": "Whether the layout includes a slide title region.",
-      "examples": [
-        true,
-        false
-      ]
-    },
-    "slideSubtitle": {
-      "type": "boolean",
-      "description": "Whether the layout includes a slide-level subtitle or supporting-description region. When placeholders is present, this is true exactly when the layout exposes a placeholder with type 'subtitle'.",
-      "examples": [
-        false,
-        true
-      ]
-    },
-    "slideTitleAlignment": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Left",
-        "Center"
-      ],
-      "description": "Horizontal alignment of the slide title region."
-    },
-    "slideImage": {
-      "type": "boolean",
-      "description": "Whether the layout includes a dedicated slide-level image region (separate from any content image).",
-      "examples": [
-        false,
-        true
-      ]
-    },
-    "slideImageAlignment": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Top",
-        "Bottom",
-        "Left",
-        "Right",
-        "Background"
-      ],
-      "description": "Where the slide-level image sits relative to the content."
-    },
-    "slideLayoutDirection": {
-      "type": "string",
-      "enum": [
-        "None",
-        "Horizontal",
-        "Vertical"
-      ],
-      "description": "Axis along which the layout's primary regions are arranged."
+    "design": {
+      "$ref": "#/$defs/DesignHints",
+      "description": "The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Core composition applies chartPrimary, contentDirection and slideImage.position from the layout record, below the slide's design and the deck's design (a layout's composition.mode still ranks above contentDirection). titleAlignment, contentAlignment, contentBox, imageFill and listBullet are not applied from the record by composition or by the render and PPTX engines: they describe how the layout is meant to be drawn, and a host that wants them applies them by copying them into design."
     },
     "placeholders": {
       "type": "array",
       "items": { "$ref": "#/$defs/Placeholder" },
-      "description": "Ordered regions the layout exposes. The engine fills 'title', 'subtitle', and 'tag' placeholders from Slide.title, Slide.subtitle, and Slide.tag. Other placeholders are content-kind hints for renderers and pickers. Slide content itself lives either in root payload fields or promoted region keys on Slide. Chrome — slide number, footer, date — is not included here; it is owned by Design.header / Design.footer."
+      "description": "Ordered regions the layout exposes. This is the single source of truth for what the layout holds: the content kind, the number of body regions and whether it has a title, subtitle or tag are derived from it (layoutContent in @openpresentation/opf), never stored separately. The engine fills 'title', 'subtitle' and 'tag' placeholders from Slide.title, Slide.subtitle and Slide.tag. The other placeholders are content-kind regions that composition uses to size the body and that pickers use to match layouts. Slide content itself lives either in root payload fields or promoted region keys on Slide. Chrome (slide number, footer, date) is not included here; it is owned by Design.header / Design.footer."
     },
     "tags": {
       "type": "array",
@@ -285,7 +142,7 @@
       "required": [
         "type"
       ],
-      "description": "A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; other placeholders describe the intended content kind for that region. The array order in the surrounding 'placeholders' field preserves layout region order.",
+      "description": "A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; every other placeholder describes the content kind that region holds. The array order in the surrounding 'placeholders' field preserves layout region order.",
       "properties": {
         "type": {
           "type": "string",
@@ -294,18 +151,102 @@
             "subtitle",
             "tag",
             "text",
+            "list",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "code",
             "metric",
             "quote",
-            "timeline",
-            "list",
-            "chart",
-            "picture",
-            "table",
-            "media",
-            "diagram",
-            "code"
+            "timeline"
           ],
-          "description": "OPF placeholder kind. 'text' and 'list' are flexible textual content regions. 'metric' is a numeric/KPI content region filled by a metric payload, including its optional label, description, unit, delta, and trend. The named kinds describe a specific content role used by pickers, AI generation, and engine defaulting. 'picture' and legacy 'diagram' use image payloads; 'media' uses video. Quote and timeline use their corresponding payload fields."
+          "description": "The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' and 'tag' are the heading kinds and bind to Slide.title, Slide.subtitle and Slide.tag. 'text' holds text and bullets; 'list' holds items. 'image' is filled by an image payload and 'video' by a video payload. 'metric', 'quote', 'timeline', 'chart', 'table' and 'code' are filled by the payload of the same name."
+        }
+      }
+    },
+    "DesignHints": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Design hints a layout carries. The keys and lowercase values are those of the deck's design and a slide's design in opf.schema.json (Design), so a slide overrides a layout by the same name and layout.design can be copied into slide.design unchanged. An absent key means the layout has no opinion. Only the keys the layout sets are stored. scripts/check-spec-integrity.mjs verifies that every key here has the same type and values as its Design counterpart.",
+      "properties": {
+        "titleAlignment": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "description": "Horizontal alignment of the title placeholder."
+        },
+        "contentAlignment": {
+          "type": "string",
+          "enum": [
+            "left",
+            "center",
+            "right"
+          ],
+          "description": "Horizontal alignment of the body regions."
+        },
+        "contentBox": {
+          "type": "boolean",
+          "description": "Whether the body regions are drawn inside a visible card or surface."
+        },
+        "contentDirection": {
+          "type": "string",
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
+          "description": "Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Composition applies it when neither the slide nor this layout's composition sets a mode, below the slide's and the deck's design.contentDirection and above automatic selection."
+        },
+        "chartPrimary": {
+          "type": "string",
+          "enum": [
+            "none",
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ],
+          "description": "Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there."
+        },
+        "imageFill": {
+          "type": "string",
+          "enum": [
+            "crop",
+            "fit"
+          ],
+          "description": "How images fill their region: 'crop' covers the region, 'fit' shows the whole image."
+        },
+        "listBullet": {
+          "type": "string",
+          "enum": [
+            "character",
+            "image"
+          ],
+          "description": "Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet."
+        },
+        "slideImage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "position"
+          ],
+          "description": "A slide-level image region the layout reserves, separate from any content image. Its presence is what lets a deck-wide design.slideImage apply to slides on this layout. The image itself comes from the slide or the deck design.",
+          "properties": {
+            "position": {
+              "type": "string",
+              "enum": [
+                "background",
+                "top",
+                "bottom",
+                "left",
+                "right"
+              ],
+              "description": "Where the slide-level image sits relative to the content. 'background' is a full-bleed image behind the content; the other positions give the image a band along that edge. Used when the slide's or deck's design.slideImage gives no position."
+            }
+          }
         }
       }
     },

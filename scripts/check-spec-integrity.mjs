@@ -4,7 +4,8 @@
 // HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
 // reduction (one non-deprecated record per Aspose.Slides ChartType), the
 // default-catalog snapshot's manifest hashes (spec/catalogs/manifest.json), and
-// deprecation links in every other kind.
+// deprecation links in every other kind, and layout-record design hints against
+// the deck's Design.
 //
 // Zero external dependencies by design. Run via `pnpm check:spec` (root) or
 // `node scripts/check-spec-integrity.mjs` directly. Exits non-zero with a
@@ -432,6 +433,47 @@ async function checkDeprecationLinks() {
   }
 }
 
+// (i) Layout records share the deck's design vocabulary (FA-01). layout.schema.json's DesignHints repeats the
+// keys of opf.schema.json's Design that a layout can carry, and a cross-file $ref cannot express that subset,
+// so this rule keeps the two copies from drifting: every DesignHints key must exist in Design with the same
+// type and enum values (slideImage compares the position enum of its object form). Bundled layout records must
+// carry only fields the layout schema defines, so a removed field (contentType, slideTitle, ...) cannot come back.
+async function checkLayoutDesignHints(opfSchema) {
+  const layoutSchema = await readJson(path.join(schemasRoot, "layout.schema.json"));
+  const hints = layoutSchema.$defs?.DesignHints?.properties;
+  const design = opfSchema.$defs?.Design?.properties;
+  if (!hints || !design) {
+    fail("[i] layout.schema.json $defs/DesignHints or opf.schema.json $defs/Design is missing");
+    return;
+  }
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  for (const [key, hint] of Object.entries(hints)) {
+    const counterpart = design[key];
+    if (!counterpart) {
+      fail(`[i] layout.schema.json DesignHints.${key} has no counterpart in opf.schema.json Design`);
+      continue;
+    }
+    if (key === "slideImage") {
+      const object = (counterpart.oneOf ?? []).find((option) => option.properties?.position);
+      if (!same(hint.properties?.position?.enum, object?.properties?.position?.enum)) {
+        fail("[i] DesignHints.slideImage.position values differ from Design.slideImage.position");
+      }
+      continue;
+    }
+    if (hint.type !== counterpart.type || !same(hint.enum, counterpart.enum)) {
+      fail(`[i] DesignHints.${key} type/values differ from Design.${key}`);
+    }
+  }
+  const layoutDir = path.join(catalogsRoot, "layouts");
+  const known = new Set(Object.keys(layoutSchema.properties));
+  for (const file of await listJsonRecordFiles(layoutDir)) {
+    const record = await readJson(path.join(layoutDir, file));
+    for (const key of Object.keys(record)) {
+      if (!known.has(key) && !key.startsWith("x-")) fail(`[i] layouts/${file}: '${key}' is not a layout schema field`);
+    }
+  }
+}
+
 async function main() {
   const opfSchema = await readJson(path.join(schemasRoot, "opf.schema.json"));
 
@@ -443,6 +485,7 @@ async function main() {
   await checkChartTypesAsposeSupported();
   await checkSnapshotManifest();
   await checkDeprecationLinks();
+  await checkLayoutDesignHints(opfSchema);
 
   if (failures.length > 0) {
     process.stderr.write(`spec integrity check failed: ${failures.length} problem(s) found\n\n`);

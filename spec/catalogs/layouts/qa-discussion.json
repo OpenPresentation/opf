@@ -4,20 +4,10 @@
   "name": "Qa_Discussion",
   "summary": "Intentional pause for questions. Frames the conversation and shows you expect dialogue, not monologue.",
   "description": "Intentional pause for questions. Frames the conversation and shows you expect dialogue, not monologue.",
-  "contentType": "Title",
-  "contentMultiple": "None",
-  "contentAlignment": "None",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": true,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "None",
+  "design": {
+    "titleAlignment": "left",
+    "contentBox": false
+  },
   "placeholders": [
     {
       "type": "title"

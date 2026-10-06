@@ -4,20 +4,12 @@
   "name": "Funnel_Pyramid",
   "summary": "Tapered shape showing progression, conversion, or hierarchy. Visualizes stages, filtering, or organizational levels.",
   "description": "Tapered shape showing progression, conversion, or hierarchy. Visualizes stages, filtering, or organizational levels.",
-  "contentType": "List",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

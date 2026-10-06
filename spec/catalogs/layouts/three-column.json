@@ -4,20 +4,12 @@
   "name": "Three_Column",
   "summary": "Content organized into three parallel sections. Ideal for three pillars, triads, or step-by-step progressions.",
   "description": "Content organized into three parallel sections. Ideal for three pillars, triads, or step-by-step progressions.",
-  "contentType": "Text",
-  "contentMultiple": "3x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
