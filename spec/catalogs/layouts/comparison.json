@@ -4,20 +4,12 @@
   "name": "Comparison",
   "summary": "Side-by-side evaluation of two options, products, or states. Makes differences and advantages visually obvious.",
   "description": "Side-by-side evaluation of two options, products, or states. Makes differences and advantages visually obvious.",
-  "contentType": "List",
-  "contentMultiple": "2x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

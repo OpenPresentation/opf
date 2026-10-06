@@ -147,7 +147,7 @@ test('slide image bands: the cover centers inside the image-safe area', () => {
   const padding = 0.08 * 720;
   for (const [position, region] of Object.entries(regions)) {
     const presentation = {design: {slideImage: {src: photo, position}}};
-    const result = composeSlide({title: 'Cover beside a photo', subtitle: 'Centered in what is left'}, {presentation, layout: {...titleSubtitle, slideImage: true}});
+    const result = composeSlide({title: 'Cover beside a photo', subtitle: 'Centered in what is left'}, {presentation, layout: {...titleSubtitle, design: {slideImage: {position: 'background'}}}});
     assert.equal(result.slideImage.position, position);
     const area = {
       left: position === 'left' ? region.width : 0, right: position === 'right' ? region.x : 1280,
@@ -162,20 +162,20 @@ test('slide image bands: the cover centers inside the image-safe area', () => {
     }
   }
   // Background images do not reserve an area; the cover centers on the whole slide.
-  const background = composeSlide({title: 'Cover on a photo', subtitle: 'Full bleed'}, {presentation: {design: {slideImage: {src: photo, position: 'background'}}}, layout: {...titleSubtitle, slideImage: true}});
+  const background = composeSlide({title: 'Cover on a photo', subtitle: 'Full bleed'}, {presentation: {design: {slideImage: {src: photo, position: 'background'}}}, layout: {...titleSubtitle, design: {slideImage: {position: 'background'}}}});
   const {top, bottom} = headingGroup(background);
   assert.ok(Math.abs((top + bottom) / 2 - 360) < 1e-6);
 });
 
 test('a root image drawn as the slide image counts as body and keeps the content origin', () => {
   const presentation = {design: {slideImage: {src: photo, position: 'left'}}};
-  const layout = {...titleSubtitle, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'picture'}]};
+  const layout = {...titleSubtitle, placeholders: [{type: 'title'}, {type: 'subtitle'}, {type: 'image'}]};
   const result = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {presentation, layout});
   assert.equal(result.slideImage.replacesContent, true);
   const padding = 0.08 * 720;
   assert.ok(Math.abs(byField(result, 'title').box.y - padding) < 1e-6);
   // The same slide without the image is a cover.
-  const cover = composeSlide({title: 'Image slide', subtitle: 'Not a cover'}, {presentation, layout: {...titleSubtitle, slideImage: true}});
+  const cover = composeSlide({title: 'Image slide', subtitle: 'Not a cover'}, {presentation, layout: {...titleSubtitle, design: {slideImage: {position: 'background'}}}});
   assert.ok(byField(cover, 'title').box.y > padding + 1);
   // Picture-slot removal is untouched: no picture placeholder box remains for the replaced image.
   assert.equal(result.items.filter(item => item.field === 'image').length, 0);

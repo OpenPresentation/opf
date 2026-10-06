@@ -64,7 +64,7 @@ test('fixed modes and promoted regions retain placement with no invented search'
   assert.deepEqual(result.explanation.decisions[1].candidates,[]);
   assert.equal(result.explanation.decisions[1].selectedColumns,1);
   assert.ok(Math.abs(result.items[0].box.height/result.items[1].box.height-2)<1e-5);
-  const inherited=composeSlide({blocks:blocks(2)},{explain:true,layout:{slideLayoutDirection:'Vertical'}});
+  const inherited=composeSlide({blocks:blocks(2)},{explain:true,layout:{design:{contentDirection:'vertical'}}});
   assert.equal(inherited.explanation.decisions[0].reason,'configured-mode');
   assert.equal(inherited.explanation.decisions[0].mode,'column');
 });

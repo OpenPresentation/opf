@@ -4,20 +4,12 @@
   "name": "Before_After",
   "summary": "Two-panel layout showing transformation. Proves impact by making change visible and concrete.",
   "description": "Two-panel layout showing transformation. Proves impact by making change visible and concrete.",
-  "contentType": "Text",
-  "contentMultiple": "2x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

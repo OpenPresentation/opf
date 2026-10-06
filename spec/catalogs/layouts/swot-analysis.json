@@ -4,20 +4,12 @@
   "name": "Swot_Analysis",
   "summary": "2x2 matrix for Strengths, Weaknesses, Opportunities, Threats. A strategic planning classic.",
   "description": "2x2 matrix for Strengths, Weaknesses, Opportunities, Threats. A strategic planning classic.",
-  "contentType": "List",
-  "contentMultiple": "4x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

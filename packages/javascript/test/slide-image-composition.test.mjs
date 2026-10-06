@@ -15,14 +15,14 @@ test('deck slide images apply to reserving layouts and same-source slide images'
   assert.equal(plain.slideImage, undefined);
   // Unchanged geometry: existing decks with an unused deck-level slideImage keep their layout.
   assert.deepEqual(plain, composeSlide(slide, {}));
-  assert.equal(composeSlide(slide, { presentation, layout: { slideImage: false } }).slideImage, undefined);
-  const reserved = composeSlide(slide, { presentation, layout: { slideImage: true } });
+  assert.equal(composeSlide(slide, { presentation, layout: { design: {} } }).slideImage, undefined);
+  const reserved = composeSlide(slide, { presentation, layout: { design: { slideImage: { position: 'background' } } } });
   assert.equal(reserved.slideImage.path, 'design.slideImage');
   assert.equal(reserved.slideImage.sourcePath, 'design.slideImage');
   assert.equal(reserved.slideImage.value, photo);
   assert.equal(reserved.slideImage.replacesContent, false);
   // The slide's own image naming the same source links it to the deck treatment without a layout opt-in.
-  const linked = composeSlide({ title: 'Heading', image: { src: photo, alt: 'Harbor' } }, { presentation, layout: { slideImage: false } });
+  const linked = composeSlide({ title: 'Heading', image: { src: photo, alt: 'Harbor' } }, { presentation, layout: { design: {} } });
   assert.equal(linked.slideImage.replacesContent, true);
   assert.equal(linked.slideImage.path, 'design.slideImage');
   assert.equal(linked.slideImage.sourcePath, 'slides.0.image');
@@ -52,7 +52,7 @@ test('band positions give the image one side and compose content in the rest', (
 
 test('a root image with the same source becomes the slide image instead of content', () => {
   const slide = { title: 'Heading', image: { src: photo, alt: 'Harbor' }, design: { slideImage: { src: photo, position: 'right' } } };
-  const result = composeSlide(slide, { layout: { placeholders: [{ type: 'title' }, { type: 'picture' }, { type: 'text' }] } });
+  const result = composeSlide(slide, { layout: { placeholders: [{ type: 'title' }, { type: 'image' }, { type: 'text' }] } });
   assert.equal(result.slideImage.replacesContent, true);
   assert.equal(result.slideImage.sourcePath, 'slides.0.image');
   assert.deepEqual(result.slideImage.value, { src: photo, alt: 'Harbor' });
@@ -76,9 +76,9 @@ test('fill follows imageFill, crop by default', () => {
 });
 
 test('asset shorthand uses the layout alignment and missing sources stay inactive', () => {
-  const layout = { slideImage: true, slideImageAlignment: 'Bottom' };
+  const layout = { design: { slideImage: { position: 'bottom' } } };
   assert.equal(composeSlide({ title: 'Heading' }, { presentation: { design: { slideImage: 'asset:hero' } }, layout }).slideImage.position, 'bottom');
-  assert.equal(composeSlide({ title: 'Heading' }, { presentation: { design: { slideImage: { src: 'asset:hero' } } }, layout: { slideImage: true } }).slideImage.position, 'background');
+  assert.equal(composeSlide({ title: 'Heading' }, { presentation: { design: { slideImage: { src: 'asset:hero' } } }, layout: { design: { slideImage: { position: 'background' } } } }).slideImage.position, 'background');
   assert.equal(composeSlide({ title: 'Heading', design: { slideImage: { position: 'left' } } }).slideImage, undefined);
 });
 

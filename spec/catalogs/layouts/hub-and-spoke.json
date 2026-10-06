@@ -4,20 +4,12 @@
   "name": "Hub_And_Spoke",
   "summary": "Central node with radiating connections. Shows one-to-many relationships clearly.",
   "description": "Central node with radiating connections. Shows one-to-many relationships clearly.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

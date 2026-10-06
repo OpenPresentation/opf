@@ -4,20 +4,11 @@
   "name": "Title_Slide",
   "summary": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact.",
   "description": "Bold, centered typography with minimal elements. Perfect for opening your presentation with impact.",
-  "contentType": "Title",
-  "contentMultiple": "None",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": true,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "None",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
   "placeholders": [
     {
       "type": "title"

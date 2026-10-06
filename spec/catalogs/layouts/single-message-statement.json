@@ -4,20 +4,11 @@
   "name": "Single_Message_Statement",
   "summary": "One sentence, one slide. Used when an idea needs the entire slide to land.",
   "description": "One sentence, one slide. Used when an idea needs the entire slide to land.",
-  "contentType": "Title",
-  "contentMultiple": "None",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "None",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
   "placeholders": [
     {
       "type": "title"

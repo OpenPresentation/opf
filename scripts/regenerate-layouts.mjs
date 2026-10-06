@@ -39,12 +39,6 @@ function lowerNone(value) {
   return String(value).toLowerCase();
 }
 
-function countFromMultiple(value) {
-  if (!value || value === "None") return 1;
-  const match = /^(\d+)x$/.exec(value);
-  return match ? Number(match[1]) : 1;
-}
-
 function groupByLayoutId(placeholders) {
   const byLayout = new Map();
   for (const placeholder of placeholders) {
@@ -71,7 +65,7 @@ function toOpfPlaceholderType(type, layout) {
     case "CHART":
       return "chart";
     case "PICTURE":
-      return "picture";
+      return "image";
     default:
       throw new Error(`Unsupported layout placeholder type: ${type}`);
   }
@@ -109,34 +103,39 @@ function extractPlaceholders(layout, placeholdersByLayout) {
   return placeholders;
 }
 
+// Layout design hints use the deck's design vocabulary (opf.schema.json Design): lowercase values, and an
+// absent key where the extract said "None". The content kind, the content count and the heading flags are
+// not stored; layoutContent() derives them from the placeholders.
+function layoutDesign(layout) {
+  const design = {};
+  const set = (key, value) => {
+    if (value !== undefined) design[key] = value;
+  };
+  set("titleAlignment", lowerNone(layout.slide_title_alignment));
+  set("contentAlignment", lowerNone(layout.content_alignment));
+  if (typeof layout.content_box === "boolean") design.contentBox = layout.content_box;
+  set("contentDirection", lowerNone(layout.slide_layout_direction));
+  set("chartPrimary", lowerNone(layout.content_type_chart_primary));
+  set("imageFill", lowerNone(layout.content_type_image_fill));
+  set("listBullet", lowerNone(layout.content_type_list_bullet));
+  if (layout.slide_image) design.slideImage = { position: lowerNone(layout.slide_image_alignment) ?? "background" };
+  return Object.keys(design).length > 0 ? design : undefined;
+}
+
 function legacyRecord(layout, placeholdersByLayout, overrides) {
   const id = nameToId(layout.name);
   const placeholders = extractPlaceholders(layout, placeholdersByLayout);
-  const titleCover = placeholders.some((placeholder) => placeholder.type === "subtitle");
 
   return {
     $schema: schema,
     id,
     name: layout.name,
     label: labelFromName(layout.name),
-    contentAlignment: layout.content_alignment,
-    contentBox: layout.content_box,
-    contentMultiple: layout.content_multiple,
-    contentTypeChartPrimary: layout.content_type_chart_primary,
-    contentTypeImageFill: layout.content_type_image_fill,
-    contentTypeListBullet: layout.content_type_list_bullet,
-    contentTypeListHeading: layout.content_type_list_heading,
-    contentType: layout.content_type,
+    design: layoutDesign(layout),
     groupDefault: layout.group_default,
     groupHash: layout.group_hash,
     master: layout.master,
     masterSlideIndex: layout.index,
-    slideImage: layout.slide_image,
-    slideImageAlignment: layout.slide_image_alignment,
-    slideLayoutDirection: layout.slide_layout_direction,
-    slideSubtitle: titleCover,
-    slideTitle: layout.slide_title,
-    slideTitleAlignment: layout.slide_title_alignment,
     bleed: layout.name.startsWith("Image_Only_"),
     placeholders,
     ...(overrides[id] ?? {}),

@@ -4,20 +4,12 @@
   "name": "Testimonial_Grid",
   "summary": "Multiple customer or stakeholder quotes in a grid. Builds social proof through volume and diversity.",
   "description": "Multiple customer or stakeholder quotes in a grid. Builds social proof through volume and diversity.",
-  "contentType": "Quote",
-  "contentMultiple": "3x",
-  "contentAlignment": "Center",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"

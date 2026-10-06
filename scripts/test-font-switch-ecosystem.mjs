@@ -219,11 +219,10 @@ const contentBlocks = {
 // A layout's family is its primary content kind, read from its placeholders, so the family list does not change when the
 // bundled catalog gains layouts (FF-55 bundles the 70 legacy gallery ids next to the structural ones): the first
 // placeholder that is not a heading names the family, a heading-only layout is a title, and no placeholder is blank.
-const FAMILY_OF_KIND = {text: 'text', list: 'list', metric: 'number', chart: 'chart', picture: 'image', diagram: 'image', media: 'media', quote: 'quote', table: 'table', code: 'code', timeline: 'timeline'};
 const layoutFamily = (record) => {
   const types = (record.placeholders ?? []).map((placeholder) => placeholder.type);
   const body = types.find((type) => !['title', 'subtitle', 'tag'].includes(type));
-  if (body !== undefined) return FAMILY_OF_KIND[body] ?? assert.fail(`layout ${record.id} has a placeholder kind with no family: ${body}`);
+  if (body !== undefined) return body;
   return types.length ? 'title' : 'blank';
 };
 const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
@@ -237,15 +236,15 @@ const placeholderBlock = {
   code: () => ({code: {source: 'let x = 1;', language: 'ts'}}),
   quote: (text) => ({quote: {text: text.body, attribution: text.cells[0]}}),
   timeline: (text) => ({timeline: {events: [{when: 'Q1', what: text.items[0]}, {when: 'Q2', what: text.items[1]}]}}),
-  picture: () => ({image: 'asset:hero'}),
-  media: () => ({video: 'asset:clip'})
+  image: () => ({image: 'asset:hero'}),
+  video: () => ({video: 'asset:clip'})
 };
 function layoutSlide(id, layoutId, text) {
   const types = byId('layouts', layoutId).placeholders.map((placeholder) => placeholder.type);
   const content = types.filter((type) => type !== 'title' && type !== 'subtitle');
   return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => placeholderBlock[type](text))} : {})};
 }
-assert.deepEqual(LAYOUT_FAMILIES, ['blank', 'chart', 'code', 'image', 'list', 'media', 'number', 'quote', 'table', 'text', 'timeline', 'title'], 'the catalog has the expected layout families');
+assert.deepEqual(LAYOUT_FAMILIES, ['blank', 'chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'title', 'video'], 'the catalog has the expected layout families');
 
 const FOOTERS = {
   off: () => ({header: false, footer: false}),
