@@ -292,15 +292,15 @@ _No named properties._
 | `dark2` | no | `string` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
 | `light1` | no | `string` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
 | `light2` | no | `string` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
-| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. |
+| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. Link runs with no color of their own are drawn underlined in it, in the preview and in PowerPoint, unless it has under 4.5:1 contrast against the slide background, then in the slide text color. |
 | `followedHyperlink` | no | `string` | Followed-hyperlink color (hex). OOXML folHlink. |
 | `primary` | no | `string` | Abstract role: primary brand color (hex). The engine maps this onto an OOXML accent slot when serializing. |
 | `secondary` | no | `string` | Abstract role: secondary brand color (hex). |
 | `accent` | no | `string` | Abstract role: accent color used for highlights and emphasis (hex). |
-| `background` | no | `string` | Abstract role: default slide background color (hex). The engine maps this to one of light1 / light2 / dark1 / dark2 when serializing. |
-| `surface` | no | `string` | Abstract role: color for elevated surfaces such as cards and panels (hex). |
-| `text` | no | `string` | Abstract role: primary body text color (hex). |
-| `textSecondary` | no | `string` | Abstract role: secondary or muted text color used for captions and supporting copy (hex). |
+| `background` | no | `string` | Abstract role: default slide background color (hex), used when the design names no single-color background (and for gradient and picture backgrounds). Overrides light1 as that default. |
+| `surface` | no | `string` | Abstract role: color for elevated surfaces such as cards and panels (hex). Overrides the default of light2 (dark2 on a dark slide). |
+| `text` | no | `string` | Abstract role: primary body text color (hex). Overrides dark1 on a light slide only; a dark slide always uses light1. |
+| `textSecondary` | no | `string` | Abstract role: secondary or muted text color used for captions and supporting copy (hex). Overrides the default of dark2 (light2 on a dark slide). |
 | `custom` | no | `object` | Map of custom named colors for advanced or theme-specific use. |
 
 

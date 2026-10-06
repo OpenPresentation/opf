@@ -1026,7 +1026,7 @@
         },
         "hyperlink": {
           "$ref": "#/$defs/HexColor",
-          "description": "Hyperlink color (hex). OOXML hlink.",
+          "description": "Hyperlink color (hex). OOXML hlink. Link runs with no color of their own are drawn underlined in it, in the preview and in PowerPoint, unless it has under 4.5:1 contrast against the slide background, then in the slide text color.",
           "examples": ["#0563C1", "#0066CC"]
         },
         "followedHyperlink": {
@@ -1051,22 +1051,22 @@
         },
         "background": {
           "$ref": "#/$defs/HexColor",
-          "description": "Abstract role: default slide background color (hex). The engine maps this to one of light1 / light2 / dark1 / dark2 when serializing.",
+          "description": "Abstract role: default slide background color (hex), used when the design names no single-color background (and for gradient and picture backgrounds). Overrides light1 as that default.",
           "examples": ["#FFFFFF", "#0B1220"]
         },
         "surface": {
           "$ref": "#/$defs/HexColor",
-          "description": "Abstract role: color for elevated surfaces such as cards and panels (hex).",
+          "description": "Abstract role: color for elevated surfaces such as cards and panels (hex). Overrides the default of light2 (dark2 on a dark slide).",
           "examples": ["#F8FAFC", "#1E293B"]
         },
         "text": {
           "$ref": "#/$defs/HexColor",
-          "description": "Abstract role: primary body text color (hex).",
+          "description": "Abstract role: primary body text color (hex). Overrides dark1 on a light slide only; a dark slide always uses light1.",
           "examples": ["#0F172A", "#F8FAFC"]
         },
         "textSecondary": {
           "$ref": "#/$defs/HexColor",
-          "description": "Abstract role: secondary or muted text color used for captions and supporting copy (hex).",
+          "description": "Abstract role: secondary or muted text color used for captions and supporting copy (hex). Overrides the default of dark2 (light2 on a dark slide).",
           "examples": ["#475569", "#94A3B8"]
         }
       }

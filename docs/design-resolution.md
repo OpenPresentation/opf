@@ -199,7 +199,18 @@ Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.c
 ```
 
 - **Slot names** (`accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`) read the named slot from the *effective* color scheme — the one produced by the slide → deck → theme → engine-default precedence at the top of this page. A slide-level `design.colorScheme` override therefore recolors that slide's named runs too.
-- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through the same role handling engines already apply to color schemes: a role defined on the effective scheme is used directly; otherwise the engine maps the role onto a slot exactly as it does when serializing schemes.
+- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through one shared definition, `resolveColorRoles()`, which the opf-render preview, the PPTX export and `auditPresentation` all call, so the same deck draws the same colors in each. A role defined on the effective scheme wins; otherwise it defaults from a slot:
+
+  | Role | Default |
+  | --- | --- |
+  | `primary`, `secondary`, `accent` | `accent1`, `accent2`, `accent3` |
+  | `background` | the slide's own resolved background when it is one color (solid, theme slot or pattern background color); else the scheme's `background` role, else `light1`. A gradient or picture background uses the scheme default. |
+  | `surface` | `light2`, or `dark2` on a dark slide |
+  | `text` | `dark1`, or `light1` on a dark slide. A `text` override applies on a light slide only, so a dark slide always keeps readable light text. |
+  | `textSecondary` | `dark2`, or `light2` on a dark slide |
+
+  A slide is dark when its background's WCAG relative luminance is under 0.179, the point where white and black text contrast equally.
+- **Links.** A link run (`link`) with no `color` of its own is drawn underlined in the scheme's `hyperlink` slot (the OOXML `hlink` color; Office blue `#0563C1` when the scheme sets none), in the preview and in the PPTX export (`a:schemeClr hlink` where the deck theme holds that color). Where that color has under 4.5:1 contrast against the slide background (the default Office blue on a dark slide), the slide's `text` color is used instead, as the slide tag does for a low-contrast primary color. A link run with its own `color` keeps it, and a `hyperlink` ColorRef always names the slot. `followedHyperlink` is written to the PPTX theme; a static preview cannot know which links were visited, so it draws every link in `hyperlink`.
 - **Variable references** (`var:<id>`) resolve against the document's top-level `variables` map, independent of the scheme. Variables are deck-scoped named colors — use them for values that have meaning (`var:risk`) or repeat across slides. An unknown id is a validation warning, never an error, and engines fall back to their default text color.
 
 The styled table cell and border color fields enforce the reference forms at the schema level (a typo like `"acent2"` is a schema error there — neither hex, a known name, nor a `var:` reference). Run colors stay open strings so imported decks keep validating: an unrecognized run color is a validation warning, and renderers fall back to the theme text color — the same warn-don't-error posture unknown catalog ids get. Unknown `var:` ids are warnings everywhere.

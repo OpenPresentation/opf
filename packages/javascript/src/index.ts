@@ -153,11 +153,15 @@ export {
   CHART_SERIES_MIN_LIGHTNESS_STEP,
   CHART_SERIES_MIN_DIFFERENCE,
   colorContrast,
+  DARK_BACKGROUND_LUMINANCE,
+  defaultSlideBackground,
+  isDarkColor,
   normalizeHexColor,
   resolveColorRef,
+  resolveColorRoles,
   textColorForFill,
 } from './color.js';
-export type { ResolveColorRefOptions, ResolveColorRefRoles } from './color.js';
+export type { ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles } from './color.js';
 export { normalizeLanguageFamily, paragraphDirection, resolveScriptFonts, resolveSlideDirection, scriptFontRole } from './script-fonts.js';
 export { paragraphDirectionAt, physicalAlignment, type PhysicalAlignment } from './direction.js';
 export type {

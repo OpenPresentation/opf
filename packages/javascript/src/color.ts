@@ -82,6 +82,103 @@ export function resolveColorRef(reference: string, options: ResolveColorRefOptio
   return fallback;
 }
 
+/** WCAG relative luminance below which a slide background counts as dark (the point where white and black text contrast equally). */
+export const DARK_BACKGROUND_LUMINANCE = 0.179;
+
+/** True when text on this color should be light: its relative luminance is under {@link DARK_BACKGROUND_LUMINANCE}. An unreadable color is not dark. */
+export function isDarkColor(color: unknown): boolean {
+  const hex = normalizeHexColor(color);
+  const value = hex ? luminance(hex) : undefined;
+  return value !== undefined && value < DARK_BACKGROUND_LUMINANCE;
+}
+
+/**
+ * The slide background a color scheme implies when the design names no single-color background: the scheme's
+ * `background` role override, else its light1 slot, else white. Gradient and picture backgrounds use it too.
+ */
+export function defaultSlideBackground(colorScheme: Record<string, unknown>): string {
+  return keepAlpha(colorScheme.background) ?? slotKeepingAlpha(colorScheme, 'light1', '#FFFFFF');
+}
+
+/** A hex color as uppercase #RRGGBB, keeping an #RRGGBBAA alpha byte (a translucent scheme surface stays translucent). */
+function keepAlpha(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const hex = value.trim();
+  if (/^#[0-9a-f]{8}$/i.test(hex)) return hex.toUpperCase();
+  return normalizeHexColor(hex);
+}
+
+function slotKeepingAlpha(colorScheme: Record<string, unknown>, slot: string, fallback: string): string {
+  return keepAlpha(colorScheme[slot]) ?? fallback;
+}
+
+/** The OOXML theme hyperlink colors a scheme without hyperlink slots gets (the Office theme values the PPTX export writes). */
+const DEFAULT_HYPERLINK = '#0563C1';
+const DEFAULT_FOLLOWED_HYPERLINK = '#954F72';
+
+/** The link color a slide draws: the scheme's, unless it is hard to read on this background (the rule the slide tag follows for the primary color). */
+const MIN_LINK_CONTRAST = 4.5;
+function readableLink(link: string, background: string, text: string): string {
+  const linkHex = normalizeHexColor(link), backgroundHex = normalizeHexColor(background);
+  const contrast = linkHex && backgroundHex ? colorContrast(linkHex, backgroundHex) : undefined;
+  return contrast !== undefined && contrast < MIN_LINK_CONTRAST ? text : link;
+}
+
+export interface ResolvedColorRoles {
+  /** Role override, else accent1. */
+  primary: string;
+  /** Role override, else accent2. */
+  secondary: string;
+  /** Role override, else accent3. */
+  accent: string;
+  /** The slide background: the resolved single-color background of the slide, else {@link defaultSlideBackground}. */
+  background: string;
+  /** Role override, else dark2 on a dark background and light2 on a light one. */
+  surface: string;
+  /** Default text. On a dark background light1. On a light background the `text` role override, else dark1. */
+  text: string;
+  /** Role override, else light2 on a dark background and dark2 on a light one. */
+  textSecondary: string;
+  /** The color of a link run that sets no color of its own: the scheme's hyperlink slot (OOXML hlink), unless that has under 4.5:1 contrast against the slide background, then the slide `text` color. */
+  hyperlink: string;
+  /** Followed-hyperlink slot (OOXML folHlink). */
+  followedHyperlink: string;
+  /** Whether the slide background is dark; text, surface and textSecondary defaults follow it. */
+  dark: boolean;
+}
+
+export interface ResolveColorRolesOptions {
+  /** The slide's resolved single-color background (solid, theme-slot or pattern background color). Omit for a gradient, picture or no background. */
+  background?: string | null;
+}
+
+/**
+ * Resolve a color scheme's abstract roles for one slide: the single definition the opf-render preview, the
+ * PPTX export and the audit share, so the same deck draws the same colors in all three. Role overrides on the
+ * scheme (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) win over the slots they
+ * default to. The background-dependent roles follow {@link isDarkColor} of the slide background; a `text`
+ * override applies only on a light background, so a dark slide always gets readable light1 text.
+ * Values are uppercase #RRGGBB, or #RRGGBBAA where the scheme color carries an alpha byte.
+ */
+export function resolveColorRoles(colorScheme: Record<string, unknown>, options: ResolveColorRolesOptions = {}): ResolvedColorRoles {
+  const slot = (name: string, fallback: string) => slotKeepingAlpha(colorScheme, name, fallback);
+  const background = keepAlpha(options.background) ?? defaultSlideBackground(colorScheme);
+  const dark = isDarkColor(background);
+  const text = dark ? slot('light1', '#FFFFFF') : (keepAlpha(colorScheme.text) ?? slot('dark1', '#111827'));
+  return {
+    primary: keepAlpha(colorScheme.primary) ?? slot('accent1', '#2563EB'),
+    secondary: keepAlpha(colorScheme.secondary) ?? slot('accent2', '#0F766E'),
+    accent: keepAlpha(colorScheme.accent) ?? slot('accent3', '#F59E0B'),
+    background,
+    surface: keepAlpha(colorScheme.surface) ?? (dark ? slot('dark2', '#1E293B') : slot('light2', '#F8FAFC')),
+    text,
+    textSecondary: keepAlpha(colorScheme.textSecondary) ?? (dark ? slot('light2', '#E2E8F0') : slot('dark2', '#334155')),
+    hyperlink: readableLink(slot('hyperlink', DEFAULT_HYPERLINK), background, text),
+    followedHyperlink: slot('followedHyperlink', DEFAULT_FOLLOWED_HYPERLINK),
+    dark,
+  };
+}
+
 /** Relative luminance contrast for opaque #RGB/#RRGGBB/#RRGGBBFF colors.
  * Unknown or translucent colors need a resolved backdrop and remain unmeasured.
  * https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html

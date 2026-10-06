@@ -142,7 +142,7 @@ Default severity: **warning**. Text colour has too little contrast against the b
 
 **Thresholds.** `contrastNormal` (default 4.5), `contrastLarge` (default 3)
 
-**Approximations.** Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview's (the scheme's dark1 or light1 chosen from the background luminance, where a gradient background counts as light), so a default can fail on a dark gradient.
+**Approximations.** Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview's (the scheme's text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme's default background colour), so a default can fail on a dark gradient. A link with no colour of its own is measured in the scheme's hyperlink colour.
 
 ### `audit/text-on-image`
 
