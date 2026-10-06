@@ -42,11 +42,11 @@ const usage = `OPF — local presentation files for agents (Node 24)
   opf bundle <input|-> <output|-> [--force] [--strict]
 ${MARKDOWN_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
-           [--paginate] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+           [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
   opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
            [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
            [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
-           [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+           [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
   opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--force] [--strict] [--json]
   opf schemas
   opf schema [name] [JSON-Pointer]
@@ -83,7 +83,9 @@ Render, export and import write files through the optional peers @openpresentati
 and @openpresentation/opf-pptx (install them next to the CLI; the error names the command to run).
 They lint the document first, print the lint report shape (diagnostics, counts) plus the written
 files with SHA-256 digests, never load system fonts and never fetch URLs; --strict writes nothing
-when there are warnings. Existing outputs require --force.
+when there are warnings. Existing outputs require --force. Per-slide images and PDF skip hidden
+slides unless --include-hidden (slides named with --slides are always written); files are named by the
+deck's filename, else its name (slugified), else the input file name.
 Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
 fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
 
