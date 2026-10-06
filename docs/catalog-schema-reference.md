@@ -10,7 +10,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-audience/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`
-- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field...
+- Purpose: Schema for audience records in the pptx.gallery library. Each record names an audience archetype (e.g. 'executive', 'engineering-team', 'investor') and carries seniority, technical-fluency, decision-power, and attention-budget hints used by AI-driven generation. Audiences are referenced from OPF documents via audience; the engine resolves the reference against catalogs.audiences (inline) catalogs.audiences.source the default catalog at https://www.pptx.gallery/audiences. The audience field al...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -98,31 +98,21 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference a...
+- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition "mixed"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-chart-type/v1"` | Identifies this record as a chart type in the open presentation catalog. |
-| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type. Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
-| `name` | yes | `string` | Stable display/programmatic name for this chart type. |
-| `label` | no | `string` | Human-readable label shown in chart pickers. |
+| `id` | yes | `string` | Stable slug used by OPF documents to reference this chart type (`chart.type`). Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming. |
+| `name` | yes | `string` | Human-readable name of the chart type, as a chart picker shows it. |
 | `summary` | no | `string` | One-sentence positioning: when to reach for this chart variant. |
 | `description` | no | `string` | Longer prose describing the chart and ideal use cases. |
 | `mappings` | yes | `ref:ChartTypeMappings` | Canonical and optional renderer-specific mappings used by engines to render this chart type. |
-| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. Deprecated records stay resolvable so existing documents keep validating, but pickers and default listings exclude them, validators warn when a document references them, and... |
-| `group` | no | `string` | Top-level grouping in the chart picker (column, bar, line, area, pie, radar, etc.). |
+| `deprecation` | no | `ref:ChartTypeDeprecation` | Present when this chart type is deprecated. A deprecated record stays resolvable so existing documents keep validating, validators warn when a document references it, and pickers and generators should not offer it. Th... |
+| `group` | no | `string` | Top-level grouping in the chart picker. |
 | `groupSort` | no | `integer` | Display ordering hint within the chart group. |
-| `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). |
-| `series` | no | `integer` | Number of data series this chart type expects. |
-| `categories` | no | `integer` | Number of category labels this chart type expects on the primary axis. |
-| `seriesGroups` | no | `integer` | Number of series groups (axis bands) this chart type uses; >1 for combo or banded charts. |
-| `useSecondaryCategories` | no | `boolean` | Whether the chart type uses a secondary category axis. |
-| `workbookRange` | no | `string` | A1 reference to the source range in the embedded workbook. |
-| `columns` | no | `array<string>` | Column header names of the embedded workbook, in left-to-right order. |
-| `dataColumns` | no | `array<ref:ChartDataColumn>` | Per-column metadata describing the role and position of each column in the workbook source. |
-| `helperColumns` | no | `array<string>` | Optional auxiliary column names used by calculated or banded charts (e.g., 'Excellent', 'Good', 'Fair', 'Poor' for a bullet chart). |
-| `sampleData` | no | `ref:ChartSampleData` | Inline sample dataset for previews and pickers. |
-| `slideNumber` | no | `integer` | Source slide number in the original chart-gallery deck. Carried for traceability. |
+| `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). The editor offers only 'simple' types... |
+| `series` | no | `integer` | Number of data series this chart type expects: exactly that many, except that a stacked or percent-stacked type and a combination (composition 'mixed', such as combo) expect at least that many. The editor offers a typ... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
@@ -166,30 +156,6 @@ OPF documents usually reference these records with string ids such as `design.th
 | `extension` | no | `string` | Optional Open XML extension namespace or element hint for extension charts. |
 | `series` | no | `array<ref:OpenXmlChartMapping>` | Open XML chart elements used by mixed/composite chart types. |
 | `notes` | no | `string` | Short implementation note for mappings that need renderer interpretation. |
-
-#### ChartDataColumn
-
-- Type: `object`
-- Required fields: `name`, `role`, `type`
-- Purpose: One column of the embedded chart workbook, annotated with its role and grid position.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `name` | yes | `string` | Column header name (e.g. 'Series 1', 'Value', 'Level1', 'Level2'). |
-| `role` | yes | `enum:categoryLabel \| series \| helper` | Role this column plays: a category label (axis tick), a series (plotted values), or a helper (calculated/auxiliary). |
-| `type` | yes | `enum:string \| number` | Cell value type for the column. |
-| `position` | no | `string` | Grid position of the column header in the source workbook, as 'row<N>_col<M>' (zero-indexed). |
-
-#### ChartSampleData
-
-- Type: `object`
-- Required fields: `headers`, `rows`
-- Purpose: Inline sample dataset for previews. Mirrors a small workbook with header row plus data rows.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `headers` | yes | `array<string>` | Header row labels. The first cell typically labels the series column; the rest are category labels. |
-| `rows` | yes | `array<array<string \| number>>` | Two-dimensional sample data. Each row aligns by index with the headers first cell is the row label, remaining cells are values. |
 
 ## Color Scheme
 

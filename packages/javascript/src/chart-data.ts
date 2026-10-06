@@ -19,6 +19,8 @@ export interface Dataset { title?: string; description?: string; columns: (strin
 export interface DatasetRef { dataset: string; fields?: string[] }
 /** `chart.mapping`: the category, X and series columns by name (after any `fields` selection). */
 export interface ChartMapping { category?: string; x?: string; series?: string[] }
+/** One series of a combo chart: drawn as a clustered column or as a line with markers, against the primary (left) or secondary (right) value axis. */
+export interface ChartComboSeries { role: 'bar' | 'line'; axis: 'primary' | 'secondary' }
 
 /** A text run as table cells and headers hold them (see the schema `TextRun`). */
 export type DataTextRun = string | { text: string; [key: string]: unknown };
@@ -72,6 +74,12 @@ export type ResolvedChartData =
       source?: DataSourceRef;
       /** The dataset id when the chart references one. */
       dataset?: string;
+      /**
+       * Combo charts only (FA-15): how each series is drawn, aligned with the series columns (`columns.slice(1)`). The series
+       * are ordered column series first, then the line series on the primary axis, then those on the secondary axis, each in
+       * plotted order, so every engine draws, exports and lists them in the legend alike.
+       */
+      combo?: ChartComboSeries[];
       diagnostics: DataDiagnostic[];
     }
   | {
@@ -539,6 +547,49 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     series = [x];
     x = undefined;
   }
+  // FA-15: a combo chart draws its series as clustered columns, except the ones `line` names (default: the last series),
+  // which are lines with markers; `secondaryAxis` moves line series to a secondary value axis. Column series come first, then
+  // the primary-axis lines, then the secondary-axis lines (one native chart group each, so the PPTX series order is this order).
+  let combo: ChartComboSeries[] | undefined;
+  if (record(chart) && chartOptionTarget(chart.type)?.kind === 'combo') {
+    const listed = (option: 'line' | 'secondaryAxis', problem: (column: number) => string | undefined): Set<number> => {
+      const found = new Set<number>();
+      const value = chart[option];
+      if (!Array.isArray(value)) return found;
+      value.forEach((name: unknown, index: number) => {
+        const path = at(base, option, index);
+        const column = known(name, path);
+        if (column === undefined) return;
+        const reason = problem(column);
+        if (reason) diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `${JSON.stringify(name)} ${reason}` });
+        else found.add(column);
+      });
+      return found;
+    };
+    const notPlotted = 'is not a plotted series of the chart';
+    const lines = listed('line', column => series.includes(column) ? undefined : `${notPlotted}; it is not drawn as a line`);
+    if (chart.line === undefined && series.length >= 2) lines.add(series[series.length - 1]!);
+    if (series.length && series.every(column => lines.has(column))) {
+      lines.delete(series[0]!);
+      diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(base, chart.line === undefined ? 'type' : 'line'), message: series.length === 1
+        ? `a combo chart needs at least two series, one drawn as columns and one as a line; its one series ${JSON.stringify(names[series[0]!])} is drawn as columns`
+        : `a combo chart keeps at least one column series; ${JSON.stringify(names[series[0]!])} is drawn as columns, not as a line` });
+    } else if (series.length === 1) {
+      diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(base, 'type'), message: `a combo chart needs at least two series, one drawn as columns and one as a line; its one series ${JSON.stringify(names[series[0]!])} is drawn as columns` });
+    }
+    const secondary = listed('secondaryAxis', column => !series.includes(column)
+      ? `${notPlotted}; it has no axis to move to`
+      : !lines.has(column) ? 'is drawn as columns; only a line series can use the secondary axis, so it stays on the primary axis' : undefined);
+    const bars = series.filter(column => !lines.has(column));
+    const primaryLines = series.filter(column => lines.has(column) && !secondary.has(column));
+    const secondaryLines = series.filter(column => lines.has(column) && secondary.has(column));
+    series = [...bars, ...primaryLines, ...secondaryLines];
+    combo = [
+      ...bars.map(() => ({ role: 'bar' as const, axis: 'primary' as const })),
+      ...primaryLines.map(() => ({ role: 'line' as const, axis: 'primary' as const })),
+      ...secondaryLines.map(() => ({ role: 'line' as const, axis: 'secondary' as const })),
+    ];
+  }
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
   // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.
@@ -582,6 +633,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     rows: out,
     ...(source ? { source } : {}),
     ...(datasetId !== undefined ? { dataset: datasetId } : {}),
+    ...(combo ? { combo } : {}),
     diagnostics,
   };
 }

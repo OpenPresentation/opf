@@ -332,7 +332,10 @@ async function checkIndexSchemaUris() {
 // mappings.renderers["aspose-slides"].chartType (compositions with no single
 // ChartType may omit it, but only when deprecated); the non-deprecated records
 // hold exactly one record per ChartType; and every deprecated record points
-// at a non-deprecated replacement and is flagged in index.json. Source:
+// at a non-deprecated replacement and is flagged in index.json. A combination
+// record (mappings.openxml.composition "mixed", FA-15 combo) names the ChartType
+// its chart starts from plus the series types it switches to (every
+// "*SeriesType" key), all Aspose.Slides members; it owns no ChartType. Source:
 // https://reference.aspose.com/slides/net/aspose.slides.charts/charttype/
 // (see docs/programs/font-fidelity-everywhere/aspose-chart-types.md).
 const ASPOSE_SLIDES_CHART_TYPES = new Set([
@@ -364,12 +367,17 @@ async function checkChartTypesAsposeSupported() {
     records.set(record.id, record);
   }
   const owners = new Map();
+  let combinations = 0;
   for (const [id, record] of records) {
     const where = `[f] chart-types/${id}.json`;
     const chartType = record.mappings?.renderers?.["aspose-slides"]?.chartType;
     const deprecation = record.deprecation;
     if (chartType !== undefined && !ASPOSE_SLIDES_CHART_TYPES.has(chartType)) {
       fail(`${where}: '${chartType}' is not an Aspose.Slides ChartType member`);
+    }
+    const aspose = record.mappings?.renderers?.["aspose-slides"] ?? {};
+    for (const [key, value] of Object.entries(aspose)) {
+      if (/SeriesType$/.test(key) && !ASPOSE_SLIDES_CHART_TYPES.has(value)) fail(`${where}: ${key} '${value}' is not an Aspose.Slides ChartType member`);
     }
     if (chartType === "SeriesOfMixedTypes") {
       fail(`${where}: SeriesOfMixedTypes is read-only in Aspose.Slides and cannot back a chart type`);
@@ -392,12 +400,17 @@ async function checkChartTypesAsposeSupported() {
       fail(`${where}: non-deprecated chart types must name an Aspose.Slides ChartType in mappings.renderers["aspose-slides"].chartType`);
       continue;
     }
+    if (record.mappings?.openxml?.composition === "mixed") {
+      if (!Object.keys(aspose).some((key) => /SeriesType$/.test(key))) fail(`${where}: a mixed composition names the series type it switches to (for example lineSeriesType)`);
+      combinations += 1;
+      continue;
+    }
     if (owners.has(chartType)) {
       fail(`${where}: Aspose.Slides ChartType '${chartType}' is already covered by '${owners.get(chartType)}'; deprecate one of them`);
     }
     owners.set(chartType, id);
   }
-  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${records.size - owners.size} deprecated`);
+  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${combinations} combination${combinations === 1 ? '' : 's'}, ${records.size - owners.size - combinations} deprecated`);
 }
 
 // (g) spec/catalogs is a pinned snapshot of the default catalog published by

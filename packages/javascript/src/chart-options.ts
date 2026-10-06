@@ -8,7 +8,8 @@
 // resolve to `active: false` and nothing in any engine changes.
 
 /** The chart constructs the engines draw. Every catalog chart type id resolves to one (see `chartOptionTarget`). */
-export type ChartOptionKind = 'bar' | 'line' | 'area' | 'pie' | 'doughnut' | 'scatter' | 'radar' | 'treemap' | 'histogram' | 'pareto' | 'box' | 'waterfall' | 'funnel' | 'map';
+/** `combo` (FA-15) draws clustered columns and line series in one plot, the lines optionally on a secondary value axis. */
+export type ChartOptionKind = 'bar' | 'line' | 'area' | 'pie' | 'doughnut' | 'scatter' | 'radar' | 'treemap' | 'histogram' | 'pareto' | 'box' | 'waterfall' | 'funnel' | 'map' | 'combo';
 export interface ChartOptionTarget {
   kind: ChartOptionKind;
   /** Stacked and 100% stacked columns, bars, lines and areas: their data labels have no outside-end position. */
@@ -20,7 +21,7 @@ export type ChartLabelPosition = 'center' | 'inside-end' | 'inside-base' | 'outs
 
 export interface ChartOptionDiagnostic {
   code: 'chart-option-adapted';
-  /** The option that was adapted: `axisTitles.category`, `axisTitles.value`, `legend`, `dataLabels`, `dataLabels.content`, `dataLabels.position`, `dataLabels.separator`, `highlight.series` or `highlight.categories`. */
+  /** The option that was adapted: `axisTitles.category`, `axisTitles.value`, `axisTitles.secondary`, `legend`, `dataLabels`, `dataLabels.content`, `dataLabels.position`, `dataLabels.separator`, `line`, `secondaryAxis`, `highlight.series` or `highlight.categories`. */
   option: string;
   reason: 'unsupported-type' | 'unsupported-content' | 'unsupported-position';
   message: string;
@@ -29,8 +30,10 @@ export interface ChartOptionDiagnostic {
 export interface ResolvedChartDataLabels {
   /** Canonical order: category, value, percent. Never empty. */
   content: ChartLabelContent[];
-  /** The concrete position, or null for a construct whose labels have no position choice (area, doughnut, radar, treemap). */
+  /** The concrete position, or null for a construct whose labels have no position choice (area, doughnut, radar, treemap). On a combo chart, the column series' position. */
   position: ChartLabelPosition | null;
+  /** Combo charts only: the concrete position of the line series' labels (`position` is the column series' one). */
+  linePosition?: ChartLabelPosition;
   separator: string;
 }
 
@@ -45,7 +48,8 @@ export interface ResolvedChartHighlight {
 export interface ResolvedChartOptions {
   /** True when the chart carries at least one option (after adaptation); false means every engine keeps today's output. */
   active: boolean;
-  axisTitles: {category?: string; value?: string};
+  /** `secondary` titles the secondary value axis of a combo chart. */
+  axisTitles: {category?: string; value?: string; secondary?: string};
   /** Undefined = no legend option: each engine keeps its default (a right legend on multi-series, pie and doughnut charts). */
   legend?: ChartLegendPosition;
   dataLabels?: ResolvedChartDataLabels;
@@ -60,14 +64,15 @@ export interface ResolvedChartOptions {
 }
 
 export interface ChartOptionSupport {
-  axisTitles: {category: boolean; value: boolean};
+  /** `secondary`: the construct can have a secondary value axis (a combo chart whose `secondaryAxis` names a line series). */
+  axisTitles: {category: boolean; value: boolean; secondary: boolean};
   legend: boolean;
   /** FA-14: what `chart.highlight` can name: series (a whole series' marks) and categories (one category's marks, or a pie slice). */
   highlight: {series: boolean; categories: boolean};
   dataLabels: {
     supported: boolean;
     content: readonly ChartLabelContent[];
-    /** Empty when labels have no position choice. */
+    /** Empty when labels have no position choice. A combo chart lists the column positions, then the line-only ones. */
     positions: readonly ChartLabelPosition[];
     /** The position `auto` resolves to; null with no positions. */
     defaultPosition: ChartLabelPosition | null;
@@ -84,9 +89,10 @@ const NONE: readonly ChartLabelPosition[] = [];
 const VALUE_CATEGORY: readonly ChartLabelContent[] = ['category', 'value'];
 const ALL_CONTENT: readonly ChartLabelContent[] = ['category', 'value', 'percent'];
 
-const categoryKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'histogram', 'pareto', 'box', 'waterfall', 'funnel']);
-const valueKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'histogram', 'pareto', 'box', 'waterfall']);
-const legendKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'box']);
+const COMBO_POSITIONS: readonly ChartLabelPosition[] = ['center', 'inside-end', 'inside-base', 'outside-end', 'above', 'below', 'left', 'right'];
+const categoryKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'histogram', 'pareto', 'box', 'waterfall', 'funnel', 'combo']);
+const valueKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'histogram', 'pareto', 'box', 'waterfall', 'combo']);
+const legendKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'box', 'combo']);
 
 // FA-14: columns, bars, lines (a category highlight marks its points), pie and doughnut slices take category highlights; columns, bars,
 // lines, areas, scatter and radar take series highlights. The chartex constructs take neither (docs/chart-options.md).
@@ -101,6 +107,8 @@ function labelSupport(target: ChartOptionTarget): ChartOptionSupport['dataLabels
       : {...none, positions: END_POSITIONS, defaultPosition: 'outside-end'};
     case 'line':
     case 'scatter': return {...none, positions: POINT_POSITIONS, defaultPosition: 'above'};
+    // Columns take the clustered positions and lines the point positions ('center' fits both); each part falls back to its own default.
+    case 'combo': return {...none, positions: COMBO_POSITIONS, defaultPosition: 'outside-end'};
     case 'pie': return {...none, content: ALL_CONTENT, positions: PIE_POSITIONS, defaultPosition: 'outside-end'};
     case 'doughnut': return {...none, content: ALL_CONTENT};
     // The funnel labels its bars with values and the treemap its tiles with category names by default.
@@ -118,7 +126,7 @@ function labelSupport(target: ChartOptionTarget): ChartOptionSupport['dataLabels
 /** What a chart construct can show. The table the docs, the validator, the preview and the exporter all follow. */
 export function chartOptionSupport(target: ChartOptionTarget): ChartOptionSupport {
   return {
-    axisTitles: {category: categoryKinds.has(target.kind), value: valueKinds.has(target.kind)},
+    axisTitles: {category: categoryKinds.has(target.kind), value: valueKinds.has(target.kind), secondary: target.kind === 'combo'},
     legend: legendKinds.has(target.kind),
     highlight: {series: highlightSeriesKinds.has(target.kind), categories: highlightCategoryKinds.has(target.kind)},
     dataLabels: labelSupport(target),
@@ -153,6 +161,7 @@ const KEPT: Readonly<Record<string, ChartOptionTarget>> = {
   waterfall: {kind: 'waterfall'},
   funnel: {kind: 'funnel'},
   world: {kind: 'map'},
+  combo: {kind: 'combo'},
 };
 
 /** The option target for a catalog chart type id; undefined for an id outside the catalog. */
@@ -181,11 +190,26 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
   const adapt = (option: string, reason: ChartOptionDiagnostic['reason'], message: string) => result.diagnostics.push({code: 'chart-option-adapted', option, reason, message});
   const kind = target?.kind ?? 'unknown';
 
+  const combo = target?.kind === 'combo';
+  // FA-15: `line` and `secondaryAxis` belong to combo charts. Which names they hold is checked against the data by resolveChartData.
+  if (!combo) {
+    for (const option of ['line', 'secondaryAxis'] as const) {
+      if (chart[option] !== undefined) adapt(option, 'unsupported-type', `Only a 'combo' chart draws line series${option === 'secondaryAxis' ? ' on a secondary axis' : ''}; ${option} is ignored on a '${kind}' chart.`);
+    }
+  }
   if (record(chart.axisTitles)) {
-    for (const axis of ['category', 'value'] as const) {
+    for (const axis of ['category', 'value', 'secondary'] as const) {
       const raw = chart.axisTitles[axis];
       if (typeof raw !== 'string' || !raw.trim()) continue;
-      if (support && !support.axisTitles[axis]) {
+      if (axis === 'secondary' && support && !support.axisTitles.secondary) {
+        adapt('axisTitles.secondary', 'unsupported-type', `Only a 'combo' chart has a secondary value axis; the secondary axis title is not drawn or exported on a '${kind}' chart.`);
+        continue;
+      }
+      if (axis === 'secondary' && combo && !(Array.isArray(chart.secondaryAxis) && chart.secondaryAxis.some(name => typeof name === 'string'))) {
+        adapt('axisTitles.secondary', 'unsupported-type', 'This combo chart plots no series on a secondary axis (secondaryAxis is absent); the secondary axis title is not drawn or exported.');
+        continue;
+      }
+      if (axis !== 'secondary' && support && !support.axisTitles[axis]) {
         adapt(`axisTitles.${axis}`, 'unsupported-type', `A '${kind}' chart has no ${axis} axis to title; the ${axis} axis title is not drawn or exported.`);
         continue;
       }
@@ -214,8 +238,20 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
       if (!content.length) content.push('value');
       const positions = support?.dataLabels.positions ?? NONE;
       let position: ChartLabelPosition | null = support?.dataLabels.defaultPosition ?? null;
-      if (typeof options.position === 'string' && POSITIONS.has(options.position) && options.position !== 'auto') {
-        if (!support || positions.includes(options.position as ChartLabelPosition)) position = options.position as ChartLabelPosition;
+      let linePosition: ChartLabelPosition | undefined;
+      const requestedPosition = typeof options.position === 'string' && POSITIONS.has(options.position) && options.position !== 'auto' ? options.position as ChartLabelPosition : undefined;
+      if (combo) {
+        // The column series take the clustered column positions and the line series the point positions; a position only one
+        // part has applies to that part, and the other keeps its own default (outside-end for columns, above for lines).
+        linePosition = 'above';
+        if (requestedPosition) {
+          if (END_POSITIONS.includes(requestedPosition)) position = requestedPosition;
+          else adapt('dataLabels.position', 'unsupported-position', `The column series of a combo chart cannot place data labels '${requestedPosition}'; they use outside-end.`);
+          if (POINT_POSITIONS.includes(requestedPosition)) linePosition = requestedPosition;
+          else adapt('dataLabels.position', 'unsupported-position', `The line series of a combo chart cannot place data labels '${requestedPosition}'; they use above.`);
+        }
+      } else if (requestedPosition) {
+        if (!support || positions.includes(requestedPosition)) position = requestedPosition;
         else adapt('dataLabels.position', 'unsupported-position', `A '${kind}'${target?.stacked ? ' stacked' : ''} chart cannot place data labels '${options.position}'; the type's default position is used.`);
       }
       let separator = typeof options.separator === 'string' ? options.separator : DEFAULT_CHART_LABEL_SEPARATOR;
@@ -224,7 +260,7 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
         separator = separator.replace(/[\r\n]+/g, ' ');
         adapt('dataLabels.separator', 'unsupported-content', 'A data label is one line; the line break in the separator is replaced with a space.');
       }
-      result.dataLabels = {content, position, separator};
+      result.dataLabels = {content, position, separator, ...(linePosition ? {linePosition} : {})};
     }
   }
 
@@ -242,7 +278,7 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
     if (kept.series.length || kept.categories.length) result.highlight = kept;
   }
 
-  result.active = result.legend !== undefined || result.dataLabels !== undefined || result.dataLabelsOff === true || result.axisTitles.category !== undefined || result.axisTitles.value !== undefined;
+  result.active = result.legend !== undefined || result.dataLabels !== undefined || result.dataLabelsOff === true || result.axisTitles.category !== undefined || result.axisTitles.value !== undefined || result.axisTitles.secondary !== undefined;
   return result;
 }
 

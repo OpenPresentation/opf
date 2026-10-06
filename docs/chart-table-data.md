@@ -231,6 +231,6 @@ Sample decks are written by the PPTX branch under `artifacts/rr-54-native/`.
 
 - Resolving a data source by file or asset, or refreshing `source` ([opf#240](https://github.com/OpenPresentation/opf/issues/240)).
 - Date axes and date formats.
-- Per-series colours or chart types (combo charts).
+- Per-series colours. (Columns with line series, optionally on a secondary axis, are the `combo` chart type: [chart-options.md](chart-options.md#combo-charts).)
 - Formulas.
 - Rich text in dataset cells.

@@ -959,7 +959,9 @@ _No named properties._
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
 | `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource / ref:DatasetRef` | Chart data: inline columns/rows, a dataset reference (`{ "dataset": "<id>", "fields"? }`), or a ChartDataSource, which no engine loads (`chart-data-source-unresolved` warning, placeholder drawn). |
 | `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name (category, scatter X, series). Absent keeps the positional rule. See docs/chart-table-data.md. |
-| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
+| `line` | no | `array<string>` | Combo charts only: the plotted series, by name, drawn as lines with markers; the others are clustered columns. Absent: the last series is the line; at least one series stays columns. See docs/chart-options.md#combo-charts. |
+| `secondaryAxis` | no | `array<string>` | Combo charts only: line series, by name, on a secondary value axis at the right with its own scale and its first series' column format. Absent: one value axis. |
+| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category, value and, on a combo chart with a secondary axis, secondary). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
 | `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
 | `highlight` | no | `ref:ChartHighlight` | Optional emphasis: series and/or categories drawn in the primary (accent) color while every other mark is muted from the theme. A mark is highlighted when its series OR its category is named. Absent keeps today's colors. Types that cannot highlight drop it with a `chart-option-adapted` diagnostic; an unknown name is a `chart-highlight-unknown-name` error. See docs/chart-options.md. |
@@ -968,12 +970,13 @@ _No named properties._
 ### ChartAxisTitles
 
 - Type: `object`
-- Purpose: Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.
+- Purpose: Titles for the axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis; 'secondary' is the secondary value axis of a combo chart.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `category` | no | `string` | Title of the category (X) axis. |
-| `value` | no | `string` | Title of the value (Y) axis. |
+| `value` | no | `string` | Title of the value (Y) axis. On a combo chart, the primary (left) value axis. |
+| `secondary` | no | `string` | Combo charts only: title of the secondary value axis at the right, rotated like the primary value title. Dropped with a `chart-option-adapted` diagnostic on any other type and on a combo chart without `secondaryAxis`. |
 
 
 ### ChartHighlight

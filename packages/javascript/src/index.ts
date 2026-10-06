@@ -134,7 +134,7 @@ export { parseTabularData, createDataContent, OPFDataImportError } from './data.
 export type { DataCell, TabularData, DataImportOptions, DataContentOptions } from './data.js';
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, excelNumberFormat, numberFormatFromExcel, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
-export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
+export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 
 export { fitRichText } from './composition.js';
 export type { RichTextRun, RichTextFragment, RichTextLine, RichTextFit, RichTextOptions } from './composition.js';
