@@ -39,9 +39,10 @@ describe("chart option targets", () => {
 
 describe("chart option support table", () => {
   test("axis titles exist only where the construct has the axis", () => {
-    assert.deepEqual(chartOptionSupport({ kind: "bar" }).axisTitles, { category: true, value: true });
-    assert.deepEqual(chartOptionSupport({ kind: "funnel" }).axisTitles, { category: true, value: false });
-    for (const kind of ["pie", "doughnut", "radar", "treemap", "map"]) assert.deepEqual(chartOptionSupport({ kind }).axisTitles, { category: false, value: false }, kind);
+    assert.deepEqual(chartOptionSupport({ kind: "bar" }).axisTitles, { category: true, value: true, secondary: false });
+    assert.deepEqual(chartOptionSupport({ kind: "funnel" }).axisTitles, { category: true, value: false, secondary: false });
+    for (const kind of ["pie", "doughnut", "radar", "treemap", "map"]) assert.deepEqual(chartOptionSupport({ kind }).axisTitles, { category: false, value: false, secondary: false }, kind);
+    assert.deepEqual(chartOptionSupport({ kind: "combo" }).axisTitles, { category: true, value: true, secondary: true });
   });
 
   test("label positions follow the OOXML position sets", () => {

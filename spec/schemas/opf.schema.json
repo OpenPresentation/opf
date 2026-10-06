@@ -3203,10 +3203,10 @@
       "properties": {
         "type": {
           "type": "string",
-          "description": "Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose.Slides officially supports.",
+          "description": "Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose.Slides officially supports, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis').",
           "examples": [
             "column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar",
-            "waterfall", "funnel", "treemap", "stacked-column"
+            "waterfall", "funnel", "treemap", "stacked-column", "combo"
           ]
         },
         "data": {
@@ -3221,9 +3221,25 @@
           "$ref": "#/$defs/ChartMapping",
           "description": "Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, then the X column for scatter, every other column a series)."
         },
+        "line": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Combo charts only (type 'combo'): the plotted series, by column name, that are drawn as lines with markers; every other plotted series is drawn as clustered columns. Absent: the last plotted series is the line. A combo chart keeps at least one column series, so a list that names every series draws the first one as columns. Column series are drawn, exported and listed in the legend first, then the line series on the primary axis, then those on the secondary axis, each in plotted order. A name that is not a column is a 'chart-mapping-unknown-column' error; a column that is not plotted is a 'chart-mapping-adapted' warning. On any other chart type it is ignored with a 'chart-option-adapted' warning.",
+          "examples": [["Margin"]]
+        },
+        "secondaryAxis": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Combo charts only: line series, by column name, plotted against a secondary value axis at the right of the plot. That axis has its own scale, and its tick labels use the number format of the first secondary series' column (DataColumn.format), for example '0%' for a margin. Absent: every series shares the primary value axis at the left. A name that is not a line series (see 'line') stays on the primary axis with a 'chart-mapping-adapted' warning; an unknown column is a 'chart-mapping-unknown-column' error. On any other chart type it is ignored with a 'chart-option-adapted' warning.",
+          "examples": [["Margin"]]
+        },
         "axisTitles": {
           "$ref": "#/$defs/ChartAxisTitles",
-          "description": "Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-whisker constructs; the funnel construct takes a category title only); a title on a type without that axis (pie, doughnut, radar, treemap, map) is dropped with a 'chart-option-adapted' diagnostic by renderers and exporters."
+          "description": "Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-whisker constructs; the funnel construct takes a category title only; a combo chart also takes 'secondary' when it plots a series on the secondary axis); a title on a type without that axis (pie, doughnut, radar, treemap, map) is dropped with a 'chart-option-adapted' diagnostic by renderers and exporters."
         },
         "legend": {
           "type": "string",
@@ -3242,7 +3258,7 @@
     "ChartAxisTitles": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.",
+      "description": "Titles for the axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis; 'secondary' is the secondary value axis of a combo chart.",
       "properties": {
         "category": {
           "type": "string",
@@ -3251,8 +3267,13 @@
         },
         "value": {
           "type": "string",
-          "description": "Title of the value (Y) axis.",
+          "description": "Title of the value (Y) axis. On a combo chart, the primary (left) value axis.",
           "examples": ["Revenue ($M)", "Customers"]
+        },
+        "secondary": {
+          "type": "string",
+          "description": "Combo charts only: title of the secondary value axis at the right of the plot, drawn rotated like the primary value axis title. Dropped with a 'chart-option-adapted' diagnostic on any other chart type and on a combo chart without 'secondaryAxis'.",
+          "examples": ["Margin (%)"]
         }
       }
     },
@@ -3271,7 +3292,7 @@
         "position": {
           "type": "string",
           "enum": ["auto", "center", "inside-end", "inside-base", "outside-end", "above", "below", "left", "right"],
-          "description": "Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked columns and bars; above for line and scatter points. Clustered columns and bars and the histogram, pareto and waterfall constructs take center, inside-end, inside-base and outside-end; stacked columns and bars take center, inside-end and inside-base; pie takes center, inside-end and outside-end; line and scatter points take above, below, left, right and center. Area, doughnut and radar charts and the funnel and treemap constructs take only 'auto' (the box-and-whisker and map constructs have no data labels). An unsupported position falls back to 'auto' with a 'chart-option-adapted' diagnostic."
+          "description": "Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked columns and bars; above for line and scatter points. Clustered columns and bars and the histogram, pareto and waterfall constructs take center, inside-end, inside-base and outside-end; stacked columns and bars take center, inside-end and inside-base; pie takes center, inside-end and outside-end; line and scatter points take above, below, left, right and center. Area, doughnut and radar charts and the funnel and treemap constructs take only 'auto' (the box-and-whisker and map constructs have no data labels). A combo chart places the labels of its column series like clustered columns and those of its line series like line points; a position only one part takes applies to that part, and the other part keeps its default (outside-end, above). An unsupported position falls back to 'auto' with a 'chart-option-adapted' diagnostic."
         },
         "separator": {
           "type": "string",

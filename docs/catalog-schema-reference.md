@@ -98,7 +98,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default cat...
+- Purpose: Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition "mixed"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -112,7 +112,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `group` | no | `string` | Top-level grouping in the chart picker. |
 | `groupSort` | no | `integer` | Display ordering hint within the chart group. |
 | `complexity` | no | `enum:simple \| calculated \| hierarchical \| normalized` | Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). The editor offers only 'simple' types... |
-| `series` | no | `integer` | Number of data series this chart type expects: exactly that many, except that a stacked or percent-stacked type expects at least that many. The editor offers a type that expects more than one series only for data with... |
+| `series` | no | `integer` | Number of data series this chart type expects: exactly that many, except that a stacked or percent-stacked type and a combination (composition 'mixed', such as combo) expect at least that many. The editor offers a typ... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 

@@ -20,7 +20,7 @@ Three optional fields on the `Chart` object:
 
 | Field | Values | Absent means |
 | --- | --- | --- |
-| `axisTitles` | `{ category?: string, value?: string }` | no axis titles (today) |
+| `axisTitles` | `{ category?: string, value?: string, secondary?: string }` (`secondary`: combo charts) | no axis titles (today) |
 | `legend` | `none`, `top`, `bottom`, `left`, `right` | today's behaviour exactly: a legend at the right of multi-series charts and of pie and doughnut charts, none for a single-series chart |
 | `dataLabels` | `true`, `false` or `{ content?, position?, separator? }` | no data labels (today); the funnel and treemap constructs keep the labels they draw by default (values, category names) |
 
@@ -51,9 +51,43 @@ Three optional fields on the `Chart` object:
 | funnel | category | none | category, value | none (center) |
 | treemap | none | none | category, value | none (center) |
 | box and whisker | category, value | yes | none | none |
+| combo (`combo`) | category, value, secondary | yes | category, value | columns: center, inside-end, inside-base, outside-end (outside-end); lines: above, below, left, right, center (above) |
 | world (region map) | none | none | none | none |
 
 A chart type outside the catalog is never adapted.
+
+## Combo charts
+
+Status: FA-15 (format audit). A `combo` chart draws clustered columns and line series in one plot, for an amount beside a rate such as revenue and margin %:
+
+```json
+{
+  "chart": {
+    "type": "combo",
+    "data": {
+      "columns": ["Quarter", { "name": "Revenue", "format": "$#,##0.0" }, { "name": "Margin", "format": "0%" }],
+      "rows": [["Q1", 12.4, 0.31], ["Q2", 18.1, 0.34], ["Q3", 21.7, 0.29], ["Q4", 26.3, 0.37]]
+    },
+    "line": ["Margin"],
+    "secondaryAxis": ["Margin"],
+    "axisTitles": { "category": "Quarter", "value": "Revenue ($M)", "secondary": "Margin" }
+  }
+}
+```
+
+| Field | Values | Absent means |
+| --- | --- | --- |
+| `line` | plotted series names, at least one | the last plotted series is the line |
+| `secondaryAxis` | line series names | every series uses the primary (left) value axis |
+| `axisTitles.secondary` | string | no secondary axis title |
+
+- **The plan.** Every plotted series (the `mapping.series` or the positional rule) is drawn as clustered columns, except the ones `line` names, which are lines with markers. At least one series stays columns, so a `line` that names every series draws the first as columns. A one-series combo chart is drawn as columns. Core's `resolveChartData` returns the plan as `combo` (`{ role: "bar" | "line", axis: "primary" | "secondary" }` per series) and orders the series columns first, then the primary-axis lines, then the secondary-axis lines, so the preview, the PPTX series order and the legend agree.
+- **The secondary axis.** `secondaryAxis` puts line series on a value axis at the right (at the left right to left). It has its own automatic scale and its tick labels use the number format of its first series' column (`DataColumn.format`, for example `0%`); the primary axis uses the first column series' format. Gridlines follow the primary axis. `axisTitles.secondary` titles it, rotated like the primary value title.
+- **Labels.** One `dataLabels` applies to both parts: column labels sit outside the end and line labels above the points by default; `center` applies to both; a position only one part takes (`inside-end`, `inside-base`, `outside-end` for columns; `above`, `below`, `left`, `right` for lines) applies to that part and the other keeps its default, with a `chart-option-adapted` note. `resolveChartOptions` returns the column position as `dataLabels.position` and the line position as `dataLabels.linePosition`.
+- **Legend.** As for other multi-series charts (right by default, or `legend`); a column series has a square key and a line series a line with a marker.
+- **Validation.** A `line` or `secondaryAxis` name that is not a column of the data is a `chart-mapping-unknown-column` error. A name that is not plotted, a `secondaryAxis` name that is not a line, a `line` that names every series and a one-series combo chart are `chart-mapping-adapted` warnings. `line`, `secondaryAxis` and `axisTitles.secondary` on any other chart type, and `axisTitles.secondary` on a combo chart without `secondaryAxis`, are `chart-option-adapted` warnings.
+- **PPTX.** One `c:plotArea` holds a clustered column `c:barChart` (primary axes) and a `c:lineChart` with markers. Secondary-axis lines form a second `c:lineChart` on a second `c:valAx` (`axPos r`, `crosses max`) and a deleted second `c:catAx`; the embedded workbook holds every series. Import reads such a plot area (one clustered column group, one or two line groups) back as `combo` with `line` (when it is not the default), `secondaryAxis`, the secondary title and the label position.
+- **Editor.** The chart type picker offers `combo` for data with two or more series, the chart options panel sets which series are lines and which lines use the secondary axis, and switching to another type removes the three fields.
 
 ## How the engines draw and write them
 
@@ -70,4 +104,4 @@ A chart that sets none of the three fields renders and exports byte-for-byte as 
 
 ## Not in this change
 
-Per-series data label overrides (column number formats are RR-54, [chart-table-data.md](chart-table-data.md)), a rotated or rich-text axis title, a chart title, a legend that overlays the plot, manual plot-area layout, secondary axes and trendlines. Charts from external spreadsheets (`ChartDataSource`) stay descoped.
+Per-series data label overrides (column number formats are RR-54, [chart-table-data.md](chart-table-data.md)), a rotated or rich-text axis title, a chart title, a legend that overlays the plot, manual plot-area layout, secondary axes outside combo charts, and trendlines. Charts from external spreadsheets (`ChartDataSource`) stay descoped.

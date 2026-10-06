@@ -19,8 +19,8 @@
     },
     "chart-types": {
       "mode": "subset",
-      "records": 26,
-      "contentSha256": "0b9b945cb190ea66c71aa12d98abd2c9b2f215b55c642fce59df1e9c939436e3",
+      "records": 27,
+      "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
       "gallery": {
         "records": 76,
         "contentSha256": "0181580c76d582f28c6c7f03d60222ce54f7f3f89ba98107038ada9df37a7c67"

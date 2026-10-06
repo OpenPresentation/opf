@@ -294,9 +294,9 @@
   },
   "addressedDefinition": "A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).",
   "summary": {
-    "records": 1052,
+    "records": 1053,
     "addressed": 1036,
-    "unaddressed": 16,
+    "unaddressed": 17,
     "byStatus": {
       "done": 499,
       "deprecated": 0,
@@ -305,7 +305,7 @@
       "unknown": 0,
       "parity-near": 32,
       "font-gap": 108,
-      "missing-gallery": 8,
+      "missing-gallery": 9,
       "missing-spec": 8,
       "missing-editor": 0,
       "parity-mismatch": 0,
@@ -370,15 +370,15 @@
         "unaddressed": 0
       },
       "charts": {
-        "records": 34,
+        "records": 35,
         "byStatus": {
           "done": 17,
           "descoped": 1,
-          "missing-gallery": 8,
+          "missing-gallery": 9,
           "missing-spec": 8
         },
         "addressed": 18,
-        "unaddressed": 16
+        "unaddressed": 17
       },
       "themes": {
         "records": 4,
@@ -473,8 +473,8 @@
       }
     },
     "unaddressedGaps": {
-      "charts missing-gallery": 8,
-      "charts unknown": 8,
+      "charts missing-gallery": 9,
+      "charts unknown": 9,
       "charts missing-spec": 8
     }
   },
@@ -1228,6 +1228,7 @@
     {"type":"charts","id":"bar","name":"Bar","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"box-and-whisker","name":"Box & Whisker","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"column","name":"Column","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
+    {"type":"charts","id":"combo","name":"Combo: Column and Line","columns":{"spec":"catalog","compose":"unknown","preview":"unknown","export":"unknown","roundTrip":"unknown","parity":"unmeasured","editor":"switch","gallery":"not-shown","native":"unverified","fonts":"n/a"},"pipeline":"unmeasured","gaps":[{"code":"missing-gallery","detail":"not shown on pptx.gallery","addressed":false},{"code":"unknown","detail":"not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run)","addressed":false}],"status":"missing-gallery","addressed":false},
     {"type":"charts","id":"doughnut","name":"Doughnut","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"filled-radar","name":"Filled Radar","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"funnel","name":"Funnel","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},

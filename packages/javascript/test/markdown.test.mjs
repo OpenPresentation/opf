@@ -505,8 +505,9 @@ describe("round trips", () => {
       total += deck.slides.length;
       for (const entry of report.embedded) reasons.set(entry.reason.replace(/"[^"]*"/g, '"key"'), (reasons.get(entry.reason.replace(/"[^"]*"/g, '"key"')) ?? 0) + 1);
     }
-    // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML.
-    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|"key" has no Markdown form|a block with several fields)/, reason);
+    // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML. A chart block carries type and
+    // data only, so a chart with options (the FA-15 combo example: line, secondaryAxis, axis titles) is embedded.
+    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|chart content|"key" has no Markdown form|a block with several fields)/, reason);
     assert.ok(nativeSlides / total > 0.9, `${nativeSlides} of ${total} slides are plain Markdown`);
   });
 
