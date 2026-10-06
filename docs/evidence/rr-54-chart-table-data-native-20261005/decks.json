@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "kind": "rr54-native-decks",
+  "builds": {
+    "core": {
+      "repo": "OpenPresentation/opf",
+      "pr": 376,
+      "commit": "1131723761d7b5b11096fcfb671a6794732aebcc",
+      "package": "packages/javascript (0.12.2, pnpm build)"
+    },
+    "pptx": {
+      "repo": "OpenPresentation/opf-pptx",
+      "pr": 171,
+      "commit": "f0ea48062883b43569697892ab5d022588f0a3a1",
+      "link": "node_modules/@openpresentation/opf is a junction to the core worktree package (as link-ecosystem does); opf-render 0.12.0 from npm ci"
+    },
+    "node": "24.21.0",
+    "exportOptions": "toPptx(deck, {onDiagnostic}) and fromPptx(bytes), default options (artifacts/exp/native-decks.mjs of the RR-54 session)",
+    "reproduced": "build-check/rebuild.mjs rebuilt the three source decks byte-identical (sha256 below) and their re-imports equal the given .reimported.opf.json"
+  },
+  "decks": [
+    {
+      "id": "rr54-formats",
+      "file": "rr54-formats.pptx",
+      "bytes": 85060,
+      "sha256": "da5edac2eec4c0cadf81d38c73df779da399d7e45b066634622e12eb576eb294",
+      "supplementary": false,
+      "savedCopy": {
+        "attempt": "20261006T021315Z",
+        "file": "rr54-formats-saved.pptx",
+        "bytes": 99673,
+        "sha256": "49f0d438d306e03da743d0ae0ff9c1e1c0375428f83b9db53b39f3f6aefe7a73"
+      }
+    },
+    {
+      "id": "rr54-datasets",
+      "file": "rr54-datasets.pptx",
+      "bytes": 80745,
+      "sha256": "50ce4ae5edf2cb7d886dc4e9ea5f50da55bee117262e69f78b328bd9da05b412",
+      "supplementary": false,
+      "savedCopy": {
+        "attempt": "20261006T021315Z",
+        "file": "rr54-datasets-saved.pptx",
+        "bytes": 93971,
+        "sha256": "5d9349b2314f1c649343156818992f8523a4b8587a1b637f5f80921397b9f782"
+      }
+    },
+    {
+      "id": "rr54-tables",
+      "file": "rr54-tables.pptx",
+      "bytes": 31240,
+      "sha256": "bf989f9141df9c3b755cca6e395e324eb47023aa767c6bd4803b5bfeb916e1f1",
+      "supplementary": false,
+      "savedCopy": {
+        "attempt": "20261006T021315Z",
+        "file": "rr54-tables-saved.pptx",
+        "bytes": 32931,
+        "sha256": "a6b9f2bbaa3dc41bc4c05b1096715e74b13f32b76a030586b2246450b6d71558"
+      }
+    },
+    {
+      "id": "rr54-spellings",
+      "file": "rr54-spellings.pptx",
+      "bytes": 66897,
+      "sha256": "17efc8182ac76615f22ac81e5beebf01dbaadbcb03dc5cddfd8e20360e2ddb47",
+      "supplementary": true,
+      "note": "Built here by build-spellings.mjs with the same builds and options: the three source decks contain no 0.## or # format, which docs/chart-table-data.md lists as a wanted native check.",
+      "savedCopy": {
+        "attempt": "20261006T021315Z",
+        "file": "rr54-spellings-saved.pptx",
+        "bytes": 73446,
+        "sha256": "0cf8d5c58ca805eae410e827dcd213e6e8239f3a798a56b03f430d71bda00e1e"
+      }
+    }
+  ]
+}

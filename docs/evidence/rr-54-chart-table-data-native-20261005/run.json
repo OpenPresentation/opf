@@ -1,0 +1,575 @@
+{
+  "schemaVersion": 1,
+  "kind": "rr54-native-runs",
+  "host": {
+    "os": "Windows 11",
+    "powerpoint": "16.0 build 20430",
+    "date": "2026-10-05"
+  },
+  "deadlineMs": 90000,
+  "retries": "none; every attempt is a new stamp, nothing was rerun in place",
+  "combinedReport": "20261006T022119Z with --also 20261006T022136Z 20261006T021315Z",
+  "attempts": [
+    {
+      "attempt": "20261006T020213Z",
+      "note": "Reads and save copies, Edit Data in the read child. PowerPoint crashed (chart.dll 0xc0000005) reading Series.Formula on rr54-formats slide 1; every later child could not attach (RPC server unavailable). No results used.",
+      "schemaVersion": 1,
+      "kind": "rr54-run",
+      "script": "both",
+      "only": [],
+      "skipEditData": false,
+      "startedAt": "2026-10-06T02:02:13.6940500Z",
+      "deadlineMs": 90000,
+      "runnerSha256": "5dcf414943e21f953a8867cdf581d96c794a9eb7df7633f773526d55f48f6706",
+      "workerSha256": {
+        "read": "31583732e3a05f6dec8002863070d3e6164f127d4151688bd96bddec322c5493",
+        "save": "7641e75970055fb937f0331cafb984d1089b0ad26e073d881492f5712bbcd77f"
+      },
+      "manifestSha256": "a09ebf212abd9f12d63d7956feea30f9e16479a14e315d163758d610161fa8f2",
+      "powerpointProcesses": [
+        9692
+      ],
+      "excelProcessesBefore": [],
+      "runs": [
+        {
+          "deck": "rr54-formats",
+          "script": "read",
+          "pid": 5224,
+          "startedAt": "2026-10-06T02:02:13.7450509Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:19.1835415Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "read",
+          "pid": 29420,
+          "startedAt": "2026-10-06T02:02:19.2062702Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:19.6044801Z"
+        },
+        {
+          "deck": "rr54-tables",
+          "script": "read",
+          "pid": 3660,
+          "startedAt": "2026-10-06T02:02:19.6160045Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:20.0185883Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "read",
+          "pid": 14700,
+          "startedAt": "2026-10-06T02:02:20.0291819Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:20.4300947Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "save",
+          "pid": 7292,
+          "startedAt": "2026-10-06T02:02:20.4416285Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:20.8440080Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "save",
+          "pid": 23100,
+          "startedAt": "2026-10-06T02:02:20.8545672Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:21.2448031Z"
+        },
+        {
+          "deck": "rr54-tables",
+          "script": "save",
+          "pid": 26424,
+          "startedAt": "2026-10-06T02:02:21.2575488Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:21.6503624Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "save",
+          "pid": 21488,
+          "startedAt": "2026-10-06T02:02:21.6603869Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 1,
+          "finishedAt": "2026-10-06T02:02:22.0554244Z"
+        }
+      ],
+      "stoppedEarly": false,
+      "finishedAt": "2026-10-06T02:02:22.0579375Z",
+      "sourcesUnchanged": true,
+      "excelProcessesAfter": []
+    },
+    {
+      "attempt": "20261006T020606Z",
+      "note": "Reader without Series.Formula; Edit Data for all charts in one child. The slide 2 ChartData.Activate hung behind the PowerPoint message \"To insert a chart, you must first close any open dialog boxes or cancel editing mode in Microsoft Excel.\"; the child hit the 90 s deadline and the set stopped. Fixed by one chart per child. No results used.",
+      "schemaVersion": 1,
+      "kind": "rr54-run",
+      "script": "both",
+      "only": [],
+      "skipEditData": false,
+      "startedAt": "2026-10-06T02:06:06.6546137Z",
+      "deadlineMs": 90000,
+      "runnerSha256": "5dcf414943e21f953a8867cdf581d96c794a9eb7df7633f773526d55f48f6706",
+      "workerSha256": {
+        "read": "cc50c2b0e1549740a312c8d494b39d3d5bef1c8338494bb30b14db6241d5dbcd",
+        "save": "7641e75970055fb937f0331cafb984d1089b0ad26e073d881492f5712bbcd77f"
+      },
+      "manifestSha256": "a09ebf212abd9f12d63d7956feea30f9e16479a14e315d163758d610161fa8f2",
+      "powerpointProcesses": [
+        3780
+      ],
+      "excelProcessesBefore": [],
+      "runs": [
+        {
+          "deck": "rr54-formats",
+          "script": "read",
+          "pid": 29160,
+          "startedAt": "2026-10-06T02:06:06.6998490Z",
+          "timedOut": true,
+          "stoppedByPid": true,
+          "exitCode": -1,
+          "finishedAt": "2026-10-06T02:07:36.7282454Z"
+        }
+      ],
+      "stoppedEarly": true,
+      "finishedAt": "2026-10-06T02:07:36.7404629Z",
+      "sourcesUnchanged": true,
+      "excelProcessesAfter": []
+    },
+    {
+      "attempt": "20261006T021315Z",
+      "note": "-SkipEditData: reads and save copies. C3 PASS and C4 used from this attempt; its C1 failures were a reader bug (Series.DataLabels() collection unrolled by the pipeline), superseded by 20261006T022119Z.",
+      "schemaVersion": 1,
+      "kind": "rr54-run",
+      "script": "both",
+      "only": [],
+      "skipEditData": true,
+      "startedAt": "2026-10-06T02:13:15.4280167Z",
+      "deadlineMs": 90000,
+      "runnerSha256": "5dcf414943e21f953a8867cdf581d96c794a9eb7df7633f773526d55f48f6706",
+      "workerSha256": {
+        "read": "cc50c2b0e1549740a312c8d494b39d3d5bef1c8338494bb30b14db6241d5dbcd",
+        "save": "7641e75970055fb937f0331cafb984d1089b0ad26e073d881492f5712bbcd77f"
+      },
+      "manifestSha256": "a09ebf212abd9f12d63d7956feea30f9e16479a14e315d163758d610161fa8f2",
+      "powerpointProcesses": [
+        3780
+      ],
+      "excelProcessesBefore": [],
+      "runs": [
+        {
+          "deck": "rr54-formats",
+          "script": "read",
+          "pid": 12080,
+          "startedAt": "2026-10-06T02:13:15.4663565Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:17.3411033Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "read",
+          "pid": 23564,
+          "startedAt": "2026-10-06T02:13:17.3581748Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:19.5630829Z"
+        },
+        {
+          "deck": "rr54-tables",
+          "script": "read",
+          "pid": 8820,
+          "startedAt": "2026-10-06T02:13:19.5737052Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:20.9031777Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "read",
+          "pid": 18116,
+          "startedAt": "2026-10-06T02:13:20.9146982Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:22.9332233Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "save",
+          "pid": 9120,
+          "startedAt": "2026-10-06T02:13:22.9454262Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:23.5482941Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "save",
+          "pid": 21708,
+          "startedAt": "2026-10-06T02:13:23.5612415Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:24.1387672Z"
+        },
+        {
+          "deck": "rr54-tables",
+          "script": "save",
+          "pid": 22744,
+          "startedAt": "2026-10-06T02:13:24.1496256Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:24.7182847Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "save",
+          "pid": 10660,
+          "startedAt": "2026-10-06T02:13:24.7299761Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:13:25.3117769Z"
+        }
+      ],
+      "stoppedEarly": false,
+      "finishedAt": "2026-10-06T02:13:25.3137771Z",
+      "sourcesUnchanged": true,
+      "excelProcessesAfter": []
+    },
+    {
+      "attempt": "20261006T022119Z",
+      "note": "Read with the fixed reader (-SkipEditData): C1 PASS on all 4 decks. Base of the combined report.",
+      "schemaVersion": 1,
+      "kind": "rr54-run",
+      "script": "read",
+      "only": [],
+      "slide": [],
+      "skipEditData": true,
+      "startedAt": "2026-10-06T02:21:19.9238782Z",
+      "deadlineMs": 90000,
+      "runnerSha256": "518b2227848def047c2dd30feb622254702da061f7d16e5ae123ee1ad9511119",
+      "workerSha256": {
+        "read": "267c4a855d3df4431b6669c0d0ff1101e0302f5f6e5aa9f4ce91ecf53688f4fd",
+        "save": "7641e75970055fb937f0331cafb984d1089b0ad26e073d881492f5712bbcd77f",
+        "editdata": "c339ae20484443e44822f06da50920cea0fbf5f43c314150b01dccffd40900a5"
+      },
+      "manifestSha256": "a09ebf212abd9f12d63d7956feea30f9e16479a14e315d163758d610161fa8f2",
+      "powerpointProcesses": [
+        3780
+      ],
+      "excelProcessesBefore": [],
+      "runs": [
+        {
+          "deck": "rr54-formats",
+          "script": "read",
+          "slide": null,
+          "pid": 21100,
+          "startedAt": "2026-10-06T02:21:19.9678801Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:21.9144009Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "read",
+          "slide": null,
+          "pid": 5624,
+          "startedAt": "2026-10-06T02:21:21.9318034Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:23.9390296Z"
+        },
+        {
+          "deck": "rr54-tables",
+          "script": "read",
+          "slide": null,
+          "pid": 22056,
+          "startedAt": "2026-10-06T02:21:23.9503101Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:25.2939690Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "read",
+          "slide": null,
+          "pid": 9900,
+          "startedAt": "2026-10-06T02:21:25.3060917Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:27.2139116Z"
+        }
+      ],
+      "stoppedEarly": false,
+      "finishedAt": "2026-10-06T02:21:27.2149115Z",
+      "sourcesUnchanged": true,
+      "excelProcessesAfter": []
+    },
+    {
+      "attempt": "20261006T022136Z",
+      "note": "Edit Data, one child per chart (16 charts): C2.",
+      "schemaVersion": 1,
+      "kind": "rr54-run",
+      "script": "editdata",
+      "only": [],
+      "slide": [],
+      "skipEditData": false,
+      "startedAt": "2026-10-06T02:21:36.6956292Z",
+      "deadlineMs": 90000,
+      "runnerSha256": "518b2227848def047c2dd30feb622254702da061f7d16e5ae123ee1ad9511119",
+      "workerSha256": {
+        "read": "267c4a855d3df4431b6669c0d0ff1101e0302f5f6e5aa9f4ce91ecf53688f4fd",
+        "save": "7641e75970055fb937f0331cafb984d1089b0ad26e073d881492f5712bbcd77f",
+        "editdata": "c339ae20484443e44822f06da50920cea0fbf5f43c314150b01dccffd40900a5"
+      },
+      "manifestSha256": "a09ebf212abd9f12d63d7956feea30f9e16479a14e315d163758d610161fa8f2",
+      "powerpointProcesses": [
+        3780
+      ],
+      "excelProcessesBefore": [],
+      "runs": [
+        {
+          "deck": "rr54-formats",
+          "script": "editdata",
+          "slide": 1,
+          "pid": 9212,
+          "startedAt": "2026-10-06T02:21:36.7401671Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:39.9934070Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "editdata",
+          "slide": 2,
+          "pid": 23560,
+          "startedAt": "2026-10-06T02:21:40.0122560Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:43.0943368Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "editdata",
+          "slide": 3,
+          "pid": 11052,
+          "startedAt": "2026-10-06T02:21:43.1053758Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:45.7847153Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "editdata",
+          "slide": 4,
+          "pid": 27984,
+          "startedAt": "2026-10-06T02:21:45.7973528Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:48.7973552Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "editdata",
+          "slide": 5,
+          "pid": 11564,
+          "startedAt": "2026-10-06T02:21:48.8079165Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:51.9014025Z"
+        },
+        {
+          "deck": "rr54-formats",
+          "script": "editdata",
+          "slide": 6,
+          "pid": 19764,
+          "startedAt": "2026-10-06T02:21:51.9127731Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:55.0225691Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "editdata",
+          "slide": 1,
+          "pid": 816,
+          "startedAt": "2026-10-06T02:21:55.0331022Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:21:58.1554096Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "editdata",
+          "slide": 2,
+          "pid": 27876,
+          "startedAt": "2026-10-06T02:21:58.1662232Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:01.3348723Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "editdata",
+          "slide": 4,
+          "pid": 2496,
+          "startedAt": "2026-10-06T02:22:01.3464103Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:04.4266344Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "editdata",
+          "slide": 5,
+          "pid": 28884,
+          "startedAt": "2026-10-06T02:22:04.4562090Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:07.5707541Z"
+        },
+        {
+          "deck": "rr54-datasets",
+          "script": "editdata",
+          "slide": 6,
+          "pid": 21520,
+          "startedAt": "2026-10-06T02:22:07.5802999Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:10.8054437Z"
+        },
+        {
+          "deck": "rr54-tables",
+          "script": "editdata",
+          "slide": 2,
+          "pid": 18944,
+          "startedAt": "2026-10-06T02:22:10.8169706Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:13.9235278Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "editdata",
+          "slide": 1,
+          "pid": 23804,
+          "startedAt": "2026-10-06T02:22:13.9352031Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:17.2019168Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "editdata",
+          "slide": 2,
+          "pid": 23172,
+          "startedAt": "2026-10-06T02:22:17.2119400Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:20.4655086Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "editdata",
+          "slide": 3,
+          "pid": 27508,
+          "startedAt": "2026-10-06T02:22:20.4750257Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:23.7045753Z"
+        },
+        {
+          "deck": "rr54-spellings",
+          "script": "editdata",
+          "slide": 4,
+          "pid": 23460,
+          "startedAt": "2026-10-06T02:22:23.7172264Z",
+          "timedOut": false,
+          "stoppedByPid": false,
+          "exitCode": 0,
+          "finishedAt": "2026-10-06T02:22:27.0119844Z"
+        }
+      ],
+      "stoppedEarly": false,
+      "finishedAt": "2026-10-06T02:22:27.0154970Z",
+      "sourcesUnchanged": true,
+      "excelProcessesAfter": [
+        7108
+      ]
+    }
+  ],
+  "diag": [
+    {
+      "stamp": "20261006T020344Z",
+      "script": "diag-chart-props.ps1",
+      "deck": "rr54-formats slide 1",
+      "result": "every property read OK; S1.Formula returned an empty string after 3.4 s, then PowerPoint died (next call: RPC server unavailable)",
+      "log": "diag/20261006T020344Z-rr54-formats.log"
+    },
+    {
+      "stamp": "20261006T020414Z",
+      "script": "diag-chart-props.ps1",
+      "deck": "control: an RR-17 deck exported by opf-pptx main",
+      "result": "same: S1.Formula returned empty after 3.0 s, then PowerPoint died",
+      "log": "diag/20261006T020414Z-control-rr17.log"
+    },
+    {
+      "stamp": "20261006T020506Z",
+      "script": "diag-native-chart-formula.ps1",
+      "deck": "control: chart inserted by PowerPoint (Shapes.AddChart2) in a new unsaved presentation",
+      "result": "GetActiveObject failed (MK_E_UNAVAILABLE): no running PowerPoint was registered yet after the crash; nothing was read",
+      "log": "diag/20261006T020506Z-native-chart.err.txt"
+    },
+    {
+      "stamp": "20261006T020539Z",
+      "script": "diag-native-chart-formula.ps1",
+      "deck": "control: chart inserted by PowerPoint (Shapes.AddChart2) in a new unsaved presentation",
+      "result": "S1.Formula returned empty after 2.8 s, then PowerPoint died before the presentation could be closed",
+      "log": "diag/20261006T020539Z-native-chart.log"
+    }
+  ]
+}
