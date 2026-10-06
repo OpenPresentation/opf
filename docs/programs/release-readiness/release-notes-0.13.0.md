@@ -1,16 +1,18 @@
 # Release-readiness note: the 0.13 release train
 
-Status: **draft** of 2026-10-06 for the owner (RR-20), written before the train runs. Internal repository documentation:
-nothing here is shown on pptx.gallery, openpresentation.org or pptx.dev, and it states no support or parity percentages
-(owner decision 2026-09-30; see the [README](README.md) invariants). Tracker: [burndown.md](burndown.md). The registry
-table below is filled in when the train has published and verified each version.
+Status: **published** on 2026-10-06 for the owner (RR-20). The registry table below was checked against npm after the
+train finished. Internal repository documentation: nothing here is shown on pptx.gallery, openpresentation.org or
+pptx.dev, and it states no support or parity percentages (owner decision 2026-09-30; see the [README](README.md)
+invariants). Tracker: [burndown.md](burndown.md).
 
 ## What the owner needs to know
 
-- The train is a lockstep **minor** release: core `@openpresentation/opf` **0.13.0**, `opf-render` **0.13.0**, `opf-pptx`
-  **0.13.0**, `opf-editor` **0.12.0** and the CLI **0.11.0** (bundles core 0.13.0), published in that dependency order by
-  `scripts/release-train.mjs`. Every sibling raises its core floor (and its optional renderer peer floor; the CLI its
-  renderer and PPTX peers) to the new versions.
+- The train is a lockstep **minor** release: core `@openpresentation/opf` **0.13.0**, `opf-render` **0.13.1**, `opf-pptx`
+  **0.13.2**, `opf-editor` **0.12.1** and the CLI **0.11.0** (bundles core 0.13.0), published in that dependency order by
+  `scripts/release-train.mjs`. Renderer, PPTX and editor each needed a patch on top of the minor (see
+  [Patch releases in the train](#patch-releases-in-the-train)); install the versions above and not the ones they
+  replace. Every sibling raises its core floor (and its optional renderer peer floor; the CLI its renderer and PPTX
+  peers) to the new versions.
 - **Every PPTX export changes** (opf-pptx): the vendored engine moves from PptxGenJS 4.0.1 (unmaintained) to its
   maintained MIT fork pptxgenjs-plus 4.3.4. Slide geometry, text, fonts, themes, tables, fields, notes text and the
   embedded workbooks' contents are unchanged; package structure and serialization change (summary below). The Windows
@@ -35,16 +37,42 @@ table below is filled in when the train has published and verified each version.
 
 ## What ships, per package
 
-Registry state (filled after `release-train.mjs tag` verifies each package: npm `latest`, `gitHead` = release merge
-commit, SLSA provenance, `npm audit signatures`):
+Registry state as of 2026-10-06, read from npm after `release-train.mjs tag` (`latest` dist-tag, `gitHead` = the release
+merge commit, SLSA v1 provenance). `npm audit signatures` on a fresh install of the five final versions reports every
+registry signature verified and the attestations verified, and `npm audit` reports 0 vulnerabilities. Times are UTC.
 
-| Package | Version | `gitHead` | Release PR | Floors |
-| --- | --- | --- | --- | --- |
-| `@openpresentation/opf` | 0.13.0 | _pending_ | _pending_ | - |
-| `@openpresentation/opf-render` | 0.13.0 | _pending_ | _pending_ | core `^0.13.0` |
-| `@openpresentation/opf-pptx` | 0.13.0 | _pending_ | _pending_ | core `^0.13.0`; optional peer renderer `^0.13.0` |
-| `@openpresentation/opf-editor` | 0.12.0 | _pending_ | _pending_ | core `^0.13.0`; optional peer renderer `^0.13.0` |
-| `@openpresentation/cli` | 0.11.0 | _pending_ | _pending_ | bundles core 0.13.0; optional peers renderer and PPTX `^0.13.0` |
+| Package | Version | Published | `gitHead` | Release PR | Provenance | Floors |
+| --- | --- | --- | --- | --- | --- | --- |
+| `@openpresentation/opf` | 0.13.0 | 2026-10-06 09:55 | `209e3a25` | [opf#398](https://github.com/OpenPresentation/opf/pull/398) | SLSA v1 | - |
+| `@openpresentation/opf-render` | 0.13.1 | 2026-10-06 17:35 | `e6665f14` | [opf-render#134](https://github.com/OpenPresentation/opf-render/pull/134) | SLSA v1 | core `^0.13.0` |
+| `@openpresentation/opf-pptx` | 0.13.2 | 2026-10-06 19:05 | `673dbba6` | [opf-pptx#180](https://github.com/OpenPresentation/opf-pptx/pull/180) | SLSA v1 | core `^0.13.0`; optional peer renderer `^0.13.1` |
+| `@openpresentation/opf-editor` | 0.12.1 | 2026-10-06 22:09 | `1d4af4e9` | [opf-editor#111](https://github.com/OpenPresentation/opf-editor/pull/111) | SLSA v1 | core `^0.13.0`; optional peer renderer `^0.13.1` |
+| `@openpresentation/cli` | 0.11.0 | 2026-10-06 21:40 | `1bd4923e` | [opf#408](https://github.com/OpenPresentation/opf/pull/408) | SLSA v1 | bundles core 0.13.0; optional peers renderer `^0.13.1` and PPTX `^0.13.2` |
+
+### Patch releases in the train
+
+The 0.13 set above is the first set that is safe to install. Four versions of the train were published or tagged and then
+replaced; nothing was unpublished.
+
+- **opf-render 0.13.0** (published 10:48) pins `sharp` 0.35.4, which is affected by GHSA-wq5f-xc86-pv6w (`sharp` below
+  0.35.5). **0.13.1** pins `sharp` 0.35.5 and is the dependency bump the patch was made for. 0.13.0 is not deprecated on npm: its
+  dependents (opf-pptx 0.13.0 and 0.13.1) were replaced instead.
+- **opf-pptx 0.13.0** (published 11:51) is **deprecated** on npm. Its browser bundle failed when a consumer's tree also
+  had `readable-stream`: `@node-projects/jszip` probes for it with a `require` that bundlers follow, and the bundle
+  stopped on the `events` and `buffer` imports (found by opf-editor#94, fixed by
+  [opf-pptx#177](https://github.com/OpenPresentation/opf-pptx/pull/177)). **0.13.1** vendors that package's own minified
+  build for the browser; Node output is identical.
+- **opf-pptx 0.13.1** (published 14:12) pins `sharp` 0.35.4, the same advisory as above, and is not deprecated on npm.
+  **0.13.2** pins `sharp` 0.35.5 and raises the optional renderer peer to `^0.13.1`.
+- **opf-editor 0.12.0** was never published and never tagged. Its release commit
+  ([opf-editor#95](https://github.com/OpenPresentation/opf-editor/pull/95)) merged, but CI on it failed: `npm audit` found
+  the `sharp` advisory through the dev dependencies renderer 0.13.0 and PPTX 0.13.1, and the release tool only tags a
+  green release commit. A release-prep PR for **0.12.1** raised the peer and dev ranges to renderer `^0.13.1` and PPTX
+  `^0.13.2`. The npm history of the editor therefore goes from 0.11.3 to 0.12.1.
+
+The core 0.13.0 and CLI 0.11.0 releases needed no patch. The CLI 0.11.0 peers were set to renderer `^0.13.1` and PPTX
+`^0.13.2` before it was published, so a CLI install never resolves a superseded version. The per-package sections below
+describe the minor release and are still accurate for the patch versions, which add only what is named above.
 
 ### Core, `@openpresentation/opf` 0.13.0
 
@@ -69,7 +97,7 @@ commit, SLSA provenance, `npm audit signatures`):
   Schema, catalogs and libraries are unchanged by it.
 - Catalog snapshot manifest re-pinned to pptx.gallery `04792cc` (no record changed).
 
-### opf-render 0.13.0
+### opf-render 0.13.0 (patched by 0.13.1)
 
 - **RR-54 in the preview** ([opf-render#127](https://github.com/OpenPresentation/opf-render/pull/127)): every chart path
   reads `resolveChartData`, so `DataColumn` headers, dataset references and `chart.mapping` plot; numbers follow core's
@@ -78,7 +106,7 @@ commit, SLSA provenance, `npm audit signatures`):
 - The default golden baseline records the core 0.13.0 examples (the 14 example-deck slides above and the new digest);
   no renderer pixel moved for it.
 
-### opf-pptx 0.13.0
+### opf-pptx 0.13.0 (patched by 0.13.1 and 0.13.2)
 
 - **PPTX engine: pptxgenjs-plus 4.3.4** ([opf-pptx#165](https://github.com/OpenPresentation/opf-pptx/pull/165), issue
   [opf-pptx#162](https://github.com/OpenPresentation/opf-pptx/issues/162); record
@@ -116,7 +144,7 @@ commit, SLSA provenance, `npm audit signatures`):
   equivalent, `OPF_DATASETS_V1` / `OPF_DATA_V1` provenance in `full` mode with a cache hash that survives PowerPoint's
   re-spelled format codes, and import of format codes back to `{ name, format }` without provenance.
 
-### opf-editor 0.12.0
+### opf-editor 0.12.1 (the 0.12.0 release was never published)
 
 - **RR-54 in the data grid** ([opf-editor#92](https://github.com/OpenPresentation/opf-editor/pull/92)): `DataColumn`
   headers and per-column formats (`setGridColumnFormat`), chart cells checked with `chartNumber`, shared datasets edited
@@ -166,8 +194,9 @@ chart labels) are unchanged.
 The RR-54 contract decisions (one strict number rule, `ChartDataSource` warns, the variables format syntax, top-level
 datasets, mapping by name) and the move to pptxgenjs-plus are the owner's (2026-10-05) and are not repeated here.
 
-1. **Minor versions for the whole set** (0.13.0 / 0.12.0 / 0.11.0): every PPTX export changes and RR-54 changes how
-   non-numeric chart text is drawn and exported, so the set is not a patch. To veto: none practical once published.
+1. **Minor versions for the whole set** (core 0.13.0, CLI 0.11.0, editor 0.12.1; renderer and PPTX at their 0.13
+   minors plus the patches above): every PPTX export changes and RR-54 changes how non-numeric chart text is drawn and
+   exported, so the set is not a patch. To veto: none practical once published.
 2. **Three engine changes are undone in `vendor-compat.js`** (empty text bodies, the notes master's placeholders, the
    separate notes theme) to keep output that PowerPoint opened in every native check and that FF-05 depends on. To veto:
    drop the compat step and re-run the native a/b set.
@@ -186,7 +215,7 @@ opf-render#128 and #130), opf-pptx 0.12.4, opf-editor 0.11.3 and CLI 0.10.1. The
 
 ## What is not finished (RR-20)
 
-- The train itself (runbook kept by the supervisor), then the follow-up docs PR: `release-plan.json` (versions,
+- The train has published (this note); the follow-up docs PR remains: `release-plan.json` (versions,
   `bundledCore`, `exampleRefs`, `verificationRefs`), the compatibility matrix, the quickstart and current-set docs, the
   published-matrix consumer, and dropping the RR-41 retained golden from `scripts/registry-golden.mjs` once no
   release-plan core ships the `485b5c07...` corpus.
