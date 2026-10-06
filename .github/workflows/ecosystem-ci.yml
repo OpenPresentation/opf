@@ -1,13 +1,14 @@
 name: Coordinated public packages
 on:
   pull_request:
-  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
-  # pull_request payload (scripts/ecosystem-scope.mjs runs everything for it), and it is never cancelled.
+  # RR-48: the merge queue's run. It has no pull_request payload (scripts/ecosystem-scope.mjs runs everything for it), and it
+  # is never cancelled. RR-57: there is no push-to-main trigger. The queue fast-forwards main to the exact commit this run
+  # tested, so a push run repeated every job on the same SHA (verified on the last six merged pull requests). The check
+  # runs of this merge_group run sit on that commit, which is where release-train.mjs `tag` reads them (commitChecks).
   merge_group:
-  push:
-    branches: [main]
-  # RR-53: the nightly full run. Together with the push to main it is the safety net while the merge queue is off (opf#297):
-  # a pull request runs the siblings' contract suites only; main and the nightly run their full suites. Scheduled runs use the default branch.
+  # RR-53: the nightly full run, the safety net for anything that reaches main without the queue (a direct push by an
+  # administrator, a ruleset bypass): a pull request runs the siblings' contract suites only; the queue and the nightly run
+  # their full suites. Scheduled runs use the default branch.
   schedule:
     - cron: '37 1 * * *'
   workflow_dispatch:
@@ -21,7 +22,7 @@ concurrency:
 # (written by the roller; docs/ecosystem-development.md) through .github/actions/ecosystem-refs.
 # RR-53, consumer-driven contracts (ci-cd.md, section 3): scripts/ecosystem-scope.mjs decides the `tier` output. A pull
 # request runs each sibling's `npm run test:contract` (the part of its suite that exercises core's APIs); merge_group,
-# push to main, the nightly schedule and manual runs run the sibling's full `npm test`. The roller's branch, a lock change,
+# the nightly schedule and manual runs run the sibling's full `npm test`. The roller's branch, a lock change,
 # a change to this tiering and the label `ecosystem-full` also run the full suites. No tier skips a check: every sibling
 # step still runs, only its depth differs, and nothing about a docs-only or contract-only change lowers a non-PR run.
 jobs:
@@ -477,17 +478,20 @@ jobs:
         if: always() && steps.scope.outputs.run == 'true'
         run: |
           echo 'Shard ${{ matrix.shard }} of ecosystem-core. Together the three shards test coordinated source, local tarballs, and exact published registry installs against pinned fixtures. It executes installed-package browser harnesses, trusted pointer/keyboard editing and undo, controlled code export/reimport, and renderer raster regression checks. Native PowerPoint fidelity, arbitrary document round-tripping and private/public site interactions require separate evidence.' >> "$GITHUB_STEP_SUMMARY"
-  # RR-45 (opf#368, item 6): the Windows and macOS legs run on their own runners for push to main, merge_group, the nightly
-  # run, manual runs and pull requests labelled `ecosystem-full`. On any other pull request each leg runs on an Ubuntu
-  # runner instead and skips every step by policy, so the required checks `Installed candidates (windows-latest)` and
-  # `Installed candidates (macos-latest)` (ruleset 24382980) still report, under their own names, without taking a Windows
-  # or macOS runner. The push to main after merge runs them in full; main-status opens the main-red issue if they fail.
+  # RR-45 (opf#368, item 6): the Windows and macOS legs run on their own runners for merge_group, the nightly run, manual
+  # runs and pull requests labelled `ecosystem-full` or `full-ci` (RR-57; a label added after a push takes effect on the next
+  # push or a re-run, because this workflow's pull_request trigger has no `labeled` type: `packages` is a required aggregator
+  # that an unrelated label must not re-run). On any other pull request each leg runs on an Ubuntu runner instead and skips
+  # every step by policy, so the required checks `Installed candidates (windows-latest)` and `Installed candidates
+  # (macos-latest)` (ruleset 24382980) still report, under their own names, without taking a Windows or macOS runner. The
+  # merge queue runs them in full before merge, and the nightly run again; main-status opens the main-red issue if the
+  # nightly run fails.
   installed-portability:
     name: Installed candidates (${{ matrix.os }})
-    runs-on: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full')) && matrix.os || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && matrix.os || 'ubuntu-24.04' }}
     timeout-minutes: 25
     env:
-      PORTABILITY: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full')) && 'run' || 'policy-skip' }}
+      PORTABILITY: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && 'run' || 'policy-skip' }}
     strategy:
       fail-fast: false
       matrix:
@@ -511,7 +515,7 @@ jobs:
             node scripts/ecosystem-scope.mjs
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request (runner $RUNNER_OS). Push to main, merge_group, the nightly run and pull requests labelled ecosystem-full run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request (runner $RUNNER_OS). merge_group, the nightly run and pull requests labelled ecosystem-full or full-ci run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
           fi
       # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
@@ -606,13 +610,13 @@ jobs:
             opf-pptx/artifacts/zip-date/**
           retention-days: 7
           if-no-files-found: ignore
-  # RR-53: while the merge queue is off (opf#297), the push to main and the nightly run are the only full-suite gates, so a
+  # RR-53: the nightly run is the only full-suite run outside the merge queue (RR-57 dropped the push to main), so a
   # failure there must be loud. The workflow run itself fails (the `packages` aggregator, or Installed candidates); this job also
   # keeps one open issue labelled `main-red` per red period (a comment per further red run, closed by the next green one), which
   # the supervisor polls: gh api 'repos/OpenPresentation/opf/issues?labels=main-red&state=open'. It never fails itself.
   main-status:
     needs: [packages, installed-portability]
-    if: always() && (github.event_name == 'push' || github.event_name == 'schedule')
+    if: always() && github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -632,7 +636,7 @@ jobs:
           echo "packages: $PACKAGES; installed-portability: $PORTABILITY"
           open=$(gh api "repos/$REPO/issues?labels=main-red&state=open&per_page=1" --jq '.[0].number // empty')
           if [ "$PACKAGES" = failure ] || [ "$PORTABILITY" = failure ]; then
-            body="The full coordinated ecosystem suites failed on $EVENT at $SHA: $RUN_URL (packages: $PACKAGES; installed candidates: $PORTABILITY). Pull requests only run the siblings' contract suites (RR-53), so this run is the gate for the rest; fix forward or revert. This issue closes itself on the next green push or nightly run."
+            body="The full coordinated ecosystem suites failed on $EVENT at $SHA: $RUN_URL (packages: $PACKAGES; installed candidates: $PORTABILITY). Pull requests only run the siblings' contract suites (RR-53), so the queue and this nightly run are the gate for the rest; fix forward or revert. This issue closes itself on the next green nightly run."
             if [ -n "$open" ]; then
               gh api "repos/$REPO/issues/$open/comments" -f body="$body"
             else

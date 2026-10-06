@@ -1,0 +1,48 @@
+# RR-57: path scope for the merge queue.
+#
+# A workflow with a `paths:` filter on pull_request and push has no such filter on merge_group (GitHub ignores `paths` for
+# that event), so a queue run would always start. A job that only matters for some paths runs this first, on a small Linux
+# runner, and its OS legs `needs:` it. It lists the files the queue entry changes against the queue's base commit and
+# answers run=true when any matches one of the patterns. Every other event answers run=true, because the event's own
+# filter (pull_request paths, schedule, workflow_dispatch) has already decided. Any failure to list the files answers
+# run=true: a queue run is never narrowed by a mistake here.
+#
+# Patterns are shell globs on repo-relative paths, one per line; `*` also matches `/`, so `packages/cli/**` and
+# `packages/cli/*` both cover the whole tree. Check out the repository (the merge group's commit) first.
+name: Changed paths (merge queue scope)
+description: For a merge_group run, answer whether the queue entry changes a path that matches a pattern.
+inputs:
+  paths:
+    description: Newline-separated shell globs of repo-relative paths.
+    required: true
+outputs:
+  run:
+    description: "'true' when the legs that need these paths must run."
+    value: ${{ steps.scope.outputs.run }}
+runs:
+  using: composite
+  steps:
+    - id: scope
+      shell: bash
+      env:
+        EVENT: ${{ github.event_name }}
+        BASE_SHA: ${{ github.event.merge_group.base_sha }}
+        PATTERNS: ${{ inputs.paths }}
+      run: |
+        set -uo pipefail
+        answer() { echo "run=$1" >> "$GITHUB_OUTPUT"; echo "Path scope: run=$1 ($2)" | tee -a "$GITHUB_STEP_SUMMARY"; exit 0; }
+        [ "$EVENT" = merge_group ] || answer true "$EVENT is decided by its own filter"
+        [ -n "$BASE_SHA" ] || answer true "no base commit in the merge group payload"
+        git fetch --no-tags --depth=1 origin "$BASE_SHA" 2>/dev/null || answer true "could not fetch the base commit $BASE_SHA"
+        files="$(git diff --name-only --no-renames "$BASE_SHA" HEAD)" || answer true "could not list the changed files"
+        while IFS= read -r file; do
+          [ -n "$file" ] || continue
+          while IFS= read -r pattern; do
+            pattern="${pattern#"${pattern%%[![:space:]]*}"}"
+            [ -n "$pattern" ] || continue
+            case "$file" in
+              $pattern) answer true "$file matches $pattern" ;;
+            esac
+          done <<< "$PATTERNS"
+        done <<< "$files"
+        answer false "no changed file matches the patterns"

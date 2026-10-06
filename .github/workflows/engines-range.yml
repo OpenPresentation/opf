@@ -1,0 +1,84 @@
+name: Node engines range
+
+# RR-57: the Node 22 and Node 26 legs of the engines range (RR-20) moved out of OPF CI. A pull request runs the Linux job on
+# the current Node (Verify OPF packages in OPF CI); these legs run in the merge queue (merge_group), on workflow_dispatch,
+# and on a pull request that carries the label `full-ci`. Add the label when a change touches Node-version-specific code
+# (runtime or syntax support, engines, dependencies with native parts). The `labeled` event starts the run without a new
+# push; any other label starts nothing and, being in its own concurrency group, cancels nothing. Not a required check
+# (ruleset 24382980 requires `packages`, both `Installed candidates` and `Verify OPF packages`).
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: engines-range-${{ github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'ignored' || 'run' }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
+
+permissions:
+  contents: read
+
+jobs:
+  # RR-20: engines.node is the open-ended ">=22", so the range is tested. The Verify OPF packages job in OPF CI stays on Node 24
+  # (the development and evidence runtime); this job repeats install, build, the test suite and the packed installs on the
+  # oldest supported major and the current release.
+  node-range:
+    name: Node ${{ matrix.node }} (engines range)
+    # Pull requests: only with the label `full-ci`, and an unrelated label starts nothing (see the header). Everything
+    # else (merge_group, workflow_dispatch) runs it.
+    if: ${{ github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci')) }}
+    runs-on: ubuntu-24.04
+    # RR-57: about 2x the p90 (8.3 min for Node 22, 6.9 for Node 26 over the last 21 runs).
+    timeout-minutes: 20
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.node }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 26]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: |
+          node -e "console.log('Node', process.version)"
+          pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
+        env:
+          OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
+
+      - name: Verify packed package install
+        run: node packages/javascript/test/packed-install-smoke.mjs
+
+      - name: Verify packed CLI install
+        run: pnpm test:cli:packed
+
+      - name: Restore the npm cache of the CLI's optional peers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/opf-cli-peers-npm
+          key: opf-cli-peers-npm-${{ runner.os }}-node${{ matrix.node }}-${{ hashFiles('packages/cli/package.json') }}
+
+      - name: Verify packed CLI with its optional render and PPTX peers
+        run: pnpm test:cli:packed:peers
+        env:
+          OPF_NPM_CACHE: ${{ runner.temp }}/opf-cli-peers-npm

@@ -1,12 +1,12 @@
 name: OPF CI
 
 on:
-  push:
-    branches:
-      - main
+  # RR-57: no push-to-main run. The merge queue fast-forwards main to the exact commit its merge_group run tested, so a
+  # push run repeated the same jobs on the same SHA (verified on the last six merged pull requests: OPF CI and
+  # Coordinated public packages ran once as merge_group and once as push on one commit). The check runs of the merge_group run
+  # sit on that commit, which is what release-train.mjs `tag` reads (commitChecks). Run it by hand with workflow_dispatch.
   pull_request:
-  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
-  # pull_request payload (nothing here reads one), and it is never cancelled.
+  # RR-48: the merge queue's run. It has no pull_request payload (nothing here reads one), and it is never cancelled.
   merge_group:
   workflow_dispatch:
 
@@ -23,6 +23,8 @@ jobs:
     # RR-40: a fixed image, so ubuntu-latest moving to Ubuntu 26 (from 2026-10-19) cannot change fonts, ICU or
     # system libraries under this required check; move to the next LTS in its own PR.
     runs-on: ubuntu-24.04
+    # RR-57: about 2x the p90 (8.3 min over the last 21 runs); a hung job no longer holds a runner for the default 6 hours.
+    timeout-minutes: 20
     # RR-45 (opf#368, item 5): each package is built once in this job and the later `pnpm build`, `pnpm test`, pack and
     # prepack builds reuse it (scripts/reuse-build.mjs; the token is this run, attempt and job, never shared).
     env:
@@ -112,61 +114,3 @@ jobs:
         if: github.event_name == 'pull_request'
         continue-on-error: true
         run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
-
-  # RR-20: engines.node is the open-ended ">=22", so the range is tested. The verify job above stays on Node 24 (the
-  # development and evidence runtime); this job repeats install, build, the test suite and the packed installs on the
-  # oldest supported major and the current release.
-  node-range:
-    name: Node ${{ matrix.node }} (engines range)
-    runs-on: ubuntu-24.04
-    env:
-      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.node }}
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [22, 26]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
-
-      - name: Install dependencies
-        run: |
-          node -e "console.log('Node', process.version)"
-          pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm build
-
-      - name: Test
-        run: pnpm test
-        env:
-          OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
-
-      - name: Verify packed package install
-        run: node packages/javascript/test/packed-install-smoke.mjs
-
-      - name: Verify packed CLI install
-        run: pnpm test:cli:packed
-
-      - name: Restore the npm cache of the CLI's optional peers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ runner.temp }}/opf-cli-peers-npm
-          key: opf-cli-peers-npm-${{ runner.os }}-node${{ matrix.node }}-${{ hashFiles('packages/cli/package.json') }}
-
-      - name: Verify packed CLI with its optional render and PPTX peers
-        run: pnpm test:cli:packed:peers
-        env:
-          OPF_NPM_CACHE: ${{ runner.temp }}/opf-cli-peers-npm

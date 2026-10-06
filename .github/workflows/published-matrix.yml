@@ -2,22 +2,20 @@ name: Published packages matrix
 # RR-04 (FF-09, FF-10, FF-11): the pairwise font-switch matrix, a TypeScript consumer and the determinism grid, run on
 # ubuntu, windows and macos against the PUBLISHED packages installed from the npm registry (versions from
 # release-plan.json, integrity hashes from the committed consumer lockfile), then compared across the three systems.
+# RR-57: a pull request runs only the Linux leg (and no cross-OS comparison) unless it carries the label `full-ci`; add the
+# label when a change touches OS-specific code. The merge queue (merge_group) runs all three systems when the entry changes one
+# of the paths below (`paths:` does not apply to merge_group, so the first job applies it), instead of the old push-to-main run
+# of the commit the queue had just tested. The `labeled` event starts the run without a new push; any other label starts nothing.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - 'scripts/published-matrix/**'
       - 'scripts/test-font-switch-ecosystem.mjs'
       - 'docs/fixtures/image-treatments.opf.json'
       - 'release-plan.json'
       - '.github/workflows/published-matrix.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/published-matrix/**'
-      - 'scripts/test-font-switch-ecosystem.mjs'
-      - 'docs/fixtures/image-treatments.opf.json'
-      - 'release-plan.json'
-      - '.github/workflows/published-matrix.yml'
+  merge_group:
   schedule:
     # Weekly, to notice runner image, registry or ICU drift that no commit caused.
     - cron: '23 5 * * 1'
@@ -25,14 +23,36 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: published-matrix-${{ github.ref }}
-  cancel-in-progress: true
+  group: published-matrix-${{ github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'ignored' || 'run' }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 env:
   # One Node patch release everywhere: its bundled ICU, Unicode and tz data are then identical on all three systems.
   NODE_VERSION: 24.21.0
 jobs:
+  # Merge queue only: does this entry change a path above? Any other event answers true.
+  scope:
+    if: ${{ github.event_name == 'merge_group' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.paths.outputs.run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: paths
+        uses: ./.github/actions/paths-changed
+        with:
+          paths: |
+            scripts/published-matrix/**
+            scripts/test-font-switch-ecosystem.mjs
+            docs/fixtures/image-treatments.opf.json
+            release-plan.json
+            .github/workflows/published-matrix.yml
   matrix:
     name: Published matrix (${{ matrix.os }})
+    needs: scope
+    # The Linux leg runs on every path-matching pull request; the other systems only with the label `full-ci`, and in the queue,
+    # on the weekly schedule and on workflow_dispatch.
+    if: ${{ !cancelled() && (github.event_name != 'merge_group' || needs.scope.outputs.run == 'true') && (github.event_name != 'pull_request' || github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 35
     strategy:
@@ -40,7 +60,8 @@ jobs:
       matrix:
         # RR-40: Linux is a fixed image (ubuntu-latest moves to Ubuntu 26 from 2026-10-19), so a change of Linux
         # release is a deliberate PR here rather than a surprise in the weekly run.
-        os: [ubuntu-24.04, windows-latest, macos-latest]
+        # RR-57: a pull request without the label `full-ci` runs the Linux leg only.
+        os: ${{ fromJSON((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) && '["ubuntu-24.04","windows-latest","macos-latest"]' || '["ubuntu-24.04"]') }}
     defaults:
       run:
         shell: bash
@@ -106,7 +127,8 @@ jobs:
   compare:
     name: Cross-OS comparison
     needs: matrix
-    if: always() && needs.matrix.result != 'cancelled'
+    # RR-57: only when all three systems ran; a Linux-only pull request has nothing to compare.
+    if: ${{ always() && needs.matrix.result != 'cancelled' && needs.matrix.result != 'skipped' && (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:

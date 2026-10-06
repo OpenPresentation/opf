@@ -13,6 +13,7 @@
     "test": "pnpm --filter @openpresentation/opf test && pnpm test:cli && node scripts/run-checks.mjs",
     "check:quarantine": "node --test scripts/quarantine.test.mjs && node scripts/quarantine.mjs check",
     "test:flake-repeat": "node scripts/flake-repeat.mjs",
+    "check:ci-diet": "node --test scripts/ci-diet.test.mjs",
     "check:engines-range": "node --test scripts/check-engines-range.test.mjs && node scripts/check-engines-range.mjs",
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
     "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs scripts/published-matrix/compare-parity.test.mjs",
