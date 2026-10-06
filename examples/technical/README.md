@@ -4,7 +4,7 @@ This folder contains focused fixtures that isolate OPF schema behavior. They are
 
 Use these examples when testing validators, renderers, catalog resolution, region semantics, asset source handling, design overrides, metadata forms, and individual content payloads.
 
-Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a single deck that exercises every major schema surface — intent metadata, organizations and speakers, narrative beat overrides, design with slide-level overrides, assets, inline catalog records, all ten content payload kinds, blocks, regions, hidden slides, and extensions.
+Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a single self-contained deck (every image is an embedded data URI) that exercises every major schema surface — intent metadata, organizations and speakers, narrative beat overrides, design with slide-level overrides, assets, inline catalog records, all ten content payload kinds, blocks, regions, hidden slides, and extensions.
 
 ## Coverage Areas
 
