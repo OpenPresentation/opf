@@ -1,0 +1,2 @@
+{"item":"FA-13","check":"opens-read-only","expected":"opens, 1 slides","actual":"opened, 1 slides, ReadOnly=-1","pass":true,"note":"COM cannot report a silent repair directly; the per-slide shape checks below catch a repaired-away chart or shape"}
+{"item":"FA-13","check":"preset-slide-size-points","expected":"540 x 540","actual":"540 x 540","pass":true,"note":"PageSetup.SlideWidth x SlideHeight in points"}
