@@ -582,4 +582,33 @@ describe("RR-54 review", () => {
     for (const code of ["0#", "#0#", "0.#0", "0,0#", "#,##0.0#0"]) assert.equal(numberFormatFromExcel(code), undefined, code);
     for (const code of ["#,##0", "0", "#", "0.##", "#,##0.00", "0.0%", "###0", ".00"]) assert.equal(numberFormatFromExcel(code), code, code);
   });
+
+  test("schema errors name the one form the value chose", () => {
+    const errors = (document) => validatePresentation(document).errors.map((issue) => [issue.path, issue.message]);
+    const datasets = { r: revenue() };
+    // chart.data: a 'dataset' key selects DatasetRef, a 'src' key ChartDataSource, 'rows' ChartData ('columns' alone is either).
+    assert.deepEqual(errors(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", fields: [] } } }] })), [
+      ["/slides/0/chart/data/fields", "must NOT have fewer than 1 items"],
+    ]);
+    assert.deepEqual(errors(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", columns: ["a"] } } }] })), [
+      ["/slides/0/chart/data", "must NOT have additional properties"],
+    ]);
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { columns: ["a", "b"], rows: [["x", 1]], source: { src: "a", retrieved: "yesterday" } } } }] })).map(([path]) => path), [
+      "/slides/0/chart/data/source/retrieved", "/slides/0/chart/data/source/retrieved", "/slides/0/chart/data/source/retrieved",
+    ]);
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", rows: [] } } }] })), [
+      ["/slides/0/chart/data", "must NOT have additional properties"],
+    ]);
+    // A table header object: 'value' selects StyledTableCell, 'name' DataColumn.
+    assert.deepEqual(errors(deck({ slides: [{ table: { columns: [{ name: "R", style: { align: "right" } }], rows: [[1]] } }] })), [
+      ["/slides/0/table/columns/0", "must NOT have additional properties"],
+    ]);
+    // Dataset-backed and inline tables: the exclusive fields are named.
+    const table = (value) => errors(deck({ datasets, slides: [{ table: value }] }));
+    assert.deepEqual(table({ dataset: "r", rows: [] }), [["/slides/0/table/rows", "'rows' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset"]]);
+    assert.deepEqual(table({ dataset: "r", columns: ["a"] }), [["/slides/0/table/columns", "'columns' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset"]]);
+    assert.deepEqual(table({ rows: [["a"]], fields: ["a"] }), [["/slides/0/table/fields", "'fields' applies only to a dataset-backed table; add 'dataset' or remove 'fields'"]]);
+    // A malformed value with no form key keeps every alternative.
+    assert.ok(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })).some(([, message]) => message === "must match exactly one schema in oneOf"));
+  });
 });

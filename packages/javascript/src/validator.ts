@@ -952,6 +952,53 @@ function typedVariableErrors(errors: ErrorObject[], value: unknown): ErrorObject
   return kept;
 }
 
+function pointerValue(root: unknown, pointer: string): unknown {
+  let current = root;
+  for (const token of pointer.split("/").slice(1)) {
+    const key = token.replaceAll("~1", "/").replaceAll("~0", "~");
+    if (Array.isArray(current)) current = current[Number(key)];
+    else if (isRecord(current) && hasOwn(current, key)) current = current[key];
+    else return undefined;
+  }
+  return current;
+}
+
+// RR-54: 'chart.data' is a oneOf of ChartData, ChartDataSource and DatasetRef, and a table column header a oneOf of a
+// string, runs, a StyledTableCell, a DataColumn and null, so Ajv reports the errors of every branch. When the value
+// names its form ('dataset', 'src' or 'rows'; 'value' or 'name'), keep only the errors of that branch. The
+// dataset/inline table exclusions ('if'/'then'/'else' with false schemas) get a message that names the field.
+const datasetTableMessage = (field: string) => `'${field}' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset`;
+function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
+  let kept = errors;
+  const schemaId = schemas.presentation.$id as string;
+  for (const union of errors) {
+    if (union.keyword !== "oneOf") continue;
+    const chartData = /\/chart\/data$/.test(union.instancePath) && /\/properties\/data\/oneOf$/.test(union.schemaPath);
+    const header = /\/table\/columns\/\d+$/.test(union.instancePath) && /\/properties\/columns\/items\/oneOf$/.test(union.schemaPath);
+    if (!chartData && !header) continue;
+    const target = pointerValue(value, union.instancePath);
+    if (!isRecord(target)) continue;
+    const branch = chartData
+      ? hasOwn(target, "dataset") ? "DatasetRef" : hasOwn(target, "src") ? "ChartDataSource" : hasOwn(target, "rows") ? "ChartData" : undefined
+      : hasOwn(target, "value") ? "StyledTableCell" : hasOwn(target, "name") ? "DataColumn" : undefined;
+    const check = branch ? getAjv().getSchema(`${schemaId}#/$defs/${branch}`) : undefined;
+    if (!check || check(target) === true) continue;
+    const branchErrors = (check.errors ?? []).map((error) => ({ ...error, instancePath: `${union.instancePath}${error.instancePath}`, schemaPath: `#/$defs/${branch}${error.schemaPath.replace(/^#/, "")}` }));
+    const prefix = `${union.instancePath}/`;
+    kept = [...kept.filter((error) => error.instancePath !== union.instancePath && !error.instancePath.startsWith(prefix)), ...branchErrors];
+  }
+  const exclusions = kept.filter((error) => error.keyword === "false schema" && /\/table\/(rows|columns|fields)$/.test(error.instancePath) && /\/(then|else)\/properties\/(rows|columns|fields)\//.test(`${error.schemaPath}/`));
+  if (!exclusions.length) return kept;
+  const tables = new Set(exclusions.map((error) => error.instancePath.replace(/\/[^/]+$/, "")));
+  return kept
+    .filter((error) => !(error.keyword === "if" && tables.has(error.instancePath)))
+    .map((error) => {
+      if (!exclusions.includes(error)) return error;
+      const field = error.instancePath.slice(error.instancePath.lastIndexOf("/") + 1);
+      return { ...error, message: field === "fields" ? "'fields' applies only to a dataset-backed table; add 'dataset' or remove 'fields'" : datasetTableMessage(field) };
+    });
+}
+
 export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentation", options: ValidateOptions = {}): ValidationResult {
   const resolved = resolveValidator(schemaOrKind);
   if (resolved.schemaName === "presentation") {
@@ -986,7 +1033,8 @@ export function validate(value: unknown, schemaOrKind: SchemaOrKind = "presentat
     }
   }
   const valid = resolved.validate(subject) === true;
-  const errors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject).map(toIssue);
+  const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
+  const errors = (resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors).map(toIssue);
   const warnings: ValidationIssue[] = [];
 
   if (resolved.schemaName === "presentation") {
