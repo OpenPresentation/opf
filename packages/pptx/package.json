@@ -70,7 +70,7 @@
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
     "pako": "3.0.2",
-    "sharp": "0.35.4"
+    "sharp": "0.35.5"
   },
   "peerDependencies": {
     "@openpresentation/opf-render": "^0.13.0"
@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@expo-google-fonts/carlito": "0.4.1",
-    "@openpresentation/opf-render": "0.13.0",
+    "@openpresentation/opf-render": "0.13.1",
     "esbuild": "0.28.2",
     "playwright": "1.63.0"
   },
