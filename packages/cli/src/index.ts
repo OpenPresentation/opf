@@ -262,7 +262,13 @@ async function main(argv: string[]) {
       const datasets = record.datasets && typeof record.datasets === 'object' && !Array.isArray(record.datasets) ? record.datasets as Record<string, unknown> : {};
       const previous = datasets[datasetId] && typeof datasets[datasetId] === 'object' ? datasets[datasetId] as Record<string, unknown> : {};
       const origin = positional[0] === '-' ? undefined : {src: positional[0].split(path.sep).join('/'), retrieved: new Date().toISOString().slice(0, 10)};
-      const entry = {...previous, columns: data.columns, rows: data.rows, ...(origin ? {source: {...(previous.source && typeof previous.source === 'object' ? previous.source : {}), ...origin}} : {})};
+      // A column that keeps its name keeps its number format. The source describes the new origin only: its other
+      // fields (sheet, range, description) survive a re-import of the same file, and data from stdin has none.
+      const formats = new Map((Array.isArray(previous.columns) ? previous.columns : []).flatMap((column: unknown) => column && typeof column === 'object' && typeof (column as {name?: unknown}).name === 'string' && typeof (column as {format?: unknown}).format === 'string' ? [[(column as {name: string}).name, (column as {format: string}).format] as const] : []));
+      const columns = data.columns.map(name => formats.has(name) ? {name, format: formats.get(name)!} : name);
+      const before = previous.source && typeof previous.source === 'object' ? previous.source as Record<string, unknown> : {};
+      const {source: _source, ...kept} = previous;
+      const entry = {...kept, columns, rows: data.rows, ...(origin ? {source: before.src === origin.src ? {...before, ...origin} : origin} : {})};
       return {...record, datasets: {...datasets, [datasetId]: entry}};
     };
     const source = options.into ? await readJson(String(options.into)) : undefined;

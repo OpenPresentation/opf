@@ -116,6 +116,17 @@ try {
   assert.deepEqual(withDataset.slides.at(-1).table,{dataset:'revenue'});
   assert.deepEqual(withDataset.datasets.revenue.columns,['Quarter','Revenue','Cost']);
   run(['import-data','data.csv','--as','table','--dataset','bad id'],{status:2});
+  // Re-importing into an existing dataset keeps each same-named column's format, and a source only describes the new
+  // origin: the old sheet/range of another file are dropped, and data from stdin has no file source.
+  await writeFile(path.join(temp,'formatted-deck.json'),JSON.stringify({name:'Formatted',datasets:{revenue:{title:'Revenue',columns:['Quarter',{name:'Revenue',format:'$#,##0'},{name:'Dropped',format:'0%'}],rows:[['Q0',1,0.5]],source:{src:'book.xlsx',sheet:'Sheet1',range:'A1:C2',description:'Finance export'}}},slides:[{title:'Uses it',table:{dataset:'revenue'}}]}));
+  const refreshed=run(['import-data','data.csv','--as','chart','--series','["Revenue"]','--dataset','revenue','--into','formatted-deck.json']).json;
+  assert.deepEqual(refreshed.datasets.revenue.columns,['Quarter',{name:'Revenue',format:'$#,##0'}]);
+  assert.equal(refreshed.datasets.revenue.title,'Revenue');
+  assert.deepEqual(Object.keys(refreshed.datasets.revenue.source).sort(),['retrieved','src']);
+  assert.equal(refreshed.datasets.revenue.source.src,'data.csv');
+  const piped=run(['import-data','-','--as','chart','--dataset','revenue','--into','formatted-deck.json'],{input:'Quarter,Revenue\nQ1,12'}).json;
+  assert.equal(piped.datasets.revenue.source,undefined);
+  assert.deepEqual(piped.datasets.revenue.columns,['Quarter',{name:'Revenue',format:'$#,##0'}]);
   run(['import-data','data.csv','--as','table','--path','/slides/0/table'],{status:2});
   run(['import-data','data.csv','--as','chart','--series','Revenue'],{status:2});
   const styled={slides:[{table:{rows:[[{value:'Merged',rowSpan:2,colSpan:2,style:{fill:'#12345680',padding:{left:0},borders:{top:{color:'#ABCDEF',width:2,dash:'dot'}}}},null],[null,null]]}}]};
