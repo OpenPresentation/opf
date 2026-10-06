@@ -205,9 +205,10 @@ test('markdown: an unmatched backtick and an escaped backtick stay text; text wi
   assert.deepEqual(back, tricky.slides[0].text);
 });
 
-test('markdown: a code span in a title keeps its backticks as text', () => {
+test('markdown: a code span in a title is a code run (titles keep inline formatting since FA-10)', () => {
   const doc = fromMarkdown('# The `foo` API\n\nBody\n');
-  assert.equal(doc.slides[0].title, 'The `foo` API');
+  assert.deepEqual(doc.slides[0].title, ['The ', { text: 'foo', code: true }, ' API']);
+  assert.deepEqual(fromMarkdown(toMarkdown(doc)).slides[0].title, doc.slides[0].title);
 });
 
 test('markdown: lang is a span attribute and round-trips', () => {

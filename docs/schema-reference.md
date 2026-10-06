@@ -595,7 +595,7 @@ _No named properties._
 
 - Type: `oneOf:schema / schema`
 - Required fields: `opacity`
-- Purpose: Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in the middle 40% of the slide. A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and at most 30% of the shorter slide edge in height; it is drawn be...
+- Purpose: Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in a fixed frame (the middle 40% of the slide width and height, from 30% to 70% on each axis). A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

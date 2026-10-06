@@ -294,9 +294,9 @@
   },
   "addressedDefinition": "A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).",
   "summary": {
-    "records": 1053,
+    "records": 1056,
     "addressed": 1036,
-    "unaddressed": 17,
+    "unaddressed": 20,
     "byStatus": {
       "done": 499,
       "deprecated": 0,
@@ -305,7 +305,7 @@
       "unknown": 0,
       "parity-near": 32,
       "font-gap": 108,
-      "missing-gallery": 9,
+      "missing-gallery": 12,
       "missing-spec": 8,
       "missing-editor": 0,
       "parity-mismatch": 0,
@@ -456,12 +456,13 @@
         "unaddressed": 0
       },
       "slide-sizes": {
-        "records": 7,
+        "records": 10,
         "byStatus": {
-          "descoped": 7
+          "descoped": 7,
+          "missing-gallery": 3
         },
         "addressed": 7,
-        "unaddressed": 0
+        "unaddressed": 3
       },
       "gallery-teasers": {
         "records": 1,
@@ -475,7 +476,9 @@
     "unaddressedGaps": {
       "charts missing-gallery": 9,
       "charts unknown": 9,
-      "charts missing-spec": 8
+      "charts missing-spec": 8,
+      "slide-sizes missing-gallery": 3,
+      "slide-sizes unknown": 3
     }
   },
   "records": [
@@ -1228,7 +1231,7 @@
     {"type":"charts","id":"bar","name":"Bar","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"box-and-whisker","name":"Box & Whisker","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"column","name":"Column","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
-    {"type":"charts","id":"combo","name":"Combo: Column and Line","columns":{"spec":"catalog","compose":"unknown","preview":"unknown","export":"unknown","roundTrip":"unknown","parity":"unmeasured","editor":"switch","gallery":"not-shown","native":"unverified","fonts":"n/a"},"pipeline":"unmeasured","gaps":[{"code":"missing-gallery","detail":"not shown on pptx.gallery","addressed":false},{"code":"unknown","detail":"not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run)","addressed":false}],"status":"missing-gallery","addressed":false},
+    {"type":"charts","id":"combo","name":"Combo: Column and Line","columns":{"spec":"catalog","compose":"unknown","preview":"unknown","export":"unknown","roundTrip":"unknown","parity":"unmeasured","editor":"switch","gallery":"not-shown","native":"exercised","fonts":"n/a"},"pipeline":"unmeasured","nativeEvidence":["docs/evidence/fa-native-20261006"],"gaps":[{"code":"missing-gallery","detail":"not shown on pptx.gallery","addressed":false},{"code":"unknown","detail":"not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run)","addressed":false}],"status":"missing-gallery","addressed":false},
     {"type":"charts","id":"doughnut","name":"Doughnut","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"filled-radar","name":"Filled Radar","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
     {"type":"charts","id":"funnel","name":"Funnel","columns":{"spec":"catalog","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"shown","native":"verified","fonts":"accepted"},"pipeline":"works","fonts":["Aptos: qualified","Aptos Display: qualified","Roboto Mono: qualified"],"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[],"status":"done","addressed":true},
@@ -1527,6 +1530,9 @@
     {"type":"slide-sizes","id":"16:9","name":"16:9","pipeline":"works","columns":{"spec":"schema-enum","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown","native":"verified","fonts":"n/a"},"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","rule":"slide-size-pages","link":"https://github.com/OpenPresentation/opf/issues/293","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
     {"type":"slide-sizes","id":"4:3","name":"4:3","pipeline":"works","columns":{"spec":"schema-enum","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown","native":"verified","fonts":"n/a"},"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","rule":"slide-size-pages","link":"https://github.com/OpenPresentation/opf/issues/293","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
     {"type":"slide-sizes","id":"16:10","name":"16:10","pipeline":"works","columns":{"spec":"schema-enum","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown","native":"verified","fonts":"n/a"},"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","rule":"slide-size-pages","link":"https://github.com/OpenPresentation/opf/issues/293","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
+    {"type":"slide-sizes","id":"1:1","name":"1:1","columns":{"spec":"schema-enum","compose":"unknown","preview":"unknown","export":"unknown","roundTrip":"unknown","parity":"unmeasured","editor":"switch","gallery":"not-shown","native":"exercised","fonts":"n/a"},"nativeEvidence":["docs/evidence/fa-native-20261006"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","addressed":false},{"code":"unknown","detail":"not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset)","addressed":false}],"status":"missing-gallery","addressed":false},
+    {"type":"slide-sizes","id":"4:5","name":"4:5","columns":{"spec":"schema-enum","compose":"unknown","preview":"unknown","export":"unknown","roundTrip":"unknown","parity":"unmeasured","editor":"switch","gallery":"not-shown","native":"exercised","fonts":"n/a"},"nativeEvidence":["docs/evidence/fa-native-20261006"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","addressed":false},{"code":"unknown","detail":"not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset)","addressed":false}],"status":"missing-gallery","addressed":false},
+    {"type":"slide-sizes","id":"9:16","name":"9:16","columns":{"spec":"schema-enum","compose":"unknown","preview":"unknown","export":"unknown","roundTrip":"unknown","parity":"unmeasured","editor":"switch","gallery":"not-shown","native":"exercised","fonts":"n/a"},"nativeEvidence":["docs/evidence/fa-native-20261006"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","addressed":false},{"code":"unknown","detail":"not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset)","addressed":false}],"status":"missing-gallery","addressed":false},
     {"type":"slide-sizes","id":"letter","name":"letter","pipeline":"works","columns":{"spec":"schema-enum","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown","native":"verified","fonts":"n/a"},"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","rule":"slide-size-pages","link":"https://github.com/OpenPresentation/opf/issues/293","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
     {"type":"slide-sizes","id":"a4","name":"a4","pipeline":"works","columns":{"spec":"schema-enum","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown","native":"verified","fonts":"n/a"},"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","rule":"slide-size-pages","link":"https://github.com/OpenPresentation/opf/issues/293","descoped":true,"addressed":true}],"status":"descoped","addressed":true},
     {"type":"slide-sizes","id":"widescreen","name":"widescreen","pipeline":"works","columns":{"spec":"schema-enum","compose":"pass","preview":"pass","export":"pass","roundTrip":"pass","parity":"perfect","editor":"switch","gallery":"not-shown","native":"verified","fonts":"n/a"},"nativeEvidence":["docs/evidence/rr-42-native-20261002/values.json"],"gaps":[{"code":"missing-gallery","detail":"pptx.gallery has no slide-size pages","rule":"slide-size-pages","link":"https://github.com/OpenPresentation/opf/issues/293","descoped":true,"addressed":true}],"status":"descoped","addressed":true},

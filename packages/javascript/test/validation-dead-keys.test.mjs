@@ -254,12 +254,12 @@ describe('FontScheme.app and languageFamily', () => {
 });
 
 describe('descriptions state what the engines do', () => {
-  test('FontScheme.code names code blocks only, and the catalog source text says engines never fetch', async () => {
+  test('FontScheme.code names code blocks and inline code runs (FA-13), and the catalog source text says engines never fetch', async () => {
     const { schemas } = await import('../dist/schemas.js');
     const defs = schemas.presentation.$defs;
     assert.match(defs.FontScheme.properties.code.description, /code blocks/);
-    assert.doesNotMatch(defs.FontScheme.properties.code.description, /inline code/);
-    assert.doesNotMatch(schemas.fontScheme.properties.code.description, /inline code/);
+    assert.match(defs.FontScheme.properties.code.description, /inline code runs/);
+    assert.match(schemas.fontScheme.properties.code.description, /inline code runs/);
     assert.match(defs.CatalogEntry.properties.source.description, /never fetch/);
     assert.match(defs.CatalogEntry.properties.source.description, /catalogSources/);
     assert.match(defs.CatalogSource.description, /catalogSources/);

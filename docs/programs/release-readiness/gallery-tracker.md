@@ -8,7 +8,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 ## Summary
 
-1053 records; 1036 addressed, 17 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+1056 records; 1036 addressed, 20 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
@@ -28,7 +28,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | image-treatments | 15 | done 15 | 15 | 0 |
 | purposes | 9 | done 9 | 9 | 0 |
 | fonts | 168 | done 121, font-gap 47 | 168 | 0 |
-| slide-sizes | 7 | descoped 7 | 7 | 0 |
+| slide-sizes | 10 | descoped 7, missing-gallery 3 | 7 | 3 |
 | gallery-teasers | 1 | descoped 1 | 1 | 0 |
 
 | Status | Records | Severity | Meaning |
@@ -40,7 +40,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | `unknown` | 0 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 32 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
 | `font-gap` | 108 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
-| `missing-gallery` | 9 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
+| `missing-gallery` | 12 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
 | `missing-spec` | 8 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
@@ -70,7 +70,9 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | --- | --- | ---: | --- | --- | --- | --- |
 | charts | `missing-gallery` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not shown on pptx.gallery | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | charts | `missing-spec` | 8 | `100pct-stacked-area-3x`, `100pct-stacked-bar-3x`, `100pct-stacked-column-3x`, `stacked-area-3x`, `stacked-bar-3x`, `stacked-column-3x`, `stacked-line-3x`, `stacked-line-with-markers-3x` | published by the pptx.gallery chart-types catalog but not bundled in core spec/catalogs (portable through an inline record) | Publish the value in the core catalog, or record that it stays gallery-only. | - |
+| slide-sizes | `missing-gallery` | 3 | `1:1`, `4:5`, `9:16` | pptx.gallery has no slide-size pages | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | charts | `unknown` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
+| slide-sizes | `unknown` | 3 | `1:1`, `4:5`, `9:16` | not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset) | Measure the missing columns (audit or probe) and commit the result. | - |
 
 ## Addressed gaps
 
