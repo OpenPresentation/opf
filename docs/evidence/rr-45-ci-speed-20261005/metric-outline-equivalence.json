@@ -1,0 +1,78 @@
+{
+  "none": {
+    "cases": 96,
+    "casesWithFailures": 0,
+    "failureLines": 0,
+    "verdictsDiffer": 0,
+    "parts": 276,
+    "partVerdictsDiffer": 0,
+    "pixelComparedParts": 276,
+    "pixelDifferentParts": 0,
+    "exit": {
+      "old": 0,
+      "new": 0
+    },
+    "seconds": {
+      "old": 100.324,
+      "new": 16.398
+    },
+    "sampleFailure": null
+  },
+  "cell-inset-3px": {
+    "cases": 96,
+    "casesWithFailures": 42,
+    "failureLines": 88,
+    "verdictsDiffer": 0,
+    "parts": 276,
+    "partVerdictsDiffer": 0,
+    "pixelComparedParts": 0,
+    "pixelDifferentParts": 0,
+    "exit": {
+      "old": 1,
+      "new": 1
+    },
+    "seconds": {
+      "old": 101.624,
+      "new": 16.157
+    },
+    "sampleFailure": "Carlito-1280-left-1: Paint leaves cell: slides.0.metric"
+  },
+  "ink-shift-40px": {
+    "cases": 96,
+    "casesWithFailures": 27,
+    "failureLines": 66,
+    "verdictsDiffer": 0,
+    "parts": 276,
+    "partVerdictsDiffer": 0,
+    "pixelComparedParts": 276,
+    "pixelDifferentParts": 0,
+    "exit": {
+      "old": 1,
+      "new": 1
+    },
+    "seconds": {
+      "old": 101.007,
+      "new": 16.516
+    },
+    "sampleFailure": "Carlito-1280-right-1: Paint leaves cell: slides.0.metric"
+  },
+  "ink-shift-down-200px": {
+    "cases": 96,
+    "casesWithFailures": 0,
+    "failureLines": 0,
+    "verdictsDiffer": 0,
+    "parts": 276,
+    "partVerdictsDiffer": 0,
+    "pixelComparedParts": 0,
+    "pixelDifferentParts": 0,
+    "exit": {
+      "old": 0,
+      "new": 0
+    },
+    "seconds": {
+      "old": 101.226,
+      "new": 16.388
+    },
+    "sampleFailure": null
+  }
+}

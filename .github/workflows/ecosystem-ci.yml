@@ -361,10 +361,14 @@ jobs:
           node -e "if (require('../opf-render/node_modules/playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the renderer test package.');"
           # RR-47: the commands are test/browser-suites.json (installed-browser); a quarantined test is deferred to the non-blocking step below.
           node scripts/quarantine.mjs run-suite installed-browser
+      # RR-45 (opf#368): one masks screenshot per case, ink measured with sharp stats() (scripts/metric-outline-ink.mjs,
+      # proven against the previous per-pixel loop by its test), four pages in parallel.
       - name: Check accepted metric outlines and actual offline SVG ink
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
-        run: node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
+        run: |
+          node --test scripts/metric-outline-ink.test.mjs
+          node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
       - name: Verify exact published registry packages and fidelity fixtures
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
