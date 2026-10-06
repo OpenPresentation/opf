@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#B45309",
-        "risk": "#047857"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-georgian",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": {
@@ -517,7 +504,7 @@
     },
     "metric-data": {
       "src": "./data/revenue-forecast-inspection.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Revenue Forecast Inspection data"
     },
     "watermark": {

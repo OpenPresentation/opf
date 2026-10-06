@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "miriam",
   "name": "Miriam",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
     "Hebrew"

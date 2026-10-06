@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#047857",
-        "risk": "#1D4ED8"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "roboto",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:10",
     "background": {
@@ -528,7 +515,7 @@
     },
     "metric-data": {
       "src": "./data/water-utility-capital-plan.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Water Utility Capital Plan data"
     },
     "watermark": {

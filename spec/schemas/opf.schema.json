@@ -64,6 +64,7 @@
     "audience": {
       "oneOf": [
         { "type": "string" },
+        { "$ref": "#/$defs/Audience" },
         {
           "type": "array",
           "items": {
@@ -75,12 +76,13 @@
           "minItems": 1
         }
       ],
-      "description": "Intended audiences for the presentation. Accepts either:\n- A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference.\n- An array of string shorthands and/or inline Audience objects for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
+      "description": "Intended audiences for the presentation. Accepts any of:\n- A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference.\n- A single inline Audience object, like purpose and tone, for custom audience metadata or catalog-backed overrides. Object form mirrors https://openpresentation.org/schema/opf-audience/v1 without '$schema'.\n- An array of string shorthands and/or inline Audience objects, for more than one audience.\n\nResolution order for catalog ids and references: inline catalogs.audiences.records[] → catalogs.audiences.source → default catalog at https://www.pptx.gallery/audiences.",
       "examples": [
         "executive",
         "Biology Students and Wildlife Enthusiasts",
         ["executive"],
         ["board", "c-suite"],
+        { "id": "executive", "attentionBudgetMinutes": 20 },
         ["Series B investors", "https://acme.com/decks/audiences/acme-board.json"],
         [
           { "id": "executive", "attentionBudgetMinutes": 20 },
@@ -242,12 +244,12 @@
         {
           "acme-logo": "./assets/acme-logo.svg",
           "watermark": { "src": "./assets/watermark.png", "alt": "Acme watermark" },
-          "revenue": { "src": "./data/revenue.csv", "format": "csv" }
+          "revenue": { "src": "./data/revenue.csv", "mediaType": "text/csv" }
         }
       ]
     },
     "Asset": {
-      "description": "Reusable or inline resource. A string is shorthand for { \"src\": value }. Source strings accept 'asset:<id>' references, HTTPS URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths. Use object form when metadata such as alt text, title, mediaType, or format matters.",
+      "description": "Reusable or inline resource. A string is shorthand for { \"src\": value }. Source strings accept 'asset:<id>' references, HTTPS URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths. Use object form when metadata such as alt text, title or mediaType matters.",
       "oneOf": [
         {
           "type": "string",
@@ -279,11 +281,6 @@
               "type": "string",
               "description": "Optional MIME media type when it cannot be inferred from src.",
               "examples": ["image/svg+xml", "image/png", "text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
-            },
-            "format": {
-              "type": "string",
-              "description": "Optional authoring/parsing format hint. Useful when format is more convenient than a full MIME media type.",
-              "examples": ["csv", "tsv", "json", "xlsx", "svg", "png", "jpg", "webp"]
             }
           }
         }
@@ -846,7 +843,7 @@
           "examples": [
             "aptos",
             "tenorite",
-            { "id": "aptos", "heading": { "family": "Inter", "weight": 700 } }
+            { "id": "aptos", "heading": "Inter" }
           ]
         },
         "dimensions": {
@@ -882,7 +879,7 @@
             { "$ref": "#/$defs/Asset" },
             { "$ref": "#/$defs/Watermark" }
           ],
-          "description": "Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }.",
+          "description": "Optional decorative watermark applied across slides, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string or Asset is the image at opacity 0.08.",
           "examples": [false, "asset:watermark", { "src": "asset:watermark", "opacity": 0.08 }]
         },
         "header": {
@@ -1078,7 +1075,7 @@
             { "$ref": "#/$defs/FontScheme" }
           ],
           "description": "Default font scheme for this theme. A string resolves against catalogs.fontSchemes; an object may provide an 'id' base reference plus overrides.",
-          "examples": ["aptos", { "id": "aptos", "heading": { "family": "Inter", "weight": 700 } }]
+          "examples": ["aptos", { "id": "aptos", "heading": "Inter" }]
         },
         "background": {
           "oneOf": [
@@ -1105,7 +1102,7 @@
     },
     "ColorScheme": {
       "type": "object",
-      "description": "Color palette used by the design system. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary, custom) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes catalog record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.colorScheme is equivalent to setting only 'id'.",
+      "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes catalog record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.colorScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
           "type": "string",
@@ -1113,111 +1110,105 @@
           "examples": ["cool-horizon", "boost", "burnt-orange", "ocean-depth", "corporate-blue", "https://acme.com/decks/color-schemes/acme.json", "pkg:@acme/decks/color-schemes/acme"]
         },
         "accent1": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Accent 1 color (hex). Mirrors the OOXML accent1 slot.",
           "examples": ["#2874A6", "#FD3223", "#F77F00"]
         },
         "accent2": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Accent 2 color (hex). Mirrors the OOXML accent2 slot.",
           "examples": ["#1B4F72", "#0308DB", "#D62828"]
         },
         "accent3": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Accent 3 color (hex). Mirrors the OOXML accent3 slot.",
           "examples": ["#5499C7", "#4F4955", "#003049"]
         },
         "accent4": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Accent 4 color (hex). Mirrors the OOXML accent4 slot.",
           "examples": ["#7BDBB2", "#A1DB30", "#FCBF49"]
         },
         "accent5": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Accent 5 color (hex). Mirrors the OOXML accent5 slot.",
           "examples": ["#3AC67A", "#0682FE", "#EAE2B7"]
         },
         "accent6": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Accent 6 color (hex). Mirrors the OOXML accent6 slot.",
           "examples": ["#24A89E", "#FC03BE", "#BFBFBF"]
         },
         "dark1": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Dark 1 color (hex). Typically the deepest neutral; OOXML dark1.",
           "examples": ["#000000"]
         },
         "dark2": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Dark 2 color (hex). Secondary dark; OOXML dark2.",
           "examples": ["#011842", "#2C2C2C"]
         },
         "light1": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Light 1 color (hex). Typically the slide canvas; OOXML lt1.",
           "examples": ["#FFFFFF"]
         },
         "light2": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Light 2 color (hex). Secondary light surface; OOXML lt2.",
           "examples": ["#F0F0F0", "#F3F7FF"]
         },
         "hyperlink": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Hyperlink color (hex). OOXML hlink.",
           "examples": ["#0563C1", "#0066CC"]
         },
         "followedHyperlink": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Followed-hyperlink color (hex). OOXML folHlink.",
           "examples": ["#954F72", "#551A8B"]
         },
         "primary": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: primary brand color (hex). The engine maps this onto an OOXML accent slot when serializing.",
           "examples": ["#1E40AF", "#0F172A"]
         },
         "secondary": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: secondary brand color (hex).",
           "examples": ["#3B82F6", "#64748B"]
         },
         "accent": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: accent color used for highlights and emphasis (hex).",
           "examples": ["#F59E0B", "#22D3EE"]
         },
         "background": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: default slide background color (hex). The engine maps this to one of light1 / light2 / dark1 / dark2 when serializing.",
           "examples": ["#FFFFFF", "#0B1220"]
         },
         "surface": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: color for elevated surfaces such as cards and panels (hex).",
           "examples": ["#F8FAFC", "#1E293B"]
         },
         "text": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: primary body text color (hex).",
           "examples": ["#0F172A", "#F8FAFC"]
         },
         "textSecondary": {
-          "type": "string",
+          "$ref": "#/$defs/HexColor",
           "description": "Abstract role: secondary or muted text color used for captions and supporting copy (hex).",
           "examples": ["#475569", "#94A3B8"]
-        },
-        "custom": {
-          "type": "object",
-          "additionalProperties": { "type": "string" },
-          "description": "Map of custom named colors for advanced or theme-specific use.",
-          "examples": [{ "success": "#10B981", "warning": "#F59E0B", "danger": "#EF4444" }]
         }
       }
     },
     "FontScheme": {
       "type": "object",
-      "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific Font objects the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema.\n\nIn design.fontScheme, 'id' resolves a fontSchemes catalog record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.fontScheme is equivalent to setting only 'id'.",
+      "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific font family names the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema. A role is a family name only: weight, style and tracking come from the text styles, and PowerPoint has no numeric weight.\n\nIn design.fontScheme, 'id' resolves a fontSchemes catalog record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string shorthand on design.fontScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
           "type": "string",
@@ -1277,56 +1268,38 @@
         },
         "app": {
           "type": "string",
-          "enum": ["PowerPoint", "Google Slides"],
-          "description": "Target application this font pairing is intended for."
+          "enum": ["powerpoint", "google-slides"],
+          "description": "Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it."
         },
         "languageFamily": {
           "type": "string",
-          "enum": ["latin", "ea", "cs"],
-          "description": "OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script slot with its own major/minor families when its languages list is empty or names the presentation language."
+          "enum": ["latin", "ea", "cs", "eastAsian", "complexScript"],
+          "description": "Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long names match the 'eastAsian' and 'complexScript' slot keys; the short names match the OOXML a:ea and a:cs elements; core reads both spellings as one value. As the design font scheme, an 'ea'/'eastAsian' or 'cs'/'complexScript' scheme also fills that script slot with its own major/minor families when its languages list is empty or names the presentation language."
         },
         "heading": {
-          "$ref": "#/$defs/Font",
-          "description": "Abstract role: font used for slide titles and headings. Maps onto the OOXML major slot when serializing."
+          "type": "string",
+          "description": "Abstract role: font family name used for slide titles and headings. Maps onto the OOXML major slot when serializing."
         },
         "body": {
-          "$ref": "#/$defs/Font",
-          "description": "Abstract role: font used for body copy. Maps onto the OOXML minor slot when serializing."
+          "type": "string",
+          "description": "Abstract role: font family name used for body copy. Maps onto the OOXML minor slot when serializing."
         },
         "accent": {
-          "$ref": "#/$defs/Font",
-          "description": "Abstract role: font used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent only when the scheme defines it. No direct OOXML slot: PPTX export writes it on those runs, and the theme fonts stay major/minor."
+          "type": "string",
+          "description": "Abstract role: font family name used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent only when the scheme defines it. No direct OOXML slot: PPTX export writes it on those runs, and the theme fonts stay major/minor."
         },
         "code": {
-          "$ref": "#/$defs/Font",
-          "description": "Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
+          "type": "string",
+          "description": "Abstract role: monospaced font family name used for code blocks. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
         }
       }
     },
-    "Font": {
-      "type": "object",
-      "description": "Specification for a single font role.",
-      "required": ["family"],
-      "properties": {
-        "family": {
-          "type": "string",
-          "description": "Font family name.",
-          "examples": ["Inter", "Roboto", "Source Serif Pro", "JetBrains Mono"]
-        },
-        "weight": {
-          "type": "number",
-          "description": "Numeric font weight (e.g., 400 for regular, 700 for bold)."
-        },
-        "style": {
-          "type": "string",
-          "enum": ["normal", "italic"],
-          "description": "Font style."
-        },
-        "letterSpacing": {
-          "type": "number",
-          "description": "Letter spacing (tracking) in ems."
-        }
-      }
+    "SlideDesign": {
+      "description": "A slide's design: every Design field except dimensions. A PPTX has one slide size, so the size is set once, on the deck's design.dimensions (or its theme), and a slide's design cannot set it. A slide-level theme whose resolved dimensions differ from the deck's is a lint warning (slide-theme-dimensions); exporting such a deck to PPTX fails with mixed-slide-dimensions.",
+      "allOf": [
+        { "$ref": "#/$defs/Design" },
+        { "not": { "required": ["dimensions"] } }
+      ]
     },
     "DimensionPreset": {
       "type": "string",
@@ -1379,7 +1352,7 @@
           "pattern": "^var:[a-z][a-z0-9-]*$"
         }
       ],
-      "description": "A color value or reference, enforced on styled table cell fill and text colors and on cell border colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes.\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
+      "description": "A color value or reference, enforced on styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes.\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
       "examples": ["#0F4C81", "accent2", "text", "var:risk"]
     },
     "Variables": {
@@ -1819,7 +1792,7 @@
           "description": "Fixed solid background fill."
         },
         "color": {
-          "type": "string",
+          "$ref": "#/$defs/ColorRef",
           "description": "Fixed solid fill color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef, resolved against the effective color scheme and the deck variables). Use { type: 'theme', slot: ... } for PowerPoint's four theme-controlled background choices.",
           "examples": ["#FFFFFF", "#0F172A", "#F8FAFC"]
         },
@@ -1851,14 +1824,15 @@
             },
             "stops": {
               "type": "array",
-              "description": "Ordered list of color stops along the gradient.",
+              "minItems": 2,
+              "description": "Ordered list of color stops along the gradient. A gradient needs at least two stops.",
               "items": {
                 "type": "object",
                 "description": "Color stop along the gradient.",
                 "required": ["color", "position"],
                 "properties": {
                   "color": {
-                    "type": "string",
+                    "$ref": "#/$defs/ColorRef",
                     "description": "Stop color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef).",
                     "examples": ["#1E40AF", "#22D3EE"]
                   },
@@ -1942,12 +1916,12 @@
               "examples": ["pct5", "ltHorz", "wdUpDiag"]
             },
             "foregroundColor": {
-              "type": "string",
+              "$ref": "#/$defs/ColorRef",
               "description": "Foreground color for the pattern: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef).",
               "examples": ["#0F172A"]
             },
             "backgroundColor": {
-              "type": "string",
+              "$ref": "#/$defs/ColorRef",
               "description": "Background color behind the pattern: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef).",
               "examples": ["#FFFFFF"]
             }
@@ -2018,13 +1992,13 @@
     },
     "Watermark": {
       "type": "object",
-      "description": "Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.",
+      "description": "Decorative watermark image and its opacity. The image is drawn once per slide, contained and centered in a fixed frame (the middle 40% of the slide width and height, from 30% to 70% on each axis), behind the slide content and above the background and slide image; there is no option to move, scale or tile it. PPTX export writes one native picture in the same frame with the opacity as alpha, and import restores it. A string or Asset (no opacity) is the same watermark at opacity 0.08. A watermark object needs both src and opacity; use a plain string or Asset for the default opacity. Use design.watermark = false to disable an inherited watermark.",
       "additionalProperties": false,
-      "required": ["opacity"],
+      "required": ["src", "opacity"],
       "properties": {
         "src": {
           "type": "string",
-          "description": "Source for the watermark image."
+          "description": "Source for the watermark image: an 'asset:<id>' reference, HTTPS URL, data URI, relative path or local path, as for Asset.src."
         },
         "opacity": {
           "type": "number",
@@ -2184,7 +2158,7 @@
         },
         "video": {
           "$ref": "#/$defs/Asset",
-          "description": "Full-slide video source. Presence of this field infers type 'video'."
+          "description": "Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to an http(s) source, with no embedded media. Native playback is out of scope (docs/programs/release-readiness)."
         },
         "chart": {
           "$ref": "#/$defs/Chart",
@@ -2230,7 +2204,7 @@
           "description": "Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks."
         },
         "design": {
-          "$ref": "#/$defs/Design",
+          "$ref": "#/$defs/SlideDesign",
           "description": "Slide-level design applied on top of the deck-wide design."
         },
         "left": {
@@ -2474,7 +2448,7 @@
         },
         "video": {
           "$ref": "#/$defs/Asset",
-          "description": "Source for a video item.",
+          "description": "Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to an http(s) source, with no embedded media. Native playback is out of scope (docs/programs/release-readiness).",
           "examples": [
             "asset:demo-video",
             "./media/demo.mp4"
@@ -3103,8 +3077,9 @@
             },
             "link": {
               "type": "string",
-              "description": "URL to link the run text to.",
-              "examples": ["https://acme.com", "https://acme.com/case-studies/beta"]
+              "pattern": "^(https?://|mailto:|tel:)\\S+$",
+              "description": "URL to link the run text to: an http(s) URL, a 'mailto:' address or a 'tel:' number, without whitespace. The preview draws it as a link and PPTX export writes a native hyperlink for all three; any other scheme is not valid.",
+              "examples": ["https://acme.com", "https://acme.com/case-studies/beta", "mailto:hello@acme.com", "tel:+15551234567"]
             },
             "superscript": {
               "type": "boolean",
@@ -3212,10 +3187,9 @@
         "data": {
           "oneOf": [
             { "$ref": "#/$defs/ChartData" },
-            { "$ref": "#/$defs/ChartDataSource" },
             { "$ref": "#/$defs/DatasetRef" }
           ],
-          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. A ChartDataSource is not resolved by any engine (a 'chart-data-source-unresolved' warning; engines draw a placeholder); prefer inline data with a 'source'."
+          "description": "Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ \"dataset\": \"<id>\" }) plots a top-level dataset instead. Data from a spreadsheet or file is imported into inline columns and rows, and its origin is recorded in data.source."
         },
         "mapping": {
           "$ref": "#/$defs/ChartMapping",
@@ -3571,35 +3545,6 @@
       },
       "examples": [{ "category": "Quarter", "series": ["Costs", "Revenue"] }, { "category": "Region", "x": "Spend", "series": ["Revenue"] }]
     },
-    "ChartDataSource": {
-      "type": "object",
-      "description": "Chart data sourced from an asset reference, URL, data URI, relative path, or local path such as CSV, TSV, JSON, or XLSX. The source is interpreted as a table; optional columns select or order fields from that table.",
-      "additionalProperties": false,
-      "required": ["src"],
-      "properties": {
-        "src": {
-          "type": "string",
-          "description": "Data source. Use 'asset:<id>' to reference the top-level assets registry, or provide an HTTPS URL, data URI, relative path, or local filesystem path.",
-          "examples": ["asset:revenue", "asset:pipeline-csv", "./data/revenue.csv", "https://cdn.acme.com/data/revenue.csv"]
-        },
-        "sheet": {
-          "type": "string",
-          "description": "Optional sheet name or table name for spreadsheet-like assets.",
-          "examples": ["Sheet1", "Revenue"]
-        },
-        "range": {
-          "type": "string",
-          "description": "Optional A1-style range or engine-defined range selector for spreadsheet-like assets.",
-          "examples": ["A1:D8", "Revenue!A1:D8"]
-        },
-        "columns": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Optional ordered columns or fields to read from the source. When omitted, renderers may use the source's own header row or schema.",
-          "examples": [["Quarter", "Revenue"], ["Month", "Revenue", "Costs"]]
-        }
-      }
-    },
     "ChartDataCell": {
       "oneOf": [
         { "type": "string" },
@@ -3850,7 +3795,7 @@
               "description": "Ordered search path of sources. The engine tries each in order; first match wins. The default catalog for the kind is appended implicitly at the end."
             }
           ],
-          "description": "Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Fetching a declared source is an explicit opt-in: the engine or its caller performs that fetch."
+          "description": "Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Engines never fetch a source. The host loads the records itself and passes them to the renderer and exporter as a 'catalogSources' map from the source string to its records; a source with no entry in that map contributes no records, except the default catalog's own URL and the '@openpresentation/opf' package, which resolve from the bundled snapshot."
         },
         "records": {
           "type": "array",
@@ -3861,7 +3806,7 @@
     },
     "CatalogSource": {
       "type": "string",
-      "description": "Catalog source location. Accepts:\n- A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'.\n- A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. Index files follow https://openpresentation.org/schema/opf-catalog-index/v1; the default catalog's index is https://www.pptx.gallery/<kind>/index.json.\n- A package reference of the form 'pkg:<package>[/<subpath>]'; resolved through a locally-installed package on the engine's package path.",
+      "description": "Catalog source location. Accepts:\n- A bare URL pointing at a catalog directory (e.g. 'https://acme.com/decks/narratives'); record ids resolve to '<base>/<id>.json'.\n- A URL pointing at an index file (e.g. 'https://acme.com/decks/narratives/index.json'); records are resolved relative to the index file's directory and the index entries describe what's available. Index files follow https://openpresentation.org/schema/opf-catalog-index/v1; the default catalog's index is https://www.pptx.gallery/<kind>/index.json.\n- A package reference of the form 'pkg:<package>[/<subpath>]'. 'pkg:@openpresentation/opf/...' resolves from the bundled snapshot; any other package reference needs the host to supply its records in 'catalogSources'.\n\nEngines never fetch or install anything for a source: the host supplies the records of every source other than the bundled default, as a 'catalogSources' map from the source string to its records.",
       "examples": [
         "https://www.pptx.gallery/narratives",
         "https://acme.com/decks/narratives/index.json",

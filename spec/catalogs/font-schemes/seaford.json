@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "seaford",
   "name": "Seaford",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Seaford Display",

@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F8FAFC",
-        "risk": "#334155"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "lucida-sans",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": {
       "preset": "16:10",
@@ -519,7 +506,7 @@
     },
     "metric-data": {
       "src": "./data/product-roadmap-decision-review.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Product Roadmap Decision Review data"
     },
     "watermark": {

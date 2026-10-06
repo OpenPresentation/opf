@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#BE123C",
-        "risk": "#B45309"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-gujarati",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "a4",
     "background": {
@@ -516,7 +503,7 @@
     },
     "metric-data": {
       "src": "./data/pricing-and-packaging-decision.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Pricing and Packaging Decision data"
     },
     "watermark": {

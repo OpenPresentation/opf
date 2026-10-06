@@ -220,10 +220,11 @@ describe("resolveChartData", () => {
     assert.equal(field.ok, true);
     assert.deepEqual(field.columns, ["Quarter"]);
     assert.deepEqual(field.diagnostics.map((entry) => [entry.code, entry.path]), [["dataset-field-unknown", "/data/fields/1"]]);
+    // A data source by file or asset is not part of the format (opf#240, descoped): such data has no columns.
     const external = resolveChartData(chart({ src: "asset:revenue" }));
     assert.equal(external.ok, false);
-    assert.equal(external.reason, "data-not-inline");
-    assert.deepEqual(codes(external.diagnostics.map((entry) => ({ params: entry }))), ["chart-data-source-unresolved"]);
+    assert.equal(external.reason, "no-columns");
+    assert.deepEqual(external.diagnostics, []);
     assert.equal(resolveChartData(chart({ columns: [], rows: [] })).reason, "no-columns");
     assert.equal(resolveChartData(chart({ columns: ["a"], rows: [] })).reason, "no-rows");
     assert.equal(resolveChartData({ type: "column" }).ok, false);
@@ -412,25 +413,22 @@ describe("validation and lint", () => {
       datasets: { spare: { columns: ["A"], rows: [] }, used: revenue() },
       slides: [
         { title: "numbers", chart: { type: "column", data: { columns: ["Q", "R"], rows: [["Q1", "12%"], ["Q2", null], ["Q3", ""], ["Q4", "1e3"]] } } },
-        { title: "source", chart: { type: "column", data: { src: "asset:revenue" } } },
         { title: "adapted", chart: { type: "column", data: { dataset: "used" }, mapping: { x: "Costs", series: ["Quarter"] } } },
       ],
-      assets: { revenue: { src: "./revenue.csv", format: "csv" } },
+      assets: { revenue: { src: "./revenue.csv", mediaType: "text/csv" } },
     });
     const result = issues(document);
     assert.equal(result.valid, true);
     assert.deepEqual(result.warnings, [
       ["chart-value-not-numeric", "/slides/0/chart/data/rows/0/1"],
-      ["chart-data-source-unresolved", "/slides/1/chart/data/src"],
-      ["chart-mapping-adapted", "/slides/2/chart/mapping/x"],
-      ["chart-mapping-adapted", "/slides/2/chart/mapping/series/0"],
+      ["chart-mapping-adapted", "/slides/1/chart/mapping/x"],
+      ["chart-mapping-adapted", "/slides/1/chart/mapping/series/0"],
     ]);
     const lint = lintPresentation(document);
     assert.deepEqual(lint.diagnostics.map((entry) => [entry.ruleId, entry.severity, entry.path]), [
       ["opf/chart-value-not-numeric", "warning", "/slides/0/chart/data/rows/0/1"],
-      ["opf/chart-data-source-unresolved", "warning", "/slides/1/chart/data/src"],
-      ["opf/chart-mapping-adapted", "warning", "/slides/2/chart/mapping/x"],
-      ["opf/chart-mapping-adapted", "warning", "/slides/2/chart/mapping/series/0"],
+      ["opf/chart-mapping-adapted", "warning", "/slides/1/chart/mapping/x"],
+      ["opf/chart-mapping-adapted", "warning", "/slides/1/chart/mapping/series/0"],
       ["opf/unused-dataset", "warning", "/datasets/spare"],
     ]);
   });
@@ -607,7 +605,7 @@ describe("RR-54 review", () => {
   test("schema errors name the one form the value chose", () => {
     const errors = (document) => validatePresentation(document).errors.map((issue) => [issue.path, issue.message]);
     const datasets = { r: revenue() };
-    // chart.data: a 'dataset' key selects DatasetRef, a 'src' key ChartDataSource, 'rows' ChartData ('columns' alone is either).
+    // chart.data: a 'dataset' key selects DatasetRef, 'rows' ChartData ('columns' alone is either).
     assert.deepEqual(errors(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", fields: [] } } }] })), [
       ["/slides/0/chart/data/fields", "must NOT have fewer than 1 items"],
     ]);
@@ -617,9 +615,12 @@ describe("RR-54 review", () => {
     assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { columns: ["a", "b"], rows: [["x", 1]], source: { src: "a", retrieved: "yesterday" } } } }] })).map(([path]) => path), [
       "/slides/0/chart/data/source/retrieved", "/slides/0/chart/data/source/retrieved", "/slides/0/chart/data/source/retrieved",
     ]);
-    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", rows: [] } } }] })), [
+    // ChartDataSource is gone: a data source by asset or file is an unknown key on inline data, and 'rows' picks the inline form.
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", rows: [["a"]] } } }] })), [
+      ["/slides/0/chart/data", "must have required property 'columns'"],
       ["/slides/0/chart/data", "must NOT have additional properties"],
     ]);
+    assert.equal(validatePresentation(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", columns: ["a"] } } }] })).valid, false);
     // A table header object: 'value' selects StyledTableCell, 'name' DataColumn.
     assert.deepEqual(errors(deck({ slides: [{ table: { columns: [{ name: "R", style: { align: "right" } }], rows: [[1]] } }] })), [
       ["/slides/0/table/columns/0", "must NOT have additional properties"],

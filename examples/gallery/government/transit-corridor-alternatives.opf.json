@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#0F172A",
-        "risk": "#14B8A6"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "raavi",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:9",
     "background": {
@@ -512,7 +499,7 @@
     },
     "metric-data": {
       "src": "./data/transit-corridor-alternatives.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Transit Corridor Alternatives data"
     },
     "watermark": {

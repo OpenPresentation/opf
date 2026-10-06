@@ -51,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#1D4ED8",
-        "risk": "#0F172A"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-devangari",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "4:3",
     "background": {
@@ -346,7 +333,7 @@
     },
     "metric-data": {
       "src": "./data/scope-3-reporting-readiness.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Scope 3 Reporting Readiness data"
     },
     "watermark": {

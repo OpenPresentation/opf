@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-sc",
   "name": "Noto Sans SC",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "ea",
   "languages": [
     "Chinese (simplified)",

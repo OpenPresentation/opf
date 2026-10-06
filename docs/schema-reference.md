@@ -19,7 +19,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set... |
 | `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution. |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
-| `audience` | no | `oneOf:string / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts either: - A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference. - An arr... |
+| `audience` | no | `oneOf:string / ref:Audience / array<oneOf:string / ref:Audience>` | Intended audiences for the presentation. Accepts any of: - A single string shorthand: free-form description ('Series B investors'), an audiences catalog id ('executive'), an HTTPS URL, or a 'pkg:' reference. - A singl... |
 | `purpose` | no | `oneOf:string / ref:Purpose` | Primary goal of the presentation. Accepts either: - A string shorthand: free-form goal ('Raise a Series B round of $30M'), a purposes catalog id ('decide', 'align'), an HTTPS URL, or a 'pkg:' reference. - An inline Pu... |
 | `language` | no | `oneOf:string / ref:Language` | Language for the presentation content. Accepts either: - A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference... |
 | `tone` | no | `oneOf:string / ref:Tone` | Desired tone for the presentation. Accepts either: - A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference. - An inline Tone object for custom tone metadata or catalog-backed overrides... |
@@ -32,7 +32,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `narrative` | no | `oneOf:string / ref:Narrative` | Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record. Accepts two forms: - String shorthand for the common case: 'narrative = "classic-story"'. Accepts a bare... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
-| `datasets` | no | `ref:Datasets` | Shared data tables keyed by id. A chart (`chart.data`: `{ "dataset": "<id>" }`) or a table (`{ "dataset": "<id>" }`) references one; engines inline it before composing. An unreferenced dataset is the lint warning `opf/unused-dataset`. See docs/chart-table-data.md. |
+| `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
 | `catalogs` | no | `ref:Catalogs` | Optional per-kind catalog overrides. Each kind may declare a non-default 'source' and/or inline 'records' that override or supplement the default catalog at https://www.pptx.gallery/<kind>. References elsewhere in the... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
@@ -52,7 +52,7 @@ _No named properties._
 
 - Type: `oneOf:string / object`
 - Required fields: none
-- Purpose: Reusable or inline resource. A string is shorthand for { "src": value }. Source strings accept 'asset:<id>' references, HTTPS URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths. Use object form when metadata such as alt text, title, mediaType, or format matters.
+- Purpose: Reusable or inline resource. A string is shorthand for { "src": value }. Source strings accept 'asset:<id>' references, HTTPS URLs, data URIs, relative paths resolved against the OPF file location, or local filesystem paths. Use object form when metadata such as alt text, title or mediaType matters.
 
 _No named properties._
 
@@ -241,7 +241,7 @@ _No named properties._
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, im... |
 | `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
-| `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }. |
+| `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string or Asset is the image at... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. |
@@ -277,31 +277,30 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Color palette used by the design system. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields. Two parallel models are supported and may be mixed: - OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as Power...
+- Purpose: Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields. Two parallel...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Color scheme reference. Resolves to the 'id' of a 'colorSchemes' catalog record. Accepts a bare id (lowercase kebab-case, e.g. 'cool-horizon'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Slot and r... |
-| `accent1` | no | `string` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
-| `accent2` | no | `string` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
-| `accent3` | no | `string` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
-| `accent4` | no | `string` | Accent 4 color (hex). Mirrors the OOXML accent4 slot. |
-| `accent5` | no | `string` | Accent 5 color (hex). Mirrors the OOXML accent5 slot. |
-| `accent6` | no | `string` | Accent 6 color (hex). Mirrors the OOXML accent6 slot. |
-| `dark1` | no | `string` | Dark 1 color (hex). Typically the deepest neutral; OOXML dark1. |
-| `dark2` | no | `string` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
-| `light1` | no | `string` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
-| `light2` | no | `string` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
-| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. |
-| `followedHyperlink` | no | `string` | Followed-hyperlink color (hex). OOXML folHlink. |
-| `primary` | no | `string` | Abstract role: primary brand color (hex). The engine maps this onto an OOXML accent slot when serializing. |
-| `secondary` | no | `string` | Abstract role: secondary brand color (hex). |
-| `accent` | no | `string` | Abstract role: accent color used for highlights and emphasis (hex). |
-| `background` | no | `string` | Abstract role: default slide background color (hex). The engine maps this to one of light1 / light2 / dark1 / dark2 when serializing. |
-| `surface` | no | `string` | Abstract role: color for elevated surfaces such as cards and panels (hex). |
-| `text` | no | `string` | Abstract role: primary body text color (hex). |
-| `textSecondary` | no | `string` | Abstract role: secondary or muted text color used for captions and supporting copy (hex). |
-| `custom` | no | `object` | Map of custom named colors for advanced or theme-specific use. |
+| `accent1` | no | `ref:HexColor` | Accent 1 color (hex). Mirrors the OOXML accent1 slot. |
+| `accent2` | no | `ref:HexColor` | Accent 2 color (hex). Mirrors the OOXML accent2 slot. |
+| `accent3` | no | `ref:HexColor` | Accent 3 color (hex). Mirrors the OOXML accent3 slot. |
+| `accent4` | no | `ref:HexColor` | Accent 4 color (hex). Mirrors the OOXML accent4 slot. |
+| `accent5` | no | `ref:HexColor` | Accent 5 color (hex). Mirrors the OOXML accent5 slot. |
+| `accent6` | no | `ref:HexColor` | Accent 6 color (hex). Mirrors the OOXML accent6 slot. |
+| `dark1` | no | `ref:HexColor` | Dark 1 color (hex). Typically the deepest neutral; OOXML dark1. |
+| `dark2` | no | `ref:HexColor` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
+| `light1` | no | `ref:HexColor` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
+| `light2` | no | `ref:HexColor` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
+| `hyperlink` | no | `ref:HexColor` | Hyperlink color (hex). OOXML hlink. |
+| `followedHyperlink` | no | `ref:HexColor` | Followed-hyperlink color (hex). OOXML folHlink. |
+| `primary` | no | `ref:HexColor` | Abstract role: primary brand color (hex). The engine maps this onto an OOXML accent slot when serializing. |
+| `secondary` | no | `ref:HexColor` | Abstract role: secondary brand color (hex). |
+| `accent` | no | `ref:HexColor` | Abstract role: accent color used for highlights and emphasis (hex). |
+| `background` | no | `ref:HexColor` | Abstract role: default slide background color (hex). The engine maps this to one of light1 / light2 / dark1 / dark2 when serializing. |
+| `surface` | no | `ref:HexColor` | Abstract role: color for elevated surfaces such as cards and panels (hex). |
+| `text` | no | `ref:HexColor` | Abstract role: primary body text color (hex). |
+| `textSecondary` | no | `ref:HexColor` | Abstract role: secondary or muted text color used for captions and supporting copy (hex). |
 
 
 ### FontScheme
@@ -318,26 +317,21 @@ _No named properties._
 | `eastAsian` | no | `object` | East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from t... |
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
-| `app` | no | `enum:PowerPoint \| Google Slides` | Target application this font pairing is intended for. |
-| `languageFamily` | no | `enum:latin \| ea \| cs` | OOXML font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' for East Asian scripts, 'cs' for Complex Scripts. As the design font scheme, an 'ea' or 'cs' scheme also fills that script... |
-| `heading` | no | `ref:Font` | Abstract role: font used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
-| `body` | no | `ref:Font` | Abstract role: font used for body copy. Maps onto the OOXML minor slot when serializing. |
-| `accent` | no | `ref:Font` | Abstract role: font used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent... |
-| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the... |
+| `app` | no | `enum:powerpoint \| google-slides` | Target application this font pairing is intended for. Metadata for pickers and catalog filters: no engine changes its output by it. |
+| `languageFamily` | no | `enum:latin \| ea \| cs \| eastAsian \| complexScript` | Font-language family this scheme is intended for: 'latin' for Latin-script content, 'ea' (or 'eastAsian', the same value) for East Asian scripts, 'cs' (or 'complexScript', the same value) for Complex Scripts. The long... |
+| `heading` | no | `string` | Abstract role: font family name used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
+| `body` | no | `string` | Abstract role: font family name used for body copy. Maps onto the OOXML minor slot when serializing. |
+| `accent` | no | `string` | Abstract role: font family name used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns... |
+| `code` | no | `string` | Abstract role: monospaced font family name used for code blocks. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engi... |
 
 
-### Font
+### SlideDesign
 
-- Type: `object`
-- Required fields: `family`
-- Purpose: Specification for a single font role.
+- Type: `allOf:ref:Design + schema`
+- Required fields: none
+- Purpose: A slide's design: every Design field except dimensions. A PPTX has one slide size, so the size is set once, on the deck's design.dimensions (or its theme), and a slide's design cannot set it. A slide-level theme whose resolved dimensions differ from the deck's is a lint warning (slide-theme-dimensions); exporting such a deck to PPTX fails with mixed-slide-dimensions.
 
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `family` | yes | `string` | Font family name. |
-| `weight` | no | `number` | Numeric font weight (e.g., 400 for regular, 700 for bold). |
-| `style` | no | `enum:normal \| italic` | Font style. |
-| `letterSpacing` | no | `number` | Letter spacing (tracking) in ems. |
+_No named properties._
 
 
 ### DimensionPreset
@@ -384,7 +378,7 @@ _No named properties._
 
 - Type: `anyOf:ref:HexColor / enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | hyperlink | followedHyperlink | primary | secondary | accent | background | surface | text | textSecondary / string`
 - Required fields: none
-- Purpose: A color value or reference, enforced on styled table cell fill and text colors and on cell border colors. Three forms: - Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'. - Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through th...
+- Purpose: A color value or reference, enforced on styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Three forms: - Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'. - Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary',...
 
 _No named properties._
 
@@ -453,7 +447,16 @@ _No named properties._
 | `label` | no | `string` | Optional short human label for forms and fill panels. |
 | `description` | no | `string` | Optional prose describing what the variable is for, surfaced by pickers, fill forms and agents. |
 | `example` | no | `number` | Illustrative number shown in fill forms and used when a template is previewed with examples. Never written to output. |
-| `format` | no | `ref:NumberFormat` | Display pattern used by '{{<id>}}'. A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' requi... |
+| `format` | no | `ref:NumberFormat` | Display pattern used by '{{<id>}}' (the shared NumberFormat syntax). A literal prefix, a numeric part of '#', '0', ',' and '.', and a literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits afte... |
+
+
+### NumberFormat
+
+- Type: `string`
+- Required fields: none
+- Purpose: Number display pattern, shared by NumberVariable.format, data column formats (DataColumn.format) and table cell formats (StyledTableCell.format). An optional literal prefix, a numeric part of '#', '0', ',' and '.', and an optional literal suffix. '0' pads digits, '#' is optional, ',' groups thousands, digits after '.' fix the decimals ('0' required, '#' optional), and a '%' in the prefix or suffix multiplies the value by 100. English separators only. A format applies only to number values; st...
+
+_No named properties._
 
 
 ### DateVariable
@@ -560,7 +563,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `const:"solid"` | Fixed solid background fill. |
-| `color` | yes | `string` | Fixed solid fill color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef, resolved against the effective color scheme and the deck variables). Use { type: 'theme', slot: ...... |
+| `color` | yes | `ref:ColorRef` | Fixed solid fill color: a hex string, a color-scheme slot or role name, or a var:<id> variable reference (a ColorRef, resolved against the effective color scheme and the deck variables). Use { type: 'theme', slot: ...... |
 | `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
@@ -628,12 +631,12 @@ _No named properties._
 ### Watermark
 
 - Type: `object`
-- Required fields: `opacity`
-- Purpose: Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.
+- Required fields: `src`, `opacity`
+- Purpose: Decorative watermark image and its opacity. The image is drawn once per slide, contained and centered in a fixed frame (the middle 40% of the slide width and height, from 30% to 70% on each axis), behind the slide content and above the background and slide image; there is no option to move, scale or tile it. PPTX export writes one native picture in the same frame with the opacity as alpha, and import restores it. A string or Asset (no opacity) is the same watermark at opacity 0.08. A watermar...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `src` | no | `string` | Source for the watermark image. |
+| `src` | yes | `string` | Source for the watermark image: an 'asset:<id>' reference, HTTPS URL, data URI, relative path or local path, as for Asset.src. |
 | `opacity` | yes | `number` | Watermark opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
@@ -690,7 +693,7 @@ _No named properties._
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide text-style bullet payload. Presence of this field infers type 'text'. |
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
 | `image` | no | `ref:Asset` | Full-slide image source. Presence of this field infers type 'image'. |
-| `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. |
+| `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Full-slide code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
@@ -699,7 +702,7 @@ _No named properties._
 | `timeline` | no | `ref:Timeline` | Full-slide timeline payload. An array is shorthand for { "events": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'. |
 | `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table or video payload. Valid only when the slide root holds exactly one of those payloads. |
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
-| `design` | no | `ref:Design` | Slide-level design applied on top of the deck-wide design. |
+| `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
 | `left` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
 | `right` | no | `ref:ContentPayload` |  |
@@ -771,7 +774,7 @@ _No named properties._
 | `bullets` | no | `array<ref:BulletItem>` | Text-style bullet payload. Presence of this field infers type 'text'. |
 | `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
 | `image` | no | `ref:Asset` | Source for an image item. |
-| `video` | no | `ref:Asset` | Source for a video item. |
+| `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
@@ -936,16 +939,17 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `string` | Chart type id. Resolves to the id of a chartTypes catalog record; renderers map that record through mappings.openxml and any renderer-specific mapping they understand. The bundled catalog covers the chart types Aspose... |
-| `data` | yes | `oneOf:ref:ChartData / ref:ChartDataSource / ref:DatasetRef` | Chart data: inline columns/rows, a dataset reference (`{ "dataset": "<id>", "fields"? }`), or a ChartDataSource, which no engine loads (`chart-data-source-unresolved` warning, placeholder drawn). |
-| `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name (category, scatter X, series). Absent keeps the positional rule. See docs/chart-table-data.md. |
-| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
-| `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
-| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
+| `data` | yes | `oneOf:ref:ChartData / ref:DatasetRef` | Chart data. Inline data uses a tabular columns/rows shape; renderers convert rows to chart series internally. A DatasetRef ({ "dataset": "<id>" }) plots a top-level dataset instead. Data from a spreadsheet or file is... |
+| `mapping` | no | `ref:ChartMapping` | Optional series mapping by column name: which column is the category, which is the X column of a scatter chart, and which columns are plotted, in order. Absent keeps the positional rule (first column the category, the... |
+| `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles. Absent keeps today's untitled axes. Supported on the chart types that have a category/value (or X/Y) axis pair (column, bar, line, area, scatter, and the histogram, pareto, waterfall and box-and-... |
+| `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position... |
+| `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator. |
 
 
 ### ChartAxisTitles
 
 - Type: `object`
+- Required fields: none
 - Purpose: Titles for the two axes of a chart. 'category' is the axis that carries the row labels (the horizontal axis of a column or line chart, the vertical axis of a bar chart, the X axis of a scatter chart); 'value' is the other axis.
 
 | Field | Required | Type | Notes |
@@ -957,90 +961,68 @@ _No named properties._
 ### ChartDataLabels
 
 - Type: `object`
+- Required fields: none
 - Purpose: Data label settings. A label shows the selected content parts in the fixed order category, value, percent, joined by the separator.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `content` | no | `array<string>` | Which parts a label shows: `value`, `percent`, `category` (default `['value']`). 'percent' exists only on pie and doughnut charts; a part a type cannot show is dropped with a `chart-option-adapted` diagnostic. |
-| `position` | no | `string` | `auto` (default), `center`, `inside-end`, `inside-base`, `outside-end`, `above`, `below`, `left`, `right`. The positions a chart type accepts are in docs/chart-options.md; an unsupported position falls back to `auto`. |
+| `content` | no | `array<enum:value \| percent \| category>` | Which parts a label shows. Defaults to ['value']. 'percent' is the share of the total and exists only on pie and doughnut charts; 'category' shows the category name (the X value on a scatter chart). A part a chart typ... |
+| `position` | no | `enum:auto \| center \| inside-end \| inside-base \| outside-end \| above \| below \| left \| right` | Where a label sits relative to its mark. 'auto' (the default) is the type's default: outside-end for clustered columns and bars, pie slices and the histogram, pareto and waterfall constructs; center for stacked column... |
 | `separator` | no | `string` | Text between the parts of a label that shows more than one. Defaults to ', '. |
 
 
 ### Table
 
 - Type: `object`
-- Required fields: `rows` (inline table) or `dataset` (dataset-backed table)
-- Purpose: Table content, inline or dataset-backed. An inline table has `rows` and optional `columns`; a dataset-backed table has `dataset` and optional `fields`, and no `rows` or `columns`.
+- Required fields: none
+- Purpose: Table content, inline or dataset-backed. An inline table has 'rows' (required) and optional 'columns'. A dataset-backed table has 'dataset' (required) and optional 'fields', and no 'rows' or 'columns': it takes its headers, rows and column formats from the dataset (per-cell styles need an inline table).
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels: strings, rich runs, styled cell objects or DataColumn objects. A header's `format` is the column's number format. Null is an empty label or a placeholder covered by a preceding column span. |
-| `rows` | inline | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
-| `dataset` | dataset | `ref:DatasetId` | Id of a top-level dataset that supplies the headers, rows and column formats. Unknown: `dataset-unknown` error. |
-| `fields` | no | `ref:DatasetFields` | Dataset tables only: the columns to show, by name and in order. Unknown: `dataset-field-unknown` error. |
+| `columns` | no | `array<oneOf:string / array<ref:TextRun> / ref:StyledTableCell / ref:DataColumn / null>` | Optional column labels. Labels may be strings, rich runs, styled cell objects or DataColumn objects ({ "name", "format" }). A header's 'format' (DataColumn or StyledTableCell) is the column's number format; a body cel... |
+| `rows` | no | `array<array<ref:TableCell>>` | Two-dimensional table row data; each row aligns by index with columns when columns are supplied. |
+| `dataset` | no | `ref:DatasetId` | Id of a top-level dataset that supplies this table's headers, rows and column formats. Excludes 'rows' and 'columns'. An unknown id is a 'dataset-unknown' error. |
+| `fields` | no | `ref:DatasetFields` | Dataset tables only: the dataset columns to show, by name and in order. Absent shows every column. An unknown name is a 'dataset-field-unknown' error. |
 
 
 ### ChartData
 
 - Type: `object`
 - Required fields: `columns`, `rows`
-- Purpose: Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless a chart type or renderer maps them differently.
+- Purpose: Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$5', '(5)', '1,234') is a gap and a 'chart-value-not-numeric' warning.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels; a DataColumn carries a number format. |
-| `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. Value cells are numbers or strict decimal strings; anything else is a gap and a `chart-value-not-numeric` warning. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance. Engines never read, fetch or refresh it. |
-
-
-### ChartDataSource
-
-- Type: `object`
-- Required fields: `src`
-- Purpose: Chart data sourced from an asset reference, URL, data URI, relative path, or local path such as CSV, TSV, JSON, or XLSX. The source is interpreted as a table; optional columns select or order fields from that table.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `src` | yes | `string` | Data source. Use 'asset:<id>' to reference the top-level assets registry, or provide an HTTPS URL, data URI, relative path, or local filesystem path. |
-| `sheet` | no | `string` | Optional sheet name or table name for spreadsheet-like assets. |
-| `range` | no | `string` | Optional A1-style range or engine-defined range selector for spreadsheet-like assets. |
-| `columns` | no | `array<string>` | Optional ordered columns or fields to read from the source. When omitted, renderers may use the source's own header row or schema. |
-
-
-### NumberFormat
-
-- Type: `string`
-- Required fields: none
-- Purpose: Number display pattern shared by NumberVariable.format, DataColumn.format and StyledTableCell.format: an optional literal prefix, a numeric part of '#', '0', ',' and '.', and an optional literal suffix; a '%' multiplies by 100. A column or cell format that is not a valid pattern is a `number-format-invalid` error. Examples: `#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`.
-
-_No named properties._
+| `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered column labels for the chart data table. A label is a string or a DataColumn ({ "name", "format" }) whose number format the data labels, value axis and exported workbook use. |
+| `rows` | yes | `array<array<ref:ChartDataCell>>` | Tabular chart rows. Each row aligns by index with columns. |
+| `source` | no | `ref:DataSourceRef` | Optional provenance: where this inline data came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. |
 
 
 ### DataColumn
 
 - Type: `object`
 - Required fields: `name`
-- Purpose: A named data column with an optional number format, wherever a chart, dataset or table column header may be a string.
+- Purpose: A named data column with an optional number format. Anywhere a chart or dataset column is a string it may be a DataColumn; the string form is { "name": value } with no format. A table column header may also be a DataColumn.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `name` | yes | `string` | Column label: the series name, the table header and the name `fields` and `chart.mapping` address. |
-| `format` | no | `ref:NumberFormat` | Number format of the column's number values. Absent: the General form. |
+| `name` | yes | `string` | Column label, used as the series name, the table header and the name 'fields' and 'chart.mapping' address. |
+| `format` | no | `ref:NumberFormat` | Number format of the column's number values (data labels, value axis, table cells, exported workbook). Absent: the General form. |
 
 
 ### DataSourceRef
 
 - Type: `object`
 - Required fields: `src`
-- Purpose: Provenance of inline data or a dataset. Engines never read, fetch or refresh it; they keep it through editing, export and re-import.
+- Purpose: Provenance of inline data or a dataset: the file, sheet and range it came from and when. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. Re-import the data to update it.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a path. |
+| `src` | yes | `string` | Where the data came from: an 'asset:<id>' reference, a URL, or a relative or local path. |
 | `sheet` | no | `string` | Sheet or table name inside a spreadsheet source. |
 | `range` | no | `string` | A1-style range inside a spreadsheet source. |
 | `fields` | no | `array<string>` | The source fields the data was taken from, in order. |
-| `retrieved` | no | `string` | ISO 8601 date or date-time the data was taken. |
+| `retrieved` | no | `anyOf:schema / schema` | When the data was taken from the source: an ISO 8601 date or date-time. |
 | `description` | no | `string` | Free-form note about the source. |
 
 
@@ -1048,7 +1030,7 @@ _No named properties._
 
 - Type: `string`
 - Required fields: none
-- Purpose: Id of an entry in the top-level datasets map (the assets id pattern `^[a-zA-Z0-9][a-zA-Z0-9._-]*$`).
+- Purpose: Id of an entry in the top-level datasets map (the assets id pattern).
 
 _No named properties._
 
@@ -1057,16 +1039,16 @@ _No named properties._
 
 - Type: `array<string>`
 - Required fields: none
-- Purpose: Dataset column names to use, in order, each at most once (at least one).
+- Purpose: Dataset column names to use, in order, each at most once. Selects and orders the dataset's columns; an unknown name is a 'dataset-field-unknown' error.
 
 _No named properties._
 
 
 ### Datasets
 
-- Type: `object map`
+- Type: `object`
 - Required fields: none
-- Purpose: Shared data tables keyed by id (the assets id pattern); each value is a Dataset.
+- Purpose: Shared data tables keyed by id (the assets id pattern). Charts reference one with 'chart.data': { "dataset": "<id>" } and tables with 'table': { "dataset": "<id>" }.
 
 _No named properties._
 
@@ -1075,40 +1057,40 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `columns`, `rows`
-- Purpose: One shared data table. Column names are unique (`data-column-duplicate` error).
+- Purpose: One shared data table: named columns (strings or DataColumn objects with a number format) and rows of scalar cells. Column names are unique ('data-column-duplicate' error). Rich text and styling belong in an inline table.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `title` | no | `string` | Human name shown by editors. |
+| `title` | no | `string` | Human name of the dataset, shown by editors. |
 | `description` | no | `string` | What the dataset holds. |
 | `columns` | yes | `array<oneOf:string / ref:DataColumn>` | Ordered, uniquely named columns. |
-| `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells aligned with columns. |
-| `source` | no | `ref:DataSourceRef` | Optional provenance. |
+| `rows` | yes | `array<array<ref:ChartDataCell>>` | Rows of scalar cells (string, number, boolean, null); each row aligns by index with columns. |
+| `source` | no | `ref:DataSourceRef` | Optional provenance. Engines never read, fetch or refresh it. |
 
 
 ### DatasetRef
 
 - Type: `object`
 - Required fields: `dataset`
-- Purpose: Chart data taken from a top-level dataset; engines inline it before plotting.
+- Purpose: Chart data taken from a top-level dataset. Engines inline it before plotting; 'chart.mapping' names columns after the 'fields' selection.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `dataset` | yes | `ref:DatasetId` | Id of the dataset. Unknown: `dataset-unknown` error. |
-| `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. |
+| `dataset` | yes | `ref:DatasetId` | Id of the dataset. An unknown id is a 'dataset-unknown' error. |
+| `fields` | no | `ref:DatasetFields` | The dataset columns to use, by name and in order. Absent uses every column. |
 
 
 ### ChartMapping
 
 - Type: `object`
 - Required fields: none
-- Purpose: Series mapping by column name, after any `fields` selection. Unknown names are `chart-mapping-unknown-column` errors; a series that repeats the category or X column, and an X column on a chart without an X axis, are dropped with a `chart-mapping-adapted` warning.
+- Purpose: Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; pie, doughnut and other single-series constructs still plot one series. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a 'chart-mapping-adapted' warning.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `category` | no | `string` | The label column. Default: the first column. |
-| `x` | no | `string` | The X column of a scatter chart. Default: the second column (the first when the category is the second column), only with three or more columns; with two, the second column is the series against row numbers. |
-| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or X. |
+| `category` | no | `string` | The label (category) column. Default: the first column. |
+| `x` | no | `string` | The X column of an XY (scatter) chart. Default: the second column (the first, when the category is the second column), and only when there are three or more columns: with two, the second column is the one series, plot... |
+| `series` | no | `array<string>` | The plotted columns, in order. Default: every column that is not the category or the X column. |
 
 
 ### ChartDataCell
@@ -1150,7 +1132,7 @@ _No named properties._
 | `style` | no | `ref:TableCellStyle` |  |
 | `colSpan` | no | `integer` | Number of grid columns covered, starting at this cell. Covered positions must contain null. Default 1. |
 | `rowSpan` | no | `integer` | Number of grid rows covered, starting at this cell. Covered positions must contain null. Header cells cannot span into body rows. Default 1. |
-| `format` | no | `ref:NumberFormat` | Number format: of this body cell's number (wins over the column's), or of the column on a header cell. |
+| `format` | no | `ref:NumberFormat` | Number format. On a body cell it formats that cell's number value (and wins over the column's format); on a header cell (in 'columns') it is the column's format, the same as a DataColumn header. Strings, booleans, nul... |
 
 
 ### TableCellStyle
@@ -1225,7 +1207,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `source` | no | `oneOf:ref:CatalogSource / array<ref:CatalogSource>` | Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Fetching a declared source is an e... |
+| `source` | no | `oneOf:ref:CatalogSource / array<ref:CatalogSource>` | Single source or an ordered search path of sources. When omitted, the engine falls back to the default catalog at https://www.pptx.gallery/<kind>, resolved from its bundled snapshot. Engines never fetch a source. The... |
 | `records` | no | `array<object>` | Inline catalog records embedded in this OPF document. Each record validates against the kind's companion schema (e.g. https://openpresentation.org/schema/opf-narrative/v1 for narratives). Inline records win over anyth... |
 
 

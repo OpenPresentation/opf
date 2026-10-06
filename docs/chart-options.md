@@ -70,4 +70,4 @@ A chart that sets none of the three fields renders and exports byte-for-byte as 
 
 ## Not in this change
 
-Per-series data label overrides (column number formats are RR-54, [chart-table-data.md](chart-table-data.md)), a rotated or rich-text axis title, a chart title, a legend that overlays the plot, manual plot-area layout, secondary axes and trendlines. Charts from external spreadsheets (`ChartDataSource`) stay descoped.
+Per-series data label overrides (column number formats are RR-54, [chart-table-data.md](chart-table-data.md)), a rotated or rich-text axis title, a chart title, a legend that overlays the plot, manual plot-area layout, secondary axes and trendlines. Charts from external spreadsheets stay descoped (the `ChartDataSource` form was removed from the schema).

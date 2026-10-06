@@ -42,7 +42,7 @@ A payload is a block, a slide or region that holds one content field, or a group
 | timeline | text | yes | `timeline name`, `timeline description` for the metadata a text cannot hold; `when: what`, then the description indented |
 | timeline | list | yes | `timeline name`, `timeline description`; `when: what` is the item text, the description its description |
 | timeline | table | yes | `timeline name`, `timeline description`. Columns `When`, `What`, `Description` only for the fields used |
-| chart | table | no | `chart type`. Only inline `columns` and `rows`; a `ChartDataSource` is refused |
+| chart | table | no | `chart type`. Only inline `columns` and `rows`, or a dataset; a chart without them is refused |
 | table | chart | yes | Refused unless every column has a plain label and every value after the first column is a number, a numeric string or empty; type `column` |
 | table | list | no | `column headings`; `table columns beyond the second (joined into the description)`; `cell styles`. First column is the item, the other columns the description. Merged cells are refused |
 | table | timeline | yes when the headings are recognised | Reads columns by heading (`When`/`Date`/`Quarter`..., `What`/`Event`/`Milestone`..., `Description`/`Notes`...) or by `columns: { when, what, description }`; `column "X"` for dropped columns, `column heading "X"` for a heading it did not recognise, `text formatting`. Refused without headings or an event column |

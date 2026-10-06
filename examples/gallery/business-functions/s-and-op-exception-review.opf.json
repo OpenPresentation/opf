@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F59E0B",
-        "risk": "#E2E8F0"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "mangal",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "a4",
     "background": {
@@ -525,7 +512,7 @@
     },
     "metric-data": {
       "src": "./data/s-and-op-exception-review.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "S&OP Exception Review data"
     },
     "watermark": {

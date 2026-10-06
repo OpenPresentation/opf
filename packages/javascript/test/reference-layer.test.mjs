@@ -233,18 +233,28 @@ describe("color reference positions", () => {
     assert.deepEqual(variableWarnings(result), []);
   });
 
-  test("background and gradient colors are not color reference positions", () => {
-    const result = validatePresentation(deck({
+  test("solid, gradient-stop and pattern background colors are color reference positions", () => {
+    const backgrounds = () => deck({
       design: {
         background: {
           type: "gradient",
           gradient: { angle: 90, stops: [{ color: "var:brand", position: 0 }, { color: "#0F172A", position: 1 }] },
         },
       },
-      slides: [{ title: "Backdrop", design: { background: { type: "solid", color: "var:brand" } } }],
-    }));
+      slides: [
+        { title: "Backdrop", design: { background: { type: "solid", color: "var:brand" } } },
+        { title: "Pattern", design: { background: { type: "pattern", pattern: { preset: "pct5", foregroundColor: "var:brand", backgroundColor: "accent2" } } } },
+      ],
+    });
+    const result = validatePresentation(backgrounds());
     assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.deepEqual(variableWarnings(result), []);
+    assert.deepEqual(variableWarnings(result).map((warning) => warning.path), [
+      "/design/background/gradient/stops/0/color",
+      "/slides/0/design/background/color",
+      "/slides/1/design/background/pattern/foregroundColor",
+    ]);
+    // Declared, the same references are clean.
+    assert.deepEqual(variableWarnings(validatePresentation({ ...backgrounds(), variables: { brand: "#0F4C81" } })), []);
   });
 });
 

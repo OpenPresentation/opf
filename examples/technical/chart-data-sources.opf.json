@@ -1,19 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
-  "name": "Chart Data Sources",
-  "description": "Technical fixture for inline chart data and asset-backed chart data sources.",
-  "assets": {
-    "revenue-csv": {
-      "src": "./data/revenue.csv",
-      "format": "csv",
-      "title": "Revenue CSV"
-    },
-    "workbook": {
-      "src": "./data/operating-model.xlsx",
-      "mediaType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "title": "Operating workbook"
-    }
-  },
+  "name": "Chart Data",
+  "description": "Technical fixture for inline chart data.",
   "slides": [
     {
       "title": "Inline Chart Data",
@@ -41,37 +29,6 @@
               21,
               13
             ]
-          ]
-        }
-      }
-    },
-    {
-      "title": "CSV Chart Data",
-      "chart": {
-        "type": "clustered-column",
-        "data": {
-          "src": "asset:revenue-csv",
-          "columns": [
-            "Quarter",
-            "Revenue",
-            "Cost"
-          ]
-        }
-      }
-    },
-    {
-      "title": "Workbook Range Chart Data",
-      "chart": {
-        "type": "stacked-bar-3x",
-        "data": {
-          "src": "asset:workbook",
-          "sheet": "Plan",
-          "range": "Plan!A1:D6",
-          "columns": [
-            "Workstream",
-            "Committed",
-            "At Risk",
-            "Blocked"
           ]
         }
       }

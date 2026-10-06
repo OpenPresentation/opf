@@ -77,11 +77,11 @@ export function resolveFontSchemeReference(reference: unknown, lookup: (id: stri
  * A scheme that names no heading or body family gets the DEFAULT_FONT_SCHEME families (Aptos Display, Aptos).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
  * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code.
- * `accent` is returned only when the scheme defines an `accent` role (a family string or Font object);
+ * `accent` is returned only when the scheme defines an `accent` role (a family name string);
  * the slide tag and the quote body use it in place of the body and heading families. */
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
-  const family = (value: unknown) => typeof value === "string" ? value : record(value).family;
+  const family = (value: unknown) => typeof value === "string" && value ? value : undefined;
   const accent = family(scheme.accent);
   return {
     heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? DEFAULT_FONT_FAMILIES.heading,

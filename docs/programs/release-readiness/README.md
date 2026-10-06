@@ -72,8 +72,8 @@ items that cite it.
 - **PowerPoint video is DESCOPED.** Native `p:video` export and preview
   playback are not part of this release. A future-work issue records it (RR-18).
 - **Charts from external spreadsheets are DESCOPED.** `ChartDataSource`
-  (`src`, `sheet`, `range`, `columns`) and a host `dataResolver` hook are not
-  part of this release. A future-work issue records it (RR-18).
+  (`src`, `sheet`, `range`, `columns`; since removed from the schema by FA-07)
+  and a host `dataResolver` hook are not part of this release. A future-work issue records it (RR-18).
 - **SVG images are IN SCOPE.** Native SVG pictures in the PPTX export (with a
   raster fallback) and import (RR-10).
 - **AI reconstruction of third-party PPTX belongs in pptx.dev.** opf-pptx and

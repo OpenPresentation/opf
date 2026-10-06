@@ -74,26 +74,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#14B8A6",
-        "risk": "#F59E0B"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "georgia",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": {
       "preset": "16:10",
@@ -529,7 +516,7 @@
     },
     "metric-data": {
       "src": "./data/airline-disruption-recovery-review.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Airline Disruption Recovery Review data"
     },
     "watermark": {
