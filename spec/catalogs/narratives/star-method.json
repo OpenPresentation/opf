@@ -9,9 +9,9 @@
     "performance-reviewers",
     "award-committees"
   ],
-  "durationRange": {
-    "minMinutes": 5,
-    "maxMinutes": 15
+  "duration": {
+    "min": 5,
+    "max": 15
   },
   "tags": [
     "case-study",
@@ -25,32 +25,32 @@
       "name": "Situation",
       "description": "Describe the context and background of the scenario.",
       "instructions": "Describe the relevant context and constraints.",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "task",
       "name": "Task",
       "description": "Explain your specific role and responsibilities in this situation.",
       "instructions": "Explain the responsibility or target outcome.",
-      "slideType": "list",
-      "layoutHint": "list-2x"
+      "type": "list",
+      "layout": "list-2x"
     },
     {
       "id": "action",
       "name": "Action",
       "description": "Detail the specific steps you took to address the challenge.",
       "instructions": "Detail the actions taken and choices made.",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "id": "result",
       "name": "Result",
       "description": "Share the measurable outcomes and impact of your actions.",
       "instructions": "Show measurable impact and proof.",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     }
   ]
 }

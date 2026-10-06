@@ -9,9 +9,9 @@
     "employees",
     "community"
   ],
-  "durationRange": {
-    "minMinutes": 5,
-    "maxMinutes": 20
+  "duration": {
+    "min": 5,
+    "max": 20
   },
   "tags": [
     "storytelling",
@@ -25,40 +25,40 @@
       "name": "Status Quo",
       "description": "Establish the starting point. What was normal life like before the challenge?",
       "instructions": "Establish the starting world before change.",
-      "slideType": "image",
-      "layoutHint": "image-bleed"
+      "type": "image",
+      "layout": "image-bleed"
     },
     {
       "id": "challenge",
       "name": "Challenge",
       "description": "Introduce the disruption or opportunity that demanded change.",
       "instructions": "Introduce the disruption that makes change necessary.",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "journey",
       "name": "Journey",
       "description": "Walk through the process of transformation. Include obstacles overcome.",
       "instructions": "Walk through the path, obstacles, and choices.",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "id": "transformation",
       "name": "Transformation",
       "description": "Show the pivotal moment or insight that changed everything.",
       "instructions": "Show the turning point that changes the outcome.",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "id": "new-reality",
       "name": "New Reality",
       "description": "Reveal the improved state and the lessons that will benefit your audience.",
       "instructions": "Reveal the improved state and lesson learned.",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     }
   ]
 }

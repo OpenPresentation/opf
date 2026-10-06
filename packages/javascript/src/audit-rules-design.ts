@@ -3,6 +3,7 @@ import type { AuditRule } from './audit-context.js';
 import { rule } from './audit-context.js';
 import { countWords, plainText, pointer, pointerOfDotted, runsOf, slidePayloads, splitPointer } from './audit-content.js';
 import { type Rec, rec } from './audit-design.js';
+import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
@@ -340,6 +341,17 @@ const emptySlideRule = rule(
 	'A slide has no content at all.',
 	'A slide with no title, no content and no picture is almost always an accident of editing. (A deliberately blank slide can use the blank layout.)',
 );
+const unusedBeatRule = rule(
+	'unused-beat',
+	'content',
+	'info',
+	'A beat of the narrative has no slide that references it.',
+	'The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.',
+	{
+		approximations:
+			'Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in AuditOptions.catalogs, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.',
+	},
+);
 const PLACEHOLDERS: { pattern: RegExp; label: string }[] = [
 	{ pattern: /lorem ipsum|dolor sit amet|consectetur adipiscing/i, label: 'lorem ipsum' },
 	{ pattern: /\b(click|tap) to (add|edit|enter)\b|\b(add|enter|insert|type) (a |your |the )?(title|subtitle|text|heading|caption|content|name|description)( here)?\s*$/i, label: 'a template prompt' },
@@ -384,6 +396,21 @@ const contentRules: AuditRule[] = [
 						fixes: [{ id: 'focus-text', label: 'Edit the text', kind: 'focus', safe: true, focus: { path: tv.path, field: 'text' } }],
 					});
 				}
+		},
+	},
+	{
+		info: unusedBeatRule,
+		run(context) {
+			const narrative = resolveNarrative(context.document, context.options.catalogs?.narratives);
+			if (!narrative) return;
+			const id = String(context.document.narrative);
+			for (const { beat, index } of unreferencedBeats(context.document, narrative))
+				context.report(unusedBeatRule, {
+					path: '/narrative',
+					message: `Beat ${JSON.stringify(beat)} (${index + 1} of ${narrative.beats.length}) of narrative ${JSON.stringify(id)} has no slide that references it.`,
+					help: `Add a slide with "beat": ${JSON.stringify(beat)}, or list the beat on the slide that covers it. If the deck deliberately skips the beat, ignore this finding.`,
+					measured: { beat, position: index + 1, beats: narrative.beats.length },
+				});
 		},
 	},
 	{

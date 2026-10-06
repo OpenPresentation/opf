@@ -9,9 +9,9 @@
     "developers",
     "general-audience"
   ],
-  "durationRange": {
-    "minMinutes": 20,
-    "maxMinutes": 60
+  "duration": {
+    "min": 20,
+    "max": 60
   },
   "tags": [
     "inspirational",
@@ -24,73 +24,73 @@
       "id": "opening",
       "name": "Opening",
       "description": "Set the stage. Tell the audience they're about to see something that matters, without yet showing it. The pause before the reveal is part of the reveal.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Set the stage",
-      "slideType": "text"
+      "type": "text"
     },
     {
       "id": "revelation",
       "name": "Revelation",
       "description": "Announce the product. One image, one name, one sentence. Anything more competes with the moment. The slide should feel like the curtain going up.",
       "instructions": "Announce product",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "demonstration",
       "name": "Demonstration",
       "description": "Show the product in real use. Choose a single defining workflow that captures what the product does and how it feels. Live beats canned wherever possible.",
       "instructions": "Showcase the product",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "wow-factor",
       "name": "Wow Factor",
       "description": "Highlight the cutting-edge feature that earns the headline. One thing, presented well — the audience should leave able to repeat it in a sentence.",
       "instructions": "Highlight cutting-edge features",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "differentiation",
       "name": "Differentiation",
       "description": "Make the contrast with existing alternatives unmistakable. Use comparisons that the audience already understands; don't argue against straw versions of the competition.",
       "instructions": "Distinctive factors",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "revolution",
       "name": "Revolution",
       "description": "Reframe the category. Show how the product changes what the playing field looks like, not just where you sit on it. This is the slide pundits will quote.",
       "instructions": "Change in the playing field",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "excitement",
       "name": "Excitement",
       "description": "Build anticipation around what's next: availability, partnerships, what the audience can imagine doing with the product. Excitement is how the room exits the keynote into the world.",
       "instructions": "Build anticipation",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "call-to-action",
       "name": "Call to Action",
       "description": "Give the audience the action that channels the excitement. Pre-order, try it, tell others. Be specific so the energy converts into behavior.",
       "instructions": "Urge to explore",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "gratitude",
       "name": "Gratitude",
       "description": "Thank the team that built it and the audience that came. Brief, sincere, not perfunctory. The closing thanks is the period at the end of the keynote.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Thank the audience",
-      "slideType": "text"
+      "type": "text"
     }
   ]
 }

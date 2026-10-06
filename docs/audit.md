@@ -126,6 +126,7 @@ The reference below is generated from the rule registry (`auditRules`); `pnpm ch
 | [`audit/image-resolution`](#auditimage-resolution) | warning | Design | An image has too few pixels for the size it is shown at. |
 | [`audit/placeholder-text`](#auditplaceholder-text) | warning | Content | Placeholder text was left in the deck. |
 | [`audit/empty-text`](#auditempty-text) | info | Content | A text field is present but empty. |
+| [`audit/unused-beat`](#auditunused-beat) | info | Content | A beat of the narrative has no slide that references it. |
 | [`audit/empty-slide`](#auditempty-slide) | warning | Content | A slide has no content at all. |
 | [`audit/unfilled-variable`](#auditunfilled-variable) | warning | Content | A template variable was never filled in. |
 
@@ -352,6 +353,14 @@ Default severity: **warning**. Placeholder text was left in the deck.
 Default severity: **info**. A text field is present but empty.
 
 **Why.** An empty title, text block or list item draws nothing, and leaves a hole in the outline and for assistive technology.
+
+### `audit/unused-beat`
+
+Default severity: **info**. A beat of the narrative has no slide that references it.
+
+**Why.** The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.
+
+**Approximations.** Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in AuditOptions.catalogs, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.
 
 ### `audit/empty-slide`
 

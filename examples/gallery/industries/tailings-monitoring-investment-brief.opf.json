@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "persuade",
-    "description": "Tailings Monitoring Investment Brief uses a compact evidence-to-decision arc for Copper Mesa Mining.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "tailings-monitoring-investment-brief-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -542,24 +519,25 @@
           "id": "tailings-monitoring-investment-brief-arc",
           "name": "Mining Decision Arc",
           "summary": "A custom arc for Copper Mesa Mining.",
+          "description": "Tailings Monitoring Investment Brief uses a compact evidence-to-decision arc for Copper Mesa Mining.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

@@ -9,9 +9,9 @@
     "skeptical-stakeholders",
     "evaluation-committees"
   ],
-  "durationRange": {
-    "minMinutes": 3,
-    "maxMinutes": 15
+  "duration": {
+    "min": 3,
+    "max": 15
   },
   "tags": [
     "contrast",
@@ -25,32 +25,32 @@
       "name": "Before State",
       "description": "Make the current pain or limitation vivid with numbers, stories, or visuals that make the problem real.",
       "instructions": "Make the current pain or limitation vivid.",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "id": "contrast-moment",
       "name": "Contrast Moment",
       "description": "Introduce the change agent, product, or decision that shifts the trajectory.",
       "instructions": "Introduce the decision, product, or event that changes the trajectory.",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "id": "after-state",
       "name": "After State",
       "description": "Show the improved reality. Make it concrete and specific instead of relying on vague benefit language.",
       "instructions": "Show the new reality created by the change.",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "proof",
       "name": "Proof",
       "description": "Validate the after state with metrics, testimonials, or third-party evidence.",
       "instructions": "Validate the change with evidence.",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     }
   ]
 }

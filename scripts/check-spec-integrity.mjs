@@ -29,14 +29,16 @@ const LAYOUT_PREVIEW_INDEX_SCHEMA_ID = "https://openpresentation.org/schema/opf-
 // per-record $schema URI (https://openpresentation.org/schema/opf-<singular>/v1).
 //
 // defName maps to the matching inline $defs/<Name> entry embedded in
-// spec/schemas/opf.schema.json, when one exists. Three kinds are referenced
+// spec/schemas/opf.schema.json, when one exists. Four kinds are referenced
 // from OPF documents as bare strings with no inline object mirror, so they
 // have no matching root $def:
+//   - narratives: the root narrative is a bare string catalog reference (FA-02);
+//     a custom narrative is an inline catalogs.narratives.records entry.
 //   - layouts: Slide.layout is a bare string catalog reference.
 //   - chartTypes: Chart.type is a bare string catalog reference.
 //   - socialPlatforms: Socials is a string-valued map keyed by platform id,
 //     not an inline SocialPlatform object.
-// Those three are skipped by the companion-schema parity check (b) below,
+// Those four are skipped by the companion-schema parity check (b) below,
 // per the task's own note to skip rather than fail when there's no def.
 const CATALOG_KINDS = [
   { dir: "audiences", singular: "audience", defName: "Audience" },
@@ -45,7 +47,7 @@ const CATALOG_KINDS = [
   { dir: "font-schemes", singular: "font-scheme", defName: "FontScheme" },
   { dir: "languages", singular: "language", defName: "Language" },
   { dir: "layouts", singular: "layout", defName: null },
-  { dir: "narratives", singular: "narrative", defName: "Narrative" },
+  { dir: "narratives", singular: "narrative", defName: null },
   { dir: "purposes", singular: "purpose", defName: "Purpose" },
   { dir: "social-platforms", singular: "social-platform", defName: null },
   { dir: "themes", singular: "theme", defName: "Theme" },
@@ -74,15 +76,11 @@ const CATALOG_KINDS = [
 //   - `deprecation` marks a catalog record as deprecated in favour of another
 //     record of the same catalog. It describes the catalog itself, so inline
 //     OPF objects never carry it.
-//   - Narrative's companion schema requires `beats`; the embedded $def does
-//     not, since an inline narrative may reference a catalog id and override
-//     only some fields without repeating all beats.
 const KNOWN_DEF_DIFFERENCES = {
   Audience: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
   Purpose: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
   Tone: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
   Theme: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
-  Narrative: { schemaOnlyProps: ["deprecation"], schemaOnlyRequired: ["id", "name", "beats"] },
   ColorScheme: {
     schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "deprecation"],
     defOnlyProps: ["primary", "secondary", "accent", "background", "surface", "text", "textSecondary", "custom"],
@@ -237,8 +235,9 @@ async function checkCompanionSchemaParity(opfSchema) {
 
 // (c) Preview index <-> on-disk HTML parity, exact byte-length check, no
 // orphan HTML files.
-// (e) Narrative beat layoutHint values must resolve to a bundled layout id.
-async function checkNarrativeLayoutHints() {
+// (e) Narrative beat layout values must resolve to a bundled layout id, and a
+// record's duration range (and its index entry's) must not be inverted (FA-02).
+async function checkNarrativeRecords() {
   const layoutDir = path.join(catalogsRoot, "layouts");
   const layoutFiles = await listJsonRecordFiles(layoutDir);
   const layoutIds = new Set(layoutFiles.map((file) => file.replace(/\.json$/, "")));
@@ -248,15 +247,24 @@ async function checkNarrativeLayoutHints() {
   for (const file of narrativeFiles) {
     const recordPath = path.join(narrativeDir, file);
     const record = await readJson(recordPath);
+    if (record.duration && record.duration.min > record.duration.max) {
+      fail(`[e] ${displayPath(recordPath)} duration.min ${record.duration.min} is greater than duration.max ${record.duration.max}`);
+    }
     if (!Array.isArray(record.beats)) continue;
     for (let index = 0; index < record.beats.length; index++) {
       const beat = record.beats[index];
-      if (!beat || typeof beat.layoutHint !== "string") continue;
-      if (!layoutIds.has(beat.layoutHint)) {
+      if (!beat || typeof beat.layout !== "string") continue;
+      if (!layoutIds.has(beat.layout)) {
         fail(
-          `[e] ${displayPath(recordPath)} beats[${index}].layoutHint '${beat.layoutHint}' is not a bundled layout id`,
+          `[e] ${displayPath(recordPath)} beats[${index}].layout '${beat.layout}' is not a bundled layout id`,
         );
       }
+    }
+  }
+  const index = await readJson(path.join(narrativeDir, "index.json"));
+  for (const entry of index.records ?? []) {
+    if (entry.duration && entry.duration.min > entry.duration.max) {
+      fail(`[e] narratives/index.json entry '${entry.id}' duration.min ${entry.duration.min} is greater than duration.max ${entry.duration.max}`);
     }
   }
 }
@@ -479,7 +487,7 @@ async function main() {
 
   await checkCatalogRecordParity();
   await checkCompanionSchemaParity(opfSchema);
-  await checkNarrativeLayoutHints();
+  await checkNarrativeRecords();
   await checkPreviewIndex();
   await checkIndexSchemaUris();
   await checkChartTypesAsposeSupported();

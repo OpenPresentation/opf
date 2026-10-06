@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "status-update",
-    "description": "Wildfire Evacuation Preparedness uses a compact evidence-to-decision arc for Pine County Emergency Management.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "wildfire-evacuation-preparedness-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -532,24 +509,25 @@
           "id": "wildfire-evacuation-preparedness-arc",
           "name": "Emergency Management Decision Arc",
           "summary": "A custom arc for Pine County Emergency Management.",
+          "description": "Wildfire Evacuation Preparedness uses a compact evidence-to-decision arc for Pine County Emergency Management.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

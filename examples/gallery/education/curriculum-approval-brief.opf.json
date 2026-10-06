@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "persuasive-sales",
-    "description": "Curriculum Approval Brief uses a compact evidence-to-decision arc for Oakbridge Faculty Senate.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "curriculum-approval-brief-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -542,24 +519,25 @@
           "id": "curriculum-approval-brief-arc",
           "name": "Academic Governance Decision Arc",
           "summary": "A custom arc for Oakbridge Faculty Senate.",
+          "description": "Curriculum Approval Brief uses a compact evidence-to-decision arc for Oakbridge Faculty Senate.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

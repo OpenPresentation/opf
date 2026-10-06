@@ -3,7 +3,7 @@
   "kind": "narratives",
   "version": "1",
   "description": "Catalog of narrative templates available in the openpresentation.org catalog. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index. Entries are grouped by usage: foundational arcs first, then pitches, sales and GTM, strategy and consulting, storytelling, keynotes and inspiration, rhythm-of-business reviews, data-driven analyses, and workforce reviews.",
-  "contentSha256": "52f00dfdee8f0323d02171770520d7224de5582f2c73c0fb7ceba434fbea4029",
+  "contentSha256": "9222e36d1fb1a54f0811b9851c5359e05f570a0a931cceca31bdbe27a888d582",
   "records": [
     {
       "id": "problem-solution",
@@ -15,9 +15,9 @@
         "executives",
         "internal-teams"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 30
+      "duration": {
+        "min": 5,
+        "max": 30
       },
       "tags": [
         "business",
@@ -36,9 +36,9 @@
         "boards",
         "leadership-teams"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 20
+      "duration": {
+        "min": 5,
+        "max": 20
       },
       "tags": [
         "executive",
@@ -58,9 +58,9 @@
         "board",
         "time-pressed-decision-makers"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 20
+      "duration": {
+        "min": 5,
+        "max": 20
       },
       "tags": [
         "executive",
@@ -79,9 +79,9 @@
         "consultants",
         "strategy-teams"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 20
+      "duration": {
+        "min": 5,
+        "max": 20
       },
       "tags": [
         "strategy",
@@ -100,9 +100,9 @@
         "senior-managers",
         "board"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 15
+      "duration": {
+        "min": 5,
+        "max": 15
       },
       "tags": [
         "executive",
@@ -123,9 +123,9 @@
         "investors",
         "executives"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "strategic",
@@ -145,9 +145,9 @@
         "general-audience",
         "press"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "keynote",
@@ -166,9 +166,9 @@
         "general-audience",
         "industry-peers"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "talk",
@@ -188,9 +188,9 @@
         "marketing-teams",
         "general-audience"
       ],
-      "durationRange": {
-        "minMinutes": 3,
-        "maxMinutes": 15
+      "duration": {
+        "min": 3,
+        "max": 15
       },
       "tags": [
         "marketing",
@@ -210,9 +210,9 @@
         "angels",
         "advisors"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 20
+      "duration": {
+        "min": 10,
+        "max": 20
       },
       "tags": [
         "startup",
@@ -231,9 +231,9 @@
         "angels",
         "advisors"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 20
+      "duration": {
+        "min": 10,
+        "max": 20
       },
       "tags": [
         "startup",
@@ -253,9 +253,9 @@
         "series-a",
         "series-b"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "startup",
@@ -275,9 +275,9 @@
         "customers",
         "buyers"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "sales",
@@ -296,9 +296,9 @@
         "skeptical-stakeholders",
         "evaluation-committees"
       ],
-      "durationRange": {
-        "minMinutes": 3,
-        "maxMinutes": 15
+      "duration": {
+        "min": 3,
+        "max": 15
       },
       "tags": [
         "contrast",
@@ -318,9 +318,9 @@
         "press",
         "candidates"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "overview",
@@ -339,9 +339,9 @@
         "executives",
         "cross-functional-partners"
       ],
-      "durationRange": {
-        "minMinutes": 30,
-        "maxMinutes": 60
+      "duration": {
+        "min": 30,
+        "max": 60
       },
       "tags": [
         "go-to-market",
@@ -361,9 +361,9 @@
         "general-audience",
         "partners"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "startup",
@@ -383,9 +383,9 @@
         "leadership-teams",
         "clients"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "consulting",
@@ -405,9 +405,9 @@
         "stakeholders",
         "internal-teams"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "management",
@@ -427,9 +427,9 @@
         "managers",
         "internal-teams"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "management",
@@ -449,9 +449,9 @@
         "product-and-strategy-teams",
         "all-hands"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "strategy",
@@ -471,9 +471,9 @@
         "stakeholders",
         "partners"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "postmortem",
@@ -492,9 +492,9 @@
         "performance-reviewers",
         "award-committees"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 15
+      "duration": {
+        "min": 5,
+        "max": 15
       },
       "tags": [
         "case-study",
@@ -513,9 +513,9 @@
         "customers",
         "internal-teams"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 30
+      "duration": {
+        "min": 5,
+        "max": 30
       },
       "tags": [
         "storytelling",
@@ -533,9 +533,9 @@
         "employees",
         "community"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 20
+      "duration": {
+        "min": 5,
+        "max": 20
       },
       "tags": [
         "storytelling",
@@ -554,9 +554,9 @@
         "leadership",
         "cross-functional-partners"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "management",
@@ -575,9 +575,9 @@
         "team-leads",
         "cross-functional-teams"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "change-management",
@@ -597,9 +597,9 @@
         "press",
         "candidates"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 20
+      "duration": {
+        "min": 5,
+        "max": 20
       },
       "tags": [
         "storytelling",
@@ -618,9 +618,9 @@
         "internal-teams",
         "candidates"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 20
+      "duration": {
+        "min": 5,
+        "max": 20
       },
       "tags": [
         "storytelling",
@@ -639,9 +639,9 @@
         "internal-teams",
         "press"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "storytelling",
@@ -660,9 +660,9 @@
         "students",
         "practitioners"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "keynote",
@@ -681,9 +681,9 @@
         "policymakers",
         "industry-peers"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 30
+      "duration": {
+        "min": 15,
+        "max": 30
       },
       "tags": [
         "keynote",
@@ -702,9 +702,9 @@
         "academics",
         "professionals"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 25
+      "duration": {
+        "min": 15,
+        "max": 25
       },
       "tags": [
         "keynote",
@@ -724,9 +724,9 @@
         "policymakers",
         "community"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "inspirational",
@@ -746,9 +746,9 @@
         "developers",
         "general-audience"
       ],
-      "durationRange": {
-        "minMinutes": 20,
-        "maxMinutes": 60
+      "duration": {
+        "min": 20,
+        "max": 60
       },
       "tags": [
         "inspirational",
@@ -768,9 +768,9 @@
         "all-hands",
         "board"
       ],
-      "durationRange": {
-        "minMinutes": 20,
-        "maxMinutes": 45
+      "duration": {
+        "min": 20,
+        "max": 45
       },
       "tags": [
         "inspirational",
@@ -789,9 +789,9 @@
         "executives",
         "cross-functional-partners"
       ],
-      "durationRange": {
-        "minMinutes": 30,
-        "maxMinutes": 90
+      "duration": {
+        "min": 30,
+        "max": 90
       },
       "tags": [
         "internal",
@@ -811,9 +811,9 @@
         "stakeholders",
         "leadership"
       ],
-      "durationRange": {
-        "minMinutes": 30,
-        "maxMinutes": 90
+      "duration": {
+        "min": 30,
+        "max": 90
       },
       "tags": [
         "customer-relationship",
@@ -832,9 +832,9 @@
         "executives",
         "investors"
       ],
-      "durationRange": {
-        "minMinutes": 60,
-        "maxMinutes": 180
+      "duration": {
+        "min": 60,
+        "max": 180
       },
       "tags": [
         "rhythm-of-business",
@@ -853,9 +853,9 @@
         "teams",
         "cross-functional-partners"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 30
+      "duration": {
+        "min": 15,
+        "max": 30
       },
       "tags": [
         "rhythm-of-business",
@@ -875,9 +875,9 @@
         "customers",
         "executives"
       ],
-      "durationRange": {
-        "minMinutes": 5,
-        "maxMinutes": 15
+      "duration": {
+        "min": 5,
+        "max": 15
       },
       "tags": [
         "reporting",
@@ -896,9 +896,9 @@
         "managers",
         "teams"
       ],
-      "durationRange": {
-        "minMinutes": 20,
-        "maxMinutes": 60
+      "duration": {
+        "min": 20,
+        "max": 60
       },
       "tags": [
         "data-driven",
@@ -918,9 +918,9 @@
         "stakeholders",
         "marketing-teams"
       ],
-      "durationRange": {
-        "minMinutes": 20,
-        "maxMinutes": 60
+      "duration": {
+        "min": 20,
+        "max": 60
       },
       "tags": [
         "data-driven",
@@ -939,9 +939,9 @@
         "analysts",
         "leadership"
       ],
-      "durationRange": {
-        "minMinutes": 15,
-        "maxMinutes": 45
+      "duration": {
+        "min": 15,
+        "max": 45
       },
       "tags": [
         "data-driven",
@@ -961,9 +961,9 @@
         "product-managers",
         "analytics-stakeholders"
       ],
-      "durationRange": {
-        "minMinutes": 10,
-        "maxMinutes": 30
+      "duration": {
+        "min": 10,
+        "max": 30
       },
       "tags": [
         "analytics",
@@ -982,9 +982,9 @@
         "manager",
         "hr-partner"
       ],
-      "durationRange": {
-        "minMinutes": 30,
-        "maxMinutes": 60
+      "duration": {
+        "min": 30,
+        "max": 60
       },
       "tags": [
         "workforce",
@@ -1003,9 +1003,9 @@
         "manager",
         "hr-partner"
       ],
-      "durationRange": {
-        "minMinutes": 30,
-        "maxMinutes": 60
+      "duration": {
+        "min": 30,
+        "max": 60
       },
       "tags": [
         "workforce",
@@ -1025,9 +1025,9 @@
         "hr-partners",
         "finance"
       ],
-      "durationRange": {
-        "minMinutes": 20,
-        "maxMinutes": 45
+      "duration": {
+        "min": 20,
+        "max": 45
       },
       "tags": [
         "workforce",

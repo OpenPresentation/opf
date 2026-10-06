@@ -164,7 +164,7 @@
     "duration": {
       "type": "integer",
       "minimum": 1,
-      "description": "Target presentation duration, as an integer number of minutes. Used by AI to set pace and depth, and to compare against the resolved narrative's durationRange."
+      "description": "Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core lint warns when it lies outside the resolved narrative's 'duration' range. Agents can also use it to set pace and depth. Nothing else reads it: the preview and the PPTX export draw no duration."
     },
     "tags": {
       "type": "array",
@@ -186,17 +186,13 @@
       "default": false
     },
     "narrative": {
-      "oneOf": [
-        { "type": "string" },
-        { "$ref": "#/$defs/Narrative" }
-      ],
-      "description": "Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record.\n\nAccepts two forms:\n- String shorthand for the common case: 'narrative = \"classic-story\"'. Accepts a bare id (lowercase kebab-case), an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package.\n- Object form for inline overrides or fully custom narratives: 'narrative = { id: \"classic-story\", beats: [...] }'. The object shape mirrors https://openpresentation.org/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that aren't part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root rather than inside the narrative object.",
+      "type": "string",
+      "description": "The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the plan (the arc, its beats and what each beat must do) lives in the catalog record, which validates against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative is a record in catalogs.narratives.records, referenced here by its id.\n\nSlides link themselves to beats with slides[].beat. Core lint warns about a slides[].beat id the resolved narrative does not define and about a root 'duration' outside its 'duration' range, and the audit reports a beat that no slide references. The preview and the PPTX export draw nothing from the narrative; opf-pptx stores the reference for round-trip.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that are not part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root.",
       "examples": [
         "classic-story",
         "problem-solution",
         "scqa",
         "pitch-deck",
-        { "id": "custom-pitch", "name": "Custom Pitch", "beats": [{ "id": "hook", "name": "Hook" }, { "id": "ask", "name": "Ask" }] },
         "https://acme.com/decks/narratives/founder-pitch.json",
         "pkg:@acme/decks/narratives/founder-pitch"
       ]
@@ -669,137 +665,6 @@
       "propertyNames": {
         "pattern": "^[a-z][a-z0-9-]*$",
         "description": "Platform id (lowercase kebab-case). Common ids include 'linkedin', 'x', 'github', 'youtube', 'instagram', 'facebook', 'tiktok', 'threads', 'mastodon', 'bluesky'."
-      }
-    },
-    "Narrative": {
-      "type": "object",
-      "description": "Structured storyline used by AI to shape generated content. Mirrors the OPF Narrative Template record at https://openpresentation.org/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable.\n\nNarrative declares the deck's intended story arc; slides may opt into beats via Slide.beat. The narrative does not constrain slide structure — validators warn on drift (orphan slides, unused beats) but never error. Slides are the source of truth; narrative is intent that travels with the deck.\n\nWhen 'id' matches a record in the resolved 'narratives' catalog, the inline fields override matching fields on the catalog record (beats merge by beat 'id'). When 'id' doesn't match, this object defines a fully custom inline narrative.\n\nDeck-level concerns that aren't part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root rather than inside this object.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Stable slug identifying this narrative. When it matches a record in the resolved 'narratives' catalog, the catalog record's beats and metadata seed this narrative; inline fields override per-key. When it doesn't match, this is a fully custom inline narrative. Lowercase kebab-case.",
-          "examples": ["classic-story", "problem-solution", "scqa", "pitch-deck", "qbr", "weekly-progress", "custom-pitch"]
-        },
-        "name": {
-          "type": "string",
-          "description": "Human-readable narrative name.",
-          "examples": ["Classic Story", "Problem → Solution", "SCQA", "Founder Pitch"]
-        },
-        "summary": {
-          "type": "string",
-          "description": "One-sentence description of when and why to use this narrative."
-        },
-        "description": {
-          "type": "string",
-          "description": "Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction.",
-          "examples": [
-            "Open with the cost of slow agentic workflows, contrast with what becomes possible at sub-second latency, then walk through our architecture and benchmark results, ending with a concrete adoption ask."
-          ]
-        },
-        "audienceFit": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Audiences this narrative works well for. Free-form strings or 'audiences' catalog ids.",
-          "examples": [["executive", "investor", "customer"]]
-        },
-        "durationRange": {
-          "type": "object",
-          "description": "Typical talk-length window this narrative suits. Compared by validators against duration.",
-          "properties": {
-            "minMinutes": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            },
-            "maxMinutes": {
-              "type": "number",
-              "exclusiveMinimum": 0
-            }
-          }
-        },
-        "tags": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Free-form labels for filtering and search.",
-          "examples": [["business", "pitch", "internal"]]
-        },
-        "preview": {
-          "type": "object",
-          "description": "Visual previews of the narrative, used by picker UIs and inline rendering. All sub-fields are optional.",
-          "properties": {
-            "src": {
-              "type": "string",
-              "format": "uri",
-              "description": "Main preview image (PNG/JPG)."
-            },
-            "thumbnailSrc": {
-              "type": "string",
-              "format": "uri",
-              "description": "Smaller thumbnail preview for dense grid views."
-            },
-            "vectorSrc": {
-              "type": "string",
-              "format": "uri",
-              "description": "SVG / vector preview for crisp scaling at any size."
-            }
-          }
-        },
-        "beats": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/NarrativeBeat" },
-          "description": "Ordered list of beats that make up the narrative arc. When 'id' matches a catalog record, beats here override or extend matching catalog beats by their own 'id'. Beat IDs must be unique within the narrative."
-        }
-      }
-    },
-    "NarrativeBeat": {
-      "type": "object",
-      "description": "A single narrative beat — a labeled segment of the story arc with a specific dramatic purpose (e.g. 'hook', 'problem', 'evidence', 'ask'). Slides reference beats via Slide.beat. Beats may also carry slide-blueprint hints (slideType, layoutHint, thoughtCues, instructions) that guide the assigned slide.\n\nMirrors the Beat definition in narrative.schema.json (https://openpresentation.org/schema/opf-narrative/v1) so library entries and inline OPF beats are interchangeable.",
-      "required": ["id", "name"],
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "description": "Stable slug used by Slide.beat to reference this beat. Lowercase kebab-case.",
-          "examples": ["hook", "problem", "evidence", "ask", "next-steps"]
-        },
-        "name": {
-          "type": "string",
-          "description": "Human-readable beat name.",
-          "examples": ["The Hook", "The Problem", "Why Now", "The Ask"]
-        },
-        "description": {
-          "type": "string",
-          "description": "Curator-written prose that explains what this beat should accomplish.",
-          "examples": [
-            "Quantify the pain customers feel today, with one striking stat the audience can repeat afterward."
-          ]
-        },
-        "instructions": {
-          "type": "string",
-          "description": "Short author-facing instruction for the beat — typically one phrase. Complements 'description' with a concise directive.",
-          "examples": ["Capture audience attention", "Introduce problem", "Detail implementation", "Inspire & conclude"]
-        },
-        "slideCount": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a high slideCount. The validator emits a warning if the deck's actual count differs significantly."
-        },
-        "slideType": {
-          "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline"],
-          "description": "Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified."
-        },
-        "layoutHint": {
-          "type": "string",
-          "description": "Suggested layout id for the beat's opening slide. Resolves the same way as Slide.layout — against catalogs.layouts and the default catalog at https://www.pptx.gallery/layouts.",
-          "examples": ["section-divider", "title-slide", "title-left", "two-column", "text-left"]
-        },
-        "thoughtCues": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Optional speaker or thinking cues attached to the beat. Surfaced in presenter notes.",
-          "examples": [["What pain is the audience feeling right now?", "Why hasn't anyone solved this yet?"]]
-        }
       }
     },
     "Design": {
@@ -2131,7 +1996,7 @@
               "items": { "type": "string" }
             }
           ],
-          "description": "Optional reference to one or more narrative beats (each value matches an id from narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats. Declares the slide's role in the story arc; does not constrain ordering or structure. Slides without a beat are valid; multiple slides may share a beat."
+          "description": "Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats. Declares the slide's role in the story arc; does not constrain ordering or structure. Core lint warns about a beat id the resolved narrative does not define, and the audit reports a beat that no slide references. Slides without a beat are valid; multiple slides may share a beat."
         },
         "layout": {
           "type": "string",
@@ -3792,7 +3657,7 @@
       "properties": {
         "narratives": {
           "$ref": "#/$defs/CatalogEntry",
-          "description": "Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. Default source: https://www.pptx.gallery/narratives."
+          "description": "Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative goes in 'catalogs.narratives.records' and is referenced by its id from the root 'narrative'. Default source: https://www.pptx.gallery/narratives."
         },
         "themes": {
           "$ref": "#/$defs/CatalogEntry",

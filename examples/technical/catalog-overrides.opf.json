@@ -23,30 +23,7 @@
       "Prefer short exact claims."
     ]
   },
-  "narrative": {
-    "id": "fixture-proof",
-    "name": "Fixture Proof",
-    "beats": [
-      {
-        "id": "contract",
-        "name": "Contract",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "proof",
-        "name": "Proof",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "decision",
-        "name": "Decision",
-        "slideType": "list",
-        "layoutHint": "list-2x"
-      }
-    ]
-  },
+  "narrative": "fixture-proof",
   "design": {
     "theme": {
       "id": "fixture-theme",
@@ -129,15 +106,21 @@
           "beats": [
             {
               "id": "contract",
-              "name": "Contract"
+              "name": "Contract",
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "proof",
-              "name": "Proof"
+              "name": "Proof",
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
-              "name": "Decision"
+              "name": "Decision",
+              "type": "list",
+              "layout": "list-2x"
             }
           ]
         }

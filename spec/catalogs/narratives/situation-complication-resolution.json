@@ -9,9 +9,9 @@
     "consultants",
     "strategy-teams"
   ],
-  "durationRange": {
-    "minMinutes": 5,
-    "maxMinutes": 20
+  "duration": {
+    "min": 5,
+    "max": 20
   },
   "tags": [
     "strategy",
@@ -25,32 +25,32 @@
       "name": "Situation",
       "description": "Set the scene with relevant background and context everyone agrees on.",
       "instructions": "State the shared context the audience already accepts.",
-      "slideType": "list",
-      "layoutHint": "list-1x"
+      "type": "list",
+      "layout": "list-1x"
     },
     {
       "id": "complication",
       "name": "Complication",
       "description": "Introduce what has changed or what challenge has emerged.",
       "instructions": "Introduce the change, risk, or tension.",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "id": "question",
       "name": "Question",
       "description": "Articulate the key question that the complication raises.",
       "instructions": "Frame the decision question raised by the complication.",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "id": "answer",
       "name": "Answer",
       "description": "Deliver your recommendation or insight that resolves the question.",
       "instructions": "Deliver the recommendation that resolves the question.",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     }
   ]
 }

@@ -9,9 +9,9 @@
     "general-audience",
     "press"
   ],
-  "durationRange": {
-    "minMinutes": 10,
-    "maxMinutes": 30
+  "duration": {
+    "min": 10,
+    "max": 30
   },
   "tags": [
     "keynote",
@@ -44,7 +44,7 @@
       "id": "invitation",
       "name": "Invitation",
       "description": "Close by inviting the audience to share the belief — to buy, build, join, or evangelize. The strongest invitations don't argue; they assume alignment and offer a way in.",
-      "layoutHint": "title"
+      "layout": "title"
     }
   ]
 }

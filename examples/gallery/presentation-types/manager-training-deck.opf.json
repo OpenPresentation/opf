@@ -47,30 +47,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "employee-review",
-    "description": "Manager Training Deck uses a compact evidence-to-decision arc for PeopleCraft.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "manager-training-deck-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -535,24 +512,25 @@
           "id": "manager-training-deck-arc",
           "name": "Training Decision Arc",
           "summary": "A custom arc for PeopleCraft.",
+          "description": "Manager Training Deck uses a compact evidence-to-decision arc for PeopleCraft.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

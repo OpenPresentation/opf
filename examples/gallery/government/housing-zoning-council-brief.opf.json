@@ -47,30 +47,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "reveal",
-    "description": "Housing Zoning Council Brief uses a compact evidence-to-decision arc for City of Redwood Falls.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "housing-zoning-council-brief-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -564,24 +541,25 @@
           "id": "housing-zoning-council-brief-arc",
           "name": "City Government Decision Arc",
           "summary": "A custom arc for City of Redwood Falls.",
+          "description": "Housing Zoning Council Brief uses a compact evidence-to-decision arc for City of Redwood Falls.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

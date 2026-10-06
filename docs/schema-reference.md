@@ -24,12 +24,12 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `language` | no | `oneOf:string / ref:Language` | Language for the presentation content. Accepts either: - A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference... |
 | `tone` | no | `oneOf:string / ref:Tone` | Desired tone for the presentation. Accepts either: - A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference. - An inline Tone object for custom tone metadata or catalog-backed overrides... |
 | `takeaway` | no | `oneOf:string / array<string>` | Audience-facing takeaway the presentation should leave behind. Array form supports multiple takeaways. Deck-level intent used by AI to seed and pressure-test slide content. |
-| `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. Used by AI to set pace and depth, and to compare against the resolved narrative's durationRange. |
+| `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core lint warns when it lies outside the resolved narrative's 'duration' range. Agen... |
 | `tags` | no | `array<string>` | Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library. |
 | `design` | no | `ref:Design` | Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration. |
 | `variables` | no | `ref:Variables` | Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables a... |
 | `template` | no | `boolean` | Marks this document as a template: an incomplete OPF file. A template declares variables (top-level 'variables') and references them from content, and may leave required variables unfilled; validation then reports the... |
-| `narrative` | no | `oneOf:string / ref:Narrative` | Structured storyline describing the deck's arc and beats. Resolves to the 'id' of a 'narratives' catalog record. Accepts two forms: - String shorthand for the common case: 'narrative = "classic-story"'. Accepts a bare... |
+| `narrative` | no | `string` | The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the p... |
 | `slides` | yes | `array<ref:Slide>` | Ordered array of slides that make up the presentation. |
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
 | `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
@@ -190,43 +190,6 @@ _No named properties._
 _No named properties._
 
 
-### Narrative
-
-- Type: `object`
-- Required fields: none
-- Purpose: Structured storyline used by AI to shape generated content. Mirrors the OPF Narrative Template record at https://openpresentation.org/schema/opf-narrative/v1 (sans '$schema'), so a library record and an inline narrative are interchangeable. Narrative declares the deck's intended story arc; slides may opt into beats via Slide.beat. The narrative does not constrain slide structure validators warn on drift (orphan slides, unused beats) but never error. Slides are the source of truth; narrative i...
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `id` | no | `string` | Stable slug identifying this narrative. When it matches a record in the resolved 'narratives' catalog, the catalog record's beats and metadata seed this narrative; inline fields override per-key. When it doesn't match... |
-| `name` | no | `string` | Human-readable narrative name. |
-| `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
-| `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
-| `audienceFit` | no | `array<string>` | Audiences this narrative works well for. Free-form strings or 'audiences' catalog ids. |
-| `durationRange` | no | `object` | Typical talk-length window this narrative suits. Compared by validators against duration. |
-| `tags` | no | `array<string>` | Free-form labels for filtering and search. |
-| `preview` | no | `object` | Visual previews of the narrative, used by picker UIs and inline rendering. All sub-fields are optional. |
-| `beats` | no | `array<ref:NarrativeBeat>` | Ordered list of beats that make up the narrative arc. When 'id' matches a catalog record, beats here override or extend matching catalog beats by their own 'id'. Beat IDs must be unique within the narrative. |
-
-
-### NarrativeBeat
-
-- Type: `object`
-- Required fields: `id`, `name`
-- Purpose: A single narrative beat a labeled segment of the story arc with a specific dramatic purpose (e.g. 'hook', 'problem', 'evidence', 'ask'). Slides reference beats via Slide.beat. Beats may also carry slide-blueprint hints (slideType, layoutHint, thoughtCues, instructions) that guide the assigned slide. Mirrors the Beat definition in narrative.schema.json (https://openpresentation.org/schema/opf-narrative/v1) so library entries and inline OPF beats are interchangeable.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `id` | yes | `string` | Stable slug used by Slide.beat to reference this beat. Lowercase kebab-case. |
-| `name` | yes | `string` | Human-readable beat name. |
-| `description` | no | `string` | Curator-written prose that explains what this beat should accomplish. |
-| `instructions` | no | `string` | Short author-facing instruction for the beat typically one phrase. Complements 'description' with a concise directive. |
-| `slideCount` | no | `integer` | Optional explicit slide count for this beat. Defaults to 1 when omitted; values >1 are reserved for beats that intentionally span multiple slides. Prefer decomposing a heavy beat into multiple beats over setting a hig... |
-| `slideType` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Default content kind for the beat's slide. Mirrors ContentPayload.type and helps engines choose a sensible layout when only the beat is specified. |
-| `layoutHint` | no | `string` | Suggested layout id for the beat's opening slide. Resolves the same way as Slide.layout against catalogs.layouts and the default catalog at https://www.pptx.gallery/layouts. |
-| `thoughtCues` | no | `array<string>` | Optional speaker or thinking cues attached to the beat. Surfaced in presenter notes. |
-
-
 ### Design
 
 - Type: `object`
@@ -247,10 +210,10 @@ _No named properties._
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. |
-| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout record sets design.slideImage or whose root image is the same source as a... |
+| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout declares slideImage: true or whose root image is the same source as a dec... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' i... |
-| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mod... |
-| `imageFill` | no | `enum:crop \| fit` | How images fill their allocated region: crop covers the region, fit shows the whole image. |
+| `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's contentTypeChartPrimary. When the slide has no promoted regions and no composition... |
+| `imageFill` | no | `enum:crop \| fit` | How picture placeholders fill their allocated region. |
 | `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. 'character' (the default) draws the glyph marker. 'image' draws the deck's icon logo (a slide's design.logo, then design.logo, then the primary organization's logo; light vari... |
 
 
@@ -689,7 +652,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
-| `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more narrative beats (each value matches an id from narrative.beats or the resolved template). A single string declares the slide's primary beat; an array declares that one slide covers mu... |
+| `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `string` | Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case,... |
 | `title` | no | `string` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. |
 | `subtitle` | no | `string` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. |
@@ -982,7 +945,6 @@ _No named properties._
 - Type: `object`
 - Required fields: none
 - Purpose: Table content, inline or dataset-backed. An inline table has 'rows' (required) and optional 'columns'. A dataset-backed table has 'dataset' (required) and optional 'fields', and no 'rows' or 'columns': it takes its headers, rows and column formats from the dataset (per-cell styles need an inline table).
-- Conditional requirement: `dataset`, or otherwise `rows`
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1207,7 +1169,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `narratives` | no | `ref:CatalogEntry` | Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. Default source: https://www.pptx.gallery/narratives. |
+| `narratives` | no | `ref:CatalogEntry` | Catalog of narrative templates. Records validate against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative goes in 'catalogs.narratives.records' and is referenced by its id from the root 'narrat... |
 | `themes` | no | `ref:CatalogEntry` | Catalog of themes. Records validate against https://openpresentation.org/schema/opf-theme/v1. Default source: https://www.pptx.gallery/themes. |
 | `colorSchemes` | no | `ref:CatalogEntry` | Catalog of color schemes. Records validate against https://openpresentation.org/schema/opf-color-scheme/v1. Default source: https://www.pptx.gallery/color-schemes. |
 | `fontSchemes` | no | `ref:CatalogEntry` | Catalog of font schemes. Records validate against https://openpresentation.org/schema/opf-font-scheme/v1. Default source: https://www.pptx.gallery/font-schemes. |

@@ -807,8 +807,8 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
   const context: CatalogReferenceContext = { document: value };
   const issues: ValidationIssue[] = [];
 
-  // String shorthand only: an inline narrative object with an unknown id is a
-  // legitimate fully-custom narrative, not a broken reference.
+  // A custom narrative is an inline catalogs.narratives.records entry, which
+  // resolves; the beat and duration checks live in lint and the audit.
   if (typeof value.narrative === "string") {
     pushIfDefined(issues, unknownIdWarning("narratives", value.narrative, "/narrative", context));
   }

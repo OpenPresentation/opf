@@ -9,9 +9,9 @@
     "senior-managers",
     "board"
   ],
-  "durationRange": {
-    "minMinutes": 5,
-    "maxMinutes": 15
+  "duration": {
+    "min": 5,
+    "max": 15
   },
   "tags": [
     "executive",
@@ -25,24 +25,24 @@
       "name": "What",
       "description": "Present the facts, data, or findings objectively and clearly.",
       "instructions": "Present the facts, data, or findings objectively and clearly.",
-      "slideType": "chart",
-      "layoutHint": "chart-1x"
+      "type": "chart",
+      "layout": "chart-1x"
     },
     {
       "id": "so-what",
       "name": "So What",
       "description": "Explain the significance. Why should your audience care about this information?",
       "instructions": "Explain the significance. Why should your audience care about this information?",
-      "slideType": "metric",
-      "layoutHint": "number-2x"
+      "type": "metric",
+      "layout": "number-2x"
     },
     {
       "id": "now-what",
       "name": "Now What",
       "description": "Define the action required. What decisions or next steps follow from this?",
       "instructions": "Define the action required. What decisions or next steps follow from this?",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     }
   ]
 }

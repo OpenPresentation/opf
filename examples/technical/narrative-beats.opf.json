@@ -1,46 +1,8 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Narrative Beats",
-  "description": "Technical fixture for inline narrative beats and slide beat references.",
-  "narrative": {
-    "id": "technical-proof",
-    "name": "Technical Proof",
-    "description": "A compact arc that states the contract, proves it, and asks for adoption.",
-    "audienceFit": [
-      "engineering-team",
-      "executive"
-    ],
-    "durationRange": {
-      "minMinutes": 8,
-      "maxMinutes": 20
-    },
-    "beats": [
-      {
-        "id": "contract",
-        "name": "Contract",
-        "description": "Describe the schema contract in one place.",
-        "slideType": "text",
-        "layoutHint": "text-1x",
-        "thoughtCues": [
-          "What must remain stable?"
-        ]
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "description": "Show validation proof.",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "adoption",
-        "name": "Adoption",
-        "description": "Close with the integration ask.",
-        "slideType": "list",
-        "layoutHint": "list-2x"
-      }
-    ]
-  },
+  "description": "Technical fixture for a custom narrative record and slide beat references.",
+  "narrative": "technical-proof",
   "slides": [
     {
       "beat": "contract",
@@ -59,5 +21,51 @@
         "Renderers can use beats for outlines and speaker notes."
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "narratives": {
+      "records": [
+        {
+          "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+          "id": "technical-proof",
+          "name": "Technical Proof",
+          "description": "A compact arc that states the contract, proves it, and asks for adoption.",
+          "audienceFit": [
+            "engineering-team",
+            "executive"
+          ],
+          "beats": [
+            {
+              "id": "contract",
+              "name": "Contract",
+              "description": "Describe the schema contract in one place.",
+              "type": "text",
+              "layout": "text-1x",
+              "thoughtCues": [
+                "What must remain stable?"
+              ]
+            },
+            {
+              "id": "evidence",
+              "name": "Evidence",
+              "description": "Show validation proof.",
+              "type": "chart",
+              "layout": "chart-1x"
+            },
+            {
+              "id": "adoption",
+              "name": "Adoption",
+              "description": "Close with the integration ask.",
+              "type": "list",
+              "layout": "list-2x"
+            }
+          ],
+          "duration": {
+            "min": 8,
+            "max": 20
+          }
+        }
+      ]
+    }
+  }
 }
