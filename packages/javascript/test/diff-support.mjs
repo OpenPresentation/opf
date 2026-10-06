@@ -1,4 +1,4 @@
-// Shared helpers for the diff, merge and format tests: the 126 example decks and
+// Shared helpers for the diff, merge and format tests: the 127 example decks and
 // seeded, deterministic edits.
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";

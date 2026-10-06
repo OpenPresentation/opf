@@ -14,6 +14,7 @@ Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a singl
 - Rich text runs in text, bullet, and list payloads.
 - Asset shorthand and object forms.
 - Inline and asset-backed chart data.
+- Chart emphasis: `chart.highlight` ([`chart-highlight.opf.json`](./chart-highlight.opf.json)).
 - Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides.
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.

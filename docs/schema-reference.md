@@ -15,7 +15,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `$schema` | no | `const:"https://openpresentation.org/schema/opf/v1"` | Optional OPF schema version. When omitted, validators and engines should assume the latest supported OPF schema. |
 | `name` | no | `string` | Display name of the presentation for GUI/TUI lists, library/search indexing, OS-level metadata, and default export filenames. This is deck identity, not slide content. Use slides[].title and slides[].subtitle for text... |
 | `description` | no | `string` | Free-form prose describing what this presentation is about. Used by agents and humans as a deck-level summary; complements purpose (the goal) and narrative (the structured storyline). Round-trips to OOXML 'docProps/co... |
-| `filename` | no | `string` | Optional base filename for exports (without extension). The opf CLI (render, export) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted... |
+| `filename` | no | `string` | Optional base filename for exports (without extension). Engine strips a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and appends the target format's extension. When omitted, the engine slugifies name when pr... |
 | `organization` | no | `oneOf:ref:Organization / array<ref:Organization>` | Organization associated with the presentation, usually the presenting company. Array form supports hosts, partners, clients, and sponsors. The primary organization (declared via Organization.role or, if no role is set... |
 | `speaker` | no | `oneOf:ref:Speaker / array<ref:Speaker>` | Person presenting the deck. Array form supports panels and multi-speaker decks. Used for cover slides, bio slides, footers, and panel attribution. |
 | `author` | no | `oneOf:string / array<string>` | Optional credit for the person who authored or contributed to the deck, distinct from speaker. Array form supports multiple contributors. Round-trips to OOXML 'docProps/core.xml' as '<dc:creator>' (semicolon-joined wh... |
@@ -292,15 +292,15 @@ _No named properties._
 | `dark2` | no | `string` | Dark 2 color (hex). Secondary dark; OOXML dark2. |
 | `light1` | no | `string` | Light 1 color (hex). Typically the slide canvas; OOXML lt1. |
 | `light2` | no | `string` | Light 2 color (hex). Secondary light surface; OOXML lt2. |
-| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. Link runs with no color of their own are drawn underlined in it, in the preview and in PowerPoint, unless it has under 4.5:1 contrast against the slide background, then in the slide text color. |
+| `hyperlink` | no | `string` | Hyperlink color (hex). OOXML hlink. |
 | `followedHyperlink` | no | `string` | Followed-hyperlink color (hex). OOXML folHlink. |
 | `primary` | no | `string` | Abstract role: primary brand color (hex). The engine maps this onto an OOXML accent slot when serializing. |
 | `secondary` | no | `string` | Abstract role: secondary brand color (hex). |
 | `accent` | no | `string` | Abstract role: accent color used for highlights and emphasis (hex). |
-| `background` | no | `string` | Abstract role: default slide background color (hex), used when the design names no single-color background (and for gradient and picture backgrounds). Overrides light1 as that default. |
-| `surface` | no | `string` | Abstract role: color for elevated surfaces such as cards and panels (hex). Overrides the default of light2 (dark2 on a dark slide). |
-| `text` | no | `string` | Abstract role: primary body text color (hex). Overrides dark1 on a light slide only; a dark slide always uses light1. |
-| `textSecondary` | no | `string` | Abstract role: secondary or muted text color used for captions and supporting copy (hex). Overrides the default of dark2 (light2 on a dark slide). |
+| `background` | no | `string` | Abstract role: default slide background color (hex). The engine maps this to one of light1 / light2 / dark1 / dark2 when serializing. |
+| `surface` | no | `string` | Abstract role: color for elevated surfaces such as cards and panels (hex). |
+| `text` | no | `string` | Abstract role: primary body text color (hex). |
+| `textSecondary` | no | `string` | Abstract role: secondary or muted text color used for captions and supporting copy (hex). |
 | `custom` | no | `object` | Map of custom named colors for advanced or theme-specific use. |
 
 
@@ -750,7 +750,7 @@ _No named properties._
 | `top+middle+bottom:left+center+right` | no | `ref:ContentPayload` |  |
 | `notes` | no | `string` | Speaker notes shown in presenter view. |
 | `section` | no | `string` | PowerPoint-style slide section label. Consecutive slides with the same value belong to the same section in presenter view, outlines, and PowerPoint section-aware exports. |
-| `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (o... |
+| `hidden` | no | `boolean` | Whether the slide is hidden from the presented sequence. |
 | `composition` | no | `ref:Composition` |  |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at slide scope; ignored by the engine but preserved across read/write round-trips. Use for review state, generation provenance, or authoring conventions such as { "authoring... |
 
@@ -776,7 +776,7 @@ _No named properties._
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
 | `code` | no | `oneOf:string / ref:Code` | Code payload. A string is shorthand for { "source": value }; object form carries optional syntax language and filename metadata. |
 | `metric` | no | `oneOf:string / number / ref:Metric` | Metric payload. A string or number is shorthand for { "value": value }; object form carries optional label, description, unit, delta, and trend metadata. Numeric values remain numbers; renderers format them for display. |
-| `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution, role, photo and source metadata. |
+| `quote` | no | `oneOf:string / ref:Quote` | Quote payload. A string is shorthand for { "text": value }; object form carries optional attribution and source metadata. |
 | `timeline` | no | `ref:Timeline` | Timeline payload ordered by narrative or chronology. |
 | `caption` | no | `ref:Caption` | Caption for an image, chart, table or video payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
@@ -787,15 +787,13 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `text`
-- Purpose: Quote content with optional attribution metadata. Use 'text' for the quoted text, 'attribution' for the credited person or organization, 'role' for that person's title and organization, 'photo' for their headshot and 'source' for a citation or URL. A string value in a quote field is shorthand for { "text": value }. The text is a plain string.
+- Purpose: Quote content with optional attribution metadata. Use 'text' for the quoted text, 'attribution' for the credited person or organization, and 'source' for a citation or URL. A string value in a quote field is shorthand for { "text": value }.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `text` | yes | `string` | Quoted text. |
-| `attribution` | no | `string` | Person or organization credited for the quote. Drawn after the quote text, in the muted text color. |
-| `role` | no | `string` | Title and organization of the attributed person. Drawn on its own line under the attribution; without an attribution it stands alone. It does not replace the attribution, so the person's name belongs in 'attribution'. |
-| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (the audit's missing-alt-text rule checks it). A raster photograph... |
-| `source` | no | `string` | Optional quote source, citation, or URL. Follows the attribution and role after ' - '. |
+| `attribution` | no | `string` | Person or organization credited for the quote. |
+| `source` | no | `string` | Optional quote source, citation, or URL. |
 
 
 ### Code
@@ -943,7 +941,7 @@ _No named properties._
 | `axisTitles` | no | `ref:ChartAxisTitles` | Optional axis titles (category and value). Absent keeps today's untitled axes; a type without the axis drops the title with a `chart-option-adapted` diagnostic. See docs/chart-options.md. |
 | `legend` | no | `string` | Optional legend position: `none`, `top`, `bottom`, `left`, `right`. Absent keeps today's legend behaviour exactly. |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels: `true` shows values at the type's default position, `false` or absent shows none (today). |
-| `alt` | no | `string` | Text alternative for the chart: what the data shows (the point and the key numbers), not "a chart". Preview: `role="img"` + `aria-label`; PPTX: the chart frame's `descr`, read back on import. `""` marks the chart decorative (a reviewed choice; the audit still reports it as info). See docs/chart-options.md. |
+| `highlight` | no | `ref:ChartHighlight` | Optional emphasis: series and/or categories drawn in the primary (accent) color while every other mark is muted from the theme. A mark is highlighted when its series OR its category is named. Absent keeps today's colors. Types that cannot highlight drop it with a `chart-option-adapted` diagnostic; an unknown name is a `chart-highlight-unknown-name` error. See docs/chart-options.md. |
 
 
 ### ChartAxisTitles
@@ -955,6 +953,18 @@ _No named properties._
 | --- | --- | --- | --- |
 | `category` | no | `string` | Title of the category (X) axis. |
 | `value` | no | `string` | Title of the value (Y) axis. |
+
+
+### ChartHighlight
+
+- Type: `object`
+- Required fields: at least one of `series`, `categories`
+- Purpose: Which series and categories a chart emphasizes. Names match data column names (series) and row labels (categories) exactly, as text.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `series` | no | `array<string>` | Series (value columns) whose marks take the accent color. An unknown column is a `chart-highlight-unknown-name` error; a column that is not plotted as a series is a `chart-highlight-adapted` warning. |
+| `categories` | no | `array<string>` | Categories (row labels) whose marks take the accent color: a column or bar of every series, a line's points, a pie or doughnut slice. A label no row has is a `chart-highlight-unknown-name` error. |
 
 
 ### ChartDataLabels

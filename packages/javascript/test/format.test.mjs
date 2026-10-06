@@ -8,7 +8,7 @@ import { loadExamples } from "./diff-support.mjs";
 const examples = loadExamples();
 
 describe("formatPresentation over the example decks", () => {
-  test("126 example decks are covered", () => assert.equal(examples.length, 126));
+  test("127 example decks are covered", () => assert.equal(examples.length, 127));
   for (const { file, raw } of examples) {
     test(file, () => {
       const once = formatPresentation(raw);

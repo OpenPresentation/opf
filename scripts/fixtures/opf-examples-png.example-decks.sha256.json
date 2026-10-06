@@ -3,8 +3,8 @@
   "source": {
     "repository": "OpenPresentation/opf",
     "path": "examples",
-    "sha256": "9f1e39942e4a98679be9b084911d963c888557188d804c96424f3d16b7160996",
-    "decks": 126
+    "sha256": "ff90d391820d781995c72c3192b2c10b87184ded3c89b258377ea17d2deed297",
+    "decks": 127
   },
   "format": "png-sha256",
   "scale": 0.25,
@@ -2933,6 +2933,18 @@
     "technical/chart-data-sources.opf.json#2": {
       "sha256": "41a26b5205aafa062dcdac54b9796fa0f392b36f4e2c9999cb6c30eac2b3eaaa",
       "bytes": 3482
+    },
+    "technical/chart-highlight.opf.json#0": {
+      "sha256": "2a302e4c4d8bb25399748458441f0b3ee666aafde55570e105029af68d52ce30",
+      "bytes": 5853
+    },
+    "technical/chart-highlight.opf.json#1": {
+      "sha256": "37df7c7b4635f0b421f77e2dad2a5efbf8dd8e5eb59741c83701fbf34a02fa36",
+      "bytes": 5165
+    },
+    "technical/chart-highlight.opf.json#2": {
+      "sha256": "ce27e61ad3300efc9c3c57a989217ac8e7eafc93f5addcb9988fae07f297b819",
+      "bytes": 8133
     },
     "technical/chart-type-sampler.opf.json#0": {
       "sha256": "3d8b8b58e566f8684d2a26cd6fd03ff10756f398cb78f6d83e97b7f7e9ae4d15",

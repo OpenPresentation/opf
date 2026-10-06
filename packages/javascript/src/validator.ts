@@ -735,8 +735,8 @@ function chartTypeWarnings(
 }
 
 // RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
-// chart-mapping-unknown-column, number-format-invalid. Warnings: chart-value-not-numeric (not for null, "" or a
-// 'var:<id>' cell whose variable is a number), chart-mapping-adapted.
+// chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: chart-value-not-numeric (not for
+// null, "" or a 'var:<id>' cell whose variable is a number), chart-mapping-adapted, chart-highlight-adapted.
 function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
   const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
   if (!isRecord(value) || !Array.isArray(value.slides)) return out;

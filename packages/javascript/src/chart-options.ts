@@ -20,7 +20,7 @@ export type ChartLabelPosition = 'center' | 'inside-end' | 'inside-base' | 'outs
 
 export interface ChartOptionDiagnostic {
   code: 'chart-option-adapted';
-  /** The option that was adapted: `axisTitles.category`, `axisTitles.value`, `legend`, `dataLabels`, `dataLabels.content`, `dataLabels.position` or `dataLabels.separator`. */
+  /** The option that was adapted: `axisTitles.category`, `axisTitles.value`, `legend`, `dataLabels`, `dataLabels.content`, `dataLabels.position`, `dataLabels.separator`, `highlight.series` or `highlight.categories`. */
   option: string;
   reason: 'unsupported-type' | 'unsupported-content' | 'unsupported-position';
   message: string;
@@ -34,6 +34,14 @@ export interface ResolvedChartDataLabels {
   separator: string;
 }
 
+/** FA-14: the series and category names `chart.highlight` keeps for a chart type (what the type cannot highlight is dropped, with a diagnostic). */
+export interface ResolvedChartHighlight {
+  /** Series (column) names whose marks take the accent colour. */
+  series: string[];
+  /** Category (row label) names whose marks take the accent colour. */
+  categories: string[];
+}
+
 export interface ResolvedChartOptions {
   /** True when the chart carries at least one option (after adaptation); false means every engine keeps today's output. */
   active: boolean;
@@ -43,12 +51,19 @@ export interface ResolvedChartOptions {
   dataLabels?: ResolvedChartDataLabels;
   /** True when `dataLabels: false` switches off the labels a construct draws by default (funnel values, treemap category names). */
   dataLabelsOff?: boolean;
+  /**
+   * FA-14: the names `chart.highlight` keeps; undefined when the chart has no highlight or its type can highlight nothing it names.
+   * It does not make `active` true: a highlight changes the colours of marks, never the geometry or the reserved space.
+   */
+  highlight?: ResolvedChartHighlight;
   diagnostics: ChartOptionDiagnostic[];
 }
 
 export interface ChartOptionSupport {
   axisTitles: {category: boolean; value: boolean};
   legend: boolean;
+  /** FA-14: what `chart.highlight` can name: series (a whole series' marks) and categories (one category's marks, or a pie slice). */
+  highlight: {series: boolean; categories: boolean};
   dataLabels: {
     supported: boolean;
     content: readonly ChartLabelContent[];
@@ -72,6 +87,11 @@ const ALL_CONTENT: readonly ChartLabelContent[] = ['category', 'value', 'percent
 const categoryKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'histogram', 'pareto', 'box', 'waterfall', 'funnel']);
 const valueKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'histogram', 'pareto', 'box', 'waterfall']);
 const legendKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'box']);
+
+// FA-14: columns, bars, lines (a category highlight marks its points), pie and doughnut slices take category highlights; columns, bars,
+// lines, areas, scatter and radar take series highlights. The chartex constructs take neither (docs/chart-options.md).
+const highlightSeriesKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'area', 'scatter', 'radar']);
+const highlightCategoryKinds: ReadonlySet<ChartOptionKind> = new Set(['bar', 'line', 'pie', 'doughnut']);
 
 function labelSupport(target: ChartOptionTarget): ChartOptionSupport['dataLabels'] {
   const none: ChartOptionSupport['dataLabels'] = {supported: true, content: VALUE_CATEGORY, positions: NONE, defaultPosition: null, defaultOn: false};
@@ -100,6 +120,7 @@ export function chartOptionSupport(target: ChartOptionTarget): ChartOptionSuppor
   return {
     axisTitles: {category: categoryKinds.has(target.kind), value: valueKinds.has(target.kind)},
     legend: legendKinds.has(target.kind),
+    highlight: {series: highlightSeriesKinds.has(target.kind), categories: highlightCategoryKinds.has(target.kind)},
     dataLabels: labelSupport(target),
   };
 }
@@ -207,6 +228,20 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
     }
   }
 
+  if (record(chart.highlight)) {
+    const names = (value: unknown): string[] => Array.isArray(value) ? [...new Set(value.filter((entry): entry is string => typeof entry === 'string'))] : [];
+    const kept: ResolvedChartHighlight = {series: [], categories: []};
+    for (const part of ['series', 'categories'] as const) {
+      const requested = names(chart.highlight[part]);
+      if (!requested.length) continue;
+      if (support && !support.highlight[part]) {
+        const alternative = part === 'series' ? (support.highlight.categories ? ' (name categories instead)' : '') : (support.highlight.series ? ' (name series instead)' : '');
+        adapt(`highlight.${part}`, 'unsupported-type', `A '${kind}' chart cannot highlight ${part}${alternative}; the highlighted ${part} are ignored.`);
+      } else kept[part] = requested;
+    }
+    if (kept.series.length || kept.categories.length) result.highlight = kept;
+  }
+
   result.active = result.legend !== undefined || result.dataLabels !== undefined || result.dataLabelsOff === true || result.axisTitles.category !== undefined || result.axisTitles.value !== undefined;
   return result;
 }
@@ -224,4 +259,33 @@ export function formatChartLabelPercent(share: number): string {
 /** The label text: the selected parts in the fixed order category, value, percent, joined by the separator. */
 export function chartLabelText(parts: {category?: string; value?: string; percent?: string}, content: readonly ChartLabelContent[], separator = DEFAULT_CHART_LABEL_SEPARATOR): string {
   return CONTENT_ORDER.filter(part => content.includes(part) && parts[part] !== undefined).map(part => parts[part]).join(separator);
+}
+
+/** Which marks of a chart a highlight names, in the order of the resolved chart data. */
+export interface ChartHighlightMarks {
+  /** One flag per plotted series (the columns after the category and X columns): its marks are highlighted. */
+  series: boolean[];
+  /** One flag per data row: the marks of that category are highlighted. */
+  categories: boolean[];
+}
+
+/**
+ * FA-14: which series and categories of a chart are highlighted. `highlight` is `resolveChartOptions(...).highlight` and `data` the
+ * chart's `resolveChartData` result (its `columns`, `hasX` and `rows`). A mark is highlighted when its series OR its category is
+ * named: a column or bar of series s in row i takes the accent colour when `series[s] || categories[i]`; every other mark takes the muted
+ * colour (`chartHighlightColors`). Category names match the row labels as text (a number label `2024` matches `"2024"`, an empty label
+ * matches `""`), every row that carries the label. Returns undefined when there is no highlight or it names nothing the chart plots (a
+ * name that matches no column or label is the `chart-highlight-unknown-name` validation error), so the engines then draw the chart as if
+ * it had none.
+ */
+export function chartHighlightMarks(
+  highlight: ResolvedChartHighlight | undefined,
+  data: {columns: readonly string[]; hasX?: boolean; rows: readonly (readonly unknown[])[]},
+): ChartHighlightMarks | undefined {
+  if (!highlight) return undefined;
+  const first = data.columns.length > 1 ? (data.hasX ? 2 : 1) : 0;
+  const series = data.columns.slice(first).map(name => highlight.series.includes(name));
+  const label = (cell: unknown): string => cell === null || cell === undefined ? '' : String(cell);
+  const categories = data.columns.length > 1 ? data.rows.map(row => highlight.categories.includes(label(row[0]))) : data.rows.map(() => false);
+  return series.some(Boolean) || categories.some(Boolean) ? {series, categories} : undefined;
 }

@@ -32,7 +32,7 @@ import {
 } from './narrative-plan.js';
 
 // RR-54: chart and table data warnings keep their validator code as the rule id.
-const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-mapping-adapted', 'slide-theme-dimensions']);
+const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-mapping-adapted', 'chart-highlight-adapted', 'slide-theme-dimensions']);
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
