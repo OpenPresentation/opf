@@ -549,6 +549,139 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
 }
 
 // ---------------------------------------------------------------------------------------------------------------
+// Migration help for the strict number rule
+
+/** One JSON Patch `replace` operation of a ChartNumberFix. */
+export interface ChartNumberFixOperation { op: 'replace'; path: string; value: unknown }
+
+/** A fix for a chart value column whose text cells all share one display style (`"12%"`, `"$1,234"`, `"1,234.5"`). */
+export interface ChartNumberFix {
+  /**
+   * JSON Patch: one `replace` per text cell (with its number), then one for the column (a DataColumn with `format`).
+   * Paths are those of the `chart-value-not-numeric` diagnostics: below `options.path` for inline data, or into
+   * `/datasets/<id>` for a dataset (which every chart and table that uses it shares; their text is unchanged).
+   */
+  patches: ChartNumberFixOperation[];
+  /** Index of the column in the authored columns (`chart.data.columns`, or the dataset's columns). */
+  column: number;
+  /** The column name. */
+  name: string;
+  /** The NumberFormat that displays every number of the column exactly as its text was written. */
+  format: string;
+}
+
+export interface ChartNumberFixOptions extends DataResolveOptions {
+  /** The column to fix, by authored index or name. Default: the first value column that has a fix. */
+  column?: number | string;
+}
+
+// One display style: an optional minus, an optional currency symbol, digits (grouped in threes or plain), optional
+// decimals and an optional percent sign. '(5)', '$-5', '1.234,5', '.5', '007', '12 %' and units are not matched.
+const DISPLAY_NUMBER = /^(-?)([$€£¥]?)((?:[1-9]\d{0,2}(?:,\d{3})+)|0|[1-9]\d*)(?:\.(\d+))?(%?)$/;
+
+/** The column fix for every value column with a consistent display style, by authored column index. */
+function chartNumberFixes(chart: unknown, document: unknown, options: DataResolveOptions): Map<number, ChartNumberFix> {
+  const fixes = new Map<number, ChartNumberFix>();
+  const resolved = resolveChartData(chart, document, options);
+  if (!resolved.ok) return fixes;
+  const candidates = new Set<number>();
+  for (const diagnostic of resolved.diagnostics) {
+    if (diagnostic.code !== 'chart-value-not-numeric') continue;
+    candidates.add(Number(diagnostic.path.slice(diagnostic.path.lastIndexOf('/') + 1)));
+  }
+  if (!candidates.size) return fixes;
+  const data = (chart as Record<string, any>).data as Record<string, any>;
+  let columns: unknown[];
+  let rows: unknown[];
+  let columnsPath: string;
+  let rowsPath: string;
+  if (isDatasetRef(data)) {
+    const dataset = datasetsOf(document)[data.dataset] as Record<string, any>;
+    columns = dataset.columns;
+    rows = dataset.rows;
+    columnsPath = at('/datasets', data.dataset, 'columns');
+    rowsPath = at('/datasets', data.dataset, 'rows');
+  } else {
+    columns = data.columns;
+    rows = data.rows;
+    columnsPath = at(options.path ?? '', 'data', 'columns');
+    rowsPath = at(options.path ?? '', 'data', 'rows');
+  }
+  for (const column of [...candidates].sort((a, b) => a - b)) {
+    const header = columns[column];
+    const name = columnName(header);
+    if (name === undefined || columnFormat(header) !== undefined) continue;
+    const fix = columnFix(rows, column, rowsPath);
+    if (!fix) continue;
+    fixes.set(column, {
+      patches: [...fix.patches, { op: 'replace', path: at(columnsPath, column), value: record(header) ? { ...header, format: fix.format } : { name, format: fix.format } }],
+      column,
+      name,
+      format: fix.format,
+    });
+  }
+  return fixes;
+}
+
+function columnFix(rows: unknown[], column: number, rowsPath: string): { format: string; patches: ChartNumberFixOperation[] } | undefined {
+  const cells: { row: number; text: string; value: number; patch: boolean }[] = [];
+  let prefix: string | undefined;
+  let suffix: string | undefined;
+  let grouping = false;
+  let wide = false;
+  const decimals: string[] = [];
+  for (const [index, row] of rows.entries()) {
+    const cell = Array.isArray(row) && column < row.length ? row[column] : null;
+    if (cell === null || cell === undefined || cell === '') continue;
+    const patch = chartNumber(cell) === null;
+    if (typeof cell !== 'number' && typeof cell !== 'string') return undefined;
+    const text = typeof cell === 'number' ? String(cell) : cell.trim();
+    const match = DISPLAY_NUMBER.exec(text);
+    if (!match) return undefined;
+    const [, minus = '', currency = '', integer = '', fraction = '', percent = ''] = match;
+    if ((prefix ?? currency) !== currency || (suffix ?? percent) !== percent) return undefined;
+    prefix = currency;
+    suffix = percent;
+    if (integer.includes(',')) grouping = true;
+    else if (integer.length > 3) wide = true;
+    decimals.push(fraction);
+    const digits = `${minus}${integer.replaceAll(',', '')}${fraction ? `.${fraction}` : ''}`;
+    cells.push({ row: index, text, value: Number(percent ? `${digits}e-2` : digits), patch });
+  }
+  // Mixed grouping ('1,234' beside '5678') has no single format.
+  if (!cells.some(cell => cell.patch) || (grouping && wide)) return undefined;
+  // Decimals: the fewest written are required; every cell that shows more must not end in a zero.
+  const fewest = Math.min(...decimals.map(fraction => fraction.length));
+  const most = Math.max(...decimals.map(fraction => fraction.length));
+  if (decimals.some(fraction => fraction.length > fewest && fraction.endsWith('0'))) return undefined;
+  const format = `${prefix ?? ''}${grouping ? '#,##0' : '0'}${most ? `.${'0'.repeat(fewest)}${'#'.repeat(most - fewest)}` : ''}${suffix ?? ''}`;
+  // Never guess: every value must display exactly as its text was written.
+  if (cells.some(cell => !Number.isFinite(cell.value) || formatDataNumber(cell.value, format) !== cell.text)) return undefined;
+  return { format, patches: cells.filter(cell => cell.patch).map(cell => ({ op: 'replace', path: at(rowsPath, cell.row, column), value: cell.value })) };
+}
+
+/**
+ * Migration help for the strict number rule: when every text cell of a chart value column is written in one display
+ * style that a NumberFormat reproduces exactly (`"12%"`/`"8.5%"` -> 0.12/0.085 with `0.#%`; `"$1,234"` -> 1234 with
+ * `$#,##0`; `"1,234"` -> 1234 with `#,##0`), the patch that stores the numbers and gives the column that format.
+ * Undefined when there is nothing to fix or no exact fix: mixed styles, accounting negatives `(5)`, `1.234,5`, units,
+ * a column that already has a format, or any value the format would display differently (number cells included).
+ */
+export function suggestChartNumberFix(chart: unknown, document?: unknown, options: ChartNumberFixOptions = {}): ChartNumberFix | undefined {
+  const fixes = chartNumberFixes(chart, document, options);
+  if (options.column === undefined) return fixes.values().next().value;
+  for (const fix of fixes.values()) if (fix.column === options.column || fix.name === options.column) return fix;
+  return undefined;
+}
+
+/** Every column fix of one chart, by the path of each text cell it rewrites (for lint). */
+export function chartNumberFixesByCell(chart: unknown, document: unknown, options: DataResolveOptions): Map<string, ChartNumberFix> {
+  const byCell = new Map<string, ChartNumberFix>();
+  for (const fix of chartNumberFixes(chart, document, options).values()) for (const patch of fix.patches.slice(0, -1)) byCell.set(patch.path, fix);
+  return byCell;
+}
+
+// ---------------------------------------------------------------------------------------------------------------
 // Tables
 
 function cellFormat(cell: unknown): string | undefined {

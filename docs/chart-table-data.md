@@ -124,6 +124,9 @@ export function resolveTableData(table: unknown, document?: unknown, options?: {
   { columns?: DataTableHeader[]; rows: DataTableCell[][]; formats: (string | undefined)[]; dataset?: string; diagnostics: DataDiagnostic[] };
 /** Display value of a table cell: a number with a valid format (cell, else column) becomes formatted text (a styled cell keeps its style with the text as value); anything else is returned unchanged. */
 export function tableCellDisplayValue(cell: DataTableCell, columnFormat?: string): DataTableCell;
+/** Migration help (see below): the patch that stores one chart value column's text as numbers with the format that shows the same text, or undefined. */
+export function suggestChartNumberFix(chart: unknown, document?: unknown, options?: { path?: string; column?: number | string }):
+  { patches: { op: "replace"; path: string; value: unknown }[]; column: number; name: string; format: string } | undefined;
 /** Helpers: dataset-level diagnostics (duplicate names, invalid formats), unreferenced dataset ids, the XY test, the DatasetRef test. */
 export function datasetDiagnostics(document: unknown): DataDiagnostic[];
 export function unusedDatasets(document: unknown): string[];
@@ -134,6 +137,16 @@ export function isDatasetRef(value: unknown): value is DatasetRef;
 `DataDiagnostic` is `{ code, severity: "error" | "warning", path, message }`, with the codes above plus `chart-value-not-numeric`. `chartNumber` runs after variables are filled. Before filling, the validator does not warn on a `var:<id>` cell whose variable is a number. `chart-value-not-numeric` is reported for any value cell that `chartNumber` rejects (strings and booleans), never for `null` or `""`. An unknown `fields` entry is a `dataset-field-unknown` error and `resolveChartData`/`resolveTableData` leave that column out. `number-format-invalid` applies to `DataColumn.format` and `StyledTableCell.format`; `NumberVariable.format` keeps its existing check (`variable-format` where it is used), so no existing document gains an error.
 
 The validator reports the codes as `params.code` on `errors` and `warnings`; lint keeps them as `opf/<code>` rule ids (errors as before, the three warnings now also) and adds `opf/unused-dataset`.
+
+### Migration help
+
+Decks written before the strict rule often hold display text in chart cells. When every text cell of a value column (an X or series column, or a lone column) is written in one display style that a NumberFormat reproduces exactly, `suggestChartNumberFix` returns the fix, and lint attaches it to each of the column's `opf/chart-value-not-numeric` warnings as `fixes: [{ id: "store-chart-numbers", kind: "patch", safe: false, patch }]` (the audit fix shape; core never applies it):
+
+- `"12%"`, `"8.5%"` become 0.12 and 0.085 with the column format `0.#%`;
+- `"$1,234"`, `"$56"` become 1234 and 56 with `$#,##0` (also `€`, `£`, `¥`);
+- `"1,234.5"`, `"999"` become 1234.5 (the plain number stays) with `#,##0.##`.
+
+The patch replaces each text cell with its number and the column with a `DataColumn` that has the format; a dataset column is fixed in the dataset, so every chart and table that uses it changes, and its tables show the same text. A style is one optional leading minus, one optional currency symbol, digits (grouped in threes or plain), optional decimals and an optional `%`. There is no fix when the column already has a format, when styles are mixed (`"12%"` beside `"$5"` or beside the number 0.5), for accounting negatives `"(5)"`, `"$-5"`, a decimal comma (`"1.234,5"`), units (`"5 units"`), `".5"` or `"007"`, for mixed grouping (`"1,234"` beside `"5678"`), or when one format cannot show every value as written (`"$5"` beside `"$5.50"`). Every fixed value is checked: `formatDataNumber(value, format)` equals the text as written.
 
 Core composition, table layout and pagination accept dataset-backed tables and charts by inlining first. Table layout measures the formatted text. Markdown conversion, diff, merge, patch, audit and format keep the new fields. In detail:
 

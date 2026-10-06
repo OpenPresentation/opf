@@ -20,7 +20,9 @@ import {
 import type { JsonPrimitive, JsonSchema } from './json.js';
 import { validationDefinition } from './validation-definitions.js';
 import { unusedReferenceWarnings } from './annotation-validation.js';
-import { unusedDatasets } from './chart-data.js';
+import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
+import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
+import type { AuditFix } from './audit-types.js';
 
 // RR-54: chart and table data warnings keep their validator code as the rule id.
 const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
@@ -53,6 +55,11 @@ export interface LintDiagnostic {
 	validation?: ValidationIssue;
 	/** Original-source UTF-16 offsets and one-based line/column. */
 	location?: LintLocation;
+	/**
+	 * Suggested repairs (the audit fix shape: JSON Patch that core never applies). RR-54: an
+	 * `opf/chart-value-not-numeric` cell whose column is written in one display style carries the column's fix.
+	 */
+	fixes?: AuditFix[];
 }
 export interface LintContract {
 	/** JSON Pointer pattern; a complete '*' segment matches one path segment. */
@@ -607,6 +614,21 @@ function distance(a: string, b: string): number {
 }
 
 /** Read-only lint with actionable schema, local catalog and explicit policy context. */
+function chartNumberFixPaths(document: unknown): Map<string, ChartNumberFix> {
+	const byCell = new Map<string, ChartNumberFix>();
+	if (!isRecord(document) || !Array.isArray(document.slides)) return byCell;
+	const payload = (node: Record<string, unknown>, path: string): void => {
+		if (isRecord(node.chart))
+			for (const [cell, fix] of chartNumberFixesByCell(node.chart, document, { path: pathFor(path, 'chart') })) byCell.set(cell, fix);
+	};
+	document.slides.forEach((slide, index) => {
+		if (!isRecord(slide)) return;
+		payload(slide, `/slides/${index}`);
+		visitContentPayloads(slide, `/slides/${index}`, payload);
+	});
+	return byCell;
+}
+
 export function lintPresentation(
 	document: unknown,
 	options: LintOptions = {},
@@ -743,9 +765,22 @@ export function lintPresentation(
 					: undefined;
 		}
 	}
+	// RR-54: the migration fix of each chart value column whose text cells share one display style, by cell path.
+	const numberFixes = validation.warnings.some((issue) => issue.params.code === 'chart-value-not-numeric') ? chartNumberFixPaths(document) : new Map<string, ChartNumberFix>();
 	// Retain any existing reference warning not covered by the schema walk.
 	for (const issue of validation.warnings) {
 		if (typeof issue.params.code === 'string' && DATA_WARNING_CODES.has(issue.params.code)) {
+			const fix = issue.params.code === 'chart-value-not-numeric' ? numberFixes.get(issue.path) : undefined;
+			if (fix) {
+				diagnostics.push({
+					...schemaDiagnostic(issue),
+					ruleId: 'opf/chart-value-not-numeric',
+					severity: 'warning',
+					help: `Every text value of column ${JSON.stringify(fix.name)} is written in one display style. Store the numbers and give the column the format ${JSON.stringify(fix.format)}, which shows the same text: apply fixes[0] (core suggestChartNumberFix). Until then the value is plotted as a gap.`,
+					fixes: [{ id: 'store-chart-numbers', label: `Store ${JSON.stringify(fix.name)} as numbers with the format ${JSON.stringify(fix.format)}`, kind: 'patch', safe: false, patch: fix.patches }],
+				});
+				continue;
+			}
 			diagnostics.push({
 				...schemaDiagnostic(issue),
 				ruleId: `opf/${issue.params.code}`,

@@ -24,12 +24,14 @@ import {
   resolveVariables,
   tableCellDisplayValue,
   validatePresentation,
+  suggestChartNumberFix,
 } from "../dist/index.js";
 import * as dataEntry from "../dist/data.js";
 import { composeSlide, layoutTable } from "../dist/composition.js";
 import { convertContent } from "../dist/convert.js";
 import { diffPresentations } from "../dist/diff.js";
 import { formatPresentation } from "../dist/format.js";
+import { applyPatch } from "../dist/patch.js";
 import { markdownToOpf, opfToMarkdown } from "../dist/markdown.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
@@ -621,5 +623,91 @@ describe("RR-54 review", () => {
     assert.deepEqual(fields(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", fields: ["Quarter", "Revenue", "Revenue"] } } }] })), [
       ["/slides/0/chart/data/fields", "must NOT have duplicate items (items ## 2 and 1 are identical)"],
     ]);
+  });
+});
+
+describe("suggestChartNumberFix: migration help for the strict number rule", () => {
+  const chart = (rows, columns = ["Q", "V"]) => ({ type: "column", data: { columns, rows } });
+  const fixOf = (rows, columns) => suggestChartNumberFix(chart(rows, columns));
+  const values = (fix) => fix.patches.slice(0, -1).map((patch) => patch.value);
+
+  test("one display style becomes numbers and the column format that shows the same text", () => {
+    const percent = fixOf([["Q1", "12%"], ["Q2", "8.5%"], ["Q3", null], ["Q4", ""], ["Q5", " -3% "]]);
+    assert.equal(percent.format, "0.#%");
+    assert.equal(percent.column, 1);
+    assert.equal(percent.name, "V");
+    assert.deepEqual(values(percent), [0.12, 0.085, -0.03]);
+    assert.deepEqual(percent.patches.map((patch) => patch.path), ["/data/rows/0/1", "/data/rows/1/1", "/data/rows/4/1", "/data/columns/1"]);
+    assert.deepEqual(percent.patches.at(-1), { op: "replace", path: "/data/columns/1", value: { name: "V", format: "0.#%" } });
+    const currency = fixOf([["Q1", "$1,234"], ["Q2", "$56"], ["Q3", "-$7,000"]]);
+    assert.equal(currency.format, "$#,##0");
+    assert.deepEqual(values(currency), [1234, 56, -7000]);
+    const grouped = fixOf([["Q1", "1,234.5"], ["Q2", "999"], ["Q3", 12.25]]);
+    assert.equal(grouped.format, "#,##0.##");
+    assert.deepEqual(values(grouped), [1234.5], "number cells and strict decimal strings are kept");
+    assert.equal(fixOf([["Q1", "€5.50"], ["Q2", "€7.25"]]).format, "€0.00");
+    assert.equal(fixOf([["Q1", "£1,000,000"]]).format, "£#,##0");
+    // Applying the fix leaves no warning and displays every value as it was written.
+    const fixed = chart([["Q1", "12%"], ["Q2", "8.5%"]]);
+    const applied = applyPatch(fixed, fixOf(fixed.data.rows).patches);
+    const resolved = resolveChartData(applied);
+    assert.deepEqual(resolved.diagnostics, []);
+    assert.deepEqual(resolved.rows.map((row) => formatDataNumber(row[1], resolved.formats[1])), ["12%", "8.5%"]);
+  });
+
+  test("never a guess", () => {
+    const none = [
+      [["Q1", "12%"], ["Q2", "$5"]], // mixed styles
+      [["Q1", "12%"], ["Q2", 0.5]], // a number beside percent text: 0.5 or 50%?
+      [["Q1", "(5)"], ["Q2", "(7)"]], // accounting negatives
+      [["Q1", "1.234,5"]], // decimal comma
+      [["Q1", "1,234"], ["Q2", "5678"]], // mixed grouping
+      [["Q1", "$5"], ["Q2", "$5.50"]], // 5 and 5.50 need different decimals
+      [["Q1", "$-5"]], // the format writes -$5
+      [["Q1", "12 %"]], [["Q1", "5 units"]], [["Q1", ".5%"]], [["Q1", "007%"]], [["Q1", "1,23"]], [["Q1", "Q1"]], [["Q1", true]],
+      [["Q1", 12], ["Q2", "18"]], // nothing to fix
+    ];
+    for (const rows of none) assert.equal(fixOf(rows), undefined, JSON.stringify(rows));
+    assert.equal(suggestChartNumberFix(chart([["Q1", "12%"]], ["Q", { name: "V", format: "0%" }])), undefined, "a column that already has a format");
+    assert.equal(suggestChartNumberFix({ type: "column", data: { src: "x.csv" } }), undefined);
+  });
+
+  test("columns, mapping, datasets and lint", () => {
+    const two = chart([["Q1", "5%", "$1"], ["Q2", "6%", "$2"]], ["Q", "A", "B"]);
+    assert.equal(suggestChartNumberFix(two).name, "A");
+    assert.equal(suggestChartNumberFix(two, undefined, { column: "B" }).format, "$0");
+    assert.equal(suggestChartNumberFix(two, undefined, { column: 2 }).name, "B");
+    assert.equal(suggestChartNumberFix({ ...two, mapping: { category: "A" } }).name, "B", "the category column is never a value column");
+    const document = deck({
+      datasets: { r: { columns: ["Quarter", { name: "Margin" }], rows: [["Q1", "31%"], ["Q2", "34.5%"]] } },
+      slides: [{ title: "Margin", blocks: [{ chart: { type: "line", data: { dataset: "r" } } }] }, { title: "Table", table: { dataset: "r" } }],
+    });
+    const fix = suggestChartNumberFix(document.slides[0].blocks[0].chart, document, { path: "/slides/0/blocks/0/chart" });
+    assert.deepEqual(fix.patches, [
+      { op: "replace", path: "/datasets/r/rows/0/1", value: 0.31 },
+      { op: "replace", path: "/datasets/r/rows/1/1", value: 0.345 },
+      { op: "replace", path: "/datasets/r/columns/1", value: { name: "Margin", format: "0.#%" } },
+    ]);
+    const before = layoutTable(document.slides[1].table, { x: 0, y: 0, width: 800, height: 400 }, { presentation: document }).rows.map((row) => row.cells.map((cell) => cell.value));
+    const after = applyPatch(document, fix.patches);
+    assert.deepEqual(layoutTable(after.slides[1].table, { x: 0, y: 0, width: 800, height: 400 }, { presentation: after }).rows.map((row) => row.cells.map((cell) => cell.value)), before, "a table of the same dataset shows the same text");
+    // Lint carries the fix on every cell of the column, and none where there is no exact fix.
+    const lintDocument = deck({ slides: [{ title: "x", chart: chart([["Q1", "12%"], ["Q2", "8.5%"], ["Q3", "n/a"]]) }, { title: "y", chart: chart([["Q1", "12%"], ["Q2", "8.5%"]]) }] });
+    const lint = lintPresentation(lintDocument);
+    const warnings = lint.diagnostics.filter((entry) => entry.ruleId === "opf/chart-value-not-numeric");
+    assert.deepEqual(warnings.map((entry) => [entry.path, entry.fixes?.[0]?.id]), [
+      ["/slides/0/chart/data/rows/0/1", undefined],
+      ["/slides/0/chart/data/rows/1/1", undefined],
+      ["/slides/0/chart/data/rows/2/1", undefined],
+      ["/slides/1/chart/data/rows/0/1", "store-chart-numbers"],
+      ["/slides/1/chart/data/rows/1/1", "store-chart-numbers"],
+    ]);
+    const [lintFix] = warnings[3].fixes;
+    assert.equal(lintFix.kind, "patch");
+    assert.equal(lintFix.safe, false);
+    assert.match(warnings[3].help, /"0\.#%"/);
+    const repaired = applyPatch(lintDocument, lintFix.patch);
+    assert.deepEqual(lintPresentation(repaired).diagnostics.filter((entry) => entry.ruleId === "opf/chart-value-not-numeric").map((entry) => entry.path), warnings.slice(0, 3).map((entry) => entry.path));
+    assert.equal(dataEntry.suggestChartNumberFix, suggestChartNumberFix);
   });
 });
