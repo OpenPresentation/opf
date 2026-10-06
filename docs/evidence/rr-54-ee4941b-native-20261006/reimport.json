@@ -1,0 +1,60 @@
+{
+  "results": [
+    {
+      "deck": "c4-formats",
+      "file": "c4-formats-after.pptx",
+      "build": "c4-after",
+      "mode": "native-save",
+      "sourceSha256Ok": true,
+      "payloadsEqual": true,
+      "datasetsEqual": true,
+      "dataDiagnostics": [],
+      "scatterPointNames": [
+        "a",
+        "b",
+        "c"
+      ],
+      "respelledCodes": [
+        "ppt/charts/chart1.xml: \\$#,##0.0",
+        "ppt/charts/chart1.xml: ",
+        "ppt/charts/chart1.xml: #,##0\\ &quot;units&quot;",
+        "ppt/charts/chart1.xml: #,##0\\ ",
+        "ppt/charts/chart2.xml: ",
+        "ppt/charts/chart3.xml: \\$#,##0",
+        "ppt/charts/chart3.xml: 0.0\\ ",
+        "ppt/charts/chart3.xml: ",
+        "ppt/charts/chart3.xml: 0.0\\ &quot;kg&quot;",
+        "ppt/charts/chart4.xml: \\$#,##0",
+        "ppt/charts/chart4.xml: ",
+        "ppt/charts/chart6.xml: ",
+        "ppt/charts/chart6.xml: 0.0\\ &quot;m/s&quot;",
+        "ppt/charts/chart6.xml: 0.0\\ ",
+        "ppt/charts/chart6.xml: \\+0.0\\ &quot;pts&quot;",
+        "ppt/charts/chart6.xml: \\+0.0\\ "
+      ],
+      "status": "PASS"
+    },
+    {
+      "deck": "c4-datasets",
+      "file": "c4-datasets-after.pptx",
+      "build": "c4-after",
+      "mode": "native-save",
+      "sourceSha256Ok": true,
+      "payloadsEqual": true,
+      "datasetsEqual": true,
+      "dataDiagnostics": [],
+      "respelledCodes": [
+        "ppt/charts/chart1.xml: \\$#,##0",
+        "ppt/charts/chart1.xml: ",
+        "ppt/charts/chart2.xml: #,##0\\ ",
+        "ppt/charts/chart2.xml: ",
+        "ppt/charts/chart2.xml: \\$#,##0",
+        "ppt/charts/chart2.xml: #,##0\\ &quot;units&quot;",
+        "ppt/charts/chart3.xml: #,##0\\ ",
+        "ppt/charts/chart3.xml: ",
+        "ppt/charts/chart4.xml: "
+      ],
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "options": {
+    "seed": 1,
+    "timestamp": "2026-10-05T00:00:00Z",
+    "zipDate": "2026-10-05T00:00:00Z"
+  },
+  "decks": [
+    {
+      "deck": "c4-formats-after.pptx",
+      "check": "C4",
+      "build": {
+        "commit": "ee4941b",
+        "core": "0.12.2",
+        "coreCommit": "d955d600"
+      },
+      "sha256": "9f3d5838790807d0a00f41e0415dc45319bbff60cb62b054a37eb3558058a72a",
+      "bytes": 83302,
+      "savedCopySha256": "0d626d02980638ce601e2c1bd6be9c8b75767fb0330a3659fe973160cd1fe94e"
+    },
+    {
+      "deck": "c4-datasets-after.pptx",
+      "check": "C4",
+      "build": {
+        "commit": "ee4941b",
+        "core": "0.12.2",
+        "coreCommit": "d955d600"
+      },
+      "sha256": "e020416d12d0c9be8bb3b37728273b08e4a89287acf773796b68203a970f6be5",
+      "bytes": 76133,
+      "savedCopySha256": "bd001cd8620dcefcff84d942bbf68aeff34b94c2dfee8c6051c2fa9ce9e07880"
+    },
+    {
+      "deck": "c2-zeros-after.pptx",
+      "check": "C2",
+      "build": {
+        "commit": "ee4941b",
+        "core": "0.12.2",
+        "coreCommit": "d955d600"
+      },
+      "sha256": "56d206a1e9efd5bfe533eec4fa3992627825b876c102e0041a81c33856fb9b5b",
+      "bytes": 97084,
+      "savedCopySha256": null
+    },
+    {
+      "deck": "rr54-slash.pptx",
+      "check": "slash",
+      "build": {
+        "commit": "ee4941b",
+        "coreCommit": "d955d600",
+        "core": "0.12.2"
+      },
+      "sha256": "3175af73076e7a6499f12faf42c87a3c7163be6bb88819329691db8372ee5559",
+      "bytes": 145780,
+      "savedCopySha256": null
+    }
+  ]
+}
