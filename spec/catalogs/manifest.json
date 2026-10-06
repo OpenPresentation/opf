@@ -10,8 +10,8 @@
   "kinds": {
     "audiences": {
       "mode": "subset",
-      "records": 22,
-      "contentSha256": "bfb44226b533a2da04c92077eb39c689dde43181e0b9979fb15c247dfaba1f98",
+      "records": 16,
+      "contentSha256": "7d09863ea2357493b038341aabeea9aa7648b7062205249a0d6726aa5e362314",
       "gallery": {
         "records": 22,
         "contentSha256": "bfb44226b533a2da04c92077eb39c689dde43181e0b9979fb15c247dfaba1f98"
@@ -19,8 +19,8 @@
     },
     "chart-types": {
       "mode": "subset",
-      "records": 76,
-      "contentSha256": "0181580c76d582f28c6c7f03d60222ce54f7f3f89ba98107038ada9df37a7c67",
+      "records": 26,
+      "contentSha256": "0b9b945cb190ea66c71aa12d98abd2c9b2f215b55c642fce59df1e9c939436e3",
       "gallery": {
         "records": 76,
         "contentSha256": "0181580c76d582f28c6c7f03d60222ce54f7f3f89ba98107038ada9df37a7c67"

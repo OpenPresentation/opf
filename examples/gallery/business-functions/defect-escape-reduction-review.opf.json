@@ -142,7 +142,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-3x",
+        "type": "line",
         "data": {
           "columns": [
             "Quarter",

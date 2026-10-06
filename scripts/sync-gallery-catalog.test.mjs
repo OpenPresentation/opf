@@ -137,6 +137,43 @@ describe("planSnapshot", () => {
   });
 });
 
+describe("--allow-removed waiver", () => {
+  const dropped = (gallery, kind, id) => {
+    const at = gallery[kind].index.records.findIndex((entry) => entry.id === id);
+    gallery[kind].records.splice(at, 1);
+    gallery[kind].index.records.splice(at, 1);
+    gallery[kind].index.contentSha256 = catalogContentSha256(gallery[kind].records);
+  };
+
+  test("lets exactly the listed ids disappear and still refuses any other lost id", () => {
+    const gallery = publishedFromSnapshot();
+    dropped(gallery, "chart-types", "pie");
+    dropped(gallery, "chart-types", "funnel");
+    const refused = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source, allowRemoved: { "chart-types": ["pie"] } });
+    assert.equal(refused.problems.filter((problem) => /no longer publishes/.test(problem)).length, 1, refused.problems.join(String.fromCharCode(10)));
+    assert.ok(refused.problems.some((problem) => /chart-types: the gallery no longer publishes 'funnel'/.test(problem)));
+
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source, allowRemoved: { "chart-types": ["pie", "funnel"] } });
+    assert.deepEqual(plan.problems, []);
+    assert.deepEqual(plan.kinds["chart-types"].removed.sort(), ["funnel", "pie"]);
+    assert.equal(plan.kinds["chart-types"].records.some((record) => record.id === "pie"), false);
+    assert.equal(plan.kinds["chart-types"].manifestEntry.records, snapshot.current["chart-types"].records.length - 2);
+  });
+
+  test("drops an id the gallery still publishes and rejects an id the snapshot does not hold", () => {
+    const gallery = publishedFromSnapshot();
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source, allowRemoved: { "chart-types": ["pie", "no-such-id"] } });
+    assert.ok(plan.problems.some((problem) => /--allow-removed 'no-such-id' is not in the snapshot/.test(problem)), plan.problems.join(String.fromCharCode(10)));
+    assert.deepEqual(plan.kinds["chart-types"].removed, ["pie"]);
+    assert.equal(plan.kinds["chart-types"].records.some((record) => record.id === "pie"), false);
+  });
+
+  test("parseIncludes reads the same shape for --allow-removed", () => {
+    assert.deepEqual(parseIncludes(["--allow-removed", "chart-types:a,b", "--include", "layouts:c"], "--allow-removed"), { "chart-types": ["a", "b"] });
+    assert.throws(() => parseIncludes(["--allow-removed", "chart-types"], "--allow-removed"), /--allow-removed needs/);
+  });
+});
+
 describe("applySnapshot", () => {
   let workdir;
   before(async () => {

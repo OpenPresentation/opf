@@ -144,7 +144,7 @@ assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(focusedPresentation.$id, presentation.$id);
 assert.equal(rawPresentation.$id, presentation.$id);
 assert.equal(rawBoardAudience.id, "board");
-assert.ok(catalogs.audiences.some((audience) => audience.id === "executives"));
+assert.ok(catalogs.audiences.some((audience) => audience.id === "executive"));
 assert.ok(tones.length > 0);
 assert.deepEqual(Object.keys(typesRuntime), []);
 

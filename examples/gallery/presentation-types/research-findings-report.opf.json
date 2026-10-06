@@ -335,7 +335,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bullet-column",
+            "type": "column",
             "data": {
               "columns": [
                 "Quarter",

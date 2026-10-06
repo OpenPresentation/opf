@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "radar",
-  "name": "RADAR",
-  "label": "Radar",
+  "name": "Radar",
   "mappings": {
     "openxml": {
       "element": "radarChart",
@@ -15,57 +14,8 @@
       }
     }
   },
-  "categories": 8,
-  "columns": [
-    "Series 1",
-    "Value"
-  ],
   "group": "Radar",
   "groupSort": 7,
   "series": 1,
-  "seriesGroups": 1,
-  "slideNumber": 40,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$I$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Series 1",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Value",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Series 1",
-      "Q1 2024",
-      "Q2 2024",
-      "Q3 2024",
-      "Q4 2024",
-      "Q1 2025",
-      "Q2 2025",
-      "Q3 2025",
-      "Q4 2025"
-    ],
-    "rows": [
-      [
-        "Value",
-        11607,
-        85243,
-        47268,
-        71524,
-        72746,
-        67733,
-        54657,
-        34164
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

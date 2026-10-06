@@ -27,6 +27,8 @@ function canonical(value) {
 export const RETAINED_CORE_GOLDENS = [
   // RR-41 corpus (digest 485b5c07..., core 0.12.1 and 0.12.2); RR-20 example decks moved the checkout to a new corpus.
   'scripts/fixtures/opf-examples-png.audience-ids.sha256.json',
+  // RR-20 corpus (digest 394c4ce7..., core 0.13.0); FA-03 chart type ids moved the checkout to a new corpus.
+  'scripts/fixtures/opf-examples-png.example-decks.sha256.json',
 ];
 
 // Returns the absolute path of the reviewed core golden that records exactly the installed core's examples: the lock's

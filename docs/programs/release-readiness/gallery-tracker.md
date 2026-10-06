@@ -8,7 +8,7 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 ## Summary
 
-1100 records; 1100 addressed, 0 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+1052 records; 1036 addressed, 16 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
@@ -18,9 +18,9 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | languages | 93 | done 66, parity-near 2, font-gap 25 | 93 | 0 |
 | backgrounds | 6 | done 6 | 6 | 0 |
 | narratives | 48 | done 48 | 48 | 0 |
-| charts | 76 | done 25, deprecated 50, descoped 1 | 76 | 0 |
+| charts | 34 | done 17, descoped 1, missing-gallery 8, missing-spec 8 | 18 | 16 |
 | themes | 4 | done 1, parity-near 3 | 4 | 0 |
-| audiences | 22 | done 22 | 22 | 0 |
+| audiences | 16 | done 16 | 16 | 0 |
 | tones | 7 | done 7 | 7 | 0 |
 | socials | 10 | done 10 | 10 | 0 |
 | headers-footers | 10 | done 10 | 10 | 0 |
@@ -33,15 +33,15 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 513 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
-| `deprecated` | 50 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
+| `done` | 499 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `deprecated` | 0 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
 | `descoped` | 397 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
 | `unknown` | 0 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 32 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
 | `font-gap` | 108 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
-| `missing-gallery` | 0 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
-| `missing-spec` | 0 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
+| `missing-gallery` | 8 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
+| `missing-spec` | 8 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
 | `native-mismatch` | 0 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
@@ -66,7 +66,11 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 ## Unaddressed gaps
 
-None: every gap is linked to an open RR item or a pull request, or is descoped with an issue.
+| Type | Gap | Records | Ids | Detail | Next action | Link |
+| --- | --- | ---: | --- | --- | --- | --- |
+| charts | `missing-gallery` | 8 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not shown on pptx.gallery | Give the value a gallery page and card, or record that it stays catalog-only. | - |
+| charts | `missing-spec` | 8 | `100pct-stacked-area-3x`, `100pct-stacked-bar-3x`, `100pct-stacked-column-3x`, `stacked-area-3x`, `stacked-bar-3x`, `stacked-column-3x`, `stacked-line-3x`, `stacked-line-with-markers-3x` | published by the pptx.gallery chart-types catalog but not bundled in core spec/catalogs (portable through an inline record) | Publish the value in the core catalog, or record that it stays gallery-only. | - |
+| charts | `unknown` | 8 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 
 ## Addressed gaps
 

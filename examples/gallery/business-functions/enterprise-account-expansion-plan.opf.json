@@ -135,7 +135,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "canada",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",

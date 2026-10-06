@@ -48,7 +48,7 @@
     {
       "title": "CSV Chart Data",
       "chart": {
-        "type": "clustered-column",
+        "type": "column",
         "data": {
           "src": "asset:revenue-csv",
           "columns": [
@@ -62,7 +62,7 @@
     {
       "title": "Workbook Range Chart Data",
       "chart": {
-        "type": "stacked-bar-3x",
+        "type": "stacked-bar",
         "data": {
           "src": "asset:workbook",
           "sheet": "Plan",
