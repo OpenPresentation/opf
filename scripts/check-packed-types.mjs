@@ -65,6 +65,7 @@ import {paginatePresentation} from '@openpresentation/opf/pagination';
 import {createDataContent} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
 import {markdownToOpf, opfToMarkdown, type MarkdownDiagnostic} from '@openpresentation/opf/markdown';
+import {fromYaml, toYaml, OPFYamlError, type YamlDiagnostic} from '@openpresentation/opf/yaml';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
@@ -87,6 +88,14 @@ const markdown: string = opfToMarkdown(deck).markdown;
 // @ts-expect-error unsupported mode must be rejected
 opfToMarkdown(deck, {unsupported: 'maybe'});
 void slides; void firstDiagnostic; void markdown;
+const parsedYaml = fromYaml('slides:\\n  - title: Typed\\n', {aliases: false});
+const yamlSlides: Presentation['slides'] = parsedYaml.document.slides;
+const yamlDiagnostic: YamlDiagnostic | undefined = parsedYaml.diagnostics[0];
+const yamlText: string = toYaml(deck, {schemaComment: true}).yaml;
+const yamlError: OPFYamlError['code'] = 'invalid-document';
+// @ts-expect-error unknown option must be rejected
+toYaml(deck, {style: 'flow'});
+void yamlSlides; void yamlDiagnostic; void yamlText; void yamlError;
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected

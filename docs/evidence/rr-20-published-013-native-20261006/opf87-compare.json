@@ -1,0 +1,874 @@
+{
+  "schemaVersion": 1,
+  "kind": "save87-compare",
+  "attempt": "20261006T175248Z",
+  "verdict": "FAIL",
+  "setFailures": [],
+  "manifest": {
+    "bindings": {
+      "@openpresentation/opf": {
+        "version": "0.13.0",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.13.0.tgz",
+        "integrity": "sha512-k6379hqDvq9zZlm42HnX7eiHIVrYlBDgj11CCPIo1lY/BA5I27rhIdZsv6Hs0v9XVmGAq6p/VOZcmdEaJec0PQ=="
+      },
+      "@openpresentation/opf-pptx": {
+        "version": "0.13.1",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.13.1.tgz",
+        "integrity": "sha512-On2tkUH3+3o05uN2n7/DvL8ExuDzhYzNfu40wjEEyKTnBJM++Wpn2+lKRIxFD+jcVUfyDN56EIPqLmOUFoQ++g=="
+      },
+      "@openpresentation/opf-render": {
+        "version": "0.13.0",
+        "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.13.0.tgz",
+        "integrity": "sha512-MChOzUDEySP/yAdCuDUFzg1xNPwyJHMi7DspseFyrGOXOnCEdQroS2Uz9c6bJkuqGxCw9ILK7XrTvJUWYwXmZw=="
+      }
+    },
+    "decks": [
+      {
+        "id": "pictures",
+        "sha256": "38a01236de1bbb9e891708eae1f041e8d67e691c062fa7b8127d6c116afd03ff"
+      },
+      {
+        "id": "furniture",
+        "sha256": "ec9ceee88844b89f57280db67af3ca27b836e30f6103e1997112aa9e70a4e380"
+      }
+    ]
+  },
+  "results": [
+    {
+      "deck": "pictures",
+      "mode": "control",
+      "verdict": "FAIL",
+      "failures": [
+        "opc: slide 5: \"OPF image 4\" blip png -> undefined"
+      ],
+      "warnings": [],
+      "rewrites": [
+        {
+          "what": "field cached text",
+          "slide": 1,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 2,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 3,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 4,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "picture media bytes",
+          "slide": 5,
+          "picture": "OPF image 4",
+          "source": "ppt/media/image-5-1.png"
+        },
+        {
+          "what": "field cached text",
+          "slide": 5,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "masters p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "layouts p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "package parts",
+          "added": [
+            "ppt/media/image1.png",
+            "ppt/media/image2.jpeg",
+            "ppt/media/image3.svg",
+            "ppt/tags/tag1.xml",
+            "ppt/tags/tag10.xml",
+            "ppt/tags/tag11.xml",
+            "ppt/tags/tag12.xml",
+            "ppt/tags/tag13.xml",
+            "ppt/tags/tag14.xml",
+            "ppt/tags/tag15.xml",
+            "ppt/tags/tag16.xml",
+            "ppt/tags/tag17.xml",
+            "ppt/tags/tag18.xml",
+            "ppt/tags/tag19.xml",
+            "ppt/tags/tag2.xml",
+            "ppt/tags/tag20.xml",
+            "ppt/tags/tag21.xml",
+            "ppt/tags/tag22.xml",
+            "ppt/tags/tag23.xml",
+            "ppt/tags/tag24.xml",
+            "ppt/tags/tag25.xml",
+            "ppt/tags/tag26.xml",
+            "ppt/tags/tag27.xml",
+            "ppt/tags/tag28.xml",
+            "ppt/tags/tag3.xml",
+            "ppt/tags/tag4.xml",
+            "ppt/tags/tag5.xml",
+            "ppt/tags/tag6.xml",
+            "ppt/tags/tag7.xml",
+            "ppt/tags/tag8.xml",
+            "ppt/tags/tag9.xml"
+          ],
+          "removed": [
+            "ppt/media/image-2-1.png",
+            "ppt/media/image-3-1.jpeg",
+            "ppt/media/image-5-1.png",
+            "ppt/media/svg-5-1.svg",
+            "ppt/tags/opfDocument.xml",
+            "ppt/tags/opfFurniture1.xml",
+            "ppt/tags/opfFurniture10.xml",
+            "ppt/tags/opfFurniture11.xml",
+            "ppt/tags/opfFurniture12.xml",
+            "ppt/tags/opfFurniture13.xml",
+            "ppt/tags/opfFurniture14.xml",
+            "ppt/tags/opfFurniture15.xml",
+            "ppt/tags/opfFurniture2.xml",
+            "ppt/tags/opfFurniture3.xml",
+            "ppt/tags/opfFurniture4.xml",
+            "ppt/tags/opfFurniture5.xml",
+            "ppt/tags/opfFurniture6.xml",
+            "ppt/tags/opfFurniture7.xml",
+            "ppt/tags/opfFurniture8.xml",
+            "ppt/tags/opfFurniture9.xml",
+            "ppt/tags/opfFurnitureSlide0.xml",
+            "ppt/tags/opfFurnitureSlide1.xml",
+            "ppt/tags/opfFurnitureSlide2.xml",
+            "ppt/tags/opfFurnitureSlide3.xml",
+            "ppt/tags/opfFurnitureSlide4.xml",
+            "ppt/tags/opfHeading1.xml",
+            "ppt/tags/opfHeading2.xml",
+            "ppt/tags/opfHeading3.xml",
+            "ppt/tags/opfHeading4.xml",
+            "ppt/tags/opfHeading5.xml",
+            "ppt/tags/opfText1.xml",
+            "ppt/tags/opfText2.xml"
+          ],
+          "changed": [
+            "[Content_Types].xml",
+            "_rels/.rels",
+            "docProps/app.xml",
+            "docProps/core.xml",
+            "ppt/_rels/presentation.xml.rels",
+            "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+            "ppt/notesMasters/notesMaster1.xml",
+            "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide2.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide3.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide4.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide5.xml.rels",
+            "ppt/presProps.xml",
+            "ppt/presentation.xml",
+            "ppt/slideLayouts/slideLayout1.xml",
+            "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+            "ppt/slideMasters/slideMaster1.xml",
+            "ppt/slides/_rels/slide1.xml.rels",
+            "ppt/slides/_rels/slide2.xml.rels",
+            "ppt/slides/_rels/slide3.xml.rels",
+            "ppt/slides/_rels/slide4.xml.rels",
+            "ppt/slides/_rels/slide5.xml.rels",
+            "ppt/slides/slide1.xml",
+            "ppt/slides/slide2.xml",
+            "ppt/slides/slide3.xml",
+            "ppt/slides/slide4.xml",
+            "ppt/slides/slide5.xml",
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "unchanged": [
+            "ppt/notesSlides/notesSlide1.xml",
+            "ppt/notesSlides/notesSlide2.xml",
+            "ppt/notesSlides/notesSlide3.xml",
+            "ppt/notesSlides/notesSlide4.xml",
+            "ppt/notesSlides/notesSlide5.xml",
+            "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+            "ppt/tableStyles.xml",
+            "ppt/viewProps.xml"
+          ]
+        },
+        {
+          "what": "p:presentation attributes",
+          "source": "<p:presentation firstSlideNum=\"1\"  saveSubsetFonts=\"1\" autoCompressPictures=\"0\">",
+          "saved": "<p:presentation saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
+        }
+      ],
+      "png": [
+        {
+          "slide": 1,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 2,
+          "differingPixelRatio": 0.00025282118055555556
+        },
+        {
+          "slide": 3,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 4,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 5,
+          "differingPixelRatio": 0
+        }
+      ],
+      "savedSha256": "acfcf820e93a37b3c408961e745235fde4708055d0a6124d4ab0c43788366980",
+      "powerpoint": {
+        "version": "16.0",
+        "build": "20430"
+      },
+      "edit": null
+    },
+    {
+      "deck": "pictures",
+      "mode": "edit",
+      "verdict": "FAIL",
+      "failures": [
+        "opc: slide 5: \"OPF image 4\" blip png -> undefined"
+      ],
+      "warnings": [
+        "png: slide 1 0.53 % pixels differ"
+      ],
+      "rewrites": [
+        {
+          "what": "HeadersFooters",
+          "slide": 1,
+          "source": {
+            "footerVisible": -1,
+            "footerText": "Footer original text",
+            "slideNumberVisible": -1,
+            "dateVisible": -1,
+            "dateUseFormat": -1,
+            "dateFormat": 1
+          },
+          "saved": {
+            "footerVisible": -1,
+            "footerText": "Footer edited natively",
+            "slideNumberVisible": -1,
+            "dateVisible": -1,
+            "dateUseFormat": -1,
+            "dateFormat": 1
+          }
+        },
+        {
+          "what": "field cached text",
+          "slide": 1,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 2,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 3,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 4,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "picture media bytes",
+          "slide": 5,
+          "picture": "OPF image 4",
+          "source": "ppt/media/image-5-1.png"
+        },
+        {
+          "what": "field cached text",
+          "slide": 5,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "masters p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "layouts p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "package parts",
+          "added": [
+            "ppt/media/image1.png",
+            "ppt/media/image2.jpeg",
+            "ppt/media/image3.svg",
+            "ppt/tags/tag1.xml",
+            "ppt/tags/tag10.xml",
+            "ppt/tags/tag11.xml",
+            "ppt/tags/tag12.xml",
+            "ppt/tags/tag13.xml",
+            "ppt/tags/tag14.xml",
+            "ppt/tags/tag15.xml",
+            "ppt/tags/tag16.xml",
+            "ppt/tags/tag17.xml",
+            "ppt/tags/tag18.xml",
+            "ppt/tags/tag19.xml",
+            "ppt/tags/tag2.xml",
+            "ppt/tags/tag20.xml",
+            "ppt/tags/tag21.xml",
+            "ppt/tags/tag22.xml",
+            "ppt/tags/tag23.xml",
+            "ppt/tags/tag24.xml",
+            "ppt/tags/tag25.xml",
+            "ppt/tags/tag26.xml",
+            "ppt/tags/tag27.xml",
+            "ppt/tags/tag28.xml",
+            "ppt/tags/tag3.xml",
+            "ppt/tags/tag4.xml",
+            "ppt/tags/tag5.xml",
+            "ppt/tags/tag6.xml",
+            "ppt/tags/tag7.xml",
+            "ppt/tags/tag8.xml",
+            "ppt/tags/tag9.xml"
+          ],
+          "removed": [
+            "ppt/media/image-2-1.png",
+            "ppt/media/image-3-1.jpeg",
+            "ppt/media/image-5-1.png",
+            "ppt/media/svg-5-1.svg",
+            "ppt/tags/opfDocument.xml",
+            "ppt/tags/opfFurniture1.xml",
+            "ppt/tags/opfFurniture10.xml",
+            "ppt/tags/opfFurniture11.xml",
+            "ppt/tags/opfFurniture12.xml",
+            "ppt/tags/opfFurniture13.xml",
+            "ppt/tags/opfFurniture14.xml",
+            "ppt/tags/opfFurniture15.xml",
+            "ppt/tags/opfFurniture2.xml",
+            "ppt/tags/opfFurniture3.xml",
+            "ppt/tags/opfFurniture4.xml",
+            "ppt/tags/opfFurniture5.xml",
+            "ppt/tags/opfFurniture6.xml",
+            "ppt/tags/opfFurniture7.xml",
+            "ppt/tags/opfFurniture8.xml",
+            "ppt/tags/opfFurniture9.xml",
+            "ppt/tags/opfFurnitureSlide0.xml",
+            "ppt/tags/opfFurnitureSlide1.xml",
+            "ppt/tags/opfFurnitureSlide2.xml",
+            "ppt/tags/opfFurnitureSlide3.xml",
+            "ppt/tags/opfFurnitureSlide4.xml",
+            "ppt/tags/opfHeading1.xml",
+            "ppt/tags/opfHeading2.xml",
+            "ppt/tags/opfHeading3.xml",
+            "ppt/tags/opfHeading4.xml",
+            "ppt/tags/opfHeading5.xml",
+            "ppt/tags/opfText1.xml",
+            "ppt/tags/opfText2.xml"
+          ],
+          "changed": [
+            "[Content_Types].xml",
+            "_rels/.rels",
+            "docProps/app.xml",
+            "docProps/core.xml",
+            "ppt/_rels/presentation.xml.rels",
+            "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+            "ppt/notesMasters/notesMaster1.xml",
+            "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide2.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide3.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide4.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide5.xml.rels",
+            "ppt/presProps.xml",
+            "ppt/presentation.xml",
+            "ppt/slideLayouts/slideLayout1.xml",
+            "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+            "ppt/slideMasters/slideMaster1.xml",
+            "ppt/slides/_rels/slide1.xml.rels",
+            "ppt/slides/_rels/slide2.xml.rels",
+            "ppt/slides/_rels/slide3.xml.rels",
+            "ppt/slides/_rels/slide4.xml.rels",
+            "ppt/slides/_rels/slide5.xml.rels",
+            "ppt/slides/slide1.xml",
+            "ppt/slides/slide2.xml",
+            "ppt/slides/slide3.xml",
+            "ppt/slides/slide4.xml",
+            "ppt/slides/slide5.xml",
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "unchanged": [
+            "ppt/notesSlides/notesSlide1.xml",
+            "ppt/notesSlides/notesSlide2.xml",
+            "ppt/notesSlides/notesSlide3.xml",
+            "ppt/notesSlides/notesSlide4.xml",
+            "ppt/notesSlides/notesSlide5.xml",
+            "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+            "ppt/tableStyles.xml",
+            "ppt/viewProps.xml"
+          ]
+        },
+        {
+          "what": "p:presentation attributes",
+          "source": "<p:presentation firstSlideNum=\"1\"  saveSubsetFonts=\"1\" autoCompressPictures=\"0\">",
+          "saved": "<p:presentation saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
+        }
+      ],
+      "png": [
+        {
+          "slide": 1,
+          "differingPixelRatio": 0.005284288194444445
+        },
+        {
+          "slide": 2,
+          "differingPixelRatio": 0.00025282118055555556
+        },
+        {
+          "slide": 3,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 4,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 5,
+          "differingPixelRatio": 0
+        }
+      ],
+      "savedSha256": "aef5597a6234a8270f52f77249a43cdf4d0cca51a7fbc3285220d8f578cfda4a",
+      "powerpoint": {
+        "version": "16.0",
+        "build": "20430"
+      },
+      "edit": {
+        "body": {
+          "shape": "Text 1",
+          "before": "Body with one ORIGINAL-RUN that PowerPoint edits.",
+          "after": "Body with one EDITED-RUN that PowerPoint edits.",
+          "bold": -1
+        },
+        "footer": {
+          "shape": "OPF furniture 0 part 1 line 0",
+          "tags": [
+            {
+              "name": "OPF_FURNITURE_V1",
+              "value": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+            }
+          ],
+          "before": "Footer original text",
+          "after": "Footer edited natively"
+        }
+      },
+      "editVersusControl": {
+        "differ": [
+          "docProps/core.xml",
+          "ppt/slides/slide1.xml"
+        ],
+        "note": "Parts whose bytes differ between <deck>-saved.pptx (edit) and <deck>-control.pptx (no edit). docProps/core.xml differs by save time alone."
+      }
+    },
+    {
+      "deck": "furniture",
+      "mode": "control",
+      "verdict": "PASS",
+      "failures": [],
+      "warnings": [],
+      "rewrites": [
+        {
+          "what": "field cached text",
+          "slide": 1,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 2,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 3,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "masters p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "layouts p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "package parts",
+          "added": [
+            "ppt/media/image1.png",
+            "ppt/tags/tag1.xml",
+            "ppt/tags/tag10.xml",
+            "ppt/tags/tag11.xml",
+            "ppt/tags/tag12.xml",
+            "ppt/tags/tag13.xml",
+            "ppt/tags/tag14.xml",
+            "ppt/tags/tag15.xml",
+            "ppt/tags/tag16.xml",
+            "ppt/tags/tag17.xml",
+            "ppt/tags/tag18.xml",
+            "ppt/tags/tag19.xml",
+            "ppt/tags/tag2.xml",
+            "ppt/tags/tag20.xml",
+            "ppt/tags/tag21.xml",
+            "ppt/tags/tag3.xml",
+            "ppt/tags/tag4.xml",
+            "ppt/tags/tag5.xml",
+            "ppt/tags/tag6.xml",
+            "ppt/tags/tag7.xml",
+            "ppt/tags/tag8.xml",
+            "ppt/tags/tag9.xml"
+          ],
+          "removed": [
+            "ppt/media/image-1-1.png",
+            "ppt/tags/opfDocument.xml",
+            "ppt/tags/opfFurniture1.xml",
+            "ppt/tags/opfFurniture10.xml",
+            "ppt/tags/opfFurniture11.xml",
+            "ppt/tags/opfFurniture12.xml",
+            "ppt/tags/opfFurniture2.xml",
+            "ppt/tags/opfFurniture3.xml",
+            "ppt/tags/opfFurniture4.xml",
+            "ppt/tags/opfFurniture5.xml",
+            "ppt/tags/opfFurniture6.xml",
+            "ppt/tags/opfFurniture7.xml",
+            "ppt/tags/opfFurniture8.xml",
+            "ppt/tags/opfFurniture9.xml",
+            "ppt/tags/opfFurnitureSlide0.xml",
+            "ppt/tags/opfFurnitureSlide1.xml",
+            "ppt/tags/opfFurnitureSlide2.xml",
+            "ppt/tags/opfHeading1.xml",
+            "ppt/tags/opfHeading2.xml",
+            "ppt/tags/opfHeading3.xml",
+            "ppt/tags/opfText1.xml",
+            "ppt/tags/opfText2.xml"
+          ],
+          "changed": [
+            "[Content_Types].xml",
+            "_rels/.rels",
+            "docProps/app.xml",
+            "docProps/core.xml",
+            "ppt/_rels/presentation.xml.rels",
+            "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+            "ppt/notesMasters/notesMaster1.xml",
+            "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide2.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide3.xml.rels",
+            "ppt/presProps.xml",
+            "ppt/presentation.xml",
+            "ppt/slideLayouts/slideLayout1.xml",
+            "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+            "ppt/slideMasters/slideMaster1.xml",
+            "ppt/slides/_rels/slide1.xml.rels",
+            "ppt/slides/_rels/slide2.xml.rels",
+            "ppt/slides/_rels/slide3.xml.rels",
+            "ppt/slides/slide1.xml",
+            "ppt/slides/slide2.xml",
+            "ppt/slides/slide3.xml",
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "unchanged": [
+            "ppt/notesSlides/notesSlide1.xml",
+            "ppt/notesSlides/notesSlide2.xml",
+            "ppt/notesSlides/notesSlide3.xml",
+            "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+            "ppt/tableStyles.xml",
+            "ppt/viewProps.xml"
+          ]
+        },
+        {
+          "what": "p:presentation attributes",
+          "source": "<p:presentation firstSlideNum=\"1\"  saveSubsetFonts=\"1\" autoCompressPictures=\"0\">",
+          "saved": "<p:presentation saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
+        }
+      ],
+      "png": [
+        {
+          "slide": 1,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 2,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 3,
+          "differingPixelRatio": 0
+        }
+      ],
+      "savedSha256": "0a5a79a18e8e243e7cc9e35d003e2790527adafb6319ff9e4d56d95f8e85314c",
+      "powerpoint": {
+        "version": "16.0",
+        "build": "20430"
+      },
+      "edit": null
+    },
+    {
+      "deck": "furniture",
+      "mode": "edit",
+      "verdict": "PASS",
+      "failures": [],
+      "warnings": [
+        "png: slide 1 0.53 % pixels differ"
+      ],
+      "rewrites": [
+        {
+          "what": "HeadersFooters",
+          "slide": 1,
+          "source": {
+            "footerVisible": -1,
+            "footerText": "Footer original text",
+            "slideNumberVisible": -1,
+            "dateVisible": -1,
+            "dateUseFormat": -1,
+            "dateFormat": 1
+          },
+          "saved": {
+            "footerVisible": -1,
+            "footerText": "Footer edited natively",
+            "slideNumberVisible": -1,
+            "dateVisible": -1,
+            "dateUseFormat": -1,
+            "dateFormat": 1
+          }
+        },
+        {
+          "what": "field cached text",
+          "slide": 1,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 2,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "field cached text",
+          "slide": 3,
+          "type": "datetime1",
+          "source": "10/5/2026",
+          "saved": "10/6/2026"
+        },
+        {
+          "what": "masters p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "layouts p:hf",
+          "source": [
+            "<p:hf sldNum=\"1\" hdr=\"0\" ftr=\"1\" dt=\"1\"/>"
+          ],
+          "saved": [
+            "<p:hf hdr=\"0\"/>"
+          ]
+        },
+        {
+          "what": "package parts",
+          "added": [
+            "ppt/media/image1.png",
+            "ppt/tags/tag1.xml",
+            "ppt/tags/tag10.xml",
+            "ppt/tags/tag11.xml",
+            "ppt/tags/tag12.xml",
+            "ppt/tags/tag13.xml",
+            "ppt/tags/tag14.xml",
+            "ppt/tags/tag15.xml",
+            "ppt/tags/tag16.xml",
+            "ppt/tags/tag17.xml",
+            "ppt/tags/tag18.xml",
+            "ppt/tags/tag19.xml",
+            "ppt/tags/tag2.xml",
+            "ppt/tags/tag20.xml",
+            "ppt/tags/tag21.xml",
+            "ppt/tags/tag3.xml",
+            "ppt/tags/tag4.xml",
+            "ppt/tags/tag5.xml",
+            "ppt/tags/tag6.xml",
+            "ppt/tags/tag7.xml",
+            "ppt/tags/tag8.xml",
+            "ppt/tags/tag9.xml"
+          ],
+          "removed": [
+            "ppt/media/image-1-1.png",
+            "ppt/tags/opfDocument.xml",
+            "ppt/tags/opfFurniture1.xml",
+            "ppt/tags/opfFurniture10.xml",
+            "ppt/tags/opfFurniture11.xml",
+            "ppt/tags/opfFurniture12.xml",
+            "ppt/tags/opfFurniture2.xml",
+            "ppt/tags/opfFurniture3.xml",
+            "ppt/tags/opfFurniture4.xml",
+            "ppt/tags/opfFurniture5.xml",
+            "ppt/tags/opfFurniture6.xml",
+            "ppt/tags/opfFurniture7.xml",
+            "ppt/tags/opfFurniture8.xml",
+            "ppt/tags/opfFurniture9.xml",
+            "ppt/tags/opfFurnitureSlide0.xml",
+            "ppt/tags/opfFurnitureSlide1.xml",
+            "ppt/tags/opfFurnitureSlide2.xml",
+            "ppt/tags/opfHeading1.xml",
+            "ppt/tags/opfHeading2.xml",
+            "ppt/tags/opfHeading3.xml",
+            "ppt/tags/opfText1.xml",
+            "ppt/tags/opfText2.xml"
+          ],
+          "changed": [
+            "[Content_Types].xml",
+            "_rels/.rels",
+            "docProps/app.xml",
+            "docProps/core.xml",
+            "ppt/_rels/presentation.xml.rels",
+            "ppt/notesMasters/_rels/notesMaster1.xml.rels",
+            "ppt/notesMasters/notesMaster1.xml",
+            "ppt/notesSlides/_rels/notesSlide1.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide2.xml.rels",
+            "ppt/notesSlides/_rels/notesSlide3.xml.rels",
+            "ppt/presProps.xml",
+            "ppt/presentation.xml",
+            "ppt/slideLayouts/slideLayout1.xml",
+            "ppt/slideMasters/_rels/slideMaster1.xml.rels",
+            "ppt/slideMasters/slideMaster1.xml",
+            "ppt/slides/_rels/slide1.xml.rels",
+            "ppt/slides/_rels/slide2.xml.rels",
+            "ppt/slides/_rels/slide3.xml.rels",
+            "ppt/slides/slide1.xml",
+            "ppt/slides/slide2.xml",
+            "ppt/slides/slide3.xml",
+            "ppt/theme/theme1.xml",
+            "ppt/theme/theme2.xml"
+          ],
+          "unchanged": [
+            "ppt/notesSlides/notesSlide1.xml",
+            "ppt/notesSlides/notesSlide2.xml",
+            "ppt/notesSlides/notesSlide3.xml",
+            "ppt/slideLayouts/_rels/slideLayout1.xml.rels",
+            "ppt/tableStyles.xml",
+            "ppt/viewProps.xml"
+          ]
+        },
+        {
+          "what": "p:presentation attributes",
+          "source": "<p:presentation firstSlideNum=\"1\"  saveSubsetFonts=\"1\" autoCompressPictures=\"0\">",
+          "saved": "<p:presentation saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
+        }
+      ],
+      "png": [
+        {
+          "slide": 1,
+          "differingPixelRatio": 0.005284288194444445
+        },
+        {
+          "slide": 2,
+          "differingPixelRatio": 0
+        },
+        {
+          "slide": 3,
+          "differingPixelRatio": 0
+        }
+      ],
+      "savedSha256": "edf180599a28684ddc7be18e5f8e3808892c1171354d37ab8f4cfe49f6f18ba5",
+      "powerpoint": {
+        "version": "16.0",
+        "build": "20430"
+      },
+      "edit": {
+        "body": {
+          "shape": "Text 1",
+          "before": "Body with one ORIGINAL-RUN that PowerPoint edits.",
+          "after": "Body with one EDITED-RUN that PowerPoint edits.",
+          "bold": -1
+        },
+        "footer": {
+          "shape": "OPF furniture 0 part 2 line 0",
+          "tags": [
+            {
+              "name": "OPF_FURNITURE_V1",
+              "value": "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+            }
+          ],
+          "before": "Footer original text",
+          "after": "Footer edited natively"
+        }
+      },
+      "editVersusControl": {
+        "differ": [
+          "docProps/core.xml",
+          "ppt/slides/slide1.xml"
+        ],
+        "note": "Parts whose bytes differ between <deck>-saved.pptx (edit) and <deck>-control.pptx (no edit). docProps/core.xml differs by save time alone."
+      }
+    }
+  ]
+}

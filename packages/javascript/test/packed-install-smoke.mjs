@@ -252,6 +252,23 @@ assert.throws(()=>opfToMarkdown({slides:'x'}),OPFMarkdownError);
 console.log('Installed Markdown: dialect conversion, round trip and located errors work offline.');
 `);
     const markdown=await run(process.execPath,['markdown.mjs'],{cwd:projectDir});process.stdout.write(markdown.stdout);
+    assertTarIncludes(files,'package/dist/yaml.js');assertTarIncludes(files,'package/dist/yaml.d.ts');
+    await writeFile(path.join(projectDir,'yaml.mjs'),`
+import assert from 'node:assert/strict';
+import {fromYaml,toYaml,OPFYamlError} from '@openpresentation/opf/yaml';
+globalThis.fetch=()=>{throw new Error('Offline YAML conversion must not fetch');};
+const source='name: Installed\\nslides:\\n  - id: a\\n    title: "2026-10-01"\\n    items:\\n      - x\\n      - "yes"\\n';
+const converted=fromYaml(source);
+assert.equal(converted.valid,true);
+assert.deepEqual(converted.document,{name:'Installed',slides:[{id:'a',title:'2026-10-01',items:['x','yes']}]});
+assert.equal(toYaml(converted.document).yaml,source);
+const broken=fromYaml('name: x\\nslides:\\n  - title: 5\\n');
+assert.equal(broken.valid,false);assert.deepEqual([broken.diagnostics[0].location.line,broken.diagnostics[0].location.column],[3,12]);
+assert.equal(fromYaml('a: &x 1\\nb: *x\\n').diagnostics[0].ruleId,'yaml/alias');
+assert.throws(()=>toYaml({slides:'x'}),OPFYamlError);
+console.log('Installed YAML: strict dialect, canonical writer and located errors work offline.');
+`);
+    const yamlRun=await run(process.execPath,['yaml.mjs'],{cwd:projectDir});process.stdout.write(yamlRun.stdout);
     assertTarIncludes(files,'package/dist/audit.js');assertTarIncludes(files,'package/dist/audit.d.ts');
     await writeFile(path.join(projectDir,'audit.mjs'),`
 import assert from 'node:assert/strict';

@@ -1,0 +1,836 @@
+{
+  "item": "RR-05 / FF-12 bounded native font sample (opf#323 section 1)",
+  "built": {
+    "node": "24.21.0",
+    "zipDate": "2026-10-05",
+    "packages": {
+      "@openpresentation/opf": "0.13.0",
+      "@openpresentation/opf-pptx": "0.13.1",
+      "@openpresentation/opf-render": "0.13.0"
+    },
+    "note": "Published npm packages only, exact versions pinned in package.json."
+  },
+  "passRule": "Presentation.Fonts names only expectedFonts (case-insensitive), lists every requiredFonts entry, the master theme slots read the manifest theme values, every run and slot name read back is an expected family, and the read reached stage done.",
+  "counts": {
+    "PASS": 11,
+    "WARN": 0,
+    "FAIL": 1,
+    "MISSING": 0
+  },
+  "results": [
+    {
+      "id": "01-carlito-code-chart-table-notes",
+      "status": "PASS",
+      "title": "Carlito with code, chart, table and speaker notes",
+      "sha256": "8f74a332becf914a098c4b6eb939d83e8a20d04906211b09b92ac031cc730f69",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Carlito",
+            "Roboto Mono"
+          ],
+          "expected": [
+            "Carlito",
+            "Roboto Mono"
+          ],
+          "required": [
+            "Carlito",
+            "Roboto Mono"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Carlito",
+              "complexScript": "",
+              "eastAsian": "Carlito"
+            },
+            "minor": {
+              "latin": "Carlito",
+              "complexScript": "",
+              "eastAsian": "Carlito"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 41,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 41,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 5,
+          "tables": 1,
+          "charts": 1
+        },
+        "hostNotInstalled": [
+          "Carlito",
+          "Roboto Mono"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Carlito, Roboto Mono"
+        }
+      ]
+    },
+    {
+      "id": "02-carlito-code-family-carlito",
+      "status": "PASS",
+      "title": "Carlito with the code role also set to Carlito",
+      "sha256": "6844ab2c5ab6a7cd8ee36c694c6144ceffafbc31ee15b1cd95bb71340f9bb3e6",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Carlito"
+          ],
+          "expected": [
+            "Carlito"
+          ],
+          "required": [
+            "Carlito"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Carlito",
+              "complexScript": "",
+              "eastAsian": "Carlito"
+            },
+            "minor": {
+              "latin": "Carlito",
+              "complexScript": "",
+              "eastAsian": "Carlito"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 28,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 28,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 4,
+          "tables": 1,
+          "charts": 1
+        },
+        "hostNotInstalled": [
+          "Carlito"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Carlito"
+        }
+      ]
+    },
+    {
+      "id": "03-default-aptos",
+      "status": "PASS",
+      "title": "Default font scheme (aptos), no design block",
+      "sha256": "c33d1e413c8c9b282a5967ba0689bc3c3f9d5b827eb9d401780e98fbb43f465e",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Aptos Display",
+            "Aptos",
+            "Roboto Mono"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Roboto Mono"
+          ],
+          "required": [
+            "Aptos",
+            "Aptos Display",
+            "Roboto Mono"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Aptos Display",
+              "complexScript": "",
+              "eastAsian": "Aptos Display"
+            },
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "",
+              "eastAsian": "Aptos"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 37,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 37,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 5,
+          "tables": 1,
+          "charts": 1
+        },
+        "hostNotInstalled": [
+          "Aptos",
+          "Aptos Display",
+          "Roboto Mono"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Aptos, Aptos Display, Roboto Mono"
+        }
+      ]
+    },
+    {
+      "id": "04-ja-meiryo",
+      "status": "PASS",
+      "title": "Japanese with Meiryo (re-run of lang-ja-meiryo)",
+      "sha256": "039a99692228923e003f1b58926b6bf1955ff8162a2b74061cfe3abf33c309d5",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Meiryo"
+          ],
+          "expected": [
+            "Meiryo"
+          ],
+          "required": [
+            "Meiryo"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Meiryo",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            },
+            "minor": {
+              "latin": "Meiryo",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 27,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 27,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 7,
+          "tables": 0,
+          "charts": 1
+        },
+        "hostNotInstalled": [],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": []
+    },
+    {
+      "id": "05-ar-rtl",
+      "status": "PASS",
+      "title": "Arabic right-to-left",
+      "sha256": "01d84adee019a2c3ca5c60f6f3c408bda81c9d5f774b904abc6467de9c31150b",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Arabic Typesetting"
+          ],
+          "required": [
+            "Aptos",
+            "Aptos Display"
+          ],
+          "soft": [
+            "Arabic Typesetting"
+          ],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": [
+            "Arabic Typesetting"
+          ]
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Aptos Display",
+              "complexScript": "Arabic Typesetting",
+              "eastAsian": "Aptos Display"
+            },
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "Arabic Typesetting",
+              "eastAsian": "Aptos"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 19,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 0,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 4,
+          "tables": 1,
+          "charts": 1
+        },
+        "hostNotInstalled": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "Presentation.Fonts",
+          "detail": "soft family not listed (allowed): Arabic Typesetting"
+        },
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Aptos, Aptos Display"
+        }
+      ]
+    },
+    {
+      "id": "06-monospace-consolas",
+      "status": "PASS",
+      "title": "Monospace scheme (Consolas)",
+      "sha256": "910638dcac142583d1c7a0397c88861d2280419043181be1349d2e04ecddfdd9",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Consolas"
+          ],
+          "expected": [
+            "Consolas"
+          ],
+          "required": [
+            "Consolas"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Consolas",
+              "complexScript": "",
+              "eastAsian": "Consolas"
+            },
+            "minor": {
+              "latin": "Consolas",
+              "complexScript": "",
+              "eastAsian": "Consolas"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 32,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 32,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 5,
+          "tables": 1,
+          "charts": 1
+        },
+        "hostNotInstalled": [],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": []
+    },
+    {
+      "id": "07-per-slide-override",
+      "status": "PASS",
+      "title": "Per-slide font scheme override",
+      "sha256": "2fe9248131c6017d014a5509aad0c84c209922190f60937d3b62e97f98936a34",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Calibri",
+            "Georgia",
+            "Courier New"
+          ],
+          "expected": [
+            "Calibri",
+            "Courier New",
+            "Georgia"
+          ],
+          "required": [
+            "Calibri",
+            "Courier New",
+            "Georgia"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Calibri",
+              "complexScript": "",
+              "eastAsian": "Calibri"
+            },
+            "minor": {
+              "latin": "Calibri",
+              "complexScript": "",
+              "eastAsian": "Calibri"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 15,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 15,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 4,
+          "tables": 0,
+          "charts": 0
+        },
+        "hostNotInstalled": [],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": []
+    },
+    {
+      "id": "08-cjk-in-latin",
+      "status": "FAIL",
+      "title": "Japanese and Chinese text inside a Latin deck",
+      "sha256": "e86f8bfdb0383ff0707553a52dcfacc037b08b343d103612c809741e4308dbc8",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Meiryo"
+          ],
+          "required": [
+            "Meiryo"
+          ],
+          "soft": [
+            "Aptos",
+            "Aptos Display"
+          ],
+          "extras": [],
+          "missingRequired": [
+            "Meiryo"
+          ],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Aptos Display",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            },
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "",
+              "eastAsian": "Meiryo"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 20,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 20,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 4,
+          "tables": 1,
+          "charts": 0
+        },
+        "hostNotInstalled": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "FAIL",
+          "check": "Presentation.Fonts",
+          "detail": "chosen and used family not listed: Meiryo"
+        },
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Aptos, Aptos Display"
+        }
+      ]
+    },
+    {
+      "id": "09-ko-malgun",
+      "status": "PASS",
+      "title": "Korean with Malgun Gothic",
+      "sha256": "78507dcd7ff2d76acb545e3f029dc64f562db0a124a8919d87ed8f0a6b1778b5",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Malgun Gothic"
+          ],
+          "expected": [
+            "Malgun Gothic"
+          ],
+          "required": [
+            "Malgun Gothic"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Malgun Gothic",
+              "complexScript": "",
+              "eastAsian": "Malgun Gothic"
+            },
+            "minor": {
+              "latin": "Malgun Gothic",
+              "complexScript": "",
+              "eastAsian": "Malgun Gothic"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 11,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 11,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 3,
+          "tables": 0,
+          "charts": 1
+        },
+        "hostNotInstalled": [],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": []
+    },
+    {
+      "id": "10-hi-mangal",
+      "status": "PASS",
+      "title": "Hindi (Devanagari) with Mangal",
+      "sha256": "42ca4cddcae2d558784a8f1c071524b35af2a04689f47d5d77c5f3f008db4d5d",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "Mangal"
+          ],
+          "required": [
+            "Aptos",
+            "Aptos Display"
+          ],
+          "soft": [
+            "Mangal"
+          ],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": [
+            "Mangal"
+          ]
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Aptos Display",
+              "complexScript": "Mangal",
+              "eastAsian": "Aptos Display"
+            },
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "Mangal",
+              "eastAsian": "Aptos"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 12,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 0,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 3,
+          "tables": 0,
+          "charts": 0
+        },
+        "hostNotInstalled": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "Presentation.Fonts",
+          "detail": "soft family not listed (allowed): Mangal"
+        },
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Aptos, Aptos Display"
+        }
+      ]
+    },
+    {
+      "id": "11-he-rtl",
+      "status": "PASS",
+      "title": "Hebrew right-to-left with David",
+      "sha256": "76322cd8cd4536d844b57b03816348399e17c9d7a7fc2ba8e4b4f180d3f9c4c6",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Aptos Display",
+            "Aptos"
+          ],
+          "expected": [
+            "Aptos",
+            "Aptos Display",
+            "David"
+          ],
+          "required": [
+            "Aptos",
+            "Aptos Display"
+          ],
+          "soft": [
+            "David"
+          ],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": [
+            "David"
+          ]
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Aptos Display",
+              "complexScript": "David",
+              "eastAsian": "Aptos Display"
+            },
+            "minor": {
+              "latin": "Aptos",
+              "complexScript": "David",
+              "eastAsian": "Aptos"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 21,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 0,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 4,
+          "tables": 1,
+          "charts": 1
+        },
+        "hostNotInstalled": [
+          "Aptos",
+          "Aptos Display"
+        ],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": [
+        {
+          "level": "INFO",
+          "check": "Presentation.Fonts",
+          "detail": "soft family not listed (allowed): David"
+        },
+        {
+          "level": "INFO",
+          "check": "host fonts",
+          "detail": "not installed on this host (PowerPoint still reports the selected name): Aptos, Aptos Display"
+        }
+      ]
+    },
+    {
+      "id": "12-serif-georgia",
+      "status": "PASS",
+      "title": "Serif scheme (Georgia)",
+      "sha256": "899da579efdcfd2af3ed8fe2e6c5767770e96f8a0308b38388168c5563d3a100",
+      "detail": {
+        "presentationFonts": {
+          "native": [
+            "Georgia"
+          ],
+          "expected": [
+            "Georgia"
+          ],
+          "required": [
+            "Georgia"
+          ],
+          "soft": [],
+          "extras": [],
+          "missingRequired": [],
+          "softMissing": []
+        },
+        "themes": [
+          {
+            "design": "Office Theme",
+            "major": {
+              "latin": "Georgia",
+              "complexScript": "",
+              "eastAsian": "Georgia"
+            },
+            "minor": {
+              "latin": "Georgia",
+              "complexScript": "",
+              "eastAsian": "Georgia"
+            }
+          }
+        ],
+        "runs": {
+          "runs": 21,
+          "refsNameFarEast": 0,
+          "refsNameComplexScript": 21,
+          "emptyFarEast": 0,
+          "emptyComplexScript": 0,
+          "unreadable": 0
+        },
+        "structure": {
+          "slides": 4,
+          "tables": 1,
+          "charts": 0
+        },
+        "hostNotInstalled": [],
+        "powerpoint": {
+          "version": "16.0",
+          "build": "20430"
+        }
+      },
+      "findings": []
+    }
+  ]
+}

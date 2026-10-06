@@ -1,0 +1,697 @@
+{
+  "builds": {
+    "p": {
+      "summary": "published @openpresentation/opf-pptx 0.13.1, core @openpresentation/opf 0.13.0, opf-render 0.13.0 (installed, not used by this build)",
+      "engine": "pptxgenjs-plus 4.3.4",
+      "bindings": {
+        "@openpresentation/opf": {
+          "version": "0.13.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.13.0.tgz",
+          "integrity": "sha512-k6379hqDvq9zZlm42HnX7eiHIVrYlBDgj11CCPIo1lY/BA5I27rhIdZsv6Hs0v9XVmGAq6p/VOZcmdEaJec0PQ=="
+        },
+        "@openpresentation/opf-pptx": {
+          "version": "0.13.1",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.13.1.tgz",
+          "integrity": "sha512-On2tkUH3+3o05uN2n7/DvL8ExuDzhYzNfu40wjEEyKTnBJM++Wpn2+lKRIxFD+jcVUfyDN56EIPqLmOUFoQ++g=="
+        },
+        "@openpresentation/opf-render": {
+          "version": "0.13.0",
+          "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.13.0.tgz",
+          "integrity": "sha512-MChOzUDEySP/yAdCuDUFzg1xNPwyJHMi7DspseFyrGOXOnCEdQroS2Uz9c6bJkuqGxCw9ILK7XrTvJUWYwXmZw=="
+        }
+      }
+    }
+  },
+  "baselineDir": "<rr17-0.12-set>/out",
+  "counts": {
+    "PASS": 20,
+    "WARN": 0,
+    "FAIL": 0,
+    "MISSING": 0
+  },
+  "results": [
+    {
+      "id": "01-latin-rich-text",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Georgia"
+      ],
+      "fontsP": [
+        "Georgia"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "02-fonts-serif-mono-code",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Times New Roman",
+        "Roboto Mono"
+      ],
+      "fontsP": [
+        "Times New Roman",
+        "Roboto Mono"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "03-cjk-japanese",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "04-devanagari-hindi",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "05-rtl-arabic",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "06-rtl-hebrew",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Tenorite Display",
+        "Tenorite"
+      ],
+      "fontsP": [
+        "Tenorite Display",
+        "Tenorite"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "07-bullets-numbered",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Arial Black",
+        "Arial"
+      ],
+      "fontsP": [
+        "Arial Black",
+        "Arial"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "08-tables",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Calibri"
+      ],
+      "fontsP": [
+        "Calibri"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "09-charts-core",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 6 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 7 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 8 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "10-charts-variants",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 6 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "11-charts-chartex",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 6 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "12-svg-png-fallback",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "13-header-footer-numbers",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Calibri"
+      ],
+      "fontsP": [
+        "Calibri"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "14-speaker-notes",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "15-backgrounds",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "fontsP": [
+        "Aptos Display",
+        "Aptos"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 5 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "16-footnotes-captions",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Georgia"
+      ],
+      "fontsP": [
+        "Georgia"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "17-gallery-bold",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Tahoma"
+      ],
+      "fontsP": [
+        "Tahoma"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "18-gallery-classic",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Tenorite",
+        "Tenorite Display"
+      ],
+      "fontsP": [
+        "Tenorite",
+        "Tenorite Display"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "19-gallery-dark",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Meiryo"
+      ],
+      "fontsP": [
+        "Meiryo"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    },
+    {
+      "id": "20-gallery-minimal-indic",
+      "status": "PASS",
+      "mode": "baseline b- read",
+      "fontsB": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "fontsP": [
+        "Aptos",
+        "Aptos Display"
+      ],
+      "findings": [
+        [
+          "INFO",
+          "slide 1 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 2 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 3 PNG",
+          "0.000 % of pixels differ"
+        ],
+        [
+          "INFO",
+          "slide 4 PNG",
+          "0.000 % of pixels differ"
+        ]
+      ]
+    }
+  ]
+}

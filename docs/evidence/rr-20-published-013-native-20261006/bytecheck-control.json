@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-06T17:45:44.982Z",
+  "mode": "control",
+  "installed": {
+    "@openpresentation/opf": "0.13.0",
+    "@openpresentation/opf-pptx": "0.13.1",
+    "@openpresentation/opf-render": "0.13.0"
+  },
+  "baseline": {
+    "@openpresentation/opf": "0.13.0",
+    "@openpresentation/opf-pptx": "0.13.1",
+    "@openpresentation/opf-render": "0.13.0"
+  },
+  "rows": [
+    {
+      "deck": "rr17-set/p-09-charts-core",
+      "rebuilt": "cd7f012bc0aacd4b6fdad88c2024cdb177d4e13b32ff1e7b6b9f4e227edcc1b0",
+      "inSet": "cd7f012bc0aacd4b6fdad88c2024cdb177d4e13b32ff1e7b6b9f4e227edcc1b0",
+      "setMatchesManifest": true,
+      "verdict": "EQUAL"
+    },
+    {
+      "deck": "rr54-recheck/c4-formats-after",
+      "rebuilt": "9f3d5838790807d0a00f41e0415dc45319bbff60cb62b054a37eb3558058a72a",
+      "inSet": "9f3d5838790807d0a00f41e0415dc45319bbff60cb62b054a37eb3558058a72a",
+      "setMatchesManifest": true,
+      "verdict": "EQUAL"
+    },
+    {
+      "deck": "ff12-set/01-carlito-code-chart-table-notes",
+      "rebuilt": "8f74a332becf914a098c4b6eb939d83e8a20d04906211b09b92ac031cc730f69",
+      "inSet": "8f74a332becf914a098c4b6eb939d83e8a20d04906211b09b92ac031cc730f69",
+      "setMatchesManifest": true,
+      "verdict": "EQUAL"
+    },
+    {
+      "deck": "save87-set/pictures",
+      "rebuilt": "38a01236de1bbb9e891708eae1f041e8d67e691c062fa7b8127d6c116afd03ff",
+      "inSet": "38a01236de1bbb9e891708eae1f041e8d67e691c062fa7b8127d6c116afd03ff",
+      "setMatchesManifest": true,
+      "verdict": "EQUAL"
+    }
+  ]
+}

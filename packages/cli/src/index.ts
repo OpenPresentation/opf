@@ -1,7 +1,7 @@
 import { readFile, writeFile, lstat, link, rename, unlink, mkdir } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, lintSource, type LintOptions } from "@openpresentation/opf";
+import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, type LintOptions } from "@openpresentation/opf";
 import { applyPatch, getAtPointer, parsePointer, PatchError } from "@openpresentation/opf/patch";
 import { diffCommand } from "./diff.js";
 import { mergeCommand } from "./merge.js";
@@ -9,6 +9,8 @@ import { formatCommand } from "./format.js";
 import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
+import {yamlCommand, YAML_USAGE, YAML_HELP} from './yaml.js';
+import {DeckReadError, commentWarning, decode, inputFormatOf, lintText, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
 import {runAudit} from './audit.js';
@@ -18,36 +20,37 @@ declare const CLI_VERSION: string;
 declare const OPF_VERSION: string;
 declare const OPF_SKILLS: SkillBundle;
 const usage = `OPF — local presentation files for agents (Node 24)
-  opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--force]
+  opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--format <json|yaml>] [--schema-comment] [--force]
   opf validate <file|-> [--strict]
   opf lint <file|-> [--config <local-json-file>] [--strict]
   opf audit <file|-> [--json] [--rule <id>] [--ignore <id>] [--fail-on <error|warning|info|never>] [--config <file>]
            (design and accessibility checks; opf audit --help, --list-rules)
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
-           [--dry-run] [--expect-sha256 <hash>] [--force] [--strict]
+           [--dry-run] [--expect-sha256 <hash>] [--format <json|yaml>] [--force] [--strict]
   opf diff <a|-> <b|-> [--format <text|json|patch>] [--exit-code] [--threshold <0-1>]
   opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer <ours|theirs>]
-           [--report <file>] [--dry-run] [--threshold <0-1>] [--strict]
+           [--report <file>] [--dry-run] [--threshold <0-1>] [--format <json|yaml>] [--strict]
   opf format <file|->... [--check | --in-place | --output <file|->]
-           [--indent <0-8>] [--eol <lf|crlf|preserve>]
+           [--indent <0-8>] [--eol <lf|crlf|preserve>] [--format <json|yaml>]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
            [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]
-           [--dataset <id>] [--force] [--strict]
+           [--dataset <id>] [--format yaml] [--force] [--strict]
   opf fill <template.opf.json|-> [--data <values.json|data.csv|data.tsv|->] [--format <csv|tsv|json>]
            [--delimiter <character>] [--no-header] [--output <file|-> | --out-dir <dir> [--name <pattern>]
-           | --combine --output <file|->] [--partial] [--examples] [--force] [--strict]
-  opf paginate <input|-> <output|-> [--force] [--strict]
-  opf bundle <input|-> <output|-> [--force] [--strict]
+           | --combine --output <file|->] [--partial] [--examples] [--format yaml] [--force] [--strict]
+  opf paginate <input|-> <output|-> [--format <json|yaml>] [--force] [--strict]
+  opf bundle <input|-> <output|-> [--format <json|yaml>] [--force] [--strict]
 ${MARKDOWN_USAGE}
+${YAML_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
            [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
   opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
            [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
            [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
            [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
-  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--force] [--strict] [--json]
+  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml>] [--force] [--strict] [--json]
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -55,6 +58,9 @@ ${MARKDOWN_USAGE}
   opf skills <install|update|status> [--agent <universal|codex|claude-code|cursor>]
              [--global | --directory <skills-directory>]
   opf --version
+
+Any command that reads a deck also takes --input-format <json|yaml> for stdin and for names
+that do not end .yaml/.yml (default json).
 
 JSON reports; '-' reads stdin or writes a document to stdout. Diagnostics for
 stdout documents go to stderr. Existing files require --force or --in-place.
@@ -91,12 +97,14 @@ fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on 
 
 ${MARKDOWN_HELP}
 
+${YAML_HELP}
+
 Install all six bundled OPF agent skills in this project:
   npx @openpresentation/cli@latest skills install
 Skills copy locally without symlinks, paid services or telemetry. Updates refuse
 locally modified/unmanaged skill folders and keep previous managed versions.`;
 class CliError extends Error {
-  constructor(message: string, readonly code = 2, readonly details?: unknown) { super(message); }
+  constructor(message: string, readonly code = 2, readonly details?: unknown, readonly key = "validation") { super(message); }
 }
 const isDeprecated = (record: object) => "deprecation" in record && !!(record as { deprecation?: unknown }).deprecation;
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
@@ -135,12 +143,25 @@ async function readJson(file: string) {
   try { return { raw, value: JSON.parse(raw.replace(/^\uFEFF/, "")) as unknown }; }
   catch { throw new CliError(`Invalid JSON in ${file === "-" ? "stdin" : file}.`); }
 }
+/** A deck or patch from a file or stdin, JSON or YAML (a name ending .yaml/.yml, else --input-format). `rewrite` warns when YAML comments would be lost. */
+async function readDeck(file: string, rewrite = false, kind: "deck" | "patch" = "deck"): Promise<DeckSource> {
+  const raw = file === "-" ? await stdin() : await readFile(file, "utf8");
+  const source = decode(raw, file, inputFormatOf(file), kind);
+  const warning = rewrite ? commentWarning(source, file) : undefined;
+  if (warning) process.stderr.write(warning);
+  return source;
+}
 function checked(value: unknown, strict = false) {
   const result = validatePresentation(value);
   if (!result.valid || (strict && result.warnings.length)) throw new CliError("Document validation failed.", 1, result);
   return result;
 }
-async function save(file: string, document: unknown, overwrite: boolean, original?: { file: string; raw: string }) { await saveText(file, json(document), overwrite, original); }
+/** The text a deck is written as: the `--format` flag, else the output name, else the format of the deck that was read. */
+/** `flag` is the output format option; `null` means the command has none to give (its `--format` names input data). */
+function render(document: unknown, output: string, options: Record<string, string | boolean>, source?: DeckSource, flag: string | boolean | null | undefined = options.format): { text: string; format: DeckFormat } {
+  const format = outputFormatOf(output, flag === null ? undefined : flag, source);
+  return { text: serialize(document, format, { schemaComment: !!options["schema-comment"], modeline: format === "yaml" ? source?.yaml?.modeline : undefined }), format };
+}
 async function saveText(file: string, text: string, overwrite: boolean, original?: { file: string; raw: string }) {
   const output = path.resolve(file), temporary = path.join(path.dirname(output), `.${path.basename(output)}.${randomUUID()}.tmp`);
   let mode: number | undefined;
@@ -161,24 +182,43 @@ async function saveText(file: string, text: string, overwrite: boolean, original
     }
   } finally { await unlink(temporary).catch(error => { if (error.code !== "ENOENT") throw error; }); }
 }
-async function emit(document: unknown, output: string, options: Record<string, string | boolean>, original?: { file: string; raw: string }, extra = {}) {
+async function emit(document: unknown, output: string, options: Record<string, string | boolean>, original?: { file: string; raw: string }, extra = {}, source?: DeckSource, flag: string | boolean | null | undefined = options.format) {
   const validation = checked(document, !!options.strict);
+  const { text } = render(document, output, options, source, flag);
   if (output === "-" || options["dry-run"]) {
-    print(document);
+    process.stdout.write(text);
     process.stderr.write(json({ valid: true, warnings: validation.warnings, dryRun: !!options["dry-run"], ...extra }));
   } else {
-    await save(output, document, !!options.force || !!options["in-place"], original);
-    print({ valid: true, output: path.resolve(output), sha256: hash(json(document)), warnings: validation.warnings, ...extra });
+    await saveText(output, text, !!options.force || !!options["in-place"], original);
+    print({ valid: true, output: path.resolve(output), sha256: hash(text), warnings: validation.warnings, ...extra });
   }
 }
-const cli: CliContext = { parse, arity, readJson, stdin, emit, saveText, print, hash, json, fail: (message, code = 2, details) => new CliError(message, code, details) };
-async function main(argv: string[]) {
+const cli: CliContext = { parse, arity, readJson, readDeck, stdin, emit, saveText, print, hash, json, fail: (message, code = 2, details, key) => new CliError(message, code, details, key) };
+/** Remove the global `--input-format <json|yaml>` option (anywhere before `--`) and apply it. */
+function takeInputFormat(argv: string[]): string[] {
+  const rest: string[] = [];
+  let value: string | undefined, seen = false;
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]!;
+    if (arg === "--") { rest.push(...argv.slice(i)); break; }
+    if (arg !== "--input-format") { rest.push(arg); continue; }
+    const next = argv[++i];
+    if (seen) throw new CliError("Unknown or duplicate option: --input-format");
+    if (next === undefined || next.startsWith("--")) throw new CliError("--input-format needs a value.");
+    value = next; seen = true;
+  }
+  setInputFormat(value);
+  return rest;
+}
+async function main(args0: string[]) {
+  const argv = takeInputFormat(args0);
   if (!argv.length || (argv.length === 1 && ["help", "--help", "-h"].includes(argv[0]))) { console.log(usage); return; }
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
   if (command === 'audit') { await runAudit(args); return; }
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
   if (command === 'from-md' || command === 'to-md') { await markdownCommand(command, args); return; }
+  if (command === 'from-yaml' || command === 'to-yaml') { await yamlCommand(command, args, cli); return; }
   if (command === 'skills') {
     const {positional,options}=parse(args,['agent','global','directory']);arity(positional,1);
     print(await manageSkills(positional[0],OPF_SKILLS,CLI_VERSION,{agent:options.agent as string|undefined,global:!!options.global,directory:options.directory as string|undefined}));return;
@@ -186,17 +226,18 @@ async function main(argv: string[]) {
   if (command === 'render' || command === 'export') { await runRenderCommand(command, args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === 'import') { await runImportCommand(args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === "create") {
-    const { positional, options } = parse(args, ["title", "from", "force", "strict"]); arity(positional, 0, 1);
+    const { positional, options } = parse(args, ["title", "from", "format", "schema-comment", "force", "strict"]); arity(positional, 0, 1);
     if (options.from && options.title !== undefined) throw new CliError("Use --from or --title, not both.");
-    const document = options.from ? (await readJson(String(options.from))).value : {
+    const from = options.from ? await readDeck(String(options.from)) : undefined;
+    const document = from ? from.value : {
       $schema: "https://openpresentation.org/schema/opf/v1", name: options.title ?? "Untitled presentation",
       slides: [{ id: "slide-1", title: options.title ?? "Untitled presentation" }],
     };
-    await emit(document, positional[0] ?? "-", options, undefined, {agentSkills:'npx @openpresentation/cli@latest skills install'}); return;
+    await emit(document, positional[0] ?? "-", options, undefined, {agentSkills:'npx @openpresentation/cli@latest skills install'}, from); return;
   }
   if (command === "validate") {
     const { positional, options } = parse(args, ["strict"]); arity(positional, 1);
-    const { raw, value } = await readJson(positional[0]), result = validatePresentation(value);
+    const { raw, value } = await readDeck(positional[0]), result = validatePresentation(value);
     print({ ...result, sha256: hash(raw) });
     if (!result.valid || (options.strict && result.warnings.length)) process.exitCode = 1;
     return;
@@ -209,7 +250,7 @@ async function main(argv: string[]) {
     if (options.config === '-') throw new CliError('Lint configuration must be an explicit local JSON file.');
     const raw = input === '-' ? await stdin() : await readFile(input, 'utf8');
     const config = options.config ? await readJson(String(options.config)) : undefined;
-    const result = lintSource(raw, config?.value as LintOptions | undefined);
+    const result = lintText(raw, inputFormatOf(input), config?.value as LintOptions | undefined);
     print({
       ...result, sha256: hash(raw), opfVersion: OPF_VERSION,
       ...(config ? { context: { file: path.resolve(String(options.config)), sha256: hash(config.raw) } } : {}),
@@ -218,20 +259,20 @@ async function main(argv: string[]) {
     return;
   }
   if (command === "edit") {
-    const { positional, options } = parse(args, ["patch", "output", "in-place", "dry-run", "expect-sha256", "force", "strict"]); arity(positional, 1);
+    const { positional, options } = parse(args, ["patch", "output", "in-place", "dry-run", "expect-sha256", "format", "force", "strict"]); arity(positional, 1);
     const input = positional[0];
     if (!options.patch) throw new CliError("edit requires --patch <file|->.");
     if (input === "-" && (options.patch === "-" || options["in-place"])) throw new CliError("stdin can supply only one input and cannot be edited in place.");
     if (options["in-place"] && (options.output !== undefined || options.force)) throw new CliError("--in-place cannot be combined with --output or --force.");
-    const source = await readJson(input);
+    const source = await readDeck(input, true);
     if (options["expect-sha256"] !== undefined) {
       if (!/^[a-fA-F0-9]{64}$/.test(String(options["expect-sha256"]))) throw new CliError("--expect-sha256 needs a SHA-256 hex digest.");
       if (hash(source.raw) !== String(options["expect-sha256"]).toLowerCase()) throw new CliError("Input hash mismatch; reread the file before editing.", 1);
     }
-    const document = applyPatch(source.value, (await readJson(String(options.patch))).value);
+    const document = applyPatch(source.value, (await readDeck(String(options.patch), false, "patch")).value);
     const output = options["in-place"] ? input : String(options.output ?? "-");
     const sameFile = input !== "-" && output !== "-" && path.resolve(input) === path.resolve(output);
-    await emit(document, output, options, sameFile ? { file: input, raw: source.raw } : undefined); return;
+    await emit(document, output, options, sameFile ? { file: input, raw: source.raw } : undefined, {}, source); return;
   }
   if (command === "diff") { await diffCommand(args, cli); return; }
   if (command === "merge") { await mergeCommand(args, cli); return; }
@@ -248,7 +289,9 @@ async function main(argv: string[]) {
       if (!Array.isArray(value) || !value.every(item => typeof item === 'string')) throw new CliError(`--${key} requires a JSON array of column names.`);
       return value;
     };
-    const format = options.format ?? (positional[0].endsWith('.json') ? 'json' : positional[0].endsWith('.tsv') ? 'tsv' : undefined);
+    // --format yaml names the output (YAML); csv, tsv and json name the data.
+    const outFlag = options.format === 'yaml' ? 'yaml' : undefined;
+    const format = (outFlag ? undefined : options.format) ?? (positional[0].endsWith('.json') ? 'json' : positional[0].endsWith('.tsv') ? 'tsv' : undefined);
     if (format !== undefined && !['csv','tsv','json'].includes(String(format))) throw new CliError('Unknown data format.');
     const raw = positional[0] === '-' ? await stdin() : await readFile(positional[0], 'utf8');
     const imported = createDataContent(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:options['chart-type'] as string|undefined});
@@ -273,7 +316,7 @@ async function main(argv: string[]) {
       const entry = {...kept, columns, rows: data.rows, ...(origin ? {source: before.src === origin.src ? {...before, ...origin} : origin} : {})};
       return {...record, datasets: {...datasets, [datasetId]: entry}};
     };
-    const source = options.into ? await readJson(String(options.into)) : undefined;
+    const source = options.into ? await readDeck(String(options.into), true) : undefined;
     let document: unknown;
     if (source) {
       if (options.path) {
@@ -284,7 +327,7 @@ async function main(argv: string[]) {
     } else document = withDataset({slides:[{id:'data-1',title:options.title ?? 'Imported data',...content}]});
     const output = options['in-place'] ? String(options.into) : String(options.output ?? '-');
     const sameFile = source && options.into !== '-' && output !== '-' && path.resolve(String(options.into)) === path.resolve(output);
-    await emit(document, output, options, sameFile ? {file:String(options.into),raw:source.raw} : undefined); return;
+    await emit(document, output, options, sameFile ? {file:String(options.into),raw:source.raw} : undefined, {}, source, outFlag ?? null); return;
   }
   if (command === "fill") {
     const { positional, options } = parse(args, ["data", "format", "delimiter", "no-header", "output", "out-dir", "name", "combine", "partial", "examples", "force", "strict"]); arity(positional, 1);
@@ -292,11 +335,12 @@ async function main(argv: string[]) {
     if (options.name !== undefined && options["out-dir"] === undefined) throw new CliError("--name requires --out-dir.");
     if (options.combine && options.output === undefined) throw new CliError("--combine requires --output <file|->.");
     if (positional[0] === "-" && options.data === "-") throw new CliError("stdin can supply only one input.");
-    const template = (await readJson(positional[0])).value;
+    const templateSource = await readDeck(positional[0], true), template = templateSource.value;
+    const outFlag = options.format === "yaml" ? "yaml" : undefined; // csv, tsv and json name the data format
     let records: FillRecord[] = [{}];
     if (options.data !== undefined) {
       const data = String(options.data), raw = data === "-" ? await stdin() : await readFile(data, "utf8");
-      const format = options.format ?? (data.endsWith(".json") ? "json" : data.endsWith(".tsv") ? "tsv" : data.endsWith(".csv") ? "csv" : /^[\s\uFEFF]*[[{]/.test(raw) ? "json" : "csv");
+      const format = (outFlag ? undefined : options.format) ?? (data.endsWith(".json") ? "json" : data.endsWith(".tsv") ? "tsv" : data.endsWith(".csv") ? "csv" : /^[\s\uFEFF]*[\[{]/.test(raw) ? "json" : "csv");
       if (!["csv", "tsv", "json"].includes(String(format))) throw new CliError("Unknown data format.");
       records = recordsFromData(raw, format as "csv" | "tsv" | "json", { delimiter: options.delimiter as string | undefined, header: !options["no-header"] });
     }
@@ -310,26 +354,28 @@ async function main(argv: string[]) {
       await mkdir(dir, { recursive: true });
       const outputs = [];
       for (const [offset, deck] of decks.entries()) {
-        const output = path.join(dir, `${names[offset]}.opf.json`);
-        await save(output, deck.presentation, !!options.force);
-        outputs.push({ record: deck.index, output, sha256: hash(json(deck.presentation)), warnings: checks[offset]!.warnings });
+        const kind = outputFormatOf("-", outFlag, templateSource);
+        const output = path.join(dir, `${names[offset]}.opf.${kind}`);
+        const { text } = render(deck.presentation, output, options, templateSource, outFlag ?? null);
+        await saveText(output, text, !!options.force);
+        outputs.push({ record: deck.index, output, sha256: hash(text), warnings: checks[offset]!.warnings });
       }
       print({ valid: true, outputs, ...fill }); return;
     }
     if (!options.combine && decks.length > 1) throw new CliError("Several records need --out-dir <dir> (one deck each) or --combine --output <file> (one deck).");
-    await emit(options.combine ? combineDecks(decks) : decks[0]!.presentation, String(options.output ?? "-"), options, undefined, { fill }); return;
+    await emit(options.combine ? combineDecks(decks) : decks[0]!.presentation, String(options.output ?? "-"), options, undefined, { fill }, templateSource, outFlag ?? null); return;
   }
   if (command === "paginate") {
-    const { positional, options } = parse(args, ["force", "strict"]); arity(positional, 2);
-    const source = await readJson(positional[0]); checked(source.value, !!options.strict);
+    const { positional, options } = parse(args, ["format", "force", "strict"]); arity(positional, 2);
+    const source = await readDeck(positional[0], true); checked(source.value, !!options.strict);
     const result = paginatePresentation(source.value);
-    await emit(result.presentation, positional[1], options, undefined, { pages: result.pages }); return;
+    await emit(result.presentation, positional[1], options, undefined, { pages: result.pages }, source); return;
   }
   if (command === "bundle") {
-    const { positional, options } = parse(args, ["force", "strict"]); arity(positional, 2);
-    const source = await readJson(positional[0]); checked(source.value, !!options.strict);
+    const { positional, options } = parse(args, ["format", "force", "strict"]); arity(positional, 2);
+    const source = await readDeck(positional[0], true); checked(source.value, !!options.strict);
     const result = bundlePresentation(source.value);
-    await emit(result.presentation, positional[1], options, undefined, { bundle: result.report }); return;
+    await emit(result.presentation, positional[1], options, undefined, { bundle: result.report }, source); return;
   }
   if (command === "schemas") { arity(args, 0); print(schemaEntries.map(entry => ({ name: entry.name, file: entry.file, id: entry.schema.$id }))); return; }
   if (command === "catalogs") {
@@ -362,6 +408,6 @@ async function main(argv: string[]) {
 }
 main(process.argv.slice(2)).catch((error: unknown) => {
   const code = error instanceof PatchError || error instanceof OPFDataImportError ? 1 : error instanceof CliError || error instanceof SkillsError ? error.code : 2;
-  process.stderr.write(json({ error: error instanceof Error ? error.message : String(error), ...(error instanceof CliError && error.details ? { validation: error.details } : {}) }));
+  process.stderr.write(json({ error: error instanceof Error ? error.message : String(error), ...(error instanceof CliError && error.details ? { [error.key]: error.details } : {}), ...(error instanceof DeckReadError && error.details ? { yaml: error.details } : {}) }));
   process.exitCode = code;
 });

@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { auditRules, auditSource, findAuditRule, type AuditDiagnostic, type AuditOptions, type AuditReport, type AuditSeverity } from "@openpresentation/opf/audit";
+import { auditRules, findAuditRule, type AuditDiagnostic, type AuditOptions, type AuditReport, type AuditSeverity } from "@openpresentation/opf/audit";
+
+import { auditText, inputFormatOf } from "./deck.js";
 
 declare const OPF_VERSION: string;
 
@@ -16,7 +18,8 @@ fonts, links, charts, placeholders and more. Rule ids are stable (audit/text-con
 comma-separate. --fail-on picks the exit threshold (default error). Exit codes: 0 no finding at or above
 the threshold, 1 findings at or above it (or a document that fails validation), 2 usage or I/O error.
 --json prints the report in lint's shape. A config file may hold {rules, ignore, only, ignorePaths,
-thresholds}; flags override it. Audit is read-only and local; it never fetches images or fonts.`;
+thresholds}; flags override it. Audit is read-only and local; it never fetches images or fonts.
+A file ending .yaml or .yml (or stdin with --input-format yaml) is read as YAML; findings are located in it.`;
 
 class AuditUsageError extends Error {}
 const rank: Record<AuditSeverity, number> = { error: 3, warning: 2, info: 1 };
@@ -129,7 +132,7 @@ export async function runAudit(args: string[]): Promise<void> {
   }
   const raw = file === "-" ? await stdin() : await readFile(file, "utf8").catch(() => { throw new AuditUsageError(`Cannot read ${file}.`); });
   let report: AuditReport;
-  try { report = auditSource(raw, options); }
+  try { report = auditText(raw, inputFormatOf(file), options); }
   catch (error) { if (error instanceof TypeError) throw new AuditUsageError(error.message); throw error; }
   const label = file === "-" ? "stdin" : path.relative(process.cwd(), path.resolve(file)) || file;
   if (json) process.stdout.write(JSON.stringify({ ...report, file: file === "-" ? null : path.resolve(file), sha256: hash(raw), opfVersion: OPF_VERSION, ...(configFile ? { context: { file: path.resolve(configFile), sha256: hash(configRaw!) } } : {}) }, null, 2) + "\n");

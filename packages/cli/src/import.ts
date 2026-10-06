@@ -1,8 +1,9 @@
 // `opf import deck.pptx`: a PowerPoint file to an OPF document through opf-pptx `fromPptx`. Import is a conversion,
 // not a lossless round trip for arbitrary decks: what it cannot keep is reported as diagnostics. With --signals it also
 // writes the raw per-shape layout and style signals of the deck (opf-pptx 0.11.9 and later), deterministic and local.
-import { lintSource, validatePresentation } from "@openpresentation/opf";
+import { type LintReport, lintSource, validatePresentation } from "@openpresentation/opf";
 import path from "node:path";
+import { DeckReadError, lintText, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
 import { FileCommandError, arity, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
 import { type Diagnostic, PPTX_PACKAGE, loadPptx } from "./peers.js";
 import { Reporter, finishReport, reportThrown } from "./reporter.js";
@@ -19,10 +20,17 @@ export async function runImportCommand(args: string[], host: Host) {
 }
 
 async function run(args: string[], host: Host) {
-	const { positional, options } = parseOptions(args, { values: ["out", "signals"], flags: ["force", "strict", "json"] });
+	const { positional, options } = parseOptions(args, { values: ["out", "signals", "format"], flags: ["force", "strict", "json"] });
 	arity(positional, 1);
 	const input = positional[0] as string;
-	const out = options.out === undefined ? (input === "-" ? "-" : `${stemOf(input)}.opf.json`) : String(options.out);
+	if (options.format !== undefined && options.format !== "json" && options.format !== "yaml") throw new FileCommandError("--format takes json or yaml.");
+	const out = options.out === undefined ? (input === "-" ? "-" : `${stemOf(input)}.opf.${options.format === "yaml" ? "yaml" : "json"}`) : String(options.out);
+	let outFormat: DeckFormat;
+	try {
+		outFormat = outputFormatOf(out, options.format);
+	} catch (error) {
+		throw new FileCommandError(error instanceof DeckReadError ? error.message : String(error));
+	}
 	const signalsFile = options.signals === undefined ? undefined : String(options.signals);
 	const strict = !!options.strict;
 	if (signalsFile === "-" || (signalsFile !== undefined && out === "-")) throw new FileCommandError("--signals needs a file path and cannot be combined with --out - (stdout carries only the document).");
@@ -52,10 +60,12 @@ async function run(args: string[], host: Host) {
 		return;
 	}
 
-	const text = json(imported);
 	const validation = validatePresentation(imported);
+	// An invalid deck is never written; its report is located in the JSON form, which every deck has.
+	const written: DeckFormat = outFormat === "yaml" && validation.valid ? "yaml" : "json";
+	const text = serialize(imported, written);
 	// The same linter as `opf lint`, over the document that would be written, so locations point into the output file.
-	const lint = lintSource(text);
+	const lint = lintText(text, written);
 	for (const item of lint.diagnostics) reporter.diagnostics.push(item as never);
 	const failed = !validation.valid || !lint.valid || reporter.failed || (strict && reporter.counts.warning > 0);
 	if (failed) {
@@ -77,7 +87,7 @@ function finishAndPrint(
 	input: string,
 	bytes: Uint8Array,
 	reporter: Reporter,
-	result: { lint: ReturnType<typeof lintSource>; text: string } | undefined,
+	result: { lint: LintReport; text: string } | undefined,
 	output: string | undefined,
 	signals: Record<string, unknown> | undefined,
 	strict: boolean,

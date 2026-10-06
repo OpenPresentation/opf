@@ -4,9 +4,11 @@ import { readFile, writeFile, lstat, link, rename, unlink } from "node:fs/promis
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import { markdownToOpf, opfToMarkdown, OPFMarkdownError } from "@openpresentation/opf/markdown";
+import { OPFYamlError } from "@openpresentation/opf/yaml";
+import { DeckReadError, decode, inputFormatOf, outputFormatOf, serialize } from "./deck.js";
 
-export const MARKDOWN_USAGE = `  opf from-md <deck.md|-> [output.opf.json|-] [--split <rules|headings>] [--title <text>]
-              [--force] [--strict]
+export const MARKDOWN_USAGE = `  opf from-md <deck.md|-> [output.opf.json|output.opf.yaml|-] [--split <rules|headings>] [--title <text>]
+              [--format <json|yaml>] [--force] [--strict]
   opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]`;
 
 export const MARKDOWN_HELP = `from-md converts Markdown in the OPF dialect (YAML front matter, '---' between slides,
@@ -14,7 +16,7 @@ export const MARKDOWN_HELP = `from-md converts Markdown in the OPF dialect (YAML
 'Note:' speaker notes, <!-- slide: ... --> options) to a validated OPF document. The output
 defaults to stdout; errors carry line and column and exit 1. --split headings starts a new
 slide at every '# ' heading (outlines). --title sets the deck name unless the front matter does.
---strict also fails on warnings.
+--strict also fails on warnings. The document is written as YAML for an output ending .yaml/.yml or --format yaml.
 to-md writes an OPF document as Markdown that from-md reads back unchanged. A part with no
 Markdown syntax (a design, regions that are not blocks, a styled table cell) is embedded as
 YAML in an opf-slide or opf-block fence, so nothing is lost; --drop-unsupported leaves it out
@@ -36,6 +38,7 @@ const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 const flags: Record<string, { value: boolean; commands: string[] }> = {
   split: { value: true, commands: ["from-md"] },
   title: { value: true, commands: ["from-md"] },
+  format: { value: true, commands: ["from-md"] },
   "drop-unsupported": { value: false, commands: ["to-md"] },
   force: { value: false, commands: ["from-md", "to-md"] },
   strict: { value: false, commands: ["from-md", "to-md"] },
@@ -113,7 +116,14 @@ async function fromMarkdown(positional: string[], options: Record<string, string
   const result = markdownToOpf(source, { split, ...(options.title !== undefined ? { defaults: { name: String(options.title) } } : {}) });
   const failing = result.counts.error > 0 || (!!options.strict && result.counts.warning > 0);
   if (failing) throw new MarkdownCommandError("Markdown conversion failed.", 1, { markdown: { sha256: hash(source), counts: result.counts, diagnostics: result.diagnostics } });
-  const text = json(result.document);
+  let text: string;
+  try {
+    text = serialize(result.document, outputFormatOf(output, options.format));
+  } catch (error) {
+    if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message);
+    if (error instanceof OPFYamlError) throw new MarkdownCommandError(error.message, error.code === "invalid-document" ? 1 : 2, { validation: error.details });
+    throw error;
+  }
   const summary = { valid: true, sha256: hash(text), slides: result.document.slides.length, counts: result.counts, diagnostics: result.diagnostics };
   if (output === "-") {
     process.stdout.write(text);
@@ -129,9 +139,10 @@ async function toMarkdown(positional: string[], options: Record<string, string |
   const raw = await readText(input);
   let document: unknown;
   try {
-    document = JSON.parse(raw.replace(/^﻿/, ""));
-  } catch {
-    throw new MarkdownCommandError(`Invalid JSON in ${input === "-" ? "stdin" : input}.`);
+    document = decode(raw, input, inputFormatOf(input)).value;
+  } catch (error) {
+    if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message, 2, error.details ? { yaml: error.details } : undefined);
+    throw error;
   }
   const { markdown, report } = opfToMarkdown(document, { unsupported: options["drop-unsupported"] ? "drop" : "embed" });
   const summary = { sha256: hash(markdown), lossless: report.lossless, native: report.native, embedded: report.embedded, loss: report.loss };
