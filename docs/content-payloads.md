@@ -13,10 +13,23 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
-| `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
+| `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
 | `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
+
+## Items versus bullets
+
+Both fields draw a bulleted (or numbered) list and share the same nesting `level`, rich-text entries and `numbering`. They differ in what they say about the content:
+
+- `bullets` is **prose bullets**: short lines of an argument, written as text. It is inferred as a `text` payload, so layouts and regions that want text take it, and an entry is a string, `TextRun[]` or `{ text, level }`. Use it for talking points where each line stands alone.
+- `items` is a **structured list**: it is inferred as a `list` payload, and an entry may also carry a `description`, so one entry is a heading plus its detail (`{ "text": "Faster onboarding", "description": "First value in under a day." }`). Use it when entries have the same shape (features, steps, options, risks) or when any of them needs supporting detail.
+
+Pick `bullets` for plain talking points and `items` as soon as an entry has a description or the slide's layout expects a list. Do not put a heading and its detail into one string with a separator; that is what `description` is for. A payload holds one of the two, not both.
+
+## Code highlight
+
+`code.highlight` marks lines of a code block: a line number or an inclusive `[start, end]` range, 1-based, for example `[3, [5, 7]]`. Lines are counted by line break in `code.source`; a line that wraps is still one line. The preview and the PPTX export draw a theme-derived band behind the marked lines and dim the others slightly; every line keeps at least 4.5:1 contrast against what it sits on (`codeHighlightColors`). The PPTX export draws one native rectangle per run of marked lines behind the per-line text boxes, and import restores `highlight` from the code provenance tag. A line past the last line, or a range written end before start, is the validation warning `code-highlight-out-of-range` or `code-highlight-range-reversed`, and engines ignore it. Pagination keeps each page's marked lines, renumbered from 1.
 
 ## Color references
 

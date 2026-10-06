@@ -241,7 +241,7 @@ _No named properties._
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, im... |
 | `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
-| `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }. |
+| `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp (see Watermark). Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value } at opacity 0.08. |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. |
@@ -323,7 +323,7 @@ _No named properties._
 | `heading` | no | `ref:Font` | Abstract role: font used for slide titles and headings. Maps onto the OOXML major slot when serializing. |
 | `body` | no | `ref:Font` | Abstract role: font used for body copy. Maps onto the OOXML minor slot when serializing. |
 | `accent` | no | `ref:Font` | Abstract role: font used for accent text. When set, the slide tag (eyebrow) and the quote body use this family instead of the body and heading families; nothing else changes. resolveFontFamilies() returns it as accent... |
-| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the... |
+| `code` | no | `ref:Font` | Abstract role: monospaced font used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the con... |
 
 
 ### Font
@@ -342,9 +342,9 @@ _No named properties._
 
 ### DimensionPreset
 
-- Type: `enum:16:9 | 4:3 | 16:10 | letter | a4 | widescreen | standard`
+- Type: `enum:16:9 | 4:3 | 16:10 | 1:1 | 4:5 | 9:16 | letter | a4 | widescreen | standard`
 - Required fields: none
-- Purpose: Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size.
+- Purpose: Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size. The social-feed ratios keep the widescreen short edge of 7.5 in: 1:1 is 7.5 x 7.5 in, 4:5 is 7.5 x 9.375 in and 9:16 is 7.5 x 13.333 in (portrait).
 
 _No named properties._
 
@@ -627,13 +627,14 @@ _No named properties._
 
 ### Watermark
 
-- Type: `object`
+- Type: `object` (exactly one of `src` and `text`)
 - Required fields: `opacity`
-- Purpose: Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.
+- Purpose: Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in the middle 40% of the slide. A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and at most 30% of the shorter slide edge in height; it is drawn be...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `src` | no | `string` | Source for the watermark image. |
+| `src` | no | `string` | Source for the watermark image. Exactly one of src and text is set. |
+| `text` | no | `string` | Text for a text watermark, such as DRAFT or CONFIDENTIAL; line breaks are drawn as spaces. Exactly one of src and text is set. |
 | `opacity` | yes | `number` | Watermark opacity from 0 (fully transparent) to 1 (fully opaque). |
 
 
@@ -800,13 +801,14 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `source`
-- Purpose: Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, and 'filename' when the rendered block should show a file label. A string value in a code field is shorthand for { "source": value }.
+- Purpose: Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, 'filename' when the rendered block should show a file label, and 'highlight' to emphasize lines. A string value in a code field is shorthand for { "source": value }.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `source` | yes | `string` | Source code text to display. |
 | `language` | no | `string` | Language identifier used for syntax highlighting. |
 | `filename` | no | `string` | Optional file label shown with the code block. |
+| `highlight` | no | `array<oneOf:integer / array<integer>>` | Source lines to emphasize, 1-based: each entry is a line number or an inclusive [start, end] range, so [3, [5, 7]] marks lines 3 and 5 to 7. Lines are counted by line break in 'source', so a line that wraps stays one... |
 
 
 ### Metric
@@ -902,7 +904,25 @@ _No named properties._
 - Required fields: none
 - Purpose: A contiguous run of text. Strings cover unformatted spans; object form adds character formatting.
 
-_No named properties._
+Object form fields:
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `text` | yes | `string` | Text for this run. |
+| `bold` | no | `boolean` | Whether the run is rendered in bold. |
+| `italic` | no | `boolean` | Whether the run is rendered in italic. |
+| `underline` | no | `boolean` | Whether the run is underlined. |
+| `strikethrough` | no | `boolean` | Whether the run is rendered with a strikethrough line. |
+| `color` | no | `string` | Run text color. Documented forms: a hex string ('#RGB', '#RRGGBB', '#RRGGBBAA'), a color-scheme slot or role name resolved through the effective color scheme ('accent2', 'text'), or a 'var:<id>' reference into the top-level variables map. Prefer names over hex so runs survive re-theming. Any other string stays schem... |
+| `fontSize` | no | `number` | Requested run font size in points. |
+| `fontFamily` | no | `string` | Run font family override. It wins over the code font a run with 'code' takes. |
+| `code` | no | `boolean` | Whether the run is an inline code span: it is drawn in the design's code font (design.fontScheme.code, else the resolved font scheme's code family, else Roboto Mono), unless the run names its own fontFamily. Only the font changes; there is no background, because a PPTX run cannot have one. Markdown backticks read an... |
+| `lang` | no | `string` | BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follow... |
+| `link` | no | `string` | URL to link the run text to. |
+| `superscript` | no | `boolean` | Whether the run is rendered as superscript. |
+| `subscript` | no | `boolean` | Whether the run is rendered as subscript. |
+| `cite` | no | `oneOf:string / array<string>` | One or more ids from the top-level references list that this run cites. Engines draw a superscript marker ('1', or '1,2' for several ids) directly after the run and list '<n> <reference text>' in the slide's footnote area; markers are numbered per deck in order of first use, and the same id keeps its number. An id m... |
+| `footnote` | no | `oneOf:string / array<ref:TextRun>` | An inline note for this run, without a references entry. Engines draw a superscript marker after the run and list the note in the slide's footnote area; every footnote takes a new number in the deck's marker sequence. Supported in text, bullets and list item runs. |
 
 
 ### Caption

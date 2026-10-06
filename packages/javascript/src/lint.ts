@@ -25,6 +25,7 @@ import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import type { AuditFix } from './audit-types.js';
 
 // RR-54: chart and table data warnings keep their validator code as the rule id.
+const CODE_HIGHLIGHT_WARNING_CODES = new Set(['code-highlight-out-of-range', 'code-highlight-range-reversed']);
 const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
 
 export type LintSeverity = 'error' | 'warning' | 'info';
@@ -769,6 +770,15 @@ export function lintPresentation(
 	const numberFixes = validation.warnings.some((issue) => issue.params.code === 'chart-value-not-numeric') ? chartNumberFixPaths(document) : new Map<string, ChartNumberFix>();
 	// Retain any existing reference warning not covered by the schema walk.
 	for (const issue of validation.warnings) {
+		if (typeof issue.params.code === 'string' && CODE_HIGHLIGHT_WARNING_CODES.has(issue.params.code)) {
+			diagnostics.push({
+				...schemaDiagnostic(issue),
+				ruleId: `opf/${issue.params.code}`,
+				severity: 'warning',
+				help: 'Marked lines count from 1 by line break in code.source. The entry marks nothing past the last line; change it to a line the code has, or remove it.',
+			});
+			continue;
+		}
 		if (typeof issue.params.code === 'string' && DATA_WARNING_CODES.has(issue.params.code)) {
 			const fix = issue.params.code === 'chart-value-not-numeric' ? numberFixes.get(issue.path) : undefined;
 			if (fix) {

@@ -10,6 +10,12 @@ Native PPTX output preserves these run styles and shared wrapping. Each fitted l
 
 The canvas supports native SVG text selection with a formatting toolbar for bold, italic, underline, strikethrough, color, font family, point size, links, and scripts. Double-click a rich text block (or focus it and press Enter) to select its full contents. For a plain text payload, start an inline edit and choose **Format text**. **Selected text** and **Replace text** replace the selected range; **Edit runs** opens structured controls. Each action validates and creates one undo step. A continuous mixed-style typing caret and IME handling remain open work; selection and formatting currently use the rendered SVG itself. List entries and descriptions use the same formatting controls at their own source paths. Complex-script shaping, bidi layout, and font-feature parity remain additional work.
 
+## Inline code and run language
+
+A run with `code: true` is an inline code span. It is set in the design's code font (the font scheme's `code` family, else Roboto Mono) unless the run names its own `fontFamily`. Only the font changes: a PPTX run cannot carry a background, so neither engine draws one. Composition measures the run in the code font (`RichTextOptions.codeFontFamily`, `TableLayoutOptions.codeFontFamily`; `composeSlide` passes `fonts.code`). Markdown backticks read and write code runs (see [Markdown](markdown.md)).
+
+A run with `lang` (a BCP-47 tag such as `fr-FR` or `ja-JP`) overrides the deck language for that run. It reaches the layout as `style.lang` on the run's fragments, the preview writes it as the `lang` of the run's text, and PPTX export writes `a:rPr/@lang` (with the run's own East Asian and complex-script theme fonts for that language). PPTX import reads `lang` back only when it differs from the deck language. Without `lang` a run follows the deck language.
+
 ```js
 import {fitRichText} from '@openpresentation/opf/composition';
 const fit = fitRichText(

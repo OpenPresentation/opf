@@ -6,6 +6,7 @@ import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
 import { MAX_COMPOSITION_DEPTH } from "./composition.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { codeHighlightLines } from "./code-highlight.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
@@ -840,6 +841,17 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     };
     numberingWarnings(slide, slidePath);
     visitContentPayloads(slide, slidePath, numberingWarnings);
+    // code.highlight: an entry past the last line, or a range written end before start, marks nothing.
+    const highlightWarnings = (payload: Record<string, unknown>, path: string): void => {
+      const code = payload.code;
+      if (!isRecord(code) || !Array.isArray(code.highlight) || typeof code.source !== "string") return;
+      for (const finding of codeHighlightLines(code.highlight, code.source).issues) {
+        if (finding.code === "code-highlight-invalid") continue;
+        issues.push(semanticIssue(pathFor(pathFor(pathFor(path, "code"), "highlight"), String(finding.index)), finding.message, { code: finding.code }));
+      }
+    };
+    highlightWarnings(slide, slidePath);
+    visitContentPayloads(slide, slidePath, highlightWarnings);
     for (const key of Object.keys(slide)) {
       if (promotedRegionKeySet.has(key)) {
         issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));

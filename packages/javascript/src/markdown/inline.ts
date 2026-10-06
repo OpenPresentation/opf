@@ -1,6 +1,6 @@
 // Inline text of the OPF Markdown dialect: parsing `**bold**`, `*italic*`, `~~strike~~`, `<u>`, `<sup>`, `<sub>`,
-// `[text](url)`, `[text]{color=... size=... font=...}` and backslash escapes into OPF TextRun values, and the
-// reverse. Pure and deterministic; no HTML, no entities, no inline code (backticks stay literal). Internal module.
+// `[text](url)`, `[text]{color=... size=... font=... lang=...}`, `` `code` `` spans and backslash escapes into OPF TextRun values, and the
+// reverse. Pure and deterministic; no HTML and no entities. Internal module.
 import { FORMATTING, type Obj, type Run, isRecord, runText } from "../convert/shared.js";
 
 /** A style applied to a stretch of text. Every key is optional; absent means off. */
@@ -11,10 +11,12 @@ interface Style {
   strikethrough?: true;
   superscript?: true;
   subscript?: true;
+  code?: true;
   color?: string;
   fontSize?: number;
   fontFamily?: string;
   link?: string;
+  lang?: string;
 }
 interface Seg {
   text: string;
@@ -48,7 +50,7 @@ const SPAN_FLAGS: Record<string, keyof Style> = {
   sub: "subscript",
   subscript: "subscript",
 };
-const SPAN_VALUES: Record<string, "color" | "fontSize" | "fontFamily"> = { color: "color", size: "fontSize", fontsize: "fontSize", font: "fontFamily", fontfamily: "fontFamily" };
+const SPAN_VALUES: Record<string, "color" | "fontSize" | "fontFamily" | "lang"> = { color: "color", size: "fontSize", fontsize: "fontSize", font: "fontFamily", fontfamily: "fontFamily", lang: "lang" };
 
 /** Read `key`, `key=bare` and `key="json string"` pairs separated by spaces or commas. Returns undefined text for a syntax error. */
 export function parseAttributes(source: string): { pairs: [string, string | true][]; error?: string } {
@@ -103,7 +105,7 @@ function spanStyle(source: string, issue: InlineIssue): Style {
     } else if (field) {
       if (typeof value === "string" && value) style[field] = value;
       else issue("markdown/span-attributes", `Span ${rawKey} needs a value.`);
-    } else issue("markdown/span-attributes", `Unknown span attribute ${JSON.stringify(rawKey)}. Known: bold, italic, underline, strike, sup, sub, color, size, font.`);
+    } else issue("markdown/span-attributes", `Unknown span attribute ${JSON.stringify(rawKey)}. Known: bold, italic, underline, strike, sup, sub, color, size, font, lang.`);
   }
   return style;
 }
@@ -203,6 +205,29 @@ function bracketPairs(s: string): Map<number, number> {
   return pairs;
 }
 
+/** Index of the first backtick run of exactly `n` characters at or after `from`, or -1 (CommonMark code spans). */
+function findCodeClose(s: string, from: number, n: number, unclosed: Set<number>): number {
+  if (unclosed.has(n)) return -1;
+  for (let i = from; i < s.length; ) {
+    if (s[i] !== "`") {
+      i++;
+      continue;
+    }
+    let j = i;
+    while (s[j] === "`") j++;
+    if (j - i === n) return i;
+    i = j;
+  }
+  unclosed.add(n);
+  return -1;
+}
+
+/** The text of a code span: line breaks become spaces, and one space is removed from each side when both sides have one. */
+function codeSpanText(body: string): string {
+  const text = body.replace(/\r\n|\r|\n/g, " ");
+  return text.length > 2 && text.startsWith(" ") && text.endsWith(" ") && /[^ ]/.test(text) ? text.slice(1, -1) : text;
+}
+
 const TAG_AT = /<(\/?)(u|sup|sub)>/iy;
 const BR_AT = /<br\s*\/?>/iy;
 const AUTOLINK_AT = /<([A-Za-z][A-Za-z0-9+.-]{1,31}:[^\s<>]*)>/y;
@@ -221,11 +246,28 @@ function tokenize(s: string, issue: InlineIssue, depth: number, budget: Budget):
     text = "";
   };
   const before = (i: number) => (i > 0 ? s[i - 1]! : " ");
+  // Backtick run lengths known to have no closing run after the point they were searched from.
+  const unclosed = new Set<number>();
   for (let i = 0; i < s.length; ) {
     const c = s[i]!;
     if (c === "\\" && i + 1 < s.length && ASCII_PUNCT.test(s[i + 1]!)) {
       text += s[i + 1];
       i += 2;
+      continue;
+    }
+    if (c === "`") {
+      let j = i;
+      while (s[j] === "`") j++;
+      const n = j - i;
+      const close = findCodeClose(s, j, n, unclosed);
+      if (close < 0) {
+        text += s.slice(i, j);
+        i = j;
+        continue;
+      }
+      flush();
+      tokens.push({ t: "node", children: [{ text: codeSpanText(s.slice(j, close)), style: { code: true } }], apply: {} });
+      i = close + n;
       continue;
     }
     if (c === "[") {
@@ -422,8 +464,9 @@ export function parseInline(text: string, issue: InlineIssue = () => {}): string
 /** Inline text for a field that holds plain text only (a title, a quote, a cell label): formatting is dropped and reported. */
 export function parsePlainInline(text: string, issue: InlineIssue = () => {}): string {
   const segs = parseInlineSegments(text, issue);
-  if (segs.some((seg) => Object.keys(seg.style).length)) issue("markdown/formatting-dropped", "This field holds plain text, so bold, italic, links and other formatting in it were dropped.");
-  return segs.map((seg) => seg.text).join("");
+  if (segs.some((seg) => Object.keys(seg.style).some((key) => key !== "code"))) issue("markdown/formatting-dropped", "This field holds plain text, so bold, italic, links and other formatting in it were dropped.");
+  // Backticks in a plain field stay literal characters, as they were before inline code existed.
+  return segs.map((seg) => (seg.style.code ? codeSpan(seg.text) : seg.text)).join("");
 }
 
 // --- serialization -----------------------------------------------------------------------------
@@ -460,7 +503,7 @@ export function escapeInline(text: string): string {
     const next = text[i + 1];
     // A backslash only needs escaping before punctuation or at the end of the text; a < only before something that could start a tag, an autolink or a comment.
     if (c === "\\") out += next === undefined || ASCII_PUNCT.test(next) ? "\\\\" : c;
-    else if (c === "*" || c === "[" || c === "]") out += `\\${c}`;
+    else if (c === "*" || c === "[" || c === "]" || c === "`") out += `\\${c}`;
     else if (c === "<") out += next !== undefined && /[A-Za-z/!]/.test(next) ? "\\<" : c;
     else if (c === "_") out += ALNUM.test(text[i - 1] ?? "") && ALNUM.test(text[i + 1] ?? "") ? c : "\\_";
     else if (c === "~") out += text[i - 1] === "~" || text[i + 1] === "~" ? "\\~" : c;
@@ -475,17 +518,28 @@ function serializeRun(run: Run, breakText: string): string | undefined {
   if (typeof run === "string") return text.split("\n").map(escapeInline).join(breakText);
   if (!isRecord(run) || typeof run.text !== "string") return undefined;
   for (const key of Object.keys(run)) if (key !== "text" && !(FORMATTING as readonly string[]).includes(key)) return undefined;
-  const lead = /^\s*/.exec(text)![0];
-  const trail = /\s*$/.exec(text.slice(lead.length))![0];
-  const core = text.slice(lead.length, text.length - trail.length);
   const edge = (s: string) => s.split("\n").map(escapeInline).join(breakText);
-  if (!core) return edge(text);
-  let out = core.split("\n").map(escapeInline).join(breakText);
-  if (run.color !== undefined || run.fontSize !== undefined || run.fontFamily !== undefined) {
+  let lead = "";
+  let trail = "";
+  let out: string;
+  if (run.code === true) {
+    // The text of a code span is literal and has no line break; the other formatting wraps the span.
+    if (!text) return "";
+    if (/[\r\n]/.test(text)) return undefined;
+    out = codeSpan(text);
+  } else {
+    lead = /^\s*/.exec(text)![0];
+    trail = /\s*$/.exec(text.slice(lead.length))![0];
+    const core = text.slice(lead.length, text.length - trail.length);
+    if (!core) return edge(text);
+    out = core.split("\n").map(escapeInline).join(breakText);
+  }
+  if (run.color !== undefined || run.fontSize !== undefined || run.fontFamily !== undefined || run.lang !== undefined) {
     const attrs: string[] = [];
     if (run.color !== undefined) attrs.push(`color=${attrValue(String(run.color))}`);
     if (run.fontSize !== undefined) attrs.push(`size=${String(run.fontSize)}`);
     if (run.fontFamily !== undefined) attrs.push(`font=${attrValue(String(run.fontFamily))}`);
+    if (run.lang !== undefined) attrs.push(`lang=${attrValue(String(run.lang))}`);
     out = `[${out}]{${attrs.join(" ")}}`;
   }
   if (run.subscript === true) out = `<sub>${out}</sub>`;
@@ -500,6 +554,14 @@ function serializeRun(run: Run, breakText: string): string | undefined {
     out = `[${out}](${/^[^\s()]+$/.test(url) ? url : `<${url}>`})`;
   }
   return edge(lead) + out + edge(trail);
+}
+
+/** A code span for `text`: a backtick fence longer than any backtick run inside, padded with a space where the text needs one. */
+export function codeSpan(text: string): string {
+  const longest = Math.max(0, ...[...text.matchAll(/`+/g)].map((match) => match[0].length));
+  const fence = "`".repeat(longest + 1);
+  const pad = /^`|`$/.test(text) || (text.startsWith(" ") && text.endsWith(" ") && /[^ ]/.test(text)) ? " " : "";
+  return `${fence}${pad}${text}${pad}${fence}`;
 }
 
 const attrValue = (value: string): string => (/^[^\s,"}]+$/.test(value) ? value : JSON.stringify(value));

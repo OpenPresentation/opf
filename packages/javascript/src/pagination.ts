@@ -1,3 +1,4 @@
+import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
 import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference, type FontSchemeDiagnostic, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
@@ -73,7 +74,16 @@ function leafFor(path: string, field: string, value: any): Leaf {
   if (field === 'code' || field === 'quote') {
     const key = field === 'code' ? 'source' : 'text';
     text = typeof value === 'string' ? value : value[key];
-    leaf.slice = (a,b) => typeof value === 'string' ? value.slice(a,b) : { ...value, [key]: text!.slice(a,b) };
+    leaf.slice = (a,b) => {
+      if (typeof value === 'string') return value.slice(a,b);
+      const piece: Record<string, any> = { ...value, [key]: text!.slice(a,b) };
+      // code.highlight lines are numbered per code block: a page keeps the marked lines it holds, renumbered from 1.
+      if (field === 'code' && value.highlight !== undefined) {
+        const highlight = codeHighlightSlice(value.highlight, text!, a, b);
+        if (highlight) piece.highlight = highlight; else delete piece.highlight;
+      }
+      return piece;
+    };
   }
   if (text !== undefined) {
     leaf.unit = 'utf16';

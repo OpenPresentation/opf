@@ -26,6 +26,8 @@ Choose one content structure per slide:
 
 Use catalog IDs from the installed package or supply inline records in `catalogs`. A gallery route is a stable identifier, but an extended gallery layout may need the inline record included in the copied document. Do not invent an unresolvable layout or assume a network lookup will happen.
 
+Pick `bullets` for plain talking points and `items` for a list whose entries have the same shape or a supporting `description` (see [content payloads](content-payloads.md#items-versus-bullets)). Mark an inline code span with `{ "text": "pnpm install", "code": true }`, a stretch in another language with `lang`, lines of a code block with `code.highlight` (`[3, [5, 7]]`), and stamp a deck with `design.watermark` `{ "text": "DRAFT", "opacity": 0.1 }`.
+
 Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts put a `type` and the same tabular structure inside `chart.data`. Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
 
 ## Revision loop

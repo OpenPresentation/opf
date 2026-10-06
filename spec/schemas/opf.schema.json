@@ -882,8 +882,8 @@
             { "$ref": "#/$defs/Asset" },
             { "$ref": "#/$defs/Watermark" }
           ],
-          "description": "Optional decorative watermark applied across slides. Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value }.",
-          "examples": [false, "asset:watermark", { "src": "asset:watermark", "opacity": 0.08 }]
+          "description": "Optional decorative watermark applied across slides: an image or a text stamp (see Watermark). Use false to suppress an inherited watermark in slide-level design; a string is equivalent to { src: value } at opacity 0.08.",
+          "examples": [false, "asset:watermark", { "src": "asset:watermark", "opacity": 0.08 }, { "text": "DRAFT", "opacity": 0.1 }]
         },
         "header": {
           "oneOf": [
@@ -1299,7 +1299,7 @@
         },
         "code": {
           "$ref": "#/$defs/Font",
-          "description": "Abstract role: monospaced font used for code blocks and inline code. No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
+          "description": "Abstract role: monospaced font used for code blocks and for inline code runs (TextRun.code). No direct OOXML slot. Resolution: this override, then the resolved catalog record's 'code' (for example Consolas for the consolas scheme), then the engine fallback Roboto Mono. Heading and body families are never used as the code fallback."
         }
       }
     },
@@ -1330,8 +1330,8 @@
     },
     "DimensionPreset": {
       "type": "string",
-      "enum": ["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"],
-      "description": "Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size."
+      "enum": ["16:9", "4:3", "16:10", "1:1", "4:5", "9:16", "letter", "a4", "widescreen", "standard"],
+      "description": "Named dimension preset; chooses both aspect ratio and physical size. 'widescreen' is an alias for 16:9 in PowerPoint widescreen size; 'standard' is an alias for 4:3 in PowerPoint standard size. The social-feed ratios keep the widescreen short edge of 7.5 in: 1:1 is 7.5 x 7.5 in, 4:5 is 7.5 x 9.375 in and 9:16 is 7.5 x 13.333 in (portrait)."
     },
     "Dimensions": {
       "type": "object",
@@ -2018,13 +2018,23 @@
     },
     "Watermark": {
       "type": "object",
-      "description": "Decorative watermark image and rendering options. Use design.watermark = false to disable an inherited watermark.",
+      "description": "Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in the middle 40% of the slide. A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and at most 30% of the shorter slide edge in height; it is drawn behind the slide content and above the background and slide image. There is no option to move, scale, rotate or tile either form. PPTX export writes one native picture (image) or one native text box (text) per slide with the opacity as alpha, and import restores the watermark. Use design.watermark = false to disable an inherited watermark.",
       "additionalProperties": false,
       "required": ["opacity"],
+      "oneOf": [
+        { "required": ["src"] },
+        { "required": ["text"] }
+      ],
       "properties": {
         "src": {
           "type": "string",
-          "description": "Source for the watermark image."
+          "description": "Source for the watermark image. Exactly one of src and text is set."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Text for a text watermark, such as DRAFT or CONFIDENTIAL; line breaks are drawn as spaces. Exactly one of src and text is set.",
+          "examples": ["DRAFT", "CONFIDENTIAL"]
         },
         "opacity": {
           "type": "number",
@@ -2783,7 +2793,7 @@
     },
     "Code": {
       "type": "object",
-      "description": "Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, and 'filename' when the rendered block should show a file label. A string value in a code field is shorthand for { \"source\": value }.",
+      "description": "Code content with optional rendering metadata. Use 'source' for the code text, 'language' for syntax highlighting, 'filename' when the rendered block should show a file label, and 'highlight' to emphasize lines. A string value in a code field is shorthand for { \"source\": value }.",
       "additionalProperties": false,
       "required": ["source"],
       "properties": {
@@ -2801,6 +2811,18 @@
           "type": "string",
           "description": "Optional file label shown with the code block.",
           "examples": ["app.py", "components/Button.tsx", "terraform/main.tf"]
+        },
+        "highlight": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              { "type": "integer", "minimum": 1 },
+              { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "integer", "minimum": 1 } }
+            ]
+          },
+          "description": "Source lines to emphasize, 1-based: each entry is a line number or an inclusive [start, end] range, so [3, [5, 7]] marks lines 3 and 5 to 7. Lines are counted by line break in 'source', so a line that wraps stays one line. Engines draw a theme-derived band behind the marked lines and dim the other lines slightly, keeping every line at least 4.5:1 against its background; PPTX export draws one native rectangle behind the line text boxes and import restores the list. A line number past the last line, or a range written end before start, gets a validation warning (code-highlight-out-of-range, code-highlight-range-reversed) and is ignored. When a code block is paginated across slides each page keeps the lines that fall on it, renumbered from 1.",
+          "examples": [[3], [3, [5, 7]], [[2, 4]]]
         }
       }
     },
@@ -3098,8 +3120,18 @@
             },
             "fontFamily": {
               "type": "string",
-              "description": "Run font family override.",
+              "description": "Run font family override. It wins over the code font a run with 'code' takes.",
               "examples": ["Inter", "Source Serif Pro", "JetBrains Mono"]
+            },
+            "code": {
+              "type": "boolean",
+              "description": "Whether the run is an inline code span: it is drawn in the design's code font (design.fontScheme.code, else the resolved font scheme's code family, else Roboto Mono), unless the run names its own fontFamily. Only the font changes; there is no background, because a PPTX run cannot have one. Markdown backticks read and write code runs."
+            },
+            "lang": {
+              "type": "string",
+              "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$",
+              "description": "BCP-47 language tag of the run, such as 'fr-FR' or 'ja-JP', when it differs from the deck language. It sets the proofing language (PPTX a:rPr lang) and the language the run's script fonts and glyph variants follow (for example the Japanese or the Simplified Chinese face for Han characters); without it the run follows the deck language. The preview and the export both honor it; line breaking and measurement keep the deck language's rules.",
+              "examples": ["fr-FR", "ja-JP", "de"]
             },
             "link": {
               "type": "string",

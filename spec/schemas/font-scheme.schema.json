@@ -81,7 +81,7 @@
     },
     "code": {
       "type": "object",
-      "description": "Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so exporters write this family on code runs. When neither design.fontScheme nor the resolved record defines 'code', engines fall back to Roboto Mono.",
+      "description": "Optional monospaced font for code blocks and for inline code runs (TextRun.code). It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so exporters write this family on code runs. When neither design.fontScheme nor the resolved record defines 'code', engines fall back to Roboto Mono.",
       "required": [
         "family"
       ],

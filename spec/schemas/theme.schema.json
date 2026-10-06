@@ -96,12 +96,15 @@
     },
     "dimensions": {
       "type": "string",
-      "enum": ["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"],
+      "enum": ["16:9", "4:3", "16:10", "1:1", "4:5", "9:16", "letter", "a4", "widescreen", "standard"],
       "description": "Default slide size for this theme. Accepts the same preset values as design.dimensions.preset.",
       "examples": [
         "16:9",
         "4:3",
         "16:10",
+        "1:1",
+        "4:5",
+        "9:16",
         "letter",
         "a4",
         "widescreen",

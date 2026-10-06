@@ -124,12 +124,13 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `**bold**`, `__bold__` | `bold` |
 | `*italic*`, `_italic_` | `italic` (`_` only at word edges: `snake_case` is text) |
 | `~~strike~~` | `strikethrough` |
+| `` `code` ``, ``` ``a ` b`` ``` | `code` (a backtick fence of any length; one space is trimmed from each side when both sides have one; the text is literal and other formatting wraps the span) |
 | `<u>`, `<sup>`, `<sub>` | `underline`, `superscript`, `subscript` |
 | `[text](url)`, `<https://...>` | `link` (a link title is ignored) |
-| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`; `bold italic underline strike sup sub` work inside the braces too |
+| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `lang` (a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
-Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. There is no inline code (backticks stay literal), no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. Fields that hold plain text (the title, the subtitle, and a quote's text, attribution and source) drop formatting with a `formatting-dropped` warning. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
+Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. Fields that hold plain text (the title, the subtitle, and a quote's text, attribution and source) drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
 
 ## Writing OPF as Markdown
 

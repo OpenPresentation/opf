@@ -238,7 +238,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `deprecation` | no | `object` | Present when this font scheme is deprecated, for example an alias kept for backward compatibility. Deprecated records stay resolvable so existing documents keep validating and rendering unchanged, but pickers and defa... |
 | `major` | yes | `string` | Heading (major) font family mirrors the OOXML majorFont entry. |
 | `minor` | yes | `string` | Body (minor) font family mirrors the OOXML minorFont entry. |
-| `code` | no | `object` | Optional monospaced font for code blocks and inline code. It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXML has no code slot, so e... |
+| `code` | no | `object` | Optional monospaced font for code blocks and for inline code runs (TextRun.code). It has the same shape as the OPF FontScheme 'code' role, so a record and an inline design.fontScheme override are interchangeable. OOXM... |
 | `eastAsian` | no | `object` | East Asian script fonts. Maps to the OOXML a:ea element of majorFont (major) and minorFont (minor), and to run-level a:ea. When set, they fill the eastAsian slot for every language; when omitted, the slot comes from t... |
 | `complexScript` | no | `object` | Complex-script fonts (for example Arabic, Hebrew, Indic and Thai). Maps to the OOXML a:cs element of majorFont (major) and minorFont (minor), and to run-level a:cs. When set, they fill the complexScript slot for every... |
 | `type` | no | `enum:sans-serif \| serif \| monospace` | High-level typographic class of the scheme. |
@@ -481,7 +481,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | `colorScheme` | no | `string` | Catalog reference to the theme's default color scheme resolved against catalogs.colorSchemes the same way design.colorScheme or design.colorScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
 | `fontScheme` | no | `string` | Catalog reference to the theme's default font scheme resolved against catalogs.fontSchemes the same way design.fontScheme or design.fontScheme.id is. Accepts a bare id, HTTPS URL, or 'pkg:' reference. |
 | `background` | no | `ref:ThemeBackground` |  |
-| `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
+| `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
