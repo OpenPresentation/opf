@@ -1,0 +1,194 @@
+{
+  "builds": {
+    "c4-after": {
+      "commit": "b076bb6",
+      "core": "0.12.2",
+      "coreCommit": "11317237"
+    },
+    "c4-before": {
+      "commit": "f0ea480",
+      "core": "0.12.2",
+      "coreCommit": "11317237"
+    },
+    "c2-after": {
+      "commit": "4baa171",
+      "core": "0.12.0",
+      "coreCommit": "npm"
+    },
+    "c2-before": {
+      "commit": "7c93a1b",
+      "core": "0.12.0",
+      "coreCommit": "npm"
+    }
+  },
+  "rows": [
+    {
+      "file": "c4-formats-after.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 6 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c4-formats-after.pptx",
+      "check": "C4 save copy",
+      "status": "FAIL",
+      "detail": "payloads equal false, datasets equal true; data diagnostics: chart-data-provenance-changed slides.5.charts.0; scatter names a, b, c; re-spelled codes: ppt/charts/chart1.xml: \\$#,##0.0 ; ppt/charts/chart1.xml:  ; ppt/charts/chart1.xml: #,##0\\ &quot;units&quot; ; ppt/charts/chart1.xml: #,##0\\  ; ppt/charts/chart2.xml:  ; ppt/charts/chart3.xml: \\$#,##0 ; ppt/charts/chart3.xml: 0.0\\  ; ppt/charts/chart3.xml:  ; ppt/charts/chart3.xml: 0.0\\ &quot;kg&quot; ; ppt/charts/chart4.xml: \\$#,##0 ; ppt/charts/chart4.xml:  ; ppt/charts/chart6.xml:  ; ppt/charts/chart6.xml: \\+0.0\\ &quot;pts&quot; ; ppt/charts/chart6.xml: \\+0.0\\ "
+    },
+    {
+      "file": "c4-formats-before.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 6 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c4-formats-before.pptx",
+      "check": "C4 save copy",
+      "status": "BASELINE (expected fail)",
+      "detail": "payloads equal false, datasets equal true; data diagnostics: chart-data-provenance-changed slides.0.charts.0, chart-data-provenance-changed slides.2.charts.0, chart-data-provenance-changed slides.3.charts.0, chart-data-provenance-changed slides.5.charts.0; scatter names 1, 2, 3; re-spelled codes: ppt/charts/chart1.xml: \\$#,##0.0 ; ppt/charts/chart1.xml:  ; ppt/charts/chart1.xml: #,##0\\ &quot;units&quot; ; ppt/charts/chart1.xml: #,##0\\  ; ppt/charts/chart2.xml:  ; ppt/charts/chart3.xml: \\$#,##0 ; ppt/charts/chart3.xml: 0.0\\  ; ppt/charts/chart3.xml:  ; ppt/charts/chart3.xml: 0.0\\ &quot;kg&quot; ; ppt/charts/chart4.xml: \\$#,##0 ; ppt/charts/chart4.xml:  ; ppt/charts/chart6.xml:  ; ppt/charts/chart6.xml: \\+0.0\\ &quot;pts&quot; ; ppt/charts/chart6.xml: \\+0.0\\ "
+    },
+    {
+      "file": "c4-datasets-after.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 6 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c4-datasets-after.pptx",
+      "check": "C4 save copy",
+      "status": "PASS",
+      "detail": "payloads equal true, datasets equal true; data diagnostics: none; scatter names -; re-spelled codes: ppt/charts/chart1.xml: \\$#,##0 ; ppt/charts/chart1.xml:  ; ppt/charts/chart2.xml: #,##0\\  ; ppt/charts/chart2.xml:  ; ppt/charts/chart2.xml: \\$#,##0 ; ppt/charts/chart2.xml: #,##0\\ &quot;units&quot; ; ppt/charts/chart3.xml: #,##0\\  ; ppt/charts/chart3.xml:  ; ppt/charts/chart4.xml: "
+    },
+    {
+      "file": "c4-datasets-before.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 6 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c4-datasets-before.pptx",
+      "check": "C4 save copy",
+      "status": "BASELINE (expected fail)",
+      "detail": "payloads equal false, datasets equal true; data diagnostics: chart-data-provenance-changed slides.0.charts.0, chart-data-provenance-changed slides.1.charts.0, chart-data-provenance-changed slides.3.charts.0; scatter names -; re-spelled codes: ppt/charts/chart1.xml: \\$#,##0 ; ppt/charts/chart1.xml:  ; ppt/charts/chart2.xml: #,##0\\  ; ppt/charts/chart2.xml:  ; ppt/charts/chart2.xml: \\$#,##0 ; ppt/charts/chart2.xml: #,##0\\ &quot;units&quot; ; ppt/charts/chart3.xml: #,##0\\  ; ppt/charts/chart3.xml:  ; ppt/charts/chart4.xml: "
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 8 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 1",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 2",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 3",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 4",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 5",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3, B4, C3, C4, C7; used range A1:C7)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 6",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3; used range A1:B4)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 7",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros B3; used range A1:B4)"
+    },
+    {
+      "file": "c2-zeros-after.pptx",
+      "check": "C2 Edit Data slide 8 (scatter)",
+      "status": "PASS",
+      "detail": "every value cell matches the chart cache (zeros A3, B3, B5, B6; used range A1:B6)"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C3 open",
+      "status": "PASS",
+      "detail": "stage done; 8 slides; source sha256 unchanged. A repair prompt is a FAIL: record it by hand."
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 1",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\"); B4: expected 0, read null (text \"\"); C3: expected 0, read null (text \"\"); C4: expected 0, read null (text \"\"); C7: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 2",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\"); B4: expected 0, read null (text \"\"); C3: expected 0, read null (text \"\"); C4: expected 0, read null (text \"\"); C7: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 3",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\"); B4: expected 0, read null (text \"\"); C3: expected 0, read null (text \"\"); C4: expected 0, read null (text \"\"); C7: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 4",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\"); B4: expected 0, read null (text \"\"); C3: expected 0, read null (text \"\"); C4: expected 0, read null (text \"\"); C7: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 5",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\"); B4: expected 0, read null (text \"\"); C3: expected 0, read null (text \"\"); C4: expected 0, read null (text \"\"); C7: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 6",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 7",
+      "status": "BASELINE (expected fail)",
+      "detail": "B3: expected 0, read null (text \"\")"
+    },
+    {
+      "file": "c2-zeros-before.pptx",
+      "check": "C2 Edit Data slide 8 (scatter)",
+      "status": "BASELINE (expected fail)",
+      "detail": "stage failed during activate; Exception from HRESULT: 0xB0D7019E",
+      "statusAsRun": "FAIL",
+      "reclassified": "Reclassified FAIL -> BASELINE in this evidence: c2-zeros-before is the opf-pptx main 7c93a1b build. Its slide-8 scatter workbook has the X gap as the numeric cell <c r=\"A4\"><v>null</v></c> (confirmed in the package), which opf-pptx#173 fixes (after: <c r=\"A4\"/>). Excel cannot load that sheet, so ChartData.Activate fails with 0xB0D7019E before any cell can be read: the expected baseline, not a regression."
+    }
+  ],
+  "summary": {
+    "PASS": 15,
+    "FAIL": 1,
+    "BASELINE": 10
+  },
+  "summaryAsRun": {
+    "PASS": 15,
+    "FAIL": 2,
+    "BASELINE": 9
+  }
+}
