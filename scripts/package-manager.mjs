@@ -18,6 +18,15 @@ export function packageManagerInvocation(name, args, {platform=process.platform,
     ]),
   ];
   const entry=candidates.find(existsSync);
-  if (!entry) throw new Error(`Cannot locate ${name}'s JavaScript entrypoint; install ${name} and include it in PATH.`);
-  return {command:process.execPath,args:[entry,...args]};
+  if (entry) return {command:process.execPath,args:[entry,...args]};
+  // RR-57: CI installs the standalone pnpm release, a single pnpm.exe with no JavaScript entrypoint. Spawn it directly
+  // (still no shell, so arguments stay literal), the way node is spawned.
+  if (name === 'pnpm') {
+    const executable = [
+      ...(explicit && path.basename(explicit).toLowerCase() === 'pnpm.exe' ? [explicit] : []),
+      ...directories.map(directory=>path.resolve(directory,'pnpm.exe')),
+    ].find(existsSync);
+    if (executable) return {command:executable,args:[...args]};
+  }
+  throw new Error(`Cannot locate ${name}'s JavaScript entrypoint; install ${name} and include it in PATH.`);
 }

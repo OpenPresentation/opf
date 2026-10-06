@@ -25,7 +25,10 @@ function run(command,args,cwd,env={}) {
   const entry=command==='npm'
    ? (process.env.PATH??'').split(path.delimiter).flatMap(directory=>[path.join(directory,'node_modules/npm/bin/npm-cli.js'),path.resolve(directory,'../npm/bin/npm-cli.js')]).find(existsSync)
    : (process.env.npm_execpath?.endsWith('pnpm.cjs')?process.env.npm_execpath:(process.env.PATH??'').split(path.delimiter).flatMap(directory=>[path.join(directory,'node_modules/pnpm/bin/pnpm.cjs'),path.resolve(directory,'../pnpm/bin/pnpm.cjs')]).find(existsSync));
-  assert.ok(entry,`Cannot locate ${command} JavaScript entrypoint`);args=[entry,...args];command=process.execPath;
+  // RR-57: the standalone pnpm release has no JavaScript entrypoint; spawn its pnpm.exe directly.
+  const executable=command==='pnpm'&&!entry?(process.env.PATH??'').split(path.delimiter).map(directory=>path.join(directory,'pnpm.exe')).find(existsSync):undefined;
+  if(executable)command=executable;
+  else{assert.ok(entry,`Cannot locate ${command} JavaScript entrypoint`);args=[entry,...args];command=process.execPath;}
  }
  const result=spawnSync(command,args,{cwd,encoding:'utf8',env:{...process.env,...env},timeout:120000});
  if(result.error)throw result.error;

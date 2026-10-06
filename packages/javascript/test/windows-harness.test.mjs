@@ -32,6 +32,13 @@ test('Windows package invocation preserves literal arguments and ignores the oth
   assert.equal(result.status,0,result.stderr);
   assert.deepEqual(JSON.parse(result.stdout),args);
   assert.deepEqual(packageManagerInvocation('pnpm',args,{platform:'win32',env:{npm_execpath:pnpm}}).args,[pnpm,...args]);
+  // RR-57: the standalone pnpm release is one pnpm.exe with no pnpm.cjs; it is spawned directly, from npm_execpath or PATH.
+  const standalone=path.join(directory,'standalone only','bin','pnpm.exe');
+  await mkdir(path.dirname(standalone),{recursive:true});
+  await writeFile(standalone,'');
+  assert.deepEqual(packageManagerInvocation('pnpm',args,{platform:'win32',env:{npm_execpath:standalone,PATH:''}}),{command:standalone,args});
+  assert.deepEqual(packageManagerInvocation('pnpm',args,{platform:'win32',env:{PATH:`"${path.dirname(standalone)}"`}}),{command:standalone,args});
+  assert.throws(()=>packageManagerInvocation('npm',[],{platform:'win32',env:{npm_execpath:standalone,PATH:path.dirname(standalone)}}),/Cannot locate npm/);
   assert.deepEqual(packageManagerInvocation('npm',args,{platform:'linux'}),{command:'npm',args});
   assert.throws(()=>packageManagerInvocation('npm',[],{platform:'win32',env:{npm_execpath:pnpm}}),/Cannot locate npm/);
   assert.throws(()=>packageManagerInvocation('unexpected',[]),/Unsupported/);

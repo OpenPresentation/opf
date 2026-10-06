@@ -1,0 +1,202 @@
+# RR-57: put a pinned, checksum-verified pnpm on PATH without installing it through npm.
+#
+# pnpm/action-setup runs `npm ci` to bootstrap pnpm and then `pnpm self-update`, a second download; on a bad day that
+# is 3 to 7 minutes before the first real step. This action downloads the one pnpm release asset for the runner from
+# https://github.com/pnpm/pnpm/releases (a single file, or an archive for pnpm 11 and later), checks its SHA-256
+# against the table below, installs it as `pnpm` (`pnpm.exe` on Windows) and appends its directory to GITHUB_PATH.
+# pnpm's standalone builds embed Node, so no Node has to be set up first; run actions/setup-node AFTER this step so
+# that `cache: pnpm` finds pnpm on PATH.
+#
+# The version is the `version` input, or else the `packageManager` field ("pnpm@10.33.2+sha512..." gives 10.33.2) of
+# `package-json`. A version with no row in the table fails with the instructions below. The step needs only bash plus
+# one of curl, wget or node to download (the pinned Playwright container image has no curl guarantee), and one of
+# sha256sum, shasum, openssl or node to verify.
+#
+# To change the pnpm version: copy the `digest` of every asset you use (sha256:...) from
+#   gh api repos/pnpm/pnpm/releases/tags/v<version> --jq '.assets[] | [.name, .digest] | @tsv'
+# into the table, one row per version and platform, next to the packageManager / `version:` bump.
+name: Set up pnpm (pinned binary)
+description: Download a pinned pnpm release asset, verify its SHA-256, and put it on PATH. No npm bootstrap.
+inputs:
+  version:
+    description: pnpm version, for example 10.33.2. Empty reads packageManager from package-json.
+    required: false
+    default: ''
+  package-json:
+    description: package.json to read packageManager from when version is empty (relative to the workspace root).
+    required: false
+    default: package.json
+outputs:
+  version:
+    description: The installed pnpm version.
+    value: ${{ steps.install.outputs.version }}
+  path:
+    description: The directory that now holds pnpm and is on PATH.
+    value: ${{ steps.install.outputs.path }}
+runs:
+  using: composite
+  steps:
+    - id: install
+      shell: bash
+      env:
+        PNPM_SETUP_VERSION: ${{ inputs.version }}
+        PNPM_SETUP_PACKAGE_JSON: ${{ inputs.package-json }}
+      run: |
+        set -euo pipefail
+
+        fail() { echo "::error title=setup-pnpm::$*" >&2; exit 1; }
+
+        # version  platform  release asset  sha256 (from the pnpm GitHub release `digest` field)
+        TABLE='
+        10.33.2 linux-x64        pnpm-linux-x64               39d7b6600239712bc9581ea219b17ffef46ba60998779cb717be2e068be029ef
+        10.33.2 linux-arm64      pnpm-linux-arm64             0828e5ee23be89d22bd53cc36e93c181ce9d5c47d75f9fe9bf4bdc7a65c66322
+        10.33.2 linux-x64-musl   pnpm-linuxstatic-x64         a47be715939bafa420fbdc5e34f7f9d8292c032402162c89ccb611e944e526d6
+        10.33.2 linux-arm64-musl pnpm-linuxstatic-arm64       4d402d0ef12cdc4d81ca339904e68638d841f4e27c73e460534d06e6b56048a9
+        10.33.2 macos-arm64      pnpm-macos-arm64             a99a4d5d0e6bd3728949c24ff74a2f2f2d07f73bc48fd308e4eea75d8e72acdc
+        10.33.2 macos-x64        pnpm-macos-x64               3b66abb865f4e7a82393861f0f3784d67a704a31a4021739874d4b7910793dca
+        10.33.2 win-x64          pnpm-win-x64.exe             3d1af71e9da7081efd58f95942e1f7e2107bf8fcdae03eb2331c0b6cea59510b
+        10.33.2 win-arm64        pnpm-win-arm64.exe           0605f8a3a707cf9a5e525ebbb84282f095668f928e1cd6e6a3a31bf78571e8d0
+        '
+
+        # 1. The version.
+        version="${PNPM_SETUP_VERSION:-}"
+        if [ -z "$version" ]; then
+          pkg="${PNPM_SETUP_PACKAGE_JSON:-package.json}"
+          # Relative paths are relative to the workspace root, whatever the job's default working directory is.
+          case "$pkg" in
+            /*|[A-Za-z]:*) ;;
+            *) ws="${GITHUB_WORKSPACE:-$PWD}"; if [ "${RUNNER_OS:-}" = Windows ]; then ws="$(cygpath -u "$ws")"; fi; pkg="$ws/$pkg" ;;
+          esac
+          [ -f "$pkg" ] || fail "No version input and no $pkg to read packageManager from."
+          version="$(sed -n 's/.*"packageManager"[[:space:]]*:[[:space:]]*"pnpm@\([^"+]*\)[^"]*".*/\1/p' "$pkg" | head -n 1)"
+          [ -n "$version" ] || fail "$pkg has no packageManager field of the form pnpm@<version>."
+        fi
+
+        # 2. The platform.
+        case "${RUNNER_OS:-$(uname -s)}" in
+          Linux) os=linux ;;
+          macOS|Darwin) os=macos ;;
+          Windows|MINGW*|MSYS*|CYGWIN*) os=win ;;
+          *) fail "Unsupported runner OS: ${RUNNER_OS:-$(uname -s)}" ;;
+        esac
+        case "${RUNNER_ARCH:-$(uname -m)}" in
+          X64|x86_64|AMD64) arch=x64 ;;
+          ARM64|arm64|aarch64) arch=arm64 ;;
+          *) fail "Unsupported runner architecture: ${RUNNER_ARCH:-$(uname -m)}" ;;
+        esac
+        libc=""
+        if [ "$os" = linux ]; then
+          ldd_out="$(ldd --version 2>&1 || true)"
+          if [ -f /etc/alpine-release ] || [[ "$ldd_out" == *musl* ]]; then libc="-musl"; fi
+        fi
+        platform="$os-$arch$libc"
+
+        row="$(printf '%s\n' "$TABLE" | awk -v v="$version" -v p="$platform" '$1 == v && $2 == p { print $3 " " $4 }')"
+        [ -n "$row" ] || fail "No pinned checksum for pnpm $version on $platform. Add one row per platform to the table in .github/actions/setup-pnpm/action.yml (see the header of that file)."
+        asset="${row% *}"
+        want="${row#* }"
+
+        # 3. Where it goes.
+        exe=pnpm
+        [ "$os" = win ] && exe=pnpm.exe
+        native() { if [ "$os" = win ]; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
+        base="${RUNNER_TOOL_CACHE:-}"
+        if [ "$os" = win ] && [ -n "$base" ]; then base="$(cygpath -u "$base")"; fi
+        if [ -z "$base" ] || ! mkdir -p "$base/pnpm-bin" 2>/dev/null || [ ! -w "$base/pnpm-bin" ]; then
+          base="$HOME/.pnpm-bin"
+          mkdir -p "$base"
+        else
+          base="$base/pnpm-bin"
+        fi
+        dir="$base/$version/$platform"
+        marker="$dir/.sha256"
+
+        # 4. Tools.
+        fetch() {
+          local url="$1" dest="$2"
+          if command -v curl >/dev/null 2>&1; then
+            curl -fsSL --connect-timeout 20 --max-time 300 -o "$dest" "$url"
+          elif command -v wget >/dev/null 2>&1; then
+            wget -q -O "$dest" "$url"
+          elif command -v node >/dev/null 2>&1; then
+            PNPM_SETUP_URL="$url" PNPM_SETUP_DEST="$dest" node -e '
+              fetch(process.env.PNPM_SETUP_URL).then(async (r) => {
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                require("fs").writeFileSync(process.env.PNPM_SETUP_DEST, Buffer.from(await r.arrayBuffer()));
+              }).catch((e) => { console.error(String(e && e.message || e)); process.exit(1); });'
+          else
+            echo "No curl, wget or node to download with." >&2
+            return 127
+          fi
+        }
+        sha256_of() {
+          if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | awk '{ print $1 }'
+          elif command -v shasum >/dev/null 2>&1; then shasum -a 256 "$1" | awk '{ print $1 }'
+          elif command -v openssl >/dev/null 2>&1; then openssl dgst -sha256 "$1" | awk '{ print $NF }'
+          elif command -v node >/dev/null 2>&1; then
+            PNPM_SETUP_FILE="$1" node -e 'const h = require("crypto").createHash("sha256"); h.update(require("fs").readFileSync(process.env.PNPM_SETUP_FILE)); console.log(h.digest("hex"));'
+          else
+            echo "No sha256sum, shasum, openssl or node to verify with." >&2
+            return 127
+          fi
+        }
+        extract_zip() {
+          local zip="$1" out="$2"
+          if command -v unzip >/dev/null 2>&1; then unzip -q "$zip" -d "$out"
+          elif command -v 7z >/dev/null 2>&1; then 7z x -y "-o$(native "$out")" "$(native "$zip")" >/dev/null
+          elif [ -x "${SYSTEMROOT:-/c/Windows}/System32/tar.exe" ]; then "${SYSTEMROOT:-/c/Windows}/System32/tar.exe" -xf "$(native "$zip")" -C "$(native "$out")"
+          elif command -v powershell >/dev/null 2>&1; then
+            powershell -NoProfile -NonInteractive -Command "Expand-Archive -LiteralPath '$(native "$zip")' -DestinationPath '$(native "$out")' -Force"
+          else
+            echo "No unzip, 7z, tar.exe or powershell to extract $zip with." >&2
+            return 127
+          fi
+        }
+
+        # 5. Download, verify, install (skipped when this exact verified asset is already installed).
+        if [ -x "$dir/$exe" ] && [ -f "$marker" ] && [ "$(cat "$marker")" = "$want" ]; then
+          echo "pnpm $version ($platform) is already installed and verified at $dir"
+        else
+          echo "::group::Download pnpm $version ($asset)"
+          tmp="$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/setup-pnpm.XXXXXX")"
+          trap 'rm -rf "$tmp"' EXIT
+          file="$tmp/$asset"
+          attempt=1
+          mismatches=0
+          while :; do
+            rm -f "$file"
+            if fetch "https://github.com/pnpm/pnpm/releases/download/v$version/$asset" "$(native "$file")"; then
+              got="$(sha256_of "$file")"
+              if [ "$got" = "$want" ]; then break; fi
+              echo "Attempt $attempt: SHA-256 mismatch for $asset (expected $want, got $got)." >&2
+              mismatches=$((mismatches + 1))
+            else
+              echo "Attempt $attempt: download of $asset failed." >&2
+            fi
+            [ "$attempt" -lt 4 ] && [ "$mismatches" -lt 2 ] || fail "Could not download a verified $asset after $attempt attempt(s)."
+            sleep $((attempt * 5))
+            attempt=$((attempt + 1))
+          done
+          echo "SHA-256 verified: $want"
+          stage="$tmp/stage"
+          mkdir -p "$stage"
+          case "$asset" in
+            *.tar.gz) tar -xzf "$file" -C "$stage" ;;
+            *.zip) extract_zip "$file" "$stage" ;;
+            *) cp "$file" "$stage/$exe" ;;
+          esac
+          [ -f "$stage/$exe" ] || fail "$asset did not contain $exe."
+          chmod +x "$stage/$exe" 2>/dev/null || true
+          rm -rf "$dir"
+          mkdir -p "$(dirname "$dir")"
+          mv "$stage" "$dir"
+          printf '%s' "$want" > "$marker"
+          echo "::endgroup::"
+        fi
+
+        # 6. On PATH, and prove it is the version asked for.
+        if [ "$os" = win ]; then echo "$(cygpath -w "$dir")" >> "$GITHUB_PATH"; else echo "$dir" >> "$GITHUB_PATH"; fi
+        installed="$(cd "${RUNNER_TEMP:-/tmp}" && "$dir/$exe" --version 2>&1 | tr -d '\r' | tail -n 1)"
+        [ "$installed" = "$version" ] || fail "Installed pnpm reports '$installed', expected $version."
+        echo "pnpm $installed ($platform) at $dir"
+        { echo "version=$installed"; echo "path=$dir"; } >> "$GITHUB_OUTPUT"
