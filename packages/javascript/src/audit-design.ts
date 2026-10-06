@@ -1,6 +1,6 @@
 import { catalogs as bundledCatalogs } from './catalogs.js';
 import type { CatalogKind } from './catalogs.js';
-import { normalizeHexColor, resolveColorRef } from './color.js';
+import { defaultSlideBackground, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import {
 	DEFAULT_FONT_SCHEME,
 	resolveCanvasDimensions,
@@ -159,7 +159,7 @@ export interface ResolvedDesign {
 	dimensions: { width: number; height: number };
 	/** The slide background after design resolution. */
 	backdrop: Backdrop;
-	/** The preview's choice: light text (`light1`) on a dark background colour, else `dark1`. */
+	/** The preview's choice: light text (`light1`) on a dark background colour, else the `text` role (`dark1`). */
 	dark: boolean;
 	colors: {
 		background: string;
@@ -186,15 +186,16 @@ const colorFrom = (scheme: Rec, slot: unknown, fallback: string): string =>
  * The background the preview draws. Like the preview, a solid, gradient-stop or pattern colour is read as a literal hex colour
  * (anything else falls back: white, the scheme's light1 for a stop, the text colour for a pattern's foreground); opacity composites over white.
  */
-function backdropOf(definition: unknown, scheme: Rec, text: string): Backdrop {
-	const resolve = (value: unknown, fallback: string) => normalizeHexColor(value) ?? fallback;
-	if (!definition) return { kind: 'solid', color: colorFrom(scheme, 'light1', PAGE) };
-	if (typeof definition === 'string') return { kind: 'solid', color: colorFrom(scheme, definition, PAGE) };
+function backdropOf(definition: unknown, scheme: Rec, text: string, variables: Rec): Backdrop {
+	const resolve = (value: unknown, fallback: string) => backgroundColorRef(value, scheme, variables, fallback);
+	const canvas = defaultSlideBackground(scheme);
+	if (!definition) return { kind: 'solid', color: canvas };
+	if (typeof definition === 'string') return { kind: 'solid', color: colorFrom(scheme, definition, canvas) };
 	const bg = rec(definition),
 		opacity = typeof bg.opacity === 'number' ? Math.max(0, Math.min(1, bg.opacity)) : 1;
 	switch (bg.type) {
 		case 'theme':
-			return { kind: 'solid', color: blend(colorFrom(scheme, bg.slot, PAGE), PAGE, opacity) };
+			return { kind: 'solid', color: blend(colorFrom(scheme, bg.slot, canvas), PAGE, opacity) };
 		case 'solid':
 			return { kind: 'solid', color: blend(resolve(bg.color, PAGE), PAGE, opacity) };
 		case 'gradient': {
@@ -203,7 +204,7 @@ function backdropOf(definition: unknown, scheme: Rec, text: string): Backdrop {
 				kind: 'gradient',
 				angle: Number(rec(bg.gradient).angle ?? 0),
 				stops: stops.map((stop, index) => ({
-					color: blend(resolve(stop.color, colorFrom(scheme, 'light1', PAGE)), PAGE, opacity),
+					color: blend(resolve(stop.color, canvas), PAGE, opacity),
 					position: typeof stop.position === 'number' ? stop.position : index / Math.max(1, stops.length - 1),
 				})),
 			};
@@ -221,29 +222,48 @@ function backdropOf(definition: unknown, scheme: Rec, text: string): Backdrop {
 		case 'image':
 			return { kind: 'image', opacity, base: PAGE };
 		default:
-			return { kind: 'solid', color: colorFrom(scheme, 'light1', PAGE) };
+			return { kind: 'solid', color: canvas };
 	}
 }
 
 /**
- * The single colour the preview's text-colour choice reads: the scheme slot or literal colour of a theme, shortcut, solid or
- * pattern background, light1 behind a picture, and white for a gradient (which has no single colour). Opacity is not applied.
+ * A solid or pattern background colour: a literal, a `var:` variable, or a slot or role that does not depend on the
+ * background itself (so the background, surface and text roles resolve through the scheme alone, as in the preview).
  */
-function decisionColor(definition: unknown, scheme: Rec): string {
-	if (!definition) return colorFrom(scheme, 'light1', PAGE);
-	if (typeof definition === 'string') return colorFrom(scheme, definition, PAGE);
+function backgroundColorRef(value: unknown, scheme: Rec, variables: Rec, fallback: string): string {
+	if (typeof value !== 'string') return fallback;
+	const literal = normalizeHexColor(value);
+	if (literal) return literal;
+	const roles = resolveColorRoles(scheme);
+	return resolveColorRef(value.trim(), {
+		colorScheme: scheme,
+		roles: { primary: roles.primary, secondary: roles.secondary, accent: roles.accent },
+		variables,
+		fallback,
+	});
+}
+
+/**
+ * The single colour the preview's text-colour choice reads: the resolved slide background of a theme, shortcut, solid or
+ * pattern background, else undefined (no background, a picture or a gradient, which has no single colour), where the choice
+ * falls back to the scheme's default slide background. Opacity is not applied. A solid or pattern colour is a ColorRef, resolved
+ * like the preview does: a literal, a `var:` variable, a slot or a role that does not depend on the background itself.
+ */
+function decisionColor(definition: unknown, scheme: Rec, variables: Rec): string | undefined {
+	if (!definition) return undefined;
+	const canvas = defaultSlideBackground(scheme);
+	const reference = (value: unknown) => backgroundColorRef(value, scheme, variables, PAGE);
+	if (typeof definition === 'string') return colorFrom(scheme, definition, canvas);
 	const bg = rec(definition);
 	switch (bg.type) {
 		case 'theme':
-			return colorFrom(scheme, bg.slot, PAGE);
+			return colorFrom(scheme, bg.slot, canvas);
 		case 'solid':
-			return normalizeHexColor(bg.color) ?? PAGE;
+			return reference(bg.color);
 		case 'pattern':
-			return normalizeHexColor(rec(bg.pattern).backgroundColor) ?? PAGE;
-		case 'gradient':
-			return PAGE;
+			return reference(rec(bg.pattern).backgroundColor);
 		default:
-			return colorFrom(scheme, 'light1', PAGE);
+			return undefined;
 	}
 }
 
@@ -282,10 +302,10 @@ export function resolveDesign(document: Rec, slide: Rec, index: number, lookup: 
 	}
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
-	const backgroundColor = decisionColor(own.background ?? deck.background ?? theme.background, colorScheme);
-	const dark = relativeLuminance(backgroundColor) < 0.179;
-	const text = colorFrom(colorScheme, dark ? 'light1' : 'dark1', dark ? '#FFFFFF' : '#111827');
-	const backdrop = backdropOf(own.background ?? deck.background ?? theme.background, colorScheme, text);
+	const roles = resolveColorRoles(colorScheme, { background: decisionColor(own.background ?? deck.background ?? theme.background, colorScheme, variables) });
+	const dark = roles.dark;
+	const text = roles.text;
+	const backdrop = backdropOf(own.background ?? deck.background ?? theme.background, colorScheme, text, variables);
 	const definition = rec(own.background ?? deck.background ?? theme.background);
 	const backgroundImage: ResolvedDesign['backgroundImage'] =
 		definition.type === 'image' && own.background !== undefined
@@ -302,13 +322,13 @@ export function resolveDesign(document: Rec, slide: Rec, index: number, lookup: 
 		backdrop,
 		dark,
 		colors: {
-			background: colorFrom(colorScheme, 'light1', PAGE),
-			surface: colorFrom(colorScheme, dark ? 'dark2' : 'light2', dark ? '#1E293B' : '#F8FAFC'),
+			background: roles.background,
+			surface: roles.surface,
 			text,
-			mutedText: colorFrom(colorScheme, dark ? 'light2' : 'dark2', dark ? '#E2E8F0' : '#334155'),
-			primary: normalizeHexColor(colorScheme.primary) ?? colorFrom(colorScheme, 'accent1', '#2563EB'),
-			secondary: normalizeHexColor(colorScheme.secondary) ?? colorFrom(colorScheme, 'accent2', '#0F766E'),
-			accent: normalizeHexColor(colorScheme.accent) ?? colorFrom(colorScheme, 'accent3', '#F59E0B'),
+			mutedText: roles.textSecondary,
+			primary: roles.primary,
+			secondary: roles.secondary,
+			accent: roles.accent,
 		},
 		variables,
 		...(backgroundImage ? { backgroundImage } : {}),

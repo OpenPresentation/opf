@@ -248,6 +248,19 @@ test('audit/reading-order: promoted regions are composed in visual order, blocks
 	assert.ok(!has(deck([{ title: 'T', left: { text: 'L' }, right: { text: 'R' } }]), 'reading-order'));
 });
 
+// ------------------------------------------------------------ resolved color roles
+
+test('audit/text-contrast: default text uses the same resolved colors as the preview (the text role applies on light slides only)', () => {
+	const scheme = { id: 'cool-horizon', text: '#DDDDDD' };
+	const slides = [{ title: 'T', text: ['Body'] }];
+	assert.ok(has(deck(slides, { design: { ...white, colorScheme: scheme } }), 'text-contrast'), 'a light text override on a white slide is measured');
+	// On a dark slide a text override does not apply: the preview draws light1.
+	assert.ok(!has(deck(slides, { design: { background: { type: 'solid', color: '#000000' }, colorScheme: scheme } }), 'text-contrast'));
+	// A background ColorRef resolves like the preview: var: references decide the dark slide too.
+	const variable = { variables: { night: '#000000' }, design: { background: { type: 'solid', color: 'var:night' } } };
+	assert.ok(!has(deck(slides, variable), 'text-contrast'), 'a dark variable background gets light text');
+});
+
 // ------------------------------------------------------------ links
 
 test('audit/link-text: generic, blank and raw-URL link text', () => {

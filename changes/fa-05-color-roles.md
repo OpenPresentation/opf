@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf]
+---
+FA-05: `resolveColorRoles(colorScheme, { background })` resolves the color-scheme roles (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) and the `hyperlink` and `followedHyperlink` slots once, for the opf-render preview, the opf-pptx export and `auditPresentation`, so a deck draws the same colors in all three. A role override wins over its slot default; the `background` role is the default slide background and the slide's own single-color background wins over it; `text` overrides `dark1` on a light slide only. `isDarkColor()` (WCAG luminance under 0.179, now the one dark-background rule) and `defaultSlideBackground()` come with it. `resolveColorRoles` also returns the `hyperlink` a link run draws in: the scheme slot, or the slide `text` color where the slot has under 4.5:1 contrast against the slide. The audit resolves default text, background `var:` references and gradient and picture backgrounds the way the preview does. The `ColorScheme` role and `hyperlink` descriptions in `opf.schema.json` now state this behavior.
