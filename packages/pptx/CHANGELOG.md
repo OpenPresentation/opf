@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.13.1 (2026-10-06)
+
+- RR-20: opf-pptx bundles for the browser again. 0.13.0 failed in esbuild (`platform: 'browser'`) with `Could not resolve "events"` / `"buffer"` whenever the consumer's tree also held readable-stream (for example through jszip 3): the engine's ZIP dependency `@node-projects/jszip` 4.3.0 probes `require("readable-stream")` inside try/catch, and bundlers follow that literal. The browser field of `vendor/pptxgenjs/package.json` now points the engine's import at `vendor/jszip/index-min.js`, the package's own published bundle of the same code (exact bytes, hashes and archive integrity in `vendor/jszip/UPSTREAM.json`; it reproduces byte for byte from `lib/` with esbuild 0.28.2), which has no such require. Node is unchanged (it ignores the browser field). Export bytes are unchanged: the 976-deck corpus (126 core examples and 850 gallery documents) gives the same packages in Node and in Chromium, before and after. No Node built-in polyfills are needed. New checks: `test/zip-bundle-boundary.mjs` (offline, in `npm test`) and `test/packed-bundle-browser.mjs` (browser suite: the packed tarball next to readable-stream, bundled with esbuild and exported in Chromium byte-identical to Node).
+
 ## 0.13.0 (2026-10-06)
 
 - RR-54 (output-changing only for decks that use the new fields, or whose chart cells held non-numeric strings; needs core with RR-54, opf#376): chart and table data in the PPTX export and import (core `docs/chart-table-data.md`).
