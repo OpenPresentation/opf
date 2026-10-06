@@ -53,7 +53,7 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
       rels = rels.replace('</Relationships>',`<Relationship Id="${id}" Type="${REL}" Target="../tags/${prefix}${count}.xml"/></Relationships>`);
       // Optional alternative text (a:cNvPr descr) for generated decoration such as the metric trend arrow.
       const descr = descriptions?.get(name);
-      if (descr !== undefined) shape = shape.replace(/<p:cNvPr\b([^>]*?)>/, (_match, attributes) => `<p:cNvPr${attributes} descr="${descr.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}">`);
+      if (descr !== undefined) shape = shape.replace(/<p:cNvPr\b([^>]*?)(\/?)>/, (_match, attributes, close) => `<p:cNvPr${attributes} descr="${descr.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}"${close}>`);
       shape = shape.replace(/<p:nvPr\s*\/>/,'<p:nvPr></p:nvPr>');
       if (!shape.includes('</p:nvPr>')) throw new Error(`Generated ${kind} shape has no native application properties.`);
       return shape.replace('</p:nvPr>',`<p:custDataLst><p:tags r:id="${id}"/></p:custDataLst></p:nvPr>`);

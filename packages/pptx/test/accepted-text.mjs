@@ -3,7 +3,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {XMLParser} from 'fast-xml-parser';
-import JSZip from 'jszip';
+import {unzipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
@@ -23,7 +23,7 @@ for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'wi
   const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading:{family:'Carlito'},body:{family:'Carlito'}}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
   const original=structuredClone(deck),options={textMeasurement:fonts.textMeasurement};
   const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})));
-  const bytes=await toPptx(deck,options),zip=await JSZip.loadAsync(bytes),xml=await zip.file('ppt/slides/slide1.xml').async('string');
+  const bytes=await toPptx(deck,options),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
   const shapes=array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape=>nativeText(shape));
   assert.equal(shapes.length,expected.length,'One editable native shape per nonblank accepted line');
   for(const [i,shape] of shapes.entries()) {

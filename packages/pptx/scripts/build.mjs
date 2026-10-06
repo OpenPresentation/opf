@@ -36,6 +36,7 @@ await copyFile(new URL('src/watermark-provenance.js', root), new URL('watermark-
 await copyFile(new URL('src/logo-provenance.js', root), new URL('logo-provenance.js', dist));
 await copyFile(new URL('src/svg-image.js', root), new URL('svg-image.js', dist));
 await copyFile(new URL('src/master-themes.js', root), new URL('master-themes.js', dist));
+await copyFile(new URL('src/vendor-compat.js', root), new URL('vendor-compat.js', dist));
 for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {
   await copyFile(new URL(`src/${name}`, root), new URL(name, dist));
 }

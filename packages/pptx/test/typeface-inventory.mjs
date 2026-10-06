@@ -18,9 +18,10 @@ const vendor = await readFile(new URL('../vendor/pptxgenjs/pptxgen.es.js', impor
 const count = (source, needle) => source.split(needle).length - 1;
 // Vendor-shape guards: these are the hard-coded defaults the export rewrites.
 // A vendor update that changes them must revisit src/package-fonts.js.
-assert.equal(count(vendor, "dataLabelFontFace || 'Arial'"), 5, 'chart data-label Arial fallbacks');
-assert.equal(count(vendor, '<a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:latin typeface="Arial"/>'), 1, 'pie data-label Arial');
-assert.equal(count(vendor, '<a:cs    typeface="\' + rel.opts.legendFontFace'), 1, 'legend writes latin/cs only');
+// pptxgenjs-plus 4.3.4 shapes (PptxGenJS 4.0.1 had 5 data-label fallbacks; 7 here, the chartex one included and a latin/cs-only legend).
+assert.equal(count(vendor, "encodeXmlEntities(opts.dataLabelFontFace) || 'Arial'"), 7, 'chart data-label Arial fallbacks');
+assert.equal(count(vendor, '<a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:latin typeface="${encodeXmlEntities(opts.dataLabelFontFace) || \'Arial\'}"/>'), 1, 'pie data-label Arial');
+assert.equal(count(vendor, '<a:ea    typeface="\' + encodeXmlEntities(rel.opts.legendFontFace)'), 1, 'legend writes latin/ea/cs');
 assert.match(vendor, /<vt:lpstr>Arial<\/vt:lpstr>\s*<vt:lpstr>Calibri<\/vt:lpstr>/, 'app.xml fixed fonts');
 assert.match(vendor, /<name val="Geneva"\/>/, 'workbook styles font');
 assert.match(vendor, /<a:latin typeface="Calibri Light" panose="020F0302020204030204"\/>/, 'workbook theme font');

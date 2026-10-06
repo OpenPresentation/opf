@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { unzipSync } from "fflate";
+import { unzipSync, zipSync } from "fflate";
+import { legacyVendorOutput } from "../dist/vendor-compat.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { validatePresentation } from "@openpresentation/opf";
 import { fromPptx, OPFPptxError, runtimePolicy, toPptx } from "../dist/index.js";
@@ -143,7 +144,8 @@ async function makeComplexPptx() {
     fill: { color: "FFAA00" },
     line: { color: "C2410C" }
   });
-  return pptx.write({ outputType: "uint8array", compression: true });
+  // pptxgenjs-plus writes an empty p:txBody into a shape without text; a non-text shape has none (vendor-compat.js).
+  return zipSync(legacyVendorOutput(unzipSync(await pptx.write({ outputType: "uint8array" }))));
 }
 
 function hash(bytes) {

@@ -82,7 +82,9 @@ export function writeChartCategoryHeading(entries,chartPart,heading){
  entries[context.workbookPart]=zipSync(workbook);
 }
 
-// PptxGenJS 4.0.1 writes broken range metadata into chart workbooks (upstream gitbrent/PptxGenJS#1531): the
+// PptxGenJS 4.0.1 wrote broken range metadata into chart workbooks (upstream gitbrent/PptxGenJS#1531). pptxgenjs-plus
+// 4.3.4 (vendored) fixed the category and scatter tables; its bubble table still takes its last row from the column
+// count (lofcz/pptxgenjs-plus#15). The 4.0.1 shapes: the
 // category-chart branch (bar, line, area, pie, doughnut, radar, and the classic fallback of chartex charts) ends the
 // table ref with a stray apostrophe (ref="A1:C7'"), the bubble branch takes the table's last row from its column
 // count, and the category sheet dimension counts one label column (too narrow for multi-level categories). Keynote

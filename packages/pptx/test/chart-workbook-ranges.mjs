@@ -1,4 +1,4 @@
-// RR-17 (opf-pptx#162): every embedded chart workbook carries valid range metadata. PptxGenJS 4.0.1 writes
+// RR-17 (opf-pptx#162): every embedded chart workbook carries valid range metadata. PptxGenJS 4.0.1 wrote
 // ref="A1:C7'" (stray apostrophe) for category-chart tables and a bubble table ref whose last row is its column count
 // (upstream gitbrent/PptxGenJS#1531); its category sheet dimension counts one label column. Keynote 15.1.1 drops every
 // chart whose table ref does not parse; Excel repairs the workbook. The export rewrites each table/autoFilter ref and
@@ -36,7 +36,8 @@ function checkWorkbook(bytes,label){
  }
 }
 
-// 1. Plain PptxGenJS 4.0.1 (the vendored copy): every chart family it writes, broken before the repair, valid after.
+// 1. Plain pptxgenjs-plus 4.3.4 (the vendored copy): every chart family it writes, valid after the repair (bubble is
+// broken before it).
 const labels=['Jan','Feb','Mar','Apr','May'],north=[10,13,16,19,22],south=[14,19,15,20,16];
 const families=[
  ['bar',[{name:'North',labels,values:north},{name:'South',labels,values:south}],{barDir:'col'}],
@@ -58,8 +59,10 @@ for(const [type,data,options={}]of families){
  const label=`PptxGenJS ${type}${options.barDir?` (${options.barDir})`:''}, ${data.length} series`;
  const raw=unzipSync(entries[workbookPart]),rawTable=strFromU8(raw['xl/tables/table1.xml']),rawRef=/<table\b[^>]*\bref="([^"]*)"/.exec(rawTable)[1];
  const actual=usedRange(strFromU8(raw['xl/worksheets/sheet1.xml'])).ref;
- // Upstream #1531 as vendored: category tables end in an apostrophe; bubble rows come from the column count.
- if(!['scatter'].includes(type))assert.notEqual(rawRef,actual,`${label}: the vendored PptxGenJS ref is wrong (${rawRef}); if upstream fixed it, update this test`);
+ // pptxgenjs-plus 4.3.4 (vendored) fixed upstream #1531 for category and scatter tables; its bubble table still takes
+ // its last row from the column count (lofcz/pptxgenjs-plus#15). The repair below keeps covering both.
+ if(type==='bubble')assert.notEqual(rawRef,actual,`${label}: the vendored bubble ref is wrong (${rawRef}); if upstream fixed it (lofcz/pptxgenjs-plus#15), update this test`);
+ else assert.equal(rawRef,actual,`${label}: the vendored table ref matches the sheet data`);
  const repaired=repairChartWorkbookRanges(raw);
  checkWorkbook(zipSync(repaired),label);
  // Nothing but the range attributes changes.

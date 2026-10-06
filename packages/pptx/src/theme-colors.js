@@ -26,7 +26,8 @@ const CONTENT_VALUES = Object.freeze({
   accent4: 'accent4', accent5: 'accent5', accent6: 'accent6',
   hyperlink: 'hlink', followedHyperlink: 'folHlink',
 });
-// PptxGenJS 4.0.1 createColorElement accepts only these scheme values.
+// PptxGenJS 4.0.1 createColorElement accepts only these scheme values (pptxgenjs-plus accepts more; the set is kept
+// so exported colours stay as they were).
 const VENDOR_VALUES = new Set(['tx1', 'tx2', 'bg1', 'bg2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6']);
 
 // Role names resolve through core resolveColorRef with the exporter's resolved

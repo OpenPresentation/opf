@@ -216,14 +216,21 @@ const HOST_APIS = [
   ['localeCompare', /\blocaleCompare\b/, {}],
   ['toLocale*', /\btoLocale\w*/, {}],
   ['Intl', /\bIntl\b/, {}],
-  ['Date.now', /\bDate\.now\b|performance\.now/, {}],
-  // Vendored docProps timestamps (2 PPTX-level, 2 workbook); normalizeCoreProperties overwrites all four.
-  ['new Date()', /new Date\(\)/, {[VENDOR]: 4}],
-  // Vendored uuid/colour picks; src/index.js seeds Math.random for each export (3 lines in withDeterministicRandom).
-  ['Math.random', /\bMath\.random\b/, {'src/index.js': 3, [VENDOR]: 4}],
-  ['process env/platform', /\bprocess\.(?:env|platform|arch|cwd|hrtime)\b/, {}],
+  // Vendored (pptxgenjs-plus 4.3.4): the font embedder's default TTF head date (addFont only; toPptx embeds no font through it).
+  ['Date.now', /\bDate\.now\b|performance\.now/, {[VENDOR]: 1}],
+  // Vendored, counted by line: docProps timestamps (2 PPTX-level lines, 1 workbook line with both), which
+  // normalizeCoreProperties overwrites; a throttle helper (2) and the font reader (1) that never reach the package;
+  // comment and revision-info dates (2), features toPptx does not use.
+  ['new Date()', /new Date\(\)/, {[VENDOR]: 8}],
+  // Vendored chart-colour fallback picks (3); src/index.js seeds Math.random for each export (3 lines in withDeterministicRandom).
+  ['Math.random', /\bMath\.random\b/, {'src/index.js': 3, [VENDOR]: 3}],
+  // Vendored debug switch (PPTXGENJS_DEBUG / NODE_DEBUG): console diagnostics only, never package bytes.
+  ['process env/platform', /\bprocess\.(?:env|platform|arch|cwd|hrtime)\b/, {[VENDOR]: 2}],
   ['node builtins', /from\s+['"]node:|\brequire\(['"](?:node:)?(?:fs|os|child_process|worker_threads|net|http|https|dns)['"]/, {}],
-  ['random ids', /crypto\.(?:randomUUID|getRandomValues)/, {}]
+  // Vendored getUuid (crypto.getRandomValues; 4.0.1 used Math.random). Its callers are comments, web extensions,
+  // pptxgenjs sections and summary zoom, pptxgenjs chartex series and custom scatter label fields: toPptx uses none of
+  // them (it writes its own sections and chartex parts), so no UUID reaches an export. The grid would catch one.
+  ['random ids', /crypto\.(?:randomUUID|getRandomValues)/, {[VENDOR]: 1}]
 ];
 function staticGuard() {
   const files = [...readdirSync(path.join(root, 'src')).filter(name => name.endsWith('.js')).map(name => 'src/' + name), VENDOR];

@@ -1,19 +1,24 @@
 {
-  "name": "pptxgenjs",
-  "version": "4.0.1",
+  "name": "pptxgenjs-plus",
+  "version": "4.3.4",
   "license": "MIT",
-  "tarball": "https://registry.npmjs.org/pptxgenjs/-/pptxgenjs-4.0.1.tgz",
-  "integrity": "sha512-TeJISr8wouAuXw4C1F/mC33xbZs/FuEG6nH9FG1Zj+nuPcGMP5YRHl6X+j3HSUnS1f3at6k75ZZXPMZlA5Lj9A==",
+  "tarball": "https://registry.npmjs.org/pptxgenjs-plus/-/pptxgenjs-plus-4.3.4.tgz",
+  "integrity": "sha512-E4mu3Guf2O5CIzy6nS7tlAv55RyhPWinpsj2MdOM5QZ3XukkSne4oipE1HONTfaVLeJG4rkr2lOk6KhwbU/4mQ==",
+  "provenance": {
+    "repository": "https://github.com/lofcz/pptxgenjs-plus",
+    "ref": "refs/heads/next",
+    "commit": "ecfa5086a7a35dc8cc0faa502a61794a577554d5"
+  },
   "files": {
     "pptxgen.es.js": {
       "source": "package/dist/pptxgen.es.js",
-      "bytes": 516931,
-      "sha256": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4"
+      "bytes": 1230609,
+      "sha256": "71f89c1bea86cee3c89f9ec948da99ef1f7dacf38fab33a21b6857ca6fb20dd1"
     },
     "LICENSE": {
       "source": "package/LICENSE",
-      "bytes": 1081,
-      "sha256": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52"
+      "bytes": 1128,
+      "sha256": "09b419524813383278d9353e387b75abec06c184336e5c48974a377804b0239a"
     }
   }
 }

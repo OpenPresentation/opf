@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {XMLParser} from 'fast-xml-parser';
-import JSZip from 'jszip';
+import {unzipSync} from 'fflate';
 import {toPptx} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
@@ -22,9 +22,9 @@ const deck = {design: {fontScheme: {id: 'carlito', heading: {family: 'Carlito'},
 let cover = 0, lines = 0;
 for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
   const resolved = resolvePresentation(deck, options).slides;
-  const zip = await JSZip.loadAsync(await toPptx(deck, options));
+  const zip = unzipSync(await toPptx(deck, options));
   for (const [index, bound] of resolved.entries()) {
-    const xml = await zip.file(`ppt/slides/slide${index + 1}.xml`).async('string');
+    const xml = new TextDecoder().decode(zip[`ppt/slides/slide${index + 1}.xml`]);
     const shapes = array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape => nativeText(shape) && /^OPF heading /.test(shape['p:nvSpPr']['p:cNvPr'].name));
     const headings = bound.geometry.items.filter(item => ['tag', 'title', 'subtitle'].includes(item.field));
     // Measured hosts accept per-line placements; estimated hosts stack lines from the box origin.

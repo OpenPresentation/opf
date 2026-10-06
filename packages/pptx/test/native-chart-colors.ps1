@@ -32,6 +32,8 @@ function Read-FixtureCharts($Presentation,[string]$Phase) {
         $record=@{slide=$slide.SlideIndex; panelColor=(Get-ColorHex $chart.ChartArea.Format.Fill.ForeColor.RGB); panelTransparency=$chart.ChartArea.Format.Fill.Transparency; plotFillVisible=$chart.PlotArea.Format.Fill.Visible; series=$chart.SeriesCollection().Count}
         # PowerShell's COM enumerator can return null series even when Count and
         # Item are valid. Use Office's one-based indexed collections explicitly.
+        # Never read $series.Formula: on PowerPoint 16.0.20430 it returns '' after about 3 s and then crashes chart.dll
+        # (0xc0000005); the next COM call fails with "The RPC server is unavailable" (bisected in opf#385).
         $seriesCollection=$chart.SeriesCollection()
         $record.seriesData=@(for($seriesIndex=1; $seriesIndex -le $seriesCollection.Count; $seriesIndex++) {
             $series=$seriesCollection.Item($seriesIndex)

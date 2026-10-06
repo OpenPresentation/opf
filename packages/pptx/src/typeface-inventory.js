@@ -20,7 +20,7 @@ const THEME_SLOT = {lt: 'latin', ea: 'ea', cs: 'cs'};
 const FIXED_PITCH = 1;
 
 // Per-script theme fonts (`<a:font script="…">`) written by the vendored
-// PptxGenJS 4.0.1 theme. They are Office's defaults for scripts the deck
+// PptxGenJS theme (4.0.1 and pptxgenjs-plus 4.3.4). They are Office's defaults for scripts the deck
 // declares no font for. PowerPoint uses one only for text in that script, and
 // it does not list them in "Fonts Used". The check allows exactly these
 // script/typeface pairs in the presentation theme; any other supplement fails
@@ -36,6 +36,9 @@ export const THEME_SCRIPT_SUPPLEMENTS = Object.freeze({
 export function inventoryPptxTypefaces(input, options = {}) {
   const typefaces = [];
   const themes = {};
+  // Every theme part's fonts, and the theme each part of the presentation package resolves its references against.
+  const themeParts = {};
+  let partTheme = () => undefined;
   let fontsUsed = null;
   const visit = (entries, prefix) => {
     const packageThemes = [];
@@ -53,20 +56,23 @@ export function inventoryPptxTypefaces(input, options = {}) {
       if (/^xl\/.*\.xml$/.test(path)) readSpreadsheetFonts(xml, part, typefaces);
       if (!prefix && path === 'docProps/app.xml') fontsUsed = readFontsUsed(xml);
     }
-    // Theme references resolve against the package theme. The exporter writes
-    // one theme per package; with several, the first (theme1) is used.
+    // Theme references resolve against the package theme (theme1). In the presentation package a part on another slide
+    // master (opf-pptx#168: one master per script profile) or the notes master resolves against that master's theme.
     const theme = packageThemes[0];
     if (theme) themes[prefix] = themeFonts(typefaces, theme);
+    for (const part of packageThemes) themeParts[part] = themeFonts(typefaces, part);
+    if (!prefix) partTheme = masterTheme(entries);
   };
   visit(toEntries(input), '');
   for (const entry of typefaces) {
     const reference = THEME_REFERENCE.exec(entry.typeface);
     if (!reference) continue;
     const prefix = entry.part.includes('!/') ? entry.part.slice(0, entry.part.lastIndexOf('!/') + 2) : '';
-    const resolved = themes[prefix]?.[reference[1] === 'mj' ? 'major' : 'minor']?.[THEME_SLOT[reference[2]]];
+    const own = prefix ? undefined : partTheme(entry.part);
+    const resolved = (own && themeParts[own] ? themeParts[own] : themes[prefix])?.[reference[1] === 'mj' ? 'major' : 'minor']?.[THEME_SLOT[reference[2]]];
     entry.resolved = resolved ?? null;
   }
-  return {typefaces, themes, fontsUsed};
+  return {typefaces, themes, themeParts, fontsUsed};
 }
 
 // Fonts a package uses, as PowerPoint lists them under "Fonts Used": the
@@ -99,8 +105,9 @@ export function checkPptxTypefaces(input, options = {}) {
   // FF-49: options.themeScripts names the East Asian / complex-script families the author selected for the
   // presentation theme, {major: {ea, cs}, minor: {ea, cs}}. A selected slot must carry exactly that family (an
   // empty or different one is a violation); a slot with nothing selected may stay empty, as in Office's own themes.
+  // options.themeScriptsByPart overrides it for the theme parts it names (opf-pptx#168: a slide master per script profile).
   const themeSlot = entry => entry.theme && !entry.part.includes('!/') && (entry.element === 'ea' || entry.element === 'cs')
-    ? options.themeScripts?.[entry.theme]?.[entry.element] || '' : '';
+    ? (options.themeScriptsByPart?.[entry.part] ?? options.themeScripts)?.[entry.theme]?.[entry.element] || '' : '';
   const pitches = new Map();
   for (const entry of inventory.typefaces) {
     const wanted = themeSlot(entry);
@@ -177,6 +184,43 @@ function readTypefaces(xml, part, isTheme, output) {
     }
     output.push(entry);
   }
+}
+
+// The theme part a slide, layout, master, notes slide or notes master uses: its own theme relationship, else its
+// layout's, master's or notes master's. Undefined for other parts (charts, the presentation part).
+function masterTheme(entries) {
+  const targets = new Map();
+  const related = path => {
+    if (!targets.has(path)) {
+      const rels = entries[path.replace(/([^/]+)$/, '_rels/$1.rels')];
+      const list = rels ? [...decoder.decode(rels).matchAll(/<Relationship\b[^>]*\/>/g)].map(([node]) => ({
+        type: /\sType="[^"]*\/([^"/]+)"/.exec(node)?.[1], target: /\sTarget="([^"]*)"/.exec(node)?.[1], external: /\sTargetMode="External"/.test(node)
+      })).filter(rel => rel.type && rel.target && !rel.external).map(rel => ({type: rel.type, path: resolvePart(path, rel.target)})) : [];
+      targets.set(path, list);
+    }
+    return targets.get(path);
+  };
+  return part => {
+    let path = part;
+    for (let depth = 0; depth < 4 && path; depth++) {
+      if (!/^ppt\/(?:slides|slideLayouts|slideMasters|notesSlides|notesMasters)\/[^/]+\.xml$/.test(path)) return undefined;
+      const rels = related(path);
+      const theme = rels.find(rel => rel.type === 'theme')?.path;
+      if (theme) return theme;
+      path = rels.find(rel => ['slideLayout', 'slideMaster', 'notesMaster'].includes(rel.type))?.path;
+    }
+    return undefined;
+  };
+}
+
+function resolvePart(source, target) {
+  if (target.startsWith('/')) return target.slice(1);
+  const parts = source.split('/').slice(0, -1);
+  for (const piece of target.split('/')) {
+    if (piece === '..') parts.pop();
+    else if (piece !== '.' && piece) parts.push(piece);
+  }
+  return parts.join('/');
 }
 
 function readSpreadsheetFonts(xml, part, output) {

@@ -12,7 +12,7 @@
 ### Windows notes
 
 - This checkout is used with `core.autocrlf=true`. The `test/*.ps1` harnesses are stored LF and check out CRLF; do not commit line-ending-only churn.
-- `.gitattributes` marks `vendor/pptxgenjs/pptxgen.es.js` and `vendor/pptxgenjs/LICENSE` as `-text`. Keep them byte-exact; every build runs `scripts/verify-vendor.mjs` against `UPSTREAM.json`. See `DEPENDENCY-NOTES.md` before touching the vendored copy.
+- `.gitattributes` marks `vendor/pptxgenjs/pptxgen.es.js` and `vendor/pptxgenjs/LICENSE` as `-text`. Keep them byte-exact (pptxgenjs-plus 4.3.4 since RR-17); every build runs `scripts/verify-vendor.mjs` against `UPSTREAM.json`. Output differences opf-pptx does not take from the engine are undone in `src/vendor-compat.js` (see `docs/pptxgenjs-plus-migration.md`). See `DEPENDENCY-NOTES.md` before touching the vendored copy.
 
 ## Changelog fragments and test discovery (RR-46)
 

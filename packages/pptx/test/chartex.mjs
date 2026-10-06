@@ -95,7 +95,8 @@ for (const id of chartexIds) {
   assert.equal(attribute(choice[1], `xmlns:${want.requires}`), CHARTEX_NAMESPACES[want.requires], `${id}: the namespace the choice requires`);
   assert.match(choice[2], new RegExp(`^<p:graphicFrame>[\\s\\S]*<a:graphicData uri="${CX}"><cx:chart xmlns:cx="${CX}" xmlns:r="[^"]+" r:id="${chartExRel[0]}"/></a:graphicData></a:graphic></p:graphicFrame>$`), `${id}: choice frame references the chartEx part`);
   assert.match(fallback[1], /^<p:graphicFrame>[\s\S]*<c:chart r:id="rId1"[^>]*\/>[\s\S]*<\/p:graphicFrame>$/, `${id}: fallback is the classic chart frame`);
-  assert.equal(slideRels.rId1.target, '/ppt/charts/chart1.xml');
+  // pptxgenjs-plus writes the slide-to-chart relationship relative to the slide part (4.0.1 wrote /ppt/charts/chart1.xml).
+  assert.equal(slideRels.rId1.target, '../charts/chart1.xml');
   const frameName = (frame) => frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)[1], frameXfrm = (frame) => frame.match(/<p:xfrm>[\s\S]*?<\/p:xfrm>/)[0];
   assert.equal(frameName(choice[2]), frameName(fallback[1]), `${id}: both frames carry the chart name`);
   assert.equal(frameXfrm(choice[2]), frameXfrm(fallback[1]), `${id}: both frames share the transform`);

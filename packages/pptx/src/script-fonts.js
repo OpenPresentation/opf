@@ -57,7 +57,104 @@ export function planScriptFonts(presentation, report) {
     report?.({code: "paragraph-direction-unavailable", path: "language",
       message: "The installed @openpresentation/opf has no paragraphDirection, so right-to-left paragraphs are not marked; the preview and export must share that rule. Use a core release that exports it."});
   }
-  return {deck, slides, lang: deck.lang, rtl, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+  // opf-pptx#168: which slides have notes (a presentation has one notes master; see reportPerSlideNotesScriptFonts).
+  const notes = (presentation.slides ?? []).map(slide => typeof slide?.notes === "string" ? slide.notes.trim() !== "" : Boolean(slide?.notes));
+  return {deck, slides, notes, report, lang: deck.lang, rtl, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+}
+
+// ---------------------------------------------------------------------------
+// Per-slide script profiles (opf-pptx#168)
+
+const FONT_GROUPS = [["majorFont", "heading"], ["minorFont", "body"]];
+
+/**
+ * The theme font slots a slide's resolved script fonts select: for the major (heading) and minor (body) font group,
+ * the `ea` / `cs` family when a script font is selected for that slot (its source is not `latin`), and core's
+ * per-script supplement entry. Values are escaped as in the theme XML. A slot with nothing selected is no requirement:
+ * the slide's script text then follows whatever the theme carries, as before.
+ */
+export function slideScriptSelections(resolved) {
+  const wanted = [];
+  for (const [tag, role] of FONT_GROUPS) {
+    for (const [element, slot] of SCRIPT_SLOTS) {
+      if (resolved.sources?.[slot] !== "latin" && resolved[role]?.[slot]) wanted.push({tag, element, value: escapeAttribute(resolved[role][slot])});
+    }
+    if (resolved.supplement?.script && resolved.supplement[role]) wanted.push({tag, script: resolved.supplement.script, value: escapeAttribute(resolved.supplement[role])});
+  }
+  return wanted;
+}
+
+/** The ea/cs typefaces and per-script entries of a theme part, as written: {majorFont: {ea, cs, scripts}, minorFont: ...}. */
+export function themeFontSlots(xml) {
+  const slots = {};
+  for (const [tag] of FONT_GROUPS) {
+    const block = new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`).exec(xml)?.[0] ?? "";
+    const face = element => new RegExp(`<a:${element}\\b[^>]*?\\btypeface="([^"]*)"`).exec(block)?.[1];
+    slots[tag] = {ea: face("ea"), cs: face("cs"), scripts: Object.fromEntries([...block.matchAll(/<a:font script="([^"]*)" typeface="([^"]*)"\/>/g)].map(match => [match[1], match[2]]))};
+  }
+  return slots;
+}
+
+/** The selections a theme does not carry. */
+export function unmetSelections(wanted, slots) {
+  return wanted.filter(item => (item.script ? slots[item.tag]?.scripts[item.script] : slots[item.tag]?.[item.element]) !== item.value);
+}
+
+/** A theme part with the given selections written into its major/minor `ea`/`cs` slots and per-script entries. */
+export function themeWithSelections(xml, wanted) {
+  for (const [tag] of FONT_GROUPS) {
+    xml = xml.replace(new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`), block => {
+      for (const item of wanted.filter(entry => entry.tag === tag)) {
+        if (item.element) {
+          block = block.replace(new RegExp(`<a:${item.element}\\b[^>]*/>`), () => `<a:${item.element} typeface="${item.value}"/>`);
+          continue;
+        }
+        const entry = `<a:font script="${item.script}" typeface="${item.value}"/>`;
+        const existing = new RegExp(`<a:font script="${item.script}" typeface="[^"]*"/>`);
+        block = existing.test(block) ? block.replace(existing, () => entry) : block.replace(`</a:${tag}>`, () => `${entry}</a:${tag}>`);
+      }
+      return block;
+    });
+  }
+  return xml;
+}
+
+/**
+ * opf-pptx#168: which theme each slide needs. Theme 0 is the finished presentation theme (`themeXml`, built from slide 1).
+ * Each slide uses the first theme that carries every script font it selects (slide 1 always uses theme 0); a slide that
+ * none carries gets a new theme: the presentation theme with that slide's selections written in. Slides that select no
+ * script font, or the same ones, share a theme, so a deck with one script profile keeps one theme. Returns
+ * `{themes: [xml], assignment: [theme index per slide]}`; deterministic in slide order.
+ */
+export function planSlideThemes(plan, themeXml) {
+  const themes = [{xml: themeXml, slots: themeFontSlots(themeXml)}];
+  const assignment = plan.slides.map((resolved, index) => {
+    if (index === 0) return 0;
+    const wanted = slideScriptSelections(resolved);
+    const found = themes.findIndex(theme => !unmetSelections(wanted, theme.slots).length);
+    if (found >= 0) return found;
+    const xml = themeWithSelections(themeXml, wanted);
+    themes.push({xml, slots: themeFontSlots(xml)});
+    return themes.length - 1;
+  });
+  return {themes: themes.map(theme => theme.xml), assignment};
+}
+
+/**
+ * A presentation has one notes master, whose theme is a copy of the presentation theme (FF-05). The notes of a slide
+ * that uses another theme (planSlideThemes) therefore draw their East Asian / complex-script text in the presentation
+ * theme's script fonts; that is reported for every such slide that has notes.
+ */
+export function reportPerSlideNotesScriptFonts(plan, {themes, assignment}) {
+  if (!plan?.report) return;
+  const deckSlots = themeFontSlots(themes[0]);
+  assignment.forEach((theme, index) => {
+    if (!theme || !plan.notes?.[index]) return;
+    const unmet = unmetSelections(slideScriptSelections(plan.slides[index]), deckSlots);
+    const families = [...new Set(unmet.map(item => item.value))].join(", ");
+    plan.report({code: "script-font-notes-not-exported", path: `slides.${index}.notes`,
+      message: `Slide ${index + 1} has its own script fonts (${families}) through its own slide master, but a presentation has one notes master, so PowerPoint draws this slide's notes in the presentation theme's East Asian/complex-script fonts.`});
+  });
 }
 
 // FF-05: East Asian characters in a deck whose own language has no East Asian font (an English deck with Japanese
@@ -331,7 +428,7 @@ export function matchCatalogLanguage(lang, catalogs) {
  * dominant run tag itself. Nothing is reported here: languageDiagnostics()
  * reports against the final imported document, after FF-32 provenance.
  */
-export function observeLanguage({slides, theme, catalogs}) {
+export function observeLanguage({slides, theme, themePath, slideThemes, catalogs}) {
   const counts = new Map();
   let rtlParagraphs = 0;
   for (const xml of slides) {
@@ -345,7 +442,7 @@ export function observeLanguage({slides, theme, catalogs}) {
   const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
   const lang = ranked[0]?.[0];
   const match = lang === undefined ? null : matchCatalogLanguage(lang, catalogs);
-  return {lang, language: lang === undefined ? undefined : match?.language ?? lang, match, ranked, rtlParagraphs, theme};
+  return {lang, language: lang === undefined ? undefined : match?.language ?? lang, match, ranked, rtlParagraphs, theme, themePath, slideThemes};
 }
 
 /**
@@ -404,19 +501,43 @@ export function languageDiagnostics(imported, observed, report) {
   if (rtlParagraphs && !rtl) {
     report({code: "rtl-language-mismatch", path: "language", message: `${rtlParagraphs} right-to-left paragraph(s) do not match the left-to-right language ${typeof imported.language === "string" ? imported.language : lang}; paragraph direction is not imported separately.`});
   }
-  if (theme && resolved) {
-    for (const [tag, role] of [["majorFont", "heading"], ["minorFont", "body"]]) {
-      const block = new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`).exec(theme)?.[0];
-      if (!block) continue;
-      const latin = attribute(/<a:latin\b[^>]*\/>/.exec(block)?.[0] ?? "", "typeface");
-      for (const [element, slot] of SCRIPT_SLOTS) {
-        const face = attribute(new RegExp(`<a:${element}\\b[^>]*/>`).exec(block)?.[0] ?? "", "typeface");
-        if (!face || face.startsWith("+") || face === latin || face === escapeAttribute(resolved[role][slot])) continue;
-        report({code: "script-font-not-imported", path: "design.fontScheme",
-          message: `Theme ${tag} ${slot} font "${face}" differs from both its latin font and what the imported document resolves, and is not represented in the imported OPF.`});
-      }
+  // The presentation theme carries the first slide's script fonts (planScriptFonts), so it is compared with that slide.
+  let themeResolved = resolved;
+  if (resolver && imported.slides?.length) { try { themeResolved = resolver(imported, {slideIndex: 0}); } catch { themeResolved = resolved; } }
+  if (theme && themeResolved) {
+    for (const {tag, slot, face} of themeScriptMismatches(theme, themeResolved)) {
+      report({code: "script-font-not-imported", path: "design.fontScheme",
+        message: `Theme ${tag} ${slot} font "${face}" differs from both its latin font and what the imported document resolves, and is not represented in the imported OPF.`});
     }
   }
+  // opf-pptx#168: a slide on another slide master carries its own script fonts in that master's theme.
+  if (resolver && Array.isArray(observed.slideThemes)) {
+    observed.slideThemes.forEach((slideTheme, index) => {
+      if (!slideTheme || slideTheme.path === observed.themePath) return;
+      let slideResolved;
+      try { slideResolved = resolver(imported, {slideIndex: index}); } catch { return; }
+      for (const {tag, slot, face} of themeScriptMismatches(slideTheme.xml, slideResolved)) {
+        report({code: "script-font-not-imported", path: `slides.${index}.design.fontScheme`,
+          message: `Slide ${index + 1}'s master theme ${tag} ${slot} font "${face}" differs from both its latin font and what the imported slide resolves, and is not represented in the imported OPF.`});
+      }
+    });
+  }
+}
+
+/** Theme ea/cs faces that neither repeat the latin font nor match the resolved slot: [{tag, slot, face}]. */
+function themeScriptMismatches(theme, resolved) {
+  const mismatches = [];
+  for (const [tag, role] of FONT_GROUPS) {
+    const block = new RegExp(`<a:${tag}>[\\s\\S]*?</a:${tag}>`).exec(theme)?.[0];
+    if (!block) continue;
+    const latin = attribute(/<a:latin\b[^>]*\/>/.exec(block)?.[0] ?? "", "typeface");
+    for (const [element, slot] of SCRIPT_SLOTS) {
+      const face = attribute(new RegExp(`<a:${element}\\b[^>]*/>`).exec(block)?.[0] ?? "", "typeface");
+      if (!face || face.startsWith("+") || face === latin || face === escapeAttribute(resolved[role][slot])) continue;
+      mismatches.push({tag, slot, face});
+    }
+  }
+  return mismatches;
 }
 
 /**

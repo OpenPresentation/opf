@@ -450,6 +450,8 @@ export interface TypefaceEntry {
 export interface TypefaceInventory {
   typefaces: TypefaceEntry[];
   themes: Record<string, {major: Partial<Record<"latin" | "ea" | "cs", string>>; minor: Partial<Record<"latin" | "ea" | "cs", string>>}>;
+  /** Every theme part's fonts by part path (several themes: one slide master per script profile, opf-pptx#168, and the notes master's). */
+  themeParts: Record<string, {major: Partial<Record<"latin" | "ea" | "cs", string>>; minor: Partial<Record<"latin" | "ea" | "cs", string>>}>;
   /** docProps/app.xml "Fonts Used", or null when the package has no readable list. */
   fontsUsed: string[] | null;
 }
@@ -463,7 +465,13 @@ export interface CheckPptxTypefacesOptions {
   allowEmptyThemeScripts?: boolean;
   /** Allowed theme script supplements; defaults to THEME_SCRIPT_SUPPLEMENTS. */
   scriptSupplements?: Readonly<Record<"major" | "minor", Readonly<Record<string, string>>>>;
+  /** FF-49: the East Asian / complex-script families selected for the theme slots; a selected slot that is empty or different is a `theme-script-slot` violation. */
+  themeScripts?: ThemeScriptSelection;
+  /** opf-pptx#168: per theme part path (for example `ppt/theme/theme3.xml`), overriding `themeScripts` for that part. */
+  themeScriptsByPart?: Record<string, ThemeScriptSelection>;
 }
+
+export type ThemeScriptSelection = Partial<Record<"major" | "minor", Partial<Record<"ea" | "cs", string>>>>;
 
 export type TypefaceViolationReason =
   | "foreign-typeface"
@@ -477,7 +485,8 @@ export type TypefaceViolationReason =
   | "inconsistent-pitch-family"
   | "missing-fonts-used"
   | "foreign-fonts-used"
-  | "fonts-used-mismatch";
+  | "fonts-used-mismatch"
+  | "theme-script-slot";
 
 export interface TypefaceViolation {
   reason: TypefaceViolationReason;

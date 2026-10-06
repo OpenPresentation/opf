@@ -3,8 +3,8 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 const root = new URL('../vendor/pptxgenjs/', import.meta.url);
 const manifest = JSON.parse(await readFile(new URL('UPSTREAM.json', root), 'utf8'));
-assert.equal(manifest.name, 'pptxgenjs');
-assert.equal(manifest.version, '4.0.1');
+assert.equal(manifest.name, 'pptxgenjs-plus');
+assert.equal(manifest.version, '4.3.4');
 assert.equal(manifest.license, 'MIT');
 for (const name of ['pptxgen.es.js', 'LICENSE']) {
   const bytes = await readFile(new URL(name, root));

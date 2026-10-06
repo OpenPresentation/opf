@@ -64,10 +64,12 @@
     "test:determinism": "node test/determinism.mjs"
   },
   "dependencies": {
+    "@node-projects/jszip": "4.3.0",
     "@openpresentation/opf": "^0.12.2",
+    "@rgrove/parse-xml": "4.2.3",
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
-    "jszip": "3.10.2",
+    "pako": "3.0.2",
     "sharp": "0.35.4"
   },
   "peerDependencies": {
