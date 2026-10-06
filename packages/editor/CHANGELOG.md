@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.11.3 (2026-10-06)
+
+- RR-53 (tooling, no package change): `npm run test:contract` runs the contract suite, the part of `npm test` that exercises core's APIs; core's pull-request checks run it instead of the full suite, while core's merge queue, pushes to main and nightly run `npm test`. `test/suites.json` `contractExclude` lists, with a reason each, the tests it leaves out, and `node scripts/run-tests.mjs --suite contract` selects it.
+- RR-17 (tests only; no package change): per-family script fixture for the editor font gate (FF-44, FF-45). `test/font-gate-script-families.mjs` drives `createFontGate` with the renderer's registry for each of the 35 open script, emoji and math families (`test/fixtures/script-family-samples.json`: original FF-44 corpus text and the FF-45 emoji and math samples), checks that the gate reports and loads only the family's script packages, that the registry holds the pinned faces and resolves each style to the family itself, and that a deck of the samples renders strictly in the family (`glyphFallback: 'none'`). It writes `artifacts/script-family-hosts/editor.json` for the font tracker in core.
+- RR-46 (repository tooling; no package change): changelog fragments and discovered tests. A change adds `changes/<slug>.md` instead of editing `## Unreleased`; the release-prep PR runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z`. `npm test` runs every `test/*.mjs` through `scripts/run-tests.mjs` (`test/suites.json` lists the helpers and separately-run files; browser suites still run through `scripts/quarantine.mjs`) and `npm run typecheck` is `scripts/check-syntax.mjs` over `src`, `test`, `scripts` and `examples`, so adding a test touches only its own file. The set of tests `npm test` runs is unchanged.
+- RR-50 (repository tooling; no package output changes): CI reads the commits of the other OpenPresentation repositories and the golden baseline from core's bot-owned `ecosystem.lock.json` through `OpenPresentation/opf/.github/actions/ecosystem-refs@main` instead of hand-edited SHA pins (`ci.yml`, `flake-repeat.yml`).
+- RR-20 (install fix, no API or output change): `engines.node` is now the open-ended `>=22` instead of `24.x`. npm's install picker skips a version whose `engines.node` does not match the running Node and silently installs the newest one that does, so on Node 26 (current) or Node 22 `npm i @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx` installed the 0.7.0 packages with core 0.9.0 instead of the latest release. The unit suite and the published-dependency check pass on Node 22, 24 and 26, and CI runs them on Node 22 and 26 (job `node-range`) next to the Node 24 package job; browser, golden and native gates stay on Node 24.
+
 ## 0.11.2 (2026-10-02)
 
 Patch release: editor switches for slide size and purpose (RR-41). Additive API; no dependency range changes (core ^0.12.0, renderer ^0.12.0).
