@@ -25,13 +25,13 @@
     "@openpresentation/cli": "0.13.0"
   },
   "exampleRefs": {
-    "opf-editor": "886329c4751fbb5b0422a7d3cd76eb49606cc647"
+    "opf-editor": "d4216427117d2c2a30fd0abc45fa8c18b5391793"
   },
   "verificationRefs": {
     "opf": "f9e94334e6f60947ee1ab643bf2b0eaf9ab32861",
     "cli": "1bd4923e4cc906a971a716b8ae98686c8837220b",
     "opf-render": "66866e5c32d0cdf9eb0b960b09dc521c226f1f13",
-    "opf-editor": "886329c4751fbb5b0422a7d3cd76eb49606cc647",
+    "opf-editor": "d4216427117d2c2a30fd0abc45fa8c18b5391793",
     "opf-pptx": "ac946771db5f980e435b48bea533ba71a7f5461b"
   }
 }
