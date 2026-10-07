@@ -356,6 +356,14 @@ test('the first failure wins the exit code of a batch; an unknown PR exits 64', 
   assert.equal(result.code, EXIT.usage);
 });
 
+test('a gh authentication failure stops at once instead of retrying until the timeout', async () => {
+  const { deps } = fake({ polls: [] });
+  deps.graphql = async () => {
+    throw new Error('To get started with GitHub CLI, please run:  gh auth login');
+  };
+  await assert.rejects(gate(['o/r#7'], deps), UsageError);
+});
+
 test('--commit waits for a commit and reads more than 100 contexts through GraphQL', async () => {
   const commitPoll = (contexts, more) => ({ data: { rateLimit: { remaining: 4000 }, r0: { defaultBranchRef: { name: 'main' }, t0: pr({ contexts, more }).commits.nodes[0].commit } } });
   const extra = { data: { repository: { object: { statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: [run('Verify OPF packages')] } } } } } };

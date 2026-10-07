@@ -18,8 +18,8 @@
 // without a queue is squash-merged. Re-running resumes: a merged PR exits 0 and a queued PR is followed.
 //
 // Exit codes: 0 green (or merged with --merge), 1 red, 2 merge conflict (DIRTY), 3 closed without merging, 4 head moved
-// (--expect-head), 5 merge-queue ejection twice or the merge/enqueue was refused, 64 usage or a target that does not
-// exist, 75 timeout (prints a RESUME line; re-run it). With several targets the first failure code in argument order wins,
+// (--expect-head), 5 merge-queue ejection twice or the merge/enqueue was refused, 64 usage, failed gh auth or a target
+// that does not exist, 75 timeout (prints a RESUME line; re-run it). With several targets the first failure code in argument order wins,
 // then 75 if any target is unfinished. GitHub API: gh's auth; GraphQL only in the poll loop (rateLimit is read on every
 // poll and the gate backs off below 200 points); REST only for the rulesets (once per repository) and --rerun-once.
 import { spawnSync } from 'node:child_process';
@@ -571,6 +571,7 @@ export async function runGate(options, deps) {
       response = await graphql(buildPollQuery(activeRepos));
       counts.polls += 1;
     } catch (error) {
+      if (/gh auth login|HTTP 401|Bad credentials/i.test(String(error?.message ?? error))) throw new UsageError(`GitHub authentication failed: ${String(error?.message ?? error).slice(0, 200)}`);
       errorsInRow += 1;
       if (errorsInRow === 1 || errorsInRow % 5 === 0) say(`GraphQL poll failed (${errorsInRow} in a row): ${String(error?.message ?? error).slice(0, 300)}; retrying at the next interval`);
     }
@@ -719,7 +720,14 @@ export async function main(argv, depsFactory = ghDeps) {
     return EXIT.usage;
   }
   const deps = depsFactory({ json: options.json });
-  const summary = await runGate(options, deps);
+  let summary;
+  try {
+    summary = await runGate(options, deps);
+  } catch (error) {
+    if (!(error instanceof UsageError)) throw error;
+    process.stderr.write(`pr-gate: ${error.message}\n`);
+    return EXIT.usage;
+  }
   if (options.json) process.stdout.write(`${JSON.stringify(summary)}\n`);
   return summary.code;
 }
