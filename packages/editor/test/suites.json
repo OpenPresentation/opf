@@ -15,5 +15,7 @@
     "playground-source.mjs",
     "switch-fixture.mjs"
   ],
-  "contractExclude": {}
+  "contractExclude": {
+    "published-core-gate.mjs": "Version arithmetic of the CI gate on opf.requiresUnreleasedCore (RR-55); package machinery, no core input."
+  }
 }

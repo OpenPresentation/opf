@@ -46,6 +46,8 @@ jobs:
       - run: npm run test:selection-browser
       - run: npm run test:click-entry-browser
       - run: npm run test:json-browser
+      - name: Refuse a declared unreleased core (RR-55)
+        run: node scripts/published-core-gate.mjs --forbid
       - run: npm run test:packed
       - run: npm pack --dry-run
       - run: npm publish --access public --provenance
