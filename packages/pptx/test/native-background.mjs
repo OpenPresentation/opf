@@ -19,7 +19,10 @@ const raw=bytes=>sharp(bytes).toColourspace('srgb').ensureAlpha().raw().toBuffer
 let cases=0,observedRgbMax=0,observedAlphaMax=0,observedOpaqueMean=0;
 for(const group of manifest.groups) {
  const source=JSON.parse(await readFile(new URL(group.source,root)));
- const restored=await fromPptx(await toPptx(source));
+ // The opacity group keeps a native reference for a gradient with no stops (transparent). A gradient needs two stops (FA-07), so
+ // the exporter is given a fully transparent solid fill for that slide and the preview renders the legacy source unvalidated.
+ const exportable={...source,slides:source.slides.map(slide=>(slide.design?.background?.gradient?.stops?.length??2)<2?{...slide,design:{...slide.design,background:{type:'solid',color:'#FFFFFF',opacity:0}}}:slide)};
+ const restored=await fromPptx(await toPptx(exportable));
  assert.ok(restored.slides.every(slide=>!slide.title&&!slide.blocks),'Blank slides remain blank after this exporter round-trips');
  for(let i=0;i<group.pngs.length;i++) {
   const fixture=group.pngs[i],bytes=await readFile(new URL(fixture.file,root));
@@ -28,7 +31,7 @@ for(const group of manifest.groups) {
   const slides=[source.slides[i]];
   if(group.name==='opaque')slides.push(nativeDoc.slides[i]);
   for(const slide of slides) {
-   const svg=renderSvg({design:{dimensions},slides:[slide]});
+   const svg=renderSvg({design:{dimensions},slides:[slide]},{validate:false});
    const reference=await raw(await svgToPng(svg,{useBundledFonts:false,background:group.transparent?'transparent':'#FFFFFF'}));
    assert.equal(reference.info.width,native.info.width);assert.equal(reference.info.height,native.info.height);
    let max=0,total=0,alphaMax=0,premultipliedMax=0,premultipliedTotal=0;

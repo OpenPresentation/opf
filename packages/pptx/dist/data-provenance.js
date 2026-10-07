@@ -13,11 +13,13 @@ import {chartUsesDataFields, isDatasetRef, numberFormatFromExcel, resolveTableDa
 //
 //   OPF_DATASETS_V1  on p:presentation (beside OPF_DOCUMENT_V1): the whole `datasets` map, unused datasets included.
 //   OPF_DATA_V1      on each chart or table graphic frame that uses one of the fields above:
-//     chart  {v: 1, kind: 'chart', data, mapping?, dataset?: hash, evidence: [hash]}   `data` is the authored
+//     chart  {v: 1, kind: 'chart', data, mapping?, highlight?, dataset?: hash, evidence: [hash]}   `data` is the authored
 //            chart.data (a dataset reference, or inline columns with DataColumn objects and `source`); `evidence`
 //            hashes the native caches (series names, categories, values and format codes) of the chart part(s) the frame
 //            shows (the chartex part and its classic fallback); `dataset` hashes the referenced dataset, so a slide
-//            pasted into a deck whose dataset of the same id holds other data keeps its values inline.
+//            pasted into a deck whose dataset of the same id holds other data keeps its values inline. `highlight` (FA-14) is
+//            the authored chart.highlight: the native chart carries only the accent and muted colours it produced, which no
+//            exact inference turns back into series and category names, and a chart with only a highlight records its inline `data`.
 //     table  {v: 1, kind: 'table', table}                                a dataset-backed table, as authored
 //            {v: 1, kind: 'table', headers: [[column, header, text]], cells: [[row, column, value, format, text]]}
 //                                                                         an inline table: the DataColumn or formatted
@@ -119,9 +121,9 @@ const datasetHash = (datasets, id) => own(datasets, id) ? hash(canonical(dataset
 
 /** The record of a chart that uses an RR-54 data field, or undefined (the frame then carries no tag). */
 export function chartDataRecord(chart, datasets) {
-  if (!chartUsesDataFields(chart)) return undefined;
+  if (!chartUsesDataFields(chart) && !object(chart?.highlight)) return undefined;
   const dataset = isDatasetRef(chart.data) ? datasetHash(datasets, chart.data.dataset) : undefined;
-  return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(dataset ? {dataset} : {})};
+  return {v: 1, kind: 'chart', data: clone(chart.data), ...(chart.mapping !== undefined ? {mapping: clone(chart.mapping)} : {}), ...(object(chart.highlight) ? {highlight: clone(chart.highlight)} : {}), ...(dataset ? {dataset} : {})};
 }
 
 /** The record of a table that is dataset-backed or formats numbers, or undefined. `layout` is the exported table layout. */
@@ -297,6 +299,7 @@ export function readDataTag(entries, frame, relationships) {
   if (!object(record) || record.v !== 1 || !['chart', 'table'].includes(record.kind)) throw Error('Unsupported data provenance version.');
   if (record.kind === 'chart' && (!object(record.data) || !Array.isArray(record.evidence) || !record.evidence.every(item => typeof item === 'string'))) throw Error('Invalid chart data record.');
   if (record.kind === 'chart' && record.dataset !== undefined && typeof record.dataset !== 'string') throw Error('Invalid chart data record.');
+  if (record.kind === 'chart' && record.highlight !== undefined && !object(record.highlight)) throw Error('Invalid chart data record.');
   if (record.kind === 'table' && !(object(record.table) || (Array.isArray(record.headers) && Array.isArray(record.cells)))) throw Error('Invalid table data record.');
   // Inline table entries are [column, header, text] and [row, column, value, format, text]; their indices are array
   // indices (non-negative integers), never a key such as "__proto__" or "length".
@@ -317,7 +320,7 @@ const validWith = (payload, datasets) => validatePresentation({slides: [{title: 
  */
 export function restoreChartData(chart, record, evidence, {datasets, report}) {
   if (!record.evidence.includes(evidence)) {
-    report({code: 'chart-data-provenance-changed', message: 'The chart\'s cached data or number formats changed after export (for example in Edit Data), so the dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows.'});
+    report({code: 'chart-data-provenance-changed', message: 'The chart\'s cached data or number formats changed after export (for example in Edit Data), so the dataset reference, column mapping, column formats and data source recorded at export were not restored; the chart imports the values and formats it now shows.' + (record.highlight ? ' The chart highlight (series and categories named at export) was not restored either: its names refer to the data as exported.' : '')});
     return chart;
   }
   if (isDatasetRef(record.data) && !own(datasets, record.data.dataset)) {
@@ -328,8 +331,8 @@ export function restoreChartData(chart, record, evidence, {datasets, report}) {
     report({code: 'chart-dataset-unavailable', message: `The chart referenced dataset '${record.data.dataset}', but this package's dataset of that id holds other data than at export (a slide pasted from another deck); the chart imports its values inline.`});
     return chart;
   }
-  const {mapping: _mapping, ...rest} = chart;
-  const restored = {...rest, data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {})};
+  const {mapping: _mapping, highlight: _highlight, ...rest} = chart;
+  const restored = {...rest, data: clone(record.data), ...(record.mapping !== undefined ? {mapping: clone(record.mapping)} : {}), ...(record.highlight !== undefined ? {highlight: clone(record.highlight)} : {})};
   if (!validWith({chart: restored}, isDatasetRef(record.data) ? datasets : undefined)) {
     report({code: 'invalid-data-provenance', message: 'The chart data recorded at export does not form a valid chart; the chart imports the values it shows.'});
     return chart;

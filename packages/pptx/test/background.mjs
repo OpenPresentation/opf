@@ -83,14 +83,19 @@ const importedOverrides=await fromPptx(overrides);assert.equal(importedOverrides
 const entries=unzipSync(overrides);
 entries['ppt/slides/slide1.xml']=encode.encode(utf8.decode(entries['ppt/slides/slide1.xml']).replace('val="123456"','val="00FF00"'));
 assert.equal((await fromPptx(zipSync(entries))).slides[0].design.background.gradient.stops[0].color,'#00FF00','Native edits drive import');
+// FA-07: a gradient needs two stops and a solid color is a ColorRef; both are rejected at the boundary, never exported.
 for(const stops of [[],[{position:.4,color:'#F00'}]]) {
- const bytes=await toPptx({slides:[{design:{background:{type:'gradient',gradient:{stops}}}}]});
- assert.ok(native(bytes)[stops.length?'a:solidFill':'a:noFill']!==undefined);assert.equal(validatePresentation(await fromPptx(bytes)).valid,true);cases++;
+ await assert.rejects(toPptx({slides:[{design:{background:{type:'gradient',gradient:{stops}}}}]}),error=>error.code==='invalid-opf');cases++;
 }
 for (const bad of ['red', '\"/><evil/>']) {
- const bytes=await toPptx({slides:[{design:{background:{type:'solid',color:bad}}}]});
- assert.equal(native(bytes)['a:solidFill']['a:srgbClr'].val,'FFFFFF');
- assert.equal(XMLValidator.validate(utf8.decode(unzipSync(bytes)['ppt/slides/slide1.xml'])),true);
+ await assert.rejects(toPptx({slides:[{design:{background:{type:'solid',color:bad}}}]}),error=>error.code==='invalid-opf');
+}
+// A native gradient with fewer than two stops cannot be an OPF gradient: it is reported, not imported.
+{
+ const one=unzipSync(await toPptx({slides:[{design:{background:{type:'gradient',gradient:{angle:0,stops:[{position:0,color:'#112233'},{position:1,color:'#445566'}]}}}}]}));
+ one['ppt/slides/slide1.xml']=encode.encode(utf8.decode(one['ppt/slides/slide1.xml']).replace(/<a:gs pos="100000">[\s\S]*?<\/a:gs>/,''));
+ const reported=[];const imported=await fromPptx(zipSync(one),{onDiagnostic:d=>reported.push(d)});
+ assert.ok(!imported.slides[0].design?.background);assert.equal(reported[0].code,'unsupported-background-gradient');cases++;
 }
 const unsupported=unzipSync(rgbaBytes);
 unsupported['ppt/slides/slide1.xml']=encode.encode(utf8.decode(unsupported['ppt/slides/slide1.xml']).replace(/<a:lin[^>]*\/>/,'<a:path path="circle"/>'));

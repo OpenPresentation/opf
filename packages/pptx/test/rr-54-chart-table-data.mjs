@@ -99,7 +99,7 @@ const formatted = {slides: [{title: 'Formats', chart: {type: 'column', dataLabel
   assert.match(sheet, /<c r="B3" s="1"\/>/, 'a gap stays a blank cell, with the column style');
   assert.doesNotMatch(sheet, /<c r="(?:A\d|E\d|[A-E]1)" s=/, 'categories, headings and unformatted columns keep the default style');
   // A percent-stacked chart keeps its 0% axis; percentage labels keep PowerPoint's own percent form.
-  const stacked = await exported({slides: [{title: 'Stacked', chart: {type: '100pct-stacked-column-3x', data: formatted.slides[0].chart.data}}]});
+  const stacked = await exported({slides: [{title: 'Stacked', chart: {type: '100pct-stacked-column', data: formatted.slides[0].chart.data}}]});
   assert.deepEqual(numFmt(block(stacked.chart, 'valAx')[0]), ['0%', '0'], 'percent-stacked axis stays 0%');
   const pie = await exported({slides: [{title: 'Pie', chart: {type: 'pie', dataLabels: {content: ['category', 'percent']}, data: {columns: ['Region', {name: 'Sales', format: '$#,##0'}], rows: [['A', 1], ['B', 3]]}}}]});
   assert.deepEqual(formatCodes(pie.chart).filter(code => code !== 'General'), ['$#,##0'], 'the pie series cache carries the format');

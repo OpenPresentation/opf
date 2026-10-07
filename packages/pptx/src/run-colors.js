@@ -46,10 +46,13 @@ export function slideRunSlots(slide) {
     if (Array.isArray(value)) for (const run of value) slots.push(object(run) ? run : null);
     else if (typeof value === 'string') slots.push(null);
   };
+  // FA-10: the heading group (tag, title, subtitle) comes first, when it is TextRun[].
+  for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) runs(slide[field]);
   for (const leaf of leaves(slide)) {
     for (const field of ROOT_PAYLOAD_FIELDS) {
       const value = leaf[field];
       if (field === 'text') { if (Array.isArray(value)) runs(value); }
+      else if (field === 'quote') { if (object(value) && Array.isArray(value.text)) runs(value.text); }
       else if ((field === 'items' || field === 'bullets') && Array.isArray(value)) {
         for (const item of value) {
           if (Array.isArray(item) || typeof item === 'string') runs(item);

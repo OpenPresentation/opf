@@ -14,7 +14,7 @@ const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', 
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const nativeText = shape => array(shape['p:txBody']?.['a:p']).map(p => array(p['a:r']).map(r => r['a:t'] ?? '').join('')).join('\n');
 const near = (actual, expected, label, tolerance = .002) => assert.ok(Math.abs(actual - expected) < tolerance, `${label}: ${actual} vs ${expected}`);
-const deck = {design: {fontScheme: {id: 'carlito', heading: {family: 'Carlito'}, body: {family: 'Carlito'}}, header: {left: {text: 'Header'}}, footer: {right: {slideNumber: true}}}, slides: [
+const deck = {design: {fontScheme: {id: 'carlito', heading: 'Carlito', body: 'Carlito'}, header: {left: {text: 'Header'}}, footer: {right: {slideNumber: true}}}, slides: [
   {layout: 'title-subtitle', tag: 'Kickoff', title: 'A cover title', subtitle: 'A supporting line'},
   {layout: 'title', title: 'A cover title that is long enough to wrap onto a second line when drawn at the cover size'},
   {layout: 'text-1x', title: 'Content title', text: 'Body text stays below the title.'},

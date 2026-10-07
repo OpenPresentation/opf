@@ -70,6 +70,8 @@ export function nativeRunStyle(properties, context, relationships, report, kind 
     if (relationship?.type.endsWith('/hyperlink') && relationship.targetMode === 'External' && relationship.target && !hyperlink.action) result.link = relationship.target;
     else report(`unsupported-${kind}-link`, 'The native hyperlink action or relationship cannot be represented as a URL.');
   }
+  // A link in the theme hyperlink color (what the export writes for a link with no color of its own) is a link with no color.
+  if (result.link && result._opfScheme === 'hyperlink') { delete result.color; delete result._opfScheme; }
   return result;
 }
 

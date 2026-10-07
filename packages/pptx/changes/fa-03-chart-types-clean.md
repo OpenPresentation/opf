@@ -1,0 +1,4 @@
+---
+type: changed
+---
+FA-03 (output-changing for a document that names a retired chart type id; needs the core release that deletes the aliases): export and import follow the clean chart-type catalog. The eight stacked chart types lose their `-3x` suffix, and a native stacked or percent-stacked chart imports as `stacked-column`, `100pct-stacked-bar`, `stacked-line-with-markers`, `stacked-area` and so on (never `-3x`). The deprecated aliases are no longer resolved: `DEPRECATED_CHART_TYPES` is removed, so `clustered-column`, `sparkline`, `dot-plot`, `australia`, `treemap-2x` and `stacked-column-3x` are outside the catalog and take the legacy substring heuristic like any other custom id. The chartex fallback fixture's `all-seven` deck drops its two retired alias slides, and the stacked entry of the RR-54 unchanged-bytes fixture names the new id; every other byte fixture entry is unchanged.

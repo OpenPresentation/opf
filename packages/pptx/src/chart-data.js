@@ -55,10 +55,15 @@ function positionalChartData(chart) {
 /** Core `resolveChartData`: the canonical positional table [category, (x,) ...series], or {ok: false, reason}. */
 export const resolveChartData = typeof opfCore.resolveChartData === 'function' ? opfCore.resolveChartData : positionalChartData;
 
-/** True when a chart uses an RR-54 data field that the native cache alone cannot carry back. */
+/**
+ * True when a chart uses an RR-54 data field that the native cache alone cannot carry back, or is a combo chart whose `line` or
+ * `secondaryAxis` exports its series in another order than the data's (FA-15: column series first, then lines), so the record
+ * restores the authored column order.
+ */
 export function chartUsesDataFields(chart) {
   const data = chart?.data;
-  return object(chart) && (chart.mapping !== undefined || isDatasetRef(data) || (object(data) && (data.source !== undefined || (Array.isArray(data.columns) && data.columns.some(object)))));
+  return object(chart) && (chart.mapping !== undefined || isDatasetRef(data) || (object(data) && (data.source !== undefined || (Array.isArray(data.columns) && data.columns.some(object))))
+    || (chart.type === 'combo' && (chart.line !== undefined || chart.secondaryAxis !== undefined)));
 }
 
 /** True when a table is dataset-backed or carries a DataColumn header or a number format. */
@@ -85,12 +90,13 @@ export function excelCode(format) {
  *   series  the Excel code of each c:ser, in document order (undefined keeps General);
  *   x       the X column's code (scatter c:xVal and the horizontal value axis);
  *   axis    the value axis code (the first plotted series' format, as Excel does), or undefined to keep the axis;
+ *   secondaryAxis  a combo chart's secondary value axis code (its first series' format, FA-15), or undefined to keep it;
  *   labels  false when the labels show percentages (the percent label keeps PowerPoint's own percent form);
  *   scatter true for an XY chart (two value axes: axPos b/t is X).
  * Every c:numCache of a series takes its code, every c:numFmt of a series' data labels too; the chart group's labels
  * take the first series' code.
  */
-export function applyChartNumberFormats(xml, {series = [], x, axis, labels = true, scatter = false}) {
+export function applyChartNumberFormats(xml, {series = [], x, axis, secondaryAxis, labels = true, scatter = false}) {
   // CT_NumData: formatCode is the cache's first child (PptxGenJS writes none on pie and doughnut series).
   const formatCode = (text, code) => code === undefined ? text : /<c:formatCode>/.test(text)
     ? text.replace(/<c:formatCode>[^<]*<\/c:formatCode>/g, `<c:formatCode>${escapeXml(code)}</c:formatCode>`)
@@ -107,10 +113,18 @@ export function applyChartNumberFormats(xml, {series = [], x, axis, labels = tru
     const result = ser.replace(/<c:(val|yVal|xVal)>[\s\S]*?<\/c:\1>/g, (role, name) => formatCode(role, name === 'xVal' ? x : code));
     return labelFormats(result, code);
   });
-  // The chart group's own label block (outside every c:ser) follows the first series.
-  const grouped = out.split(/(<c:ser>[\s\S]*?<\/c:ser>)/).map((part, position) => position % 2 ? part : labelFormats(part, series[0])).join('');
+  // The chart group's own label block (outside every c:ser) follows the group's first series. Only a combo chart has more than
+  // one group (FA-15: its line groups follow their own first series).
+  let first = 0;
+  const grouped = out.replace(/<c:(barChart|lineChart|areaChart|pieChart|doughnutChart|scatterChart|radarChart)>[\s\S]*?<\/c:\1>/g, group => {
+    const code = series[first];
+    first += group.match(/<c:ser>/g)?.length ?? 0;
+    return group.split(/(<c:ser>[\s\S]*?<\/c:ser>)/).map((part, position) => position % 2 ? part : labelFormats(part, code)).join('');
+  });
+  // The first c:valAx is the value axis; a combo chart's second one is its secondary axis (a scatter chart's two are X and Y).
+  let valueAxis = 0;
   return grouped.replace(/<c:valAx>[\s\S]*?<\/c:valAx>/g, valAx => {
-    const code = scatter && /<c:axPos val="[bt]"\/>/.test(valAx) ? x : axis;
+    const code = scatter ? (/<c:axPos val="[bt]"\/>/.test(valAx) ? x : axis) : valueAxis++ === 0 ? axis : secondaryAxis;
     return code === undefined ? valAx : valAx.replace(/<c:numFmt\b[^>]*\/>/, `<c:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`);
   });
 }

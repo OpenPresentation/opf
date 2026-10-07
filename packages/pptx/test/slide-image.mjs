@@ -87,7 +87,7 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
 // Deck-level images apply only where the layout reserves a slide image.
 {
   const deck = { design: { theme: 'classic', slideImage: { src: uri(wide), position: 'right' } },
-    catalogs: { layouts: { records: [{ $schema: 'https://openpresentation.org/schema/opf-layout/v1', id: 'hero-right', name: 'Hero right', slideImage: true, slideImageAlignment: 'Right', placeholders: [{ type: 'title' }] }] } },
+    catalogs: { layouts: { records: [{ $schema: 'https://openpresentation.org/schema/opf-layout/v1', id: 'hero-right', name: 'Hero right', design: { slideImage: { position: 'right' } }, placeholders: [{ type: 'title' }] }] } },
     slides: [{ title: 'Uses the deck image', layout: 'hero-right' }, { title: 'Default layout, no image' }] };
   const bytes = await toPptx(deck, { imageFormat: 'preserve' });
   const entries = unzipSync(bytes);
@@ -185,7 +185,7 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
 // an unchanged slide with a slide image restores its layout reference.
 {
   const deck = { design: { theme: 'classic', imageFill: 'crop' },
-    catalogs: { layouts: { records: [{ $schema: 'https://openpresentation.org/schema/opf-layout/v1', id: 'hero-left', name: 'Hero left', slideImage: true, slideImageAlignment: 'Left', placeholders: [{ type: 'title' }, { type: 'text' }] }] } },
+    catalogs: { layouts: { records: [{ $schema: 'https://openpresentation.org/schema/opf-layout/v1', id: 'hero-left', name: 'Hero left', design: { slideImage: { position: 'left' } }, placeholders: [{ type: 'title' }, { type: 'text' }] }] } },
     slides: [{ layout: 'hero-left', title: 'Layout kept', text: 'Body', design: { slideImage: { src: uri(wide), position: 'left' } } },
       { layout: 'hero-left', title: 'Background', design: { slideImage: { src: uri(tall), position: 'background' } } }] };
   const bytes = await toPptx(deck, { imageFormat: 'preserve', strictAssets: true });

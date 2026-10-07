@@ -117,7 +117,7 @@ for (const [scheme, language] of [['meiryo', 'japanese'], ['calibri', 'english-u
 
 // 4. Inline (gallery legacy) records select nothing; an explicit script slot on the design scheme is written.
 {
-  const record = {id: 'legacy-face', name: 'Legacy face', app: 'PowerPoint', languageFamily: 'latin', languages: [], major: 'Legacy Head', minor: 'Legacy Body', type: 'sans-serif'};
+  const record = {id: 'legacy-face', name: 'Legacy face', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Legacy Head', minor: 'Legacy Body', type: 'sans-serif'};
   const {inventory} = await exported(deck('legacy-face', undefined, {catalogs: {fontSchemes: {records: [record]}}}));
   assert.deepEqual(theme(inventory), {major: {latin: 'Legacy Head', ea: 'Legacy Head', cs: ''}, minor: {latin: 'Legacy Body', ea: 'Legacy Body', cs: ''}});
   const explicit = {id: 'aptos', eastAsian: {major: 'Noto Sans JP', minor: 'Noto Sans JP'}, complexScript: {major: 'Noto Naskh Arabic', minor: 'Noto Naskh Arabic'}};

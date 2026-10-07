@@ -38,14 +38,19 @@ export function resolveVariableColors(variables) {
   return isPlainObject(variables) ? variables : {};
 }
 
+// The color roles a ColorRef names. An export context carries them resolved (core resolveColorRoles); a bare
+// context with only `colors` maps those fields (the exporter's colors.accent is the primary color).
 function coreRoles(ctx) {
   const colors = ctx.colors ?? {};
+  const roles = ctx.roles;
   return {
-    background: withHash(colors.background),
-    surface: withHash(colors.surface),
-    text: withHash(colors.text),
-    textSecondary: withHash(colors.mutedText),
-    accent: withHash(colors.accent),
+    primary: withHash(roles?.primary),
+    secondary: withHash(roles?.secondary),
+    accent: withHash(roles ? roles.accent : colors.accent),
+    background: withHash(roles?.background ?? colors.background),
+    surface: withHash(roles?.surface ?? colors.surface),
+    text: withHash(roles?.text ?? colors.text),
+    textSecondary: withHash(roles?.textSecondary ?? colors.mutedText),
   };
 }
 
@@ -76,6 +81,7 @@ export function colorContext(context, fallback) {
   return {
     colorScheme: context.colorScheme,
     colors: context.colors,
+    roles: context.roles,
     variables: context.variables ?? {},
     fallback: fallback ?? context.colors?.text ?? "000000",
   };

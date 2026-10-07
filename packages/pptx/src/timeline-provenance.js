@@ -3,6 +3,7 @@ import {validatePresentation} from '@openpresentation/opf';
 import {attachTextTags,decodeTextTag} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 
+const STATUSES=['done','current','planned'];
 const TAG='OPF_TIMELINE_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -49,16 +50,22 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
   for(const group of groups.values())try{
     const anchors=group.filter(item=>item.data.anchor!==undefined);if(anchors.length!==1)throw Error('Missing or duplicated timeline anchor.');
     const anchor=anchors[0],manifest=anchor.data.anchor,count=validateManifest(manifest);
-    const total=count+manifest.eventCount+1;
+    // A current event's ring is a second native ellipse with its own tag, so the group has one more shape per ring.
+    const total=count+manifest.eventCount+1+group.filter(item=>item.data.role==='ring').length;
     if(anchor.data.role!=='text'||anchor.data.part!==0||anchor.data.line!==0||group.length!==total||new Set(group.map(item=>item.shape)).size!==total)throw Error('Incomplete or duplicated timeline elements.');
-    const ordered=manifest.parts.map(part=>Array(part.lines)),markers=new Set();let connectors=0;
+    const ordered=manifest.parts.map(part=>Array(part.lines)),markers=new Set(),rings=new Set(),statuses=new Map();let connectors=0;
     for(const item of group){
       if(item.ambiguous)throw Error('Multiple source identities on one timeline shape.');
-      if(item.data.role==='connector'||item.data.role==='marker'){
+      if(item.data.role==='connector'||item.data.role==='marker'||item.data.role==='ring'){
         const expected=item.data.role==='connector'?'line':'ellipse';
         if(item.shape['p:spPr']?.['a:prstGeom']?.prst!==expected||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet))throw Error('Timeline graphic now contains different geometry or native text.');
         if(item.data.role==='connector'){if(++connectors>1)throw Error('Duplicated timeline connector.');}
-        else{const index=item.data.eventIndex;if(!Number.isSafeInteger(index)||index<0||index>=manifest.eventCount||markers.has(index))throw Error('Ambiguous timeline marker.');markers.add(index);}
+        else{
+          const index=item.data.eventIndex,known=item.data.role==='marker'?markers:rings;
+          if(!Number.isSafeInteger(index)||index<0||index>=manifest.eventCount||known.has(index))throw Error('Ambiguous timeline marker.');
+          known.add(index);
+          if(item.data.role==='marker'&&item.data.status!==undefined){if(!STATUSES.includes(item.data.status))throw Error('Invalid timeline event status.');statuses.set(index,item.data.status);}
+        }
         continue;
       }
       const {part,line}=item.data;
@@ -66,11 +73,15 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
       ordered[part][line]=item;
     }
     if(connectors!==1||markers.size!==manifest.eventCount)throw Error('Incomplete timeline graphics.');
+    // Only a current event has a ring, and every current event has one.
+    for(const index of rings)if(statuses.get(index)!=='current')throw Error('Timeline ring without a current event.');
+    for(const [index,status] of statuses)if(status==='current'&&!rings.has(index))throw Error('Current timeline event without its ring.');
     const result={events:Array.from({length:manifest.eventCount},()=>({}))};
     for(const [index,part]of manifest.parts.entries()){
       const text=sourceLineParagraphs(ordered[index],paragraphs)[0].text;
       if(part.eventIndex===undefined)result[part.field]=text;else result.events[part.eventIndex][part.field]=text;
     }
+    for(const [index,status] of statuses)result.events[index].status=status;
     const timeline=manifest.shorthand?result.events:result;
     if(!validatePresentation({slides:[{timeline}]}).valid)throw Error('Current native text does not form a valid timeline.');
     for(const item of group)consumed.add(item.shape);

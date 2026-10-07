@@ -13,7 +13,7 @@ import {nativeShapeParagraphs} from '../src/code-provenance.js';
 const {options} = await prepareNodeFonts({pack: 'office', strictGlyphs: false, aliases: {'Cambria Math': 'Caladea', 'Segoe UI Emoji': 'Roboto'}});
 const EMOJI = ['\u{1F680}', '\u{1F468}‍\u{1F469}‍\u{1F467}‍\u{1F466}', '\u{1F1E9}\u{1F1EA}', '\u{1F44D}\u{1F3FD}', '1️⃣', '❤️', '❤︎', '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}'];
 const MATH = '∑ ∫ √ \u{1D44E}\u{1D44F} ℝ ≤ ∞ αβ';
-const deck = (family, title, text) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-45', design: {fontScheme: {id: 'aptos', heading: {family}, body: {family}}}, slides: [{title, text}]});
+const deck = (family, title, text) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-45', design: {fontScheme: {id: 'aptos', heading: family, body: family}}, slides: [{title, text}]});
 const typefaces = xml => [...new Set([...xml.matchAll(/typeface="([^"]*)"/g)].map(match => match[1]).filter(name => name && !name.startsWith('+')))];
 const texts = xml => [...xml.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]);
 const unescape = value => value.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');

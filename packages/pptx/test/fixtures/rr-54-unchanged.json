@@ -2,7 +2,7 @@
  "source": {
   "repository": "OpenPresentation/opf-pptx",
   "commit": "4ca079f57494c0239793c84abd4fe628abe95284",
-  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export."
+  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged."
  },
  "entries": {
   "column": {
@@ -267,9 +267,9 @@
    "deck": {
     "slides": [
      {
-      "title": "100pct-stacked-column-3x chart",
+      "title": "100pct-stacked-column chart",
       "chart": {
-       "type": "100pct-stacked-column-3x",
+       "type": "100pct-stacked-column",
        "data": {
         "columns": [
          "Quarter",
@@ -303,7 +303,7 @@
      }
     ]
    },
-   "sha256": "9cd60e0a6746eb737003ed39405101445fffe52afc2d38d46e52f50a421983ad"
+   "sha256": "fe3805222bef342fb3db72430a57b304b26d356a2efcdbe0659efef29f6f7568"
   },
   "pie": {
    "deck": {

@@ -57,7 +57,7 @@ const flags = block => ({
 const seriesBlocks = xml => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(match => match[1].match(/<c:dLbls>([\s\S]*?)<\/c:dLbls>/)?.[0]);
 
 // 1. A chart without options writes the same chart parts as before: no axis titles, the default legend, labels hidden.
-for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column-3x']) {
+for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
   const result = await exportDeck({type, data: type === 'scatter' ? scatterData : data});
   assert.doesNotMatch(result.classic, /<c:title>/, `${type}: no axis title by default`);
   assert.deepEqual([...result.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].map(match => match[1]).filter(value => value === '1'), [], `${type}: no label is shown by default`);
@@ -137,7 +137,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
     ['column', {content: ['category', 'value'], position: 'inside-end', separator: ' | '}, {value: true, category: true, percent: false, position: 'inEnd', separator: ' | '}],
     ['column', {position: 'center'}, {value: true, category: false, percent: false, position: 'ctr', separator: ', '}],
     ['bar', {position: 'inside-base'}, {value: true, category: false, percent: false, position: 'inBase', separator: ', '}],
-    ['stacked-column-3x', true, {value: true, category: false, percent: false, position: 'ctr', separator: ', '}],
+    ['stacked-column', true, {value: true, category: false, percent: false, position: 'ctr', separator: ', '}],
     ['line', {position: 'below'}, {value: true, category: false, percent: false, position: 'b', separator: ', '}],
     ['line', true, {value: true, category: false, percent: false, position: 't', separator: ', '}],
     ['line-with-markers', {position: 'right', content: ['category']}, {value: false, category: true, percent: false, position: 'r', separator: ', '}],
@@ -181,7 +181,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   assert.equal(new Set(insideColour(outside.classic)).size, 1, 'outside labels share the chart text colour');
   assert.ok(insideColour(inside.classic).every(colour => /^[0-9A-F]{6}$/.test(colour)));
   // Unsupported combinations adapt with a diagnostic.
-  const stacked = await exportDeck({type: 'stacked-column-3x', data, dataLabels: {position: 'outside-end', content: ['percent', 'value']}});
+  const stacked = await exportDeck({type: 'stacked-column', data, dataLabels: {position: 'outside-end', content: ['percent', 'value']}});
   assert.deepEqual(stacked.diagnostics.filter(d => d.code === 'chart-option-adapted' && d.phase !== 'import').map(d => d.option).sort(), ['dataLabels.content', 'dataLabels.position']);
   assert.equal(flags(seriesBlocks(stacked.classic)[0]).position, 'ctr');
 }

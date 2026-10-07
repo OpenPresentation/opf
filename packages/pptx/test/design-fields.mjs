@@ -56,7 +56,7 @@ let checked = 0;
 
 if (!hasCore) {
   // Published core: nothing composes a logo, a picture bullet or the accent role, so the export is unchanged.
-  const deck = {design: {logo: wide, listBullet: 'image', fontScheme: {id: 'aptos', accent: {family: 'Georgia'}}, background: light}, slides: [
+  const deck = {design: {logo: wide, listBullet: 'image', fontScheme: {id: 'aptos', accent: 'Georgia'}, background: light}, slides: [
     {title: 'Cover', layout: 'title'}, {title: 'List', items: ['One', 'Two']}]};
   const {entries} = await open(deck);
   assert.ok(!/name="OPF logo"/.test(slideXml(entries, 0)), 'no logo picture without core support');
@@ -265,7 +265,7 @@ if (!hasCore) {
 // ---- fontScheme.accent: the tag and the quote body carry the accent typeface; theme fonts and body stay.
 {
   const accent = 'Georgia';
-  const deck = {design: {fontScheme: {id: 'aptos', accent: {family: accent}}}, slides: [
+  const deck = {design: {fontScheme: {id: 'aptos', accent: accent}}, slides: [
     {tag: 'Eyebrow', title: 'Accent check', text: 'Body copy.'},
     {title: 'Quote', quote: {text: 'Design is how it works.', attribution: 'Someone'}},
   ]};
@@ -289,7 +289,7 @@ if (!hasCore) {
   assert.ok(!checkPptxTypefaces(bytes, {fonts: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']}).ok, 'the accent is a chosen font the author must list');
   // Round trip: the scheme returns from provenance.
   const imported = await fromPptx(bytes);
-  assert.deepEqual(imported.design.fontScheme, {id: 'aptos', accent: {family: accent}});
+  assert.deepEqual(imported.design.fontScheme, {id: 'aptos', accent: accent});
   // Without an accent role nothing changes.
   const plain = await open({design: {fontScheme: 'aptos'}, slides: deck.slides});
   assert.ok(!/Georgia/.test(slideXml(plain.entries, 0)) && !/Georgia/.test(slideXml(plain.entries, 1)));

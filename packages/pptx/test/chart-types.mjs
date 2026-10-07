@@ -1,12 +1,11 @@
 // FF-22: every classic chart type the core catalog keeps exports the exact
 // native construct for its Aspose.Slides ChartType and imports back to the
-// same id; deprecated ids export like their replacement; other ids keep the
-// legacy construct.
+// same id; other ids keep the legacy construct.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {catalogs} from '@openpresentation/opf';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {CHART_TYPES, CHARTEX_FALLBACK, DEPRECATED_CHART_TYPES, resolveChartType} from '../dist/chart-types.js';
+import {CHART_TYPES, CHARTEX_FALLBACK, resolveChartType} from '../dist/chart-types.js';
 
 const decoder = new TextDecoder();
 const categoryData = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 2, 3], ['Q3', 6, 4, 1]]};
@@ -43,18 +42,18 @@ function construct(xml) {
 
 const expected = {
   column: {element: 'barChart', barDir: 'col', grouping: 'clustered'},
-  'stacked-column-3x': {element: 'barChart', barDir: 'col', grouping: 'stacked', overlap: '100'},
-  '100pct-stacked-column-3x': {element: 'barChart', barDir: 'col', grouping: 'percentStacked', overlap: '100', valFormat: '0%'},
+  'stacked-column': {element: 'barChart', barDir: 'col', grouping: 'stacked', overlap: '100'},
+  '100pct-stacked-column': {element: 'barChart', barDir: 'col', grouping: 'percentStacked', overlap: '100', valFormat: '0%'},
   bar: {element: 'barChart', barDir: 'bar', grouping: 'clustered'},
-  'stacked-bar-3x': {element: 'barChart', barDir: 'bar', grouping: 'stacked', overlap: '100'},
-  '100pct-stacked-bar-3x': {element: 'barChart', barDir: 'bar', grouping: 'percentStacked', overlap: '100', valFormat: '0%'},
+  'stacked-bar': {element: 'barChart', barDir: 'bar', grouping: 'stacked', overlap: '100'},
+  '100pct-stacked-bar': {element: 'barChart', barDir: 'bar', grouping: 'percentStacked', overlap: '100', valFormat: '0%'},
   line: {element: 'lineChart', grouping: 'standard', symbol: 'none'},
   'line-with-markers': {element: 'lineChart', grouping: 'standard', symbol: 'circle'},
-  'stacked-line-3x': {element: 'lineChart', grouping: 'stacked', symbol: 'none'},
-  'stacked-line-with-markers-3x': {element: 'lineChart', grouping: 'stacked', symbol: 'circle'},
+  'stacked-line': {element: 'lineChart', grouping: 'stacked', symbol: 'none'},
+  'stacked-line-with-markers': {element: 'lineChart', grouping: 'stacked', symbol: 'circle'},
   area: {element: 'areaChart', grouping: 'standard'},
-  'stacked-area-3x': {element: 'areaChart', grouping: 'stacked'},
-  '100pct-stacked-area-3x': {element: 'areaChart', grouping: 'percentStacked', valFormat: '0%'},
+  'stacked-area': {element: 'areaChart', grouping: 'stacked'},
+  '100pct-stacked-area': {element: 'areaChart', grouping: 'percentStacked', valFormat: '0%'},
   pie: {element: 'pieChart', seriesCount: 1},
   doughnut: {element: 'doughnutChart', seriesCount: 1},
   scatter: {element: 'scatterChart', seriesCount: 2, symbol: 'circle'},
@@ -63,7 +62,8 @@ const expected = {
   'filled-radar': {element: 'radarChart', radarStyle: 'filled'},
 };
 
-const classic = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family !== 'chartex');
+// The combo chart (FA-15) is a mixed composition with its own test (test/combo-charts.mjs).
+const classic = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family !== 'chartex' && CHART_TYPES[id].family !== 'combo');
 assert.deepEqual(classic.sort(), Object.keys(expected).sort(), 'every classic kept chart type has an expectation');
 
 let checked = 0;
@@ -87,17 +87,8 @@ for (const [id, want] of Object.entries(expected)) {
   checked++;
 }
 
-// Deprecated ids export exactly like their replacement and import as it.
-for (const [deprecated, replacement] of Object.entries(DEPRECATED_CHART_TYPES)) {
-  assert.equal(resolveChartType(deprecated).id, replacement);
-  if (CHART_TYPES[replacement].family === 'chartex') continue;
-  const data = dataFor(replacement);
-  const [a, b] = await Promise.all([exportChart(deprecated, data), exportChart(replacement, data)]);
-  const strip = (xml) => construct(xml).body;
-  assert.equal(strip(a.xml), strip(b.xml), `${deprecated} exports like ${replacement}`);
-  assert.equal(a.chart.type, replacement, `${deprecated} imports as ${replacement}`);
-  checked++;
-}
+// The retired ids (deprecated aliases and the -3x spellings) are outside the catalog now: the legacy heuristic, not an alias.
+for (const id of ['stacked-column-3x', 'clustered-column', 'sparkline', 'dot-plot', 'australia', 'treemap-2x']) assert.equal(resolveChartType(id).id, null, `${id} is not a chart type`);
 
 // Ids outside the core catalog keep the legacy heuristic.
 for (const [id, element, barDir] of [['custom-kpi', 'barChart', 'col'], ['my-bar', 'barChart', 'bar'], ['trend-line', 'lineChart', undefined], ['donut', 'doughnutChart', undefined]]) {
@@ -107,15 +98,11 @@ for (const [id, element, barDir] of [['custom-kpi', 'barChart', 'col'], ['my-bar
   checked++;
 }
 
-// The tables agree with the core catalog (@openpresentation/opf catalogs.chartTypes): the same kept and deprecated ids,
-// the same replacements, and the catalog's Open XML construct for every classic kept id, both in the table and in the exported part.
+// The table agrees with the core catalog (@openpresentation/opf catalogs.chartTypes): the same ids and the catalog's Open XML construct for every classic kept id, both in the table and in the exported part.
 const records = new Map(catalogs.chartTypes.map((record) => [record.id, record]));
-const keptRecords = catalogs.chartTypes.filter((record) => !record.deprecation);
-const deprecatedRecords = catalogs.chartTypes.filter((record) => record.deprecation);
-assert.deepEqual(Object.keys(CHART_TYPES).sort(), keptRecords.map((record) => record.id).sort(), 'kept ids match the catalog');
-assert.deepEqual(Object.keys(DEPRECATED_CHART_TYPES).sort(), deprecatedRecords.map((record) => record.id).sort(), 'deprecated ids match the catalog');
-for (const record of deprecatedRecords) assert.equal(DEPRECATED_CHART_TYPES[record.id], record.deprecation.replacedBy, `${record.id}: replacedBy`);
-for (const replacement of Object.values(DEPRECATED_CHART_TYPES)) assert.ok(Object.hasOwn(CHART_TYPES, replacement) && !records.get(replacement).deprecation, `${replacement} is a kept id`);
+const keptRecords = catalogs.chartTypes;
+assert.deepEqual(catalogs.chartTypes.filter((record) => record.deprecation), [], 'the bundled catalog holds no deprecated record');
+assert.deepEqual(Object.keys(CHART_TYPES).sort(), keptRecords.map((record) => record.id).sort(), 'ids match the catalog');
 const nativeElement = {bar: 'barChart', line: 'lineChart', area: 'areaChart', pie: 'pieChart', doughnut: 'doughnutChart', scatter: 'scatterChart', radar: 'radarChart'};
 for (const record of keptRecords) {
   const spec = CHART_TYPES[record.id];
@@ -123,6 +110,19 @@ for (const record of keptRecords) {
   assert.equal(spec.aspose, record.mappings.renderers['aspose-slides'].chartType, `${record.id}: Aspose.Slides ChartType`);
   assert.equal(spec.family === 'chartex', openxml.composition === 'extension', `${record.id}: chartex family is the catalog's extension composition`);
   if (spec.family === 'chartex') continue;
+  if (spec.family === 'combo') {
+    // A mixed composition: a clustered column barChart and a lineChart with markers, both exported (test/combo-charts.mjs).
+    assert.equal(openxml.composition, 'mixed', record.id);
+    assert.deepEqual(openxml.series.map((entry) => entry.element), ['barChart', 'lineChart'], record.id);
+    assert.equal(spec.barDir, openxml.barDir, `${record.id}: barDir`);
+    assert.equal(spec.grouping, openxml.grouping, `${record.id}: grouping`);
+    assert.equal(spec.markers, openxml.series[1].marker === true, `${record.id}: line markers`);
+    const {xml} = await exportChart(record.id, dataFor(record.id));
+    assert.match(xml, /<c:barChart><c:barDir val="col"\/><c:grouping val="clustered"\/>/, `${record.id}: exported column group`);
+    assert.match(xml, /<c:lineChart><c:grouping val="standard"\/>/, `${record.id}: exported line group`);
+    checked++;
+    continue;
+  }
   assert.equal(openxml.composition, 'single', record.id);
   assert.equal(nativeElement[spec.pptx], openxml.element, `${record.id}: chart element`);
   if (spec.pptx === 'bar') assert.equal(spec.barDir, openxml.barDir, `${record.id}: barDir`);
@@ -168,7 +168,7 @@ for (const type of ['pie', 'doughnut']) {
 // By default ('auto') a confirmed chartex type is written natively (test/chartex.mjs): its classic part is the clustered
 // column mc:Fallback and no fallback is reported. The unconfirmed map keeps the clustered column chart and reports it.
 const chartexTypes = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family === 'chartex');
-for (const type of [...chartexTypes, 'treemap-2x', 'australia']) {
+for (const type of chartexTypes) {
   const single = {columns: categoryData.columns.slice(0, 2), rows: categoryData.rows.map((row) => row.slice(0, 2))};
   const {diagnostics, xml, chartex} = await diagnosticsFor(type, type === 'box-and-whisker' ? categoryData : single);
   const unconfirmed = Boolean(resolveChartType(type).spec.unconfirmed);
@@ -193,4 +193,4 @@ for (const type of [...classic, 'custom-kpi']) {
   assert.deepEqual(diagnostics, [], `${type}: no adaptation`);
 }
 
-console.log(`Chart types passed: ${checked} exports (${Object.keys(expected).length} classic Aspose chart types, ${Object.keys(DEPRECATED_CHART_TYPES).length} deprecated aliases, legacy ids) with exact constructs and same-id reimport.`);
+console.log(`Chart types passed: ${checked} exports (${Object.keys(expected).length} classic Aspose chart types, legacy ids) with exact constructs and same-id reimport.`);

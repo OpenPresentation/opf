@@ -176,6 +176,8 @@ function runArrays(slide) {
     if (!object(host)) return;
     if (Array.isArray(host.blocks)) { host.blocks.forEach((block, index) => visit(block, `${path}.blocks.${index}`)); return; }
     if (Array.isArray(host.text)) found.push({path: `${path}.text`, get: () => host.text, set: value => { host.text = value; }});
+    // FA-10: a quote's text may carry markers too.
+    if (object(host.quote) && Array.isArray(host.quote.text)) found.push({path: `${path}.quote.text`, get: () => host.quote.text, set: value => { host.quote.text = value; }});
     for (const field of ['bullets', 'items']) if (Array.isArray(host[field])) host[field].forEach((item, index) => {
       if (Array.isArray(item)) found.push({path: `${path}.${field}.${index}`, get: () => host[field][index], set: value => { host[field][index] = value; }});
       else if (object(item)) {
@@ -184,6 +186,8 @@ function runArrays(slide) {
       }
     });
   };
+  // FA-10: the heading group (tag, title, subtitle) may carry markers when it is TextRun[].
+  for (const field of ['tag', 'title', 'subtitle']) if (Array.isArray(slide[field])) found.push({path: field, get: () => slide[field], set: value => { slide[field] = value; }});
   const keys = Object.keys(slide).filter(key => /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key) && object(slide[key]));
   if (keys.length) for (const key of keys.sort()) visit(slide[key], key); else visit(slide, '');
   return found;

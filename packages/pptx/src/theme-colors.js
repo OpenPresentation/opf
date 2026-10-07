@@ -36,7 +36,7 @@ const VENDOR_VALUES = new Set(['tx1', 'tx2', 'bg1', 'bg2', 'accent1', 'accent2',
 const ROLE_SLOTS = Object.freeze({
   primary: ['accent1'],
   secondary: ['accent2'],
-  accent: ['accent1', 'accent3'],
+  accent: ['accent3'],
   text: ['dark1', 'light1'],
   textSecondary: ['dark2', 'light2'],
   surface: ['light2', 'dark2'],

@@ -9,7 +9,7 @@ import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {catalogs} from '@openpresentation/opf';
 import {fromPptx, toPptx} from '../dist/index.js';
-import {CHART_TYPES, CHARTEX_NAMESPACES, DEPRECATED_CHART_TYPES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
+import {CHART_TYPES, CHARTEX_NAMESPACES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
 import {CHARTEX_CONTENT_TYPES, CHARTEX_RELATIONSHIP_TYPES, chartexPointColors, columnLetters, scottBinCount} from '../dist/chartex.js';
 
 const CX = 'http://schemas.microsoft.com/office/drawing/2014/chartex';
@@ -244,14 +244,14 @@ assert.equal(chartTypeFromChartex(['clusteredColumn']), 'histogram');
 assert.equal(chartTypeFromChartex(['clusteredColumn', 'paretoLine']), 'pareto');
 
 // ---------------------------------------------------------------------------
-// Round trip: every chartex id and its data shapes come back as authored; deprecated aliases import as their replacement.
+// Round trip: every chartex id and its data shapes come back as authored.
 const importedChart = async (bytes) => {
   const slide = (await fromPptx(bytes)).slides[0];
   return slide.chart ?? slide.blocks?.find((block) => block.chart)?.chart;
 };
 for (const [type, data, expectedType = type] of [
   ...chartexIds.map((id) => [id, dataFor(id)]),
-  ['histogram', singleData], ['pareto', singleData], ['box-and-whisker', categoryData], ['treemap-2x', categoryData, 'treemap'], ['australia', categoryData, 'world'], ['box-and-whisker-3x', boxData, 'box-and-whisker'],
+  ['histogram', singleData], ['pareto', singleData], ['box-and-whisker', categoryData], ['box-and-whisker', boxData],
 ]) {
   const {bytes} = await exportDeck([{title: type, chart: {type, data}}]);
   assert.deepEqual(await importedChart(bytes), {type: expectedType, data}, `${type}: round trip`);
@@ -398,7 +398,7 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     assert.deepEqual(fallback.diagnostics, fixture.entries[name].diagnostics, `${name} (fallback): main's diagnostics`);
     assert.equal(fallback.chartexParts, 0, `${name} (fallback): no chartex parts`);
     assert.ok(fallback.slides.every((slide) => !slide.includes('AlternateContent')), `${name} (fallback): no alternate content`);
-    const maps = deck.slides.filter((slide) => ['world', 'australia'].includes(slide.chart.type)).length;
+    const maps = deck.slides.filter((slide) => slide.chart.type === 'world').length;
     const auto = await run(deck, undefined), explicit = await run(deck, 'auto'), native = await run(deck, 'native');
     assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
     assert.equal(auto.chartexParts, deck.slides.length - maps, `${name} (auto): chartex parts for every confirmed construct`);
@@ -456,7 +456,6 @@ assert.equal(scottBinCount([-1e308, 1e308]), 1, 'finite for extreme values');
 assert.deepEqual(chartexPointColors('treemap', [1, null, 3], ['A', 'B', 'C']), ['A', null, 'C']);
 assert.deepEqual(chartexPointColors('waterfall', [1, -2, 0, null], ['UP', 'DOWN']), ['UP', 'DOWN', 'UP', null]);
 assert.deepEqual(chartexPointColors('funnel', [1, 2], ['A']), [null, null]);
-assert.equal(resolveChartType('treemap-3x').id, 'treemap');
-assert.equal(DEPRECATED_CHART_TYPES['united-states'], 'world');
+assert.equal(resolveChartType('treemap-3x').id, null, 'a retired alias is outside the catalog');
 
 console.log(`Chartex passed: ${checks} checks; ${chartexIds.length} chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core catalogs.chartTypes, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' stays byte-identical to main).`);

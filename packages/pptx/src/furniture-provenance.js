@@ -15,7 +15,7 @@ const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const kinds = ['header', 'footer'], zones = ['left', 'center', 'right'];
-const fields = ['text', 'image', 'organization', 'socials', 'section', 'slideNumber', 'date'];
+const fields = ['text', 'image', 'organization', 'speaker', 'socials', 'section', 'slideNumber', 'date'];
 const settings = ['slideNumberFormat', 'dateFormat'];
 const dateFormatForField = Object.fromEntries(Object.entries(NATIVE_DATE_FIELDS).map(([format, type]) => [type, format]));
 // Platform keys follow the Socials schema's propertyNames pattern exactly, so
@@ -97,6 +97,7 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
   if (!Object.keys(definitions).length) return null;
   const organizations = array(presentation.organization);
   const organization = organizations.find(item => item.role === 'primary') ?? organizations[0];
+  const speaker = array(presentation.speaker)[0];
   // Generated deck logos (logo: true) are listed beside the topology, never inside it: the part list and the field
   // definitions are validated strictly by every released importer (0.11.6 and earlier reject an unknown field there),
   // so they keep describing only what those importers know. `drawn` is false when no logo resolved at export.
@@ -109,9 +110,12 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
   }
   return {v: 1, role: 'slide', group: String(slideIndex), definitions, ...(Object.keys(formats).length ? {formats} : {}),
     ...(layout.parts.some(part => part.field === 'organization' || part.field === 'socials') ? {organizationId: organization?.id} : {}),
+    ...(layout.parts.some(part => part.field === 'speaker') ? {speakerId: speaker?.id} : {}),
     parts: layout.parts.flatMap((part, index) => part.field === 'logo' ? [] : [{kind: part.kind, zone: part.zone, field: part.field,
       type: part.type, count: part.type === 'image' ? 1 : part.fit.lines.length,
       ...(part.field === 'socials' ? {socials: socialLines(part)} : {}),
+      // The speaker part is one line, "Name, Title" or "Name": the name's length lets import split it again (lengths, never words).
+      ...(part.field === 'speaker' ? {nameLength: speaker.name.length} : {}),
       ...(staticDates.has(index) ? {staticDate: staticDates.get(index)} : {}),
       // RR-11: this part is a native PowerPoint placeholder (dt, ftr or sldNum); deleting it in PowerPoint's dialog is then intent.
       ...(natives.has(index) ? {ph: natives.get(index)} : {})}]),
@@ -209,8 +213,12 @@ function validateManifest(manifest) {
       && part.socials.every(line => object(line) && platformId.test(line.platform) && schemes.includes(line.scheme))
       && new Set(part.socials.map(line => line.platform)).size === part.socials.length, 'Invalid social profile lines.');
     else check(part.socials === undefined, 'Unexpected social profile lines.');
+    if (part.field === 'speaker') check(Number.isSafeInteger(part.nameLength) && part.nameLength >= 1 && part.nameLength <= 100000, 'Invalid speaker name length.');
+    else check(part.nameLength === undefined, 'Unexpected speaker name length.');
     expected.delete(key(part));
   }
+  if (manifest.parts.some(part => part.field === 'speaker')) check(typeof manifest.speakerId === 'string' && /^[a-zA-Z0-9_-]+$/.test(manifest.speakerId), 'Invalid speaker identity.');
+  else check(manifest.speakerId === undefined, 'Unexpected speaker identity.');
   if (manifest.parts.some(part => part.field === 'organization' || part.field === 'socials')) check(typeof manifest.organizationId === 'string' && /^[a-zA-Z0-9_-]+$/.test(manifest.organizationId), 'Invalid organization identity.');
 }
 
@@ -269,7 +277,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
       if (value !== false) for (const zone of zones) if (definition.value[zone] !== undefined) {
         value[zone] = Object.fromEntries(Object.entries(definition.value[zone]).filter(([, flag]) => flag === false));
       }
-      const candidate = {scope: definition.scope, value, text: [], pictures: [], organizations: [], socials: [], sections: []};
+      const candidate = {scope: definition.scope, value, text: [], pictures: [], organizations: [], speakers: [], socials: [], sections: []};
       // logo: true returns as its flag; the generated picture is consumed, never content or an image field.
       for (const logo of (manifest.logos ?? []).filter(item => item.kind === kind)) {
         const found = logoPictures.filter(item => item.data.v === 1 && item.data.group === manifest.group && item.data.furniture === kind && item.data.zone === logo.zone);
@@ -305,6 +313,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
           }
           if (part.field === 'section') candidate.sections.push(text);
           if (part.field === 'organization') candidate.organizations.push({id: manifest.organizationId, name: text});
+          if (part.field === 'speaker') candidate.speakers.push(importedSpeaker(manifest.speakerId, text, part.nameLength));
           if (part.field === 'socials') {
             const lines = text.split('\n');
             check(lines.length === part.socials.length && lines.every(line => line.trim()), 'Current social profile lines no longer match their platforms.');
@@ -328,6 +337,14 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText)
     } catch (error) { report(slideIndex, `${kind}: ${error.message}`); }
   }
   return candidates;
+}
+
+// The generated speaker line is "Name, Title" (or "Name"). The recorded name length splits it again; a line edited in
+// PowerPoint that no longer has the separator at that position is the visible text as the name, with no title.
+function importedSpeaker(id, text, nameLength) {
+  const rest = text.slice(nameLength);
+  if (text.length > nameLength && rest.startsWith(', ') && rest.length > 2) return {id, name: text.slice(0, nameLength), title: rest.slice(2)};
+  return {id, name: text};
 }
 
 // A current native date field wins. Full-mode static-wrap evidence can recover
@@ -368,6 +385,13 @@ export function importFurniture(contexts, entries, onDiagnostic) {
       delete slide[kind]; report(index, `${kind}: Current organization metadata disagrees across repeated fields.`);
     }
   }
+  const speakers = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.speakers));
+  const speakerConflict = speakers.some(item => !same(item, speakers[0]));
+  if (speakerConflict) {
+    for (const [index, slide] of candidates.entries()) for (const kind of kinds) if (slide[kind]?.speakers.length) {
+      delete slide[kind]; report(index, `${kind}: Current speaker metadata disagrees across repeated fields.`);
+    }
+  }
   for (const [index, slide] of candidates.entries()) {
     const sections = Object.values(slide).flatMap(candidate => candidate.sections);
     if (sections.some(section => section !== sections[0])) for (const kind of kinds) if (slide[kind]?.sections.length) {
@@ -398,7 +422,7 @@ export function importFurniture(contexts, entries, onDiagnostic) {
     }
     if (!accepted.length) return;
     const merged = footerValue(accepted), indexes = accepted.map(item => item.index);
-    if (!existing) slide.footer = {scope: 'native', value: merged, text: indexes, pictures: [], organizations: [], socials: [], sections: []};
+    if (!existing) slide.footer = {scope: 'native', value: merged, text: indexes, pictures: [], organizations: [], speakers: [], socials: [], sections: []};
     else {
       if (existing.value === false) existing.value = {};
       for (const zone of Object.keys(merged)) existing.value[zone] = {...existing.value[zone], ...merged[zone]};
@@ -417,6 +441,9 @@ export function importFurniture(contexts, entries, onDiagnostic) {
   if (result.organization && validSocials.length) result.organization = {...result.organization, socials: validSocials[0].socials};
   // Stored document metadata (FF-32) must not override disagreeing visible names.
   if (organizationConflict) result.organizationConflict = true;
+  const validSpeakers = candidates.flatMap(slide => Object.values(slide).flatMap(candidate => candidate.speakers));
+  if (validSpeakers.length) result.speaker = validSpeakers[0];
+  if (speakerConflict) result.speakerConflict = true;
   for (const kind of kinds) {
     const inherited = candidates.map(slide => slide[kind]).filter(candidate => candidate?.scope === 'global');
     if (inherited.length && candidates.every(slide => slide[kind]) && inherited.every(candidate => same(candidate.value, inherited[0].value))) {

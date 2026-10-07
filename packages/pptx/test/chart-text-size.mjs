@@ -9,7 +9,7 @@ import {strFromU8, unzipSync} from 'fflate';
 import {toPptx} from '../dist/index.js';
 
 const data = {columns: ['Region', 'Alpha', 'Beta'], rows: [['North', 10, 20], ['South', 30, 15], ['East', 5, 25], ['West', 40, 10]]};
-const types = ['column', 'stacked-column-3x', '100pct-stacked-column-3x', 'bar', 'stacked-bar-3x', 'line', 'line-with-markers', 'area', 'stacked-area-3x', 'scatter',
+const types = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', 'line', 'line-with-markers', 'area', 'stacked-area', 'scatter',
   'radar', 'radar-with-markers', 'filled-radar', 'pie', 'doughnut', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world'];
 // What each text row is, from its trace path and construct: renderer charts.js draws a series name as `data.columns.N`, a category or value as
 // `data.rows.R.C`, and an axis tick on the chart's own path. A pie or doughnut draws its categories as the legend, a treemap its tiles as data labels.

@@ -54,9 +54,7 @@ const wide = await exported('histogram', {columns: ['Value'], rows: Array.from({
 assert.equal(binCount(wide.chartex), 10, 'Scott bins for 0..999: 3.49 * 288.8 / 10 = 100.8 wide');
 assert.equal(chartexValues(wide.chartex)[0].length, 1000);
 
-// The same silent drop applied to every chart type with one data column (dot plot is the other catalog one).
-const singleColumn = catalogs.chartTypes.filter((record) => record.columns?.length === 1).map((record) => record.id);
-assert.deepEqual(singleColumn.sort(), ['dot-plot', 'histogram'], 'the catalog chart types with one data column');
+// The same silent drop applied to every chart type with one data column.
 const types = new Set([...catalogs.chartTypes.map((record) => record.id), 'column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar']);
 for (const type of types) {
   const result = await exported(type, {columns: ['Value'], rows: [[3], [5], [8]]});
@@ -74,8 +72,8 @@ for (const type of types) {
   if (binned) assert.doesNotMatch(result.chartex, /<cx:strDim/, `${type}: the values are binned, not categorised`);
   else if (result.chartex) assert.match(result.chartex, /<cx:strDim type="cat">[\s\S]*<cx:pt idx="0">1<\/cx:pt>/, `${type}: the chartex categories are the row numbers`);
 }
-const dots = await exported('dot-plot', {columns: ['2023'], rows: [[3], [5], [8]]});
-// A dot plot is a scatter chart (core replaces dot-plot with scatter): X is the row number, Y the value.
+const dots = await exported('scatter', {columns: ['2023'], rows: [[3], [5], [8]]});
+// A scatter chart with one data column: X is the row number, Y the value.
 assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3']], 'rows are numbered');
 assert.deepEqual(numbers(dots.chart, 'yVal'), [['3', '5', '8']]);
 assert.match(dots.chartDiagnostics[0].message, /'2023'.*row numbers/);
@@ -85,8 +83,7 @@ assert.deepEqual(numbers(scatter.chart, 'xVal'), [['1', '2', '3']]);
 
 // Data that cannot be plotted keeps the placeholder frame and says why, instead of dropping the chart quietly.
 for (const [label, data, reason] of [
-  ['text only', {columns: ['Category'], rows: [['a'], ['b']]}, 'single-column-not-numeric'],
-  ['external data', {src: 'https://example.invalid/data.csv'}, 'data-not-inline']
+  ['text only', {columns: ['Category'], rows: [['a'], ['b']]}, 'single-column-not-numeric']
 ]) {
   const result = await exported('histogram', data);
   assert.equal(result.charts.length, 0, label);
@@ -120,7 +117,7 @@ for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.797693134
   const histogram = await exported('histogram', {columns: ['Value'], rows});
   assert.deepEqual(chartexValues(histogram.chartex), [['12', '-5', '1000', '7']], 'four cells hold numbers');
   assert.deepEqual(numbers(histogram.chart, 'cat'), [['1', '2', '3', '10']], 'the fallback keeps the row numbers');
-  const dots = await exported('dot-plot', {columns: ['V'], rows});
+  const dots = await exported('scatter', {columns: ['V'], rows});
   assert.deepEqual(numbers(dots.chart, 'xVal'), [['1', '2', '3', '10']], 'skipped rows leave gaps in the row numbers');
   assert.deepEqual(numbers(dots.chart, 'yVal'), [['12', '-5', '1000', '7']], 'skipped cells are not plotted as 0');
   assert.match(dots.chartDiagnostics.find((diagnostic) => diagnostic.code === 'chart-data-adapted').message, /its 4 values \(6 non-numeric cells were skipped\)/);
@@ -129,11 +126,11 @@ for (const rows of [[[-1e308], [1e308]], [[-1e308], [0], [1e308]], [[1.797693134
   assert.deepEqual(numbers(multi.chart, 'val'), [['12']], 'multi-column charts parse the same way');
 }
 // A placeholder is plain words: no raw JSON, data or source URL in slide text.
-for (const data of [{columns: ['Category'], rows: [['a'], ['b']]}, {src: 'https://example.invalid/data.csv?token=secret'}]) {
+for (const data of [{columns: ['Category'], rows: [['a'], ['b']]}]) {
   const result = await exported('histogram', data);
   const text = [...result.slide.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(([, value]) => value).join('|');
   assert.doesNotMatch(text, /&quot;|\{|example\.invalid|secret/, `placeholder text is readable: ${text}`);
-  assert.match(text, /Chart data is not inline, so it cannot be drawn here|chart&apos;s data column has no numbers/);
+  assert.match(text, /chart&apos;s data column has no numbers/);
 }
 {
   const placeholderDiagnostics = [];

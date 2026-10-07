@@ -129,14 +129,13 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
 
 // 4. Never silent: unrepresentable variants report a specific diagnostic.
 {
-  // The schema accepts an opacity-only object, which carries no image to draw.
-  for (const [deck, path] of [
-    [{ design: { watermark: { opacity: 0.2 } }, slides: [{ title: 'A', text: 'b' }] }, 'design.watermark'],
-    [{ slides: [{ title: 'A', text: 'b', design: { watermark: { opacity: 0.2 } } }] }, 'slides.0.design.watermark']
+  // FA-13: a watermark names exactly one of src and text, so an opacity-only object (or one with both) is rejected by the schema.
+  for (const deck of [
+    { design: { watermark: { opacity: 0.2 } }, slides: [{ title: 'A', text: 'b' }] },
+    { slides: [{ title: 'A', text: 'b', design: { watermark: { opacity: 0.2 } } }] },
+    { design: { watermark: { src: 'asset:a', text: 'DRAFT', opacity: 0.2 } }, slides: [{ title: 'A', text: 'b' }] }
   ]) {
-    const { trees, diagnostics } = await exported(deck);
-    assert.equal(watermarkOf(trees[0]).length, 0);
-    assert.deepEqual(diagnostics.filter(d => d.code === 'watermark-not-exported').map(d => d.path), [path]);
+    await assert.rejects(exported(deck), error => error.code === 'invalid-opf');
   }
   const deck = { design: { watermark: 'https://example.com/watermark.png' }, slides: [{ title: 'A', text: 'b' }, { title: 'B', text: 'c', design: { watermark: 'asset:missing' } }] };
   const diagnostics = [];

@@ -157,5 +157,10 @@ function text(bytes) {
 }
 
 await assert.rejects(() => toPptx({ slides: [{ text: "Crowded. ".repeat(4000), composition: { overflow: "error" } }] }));
-await assert.rejects(() => toPptx({ slides: [{ text: "Custom canvas", design: { dimensions: { widthInches: 4, heightInches: 9 } } }] }), error => error.code === "mixed-slide-dimensions");
+// A slide's own design cannot set dimensions (FA-07); a slide-level theme with another size still stops the export.
+await assert.rejects(() => toPptx({ slides: [{ text: "Custom canvas", design: { dimensions: { widthInches: 4, heightInches: 9 } } }] }), error => error.code === "invalid-opf");
+await assert.rejects(() => toPptx({
+  catalogs: { themes: { records: [{ $schema: "https://openpresentation.org/schema/opf-theme/v1", id: "tall-canvas", name: "Tall canvas", dimensions: { widthInches: 4, heightInches: 9 } }] } },
+  slides: [{ text: "Custom canvas", design: { theme: "tall-canvas" } }]
+}), error => error.code === "mixed-slide-dimensions");
 await assert.rejects(() => toPptx({ slides: [{ layout: "unknown-layout", text: "Needs a definition" }] }), error => error.code === "catalog-resolution-failed");

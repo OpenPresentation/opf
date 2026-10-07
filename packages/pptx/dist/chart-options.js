@@ -79,17 +79,33 @@ const dLbl = (index, color, labels, {size, font}) =>
  *   - the label text colour: the chart text colour outside a mark, the contrasting colour (core's `textColorForFill`, as the
  *     preview) inside one, per series, and per point on pie and doughnut charts.
  *
- * `info`: {resolved, kind, palette (series colours, hex without #), labelColor, font, textSize, pointCount}.
+ * FA-14: with a chart highlight (`info.highlight`, src/chart-highlight.js) `palette` holds the highlight-aware series colours, and a
+ * label inside a mark whose colour differs per point (pie and doughnut slices, columns and bars with a category highlight) is written
+ * per point with the colour that contrasts with that point's fill.
+ *
+ * `info`: {resolved, kind, palette (series colours, hex without #), labelColor, font, textSize, pointCount, highlight?}.
  */
 export function applyDataLabels(xml, info) {
-  const {resolved, kind, palette, labelColor, font, textSize, pointCount} = info;
+  // FA-15: a combo chart labels its column group like clustered columns and its line groups like line points (core's
+  // `linePosition`); the series colours run on across the groups.
+  if (info.kind === 'combo') {
+    let offset = 0;
+    return xml.replace(/<c:(barChart|lineChart)>[\s\S]*?<\/c:\1>/g, (group, element) => {
+      const line = element === 'lineChart';
+      const dataLabels = line ? {...info.resolved.dataLabels, position: info.resolved.dataLabels.linePosition ?? 'above'} : info.resolved.dataLabels;
+      const palette = info.palette.slice(offset).concat(info.palette.slice(0, offset));
+      offset = (offset + (group.match(/<c:ser>/g)?.length ?? 0)) % Math.max(1, info.palette.length);
+      return applyDataLabels(group, {...info, kind: line ? 'line' : 'bar', palette, resolved: {...info.resolved, dataLabels}});
+    });
+  }
+  const {resolved, kind, palette, labelColor, font, textSize, pointCount, highlight} = info;
   const labels = resolved.dataLabels;
   // Where the label sits on its mark: a bar or pie label placed inside the mark, and the labels of an area or a doughnut ring,
   // take the colour that contrasts with the mark; every other label keeps the chart text colour (as the preview does).
   const inside = kind === 'area' || kind === 'doughnut' || (['bar', 'pie', 'histogram', 'pareto', 'waterfall'].includes(kind) && INSIDE.has(labels.position));
   const contrast = fill => typeof opfCore.textColorForFill === 'function' ? String(opfCore.textColorForFill(`#${fill}`, `#${labelColor}`)).replace(/^#/, '').toUpperCase() : labelColor;
-  const block = (color, {points = 0, leaderLines = false} = {}) =>
-    `<c:dLbls>${Array.from({length: points}, (_, index) => dLbl(index, inside ? contrast(palette[index % palette.length]) : labelColor, labels, {size: textSize, font})).join('')}` +
+  const block = (color, {points = 0, leaderLines = false, fills} = {}) =>
+    `<c:dLbls>${Array.from({length: points}, (_, index) => dLbl(index, inside ? contrast(fills?.[index] ?? palette[index % palette.length]) : labelColor, labels, {size: textSize, font})).join('')}` +
     `<c:numFmt formatCode="General" sourceLinked="0"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>${labelText(color, textSize, font)}${labelFlags(labels, {leaderLines})}</c:dLbls>`;
   const circular = kind === 'pie' || kind === 'doughnut';
   const replaceBlocks = (text, make) => text.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g, existing => make(existing));
@@ -98,7 +114,9 @@ export function applyDataLabels(xml, info) {
   const withSeries = xml.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, ser => {
     const index = seriesIndex++;
     const color = inside && !circular ? contrast(palette[index % palette.length]) : labelColor;
-    return replaceBlocks(ser, existing => block(color, {points: circular ? pointCount : 0, leaderLines: /<c:showLeaderLines\b/.test(existing)}));
+    const fills = highlight?.pointFills(index);
+    const points = circular ? pointCount : inside && fills ? fills.length : 0;
+    return replaceBlocks(ser, existing => block(color, {points, fills, leaderLines: /<c:showLeaderLines\b/.test(existing)}));
   });
   const outside = withSeries.split(/(<c:ser>[\s\S]*?<\/c:ser>)/);
   const groupLevel = outside.map((part, index) => index % 2 ? part : replaceBlocks(part, existing => block(labelColor, {leaderLines: /<c:showLeaderLines\b/.test(existing)}))).join('');
@@ -133,7 +151,7 @@ function titleString(title) {
  * plus `notes` naming what the three fields cannot express. `defaults` is what an export writes without the field:
  * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind.
  */
-export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = []}) {
+export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = [], combo}) {
   // An older core's schema has no such fields (additionalProperties is false), so nothing is added to the imported chart.
   if (!coreKnowsChartOptions()) return {options: {}, notes: []};
   const chart = chartSpace?.['c:chart'];
@@ -151,6 +169,9 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     const category = titleString(asArray(plotArea?.['c:catAx'])[0]?.['c:title']), value = titleString(asArray(plotArea?.['c:valAx'])[0]?.['c:title']);
     if (category) axisTitles.category = category;
     if (value) axisTitles.value = value;
+    // FA-15: a combo chart's secondary value axis title.
+    const secondary = titleString(combo?.secondaryValueAxis?.['c:title']);
+    if (secondary) axisTitles.secondary = secondary;
   }
   if (Object.keys(axisTitles).length) out.axisTitles = axisTitles;
 
@@ -164,12 +185,12 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     if (!(defaultLegend && position === 'right')) out.legend = position;
   } else if (defaultLegend) out.legend = 'none';
 
-  const dataLabels = classicDataLabels(chartNode, target, notes, seriesFormats);
+  const dataLabels = classicDataLabels(chartNode, target, notes, seriesFormats, combo);
   if (dataLabels !== undefined) out.dataLabels = dataLabels;
   return {options: out, notes};
 }
 
-function classicDataLabels(chartNode, target, notes, seriesFormats = []) {
+function classicDataLabels(chartNode, target, notes, seriesFormats = [], combo) {
   const series = asArray(chartNode?.['c:ser']);
   // The labels the chart shows: the first series' block when it has one (PptxGenJS writes pie and doughnut visibility as per
   // point overrides), else the chart group's block.
@@ -191,7 +212,14 @@ function classicDataLabels(chartNode, target, notes, seriesFormats = []) {
   // RR-54: a label format that is a series' own number format imports with that column's format (or its own note).
   if (numberFormat && numberFormat !== 'General' && numberFormat !== '#,##0' && numberFormat !== '0%' && !seriesFormats.includes(numberFormat)) notes.push({option: 'dataLabels', message: `The label number format '${numberFormat}' cannot be expressed; labels import in the General format.`});
   const out = {};
-  const position = DLBL_POS_BACK[source['c:dLblPos']?.val ?? block['c:dLblPos']?.val];
+  let position = DLBL_POS_BACK[source['c:dLblPos']?.val ?? block['c:dLblPos']?.val];
+  if (combo) {
+    // FA-15: one OPF position covers both parts. A line position the columns cannot take (below, left, right) was asked for the
+    // lines; otherwise the column position (center, inside-end, inside-base) is the one, and 'center' is written to both.
+    const lineSeries = asArray(combo.lineNode?.['c:ser']).map(entry => entry?.['c:dLbls']).find(entry => entry !== undefined) ?? combo.lineNode?.['c:dLbls'];
+    const linePosition = DLBL_POS_BACK[lineSeries?.['c:dLblPos']?.val];
+    if (['below', 'left', 'right'].includes(linePosition)) position = linePosition;
+  }
   const supported = support?.dataLabels.positions ?? [];
   if (position && position !== support?.dataLabels.defaultPosition) {
     if (!support || supported.includes(position)) out.position = position;

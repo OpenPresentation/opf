@@ -22,7 +22,7 @@ for (const design of [{fontScheme: 'roboto'}, {fontScheme: 'roboto', theme: 'dar
   // The colour of series 0 in a two-series chart is the colour the single series must have (preview: palette colour 0).
   const reference = seriesFill(series(await chartXml({type: 'column', data: two}, design))[0]);
   assert.match(reference ?? '', /^[0-9A-F]{6}$/);
-  for (const [type, data] of [['column', one], ['bar', one], ['stacked-column-3x', one], ['column', signed], ['waterfall', signed]]) {
+  for (const [type, data] of [['column', one], ['bar', one], ['stacked-column', one], ['column', signed], ['waterfall', signed]]) {
     const xml = await chartXml({type, data}, design);
     assert.match(xml, /<c:barChart>/, `${type}: a classic bar chart part`);
     assert.match(xml, /<c:varyColors val="0"\/>/, `${type}: colours do not vary by point`);

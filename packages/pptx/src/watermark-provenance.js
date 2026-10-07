@@ -19,6 +19,8 @@ const canonical = value => JSON.stringify(value, (_key, item) => item && typeof 
   ? Object.fromEntries(Object.keys(item).sort().filter(key => !(key === '#text' && typeof item[key] === 'string' && !item[key].trim())).map(key => [key, item[key]])) : item);
 
 export const watermarkName = () => 'OPF watermark';
+// FA-13: a text watermark is one native text box (a p:sp), not a picture.
+export const watermarkTextName = () => 'OPF watermark text';
 
 // The preview's frame: x/y at 30% and a 40% by 40% box, in the slide's units.
 export const watermarkBox = (width, height) => ({x: width * .3, y: height * .3, w: width * .4, h: height * .4});
@@ -80,6 +82,7 @@ function attachTags(entries, manifests) {
   const NS = 'http://schemas.openxmlformats.org/presentationml/2006/main', types = [];
   let count = 0;
   for (const [part, manifest] of manifests) {
+    const element = manifest.kind === 'text' ? 'sp' : 'pic', name = manifest.kind === 'text' ? watermarkTextName() : watermarkName();
     const relPath = part.replace('/slides/', '/slides/_rels/') + '.rels';
     const rels = decoder.decode(entries[relPath]);
     const ids = new Set([...rels.matchAll(/\bId="([^"]+)"/g)].map(match => match[1]));
@@ -90,16 +93,38 @@ function attachTags(entries, manifests) {
     types.push(`<Override PartName="/${tagPart}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
     entries[relPath] = encoder.encode(rels.replace('</Relationships>', `<Relationship Id="${id}" Type="${REL}" Target="../tags/opfWatermark${count}.xml"/></Relationships>`));
     let attached = false;
-    const xml = decoder.decode(entries[part]).replace(/<p:pic>[\s\S]*?<\/p:pic>/g, picture => {
-      if (attached || picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1] !== watermarkName()) return picture;
+    const xml = decoder.decode(entries[part]).replace(new RegExp(`<p:${element}>[\\s\\S]*?</p:${element}>`, 'g'), picture => {
+      if (attached || picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1] !== name) return picture;
       attached = true;
       picture = picture.replace(/<p:nvPr\s*\/>/, '<p:nvPr></p:nvPr>');
-      if (!picture.includes('</p:nvPr>')) throw new Error('Generated watermark picture has no native application properties.');
+      if (!picture.includes('</p:nvPr>')) throw new Error('Generated watermark shape has no native application properties.');
       return picture.replace('</p:nvPr>', `<p:custDataLst><p:tags r:id="${id}"/></p:custDataLst></p:nvPr>`);
     });
     entries[part] = encoder.encode(xml);
   }
   entries['[Content_Types].xml'] = encoder.encode(decoder.decode(entries['[Content_Types].xml']).replace('</Types>', types.join('') + '</Types>'));
+}
+
+/**
+ * Bind each generated text watermark box to its manifest with a native tag.
+ * marks: Map<slidePart, {slide, text, opacity}>. The manifest records the text and the exact native geometry
+ * (position, size and rotation), so an unchanged box imports back as design.watermark.
+ */
+export function tagTextWatermarks(entries, marks) {
+  if (!marks.size) return;
+  const manifests = new Map();
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const mark = marks.get(part);
+    if (!mark) continue;
+    let found = 0;
+    for (const shape of decoder.decode(entries[part]).match(/<p:sp>[\s\S]*?<\/p:sp>/g) ?? []) {
+      if (shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1] !== watermarkTextName()) continue;
+      found++;
+      manifests.set(part, {v: 1, kind: 'text', slide: mark.slide, text: mark.text, opacity: mark.opacity, properties: parser.parse(shape)['p:sp']['p:spPr']});
+    }
+    if (found !== 1) throw new Error('Missing generated watermark text box.');
+  }
+  attachTags(entries, manifests);
 }
 
 function readTags(container, relationships, entries) {
@@ -111,6 +136,43 @@ function readTags(container, relationships, entries) {
     try { tags.push(...array(parser.parse(decoder.decode(entries[rel.path]))['p:tagLst']?.['p:tag'])); } catch { unreadable = true; }
   }
   return {tags, unreadable};
+}
+
+/**
+ * Recover a text design.watermark from an unchanged tagged text box. paragraphs[index] are the native paragraphs of
+ * shapes[index]. Returns the consumed shape indexes and the slide design fields to restore. A box whose text, position,
+ * size or rotation changed stays an ordinary text box and is reported.
+ */
+export function importTextWatermark(shapes, paragraphs, relationships, entries, slideIndex, report) {
+  const consumed = new Set(), found = [];
+  for (const [index, shape] of shapes.entries()) {
+    const {tags, unreadable} = readTags(shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst'], relationships, entries);
+    const own = tags.filter(tag => tag.name?.toUpperCase() === TAG);
+    if (!own.length) continue;
+    // The picture watermark has the same tag name; a picture's manifest has no kind and is read by importWatermark.
+    let kind;
+    try { kind = decodeTextTag(own[0].val)?.kind; } catch { kind = undefined; }
+    if (kind !== 'text') continue;
+    found.push({index, shape, own, unreadable, others: tags.some(tag => /^OPF_/i.test(tag.name) && tag.name.toUpperCase() !== TAG)});
+  }
+  if (!found.length) return {consumed};
+  const invalid = () => report({code: 'invalid-watermark-provenance', message: 'An edited, ambiguous or invalid tagged OPF watermark was imported as ordinary text. It is not reconstructed as design.watermark.'});
+  if (found.length > 1) { invalid(); return {consumed}; }
+  const [{index, shape, own, unreadable, others}] = found;
+  try {
+    if (unreadable || others || own.length !== 1) throw Error('Ambiguous watermark identity.');
+    const manifest = decodeTextTag(own[0].val);
+    if (manifest?.v !== 1 || manifest.kind !== 'text' || manifest.slide !== `slides.${slideIndex}` || typeof manifest.text !== 'string' || !manifest.text
+      || typeof manifest.opacity !== 'number' || !(manifest.opacity >= 0 && manifest.opacity <= 1)) throw Error('Invalid watermark manifest.');
+    if (shape['p:nvSpPr']?.['p:cNvPr']?.name !== watermarkTextName()) throw Error('Watermark identity changed.');
+    if (canonical(shape['p:spPr']) !== canonical(manifest.properties)) throw Error('Watermark geometry changed.');
+    if ((paragraphs[index] ?? []).map(paragraph => paragraph.text).join('\n') !== manifest.text) throw Error('Watermark text changed.');
+    consumed.add(index);
+    return {consumed, design: {watermark: {text: manifest.text, opacity: manifest.opacity}}};
+  } catch {
+    invalid();
+    return {consumed};
+  }
 }
 
 /**

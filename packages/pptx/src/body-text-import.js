@@ -17,7 +17,10 @@ export const joinNativeParagraphs = paragraphs => value(paragraphs.flatMap((para
   ...(index ? ['\n'] : []), ...(Array.isArray(paragraph.richText) ? paragraph.richText : [paragraph.richText ?? paragraph.text])
 ]));
 
-function bodyRunStyle(properties, context, relationships, report) {
+// FA-13: a run language that differs from the deck language comes back as TextRun.lang; a run in the design's code family
+// comes back as an inline code run. `extras` is {deckLang, codeFamily} (either may be absent).
+const RUN_LANG = /^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/;
+function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   const supported = {...properties};
   for (const key of ['b', 'i']) if (properties[key] !== undefined && !['1','0','true','false','on','off'].includes(properties[key])) {
     report('unsupported-body-text-style', `The native ${key} value is not a supported boolean; current text was retained.`);
@@ -52,10 +55,19 @@ function bodyRunStyle(properties, context, relationships, report) {
     (properties.cap !== undefined && properties.cap !== 'none') || (properties.spc !== undefined && Number(properties.spc) !== 0)) {
     report('unsupported-body-text-style', 'Native text effects, capitalization, spacing or underline decoration are not represented by OPF run properties; current text was retained.');
   }
-  return nativeRunStyle(supported, context, relationships, report, 'body');
+  const style = nativeRunStyle(supported, context, relationships, report, 'body');
+  const lang = properties.lang;
+  if (extras.deckLang && typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && lang.toLowerCase() !== extras.deckLang.toLowerCase()) style.lang = lang;
+  const family = typeof style.fontFamily === 'string' ? style.fontFamily.trim().toLowerCase() : undefined;
+  if (family && extras.codeFamily && family === extras.codeFamily.trim().toLowerCase()
+    && !['a:majorFont', 'a:minorFont'].some(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase() === family)) {
+    style.code = true;
+    delete style.fontFamily;
+  }
+  return style;
 }
 
-export function nativeBodyReader(slidePath, archive, relationships, report) {
+export function nativeBodyReader(slidePath, archive, relationships, report, extras = {}) {
   let bodies, context;
   return index => {
     if (!bodies) {
@@ -80,7 +92,7 @@ export function nativeBodyReader(slidePath, archive, relationships, report) {
         const properties = mergeNativeRunProperties(defaults, drawingObject(node[tag])['a:rPr']);
         // RR-05: a Latin phrase of a right-to-left paragraph is its own en-US run; its East Asian/complex-script slots can render nothing in it, so the face loss is not reported.
         const phrase = nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' && properties.lang === 'en-US' && LATIN_ONLY.test(current);
-        const style = bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); });
+        const style = bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, phrase ? {...extras, deckLang: undefined} : extras);
         if (current) runs.push(Object.keys(style).length ? {text:current,...style} : current);
       }
       return {text:runs.map(run => typeof run === 'string' ? run : run.text).join(''), richText:value(runs)};

@@ -19,8 +19,8 @@ function unhex(value) {
   return JSON.parse(dec.decode(Uint8Array.from(value.match(/../g),byte=>parseInt(byte,16))));
 }
 
-export function codeManifest(value, layout, group) {
-  return {v:1, group, role:'panel', value, parts:layout.parts.map(part=>({role:part.role, generated:part.generated === true,
+export function codeManifest(value, layout, group, bands) {
+  return {v:1, group, role:'panel', value, ...(bands ? {bands} : {}), parts:layout.parts.map(part=>({role:part.role, generated:part.generated === true,
     lines:part.fit.sourceLines.map(({start,end,nextStart,boundary})=>({start,end,nextStart,boundary}))}))};
 }
 
@@ -126,11 +126,16 @@ function sourceFor(value, role, generated) {
 function validateManifest(manifest) {
   const {value,parts} = manifest;
   const object = value && typeof value === 'object' && !Array.isArray(value);
-  if (typeof value !== 'string' && (!object || typeof value.source !== 'string' || Object.keys(value).some(key=>!['source','filename','language'].includes(key)) || ['filename','language'].some(key=>value[key] !== undefined && typeof value[key] !== 'string'))) throw new Error('Invalid source value.');
+  if (typeof value !== 'string' && (!object || typeof value.source !== 'string' || Object.keys(value).some(key=>!['source','filename','language','highlight'].includes(key)) || ['filename','language'].some(key=>value[key] !== undefined && typeof value[key] !== 'string'))) throw new Error('Invalid source value.');
+  // FA-13: code.highlight is a list of line numbers and [start, end] pairs from 1.
+  const line = entry => Number.isSafeInteger(entry) && entry >= 1;
+  if (object && value.highlight !== undefined && (!Array.isArray(value.highlight) || !value.highlight.length || !value.highlight.every(entry => line(entry) || (Array.isArray(entry) && entry.length === 2 && entry.every(line))))) throw new Error('Invalid highlight value.');
   // Empty metadata is preserved in the manifest but does not produce a label.
   const roles = [...(object && value.filename ? ['filename'] : []), ...(object && value.language ? ['language'] : []), 'body'];
   if (roles.length === 1) roles.unshift('language');
   if (!Array.isArray(parts) || parts.length !== roles.length) throw new Error('Invalid code parts.');
+  // FA-13: the number of native highlight bands the export drew behind the lines.
+  if (manifest.bands !== undefined && (!Number.isSafeInteger(manifest.bands) || manifest.bands < 1 || manifest.bands > 100000 || !object || value.highlight === undefined)) throw new Error('Invalid highlight bands.');
   parts.forEach((part,i)=>{
     const generated = roles.length === 2 && roles[0] === 'language' && !(object && (value.filename || value.language)) && i === 0;
     if (part.role !== roles[i] || part.generated !== generated || !Array.isArray(part.lines) || !part.lines.length) throw new Error('Invalid source part.');
@@ -180,10 +185,21 @@ export function importCodeGroups(shapes, paragraphs, relationships, entries, rep
       if (panels.length !== 1 || panels[0].text !== '') throw new Error('Missing, duplicated or edited panel.');
       const panel = panels[0], manifest = panel.data;
       validateManifest(manifest);
+      // FA-13: highlight bands are decoration. The panel and every line are required; a band may be missing (someone removed it in
+      // PowerPoint) without losing the source, and code.highlight itself comes from the manifest value.
       const expectedCount = 1 + manifest.parts.reduce((sum,part)=>sum+part.lines.length,0);
-      if (group.length !== expectedCount || new Set(group.map(item=>item.shape)).size !== group.length) throw new Error('Incomplete or duplicated code shapes.');
+      const bandCount = group.filter(item=>item.data.role === 'highlight').length;
+      if (group.length !== expectedCount + bandCount || new Set(group.map(item=>item.shape)).size !== group.length) throw new Error('Incomplete or duplicated code shapes.');
       const nativeLines = new Map();
+      const seenBands = new Set();
       for (const item of group) if (item !== panel) {
+        // FA-13: a highlight band holds no text; it only has to be one of the manifest's bands.
+        if (item.data.role === 'highlight') {
+          const {index} = item.data;
+          if (!Number.isSafeInteger(index) || index < 0 || index >= (manifest.bands ?? 0) || seenBands.has(index) || item.text !== '') throw new Error('Ambiguous highlight band.');
+          seenBands.add(index);
+          continue;
+        }
         const {role,part,line} = item.data, key = `${part}:${line}`;
         if (role !== 'line' || !Number.isSafeInteger(part) || !Number.isSafeInteger(line) || !manifest.parts[part]?.lines[line] || nativeLines.has(key)) throw new Error('Ambiguous source line.');
         nativeLines.set(key,item.text);

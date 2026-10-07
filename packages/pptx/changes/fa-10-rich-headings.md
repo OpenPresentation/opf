@@ -1,0 +1,4 @@
+---
+type: added
+---
+FA-10: rich headline text exports and imports. A `TextRun[]` `title`, `subtitle` or `tag` exports as one tagged native text box per laid-out line with its runs (color, weight, italic, links, super/subscript and citation markers) at core's rich-line geometry, and a `TextRun[]` `quote.text` exports the same way under the quote tags. Import returns `TextRun[]` where a heading's native runs are formatted differently from one another and a plain string where they are uniform (a tagged export records the heading's own weight, color, size and family so only authored run formatting comes back; a native title placeholder is read the way body text is, dropping what every run shares), turns marker runs in a heading or quote into `cite`/`footnote`, and includes heading and quote runs in the run-color reference slots. Strings export and import exactly as before. Needs core with FA-10.

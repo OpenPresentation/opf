@@ -37,7 +37,7 @@ export function addFitLines(slide, value, fit, box, context, helpers, {objectNam
         return {text: fragment.text, options: {...helpers.nativeFontOptions(fragment.style), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: native,
           underline: fragment.run.underline ? {style: 'sng', color: native} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined,
           baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined,
-          hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined}};
+          hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined}};
       });
       if (!runs.length) runs.push({text: '', options: {}});
       const placed = fit.placement?.lines[index];

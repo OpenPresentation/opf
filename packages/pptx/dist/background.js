@@ -57,8 +57,6 @@ export function nativeBackgroundFill(background, {width, height}, fallback = 'FF
   }
   if (background.type !== 'gradient') return null;
   const stops = background.gradient?.stops ?? [];
-  if (!stops.length) return '<a:noFill/>';
-  if (stops.length === 1) return `<a:solidFill>${paint(stops[0].color, fallback)}</a:solidFill>`;
   const radians = turn(background.gradient?.angle ?? 0) * Math.PI / 180;
   const c = Math.cos(radians), s = Math.sin(radians), span = Math.abs(c) + Math.abs(s);
   const angle = Math.round(turn(Math.atan2(s / height, c / width) * 180 / Math.PI) * 60000) % 21600000;
@@ -215,7 +213,8 @@ export function readNativeBackground(properties, {width, height}, report = () =>
     if (!c || !Number.isFinite(position) || position < -.00002 || position > 1.00002) return null;
     return {...c, position: clamp(position)};
   });
-  if (!stops.length || stops.some(stop => !stop)) return unsupported();
+  // The schema needs at least two stops (DrawingML does too).
+  if (stops.length < 2 || stops.some(stop => !stop)) return unsupported();
   const alpha = stops[0].alpha, uniform = stops.every(stop => stop.alpha === alpha);
   return {type: 'gradient', gradient: {angle, stops: stops.map(stop => ({position: stop.position,
     color: stop.hex + (!uniform && stop.alpha !== 1 ? Math.round(stop.alpha * 255).toString(16).padStart(2, '0').toUpperCase() : '')}))},

@@ -55,7 +55,7 @@ if(mode==='generate') {
   const fonts=createFontRegistry(fontFaces,{substitutionPolicy:'none'}), decks=[];
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const id='quote-'+dimensions.width;
-    const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code:{family:'Calibri'}}},slides:[12,16,20,24].map(repeats=>({title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}))};
+    const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code: 'Calibri'}},slides:[12,16,20,24].map(repeats=>({title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}))};
     document.slides.push({title:'A quote and its source',quote:{text:'Keep the complete source visible.',attribution:'Long attribution '.repeat(60),source:'Recorded interview'}});
     const readable=paginateSlide({title:'A quote and its source',quote:{text:'This source keeps the selected readability floor.',attribution:'Repeated source '.repeat(15),source:'Recorded interview'}},{...dimensions,fonts:{heading:'Calibri',body:'Calibri',code:'Calibri'},textMeasurement:fonts.textMeasurement});
     assert.equal(readable.slides.length,1);

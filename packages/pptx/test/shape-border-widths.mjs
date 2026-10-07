@@ -23,7 +23,7 @@ const deck = dimensions => ({
     {title: 'Code', code: {source: 'const a = 1;', language: 'js'}},
     {title: 'Media', video: {src: 'https://example.com/v.mp4', title: 'Video'}},
     {title: 'Timeline', timeline: {events: [{when: 'Q1', what: 'Plan'}, {when: 'Q2', what: 'Build'}]}},
-    {title: 'Unsupported chart source', chart: {type: 'column', data: {src: 'data.csv'}}},
+    {title: 'Unplottable chart data', chart: {type: 'histogram', data: {columns: ['Category'], rows: [['a'], ['b']]}}},
     {title: 'Image', image: {src: 'https://example.invalid/missing.png', alt: 'Missing'}},
     {title: 'Table', table: {columns: ['A', 'B'], rows: [['1', '2']]}},
   ],

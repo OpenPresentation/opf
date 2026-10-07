@@ -8,8 +8,9 @@ import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
 import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord} from './data-provenance.js';
-import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,NATIVE_CHART_ELEMENTS} from './chart-types.js';
+import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {applyChartAlt,readFrameAlt} from './chart-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
@@ -19,9 +20,10 @@ import {attachMediaTags,importMediaGroups,mediaCaption,mediaFrameRecord,mediaTex
 import {addCaption, addFootnotes} from './annotation-export.js';
 import {attachAnnotationTags, captionValue, importAnnotations, restoreCitations} from './annotation-provenance.js';
 import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
+import {headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
-import {attachQuoteTags,quoteManifest,importQuoteGroups} from './quote-provenance.js';
+import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, manifestPartIndex, staticDateFallback} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
 import {joinWrappedText} from './content-topology.js';
@@ -33,12 +35,13 @@ import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
 import {placeSlideImages, importSlideImage, slideImageName, slideImageOverlayName} from './slide-image-provenance.js';
 import {dedupeMedia} from './media-dedupe.js';
-import {placeWatermarks, importWatermark, watermarkName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
+import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
 import {importBackground} from './background-import.js';
+import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
-import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
+import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
@@ -191,6 +194,9 @@ const DIMENSION_PRESETS = Object.freeze({
   "4:3": Object.freeze({ widthInches: 10, heightInches: 7.5 }),
   "16:10": Object.freeze({ widthInches: 10, heightInches: 6.25 }),
   letter: Object.freeze({ widthInches: 11, heightInches: 8.5 }),
+  "1:1": Object.freeze({ widthInches: 7.5, heightInches: 7.5 }),
+  "4:5": Object.freeze({ widthInches: 7.5, heightInches: 9.375 }),
+  "9:16": Object.freeze({ widthInches: 7.5, heightInches: 40 / 3 }),
   a4: Object.freeze({ widthInches: 11.69, heightInches: 8.27 })
 });
 
@@ -237,6 +243,7 @@ export async function toPptx(input, options = {}) {
   context.pictureText = new Map();
   context.slideImages = new Map();
   context.watermarks = new Map();
+  context.textWatermarks = new Map();
   context.logos = new Map();
   context.logoPlaceholderTags = new Map();
   context.bulletImages = new Map();
@@ -249,6 +256,7 @@ export async function toPptx(input, options = {}) {
   context.plainTextTags = new Map();
   context.timelineTags = new Map();
   context.quoteTags = new Map();
+  context.quotePhotos = new Map();
   context.furnitureTags = new Map();
   context.furnitureLogoTags = new Map();
   context.furnitureFields = new Map();
@@ -261,6 +269,7 @@ export async function toPptx(input, options = {}) {
   context.metricTags = new Map();
   context.metricDescriptions = new Map();
   context.chartHeadings = new Map();
+  context.chartAlts = new Map();
   context.chartFonts = new Map();
   context.chartPalettes = new Map();
   context.chartex = new Map();
@@ -384,6 +393,7 @@ export async function fromPptx(input, options = {}) {
   const furniture = importFurniture(furnitureContexts, entries, options.onDiagnostic);
   if (Object.keys(furniture.design).length) imported.design = {...imported.design, ...furniture.design};
   if (furniture.organization) imported.organization = furniture.organization;
+  if (furniture.speaker) imported.speaker = furniture.speaker;
 
   // RR-54: the datasets recorded at export (OPF_DATASETS_V1). Chart and table frames restore their dataset references against
   // them, so the document carries them before document provenance validates the restored document.
@@ -391,7 +401,7 @@ export async function fromPptx(input, options = {}) {
   const mediaRegistry = Object.create(null);
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
-    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
+    imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), deckLang: observedLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported.design) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
   }
   if (datasets) imported.datasets = datasets;
   // Native sections (PowerPoint's own section list, `Default Section` = none)
@@ -421,7 +431,7 @@ export async function fromPptx(input, options = {}) {
   let slideProvenance = slidePaths.map(() => ({structure: "untagged"}));
   let restoredGroups = [];
   try {
-    const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true,
+    const restored = restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, organizationConflict: furniture.organizationConflict === true, speakerConflict: furniture.speakerConflict === true,
       // Host catalogs format stored socials exactly as export did (FF-34).
       socialPlatformRecords: catalogs => socialPlatformRecords({catalogs}, options),
       nativeSections: slideSections,
@@ -623,6 +633,16 @@ function readCoreProperties(entries) {
   };
 }
 
+// FA-13: the code family of the imported design's font scheme (a run in it is an inline code run). The scheme's own `code` role,
+// else the bundled record's, else the shared fallback; heading and body families are never code. Only a package the exporter
+// wrote (it carries OPF tag parts) is read this way; a deck from another tool keeps its runs' font families as they are.
+function importedCodeFamily(design) {
+  const reference = design?.fontScheme;
+  const id = referenceId(reference);
+  const base = (id && findById(defaultCatalog("fontSchemes"), id)) || findById(defaultCatalog("fontSchemes"), DEFAULTS.fontScheme);
+  return resolveFontFamilies({...base, ...(isPlainObject(reference) ? reference : {})}).code;
+}
+
 function dimensionsFromPresentation(presentationRoot) {
   const size = presentationRoot["p:sldSz"];
   const width = emuToInches(size?.cx);
@@ -659,6 +679,11 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   nativeContext.slideImagePictures = slideImage.consumed;
   nativeContext.slideImageShapes = slideImage.consumedShapes;
   const watermarkPath = `slides.${slideIndex}.design.watermark`;
+  // FA-13: a text watermark is a tagged native text box; it is not content and never imports as a text block.
+  const textWatermark = importTextWatermark(nativeContext.shapes, nativeContext.paragraphs.map(shapeParagraphs => shapeParagraphs.map(paragraph => ({text: paragraph.text}))), relationships, entries, slideIndex,
+    diagnostic => options.onDiagnostic?.({...diagnostic, path: watermarkPath}));
+  if (textWatermark.design) slide.design = {...slide.design, ...textWatermark.design};
+  nativeContext.watermarkShapes = textWatermark.consumed;
   const watermark = importWatermark(nativeContext.pictures, relationships, entries, slideIndex,
     picture => importPicture(entries, picture, slidePath, relationships, diagnostic => {
       // The recorded fit is re-derived from design.watermark.
@@ -684,12 +709,22 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   // fill an absent role by geometry; explicit native placeholders still apply.
   const inferHeadings = !items.some(item => item.heading||item.sourceText);
   const heading = field => {const index=items.findIndex(item=>item.heading===field);return index<0?null:items.splice(index,1)[0];};
+  // FA-10: a heading is its plain text, or TextRun[] when its native runs are formatted differently from one another (the way
+  // body text reads current native runs). A tagged line group brings its own value; one native shape (a title placeholder, or the
+  // shape the importer took for the title) is read through the native body reader.
+  const headingText = item => {
+    const key = item.sources?.length === 1 ? /^sp:(\d+)$/.exec(item.sources[0]) : null;
+    const parts = item.richText === undefined && key ? joinRichLines([{index: Number(key[1])}], nativeContext.readBody, () => '') : undefined;
+    const value = item.richText ?? (parts ? headingValue(parts) : undefined);
+    // Only when it reads as the same words as the plain path: the native text is authoritative.
+    return Array.isArray(value) && value.map(run => typeof run === 'string' ? run : run.text).join('') === item.text ? value : item.text;
+  };
   const tagItem=heading('tag');
-  if(tagItem)slide.tag=tagItem.text;
+  if(tagItem)slide.tag=headingText(tagItem);
   const titleItem = heading('title')??takeTitleItem(items, dimensions, inferHeadings);
-  if (titleItem) slide.title = titleItem.text;
+  if (titleItem) slide.title = headingText(titleItem);
   const subtitleItem = heading('subtitle')??takeSubtitleItem(items, titleItem, dimensions, inferHeadings);
-  if (subtitleItem) slide.subtitle = subtitleItem.text;
+  if (subtitleItem) slide.subtitle = headingText(subtitleItem);
 
   // Heading inference keeps its existing scalar/native metrics. Only remaining
   // ordinary body shapes gain current rich values; tagged recovery is separate.
@@ -760,16 +795,21 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   nativeContext.signalRoles = roles;
   const readBody = nativeBodyReader(slidePath, {
     part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
-  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}));
+  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily});
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const media = importMediaGroups(shapes, paragraphs, relationships, entries, slideIndex, diagnostic => options.onDiagnostic?.(diagnostic), nativeContext.mediaRegistry);
   nativeContext.mediaAssets = media.assets;
-  const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  nativeContext.readBody=readBody;
+  const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
-  const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}));
+  const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
+    picture=>importPicture(entries,picture,slidePath,relationships,diagnostic=>{
+      // The recorded crop is re-derived from the circular frame of the quote photo.
+      if(diagnostic.code!=='unsupported-image-crop')options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote.photo`});
+    }),readBody);
   // RR-34: tagged caption and footnote lines are not content; captions re-attach to their media block and notes rebuild cite/footnote.
   const annotations=importAnnotations({shapes,paragraphs,relationships,entries,slideIndex,readBody,report:diagnostic=>options.onDiagnostic?.(diagnostic)});
   nativeContext.annotations=annotations;
@@ -778,7 +818,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if(item){
       const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
       if(bounds.length){const x=Math.min(...bounds.map(b=>b.x)),y=Math.min(...bounds.map(b=>b.y));item.bounds={x,y,w:Math.max(...bounds.map(b=>b.x+b.w))-x,h:Math.max(...bounds.map(b=>b.y+b.h))-y};}
-      items.push({...item,heading:group.field,sourceText:!group.field,sources:sourcesOf(group.shapes)});
+      items.push({...item,heading:group.field,sourceText:!group.field,sources:sourcesOf(group.shapes),...(group.richText!==undefined?{richText:group.richText}:{})});
     }
   }
   for(const group of timelines.items){
@@ -787,18 +827,18 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     items.push({kind:'timeline',sourceText:true,bounds:union,payload:group.payload,sources:sourcesOf(group.shapes)});
   }
   for(const group of quotes.items){
-    const bounds=group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])).filter(Boolean);
+    const bounds=[...group.shapes.map(shape=>shapeBounds(shape['p:spPr']?.['a:xfrm'])),...group.pictures.map(picture=>shapeBounds(picture['p:spPr']?.['a:xfrm']))].filter(Boolean);
     let union;for(const bound of bounds){if(!union)union={...bound};else{const x=Math.min(union.x,bound.x),y=Math.min(union.y,bound.y);union={x,y,w:Math.max(union.x+union.w,bound.x+bound.w)-x,h:Math.max(union.y+union.h,bound.y+bound.h)-y};}}
-    items.push({kind:'quote',bounds:union,payload:group.payload,sources:sourcesOf(group.shapes)});
+    items.push({kind:'quote',bounds:union,payload:group.payload,sources:[...sourcesOf(group.shapes),...group.pictures.map(picture=>`pic:${nativeContext.pictures.indexOf(picture)}`)]});
   }
   for (const item of code.items) items.push({kind:'code',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
   for (const item of metric.items) items.push({kind:'metric',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
   for (const item of media.items) items.push({kind:'media',sourceText:item.payload.type==='text',bounds:shapeBounds(item.shape['p:spPr']?.['a:xfrm']),payload:item.payload,sources:sourcesOf([item.shape])});
   for (const [index,shape] of shapes.entries()) {
-    const role = furniture.text.has(index) ? 'furniture' : nativeContext.slideImageShapes?.has(index) ? 'slide-image' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
+    const role = furniture.text.has(index) ? 'furniture' : nativeContext.slideImageShapes?.has(index) ? 'slide-image' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
-    if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index)) continue;
+    if (furniture.text.has(index) || nativeContext.slideImageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
@@ -834,7 +874,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   for (const [index, picture] of nativeContext.pictures.entries()) {
-    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.slideImagePictures?.has(index) ? 'slide-image' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : undefined;
+    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.slideImagePictures?.has(index) ? 'slide-image' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : undefined;
     if (pictureRole) { roles.set(`pic:${index}`, pictureRole); continue; }
     const report = diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`});
     const item = importPicture(entries, picture, slidePath, relationships, report);
@@ -916,15 +956,18 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
       : chartFromRelationship(entries, slidePath, relationships, chartRelId, report);
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
-    const chart = stored && part && entries[part]
+    const restored = stored && part && entries[part]
       ? restore('chart', imported, () => restoreChartData(imported, stored, chartEvidence(decodeText(entries[part])), {datasets: data.datasets, report: diagnostic => data.report?.('chart', diagnostic)}))
       : imported;
+    const chart = restored?.type === 'combo' ? elideComboDefault(restored, data.datasets) : restored;
+    // FA-09: the frame's descr (or PowerPoint's decorative marker) is the chart's text alternative.
+    const alt = chart ? readFrameAlt(frame["p:nvGraphicFramePr"]?.["p:cNvPr"]) : undefined;
     return {
       kind: "chart",
       bounds,
       name,
       payload: chart
-        ? { type: "chart", chart }
+        ? { type: "chart", chart: alt === undefined ? chart : { ...chart, alt } }
         : { type: "text", text: `PowerPoint chart: ${name || chartRelId}` }
     };
   }
@@ -1211,9 +1254,12 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const plotArea = doc["c:chartSpace"]?.["c:chart"]?.["c:plotArea"];
   if (!plotArea) return null;
 
-  const chartNode = firstChartNode(plotArea);
+  // FA-15: a clustered column group with one or two line groups is a combo chart; its series are read in c:order.
+  const combo = comboFromNative(plotArea);
+  const comboSeries = combo ? comboSeriesOf(combo) : undefined;
+  const chartNode = combo ? {node: combo.bar, type: 'combo'} : firstChartNode(plotArea);
   if (!chartNode) return null;
-  const series = asArray(chartNode.node["c:ser"]);
+  const series = comboSeries ? comboSeries.map(entry => entry.ser) : asArray(chartNode.node["c:ser"]);
   if (series.length === 0) return null;
   if (series.length > MAX_CHART_CACHE_POINTS) {
     throw new OPFPptxError('invalid-chart-cache', 'Chart cache exceeds the 100,000-series import limit; reduce its series before importing.', {path: relationship.path});
@@ -1226,7 +1272,8 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const xCode = chartNode.type === 'scatter' ? cacheFormatCode(series[0]?.["c:xVal"]) : undefined;
   // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
   const withOptions = chart => {
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes});
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+      ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
     return chart && Object.keys(options).length ? {...chart, ...options} : chart;
@@ -1257,8 +1304,55 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
     data: {
       columns: formattedColumns([readChartCategoryHeading(entries,relationship.path) ?? "Category", ...names], [undefined, ...valueCodes], report),
       rows
-    }
+    },
+    ...(comboSeries ? comboFields(comboSeries, names, report) : {})
   });
+}
+
+// FA-15: the series of a combo plot area with their role and axis, in c:order (document order breaks ties).
+function comboSeriesOf(combo) {
+  const entries = [
+    ...asArray(combo.bar["c:ser"]).map(ser => ({ser, role: 'bar', secondary: false})),
+    ...combo.lines.flatMap(group => asArray(group.node["c:ser"]).map(ser => ({ser, role: 'line', secondary: group.secondary}))),
+  ];
+  const order = (entry, index) => {
+    const value = Number(entry.ser?.["c:order"]?.val);
+    return Number.isFinite(value) ? value : index;
+  };
+  return entries.map((entry, index) => ({...entry, key: order(entry, index), index})).sort((a, b) => a.key - b.key || a.index - b.index);
+}
+
+// The c:valAx a secondary line group plots against (its axis that the column group does not use), or undefined.
+function secondaryValueAxisOf(plotArea, combo) {
+  const group = combo.lines.find(entry => entry.secondary);
+  if (!group) return undefined;
+  const ids = new Set(asArray(group.node["c:axId"]).map(axis => String(axis?.val)));
+  return asArray(plotArea["c:valAx"]).find(axis => ids.has(String(axis?.["c:axId"]?.val)));
+}
+
+// `line` and `secondaryAxis` of an imported combo chart by series name (elideComboDefault drops a `line` that is the default).
+// Combo lines always draw markers in OPF; a native line without markers is reported, never silently changed.
+function comboFields(comboSeries, names, report) {
+  const line = names.filter((_, index) => comboSeries[index].role === 'line');
+  const secondaryAxis = names.filter((_, index) => comboSeries[index].secondary);
+  const unmarked = names.filter((_, index) => comboSeries[index].role === 'line' && comboSeries[index].ser?.["c:marker"]?.["c:symbol"]?.val === 'none');
+  if (unmarked.length) report?.({option: 'line', message: `The combo chart's line ${unmarked.length === 1 ? 'series' : 'series'} ${unmarked.map(name => `'${name}'`).join(', ')} ${unmarked.length === 1 ? 'has' : 'have'} no markers; OPF combo lines always draw markers, so ${unmarked.length === 1 ? 'it imports' : 'they import'} with markers.`});
+  if (new Set(line).size !== line.length || new Set(names).size !== names.length) {
+    report?.({option: 'line', message: 'Two series of the combo chart share a name, so which of them is a line cannot be said by name; the chart imports with its default line (the last series).'});
+    return {};
+  }
+  return {...(line.length ? {line} : {}), ...(secondaryAxis.length ? {secondaryAxis} : {})};
+}
+
+// An imported combo chart writes `line` only when it differs from the default (the last plotted series), judged on the final
+// data (a restored data record can order the columns differently from the native series).
+function elideComboDefault(chart, datasets) {
+  if (!Array.isArray(chart.line)) return chart;
+  const {line, ...rest} = chart;
+  const resolved = resolveChartData(rest, {datasets: datasets ?? {}});
+  if (!resolved.ok || !Array.isArray(resolved.combo)) return chart;
+  const defaults = resolved.columns.slice(1).filter((_, index) => resolved.combo[index]?.role === 'line');
+  return defaults.length === line.length && defaults.every(name => line.includes(name)) ? rest : chart;
 }
 
 // The format code of a numeric cache (c:numRef/c:numCache or c:numLit), or undefined.
@@ -1518,7 +1612,7 @@ function resolveTemplateInput(presentation, options) {
     throw new OPFPptxError(errors.some(entry => entry.code === "variable-unfilled") ? "unfilled-variables" : "invalid-variables", errors[0].message, {issues: errors, path: errors[0].path});
   }
   for (const entry of result.diagnostics) {
-    if (entry.code === "variable-example-used") options.onDiagnostic?.({code: "variable-example-used", path: entry.path, message: entry.message, id: entry.id});
+    if (entry.code === "variable-example-used" || entry.code === "variable-builtin-missing") options.onDiagnostic?.({code: entry.code, path: entry.path, message: entry.message, id: entry.id});
   }
   return result.presentation;
 }
@@ -1555,10 +1649,11 @@ function resolvePresentationContext(presentation, options) {
   const dimensions = resolveDimensions(design.dimensions ?? theme?.dimensions);
   const variables = resolveVariableColors(presentation.variables);
   const background = resolveBackground(design.background ?? theme?.background, colorScheme, variables);
+  // One resolution for every color role (core resolveColorRoles), shared with the SVG preview and the audit.
+  const roles = opfCore.resolveColorRoles(colorScheme, {background: `#${background}`});
   const fonts = resolveFonts(fontScheme);
   for (const role of ["heading","body","code"]) fonts[role] = resolveTextStyle({fontFamily:fonts[role],fontWeight:role === "heading" ? 700 : 400},options.textMeasurement).fontFamily;
-  const textColor = readableTextColor(background, colorScheme);
-  const darkBackground = isDarkHex(background);
+  const textColor = normalizeHex(roles.text);
 
   return {
     seed: Number.isInteger(options.seed) ? options.seed : DEFAULT_SEED,
@@ -1572,12 +1667,15 @@ function resolvePresentationContext(presentation, options) {
     backgroundDefinition: design.background ?? theme?.background,
     fonts,
     unresolvedFontScheme,
+    // The color roles a ColorRef names (primary, secondary, accent, background, surface, text, textSecondary, hyperlink).
+    roles,
     colors: {
       background,
       text: textColor,
-      mutedText: normalizeHex(colorScheme.textSecondary ?? (darkBackground ? colorScheme.light2 : colorScheme.dark2) ?? "#475569"),
-      accent: normalizeHex(colorScheme.primary ?? colorScheme.accent1 ?? "#2874A6"),
-      surface: normalizeHex(colorScheme.surface ?? (darkBackground ? colorScheme.dark2 : colorScheme.light2) ?? "#F8FAFC"),
+      mutedText: normalizeHex(roles.textSecondary),
+      // The primary color, which the exporter draws accent fills (table headers, tag, media badge) in. The `accent` ColorRef role is roles.accent.
+      accent: normalizeHex(roles.primary),
+      surface: normalizeHex(roles.surface),
       border: normalizeHex(colorScheme.accent5 ?? "#CBD5E1")
     },
     variables
@@ -1618,9 +1716,29 @@ function contrastRatio(first, second) {
   const a = relativeLuminance(first), b = relativeLuminance(second);
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
+// The tag's color as a literal (the one tagColor writes, resolved).
+function tagHex(context) {
+  return contrastRatio(context.colors.accent, context.colors.background) < TAG_MIN_CONTRAST ? context.colors.text : context.colors.accent;
+}
+
+// The defaults a rich heading or quote body is exported with on every run (weight, color, size, family). The tag records them so that
+// import can tell the heading's own look from run formatting the author chose.
+function richBase(fit, style, color) {
+  const font = nativeFontOptions(style);
+  return {bold: font.bold === true, color: `#${normalizeHex(color)}`, fontSize: Math.round(fit.fontSize * .75 * 100) / 100, fontFamily: font.fontFace};
+}
+
 function tagColor(context) {
   if (contrastRatio(context.colors.accent, context.colors.background) < TAG_MIN_CONTRAST) return context.textColor;
   return nativeColor('primary', context.colors.accent, context);
+}
+
+// A link run with no color of its own is written in the theme hyperlink color (a:schemeClr hlink where the deck theme
+// holds that exact color, else the literal), underlined by PowerPoint, as the preview draws it. A run color is kept.
+function linkColor(run, color, context) {
+  const link = typeof run?.link === 'string' && /^(https?:|mailto:|tel:)/i.test(run.link);
+  if (!link || !(run.color === undefined || run.color === null || run.color === '')) return color;
+  return nativeColor('hyperlink', normalizeHex(context.roles.hyperlink), context);
 }
 
 // FF-24c: two literals no document color uses stand in for hlink and folHlink
@@ -1720,6 +1838,16 @@ function configurePresentation(pptx, presentation, context) {
 async function addSlide(pptx, presentation, opfSlide, slideIndex, context, options) {
   const slide = pptx.addSlide();
   const slideContext = resolveSlideContext(presentation, opfSlide, context, options, slideIndex);
+  const { widthInches, heightInches } = slideContext.dimensions;
+  const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
+  if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
+  const composeOptions = { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, textRasterPadding:options.textRasterPadding, darkBackground: slideContext.roles.dark, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) };
+  // Core resolves every shared design key once (slide design, deck design, then the layout record's design): the text alignment of
+  // each item (item.alignment), and the imageFill that backgrounds and picture placements use (SlideComposition.design).
+  const geometry = composeSlide(opfSlide, composeOptions);
+  slideContext.imageFill = geometry.design.imageFill ?? "fit";
+  // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).
+  if (slideIndex === 0) context.defaultFooterOptions = composeOptions;
   slide.background = { color: slideContext.colors.background };
   const backgroundDefinition = slideContext.backgroundDefinition;
   const backgroundPath = `${opfSlide.design?.background !== undefined ? `slides.${slideIndex}.` : ''}design.background`;
@@ -1750,23 +1878,6 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   slide.color = slideContext.textColor;
   if (opfSlide.hidden === true) slide.hidden = true;
 
-  const { widthInches, heightInches } = slideContext.dimensions;
-  const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
-  if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
-  // design.titleAlignment/contentAlignment are Design properties (slide design
-  // overrides the deck). Core only returns an accepted `placement.alignment`
-  // with outline measurement, so the same effective values must also drive
-  // text without placement, exactly as the renderer's preview does.
-  const titleAlignment=opfSlide.design?.titleAlignment??presentation.design?.titleAlignment;
-  const contentAlignment=opfSlide.design?.contentAlignment??presentation.design?.contentAlignment;
-  const fieldAlignment=field=>field==='title'?titleAlignment:contentAlignment;
-  // Core composition resolves one alignment per composed item for every engine
-  // (FF-29); the design fallback keeps cores published before item.alignment working.
-  const alignmentFor=item=>item.alignment??fieldAlignment(item.field);
-  const composeOptions = { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, contentAlignment, titleAlignment, textRasterPadding:options.textRasterPadding, contentBox:opfSlide.design?.contentBox??presentation.design?.contentBox, darkBackground: isDarkHex(slideContext.colors.background), textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) };
-  const geometry = composeSlide(opfSlide, composeOptions);
-  // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).
-  if (slideIndex === 0) context.defaultFooterOptions = composeOptions;
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, geometry.items);
@@ -1783,14 +1894,14 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
       const frame=item.frameBox;
       context.cardTags.set(`OPF card ${item.path}`,item.path);
       const paint=value=>({color:normalizeHex(value),transparency:/^#[0-9a-f]{8}$/i.test(value)?(1-parseInt(value.slice(7),16)/255)*100:0});
-      const surface=itemContext.colorScheme[isDarkHex(itemContext.colors.background)?'dark2':'light2']??`#${itemContext.colors.surface}`;
+      const surface=itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
       slide.addShape('roundRect',{x:frame.x/96,y:frame.y/96,w:frame.width/96,h:frame.height/96,
         rectRadius:8*Math.min(widthInches,heightInches)/720,
         fill:paint(surface),line:{...paint(itemContext.colorScheme.accent5??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
     if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:alignmentFor(item),diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
-    } else if (["title", "subtitle", "tag"].includes(item.field)) {
+      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
+    } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
       const objectName = `OPF heading ${item.path} line 0`;
@@ -1799,34 +1910,30 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
         color: item.field === "tag" ? tagColor(itemContext) : itemContext.textColor,
-        align: physicalAlignment(alignmentFor(item), item.text.directions?.[0]),
+        align: physicalAlignment(item.alignment, item.text.directions?.[0]),
         ...(item.text.directions?.[0] === 'rtl' ? {rtlMode: true} : {}),
         objectName,
         breakLine: false
       });
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);
-    } else if (item.field === "text" && item.text?.richLines) {
-      const logicalAlignment=item.text.placement?.alignment??alignmentFor(item)??'left';
-      for(const [index,line] of item.text.richLines.entries()){
-        const runs=line.fragments.map(fragment=>{
-          const runColor=exportColor(fragment.run.color,itemContext,itemContext.colors.text);
-          const color=nativeColor(fragment.run.color,runColor,itemContext,itemContext.textColor);
-          return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
-        });
-        // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
-        const placed=item.text.placement?.lines[index],alignment=placed?.alignment??physicalAlignment(logicalAlignment,item.text.directions?.[index]),factor=alignment==='right'?1:alignment==='center'?.5:0;
-        const area=placed?{...region,x:(placed.x+line.width*factor-item.box.width*factor)/96,y:placed.y/96,h:placed.height/96}:{...region,y:region.y+line.y/96,h:line.height/96};
-        // PptxGenJS reads the paragraph direction from the first run's options, not from the shape options.
-        if(item.text.directions?.[index]==='rtl')for(const run of runs)run.options.rtlMode=true;
-        if(runs.length)slide.addText(runs,{...textBoxOptions(area,itemContext,item.text.fontSize*.75),align:alignment,fit:'none',wrap:false,lineSpacingMultiple:1});
-      }
+    } else if (["text", "title", "subtitle", "tag"].includes(item.field) && item.text?.richLines) {
+      // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
+      const heading = item.field !== 'text';
+      addRichFitLines(slide, item.text, item.box, itemContext, {
+        value: item.value, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
+        fallback: item.field === 'tag' ? tagColor(itemContext) : itemContext.textColor,
+        ...(heading ? {
+          objectName: index => `OPF heading ${item.path} line ${index}`,
+          tag: (name, index, count, boundary) => context.headingTags.set(name, {v: 1, group: item.path, field: item.field, line: index, count, ...boundary, base: richBase(item.text, item.textStyle, item.field === 'tag' ? tagHex(itemContext) : itemContext.colors.text)})
+        } : {})
+      });
     } else if (item.field === "text" && typeof item.value === "string") {
-      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:physicalAlignment(alignmentFor(item), item.text.directions?.[0])});
+      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:physicalAlignment(item.alignment, item.text.directions?.[0])});
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.imagePlacements.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: alignmentFor(item) ?? "left", direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.imagePlacements.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -1864,7 +1971,7 @@ function resolveSlideContext(presentation, slide, baseContext, options, slideInd
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  const slideContext = { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, variables: resolved.variables, imageFill: effective.design.imageFill ?? "fit" };
+  const slideContext = { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
   // A slide-level color scheme (directly or through a slide theme) pins every
   // named color on that slide to literal sRGB; see schemeColorValue().
   const slideScheme = themeSlotColors(resolved.colorScheme), deckScheme = baseContext.themeColors ?? {};
@@ -1909,7 +2016,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addMetricPayload(slide, payload.metric,metricLayout,context,path,options);
       break;
     case "quote":
-      addQuotePayload(slide, payload.quote, quoteLayout, context, options, path);
+      await addQuotePayload(slide, presentation, payload.quote, quoteLayout, context, options, path);
       break;
     case "timeline":
       addTimelinePayload(slide, payload.timeline, timelineLayout, context, options, path);
@@ -1946,7 +2053,7 @@ function richLineRuns(line,color,native,context) {
   const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
-    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color,underline:fragment.run.underline?{style:'sng',color}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined}};
+    return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
   });
 }
 // Every native line of a list, marker paragraph or not, is named for the list's
@@ -2076,13 +2183,14 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
   const watermark = local ? opfSlide.design.watermark : presentation.design?.watermark;
   if (watermark === undefined || watermark === null || watermark === false) return;
   const path = local ? `slides.${slideIndex}.design.watermark` : 'design.watermark';
-  const notExported = message => options.onDiagnostic?.({code: 'watermark-not-exported', path, message});
-  const asset = isPlainObject(watermark) || typeof watermark === 'string' ? watermark : null;
-  if (asset === null || (isPlainObject(asset) && typeof asset.src !== 'string')) {
-    notExported('The watermark needs an image source (a string, or an object with src); no watermark was exported for this slide.');
+  // The schema requires exactly one of src and text, so there is no source-less watermark to report.
+  const asset = watermark;
+  const {widthInches, heightInches} = slideContext.dimensions;
+  // FA-13: a text watermark is one native text box with the opacity as text alpha, centered and rotated as core's layoutWatermark says.
+  if (isPlainObject(asset) && typeof asset.text === 'string') {
+    addTextWatermark(slide, asset, slideIndex, {width: widthInches * 96, height: heightInches * 96}, slideContext, context, options, path);
     return;
   }
-  const {widthInches, heightInches} = slideContext.dimensions;
   const box = watermarkBox(widthInches, heightInches);
   const outcome = {box};
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
@@ -2095,6 +2203,29 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
   // Opacity is an a:alphaModFix on the blip, which PowerPoint applies to an SVG picture (native check 2026-10-01).
   if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${watermarkName()}`, outcome.svg);
   slide.addImage({...resolved, objectName: watermarkName(), ...box, altText: assetAlt(asset, presentation) ?? 'Watermark'});
+}
+
+// The stamp takes the slide's own resolved fonts and default text color (readable on that slide's background), as the preview does.
+function addTextWatermark(slide, watermark, slideIndex, size, slideContext, context, options, path) {
+  if (typeof opfCore.layoutWatermark !== 'function') {
+    options.onDiagnostic?.({code: 'watermark-not-exported', path, message: 'The installed @openpresentation/opf has no layoutWatermark, so the text watermark was not exported. Use a core release that exports it.'});
+    return;
+  }
+  const layout = opfCore.layoutWatermark(watermark.text, size, {fontFamily: slideContext.fonts.heading, fontWeight: 700, textMeasurement: options.textMeasurement});
+  if (!layout) {
+    options.onDiagnostic?.({code: 'watermark-not-exported', path, message: 'The text watermark has no text; no watermark was exported for this slide.'});
+    return;
+  }
+  const opacity = watermarkOpacity(watermark);
+  const {box} = layout;
+  slide.addText(layout.text, {
+    ...textBoxOptions({x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96}, slideContext, layout.fontSize * .75),
+    ...nativeFontOptions(layout.style), bold: true,
+    color: slideContext.textColor, transparency: Math.round((1 - opacity) * 100000) / 1000,
+    align: 'center', valign: 'middle', fit: 'none', wrap: false, lineSpacingMultiple: 1,
+    rotate: (layout.rotation + 360) % 360, objectName: watermarkTextName()
+  });
+  context.textWatermarks.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, text: layout.text, opacity});
 }
 
 // The deck logo (design.logo, a slide's own logo or the primary organization's) on a cover or section slide: one native
@@ -2202,7 +2333,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
 
   // Keep the resolved palette surface (including alpha) explicit in native
   // chart/plot areas, so inherited labels are assessed against their own panel.
-  const panelFill = context.colorScheme.surface ?? context.colorScheme[isDarkHex(context.colors.background) ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
+  const panelFill = context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
   const labelColor = normalizeHex(textColorForFill(panelFill, `#${context.colors.text}`));
   const transparency = /^#[0-9a-f]{8}$/i.test(panelFill) ? (1 - parseInt(panelFill.slice(7), 16) / 255) * 100 : 0;
   const fill = {color:normalizeHex(panelFill),transparency};
@@ -2211,15 +2342,25 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const textSize = chartTextSize(context);
   // RR-54: the columns' number formats (Excel codes per exported series) for the caches, labels, value axis and workbook.
   // The value axis shows the first plotted series' format (General when it has none), as the preview does.
+  // A combo chart's secondary value axis shows its first series' format (FA-15).
+  const secondaryIndex = chartData.combo?.findIndex((entry) => entry.axis === 'secondary') ?? -1;
   const numberFormats = chartData.formats && {...chartData.formats, axis: chartData.spec.grouping === 'percentStacked' ? undefined : chartData.formats.series[0],
+    ...(secondaryIndex >= 0 ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
   recordPayloadData(context, objectName, 'chart', presentation, path);
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
+  // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
+  if (typeof chart.alt === 'string') context.chartAlts.set(objectName, chart.alt);
   const preferredPalette = CHART_COLORS.map(color=>`#${color}`);
   const palette = (typeof opfComposition.chartPaletteForFill === "function" ? opfComposition.chartPaletteForFill(panelFill, preferredPalette) : preferredPalette.map(color=>chartColorForFill(panelFill,color))).map(color=>normalizeHex(color));
-  context.chartPalettes.set(objectName,palette);
+  // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
+  // contrast with those colours (src/chart-highlight.js).
+  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor, primary: `#${context.colors.accent}`,
+    schemeFor: hex => schemeColorValue('primary', hex, context)});
+  context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
+  if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
   if (chartData.chartex) {
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
@@ -2235,7 +2376,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // bar chart with one series whenever chartColors is a custom array of more than one colour, so PowerPoint drew each
   // column of a single-series column or bar chart in a different colour. One colour for that series writes no c:dPt.
   const chartColors = chartData.type === 'bar' && chartData.series.length === 1 ? palette.slice(0, 1) : palette;
-  slide.addChart(chartData.type, chartData.series, {
+  const chartOptionsXml = {
     objectName,
     x: region.x,
     y: region.y,
@@ -2271,7 +2412,37 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
     ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {})
-  });
+  };
+  if (chartData.combo?.length && chartData.combo.length === chartData.series.length) {
+    slide.addChart(...comboChart(chartData, chartOptionsXml, {palette, chartOptions, labelColor, font: context.fonts.body, textSize}));
+    return;
+  }
+  slide.addChart(chartData.type, chartData.series, chartOptionsXml);
+}
+
+// FA-15: a combo chart is one PptxGenJS multi-type chart: a clustered column c:barChart on the primary axes, a c:lineChart with
+// markers for the primary-axis lines, and one for the secondary-axis lines on a second c:valAx (at the right, crossing at the
+// maximum of a deleted second c:catAx). Each series keeps its palette colour by its index in the whole chart (PptxGenJS restarts
+// the colour cycle per chart type), and the embedded workbook holds every series. The secondary axis has no gridlines and only
+// its own title; applyComboConstruct puts the line groups into schema order afterwards.
+function comboChart(chartData, options, {palette, chartOptions, labelColor, font, textSize}) {
+  const series = chartData.series.map((entry, index) => ({...entry, color: palette[index % palette.length]}));
+  const part = (role, axis) => series.filter((_, index) => chartData.combo[index].role === role && (role === 'bar' || chartData.combo[index].axis === axis));
+  const bars = part('bar'), primaryLines = part('line', 'primary'), secondaryLines = part('line', 'secondary');
+  const lineOptions = {lineDataSymbol: 'circle'};
+  const types = [
+    // The column group's own colour list: with one column series, a longer list would make PptxGenJS colour each column (c:dPt, RR-36).
+    ...(bars.length ? [{type: 'bar', data: bars, options: {barDir: 'col', barGrouping: 'clustered', chartColors: bars.map((entry) => entry.color)}}] : []),
+    ...(primaryLines.length ? [{type: 'line', data: primaryLines, options: lineOptions}] : []),
+    ...(secondaryLines.length ? [{type: 'line', data: secondaryLines, options: {...lineOptions, secondaryValAxis: true, secondaryCatAxis: true}}] : []),
+  ];
+  // A gap in a line series breaks the line, as the preview draws it (PptxGenJS defaults to span).
+  const {barGrouping: _grouping, ...rest} = options;
+  const shared = {...rest, displayBlanksAs: 'gap'};
+  if (!secondaryLines.length) return [types, {...shared, barDir: 'col'}];
+  const title = chartOptions?.axisTitles?.secondary;
+  const secondaryValue = {valGridLine: {style: 'none'}, showValAxisTitle: Boolean(title), ...(title ? {valAxisTitle: title, valAxisTitleColor: labelColor, valAxisTitleFontFace: font, valAxisTitleFontSize: textSize / 100} : {})};
+  return [types, {...shared, barDir: 'col', valAxes: [{}, secondaryValue], catAxes: [{}, {catAxisHidden: true, showCatAxisTitle: false}]}];
 }
 
 // RR-54: a chart or table that uses a dataset, DataColumn objects, a mapping, a data source or number formats records its
@@ -2330,9 +2501,9 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
       const color = nativeColor(run.color !== undefined && run.color !== '' ? run.color : cellStyle.color, rawColor, context, defaultText), transparency = rawColor.length === 8 ? (1 - parseInt(rawColor.slice(6), 16) / 255) * 100 : 0;
       const runOptions = {
         ...nativeFontOptions(runStyle),fontSize:fragment ? fragment.fontSize * .75 : fit.fontSize * .75,
-        underline:run.underline ? {style:'sng',color} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
-        color,transparency,baseline:fragment?.baselineShift ? -fragment.baselineShift / fragment.fontSize * 2000 : undefined,
-        hyperlink:run.link && /^(https?:|mailto:)/i.test(run.link) ? {url:run.link} : undefined,
+        underline:run.underline ? {style:'sng',color:linkColor(run,color,context)} : undefined,strike:run.strikethrough ? 'sngStrike' : undefined,
+        color:linkColor(run,color,context),transparency,baseline:fragment?.baselineShift ? -fragment.baselineShift / fragment.fontSize * 2000 : undefined,
+        hyperlink:run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url:run.link} : undefined,
       };
       // PptxGenJS marks every part of a newline-containing run as a paragraph
       // break, including its final part. Split explicitly so the next styled
@@ -2392,6 +2563,39 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
 
 function pixelBox(region) {
   return {x: region.x * 96, y: region.y * 96, width: region.w * 96, height: region.h * 96};
+}
+
+// One native text box per laid-out rich line (core's richLines), each carrying its runs: run color, size, weight, underline, strike,
+// super/subscript (a citation marker is a baseline run) and http(s)/mailto links. The body's lines stay untagged; a heading or quote
+// body passes `objectName` and `tag`, which name and tag every line with the boundary between wrapped lines (a soft wrap inserts
+// nothing, a hard line break keeps its separator), recovered from the flattened text. `fallback` is the color of runs without one.
+function addRichFitLines(slide, fit, box, context, {value, alignment: logicalAlignment, fallback, objectName, tag}) {
+  const region = {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96};
+  const runText = run => typeof run === 'string' ? run : run.text;
+  const whole = typeof value === 'string' ? value : value.map(runText).join('');
+  const count = fit.richLines.length;
+  let cursor = 0;
+  for (const [index, line] of fit.richLines.entries()) {
+    const runs = line.fragments.map(fragment => {
+      const runColor = exportColor(fragment.run.color, context, context.colors.text);
+      const color = nativeColor(fragment.run.color, runColor, context, fallback);
+      return {text: fragment.text, options: {...nativeFontOptions(fragment.style), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
+    });
+    // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
+    const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
+    const area = placed ? {...region, x: (placed.x + line.width * factor - box.width * factor) / 96, y: placed.y / 96, h: placed.height / 96} : {...region, y: region.y + line.y / 96, h: line.height / 96};
+    // PptxGenJS reads the paragraph direction from the first run's options, not from the shape options.
+    if (fit.directions?.[index] === 'rtl') for (const run of runs) run.options.rtlMode = true;
+    let name;
+    if (tag) {
+      const text = fit.lines[index] ?? '', end = cursor + text.length;
+      const newline = index < count - 1 && whole.startsWith(text, cursor) ? /^(\r\n|\r|\n)/.exec(whole.slice(end)) : null;
+      name = objectName(index);
+      tag(name, index, count, {boundary: index === count - 1 ? 'end' : newline ? 'hard' : 'soft', separator: newline ? newline[0] : ''});
+      cursor = end + (newline ? newline[0].length : 0);
+    }
+    if (runs.length) slide.addText(runs, {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, ...(name ? {objectName: name} : {})});
+  }
 }
 
 // Match the published renderer's payload geometry and shared core text fitting.
@@ -2512,9 +2716,22 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
   }
   const group = String(context.codeTags.size + 1), panelName = `OPF code ${group} panel`;
   for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
-  context.codeTags.set(panelName,codeManifest(value,layout,group));
+  // FA-13: code.highlight is one native rectangle per run of marked lines, between the panel and the line text boxes; marked
+  // lines keep the syntax colours, the others are dimmed, from the same core helpers the preview calls.
+  const highlight = codeHighlight(value, layout, context);
+  context.codeTags.set(panelName,codeManifest(value,layout,group,highlight?.bands.length));
   const syntax = codeSyntax(value, layout, context, path, options);
   slide.addShape('rect', {...region, fill: {color: '111827'}, line: {color: '334155', width: .75}, objectName:panelName});
+  if (highlight) {
+    const bodyPart = layout.parts.find(part => part.role === 'body');
+    highlight.bands.forEach((band, bandIndex) => {
+      const lineHeight = bodyPart.fit.lineHeight;
+      const bandName = `OPF code ${group} highlight ${bandIndex + 1}`;
+      context.codeTags.set(bandName, {v:1, group, role:'highlight', index:bandIndex});
+      slide.addShape('rect', {x: region.x + .01, y: (bodyPart.box.y + band.first * lineHeight) / 96, w: region.w - .02, h: (band.last - band.first + 1) * lineHeight / 96,
+        fill: {color: highlight.colors.band.slice(1)}, line: {type: 'none'}, objectName: bandName});
+    });
+  }
   for (const [partIndex,part] of layout.parts.entries()) {
     if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
     for (const [index,line] of part.fit.sourceLines.entries()) {
@@ -2523,17 +2740,29 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
       context.codeTags.set(objectName,{v:1,group,role:'line',part:partIndex,line:index});
       // RR-07: the same token ranges and palette the preview paints; the text of the runs is the line text, unchanged.
       const runs = syntax && part.role==='body' ? opfCore.codeLineRuns(syntax.tokens,line.start,line.end,part.text) : undefined;
+      const lineColors = highlight && part.role==='body' ? (highlight.marked.has(highlight.numbers[index]) ? highlight.colors.lit : highlight.colors.dim) : undefined;
       const lineText = part.text.slice(line.start,line.end);
       const lineOptions = {
         ...textBoxOptions({x:part.box.x/96,y:(part.box.y+index*part.fit.lineHeight)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
         ...nativeFontOptions(part.style),
-        color:part.role==='body'?'E5E7EB':'93C5FD',align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
+        color:part.role==='body'?(lineColors?.plain.slice(1)??'E5E7EB'):'93C5FD',align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       };
       // A run's own options replace the line's, so every run repeats the font, size, alignment and tab stops and differs only in colour.
-      slide.addText(runs?.some(run=>run.kind) ? runs.map(run=>({text:part.text.slice(run.start,run.end),options:{...lineOptions,color:syntax.palette[run.kind??'plain'].slice(1)}})) : lineText,lineOptions);
+      slide.addText(runs?.some(run=>run.kind) ? runs.map(run=>({text:part.text.slice(run.start,run.end),options:{...lineOptions,color:(lineColors??syntax.palette)[run.kind??'plain'].slice(1)}})) : lineText,lineOptions);
     }
   }
+}
+
+// FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colours, from core (the preview
+// calls the same functions); undefined when the code marks no line.
+function codeHighlight(value, layout, context) {
+  if (!value || typeof value !== 'object' || !Array.isArray(value.highlight)) return undefined;
+  const body = layout.parts.find(part => part.role === 'body');
+  if (!body?.fit) return undefined;
+  const lines = opfCore.codeHighlightLines(value.highlight, body.text).lines;
+  if (!lines.length) return undefined;
+  return {marked: new Set(lines), numbers: opfCore.codeLineNumbers(body.fit.sourceLines), bands: opfCore.codeHighlightBands(body.fit.sourceLines, lines), colors: opfCore.codeHighlightColors(context.colorScheme)};
 }
 
 // Token ranges and palette for the code body, from core (the preview calls the same functions); undefined for plain code.
@@ -2582,18 +2811,48 @@ function addMetricPayload(slide,value,layout,context,path,options) {
   }
 }
 
-function addQuotePayload(slide, value, layout, context, options, path) {
+async function addQuotePayload(slide, presentation, value, layout, context, options, path) {
   if (!layout) throw new OPFPptxError('missing-quote-layout', 'Quote export requires a coordinated core build with shared quote geometry.', {path});
   for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
   // Every line shape is tagged (OPF_QUOTE_V1) so an unchanged export re-imports as a quote payload (FF-57).
   const group=String(context.quoteTags.size),anchor=quoteManifest(value,layout);
   for (const [index,part] of layout.parts.entries()) {
+    // FA-10: a TextRun[] quote body (core's rich lines, quotation marks joined to its first and last run) is exported line by line like rich body text, with the same quote tags.
+    if (part.runs && part.fit.richLines) {
+      addRichFitLines(slide, part.fit, part.box, context, {
+        value: part.text, alignment: part.fit.placement?.alignment ?? context.contentAlignment ?? 'left', fallback: context.textColor,
+        objectName: line => `OPF quote ${group} part ${index} line ${line}`,
+        tag: (name, line, count, boundary) => context.quoteTags.set(name, {v: 1, role: 'text', group, part: index, line, count, ...boundary, base: richBase(part.fit, part.style, context.colors.text), ...(index === 0 && line === 0 ? {anchor} : {})})
+      });
+      continue;
+    }
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{
       path:part.path,fit:part.fit,textStyle:part.style,diagnosticsHandled:true,
       color:part.role==='footer'?context.mutedColor:context.textColor,
       quote:{group,part:index,anchor},
     });
   }
+  if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+}
+
+// FA-12: the attributed person's headshot is a native picture in the core circle frame: cropped to fill it (a:srcRect after the bytes
+// are embedded) with the `ellipse` preset geometry, the alt text as its description, tagged into the quote's provenance group.
+async function addQuotePhoto(slide, presentation, photo, group, context, options) {
+  const box = { x: photo.box.x / 96, y: photo.box.y / 96, w: photo.box.width / 96, h: photo.box.height / 96 };
+  const outcome = { box, cover: true };
+  const resolved = await resolveImage(photo.value, presentation, options, photo.path, outcome);
+  if (!resolved) {
+    addImagePlaceholder(slide, presentation, photo.value, box, photo.path, context, options);
+    return;
+  }
+  const objectName = quotePhotoName(group);
+  // PowerPoint is not confirmed to apply a non-rectangular mask to an SVG picture, so an SVG photo exports as its PNG raster (as a masked slide image does).
+  if (outcome.svg) options.onDiagnostic?.({ code: 'svg-image-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
+  context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape });
+  context.quoteTags.set(objectName, { v: 1, role: 'photo', group });
+  const alt = assetAlt(photo.value, presentation);
+  context.pictureText.set(objectName, pictureText(alt, photo.value, presentation));
+  slide.addImage({ ...resolved, objectName, ...box, altText: alt });
 }
 
 function addTimelinePayload(slide, value, layout, context, options, path) {
@@ -2606,13 +2865,27 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   const {x1,y1,x2,y2}=layout.connector;
   slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
+  // FA-11: a status draws from the deck's colors through core's shared shapes: native ellipses (solid fill, or the
+  // background fill plus a line for a hollow marker or a ring) and a muted text color for a planned event. An older core draws plain markers.
+  const statusColors={background:`#${normalizeHex(context.colors.background)}`,primary:`#${context.colors.accent}`,text:`#${normalizeHex(context.colors.text)}`,mutedText:`#${context.colors.mutedText}`};
+  const statusShapes=typeof opfCore.timelineMarkerShapes==='function';
   for(const marker of layout.markers){
-    const objectName=`OPF timeline ${group} marker ${marker.eventIndex}`;
-    slide.addShape('ellipse',{objectName,x:(marker.x-marker.radius)/96,y:(marker.y-marker.radius)/96,w:marker.radius*2/96,h:marker.radius*2/96,fill:{color:context.colors.accent},line:{transparency:100}});
-    context.timelineTags.set(objectName,{v:1,group,role:'marker',eventIndex:marker.eventIndex});
+    if(!statusShapes||!marker.status){
+      const objectName=`OPF timeline ${group} marker ${marker.eventIndex}`;
+      slide.addShape('ellipse',{objectName,x:(marker.x-marker.radius)/96,y:(marker.y-marker.radius)/96,w:marker.radius*2/96,h:marker.radius*2/96,fill:{color:context.colors.accent},line:{transparency:100}});
+      context.timelineTags.set(objectName,{v:1,group,role:'marker',eventIndex:marker.eventIndex});
+      continue;
+    }
+    for(const shape of opfCore.timelineMarkerShapes(marker,statusColors)){
+      const objectName=`OPF timeline ${group} ${shape.role} ${marker.eventIndex}`;
+      slide.addShape(shape.shape,{objectName,x:(shape.cx-shape.radius)/96,y:(shape.cy-shape.radius)/96,w:shape.radius*2/96,h:shape.radius*2/96,
+        fill:{color:normalizeHex(shape.fill)},line:shape.stroke?{color:normalizeHex(shape.stroke.color),width:shape.stroke.width*.75}:{transparency:100}});
+      context.timelineTags.set(objectName,{v:1,group,role:shape.role,eventIndex:marker.eventIndex,...(shape.role==='marker'?{status:marker.status}:{})});
+    }
   }
   for(const [index,part]of layout.parts.entries()){
-    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor}});
+    const statusColor=part.status==='planned'&&typeof opfCore.timelineTextColor==='function'?normalizeHex(opfCore.timelineTextColor(part,statusColors)):undefined;
+    addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(statusColor?{color:statusColor}:{})});
   }
 }
 
@@ -2777,6 +3050,12 @@ function chosenFamilyMeasurement(measurement) {
   return wrapped;
 }
 
+// FA-13: TextRun.lang as the run's own proofing language (a:rPr lang), when it differs from the deck language.
+function langOptions(context, tag) {
+  const lang = runLanguageTag(context.scriptFonts, tag);
+  return lang ? {lang} : {};
+}
+
 function nativeFontOptions(style) {
   const face=style.fontFace;
   if(face!==undefined) {
@@ -2826,14 +3105,15 @@ function textRuns(value, context, fallbackFontSize) {
       options: {
         bold: run?.bold,
         italic: run?.italic,
-        underline: run?.underline ? { style: "sng", color: nativeColor(run?.color, exportColor(run?.color, context, context.colors.text), context, context.textColor) } : undefined,
+        underline: run?.underline ? { style: "sng", color: linkColor(run, nativeColor(run?.color, exportColor(run?.color, context, context.colors.text), context, context.textColor), context) } : undefined,
         strike: run?.strikethrough ? "sngStrike" : undefined,
-        color: nativeColor(run?.color, exportColor(run?.color, context, context.colors.text), context, context.textColor),
+        color: linkColor(run, nativeColor(run?.color, exportColor(run?.color, context, context.colors.text), context, context.textColor), context),
         fontFace: run?.fontFamily ?? context.fonts.body,
         fontSize: run?.fontSize ?? fallbackFontSize,
         superscript: run?.superscript,
         subscript: !run?.superscript && run?.subscript,
-        hyperlink: run?.link && /^(https?:|mailto:)/i.test(run.link) ? { url: run.link } : undefined
+        hyperlink: run?.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? { url: run.link } : undefined,
+        ...langOptions(context, run?.lang)
       }
     };
   });
@@ -2860,7 +3140,7 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation) {
     return unplottable("dataset-unknown", "The chart's dataset is missing, so it cannot be drawn here.", `The chart references dataset '${stringifyText(authored.dataset)}', which the document does not hold (or a field it names).`);
   }
   if (!authored || !Array.isArray(authored.columns) || !Array.isArray(authored.rows)) {
-    return unplottable("data-not-inline", "Chart data is not inline, so it cannot be drawn here.", "The chart data is not inline columns and rows (for example an external data source). Supply inline columns and rows.");
+    return unplottable("no-columns", "The chart has no inline data, so it cannot be drawn here.", "The chart data is not inline columns and rows. Supply inline columns and rows or a dataset.");
   }
   if (authored.rows.length === 0) return unplottable("no-rows", "The chart has no data rows.", "The chart data has no rows.");
   if (authored.columns.length === 0) return unplottable("no-columns", "The chart has no data columns.", "The chart data has no columns.");
@@ -2887,7 +3167,10 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation) {
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
     adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart ${reason}; its data is exported as a native clustered column chart instead.`});
   }
-  const mapped = {type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, diagnostics, heading: data.columns[0], pointCount: data.rows.length};
+  // FA-14: the resolved table (category, X, series columns), which chart.highlight names its series and categories in.
+  const mapped = {resolved: {columns: data.columns, hasX: resolvedData.hasX === true, rows: data.rows}, type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, diagnostics, heading: data.columns[0], pointCount: data.rows.length,
+    // FA-15: core's combo plan (column series, then the primary-axis lines, then the secondary-axis lines), aligned with the series.
+    ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {})};
   // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
   const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined ? {...result, formats} : result;
   if (data.columns.length === 1) {
@@ -2962,6 +3245,12 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation) {
   // A scatter chart's first series is its X values (PptxGenJS writes one c:ser per Y series, each with c:xVal).
   const formats = spec.family === 'xy' ? {series: codes.slice(1), x: codes[0]} : {series: codes};
   return withFormats({...mapped, series, hasCategories: true, adaptations, notNumeric}, formats);
+}
+
+/** Core's combo plan; a core without one draws every series as columns except the last, a line on the primary axis (the preview's rule). */
+function comboPlanOf(resolved, count) {
+  if (Array.isArray(resolved.combo) && resolved.combo.length === count) return resolved.combo;
+  return Array.from({length: count}, (_, index) => ({role: count > 1 && index === count - 1 ? 'line' : 'bar', axis: 'primary'}));
 }
 
 /** A chart column's name: the string, or a DataColumn's `name`. */
@@ -3269,30 +3558,24 @@ function resolveBackground(value, colorScheme, variables = {}) {
   const reference = entry => normalizeHex(resolveBackgroundColorRef(entry, colorScheme, variables) ?? entry, fallback);
   if (typeof value === "string") {
     if (value.startsWith("#")) return normalizeHex(value, fallback);
-    return normalizeHex(colorScheme[value] ?? colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
+    return normalizeHex(colorScheme[value] ?? opfCore.defaultSlideBackground(colorScheme), fallback);
   }
   if (isPlainObject(value)) {
     if (value.type === "solid" && value.color) return reference(value.color);
     if (value.type === "theme" && value.slot) {
-      return normalizeHex(colorScheme[value.slot] ?? colorScheme.light1 ?? "#FFFFFF", fallback);
+      return normalizeHex(colorScheme[value.slot] ?? opfCore.defaultSlideBackground(colorScheme), fallback);
     }
     // Like the SVG preview, text contrast follows a pattern's background color.
     if (value.type === "pattern") return reference(value.pattern?.backgroundColor ?? "#FFFFFF");
     if (value.backgroundColor) return normalizeHex(value.backgroundColor, fallback);
   }
-  return normalizeHex(colorScheme.background ?? colorScheme.light1 ?? "#FFFFFF", fallback);
+  return normalizeHex(opfCore.defaultSlideBackground(colorScheme), fallback);
 }
 
 function resolveFonts(fontScheme) {
   return {id:fontScheme.id,...resolveFontFamilies(fontScheme),scheme:{type:fontScheme.type,major:fontScheme.major,minor:fontScheme.minor}};
 }
 
-
-function readableTextColor(background, colorScheme) {
-  return isDarkHex(background)
-    ? normalizeHex(colorScheme.light1 ?? "#FFFFFF")
-    : normalizeHex(colorScheme.text ?? colorScheme.dark1 ?? "#0F172A");
-}
 
 function normalizeHex(value, fallback = "000000") {
   if (typeof value !== "string") return fallback.replace(/^#/, "").toUpperCase().slice(0, 6);
@@ -3304,15 +3587,6 @@ function normalizeHex(value, fallback = "000000") {
     return raw.slice(0, 6).toUpperCase();
   }
   return fallback.replace(/^#/, "").toUpperCase().slice(0, 6);
-}
-
-function isDarkHex(value) {
-  const hex = normalizeHex(value);
-  if (!/^[0-9A-F]{6}$/.test(hex)) return false;
-  const red = Number.parseInt(hex.slice(0, 2), 16);
-  const green = Number.parseInt(hex.slice(2, 4), 16);
-  const blue = Number.parseInt(hex.slice(4, 6), 16);
-  return (red * 299 + green * 587 + blue * 114) / 1000 < 128;
 }
 
 // The master, layout and notes master half of the native header/footer (RR-11): placeholders and p:hf on the finished parts.
@@ -3373,13 +3647,18 @@ async function normalizePptxZip(raw, context) {
       const {heading,labelColor,spec,textSize}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
       entries[chartPart]=encodeText(omitEmptyNumberPoints(applyChartConstruct(decodeText(entries[chartPart]),spec)));
+      const highlight=context.chartHeadings.get(name).highlight;
+      if(highlight){
+        try{entries[chartPart]=encodeText(applyChartHighlight(decodeText(entries[chartPart]),highlight));}
+        catch(error){throw new OPFPptxError('packaging-failed',`Chart highlight could not be written: ${errorMessage(error)}`);}
+      }
       // PptxGenJS hardcodes a black fallback in pie/doughnut label properties.
       // Normalize only our generated chart text styles; point/series fills stay intact.
       entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:txPr>[\s\S]*?<\/c:txPr>/g,properties=>properties.replace(/<a:solidFill>[\s\S]*?<\/a:solidFill>/g,()=>`<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill>`)));
       entries[chartPart]=encodeText(applyChartTextSize(decodeText(entries[chartPart]),textSize));
       // RR-35: data labels last, so their own text colours (contrast inside a mark) are not normalized away.
       const {options:chartOptions,kind:optionKind,pointCount}=context.chartHeadings.get(name);
-      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount}));
+      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
       // RR-54: the columns' number formats, after the labels: caches, label and value-axis formats, then the workbook cells.
       const numberFormats=context.chartHeadings.get(name).numberFormats;
       if(numberFormats){
@@ -3390,6 +3669,7 @@ async function normalizePptxZip(raw, context) {
     }
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);
+  if (context.chartAlts.size) for (const [part, bytes] of Object.entries(entries)) if (/^ppt\/slides\/slide\d+\.xml$/.test(part)) { const xml = decodeText(bytes), next = applyChartAlt(xml, context.chartAlts); if (next !== xml) entries[part] = encodeText(next); }
   // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame (the classic chart above is the fallback).
   try {
     attachChartexParts(entries, context.chartex, parseRelationships);
@@ -3408,7 +3688,7 @@ async function normalizePptxZip(raw, context) {
     const relationships = parseRelationships(entries, part);
     for (const [picture] of decodeText(bytes).matchAll(/<p:pic>[\s\S]*?<\/p:pic>/g)) {
       const name = picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
-      const placement = context.imagePlacements.get(name) ?? context.slideImages.get(name) ?? (name === watermarkName() ? context.watermarks.get(part) : name === logoName() ? context.logos.get(part) : undefined);
+      const placement = context.imagePlacements.get(name) ?? context.quotePhotos.get(name) ?? context.slideImages.get(name) ?? (name === watermarkName() ? context.watermarks.get(part) : name === logoName() ? context.logos.get(part) : undefined);
       const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
       if (placement) imageSources.set(relationships.get(id)?.path, placement.path);
     }
@@ -3442,6 +3722,7 @@ async function normalizePptxZip(raw, context) {
   placeSlideImages(entries, context.slideImages, (part, id) => imageMetadata.get(parseRelationships(entries, part).get(id)?.path), path => {
     throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path });
   });
+  tagTextWatermarks(entries, context.textWatermarks);
   placeWatermarks(entries, context.watermarks, (part, id) => imageMetadata.get(parseRelationships(entries, part).get(id)?.path), path => {
     throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path });
   });
@@ -3685,7 +3966,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         }
         const text = context.pictureText.get(picture.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
         if (text) picture = writePictureText(picture, text);
-        const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]);
+        const placement = context.imagePlacements.get(picture.match(/name="(OPF image \d+)"/)?.[1]) ?? context.quotePhotos.get(picture.match(/name="(OPF quote photo \d+)"/)?.[1]);
         if (!placement) return picture;
         const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
         const dimensions = imageMetadata.get(relationships.get(id)?.path);
@@ -3698,6 +3979,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
           const attrs = Object.entries(fitted.crop).map(([key, value]) => `${key}="${value}"`).join(' ');
           picture = picture.replace('<a:stretch>', `<a:srcRect ${attrs}/><a:stretch>`);
         }
+        // The circular headshot mask: the core frame's DrawingML preset (ellipse) instead of the rectangle.
+        if (placement.shape) picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, `<a:prstGeom prst="${placement.shape.preset}"><a:avLst/></a:prstGeom>`);
         return picture;
       });
       // Native bullets otherwise inherit the first rich run's size, font and
@@ -3733,6 +4016,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);
     if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = stripRunScriptFonts(xml);
+    if (context.scriptFonts && /^ppt\/slides\/slide\d+\.xml$/.test(path)) xml = runLanguageFonts(xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     return encodeText(normalizePartReferences(xml, renameMaps));
   }
   return bytes;

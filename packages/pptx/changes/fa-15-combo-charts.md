@@ -1,0 +1,4 @@
+---
+type: added
+---
+FA-15: combo charts export natively and import back. `type: "combo"` writes one `c:plotArea` with a clustered column `c:barChart` and a `c:lineChart` with markers; `chart.secondaryAxis` lines plot in a second `c:lineChart` against a secondary `c:valAx` (at the right, crossing at the maximum, in its first series' number format, without gridlines, with `axisTitles.secondary`) and a deleted second `c:catAx`. The embedded workbook holds every series, series keep their palette colours across the groups, and the line groups are written in schema order. `fromPptx` reads such a plot area (one clustered column group, one or two line groups) as `combo` with `line`, `secondaryAxis`, the secondary title and the label position; the chart's data record restores the authored column order. Needs the FA-15 core.

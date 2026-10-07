@@ -20,7 +20,7 @@ if(out)await mkdir(out,{recursive:true});
 for(const dimensions of [{widthInches:40/3,heightInches:7.5},{widthInches:5.625,heightInches:10}])
 for(const contentBox of [false,true])for(const alignment of ['left','center','right'])
 for(const text of ['Full source\nSecond paragraph.', ['Exact spacing ',{text:'with bold words',bold:true},' and ',{text:'italics.',italic:true},'\n',{text:'Raised ',superscript:true},{text:'note',fontSize:20,underline:true},' stays editable.']]) {
-  const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading:{family:'Carlito'},body:{family:'Carlito'}}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
+  const deck={design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,fontScheme:{id:'carlito',heading: 'Carlito',body: 'Carlito'}},slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]};
   const original=structuredClone(deck),options={textMeasurement:fonts.textMeasurement};
   const bound=resolvePresentation(deck,options).slides[0],expected=bound.geometry.items.flatMap(item=>item.text.placement.lines.map((placed,index)=>({item,placed,index})));
   const bytes=await toPptx(deck,options),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);

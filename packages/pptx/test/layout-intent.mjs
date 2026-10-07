@@ -11,6 +11,8 @@ import {renderSvgDeck} from '@openpresentation/opf-render';
 const enc = new TextEncoder(), dec = new TextDecoder();
 const base = catalogs.layouts.find(record => record.id === 'title-subtitle');
 const heroA = {...structuredClone(base), id: 'gallery-hero', name: 'Gallery Hero'};
+// Bundled layouts name a preview image (vectorSrc), which is a source; the record this test copies must carry none.
+delete heroA.preview;
 const heroB = {...structuredClone(heroA), name: 'Gallery Hero (other deck)'};
 const sideB = {...structuredClone(base), id: 'gallery-side', name: 'Gallery Side'};
 const deckA = {

@@ -1,34 +1,35 @@
 // OPF chart type ids -> native PowerPoint chart constructs (FF-22).
 //
 // The core catalog keeps one chart type per Aspose.Slides ChartType
-// (spec/catalogs/chart-types, OpenPresentation/opf#121) and deprecates the
-// rest with a replacement id. The published core package this exporter
-// depends on predates that metadata, so the mapping is carried here. Kept ids
-// map to the exact Office construct; deprecated ids resolve to their
-// replacement; any other id keeps the legacy substring heuristic.
+// (spec/catalogs/chart-types, OpenPresentation/opf#121). The mapping is carried
+// here so the exporter stays self-contained. A catalog id maps to the exact
+// Office construct; any other id keeps the legacy substring heuristic.
 
 const category = (pptx, extra = {}) => ({ family: 'category', pptx, ...extra });
 
 export const CHART_TYPES = Object.freeze({
   column: category('bar', { aspose: 'ClusteredColumn', barDir: 'col', grouping: 'clustered' }),
-  'stacked-column-3x': category('bar', { aspose: 'StackedColumn', barDir: 'col', grouping: 'stacked' }),
-  '100pct-stacked-column-3x': category('bar', { aspose: 'PercentsStackedColumn', barDir: 'col', grouping: 'percentStacked' }),
+  'stacked-column': category('bar', { aspose: 'StackedColumn', barDir: 'col', grouping: 'stacked' }),
+  '100pct-stacked-column': category('bar', { aspose: 'PercentsStackedColumn', barDir: 'col', grouping: 'percentStacked' }),
   bar: category('bar', { aspose: 'ClusteredBar', barDir: 'bar', grouping: 'clustered' }),
-  'stacked-bar-3x': category('bar', { aspose: 'StackedBar', barDir: 'bar', grouping: 'stacked' }),
-  '100pct-stacked-bar-3x': category('bar', { aspose: 'PercentsStackedBar', barDir: 'bar', grouping: 'percentStacked' }),
+  'stacked-bar': category('bar', { aspose: 'StackedBar', barDir: 'bar', grouping: 'stacked' }),
+  '100pct-stacked-bar': category('bar', { aspose: 'PercentsStackedBar', barDir: 'bar', grouping: 'percentStacked' }),
   line: category('line', { aspose: 'Line', grouping: 'standard', markers: false }),
   'line-with-markers': category('line', { aspose: 'LineWithMarkers', grouping: 'standard', markers: true }),
-  'stacked-line-3x': category('line', { aspose: 'StackedLine', grouping: 'stacked', markers: false }),
-  'stacked-line-with-markers-3x': category('line', { aspose: 'StackedLineWithMarkers', grouping: 'stacked', markers: true }),
+  'stacked-line': category('line', { aspose: 'StackedLine', grouping: 'stacked', markers: false }),
+  'stacked-line-with-markers': category('line', { aspose: 'StackedLineWithMarkers', grouping: 'stacked', markers: true }),
   area: category('area', { aspose: 'Area', grouping: 'standard' }),
-  'stacked-area-3x': category('area', { aspose: 'StackedArea', grouping: 'stacked' }),
-  '100pct-stacked-area-3x': category('area', { aspose: 'PercentsStackedArea', grouping: 'percentStacked' }),
+  'stacked-area': category('area', { aspose: 'StackedArea', grouping: 'stacked' }),
+  '100pct-stacked-area': category('area', { aspose: 'PercentsStackedArea', grouping: 'percentStacked' }),
   pie: { family: 'circular', pptx: 'pie', aspose: 'Pie' },
   doughnut: { family: 'circular', pptx: 'doughnut', aspose: 'Doughnut' },
   scatter: { family: 'xy', pptx: 'scatter', aspose: 'ScatterWithMarkers' },
   radar: category('radar', { aspose: 'Radar', radarStyle: 'standard', markers: false }),
   'radar-with-markers': category('radar', { aspose: 'RadarWithMarkers', radarStyle: 'marker', markers: true }),
   'filled-radar': category('radar', { aspose: 'FilledRadar', radarStyle: 'filled', markers: false }),
+  // FA-15: clustered columns (a c:barChart on the primary axes) with line series with markers (a c:lineChart per value axis;
+  // the secondary one crosses at the right on a deleted second c:catAx). Core's resolveChartData says which series is which.
+  combo: { family: 'combo', pptx: 'bar', aspose: 'ClusteredColumn', barDir: 'col', grouping: 'clustered', markers: true },
   // Office 2016 chartex constructs (cx:chartSpace, one cx:series per plot,
   // named by layoutId). `requires` is the markup-compatibility namespace the
   // slide's mc:Choice names, so older readers take the classic fallback.
@@ -75,51 +76,13 @@ export function chartTypeFromChartex(layoutIds) {
   return null;
 }
 
-const variants = (base, target) => Object.fromEntries([base, `${base}-2x`, `${base}-3x`].map((id) => [id, target]));
-
-// Deprecated core ids (opf 0.12.0 removes them) -> replacement id.
-export const DEPRECATED_CHART_TYPES = Object.freeze({
-  ...variants('100pct-bullet-bar', '100pct-stacked-bar-3x'),
-  '100pct-progress-bar': '100pct-stacked-bar-3x',
-  '100pct-stacked-bar-2x': '100pct-stacked-bar-3x',
-  ...variants('100pct-bullet-column', '100pct-stacked-column-3x'),
-  '100pct-stacked-column-2x': '100pct-stacked-column-3x',
-  '100pct-stacked-area-2x': '100pct-stacked-area-3x',
-  australia: 'world',
-  canada: 'world',
-  'united-kingdom': 'world',
-  'united-states': 'world',
-  'box-and-whisker-2x': 'box-and-whisker',
-  'box-and-whisker-3x': 'box-and-whisker',
-  ...variants('bullet-bar', 'bar'),
-  'clustered-bar-2x': 'bar',
-  ...variants('bullet-column', 'column'),
-  'clustered-column': 'column',
-  ...Object.fromEntries(['', '-2x', '-3x', '-4x', '-5x', '-6x'].map((suffix) => [`dot-plot${suffix}`, 'scatter'])),
-  dumbbell: 'scatter',
-  'line-2x': 'line',
-  'line-3x': 'line',
-  'line-with-high-low': 'line',
-  ...Object.fromEntries(['', '-2x', '-3x', '-4x', '-5x', '-6x'].map((suffix) => [`sparkline${suffix}`, 'line'])),
-  'line-with-high-low-and-markers': 'line-with-markers',
-  'line-with-markers-2x': 'line-with-markers',
-  'line-with-markers-3x': 'line-with-markers',
-  'stacked-area-2x': 'stacked-area-3x',
-  'stacked-bar-2x': 'stacked-bar-3x',
-  'stacked-column-2x': 'stacked-column-3x',
-  'stacked-line-2x': 'stacked-line-3x',
-  'stacked-line-with-markers-2x': 'stacked-line-with-markers-3x',
-  'treemap-2x': 'treemap',
-  'treemap-3x': 'treemap',
-});
-
 const ALIASES = Object.freeze({ donut: 'doughnut' });
 
-// Resolve an OPF chart type id to {id, spec}. Kept and deprecated ids resolve
-// to a kept id; anything else returns the legacy heuristic with id: null.
+// Resolve an OPF chart type id to {id, spec}. A catalog id resolves to itself;
+// anything else returns the legacy heuristic with id: null.
 export function resolveChartType(type) {
   const raw = String(type ?? '').trim().toLowerCase();
-  const id = ALIASES[raw] ?? DEPRECATED_CHART_TYPES[raw] ?? raw;
+  const id = ALIASES[raw] ?? raw;
   if (Object.hasOwn(CHART_TYPES, id)) return { id, spec: CHART_TYPES[id] };
   return { id: null, spec: legacyChartType(raw) };
 }
@@ -149,17 +112,17 @@ export function chartTypeFromNative(element, node) {
     case 'barChart':
     case 'bar3DChart': {
       const direction = attr('barDir') === 'bar' ? 'bar' : 'column';
-      if (percent) return `100pct-stacked-${direction}-3x`;
-      if (stacked) return `stacked-${direction}-3x`;
+      if (percent) return `100pct-stacked-${direction}`;
+      if (stacked) return `stacked-${direction}`;
       return direction;
     }
     case 'lineChart':
     case 'line3DChart':
-      if (stacked) return markers ? 'stacked-line-with-markers-3x' : 'stacked-line-3x';
+      if (stacked) return markers ? 'stacked-line-with-markers' : 'stacked-line';
       return markers ? 'line-with-markers' : 'line';
     case 'areaChart':
     case 'area3DChart':
-      return percent ? '100pct-stacked-area-3x' : stacked ? 'stacked-area-3x' : 'area';
+      return percent ? '100pct-stacked-area' : stacked ? 'stacked-area' : 'area';
     case 'pieChart':
     case 'pie3DChart':
     case 'ofPieChart':
@@ -179,6 +142,25 @@ export function chartTypeFromNative(element, node) {
   }
 }
 
+/**
+ * A combo chart in a parsed c:plotArea: exactly one clustered (or standard) column c:barChart and one or two standard
+ * c:lineChart groups, and no other chart group. Returns {bar, lines: [{node, secondary}]} (a line group is secondary when it
+ * plots against an axis the column group does not use) or null for any other plot area.
+ */
+export function comboFromNative(plotArea) {
+  if (!plotArea) return null;
+  const bars = asArray(plotArea['c:barChart']);
+  const lines = asArray(plotArea['c:lineChart']);
+  if (bars.length !== 1 || lines.length < 1 || lines.length > 2) return null;
+  if (NATIVE_CHART_ELEMENTS.some((element) => element !== 'barChart' && element !== 'lineChart' && plotArea[`c:${element}`] !== undefined)) return null;
+  const [bar] = bars;
+  if ((bar['c:barDir']?.val ?? 'col') !== 'col' || !['clustered', 'standard'].includes(bar['c:grouping']?.val ?? 'clustered')) return null;
+  if (lines.some((line) => !['standard', undefined].includes(line['c:grouping']?.val))) return null;
+  const axes = (node) => asArray(node['c:axId']).map((axis) => String(axis?.val));
+  const primary = axes(bar);
+  return { bar, lines: lines.map((node) => ({ node, secondary: axes(node).some((id) => !primary.includes(id)) })) };
+}
+
 export const NATIVE_CHART_ELEMENTS = Object.freeze([
   'barChart', 'bar3DChart', 'lineChart', 'line3DChart', 'pieChart', 'pie3DChart', 'ofPieChart',
   'doughnutChart', 'areaChart', 'area3DChart', 'scatterChart', 'radarChart',
@@ -191,6 +173,7 @@ function asArray(value) {
 // PptxGenJS omits or cannot express parts of these constructs. Rewrite only
 // the generated chart-type element so the part states the exact grouping.
 export function applyChartConstruct(xml, spec) {
+  if (spec?.family === 'combo') return applyComboConstruct(xml);
   // ScatterWithMarkers: the core catalog records scatterStyle "marker" (markers, no connecting line). PptxGenJS writes lineMarker and relies on the series line being noFill.
   if (spec?.family === 'xy') return xml.replace(/<c:scatterStyle val="[^"]*"\/>/, '<c:scatterStyle val="marker"/>');
   if (!spec || spec.family !== 'category') return xml;
@@ -213,4 +196,22 @@ export function applyChartConstruct(xml, spec) {
     body = body.replace(/<c:overlap val="[^"]*"\/>/, '<c:overlap val="100"/>');
   }
   return xml.slice(0, start) + open + body + xml.slice(end);
+}
+
+// FA-15: PptxGenJS writes each c:lineChart of a multi-type chart without the c:grouping CT_LineChart requires, gives its series
+// the bar-only c:invertIfNegative, and writes c:dLbls before c:marker (CT_LineSer orders marker, dPt, dLbls). Rewrite every line
+// group of a combo chart into schema order; the c:barChart already states barDir and grouping.
+export function applyComboConstruct(xml) {
+  return xml.replace(/<c:lineChart>([\s\S]*?)<\/c:lineChart>/g, (_, body) => {
+    let next = `<c:grouping val="standard"/>${body.replace(/<c:grouping val="[^"]*"\/>/g, '')}`;
+    next = next.replace(/<c:invertIfNegative val="[^"]*"\/>/g, '');
+    next = next.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, (ser) => {
+      const marker = /<c:marker>[\s\S]*?<\/c:marker>/.exec(ser)?.[0];
+      const labels = /<c:dLbls>[\s\S]*?<\/c:dLbls>/.exec(ser);
+      if (!marker || !labels || ser.indexOf(marker) < labels.index) return ser;
+      const without = ser.replace(marker, '');
+      return without.replace(/<c:dLbls>/, `${marker}<c:dLbls>`);
+    });
+    return `<c:lineChart>${next}</c:lineChart>`;
+  });
 }

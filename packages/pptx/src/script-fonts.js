@@ -59,7 +59,61 @@ export function planScriptFonts(presentation, report) {
   }
   // opf-pptx#168: which slides have notes (a presentation has one notes master; see reportPerSlideNotesScriptFonts).
   const notes = (presentation.slides ?? []).map(slide => typeof slide?.notes === "string" ? slide.notes.trim() !== "" : Boolean(slide?.notes));
-  return {deck, slides, notes, report, lang: deck.lang, rtl, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+  return {deck, slides, notes, report, lang: deck.lang, rtl, presentation, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+}
+
+/**
+ * FA-13: the OOXML tag a run's own `lang` (TextRun.lang) is written with: core's curated tag for the language (fr becomes
+ * fr-FR), or undefined when it is the deck language (the run then follows the deck). Without a plan the tag is written as given.
+ */
+export function runLanguageTag(plan, tag) {
+  if (typeof tag !== "string" || !tag) return undefined;
+  if (!plan) return tag.toLowerCase() === "en-us" ? undefined : tag;
+  const cache = plan.runLanguages ??= new Map();
+  if (!cache.has(tag)) {
+    let lang = tag;
+    try {
+      const resolved = resolver(plan.presentation, {language: tag});
+      if (resolved.languageSource !== "default") lang = resolved.lang;
+    } catch { /* an unresolvable tag is written as given */ }
+    cache.set(tag, lang.toLowerCase() === String(plan.lang).toLowerCase() ? undefined : lang);
+  }
+  return cache.get(tag);
+}
+
+/**
+ * FA-13: a run with its own language (TextRun.lang) names the East Asian and complex-script faces of that language, so a Han
+ * run tagged ja-JP draws in the Japanese face and one tagged zh-CN in the Simplified Chinese face, as the preview does. Only a
+ * slot with a script-specific font for the run's language is written; every other run keeps following the theme. Runs the
+ * exporter writes carry no ea/cs of their own (stripRunScriptFonts), so this runs after that strip. `xml` is a slide part.
+ */
+export function runLanguageFonts(xml, plan, slideIndex) {
+  if (!plan || !xml.includes(' altLang="en-US"')) return xml;
+  return xml.replace(/<p:(sp|graphicFrame)>[\s\S]*?<\/p:\1>/g, shape => {
+    const heading = /<p:cNvPr\b[^>]*\bname="OPF heading /.test(shape);
+    return shape.replace(OWN_LANGUAGE_RUN, (run, lang) => {
+      const resolved = runScriptPlan(plan, slideIndex, lang);
+      if (!resolved) return run;
+      const slots = heading ? resolved.heading : resolved.body;
+      const latin = /<a:latin typeface="([^"]*)"/.exec(run)?.[1];
+      const insert = SCRIPT_SLOTS.map(([element, slot]) => {
+        const face = slots?.[slot];
+        return resolved.sources?.[slot] !== "latin" && face && escapeAttribute(face) !== latin && !new RegExp(`<a:${element}\\b`).test(run) ? `<a:${element} typeface="${escapeAttribute(face)}"/>` : "";
+      }).join("");
+      return insert ? run.replace(/(<a:latin\b[^>]*\/>)/, `$1${insert}`) : run;
+    });
+  });
+}
+
+/** The script fonts of one slide for a run language (FA-13), memoized; undefined when the language cannot be resolved. */
+function runScriptPlan(plan, slideIndex, lang) {
+  const cache = plan.runScripts ??= new Map(), key = `${slideIndex}|${lang}`;
+  if (!cache.has(key)) {
+    let resolved;
+    try { resolved = resolver(plan.presentation, {slideIndex, language: lang}); } catch { resolved = undefined; }
+    cache.set(key, resolved && resolved.languageSource !== "default" ? resolved : undefined);
+  }
+  return cache.get(key);
 }
 
 // ---------------------------------------------------------------------------
@@ -274,7 +328,9 @@ function runScriptFonts(xml, resolved, headingShape) {
   });
 }
 
-const RUN_LANGUAGE = /(<a:(?:rPr|endParaRPr|defRPr)\b[^>]*?\slang=")en-US(")/g;
+// A run with its own language (TextRun.lang, FA-13) is written with an altLang attribute; the deck language never replaces it.
+const RUN_LANGUAGE = /(<a:(?:rPr|endParaRPr|defRPr)\b[^>]*?\slang=")en-US("(?! altLang="))/g;
+const OWN_LANGUAGE_RUN = /<a:rPr\b[^>]*?\slang="([^"]+)" altLang="en-US"[^>]*[^/]>[\s\S]*?<\/a:rPr>/g;
 
 const decodeText = value => value.replace(/&(?:#(\d+)|#x([0-9a-f]+)|(amp|lt|gt|quot|apos));/gi, (entity, decimal, hex, name) =>
   decimal ? String.fromCodePoint(Number(decimal)) : hex ? String.fromCodePoint(parseInt(hex, 16)) : {amp: "&", lt: "<", gt: ">", quot: "\"", apos: "'"}[name.toLowerCase()]);
@@ -488,7 +544,7 @@ export function languageDiagnostics(imported, observed, report) {
   const languages = observedRtl(observed) ? ranked.filter(([tag]) => tag === lang || tag !== "en-US") : ranked;
   if (languages.length > 1) {
     report({code: "mixed-run-languages", path: "language",
-      message: `Runs use ${languages.length} languages (${languages.map(([tag, count]) => `${tag} x${count}`).join(", ")}). OPF has one presentation language, so ${lang} was imported.`});
+      message: `Runs use ${languages.length} languages (${languages.map(([tag, count]) => `${tag} x${count}`).join(", ")}). OPF has one presentation language, so ${lang} was imported; a run in another language keeps it as its own lang where the text imports as rich text.`});
   }
   const kept = imported.language === observed.language;
   if (kept && !match) report({code: "language-uncatalogued", path: "language", message: `Run language ${lang} matches no languages catalog record; it was imported as a BCP-47 tag.`});

@@ -15,7 +15,7 @@ const decks = {
   'waterfall-single': {slides: [{title: 'waterfall', chart: {type: 'waterfall', data: single}}]},
   'funnel-category': {slides: [{title: 'funnel', chart: {type: 'funnel', data: region}}]},
   'world-category': {name: 'Map deck', language: 'ja-JP', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: '地図', chart: {type: 'world', data: {columns: ['国', '値'], rows: [['日本', 4], ['ドイツ', 3]]}}, text: 'Body'}]},
-  'all-seven': {slides: ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'treemap-2x', 'australia'].map((type) => ({title: type, chart: {type, data: region}}))},
+  'all-seven': {slides: ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world'].map((type) => ({title: type, chart: {type, data: region}}))},
 };
 const entries = {};
 for (const [name, deck] of Object.entries(decks)) {

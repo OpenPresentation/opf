@@ -872,7 +872,7 @@ export function slideListBreaks(entries, path, root, rels) {
  * `nativeSections` is the package's native section list as one name (or
  * undefined) per slide, or null when the package has no list.
  */
-export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, socialPlatformRecords, nativeSections = null}, report) {
+export function restoreDocumentProvenance(imported, {entries, presentationRoot, presentationRels, slides, organizationConflict = false, speakerConflict = false, socialPlatformRecords, nativeSections = null}, report) {
   const invalid = message => report({code: 'invalid-document-provenance', path: '', message: `${message} Ordinary import keeps the values observed in the PPTX.`});
   let document;
   try {
@@ -1109,6 +1109,10 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       report({code: 'metadata-reference-changed', path: 'organization', message: 'Slides now show different organization names in their furniture, so the stored organization was not restored; each slide keeps its visible text.'});
       continue;
     }
+    if (key === 'speaker' && speakerConflict) {
+      report({code: 'metadata-reference-changed', path: 'speaker', message: 'Slides now show different speaker names in their furniture, so the stored speaker was not restored; each slide keeps its visible text.'});
+      continue;
+    }
     if (key === 'author') {
       // Native evidence: the stored authored form only stands for the creator it was joined into.
       if (joinAuthors(imported.author) === joinAuthors(metadata.author)) group('author', [set(['author'], clone(metadata.author))]);
@@ -1128,6 +1132,14 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
       if (index < 0) value = clone(observed);
       else if (Array.isArray(value)) value[index] = {...list[index], ...merge(list[index], clone(observed))};
       else value = {...value, ...merge(value, clone(observed))};
+    }
+    if (key === 'speaker' && object(imported.speaker)) {
+      // The furniture speaker line (name and title) is native content and wins over the stored speaker with the same id.
+      const observed = imported.speaker, list = array(value), index = list.findIndex(item => object(item) && item.id === observed.id);
+      const merged = stored => { const {title: _title, ...rest} = stored; return {...rest, ...clone(observed)}; };
+      if (index < 0) value = clone(observed);
+      else if (Array.isArray(value)) value[index] = merged(list[index]);
+      else value = merged(value);
     }
     group(key, [set([key], value)]);
   }
