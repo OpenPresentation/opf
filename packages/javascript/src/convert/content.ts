@@ -76,8 +76,8 @@ export const CONTENT_CONVERSIONS: Readonly<Record<string, readonly ContentKind[]
 });
 
 export interface ConvertOptions extends TableOptions {
-  /** RR-54: the document the payload belongs to. A dataset-backed chart or table needs it (its `datasets`) to convert to another kind or to validate. */
-  document?: unknown;
+  /** RR-54: the presentation the payload belongs to. A dataset-backed chart or table needs it (its `datasets`) to convert to another kind or to validate. */
+  presentation?: unknown;
   /** Text to timeline: also read `label: text` with any short label as the date (default: only date-like labels). */
   looseWhen?: boolean;
   /** Code to text: `auto` (default) writes a fenced block when the code has a language or file name so nothing is lost; `never` writes the bare source and reports the loss. */
@@ -395,8 +395,8 @@ export function convertContent(payload: unknown, to: ContentKind, options: Conve
   // RR-54: a dataset table converts to anything but a chart from its inline copy, which needs the document.
   let content = info.content;
   if (info.kind === "table" && to !== "chart" && isDatasetRef(content)) {
-    content = inlineTableData(content, options.document);
-    if (isDatasetRef(content)) throw refuse(`This table shows dataset '${content.dataset}'. Pass the document (options.document) so its rows can be converted.`);
+    content = inlineTableData(content, options.presentation);
+    if (isDatasetRef(content)) throw refuse(`This table shows dataset '${content.dataset}'. Pass the presentation (options.presentation) so its rows can be converted.`);
     loss.note("dataset reference (the rows are copied)");
   }
   const { key, value } = convertField(info.kind, to, content, options, loss);
@@ -411,7 +411,7 @@ export function convertContent(payload: unknown, to: ContentKind, options: Conve
   }
   if (owner.type !== undefined) out.type = TYPE_OF_KIND[to] ?? to;
   out[key] = value;
-  assertValidOwner(out, isRecord(options.document) ? options.document : {});
+  assertValidOwner(out, isRecord(options.presentation) ? options.presentation : {});
   return { payload: out, from: info.kind, to, key, changed: true, ...report(loss.list) };
 }
 

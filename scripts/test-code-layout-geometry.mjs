@@ -51,7 +51,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     assert.ok(validatePresentation(deck).valid,'Probe inputs must use actual schema-valid dimensions');
     const bound=resolvePresentation(deck,{textMeasurement:registry.textMeasurement}).slides[0];
     assert.deepEqual(bound.design.dimensions,dimensions);
-    const options={fonts:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSize:24,scale:Math.min(dimensions.width,dimensions.height)/720};
+    const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSize:24,scale:Math.min(dimensions.width,dimensions.height)/720};
     const layout=layoutCode(code,bound.geometry.items[0].box,options);
     assert.equal(layout.overflow,overflowing);
     assert.equal(layout.parts.at(-1).text,code.source);

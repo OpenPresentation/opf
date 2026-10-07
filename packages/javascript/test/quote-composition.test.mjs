@@ -8,7 +8,7 @@ test('accepted quote geometry includes all parts without changing source or re-m
   const before=structuredClone(slide);
   let calls=0;
   const textMeasurement={measure:(text,size)=>{calls++;return text.length*size*.5;}};
-  const options={width:731.2345678,height:1280,fonts:{heading:'Heading',body:'Body'},textMeasurement};
+  const options={width:731.2345678,height:1280,fontFamilies:{heading:'Heading',body:'Body'},textMeasurement};
   const ordinary=composeSlide(slide,options),count=calls;
   calls=0;
   const {explanation,...explained}=composeSlide(slide,{...options,explain:true});

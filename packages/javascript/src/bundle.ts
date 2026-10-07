@@ -268,7 +268,7 @@ function pushReportId(map: Partial<Record<CatalogKind, string[]>>, kind: Catalog
  * validator warns about, and silently skipped elsewhere; see
  * `BundleReport.unresolved`.
  */
-export function bundlePresentation(value: unknown): BundleResult {
+export function bundle(value: unknown): BundleResult {
   const report: BundleReport = { added: {}, alreadyInline: {}, keptSources: [], unresolved: {} };
   if (!isRecord(value)) {
     return { presentation: value, report };

@@ -80,7 +80,7 @@ Validation:
 - an unknown dataset id is a `dataset-unknown` error;
 - an unknown field is a `dataset-field-unknown` error;
 - duplicate column names in a dataset, or in chart data that a `mapping` or `fields` addresses, are a `data-column-duplicate` error;
-- a dataset nothing references is the lint warning `opf/unused-dataset`.
+- a dataset nothing references is the warning `opf/unused-dataset` (category `references`).
 
 ### Series mapping
 
@@ -103,9 +103,9 @@ export function formatDataNumber(value: number, format?: string): string;
 /** Why a NumberFormat is invalid (the number-format-invalid message), or undefined when it is valid or absent. */
 export function numberFormatError(format: unknown): string | undefined;
 /** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted as one run ("0.0 m/s" -> '0.0 "m/s"'), so '/' (Excel's fraction bar), 'E+', '@', '*', '_' and '?' are never bare (native check opf#387); placeholders are written '#' before '0' ("0#" -> "#0"). */
-export function excelNumberFormat(format?: string): string;
+export function toExcelNumberFormat(format?: string): string;
 /** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General, sections, scaling commas, and placeholder orders Excel reads by position such as "0#" or "0.#0"). */
-export function numberFormatFromExcel(code: string): string | undefined;
+export function fromExcelNumberFormat(code: string): string | undefined;
 /** Pure: a copy of the document where every chart and table DatasetRef is replaced by inline data (columns as DataColumn when a format applies, rows copied; a chart also takes the dataset's `source`). `datasets` stays in place. Unknown ids, and references naming an unknown field, are left as they are. */
 export function inlineDatasets<T>(document: T): T;
 /** One table or chart in inline form (a dataset reference copied from document.datasets); anything else is returned as is. */
@@ -139,11 +139,11 @@ export function isDatasetRef(value: unknown): value is DatasetRef;
 
 `DataDiagnostic` is `{ code, severity: "error" | "warning", path, message }`, with the codes above plus `chart-value-not-numeric`. `chartNumber` runs after variables are filled. Before filling, the validator does not warn on a `var:<id>` cell whose variable is a number. `chart-value-not-numeric` is reported for any value cell that `chartNumber` rejects (strings and booleans), never for `null` or `""`. An unknown `fields` entry is a `dataset-field-unknown` error and `resolveChartData`/`resolveTableData` leave that column out. `number-format-invalid` applies to `DataColumn.format` and `StyledTableCell.format`; `NumberVariable.format` keeps its existing check (`variable-format` where it is used), so no existing document gains an error.
 
-The validator reports the codes as `params.code` on `errors` and `warnings`; lint keeps them as `opf/<code>` rule ids (errors as before, the three warnings now also) and adds `opf/unused-dataset`.
+`validate` reports the codes as `opf/<code>` rule ids: the errors are `format` findings, `opf/chart-value-not-numeric` and `opf/chart-mapping-adapted` are `content` warnings, `opf/chart-data-source-unresolved` is a `references` warning, and `references` adds `opf/unused-dataset`. The raw schema issue of a finding is in its `validation` field (`validation.params.code`).
 
 ### Migration help
 
-Decks written before the strict rule often hold display text in chart cells. When every text cell of a value column (an X or series column, or a lone column) is written in one display style that a NumberFormat reproduces exactly, `suggestChartNumberFix` returns the fix, and lint attaches it to each of the column's `opf/chart-value-not-numeric` warnings as `fixes: [{ id: "store-chart-numbers", kind: "patch", safe: false, patch }]` (the audit fix shape; core never applies it):
+Decks written before the strict rule often hold display text in chart cells. When every text cell of a value column (an X or series column, or a lone column) is written in one display style that a NumberFormat reproduces exactly, `suggestChartNumberFix` returns the fix, and `validate` attaches it to each of the column's `opf/chart-value-not-numeric` warnings as `fixes: [{ id: "store-chart-numbers", title, kind: "patch", safe: false, patch }]` (a [finding fix](finding-schema-reference.md); core never applies it):
 
 - `"12%"`, `"8.5%"` become 0.12 and 0.085 with the column format `0.#%`;
 - `"$1,234"`, `"$56"` become 1234 and 56 with `$#,##0` (also `€`, `£`, `¥`);
@@ -151,12 +151,12 @@ Decks written before the strict rule often hold display text in chart cells. Whe
 
 The patch replaces each text cell with its number and the column with a `DataColumn` that has the format; a dataset column is fixed in the dataset, so every chart and table that uses it changes, and its tables show the same text. A style is one optional leading minus, one optional currency symbol, digits (grouped in threes or plain), optional decimals and an optional `%`. There is no fix when the column already has a format, when styles are mixed (`"12%"` beside `"$5"` or beside the number 0.5), for accounting negatives `"(5)"`, `"$-5"`, a decimal comma (`"1.234,5"`), units (`"5 units"`), `".5"` or `"007"`, for mixed grouping (`"1,234"` beside `"5678"`), or when one format cannot show every value as written (`"$5"` beside `"$5.50"`). Every fixed value is checked: `formatDataNumber(value, format)` equals the text as written.
 
-Core composition, table layout and pagination accept dataset-backed tables and charts by inlining first. Table layout measures the formatted text. Markdown conversion, diff, merge, patch, audit and format keep the new fields. In detail:
+Core composition, table layout and pagination accept dataset-backed tables and charts by inlining first. Table layout measures the formatted text. Markdown conversion, diff, merge, patch, validate and format keep the new fields. In detail:
 
 - `composeSlide` inlines a dataset-backed `table` or `chart` from `options.presentation.datasets`, so the composed item's `value` (and `payload`) is the inline copy; the item `path` still points at the authored field. `layoutTable(value, box, { presentation })` does the same, and each body cell's `TableCellLayout.value` is its display value (`tableCellDisplayValue`); `input` stays the authored cell. A DataColumn header shows its `name` (`path` ends in `.name`).
-- `paginateSlide`/`paginatePresentation` validate a slide with the deck's `datasets` (and `references`). A dataset table that has to be split is written to the continuation slides as inline tables (the slide that fits is returned unchanged, with its reference).
-- `convertContent` keeps a dataset reference between chart and table (`fields` too; `mapping` is reported as lost) and needs `options.document` to convert a dataset table to any other kind. Inline conversions keep DataColumn formats and report lost number formats and `source`. Slide-level conversions validate with the document's datasets; slide-only structure edits skip the dataset checks they cannot make.
-- Markdown writes the new fields in its embedded YAML form (lossless); `datasets` go to the front matter. `format` orders `datasets`, `mapping`, `source` and `DataColumn` keys by the schema. `diff` reports changes under `datasets` in their own category. The audit's chart rules read resolved chart data (DataColumn names, dataset charts).
+- `paginateSlide`/`paginate` validate a slide with the deck's `datasets` (and `references`). A dataset table that has to be split is written to the continuation slides as inline tables (the slide that fits is returned unchanged, with its reference).
+- `convertContent` keeps a dataset reference between chart and table (`fields` too; `mapping` is reported as lost) and needs `options.presentation` to convert a dataset table to any other kind. Inline conversions keep DataColumn formats and report lost number formats and `source`. Slide-level conversions validate with the document's datasets; slide-only structure edits skip the dataset checks they cannot make.
+- Markdown writes the new fields in its embedded YAML form (lossless); `datasets` go to the front matter. `format` orders `datasets`, `mapping`, `source` and `DataColumn` keys by the schema. `diff` reports changes under `datasets` in their own category. The chart rules of `validate` read resolved chart data (DataColumn names, dataset charts).
 - Variables: `resolveVariables` walks `datasets` like any other content, so `{{id}}` tokens and whole `var:<id>` cells in dataset rows are filled before engines inline the reference.
 - `opf import-data --dataset <id>` (CLI) writes the imported columns and rows into `datasets.<id>` and references it. Re-importing into an existing dataset keeps its title, description and the format of each column whose name is unchanged; `source` names the imported file (stdin: none).
 - The generated `Table` type now has `rows?` (a dataset table has none) and `dataset?`/`fields?`; TypeScript callers that read `table.rows` handle the dataset form (or call `resolveTableData`).
@@ -182,7 +182,7 @@ All three engines read core's functions when they exist and fall back to their p
 ### PPTX export (opf-pptx, [opf-pptx#171](https://github.com/OpenPresentation/opf-pptx/pull/171))
 
 - **Numbers:** the export resolves data through `resolveChartData`, and the lenient `parsedNumber`/`numericValue` are removed. Non-numeric strings export as gaps, with one `chart-value-not-numeric` diagnostic per chart that carries a `count`.
-- **Classic charts:** `excelNumberFormat` codes are written as:
+- **Classic charts:** `toExcelNumberFormat` codes are written as:
   - the series `c:numCache/c:formatCode` (added where PptxGenJS writes none, such as pie and doughnut);
   - the series and chart-group data-label `c:numFmt sourceLinked="0"`;
   - the value-axis `c:numFmt`. The first plotted series' format is used, a scatter X axis takes the X column's, and a 100% stacked axis keeps `0%`.
@@ -195,8 +195,8 @@ All three engines read core's functions when they exist and fall back to their p
 
 ### PPTX import (opf-pptx)
 
-- **With provenance:** `datasets` is restored before document provenance validates. A frame's dataset reference, `mapping`, formats and `source` are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`. The hash compares format codes in core's canonical form (`numberFormatFromExcel`), so PowerPoint's re-spellings on save (`\$#,##0.0` for `$#,##0.0`, `#,##0\ "units"` for `#,##0 "units"`, native check [opf#385](https://github.com/OpenPresentation/opf/pull/385)) still match; a General code counts as no code.
-- **Without provenance:** a cache `formatCode` that `numberFormatFromExcel` maps back becomes that column's `{ name, format }`, for both classic and chartex charts. Core returns the canonical spelling, such as `#,##0 units` for `#,##0 "units"`. Other codes are reported as `chart-number-format-adapted` and never invented.
+- **With provenance:** `datasets` is restored before document provenance validates. A frame's dataset reference, `mapping`, formats and `source` are restored only while the cache hash still matches. If PowerPoint (or a person) changed the values, the native values import and a diagnostic says why, such as `chart-data-provenance-changed` or `table-dataset-unavailable`. The hash compares format codes in core's canonical form (`fromExcelNumberFormat`), so PowerPoint's re-spellings on save (`\$#,##0.0` for `$#,##0.0`, `#,##0\ "units"` for `#,##0 "units"`, native check [opf#385](https://github.com/OpenPresentation/opf/pull/385)) still match; a General code counts as no code.
+- **Without provenance:** a cache `formatCode` that `fromExcelNumberFormat` maps back becomes that column's `{ name, format }`, for both classic and chartex charts. Core returns the canonical spelling, such as `#,##0 units` for `#,##0 "units"`. Other codes are reported as `chart-number-format-adapted` and never invented.
 - **Cached values:** these follow the strict rule as well. XML decimal forms (`+5`, `.5`, `007`) are numbers; anything else is a gap with a diagnostic, never a stripped number or 0.
 
 ### Editor (opf-editor, [opf-editor#92](https://github.com/OpenPresentation/opf-editor/pull/92))

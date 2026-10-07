@@ -8,7 +8,7 @@ interface Definition {
 
 // AJV can compile a referenced subschema as its own root and report '#/type'
 // instead of the containing document's definition path. Keep the original
-// validator report unchanged; lint can look up the exact parent schema object.
+// validator report unchanged; validate can look up the exact parent schema object.
 let schemaLocations: WeakMap<object, Definition> | undefined;
 const issueLocations = new WeakMap<object, Definition>();
 

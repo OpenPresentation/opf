@@ -10,13 +10,13 @@ import {measureInk} from './metric-outline-ink.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {chromium}=require('playwright'),sharp=require('sharp');
-const {prepareNodeFonts}=await import(new URL('../../opf-render/dist/fonts-node.js',import.meta.url));
-const {renderSvg,resolvePresentation}=await import(new URL('../../opf-render/dist/svg.js',import.meta.url));
+const {loadFonts}=await import(new URL('../../opf-render/dist/fonts-node.js',import.meta.url));
+const {renderSlideSvg,resolvePresentation}=await import(new URL('../../opf-render/dist/svg.js',import.meta.url));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const out=path.resolve(process.argv[2]??'artifacts/metric-outline-browser'),widthOnly=process.argv.includes('--width-only');
 await mkdir(out,{recursive:true});
-const prepared=await prepareNodeFonts({pack:'office'});
-const options={...prepared.options,trace:true,...(widthOnly?{textMeasurement:{...prepared.options.textMeasurement,outlineBounds:undefined}}:{})};
+const fonts=await loadFonts({pack:'office'});
+const options={fonts:widthOnly?{...fonts,textMeasurement:{...fonts.textMeasurement,outlineBounds:undefined}}:fonts,trace:true};
 const metrics=[0,'',{value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'},
   {value:'42\r\n-0.5',unit:'milliseconds across all completed production requests',label:'Latency'},
   {value:'',unit:'',label:'',description:'',delta:'',trend:'up'},
@@ -27,7 +27,7 @@ const cases=[];
 for(const family of ['Carlito','Roboto'])for(const [width,height]of [[1280,720],[540,960]])for(const align of ['left','center','right'])for(const [index,metric]of metrics.entries()){
   const id=`${family}-${width}-${align}-${index+1}`;
   const document={design:{dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,fontScheme:{id:'roboto',heading:family,body:family,code:family}},slides:[{composition:{minFontSize:24},metric}]};
-  const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=renderSvg(document,options),item=bound.geometry.items[0];
+  const before=JSON.stringify(document),bound=resolvePresentation(document,options).slides[0],svg=renderSlideSvg(document,0,options),item=bound.geometry.items[0];
   assert.equal(JSON.stringify(document),before);assert.equal(item.metricLayout.overflow,false);
   cases.push({id,width,height,document,cell:item.box,layout:item.metricLayout,svg,sourceSha256:hash(before),svgSha256:hash(svg)});
 }
@@ -44,7 +44,7 @@ async function openPage(){
   const page=await (await browser.newContext({viewport})).newPage();
   page.on('pageerror',error=>errors.push(error.message));await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
   await page.setContent('<style>body{margin:0}main{position:relative}</style><main></main>');
-  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},prepared.options.embeddedFonts);
+  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},fonts.embeddedFonts);
   return page;
 }
 async function runCase(page,index){
@@ -92,7 +92,7 @@ try{
   let next=0;
   await Promise.all(Array.from({length:pages},async()=>{const page=await openPage();for(let index=next++;index<cases.length;index=next++)await runCase(page,index);}));
   const runtime={};for(const file of (await readdir(path.join(root,'packages/javascript/dist'))).filter(file=>file.endsWith('.js')))runtime[file]=hash(await readFile(path.join(root,'packages/javascript/dist',file)));
-  const report={node:process.version,browser:browser.version(),platform:process.platform,widthOnly,sourceSha256:hash(await readFile(path.join(root,'packages/javascript/src/composition.ts'))),runtime,verifierSha256:hash(await readFile(fileURLToPath(import.meta.url))),fonts:prepared.options.embeddedFonts.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),results,errors,requests,scope:'96 actual offline SVG metric cases using exact open Carlito/Roboto bytes. Source, accepted segment origins/advances within 0.1 reference pixels, and nonzero mask pixel centers inside cells plus 0.1 (one masks screenshot per case, measured with sharp stats()). Width-only mode retains the previous metric model as a control. Native PowerPoint/Calibri tab and paint gates require independent fresh evidence.'};
+  const report={node:process.version,browser:browser.version(),platform:process.platform,widthOnly,sourceSha256:hash(await readFile(path.join(root,'packages/javascript/src/composition.ts'))),runtime,verifierSha256:hash(await readFile(fileURLToPath(import.meta.url))),fonts:fonts.embeddedFonts.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),results,errors,requests,scope:'96 actual offline SVG metric cases using exact open Carlito/Roboto bytes. Source, accepted segment origins/advances within 0.1 reference pixels, and nonzero mask pixel centers inside cells plus 0.1 (one masks screenshot per case, measured with sharp stats()). Width-only mode retains the previous metric model as a control. Native PowerPoint/Calibri tab and paint gates require independent fresh evidence.'};
   await writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);assert.deepEqual(results.flatMap(result=>result.failures.map(failure=>result.id+': '+failure)),[]);
   console.log(`${results.length} actual metric SVG cases preserve source, accepted segment positions and nonzero ink containment (${pages} pages).`);

@@ -2,18 +2,10 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import {
-  chartHighlightColors,
-  chartHighlightMarks,
-  chartOptionSupport,
-  chartOptionTarget,
-  colorContrast,
-  resolveChartData,
-  resolveChartOptions,
-  textColorForFill,
-  validatePresentation,
-} from "../dist/index.js";
+import { resolveChartData } from "../dist/index.js";
+import { chartHighlightColors, chartHighlightMarks, chartOptionSupport, chartOptionTarget, colorContrast, resolveChartOptions, textColorForFill } from '../dist/composition.js';
 import * as composition from "../dist/composition.js";
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const data = { columns: ["Quarter", "Revenue", "Costs"], rows: [["Q1", 12, 8], ["Q2", 18, 11], ["Q3", 24, 15], ["Q3", 25, 16]] };
 const chart = (type, extra = {}) => ({ type, data, ...extra });
@@ -113,55 +105,55 @@ describe("chartHighlightMarks", () => {
 
 describe("validation", () => {
   test("a highlight is valid and silent on a type that supports it", () => {
-    const result = validatePresentation(deck({ highlight: { series: ["Revenue"], categories: ["Q3"] } }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.deepEqual(result.warnings, []);
-    assert.equal(validatePresentation(deck({ highlight: { categories: ["Q1"] } }, "pie")).valid, true);
+    const result = check(deck({ highlight: { series: ["Revenue"], categories: ["Q3"] } }));
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    assert.deepEqual(warningsOf(result), []);
+    assert.equal(check(deck({ highlight: { categories: ["Q1"] } }, "pie")).valid, true);
   });
 
   test("the schema rejects an empty or malformed highlight", () => {
-    assert.equal(validatePresentation(deck({ highlight: {} })).valid, false);
-    assert.equal(validatePresentation(deck({ highlight: { series: [] } })).valid, false);
-    assert.equal(validatePresentation(deck({ highlight: { series: ["Revenue", "Revenue"] } })).valid, false);
-    assert.equal(validatePresentation(deck({ highlight: { series: "Revenue" } })).valid, false);
-    assert.equal(validatePresentation(deck({ highlight: { color: "#FF0000" } })).valid, false, "there is no color field");
-    assert.equal(validatePresentation(deck({ highlight: { series: [3] } })).valid, false);
+    assert.equal(check(deck({ highlight: {} })).valid, false);
+    assert.equal(check(deck({ highlight: { series: [] } })).valid, false);
+    assert.equal(check(deck({ highlight: { series: ["Revenue", "Revenue"] } })).valid, false);
+    assert.equal(check(deck({ highlight: { series: "Revenue" } })).valid, false);
+    assert.equal(check(deck({ highlight: { color: "#FF0000" } })).valid, false, "there is no color field");
+    assert.equal(check(deck({ highlight: { series: [3] } })).valid, false);
   });
 
   test("an unknown series or category is a chart-highlight-unknown-name error naming the path", () => {
-    const result = validatePresentation(deck({ highlight: { series: ["Revenue", "Profit"], categories: ["Q1", "Q9"] } }));
+    const result = check(deck({ highlight: { series: ["Revenue", "Profit"], categories: ["Q1", "Q9"] } }));
     assert.equal(result.valid, false);
-    const found = result.errors.filter((error) => error.params.code === "chart-highlight-unknown-name");
+    const found = errorsOf(result).filter((error) => error.ruleId === "opf/chart-highlight-unknown-name");
     assert.deepEqual(found.map((error) => error.path), ["/slides/0/chart/highlight/series/1", "/slides/0/chart/highlight/categories/1"]);
     assert.match(found[0].message, /"Profit"/);
     assert.match(found[1].message, /"Q9"/);
   });
 
   test("also inside a block and for a dataset-backed chart", () => {
-    const blocks = validatePresentation({ slides: [{ title: "B", blocks: [{ chart: chart("column", { highlight: { series: ["Profit"] } }) }, { text: "x" }] }] });
-    assert.deepEqual(blocks.errors.map((error) => error.path), ["/slides/0/blocks/0/chart/highlight/series/0"]);
-    const dataset = validatePresentation({ datasets: { rev: data }, slides: [{ title: "D", chart: { type: "column", data: { dataset: "rev" }, highlight: { categories: ["Q2", "Q7"] } } }] });
-    assert.deepEqual(dataset.errors.map((error) => error.path), ["/slides/0/chart/highlight/categories/1"]);
+    const blocks = check({ slides: [{ title: "B", blocks: [{ chart: chart("column", { highlight: { series: ["Profit"] } }) }, { text: "x" }] }] });
+    assert.deepEqual(errorsOf(blocks).map((error) => error.path), ["/slides/0/blocks/0/chart/highlight/series/0"]);
+    const dataset = check({ datasets: { rev: data }, slides: [{ title: "D", chart: { type: "column", data: { dataset: "rev" }, highlight: { categories: ["Q2", "Q7"] } } }] });
+    assert.deepEqual(errorsOf(dataset).map((error) => error.path), ["/slides/0/chart/highlight/categories/1"]);
   });
 
   test("a column that is not plotted as a series is a chart-highlight-adapted warning", () => {
-    const result = validatePresentation(deck({ highlight: { series: ["Quarter", "Costs"] }, mapping: { series: ["Revenue"] } }));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.deepEqual(result.warnings.map((warning) => [warning.params.code, warning.path]), [
-      ["chart-highlight-adapted", "/slides/0/chart/highlight/series/0"],
-      ["chart-highlight-adapted", "/slides/0/chart/highlight/series/1"],
+    const result = check(deck({ highlight: { series: ["Quarter", "Costs"] }, mapping: { series: ["Revenue"] } }), { only: ["format", "content"] });
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    assert.deepEqual(warningsOf(result).map((warning) => [warning.ruleId, warning.path]), [
+      ["opf/chart-highlight-adapted", "/slides/0/chart/highlight/series/0"],
+      ["opf/chart-highlight-adapted", "/slides/0/chart/highlight/series/1"],
     ]);
   });
 
   test("a part the chart type cannot highlight is a chart-option-adapted warning naming the option path", () => {
-    const result = validatePresentation(deck({ highlight: { series: ["Revenue"] } }, "pie"));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.deepEqual(result.warnings.map((warning) => [warning.params.code, warning.path]), [["chart-option-adapted", "/slides/0/chart/highlight/series"]]);
+    const result = check(deck({ highlight: { series: ["Revenue"] } }, "pie"), { only: ["format", "layout"] });
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    assert.deepEqual(warningsOf(result).map((warning) => [warning.ruleId, warning.path]), [["opf/chart-option-adapted", "/slides/0/chart/highlight/series"]]);
   });
 
   test("a deck without a highlight validates exactly as before", () => {
-    const result = validatePresentation(deck({}));
-    assert.deepEqual(result.warnings, []);
+    const result = check(deck({}), { only: ["format", "references", "layout", "content"] });
+    assert.deepEqual(warningsOf(result), []);
     assert.equal(result.valid, true);
   });
 });

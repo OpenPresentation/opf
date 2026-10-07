@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {measureTextOutline,placeTextLines,composeSlide,OPFCompositionError} from '../dist/composition.js';
-import {paginatePresentation} from '../dist/pagination.js';
+import {paginate} from '../dist/pagination.js';
 const style={fontFamily:'Host font',fontWeight:400};
 test('optional outline providers distinguish unknown measurement from no ink',()=>{
   assert.equal(measureTextOutline('Words',20,style),undefined);
@@ -78,8 +78,8 @@ test('presentation pagination forwards outline padding and effective title align
   const width=composeSlide(slide).items[0].box.width;
   const edge={measure:(text,size,s)=>s.path.endsWith('.title')?width:measurement.measure(text,size),outlineBounds:(text,size,s)=>s.path.endsWith('.title')?{x:0,y:-size*.8,width,height:size}:measurement.outlineBounds(text,size,s)};
   const deck={design,slides:[slide]};
-  assert.doesNotThrow(()=>paginatePresentation(deck,{textMeasurement:edge,textRasterPadding:0}));
-  assert.throws(()=>paginatePresentation(deck,{textMeasurement:edge,textRasterPadding:1}));
+  assert.doesNotThrow(()=>paginate(deck,{fonts:{textMeasurement:edge},textRasterPadding:0}));
+  assert.throws(()=>paginate(deck,{fonts:{textMeasurement:edge},textRasterPadding:1}));
 });
 test('invalid outline coordinates fail instead of silently claiming fit',()=>{
   for(const bounds of [undefined,{},0,{x:0,y:0,width:NaN,height:1},{x:Infinity,y:0,width:1,height:1},{x:0,y:0,width:1,height:-1}]){

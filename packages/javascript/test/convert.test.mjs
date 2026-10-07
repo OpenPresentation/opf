@@ -11,7 +11,8 @@ import {
   readContent,
 } from "../dist/convert.js";
 import * as root from "../dist/convert.js";
-import { validatePresentation } from "../dist/index.js";
+import { check } from './support/validation.mjs';
+
 
 const convert = (payload, to, options) => convertContent(payload, to, options);
 const refused = (payload, to, pattern, options) =>
@@ -19,7 +20,7 @@ const refused = (payload, to, pattern, options) =>
     () => convert(payload, to, options),
     (error) => error instanceof OPFConversionError && error.code === "not-convertible" && pattern.test(error.message),
   );
-const valid = (block) => validatePresentation({ slides: [{ blocks: [block] }] }).valid;
+const valid = (block) => check({ slides: [{ blocks: [block] }] }).valid;
 
 describe("contract", () => {
   test("the matrix, labels and readContent describe the supported kinds", () => {

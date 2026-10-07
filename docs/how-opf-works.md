@@ -156,7 +156,7 @@ The principle, used throughout OPF: **slides are the source of truth**. Layouts,
 
 A narrative is a **plan**: a story arc, its ordered **beats** (labeled segments such as `hook`, `problem`, `evidence`, `ask`) and what each beat must do. A deck is the **product**. So the plan lives in the `narratives` catalog and the deck holds only a pointer: `narrative` is a string, a catalog id (`"classic-story"`, `"pitch-deck"`), an HTTPS URL or a `pkg:` reference. A beat carries its blueprint: `type` is the slide's `Slide.type`, `layout` is its `Slide.layout`, and `instructions` and `thoughtCues` guide the author. A record's `duration { min, max }` is the talk length in minutes it suits.
 
-Slides link themselves to beats with `Slide.beat`. Nothing forces them to, and the preview and the PPTX export draw nothing from the narrative. Lint warns about a `slides[].beat` id the narrative does not define (`opf/unknown-beat`) and about a root `duration` outside the narrative's range (`opf/duration-outside-narrative`). The audit reports a beat that no slide references (`audit/unused-beat`, info).
+Slides link themselves to beats with `Slide.beat`. Nothing forces them to, and the preview and the PPTX export draw nothing from the narrative. `validate` warns about a `slides[].beat` id the narrative does not define (`opf/unknown-beat`) and about a root `duration` outside the narrative's range (`opf/duration-outside-narrative`), and reports a beat that no slide references (`opf/unused-beat`, info).
 
 A custom narrative is a record in `catalogs.narratives.records`, and `narrative` names its id. There is one shape, the catalog record:
 
@@ -234,7 +234,7 @@ A document can carry its own records or point at a private registry, which also 
   "design": { "colorScheme": "acme-brand" },
   "catalogs": {
     "colorSchemes": {
-      "records": [{ "id": "acme-brand", "accent1": "#0F4C81", "light1": "#FFFFFF", "dark1": "#0B1B2B" }]
+      "records": [{ "id": "acme-brand", "name": "Acme Brand", "accent1": "#0F4C81", "light1": "#FFFFFF", "dark1": "#0B1B2B" }]
     },
     "narratives": { "source": "https://catalogs.example.com/narratives" }
   },
@@ -327,7 +327,7 @@ Two layers, with a deliberate split:
 - **Schema errors** for structural problems: wrong types, overlapping region keys, payloads mixing incompatible content kinds, a region payload missing concrete content, duplicate slide or payload ids.
 - **Warnings** for advisory drift: unknown catalog ids, unknown `var:` variable references and unrecognized run colors, narrative/slide mismatches. These never make a document invalid.
 
-`validatePresentation` from `@openpresentation/opf` applies both layers locally.
+`validate` from `@openpresentation/opf` applies both layers locally and, beyond them, checks references, accessibility, layout and content ([validate](validate.md)).
 
 ## Where to go next
 

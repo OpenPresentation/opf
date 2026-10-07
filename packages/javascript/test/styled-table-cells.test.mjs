@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {validatePresentation} from '../dist/index.js';
+
 import {layoutTable, tableGrid, tableRowBoundaries, composeSlide} from '../dist/composition.js';
 import {paginateSlide, OPFPaginationError} from '../dist/pagination.js';
+import { check, errorsOf } from './support/validation.mjs';
 
 const measurement = {measure: (text, size) => [...text].length * size * .5};
 const box = {x: 10, y: 20, width: 600, height: 600};
@@ -12,8 +13,8 @@ const style = {
   borders: {top: {color: '#abc', width: 2, dash: 'dash'}, bottom: {color: '#00000000', width: 0}},
 };
 const valid = table => {
-  const result = validatePresentation({slides: [{table}]});
-  assert.equal(result.valid, true, JSON.stringify(result.errors));
+  const result = check({slides: [{table}]});
+  assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
 };
 
 test('styled values coexist with scalar, rich, empty and merged header cells', () => {
@@ -41,7 +42,7 @@ test('schema rejects ambiguous values and unsupported style properties', () => {
     {value: 'x', style: {padding: {left: -1}}},
     {value: 'x', style: {borders: {top: {color: '#fff', width: 2, dash: 'unknown'}}}},
     {value: 'x', style: {unknown: true}},
-  ]) assert.equal(validatePresentation({slides: [{table: {rows: [[cell]]}}]}).valid, false, JSON.stringify(cell));
+  ]) assert.equal(check({slides: [{table: {rows: [[cell]]}}]}).valid, false, JSON.stringify(cell));
 });
 
 test('spans reject hidden content, missing covered positions, overlap and header crossing', () => {
@@ -54,12 +55,12 @@ test('spans reject hidden content, missing covered positions, overlap and header
     {rows: [['A', {value: 'B', rowSpan: 2}], [{value: 'C', colSpan: 2}, null]]},
   ]) {
     assert.ok(tableGrid(table).issues.length, JSON.stringify(table));
-    assert.equal(validatePresentation({slides: [{table}]}).valid, false);
+    assert.equal(check({slides: [{table}]}).valid, false);
     assert.throws(() => layoutTable(table, box), RangeError);
   }
   const table = {rows: [[{value: 'A', colSpan: 2}, 'hidden']]};
-  const result = validatePresentation({slides: [{'left': {blocks: [{table}]}}]});
-  assert.ok(result.errors.some(error => error.path === '/slides/0/left/blocks/0/table/rows/0/1'), JSON.stringify(result.errors));
+  const result = check({slides: [{'left': {blocks: [{table}]}}]});
+  assert.ok(errorsOf(result).some(error => error.path === '/slides/0/left/blocks/0/table/rows/0/1'), JSON.stringify(errorsOf(result)));
 });
 
 test('span rectangles preserve dense column indexes and editable value paths', () => {
@@ -116,7 +117,7 @@ test('pagination preserves vertical merge groups, rich styles, headers and sourc
     : [null, `Row ${i}`]);
   const table = {columns: [{value: 'Groups', style}, 'Details'], rows};
   const source = {blocks: [{table}]}, before = structuredClone(source);
-  const result = paginateSlide(source, {textMeasurement: measurement, slideIndex: 2});
+  const result = paginateSlide(source, {fonts:{textMeasurement:measurement}, slideIndex: 2});
   assert.ok(result.slides.length > 1);
   assert.deepEqual(result.slides.flatMap(slide => slide.blocks[0].table.rows), rows);
   for (const [i, slide] of result.slides.entries()) {
@@ -134,5 +135,5 @@ test('overlapping merge groups are atomic, and oversized groups fail without par
   const table = {rows: [[{value: 'A', rowSpan: 2}, 'B'], [null, {value: 'C', rowSpan: 2}], ['D', null], ['E', 'F']]};
   assert.deepEqual(tableRowBoundaries(table), [0, 3, 4]);
   const huge = {rows: [[{value: 'word\n'.repeat(100), rowSpan: 2}], [null]]};
-  assert.throws(() => paginateSlide({table: huge}, {textMeasurement: measurement}), OPFPaginationError);
+  assert.throws(() => paginateSlide({table: huge}, {fonts:{textMeasurement:measurement}}), OPFPaginationError);
 });

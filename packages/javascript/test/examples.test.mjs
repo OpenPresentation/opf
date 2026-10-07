@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { validatePresentation } from "../dist/index.js";
+
 import {
   exampleCategories,
   examples,
@@ -12,6 +12,7 @@ import {
   getGallery,
 } from "../dist/examples.js";
 import { docs, getDoc } from "../dist/docs.js";
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 describe("example catalog sanity", () => {
   test("has at least one example", () => {
@@ -34,18 +35,18 @@ describe("every bundled example validates cleanly", () => {
       assert.ok(example.file.startsWith("examples/"));
       assert.equal(typeof example.category, "string");
       assert.ok(example.deck && typeof example.deck === "object");
-      const result = validatePresentation(example.deck);
+      const result = check(example.deck, { only: ['format', 'references'] });
       assert.equal(
         result.valid,
         true,
-        `Example ${example.slug} failed validation: ${JSON.stringify(result.errors, null, 2)}`,
+        `Example ${example.slug} failed validation: ${JSON.stringify(errorsOf(result), null, 2)}`,
       );
       // The published example corpus is pinned by the renderer golden baseline,
       // so examples still referencing FF-22 deprecated chart types migrate with
       // the coordinated 0.12.0 removal (docs/migrations/0.12.0.md). Until then
       // only deprecation warnings that name a replacement are tolerated.
-      const unexpected = result.warnings.filter(
-        (warning) => !(warning.params?.kind === "chartTypes" && typeof warning.params?.replacedBy === "string"),
+      const unexpected = warningsOf(result).filter(
+        (warning) => !(warning.ruleId === "opf/deprecated-catalog-id" && warning.validation?.params?.kind === "chartTypes"),
       );
       assert.equal(
         unexpected.length,
@@ -134,13 +135,14 @@ describe("fenced JSON presentation examples embedded in docs", () => {
 
   for (const { doc, parsed, blockIndex } of fencedPresentationExamples) {
     test(`doc '${doc.slug}' fenced JSON example #${blockIndex} validates cleanly`, () => {
-      const result = validatePresentation(parsed);
+      const result = check(parsed, { only: ['format', 'references'] });
       assert.equal(
         result.valid,
         true,
-        `doc ${doc.slug} has an invalid presentation example: ${JSON.stringify(result.errors, null, 2)}`,
+        `doc ${doc.slug} has an invalid presentation example: ${JSON.stringify(errorsOf(result), null, 2)}`,
       );
-      const unexpected = result.warnings;
+      // A template example carries one 'variable-unfilled' warning per required variable it leaves empty.
+      const unexpected = warningsOf(result).filter((warning) => !(parsed.template === true && warning.ruleId === "opf/variable-unfilled"));
       assert.equal(
         unexpected.length,
         0,

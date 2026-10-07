@@ -1,9 +1,10 @@
 // `opf import deck.pptx`: a PowerPoint file to an OPF document through opf-pptx `fromPptx`. Import is a conversion,
 // not a lossless round trip for arbitrary decks: what it cannot keep is reported as diagnostics. With --signals it also
 // writes the raw per-shape layout and style signals of the deck (opf-pptx 0.11.9 and later), deterministic and local.
-import { type LintReport, lintSource, validatePresentation } from "@openpresentation/opf";
+import { type FindingSeverity, type ValidationReport, validate } from "@openpresentation/opf";
 import path from "node:path";
-import { DeckReadError, lintText, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
+import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches } from "./check.js";
+import { DeckReadError, checkText, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
 import { FileCommandError, arity, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
 import { type Diagnostic, PPTX_PACKAGE, loadPptx } from "./peers.js";
 import { Reporter, finishReport, reportThrown } from "./reporter.js";
@@ -20,7 +21,7 @@ export async function runImportCommand(args: string[], host: Host) {
 }
 
 async function run(args: string[], host: Host) {
-	const { positional, options } = parseOptions(args, { values: ["out", "signals", "format"], flags: ["force", "strict", "json"] });
+	const { positional, options } = parseOptions(args, { values: ["out", "signals", "format", "fail-on"], flags: ["force", "json"] });
 	arity(positional, 1);
 	const input = positional[0] as string;
 	if (options.format !== undefined && options.format !== "json" && options.format !== "yaml") throw new FileCommandError("--format takes json or yaml.");
@@ -32,7 +33,8 @@ async function run(args: string[], host: Host) {
 		throw new FileCommandError(error instanceof DeckReadError ? error.message : String(error));
 	}
 	const signalsFile = options.signals === undefined ? undefined : String(options.signals);
-	const strict = !!options.strict;
+	const failOn = parseFailOn(options["fail-on"]);
+	if (!failOn) throw new FileCommandError(FAIL_ON_MESSAGE);
 	if (signalsFile === "-" || (signalsFile !== undefined && out === "-")) throw new FileCommandError("--signals needs a file path and cannot be combined with --out - (stdout carries only the document).");
 	if (signalsFile !== undefined && path.resolve(signalsFile) === path.resolve(out)) throw new FileCommandError("--signals and --out name the same file.");
 
@@ -56,20 +58,18 @@ async function run(args: string[], host: Host) {
 		} else imported = result;
 	} catch (error) {
 		reportThrown(reporter, "import", error);
-		finishAndPrint(host, pptx.version, input, source.bytes, reporter, undefined, undefined, undefined, strict, false);
+		finishAndPrint(host, pptx.version, input, source.bytes, reporter, undefined, undefined, undefined, failOn, false);
 		return;
 	}
 
-	const validation = validatePresentation(imported);
 	// An invalid deck is never written; its report is located in the JSON form, which every deck has.
-	const written: DeckFormat = outFormat === "yaml" && validation.valid ? "yaml" : "json";
+	const written: DeckFormat = outFormat === "yaml" && validate(imported, { only: ["format"] }).valid ? "yaml" : "json";
 	const text = serialize(imported, written);
-	// The same linter as `opf lint`, over the document that would be written, so locations point into the output file.
-	const lint = lintText(text, written);
-	for (const item of lint.diagnostics) reporter.diagnostics.push(item as never);
-	const failed = !validation.valid || !lint.valid || reporter.failed || (strict && reporter.counts.warning > 0);
-	if (failed) {
-		finishAndPrint(host, pptx.version, input, source.bytes, reporter, { lint, text }, undefined, undefined, strict, false);
+	// The check of `opf validate` (format and references), over the document that would be written, so locations point into the output file.
+	const { report: check } = checkText(text, written, WRITE_CHECK);
+	for (const item of check.findings) reporter.findings.push(item as never);
+	if (!check.valid || reporter.failed || reaches(reporter.findings, failOn)) {
+		finishAndPrint(host, pptx.version, input, source.bytes, reporter, { check, text }, undefined, undefined, failOn, false);
 		return;
 	}
 	const toStdout = out === "-";
@@ -78,7 +78,7 @@ async function run(args: string[], host: Host) {
 	if (signalsFile !== undefined && signalsText !== undefined) planned.push({ file: signalsFile, bytes: new TextEncoder().encode(signalsText) });
 	if (toStdout) process.stdout.write(text);
 	else await writeFiles(planned, !!options.force);
-	finishAndPrint(host, pptx.version, input, source.bytes, reporter, { lint, text }, toStdout ? "-" : path.resolve(out), signalsFile === undefined || signalsText === undefined ? undefined : { file: path.resolve(signalsFile), sha256: sha256(signalsText), version: pptx.module.SIGNALS_VERSION }, strict, true, toStdout);
+	finishAndPrint(host, pptx.version, input, source.bytes, reporter, { check, text }, toStdout ? "-" : path.resolve(out), signalsFile === undefined || signalsText === undefined ? undefined : { file: path.resolve(signalsFile), sha256: sha256(signalsText), version: pptx.module.SIGNALS_VERSION }, failOn, true, toStdout);
 }
 
 function finishAndPrint(
@@ -87,14 +87,14 @@ function finishAndPrint(
 	input: string,
 	bytes: Uint8Array,
 	reporter: Reporter,
-	result: { lint: LintReport; text: string } | undefined,
+	result: { check: ValidationReport; text: string } | undefined,
 	output: string | undefined,
 	signals: Record<string, unknown> | undefined,
-	strict: boolean,
+	failOn: FindingSeverity,
 	written: boolean,
 	toStdout = false,
 ) {
-	const finished = finishReport(result?.lint ?? { valid: true, schemaValid: null, checks: lintSource("{}").checks }, reporter, strict);
+	const finished = finishReport(result?.check ?? { valid: true, schemaValid: null, checks: validate("{}", { only: [] }).checks }, reporter, failOn);
 	const body = {
 		command: "import",
 		ok: finished.ok,
@@ -107,7 +107,7 @@ function finishAndPrint(
 		opfVersion: host.opfVersion,
 		cli: host.cliVersion,
 		pptx: { package: PPTX_PACKAGE, version },
-		diagnostics: finished.diagnostics,
+		findings: finished.findings,
 		counts: finished.counts,
 		checks: { ...finished.checks, nativeExport: "not-checked" },
 	};

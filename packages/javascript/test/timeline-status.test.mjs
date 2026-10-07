@@ -2,12 +2,11 @@
 // Markdown, conversions and pagination.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {
-  TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, colorContrast as contrastRatio, composeSlide, layoutTimeline,
-  paginateSlide, timelineMarkerShapes, timelineTextColor, validatePresentation,
-} from '../dist/index.js';
-import { markdownToOpf, opfToMarkdown } from '../dist/markdown.js';
+import { paginateSlide } from '../dist/index.js';
+import { TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, colorContrast as contrastRatio, composeSlide, layoutTimeline, timelineMarkerShapes, timelineTextColor } from '../dist/composition.js';
+import { fromMarkdown, toMarkdown } from '../dist/markdown.js';
 import { convertContent } from '../dist/convert.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const box = { x: 10, y: 20, width: 1400, height: 700 };
 const events = [{ when: 'Q1', what: 'Discovery' }, { when: 'Q2', what: 'Pilot' }, { when: 'Q3', what: 'Rollout' }];
@@ -18,9 +17,9 @@ const colors = { background: '#FFFFFF', primary: '#1D4ED8', text: '#111827', mut
 test('the schema takes done, current and planned and nothing else', () => {
   assert.deepEqual([...TIMELINE_STATUSES], ['done', 'current', 'planned']);
   const deck = (status) => ({ slides: [{ timeline: [{ what: 'Pilot', status }] }] });
-  for (const status of TIMELINE_STATUSES) assert.equal(validatePresentation(deck(status)).valid, true, status);
-  for (const status of ['at-risk', 'blocked', 'Done', '', 1, null]) assert.equal(validatePresentation(deck(status)).valid, false, String(status));
-  assert.equal(validatePresentation({ slides: [{ timeline: { events: withStatus('done', 'current', 'planned') } }] }).valid, true);
+  for (const status of TIMELINE_STATUSES) assert.equal(check(deck(status)).valid, true, status);
+  for (const status of ['at-risk', 'blocked', 'Done', '', 1, null]) assert.equal(check(deck(status)).valid, false, String(status));
+  assert.equal(check({ slides: [{ timeline: { events: withStatus('done', 'current', 'planned') } }] }).valid, true);
 });
 
 test('events without a status lay out exactly as before: no status keys anywhere', () => {
@@ -132,21 +131,21 @@ test('Markdown writes and reads status as a task-list prefix and round-trips it'
     { what: 'Scale', status: 'planned' },
     { when: '2027', what: 'Review' },
   ] } }] };
-  const { markdown, report } = opfToMarkdown(deck);
+  const { markdown, report } = toMarkdown(deck);
   assert.equal(report.lossless, true);
   assert.match(markdown, /```timeline name="Plan"\n\[x\] 2025 — Research\n {2}Interviews\.\n\[>\] 2026 — Pilot\n\[ \] Scale\n2027 — Review\n```/);
-  assert.deepEqual(markdownToOpf(markdown).document.slides[0].timeline, deck.slides[0].timeline);
-  const parsed = markdownToOpf('# T\n\n```timeline\n[x] Done thing\n[>] Doing thing\n[ ] Later thing\n```\n').document.slides[0].timeline;
+  assert.deepEqual(fromMarkdown(markdown).presentation.slides[0].timeline, deck.slides[0].timeline);
+  const parsed = fromMarkdown('# T\n\n```timeline\n[x] Done thing\n[>] Doing thing\n[ ] Later thing\n```\n').presentation.slides[0].timeline;
   assert.deepEqual(parsed, [{ what: 'Done thing', status: 'done' }, { what: 'Doing thing', status: 'current' }, { what: 'Later thing', status: 'planned' }]);
-  assert.equal(validatePresentation({ slides: [{ timeline: parsed }] }).valid, true);
+  assert.equal(check({ slides: [{ timeline: parsed }] }).valid, true);
 });
 
 test('Markdown keeps event text that looks like a status mark', () => {
   const deck = { slides: [{ title: 'T', timeline: [{ what: '[x] literal' }, { what: 'Plain' }] }] };
-  const { markdown } = opfToMarkdown(deck);
-  assert.deepEqual(markdownToOpf(markdown).document.slides[0].timeline, deck.slides[0].timeline);
+  const { markdown } = toMarkdown(deck);
+  assert.deepEqual(fromMarkdown(markdown).presentation.slides[0].timeline, deck.slides[0].timeline);
   const marked = { slides: [{ title: 'T', timeline: [{ what: '[x] literal', status: 'planned' }] }] };
-  assert.deepEqual(markdownToOpf(opfToMarkdown(marked).markdown).document.slides[0].timeline, marked.slides[0].timeline);
+  assert.deepEqual(fromMarkdown(toMarkdown(marked).markdown).presentation.slides[0].timeline, marked.slides[0].timeline);
 });
 
 test('conversions that cannot show status say so', () => {

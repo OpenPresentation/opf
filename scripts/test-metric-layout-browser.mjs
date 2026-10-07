@@ -23,7 +23,7 @@ assert.equal(fixtures.length,geometry.results.length);
 const cases=fixtures.flatMap((fixture,index)=>{
   const recorded=geometry.results[index];assert.equal(fixture.id,recorded.id);assert.equal(fixture.family,recorded.family);assert.deepEqual(fixture.dimensions,recorded.dimensions);
   if (recorded.error) {assert.equal(recorded.error.code,'missing-glyph');assert.equal(recorded.error.details.character,fixture.missingGlyph);return [];}
-  const layout=layoutMetric(fixture.metric,recorded.box,{fonts:{heading:fixture.family,body:fixture.family},path:'slides.0.metric',
+  const layout=layoutMetric(fixture.metric,recorded.box,{fontFamilies:{heading:fixture.family,body:fixture.family},path:'slides.0.metric',
     textMeasurement:registry.textMeasurement,scale:recorded.scale,minFontSize:fixture.minFontSize});
   assert.equal(layout.overflow,recorded.overflow);assert.equal(layout.arrangement,recorded.arrangement);
   for (const [i,part] of layout.parts.entries()) {

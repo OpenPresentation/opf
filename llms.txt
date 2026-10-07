@@ -2,17 +2,19 @@
 
 > Portable, human-readable JSON document format for slide decks. Plain JSON instead of zipped OOXML, so humans can diff decks, git can track them, and LLMs can author them. MIT licensed. npm package: @openpresentation/opf.
 
-Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` and only `slides` is required. Slides carry content as a root payload (text, items, chart, table, image, video, code, metric, quote, timeline), as `blocks` (payloads or nested groups with optional `composition`), or in 3x3 region keys (`left`, `center+right`, `top:left`, ...). Reusable values (narrative, theme, colorScheme, fontScheme, layout, chart type, audience, purpose, tone, language) are kebab-case ids resolved against catalogs. Content color fields accept hex, color-scheme slot/role names (`accent2`, `text`), or `var:<id>` references into top-level `variables`. Unknown ids warn, never error. Validate with `validatePresentation` from @openpresentation/opf.
+Authoring rule of thumb: a presentation is `{ "name": "...", "slides": [...] }` and only `slides` is required. Slides carry content as a root payload (text, items, chart, table, image, video, code, metric, quote, timeline), as `blocks` (payloads or nested groups with optional `composition`), or in 3x3 region keys (`left`, `center+right`, `top:left`, ...). Reusable values (narrative, theme, colorScheme, fontScheme, layout, chart type, audience, purpose, tone, language) are kebab-case ids resolved against catalogs. Content color fields accept hex, color-scheme slot/role names (`accent2`, `text`), or `var:<id>` references into top-level `variables`. Unknown ids warn, never error. Validate with `validate` from @openpresentation/opf (or `opf validate`): one list of findings with stable rule ids, severities and fixes, covering format, references, accessibility, layout and content.
 
 ## Docs
 
 - [Format card](https://github.com/OpenPresentation/opf/blob/main/docs/format-card.md): the whole authoring surface on one page, sized for pasting into a model's context
 - [How OPF works](https://github.com/OpenPresentation/opf/blob/main/docs/how-opf-works.md): start here — document model, content shapes, catalog resolution, validation philosophy
 - [Schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/schema-reference.md): every field of every presentation object
+- [Validate](https://github.com/OpenPresentation/opf/blob/main/docs/validate.md): the one checker, `validate` and `opf validate`: rules by category, options, config, fixes and cost
 - [Content payloads](https://github.com/OpenPresentation/opf/blob/main/docs/content-payloads.md): payload shapes and inference rules
 - [Design resolution](https://github.com/OpenPresentation/opf/blob/main/docs/design-resolution.md): design precedence algorithm with worked examples
 - [Catalog schema reference](https://github.com/OpenPresentation/opf/blob/main/docs/catalog-schema-reference.md): every field of every catalog record schema
 - [Examples guide](https://github.com/OpenPresentation/opf/blob/main/docs/examples.md): map of the 125 example decks
+- [Stats](https://github.com/OpenPresentation/opf/blob/main/docs/stats.md): neutral facts about a deck (`stats()`, `opf stats`): slides, words, notes, images, charts, tables, assets, fonts, an estimated speaking time
 - [Markdown and outlines](https://github.com/OpenPresentation/opf/blob/main/docs/markdown.md): the deterministic Markdown dialect for decks (`@openpresentation/opf/markdown`, `opf from-md`, `opf to-md`)
 - [OPF as YAML](https://github.com/OpenPresentation/opf/blob/main/docs/yaml.md): the strict JSON-compatible YAML form of a deck (`@openpresentation/opf/yaml`, `opf from-yaml`, `opf to-yaml`, `.opf.yaml` in every command); JSON stays canonical
 - [Release process](https://github.com/OpenPresentation/opf/blob/main/docs/release-process.md): maintainer runbook for npm releases, trusted publishing, verification, and GitHub release notes

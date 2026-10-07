@@ -133,13 +133,13 @@ The `code` role resolves per key like every other override:
 2. `code` on the resolved font-scheme record (the `consolas` and `courier-new` records carry `"Consolas"` and `"Courier New"`);
 3. otherwise **Roboto Mono**, the documented fallback that `@openpresentation/opf-render` bundles.
 
-The heading and body families are never reused as the code fallback, so choosing `aptos` still gives Roboto Mono code unless the deck sets `code`. `resolveFontFamilies()` in `@openpresentation/opf` applies these rules for all engines.
+The heading and body families are never reused as the code fallback, so choosing `aptos` still gives Roboto Mono code unless the deck sets `code`. `resolveFontFamilies()` in `@openpresentation/opf/composition` applies these rules for all engines.
 
 ### Engine default font scheme
 
 The last-resort font scheme applies only when neither the slide, the deck nor the resolved theme names one. Every bundled theme names a font scheme (`minimal` uses `aptos`), and engines default the theme to `minimal`, so a document with no `design` gets `aptos` in every engine.
 
-Every engine shares one last resort, `aptos`, so a custom theme without `fontScheme` is measured, paginated, previewed and exported in the same fonts. `@openpresentation/opf` exports it as `DEFAULT_FONT_SCHEME` (`resolveScriptFonts()` uses it too), and [`engine-defaults.json`](../spec/reference/engine-defaults.json) records it as `fontScheme.pptx.latin`:
+Every engine shares one last resort, `aptos`, so a custom theme without `fontScheme` is measured, paginated, previewed and exported in the same fonts. `@openpresentation/opf/composition` exports it as `DEFAULT_FONT_SCHEME` (`resolveScriptFonts()` uses it too), and [`engine-defaults.json`](../spec/reference/engine-defaults.json) records it as `fontScheme.pptx.latin`:
 
 | Engine | Last resort | Where |
 | --- | --- | --- |
@@ -159,6 +159,16 @@ Aptos is not openly licensed, so no OPF package bundles it. Previews take the sa
 
 Until FF-35 (font-fidelity-everywhere), core pagination, opf-render and opf-editor fell back to `roboto` while opf-pptx used `aptos`, so such a deck was measured in Roboto but exported with Aptos. None of the 126 bundled examples reaches the last resort: all 805 renderer golden rasters and all 126 exported PPTX files are byte-identical before and after the change. `packages/javascript/test/font-scheme-defaults.test.mjs` checks the shared default in core pagination, and each sibling repository has a parity test.
 
+### Unknown layout, theme and colour scheme
+
+The same rule holds for the other catalog references, and no engine throws for them:
+
+- **Layout.** A slide with no `layout`, or with an id that no inline record, host catalog or default catalog defines, is composed with **no layout record**: title, subtitle, tag and content are arranged automatically, a slide with no body payload is a cover (the title block vertically centred) and the design hints apply. An engine must not substitute a different layout for an omitted one. An unknown id reports `unresolved-layout` (and `validate` a `catalog-reference` warning).
+- **Theme.** An unknown theme id uses the `minimal` record and reports `unresolved-theme`. An object reference with fields of its own is an inline record and reports nothing; an object with an `id` is laid over that id's record, and an object without an `id` over the default record (`minimal` for a theme, `cool-horizon` for a colour scheme), so a partial inline scheme keeps the slots it does not name.
+- **Colour scheme.** An unknown colour scheme id uses `cool-horizon` and reports `unresolved-color-scheme`; the theme's own colour scheme counts as the reference when the deck and slide name none.
+
+Both diagnostics are `{ code, path, id, fallback, message }` with `path` where the id is written (`slides.N.layout`, `slides.N.design.theme`, `design.colorScheme`, ...). `resolveSlideContext` reports them, and it also returns `darkBackground` (the preview's decision: the one colour the background names, resolved through the colour scheme and the deck's `variables` so `var:brand`, a scheme slot or `primary`/`secondary`/`accent` work, has a WCAG relative luminance below 0.179; a gradient counts as light, a picture reads `light1`, a pattern its `backgroundColor`; no opacity is applied), which `composeSlide` uses to pick logo variants. Core pagination continues with the fallbacks and passes each diagnostic to `onDiagnostic`.
+
 ### Unknown font scheme
 
 A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-such-scheme"`, `{ "id": "no-such-scheme", ... }`, or a theme record that names one) is handled the same way in every engine. The document still validates, because an id may name a record from a catalog the engine has not loaded:
@@ -167,11 +177,11 @@ A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-su
 2. The engine reports one `unresolved-font-scheme` diagnostic: `{ code, path, id, fallback: "aptos", message }`. `path` is where the id is written: `slides.N.design.fontScheme`, `design.fontScheme`, or the `slides.N.design.theme` / `design.theme` reference whose record names it.
 3. An object without `id` is an inline scheme on the same base and reports nothing.
 
-`resolveFontSchemeReference(reference, lookup, path)` in `@openpresentation/opf` implements this rule. `resolveFontFamilies()` also falls back to the default scheme's families (Aptos Display, Aptos) when a scheme names no heading or body family, instead of Roboto. Authoring-time `lintPresentation()` already warns about the unknown id (`opf/catalog-reference`).
+`resolveFontSchemeReference(reference, lookup, path)` in `@openpresentation/opf/composition` implements this rule, and `resolveSlideContext(presentation, index, { fonts })` (package root) applies it, with the slide, deck and theme precedence above, for core pagination and the layout checks: it returns the `ComposeSlideOptions` for one slide (canvas, layout, families as `fontFamilies`, alignment, measurement) plus an `unresolved-font-scheme` diagnostic. Hosts that compose a slide call it instead of repeating the chain. `resolveFontFamilies()` also falls back to the default scheme's families (Aptos Display, Aptos) when a scheme names no heading or body family, instead of Roboto. Authoring-time `validate()` already warns about the unknown id (`opf/catalog-reference`).
 
 | Engine | Diagnostic channel | Reported |
 | --- | --- | --- |
-| Core pagination | `paginatePresentation(..., { onDiagnostic })` | once per path per call |
+| Core pagination | `paginate(..., { onDiagnostic })` | once per path per call |
 | opf-render preview | `renderSvg` / `renderSvgDeck` `onDiagnostic` | once per path per rendered slide |
 | opf-editor | `session.composeSlide` / `paginateSlide` `onDiagnostic` option | once per call |
 | opf-pptx export | `toPptx(..., { onDiagnostic })` | once per path per export |
@@ -180,7 +190,7 @@ Before FF-35b, core pagination and opf-editor measured such decks in Roboto and 
 
 ### Sibling agreement checks
 
-opf-render, opf-editor and opf-pptx run the same unknown-scheme cases as core (`test/default-font-scheme.mjs`). Each package keeps a local copy of the default, and in opf-editor of the resolver. Their checks against core's `DEFAULT_FONT_SCHEME`, `resolveFontSchemeReference` and `paginatePresentation` run only when the installed core exports them. Those checks are skipped today: the siblings install the published `@openpresentation/opf` 0.11.0, which predates FF-35. They activate in either of two ways:
+opf-render, opf-editor and opf-pptx run the same unknown-scheme cases as core (`test/default-font-scheme.mjs`). Each package keeps a local copy of the default, and in opf-editor of the resolver. Their checks against core's `DEFAULT_FONT_SCHEME`, `resolveFontSchemeReference` and `paginate` run only when the installed core exports them. Those checks are skipped today: the siblings install the published `@openpresentation/opf` 0.11.0, which predates FF-35. They activate in either of two ways:
 
 - **Sibling CI:** after a core release that includes FF-35 and FF-35b is published, and each sibling's `@openpresentation/opf` dependency and lockfile move to it. After that release, the local copies can import core directly.
 - **Core ecosystem CI** (`.github/workflows/ecosystem-ci.yml`), which links this checkout's core into pinned sibling commits and runs their `npm test`: after those pins move to sibling commits that contain the FF-35 and FF-35b tests (the program's sibling pin bump).
@@ -199,7 +209,7 @@ Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.c
 ```
 
 - **Slot names** (`accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`) read the named slot from the *effective* color scheme — the one produced by the slide → deck → theme → engine-default precedence at the top of this page. A slide-level `design.colorScheme` override therefore recolors that slide's named runs too.
-- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through one shared definition, `resolveColorRoles()`, which the opf-render preview, the PPTX export and `auditPresentation` all call, so the same deck draws the same colors in each. A role defined on the effective scheme wins; otherwise it defaults from a slot:
+- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through one shared definition, `resolveColorRoles()`, which the opf-render preview, the PPTX export and `validate` all call, so the same deck draws the same colors in each. A role defined on the effective scheme wins; otherwise it defaults from a slot:
 
   | Role | Default |
   | --- | --- |
@@ -221,7 +231,7 @@ The colors of a solid background (`SolidBackground.color`), of each gradient sto
 
 > **Decision, 2026-09-30 (agent decision, vetoable).** The spec coverage audit found that `SolidBackground.color` accepted `var:` and slot names (the field is a string) but both engines painted white, while [`content-item-design-overrides.md`](./content-item-design-overrides.md) already states that every color field must accept the ColorRef forms and never hex alone. Rather than tighten the schema (which would break documents that validate today), the engines resolve ColorRefs in backgrounds. The owner can veto this by restricting the three background color fields to `HexColor` in the schema and the engines to hex only.
 
-`@openpresentation/opf` exports `resolveColorRef()` with the shared slot, role, variable, and hex rules above so renderers and exporters do not drift. Pass the effective color scheme, optional resolved role colors, the deck `variables` map, and a theme-text `fallback` for unrecognized references.
+`@openpresentation/opf/composition` exports `resolveColorRef()` with the shared slot, role, variable, and hex rules above so renderers and exporters do not drift. Pass the effective color scheme, optional resolved role colors, the deck `variables` map, and a theme-text `fallback` for unrecognized references.
 
 ## Script fonts and language
 
@@ -243,7 +253,7 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 - A language sets `lang`, the text direction and the script slots, and never the Latin scheme: only `design.fontScheme` (slide, then deck, then theme, then the shared default `aptos`) sets the latin fonts, and a language record's `fontScheme` is a default for its own script slot, not a deck font. The PPTX theme's `a:ea` and `a:cs` are written only for a slot a script font is selected for (the scheme's explicit slot or the language's script font) and stay empty otherwise, as in Office's own themes. See [Language contract](./programs/font-fidelity-everywhere/script-font-model.md#language-contract-ff-50-model-c) and [Theme slots](./programs/font-fidelity-everywhere/script-font-model.md#theme-slots-ff-49).
 - A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Meiryo (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
 
-`@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`) and `normalizeLanguageFamily(value)` (which reads `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
+`@openpresentation/opf/composition` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`), and the package root exports `normalizeLanguageFamily(value)` (which reads a font scheme's `languageFamily`, `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
 
 ## Brand assets and layout hints
 
@@ -255,7 +265,7 @@ A layout record (`opf-layout/v1`) holds what it contains in `placeholders` and h
 
 - `layoutContent(record)` (exported from `@openpresentation/opf`) derives `{ kind, count, heading: { title, subtitle, tag } }` from the placeholders. `kind` is the most frequent body placeholder kind (a tie goes to the first in placeholder order), or `title` when there is none; `count` is the number of body placeholders. Nothing derived is stored on the record.
 - `design` uses the keys and lowercase values of the deck's and a slide's `design`: `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet` and `slideImage: { position }`. An absent key means the layout has no opinion. `pnpm check:spec` verifies that the layout schema's `DesignHints` and `Design` agree.
-- **One merge, per key, the slide winning:** the slide's `design`, then the deck's `design`, then the slide's layout record `design`, then the engine default. This holds for `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill` and `listBullet`, so a slide overrides exactly what its layout sets, by the same name, and a layout value nobody overrides is honored without copying it anywhere. `resolveDesignHints({ slide, layout, presentation, slideIndex })` (exported from `@openpresentation/opf`) is the one place that computes it; it also reports which level supplied each key. `composeSlide()` returns the result as `SlideComposition.design`, and the renderer, the PPTX exporter, pagination and the audit take `titleAlignment`, `contentAlignment`, `contentBox`, `imageFill` and `listBullet` from there instead of re-deriving them. A value the schema does not allow for its key is skipped, so the next level answers.
+- **One merge, per key, the slide winning:** the slide's `design`, then the deck's `design`, then the slide's layout record `design`, then the engine default. This holds for `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill` and `listBullet`, so a slide overrides exactly what its layout sets, by the same name, and a layout value nobody overrides is honored without copying it anywhere. `resolveDesignHints({ slide, layout, presentation, slideIndex })` (exported from `@openpresentation/opf/composition`) is the one place that computes it; it also reports which level supplied each key. `composeSlide()` returns the result as `SlideComposition.design`, and the renderer, the PPTX exporter, pagination and `validate` take `titleAlignment`, `contentAlignment`, `contentBox`, `imageFill` and `listBullet` from there instead of re-deriving them. A value the schema does not allow for its key is skipped, so the next level answers.
 - The layout's `composition.mode` still ranks above the design hint: `contentDirection` acts below it (see the decision below), and a layout's own `composition` columns and weights are overridden only by an effective `chartPrimary`.
 - `slideImage.position` is not a per-key merge: a layout whose record sets `slideImage` is what lets a deck-wide `design.slideImage` apply, and its `position` is the fallback when the slide's or the deck's value gives none.
 - Hosts no longer need to copy a layout's `design` into the deck or a slide. The pptx.gallery example builder and the editor's layout apply still do, which is harmless: a copied value is a deck or slide value and ranks above the record.

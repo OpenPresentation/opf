@@ -1,6 +1,6 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {renderSvg} from '../../opf-render/src/svg.js';
+import {renderSlideSvg} from '../../opf-render/src/svg.js';
 const host=document.querySelector('#canvas'),out=document.querySelector('#results');let count=0;
 const check=(value,message)=>{if(!value)throw new Error(message);count++;out.textContent+=`PASS ${message}\n`;};
 const original={name:'Block moves',slides:[{title:'Arrange complete content blocks',notes:'Keep notes',composition:{mode:'row',weights:[2,1,1]},blocks:[{text:[{text:'A: Keep all formatting.',bold:true}]},{composition:{mode:'column'},blocks:[{text:'B: A nested point.'},{text:'C: Another point.'}]},{text:'D: Supporting context.'}]}]};
@@ -14,12 +14,12 @@ try{
  handle('/slides/0/blocks/0').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
  check(editor.get('slides.0.blocks.1.text.0.bold')===true,'keyboard move carries rich formatting');
  check(commits===1&&editor.get('slides.0.notes')==='Keep notes','keyboard move is one transaction and preserves notes');editor.undo();
- check(JSON.stringify(editor.document)===JSON.stringify(original)&&!editor.canUndo,'undo restores exact block order and structure');
+ check(JSON.stringify(editor.presentation)===JSON.stringify(original)&&!editor.canUndo,'undo restores exact block order and structure');
  canvas.openBlockMenu('slides.0.blocks.0');check(!!host.querySelector('[role=dialog]'),'programmatic menu accepts OPF paths');button('Later').click();check(Array.isArray(editor.get('slides.0.blocks.0.blocks')),'Later reorders the whole group and block');editor.undo();
  handle('/slides/0/blocks/0').click();change('Move destination','/slides/0/blocks/1');change('Move position','1');button('Move').click();
  check(editor.get('slides.0.blocks.0.blocks.1.text.0.bold')===true,'move menu inserts into a group after index shifts');
  check(editor.get('slides.0.composition.weights.0')===2,'track weights stay with positions');
- const expected=document.createElement('div');expected.innerHTML=renderSvg(editor.document);
+ const expected=document.createElement('div');expected.innerHTML=renderSlideSvg(editor.presentation,0);
  const glyphs=node=>[...node.querySelectorAll('text')].map(n=>[n.textContent,n.getAttribute('x'),n.getAttribute('y'),n.getAttribute('font-size')]);
  check(JSON.stringify(glyphs(host))===JSON.stringify(glyphs(expected)),'moved slide matches standalone renderer geometry');editor.undo();
  handle('/slides/0/blocks/1').click();check(![...host.querySelector('[aria-label="Move destination"]').options].some(o=>o.value==='/slides/0/blocks/1'),'group cannot be selected as its own destination');button('Cancel').click();
@@ -29,8 +29,8 @@ try{
  canvas.beginEdit('slides.0.blocks.2.text');check(!host.querySelector('[data-block-path]'),'inline editing hides move handles');canvas.cancel();
  canvas.setLayoutEditing(false);check(!host.querySelector('[data-block-path]'),'leaving Arrange hides block controls');canvas.setLayoutEditing(true);
  const strict={slides:[{composition:{mode:'row',weights:[4,1],overflow:'error'},blocks:[{text:'Evidence remains complete. '.repeat(40)},{text:'Short'}]}]};
- editor.applyPatch([{op:'replace',path:'',value:strict}]);const beforeStrict=JSON.stringify(editor.document);
- handle('/slides/0/blocks/0').click();button('Later').click();check(JSON.stringify(editor.document)===beforeStrict,'move into a strict overflowing slot is rejected before commit');check(errors.length===1,'strict move failure is reported');errors=[];
+ editor.applyPatch([{op:'replace',path:'',value:strict}]);const beforeStrict=JSON.stringify(editor.presentation);
+ handle('/slides/0/blocks/0').click();button('Later').click();check(JSON.stringify(editor.presentation)===beforeStrict,'move into a strict overflowing slot is rejected before commit');check(errors.length===1,'strict move failure is reported');errors=[];
  check(errors.length===0,'valid block interactions produce no errors');
  canvas.destroy();check(!host.children.length,'destroy disposes block controls and listeners');
  out.textContent+=`\n${count} checks passed\n`;document.title=`PASS ${count} block checks`;
@@ -40,5 +40,5 @@ const simple={slides:[{title:'Drag a handle to reorder',composition:{mode:'row'}
 const demoEditor=createEditorSession(simple,{rejectInvalid:true});let moves=0;
 const demo=createCanvasEditor(host,{editor:demoEditor,layoutEditing:true,onCommit:()=>moves++,onError:error=>{document.querySelector('#drag-status').textContent='FAIL '+error.message;}});
 document.querySelector('#verify').onclick=()=>{
- try{check(demoEditor.get('slides.0.blocks.2.text')==='First: Recommendation','trusted drag changes block order');check(moves===1,'trusted drag creates one committed edit');demoEditor.undo();check(JSON.stringify(demoEditor.document)===JSON.stringify(simple)&&!demoEditor.canUndo,'trusted drag undo restores the source deck');document.querySelector('#drag-status').textContent='PASS trusted block drag';}catch(error){document.querySelector('#drag-status').textContent='FAIL '+error.message;}
+ try{check(demoEditor.get('slides.0.blocks.2.text')==='First: Recommendation','trusted drag changes block order');check(moves===1,'trusted drag creates one committed edit');demoEditor.undo();check(JSON.stringify(demoEditor.presentation)===JSON.stringify(simple)&&!demoEditor.canUndo,'trusted drag undo restores the source deck');document.querySelector('#drag-status').textContent='PASS trusted block drag';}catch(error){document.querySelector('#drag-status').textContent='FAIL '+error.message;}
 };

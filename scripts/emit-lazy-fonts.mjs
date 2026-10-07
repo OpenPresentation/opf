@@ -5,7 +5,7 @@
 // every editor and gallery visitor does not download them. A host copies their package directories next to the page, at the
 // same package-relative paths (`fonts/intos/...`, `fonts/open/...`), and the browser loader fetches them on demand, verified
 // against the sha256 the renderer's manifest pins, when a document's font families need them:
-//   loadBrowserFontRegistry(eagerFaces, {lazyFontsBaseUrl: './'}) then `await registry.ensureLazyFonts(presentation)`.
+//   loadFonts({faces: eagerFaces, lazyFontsBaseUrl: './'}) from fonts-browser, then `await fonts.ensure(presentation)`.
 // The committed half is `lazy-fonts.json` (gallery-lazy-fonts.mjs): the pinned manifest, no bytes. This local copy of the files is
 // for the editor demo served from artifacts/editor; the gallery copies the faces from the pinned renderer package at build time.
 import { createHash } from "node:crypto";

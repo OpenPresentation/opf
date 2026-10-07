@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import {
-  PatchError,
-  PatchValidationError,
+  OPFPatchError,
+  OPFPatchValidationError,
   applyPatch,
   applyPatchWithInverse,
   formatPointer,
@@ -103,7 +103,7 @@ describe("RFC 6902 conformance", () => {
   for (const [name, document, patch, code] of failures) {
     test(`rejects: ${name}`, () => {
       const before = structuredClone(document);
-      assert.throws(() => applyPatch(document, patch), error => error instanceof PatchError && error.code === code, `expected ${code}`);
+      assert.throws(() => applyPatch(document, patch), error => error instanceof OPFPatchError && error.code === code, `expected ${code}`);
       assert.deepEqual(document, before);
     });
   }
@@ -151,7 +151,7 @@ describe("object safety", () => {
     const patch = [{ op: "add", path: "/v", value: { x: 1 } }];
     const applied = applyPatchWithInverse({}, patch);
     patch[0].value.x = 2;
-    assert.deepEqual(applied.document.v, { x: 1 });
+    assert.deepEqual(applied.presentation.v, { x: 1 });
     assert.deepEqual(applied.patch[0].value, { x: 1 });
   });
 });
@@ -161,15 +161,22 @@ describe("optional schema validation", () => {
   test("accepts a valid result and reports it", () => {
     const result = applyPatchWithInverse(deck, [{ op: "replace", path: "/slides/0/title", value: "B" }], { validate: true });
     assert.equal(result.validation.valid, true);
-    assert.equal(result.document.slides[0].title, "B");
+    assert.equal(result.presentation.slides[0].title, "B");
   });
   test("rejects an invalid result without returning a document", () => {
-    assert.throws(() => applyPatch(deck, [{ op: "replace", path: "/slides", value: "bad" }], { validate: true }), error => error instanceof PatchValidationError && error.code === "patch-invalid-document" && error.validation.valid === false);
+    assert.throws(() => applyPatch(deck, [{ op: "replace", path: "/slides", value: "bad" }], { validate: true }), error => error instanceof OPFPatchValidationError && error.code === "patch-invalid-document" && error.validation.valid === false);
     assert.deepEqual(deck.slides, [{ id: "a", title: "A" }]);
   });
   test("a custom validator and strict mode", () => {
-    assert.throws(() => applyPatch(deck, [], { validate: () => ({ valid: true, warnings: [{ message: "w" }] }), strict: true }), error => error instanceof PatchValidationError);
-    assert.doesNotThrow(() => applyPatch(deck, [], { validate: () => ({ valid: true, warnings: [{ message: "w" }] }) }));
+    const warning = { ruleId: "test/warning", severity: "warning", category: "format", path: "", message: "w" };
+    assert.throws(() => applyPatch(deck, [], { validate: () => ({ valid: true, findings: [warning] }), strict: true }), error => error instanceof OPFPatchValidationError);
+    assert.doesNotThrow(() => applyPatch(deck, [], { validate: () => ({ valid: true, findings: [warning] }) }));
+  });
+  test("the built-in check is validate: the format rules, plus the references rules in strict mode", () => {
+    const unknownTheme = { ...deck, design: { theme: "no-such-theme" } };
+    assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.valid, true);
+    assert.equal(applyPatchWithInverse(unknownTheme, [], { validate: true }).validation.findings.length, 0, "a catalog warning is not part of the format check");
+    assert.throws(() => applyPatch(unknownTheme, [], { validate: true, strict: true }), error => error instanceof OPFPatchValidationError && error.validation.findings.some(entry => entry.ruleId === "opf/catalog-reference"));
   });
   test("intermediate invalid states are allowed when the result is valid", () => {
     const patch = [{ op: "replace", path: "/slides", value: "bad" }, { op: "replace", path: "/slides", value: [{ id: "z" }] }];
@@ -277,7 +284,7 @@ describe("inverse patches", () => {
         const operation = candidates[rand(candidates.length)];
         try { doc = applyPatch(doc, [operation]); applied.push(operation); } catch { /* an invalid random operation is skipped */ }
       }
-      const { document: after, inverse } = applyPatchWithInverse(original, applied);
+      const { presentation: after, inverse } = applyPatchWithInverse(original, applied);
       assert.deepEqual(after, doc);
       assert.deepEqual(applyPatch(after, inverse), original, JSON.stringify(applied));
     }

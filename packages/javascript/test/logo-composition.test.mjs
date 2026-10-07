@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide, layoutFurniture, resolveLogo} from '../dist/composition.js';
-import {resolveLogo as rootResolveLogo} from '../dist/index.js';
-import {OPFPaginationError, paginatePresentation, paginateSlide} from '../dist/pagination.js';
+import { resolveLogo as rootResolveLogo } from '../dist/composition.js';
+import {OPFPaginationError, paginate, paginateSlide} from '../dist/pagination.js';
 
 // Logos: resolveLogo precedence and variant chains, the cover logo box, furniture logo parts and
 // picture bullets (spec-gap closure A1 and A5). Decisions are recorded in docs/design-resolution.md.
@@ -246,7 +246,7 @@ test('pagination ignores the picture-bullet notice: it neither splits nor reject
   for (const page of split.slides) assert.deepEqual(composeSlide(page, {presentation: noLogo}).diagnostics.map(d => d.code), ['unresolved-content']);
   // With a logo the pages carry picture bullets and no diagnostic.
   const withLogo = {design: {listBullet: 'image', logo: asset('deck')}, slides: [long]};
-  const pages = paginatePresentation(withLogo);
+  const pages = paginate(withLogo);
   assert.ok(pages.presentation.slides.length > 1);
   for (const [index, page] of pages.presentation.slides.entries()) {
     const result = composeSlide(page, {presentation: withLogo, slideIndex: index});

@@ -6,7 +6,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { after, describe, test } from "node:test";
 
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
+
+const formatValid = (value) => validate(value, { only: ["format"] }).valid;
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const CLI_BIN = process.env.OPF_TEST_BIN ?? path.resolve(here, "../dist/index.js");
@@ -50,7 +52,7 @@ describe("opf from-yaml", () => {
     assert.equal(result.status, 0, result.stderr);
     const document = JSON.parse(result.stdout);
     assert.deepEqual(document, deck);
-    assert.equal(validatePresentation(document).valid, true);
+    assert.equal(formatValid(document), true);
     const summary = JSON.parse(result.stderr);
     assert.equal(summary.valid, true);
     assert.equal(summary.slides, 2);
@@ -78,11 +80,11 @@ describe("opf from-yaml", () => {
     assert.equal(dialect.stdout, "");
     const error = JSON.parse(dialect.stderr);
     assert.equal(error.error, "YAML conversion failed.");
-    assert.equal(error.yaml.diagnostics[0].ruleId, "yaml/duplicate-key");
-    assert.deepEqual([error.yaml.diagnostics[0].location.line, error.yaml.diagnostics[0].location.column], [2, 1]);
+    assert.equal(error.yaml.findings[0].ruleId, "yaml/duplicate-key");
+    assert.deepEqual([error.yaml.findings[0].location.line, error.yaml.findings[0].location.column], [2, 1]);
     const opf = run(["from-yaml", "-", output], "name: x\nslides:\n  - title: 5\n");
     assert.equal(opf.status, 1);
-    const found = JSON.parse(opf.stderr).yaml.diagnostics[0];
+    const found = JSON.parse(opf.stderr).yaml.findings[0];
     assert.match(found.ruleId, /^opf\//);
     assert.deepEqual([found.location.line, found.location.column], [3, 12]);
     assert.equal(existsSync(output), false);
@@ -92,17 +94,18 @@ describe("opf from-yaml", () => {
     const aliased = "name: Shared\nslides:\n  - title: One\n    extensions:\n      a: &a {owner: ops}\n      b: *a\n";
     const refused = run(["from-yaml", "-"], aliased);
     assert.equal(refused.status, 1);
-    assert.equal(JSON.parse(refused.stderr).yaml.diagnostics[0].ruleId, "yaml/alias");
-    assert.match(JSON.parse(refused.stderr).yaml.diagnostics[0].help, /aliases: true/);
+    assert.equal(JSON.parse(refused.stderr).yaml.findings[0].ruleId, "yaml/alias");
+    assert.match(JSON.parse(refused.stderr).yaml.findings[0].help, /aliases: true/);
     const accepted = run(["from-yaml", "-", "--aliases"], aliased);
     assert.equal(accepted.status, 0, accepted.stderr);
     assert.deepEqual(JSON.parse(accepted.stdout).slides[0].extensions, { a: { owner: "ops" }, b: { owner: "ops" } });
   });
 
-  test("--strict fails on a warning", () => {
-    const warning = "slides:\n  - title: Lint target\n    layout: pratner\n";
+  test("--fail-on warning fails on a warning", () => {
+    const warning = "slides:\n  - title: Validate target\n    layout: pratner\n";
     assert.equal(run(["from-yaml", "-"], warning).status, 0);
-    assert.equal(run(["from-yaml", "-", "--strict"], warning).status, 1);
+    assert.equal(run(["from-yaml", "-", "--fail-on", "warning"], warning).status, 1);
+    assert.equal(run(["from-yaml", "-", "--strict"], warning).status, 2, "--strict is gone");
   });
 
   test("usage errors exit 2", () => {
@@ -167,9 +170,9 @@ describe("decks read from YAML by every command", () => {
     write("deck.txt", deckYaml);
     assert.equal(run(["validate", "deck.opf.yaml"]).status, 0);
     assert.equal(run(["validate", "deck.yml"]).status, 0);
-    assert.equal(run(["validate", "deck.txt"]).status, 2, "an unknown name is JSON by default");
+    assert.equal(run(["validate", "deck.txt"]).status, 1, "an unknown name is JSON by default, and YAML is not valid JSON");
     assert.equal(run(["validate", "deck.txt", "--input-format", "yaml"]).status, 0);
-    assert.equal(run(["validate", "-"], deckYaml).status, 2);
+    assert.equal(run(["validate", "-"], deckYaml).status, 1);
     assert.equal(run(["validate", "-", "--input-format", "yaml"], deckYaml).status, 0);
     assert.equal(run(["--input-format", "yaml", "validate", "-"], deckYaml).status, 0);
     assert.equal(run(["validate", "-", "--input-format", "json"], JSON.stringify(deck)).status, 0);
@@ -180,24 +183,32 @@ describe("decks read from YAML by every command", () => {
     assert.equal(JSON.parse(result.stdout).sha256, run(["validate", "-", "--input-format", "yaml"], deckYaml).stdout.match(/"sha256": "(\w+)"/)[1]);
   });
 
-  test("a YAML syntax error exits 2 with the line and column in the message", () => {
+  test("a YAML syntax error exits 2 with the line and column in the message; validate reports it as a finding", () => {
     write("bad.opf.yaml", "name: x\nslides:\n  - title: a\n  - title: b\n    title: c\n");
-    for (const args of [["validate"], ["format", "--check"], ["to-md"], ["paginate"], ["bundle"]]) {
+    const checked = run(["validate", "bad.opf.yaml"]);
+    assert.equal(checked.status, 1, checked.stderr);
+    const report = JSON.parse(checked.stdout);
+    assert.equal(report.valid, false);
+    assert.equal(report.schemaValid, null);
+    assert.equal(report.findings[0].ruleId, "yaml/duplicate-key");
+    assert.equal(report.findings[0].category, "format");
+    assert.deepEqual([report.findings[0].location.line, report.findings[0].location.column], [5, 5]);
+    for (const args of [["format", "--check"], ["to-md"], ["paginate"], ["bundle"]]) {
       const extra = args[0] === "paginate" || args[0] === "bundle" ? ["bad.opf.yaml", "out.opf.json"] : ["bad.opf.yaml"];
       const result = run([args[0], ...extra, ...args.slice(1)]);
       assert.equal(result.status, 2, `${args[0]}: ${result.stderr}`);
       const error = JSON.parse(result.stderr);
       assert.match(error.error, /^Invalid YAML in bad\.opf\.yaml at line 5, column 5: /, args[0]);
-      assert.equal(error.yaml.diagnostics[0].ruleId, "yaml/duplicate-key");
+      assert.equal(error.yaml.findings[0].ruleId, "yaml/duplicate-key");
     }
     assert.equal(existsSync(path.join(temp, "out.opf.json")), false);
-    const stdin = run(["validate", "-", "--input-format", "yaml"], "a: [");
+    const stdin = run(["to-md", "-", "--input-format", "yaml"], "a: [");
     assert.equal(stdin.status, 2);
     assert.match(JSON.parse(stdin.stderr).error, /^Invalid YAML in stdin at line \d+, column \d+: /);
     for (const [text, rule] of [["- a\n", "yaml/not-mapping"], ["", "yaml/empty"], ["a: 1\n---\nb: 2\n", "yaml/multiple-documents"], ["a: &x 1\nb: *x\n", "yaml/alias"], ["a: !x 1\n", "yaml/tag"], ["a: .nan\n", "yaml/number"]]) {
       const result = run(["validate", "-", "--input-format", "yaml"], text);
-      assert.equal(result.status, 2, text);
-      assert.equal(JSON.parse(result.stderr).yaml.diagnostics[0].ruleId, rule, text);
+      assert.equal(result.status, 1, text);
+      assert.equal(JSON.parse(result.stdout).findings[0].ruleId, rule, text);
     }
   });
 
@@ -216,35 +227,28 @@ describe("decks read from YAML by every command", () => {
     assert.equal(run(["create", "-", "--format", "json"]).stdout.trimStart()[0], "{");
   });
 
-  test("lint locates its findings in the YAML", () => {
-    write("lint.opf.yaml", "name: Lint\nslides:\n  - title: Target\n    layout: pratner\n");
-    const linted = run(["lint", "lint.opf.yaml"]);
-    assert.equal(linted.status, 0, linted.stderr);
-    const result = JSON.parse(linted.stdout);
+  test("validate locates its findings in the YAML", () => {
+    write("check.opf.yaml", "name: Check\nslides:\n  - title: Target\n    layout: pratner\n");
+    const checked = run(["validate", "check.opf.yaml", "--only", "references"]);
+    assert.equal(checked.status, 0, checked.stderr);
+    const result = JSON.parse(checked.stdout);
     assert.equal(result.valid, true);
     assert.equal(result.counts.warning, 1);
-    assert.deepEqual([result.diagnostics[0].location.line, result.diagnostics[0].location.column], [4, 13]);
-    assert.equal(run(["lint", "lint.opf.yaml", "--strict"]).status, 1);
-    const broken = run(["lint", "-", "--input-format", "yaml"], "name: x\nname: y\n");
+    assert.equal(result.findings[0].ruleId, "opf/catalog-reference");
+    assert.deepEqual([result.findings[0].location.line, result.findings[0].location.column], [4, 13]);
+    assert.equal(run(["validate", "check.opf.yaml", "--only", "references", "--fail-on", "warning"]).status, 1);
+    const broken = run(["validate", "-", "--input-format", "yaml"], "name: x\nname: y\n");
     assert.equal(broken.status, 1);
-    assert.equal(JSON.parse(broken.stdout).diagnostics[0].ruleId, "yaml/duplicate-key");
+    assert.equal(JSON.parse(broken.stdout).findings[0].ruleId, "yaml/duplicate-key");
     assert.equal(JSON.parse(broken.stdout).schemaValid, null);
-    const config = write("lint-config.json", JSON.stringify({ contracts: [{ path: "/slides/0/layout", allowedValues: ["title"] }] }));
-    assert.equal(run(["lint", "lint.opf.yaml", "--config", config]).status, 1, "a JSON config applies to a YAML deck");
-  });
-
-  test("audit reports its findings at YAML lines", () => {
-    write("audit.opf.yaml", "name: Audit\nslides:\n  - title: Picture\n    image:\n      src: https://example.com/a.png\n");
-    const audited = run(["audit", "audit.opf.yaml", "--json"]);
-    const result = JSON.parse(audited.stdout);
-    assert.ok(result.diagnostics.length > 0, audited.stderr);
-    for (const diagnostic of result.diagnostics) assert.ok(diagnostic.location, diagnostic.ruleId);
-    const alt = result.diagnostics.find((d) => d.path.startsWith("/slides/0/image"));
+    const config = write("check-config.json", JSON.stringify({ contracts: [{ path: "/slides/0/layout", allowedValues: ["title"] }] }));
+    assert.equal(run(["validate", "check.opf.yaml", "--config", config]).status, 1, "a JSON config applies to a YAML deck");
+    write("picture.opf.yaml", "name: Picture\nslides:\n  - title: Picture\n    image:\n      src: https://example.com/a.png\n");
+    const full = JSON.parse(run(["validate", "picture.opf.yaml"]).stdout);
+    assert.ok(full.findings.length > 0);
+    for (const found of full.findings) assert.ok(found.location, found.ruleId);
+    const alt = full.findings.find((found) => found.path.startsWith("/slides/0/image"));
     assert.ok(alt && alt.location.line >= 4);
-    const broken = run(["audit", "-", "--json", "--input-format", "yaml"], "a: [");
-    assert.equal(broken.status, 1);
-    assert.equal(JSON.parse(broken.stdout).diagnostics[0].ruleId, "audit/invalid-document");
-    assert.match(JSON.parse(broken.stdout).diagnostics[0].message, /not valid YAML/);
   });
 
   test("edit applies a JSON patch or a YAML patch to a YAML deck and writes YAML in place, keeping the modeline", () => {
@@ -348,7 +352,7 @@ describe("decks read from YAML by every command", () => {
     const after = read("data-deck.opf.yaml");
     assert.match(after, /^# yaml-language-server: /);
     assert.match(after, /chart:/);
-    assert.equal(validatePresentation(JSON.parse(run(["from-yaml", "data-deck.opf.yaml"]).stdout)).valid, true);
+    assert.equal(formatValid(JSON.parse(run(["from-yaml", "data-deck.opf.yaml"]).stdout)), true);
     const toYaml = run(["import-data", "data.csv", "--as", "table", "--format", "yaml"]);
     assert.equal(toYaml.status, 0, toYaml.stderr);
     assert.match(toYaml.stdout, /^slides:\n {2}- id: data-1\n/);
@@ -398,7 +402,7 @@ describe("decks read from YAML by every command", () => {
     assert.equal(run(["to-md", "-", "--input-format", "yaml"], deckYaml).status, 0);
   });
 
-  test("render and export read a YAML deck and locate lint errors in it", () => {
+  test("render and export read a YAML deck and locate validation errors in it", () => {
     write("render.opf.yaml", "name: Render\nslides:\n  - id: s1\n    title: Hello\n    text: World\n");
     const rendered = run(["render", "render.opf.yaml", "--slides", "1", "--out", "-", "--format", "svg", "--svg-fonts", "none"]);
     if (rendered.status === 2 && /opf-render/.test(rendered.stderr)) return; // the optional renderer is not installed
@@ -407,7 +411,7 @@ describe("decks read from YAML by every command", () => {
     write("render-bad.opf.yaml", "name: Render\nslides:\n  - id: s1\n    title: 5\n");
     const bad = run(["render", "render-bad.opf.yaml", "--out", "-"]);
     assert.equal(bad.status, 1);
-    const found = JSON.parse(bad.stdout).diagnostics.find((d) => d.path === "/slides/0/title");
+    const found = JSON.parse(bad.stdout).findings.find((d) => d.path === "/slides/0/title");
     assert.deepEqual([found.location.line, found.location.column], [4, 12]);
   });
 });

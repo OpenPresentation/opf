@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { describe, test } from "node:test";
 
-import { SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_FAMILIES, fontPolicyFor, isSymbolEncodedFamily, mapSymbolText, symbolCodeForUnicode, symbolCodeOf, symbolFontEncodingFor, symbolUnicodeFor } from "../dist/index.js";
+import { fontPolicyFor } from "../dist/index.js"; import { SYMBOL_FONT_ENCODINGS, SYMBOL_FONT_FAMILIES, isSymbolEncodedFamily, mapSymbolText, symbolCodeForUnicode, symbolCodeOf, symbolFontEncodingFor, symbolUnicodeFor } from "../dist/symbol-font-encodings.js";
 import * as subpath from "../dist/symbol-font-encodings.js";
 
 // FF-45: one reversible, version-specific code-to-Unicode table per symbol-encoded family. Exhaustive: every code of

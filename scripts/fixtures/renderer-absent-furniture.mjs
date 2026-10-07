@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 const root=fileURLToPath(new URL('../',import.meta.url)),output=path.join(root,'outputs');
 await mkdir(output,{recursive:true});
 const require=createRequire(import.meta.url),hash=x=>createHash('sha256').update(x).digest('hex');
@@ -36,7 +36,7 @@ let groupDir;
 async function emit(label,source,extra={}){
  const before=structuredClone(source),issues=[],options={...fixed,...extra};
  await json(path.join(groupDir,label+'.source.json'),source);await json(path.join(groupDir,label+'.options.json'),options);
- const validation=validatePresentation(source);assert.equal(validation.valid,true,JSON.stringify(validation));
+ const validation=validate(source,{only:['format']});assert.equal(validation.valid,true,JSON.stringify(validation));
  let bytes;
  try {bytes=await toPptx(source,{...options,onDiagnostic:x=>issues.push(x)});} finally {
   await json(path.join(groupDir,label+'.export-diagnostics.json'),issues);
@@ -50,7 +50,7 @@ async function emit(label,source,extra={}){
 async function read(label,bytes){
  const issues=[],document=await fromPptx(bytes,{onDiagnostic:x=>issues.push(x)});
  await json(path.join(groupDir,label+'.imported.json'),document);await json(path.join(groupDir,label+'.import-diagnostics.json'),issues);
- assert.equal(validatePresentation(document).valid,true);return {document,issues};
+ assert.equal(validate(document,{only:['format']}).valid,true);return {document,issues};
 }
 const outcomes=[];
 async function group(id,name,run){

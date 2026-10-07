@@ -28,6 +28,8 @@ const verifyFontPreparation = !registry || rendererVersion?.[0] > 0 || rendererV
 const verifyEstimatedRichText = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 10;
 // Furniture shipped in the coordinated core 0.10.1 train; older plans stay testable.
 const verifyFurniture = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] > 10 || (coreVersion?.[1] === 10 && coreVersion?.[2] >= 1);
+// RR-55: the candidate packages are the 0.14 train (loadFonts handle, renderSvg for a deck, { fonts }, editor.presentation); the registry plan
+// still names the published 0.13 train, so each inline consumer below has a published variant and a candidate variant.
 const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
 async function readHarnessBytes(repo, file) {
@@ -175,7 +177,7 @@ if (!registry) {
   }
 }
 if (verifyFontPreparation) {
-  await writeFile(path.join(consumer,'check-font-preparation.mjs'), `
+  await writeFile(path.join(consumer,'check-font-preparation.mjs'), registry ? `
 import assert from 'node:assert/strict';
 import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
 const LAZY_FONT_COUNTS=${JSON.stringify(LAZY_FONT_COUNTS)};
@@ -211,6 +213,42 @@ assert.ok(expectedLazy&&expectedLazy.includes(registry.lazyFonts.length),'the la
 assert.equal(options.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,registry.lazyFonts.length);
 }
 console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
+` : `
+import assert from 'node:assert/strict';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+const LAZY_FONT_COUNTS=${JSON.stringify(LAZY_FONT_COUNTS)};
+import {renderSvg,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
+import {paginate} from '@openpresentation/opf/pagination';
+import {createEditorSession} from '@openpresentation/opf-editor';
+import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
+const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual'});const {registry}=fonts;
+assert.equal(fonts.loadSystemFonts,false);assert.equal(fonts.useBundledFonts,false);
+const {mkdir,readFile,writeFile}=await import('node:fs/promises');
+const {createHash}=await import('node:crypto');
+await mkdir('artifacts',{recursive:true});
+await writeFile('artifacts/font-preparation.json',JSON.stringify({systemFontDiscovery:false,bundledFallback:false,fonts:await Promise.all(fonts.fontFiles.map(async file=>({file,sha256:createHash('sha256').update(await readFile(file)).digest('hex')})))},null,2)+'\\n');
+const source={design:{fontScheme:'roboto'},slides:[{id:'fonts',title:'Prepared installed fonts',text:'A measured local document preserves its content.'}]};
+const original=JSON.stringify(source);
+const {presentation}=paginate(source,{fonts});
+const editor=createEditorSession(presentation);
+assert.deepEqual(editor.composeSlide(0,{fonts}),resolvePresentation(presentation,{fonts}).slides[0].geometry);
+editor.set('slides.0.title','Editable prepared fonts');editor.undo();
+assert.equal(editor.presentation.slides[0].title,source.slides[0].title);
+const svgs=renderSvg(editor.presentation,{fonts});
+assert.ok((await svgToPng(svgs[0],{fonts})).length>1000);
+const imported=await fromPptx(await toPptx(editor.presentation,{fonts}));
+assert.equal(imported.slides[0].title,source.slides[0].title);
+assert.equal(JSON.stringify(source),original);
+assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendored (embed used) faces are the lazy set: the open families and Intos
+if(registry.lazyFonts){// renderers that vendor Intos and the open families (after 0.10.0) list them here; the pinned earlier renderer has none
+// the vendored open and Intos faces, exact per renderer version (scripts/lazy-font-counts.mjs)
+const renderVersion=${JSON.stringify(renderSourceVersion)};// the renderer's own version (release plan, or the source version behind a preview tarball)
+const expectedLazy=LAZY_FONT_COUNTS[renderVersion];
+assert.ok(expectedLazy&&expectedLazy.includes(registry.lazyFonts.length),'the lazy face count of renderer '+renderVersion+' is '+registry.lazyFonts.length+'; expected '+(expectedLazy??['a recorded count']).join(' or '));
+// the four Noto Sans glyph-fallback faces (opf-render#57) are npm files, also embed used; every other embed-used face is a lazy one
+assert.equal(fonts.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,registry.lazyFonts.length);
+}
+console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.');
 `);
   run(process.execPath,['check-font-preparation.mjs']);
   if (verifyFurniture) {
@@ -240,13 +278,15 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
     const source=(await readHarness(repo,'test/font-variants.mjs'))
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
       .replaceAll("'../dist/fonts.js'","'@openpresentation/opf-render/fonts'")
+      // RR-55: the renderer keeps createFontRegistry in an internal module that is not an entry point; the installed file is read by path.
+      .replaceAll("'../dist/font-registry.js'","'./node_modules/@openpresentation/opf-render/dist/font-registry.js'")
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
       .replaceAll("new URL('../../opf-render/package.json',import.meta.url)","import.meta.resolve('@openpresentation/opf-render/package.json')");
     const file=repo+'-font-variants.mjs';
     await writeFile(path.join(consumer,file),source);
     run(process.execPath,[file,'artifacts/'+repo+'-font-variants.json']);
   }
-  await writeFile(path.join(consumer,'font-preparation-types.mts'), `
+  await writeFile(path.join(consumer,'font-preparation-types.mts'), registry ? `
 import {prepareNodeFonts,type PreparedNodeFonts,type BundledFontManifest} from '@openpresentation/opf-render/fonts-node';
 import {renderSvgDeck,svgToPng} from '@openpresentation/opf-render';
 import {paginatePresentation} from '@openpresentation/opf/pagination';
@@ -270,11 +310,35 @@ await toPptx(presentation,prepared.options);
 manifest.packages[0].faces[0].sha256='changed';
 // @ts-expect-error Unknown packs are not valid inputs.
 await prepareNodeFonts({pack:'unknown'});
+` : `
+import {loadFonts,type NodeFontsHandle,type BundledFontManifest} from '@openpresentation/opf-render/fonts-node';
+import {renderSvg,svgToPng} from '@openpresentation/opf-render';
+import {paginate} from '@openpresentation/opf/pagination';
+import {createEditorSession} from '@openpresentation/opf-editor';
+import {toPptx} from '@openpresentation/opf-pptx';
+import type {FontFaceSelection,TextStyle} from '@openpresentation/opf/composition';
+const fonts:NodeFontsHandle=await loadFonts({pack:'office',substitutionPolicy:'visual'});
+const manifest:BundledFontManifest=fonts.manifest;
+const physical:FontFaceSelection={family:'Roboto SemiBold',bold:false,italic:false};
+const measured:TextStyle=fonts.registry.textMeasurement.resolveStyle!({fontFamily:'Roboto',fontWeight:600,fontFace:physical});
+const selected:FontFaceSelection|undefined=measured.fontFace;
+void selected;
+// @ts-expect-error Native style flags must be booleans, independent of numeric CSS weights.
+const invalid:FontFaceSelection={family:'Roboto SemiBold',bold:600,italic:false};
+const {presentation}=paginate({slides:[{title:'Prepared type consumer'}]},{fonts});
+const editor=createEditorSession(presentation);
+editor.composeSlide(0,{fonts});
+await svgToPng(renderSvg(presentation,{fonts})[0],{fonts});
+await toPptx(presentation,{fonts});
+// @ts-expect-error The provenance catalog is immutable.
+manifest.packages[0].faces[0].sha256='changed';
+// @ts-expect-error Unknown packs are not valid inputs.
+await loadFonts({pack:'unknown'});
 `);
 }
 await writeFile(
   path.join(consumer, "check.mjs"),
-  `import assert from 'node:assert/strict';
+  registry ? `import assert from 'node:assert/strict';
 import {createDataContent} from '@openpresentation/opf/data';
 import {fitRichText,fitList} from '@openpresentation/opf/composition';
 import {parseTabularData} from '@openpresentation/opf-editor/data';
@@ -323,6 +387,56 @@ assert.equal(prepareOpfImport(editor.document,copied).document.slides.length,2);
 const gallery=await loadOpfGallery('https://gallery.example/registry.json',{fetch:async()=>new Response(JSON.stringify({items:[{name:'Example',opf:copied.document}]}))});
 assert.equal(gallery.items.length,1);
 const pptx=await toPptx(editor.document,{textMeasurement:fonts.textMeasurement});
+assert.ok(pptx.length>1000);
+console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n` : `import assert from 'node:assert/strict';
+import {importData} from '@openpresentation/opf/data';
+import {fitRichText,fitList} from '@openpresentation/opf/composition';
+import {parseTabularData} from '@openpresentation/opf-editor/data';
+import {formatRichTextRange, replaceRichTextRange, richTextContent} from '@openpresentation/opf-editor/rich-text';
+import {createEditorSession} from '@openpresentation/opf-editor';
+import {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
+import {createCanvasEditor} from '@openpresentation/opf-editor/canvas';
+import {parseOpfTransfer,serializeOpfTransfer,prepareOpfImport} from '@openpresentation/opf-editor/transfer';
+import {loadOpfGallery} from '@openpresentation/opf-editor/galleries';
+import {listSchemaFields} from '@openpresentation/opf-editor/schema';
+import {createSchemaInspector} from '@openpresentation/opf-editor/schema-inspector';
+import {loadFonts as loadBrowserFonts} from '@openpresentation/opf-render/fonts-browser';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {renderSlideSvg} from '@openpresentation/opf-render';
+import {toPptx} from '@openpresentation/opf-pptx';
+assert.equal(importData('Q,R\\nQ1,12',{as:'chart'}).chart.data.rows[0][1],12);
+assert.equal(parseTabularData([{q:'Q1',r:12}]).rows[0][1],12);
+assert.equal(fitList([{text:'Packed list',level:2}],{x:0,y:0,width:300,height:100}).listEntries[0].level,2);
+assert.ok(fitRichText([{text:'Packed rich text',bold:true}],{x:0,y:0,width:300,height:100}).richLines.length);
+assert.deepEqual(formatRichTextRange('Hello',0,5,{bold:true}),[{text:'Hello',bold:true}]);
+assert.equal(richTextContent(replaceRichTextRange(['Hello'],1,4,'i')),'Hio');
+assert.ok(listSchemaFields().length>=604);assert.equal(typeof createSchemaInspector,'function');
+const fonts=await loadFonts();
+const editor=createEditorSession({design:{fontScheme:'roboto'},slides:[{title:'Packed consumer',composition:{mode:'row'},blocks:[{text:'One'},{text:'Two'}]}]});
+editor.set('slides.0.title','Installed consumer');
+editor.applyPatch(prepareTrackResize(editor.presentation,editor.composeSlide(0).flows[0],0,.6).patches);
+assert.equal(editor.get('slides.0.composition.weights.0'),1.2);
+assert.equal(listBlockContainers(editor.presentation).length,1);
+editor.applyPatch(prepareBlockMove(editor.presentation,'slides.0.blocks.0','slides.0',2).patches);
+assert.equal(editor.get('slides.0.blocks.1.text'),'One');
+editor.applyPatch(prepareBlockInsert(editor.presentation,'slides.0',createContentBlock('text')).patches);
+editor.applyPatch(prepareBlockDuplicate(editor.presentation,'slides.0.blocks.2').patches);
+editor.applyPatch(prepareBlockRemove(editor.presentation,'slides.0.blocks.2').patches);
+assert.equal(editor.get('slides.0.blocks.2.text'),'Add your text');
+const svg=renderSlideSvg(editor.presentation,0,{fonts});
+assert.match(svg,/Installed consumer/);
+assert.equal(typeof createCanvasEditor,'function');assert.equal(typeof loadBrowserFonts,'function');
+const richEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[['Cell']]}}]});
+richEditor.set('slides.0.table.rows.0.0',formatRichTextRange('Cell',0,4,{bold:true,color:'#008800'}));
+assert.deepEqual(richEditor.get('slides.0.table.rows.0.0'),[{text:'Cell',bold:true,color:'#008800'}]);
+assert.match(renderSlideSvg(richEditor.presentation,0,{trace:true,fonts}),/data-opf-rich-text="true"/);
+assert.ok((await toPptx(richEditor.presentation,{fonts})).length>1000);
+richEditor.undo();assert.equal(richEditor.get('slides.0.table.rows.0.0'),'Cell');
+const copied=parseOpfTransfer(serializeOpfTransfer(editor.presentation,{scope:'slide',format:'markdown'}));
+assert.equal(prepareOpfImport(editor.presentation,copied).presentation.slides.length,2);
+const gallery=await loadOpfGallery('https://gallery.example/registry.json',{fetch:async()=>new Response(JSON.stringify({items:[{name:'Example',opf:copied.presentation}]}))});
+assert.equal(gallery.items.length,1);
+const pptx=await toPptx(editor.presentation,{fonts});
 assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
@@ -384,7 +498,7 @@ if (registry) {
 
 await writeFile(
   path.join(consumer, "browser.ts"),
-  `import {presentation} from '@openpresentation/opf/schemas';
+  registry ? `import {presentation} from '@openpresentation/opf/schemas';
 import type {Presentation} from '@openpresentation/opf/types';
 export const richTable:Presentation={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
 export const compositionSchema = presentation.$defs.Composition;
@@ -404,6 +518,26 @@ export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema
 export async function mount(container:HTMLElement):Promise<CanvasEditor> {
  const fonts=await loadBrowserFontRegistry([{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]);
  return createCanvasEditor(container,{document:{slides:[{title:'Hello'}]},renderOptions:{textMeasurement:fonts.textMeasurement}});
+}\n` : `import {presentation} from '@openpresentation/opf/schemas';
+import type {Presentation} from '@openpresentation/opf/types';
+export const richTable:Presentation={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
+export const compositionSchema = presentation.$defs.Composition;
+export const contentSchema = presentation.$defs.ContentPayload;
+import {createCanvasEditor, type CanvasEditor} from '@openpresentation/opf-editor/canvas';
+import {loadFonts} from '@openpresentation/opf-render/fonts-browser';
+export {parseOpfTransfer,prepareOpfImport,serializeOpfTransfer} from '@openpresentation/opf-editor/transfer';
+export {loadOpfGallery,loadOpfGalleryItem} from '@openpresentation/opf-editor/galleries';
+export {createSchemaInspector} from '@openpresentation/opf-editor/schema-inspector';
+export {formatRichTextRange,replaceRichTextRange,richTextContent,type TextRunFormat} from '@openpresentation/opf-editor/rich-text';
+export {prepareTrackResize,prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,createContentBlock} from '@openpresentation/opf-editor/layout';
+export {fitList,type ListFit,type ListValue} from '@openpresentation/opf/composition';
+${verifyTableLayout ? "export {layoutTable,type TableLayout,type TableLayoutOptions,type TableCellLayout} from '@openpresentation/opf/composition';" : ''}
+${verifySharedQuotes ? "export {layoutQuote,type QuoteLayout,type QuoteTextPart,type QuoteTextSource,type QuoteLayoutOptions,type CompositionExplanation} from '@openpresentation/opf/composition';" : ''}
+${verifySharedCode ? "export {layoutCode,type CodeLayout,type CodeTextPart,type CodeTextFit,type CodeLayoutOptions} from '@openpresentation/opf/composition';" : ''}
+export {schemaAtPath,listSchemaFields} from '@openpresentation/opf-editor/schema';
+export async function mount(container:HTMLElement):Promise<CanvasEditor> {
+ const fonts=await loadFonts({faces:[{url:'/fonts/Roboto.ttf'},{url:'/fonts/RobotoMono.ttf'}]});
+ return createCanvasEditor(container,{presentation:{slides:[{title:'Hello'}]},fonts});
 }\n`,
 );
 const require = createRequire(
@@ -446,9 +580,12 @@ const browserOut=path.join(root,'artifacts/editor');
 await mkdir(browserOut,{recursive:true});
 // Build every required browser asset here; a clean registry check must not
 // borrow HTML or fonts left by a previous source playground build.
-await writeFile(path.join(consumer, 'browser-fonts.mjs'), `import {writeFile} from 'node:fs/promises';
+await writeFile(path.join(consumer, 'browser-fonts.mjs'), registry ? `import {writeFile} from 'node:fs/promises';
 import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
 await writeFile(process.argv[2],JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts));
+` : `import {writeFile} from 'node:fs/promises';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+await writeFile(process.argv[2],JSON.stringify((await loadFonts({pack:'office'})).embeddedFonts));
 `);
 run(process.execPath, ['browser-fonts.mjs', path.join(browserOut, 'fonts.json')]);
 function browserHtml(suite, controls = '') {

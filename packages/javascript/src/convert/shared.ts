@@ -1,5 +1,5 @@
 // Shared helpers for the pure content conversions (`@openpresentation/opf/convert`). Internal module.
-import { validatePresentation } from "../validator.js";
+import { validate } from "../validator.js";
 
 /** Content fields a payload can hold; a block with exactly one of them is a convertible leaf. */
 export const CONTENT_KEYS = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"] as const;
@@ -72,8 +72,9 @@ export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "s
   // RR-54: a dataset-backed chart or table validates with the document's datasets. Without them (a slide-only
   // edit) the dataset references cannot be checked here and are left to the caller's document validation.
   const datasets = isRecord(context.datasets) ? context.datasets : undefined;
-  const result = validatePresentation({ ...(datasets ? { datasets } : {}), slides });
-  const errors = datasets ? result.errors : result.errors.filter((issue) => issue.params.code !== "dataset-unknown" && issue.params.code !== "dataset-field-unknown");
+  const report = validate({ ...(datasets ? { datasets } : {}), slides }, { only: ["format"] });
+  const found = report.findings.filter((entry) => entry.severity === "error");
+  const errors = datasets ? found : found.filter((entry) => entry.ruleId !== "opf/dataset-unknown" && entry.ruleId !== "opf/dataset-field-unknown");
   if (errors.length) {
     const first = errors[0];
     throw new OPFConversionError("invalid-output", `The converted content is not valid OPF: ${first?.message ?? "unknown error"}${first?.path ? ` (${first.path})` : ""}.`, { issues: errors });

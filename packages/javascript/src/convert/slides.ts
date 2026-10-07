@@ -3,7 +3,7 @@
 // return the replacement slides, the range they replace and the new presentation. Pure; every result is
 // validated as OPF. Internal module.
 import { visitContentPayloads } from "../content-walk.js";
-import { OPFPaginationError, type PaginatedPage, type PresentationPaginationOptions, paginatePresentation } from "../pagination.js";
+import { OPFPaginationError, type PaginatedPage, type PresentationPaginationOptions, paginate } from "../pagination.js";
 import { CONTENT_KEYS, type ConversionReport, type Json, Loss, type Obj, assertValidOutput, clone, concatText, contentKeysOf, isRecord, refuse, report, same } from "./shared.js";
 import { isRegionKey, regionKeysOf, sortRegionKeys } from "./structure.js";
 
@@ -114,7 +114,7 @@ export interface SplitOverflowResult extends SlideEdit {
 const remapPath = (path: string, from: number, to: number): string => path.replace(new RegExp(`^slides\\.${from}(?=\\.|$)`), `slides.${to}`);
 
 /**
- * Split a slide that does not fit into continuation slides with the existing pagination (`paginatePresentation`):
+ * Split a slide that does not fit into continuation slides with the existing pagination (`paginate`):
  * text, lists, tables and timelines break at item or sentence boundaries, headings are repeated and nothing is
  * dropped. The slide is paginated on its own, as slide 1 of 1, with the host's `options` (fonts, text
  * measurement); a slide that already fits is returned unchanged. Throws `not-convertible` when pagination
@@ -123,9 +123,9 @@ const remapPath = (path: string, from: number, to: number): string => path.repla
 export function splitSlideOnOverflow(presentation: unknown, slideIndex: number, options: PresentationPaginationOptions = {}): SplitOverflowResult {
   const source = slideAt(presentation, slideIndex);
   const whole = presentation as Obj;
-  let result: ReturnType<typeof paginatePresentation>;
+  let result: ReturnType<typeof paginate>;
   try {
-    result = paginatePresentation({ ...clone(whole), slides: [clone(source)] }, options);
+    result = paginate({ ...clone(whole), slides: [clone(source)] }, options);
   } catch (error) {
     if (error instanceof OPFPaginationError) throw refuse(error.message, { diagnostics: error.diagnostics });
     throw error;
@@ -234,7 +234,7 @@ export interface UnpaginateOptions {
 }
 
 /**
- * The inverse of `paginatePresentation` for slides still as it returned them: given its `pages` mapping, join the
+ * The inverse of `paginate` for slides still as it returned them: given its `pages` mapping, join the
  * slices of each source slide back into the original leaves (text, list items, table rows, timeline events, code
  * lines) and replace the continuation slides by one slide. The first slide's id, headings and design are kept; the
  * slides must not have been edited or reordered since (a gap between two slices is refused). The readability floor

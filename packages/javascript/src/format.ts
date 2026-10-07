@@ -25,8 +25,8 @@ interface Node {
   $defs?: Record<string, Schema>;
 }
 
-export class FormatError extends Error {
-  constructor(message: string) { super(message); this.name = "FormatError"; }
+export class OPFFormatError extends Error {
+  constructor(message: string) { super(message); this.name = "OPFFormatError"; }
 }
 
 export interface FormatOptions {
@@ -91,23 +91,23 @@ export function sortPresentationKeys<T>(document: T): T {
 
 /**
  * Canonical text for an OPF document. `input` is either JSON source text or
- * a parsed document. Throws `FormatError` for text that is not JSON.
+ * a parsed document. Throws `OPFFormatError` for text that is not JSON.
  */
-export function formatPresentation(input: unknown, options: FormatOptions = {}): string {
+export function format(input: unknown, options: FormatOptions = {}): string {
   let document = input;
   if (typeof input === "string") {
     try { document = JSON.parse(input.replace(/^﻿/u, "")); }
-    catch (error) { throw new FormatError(`Invalid JSON: ${(error as Error).message}`); }
+    catch (error) { throw new OPFFormatError(`Invalid JSON: ${(error as Error).message}`); }
   }
   const indent = options.indent ?? 2;
-  if (!Number.isInteger(indent) || indent < 0 || indent > 8) throw new FormatError("indent must be an integer from 0 to 8.");
-  if (options.eol !== undefined && options.eol !== "lf" && options.eol !== "crlf") throw new FormatError("eol must be lf or crlf.");
+  if (!Number.isInteger(indent) || indent < 0 || indent > 8) throw new OPFFormatError("indent must be an integer from 0 to 8.");
+  if (options.eol !== undefined && options.eol !== "lf" && options.eol !== "crlf") throw new OPFFormatError("eol must be lf or crlf.");
   const text = JSON.stringify(sortPresentationKeys(document), null, indent);
-  if (text === undefined) throw new FormatError("Nothing to format.");
+  if (text === undefined) throw new OPFFormatError("Nothing to format.");
   return options.eol === "crlf" ? `${text.replaceAll("\n", "\r\n")}\r\n` : `${text}\n`;
 }
 
 /** True when `source` is already exactly the canonical text. */
 export function isFormatted(source: string, options: FormatOptions = {}): boolean {
-  try { return formatPresentation(source, options) === source; } catch { return false; }
+  try { return format(source, options) === source; } catch { return false; }
 }

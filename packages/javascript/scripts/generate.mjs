@@ -25,6 +25,10 @@ const schemaDefinitions = [
   { name: "language", typeName: "Language", file: "language.schema.json" },
   { name: "colorScheme", typeName: "ColorScheme", file: "color-scheme.schema.json", typeFile: "color-scheme" },
   { name: "fontScheme", typeName: "FontScheme", file: "font-scheme.schema.json", typeFile: "font-scheme" },
+  // The report format every OPF tool shares (validate, the converters, the editor Review panel, hosted reviewers).
+  // It is not a catalog kind. Its root schema is open so a richer report (validate's) still validates against it;
+  // the generated type is closed so an unknown field is a type error.
+  { name: "finding", typeName: "FindingReport", file: "finding.schema.json", typeFile: "finding", compileOptions: { additionalProperties: false } },
 ];
 
 const catalogDefinitions = [
@@ -348,6 +352,7 @@ async function generateTypes() {
       bannerComment: generatedHeader(path.posix.join("schemas", definition.file)).trimEnd(),
       unreachableDefinitions: true,
       format: false,
+      ...(definition.compileOptions ?? {}),
       style: {
         semi: true,
         singleQuote: false,

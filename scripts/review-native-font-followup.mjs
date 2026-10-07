@@ -3,11 +3,11 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fromPptx} from '../../opf-pptx/dist/index.js';
-import {prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
+import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 const [root,output]=process.argv.slice(2);assert.ok(root&&output);
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=async file=>JSON.parse((await readFile(file,'utf8')).replace(/^\uFEFF/,''));
-const {options}=await prepareNodeFonts(),openHashes=new Set(await Promise.all(options.fontFiles.map(async file=>hash(await readFile(file)))));
+const fonts=await loadFonts(),openHashes=new Set(await Promise.all(fonts.fontFiles.map(async file=>hash(await readFile(file)))));
 const results=[],rasterSets=[];
 for(const [node,attempt]of [['20','01'],['24','03']]){
   const directory=path.join(root,`raw/font-native-node${node}-${attempt}`),generation=await json(directory+'/generation.json'),native=await json(directory+'/native.json'),pdf=await json(directory+'/pdf-fonts.json');

@@ -7,15 +7,15 @@ import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
-import {renderSvg} from '../../opf-render/dist/index.js';
-import {loadBundledFontRegistry} from '../../opf-render/dist/fonts-node.js';
+import {renderSvg,renderSlideSvg} from '../../opf-render/dist/index.js';
+import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const sharp=require('sharp'),{chromium}=require('playwright');
 const root=fileURLToPath(new URL('../',import.meta.url));
 const auditPath=path.resolve(process.argv[2]??path.join(root,'docs/evidence/gallery-artwork-images/contrast-current.json'));
 const output=path.resolve(process.argv[3]??path.join(root,'artifacts/contrast-glyphs'));
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const auditBytes=await readFile(auditPath),audit=JSON.parse(auditBytes),fonts=await loadBundledFontRegistry();
+const auditBytes=await readFile(auditPath),audit=JSON.parse(auditBytes),fonts=await loadFonts();
 // An explicit prior glyph report rechecks its actual glyph failures after layout changes.
 // Source bytes, leaf text/path, fonts and browser remain guarded; every matching
 // current leaf is tested when repeated text makes old/new leaf identity ambiguous.
@@ -95,7 +95,7 @@ try{
  }
  for(const [name,foreground,background,shouldPass]of [['black-on-white','#000000','#FFFFFF',true],['invisible-white','#FFFFFF','#FFFFFF',false],['invisible-black','#000000','#000000',false]]){
   const deck={design:{background,fontScheme:'roboto'},slides:[{text:[{text:'Visible glyph support even when source text disappears',color:foreground}]}]};
-  const result=await inspect(renderSvg(deck,{trace:true}),null,`control-${name}`);assert.equal(result.passed,shouldPass);if(!shouldPass){assert.equal(result.glyphMinimum,1);assert.equal(result.visiblePixels,0);}
+  const result=await inspect(renderSlideSvg(deck,0,{trace:true}),null,`control-${name}`);assert.equal(result.passed,shouldPass);if(!shouldPass){assert.equal(result.glyphMinimum,1);assert.equal(result.visiblePixels,0);}
   controls.push(result);
  }
  const visited=new Set();
@@ -104,7 +104,7 @@ try{
   const identity=JSON.stringify([record.file,record.slide,record.path,record.text]);
   if(previous&&visited.has(identity))continue;
   visited.add(identity);
-  const source=await readFile(path.join(root,record.file)),deck=JSON.parse(source),before=JSON.stringify(deck),svg=renderSvg(deck,{slideIndex:record.slide,trace:true});
+  const source=await readFile(path.join(root,record.file)),deck=JSON.parse(source),before=JSON.stringify(deck),svg=renderSlideSvg(deck,record.slide,{trace:true});
   const auditedSlide=audit.decks.find(item=>item.file===record.file)?.slides.find(item=>item.slide===record.slide);assert.ok(auditedSlide);
   let expected=record,leafCount=1,previousFindingIndices=[];
   if(previous){

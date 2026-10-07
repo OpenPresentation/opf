@@ -13,7 +13,21 @@ export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartHighlightColors, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST} from './color.js';
+export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartHighlightColors, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
+export type {ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
+export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
+export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptRole} from './script-fonts.js';
+export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
+export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
+export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, metricTrendColor, metricTrendMark, metricTrendPoints} from './metric-trend.js';
+export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
+export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
+export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
+export {codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers} from './code-highlight.js';
+export type {CodeHighlightBand, CodeHighlightColors, CodeHighlightEntry, CodeHighlightIssue, CodeHighlightLines} from './code-highlight.js';
+export {layoutWatermark} from './watermark.js';
+export type {WatermarkTextLayout, WatermarkTextOptions} from './watermark.js';
+export {PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitmap, patternRuns, resolvePatternPreset} from './pattern-fills.js';
 import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
 export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
@@ -100,6 +114,14 @@ export interface TextMeasurement {
   /** Shaped vector ink relative to the left baseline origin (positive y down).
    * Null means no outline. These are not hinted/antialiased raster bounds. */
   outlineBounds?: (text: string, fontSize: number, style: TextStyle) => LayoutBox | null;
+}
+/**
+ * The fonts handle every deck-level verb takes as `{ fonts }`. Core reads only `textMeasurement`: how wide the
+ * host's real fonts draw a string. The renderer's `loadFonts()` returns a richer handle (embedded fonts, font
+ * files, registry, manifest) that extends this one, so the same object goes to every verb.
+ */
+export interface Fonts {
+  textMeasurement?: TextMeasurement;
 }
 export type MeasureTextWidth = (text: string, fontSize: number) => number;
 export function resolveTextStyle(style: TextStyle, measurement?: TextMeasurement): TextStyle {
@@ -385,7 +407,7 @@ export interface ComposeSlideOptions {
    * consults a clock; without this option a current date is reported as unresolved content.
    */
   date?: string;
-  fonts?: Partial<FontFamilies>;
+  fontFamilies?: Partial<FontFamilies>;
   /**
    * Deck base direction (RR-05). Defaults to the direction of the presentation language's script. In a right-to-left deck
    * composition mirrors the arrangement (the first column or `left` region is drawn at the right, slide images, logos and
@@ -693,7 +715,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
   const speakers=Array.isArray(options.presentation?.speaker)?options.presentation.speaker:[options.presentation?.speaker],speaker=record(speakers[0]),speakerRoot=Array.isArray(options.presentation?.speaker)?'speaker.0':'speaker';
   const inlinePlatforms=record(record(options.presentation?.catalogs).socialPlatforms).records,platformRecords=[...(Array.isArray(inlinePlatforms)?inlinePlatforms:[]),...(options.socialPlatforms??[])];
-  const fontFamily=options.fonts?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
+  const fontFamily=options.fontFamilies?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
   for(const kind of ['header','footer'] as const){
     const local=record(slide.design)[kind]!==undefined,value=local?record(slide.design)[kind]:options.presentation?.design?.[kind];
@@ -901,7 +923,7 @@ export interface QuoteLayout {
 export interface QuoteLayoutOptions {
   /** Canvas short edge divided by 720. Insets retain the current 18 reference-pixel contract. */
   scale?: number;
-  fonts?: Partial<FontFamilies>;
+  fontFamilies?: Partial<FontFamilies>;
   /** Readability floor in reference pixels, before canvas scaling. */
   minFontSize?: number;
   overflow?: Composition['overflow'];
@@ -972,10 +994,10 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const bodyPath = shorthand ? path : `${path}.text`;
   const body = add('body',`"${quoteText}"`,[source(bodyPath,quoteText,1)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
-    28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody):undefined);
+    28,options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody):undefined);
   const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
-    17,options.fonts?.body??'sans-serif',500,path) : undefined;
+    17,options.fontFamilies?.body??'sans-serif',500,path) : undefined;
   // A photo with no footer text still sizes from the nominal footer size.
   const footerRequested = attribution?.requestedFontSize ?? gridFontSize(17 * scale, minimum);
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
@@ -1145,7 +1167,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (sourceValue===undefined) continue;
     const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     const nominal=role==='value'?Math.min(76*scale,box.height*.28):(role==='description'?20:role==='trend'?18:23)*scale;
-    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fonts?.heading:options.fonts?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
+    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:gridFontSize(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
@@ -1346,7 +1368,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const outlines=options.textMeasurement?.outlineBounds!==undefined,rtl=options.direction==='rtl';
   if(outlines&&typeof options.textMeasurement?.outlineBounds!=='function')throw new TypeError('Text outline provider must be a function.');
   const path=options.path??'timeline',eventPath=(index:number)=>shorthand?`${path}.${index}`:`${path}.events.${index}`;
-  const fonts=resolveFontFamilies(options.fonts),source:TimelineTextPart[]=[];
+  const fonts=resolveFontFamilies(options.fontFamilies),source:TimelineTextPart[]=[];
   const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,size:number,weight:number,eventIndex?:number)=>{
     if(text===undefined)return;
     // A current event's label is bold ("we are here"); every other part keeps its weight.
@@ -1578,7 +1600,7 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   const path=options.path??'code',inner={x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
   const parts:CodeTextPart[]=[],diagnostics:CodeLayoutDiagnostic[]=[];
   const add=(role:CodeTextPart['role'],text:string,partPath:string,generated=false)=>{
-    const requestedStyle:TextStyle={fontFamily:options.fonts?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
+    const requestedStyle:TextStyle={fontFamily:options.fontFamilies?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
     const part:CodeTextPart={role,path:partPath,text,sources:generated?[]:[{path:partPath,start:0,end:text.length}],generated,box:{...inner},
       requestedFontSize:gridFontSize((role==='body'?18:14)*scale,minimum),minFontSize:minimum,requestedStyle,
       style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
@@ -2012,7 +2034,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   return {rows,columnCount,height:sum(heights),overflow};
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
-  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -2095,7 +2117,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       ? hints.titleAlignment : hints.contentAlignment) ?? 'left';
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
-    fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : field === "tag" ? options.fonts?.accent ?? options.fonts?.body : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
+    fontFamily: (field === "title" ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : field === "tag" ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
   const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
@@ -2108,7 +2130,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // whose runs cite or carry footnotes get a marker resolver and a footnote area; others are unchanged.
   const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
-  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
+  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
@@ -2281,19 +2303,19 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
   };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
-    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
     ...(citationMarker?{citationMarker}:{}),
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
-    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
   });
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
-    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
     textRasterPadding:options.textRasterPadding,
     align:alignmentFor('metric'),direction:textDirection,
   });
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
-    fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
   });
   // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
   const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, annotationOptions) : undefined;
@@ -2477,7 +2499,7 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
-export {chartNumber,formatDataNumber,numberFormatError,excelNumberFormat,numberFormatFromExcel,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';
+export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';
 export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 
 export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';

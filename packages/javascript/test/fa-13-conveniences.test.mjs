@@ -1,17 +1,15 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import {
-  CODE_PANEL_BACKGROUND, CODE_SYNTAX_MIN_CONTRAST, WATERMARK_TEXT_ROTATION, codeHighlightBands, codeHighlightColors, codeHighlightLines,
-  codeHighlightList, codeHighlightSlice, codeLineCount, codeLineNumbers, codeSyntaxPaletteForScheme, colorContrast, composeSlide,
-  fitRichText, layoutCode, layoutWatermark, paginateSlide, resolveCanvasDimensions, validatePresentation,
-} from '../dist/index.js';
-import { markdownToOpf, opfToMarkdown } from '../dist/markdown.js';
+import { paginateSlide, validate } from '../dist/index.js';
+import { CODE_PANEL_BACKGROUND, CODE_SYNTAX_MIN_CONTRAST, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeSyntaxPaletteForScheme, colorContrast, composeSlide, fitRichText, layoutCode, layoutWatermark, resolveCanvasDimensions } from '../dist/composition.js';
+import { fromMarkdown, toMarkdown } from '../dist/markdown.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
-const fromMarkdown = (source) => markdownToOpf(source).document;
-const toMarkdown = (document) => opfToMarkdown(document).markdown;
+const deckOf = (source) => fromMarkdown(source).presentation;
+const markdownOf = (presentation) => toMarkdown(presentation).markdown;
 
 const deck = (slides, extra = {}) => ({ name: 'D', slides, ...extra });
-const issuesOf = (document, code) => validatePresentation(document).warnings.filter((issue) => issue.params.code === code);
+const issuesOf = (document, code) => validate(document, { only: [`opf/${code}`] }).findings;
 
 // --- code.highlight ----------------------------------------------------------------------------------------------
 
@@ -21,10 +19,9 @@ test('code.highlight resolves numbers and inclusive ranges against the source', 
   assert.equal(result.lineCount, 7, 'a trailing line break does not start a line');
   assert.deepEqual(result.lines, [3, 5, 6, 7]);
   assert.deepEqual(result.issues, []);
-  assert.deepEqual(codeHighlightList([3, 5, 6, 7]), [3, [5, 7]]);
-  assert.equal(codeLineCount('x'), 1);
-  assert.equal(codeLineCount('x\r\ny\rz'), 3);
-  assert.equal(codeLineCount(''), 1);
+  assert.equal(codeHighlightLines([], 'x').lineCount, 1);
+  assert.equal(codeHighlightLines([], 'x\r\ny\rz').lineCount, 3);
+  assert.equal(codeHighlightLines([], '').lineCount, 1);
 });
 
 test('code.highlight reports out-of-range, reversed and invalid entries and ignores them', () => {
@@ -66,24 +63,14 @@ test('the band colour follows the theme and is deterministic', () => {
   assert.deepEqual(codeHighlightColors({ primary: '#2563EB' }), blue);
 });
 
-test('slicing a code block keeps the marked lines of the page, renumbered', () => {
-  const source = 'l1\nl2\nl3\nl4\nl5\nl6';
-  const second = source.indexOf('l4');
-  assert.deepEqual(codeHighlightSlice([2, [4, 5]], source, 0, second), [2]);
-  assert.deepEqual(codeHighlightSlice([2, [4, 5]], source, second, source.length), [[1, 2]]);
-  assert.equal(codeHighlightSlice([1], source, second, source.length), undefined);
-  // A page that starts inside a line keeps that line's number for its first line.
-  assert.deepEqual(codeHighlightSlice([4], source, source.indexOf('l4') + 1, source.length), [1]);
-});
-
 test('validation: schema accepts highlight; warnings name the entry', () => {
   const document = deck([{ title: 'Code', code: { source: 'a\nb\nc', language: 'ts', highlight: [1, [2, 3]] } }]);
-  const ok = validatePresentation(document);
-  assert.equal(ok.valid, true, JSON.stringify(ok.errors));
-  assert.deepEqual(ok.warnings.filter((issue) => /^code-highlight/.test(issue.params.code ?? '')), []);
+  const ok = check(document);
+  assert.equal(ok.valid, true, JSON.stringify(errorsOf(ok)));
+  assert.deepEqual(validate(document).findings.filter((issue) => issue.ruleId.startsWith('opf/code-highlight')), []);
 
   const bad = deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]);
-  const result = validatePresentation(bad);
+  const result = check(bad);
   assert.equal(result.valid, true);
   assert.deepEqual(issuesOf(bad, 'code-highlight-out-of-range').map((issue) => issue.path), ['/slides/0/code/highlight/1']);
   assert.deepEqual(issuesOf(bad, 'code-highlight-range-reversed').map((issue) => issue.path), ['/slides/0/code/highlight/2']);
@@ -92,7 +79,7 @@ test('validation: schema accepts highlight; warnings name the entry', () => {
   assert.equal(issuesOf(nested, 'code-highlight-out-of-range').length, 1, 'blocks are checked too');
 
   for (const highlight of [[], [0], [1.5], [[1]], [[1, 2, 3]], 'x']) {
-    assert.equal(validatePresentation(deck([{ title: 'C', code: { source: 'a', highlight } }])).valid, false, JSON.stringify(highlight));
+    assert.equal(check(deck([{ title: 'C', code: { source: 'a', highlight } }])).valid, false, JSON.stringify(highlight));
   }
 });
 
@@ -123,7 +110,7 @@ test('layoutCode and composeSlide leave the code geometry unchanged by highlight
 // --- Watermark.text ----------------------------------------------------------------------------------------------
 
 test('Watermark takes exactly one of src and text', () => {
-  const valid = (watermark) => validatePresentation(deck([{ title: 'T' }], { design: { watermark } })).valid;
+  const valid = (watermark) => check(deck([{ title: 'T' }], { design: { watermark } })).valid;
   assert.equal(valid({ text: 'DRAFT', opacity: 0.1 }), true);
   assert.equal(valid({ src: 'asset:w', opacity: 0.1 }), true);
   assert.equal(valid('asset:w'), true);
@@ -131,7 +118,7 @@ test('Watermark takes exactly one of src and text', () => {
   assert.equal(valid({ opacity: 0.1 }), false, 'neither');
   assert.equal(valid({ text: '', opacity: 0.1 }), false, 'empty text');
   assert.equal(valid({ text: 'DRAFT' }), false, 'opacity is required');
-  assert.equal(validatePresentation(deck([{ title: 'T', design: { watermark: { text: 'CONFIDENTIAL', opacity: 0.08 } } }])).valid, true, 'slide level');
+  assert.equal(check(deck([{ title: 'T', design: { watermark: { text: 'CONFIDENTIAL', opacity: 0.08 } } }])).valid, true, 'slide level');
 });
 
 test('a text watermark is centered, diagonal and inside every preset', () => {
@@ -139,7 +126,7 @@ test('a text watermark is centered, diagonal and inside every preset', () => {
     const { width, height } = resolveCanvasDimensions(preset);
     for (const text of ['DRAFT', 'CONFIDENTIAL', 'Internal use only - do not distribute']) {
       const layout = layoutWatermark(text, { width, height });
-      assert.equal(layout.rotation, WATERMARK_TEXT_ROTATION);
+      assert.equal(layout.rotation, -30, 'the text watermark is rotated 30 degrees counter-clockwise');
       assert.ok(layout.textWidth <= width * 0.7 + 0.01, `${preset} ${text} width`);
       assert.ok(layout.fontSize <= Math.min(width, height) * 0.3 + 0.01);
       const { box } = layout, cx = box.x + box.width / 2, cy = box.y + box.height / 2;
@@ -167,7 +154,7 @@ test('a code run takes the code family; its own fontFamily wins; lang reaches th
 
 test('composeSlide measures an inline code run in the design code font', () => {
   const slide = { title: 'T', text: ['Run ', { text: 'pnpm install', code: true }] };
-  const composed = composeSlide(slide, { width: 1280, height: 720, fonts: { heading: 'Aptos Display', body: 'Aptos', code: 'Consolas' } });
+  const composed = composeSlide(slide, { width: 1280, height: 720, fontFamilies: { heading: 'Aptos Display', body: 'Aptos', code: 'Consolas' } });
   const text = composed.items.find((item) => item.field === 'text');
   const fragments = text.text.richLines.flatMap((line) => line.fragments);
   assert.equal(fragments.find((fragment) => fragment.text === 'pnpm install').style.fontFamily, 'Consolas');
@@ -175,7 +162,7 @@ test('composeSlide measures an inline code run in the design code font', () => {
 });
 
 test('TextRun schema: code is boolean, lang is a BCP-47 tag', () => {
-  const valid = (run) => validatePresentation(deck([{ title: 'T', text: [run] }])).valid;
+  const valid = (run) => check(deck([{ title: 'T', text: [run] }])).valid;
   assert.equal(valid({ text: 'x', code: true }), true);
   assert.equal(valid({ text: 'x', code: 'yes' }), false);
   assert.equal(valid({ text: 'x', lang: 'fr-FR' }), true);
@@ -185,41 +172,41 @@ test('TextRun schema: code is boolean, lang is a BCP-47 tag', () => {
 });
 
 test('markdown reads and writes inline code in both directions', () => {
-  const doc = fromMarkdown('# T\n\nRun `pnpm install` now, **`bold code`**, and ``a ` b`` too.\n');
+  const doc = deckOf('# T\n\nRun `pnpm install` now, **`bold code`**, and ``a ` b`` too.\n');
   const slide = doc.slides[0];
   assert.deepEqual(slide.text, ['Run ', { text: 'pnpm install', code: true }, ' now, ', { text: 'bold code', bold: true, code: true }, ', and ', { text: 'a ` b', code: true }, ' too.']);
-  const markdown = toMarkdown(doc);
+  const markdown = markdownOf(doc);
   assert.ok(markdown.includes('Run `pnpm install` now, **`bold code`**, and ``a ` b`` too.'), markdown);
-  assert.deepEqual(fromMarkdown(markdown).slides[0].text, slide.text);
+  assert.deepEqual(deckOf(markdown).slides[0].text, slide.text);
 });
 
 test('markdown: an unmatched backtick and an escaped backtick stay text; text with backticks round-trips', () => {
-  assert.equal(fromMarkdown('# T\n\nA lone ` tick.\n').slides[0].text, 'A lone ` tick.');
-  const doc = fromMarkdown('# T\n\nUse \\`literal\\` ticks.\n');
+  assert.equal(deckOf('# T\n\nA lone ` tick.\n').slides[0].text, 'A lone ` tick.');
+  const doc = deckOf('# T\n\nUse \\`literal\\` ticks.\n');
   assert.equal(doc.slides[0].text, 'Use `literal` ticks.');
-  const again = fromMarkdown(toMarkdown(doc));
+  const again = deckOf(markdownOf(doc));
   assert.equal(again.slides[0].text, doc.slides[0].text);
   // Padding rules: a span that begins or ends with a backtick or space.
   const tricky = { slides: [{ title: 'T', text: [{ text: '`x', code: true }, ' ', { text: ' y ', code: true }, ' ', { text: 'z`', code: true }] }] };
-  const back = fromMarkdown(toMarkdown(tricky)).slides[0].text;
+  const back = deckOf(markdownOf(tricky)).slides[0].text;
   assert.deepEqual(back, tricky.slides[0].text);
 });
 
 test('markdown: a code span in a title is a code run (titles keep inline formatting since FA-10)', () => {
-  const doc = fromMarkdown('# The `foo` API\n\nBody\n');
+  const doc = deckOf('# The `foo` API\n\nBody\n');
   assert.deepEqual(doc.slides[0].title, ['The ', { text: 'foo', code: true }, ' API']);
-  assert.deepEqual(fromMarkdown(toMarkdown(doc)).slides[0].title, doc.slides[0].title);
+  assert.deepEqual(deckOf(markdownOf(doc)).slides[0].title, doc.slides[0].title);
 });
 
 test('markdown: lang is a span attribute and round-trips', () => {
-  const doc = fromMarkdown('# T\n\nHello [bonjour]{lang=fr-FR} you.\n');
+  const doc = deckOf('# T\n\nHello [bonjour]{lang=fr-FR} you.\n');
   assert.deepEqual(doc.slides[0].text, ['Hello ', { text: 'bonjour', lang: 'fr-FR' }, ' you.']);
-  assert.deepEqual(fromMarkdown(toMarkdown(doc)).slides[0].text, doc.slides[0].text);
+  assert.deepEqual(deckOf(markdownOf(doc)).slides[0].text, doc.slides[0].text);
 });
 
 test('markdown: a code run holding a line break has no native form and does not corrupt the deck', () => {
   const doc = { slides: [{ title: 'T', text: [{ text: 'a\nb', code: true }] }] };
-  const back = fromMarkdown(toMarkdown(doc));
+  const back = deckOf(markdownOf(doc));
   assert.equal(JSON.stringify(back.slides[0].text).includes('a'), true);
 });
 
@@ -235,7 +222,7 @@ test('the 1:1, 4:5 and 9:16 presets keep the 7.5 in short edge', () => {
   assert.deepEqual(inches({ preset: '4:5' }), [7.5, 9.375]);
   assert.deepEqual(inches({ preset: '1:1', widthInches: 5 }), [5, 7.5], 'explicit inches still win');
   for (const preset of ['1:1', '4:5', '9:16']) {
-    assert.equal(validatePresentation(deck([{ title: 'T' }], { design: { dimensions: preset } })).valid, true, preset);
-    assert.equal(validatePresentation(deck([{ title: 'T' }], { design: { dimensions: { preset } } })).valid, true, preset);
+    assert.equal(check(deck([{ title: 'T' }], { design: { dimensions: preset } })).valid, true, preset);
+    assert.equal(check(deck([{ title: 'T' }], { design: { dimensions: { preset } } })).valid, true, preset);
   }
 });

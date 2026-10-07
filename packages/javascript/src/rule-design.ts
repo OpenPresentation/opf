@@ -1,19 +1,14 @@
 import { catalogs as bundledCatalogs } from './catalogs.js';
 import type { CatalogKind } from './catalogs.js';
 import { defaultSlideBackground, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
-import {
-	DEFAULT_FONT_SCHEME,
-	resolveCanvasDimensions,
-	resolveFontFamilies,
-	resolveFontSchemeReference,
-	type FontFamilies,
-} from './composition.js';
+import type { FontFamilies } from './composition.js';
+import type { SlideContext } from './slide-context.js';
 
 /**
- * Design resolution and colour maths for `auditPresentation`.
+ * Design resolution and colour maths for the accessibility and layout rules of `validate`.
  *
  * The resolution mirrors what the opf-render preview and the PPTX export draw (slide design, then deck
- * design, then theme, then engine default, per field), because an audit that reasons about a different
+ * design, then theme, then engine default, per field), because a check that reasons about a different
  * colour than the one on screen is worse than none. Internal module.
  */
 
@@ -129,15 +124,6 @@ export function createLookup(
 	};
 }
 
-function resolveReference(kind: CatalogKind, reference: unknown, lookup: Lookup): Rec {
-	if (typeof reference === 'string') return lookup(kind, reference) ?? {};
-	if (reference && typeof reference === 'object' && !Array.isArray(reference)) {
-		const id = (reference as Rec).id;
-		return { ...(typeof id === 'string' ? lookup(kind, id) : undefined), ...(reference as Rec) };
-	}
-	return {};
-}
-
 // ------------------------------------------------------------- design resolve
 
 export interface BackdropGradient {
@@ -179,7 +165,7 @@ export interface ResolvedDesign {
 }
 
 const PAGE = '#FFFFFF';
-const colorFrom = (scheme: Rec, slot: unknown, fallback: string): string =>
+export const colorFrom = (scheme: Rec, slot: unknown, fallback: string): string =>
 	typeof slot === 'string' ? (slot.startsWith('#') ? (normalizeHexColor(slot) ?? fallback) : (normalizeHexColor(scheme[slot]) ?? fallback)) : fallback;
 
 /**
@@ -250,7 +236,7 @@ function backgroundColorRef(value: unknown, scheme: Rec, variables: Rec, fallbac
  * falls back to the scheme's default slide background. Opacity is not applied. A solid or pattern colour is a ColorRef, resolved
  * like the preview does: a literal, a `var:` variable, a slot or a role that does not depend on the background itself.
  */
-function decisionColor(definition: unknown, scheme: Rec, variables: Rec): string | undefined {
+export function decisionColor(definition: unknown, scheme: Rec, variables: Rec = {}): string | undefined {
 	if (!definition) return undefined;
 	const canvas = defaultSlideBackground(scheme);
 	const reference = (value: unknown) => backgroundColorRef(value, scheme, variables, PAGE);
@@ -273,34 +259,15 @@ function decisionColor(definition: unknown, scheme: Rec, variables: Rec): string
  * its choice of text colour from the luminance of the background (a gradient background counts as light, as
  * the preview treats it).
  */
-export function resolveDesign(document: Rec, slide: Rec, index: number, lookup: Lookup): ResolvedDesign {
+export function resolveDesign(document: Rec, index: number, context: SlideContext): ResolvedDesign {
 	const deck = rec(document.design),
-		own = rec(slide.design);
-	const theme = resolveReference('themes', own.theme ?? deck.theme ?? 'minimal', lookup);
-	const colorScheme = resolveReference(
-		'colorSchemes',
-		own.colorScheme ?? deck.colorScheme ?? theme.colorScheme ?? 'cool-horizon',
-		lookup,
-	);
-	const fontPath =
-		own.fontScheme !== undefined
-			? `/slides/${index}/design/fontScheme`
-			: deck.fontScheme !== undefined
-				? '/design/fontScheme'
-				: own.theme !== undefined
-					? `/slides/${index}/design/theme`
-					: '/design/theme';
-	const font = resolveFontSchemeReference(
-		own.fontScheme ?? deck.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
-		(id) => lookup('fontSchemes', id),
-		fontPath,
-	);
-	let dimensions: ResolvedDesign['dimensions'];
-	try {
-		dimensions = resolveCanvasDimensions(own.dimensions ?? deck.dimensions ?? theme.dimensions);
-	} catch {
-		dimensions = resolveCanvasDimensions(undefined);
-	}
+		own = rec(rec(rec(document.slides)[index]).design);
+	// The slide -> deck -> theme -> font scheme chain is resolveSlideContext's; the layout and accessibility rules read the same records it composes with.
+	const { options, diagnostics, resolved } = context;
+	const { theme, colorScheme, fontScheme, fontSchemePath } = resolved;
+	const fontPath = `/${fontSchemePath.split('.').join('/')}`;
+	const fontDiagnostic = diagnostics.find((diagnostic) => diagnostic.code === 'unresolved-font-scheme');
+	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
 	const roles = resolveColorRoles(colorScheme, { background: decisionColor(own.background ?? deck.background ?? theme.background, colorScheme, variables) });
@@ -317,8 +284,8 @@ export function resolveDesign(document: Rec, slide: Rec, index: number, lookup: 
 	return {
 		theme,
 		colorScheme,
-		fontScheme: font.scheme,
-		fonts: resolveFontFamilies(font.scheme),
+		fontScheme,
+		fonts: options.fontFamilies as FontFamilies,
 		dimensions,
 		backdrop,
 		dark,
@@ -334,7 +301,7 @@ export function resolveDesign(document: Rec, slide: Rec, index: number, lookup: 
 		variables,
 		...(backgroundImage ? { backgroundImage } : {}),
 		fontSchemePath: fontPath,
-		...(font.diagnostic ? { unresolvedFontScheme: font.diagnostic.id } : {}),
+		...(fontDiagnostic ? { unresolvedFontScheme: fontDiagnostic.id } : {}),
 	};
 }
 
@@ -448,7 +415,7 @@ export function readableColor(candidates: readonly string[], sample: BackdropSam
 
 /**
  * The series palette opf-render and opf-pptx draw charts with (`CHART_COLORS`), in series order. A host with
- * its own palette passes `AuditOptions.chartPalette`.
+ * its own palette passes `ValidateOptions.chartPalette`.
  */
 export const DEFAULT_CHART_PALETTE: readonly string[] = [
 	'#2874A6', '#1B4F72', '#5499C7', '#7BDBB2', '#3AC67A', '#24A89E',

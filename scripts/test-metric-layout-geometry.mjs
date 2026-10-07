@@ -68,7 +68,7 @@ for (const fixture of metricLayoutFixtures({coreVersion})) {
   const bound=resolvePresentation(document,fixture.missingGlyph?{}:{textMeasurement:registry.textMeasurement}).slides[0];
   assert.deepEqual(bound.design.dimensions,dimensions);
   const box=bound.geometry.items[0].box,scale=Math.min(dimensions.width,dimensions.height)/720;
-  const options={fonts:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.metric',minFontSize,scale};
+  const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.metric',minFontSize,scale};
   if (fixture.missingGlyph) {
     let error;
     assert.throws(()=>layoutMetric(metric,box,options),actual=>{

@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {renderSvg} from '../../opf-render/dist/index.js';
-import {loadBundledFontRegistry} from '../../opf-render/dist/fonts-node.js';
-import {colorContrast} from '../packages/javascript/dist/index.js';
+import {renderSlideSvg} from '../../opf-render/dist/index.js';
+import {loadFonts} from '../../opf-render/dist/fonts-node.js';
+import { colorContrast } from '../packages/javascript/dist/composition.js';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const sharp=require('sharp'),{chromium}=require('playwright'),hash=b=>createHash('sha256').update(b).digest('hex');
 const root=new URL('../artifacts/contrast-border/',import.meta.url);
@@ -13,7 +13,7 @@ const auditPath=new URL('../artifacts/gallery-contrast-current.json',import.meta
 const audit=JSON.parse(await readFile(auditPath,'utf8'));
 const file='examples/gallery/business-functions/compliance-readiness-review.opf.json',slide=5;
 const record=audit.failures.find(row=>row.file===file&&row.slide===slide&&row.role==='value');assert.ok(record);
-const deck=JSON.parse(await readFile(new URL('../'+file,import.meta.url),'utf8')),svg=renderSvg(deck,{slideIndex:slide,trace:true});
+const deck=JSON.parse(await readFile(new URL('../'+file,import.meta.url),'utf8')),svg=renderSlideSvg(deck,slide,{trace:true});
 assert.equal(hash(svg),audit.decks.find(row=>row.file===file).slides[slide].svgSha256);
 const browser=await chromium.launch({channel:'msedge'}),errors=[],requests=[];
 try{
@@ -21,7 +21,7 @@ try{
  const page=await browser.newPage({viewport:{width:1280,height:720},deviceScaleFactor:1});
  await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});page.on('pageerror',e=>errors.push(e.message));
  await page.setContent('<style>body{margin:0;background:white}</style><main></main>');
- const fonts=await loadBundledFontRegistry();
+ const fonts=await loadFonts();
  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());},fonts.embeddedFonts);
  await page.evaluate(async svg=>{document.querySelector('main').innerHTML=svg;await document.fonts.ready;},svg);
  const foreground=await page.locator('svg').screenshot();

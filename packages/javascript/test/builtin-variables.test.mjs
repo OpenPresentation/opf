@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {hasContentVariables, listBuiltinVariables, resolveVariables, validatePresentation} from '../dist/index.js';
+import { hasContentVariables, listBuiltinVariables, resolveVariables } from '../dist/index.js';
 import {composeSlide} from '../dist/composition.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const BS = String.fromCharCode(92);
 
@@ -118,9 +119,9 @@ test('a missing source value resolves to nothing with a warning, and an optional
   const codes = result.diagnostics.map((entry) => `${entry.code}:${entry.id}`);
   assert.deepEqual(codes.sort(), ['variable-builtin-missing:organization.tagline', 'variable-builtin-missing:speaker.name', 'variable-builtin-missing:speaker.photo', 'variable-builtin-missing:speakers']);
   assert.ok(result.diagnostics.every((entry) => entry.severity === 'warning'));
-  const validation = validatePresentation(bare);
-  assert.equal(validation.valid, true, JSON.stringify(validation.errors));
-  assert.equal(validation.warnings.filter((entry) => entry.params?.code === 'variable-builtin-missing').length, 4);
+  const validation = check(bare, { only: ['format', 'content'] });
+  assert.equal(validation.valid, true, JSON.stringify(errorsOf(validation)));
+  assert.equal(warningsOf(validation).filter((entry) => entry.ruleId === 'opf/variable-builtin-missing').length, 4);
 });
 
 test('an unknown built-in path is an error and stays as written', () => {
@@ -132,33 +133,33 @@ test('an unknown built-in path is an error and stays as written', () => {
     assert.ok(entry, token);
     assert.equal(entry.severity, 'error');
     assert.ok(entry.message.includes(fragment), `${token}: ${entry.message}`);
-    const validation = validatePresentation(document);
+    const validation = check(document);
     assert.equal(validation.valid, false, token);
-    assert.ok(validation.errors.some((error) => error.params?.code === 'variable-unknown-builtin' && error.path === '/slides/0/title'), token);
+    assert.ok(errorsOf(validation).some((error) => error.ruleId === 'opf/variable-unknown-builtin' && error.path === '/slides/0/title'), token);
   }
   assert.throws(() => resolved(withSlide({image: 'var:speaker.mugshot'}), {}, {strict: true}), /not a speaker field/);
 });
 
 test('user variable ids keep their pattern, so a built-in can never collide; speakers is reserved', () => {
-  const dotted = validatePresentation(deck({variables: {'speaker.name': {type: 'text', value: 'x'}}}));
+  const dotted = check(deck({variables: {'speaker.name': {type: 'text', value: 'x'}}}));
   assert.equal(dotted.valid, false);
-  const reserved = validatePresentation(deck({variables: {speakers: {type: 'text', value: 'x'}}}));
+  const reserved = check(deck({variables: {speakers: {type: 'text', value: 'x'}}}));
   assert.equal(reserved.valid, false);
-  assert.ok(reserved.errors.some((error) => error.path === '/variables/speakers' && /reserved/.test(error.message)));
+  assert.ok(errorsOf(reserved).some((error) => error.path === '/variables/speakers' && /reserved/.test(error.message)));
   // A user variable named like a built-in root is fine: it has no dot.
   const plain = withSlide({title: '{{speaker}} / {{speaker.name}}'}, {variables: {speaker: {type: 'text', value: 'User value'}}});
   assert.equal(first(resolved(plain)).title, 'User value / Ada Lovelace');
 });
 
 test('unique speaker and organization ids and a resolving organizationId are validation errors', () => {
-  const duplicates = validatePresentation(deck({speaker: [{id: 'a', name: 'A'}, {id: 'a', name: 'B'}], organization: [{id: 'o', name: 'O'}, {id: 'o', name: 'P'}]}));
-  assert.deepEqual(duplicates.errors.map((error) => error.path).sort(), ['/organization/1/id', '/speaker/1/id']);
-  const dangling = validatePresentation(deck({speaker: {id: 'a', name: 'A', organizationId: 'gone'}}));
-  assert.deepEqual(dangling.errors.map((error) => error.path), ['/speaker/organizationId']);
-  assert.match(dangling.errors[0].message, /names no organization/);
-  assert.equal(validatePresentation(deck()).valid, true);
+  const duplicates = check(deck({speaker: [{id: 'a', name: 'A'}, {id: 'a', name: 'B'}], organization: [{id: 'o', name: 'O'}, {id: 'o', name: 'P'}]}));
+  assert.deepEqual(errorsOf(duplicates).map((error) => error.path).sort(), ['/organization/1/id', '/speaker/1/id']);
+  const dangling = check(deck({speaker: {id: 'a', name: 'A', organizationId: 'gone'}}));
+  assert.deepEqual(errorsOf(dangling).map((error) => error.path), ['/speaker/organizationId']);
+  assert.match(errorsOf(dangling)[0].message, /names no organization/);
+  assert.equal(check(deck()).valid, true);
   // Speaker ids and organization ids are separate namespaces.
-  assert.equal(validatePresentation(deck({speaker: {id: 'acme', name: 'A', organizationId: 'acme'}})).valid, true);
+  assert.equal(check(deck({speaker: {id: 'acme', name: 'A', organizationId: 'acme'}})).valid, true);
 });
 
 test('template previews use the real document metadata and leave an absent built-in visible', () => {
@@ -177,9 +178,9 @@ test('template previews use the real document metadata and leave an absent built
   const filled = resolved(template, {client: 'Globex'});
   assert.equal(first(filled).subtitle, '');
   // A template validates; the unknown path is still an error.
-  const validation = validatePresentation(template);
+  const validation = check(template);
   assert.equal(validation.template, true);
-  assert.ok(validation.errors.some((error) => error.params?.code === 'variable-unknown-builtin'));
+  assert.ok(errorsOf(validation).some((error) => error.ruleId === 'opf/variable-unknown-builtin'));
 });
 
 test('built-ins are listed with kind, availability and uses for pickers', () => {
@@ -223,6 +224,6 @@ test('the speaker furniture field draws the first speaker name and title after o
   const none = composeSlide({id: 'cover'}, {width: 1280, height: 720, presentation: absent});
   assert.equal(none.furniture.parts.length, 0);
   assert.ok(none.furniture.diagnostics.some((entry) => entry.code === 'unresolved-content' && entry.path === 'design.footer.left.speaker'));
-  const validation = validatePresentation(presentation);
-  assert.equal(validation.valid, true, JSON.stringify(validation.errors));
+  const validation = check(presentation);
+  assert.equal(validation.valid, true, JSON.stringify(errorsOf(validation)));
 });

@@ -16,38 +16,38 @@ Four deterministic, local pieces share one implementation: no network, no model 
 `opf edit`, the editor session (`@openpresentation/opf-editor`, undo/redo) and the diff output all use `@openpresentation/opf/patch`. There is no second implementation.
 
 ```ts
-import { applyPatch, applyPatchWithInverse, invertPatch, PatchError } from "@openpresentation/opf/patch";
+import { applyPatch, applyPatchWithInverse, invertPatch, OPFPatchError } from "@openpresentation/opf/patch";
 
-const next = applyPatch(document, [
+const next = applyPatch(presentation, [
   { op: "test", path: "/slides/0/id", value: "intro" },
   { op: "replace", path: "/slides/0/title", value: "Welcome" },
   { op: "move", from: "/slides/3", path: "/slides/1" },
 ]);
-// applyPatch clones: `document` is never changed, and any failure applies nothing.
+// applyPatch clones: `presentation` is never changed, and any failure applies nothing.
 
-const { document: after, inverse } = applyPatchWithInverse(document, patch);
-applyPatch(after, inverse); // deep-equals `document`: this is the undo patch
+const { presentation: after, inverse } = applyPatchWithInverse(presentation, patch);
+applyPatch(after, inverse); // deep-equals `presentation`: this is the undo patch
 ```
 
 - All six RFC 6902 operations: `add`, `remove`, `replace`, `move`, `copy`, `test`. Unknown members of an operation are ignored (RFC 6902 section 4); unknown `op` values are errors.
 - Pointers are strict RFC 6901. `-` is accepted only as the final token of an `add`, `move` target or `copy` target. Array indexes are canonical decimal (`01`, `-1` and `1.0` are errors). `parsePointer`, `formatPointer`, `escapePointerToken`, `pointerFromPath` (a pointer, an OPF dotted path such as `slides.0.title`, or a segment array) and `splitPointer` give every caller the same path handling; build pointers with `formatPointer` rather than joining unescaped keys.
-- Errors are `PatchError` with a stable `code` (`patch-test-failed`, `patch-path-missing`, `patch-parent-missing`, `invalid-array-index`, `invalid-json-pointer`, `invalid-patch`, `invalid-patch-operation`, `unsupported-patch-operation`, `patch-invalid-move`, `patch-root-remove`, `patch-invalid-document`), the failing operation's `index` and `path`, and a message that starts with `Operation <n>:`.
+- Errors are `OPFPatchError` with a stable `code` (`patch-test-failed`, `patch-path-missing`, `patch-parent-missing`, `invalid-array-index`, `invalid-json-pointer`, `invalid-patch`, `invalid-patch-operation`, `unsupported-patch-operation`, `patch-invalid-move`, `patch-root-remove`, `patch-invalid-document`), the failing operation's `index` and `path`, and a message that starts with `Operation <n>:`.
 - `test` fails on a missing path, and compares by JSON value: member order is irrelevant, `0` equals `-0`, arrays compare in order. `move` onto itself is a no-op; moving a value into its own descendant is an error; removing the document root is an error. A `__proto__` key is data and never reaches a prototype.
-- Optional schema validation of the result: `applyPatch(document, patch, { validate: true })` (or a custom validator; add `strict: true` to reject warnings) throws `PatchValidationError` with the full validation report when the final document is invalid. Intermediate states are not validated, so a patch may pass through an invalid state. `opf edit` validates the saved document itself, as before.
+- Optional schema validation of the result: `applyPatch(presentation, patch, { validate: true })` (or a custom validator; add `strict: true` to reject warnings) throws `OPFPatchValidationError` with the full validation report when the final document is invalid. Intermediate states are not validated, so a patch may pass through an invalid state. `opf edit` validates the saved document itself, as before.
 - Inverse patches: `applyPatchWithInverse` and `invertPatch` return operations that restore the input exactly, in reverse order, with concrete array indexes (the inverse of an `add` at `-` removes the real index). `test` has no inverse. The editor stores these in its undo stack.
 
 ## Diff
 
 ```ts
-import { diffPresentations, formatDiffReport } from "@openpresentation/opf/diff";
+import { diff, formatDiffReport } from "@openpresentation/opf/diff";
 
-const diff = diffPresentations(a, b);
-diff.equal;     // true when nothing differs
-diff.patch;     // RFC 6902 patch: applyPatch(a, diff.patch) deep-equals b
-diff.changes;   // typed, categorised changes
-diff.slides;    // how each slide was matched, and its status
-diff.summary;   // counts by type, category and slide status
-formatDiffReport(diff); // plain-text report
+const result = diff(a, b);
+result.equal;     // true when nothing differs
+result.patch;     // RFC 6902 patch: applyPatch(a, result.patch) deep-equals b
+result.changes;   // typed, categorised changes
+result.slides;    // how each slide was matched, and its status
+result.summary;   // counts by type, category and slide status
+formatDiffReport(result); // plain-text report
 ```
 
 **Matching.** Arrays are matched element by element, in this order, and the same rule applies to slides, blocks, list items, table rows and every other array:
@@ -89,9 +89,9 @@ CLI: `opf diff <a|-> <b|-> [--format text|json|patch] [--exit-code] [--threshold
 ## Merge
 
 ```ts
-import { mergePresentations } from "@openpresentation/opf/diff";
+import { merge } from "@openpresentation/opf/diff";
 
-const { merged, conflicts, clean, applied } = mergePresentations(base, ours, theirs, { prefer: "ours" });
+const { merged, conflicts, clean, applied } = merge(base, ours, theirs, { prefer: "ours" });
 ```
 
 Changes in different places merge automatically; the same change on both sides is applied once. Arrays merge element by element with the diff matcher:
@@ -104,14 +104,14 @@ Changes in different places merge automatically; the same change on both sides i
 
 The merge result is not schema-validated by the library; `opf merge` validates it before writing, because two valid documents can merge into an invalid one (for example duplicate ids).
 
-CLI: `opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer ours|theirs] [--report <file>] [--dry-run] [--threshold <0-1>] [--strict]`. With conflicts and no `--prefer`, nothing is written, the conflict report goes to stderr as JSON and the exit code is 1. With `--prefer`, the chosen side's value is written, the report lists every conflict, and the exit code is 0. `--report <file>` saves the `{clean, conflicts, applied}` summary. `--in-place` rewrites the *ours* file (like `git merge-file`) with the same hash guard as `opf edit`. The usual output rules apply: stdout without an output option, `--force` to replace a file.
+CLI: `opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer ours|theirs] [--report <file>] [--dry-run] [--threshold <0-1>] [--fail-on <level>]`. With conflicts and no `--prefer`, nothing is written, the conflict report goes to stderr as JSON and the exit code is 1. With `--prefer`, the chosen side's value is written, the report lists every conflict, and the exit code is 0. `--report <file>` saves the `{clean, conflicts, applied}` summary. `--in-place` rewrites the *ours* file (like `git merge-file`) with the same hash guard as `opf edit`. The usual output rules apply: stdout without an output option, `--force` to replace a file.
 
 ## Format
 
 ```ts
-import { formatPresentation, sortPresentationKeys, isFormatted } from "@openpresentation/opf/format";
+import { format, sortPresentationKeys, isFormatted } from "@openpresentation/opf/format";
 
-const text = formatPresentation(sourceTextOrDocument);
+const text = format(sourceTextOrDocument);
 ```
 
 - **Key order** follows the property declaration order of the OPF schema at every depth (through `$ref`, `oneOf`, `anyOf`, `allOf` and `then`/`else`): `$schema`, `name`, `description`, ..., `design`, `variables`, `narrative`, `slides`, `assets`, `catalogs`, `extensions` at the root, `id`, `layout`, `title`, ... in a slide. Keys the schema does not declare (extensions, catalog records, custom colours, unknown fields) follow the declared ones in their original relative order, so formatting never reorders user data that has no canonical order. Array order and every value are unchanged.

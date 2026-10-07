@@ -58,56 +58,60 @@ export async function checkPackedTypes(directory, {downstream = false} = {}) {
   }).join('\n');
   await writeFile(path.join(directory, 'types-smoke.ts'), `${imports}
 import type {Presentation} from '@openpresentation/opf/types';
-import {validatePresentation} from '@openpresentation/opf/validator';
+import {validate, type ValidationReport} from '@openpresentation/opf/validator';
+import type {Finding} from '@openpresentation/opf/types';
 import {composeSlide} from '@openpresentation/opf/composition';
 import type {FontFaceSelection, TextStyle} from '@openpresentation/opf/composition';
-import {paginatePresentation} from '@openpresentation/opf/pagination';
-import {createDataContent} from '@openpresentation/opf/data';
+import {paginate} from '@openpresentation/opf/pagination';
+import {importData} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
-import {markdownToOpf, opfToMarkdown, type MarkdownDiagnostic} from '@openpresentation/opf/markdown';
-import {fromYaml, toYaml, OPFYamlError, type YamlDiagnostic} from '@openpresentation/opf/yaml';
+import {fromMarkdown, toMarkdown} from '@openpresentation/opf/markdown';
+import {fromYaml, toYaml, OPFYamlError, type YamlFinding} from '@openpresentation/opf/yaml';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
 // @ts-expect-error Physical style-link flags are booleans, independent of weight.
 const invalidFace: FontFaceSelection = {family: 'Roboto', bold: 600, italic: false};
 void measuredStyle; void invalidFace;
-const valid: boolean = validatePresentation(deck).valid;
-const pages = paginatePresentation(deck).presentation;
+const report: ValidationReport = validate(deck, {only: ['format']});
+const valid: boolean = report.valid;
+const firstFinding: Finding | undefined = report.findings[0];
+const pages = paginate(deck).presentation;
 composeSlide(pages.slides[0]);
-createDataContent('Name,Value\\nA,1', {as: 'table'});
+importData('Name,Value\\nA,1', {as: 'table'});
 const converted: ConvertedContent = convertContent({text: 'a'}, 'list');
 const lossless: boolean = converted.lossless;
 // @ts-expect-error unknown content kind must be rejected
 convertContent({text: 'a'}, 'unsupported');
 void lossless;
-const fromMarkdown = markdownToOpf('# Typed\\n');
-const slides: Presentation['slides'] = fromMarkdown.document.slides;
-const firstDiagnostic: MarkdownDiagnostic | undefined = fromMarkdown.diagnostics[0];
-const markdown: string = opfToMarkdown(deck).markdown;
+const markdownResult = fromMarkdown('# Typed\\n');
+const slides: Presentation['slides'] = markdownResult.presentation.slides;
+const firstMarkdownFinding: Finding | undefined = markdownResult.findings[0];
+const markdown: string = toMarkdown(deck).markdown;
 // @ts-expect-error unsupported mode must be rejected
-opfToMarkdown(deck, {unsupported: 'maybe'});
-void slides; void firstDiagnostic; void markdown;
+toMarkdown(deck, {unsupported: 'maybe'});
+void slides; void firstMarkdownFinding; void firstFinding; void markdown;
 const parsedYaml = fromYaml('slides:\\n  - title: Typed\\n', {aliases: false});
-const yamlSlides: Presentation['slides'] = parsedYaml.document.slides;
-const yamlDiagnostic: YamlDiagnostic | undefined = parsedYaml.diagnostics[0];
+const yamlSlides: Presentation['slides'] = parsedYaml.presentation.slides;
+const yamlFinding: YamlFinding | undefined = parsedYaml.findings[0];
+const yamlSchemaValid: boolean | null = parsedYaml.schemaValid;
 const yamlText: string = toYaml(deck, {schemaComment: true}).yaml;
 const yamlError: OPFYamlError['code'] = 'invalid-document';
 // @ts-expect-error unknown option must be rejected
 toYaml(deck, {style: 'flow'});
-void yamlSlides; void yamlDiagnostic; void yamlText; void yamlError;
+void yamlSlides; void yamlFinding; void yamlSchemaValid; void yamlText; void yamlError;
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected
-createDataContent([], {as: 'unsupported'});
+importData([], {as: 'unsupported'});
 void valid; void invalid;
 ${downstream ? `
-import {renderSvg} from '@openpresentation/opf-render';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx} from '@openpresentation/opf-pptx';
 const editor = createEditorSession(deck);
-const edited = editor.document;
-const svg: string = renderSvg(edited);
+const edited = editor.presentation;
+const svg: string = renderSlideSvg(edited, 0);
 toPptx(edited); void svg;
 ` : ''}
 `);

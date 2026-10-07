@@ -140,13 +140,13 @@ async function presentationReference() {
 
 async function catalogReference() {
   const files = (await readdir(schemaRoot))
-    .filter((file) => file.endsWith(".schema.json") && file !== "opf.schema.json")
+    .filter((file) => file.endsWith(".schema.json") && file !== "opf.schema.json" && file !== "finding.schema.json")
     .sort((a, b) => a.localeCompare(b));
 
   const lines = [
     "# OPF Catalog Schema Reference",
     "",
-    "Catalog records are reusable presets that OPF documents reference by id. This page summarizes every companion schema in `spec/schemas/` except the top-level presentation schema.",
+    "Catalog records are reusable presets that OPF documents reference by id. This page summarizes every catalog companion schema in `spec/schemas/`. The top-level presentation schema has its own [schema reference](schema-reference.md), and the report format every tool shares has the [finding schema reference](finding-schema-reference.md).",
     "",
     "OPF documents usually reference these records with string ids such as `design.theme = \"minimal\"`, `tone = \"formal\"`, or `chart.type = \"line\"`. Dense examples may also embed catalog sources or inline records under `catalogs`.",
     "",
@@ -190,6 +190,32 @@ async function catalogReference() {
   }
 
   return { file: "catalog-schema-reference.md", content: `${lines.join("\n").trimEnd()}\n` };
+}
+
+async function findingReference() {
+  const schema = await loadSchema("finding.schema.json");
+  const lines = [
+    "# OPF Finding Schema Reference",
+    "",
+    "A finding is one thing a checker found at one place in a presentation, and a report lists them. `validate` in `@openpresentation/opf`, the Markdown and YAML converters, the editor's Review panel and hosted reviewers such as pptx.dev's AI review all produce this shape, so a host shows and applies findings from any of them the same way. This page summarizes `spec/schemas/finding.schema.json`; the schema remains the source of truth. How core produces findings is in [validate](validate.md).",
+    "",
+    "## Report Contract",
+    "",
+    `- Schema id: \`${schema.$id}\``,
+    `- Required top-level fields: ${(schema.required ?? []).map((field) => `\`${field}\``).join(", ")}`,
+    "- Additional top-level fields: allowed (`validate` adds `schemaValid`, `checks`, `template` and `unfilledVariables`)",
+    "",
+    "## Top-Level Fields",
+    "",
+    table(propertyRows(schema)),
+    "## Object And Type Reference",
+    "",
+  ];
+  for (const [name, def] of Object.entries(schema.$defs ?? {})) {
+    lines.push(definitionDoc(name, def));
+    lines.push("");
+  }
+  return { file: "finding-schema-reference.md", content: `${lines.join("\n").trimEnd()}\n` };
 }
 
 async function countExampleDecks() {
@@ -265,7 +291,7 @@ async function examplesGuide() {
 }
 
 async function main() {
-  const docs = [await presentationReference(), await catalogReference(), await examplesGuide()];
+  const docs = [await presentationReference(), await catalogReference(), await findingReference(), await examplesGuide()];
   if (process.argv.includes("--check")) {
     const stale = [];
     for (const { file, content } of docs) {

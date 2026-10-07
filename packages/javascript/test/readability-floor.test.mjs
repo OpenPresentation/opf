@@ -52,12 +52,12 @@ test('irreducible content reports overflow and bounded fitting always evaluates 
 
 test('pagination retains source and enforces the selected floor on table cells and descriptions',()=>{
   const items=Array.from({length:20},(_,i)=>({text:`Item ${i}`,description:'Every word survives.'}));
-  const result=paginateSlide({items},{minFontSize:32,textMeasurement:measurement});
+  const result=paginateSlide({items},{minFontSize:32,fonts:{textMeasurement:measurement}});
   assert.deepEqual(result.slides.flatMap(slide=>slide.items),items);
   for(const slide of result.slides)for(const entry of composeSlide(slide,{textMeasurement:measurement}).items[0].text.listEntries)
     for(const part of [...glyphs(entry.text),...glyphs(entry.description)])readable(part.fontSize,32);
   const table={columns:['Header'],rows:Array.from({length:25},(_,i)=>[`Row ${i}`])};
-  const tables=paginateSlide({table},{minFontSize:32,textMeasurement:measurement});
+  const tables=paginateSlide({table},{minFontSize:32,fonts:{textMeasurement:measurement}});
   assert.deepEqual(tables.slides.flatMap(slide=>slide.table.rows),table.rows);
   for(const slide of tables.slides) {
     const geometry=composeSlide(slide,{textMeasurement:measurement}),item=geometry.items[0];assert.deepEqual(geometry.diagnostics,[]);

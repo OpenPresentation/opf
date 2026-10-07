@@ -24,7 +24,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `language` | no | `oneOf:string / ref:Language` | Language for the presentation content. Accepts either: - A string shorthand: a BCP-47 language tag ('en-US', 'en-GB', 'ja-JP', 'fr'), a languages catalog id ('english', 'japanese'), an HTTPS URL, or a 'pkg:' reference... |
 | `tone` | no | `oneOf:string / ref:Tone` | Desired tone for the presentation. Accepts either: - A string shorthand: a tones catalog id ('formal'), an HTTPS URL, or a 'pkg:' reference. - An inline Tone object for custom tone metadata or catalog-backed overrides... |
 | `takeaway` | no | `oneOf:string / array<string>` | Audience-facing takeaway the presentation should leave behind. Array form supports multiple takeaways. Deck-level intent used by AI to seed and pressure-test slide content. |
-| `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core lint warns when it lies outside the resolved narrative's 'duration' range. Agen... |
+| `duration` | no | `integer` | Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core validate warns when it lies outside the resolved narrative's 'duration' range.... |
 | `tags` | no | `array<string>` | Free-form labels used for categorization, search, and filtering. Lowercase kebab-case is recommended for consistency across a deck library. |
 | `design` | no | `ref:Design` | Optional design system covering theme, color scheme, font scheme, dimensions, background, logo, watermark, header, and footer applied to the deck. When omitted, engines use their default design configuration. |
 | `variables` | no | `ref:Variables` | Optional named variables: deck colors referenced as 'var:<id>' (the original use), and typed content variables (text, number, date, image, url, list) referenced inline as '{{<id>}}' or whole as 'var:<id>'. Variables a... |
@@ -292,7 +292,7 @@ _No named properties._
 
 - Type: `allOf:ref:Design + schema`
 - Required fields: none
-- Purpose: A slide's design: every Design field except dimensions. A PPTX has one slide size, so the size is set once, on the deck's design.dimensions (or its theme), and a slide's design cannot set it. A slide-level theme whose resolved dimensions differ from the deck's is a lint warning (slide-theme-dimensions); exporting such a deck to PPTX fails with mixed-slide-dimensions.
+- Purpose: A slide's design: every Design field except dimensions. A PPTX has one slide size, so the size is set once, on the deck's design.dimensions (or its theme), and a slide's design cannot set it. A slide-level theme whose resolved dimensions differ from the deck's is a validate warning (opf/slide-theme-dimensions); exporting such a deck to PPTX fails with mixed-slide-dimensions.
 
 _No named properties._
 
@@ -649,7 +649,7 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
-| `layout` | no | `string` | Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case,... |
+| `layout` | no | `string` | Optional. Resolves to the 'id' of a 'layouts' catalog record. When omitted, or when it names an id that no inline record, host catalog or default catalog defines, the slide is composed with no layout record: engines a... |
 | `title` | no | `oneOf:string / array<ref:TextRun>` | Slide-level title content. When the resolved layout exposes a 'title' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a ci... |
 | `subtitle` | no | `oneOf:string / array<ref:TextRun>` | Slide-level subtitle or supporting line. When the resolved layout exposes a 'subtitle' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, b... |
 | `tag` | no | `oneOf:string / array<ref:TextRun>` | Small slide-level label or badge. When the resolved layout exposes a 'tag' placeholder, the engine renders this value there. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link,... |
@@ -762,7 +762,7 @@ _No named properties._
 | `text` | yes | `oneOf:string / array<ref:TextRun>` | Quoted text: a string, or TextRun[] for inline rich text (a colored phrase, bold, a link, or a citation or footnote marker). The engine draws the surrounding quotation marks. |
 | `attribution` | no | `string` | Person or organization credited for the quote. Drawn after the quote text, in the muted text color. |
 | `role` | no | `string` | Title and organization of the attributed person. Drawn on its own line under the attribution; without an attribution it stands alone. It does not replace the attribution, so the person's name belongs in 'attribution'. |
-| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (the audit's missing-alt-text rule checks it). A raster photograph... |
+| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photogr... |
 | `source` | no | `string` | Optional quote source, citation, or URL. Follows the attribution and role after ' - '. |
 
 

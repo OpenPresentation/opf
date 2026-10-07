@@ -4,14 +4,14 @@ import {createRequire} from 'node:module';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {loadOfficeFontRegistry} from '../../opf-render/dist/fonts-node.js';
+import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 const root=fileURLToPath(new URL('../',import.meta.url)),require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {build}=require('esbuild'),{chromium}=require('playwright'),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const output=path.resolve(process.argv[2]);await mkdir(output,{recursive:true});
 const mode=process.argv[3]??'measured';assert.ok(['measured','estimated'].includes(mode));
 const pageUrl='http://opf-fixture.local/'+(mode==='estimated'?'?estimated':'');
 const bundled=await build({absWorkingDir:root,entryPoints:['scripts/test-rich-text-browser.mjs'],bundle:true,platform:'browser',format:'esm',write:false,minify:true,metafile:true});
-const bundle=bundled.outputFiles[0].text,fonts=JSON.stringify((await loadOfficeFontRegistry()).embeddedFonts);
+const bundle=bundled.outputFiles[0].text,fonts=JSON.stringify((await loadFonts({pack:'office'})).embeddedFonts);
 const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined}),errors=[],unexpectedRequests=[];
 try {
   const page=await browser.newPage({viewport:{width:1400,height:1000}});page.on('pageerror',error=>errors.push(error.message));

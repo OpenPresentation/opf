@@ -12,7 +12,7 @@ test('complete quote layout preserves source ranges, requested/resolved styles a
     resolveStyle: style => ({...style,fontFamily:style.fontFamily.replace('Requested','Resolved')}),
     measure:(text,size,style)=>{seen.push({...style});return [...text].length*size*.5;},
   };
-  const result = layoutQuote(value,cell,{fonts,textMeasurement:measurement,path:'slides.3.quote'});
+  const result = layoutQuote(value,cell,{fontFamilies:fonts,textMeasurement:measurement,path:'slides.3.quote'});
   assert.equal(result.overflow,false);
   assert.equal(result.textMeasurement,'provided');
   assert.deepEqual(result.parts.map(part=>part.box),[

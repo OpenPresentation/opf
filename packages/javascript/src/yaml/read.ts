@@ -1,10 +1,11 @@
 // YAML reading for `@openpresentation/opf/yaml` (RR-56): the strict, JSON-compatible YAML 1.2 core dialect, located
-// diagnostics, and the JSON Pointer to source range index that maps OPF lint findings back to the YAML. Internal module.
+// findings, and the JSON Pointer to source range index that maps OPF validation findings back to the YAML. Internal module.
 import { type Alias, type Document, type ParsedNode, type Scalar, type YAMLError, type YAMLMap, type YAMLSeq, Parser, isAlias, isMap, isScalar, isSeq, parseDocument, visit } from "yaml";
-import type { LintDiagnostic, LintLocation, LintSeverity } from "../lint.js";
+import type { Finding, FindingLocation } from "../generated/types/finding.js";
 import { Ctx, type Range } from "../markdown/support.js";
 
-export type YamlDiagnostic = LintDiagnostic & { location: LintLocation };
+/** A finding located in the YAML source: `yaml/<rule>` syntax and dialect errors (category `format`) and the OPF findings of the parsed deck. */
+export type YamlFinding = Finding & { location: FindingLocation };
 
 /** The most alias expansions `aliases: true` allows before the YAML is refused (the yaml package's `maxAliasCount`). */
 export const MAX_ALIAS_COUNT = 100;
@@ -24,8 +25,8 @@ export interface ParsedYaml {
   /** The decoded value (`{}` when there are errors). */
   value: unknown;
   /** Maps a JSON Pointer to the location of the YAML node it names (the nearest ancestor when the pointer names nothing). */
-  locatePointer: (pointer: string) => LintLocation | undefined;
-  diagnostics: YamlDiagnostic[];
+  locatePointer: (pointer: string) => FindingLocation | undefined;
+  findings: YamlFinding[];
   errors: number;
 }
 
@@ -92,18 +93,18 @@ function keyRangeAt(doc: Document.Parsed, start: number): Range | undefined {
 
 type Add = (rule: string, message: string, help: string, range: Range, path?: string) => void;
 
-/** Parse one OPF YAML document in the strict dialect. Never throws; the diagnostics carry what is wrong. */
+/** Parse one OPF YAML document in the strict dialect. Never throws; the findings carry what is wrong. */
 export function readYamlDocument(source: string, aliases: boolean, rootKind: "mapping" | "any" = "mapping"): ParsedYaml {
   const bom = source.startsWith("﻿") ? 1 : 0;
   const text = source.slice(bom);
   const ctx = new Ctx(text);
-  const diagnostics: YamlDiagnostic[] = [];
-  const locate = (range: Range): LintLocation => {
+  const findings: YamlFinding[] = [];
+  const locate = (range: Range): FindingLocation => {
     const location = ctx.location(range);
     return { ...location, offset: location.offset + bom };
   };
   const add: Add = (rule, message, help, range, path = "") => {
-    diagnostics.push({ ruleId: `yaml/${rule}`, severity: "error" as LintSeverity, scope: "document", path, message, help, location: locate(range) });
+    findings.push({ ruleId: `yaml/${rule}`, severity: "error", category: "format", scope: "document", path, message, help, location: locate(range) });
   };
   const doc = parseDocument(text, { schema: "core", uniqueKeys: true, merge: aliases, prettyErrors: false });
   const finish = (value: unknown): ParsedYaml => ({
@@ -112,8 +113,8 @@ export function readYamlDocument(source: string, aliases: boolean, rootKind: "ma
       const range = rangeOfPointer(doc, pointer);
       return range ? locate(range) : undefined;
     },
-    diagnostics,
-    errors: diagnostics.length,
+    findings,
+    errors: findings.length,
   });
 
   for (const error of [...doc.errors, ...doc.warnings.filter((warning) => warning.code === "TAG_RESOLVE_FAILED")]) {
@@ -121,7 +122,7 @@ export function readYamlDocument(source: string, aliases: boolean, rootKind: "ma
     const [start, end] = error.pos;
     add(described.rule, described.message, described.help, (error.code === "DUPLICATE_KEY" ? keyRangeAt(doc, start) : undefined) ?? { start, end: Math.max(start, end) });
   }
-  if (diagnostics.length) return finish({});
+  if (findings.length) return finish({});
 
   const root = doc.contents as ParsedNode | null;
   if (root === null || !root.range) {
@@ -134,7 +135,7 @@ export function readYamlDocument(source: string, aliases: boolean, rootKind: "ma
     return finish({});
   }
   checkTree({ doc, text, aliases, add }, root, [], []);
-  if (diagnostics.length) return finish({});
+  if (findings.length) return finish({});
 
   let value: unknown;
   try {

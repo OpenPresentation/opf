@@ -1,17 +1,17 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {loadBrowserFontRegistry} from '../../opf-render/src/fonts-browser.js';
+import {loadFonts} from '../../opf-render/src/fonts-browser.js';
 import {richTextContent} from '../../opf-editor/src/rich-text.js';
 const out=document.querySelector('#results'),host=document.querySelector('#canvas');let checks=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);out.textContent+=`PASS ${message}\n`;checks++;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 const text=[{text:'Select these words to format them. ',fontSize:30}, {text:'Keep this link',bold:true,link:'https://example.org',fontSize:30},' and the final sentence.'];
 const original={design:{fontScheme:'roboto'},slides:[{title:'Rich text, on the slide',text,notes:'Keep these notes'}]};
-const fonts=await loadBrowserFontRegistry((await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family)&&[400,700].includes(f.weight)).map(f=>({...f,data:Uint8Array.from(atob(f.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})));
+const fonts=await loadFonts({faces:(await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family)&&[400,700].includes(f.weight)).map(f=>({...f,data:Uint8Array.from(atob(f.dataUrl.split(',')[1]),c=>c.charCodeAt(0))}))});
 const estimated=new URLSearchParams(location.search).has('estimated')||location.pathname.includes('rich-text-estimated');
-const renderOptions=estimated?{}:{textMeasurement:fonts.textMeasurement};
+const canvasFonts=estimated?{}:{fonts};
 const editor=createEditorSession(original,{rejectInvalid:true});let errors=[], commits=0;
-const canvas=createCanvasEditor(host,{editor,renderOptions,onCommit:()=>commits++,onError:error=>errors.push(error.message)});
+const canvas=createCanvasEditor(host,{editor,...canvasFonts,onCommit:()=>commits++,onError:error=>errors.push(error.message)});
 const button=name=>[...host.querySelectorAll('.opf-rich-toolbar button')].find(b=>b.textContent===name);
 const input=name=>host.querySelector(`.opf-rich-toolbar input[aria-label="${name}"]`);
 const nodes=()=>[...host.querySelectorAll('text[data-opf-text-start],tspan[data-opf-text-start]')];
@@ -38,7 +38,7 @@ try {
  await select(7,40,true);change('Text color','#2563eb');check(nodes().filter(n=>+n.dataset.opfTextStart>=7&&+n.dataset.opfTextEnd<=40).every(n=>n.getAttribute('fill')==='#2563eb'),'reverse cross-run selection colors only the range');
  change('Font size (pt)','24');check(editor.get('slides.0.text').filter(r=>r.color==='#2563eb').every(r=>r.fontSize===24),'point size applies to all selected runs');
  change('Link URL','javascript:alert(1)');check(errors.at(-1)?.includes('HTTP'),'unsafe link entry rejected');errors=[];
- if(!estimated){const beforeMissingFont=JSON.stringify(editor.document);change('Font family','Definitely Missing OPF Test Font');check(JSON.stringify(editor.document)===beforeMissingFont&&errors.at(-1)?.includes('font'),'missing font fails before changing the document');errors=[];}
+ if(!estimated){const beforeMissingFont=JSON.stringify(editor.presentation);change('Font family','Definitely Missing OPF Test Font');check(JSON.stringify(editor.presentation)===beforeMissingFont&&errors.at(-1)?.includes('font'),'missing font fails before changing the document');errors=[];}
  change('Link URL','https://openpresentation.org');check(editor.get('slides.0.text').some(r=>r.link==='https://openpresentation.org'),'safe hyperlink stored');
  input('Selected text').value='replacement';button('Replace text').click();check(richTextContent(editor.get('slides.0.text'))===richTextContent(text).slice(0,7)+'replacement'+richTextContent(text).slice(40),'selected text replacement preserves the suffix');
  button('Superscript').click();check(editor.get('slides.0.text').some(r=>r.text==='replacement'&&r.superscript&&!r.subscript),'superscript uses exclusive script state');
@@ -100,5 +100,5 @@ try {
  canvas.destroy();check(!host.children.length,'destroy cleans up canvas and toolbar');
  out.textContent+=`\n${checks} checks passed`;document.title=`PASS ${checks} rich text canvas checks`;
  // Leave an interactive specimen after verification.
- const demo=createCanvasEditor(host,{document:original,renderOptions});await demo.ready;
+ const demo=createCanvasEditor(host,{presentation:original,...canvasFonts});await demo.ready;
 }catch(error){out.textContent+=`FAIL ${error.stack}`;document.title='FAIL rich text canvas checks';throw error;}

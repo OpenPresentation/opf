@@ -1,26 +1,27 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { FormatError, formatPresentation, isFormatted, sortPresentationKeys } from "../dist/format.js";
-import { validatePresentation } from "../dist/validator.js";
+import { OPFFormatError, format, isFormatted, sortPresentationKeys } from "../dist/format.js";
+
 import { loadExamples } from "./diff-support.mjs";
+import { check } from './support/validation.mjs';
 
 const examples = loadExamples();
 
-describe("formatPresentation over the example decks", () => {
+describe("format over the example decks", () => {
   test("127 example decks are covered", () => assert.equal(examples.length, 127));
   for (const { file, raw } of examples) {
     test(file, () => {
-      const once = formatPresentation(raw);
+      const once = format(raw);
       // Idempotent, text and value level.
-      assert.equal(formatPresentation(once), once);
+      assert.equal(format(once), once);
       assert.equal(isFormatted(once), true);
-      assert.equal(formatPresentation(JSON.parse(raw)), once, "text and parsed input agree");
+      assert.equal(format(JSON.parse(raw)), once, "text and parsed input agree");
       // Only the order of object members changes: every value and array order is preserved.
       assert.deepEqual(JSON.parse(once), JSON.parse(raw));
       assert.equal(JSON.stringify(sortPresentationKeys(JSON.parse(raw)).slides?.map(slide => slide.id)), JSON.stringify(JSON.parse(raw).slides?.map(slide => slide.id)));
       // Formatting never changes validity.
-      assert.equal(validatePresentation(JSON.parse(once)).valid, validatePresentation(JSON.parse(raw)).valid);
+      assert.equal(check(JSON.parse(once)).valid, check(JSON.parse(raw)).valid);
       // Layout: two-space indent, LF only, exactly one trailing newline, no BOM.
       assert.ok(once.endsWith("}\n") && !once.endsWith("\n\n"));
       assert.equal(once.includes("\r"), false);
@@ -78,20 +79,20 @@ describe("canonical key order", () => {
 describe("text layout", () => {
   const messy = '﻿{\r\n  "slides": [ {"title":"T","id":"a"} ],\r\n  "name": "N"\r\n}\r\n';
   test("normalises BOM, line endings and whitespace", () => {
-    assert.equal(formatPresentation(messy), '{\n  "name": "N",\n  "slides": [\n    {\n      "id": "a",\n      "title": "T"\n    }\n  ]\n}\n');
+    assert.equal(format(messy), '{\n  "name": "N",\n  "slides": [\n    {\n      "id": "a",\n      "title": "T"\n    }\n  ]\n}\n');
   });
   test("indent and eol options", () => {
-    assert.equal(formatPresentation('{"name":"N"}', { indent: 4 }), '{\n    "name": "N"\n}\n');
-    assert.equal(formatPresentation('{"name":"N"}', { indent: 0 }), '{"name":"N"}\n');
-    assert.equal(formatPresentation('{"name":"N","slides":[]}', { eol: "crlf" }), '{\r\n  "name": "N",\r\n  "slides": []\r\n}\r\n');
-    assert.throws(() => formatPresentation("{}", { indent: 9 }), FormatError);
-    assert.throws(() => formatPresentation("{}", { eol: "cr" }), FormatError);
+    assert.equal(format('{"name":"N"}', { indent: 4 }), '{\n    "name": "N"\n}\n');
+    assert.equal(format('{"name":"N"}', { indent: 0 }), '{"name":"N"}\n');
+    assert.equal(format('{"name":"N","slides":[]}', { eol: "crlf" }), '{\r\n  "name": "N",\r\n  "slides": []\r\n}\r\n');
+    assert.throws(() => format("{}", { indent: 9 }), OPFFormatError);
+    assert.throws(() => format("{}", { eol: "cr" }), OPFFormatError);
   });
   test("non-ASCII text stays literal", () => {
-    assert.equal(formatPresentation({ name: "Café ☃ \u{1F600}" }), '{\n  "name": "Café ☃ \u{1F600}"\n}\n');
+    assert.equal(format({ name: "Café ☃ \u{1F600}" }), '{\n  "name": "Café ☃ \u{1F600}"\n}\n');
   });
-  test("invalid JSON is a FormatError", () => {
-    assert.throws(() => formatPresentation("{not json"), FormatError);
+  test("invalid JSON is a OPFFormatError", () => {
+    assert.throws(() => format("{not json"), OPFFormatError);
     assert.equal(isFormatted("{not json"), false);
   });
   test("isFormatted detects drift", () => {
@@ -109,8 +110,8 @@ describe("text layout", () => {
       return object;
     };
     for (let i = 0; i < 300; i++) {
-      const text = formatPresentation(build(0));
-      assert.equal(formatPresentation(text), text);
+      const text = format(build(0));
+      assert.equal(format(text), text);
     }
   });
 });

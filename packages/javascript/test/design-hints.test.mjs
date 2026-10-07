@@ -19,9 +19,10 @@ const KEYS = {
   listBullet: ['image', 'character'],
 };
 
-test('the shared key list and the root entry export the helper', () => {
+test('the shared key list; the helper is an engine name on the composition entry, not the root', () => {
   assert.deepEqual([...DESIGN_HINT_KEYS].sort(), Object.keys(KEYS).sort());
-  assert.equal(root.resolveDesignHints, resolveDesignHints);
+  assert.equal(typeof resolveDesignHints, 'function');
+  assert.equal(root.resolveDesignHints, undefined);
 });
 
 for (const [key, [layoutValue, otherValue]] of Object.entries(KEYS)) {

@@ -1,6 +1,6 @@
 # OPF Catalog Schema Reference
 
-Catalog records are reusable presets that OPF documents reference by id. This page summarizes every companion schema in `spec/schemas/` except the top-level presentation schema.
+Catalog records are reusable presets that OPF documents reference by id. This page summarizes every catalog companion schema in `spec/schemas/`. The top-level presentation schema has its own [schema reference](schema-reference.md), and the report format every tool shares has the [finding schema reference](finding-schema-reference.md).
 
 OPF documents usually reference these records with string ids such as `design.theme = "minimal"`, `tone = "formal"`, or `chart.type = "line"`. Dense examples may also embed catalog sources or inline records under `catalogs`.
 
@@ -355,7 +355,7 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-narrative/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `beats`
-- Purpose: Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core lint warns about a 'slides[].beat' id the resolved narrati...
+- Purpose: Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core validate warns about a 'slides[].beat' id the resolved nar...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -366,7 +366,7 @@ _No named properties._
 | `summary` | no | `string` | One-sentence description of when and why to use this narrative. |
 | `description` | no | `string` | Longer prose describing the narrative arc and ideal use cases. Used by AI-driven generation to seed deck-level direction. |
 | `audienceFit` | no | `array<string>` | Audiences this narrative works well for, e.g. ['executive', 'investor', 'customer']. |
-| `duration` | no | `object` | Typical talk length this narrative suits, as a range in minutes. A deck's own target is the root 'duration' (one number); lint warns when that target lies outside this range, and when 'min' is greater than 'max'. |
+| `duration` | no | `object` | Typical talk length this narrative suits, as a range in minutes. A deck's own target is the root 'duration' (one number); core validate warns when that target lies outside this range, and when 'min' is greater than 'm... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search, e.g. ['business', 'pitch', 'internal']. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 | `beats` | yes | `array<ref:Beat>` | Ordered list of beats that make up the narrative arc. |

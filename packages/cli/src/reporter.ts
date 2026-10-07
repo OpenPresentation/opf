@@ -1,9 +1,11 @@
-// The diagnostics reporter shared by render, export and import. It extends the `opf lint` report: same fields
-// (`valid`, `schemaValid`, `diagnostics`, `counts`, `checks`, `sha256`, `opfVersion`), same diagnostic shape
-// (`ruleId`, `severity`, `path` as a JSON Pointer, `scope`, `message`, `help`), so one consumer reads all of them.
-// Renderer, exporter and importer diagnostics are appended with a `render/`, `pptx/`, `pdf/`, `fonts/` or `import/`
-// rule prefix. Exit status follows lint: an error always fails, a warning fails under --strict.
-import type { LintDiagnostic, LintReport, LintSeverity } from "@openpresentation/opf";
+// The findings reporter shared by render, export and import. It extends the `opf validate` report: same fields
+// (`valid`, `schemaValid`, `findings`, `counts`, `checks`, `sha256`, `opfVersion`), same finding shape
+// (`ruleId`, `severity`, `category`, `path` as a JSON Pointer, `scope`, `message`, `help`), so one consumer reads all of them.
+// Renderer, exporter and importer findings are appended with a `render/`, `pptx/`, `pdf/`, `fonts/` or `import/`
+// rule prefix and the same word as their category. Exit status follows --fail-on: an error always fails, a warning
+// fails under --fail-on warning.
+import type { Finding, FindingSeverity, ValidationReport } from "@openpresentation/opf";
+import { reaches } from "./check.js";
 import { pointerOf } from "./io.js";
 import type { Diagnostic } from "./peers.js";
 
@@ -40,25 +42,26 @@ const HELP: Record<string, string> = {
 	"duplicate-font-face": "A --font-dir face repeats a bundled family, weight and style; remove it or rename the family.",
 };
 
-export interface ReportDiagnostic extends Omit<LintDiagnostic, "scope"> {
-	scope: "document" | "context";
+/** A finding of the shared format, with the library's details (font family, package, ...) alongside. */
+export interface ReportFinding extends Finding {
 	[detail: string]: unknown;
 }
 
 export class Reporter {
-	readonly diagnostics: ReportDiagnostic[] = [];
+	readonly findings: ReportFinding[] = [];
 	private readonly seen = new Set<string>();
 
-	constructor(initial: readonly LintDiagnostic[] = []) {
-		for (const item of initial) this.diagnostics.push(item as ReportDiagnostic);
+	constructor(initial: readonly Finding[] = []) {
+		for (const item of initial) this.findings.push(item as ReportFinding);
 	}
 
 	/** Add a library diagnostic (`code`, `path`, `message` and details). Identical entries are kept once. */
-	add(source: Source, diagnostic: Diagnostic, severity?: LintSeverity) {
+	add(source: Source, diagnostic: Diagnostic, severity?: FindingSeverity) {
 		const { code, path: where, message, ...details } = diagnostic;
-		const entry: ReportDiagnostic = {
+		const entry: ReportFinding = {
 			ruleId: `${source}/${code}`,
 			severity: severity ?? (INFO.has(code) ? "info" : "warning"),
+			category: source,
 			path: pointerOf(where ?? ""),
 			scope: "document",
 			message,
@@ -68,16 +71,16 @@ export class Reporter {
 		const key = JSON.stringify([entry.ruleId, entry.path, entry.message]);
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
-		this.diagnostics.push(entry);
+		this.findings.push(entry);
 	}
 
 	error(source: Source, code: string, message: string, where = "", details: Record<string, unknown> = {}) {
 		this.add(source, { code, path: where, message, ...details }, "error");
 	}
 
-	get counts(): Record<LintSeverity, number> {
+	get counts(): Record<FindingSeverity, number> {
 		const counts = { error: 0, warning: 0, info: 0 };
-		for (const item of this.diagnostics) counts[item.severity] += 1;
+		for (const item of this.findings) counts[item.severity] += 1;
 		return counts;
 	}
 
@@ -98,11 +101,11 @@ export function reportThrown(reporter: Reporter, source: Source, error: unknown)
 }
 
 export function finishReport(
-	base: Pick<LintReport, "valid" | "schemaValid" | "checks">,
+	base: Pick<ValidationReport, "valid" | "schemaValid" | "checks">,
 	reporter: Reporter,
-	strict: boolean,
+	failOn: FindingSeverity,
 ) {
 	const counts = reporter.counts;
-	const ok = base.valid && counts.error === 0 && !(strict && counts.warning > 0);
-	return { ok, valid: base.valid && counts.error === 0, schemaValid: base.schemaValid, diagnostics: reporter.diagnostics, counts, checks: base.checks };
+	const ok = base.valid && counts.error === 0 && !reaches(reporter.findings, failOn);
+	return { ok, valid: base.valid && counts.error === 0, schemaValid: base.schemaValid, findings: reporter.findings, counts, checks: base.checks };
 }

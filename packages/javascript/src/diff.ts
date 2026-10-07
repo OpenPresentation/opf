@@ -1,6 +1,6 @@
 // Semantic diff of two OPF documents.
 //
-// `diffPresentations(a, b)` matches slides (and every other array's elements)
+// `diff(a, b)` matches slides (and every other array's elements)
 // deterministically, then reports what changed as typed, categorised changes
 // and as an RFC 6902 patch that turns A into B. Moves are detected, not
 // reported as a remove plus an add. The report is a pure function of the two
@@ -9,7 +9,7 @@ import { annotationText } from "./annotations.js";
 import { formatPointer, jsonEqual, type JsonPatchOperation } from "./patch.js";
 import { matchArrays, idOf, DEFAULT_MATCH_THRESHOLD, type MatchedBy, type MatchOptions } from "./diff-match.js";
 
-export { mergePresentations } from "./merge.js";
+export { merge } from "./merge.js";
 export type { MergeConflict, MergeConflictKind, MergeOptions, MergeResult } from "./merge.js";
 export { matchArrays, similarity } from "./diff-match.js";
 export type { ArrayMatch, MatchPair, MatchedBy, MatchOptions } from "./diff-match.js";
@@ -214,7 +214,7 @@ function summarise(changes: DiffChange[], slides: SlideMatchInfo[]): DiffSummary
  * rule matches blocks, list items and every other array element. The result
  * lists categorised changes and a JSON Patch from `a` to `b`.
  */
-export function diffPresentations(a: unknown, b: unknown, options: DiffOptions = {}): PresentationDiff {
+export function diff(a: unknown, b: unknown, options: DiffOptions = {}): PresentationDiff {
   const ctx: Context = { options: { threshold: options.threshold ?? DEFAULT_MATCH_THRESHOLD }, changes: [], patch: [], slides: [] };
   diffValue(a, b, [], [], ctx);
   return { equal: ctx.patch.length === 0, changes: ctx.changes, patch: ctx.patch, slides: ctx.slides, summary: summarise(ctx.changes, ctx.slides) };

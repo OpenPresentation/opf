@@ -25,7 +25,8 @@ describe("opf validate", () => {
     assert.equal(result.status, 0, `stderr: ${result.stderr}`);
     const parsed = JSON.parse(result.stdout);
     assert.equal(parsed.valid, true);
-    assert.deepEqual(parsed.errors, []);
+    assert.equal(parsed.schemaValid, true);
+    assert.equal(parsed.counts.error, 0);
     assert.match(parsed.sha256, /^[a-f0-9]{64}$/);
     assert.equal(result.stderr, "");
   });
@@ -36,10 +37,10 @@ describe("opf validate", () => {
     // Validation reports remain on stdout, including invalid documents.
     const parsed = JSON.parse(result.stdout);
     assert.equal(parsed.valid, false);
-    assert.ok(Array.isArray(parsed.errors) && parsed.errors.length > 0, JSON.stringify(parsed, null, 2));
+    assert.ok(Array.isArray(parsed.findings) && parsed.counts.error > 0, JSON.stringify(parsed, null, 2));
     assert.ok(
-      parsed.errors.some((error) => error.message.includes("must NOT have additional properties")),
-      JSON.stringify(parsed.errors, null, 2),
+      parsed.findings.some((finding) => finding.severity === "error" && finding.category === "format" && finding.message.includes("must NOT have additional properties")),
+      JSON.stringify(parsed.findings, null, 2),
     );
   });
 

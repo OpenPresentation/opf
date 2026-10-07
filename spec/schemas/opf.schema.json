@@ -166,7 +166,7 @@
     "duration": {
       "type": "integer",
       "minimum": 1,
-      "description": "Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core lint warns when it lies outside the resolved narrative's 'duration' range. Agents can also use it to set pace and depth. Nothing else reads it: the preview and the PPTX export draw no duration."
+      "description": "Target presentation duration, as an integer number of minutes. The opf-render presenter view counts the elapsed time against it, and core validate warns when it lies outside the resolved narrative's 'duration' range. Agents can also use it to set pace and depth. Nothing else reads it: the preview and the PPTX export draw no duration."
     },
     "tags": {
       "type": "array",
@@ -189,7 +189,7 @@
     },
     "narrative": {
       "type": "string",
-      "description": "The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the plan (the arc, its beats and what each beat must do) lives in the catalog record, which validates against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative is a record in catalogs.narratives.records, referenced here by its id.\n\nSlides link themselves to beats with slides[].beat. Core lint warns about a slides[].beat id the resolved narrative does not define and about a root 'duration' outside its 'duration' range, and the audit reports a beat that no slide references. The preview and the PPTX export draw nothing from the narrative; opf-pptx stores the reference for round-trip.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that are not part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root.",
+      "description": "The deck's narrative plan, by reference: the 'id' of a 'narratives' catalog record, an HTTPS URL pointing at a record file, or a 'pkg:' reference to a locally-installed package. The deck holds only this pointer; the plan (the arc, its beats and what each beat must do) lives in the catalog record, which validates against https://openpresentation.org/schema/opf-narrative/v1. A custom narrative is a record in catalogs.narratives.records, referenced here by its id.\n\nSlides link themselves to beats with slides[].beat. Core validate warns about a slides[].beat id the resolved narrative does not define and about a root 'duration' outside its 'duration' range, and reports a beat that no slide references. The preview and the PPTX export draw nothing from the narrative; opf-pptx stores the reference for round-trip.\n\nResolution order: inline catalogs.narratives.records[] → catalogs.narratives.source → default catalog at https://www.pptx.gallery/narratives. Unknown ids produce a validation warning, not an error.\n\nDeck-level concerns that are not part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root.",
       "examples": [
         "classic-story",
         "problem-solution",
@@ -208,12 +208,12 @@
     "references": {
       "type": "array",
       "items": { "$ref": "#/$defs/Reference" },
-      "description": "Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run cites is a lint warning (opf/unused-reference). referencesSlide() turns the cited references into an ordinary list slide.",
+      "description": "Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run cites is the warning opf/unused-reference. referencesSlide() turns the cited references into an ordinary list slide.",
       "examples": [[{ "id": "gartner-2026", "text": "Gartner, Market Guide for Presentation Tooling, 2026", "url": "https://www.gartner.com" }]]
     },
     "datasets": {
       "$ref": "#/$defs/Datasets",
-      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is a lint warning (opf/unused-dataset). See docs/chart-table-data.md."
+      "description": "Optional shared data tables, keyed by id. A chart ('chart.data': { \"dataset\": \"<id>\" }) or a table ('table': { \"dataset\": \"<id>\" }) references one instead of holding its own copy; engines inline the reference before composing, rendering or exporting. A dataset nothing references is the warning opf/unused-dataset. See docs/chart-table-data.md."
     },
     "assets": {
       "$ref": "#/$defs/Assets",
@@ -1160,7 +1160,7 @@
       }
     },
     "SlideDesign": {
-      "description": "A slide's design: every Design field except dimensions. A PPTX has one slide size, so the size is set once, on the deck's design.dimensions (or its theme), and a slide's design cannot set it. A slide-level theme whose resolved dimensions differ from the deck's is a lint warning (slide-theme-dimensions); exporting such a deck to PPTX fails with mixed-slide-dimensions.",
+      "description": "A slide's design: every Design field except dimensions. A PPTX has one slide size, so the size is set once, on the deck's design.dimensions (or its theme), and a slide's design cannot set it. A slide-level theme whose resolved dimensions differ from the deck's is a validate warning (opf/slide-theme-dimensions); exporting such a deck to PPTX fails with mixed-slide-dimensions.",
       "allOf": [
         { "$ref": "#/$defs/Design" },
         { "not": { "required": ["dimensions"] } }
@@ -1984,11 +1984,11 @@
               "items": { "type": "string" }
             }
           ],
-          "description": "Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats. Declares the slide's role in the story arc; does not constrain ordering or structure. Core lint warns about a beat id the resolved narrative does not define, and the audit reports a beat that no slide references. Slides without a beat are valid; multiple slides may share a beat."
+          "description": "Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats. Declares the slide's role in the story arc; does not constrain ordering or structure. Core validate warns about a beat id the resolved narrative does not define, and reports a beat that no slide references. Slides without a beat are valid; multiple slides may share a beat."
         },
         "layout": {
           "type": "string",
-          "description": "Optional slide layout reference. Resolves to the 'id' of a 'layouts' catalog record. When omitted, engines infer a layout from the slide's root payload or promoted region keys. Accepts a bare id (lowercase kebab-case, e.g. 'title-subtitle'), an HTTPS URL pointing at a record file, or a 'pkg:' reference. Free-form custom layout names that don't resolve through any catalog fall through to engine-defined layouts.\n\nResolution order: inline catalogs.layouts.records[] → catalogs.layouts.source → default catalog at https://www.pptx.gallery/layouts.",
+          "description": "Optional. Resolves to the 'id' of a 'layouts' catalog record. When omitted, or when it names an id that no inline record, host catalog or default catalog defines, the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slide with no body payload is a cover (vertically centered), and design hints apply. A layout never changes what a slide contains. An unresolved id is an `unresolved-layout` diagnostic and a `catalog-reference` warning, never an error. Engines must not substitute a different layout for an omitted one. Accepts a bare id (lowercase kebab-case, e.g. 'title-subtitle'), an HTTPS URL pointing at a record file, or a 'pkg:' reference.\n\nResolution order: inline catalogs.layouts.records[] → catalogs.layouts.source → default catalog at https://www.pptx.gallery/layouts.",
           "examples": ["title", "title-subtitle", "text-2x", "chart-3x", "image-bleed", "blank", "https://acme.com/decks/layouts/cover.json", "pkg:@acme/decks/layouts/cover"]
         },
         "title": {
@@ -2260,7 +2260,7 @@
         },
         "hidden": {
           "type": "boolean",
-          "description": "Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (opf CLI: --include-hidden; renderSvgDeck: skipHidden is opt-in). A slide named explicitly (opf render --slides, renderSvg slideIndex) is still rendered."
+          "description": "Whether the slide is hidden from the presented sequence. The player skips it, the PPTX export writes it as a hidden slide, and per-slide image and PDF output skips it unless the caller asks to include hidden slides (opf CLI: --include-hidden; the deck-level renderSvg: the opt-in skipHidden). A slide named explicitly (opf render --slides, renderSvg slideIndex) is still rendered."
         },
         "composition": {
           "$ref": "#/$defs/Composition"
@@ -2658,7 +2658,7 @@
         },
         "photo": {
           "$ref": "#/$defs/Asset",
-          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (the audit's missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the circular mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
+          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the circular mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
           "examples": ["./assets/priya-raman.jpg", {"src": "asset:priya-raman", "alt": "Priya Raman"}]
         },
         "source": {
@@ -3175,7 +3175,7 @@
         },
         "alt": {
           "type": "string",
-          "description": "Text alternative for the chart: what the data shows (the point and the key numbers), not 'a chart' or 'bar chart'. The preview exposes it as the chart's accessible name (role img with aria-label) and the PowerPoint export writes it as the chart frame's alternative text (descr); import reads it back. An empty string marks the chart decorative, with the same meaning as an empty Asset alt, but it is a reviewed choice that audit/chart-text-alternative still reports as info (a chart almost always carries a message). When absent, the audit accepts text beside the chart instead.",
+          "description": "Text alternative for the chart: what the data shows (the point and the key numbers), not 'a chart' or 'bar chart'. The preview exposes it as the chart's accessible name (role img with aria-label) and the PowerPoint export writes it as the chart frame's alternative text (descr); import reads it back. An empty string marks the chart decorative, with the same meaning as an empty Asset alt, but it is a reviewed choice that opf/chart-text-alternative still reports as info (a chart almost always carries a message). When absent, validate accepts text beside the chart instead.",
           "examples": ["Revenue grew from $12M in Q1 to $18M in Q2, with the steepest rise in the West region."]
         },
         "highlight": {

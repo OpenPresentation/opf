@@ -9,14 +9,14 @@ import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {renderSvgDeck} from '../../opf-render/dist/index.js';
-import {loadBundledFontRegistry} from '../../opf-render/dist/fonts-node.js';
+import {renderSvg} from '../../opf-render/dist/index.js';
+import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const output=path.resolve(process.argv[2]??path.join(root,'artifacts/svg-contrast.json'));
 const filter=process.argv[3]??'examples/gallery/';
 const hash=b=>createHash('sha256').update(b).digest('hex');
-const registry=await loadBundledFontRegistry();
+const registry=await loadFonts();
 const runtime={};
 for(const [name,directory]of [['opf',path.join(root,'packages/javascript')],['opf-render',path.resolve(root,'../opf-render')]]){
  for(const file of (await readdir(path.join(directory,'dist'))).filter(file=>file.endsWith('.js')).sort())runtime[`${name}/dist/${file}`]=hash(await readFile(path.join(directory,'dist',file)));
@@ -33,7 +33,7 @@ try{
  await page.setContent('<style>body{margin:0;background:white}</style><main></main>');
  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
  for(const {file,deck}of examples.filter(item=>item.file.startsWith(filter))){
-  const svgs=renderSvgDeck(deck,{trace:true}),results=[];
+  const svgs=renderSvg(deck,{trace:true}),results=[];
   for(const [slide,svg]of svgs.entries()){
    const result=await page.evaluate(async svg=>{
     document.querySelector('main').innerHTML=svg;

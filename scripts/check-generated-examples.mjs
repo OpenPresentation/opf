@@ -1,4 +1,4 @@
-import {lintPresentation} from '../packages/javascript/dist/lint.js';
+import {validate} from '../packages/javascript/dist/index.js';
 import {catalogKinds, deckFor, loadCatalogIds, scenarioSpecs} from './generate-example-suite.mjs';
 
 // Exercise the templates in memory: checking the committed fixtures alone
@@ -9,10 +9,10 @@ const catalogs = Object.fromEntries(await Promise.all(
 const failures = [];
 for (const [index, spec] of scenarioSpecs.entries()) {
   const {deck, folder, filename} = deckFor(spec, index, catalogs);
-  const result = lintPresentation(deck);
+  const result = validate(deck, {only: ['format', 'references']});
   if (!result.valid) failures.push({
     file: `examples/gallery/${folder}/${filename}`,
-    diagnostics: result.diagnostics.filter(issue => issue.severity === 'error'),
+    findings: result.findings.filter(issue => issue.severity === 'error'),
   });
 }
 console.log(JSON.stringify({valid: failures.length === 0, generated: scenarioSpecs.length, failures}, null, 2));

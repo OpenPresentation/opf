@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {layoutMetric,OPFCompositionError} from '../dist/composition.js';
-import {layoutMetric as rootLayoutMetric} from '../dist/index.js';
+import { layoutMetric as rootLayoutMetric } from '../dist/composition.js';
 
 const box={x:40,y:60,width:800,height:400};
 const restored=part=>part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join('');
@@ -83,7 +83,7 @@ test('metric alignment positions the inline pair together and records exact orig
 
 test('metadata borrows spare primary space before reducing type and exposes resolved style paths',()=>{
   const seen=[];
-  const options={fonts:{heading:'Requested Heading',body:'Requested Body'},textMeasurement:{
+  const options={fontFamilies:{heading:'Requested Heading',body:'Requested Body'},textMeasurement:{
     resolveStyle:style=>({...style,fontFamily:style.fontFamily.replace('Requested','Resolved')}),
     measure:(text,size,style)=>{seen.push(style);return [...text].length*size*.5;},
   }};

@@ -14,14 +14,15 @@ import {
   unwrapGroup,
   wrapBlocks,
 } from "../dist/convert.js";
-import { validatePresentation } from "../dist/index.js";
+import { check } from './support/validation.mjs';
+
 
 const refused = (action, pattern) =>
   assert.throws(
     action,
     (error) => error instanceof OPFConversionError && error.code === "not-convertible" && pattern.test(error.message),
   );
-const valid = (slide) => validatePresentation({ slides: [slide] }).valid;
+const valid = (slide) => check({ slides: [slide] }).valid;
 
 describe("list levels", () => {
   const outline = { items: ["A", { text: "B", level: 1 }, { text: "C", level: 2 }, "D", { text: "E", description: "e", level: 1 }] };

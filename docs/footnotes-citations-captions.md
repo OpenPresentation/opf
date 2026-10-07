@@ -1,7 +1,7 @@
 # Footnotes, citations and captions
 
 Program item RR-34 (release readiness, scope 2). Three additive spec features, each end to end: core
-(schema, validation, lint, shared composition geometry), the SVG preview, native PPTX export and import,
+(schema, validation, shared composition geometry), the SVG preview, native PPTX export and import,
 and the editor. A deck without the new fields validates, composes, previews and exports exactly as before
 (every bundled example slide composes to the same geometry; the renderer's raster baseline is unchanged).
 
@@ -31,12 +31,12 @@ and the editor. A deck without the new fields validates, composes, previews and 
 }
 ```
 
-Validation (`validatePresentation`, errors): `cite-unknown-reference` (an id missing from `references`, at
+Validation (`validate`, category `format`, errors): `cite-unknown-reference` (an id missing from `references`, at
 the `cite` field), `reference-id-duplicate`, `caption-unsupported-payload` (a caption on a text, list,
 code, metric, quote or timeline payload, on a group, or on a slide root with several payloads) and
 `cite-unsupported-location` (`cite`/`footnote` on a run in a table cell, a caption, a reference text or a
-footnote text, where no engine draws a marker). Lint (`lintPresentation`) reports each of those under its
-code as the rule id (`opf/cite-unknown-reference`) and adds the warning `opf/unused-reference` for a
+footnote text, where no engine draws a marker). Each is reported under its code as the rule id
+(`opf/cite-unknown-reference`), and the `references` category adds the warning `opf/unused-reference` for a
 reference no run cites. Markers are supported in the slide `tag`, `title` and `subtitle` when they are
 `TextRun[]` (FA-10), and in `text`, `bullets`, list item (`text`, `description`) and `quote.text` runs; that is
 the "unsupported location" boundary, chosen so the engines never silently drop a marker (vetoable).
@@ -132,8 +132,7 @@ Recorded as vetoable decisions; the brief is `rr-33-35/DECISIONS.md` (RR-34 sect
   accepting a marker that no engine would draw.
 - Footnote text size equals the furniture size (the readable floor on a 16:9 deck), not a size below it:
   core never draws text under `minFontSize`.
-- Unused references are a lint warning only (`opf/unused-reference`); `validatePresentation` keeps its
-  warnings for catalog references.
+- Unused references are a warning only (`opf/unused-reference`, category `references`), never an error.
 - Round trip. The run-level association comes back from the marker numbers and the tagged footnote lines
   (one number, one note), not from a stored per-run record: it is exact for every authored form, and an
   edited or deleted marker in PowerPoint changes the document the way the user edited it.

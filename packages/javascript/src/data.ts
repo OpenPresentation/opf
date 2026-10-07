@@ -2,7 +2,7 @@
 import { chartNumber } from './chart-data.js';
 
 // RR-54: chart and table data (strict numbers, number formats, datasets, series mapping) are also on this entry.
-export { chartNumber, formatDataNumber, numberFormatError, excelNumberFormat, numberFormatFromExcel, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
+export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 export type DataCell = string | number | boolean | null;
 export interface TabularData { columns: string[]; rows: DataCell[][] }
@@ -12,7 +12,7 @@ export interface DataImportOptions {
   header?: boolean;
   columns?: string[];
 }
-export interface DataContentOptions extends DataImportOptions {
+export interface ImportDataOptions extends DataImportOptions {
   as: 'table' | 'chart';
   chartType?: string;
   category?: string;
@@ -99,7 +99,7 @@ function measure(value: DataCell, location: string): number {
   if (number !== null) return number;
   return fail(`${location}: expected a numeric chart value; found ${JSON.stringify(value)}. Clean the value or select another series.`);
 }
-export function createDataContent(input: unknown, options: DataContentOptions): { table: TabularData } | { chart: { type: string; data: TabularData } } {
+export function importData(input: unknown, options: ImportDataOptions): { table: TabularData } | { chart: { type: string; data: TabularData } } {
   const data = parseTabularData(input, options);
   if (options.as === 'table') return { table: data };
   if (options.as !== 'chart') return fail('Choose table or chart.');

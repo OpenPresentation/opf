@@ -8,13 +8,12 @@
 //   key is data), and only ever reads own properties.
 // - Inverse patches: `applyPatchWithInverse` returns the patch that restores
 //   the input exactly, for undo stacks.
-import { validatePresentation } from "./validator.js";
+import type { Finding, FindingReport, JsonPatchOperation } from "./generated/types/finding.js";
+import { validate } from "./validator.js";
+
+export type { JsonPatchOperation };
 
 export type JsonPointer = string;
-export type JsonPatchOperation =
-  | { op: "add" | "replace" | "test"; path: JsonPointer; value: unknown }
-  | { op: "remove"; path: JsonPointer }
-  | { op: "move" | "copy"; from: JsonPointer; path: JsonPointer };
 
 export type PatchErrorCode =
   | "invalid-patch"
@@ -29,7 +28,7 @@ export type PatchErrorCode =
   | "patch-root-remove"
   | "patch-invalid-document";
 
-export class PatchError extends Error {
+export class OPFPatchError extends Error {
   readonly code: PatchErrorCode;
   /** The JSON Pointer the failing operation addressed, when known. */
   path?: string;
@@ -39,7 +38,7 @@ export class PatchError extends Error {
   operation?: unknown;
   constructor(code: PatchErrorCode, message: string, details: { path?: string; index?: number; operation?: unknown } = {}) {
     super(message);
-    this.name = "PatchError";
+    this.name = "OPFPatchError";
     this.code = code;
     if (details.path !== undefined) this.path = details.path;
     if (details.index !== undefined) this.index = details.index;
@@ -48,26 +47,24 @@ export class PatchError extends Error {
 }
 
 /** Thrown when `validate` is requested and the patched document is not a valid OPF presentation. */
-export class PatchValidationError extends PatchError {
+export class OPFPatchValidationError extends OPFPatchError {
   readonly validation: PatchValidationResult;
   constructor(validation: PatchValidationResult) {
     super("patch-invalid-document", "The patched document is not a valid OPF presentation.");
-    this.name = "PatchValidationError";
+    this.name = "OPFPatchValidationError";
     this.validation = validation;
   }
 }
 
-export interface PatchValidationResult {
-  valid: boolean;
-  errors?: unknown[];
-  warnings?: unknown[];
-  [key: string]: unknown;
+/** What a validator hook returns: a `validate` report, or anything with `valid` (and `findings` for `strict` to read). */
+export interface PatchValidationResult extends Pick<FindingReport, "valid"> {
+  findings?: Finding[];
 }
 
 export interface ApplyPatchOptions {
   /**
    * Validate the whole patched document against the OPF schema (`true`) or a
-   * custom validator. An invalid result throws `PatchValidationError`; the
+   * custom validator. An invalid result throws `OPFPatchValidationError`; the
    * input is never changed. Intermediate states are not validated.
    */
   validate?: boolean | ((document: unknown) => PatchValidationResult);
@@ -76,8 +73,9 @@ export interface ApplyPatchOptions {
 }
 
 export interface PatchResult {
-  document: unknown;
-  /** The patch that restores the input from `document`. Applying it to `document` yields the input. */
+  /** The patched presentation (a clone; the input is never changed). */
+  presentation: unknown;
+  /** The patch that restores the input from `presentation`. Applying it to `presentation` yields the input. */
   inverse: JsonPatchOperation[];
   /** The normalised operations that were applied (values cloned, unknown members dropped). */
   patch: JsonPatchOperation[];
@@ -115,7 +113,7 @@ export function unescapePointerToken(token: string): string {
 /** Split a JSON Pointer into unescaped tokens. Throws `invalid-json-pointer`. */
 export function parsePointer(pointer: unknown): string[] {
   if (typeof pointer !== "string" || (pointer !== "" && !pointer.startsWith("/")) || /~(?![01])/u.test(pointer)) {
-    throw new PatchError("invalid-json-pointer", "Expected a JSON Pointer (empty string or /path with ~0 and ~1 escapes).", { path: typeof pointer === "string" ? pointer : undefined });
+    throw new OPFPatchError("invalid-json-pointer", "Expected a JSON Pointer (empty string or /path with ~0 and ~1 escapes).", { path: typeof pointer === "string" ? pointer : undefined });
   }
   return pointer === "" ? [] : pointer.slice(1).split("/").map(unescapePointerToken);
 }
@@ -132,7 +130,7 @@ export function formatPointer(tokens: readonly (string | number)[]): JsonPointer
  */
 export function pointerFromPath(path: string | readonly (string | number)[]): JsonPointer {
   if (Array.isArray(path)) return formatPointer(path);
-  if (typeof path !== "string") throw new PatchError("invalid-json-pointer", "A path must be a string or an array of segments.");
+  if (typeof path !== "string") throw new OPFPatchError("invalid-json-pointer", "A path must be a string or an array of segments.");
   if (path === "") return "";
   if (path.startsWith("/")) { parsePointer(path); return path; }
   return formatPointer(path.split(".").filter(Boolean));
@@ -141,7 +139,7 @@ export function pointerFromPath(path: string | readonly (string | number)[]): Js
 /** Parent pointer and final token of a non-root pointer. */
 export function splitPointer(pointer: JsonPointer): { parent: JsonPointer; token: string } {
   const tokens = parsePointer(pointer);
-  if (!tokens.length) throw new PatchError("invalid-json-pointer", "The root pointer has no parent.", { path: pointer });
+  if (!tokens.length) throw new OPFPatchError("invalid-json-pointer", "The root pointer has no parent.", { path: pointer });
   return { parent: formatPointer(tokens.slice(0, -1)), token: tokens[tokens.length - 1]! };
 }
 
@@ -166,7 +164,7 @@ export function getAtPointer(document: unknown, pointer: JsonPointer | readonly 
   const result = readPointer(document, pointer);
   if (!result.found) {
     const shown = typeof pointer === "string" ? pointer : formatPointer(pointer);
-    throw new PatchError("patch-path-missing", `Patch path does not exist: ${shown || "/"}`, { path: shown });
+    throw new OPFPatchError("patch-path-missing", `Patch path does not exist: ${shown || "/"}`, { path: shown });
   }
   return result.value;
 }
@@ -178,20 +176,20 @@ export const hasPointer = (document: unknown, pointer: JsonPointer | readonly st
 
 function arrayIndex(token: string, length: number, allowEnd: boolean, path: string): number {
   if (allowEnd && token === "-") return length;
-  if (!/^(0|[1-9][0-9]*)$/.test(token)) throw new PatchError("invalid-array-index", `Invalid array index: ${token}`, { path });
+  if (!/^(0|[1-9][0-9]*)$/.test(token)) throw new OPFPatchError("invalid-array-index", `Invalid array index: ${token}`, { path });
   const at = Number(token);
-  if (!Number.isSafeInteger(at) || at > length || (!allowEnd && at >= length)) throw new PatchError("invalid-array-index", `Array index out of bounds: ${token}`, { path });
+  if (!Number.isSafeInteger(at) || at > length || (!allowEnd && at >= length)) throw new OPFPatchError("invalid-array-index", `Array index out of bounds: ${token}`, { path });
   return at;
 }
 
 /** Normalise and structurally validate a patch (shape only; no document needed). Values are cloned. */
 export function normalizePatch(patch: unknown): JsonPatchOperation[] {
-  if (!Array.isArray(patch)) throw new PatchError("invalid-patch", "A JSON Patch must be an array of operations.");
+  if (!Array.isArray(patch)) throw new OPFPatchError("invalid-patch", "A JSON Patch must be an array of operations.");
   return patch.map((operation, index) => normalizeOperation(operation, index));
 }
 
 function normalizeOperation(operation: unknown, index?: number): JsonPatchOperation {
-  const fail = (code: PatchErrorCode, message: string, path?: string) => new PatchError(code, index === undefined ? message : `Operation ${index}: ${message}`, { index, operation, path });
+  const fail = (code: PatchErrorCode, message: string, path?: string) => new OPFPatchError(code, index === undefined ? message : `Operation ${index}: ${message}`, { index, operation, path });
   if (!isObject(operation)) throw fail("invalid-patch-operation", "Expected an operation object.");
   const op = operation.op;
   if (typeof op !== "string" || !["add", "remove", "replace", "move", "copy", "test"].includes(op)) {
@@ -213,7 +211,7 @@ function parentOf(document: unknown, tokens: string[], path: string): { parent: 
   const key = tokens[tokens.length - 1]!;
   const found = readPointer(document, tokens.slice(0, -1));
   if (!found.found || !found.value || typeof found.value !== "object") {
-    throw new PatchError("patch-parent-missing", `Patch parent does not exist for ${path}.`, { path });
+    throw new OPFPatchError("patch-parent-missing", `Patch parent does not exist for ${path}.`, { path });
   }
   return { parent: found.value, key };
 }
@@ -249,7 +247,7 @@ function replaceAt(document: unknown, path: string, value: unknown): { document:
     parent[at] = clone(value);
   } else {
     const record = parent as Record<string, unknown>;
-    if (!own(record, key)) throw new PatchError("patch-path-missing", `Patch path does not exist: ${path}.`, { path });
+    if (!own(record, key)) throw new OPFPatchError("patch-path-missing", `Patch path does not exist: ${path}.`, { path });
     previous = record[key];
     Object.defineProperty(record, key, { value: clone(value), enumerable: true, configurable: true, writable: true });
   }
@@ -258,7 +256,7 @@ function replaceAt(document: unknown, path: string, value: unknown): { document:
 
 function removeAt(document: unknown, path: string): { document: unknown; inverse: JsonPatchOperation } {
   const tokens = parsePointer(path);
-  if (!tokens.length) throw new PatchError("patch-root-remove", "The document root cannot be removed.", { path });
+  if (!tokens.length) throw new OPFPatchError("patch-root-remove", "The document root cannot be removed.", { path });
   const { parent, key } = parentOf(document, tokens, path);
   let previous: unknown;
   if (Array.isArray(parent)) {
@@ -268,7 +266,7 @@ function removeAt(document: unknown, path: string): { document: unknown; inverse
     return { document, inverse: { op: "add", path: formatPointer([...tokens.slice(0, -1), at]), value: clone(previous) } };
   }
   const record = parent as Record<string, unknown>;
-  if (!own(record, key)) throw new PatchError("patch-path-missing", `Patch path does not exist: ${path}.`, { path });
+  if (!own(record, key)) throw new OPFPatchError("patch-path-missing", `Patch path does not exist: ${path}.`, { path });
   previous = record[key];
   delete record[key];
   return { document, inverse: { op: "add", path, value: clone(previous) } };
@@ -281,7 +279,7 @@ function applyOne(document: unknown, operation: JsonPatchOperation): { document:
     case "remove": { const r = removeAt(document, operation.path); return { document: r.document, inverse: [r.inverse] }; }
     case "test": {
       const found = readPointer(document, operation.path);
-      if (!found.found || !jsonEqual(found.value, operation.value)) throw new PatchError("patch-test-failed", `Test failed at ${operation.path || "/"}: the value changed.`, { path: operation.path });
+      if (!found.found || !jsonEqual(found.value, operation.value)) throw new OPFPatchError("patch-test-failed", `Test failed at ${operation.path || "/"}: the value changed.`, { path: operation.path });
       return { document, inverse: [] };
     }
     case "copy": {
@@ -294,7 +292,7 @@ function applyOne(document: unknown, operation: JsonPatchOperation): { document:
       const value = clone(getAtPointer(document, from));
       if (from.length === to.length && from.every((token, i) => token === to[i])) return { document, inverse: [] };
       if (to.length > from.length && from.every((token, i) => to[i] === token)) {
-        throw new PatchError("patch-invalid-move", "Cannot move a value into its descendant.", { path: operation.path });
+        throw new OPFPatchError("patch-invalid-move", "Cannot move a value into its descendant.", { path: operation.path });
       }
       const removed = removeAt(document, operation.from);
       const added = addAt(removed.document, operation.path, value);
@@ -318,18 +316,18 @@ export function applyPatchWithInverse(document: unknown, patch: unknown, options
       working = step.document;
       inverse.unshift(...step.inverse);
     } catch (error) {
-      if (error instanceof PatchError && error.index === undefined) {
-        const wrapped = new PatchError(error.code, `Operation ${index}: ${error.message}`, { path: error.path, index, operation });
+      if (error instanceof OPFPatchError && error.index === undefined) {
+        const wrapped = new OPFPatchError(error.code, `Operation ${index}: ${error.message}`, { path: error.path, index, operation });
         throw wrapped;
       }
       throw error;
     }
   }
-  const result: PatchResult = { document: working, inverse, patch: operations };
+  const result: PatchResult = { presentation: working, inverse, patch: operations };
   if (options.validate) {
-    const validator = typeof options.validate === "function" ? options.validate : (value: unknown) => validatePresentation(value) as PatchValidationResult;
+    const validator = typeof options.validate === "function" ? options.validate : (value: unknown) => validate(value, { only: options.strict ? ["format", "references"] : ["format"] });
     const validation = validator(working);
-    if (!validation.valid || (options.strict && Array.isArray(validation.warnings) && validation.warnings.length)) throw new PatchValidationError(validation);
+    if (!validation.valid || (options.strict && validation.findings?.some((entry) => entry.severity === "warning"))) throw new OPFPatchValidationError(validation);
     result.validation = validation;
   }
   return result;
@@ -337,7 +335,7 @@ export function applyPatchWithInverse(document: unknown, patch: unknown, options
 
 /** Apply an RFC 6902 patch to a clone of `document`; the input is never changed. */
 export function applyPatch(document: unknown, patch: unknown, options: ApplyPatchOptions = {}): unknown {
-  return applyPatchWithInverse(document, patch, options).document;
+  return applyPatchWithInverse(document, patch, options).presentation;
 }
 
 /** The patch that undoes `patch` when applied to the result of `applyPatch(document, patch)`. */

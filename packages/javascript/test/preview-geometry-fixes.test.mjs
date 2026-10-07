@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide, layoutFurniture} from '../dist/composition.js';
-import {PICTURE_BULLET_SCALE} from '../dist/index.js';
+import { PICTURE_BULLET_SCALE } from '../dist/composition.js';
 
 // Two geometry decisions recorded in docs/design-resolution.md and docs/dynamic-composition.md:
 // the picture-bullet box (measured against desktop PowerPoint) and the alignment of furniture image parts.

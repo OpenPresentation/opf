@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-narrative/v1",
   "title": "Narrative Template",
-  "description": "Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core lint warns about a 'slides[].beat' id the resolved narrative does not define and about a root 'duration' outside this record's 'duration' range; the audit reports a beat no slide references.",
+  "description": "Schema for narrative template files in the openpresentation.org catalog. A narrative is a plan: a named story arc (e.g. 'problem-solution', 'scqa') as an ordered list of beats, each saying what its slide must do. A document points at one with the string 'narrative' (a catalog id, an HTTPS URL or a 'pkg:' reference) and links its slides to beats with 'slides[].beat'. A custom narrative is a record in 'catalogs.narratives.records'. Core validate warns about a 'slides[].beat' id the resolved narrative does not define (opf/unknown-beat) and about a root 'duration' outside this record's 'duration' range (opf/duration-outside-narrative), and reports a beat no slide references (opf/unused-beat).",
   "type": "object",
   "required": [
     "$schema",
@@ -66,7 +66,7 @@
     "duration": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Typical talk length this narrative suits, as a range in minutes. A deck's own target is the root 'duration' (one number); lint warns when that target lies outside this range, and when 'min' is greater than 'max'.",
+      "description": "Typical talk length this narrative suits, as a range in minutes. A deck's own target is the root 'duration' (one number); core validate warns when that target lies outside this range, and when 'min' is greater than 'max'.",
       "properties": {
         "min": {
           "type": "number",

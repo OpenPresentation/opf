@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
-import {renderSvg,resolvePresentation} from '../../opf-render/src/svg.js';
-import {loadOfficeFontRegistry} from '../../opf-render/src/fonts-node.js';
+import {renderSlideSvg,resolvePresentation} from '../../opf-render/src/svg.js';
+import {loadFonts} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
@@ -13,8 +13,8 @@ const document={name:'Measured lists',design:{fontScheme:'roboto'},slides:[{titl
  {text:[{text:'Color and emphasis',color:'#2563EB',fontSize:22}],description:'A smaller description shares the text indent.',level:2},
  {text:['H',{text:'2',subscript:true},'O and x',{text:'2',superscript:true}],level:4}
  ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Also editable',italic:true}],level:1},'A final point']}]}]};
-const fonts=await loadOfficeFontRegistry(),options={textMeasurement:fonts.textMeasurement};
-const bound=resolvePresentation(document,options).slides[0],svg=renderSvg(document,{...options,embeddedFonts:fonts.embeddedFonts,trace:true});
+const fonts=await loadFonts({pack:'office'}),options={fonts};
+const bound=resolvePresentation(document,options).slides[0],svg=renderSlideSvg(document,0,{...options,trace:true});
 assert.equal(bound.geometry.diagnostics.length,0);
 for(const pattern of [/font-weight="700"/,/font-style="italic"/,/#2563EB/,/href="https:\/\/openpresentation.org"/,/data-opf-path="slides.0.blocks.0.items.0.description"/,/data-opf-path="slides.0.blocks.1.bullets.1.text"/])assert.match(svg,pattern);
 const bytes=await toPptx(document,options),files=unzipSync(bytes),raw=new TextDecoder().decode(files['ppt/slides/slide1.xml']),xml=parser.parse(raw);

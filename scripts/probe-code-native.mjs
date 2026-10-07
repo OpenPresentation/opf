@@ -48,7 +48,7 @@ if (mode==='generate') {
   pptx.layout='LAYOUT_WIDE';pptx.author='OpenPresentation native code compatibility probe';
   for (const source of ['a\tb','aaaa\tb','\tconst value = "two  spaces";','  indentation  ','a\t','\t\t',' \t \tkeep  ','src\tCaseSensitive.ts']) {
     const role=source.startsWith('src')?'filename':'body';
-    const part=layoutCode(role==='filename'?{source:'body',filename:source}:source,{x:0,y:0,width:1000,height:500},{fonts:{code:'Courier New'},textMeasurement:registry.textMeasurement}).parts.find(part=>part.role===role);
+    const part=layoutCode(role==='filename'?{source:'body',filename:source}:source,{x:0,y:0,width:1000,height:500},{fontFamilies:{code:'Courier New'},textMeasurement:registry.textMeasurement}).parts.find(part=>part.role===role);
     assert.ok(part?.fit&&!part.fit.overflow);assert.equal(part.fit.lines.length,1);
     const line=part.fit.sourceLines[0],tabStops=line.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'}));
     pptx.addSlide().addText(source,{x:1,y:1,w:10,h:.8,margin:0,fontFace:part.style.fontFamily,fontSize:part.fit.fontSize*.75,bold:part.style.fontWeight>=600,align:'left',valign:'top',breakLine:false,paraSpaceAfter:0,fit:'none',wrap:false,tabStops,objectName:'code-probe'});

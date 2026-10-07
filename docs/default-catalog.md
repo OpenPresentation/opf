@@ -106,13 +106,12 @@ removed outright (the FA-03 cleanup deleted 50 chart-type aliases and 6 audience
 aliases and dropped the `-3x` suffix from the chart-type ids), so a document that
 names a retired id gets an `unknown <kind> catalog id` warning, not a redirect.
 
-The mechanism stays in the record schemas, the validator and lint for after v1.
+The mechanism stays in the record schemas and in `validate` for after v1.
 Any record may carry `deprecation: { "replacedBy": "<id>", "reason"?, "removal"? }`
 (FF-22). The record stays for backward compatibility:
 
 - the old id keeps resolving to its own record, unchanged;
-- `validatePresentation` warns (`deprecated <kind> catalog id '<id>'; use '<replacedBy>'`);
-- `lintPresentation` reports `opf/deprecated-catalog-id` and suggests the replacement;
+- `validate` warns with `opf/deprecated-catalog-id` (`Deprecated <kind> catalog id "<id>"; use "<replacedBy>" instead.`) and suggests the replacement;
 - pickers and generators should offer only non-deprecated records. Index entries
   carry `"deprecated": true` and `replacedBy`, so a picker can hide the old id
   without loading records.
@@ -210,7 +209,7 @@ The other 385 layouts (the Dark master; 24 of them deprecated aliases from FF-52
 are published only by pptx.gallery. A document names one of them and resolves it
 online through the default catalog, or offline with an inline
 `catalogs.layouts.records` entry, which the gallery snippets add and
-`bundlePresentation` inlines for the 100 bundled ids. All 485 compose, validate
+`bundle` inlines for the 100 bundled ids. All 485 compose, validate
 and export; this decision is about where the records live, not about the engines.
 
 Measured on `@openpresentation/opf` 0.12.0 with all 485 layouts synced (`npm pack

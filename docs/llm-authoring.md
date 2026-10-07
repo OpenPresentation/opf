@@ -40,7 +40,7 @@ Do not retype the speaker, organization or deck name into slide text. Put them i
 
 ## Revision loop
 
-1. Validate with `validatePresentation`. Fix errors at their returned JSON paths. Check warnings for unknown catalog IDs.
+1. Validate with `validate` (or `opf validate`). Fix error findings at their returned JSON paths, then read the warnings: unknown catalog IDs, missing alt text, low contrast, overflow and placeholder text each have a rule id and a suggested fix ([validate](validate.md)).
 2. Render with `onDiagnostic` and inspect `text-overflow` / `small-cell` paths. Shorten text, reduce the number of blocks, change composition, or explicitly split the slide. Revalidate after edits.
 3. Use `composition.overflow: "error"` for a strict text-layout gate. It does not certify chart readability, font availability, or exact PowerPoint rendering.
 4. Inspect the actual preview and exported PPTX. Geometry is shared; font substitution and specialized objects can still differ. Previews draw an open look-alike where the license-restricted font cannot be bundled (metric-compatible where one exists, for example Carlito for Calibri; Intos for Aptos), but the exported PPTX keeps the font name the user selected.
@@ -52,4 +52,4 @@ See [dynamic composition](dynamic-composition.md), [content payloads](content-pa
 
 Use nested `blocks` to keep related content together. Put `composition` on the group to arrange its children, for example a column of evidence inside a row of sections. Read `composeSlide().groups` for group bounds and `items[].path` for precise leaf edits. Groups inherit readability constraints; splitting content into more levels does not make text smaller.
 
-Use `paginatePresentation(deck)` when a draft exceeds readable space. Review the returned ordinary OPF slides and source mappings before export. Pagination preserves source text exactly; it does not summarize or rewrite it. An atomic item that cannot fit produces a diagnostic for a targeted edit.
+Use `paginate(deck)` when a draft exceeds readable space. Review the returned ordinary OPF slides and source mappings before export. Pagination preserves source text exactly; it does not summarize or rewrite it. An atomic item that cannot fit produces a diagnostic for a targeted edit.
