@@ -647,6 +647,55 @@ test("tag --execute creates the tag on the release commit, waits for the publish
   assert.deepEqual(world.writes, []);
 });
 
+test("RR-20: tag --checks-wait-minutes waits for checks that are not reported yet or still running, then tags; red stops at once", async () => {
+  // Right after the merge no check is reported on the release commit, then CI runs, then it is green.
+  let { world, release } = readyWorld();
+  const repo = world.repos["opf-pptx"];
+  repo.checkRuns[release] = [];
+  const states = [[{ name: "CI", status: "in_progress", started_at: "1" }], [{ name: "CI", status: "completed", conclusion: "success", started_at: "1" }]];
+  let sleeps = 0;
+  world.deps.sleep = async (ms) => {
+    world.clock += ms;
+    sleeps += 1;
+    if (states.length) repo.checkRuns[release] = states.shift();
+  };
+  world.onRunsPoll = () => {
+    repo.runs = [{ id: 9, head_branch: "opf-pptx-v0.12.3", head_sha: release, status: "completed", conclusion: "success", html_url: "https://github.com/run/9" }];
+    world.publish("pptx", "0.12.3", release);
+  };
+  const result = await tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true, pollSeconds: 60, checksWaitMinutes: 30 });
+  assert.equal(result.status, "released");
+  assert.equal(sleeps, 2, "polled twice: not reported, then running, then green");
+  assert.deepEqual(world.writes, [{ repo: "opf-pptx", ref: "refs/tags/opf-pptx-v0.12.3", sha: release }]);
+  assert.match(world.logs.join("\n"), /waiting for the checks on opf-pptx@[0-9a-f]{12} \(pending \(no checks reported\)\)/);
+
+  // Checks that go red while it waits stop it, and nothing is tagged.
+  ({ world, release } = readyWorld());
+  world.repos["opf-pptx"].checkRuns[release] = [{ name: "CI", status: "in_progress", started_at: "1" }];
+  world.deps.sleep = async (ms) => {
+    world.clock += ms;
+    world.repos["opf-pptx"].checkRuns[release] = [{ name: "CI", status: "completed", conclusion: "cancelled", started_at: "1" }];
+  };
+  await assert.rejects(
+    tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true, checksWaitMinutes: 30 }),
+    (error) => error instanceof TrainStop && /checks on opf-pptx@[0-9a-f]{12} are red \(failing: CI\)/.test(error.message),
+  );
+  assert.deepEqual(world.writes, []);
+
+  // Checks still pending after the wait stop it with a timeout; a dry run never waits.
+  ({ world, release } = readyWorld());
+  world.repos["opf-pptx"].checkRuns[release] = [{ name: "CI", status: "in_progress", started_at: "1" }];
+  await assert.rejects(
+    tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true, pollSeconds: 120, checksWaitMinutes: 10 }),
+    (error) => error instanceof TrainStop && /timed out after 10 min waiting for the checks on opf-pptx@/.test(error.message),
+  );
+  assert.equal(world.clock, 600_000);
+  assert.deepEqual(world.writes, []);
+  world.clock = 0;
+  await assert.rejects(tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { checksWaitMinutes: 10 }), /are pending \(running: CI\)/);
+  assert.equal(world.clock, 0);
+});
+
 test("tag refuses red checks, an upstream not on npm, a commit off main or a tag elsewhere; a failed publish is never re-tagged", async () => {
   const stop = async (world, train, pattern, options = { execute: true }) => {
     await assert.rejects(tagRelease(world.deps, packageOf("pptx"), "0.12.3", train, options), (error) => error instanceof TrainStop && pattern.test(error.message));

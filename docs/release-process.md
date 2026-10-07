@@ -117,7 +117,9 @@ What each step checks:
 - `tag` re-verifies right before tagging: the version at the release commit, that the commit is on `main`, green
   required checks, every upstream of the train on npm and every runtime floor naming a version npm has. It then creates
   `refs/tags/<prefix>X.Y.Z` (`opf-v`, `opf-render-v`, `opf-pptx-v`, `opf-editor-v`, `cli-v`) with
-  `POST /repos/{repo}/git/refs` on the release commit, polls that repository's publish workflow run for the tag
+  `POST /repos/{repo}/git/refs` on the release commit (checks that are still running, or not reported yet right after
+  the merge, stop it unless `--checks-wait-minutes N` is given: it then polls them every `--poll-seconds` for up to N
+  minutes, and a red check still stops it at once), polls that repository's publish workflow run for the tag
   (default every 120 s, up to 90 min), polls npm until the version is visible, and runs `verify`. A tag that already
   exists on the release commit is not created again; one on another commit stops the train. A failed publish run stops
   with its link: never move or re-push the tag; re-run a transient failure (`gh run rerun <id> --failed`), fix a real
