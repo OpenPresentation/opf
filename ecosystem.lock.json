@@ -11,7 +11,7 @@
   "golden": {
     "repository": "opf",
     "path": "scripts/fixtures/opf-examples-png.example-decks.sha256.json",
-    "note": "RR-20: launch-quality playground decks (full-feature-tour, developer-conference-talk) move 14 slides; this core fixture is the RR-41 baseline with those 14 hashes and the new corpus digest (scripts/fixtures/README.md). The RR-41 file stays as a retained golden for published core 0.12.1/0.12.2 (scripts/registry-golden.mjs). Select the renderer's own baseline again once the renderer adopts the core release that ships these examples."
+    "note": "RR-20: launch-quality playground decks (full-feature-tour, developer-conference-talk) move 14 slides; this core fixture is the RR-41 baseline with those 14 hashes and the new corpus digest (scripts/fixtures/README.md). The release plan's core 0.13.0 ships this corpus, so no older golden is retained (scripts/registry-golden.mjs). The renderer's own default baseline records it since opf-render 0.13.0; select that baseline again once the ecosystem CI no longer needs this core copy."
   },
   "provenance": {
     "source": "roller",
