@@ -1,4 +1,0 @@
----
-type: fixed
----
-FA-05 (output-changing for decks that set color-scheme roles, contain links, or use a saturated mid-tone background): the export resolves color roles through core `resolveColorRoles`, shared with the preview. The `accent` ColorRef role is the scheme `accent` (accent3), not the primary color; the `surface` override reaches cards and chart panels; and the dark-background decision uses WCAG luminance (under 0.179) instead of Rec. 601 luma, so saturated backgrounds such as red now take dark text in both engines. A link run with no color of its own is written in `a:schemeClr hlink` (the theme hyperlink color, or the slide text color where that has under 4.5:1 contrast against the slide) instead of the default text color, and a link in the bare `hlink` color imports as a link with no color.
