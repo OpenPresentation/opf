@@ -2,13 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-sc",
   "name": "Noto Sans SC",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (simplified)",
-    "Chinese (traditional)",
-    "Japanese",
-    "Korean"
+    "chinese-simplified",
+    "chinese-traditional",
+    "japanese",
+    "korean"
   ],
   "major": "Noto Sans SC",
   "minor": "Noto Sans SC",

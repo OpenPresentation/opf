@@ -28,8 +28,10 @@ test('slide false overrides host cards; nested leaves receive one inset and pres
   const plain=composeSlide(slide),boxed=composeSlide(slide,{contentBox:true});
   assert.deepEqual(boxed.groups,plain.groups);assert.deepEqual(boxed.flows,plain.flows);
   assert.deepEqual(boxed.items.map(i=>i.frameBox),plain.items.map(i=>i.box));
-  assert.deepEqual(composeSlide({...slide,design:{contentBox:false}},{contentBox:true}),plain);
-  assert.deepEqual(composeSlide({...slide,design:{contentBox:true}}),boxed);
+  // The effective design hints differ by construction (they record which level supplied contentBox); the geometry must not.
+  const geometry=({design,...rest})=>rest;
+  assert.deepEqual(geometry(composeSlide({...slide,design:{contentBox:false}},{contentBox:true})),geometry(plain));
+  assert.deepEqual(geometry(composeSlide({...slide,design:{contentBox:true}})),geometry(boxed));
   const tiny=composeSlide({composition:{mode:'row',gap:.1},blocks:Array.from({length:12},()=>({text:'Irreducible'}))},{contentBox:true});
   assert.ok(tiny.items[0].box.width>0&&tiny.items[0].box.height>0);
   assert.ok(tiny.diagnostics.some(d=>d.code==='small-cell'));

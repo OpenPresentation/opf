@@ -20,13 +20,23 @@ Write a complete JSON document with `name` and `slides`. Put visible words in sl
 
 Choose one content structure per slide:
 
-- Root payloads for a simple slide: `text`, `items`, `image`, `chart`, `table`, `code`, `metric`, `quote`, or `timeline`.
+- Root payloads for a simple slide: `text`, `items`, `image`, `chart`, `table`, `code`, `metric`, `quote`, or `timeline`. Mark a roadmap's progress with `status` on the timeline events (`done`, `current`, `planned`); the engines draw it, so do not add color or schedule-health words to fake it.
 - `blocks` for a sequence that should reflow. Set `composition` only when an arrangement matters. Omit it to let the engine choose.
 - Promoted regions such as `left`, `center+right`, `top`, and `bottom` for spatially meaningful content. Regions must not overlap. Do not mix regions with root payloads or blocks.
 
 Use catalog IDs from the installed package or supply inline records in `catalogs`. A gallery route is a stable identifier, but an extended gallery layout may need the inline record included in the copied document. Do not invent an unresolvable layout or assume a network lookup will happen.
 
-Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts put a `type` and the same tabular structure inside `chart.data`. Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
+A testimonial quote is `{ "quote": { "text": "...", "attribution": "Priya Raman", "role": "VP Operations, Acme", "photo": { "src": "asset:priya", "alt": "Priya Raman" } } }`: the attribution holds the name, `role` the title and organization, and `photo` a circular headshot that needs alt text.
+
+Pick `bullets` for plain talking points and `items` for a list whose entries have the same shape or a supporting `description` (see [content payloads](content-payloads.md#items-versus-bullets)). Mark an inline code span with `{ "text": "pnpm install", "code": true }`, a stretch in another language with `lang`, lines of a code block with `code.highlight` (`[3, [5, 7]]`), and stamp a deck with `design.watermark` `{ "text": "DRAFT", "opacity": 0.1 }`.
+
+A headline or quote may carry inline formatting: `title`, `subtitle`, `tag` and `quote.text` accept a string or `TextRun[]`, for example `"title": ["Revenue grew ", { "text": "28%", "color": "accent1" }]` to color the word that carries the claim, or a `cite` marker on the claim. Use a plain string unless a run needs its own style.
+
+Tables use `{ "columns": ["Category", "Value"], "rows": [["A", 10]] }`. Charts put a `type` and the same tabular structure inside `chart.data`, plus an `alt` sentence that says what the data shows. For an amount beside a rate, a `combo` chart draws columns with line series (`line`, default the last series) and can put a line on a secondary axis (`secondaryAxis`); see [chart-options.md](chart-options.md#combo-charts). Images use a source string or `{ "src": "...", "alt": "..." }`; use the top-level `assets` registry and `asset:<id>` references for reuse. The local renderer does not fetch remote sources.
+
+## Deck facts: built-in variables
+
+Do not retype the speaker, organization or deck name into slide text. Put them in the root `speaker`, `organization`, `name`, `description` and `author` once and reference them: `{{speaker.name}}`, `{{speaker.title}}`, `{{organization.name}}`, `{{organization.tagline}}`, `{{deck.name}}` inside any string, and `var:speaker.photo` or `var:organization.logo` as a whole image field. `{{speakers}}` joins every speaker name, and `speaker.<id>.<field>` / `organization.<id>.<field>` address one entry by id. Nothing about a speaker is drawn unless you reference it (or set the `speaker` header/footer field); the organization's tagline, legal name, domain, email and phone are likewise only available this way. A built-in whose source field is missing resolves to nothing and warns; an unknown path is a validation error. Speaker ids and organization ids must each be unique and `Speaker.organizationId` must name an organization. See [templates and variables](templates-and-variables.md#built-in-variables).
 
 ## Revision loop
 

@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "skeena",
   "name": "Skeena",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Skeena Display",

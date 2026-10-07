@@ -2,12 +2,12 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-arabic",
   "name": "Noto Sans Arabic",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Arabic",
-    "Pashto",
-    "Punjabi (Shahmukhi)"
+    "arabic",
+    "pashto",
+    "punjabi-shahmukhi"
   ],
   "major": "Noto Naskh Arabic",
   "minor": "Noto Naskh Arabic",

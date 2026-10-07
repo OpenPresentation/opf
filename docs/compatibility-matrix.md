@@ -104,7 +104,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **126** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
 | Validate | `validatePresentation` / `opf validate` | Schema and semantic checks |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
 | Offline catalog bundle | `bundlePresentation` / `opf bundle` | Inlines resolved catalog records; remote media/data and custom catalog sources remain explicit host concerns. |

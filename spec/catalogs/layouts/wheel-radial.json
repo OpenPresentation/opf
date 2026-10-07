@@ -4,20 +4,12 @@
   "name": "Wheel_Radial",
   "summary": "Circular frame with segments around a central theme. Good for frameworks with equal-weight components.",
   "description": "Circular frame with segments around a central theme. Good for frameworks with equal-weight components.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +23,7 @@
     "Radial",
     "Segments"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/wheel-radial.svg"
+  }
 }

@@ -86,8 +86,8 @@ A deck without front matter starts with its first slide, so a file never begins 
 | Part | Syntax | OPF |
 | --- | --- | --- |
 | Options | `<!-- slide: id=cover layout=title section="Part 1" tag=NEW hidden beat=a beat=b type=chart -->` | `id`, `layout`, `section`, `tag`, `hidden` (`hidden=false` too), `beat` (repeat for several), `type`. Values are bare words or JSON strings. At most one per slide, anywhere in it; written first |
-| Title | `# Title` | `title`. One per slide; closing `#` characters are dropped |
-| Subtitle | `## Subtitle` | `subtitle`. One per slide |
+| Title | `# Title` | `title`: a string, or `TextRun[]` when the line has [inline formatting](#inline-text). One per slide; closing `#` characters are dropped |
+| Subtitle | `## Subtitle` | `subtitle`, a string or `TextRun[]` like the title. One per slide |
 | Deeper headings | `### Text` | A bold paragraph, with a `heading-demoted` warning |
 | Notes | `Note: ...` or `Notes: ...` at the start of a line | `notes`: plain text, every following line of the slide verbatim (blank lines, `#`, `-` and fences included), ending at the next `---` |
 | Content | The blocks below, top to bottom | One block with no `id`/`type`/`region`: a root field (`text`, `items`, `chart`, ...). Otherwise `blocks` |
@@ -108,13 +108,13 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | --- | --- | --- |
 | A paragraph | `text` | A soft line break is a space; a backslash at the end of a line is a hard break (`\n`). Inline formatting becomes `TextRun[]`, otherwise a string |
 | `- item` (`*` and `+` too) | `items` | Nested by deeper indentation (two spaces when written) into `level`. An indented line `  : text` after an item is its `description`. A different marker character starts a new list (the writer alternates `-` and `*` for lists in a row). Numbered markers (`1.`) are read as bullets with a `numbered-list` warning: the dialect has no syntax for the `numbering` field of [numbered lists](numbered-lists.md), so numbers and styles are not kept (add `numbering` in an `opf-slide` or `opf-block` fence) |
-| `> text` and trailing dash lines | `quote` | `> — Name, Title` is the `attribution`, a second dash line the `source`. The rules (`—`, `–`, `--`, `~`, `-`; one short line; not a dashed list) are those of [content conversions](conversions.md), as is the code fence rule |
+| `> text` and trailing dash lines | `quote` | `> — Name, Title` is the `attribution`, a second dash line the `source`. The rules (`—`, `–`, `--`, `~`, `-`; one short line; not a dashed list) are those of [content conversions](conversions.md), as is the code fence rule. A quote with a `role` or a `photo` has no Markdown form (a dash line holds a name and a title in one string, and a quote has no image syntax): it is written as an `opf-block`, which reads back exactly. Put `Name, Title` in the attribution line for a plain Markdown quote |
 | ```` ```lang title="file" ```` | `code` | `{ source, language, filename }`, or just the string when there is neither. Backtick or tilde fences, longer fences for code that contains fences |
 | `\| a \| b \|` rows with a `\| --- \| --- \|` row | `table` | The first row is `columns`; an all-empty first row means none. Cells are text with inline formatting, as in the [data import](data-import.md) (`007` and `2024` stay text); an empty cell is `null`. `\|` is a pipe, `<br>` a line break. Alignment colons are ignored. Short and long rows warn |
 | `![alt](src "title")` | `image` | `{ src, alt, title }`, or the string when there is only a source. `<src with spaces>` in angle brackets |
-| ```` ```chart column ```` | `chart` | The word after `chart` is the chart `type`. The body is CSV with a header row (the first column is the category labels and always text; in the other columns an unquoted decimal is a number, `true` and `false` are booleans, an empty field is `null` and a quoted field is text) or a JSON object holding `columns` and `rows` or a `src` data source |
-| ```` ```metric ```` | `metric` | `key: value` lines: `value`, `label`, `description`, `unit`, `delta`, `trend`. A plain decimal `value` or `delta` is a number; `"..."` is a JSON string; `unit: %` and `delta: +3 pts` are plain text |
-| ```` ```timeline name="Roadmap" ```` | `timeline` | One event per line: `when — what` (spaced em dash), or the date forms of the conversions (`2026 Q1: Pilot`, `Jan - Kickoff`), or just `what`. An indented line is the event's `description`. `name` and `description` go on the fence line |
+| ```` ```metric ```` | `metric` | `key: value` lines: `value`, `label`, `description`, `unit`, `delta`, `trend`, `sentiment`. A plain decimal `value` or `delta` is a number; `"..."` is a JSON string; `unit: %` and `delta: +3 pts` are plain text |
+| ```` ```chart column ```` | `chart` | The word after `chart` is the chart `type`; an optional `alt="..."` after it is the chart's text alternative (`alt=""` marks it decorative; a quoted JSON string, as on the timeline fence). The body is CSV with a header row (the first column is the category labels and always text; in the other columns an unquoted decimal is a number, `true` and `false` are booleans, an empty field is `null` and a quoted field is text) or a JSON object holding `columns` and `rows` |
+| ```` ```timeline name="Roadmap" ```` | `timeline` | One event per line: `when — what` (spaced em dash), or the date forms of the conversions (`2026 Q1: Pilot`, `Jan - Kickoff`), or just `what`. A task-list prefix sets the event's `status`: `[x]` done, `[>]` current ("we are here"), `[ ]` planned. An indented line is the event's `description`. `name` and `description` go on the fence line |
 | ```` ```opf-block ```` | any block | A YAML `ContentPayload`: `id`, `type`, any content field, nested `blocks` groups |
 
 ### Inline text
@@ -124,16 +124,17 @@ Blocks are separated by blank lines; a fence, heading, quote, table, image line 
 | `**bold**`, `__bold__` | `bold` |
 | `*italic*`, `_italic_` | `italic` (`_` only at word edges: `snake_case` is text) |
 | `~~strike~~` | `strikethrough` |
+| `` `code` ``, ``` ``a ` b`` ``` | `code` (a backtick fence of any length; one space is trimmed from each side when both sides have one; the text is literal and other formatting wraps the span) |
 | `<u>`, `<sup>`, `<sub>` | `underline`, `superscript`, `subscript` |
 | `[text](url)`, `<https://...>` | `link` (a link title is ignored) |
-| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`; `bold italic underline strike sup sub` work inside the braces too |
+| `[text]{color=#B42318 size=24 font="Open Sans"}` | `color` (a hex colour, scheme slot or `var:name`), `fontSize`, `fontFamily`, `lang` (a BCP-47 tag); `bold italic underline strike sup sub` work inside the braces too |
 | `\*` and any backslash before ASCII punctuation | The character itself |
 
-Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. There is no inline code (backticks stay literal), no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. Fields that hold plain text (the title, the subtitle, and a quote's text, attribution and source) drop formatting with a `formatting-dropped` warning. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
+Flanking follows CommonMark, so `2*(3+4)*5` and `a * b` are text. A backtick that has no matching fence, or that is escaped with a backslash, is text. There is no raw HTML beyond the tags above and `<br>`, no entities (`&amp;` is literal) and no setext headings or indented code. The title, the subtitle and a quote's text keep inline formatting (a string when nothing is formatted, `TextRun[]` otherwise); a quote with formatted text and no attribution stays `{ text: [...] }`, because the string shorthand is for plain text. A quote's attribution and source are plain strings and drop formatting with a `formatting-dropped` warning; backticks in them stay literal characters. `cite` and `footnote` have no inline syntax: a heading or quote that carries one is written in an `opf-slide` fence. Image alt text, code, metric values and timeline lines are read as written, without inline formatting.
 
 ## Writing OPF as Markdown
 
-`opfToMarkdown(document, { unsupported })` first validates the document (`OPFMarkdownError`, `code: "invalid-document"`, when it is not valid OPF). Every part is written in the dialect and **read back before it is kept**: a part whose text could not be read back as the same value (a table cell that is not text, a title that ends in ` #`, notes with a `---` line, formatting next to punctuation that CommonMark cannot open) takes the fallback instead of being written wrongly.
+`opfToMarkdown(document, { unsupported })` first validates the document (`OPFMarkdownError`, `code: "invalid-document"`, when it is not valid OPF). Every part is written in the dialect and **read back before it is kept**: a part whose text could not be read back as the same value (a table cell that is not text, a title that ends in ` #`, a title or quote run with `cite` or `footnote`, notes with a `---` line, formatting next to punctuation that CommonMark cannot open) takes the fallback instead of being written wrongly.
 
 | `unsupported` | Behaviour |
 | --- | --- |
@@ -152,7 +153,7 @@ The writer's canonical form: front matter, then slides joined by a blank line, `
 
 `markdownToOpf(markdown, options)` never throws for malformed content. It returns `{ document, valid, diagnostics, counts }`; `document` is a best effort when `valid` is false. Each diagnostic is a lint diagnostic (`ruleId`, `severity`, `path`, `scope`, `message`, `help`) plus `location` (`offset`, `length` in UTF-16 units, one-based `line` and `column`). Rule ids starting `markdown/` come from the Markdown; ids starting `opf/` are the OPF lint findings of the converted deck, located by the Markdown of the field they name. Options: `split` (`"rules"` or `"headings"`), `defaults`, `validate` (false skips the OPF lint).
 
-Errors: `front-matter`, `front-matter-not-mapping`, `front-matter-unterminated`, `front-matter-slides`, `no-slides`, `options-syntax`, `options-unknown-key`, `options-value`, `options-duplicate`, `options-orphan`, `options-trailing`, `options-embedded`, `comment-unterminated`, `duplicate-title`, `duplicate-subtitle`, `empty-heading`, `empty-quote`, `image-source`, `fence-unterminated`, `code-fence`, `chart-type`, `chart-data`, `metric-block`, `timeline-attributes`, `timeline-description`, `timeline-events`, `opf-slide`, `opf-slide-not-mapping`, `opf-block`, `opf-block-not-mapping`, `slide-property-conflict`, `span-attributes`. Warnings: `front-matter-comments`, `empty-slide`, `heading-demoted`, `numbered-list`, `table-ragged`, `chart-ragged`, `formatting-dropped`.
+Errors: `front-matter`, `front-matter-not-mapping`, `front-matter-unterminated`, `front-matter-slides`, `no-slides`, `options-syntax`, `options-unknown-key`, `options-value`, `options-duplicate`, `options-orphan`, `options-trailing`, `options-embedded`, `comment-unterminated`, `duplicate-title`, `duplicate-subtitle`, `empty-heading`, `empty-quote`, `image-source`, `fence-unterminated`, `code-fence`, `chart-type`, `chart-attributes`, `chart-data`, `metric-block`, `timeline-attributes`, `timeline-description`, `timeline-events`, `opf-slide`, `opf-slide-not-mapping`, `opf-block`, `opf-block-not-mapping`, `slide-property-conflict`, `span-attributes`. Warnings: `front-matter-comments`, `empty-slide`, `heading-demoted`, `numbered-list`, `table-ragged`, `chart-ragged`, `formatting-dropped`.
 
 ## Command line
 

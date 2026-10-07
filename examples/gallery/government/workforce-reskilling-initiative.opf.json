@@ -47,30 +47,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "weekly-progress",
-    "description": "Workforce Reskilling Initiative uses a compact evidence-to-decision arc for State Workforce Board.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "workforce-reskilling-initiative-arc",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -83,26 +60,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F59E0B",
-        "risk": "#E2E8F0"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "simsun",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "a4",
     "background": {
@@ -190,7 +154,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-bullet-bar-2x",
+        "type": "100pct-stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -360,7 +324,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-bar-3x",
+            "type": "100pct-stacked-bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -539,7 +503,7 @@
     },
     "metric-data": {
       "src": "./data/workforce-reskilling-initiative.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Workforce Reskilling Initiative data"
     },
     "watermark": {
@@ -569,24 +533,25 @@
           "id": "workforce-reskilling-initiative-arc",
           "name": "Workforce Development Decision Arc",
           "summary": "A custom arc for State Workforce Board.",
+          "description": "Workforce Reskilling Initiative uses a compact evidence-to-decision arc for State Workforce Board.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

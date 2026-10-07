@@ -2,13 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "microsoft-yahei",
   "name": "Microsoft Yahei",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (simplified)",
-    "Chinese (traditional)",
-    "Japanese",
-    "Korean"
+    "chinese-simplified",
+    "chinese-traditional",
+    "japanese",
+    "korean"
   ],
   "major": "Microsoft YaHei",
   "minor": "Microsoft YaHei",

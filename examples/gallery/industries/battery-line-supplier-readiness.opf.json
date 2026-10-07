@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "marketing-strategy",
-    "description": "Battery Line Supplier Readiness uses a compact evidence-to-decision arc for Voltcrest Components.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "battery-line-supplier-readiness-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#E2E8F0",
-        "risk": "#F8FAFC"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "garamond",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": "light1",
@@ -169,13 +133,32 @@
       "chart": {
         "type": "box-and-whisker",
         "data": {
-          "src": "asset:metric-data",
-          "sheet": "Summary",
-          "range": "A1:C8",
           "columns": [
             "Quarter",
             "Current",
             "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              16,
+              10
+            ],
+            [
+              "Q3",
+              21,
+              13
+            ],
+            [
+              "Q4",
+              26,
+              15
+            ]
           ]
         }
       }
@@ -318,7 +301,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "canada",
+            "type": "world",
             "data": {
               "columns": [
                 "Quarter",
@@ -496,7 +479,7 @@
     },
     "metric-data": {
       "src": "./data/battery-line-supplier-readiness.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Battery Line Supplier Readiness data"
     },
     "watermark": {
@@ -526,24 +509,25 @@
           "id": "battery-line-supplier-readiness-arc",
           "name": "Automotive Supply Decision Arc",
           "summary": "A custom arc for Voltcrest Components.",
+          "description": "Battery Line Supplier Readiness uses a compact evidence-to-decision arc for Voltcrest Components.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

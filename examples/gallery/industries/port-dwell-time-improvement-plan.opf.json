@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "company-intro",
-    "description": "Port Dwell Time Improvement Plan uses a compact evidence-to-decision arc for Bluewater Logistics.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "port-dwell-time-improvement-plan-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#14B8A6",
-        "risk": "#F59E0B"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "bookman",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "widescreen",
     "background": {
@@ -172,7 +136,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-progress-bar",
+        "type": "100pct-stacked-bar",
         "data": {
           "columns": [
             "Quarter",
@@ -532,7 +496,7 @@
     },
     "metric-data": {
       "src": "./data/port-dwell-time-improvement-plan.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Port Dwell Time Improvement Plan data"
     },
     "watermark": {
@@ -562,24 +526,25 @@
           "id": "port-dwell-time-improvement-plan-arc",
           "name": "Ports And Logistics Decision Arc",
           "summary": "A custom arc for Bluewater Logistics.",
+          "description": "Port Dwell Time Improvement Plan uses a compact evidence-to-decision arc for Bluewater Logistics.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

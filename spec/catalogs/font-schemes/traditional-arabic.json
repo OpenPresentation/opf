@@ -2,12 +2,12 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "traditional-arabic",
   "name": "Traditional Arabic",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Arabic",
-    "Urdu",
-    "Pashto"
+    "arabic",
+    "urdu",
+    "pashto"
   ],
   "major": "Traditional Arabic",
   "minor": "Traditional Arabic",

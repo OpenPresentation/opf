@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "raavi",
   "name": "Raavi",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Punjabi"
+    "punjabi-gurmukhi"
   ],
   "major": "Raavi",
   "minor": "Raavi",

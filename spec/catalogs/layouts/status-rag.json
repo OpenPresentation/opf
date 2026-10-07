@@ -4,20 +4,12 @@
   "name": "Status_Rag",
   "summary": "Red/Amber/Green health summary across workstreams. The standard project-status slide.",
   "description": "Red/Amber/Green health summary across workstreams. The standard project-status slide.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +23,7 @@
     "Health",
     "RAG"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/status-rag.svg"
+  }
 }

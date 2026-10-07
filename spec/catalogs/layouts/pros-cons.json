@@ -4,20 +4,12 @@
   "name": "Pros_Cons",
   "summary": "Two-column trade-off analysis. Transparent way to present an option without pretending it has no downsides.",
   "description": "Two-column trade-off analysis. Transparent way to present an option without pretending it has no downsides.",
-  "contentType": "List",
-  "contentMultiple": "2x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -34,7 +26,9 @@
     "Balance",
     "Honest"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/pros-cons.svg"
+  },
   "composition": {
     "mode": "row"
   }

@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "treemap",
-  "name": "TREEMAP",
-  "label": "Treemap",
+  "name": "Treemap",
   "mappings": {
     "openxml": {
       "element": "treemapChart",
@@ -15,53 +14,8 @@
       }
     }
   },
-  "categories": 6,
-  "columns": [
-    "Level1",
-    "Series1"
-  ],
   "group": "Treemap",
   "groupSort": 8,
   "series": 1,
-  "seriesGroups": 1,
-  "slideNumber": 43,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$G$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Level1",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Series1",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Level1",
-      "Q1 2024",
-      "Q2 2024",
-      "Q3 2024",
-      "Q4 2024",
-      "Q1 2025",
-      "Q2 2025"
-    ],
-    "rows": [
-      [
-        "Series1",
-        21164,
-        42530,
-        25525,
-        83147,
-        64548,
-        89471
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

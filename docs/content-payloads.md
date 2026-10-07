@@ -2,6 +2,8 @@
 
 Slide content lives directly on a slide as a full-slide payload, in layout-agnostic `blocks`, or inside a promoted region key such as `left`, `center+right`, or `top:left`.
 
+The slide-level `title`, `subtitle` and `tag` are not payloads, but like `text` and `quote.text` they accept a string or `TextRun[]` (colored words, bold, links, `cite`/`footnote` markers); see [Rich text](rich-text.md#rich-headings-and-quotes).
+
 The optional payload `type` can make intent explicit, but OPF should usually infer the content kind from the field present:
 
 | Field | Inferred type | Notes |
@@ -13,17 +15,30 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
-| `code` | `code` | String shorthand or `Code` object with `source`, `language`, and `filename`. |
-| `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, and `trend`. |
-| `quote` | `quote` | String shorthand or `Quote` object with `text`, `attribution`, and `source`. |
+| `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
+| `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, `trend`, and `sentiment`. |
+| `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
+
+## Items versus bullets
+
+Both fields draw a bulleted (or numbered) list and share the same nesting `level`, rich-text entries and `numbering`. They differ in what they say about the content:
+
+- `bullets` is **prose bullets**: short lines of an argument, written as text. It is inferred as a `text` payload, so layouts and regions that want text take it, and an entry is a string, `TextRun[]` or `{ text, level }`. Use it for talking points where each line stands alone.
+- `items` is a **structured list**: it is inferred as a `list` payload, and an entry may also carry a `description`, so one entry is a heading plus its detail (`{ "text": "Faster onboarding", "description": "First value in under a day." }`). Use it when entries have the same shape (features, steps, options, risks) or when any of them needs supporting detail.
+
+Pick `bullets` for plain talking points and `items` as soon as an entry has a description or the slide's layout expects a list. Do not put a heading and its detail into one string with a separator; that is what `description` is for. A payload holds one of the two, not both.
+
+## Code highlight
+
+`code.highlight` marks lines of a code block: a line number or an inclusive `[start, end]` range, 1-based, for example `[3, [5, 7]]`. Lines are counted by line break in `code.source`; a line that wraps is still one line. The preview and the PPTX export draw a theme-derived band behind the marked lines and dim the others slightly; every line keeps at least 4.5:1 contrast against what it sits on (`codeHighlightColors`). The PPTX export draws one native rectangle per run of marked lines behind the per-line text boxes, and import restores `highlight` from the code provenance tag. A line past the last line, or a range written end before start, is the validation warning `code-highlight-out-of-range` or `code-highlight-range-reversed`, and engines ignore it. Pagination keeps each page's marked lines, renumbered from 1.
 
 ## Color references
 
 Every content color field — `TextRun.color`, styled table cell `style.fill` and `style.color`, and table cell border `color` — accepts three forms:
 
 - A literal hex color: `"#0F172A"`, `"#B42318CC"`.
-- A color-scheme slot or role name, resolved through the effective color scheme after design resolution: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`; roles `primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`.
+- A color-scheme slot or role name, resolved through the effective color scheme after design resolution: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`; roles `primary`, `secondary`, `accent`, `background`, `surface`, `surfaceAlt`, `text`, `textSecondary`. `surfaceAlt` is the alternate surface for banded table rows: core derives it from `surface` and `text` (`surfaceAltColor`), so it always differs visibly from the `surface` of the plain rows, on light and dark slides, and body text keeps 4.5:1 on it.
 - A variable reference `var:<id>` into the top-level `variables` map.
 
 ```json
@@ -137,6 +152,8 @@ Chart-specific fields are grouped under `chart`. Do not put loose chart data dir
 
 Inline chart data is tabular by default. Renderers convert `columns` and `rows` into series, axes, legends, and workbook data internally.
 
+Give every chart an `alt`: one or two sentences that say what the data shows (the point and the key numbers), not "a chart" or "bar chart". The preview names the chart with it (`role="img"`, `aria-label`) and the PowerPoint export writes it as the chart frame's alternative text (`descr`), which `fromPptx` reads back. `"alt": ""` marks a chart decorative, as an empty image `alt` does; the audit (`audit/chart-text-alternative`) still reports it as info so the choice is reviewed. Without `alt`, text beside the chart (a subtitle, text or table) satisfies the audit. See [chart options](chart-options.md#text-alternative).
+
 Value cells are numbers. A string is read only in strict decimal syntax (`"12"`, `" -3.5 "`, `"1e6"`); anything else (`"12%"`, `"$5"`, `"(5)"`, `"1,234"`, `"Q1"`) is a gap in the preview and the export and a `chart-value-not-numeric` warning, never a guessed value. `null` and `""` are gaps without a warning. Core `chartNumber` is the one rule every engine uses (RR-54; before it the PPTX exporter stripped non-numeric characters, so `"12%"` exported as 12).
 
 A column is a string or a `DataColumn` with a number format, which the data labels, the value axis and the exported workbook use:
@@ -157,7 +174,7 @@ A column is a string or a `DataColumn` with a number format, which the data labe
 
 Formats use the `NumberVariable.format` syntax (`#,##0`, `0.0%`, `$#,##0.00`, `#,##0 units`; a `%` multiplies by 100). `source` records provenance only; engines never read or refresh it. `mapping` picks the category, the X column of a scatter chart and the plotted series by column name; without it the first column is the category and every other column a series. Shared data lives in the top-level `datasets` map and a chart plots it with `"data": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }`. The full contract, with validation codes and the engine behaviour, is [Chart and table data](chart-table-data.md).
 
-The `ChartDataSource` form (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is still valid, but no engine loads it: the preview and the export draw a placeholder and the validator warns `chart-data-source-unresolved`. Import the data inline (with a `source`) or into a dataset instead.
+Chart data is inline columns and rows or a dataset. A data source by file or asset (`"data": { "src": "asset:revenue-csv", "columns": [...] }`) is not part of the format: no engine loaded it, and the validator rejects it. Import the data inline (with a `source`) or into a dataset instead.
 
 ## Table
 
@@ -228,7 +245,7 @@ Code-specific fields are grouped under `code`. A string value is shorthand for `
 
 ## Metric
 
-Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, or trends matter. A `trend` (`up`, `down`, `flat`) draws an arrow beside its word, coloured with the delta text, in the preview and the PowerPoint export; the word stays editable text and the arrow carries "Trend: up" as its alternative text (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
+Metric-specific fields are grouped under `metric`. A string or number value is shorthand for `metric.value`; numeric values stay numeric and are formatted by renderers at display time. Use object form when labels, descriptions, units, deltas, trends, or sentiment matter. A `trend` (`up`, `down`, `flat`) draws an arrow beside its word, coloured with the delta text, in the preview and the PowerPoint export; the arrow always points the way the trend does, and its colour follows `sentiment` (`positive` green, `negative` red, `neutral` the neutral text colour). When `sentiment` is absent up is positive, down is negative and flat is neutral, so set it when the direction is not the verdict: a falling churn, cost or latency is `"trend": "down", "sentiment": "positive"`. Only the trend arrow and the trend and delta text take the colour, so `sentiment` has no visible effect on a metric without a `trend`; the word stays editable text and the arrow carries "Trend: up" as its alternative text (see [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07)).
 
 The `number-1x` through `number-6x` layout IDs declare one title placeholder and one through six `metric` placeholders. The IDs retain their existing names; the content kind and payload key are `metric`, not `number` or `text`. For several metrics, use separate `{ "metric": ... }` entries in `blocks`. Choosing a layout does not reinterpret existing text as numeric data.
 
@@ -245,24 +262,56 @@ The `number-1x` through `number-6x` layout IDs declare one title placeholder and
 }
 ```
 
+A falling value that is good news keeps its downward arrow and takes the green:
+
+```json
+{
+  "title": "Churn",
+  "metric": {
+    "value": "3.1%",
+    "label": "Monthly churn",
+    "delta": "-0.6 pts",
+    "trend": "down",
+    "sentiment": "positive"
+  }
+}
+```
+
 ## Quote
 
-Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters.
+Quote-specific fields are grouped under `quote`. A string value is shorthand for `quote.text`; use object form when attribution or citation matters. `text` is a string or `TextRun[]` with inline formatting; `attribution`, `role` and `source` are plain strings.
 
 ```json
 {
   "title": "Customer Proof",
   "quote": {
     "text": "The new workflow made exceptions visible before they became escalations.",
-    "attribution": "VP Operations, Acme Corp",
+    "attribution": "Priya Raman",
     "source": "Customer interview"
   }
 }
 ```
 
+A testimonial attributes the quote to a person with a title and a face. `role` is the person's title and organization, and `photo` is their headshot, an `Asset` (a source string or an object with `src` and `alt`):
+
+```json
+{
+  "title": "Customer Proof",
+  "quote": {
+    "text": "The new workflow made exceptions visible before they became escalations.",
+    "attribution": "Priya Raman",
+    "role": "VP Operations, Acme",
+    "photo": { "src": "asset:priya-raman", "alt": "Priya Raman" },
+    "source": "Customer interview, March 2026"
+  }
+}
+```
+
+The footer under the quote is the attribution, then the role on its own line, then the source after ` - ` on the last line. Without a `role` it is the single line it always was (`attribution - source`). With a `photo`, the headshot is a circle at the start edge of the footer row (the left in a left-to-right deck, the right in a right-to-left one), three times the footer font size across, and the footer lines sit beside it, centered on it. The photo is cropped to fill the circle, and its size follows the footer's font size when the readability floor shrinks the footer. Without a `photo` nothing else changes. The preview draws it with the circular clip that `design.slideImage` uses for shape `circle`, and PowerPoint export writes a native picture with the `ellipse` geometry and the alt text as its description; importing that file restores `role` and `photo`. A photo needs alt text (the `missing-alt-text` audit rule checks `quote.photo`); an SVG photo exports as its PNG raster. A photo with no attribution, role or source still draws, alone in the footer row. The Markdown dialect has no native form for `role` and `photo`: a quote that carries them is written as an `opf` block, which round trips exactly, and a plain `> — Name, Title` line stays an attribution.
+
 ## Timeline
 
-Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, and `description`.
+Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
 
 ```json
 {
@@ -283,6 +332,19 @@ Timeline-specific fields are grouped under `timeline`. An array value is shortha
       }
     ]
   }
+}
+```
+
+A roadmap with progress states:
+
+```json
+{
+  "title": "Product roadmap",
+  "timeline": [
+    { "when": "Q1", "what": "Discovery", "status": "done" },
+    { "when": "Q2", "what": "Pilot", "status": "current" },
+    { "when": "Q3", "what": "Rollout", "status": "planned" }
+  ]
 }
 ```
 

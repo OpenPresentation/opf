@@ -9,6 +9,14 @@
     "id",
     "name"
   ],
+  "$defs": {
+    "HexColor": {
+      "type": "string",
+      "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$",
+      "description": "Hex color: '#RGB', '#RRGGBB' or '#RRGGBBAA'. The same definition as HexColor in opf.schema.json.",
+      "examples": ["#fff", "#2874A6", "#0F172AFF"]
+    }
+  },
   "properties": {
     "$schema": {
       "type": "string",
@@ -73,7 +81,7 @@
       ]
     },
     "accent1": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Accent 1 color (hex). Mirrors the OOXML accent1 slot.",
       "examples": [
         "#2874A6",
@@ -82,7 +90,7 @@
       ]
     },
     "accent2": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Accent 2 color (hex). Mirrors the OOXML accent2 slot.",
       "examples": [
         "#1B4F72",
@@ -91,7 +99,7 @@
       ]
     },
     "accent3": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Accent 3 color (hex). Mirrors the OOXML accent3 slot.",
       "examples": [
         "#5499C7",
@@ -100,7 +108,7 @@
       ]
     },
     "accent4": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Accent 4 color (hex). Mirrors the OOXML accent4 slot.",
       "examples": [
         "#7BDBB2",
@@ -109,7 +117,7 @@
       ]
     },
     "accent5": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Accent 5 color (hex). Mirrors the OOXML accent5 slot.",
       "examples": [
         "#3AC67A",
@@ -118,7 +126,7 @@
       ]
     },
     "accent6": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Accent 6 color (hex). Mirrors the OOXML accent6 slot.",
       "examples": [
         "#24A89E",
@@ -127,42 +135,42 @@
       ]
     },
     "dark1": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Dark 1 color (hex). Typically the deepest neutral; OOXML dark1.",
       "examples": [
         "#000000"
       ]
     },
     "dark2": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Dark 2 color (hex). Secondary dark; OOXML dark2.",
       "examples": [
         "#011842"
       ]
     },
     "light1": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Light 1 color (hex). Typically the slide canvas; OOXML lt1.",
       "examples": [
         "#FFFFFF"
       ]
     },
     "light2": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Light 2 color (hex). Secondary light surface; OOXML lt2.",
       "examples": [
         "#F0F0F0"
       ]
     },
     "hyperlink": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Hyperlink color (hex). OOXML hlink.",
       "examples": [
         "#0563C1"
       ]
     },
     "followedHyperlink": {
-      "type": "string",
+      "$ref": "#/$defs/HexColor",
       "description": "Followed-hyperlink color (hex). OOXML folHlink.",
       "examples": [
         "#954F72"

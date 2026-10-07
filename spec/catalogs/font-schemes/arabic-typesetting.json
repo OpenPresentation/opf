@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "arabic-typesetting",
   "name": "Arabic Typesetting",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Arabic"
+    "arabic"
   ],
   "major": "Arabic Typesetting",
   "minor": "Arabic Typesetting",

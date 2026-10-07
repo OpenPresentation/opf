@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "rags-to-riches",
-    "description": "Demand Generation Campaign Brief uses a compact evidence-to-decision arc for Brightpath Analytics.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "demand-generation-campaign-brief-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#334155",
-        "risk": "#0369A1"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "latha",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "4:3",
     "background": "#F8FAFC",
@@ -165,7 +129,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "clustered-bar-2x",
+        "type": "bar",
         "data": {
           "columns": [
             "Quarter",
@@ -510,7 +474,7 @@
     },
     "metric-data": {
       "src": "./data/demand-generation-campaign-brief.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Demand Generation Campaign Brief data"
     },
     "watermark": {
@@ -540,24 +504,25 @@
           "id": "demand-generation-campaign-brief-arc",
           "name": "Marketing Decision Arc",
           "summary": "A custom arc for Brightpath Analytics.",
+          "description": "Demand Generation Campaign Brief uses a compact evidence-to-decision arc for Brightpath Analytics.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

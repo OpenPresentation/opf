@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "gautami",
   "name": "Gautami",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Telugu"
+    "telugu"
   ],
   "major": "Gautami",
   "minor": "Gautami",

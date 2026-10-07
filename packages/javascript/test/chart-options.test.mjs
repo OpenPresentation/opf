@@ -23,9 +23,7 @@ describe("chart option targets", () => {
       assert.ok(target === undefined || typeof target.kind === "string", record.id);
     }
     assert.equal(chartOptionTarget("column")?.kind, "bar");
-    assert.equal(chartOptionTarget("stacked-bar-3x")?.stacked, true);
-    assert.equal(chartOptionTarget("clustered-column")?.kind, "bar");
-    assert.equal(chartOptionTarget("stacked-column-2x")?.stacked, true, "a deprecated id resolves through its replacement");
+    assert.equal(chartOptionTarget("stacked-bar")?.stacked, true);
     assert.equal(chartOptionTarget("donut")?.kind, "doughnut");
     assert.equal(chartOptionTarget("pareto")?.kind, "pareto");
     assert.equal(chartOptionTarget("not-a-chart"), undefined);
@@ -41,9 +39,10 @@ describe("chart option targets", () => {
 
 describe("chart option support table", () => {
   test("axis titles exist only where the construct has the axis", () => {
-    assert.deepEqual(chartOptionSupport({ kind: "bar" }).axisTitles, { category: true, value: true });
-    assert.deepEqual(chartOptionSupport({ kind: "funnel" }).axisTitles, { category: true, value: false });
-    for (const kind of ["pie", "doughnut", "radar", "treemap", "map"]) assert.deepEqual(chartOptionSupport({ kind }).axisTitles, { category: false, value: false }, kind);
+    assert.deepEqual(chartOptionSupport({ kind: "bar" }).axisTitles, { category: true, value: true, secondary: false });
+    assert.deepEqual(chartOptionSupport({ kind: "funnel" }).axisTitles, { category: true, value: false, secondary: false });
+    for (const kind of ["pie", "doughnut", "radar", "treemap", "map"]) assert.deepEqual(chartOptionSupport({ kind }).axisTitles, { category: false, value: false, secondary: false }, kind);
+    assert.deepEqual(chartOptionSupport({ kind: "combo" }).axisTitles, { category: true, value: true, secondary: true });
   });
 
   test("label positions follow the OOXML position sets", () => {
@@ -74,7 +73,7 @@ describe("resolveChartOptions", () => {
   test("dataLabels: true shows values at the type default position; false and absent show none", () => {
     const column = resolveChartOptions({ dataLabels: true }, chartOptionTarget("column"));
     assert.deepEqual(column.dataLabels, { content: ["value"], position: "outside-end", separator: ", " });
-    assert.equal(resolveChartOptions({ dataLabels: true }, chartOptionTarget("stacked-column-3x")).dataLabels.position, "center");
+    assert.equal(resolveChartOptions({ dataLabels: true }, chartOptionTarget("stacked-column")).dataLabels.position, "center");
     assert.equal(resolveChartOptions({ dataLabels: true }, chartOptionTarget("line")).dataLabels.position, "above");
     assert.equal(resolveChartOptions({ dataLabels: true }, chartOptionTarget("area")).dataLabels.position, null);
     assert.equal(resolveChartOptions({ dataLabels: false }, chartOptionTarget("column")).dataLabels, undefined);
@@ -106,7 +105,7 @@ describe("resolveChartOptions", () => {
   });
 
   test("an unsupported position falls back to the default and is reported", () => {
-    const stacked = resolveChartOptions({ dataLabels: { position: "outside-end" } }, chartOptionTarget("stacked-column-3x"));
+    const stacked = resolveChartOptions({ dataLabels: { position: "outside-end" } }, chartOptionTarget("stacked-column"));
     assert.equal(stacked.dataLabels.position, "center");
     assert.deepEqual(stacked.diagnostics.map((d) => [d.option, d.reason]), [["dataLabels.position", "unsupported-position"]]);
     const line = resolveChartOptions({ dataLabels: { position: "inside-base" } }, chartOptionTarget("line"));

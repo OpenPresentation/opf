@@ -4,7 +4,7 @@ const schemeColorSlots = new Set([
 ]);
 
 const schemeColorRoles = new Set([
-  'primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary',
+  'primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary',
 ]);
 
 const defaultRoleSlots: Record<string, string> = {
@@ -27,7 +27,7 @@ export function normalizeHexColor(value: unknown): string | undefined {
 }
 
 export type ResolveColorRefRoles = Partial<Record<
-  'primary' | 'secondary' | 'accent' | 'background' | 'surface' | 'text' | 'textSecondary',
+  'primary' | 'secondary' | 'accent' | 'background' | 'surface' | 'surfaceAlt' | 'text' | 'textSecondary',
   string
 >>;
 
@@ -71,6 +71,12 @@ export function resolveColorRef(reference: string, options: ResolveColorRefOptio
     const roleKey = reference as keyof ResolveColorRefRoles;
     const fromRoles = roles?.[roleKey];
     if (fromRoles) return normalizeHexColor(fromRoles) ?? fallback;
+    // surfaceAlt has no slot or scheme override: it is derived from the surface and text roles (see surfaceAltColor).
+    if (reference === 'surfaceAlt') {
+      const surface = resolveColorRef('surface', { colorScheme, roles, variables, fallback: '#FFFFFF' });
+      const text = resolveColorRef('text', { colorScheme, roles, variables, fallback: textColorForFill(surface, '#000000') });
+      return surfaceAltColor(surface, text);
+    }
     const fromScheme = normalizeHexColor(colorScheme[reference]);
     if (fromScheme) return fromScheme;
     const slot = defaultRoleSlots[reference];
@@ -80,6 +86,107 @@ export function resolveColorRef(reference: string, options: ResolveColorRefOptio
   if (schemeColorSlots.has(reference)) return schemeSlot(colorScheme, reference, fallback);
 
   return fallback;
+}
+
+/** WCAG relative luminance below which a slide background counts as dark (the point where white and black text contrast equally). */
+export const DARK_BACKGROUND_LUMINANCE = 0.179;
+
+/** True when text on this color should be light: its relative luminance is under {@link DARK_BACKGROUND_LUMINANCE}. An unreadable color is not dark. */
+export function isDarkColor(color: unknown): boolean {
+  const hex = normalizeHexColor(color);
+  const value = hex ? luminance(hex) : undefined;
+  return value !== undefined && value < DARK_BACKGROUND_LUMINANCE;
+}
+
+/**
+ * The slide background a color scheme implies when the design names no single-color background: the scheme's
+ * `background` role override, else its light1 slot, else white. Gradient and picture backgrounds use it too.
+ */
+export function defaultSlideBackground(colorScheme: Record<string, unknown>): string {
+  return keepAlpha(colorScheme.background) ?? slotKeepingAlpha(colorScheme, 'light1', '#FFFFFF');
+}
+
+/** A hex color as uppercase #RRGGBB, keeping an #RRGGBBAA alpha byte (a translucent scheme surface stays translucent). */
+function keepAlpha(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const hex = value.trim();
+  if (/^#[0-9a-f]{8}$/i.test(hex)) return hex.toUpperCase();
+  return normalizeHexColor(hex);
+}
+
+function slotKeepingAlpha(colorScheme: Record<string, unknown>, slot: string, fallback: string): string {
+  return keepAlpha(colorScheme[slot]) ?? fallback;
+}
+
+/** The OOXML theme hyperlink colors a scheme without hyperlink slots gets (the Office theme values the PPTX export writes). */
+const DEFAULT_HYPERLINK = '#0563C1';
+const DEFAULT_FOLLOWED_HYPERLINK = '#954F72';
+
+/** The link color a slide draws: the scheme's, unless it is hard to read on this background (the rule the slide tag follows for the primary color). */
+const MIN_LINK_CONTRAST = 4.5;
+function readableLink(link: string, background: string, text: string): string {
+  const linkHex = normalizeHexColor(link), backgroundHex = normalizeHexColor(background);
+  const contrast = linkHex && backgroundHex ? colorContrast(linkHex, backgroundHex) : undefined;
+  return contrast !== undefined && contrast < MIN_LINK_CONTRAST ? text : link;
+}
+
+export interface ResolvedColorRoles {
+  /** Role override, else accent1. */
+  primary: string;
+  /** Role override, else accent2. */
+  secondary: string;
+  /** Role override, else accent3. */
+  accent: string;
+  /** The slide background: the resolved single-color background of the slide, else {@link defaultSlideBackground}. */
+  background: string;
+  /** Role override, else dark2 on a dark background and light2 on a light one. */
+  surface: string;
+  /** The alternate surface of banded table rows: {@link surfaceAltColor} of `surface` and `text`, always distinguishable from `surface`. */
+  surfaceAlt: string;
+  /** Default text. On a dark background light1. On a light background the `text` role override, else dark1. */
+  text: string;
+  /** Role override, else light2 on a dark background and dark2 on a light one. */
+  textSecondary: string;
+  /** The color of a link run that sets no color of its own: the scheme's hyperlink slot (OOXML hlink), unless that has under 4.5:1 contrast against the slide background, then the slide `text` color. */
+  hyperlink: string;
+  /** Followed-hyperlink slot (OOXML folHlink). */
+  followedHyperlink: string;
+  /** Whether the slide background is dark; text, surface and textSecondary defaults follow it. */
+  dark: boolean;
+}
+
+export interface ResolveColorRolesOptions {
+  /** The slide's resolved single-color background (solid, theme-slot or pattern background color). Omit for a gradient, picture or no background. */
+  background?: string | null;
+}
+
+/**
+ * Resolve a color scheme's abstract roles for one slide: the single definition the opf-render preview, the
+ * PPTX export and the audit share, so the same deck draws the same colors in all three. Role overrides on the
+ * scheme (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) win over the slots they
+ * default to. The background-dependent roles follow {@link isDarkColor} of the slide background; a `text`
+ * override applies only on a light background, so a dark slide always gets readable light1 text.
+ * Values are uppercase #RRGGBB, or #RRGGBBAA where the scheme color carries an alpha byte.
+ */
+export function resolveColorRoles(colorScheme: Record<string, unknown>, options: ResolveColorRolesOptions = {}): ResolvedColorRoles {
+  const slot = (name: string, fallback: string) => slotKeepingAlpha(colorScheme, name, fallback);
+  const background = keepAlpha(options.background) ?? defaultSlideBackground(colorScheme);
+  const dark = isDarkColor(background);
+  const text = dark ? slot('light1', '#FFFFFF') : (keepAlpha(colorScheme.text) ?? slot('dark1', '#111827'));
+  const surface = keepAlpha(colorScheme.surface) ?? (dark ? slot('dark2', '#1E293B') : slot('light2', '#F8FAFC'));
+  return {
+    primary: keepAlpha(colorScheme.primary) ?? slot('accent1', '#2563EB'),
+    secondary: keepAlpha(colorScheme.secondary) ?? slot('accent2', '#0F766E'),
+    accent: keepAlpha(colorScheme.accent) ?? slot('accent3', '#F59E0B'),
+    background,
+    surface,
+    surfaceAlt: surfaceAltColor(surface, text),
+    text,
+    textSecondary: keepAlpha(colorScheme.textSecondary) ?? (dark ? slot('light2', '#E2E8F0') : slot('dark2', '#334155')),
+    hyperlink: readableLink(slot('hyperlink', DEFAULT_HYPERLINK), background, text),
+    followedHyperlink: slot('followedHyperlink', DEFAULT_FOLLOWED_HYPERLINK),
+    dark,
+  };
 }
 
 /** Relative luminance contrast for opaque #RGB/#RRGGBB/#RRGGBBFF colors.
@@ -266,4 +373,77 @@ export function chartPaletteForFill(fill: string, palette: readonly string[]): s
     placedLab[index] = best.lab;
   });
   return placed as string[];
+}
+
+// --------------------------------------------------------------- chart highlight (FA-14)
+
+/** Share of the text colour mixed into the surface to make the muted colour of a highlighted chart. */
+export const CHART_HIGHLIGHT_MUTED_MIX = 0.3;
+/** Smallest contrast the muted colour keeps against the surface: recessive, but still a visible mark. */
+export const CHART_HIGHLIGHT_MUTED_MIN_CONTRAST = 1.6;
+
+const mixChannels = (from: readonly number[], to: readonly number[], amount: number): string =>
+  hexOfChannels(from.map((channel, index) => channel + (to[index]! - channel) * amount));
+
+/**
+ * The two colours of a chart that highlights marks (`chart.highlight`), derived from the theme only: `accent` for the highlighted
+ * marks, `muted` for every other mark.
+ *
+ * - `accent` is the deck's primary colour, kept at >= 3:1 against the surface by `chartColorForFill` (a primary that already has
+ *   that contrast is returned unchanged).
+ * - `muted` is the surface mixed {@link CHART_HIGHLIGHT_MUTED_MIX} of the way towards the text colour: a light grey on a light surface
+ *   and a dim grey on a dark one, in the surface's own hue. When that falls below {@link CHART_HIGHLIGHT_MUTED_MIN_CONTRAST} against
+ *   the surface (a surface and text that are close together) the mix moves towards the text colour until it holds.
+ *
+ * Pure arithmetic on opaque colours: the preview and the PPTX export both call it with the chart panel, the primary and the label
+ * colour, so they draw and write the same two colours. An unresolved colour is replaced by white (surface), the surface's own
+ * best contrast partner (text) or black (primary).
+ */
+export function chartHighlightColors(surface: string, primary: string, text: string): { accent: string; muted: string } {
+  const fill = normalizeHexColor(surface) ?? '#FFFFFF';
+  const accent = chartColorForFill(fill, normalizeHexColor(primary) ?? '#000000');
+  const ink = normalizeHexColor(text) ?? textColorForFill(fill, '#000000');
+  const from = opaqueChannels(fill)!, to = opaqueChannels(ink)!;
+  let muted = mixChannels(from, to, CHART_HIGHLIGHT_MUTED_MIX);
+  for (let amount = CHART_HIGHLIGHT_MUTED_MIX; (colorContrast(muted, fill) ?? Infinity) < CHART_HIGHLIGHT_MUTED_MIN_CONTRAST && amount < 1; ) {
+    amount = Math.min(1, amount + 0.02);
+    muted = mixChannels(from, to, amount);
+  }
+  return { accent, muted };
+}
+
+// --------------------------------------------------------------- alternate surface (banded table rows)
+
+/** Share of the text colour mixed into the surface for the `surfaceAlt` role. */
+export const SURFACE_ALT_MIX = 0.1;
+/** Smallest contrast `surfaceAlt` keeps against `surface`, so a band is visible next to a plain row. */
+export const SURFACE_ALT_MIN_CONTRAST = 1.1;
+
+/**
+ * The `surfaceAlt` colour role: the fill of the banded rows of a table whose other body rows take `surface`. It is the surface
+ * mixed {@link SURFACE_ALT_MIX} of the way towards the text colour (a slightly darker band on a light table, a slightly lighter one
+ * on a dark table), moved further until it differs from the surface by {@link SURFACE_ALT_MIN_CONTRAST}, while the text keeps
+ * 4.5:1 on it. When mixing towards the text cannot keep both (a surface and text that are close together), the band moves the
+ * other way, away from the text, which only raises the text contrast. Pure arithmetic on opaque colours, so the preview and
+ * the PPTX export, which both resolve the `surfaceAlt` ColorRef from their own `surface` and `text` roles, draw and write the
+ * same colour. An unresolved surface is white; an unresolved text colour is the surface's best contrast partner.
+ */
+export function surfaceAltColor(surface: string, text: string): string {
+  const fill = normalizeHexColor(surface) ?? '#FFFFFF';
+  const ink = normalizeHexColor(text) ?? textColorForFill(fill, '#000000');
+  const from = opaqueChannels(fill)!, toText = opaqueChannels(ink)!;
+  const step = (color: string) => (colorContrast(color, fill) ?? 1) >= SURFACE_ALT_MIN_CONTRAST;
+  const readable = (color: string) => (colorContrast(ink, color) ?? 0) >= 4.5 || (colorContrast(ink, color) ?? 0) >= (colorContrast(ink, fill) ?? 0);
+  for (let amount = SURFACE_ALT_MIX; amount <= 0.5 + 1e-9; amount += 0.02) {
+    const band = mixChannels(from, toText, amount);
+    if (!readable(band)) break;
+    if (step(band)) return band;
+  }
+  // Away from the text: towards black under light text, towards white under dark text.
+  const away = (luminance(ink) ?? 0) > (luminance(fill) ?? 0) ? [0, 0, 0] : [255, 255, 255];
+  for (let amount = SURFACE_ALT_MIX; amount <= 1 + 1e-9; amount += 0.02) {
+    const band = mixChannels(from, away, Math.min(1, amount));
+    if (step(band)) return band;
+  }
+  return mixChannels(from, toText, SURFACE_ALT_MIX);
 }

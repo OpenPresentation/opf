@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "fangsong",
   "name": "FangSong",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (simplified)"
+    "chinese-simplified"
   ],
   "major": "FangSong",
   "minor": "FangSong",

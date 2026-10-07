@@ -2,6 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "number-3x",
   "name": "Number 3x",
+  "summary": "Reach for it when three headline figures summarise a result.",
+  "description": "A title above three metrics in a row. Use it for a three-number summary, such as revenue, margin and growth, or a before, during and after.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -18,5 +25,13 @@
   ],
   "composition": {
     "mode": "row"
+  },
+  "tags": [
+    "Numbers",
+    "KPIs",
+    "Triads"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-3x.svg"
   }
 }

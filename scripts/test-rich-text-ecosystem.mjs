@@ -10,6 +10,7 @@ const fonts=await loadOfficeFontRegistry(),svg=renderSvg(document,{textMeasureme
 for(const pattern of [/font-weight="700"/,/font-style="italic"/,/text-decoration="underline"/,/line-through/,/#2563EB/,/href="https:\/\/www.openpresentation.org"/])assert.match(svg,pattern);
 const bytes=await toPptx(document,{textMeasurement:fonts.textMeasurement}),files=unzipSync(bytes),xml=strFromU8(files['ppt/slides/slide1.xml']);
 for(const pattern of [/b="1"/,/i="1"/,/u="sng"/,/sngStrike/,/baseline="-/,/hlinkClick/])assert.match(xml,pattern);
-const bad=renderSvg({slides:[{text:[{text:'Safe text',link:'javascript:alert(1)'}]}]});assert.doesNotMatch(bad,/javascript:/);
+// FA-07: TextRun.link accepts only http(s), mailto and tel, so a javascript: link is refused before anything is drawn.
+assert.throws(()=>renderSvg({slides:[{text:[{text:'Safe text',link:'javascript:alert(1)'}]}]}),error=>error.code==='invalid-opf'&&JSON.stringify(error).includes('/slides/0/text/0/link'));
 await mkdir('artifacts/rich-text',{recursive:true});await writeFile('artifacts/rich-text/reference.opf.json',JSON.stringify(document,null,2));await writeFile('artifacts/rich-text/reference.svg',svg);await writeFile('artifacts/rich-text/reference.pptx',bytes);
 console.log('Rich text ecosystem passed: measured SVG styles, native PPTX formatting, scripts and hyperlinks.');

@@ -7,7 +7,7 @@ Status: RR-54 (release readiness). Additive schema plus one behaviour fix (stric
 Recorded 2026-10-05 for the owner, who asked for all five recommendations of the chart/table data review at once:
 
 1. **One strict chart number rule in core.** The preview read `"12%"` as a gap and `"1e6"` as 1000000; the exporter stripped every non-numeric character (`"1e6"` became 16, `"(5)"` became 5, `"Q1"` became 1). Both engines now call core `chartNumber`, which follows the existing data-import rule. A string that is not a strict decimal number is a gap in both engines and a `chart-value-not-numeric` warning, never a guessed value. Decks whose chart cells held `"12%"` or `"$5"` export a gap where they used to export 12 or 5.
-2. **`ChartDataSource` stays valid but warns.** No engine resolves it ([opf#240](https://github.com/OpenPresentation/opf/issues/240), descoped). The validator reports `chart-data-source-unresolved`. Inline data can instead record where it came from with `data.source`, which engines never read.
+2. **`ChartDataSource` is removed from the schema.** No engine resolved it ([opf#240](https://github.com/OpenPresentation/opf/issues/240), descoped), so the format-audit program (FA-07, 2026-10-06) deleted it, with its `chart-data-source-unresolved` warning. A future data-resolver design re-adds it when it is built. Inline data records where it came from with `data.source`, which engines never read.
 3. **Number formats use the variables syntax.** One pattern language for `NumberVariable.format`, column formats and cell formats. Core converts it to an Excel format code for the PPTX export and back on import.
 4. **Datasets are top-level and shared.** A chart or a table references one with `{ "dataset": "<id>" }`. Core inlines references before composition, so the engines keep plotting and laying out inline data.
 5. **Series mapping is by column name.** `chart.mapping` picks the category, X and series columns. Absent keeps today's positional rule exactly.
@@ -53,7 +53,7 @@ A body cell's own format wins over the column's.
 
 `DataSourceRef` is `{ "src": string, "sheet"?, "range"?, "fields"?: string[], "retrieved"?: string (ISO date or date-time), "description"?: string }`. It records where inline data or a dataset came from. Engines never read, fetch or refresh it; they keep it through editing, export and re-import. It may appear as `ChartData.source` and `Dataset.source`.
 
-The existing `ChartDataSource` (`chart.data` with `src`, `sheet`, `range`, `columns`) is unchanged and still valid. The validator now warns `chart-data-source-unresolved`: the preview and export draw a placeholder for it. Prefer inline `columns`/`rows` with a `source`.
+There is no chart data source by file or asset (`chart.data` with `src`, `sheet`, `range`, `columns`): that form is removed (opf#240, descoped) and is a schema error. Import the data inline with `columns`/`rows` and record its origin in `source`.
 
 ### Datasets
 
@@ -73,7 +73,7 @@ Top-level `datasets` maps ids (the `assets` id pattern) to a `Dataset`:
 ```
 
 Rows hold `ChartDataCell` scalars (string, number, boolean, null). A `DatasetRef` is `{ "dataset": "<id>", "fields"?: string[] }`; `fields` selects and orders columns by name, each at most once (a repeated name is a schema error).
-- **Chart:** `chart.data` may be a `DatasetRef`. It is the third `oneOf` branch beside `ChartData` and `ChartDataSource`.
+- **Chart:** `chart.data` may be a `DatasetRef`. It is the second `oneOf` branch beside `ChartData`.
 - **Table:** a table is either inline (`rows` required, optional `columns`) or dataset-backed (`dataset` required, optional `fields`, and no `rows` or `columns`). Dataset tables take their headers and column formats from the dataset; per-cell styles need an inline table.
 
 Validation:
@@ -121,7 +121,7 @@ export function inlineChartData<T>(chart: T, document?: unknown): T;
  */
 export function resolveChartData(chart: unknown, document?: unknown, options?: { path?: string }):
   | { ok: true; columns: string[]; hasX: boolean; formats: (string | undefined)[]; rows: (string | number | boolean | null)[][]; source?: DataSourceRef; dataset?: string; diagnostics: DataDiagnostic[] }
-  | { ok: false; reason: "data-not-inline" | "dataset-unknown" | "no-rows" | "no-columns"; message: string; diagnostics: DataDiagnostic[] };
+  | { ok: false; reason: "dataset-unknown" | "no-rows" | "no-columns"; message: string; diagnostics: DataDiagnostic[] };
 /** Resolve a table (inline or dataset-backed) to headers, rows and per-column formats. */
 export function resolveTableData(table: unknown, document?: unknown, options?: { path?: string }):
   { columns?: DataTableHeader[]; rows: DataTableCell[][]; formats: (string | undefined)[]; dataset?: string; diagnostics: DataDiagnostic[] };
@@ -191,7 +191,7 @@ All three engines read core's functions when they exist and fall back to their p
 - **Embedded workbook:** custom `numFmt` entries from id 164, with cell styles on every value cell, so Edit Data shows the formats.
 - **Tables:** tables export core layout's display text.
 - **Datasets and mapping:** a chart that uses them exports exactly like its inline equivalent.
-- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form, plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
+- **Provenance:** in `full` mode, `OPF_DATASETS_V1` holds the `datasets` map. `OPF_DATA_V1` sits on each chart or table frame that uses a new field and holds the authored `data`, `mapping` and table form (and, FA-14, a chart's `highlight`, which then also records its inline `data`; see [chart-options.md](chart-options.md)), plus a hash of the cached names, values and format codes. `references-only` mode and `provenance: false` write neither tag.
 
 ### PPTX import (opf-pptx)
 
@@ -229,8 +229,8 @@ Sample decks are written by the PPTX branch under `artifacts/rr-54-native/`.
 
 ## Not in this change
 
-- Resolving `ChartDataSource` or refreshing `source` ([opf#240](https://github.com/OpenPresentation/opf/issues/240)).
+- Resolving a data source by file or asset, or refreshing `source` ([opf#240](https://github.com/OpenPresentation/opf/issues/240)).
 - Date axes and date formats.
-- Per-series colours or chart types (combo charts).
+- Per-series colours. (Columns with line series, optionally on a secondary axis, are the `combo` chart type: [chart-options.md](chart-options.md#combo-charts).)
 - Formulas.
 - Rich text in dataset cells.

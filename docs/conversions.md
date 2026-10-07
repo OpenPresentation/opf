@@ -4,7 +4,7 @@
 
 Every conversion follows one contract:
 
-- **Never invents content.** Every word, number and date in the result came from the source. The only generated text is the fixed column headings of a timeline or metric table (`When`, `What`, `Description`, `Label`, `Value`, `Unit`, `Delta`, `Trend`), the `---` row of a Markdown table, and the `title=` of a code fence; a heading row can be left off (`headings: false`).
+- **Never invents content.** Every word, number and date in the result came from the source. The only generated text is the fixed column headings of a timeline or metric table (`When`, `What`, `Description`, `Label`, `Value`, `Unit`, `Delta`, `Trend`, `Sentiment`), the `---` row of a Markdown table, and the `title=` of a code fence; a heading row can be left off (`headings: false`).
 - **Reports what it cannot carry.** A result has `lossless` and `loss`, a list of names such as `text formatting` or `list nesting levels`. `lossless` is true exactly when `loss` is empty. Show `loss` before applying.
 - **Refuses with a reason.** A pair with no mapping, or content that does not fit, throws `OPFConversionError` (`code: "not-convertible"`) with a message that says what to change. `contentConversionTargets()` returns the same refusal as `available: false` and `reason`.
 - **Validates its output** as OPF. A result that would not validate throws `code: "invalid-output"`.
@@ -36,18 +36,18 @@ A payload is a block, a slide or region that holds one content field, or a group
 | list | text | when plain, no descriptions, levels in order | `list nesting levels (renumbered...)` for gaps in levels; `list item descriptions (kept as indented lines)`. Levels are written as 2-space indentation |
 | list | timeline | no when the list nests or is rich | `list nesting levels`, `text formatting`. `2024 — Launch` gives `when`; an item's description is the event's description |
 | list | table | yes without nesting | `list nesting levels`. One column, or text and description when any item has one; no headings are invented |
-| quote | text | yes | text, then `— attribution`, then `— source` (the source line is plain when there is no attribution) |
-| metric | text | no with a trend | `metric trend` |
+| quote | text | yes | text, then `— attribution, role` (the role joins the attribution after a comma), then `— source` (the source line is plain when there is no attribution or role); loses the `quote photo` |
+| metric | text | no with a trend or sentiment | `metric trend`, `metric sentiment` |
 | code | text | yes with `fences: "auto"` (default) | A fenced block keeps the language and file name; with `fences: "never"` the loss is `code language`, `code filename` |
 | timeline | text | yes | `timeline name`, `timeline description` for the metadata a text cannot hold; `when: what`, then the description indented |
 | timeline | list | yes | `timeline name`, `timeline description`; `when: what` is the item text, the description its description |
 | timeline | table | yes | `timeline name`, `timeline description`. Columns `When`, `What`, `Description` only for the fields used |
-| chart | table | no | `chart type`. Only inline `columns` and `rows`; a `ChartDataSource` is refused |
+| chart | table | no | `chart type`. Only inline `columns` and `rows`, or a dataset; a chart without them is refused |
 | table | chart | yes | Refused unless every column has a plain label and every value after the first column is a number, a numeric string or empty; type `column` |
 | table | list | no | `column headings`; `table columns beyond the second (joined into the description)`; `cell styles`. First column is the item, the other columns the description. Merged cells are refused |
 | table | timeline | yes when the headings are recognised | Reads columns by heading (`When`/`Date`/`Quarter`..., `What`/`Event`/`Milestone`..., `Description`/`Notes`...) or by `columns: { when, what, description }`; `column "X"` for dropped columns, `column heading "X"` for a heading it did not recognise, `text formatting`. Refused without headings or an event column |
 | table | text | yes for plain cells | `text formatting`, `cell styles`, `merged cells`, `line breaks inside cells`, `empty rows`. Markdown with headings, tab-separated without |
-| table | metric blocks | yes when the headings are recognised | Needs a `Value` column; `Label`, `Unit`, `Delta`, `Trend`, `Description` are read too; `column "X"`, `trend values other than up, down or flat`, `text formatting` |
+| table | metric blocks | yes when the headings are recognised | Needs a `Value` column; `Label`, `Unit`, `Delta`, `Trend`, `Sentiment`, `Description` are read too; `column "X"`, `trend values other than up, down or flat`, `sentiment values other than positive, negative or neutral`, `text formatting` |
 | group of metric blocks | table | yes | `block ids and extensions`, `group arrangement (composition)` (a group's composition cannot sit on a table; a slide keeps its own). Columns only for the fields used |
 
 Images, videos and any other group have no content conversion.

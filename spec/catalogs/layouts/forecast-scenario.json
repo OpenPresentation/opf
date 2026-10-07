@@ -4,20 +4,12 @@
   "name": "Forecast_Scenario",
   "summary": "Multi-line chart showing base, upside, and downside projections. The honest way to present uncertainty.",
   "description": "Multi-line chart showing base, upside, and downside projections. The honest way to present uncertainty.",
-  "contentType": "Chart",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -34,7 +26,9 @@
     "Scenarios",
     "Uncertainty"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/forecast-scenario.svg"
+  },
   "composition": {
     "mode": "row",
     "weights": [

@@ -506,11 +506,8 @@ components:
           additionalProperties: true
           description: Optional per-kind catalog overrides (inline records and/or a non-default source).
         narrative:
-          description: Structured storyline. A bare catalog id string, or an inline narrative object.
-          oneOf:
-            - type: string
-            - type: object
-              additionalProperties: true
+          description: Narrative plan by reference. A catalog id, an HTTPS URL or a `pkg:` reference; a custom narrative is a record in `catalogs.narratives.records`.
+          type: string
         audience:
           description: Intended audience(s). A string shorthand, or an array of strings/inline audience objects.
           oneOf:

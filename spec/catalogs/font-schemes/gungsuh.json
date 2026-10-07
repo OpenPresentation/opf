@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "gungsuh",
   "name": "Gungsuh",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Korean"
+    "korean"
   ],
   "major": "GungsuhChe",
   "minor": "Gungsuh",

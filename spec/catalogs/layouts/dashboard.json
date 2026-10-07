@@ -4,20 +4,12 @@
   "name": "Dashboard",
   "summary": "Multiple small charts in a grid for an at-a-glance overview. Bird's-eye view of a business or function.",
   "description": "Multiple small charts in a grid for an at-a-glance overview. Bird's-eye view of a business or function.",
-  "contentType": "Chart",
-  "contentMultiple": "2x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -34,7 +26,9 @@
     "Multi-chart",
     "Monitoring"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
+  },
   "composition": {
     "mode": "row"
   }

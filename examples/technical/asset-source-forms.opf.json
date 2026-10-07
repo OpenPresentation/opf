@@ -44,7 +44,7 @@
     },
     "pipeline-data": {
       "src": "./data/pipeline.csv",
-      "format": "csv"
+      "mediaType": "text/csv"
     }
   },
   "slides": [
@@ -67,14 +67,31 @@
       "video": "asset:demo-video"
     },
     {
-      "title": "Asset Backed Chart",
+      "title": "Pipeline Chart",
       "chart": {
         "type": "bar",
         "data": {
-          "src": "asset:pipeline-data",
           "columns": [
             "Stage",
             "Count"
+          ],
+          "rows": [
+            [
+              "Lead",
+              120
+            ],
+            [
+              "Qualified",
+              64
+            ],
+            [
+              "Proposal",
+              31
+            ],
+            [
+              "Won",
+              12
+            ]
           ]
         }
       }

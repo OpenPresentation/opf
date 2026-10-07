@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "latha",
   "name": "Latha",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Tamil"
+    "tamil"
   ],
   "major": "Latha",
   "minor": "Latha",

@@ -1,11 +1,12 @@
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-import { catalogSchemaNames, type CatalogKind } from "./catalogs.js";
+import { catalogSchemaNames, themes as bundledThemes, type CatalogKind } from "./catalogs.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
-import { MAX_COMPOSITION_DEPTH } from "./composition.js";
+import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { codeHighlightLines } from "./code-highlight.js";
 import { bareIdPattern, isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
@@ -229,10 +230,16 @@ function resolveValidator(schemaOrKind: SchemaOrKind): {
   return { validate: validator };
 }
 
+// SlideDesign is Design plus `not: { required: ["dimensions"] }` (schemaPath "…/allOf/1/not" on a design object); Ajv says "must NOT be valid".
+const slideDimensionsSchemaPath = /\/allOf\/1\/not$/;
+const designInstancePath = /\/design$/;
 function toIssue(error: ErrorObject): ValidationIssue {
+  const slideDimensions = error.keyword === "not" && slideDimensionsSchemaPath.test(error.schemaPath) && designInstancePath.test(error.instancePath);
   const issue: ValidationIssue = {
     path: error.instancePath || "/",
-    message: error.message ?? "failed validation",
+    message: slideDimensions
+      ? "a slide's design cannot set 'dimensions': a PPTX has one slide size, so set design.dimensions on the deck (or its theme)"
+      : error.message ?? "failed validation",
     keyword: error.keyword,
     schemaPath: error.schemaPath,
     params: error.params as Record<string, unknown>,
@@ -467,6 +474,33 @@ function validateSlideRegions(slide: Record<string, unknown>, slidePath: string)
   return issues;
 }
 
+// Speaker and organization ids are cross-referenced (Speaker.organizationId) and addressed by built-in variables
+// (`speaker.<id>.name`), so each set must be unique and a reference must resolve.
+function deckMetadataIssues(value: Record<string, unknown>): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const entries = (key: "speaker" | "organization"): { entry: Record<string, unknown>; path: string }[] => {
+    const field = value[key];
+    if (Array.isArray(field)) return field.flatMap((entry, index) => (isRecord(entry) ? [{ entry, path: `/${key}/${index}` }] : []));
+    return isRecord(field) ? [{ entry: field, path: `/${key}` }] : [];
+  };
+  const organizationIds = new Set<string>();
+  for (const key of ["organization", "speaker"] as const) {
+    const seen = new Set<string>();
+    for (const { entry, path } of entries(key)) {
+      if (typeof entry.id !== "string") continue;
+      if (seen.has(entry.id)) issues.push(semanticIssue(`${path}/id`, `${key} ids must be unique within a presentation`, { id: entry.id }));
+      seen.add(entry.id);
+      if (key === "organization") organizationIds.add(entry.id);
+    }
+  }
+  for (const { entry, path } of entries("speaker")) {
+    if (typeof entry.organizationId === "string" && !organizationIds.has(entry.organizationId)) {
+      issues.push(semanticIssue(`${path}/organizationId`, `organizationId '${entry.organizationId}' names no organization in the presentation; use the id of an entry in organization`, { id: entry.organizationId }));
+    }
+  }
+  return issues;
+}
+
 function validatePresentationSemantics(value: unknown): ValidationIssue[] {
   if (!isRecord(value) || !Array.isArray(value.slides)) {
     return [];
@@ -482,6 +516,12 @@ function validatePresentationSemantics(value: unknown): ValidationIssue[] {
     issues.push(semanticIssue("/language/bcp47", "Use 'en-GB' for UK English; 'en-UK' is not a valid BCP-47 region tag", {
       replacement: "en-GB",
     }));
+  }
+
+  issues.push(...deckMetadataIssues(value));
+  // 'speakers' is the one built-in variable name without a dot, so a declared variable may not take it.
+  if (isRecord(value.variables) && hasOwn(value.variables, "speakers")) {
+    issues.push(semanticIssue("/variables/speakers", "'speakers' is reserved for the built-in list of speaker names; choose another variable id", { id: "speakers" }));
   }
 
   // Slide and payload ids share one namespace, so the origin of the id already
@@ -621,6 +661,55 @@ function designReferenceWarnings(
   return issues;
 }
 
+// The theme a design names: a bare id resolves through the inline catalog records, then the bundled themes; the
+// object form lays its own fields over that record. Undefined when the id is not in either (a host catalog).
+function themeOf(reference: unknown, context: CatalogReferenceContext): Record<string, unknown> | undefined {
+  const id = typeof reference === "string" ? reference : isRecord(reference) ? reference.id : undefined;
+  const entry = inlineCatalogEntry(context, "themes");
+  const inline = typeof id === "string" && Array.isArray(entry?.records) ? entry.records.find((record) => isRecord(record) && record.id === id) : undefined;
+  const base = isRecord(inline) ? inline : typeof id === "string" ? (bundledThemes as readonly unknown[]).find((record) => isRecord(record) && record.id === id) as Record<string, unknown> | undefined : undefined;
+  if (isRecord(reference)) return { ...(base ?? {}), ...reference };
+  return base;
+}
+
+function canvasSize(dimensions: unknown): string {
+  try {
+    const { width, height } = resolveCanvasDimensions(dimensions);
+    return `${Math.round(width * 100) / 100}x${Math.round(height * 100) / 100} px`;
+  } catch {
+    return "invalid";
+  }
+}
+
+// A PPTX has one slide size. A slide-level theme whose dimensions differ from the deck's is never what the author
+// meant: the deck's own design.dimensions wins in every engine, and without one the exporter stops with
+// mixed-slide-dimensions. Warn at the slide's theme.
+function slideThemeDimensionsWarnings(
+  document: Record<string, unknown>,
+  slide: Record<string, unknown>,
+  slidePath: string,
+  context: CatalogReferenceContext,
+): ValidationIssue[] {
+  const slideDesign = isRecord(slide.design) ? slide.design : undefined;
+  if (!slideDesign || slideDesign.theme === undefined) return [];
+  const slideTheme = themeOf(slideDesign.theme, context);
+  if (!slideTheme || slideTheme.dimensions === undefined) return [];
+  const deckDesign = isRecord(document.design) ? document.design : {};
+  const deckTheme = themeOf(deckDesign.theme ?? "minimal", context);
+  const deckDimensions = deckDesign.dimensions ?? deckTheme?.dimensions;
+  const slideSize = canvasSize(slideTheme.dimensions);
+  const deckSize = canvasSize(deckDimensions);
+  if (slideSize === deckSize) return [];
+  const explicit = deckDesign.dimensions !== undefined;
+  return [semanticIssue(
+    pathFor(pathFor(slidePath, "design"), "theme"),
+    explicit
+      ? `this slide's theme sets a slide size (${slideSize}) that differs from the deck's design.dimensions (${deckSize}); a PPTX has one slide size, so the deck's size is used`
+      : `this slide's theme sets a slide size (${slideSize}) that differs from the deck's (${deckSize}); a PPTX has one slide size, so set design.dimensions on the deck`,
+    { code: "slide-theme-dimensions", slideDimensions: slideSize, deckDimensions: deckSize },
+  )];
+}
+
 function chartTypeWarnings(
   payload: unknown,
   path: string,
@@ -647,8 +736,8 @@ function chartTypeWarnings(
 }
 
 // RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
-// chart-mapping-unknown-column, number-format-invalid. Warnings: chart-value-not-numeric (not for null, "" or a
-// 'var:<id>' cell whose variable is a number), chart-data-source-unresolved, chart-mapping-adapted.
+// chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: chart-value-not-numeric (not for
+// null, "" or a 'var:<id>' cell whose variable is a number), chart-mapping-adapted, chart-highlight-adapted.
 function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
   const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
   if (!isRecord(value) || !Array.isArray(value.slides)) return out;
@@ -783,6 +872,23 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
       richText(entry.description, pathFor(entryPath, "description"));
     });
   };
+  // Solid, gradient-stop and pattern colors of a design's background are ColorRef positions.
+  const backgroundColors = (background: unknown, path: string): void => {
+    if (!isRecord(background)) return;
+    colorRef(background.color, pathFor(path, "color"));
+    const stops = isRecord(background.gradient) ? background.gradient.stops : undefined;
+    if (Array.isArray(stops)) stops.forEach((stop, index) => { if (isRecord(stop)) colorRef(stop.color, `${path}/gradient/stops/${index}/color`); });
+    if (isRecord(background.pattern)) {
+      colorRef(background.pattern.foregroundColor, `${path}/pattern/foregroundColor`);
+      colorRef(background.pattern.backgroundColor, `${path}/pattern/backgroundColor`);
+    }
+  };
+  const designColors = (design: unknown, path: string): void => {
+    if (!isRecord(design)) return;
+    backgroundColors(design.background, pathFor(path, "background"));
+    if (isRecord(design.theme)) backgroundColors(design.theme.background, `${path}/theme/background`);
+  };
+  designColors(value.design, "/design");
   const payload = (node: Record<string, unknown>, path: string): void => {
     richText(node.text, pathFor(path, "text"));
     textEntries(node.items, pathFor(path, "items"));
@@ -793,6 +899,7 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   value.slides.forEach((slide, index) => {
     if (!isRecord(slide)) return;
     const slidePath = `/slides/${index}`;
+    designColors(slide.design, pathFor(slidePath, "design"));
     payload(slide, slidePath);
     visitContentPayloads(slide, slidePath, payload);
   });
@@ -807,8 +914,8 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
   const context: CatalogReferenceContext = { document: value };
   const issues: ValidationIssue[] = [];
 
-  // String shorthand only: an inline narrative object with an unknown id is a
-  // legitimate fully-custom narrative, not a broken reference.
+  // A custom narrative is an inline catalogs.narratives.records entry, which
+  // resolves; the beat and duration checks live in lint and the audit.
   if (typeof value.narrative === "string") {
     pushIfDefined(issues, unknownIdWarning("narratives", value.narrative, "/narrative", context));
   }
@@ -821,6 +928,8 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     value.audience.forEach((entry, index) => {
       pushIfDefined(issues, referenceObjectWarning("audiences", entry, `/audience/${index}`, context));
     });
+  } else if (isRecord(value.audience)) {
+    pushIfDefined(issues, referenceObjectWarning("audiences", value.audience, "/audience", context));
   } else {
     pushIfDefined(issues, unknownIdWarning("audiences", value.audience, "/audience", context));
   }
@@ -834,12 +943,24 @@ function presentationReferenceWarnings(value: unknown): ValidationIssue[] {
     }
     const slidePath = `/slides/${index}`;
     issues.push(...designReferenceWarnings(slide.design, pathFor(slidePath, "design"), context));
+    issues.push(...slideThemeDimensionsWarnings(value, slide, slidePath, context));
     issues.push(...chartTypeWarnings(slide, slidePath, context));
     const numberingWarnings = (payload: Record<string, unknown>, path: string): void => {
       for (const finding of numberingFindings(payload).warnings) issues.push(semanticIssue(pathFor(path, finding.key), finding.message, finding.params));
     };
     numberingWarnings(slide, slidePath);
     visitContentPayloads(slide, slidePath, numberingWarnings);
+    // code.highlight: an entry past the last line, or a range written end before start, marks nothing.
+    const highlightWarnings = (payload: Record<string, unknown>, path: string): void => {
+      const code = payload.code;
+      if (!isRecord(code) || !Array.isArray(code.highlight) || typeof code.source !== "string") return;
+      for (const finding of codeHighlightLines(code.highlight, code.source).issues) {
+        if (finding.code === "code-highlight-invalid") continue;
+        issues.push(semanticIssue(pathFor(pathFor(pathFor(path, "code"), "highlight"), String(finding.index)), finding.message, { code: finding.code }));
+      }
+    };
+    highlightWarnings(slide, slidePath);
+    visitContentPayloads(slide, slidePath, highlightWarnings);
     for (const key of Object.keys(slide)) {
       if (promotedRegionKeySet.has(key)) {
         issues.push(...chartTypeWarnings(slide[key], pathFor(slidePath, key), context));
@@ -963,9 +1084,9 @@ function pointerValue(root: unknown, pointer: string): unknown {
   return current;
 }
 
-// RR-54: 'chart.data' is a oneOf of ChartData, ChartDataSource and DatasetRef, and a table column header a oneOf of a
+// RR-54: 'chart.data' is a oneOf of ChartData and DatasetRef, and a table column header a oneOf of a
 // string, runs, a StyledTableCell, a DataColumn and null, so Ajv reports the errors of every branch. When the value
-// names its form ('dataset', 'src' or 'rows'; 'value' or 'name'), keep only the errors of that branch. The
+// names its form ('dataset' or 'rows'; 'value' or 'name'), keep only the errors of that branch. The
 // dataset/inline table exclusions ('if'/'then'/'else' with false schemas) get a message that names the field.
 const datasetTableMessage = (field: string) => `'${field}' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset`;
 function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
@@ -979,7 +1100,7 @@ function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
     const target = pointerValue(value, union.instancePath);
     if (!isRecord(target)) continue;
     const branch = chartData
-      ? hasOwn(target, "dataset") ? "DatasetRef" : hasOwn(target, "src") ? "ChartDataSource" : hasOwn(target, "rows") ? "ChartData" : undefined
+      ? hasOwn(target, "dataset") ? "DatasetRef" : hasOwn(target, "rows") ? "ChartData" : undefined
       : hasOwn(target, "value") ? "StyledTableCell" : hasOwn(target, "name") ? "DataColumn" : undefined;
     const check = branch ? getAjv().getSchema(`${schemaId}#/$defs/${branch}`) : undefined;
     if (!check || check(target) === true) continue;

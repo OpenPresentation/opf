@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "persuade",
-    "description": "Athletics Budget Review uses a compact evidence-to-decision arc for Summit State Athletics.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "athletics-budget-review-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#B45309",
-        "risk": "#047857"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-tamil",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": "#F8FAFC",
@@ -165,7 +129,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "sparkline-6x",
+        "type": "line",
         "data": {
           "columns": [
             "Quarter",
@@ -335,7 +299,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line-with-markers-2x",
+            "type": "stacked-line-with-markers",
             "data": {
               "columns": [
                 "Quarter",
@@ -510,7 +474,7 @@
     },
     "metric-data": {
       "src": "./data/athletics-budget-review.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Athletics Budget Review data"
     },
     "watermark": {
@@ -540,24 +504,25 @@
           "id": "athletics-budget-review-arc",
           "name": "College Athletics Decision Arc",
           "summary": "A custom arc for Summit State Athletics.",
+          "description": "Athletics Budget Review uses a compact evidence-to-decision arc for Summit State Athletics.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

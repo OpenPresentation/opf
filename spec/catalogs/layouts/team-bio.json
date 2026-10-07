@@ -4,26 +4,22 @@
   "name": "Team_Bio",
   "summary": "Grid of team members with photos, names, and roles. Humanizes your organization and builds credibility.",
   "description": "Grid of team members with photos, names, and roles. Humanizes your organization and builds credibility.",
-  "contentType": "Image",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     }
   ],
   "tags": [
@@ -31,5 +27,7 @@
     "Organization",
     "Credibility"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/team-bio.svg"
+  }
 }

@@ -47,30 +47,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "pitch-deck",
-    "description": "Kiosk Orientation Deck uses a compact evidence-to-decision arc for Northgate Museum.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "kiosk-orientation-deck-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -83,26 +60,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F8FAFC",
-        "risk": "#334155"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "constantia",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": {
       "preset": "16:10",
@@ -181,7 +145,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bullet-column-2x",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",
@@ -351,7 +315,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "dot-plot-4x",
+            "type": "scatter",
             "data": {
               "columns": [
                 "Quarter",
@@ -528,7 +492,7 @@
     },
     "metric-data": {
       "src": "./data/kiosk-orientation-deck.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Kiosk Orientation Deck data"
     },
     "watermark": {
@@ -558,24 +522,25 @@
           "id": "kiosk-orientation-deck-arc",
           "name": "Visitor Orientation Decision Arc",
           "summary": "A custom arc for Northgate Museum.",
+          "description": "Kiosk Orientation Deck uses a compact evidence-to-decision arc for Northgate Museum.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

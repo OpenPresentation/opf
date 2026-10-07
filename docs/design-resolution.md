@@ -117,7 +117,7 @@ There is no ambiguity between "override" and "reference": every scheme value *is
   "design": {
     "fontScheme": {
       "id": "aptos",
-      "code": { "family": "JetBrains Mono" }
+      "code": "JetBrains Mono"
     }
   }
 }
@@ -130,7 +130,7 @@ The `aptos` record supplies the OOXML pair (`major`/`minor`). The `code` role is
 The `code` role resolves per key like every other override:
 
 1. `code` on the effective `design.fontScheme` object;
-2. `code` on the resolved font-scheme record (the `consolas` and `courier-new` records carry `{ "family": "Consolas" }` and `{ "family": "Courier New" }`);
+2. `code` on the resolved font-scheme record (the `consolas` and `courier-new` records carry `"Consolas"` and `"Courier New"`);
 3. otherwise **Roboto Mono**, the documented fallback that `@openpresentation/opf-render` bundles.
 
 The heading and body families are never reused as the code fallback, so choosing `aptos` still gives Roboto Mono code unless the deck sets `code`. `resolveFontFamilies()` in `@openpresentation/opf` applies these rules for all engines.
@@ -199,7 +199,18 @@ Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.c
 ```
 
 - **Slot names** (`accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`) read the named slot from the *effective* color scheme — the one produced by the slide → deck → theme → engine-default precedence at the top of this page. A slide-level `design.colorScheme` override therefore recolors that slide's named runs too.
-- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through the same role handling engines already apply to color schemes: a role defined on the effective scheme is used directly; otherwise the engine maps the role onto a slot exactly as it does when serializing schemes.
+- **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through one shared definition, `resolveColorRoles()`, which the opf-render preview, the PPTX export and `auditPresentation` all call, so the same deck draws the same colors in each. A role defined on the effective scheme wins; otherwise it defaults from a slot:
+
+  | Role | Default |
+  | --- | --- |
+  | `primary`, `secondary`, `accent` | `accent1`, `accent2`, `accent3` |
+  | `background` | the slide's own resolved background when it is one color (solid, theme slot or pattern background color); else the scheme's `background` role, else `light1`. A gradient or picture background uses the scheme default. |
+  | `surface` | `light2`, or `dark2` on a dark slide |
+  | `text` | `dark1`, or `light1` on a dark slide. A `text` override applies on a light slide only, so a dark slide always keeps readable light text. |
+  | `textSecondary` | `dark2`, or `light2` on a dark slide |
+
+  A slide is dark when its background's WCAG relative luminance is under 0.179, the point where white and black text contrast equally.
+- **Links.** A link run (`link`) with no `color` of its own is drawn underlined in the scheme's `hyperlink` slot (the OOXML `hlink` color; Office blue `#0563C1` when the scheme sets none), in the preview and in the PPTX export (`a:schemeClr hlink` where the deck theme holds that color). Where that color has under 4.5:1 contrast against the slide background (the default Office blue on a dark slide), the slide's `text` color is used instead, as the slide tag does for a low-contrast primary color. A link run with its own `color` keeps it, and a `hyperlink` ColorRef always names the slot. `followedHyperlink` is written to the PPTX theme; a static preview cannot know which links were visited, so it draws every link in `hyperlink`.
 - **Variable references** (`var:<id>`) resolve against the document's top-level `variables` map, independent of the scheme. Variables are deck-scoped named colors — use them for values that have meaning (`var:risk`) or repeat across slides. An unknown id is a validation warning, never an error, and engines fall back to their default text color.
 
 The styled table cell and border color fields enforce the reference forms at the schema level (a typo like `"acent2"` is a schema error there — neither hex, a known name, nor a `var:` reference). Run colors stay open strings so imported decks keep validating: an unrecognized run color is a validation warning, and renderers fall back to the theme text color — the same warn-don't-error posture unknown catalog ids get. Unknown `var:` ids are warnings everywhere.
@@ -219,8 +230,10 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 ```
   latin          design font scheme heading/body (the chain above)
   eastAsian      1. design.fontScheme.eastAsian      explicit slot
-  complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs and its
-                                                     languages list is empty or names the language
+  complexScript  2. the scheme's own major/minor     when languageFamily is ea / cs (or eastAsian /
+                                                     complexScript, the same values) and its
+                                                     languages list (language ids) is empty or
+                                                     names the language
                  3. the language's font scheme       when the language's script uses the slot
                  4. the latin family                 otherwise
 ```
@@ -230,11 +243,23 @@ OOXML gives each theme font (major and minor) three script slots: `latin`, East 
 - A language sets `lang`, the text direction and the script slots, and never the Latin scheme: only `design.fontScheme` (slide, then deck, then theme, then the shared default `aptos`) sets the latin fonts, and a language record's `fontScheme` is a default for its own script slot, not a deck font. The PPTX theme's `a:ea` and `a:cs` are written only for a slot a script font is selected for (the scheme's explicit slot or the language's script font) and stay empty otherwise, as in Office's own themes. See [Language contract](./programs/font-fidelity-everywhere/script-font-model.md#language-contract-ff-50-model-c) and [Theme slots](./programs/font-fidelity-everywhere/script-font-model.md#theme-slots-ff-49).
 - A Latin deck therefore repeats its heading/body family in `ea`/`cs`. A Japanese deck with `design.fontScheme: { "major": "Carlito", "minor": "Carlito" }` keeps the Latin family in `latin` and uses Meiryo (PowerPoint) or Noto Sans JP (Google Slides) in `ea`. `design.fontScheme.eastAsian` / `.complexScript` (`{ "major": ..., "minor": ... }`) name a script font explicitly, for example for CJK text inside a Latin deck.
 
-`@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })`, which returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
+`@openpresentation/opf` exports `resolveScriptFonts(document, { app, slideIndex })` (`app` is `"powerpoint"`, the default, or `"google-slides"`) and `normalizeLanguageFamily(value)` (which reads `eastAsian` as `ea` and `complexScript` as `cs`). `resolveScriptFonts` returns the heading and body slots, the OOXML `lang` (a curated `ooxmlLang` culture tag such as `ja-JP` or `ms-MY`, or an authored region tag), the canonical `bcp47` tag, `script`, `direction`/`rtl`, and the per-script supplemental theme font. Renderers and exporters should use it rather than re-deriving slots. The model, the OOXML mapping and the open questions are in [`programs/font-fidelity-everywhere/script-font-model.md`](./programs/font-fidelity-everywhere/script-font-model.md). opf-render and opf-pptx implement it (FF-07, FF-19, FF-49).
 
 ## Brand assets and layout hints
 
 The 2026-09-30 spec coverage audit found that `design.logo`, `organization.logo`, `speaker.photo`, `design.contentDirection`, `design.chartPrimary`, `design.listBullet` and `fontScheme.accent` validated, edited and round-tripped but changed nothing in any engine. This section states what they do now. Every rule below is implemented once, in `composeSlide()` and `resolveLogo()` of `@openpresentation/opf`, and consumed by the renderer and the exporter; the decisions marked **(vetoable)** are agent decisions the owner can overturn.
+
+### Layout records: `placeholders` and `design`
+
+A layout record (`opf-layout/v1`) holds what it contains in `placeholders` and how it is meant to look in `design`. The content kinds are one vocabulary: `title`, `subtitle`, `tag`, `text`, `list`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote` and `timeline`.
+
+- `layoutContent(record)` (exported from `@openpresentation/opf`) derives `{ kind, count, heading: { title, subtitle, tag } }` from the placeholders. `kind` is the most frequent body placeholder kind (a tie goes to the first in placeholder order), or `title` when there is none; `count` is the number of body placeholders. Nothing derived is stored on the record.
+- `design` uses the keys and lowercase values of the deck's and a slide's `design`: `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill`, `listBullet` and `slideImage: { position }`. An absent key means the layout has no opinion. `pnpm check:spec` verifies that the layout schema's `DesignHints` and `Design` agree.
+- **One merge, per key, the slide winning:** the slide's `design`, then the deck's `design`, then the slide's layout record `design`, then the engine default. This holds for `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFill` and `listBullet`, so a slide overrides exactly what its layout sets, by the same name, and a layout value nobody overrides is honored without copying it anywhere. `resolveDesignHints({ slide, layout, presentation, slideIndex })` (exported from `@openpresentation/opf`) is the one place that computes it; it also reports which level supplied each key. `composeSlide()` returns the result as `SlideComposition.design`, and the renderer, the PPTX exporter, pagination and the audit take `titleAlignment`, `contentAlignment`, `contentBox`, `imageFill` and `listBullet` from there instead of re-deriving them. A value the schema does not allow for its key is skipped, so the next level answers.
+- The layout's `composition.mode` still ranks above the design hint: `contentDirection` acts below it (see the decision below), and a layout's own `composition` columns and weights are overridden only by an effective `chartPrimary`.
+- `slideImage.position` is not a per-key merge: a layout whose record sets `slideImage` is what lets a deck-wide `design.slideImage` apply, and its `position` is the fallback when the slide's or the deck's value gives none.
+- Hosts no longer need to copy a layout's `design` into the deck or a slide. The pptx.gallery example builder and the editor's layout apply still do, which is harmless: a copied value is a deck or slide value and ranks above the record.
+- **Decision, 2026-10-06 (agent decision, vetoable).** On a cover, `tag` and `subtitle` follow `titleAlignment` unless the slide's own `design.contentAlignment` is set; a deck or layout `contentAlignment` does not split the heading group, exactly as a deck value did before.
 
 ### Logo source and variant selection
 
@@ -270,9 +295,9 @@ Hosts pass their own background luminance test as `composeSlide(..., { darkBackg
 
 > **Decision, 2026-09-30 (agent decision, vetoable).** 84 of the 126 bundled example decks carry a `design.logo` or an `organization.logo`, so 81 cover slides gain a logo and their heading group moves down. The placement (top-left, 56 px, lockup) and the content-slide exclusion are the reference-engine defaults; a layout-driven logo slot is a separate design.
 
-### `speaker.photo` is authoring metadata (vetoable)
+### `speaker.photo` is a built-in image variable (vetoable)
 
-No reference engine draws a speaker photo: the schema has no speaker slot on any slide and no slide-to-speaker link, and a speaker block on covers would be a separate design. The field stays authoring metadata for hosts and layouts, and it round-trips through PPTX provenance.
+No reference engine draws a speaker photo by itself: the schema has no speaker slot on any slide and no slide-to-speaker link, and a speaker block on covers would be a separate design. The author places it explicitly with the built-in image variable (`"image": "var:speaker.photo"`, see [templates and variables](templates-and-variables.md#built-in-variables)); the field also round-trips through PPTX provenance.
 
 ### `contentDirection`
 
@@ -282,13 +307,13 @@ The effective value is `slides[i].design.contentDirection`, then `design.content
   1. composition.mode                            explicit: the slide's own, else the
                                                  layout record's geometry contract
   2. design.contentDirection                     slide design, then deck design
-  3. the layout record's slideLayoutDirection    existing hint
+  3. the layout record's design.contentDirection the layout's own direction
   4. auto
 ```
 
-Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `contentDirection` does not reinterpret them. Nested groups keep their own `composition`. The decision record keeps `reason: 'configured-mode'`. Reserved placeholder slots still count when only the hint sets the mode, as they do for `slideLayoutDirection`.
+Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `contentDirection` does not reinterpret them. Nested groups keep their own `composition`. The decision record keeps `reason: 'configured-mode'`. Reserved placeholder slots still count when only the hint sets the mode, as they do for the layout record's `design.contentDirection`.
 
-> **Decision, 2026-09-30 (agent decision, vetoable).** A layout record's `composition.mode` ranks above the design hint. pptx.gallery derives `design.contentDirection` from every layout's own `slideLayoutDirection`, so a hint that overrode the layout's `composition.mode` would flatten the layout's own grid by construction: `chart-2x` (`slideLayoutDirection: Horizontal`, `mode: grid, columns: 2`) would compose its four blocks as one row under the `horizontal` it derives for itself, and the renderer's gallery-layout fixtures (57 layouts whose preview must differ from the default only in alignment) fail. The hint therefore ranks with `slideLayoutDirection`, above it, and acts where no composition contract exists: slides without a layout and the bundled layouts without `composition.mode` (62 of 100). Under this rule no bundled example slide changes geometry for `contentDirection` (101 decks set it; all of their blocks slides use layouts that carry a mode). The alternative, ranking the hint above the layout mode, would change 125 single-payload example slides and break the gallery's own layouts.
+> **Decision, 2026-09-30 (agent decision, vetoable).** A layout record's `composition.mode` ranks above the design hint. pptx.gallery copies a layout record's `design.contentDirection` into the design of its examples, so a hint that overrode the layout's `composition.mode` would flatten the layout's own grid by construction: `chart-2x` (`design.contentDirection: horizontal`, `mode: grid, columns: 2`) would compose its four blocks as one row under the `horizontal` it derives for itself, and the renderer's gallery-layout fixtures (57 layouts whose preview must differ from the default only in alignment) fail. The hint therefore ranks with the layout record's `design.contentDirection`, above it, and acts where no composition contract exists: slides without a layout and the bundled layouts without `composition.mode` (62 of 100). Under this rule no bundled example slide changes geometry for `contentDirection` (101 decks set it; all of their blocks slides use layouts that carry a mode). The alternative, ranking the hint above the layout mode, would change 125 single-payload example slides and break the gallery's own layouts.
 
 ### `titleAlignment` and `contentAlignment` in right-to-left decks
 
@@ -296,7 +321,7 @@ Promoted regions (`left`, `top:left`, ...) keep their explicit geometry: `conten
 
 ### `chartPrimary`
 
-The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimary`, then the layout record's `contentTypeChartPrimary` (`Top`, `Bottom`, `Left`, `Right` lower-cased; `None` is `none`). It applies to the root arrangement only when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
+The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimary`, then the layout record's `design.chartPrimary`. It applies to the root arrangement only when the slide has no promoted regions, no `composition.mode` of its own, and its root nodes contain at least one chart leaf and at least one node that is not a chart. The **first chart node is primary** and the other root nodes form one synthetic sub-grid:
 
 - `left` / `right`: the root is a two-track row with weights `[3, 2]` (chart first for `left`, last for `right`); the rest arrange in `auto` mode inside their track.
 - `top` / `bottom`: a two-track column with weights `[3, 2]` (chart first for `top`).
@@ -304,7 +329,7 @@ The effective value is `slides[i].design.chartPrimary`, then `design.chartPrimar
 
 The synthetic container has no OPF path, so it records no `groups`, `flows` or explanation entry; the root decision has `reason: 'chart-primary'` and `selectedColumns` 2 (row) or 1 (column). Explicit root `columns` and `weights`, from the slide or the layout record, are ignored while it applies, and reserved placeholder slots are not applied. A chart inside a nested group, a chart-only root, or a single root `chart` payload leaves the arrangement unchanged.
 
-> **Decision, 2026-09-30 (agent decision, vetoable).** Unlike `contentDirection`, `chartPrimary` overrides the layout record's `composition.mode`, `columns` and `weights` (only the slide's own `composition.mode` blocks it). It is an author opt-in: every bundled layout's `contentTypeChartPrimary` is `None`, so nothing derives it, while every bundled chart layout that mixes a chart with text carries a `composition.mode` (`chart-2x` grid, `data-visualization` row `[2, 1]`, ...). Ranking the layout mode above the hint would make the field inert on every bundled chart layout. 40 example slides (10 per side) change under this rule.
+> **Decision, 2026-09-30 (agent decision, vetoable).** Unlike `contentDirection`, `chartPrimary` overrides the layout record's `composition.mode`, `columns` and `weights` (only the slide's own `composition.mode` blocks it). It is an author opt-in: no bundled layout record sets `design.chartPrimary`, so nothing derives it, while every bundled chart layout that mixes a chart with text carries a `composition.mode` (`chart-2x` grid, `data-visualization` row `[2, 1]`, ...). Ranking the layout mode above the hint would make the field inert on every bundled chart layout. 40 example slides (10 per side) change under this rule.
 
 ### `listBullet` (vetoable)
 

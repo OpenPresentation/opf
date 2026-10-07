@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "ms-mincho",
   "name": "MS Mincho",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Japanese"
+    "japanese"
   ],
   "major": "MS Mincho",
   "minor": "MS Mincho",

@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-ethiopic",
   "name": "Noto Sans Ethiopic",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Amharic"
+    "amharic"
   ],
   "major": "Noto Sans Ethiopic",
   "minor": "Noto Sans Ethiopic",

@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "board-meeting",
-    "description": "Data Platform Migration Plan uses a compact evidence-to-decision arc for Fathom Retail.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "data-platform-migration-plan-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F8FAFC",
-        "risk": "#334155"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-nastaliq-urdu",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:10",
     "background": {
@@ -519,7 +483,7 @@
     },
     "metric-data": {
       "src": "./data/data-platform-migration-plan.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Data Platform Migration Plan data"
     },
     "watermark": {
@@ -549,24 +513,25 @@
           "id": "data-platform-migration-plan-arc",
           "name": "Data Engineering Decision Arc",
           "summary": "A custom arc for Fathom Retail.",
+          "description": "Data Platform Migration Plan uses a compact evidence-to-decision arc for Fathom Retail.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

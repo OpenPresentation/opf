@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "kalinga",
   "name": "Kalinga",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Odia"
+    "odia"
   ],
   "major": "Kalinga",
   "minor": "Kalinga",

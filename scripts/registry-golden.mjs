@@ -24,9 +24,10 @@ function canonical(value) {
 // moved on (the lock's golden always records this checkout's corpus). The registry run installs the release-plan core,
 // which can ship such an older corpus until the next core release; each file still compares every pixel hash exactly.
 // Remove an entry once no release-plan core ships its corpus.
-// None today: the release plan's core 0.13.0 ships the corpus the lock golden records (digest 394c4ce7...). The RR-41 corpus
-// (485b5c07..., core 0.12.1 and 0.12.2) was retained until the 0.13 records (RR-20) because no plan core ships it any more.
-export const RETAINED_CORE_GOLDENS = [];
+export const RETAINED_CORE_GOLDENS = [
+  // RR-20 corpus (digest 394c4ce7..., core 0.13.0); the FA 0.14 examples moved the checkout to a new corpus.
+  'scripts/fixtures/opf-examples-png.example-decks.sha256.json',
+];
 
 // Returns the absolute path of the reviewed core golden that records exactly the installed core's examples: the lock's
 // core golden, else a retained one (RETAINED_CORE_GOLDENS); otherwise undefined (the renderer then uses its own

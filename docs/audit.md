@@ -112,7 +112,7 @@ The reference below is generated from the rule registry (`auditRules`); `pnpm ch
 | [`audit/reading-order`](#auditreading-order) | warning | Accessibility | The order content is read differs from the order it appears on the slide. |
 | [`audit/link-text`](#auditlink-text) | warning | Accessibility | Link text does not say where the link goes. |
 | [`audit/chart-color-only`](#auditchart-color-only) | info | Accessibility | Chart series may be indistinguishable without colour vision. |
-| [`audit/chart-text-alternative`](#auditchart-text-alternative) | info | Accessibility | A chart is the only content on its slide besides the title. |
+| [`audit/chart-text-alternative`](#auditchart-text-alternative) | info | Accessibility | A chart has no text alternative, or is marked decorative. |
 | [`audit/missing-language`](#auditmissing-language) | info | Accessibility | The presentation does not declare its language. |
 | [`audit/text-overflow`](#audittext-overflow) | warning | Design | Text or a table does not fit its space at the smallest allowed size. |
 | [`audit/small-cell`](#auditsmall-cell) | info | Design | A content cell is too small for comfortable reading. |
@@ -126,6 +126,7 @@ The reference below is generated from the rule registry (`auditRules`); `pnpm ch
 | [`audit/image-resolution`](#auditimage-resolution) | warning | Design | An image has too few pixels for the size it is shown at. |
 | [`audit/placeholder-text`](#auditplaceholder-text) | warning | Content | Placeholder text was left in the deck. |
 | [`audit/empty-text`](#auditempty-text) | info | Content | A text field is present but empty. |
+| [`audit/unused-beat`](#auditunused-beat) | info | Content | A beat of the narrative has no slide that references it. |
 | [`audit/empty-slide`](#auditempty-slide) | warning | Content | A slide has no content at all. |
 | [`audit/unfilled-variable`](#auditunfilled-variable) | warning | Content | A template variable was never filled in. |
 
@@ -141,7 +142,7 @@ Default severity: **warning**. Text colour has too little contrast against the b
 
 **Thresholds.** `contrastNormal` (default 4.5), `contrastLarge` (default 3)
 
-**Approximations.** Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview's (the scheme's dark1 or light1 chosen from the background luminance, where a gradient background counts as light), so a default can fail on a dark gradient.
+**Approximations.** Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview's (the scheme's text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme's default background colour), so a default can fail on a dark gradient. A link with no colour of its own is measured in the scheme's hyperlink colour.
 
 ### `audit/text-on-image`
 
@@ -163,7 +164,7 @@ Default severity: **warning**. A picture has no alt text and is not marked decor
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts have no alt field in OPF; see audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
+**Approximations.** Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see audit/poor-alt-text). Charts carry `chart.alt` and are checked by audit/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.
 
 ### `audit/poor-alt-text`
 
@@ -173,7 +174,7 @@ Default severity: **info**. Alt text is a file name, a URL, a generic word or ve
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. It cannot tell whether a plausible sentence is accurate.
+**Approximations.** Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. Chart alt text (chart.alt) is checked too: a bare chart word, a URL, a leading "chart of" or more than 250 characters. It cannot tell whether a plausible sentence is accurate.
 
 ### `audit/missing-slide-title`
 
@@ -227,13 +228,13 @@ Default severity: **info**. Chart series may be indistinguishable without colour
 
 ### `audit/chart-text-alternative`
 
-Default severity: **info**. A chart is the only content on its slide besides the title.
+Default severity: **info**. A chart has no text alternative, or is marked decorative.
 
-**Why.** A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. OPF has no alt field for charts, so a sentence or table next to the chart is the text alternative.
+**Why.** A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. The chart's alt field is that text alternative (the preview exposes it as the chart's accessible name and the PowerPoint export writes it as the frame's alternative text); a sentence or table beside the chart also serves. An empty alt marks a chart decorative, which is reported as info so the choice is reviewed: a chart rarely carries no message.
 
 **Standard.** WCAG 2.2 SC 1.1.1 Non-text Content, level A
 
-**Approximations.** A chart passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether that text states the chart's point.
+**Approximations.** A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart's point (see audit/poor-alt-text for generic alt text). alt: "" is reported as a decorative chart, whatever else is on the slide.
 
 ### `audit/missing-language`
 
@@ -352,6 +353,14 @@ Default severity: **warning**. Placeholder text was left in the deck.
 Default severity: **info**. A text field is present but empty.
 
 **Why.** An empty title, text block or list item draws nothing, and leaves a hole in the outline and for assistive technology.
+
+### `audit/unused-beat`
+
+Default severity: **info**. A beat of the narrative has no slide that references it.
+
+**Why.** The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.
+
+**Approximations.** Resolved offline like every catalog reference: the inline catalogs.narratives.records of the document, then records passed in AuditOptions.catalogs, then the bundled catalog. A narrative given as a URL or a pkg: reference, or an id no local source defines, is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.
 
 ### `audit/empty-slide`
 

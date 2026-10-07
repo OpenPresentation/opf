@@ -4,35 +4,31 @@
   "name": "Photo_Grid",
   "summary": "Multiple images in a structured mosaic or uniform grid. Tells a visual story that words alone cannot.",
   "description": "Multiple images in a structured mosaic or uniform grid. Tells a visual story that words alone cannot.",
-  "contentType": "Image",
-  "contentMultiple": "4x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     },
     {
-      "type": "picture"
+      "type": "image"
     },
     {
-      "type": "picture"
+      "type": "image"
     },
     {
-      "type": "picture"
+      "type": "image"
     }
   ],
   "tags": [
@@ -40,7 +36,9 @@
     "Visual",
     "Collection"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/photo-grid.svg"
+  },
   "composition": {
     "mode": "grid",
     "columns": 2

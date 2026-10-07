@@ -4,20 +4,12 @@
   "name": "Logic_Tree",
   "summary": "Top-down tree that breaks a conclusion into supporting arguments and evidence. The consultant's MECE diagram.",
   "description": "Top-down tree that breaks a conclusion into supporting arguments and evidence. The consultant's MECE diagram.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +23,7 @@
     "Structure",
     "Argument"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/logic-tree.svg"
+  }
 }

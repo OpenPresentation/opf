@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { validatePresentation } from "../dist/index.js";
+import { catalogs, validatePresentation } from "../dist/index.js";
 import { assertValid, validate, validateCatalogRecord } from "../dist/validator.js";
 
 const doc = {
@@ -199,11 +199,12 @@ describe("presentation shapes that must validate", () => {
     });
   });
 
-  test("Chart Data Source", () => {
-    assertPresentationValid({
-      name: "Chart Data Source",
+  test("Removed Chart Data Source", () => {
+    // ChartDataSource (opf#240, descoped) is not part of the format: data is inline columns and rows, or a dataset.
+    assertPresentationInvalid({
+      name: "Removed Chart Data Source",
       assets: {
-        "revenue-csv": { src: "./data/revenue.csv", format: "csv" },
+        "revenue-csv": { src: "./data/revenue.csv", mediaType: "text/csv" },
       },
       slides: [{
         title: "Revenue From Asset",
@@ -215,7 +216,7 @@ describe("presentation shapes that must validate", () => {
           },
         },
       }],
-    });
+    }, "must NOT have additional properties");
   });
 
   test("Grid", () => {
@@ -550,7 +551,7 @@ describe("presentation shapes that must be rejected", () => {
           },
         },
       }],
-    }, "must have required property 'src'");
+    }, "must NOT have additional properties");
   });
 
   test("Image Array Rejected", () => {
@@ -872,13 +873,28 @@ describe("catalog-id warning behavior", () => {
     }).warnings.length, 0);
   });
 
-  test("object-form narrative with unknown id is a custom inline narrative, not a broken reference", () => {
-    // Object form with an unknown id is a fully custom inline narrative, not a broken reference.
+  test("a custom narrative is an inline catalog record, and the narrative field is a string only", () => {
     assert.equal(validatePresentation({
       name: "Custom Inline Narrative",
-      narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
+      narrative: "my-own-arc",
+      catalogs: { narratives: { records: [{ id: "my-own-arc", name: "My Own Arc", beats: [{ id: "hook", name: "Hook" }] }] } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
+    const object = validatePresentation({
+      name: "Inline Narrative Object",
+      narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
+      slides: [{ title: "Slide Title" }],
+    });
+    assert.equal(object.valid, false, "an inline narrative object is no longer part of the format");
+    const narrativeRecord = (extra) => validateCatalogRecord("narratives", {
+      $schema: "https://openpresentation.org/schema/opf-narrative/v1",
+      id: "x", name: "X", beats: [{ id: "a", name: "A", ...extra.beat }], ...extra.record,
+    });
+    assert.equal(narrativeRecord({ record: { duration: { min: 5, max: 10 } }, beat: { type: "video", layout: "title" } }).valid, true);
+    assert.equal(narrativeRecord({ beat: { type: "shape" } }).valid, false, "shape is not a content kind");
+    assert.equal(narrativeRecord({ beat: { type: "title" } }).valid, false, "beat type is Slide.type");
+    assert.equal(narrativeRecord({ record: { duration: { min: 0, max: 10 } } }).valid, false, "duration is greater than zero");
+    assert.equal(narrativeRecord({ record: { duration: { minMinutes: 5, maxMinutes: 10 } } }).valid, false, "durationRange names are gone");
   });
 
   test("unknown design references warn at their respective paths", () => {
@@ -912,52 +928,38 @@ describe("catalog-id warning behavior", () => {
     );
   });
 
-  test("deprecated chart type id stays valid but warns with its replacement", () => {
+  test("the bundled catalog holds no deprecated records and the retired chart type and audience ids are unknown", () => {
+    for (const [kind, records] of Object.entries(catalogs)) {
+      assert.deepEqual(records.filter((record) => record.deprecation).map((record) => record.id), [], `bundled ${kind} records carry no deprecation`);
+    }
+    const retired = ["bullet-column", "clustered-column", "sparkline", "dot-plot", "australia", "stacked-column-3x", "stacked-column-2x"];
     const result = validatePresentation({
-      name: "Deprecated Chart Type",
+      name: "Retired Ids",
+      audience: ["executives", "sales-team", "executive"],
       slides: [
-        { title: "Bullet", chart: { type: "bullet-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
-        { title: "Column", chart: { type: "column", data: { columns: ["A", "B"], rows: [["x", 1]] } } },
+        ...retired.map((type) => ({ title: type, chart: { type, data: { columns: ["A", "B"], rows: [["x", 1]] } } })),
+        { title: "Stacked column", chart: { type: "stacked-column", data: { columns: ["A", "B", "C"], rows: [["x", 1, 2]] } } },
       ],
     });
-    assert.equal(result.valid, true);
-    const warning = result.warnings.find((candidate) => candidate.path === "/slides/0/chart/type");
-    assert.ok(warning, JSON.stringify(result.warnings, null, 2));
-    assert.equal(warning.message, "deprecated chartTypes catalog id 'bullet-column'; use 'column'");
-    assert.equal(warning.params.replacedBy, "column");
-    assert.equal(result.warnings.some((candidate) => candidate.path === "/slides/1/chart/type"), false);
+    assert.equal(result.valid, true, "an unknown catalog id warns, never errors");
+    assert.deepEqual(
+      result.warnings.map((warning) => warning.message),
+      [
+        "unknown audiences catalog id 'executives'",
+        "unknown audiences catalog id 'sales-team'",
+        ...retired.map((id) => `unknown chartTypes catalog id '${id}'`),
+      ],
+    );
   });
 
-  test("the six plural audience ids stay valid but warn with their singular replacement", () => {
-    const replacements = {
-      executives: "executive",
-      investors: "investor",
-      customers: "customer",
-      "sales-team": "sales",
-      "marketing-team": "marketing",
-      regulators: "regulatory",
-    };
-    const plural = Object.keys(replacements);
+  test("an inline chart type record can still deprecate an id", () => {
     const result = validatePresentation({
-      name: "Plural Audiences",
-      audience: [...plural, ...Object.values(replacements), "candidates", "engineering-team"],
-      slides: [{ title: "Slide Title" }],
+      name: "Inline Deprecated Chart Type",
+      catalogs: { chartTypes: { records: [{ id: "my-column", name: "My column", deprecation: { replacedBy: "column" } }] } },
+      slides: [{ title: "Old", chart: { type: "my-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } }],
     });
-    assert.equal(result.valid, true, "deprecated ids must warn, never error");
-    assert.deepEqual(result.errors, []);
-    assert.deepEqual(
-      result.warnings.map((warning) => [warning.path, warning.message]),
-      plural.map((id, index) => [`/audience/${index}`, `deprecated audiences catalog id '${id}'; use '${replacements[id]}'`]),
-    );
-    for (const warning of result.warnings) assert.equal(warning.params.replacedBy, replacements[warning.params.id]);
-
-    const object = validatePresentation({
-      name: "Plural Audience Override",
-      audience: [{ id: "sales-team", attentionBudgetMinutes: 20 }],
-      slides: [{ title: "Slide Title" }],
-    });
-    assert.equal(object.valid, true);
-    assert.deepEqual(object.warnings.map((warning) => warning.message), ["deprecated audiences catalog id 'sales-team'; use 'sales'"]);
+    assert.equal(result.valid, true);
+    assert.deepEqual(result.warnings.map((warning) => warning.message), ["deprecated chartTypes catalog id 'my-column'; use 'column'"]);
   });
 
   test("inline catalog record legitimizes an id the bundled catalogs don't know", () => {

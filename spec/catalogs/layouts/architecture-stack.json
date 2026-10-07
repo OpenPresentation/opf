@@ -4,20 +4,12 @@
   "name": "Architecture_Stack",
   "summary": "Layered diagram of a system from foundation to user-facing. Classic for tech stacks and capability layers.",
   "description": "Layered diagram of a system from foundation to user-facing. Classic for tech stacks and capability layers.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +23,7 @@
     "Layers",
     "System"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/architecture-stack.svg"
+  }
 }

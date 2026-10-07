@@ -93,12 +93,16 @@ const only = (value: Obj, keys: readonly string[]): boolean => Object.keys(value
 
 function canonQuote(value: unknown): unknown {
   if (typeof value === "string") return value;
-  if (!isRecord(value) || !only(value, ["text", "attribution", "source"]) || typeof value.text !== "string") return undefined;
+  if (!isRecord(value) || !only(value, ["text", "attribution", "source"])) return undefined;
+  // The quote text is a string or TextRun[] with formatting the dialect can write; attribution and source are plain strings.
+  const text = canonText(value.text);
+  if (text === undefined) return undefined;
   for (const key of ["attribution", "source"]) if (value[key] !== undefined && typeof value[key] !== "string") return undefined;
   // A source with no attribution has no line to stand on.
   if (value.source !== undefined && value.attribution === undefined) return undefined;
-  if (value.attribution === undefined) return value.text;
-  const out: Obj = { text: value.text, attribution: value.attribution };
+  // The string shorthand exists only for a plain string; a rich text stays in its { text } object.
+  if (value.attribution === undefined) return typeof text === "string" ? text : { text };
+  const out: Obj = { text, attribution: value.attribution };
   if (value.source !== undefined) out.source = value.source;
   return out;
 }
@@ -116,10 +120,10 @@ function canonCode(value: unknown): unknown {
 
 function canonMetric(value: unknown): unknown {
   if (typeof value === "string" || typeof value === "number") return value;
-  if (!isRecord(value) || !only(value, ["value", "label", "description", "unit", "delta", "trend"])) return undefined;
+  if (!isRecord(value) || !only(value, ["value", "label", "description", "unit", "delta", "trend", "sentiment"])) return undefined;
   if (typeof value.value !== "string" && typeof value.value !== "number") return undefined;
   const out: Obj = { value: value.value };
-  for (const key of ["label", "description", "unit", "delta", "trend"]) {
+  for (const key of ["label", "description", "unit", "delta", "trend", "sentiment"]) {
     const entry = value[key];
     if (entry === undefined) continue;
     if (typeof entry !== "string" && !(key === "delta" && typeof entry === "number")) return undefined;
@@ -166,24 +170,27 @@ function canonTable(value: unknown): unknown {
 }
 
 function canonChart(value: unknown): unknown {
-  if (!isRecord(value) || !only(value, ["type", "data"]) || typeof value.type !== "string" || !isRecord(value.data)) return undefined;
+  if (!isRecord(value) || !only(value, ["type", "alt", "data"]) || typeof value.type !== "string" || !isRecord(value.data)) return undefined;
+  if (value.alt !== undefined && typeof value.alt !== "string") return undefined;
+  const alt = value.alt === undefined ? {} : { alt: value.alt };
   const data = value.data;
   if (Array.isArray(data.columns) && Array.isArray(data.rows) && only(data, ["columns", "rows"])) {
     if (!data.columns.every((column) => typeof column === "string") || data.columns.length === 0 || data.rows.length === 0) return undefined;
     for (const row of data.rows) if (!Array.isArray(row) || !row.every((cell) => cell === null || ["string", "number", "boolean"].includes(typeof cell))) return undefined;
-    return { type: value.type, data: { columns: data.columns, rows: data.rows } };
+    return { type: value.type, ...alt, data: { columns: data.columns, rows: data.rows } };
   }
-  if (typeof data.src === "string" && only(data, ["src", "sheet", "range", "columns"])) return { type: value.type, data };
   return undefined;
 }
 
 function canonEvent(event: unknown): unknown {
-  if (!isRecord(event) || !only(event, ["when", "what", "description"]) || typeof event.what !== "string") return undefined;
+  if (!isRecord(event) || !only(event, ["when", "what", "description", "status"]) || typeof event.what !== "string") return undefined;
   for (const key of ["when", "description"]) if (event[key] !== undefined && typeof event[key] !== "string") return undefined;
+  if (event.status !== undefined && !["done", "current", "planned"].includes(event.status as string)) return undefined;
   const out: Obj = {};
   if (event.when !== undefined) out.when = event.when;
   out.what = event.what;
   if (event.description !== undefined) out.description = event.description;
+  if (event.status !== undefined) out.status = event.status;
   return out;
 }
 

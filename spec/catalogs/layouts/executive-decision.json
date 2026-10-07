@@ -4,20 +4,12 @@
   "name": "Executive_Decision",
   "summary": "The \"ask\" slide. States the decision requested, the recommendation, and why.",
   "description": "The \"ask\" slide. States the decision requested, the recommendation, and why.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,7 +23,9 @@
     "Recommendation",
     "Ask"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/executive-decision.svg"
+  },
   "composition": {
     "padding": 0.12
   }

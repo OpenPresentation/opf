@@ -2,6 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "text-3x",
   "name": "Text 3x",
+  "summary": "Reach for it when three parallel points each need a short passage of their own.",
+  "description": "A title above three text blocks in a row, equal in weight. Use it for three pillars, three steps explained in prose, or three options described one by one.",
   "placeholders": [
     {
       "type": "title"
@@ -18,5 +20,13 @@
   ],
   "composition": {
     "mode": "row"
+  },
+  "tags": [
+    "Text",
+    "Triads",
+    "Balance"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/text-3x.svg"
   }
 }

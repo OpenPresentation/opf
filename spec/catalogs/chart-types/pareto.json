@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "pareto",
-  "name": "PARETO",
-  "label": "Pareto",
+  "name": "Pareto",
   "mappings": {
     "openxml": {
       "element": "histogramChart",
@@ -16,55 +15,8 @@
       }
     }
   },
-  "categories": 7,
-  "columns": [
-    "Cause",
-    "Defects"
-  ],
   "group": "Histogram",
   "groupSort": 9,
   "series": 1,
-  "seriesGroups": 2,
-  "slideNumber": 47,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$H$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Cause",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Defects",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Cause",
-      "Scratches",
-      "Dents",
-      "Misalignment",
-      "Paint defects",
-      "Cracks",
-      "Loose fittings",
-      "Other"
-    ],
-    "rows": [
-      [
-        "Defects",
-        52,
-        31,
-        24,
-        15,
-        9,
-        6,
-        4
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

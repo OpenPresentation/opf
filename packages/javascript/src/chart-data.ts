@@ -19,6 +19,8 @@ export interface Dataset { title?: string; description?: string; columns: (strin
 export interface DatasetRef { dataset: string; fields?: string[] }
 /** `chart.mapping`: the category, X and series columns by name (after any `fields` selection). */
 export interface ChartMapping { category?: string; x?: string; series?: string[] }
+/** One series of a combo chart: drawn as a clustered column or as a line with markers, against the primary (left) or secondary (right) value axis. */
+export interface ChartComboSeries { role: 'bar' | 'line'; axis: 'primary' | 'secondary' }
 
 /** A text run as table cells and headers hold them (see the schema `TextRun`). */
 export type DataTextRun = string | { text: string; [key: string]: unknown };
@@ -33,12 +35,13 @@ export type DataTableHeader = DataTableCell | DataColumn;
 
 export type DataDiagnosticCode =
   | 'chart-value-not-numeric'
-  | 'chart-data-source-unresolved'
   | 'dataset-unknown'
   | 'dataset-field-unknown'
   | 'data-column-duplicate'
   | 'chart-mapping-unknown-column'
   | 'chart-mapping-adapted'
+  | 'chart-highlight-unknown-name'
+  | 'chart-highlight-adapted'
   | 'number-format-invalid';
 
 export interface DataDiagnostic {
@@ -71,11 +74,17 @@ export type ResolvedChartData =
       source?: DataSourceRef;
       /** The dataset id when the chart references one. */
       dataset?: string;
+      /**
+       * Combo charts only (FA-15): how each series is drawn, aligned with the series columns (`columns.slice(1)`). The series
+       * are ordered column series first, then the line series on the primary axis, then those on the secondary axis, each in
+       * plotted order, so every engine draws, exports and lists them in the legend alike.
+       */
+      combo?: ChartComboSeries[];
       diagnostics: DataDiagnostic[];
     }
   | {
       ok: false;
-      reason: 'data-not-inline' | 'dataset-unknown' | 'no-rows' | 'no-columns';
+      reason: 'dataset-unknown' | 'no-rows' | 'no-columns';
       message: string;
       diagnostics: DataDiagnostic[];
     };
@@ -448,7 +457,7 @@ function numberVariable(document: unknown, cell: unknown): boolean {
 export function resolveChartData(chart: unknown, document?: unknown, options: DataResolveOptions = {}): ResolvedChartData {
   const base = options.path ?? '';
   const diagnostics: DataDiagnostic[] = [];
-  const fail = (reason: 'data-not-inline' | 'dataset-unknown' | 'no-rows' | 'no-columns', message: string): ResolvedChartData => ({ ok: false, reason, message, diagnostics });
+  const fail = (reason: 'dataset-unknown' | 'no-rows' | 'no-columns', message: string): ResolvedChartData => ({ ok: false, reason, message, diagnostics });
   const data = record(chart) ? chart.data : undefined;
   if (!record(data)) return fail('no-columns', 'The chart has no data.');
   let columns: unknown[];
@@ -474,9 +483,6 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     selected = selection.indices;
     rows = dataset.rows;
     if (record(dataset.source)) source = dataset.source as DataSourceRef;
-  } else if (typeof data.src === 'string') {
-    diagnostics.push({ code: 'chart-data-source-unresolved', severity: 'warning', path: at(base, 'data', 'src'), message: `chart data source '${data.src}' is not loaded by any engine; the preview and export draw a placeholder. Import the data inline (columns and rows, with a 'source' for provenance) or reference a dataset` });
-    return fail('data-not-inline', 'The chart reads an external data source, which no engine resolves.');
   } else {
     if (!Array.isArray(data.columns)) return fail('no-columns', 'The chart data has no columns.');
     columns = data.columns;
@@ -541,6 +547,49 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     series = [x];
     x = undefined;
   }
+  // FA-15: a combo chart draws its series as clustered columns, except the ones `line` names (default: the last series),
+  // which are lines with markers; `secondaryAxis` moves line series to a secondary value axis. Column series come first, then
+  // the primary-axis lines, then the secondary-axis lines (one native chart group each, so the PPTX series order is this order).
+  let combo: ChartComboSeries[] | undefined;
+  if (record(chart) && chartOptionTarget(chart.type)?.kind === 'combo') {
+    const listed = (option: 'line' | 'secondaryAxis', problem: (column: number) => string | undefined): Set<number> => {
+      const found = new Set<number>();
+      const value = chart[option];
+      if (!Array.isArray(value)) return found;
+      value.forEach((name: unknown, index: number) => {
+        const path = at(base, option, index);
+        const column = known(name, path);
+        if (column === undefined) return;
+        const reason = problem(column);
+        if (reason) diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path, message: `${JSON.stringify(name)} ${reason}` });
+        else found.add(column);
+      });
+      return found;
+    };
+    const notPlotted = 'is not a plotted series of the chart';
+    const lines = listed('line', column => series.includes(column) ? undefined : `${notPlotted}; it is not drawn as a line`);
+    if (chart.line === undefined && series.length >= 2) lines.add(series[series.length - 1]!);
+    if (series.length && series.every(column => lines.has(column))) {
+      lines.delete(series[0]!);
+      diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(base, chart.line === undefined ? 'type' : 'line'), message: series.length === 1
+        ? `a combo chart needs at least two series, one drawn as columns and one as a line; its one series ${JSON.stringify(names[series[0]!])} is drawn as columns`
+        : `a combo chart keeps at least one column series; ${JSON.stringify(names[series[0]!])} is drawn as columns, not as a line` });
+    } else if (series.length === 1) {
+      diagnostics.push({ code: 'chart-mapping-adapted', severity: 'warning', path: at(base, 'type'), message: `a combo chart needs at least two series, one drawn as columns and one as a line; its one series ${JSON.stringify(names[series[0]!])} is drawn as columns` });
+    }
+    const secondary = listed('secondaryAxis', column => !series.includes(column)
+      ? `${notPlotted}; it has no axis to move to`
+      : !lines.has(column) ? 'is drawn as columns; only a line series can use the secondary axis, so it stays on the primary axis' : undefined);
+    const bars = series.filter(column => !lines.has(column));
+    const primaryLines = series.filter(column => lines.has(column) && !secondary.has(column));
+    const secondaryLines = series.filter(column => lines.has(column) && secondary.has(column));
+    series = [...bars, ...primaryLines, ...secondaryLines];
+    combo = [
+      ...bars.map(() => ({ role: 'bar' as const, axis: 'primary' as const })),
+      ...primaryLines.map(() => ({ role: 'line' as const, axis: 'primary' as const })),
+      ...secondaryLines.map(() => ({ role: 'line' as const, axis: 'secondary' as const })),
+    ];
+  }
   const order = [category, ...(x === undefined ? [] : [x]), ...series];
   if (!rows.length) return fail('no-rows', 'The chart data has no rows.');
   // A lone column (no category column) is the chart's values, plotted against row numbers or binned: it is read as numbers too.
@@ -555,6 +604,27 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     }
     return number;
   }));
+  // FA-14: chart.highlight names plotted series (columns) and category labels (row label values).
+  const highlight = record(chart) && record(chart.highlight) ? chart.highlight : undefined;
+  if (highlight) {
+    const plotted = order.slice(order.length - series.length).map(index => names[index]!);
+    const labels = lone ? undefined : new Set(out.map(row => (row[0] === null || row[0] === undefined ? '' : String(row[0]))));
+    const listed = (value: unknown): unknown[] => Array.isArray(value) ? value : [];
+    const highlightPath = at(base, 'highlight');
+    listed(highlight.series).forEach((name, index) => {
+      const path = at(highlightPath, 'series', index);
+      if (typeof name !== 'string' || !names.includes(name)) {
+        diagnostics.push({ code: 'chart-highlight-unknown-name', severity: 'error', path, message: `highlight names series ${JSON.stringify(name)}, which the chart data does not have as a column; use one of ${names.map(entry => JSON.stringify(entry)).join(', ')}` });
+      } else if (!plotted.includes(name)) {
+        diagnostics.push({ code: 'chart-highlight-adapted', severity: 'warning', path, message: `highlight names column ${JSON.stringify(name)}, which is not plotted as a series (it is the category or X column, or the mapping leaves it out); it highlights nothing` });
+      }
+    });
+    listed(highlight.categories).forEach((name, index) => {
+      if (typeof name === 'string' && labels?.has(name)) return;
+      const shown = labels ? [...labels].slice(0, 12).map(entry => JSON.stringify(entry)).join(', ') : '';
+      diagnostics.push({ code: 'chart-highlight-unknown-name', severity: 'error', path: at(highlightPath, 'categories', index), message: `highlight names category ${JSON.stringify(name)}, which no row of the chart data has as its label${shown ? `; the labels are ${shown}${labels!.size > 12 ? ', ...' : ''}` : ''}` });
+    });
+  }
   return {
     ok: true,
     columns: order.map(index => names[index]!),
@@ -563,6 +633,7 @@ export function resolveChartData(chart: unknown, document?: unknown, options: Da
     rows: out,
     ...(source ? { source } : {}),
     ...(datasetId !== undefined ? { dataset: datasetId } : {}),
+    ...(combo ? { combo } : {}),
     diagnostics,
   };
 }

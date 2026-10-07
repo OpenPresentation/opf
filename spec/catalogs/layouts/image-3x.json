@@ -2,24 +2,26 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "image-3x",
   "name": "Image 3x",
+  "summary": "Reach for it when three pictures make a set, each with a short note.",
+  "description": "A title above three images, each followed by a text block, in three columns. Use it for three products, steps or places shown as a row.",
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     },
     {
       "type": "text"
     },
     {
-      "type": "picture"
+      "type": "image"
     },
     {
       "type": "text"
     },
     {
-      "type": "picture"
+      "type": "image"
     },
     {
       "type": "text"
@@ -28,5 +30,13 @@
   "composition": {
     "mode": "grid",
     "columns": 3
+  },
+  "tags": [
+    "Visual",
+    "Gallery",
+    "Collection"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/image-3x.svg"
   }
 }

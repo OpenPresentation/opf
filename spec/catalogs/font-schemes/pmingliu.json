@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "pmingliu",
   "name": "PMingLiU",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (traditional)"
+    "chinese-traditional"
   ],
   "major": "PMingLiU",
   "minor": "PMingLiU",

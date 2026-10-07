@@ -8,9 +8,9 @@
     "manager",
     "hr-partner"
   ],
-  "durationRange": {
-    "minMinutes": 30,
-    "maxMinutes": 60
+  "duration": {
+    "min": 30,
+    "max": 60
   },
   "tags": [
     "workforce",
@@ -23,65 +23,65 @@
       "id": "introduction",
       "name": "Introduction",
       "description": "Open with the period covered and the spirit of the conversation: collaborative, honest, growth-focused. Frame the meeting so both sides know what to expect.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Name & date",
-      "slideType": "text"
+      "type": "text"
     },
     {
       "id": "performance",
       "name": "Performance",
       "description": "Review job execution against the role's expectations. Specific examples, dated. Avoid characterizing the person; describe the work and its impact.",
       "instructions": "Review job execution",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "achievements",
       "name": "Achievements",
       "description": "Acknowledge what went well. Name the projects, the moves, the moments where the employee made a difference. Specific recognition lands harder than generic praise.",
       "instructions": "Acknowledge success",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "feedback",
       "name": "Feedback",
       "description": "Provide constructive feedback grounded in observation. Distinguish patterns from one-offs. Tell the employee something they can act on, not something they can only feel.",
       "instructions": "Provide positive remarks",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "constructive-criticism",
       "name": "Constructive Criticism",
       "description": "Suggest improvements in language that respects the employee's intelligence. Pair each piece of criticism with a concrete example and a specific behavior change you'd like to see.",
       "instructions": "Suggest improvements",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "development-opportunities",
       "name": "Development Opportunities",
       "description": "Highlight growth areas and the experiences that could stretch the employee. Frame development as an investment, not a fix.",
       "instructions": "Highlight growth areas",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "goals",
       "name": "Goals",
       "description": "Outline next-period goals together. Specific, measurable, with explicit support. The strongest goals are co-authored, not handed down.",
       "instructions": "Outline next steps",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "mentoring",
       "name": "Mentoring",
       "description": "Encourage continued learning through mentorship, training, peer pairings. Close the review with the message that growth is a shared responsibility, not a one-way evaluation.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Encourage continuous learning",
-      "slideType": "text"
+      "type": "text"
     }
   ]
 }

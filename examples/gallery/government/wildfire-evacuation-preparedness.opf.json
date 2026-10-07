@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "status-update",
-    "description": "Wildfire Evacuation Preparedness uses a compact evidence-to-decision arc for Pine County Emergency Management.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "wildfire-evacuation-preparedness-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#1D4ED8",
-        "risk": "#0F172A"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "raleway",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "4:3",
     "background": {
@@ -174,15 +138,34 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-line-with-markers-3x",
+        "type": "stacked-line-with-markers",
         "data": {
-          "src": "asset:metric-data",
-          "sheet": "Summary",
-          "range": "A1:C8",
           "columns": [
             "Quarter",
             "Current",
             "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              16,
+              10
+            ],
+            [
+              "Q3",
+              21,
+              13
+            ],
+            [
+              "Q4",
+              26,
+              15
+            ]
           ]
         }
       }
@@ -325,7 +308,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-bullet-bar-2x",
+            "type": "100pct-stacked-bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -502,7 +485,7 @@
     },
     "metric-data": {
       "src": "./data/wildfire-evacuation-preparedness.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Wildfire Evacuation Preparedness data"
     },
     "watermark": {
@@ -532,24 +515,25 @@
           "id": "wildfire-evacuation-preparedness-arc",
           "name": "Emergency Management Decision Arc",
           "summary": "A custom arc for Pine County Emergency Management.",
+          "description": "Wildfire Evacuation Preparedness uses a compact evidence-to-decision arc for Pine County Emergency Management.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

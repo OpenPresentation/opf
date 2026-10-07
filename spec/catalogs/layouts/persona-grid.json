@@ -4,26 +4,22 @@
   "name": "Persona_Grid",
   "summary": "Grid of customer personas with attributes, needs, and priorities. Grounds strategy in real users.",
   "description": "Grid of customer personas with attributes, needs, and priorities. Grounds strategy in real users.",
-  "contentType": "Image",
-  "contentMultiple": "1x",
-  "contentAlignment": "Center",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     }
   ],
   "tags": [
@@ -31,5 +27,7 @@
     "Segments",
     "Customers"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/persona-grid.svg"
+  }
 }

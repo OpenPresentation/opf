@@ -4,26 +4,22 @@
   "name": "Capability_Map",
   "summary": "Nested grid of business capabilities grouped by domain. The \"what the company does\" view, independent of teams.",
   "description": "Nested grid of business capabilities grouped by domain. The \"what the company does\" view, independent of teams.",
-  "contentType": "Image",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     }
   ],
   "tags": [
@@ -31,5 +27,7 @@
     "Domains",
     "Strategy"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/capability-map.svg"
+  }
 }

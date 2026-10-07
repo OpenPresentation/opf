@@ -323,21 +323,21 @@ test('unknown bare-id audiences warn like narratives; gallery audience ids resol
 	);
 });
 
-test('custom inline narrative IDs remain custom even without beats', () => {
-	for (const narrative of [
-		{ id: 'custom-arc' },
-		{ id: 'custom-arc', beats: [] },
-	]) {
-		const result = lintPresentation({ narrative, slides: [{ title: 'Keep' }] });
-		assert.equal(result.valid, true);
-		assert.deepEqual(result.diagnostics, []);
-	}
+test('a custom narrative is an inline catalog record; the narrative field is a string', () => {
+	const inline = (records) =>
+		lintPresentation({
+			narrative: 'custom-arc',
+			catalogs: { narratives: { records } },
+			slides: [{ title: 'Keep' }],
+		});
+	assert.deepEqual(inline([{ id: 'custom-arc', name: 'Custom', beats: [{ id: 'a', name: 'A' }] }]).diagnostics, []);
 	assert.ok(
 		lintPresentation({
 			narrative: 'custom-arc',
 			slides: [{ title: 'Keep' }],
 		}).diagnostics.some((issue) => issue.ruleId === 'opf/catalog-reference'),
 	);
+	assert.equal(lintPresentation({ narrative: { id: 'custom-arc' }, slides: [{ title: 'Keep' }] }).valid, false);
 });
 
 test('catalog diagnostics locate referenced schema constraints without changing validator reports', () => {

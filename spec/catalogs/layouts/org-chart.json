@@ -4,20 +4,12 @@
   "name": "Org_Chart",
   "summary": "Hierarchical tree of reporting relationships. Shows structure, spans of control, and open roles.",
   "description": "Hierarchical tree of reporting relationships. Shows structure, spans of control, and open roles.",
-  "contentType": "Chart",
-  "contentMultiple": "2x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -34,7 +26,9 @@
     "Reporting",
     "People"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/org-chart.svg"
+  },
   "composition": {
     "mode": "row",
     "weights": [

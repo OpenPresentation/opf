@@ -28,7 +28,7 @@ A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `l
 
 `composition` (on a slide or group) arranges children: `{ "mode": "auto|grid|row|column", "columns": 1-12, "weights": [..], "gap": 0-0.1, "padding": 0-0.2, "minFontSize": 8-32, "overflow": "warn|error" }`. Weights are relative track sizes; gap/padding are fractions of the canvas short edge. Engines own placement — there is no x/y.
 
-Payload notes: chart is `{ "type": "<chart-type id>", "data": { "columns": [...], "rows": [...] } }` or `{ "data": { "src": "asset:<id>" } }`; table rows may hold scalars, `TextRun[]`, or styled cells `{ "value", "style": { "fill", "color", "align", "borders", ... }, "colSpan", "rowSpan" }`; `metric`/`quote`/`code` accept string shorthand; list nesting uses `level` on items, not nested payloads.
+Payload notes: chart is `{ "type": "<chart-type id>", "data": { "columns": [...], "rows": [...] } }` or `{ "data": { "dataset": "<id>" } }`; table rows may hold scalars, `TextRun[]`, or styled cells `{ "value", "style": { "fill", "color", "align", "borders", ... }, "colSpan", "rowSpan" }`; `metric`/`quote`/`code` accept string shorthand; list nesting uses `level` on items, not nested payloads.
 
 ## Rich text and color references
 

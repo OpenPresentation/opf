@@ -4,26 +4,22 @@
   "name": "Competitive_Landscape",
   "summary": "2x2 or ecosystem view of competitors and where you fit. The positioning argument made visual.",
   "description": "2x2 or ecosystem view of competitors and where you fit. The positioning argument made visual.",
-  "contentType": "Image",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     }
   ],
   "tags": [
@@ -31,5 +27,7 @@
     "Positioning",
     "Market"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/competitive-landscape.svg"
+  }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "Roadmap with progress — example",
+  "description": "Illustrative starter for a roadmap whose events show progress: done, current and planned. Replace the example events with the user's supported content.",
+  "design": {"theme": "classic", "fontScheme": "roboto"},
+  "slides": [
+    {
+      "id": "roadmap",
+      "title": "Where the rollout stands",
+      "timeline": {
+        "name": "Regional rollout",
+        "events": [
+          {"when": "Q1", "what": "Discovery", "description": "Interviews and requirements.", "status": "done"},
+          {"when": "Q2", "what": "Pilot", "description": "One operations team.", "status": "done"},
+          {"when": "Q3", "what": "Rollout", "description": "All regions, in waves.", "status": "current"},
+          {"when": "Q4", "what": "Scale", "description": "Automate exception reporting.", "status": "planned"},
+          {"when": "Q1 next year", "what": "Review", "description": "Measure the results.", "status": "planned"}
+        ]
+      },
+      "notes": "Use done for finished work, current for the one event in progress, planned for what comes next. Status is progress only; write at-risk or blocked in the event text."
+    }
+  ]
+}

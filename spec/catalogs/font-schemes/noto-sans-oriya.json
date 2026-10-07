@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-oriya",
   "name": "Noto Sans Oriya",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Odia"
+    "odia"
   ],
   "major": "Noto Sans Oriya",
   "minor": "Noto Sans Oriya",

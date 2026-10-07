@@ -2,11 +2,11 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "aparajita",
   "name": "Aparajita",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Hindi",
-    "Nepali"
+    "hindi",
+    "nepali"
   ],
   "major": "Aparajita",
   "minor": "Aparajita",

@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "century-schoolbook",
   "name": "Century Schoolbook",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Century Schoolbook",

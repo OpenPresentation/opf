@@ -4,13 +4,13 @@
 
 ```sh
 npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
-opf render deck.opf.json --slides 1,3-5 --format svg|png [--scale 2] [--out dir]
+opf render deck.opf.json --slides 1,3-5 --format svg|png [--scale 2] [--include-hidden] [--out dir]
 opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|x.zip] [--pdf-mode vector|raster]
-           [--chartex auto|native|fallback] [--provenance full|references-only|none] [--paginate] [--date YYYY-MM-DD]
+           [--chartex auto|native|fallback] [--provenance full|references-only|none] [--paginate] [--include-hidden] [--date YYYY-MM-DD]
 opf import deck.pptx [--out deck.opf.json] [--signals signals.json]
 ```
 
-Each prints one JSON report (the `opf lint` shape: `ok`, `diagnostics` with `ruleId`/`severity`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on warnings with `--strict` (nothing is written then). The CLI uses the same `prepareNodeFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). `--pdf-mode vector` and `--signals` need an opf-render and opf-pptx that have them; the CLI refuses them otherwise. Full reference: `docs/cli.md` in the core repository.
+Each prints one JSON report (the `opf lint` shape: `ok`, `diagnostics` with `ruleId`/`severity`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on warnings with `--strict` (nothing is written then). The CLI uses the same `prepareNodeFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). `--pdf-mode vector` and `--signals` need an opf-render and opf-pptx that have them; the CLI refuses them otherwise. Per-slide images and PDF skip slides marked `hidden: true` unless `--include-hidden`, and output files are named by the deck's `filename`, else its slugified `name`, else the input file's name. Full reference: `docs/cli.md` in the core repository.
 
 ## Prepared font inputs
 
@@ -60,7 +60,7 @@ A raster snapshot embedded into PPTX is not equivalent to editable native shapes
 
 ## Templates and variables
 
-A deck that declares content variables, or a template (`"template": true`), is resolved by core `resolveVariables` before it is composed, so preview and PPTX agree. Pass the values as the `variables` option of `renderSvg`, `renderSvgDeck`, `resolvePresentation` and `toPptx`. A template previews and exports with each variable's `example` (PPTX reports `variable-example-used` through `onDiagnostic`); a normal deck with an unfilled required variable is refused with code `unfilled-variables`. The PPTX holds the resolved text, so re-import returns the filled deck, not the template. Fill a template into a concrete deck first (`opf fill`) when the deliverable is a finished deck.
+A deck that declares content variables, uses a built-in (`{{speaker.name}}`, `var:organization.logo`) or is a template (`"template": true`) is resolved by core `resolveVariables` before it is composed, so preview and PPTX agree. Pass the values as the `variables` option of `renderSvg`, `renderSvgDeck`, `resolvePresentation` and `toPptx`. A template previews and exports with each variable's `example` (PPTX reports `variable-example-used` through `onDiagnostic`); a normal deck with an unfilled required variable is refused with code `unfilled-variables`. The PPTX holds the resolved text, so re-import returns the filled deck, not the template. Fill a template into a concrete deck first (`opf fill`) when the deliverable is a finished deck.
 
 ## Browser rendering
 

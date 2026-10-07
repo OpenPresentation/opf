@@ -96,7 +96,7 @@ The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it
 | --- | --- |
 | Titles, subtitles, plain text, simple numeric values | One click enters editing with the caret at the clicked character (editor 0.10.2); press-drag selects a range; while editing, double-click selects a word and triple-click a paragraph. Focus a target and press Enter, Space or F2 to edit with all text selected. See *Text entry gestures* below. |
 | Table headers and string/number cells | Inline editing; numeric cells keep their numeric type. |
-| Lists, charts, metrics, quotes, code, timelines, rich text payloads | Select the object and edit its existing scalar fields in a floating form; valid drafts render immediately. |
+| Lists, charts, metrics, quotes, code, timelines, rich text payloads | Select the object and edit its existing scalar fields in a floating form; valid drafts render immediately. A timeline event's `status` (`done`, `current`, `planned`) is a menu, not free text. |
 | Images | Edit source/alt fields; replace with a local PNG/JPEG/GIF/WebP file up to 20 MB. External sources still require a host image resolver. |
 | Collections | Add or remove the last item, subject to OPF schema validation. Empty structured collections may need authoring through source. |
 | Dynamic layout | Text edits recompose the slide through shared geometry; row/column/grid controls remain in the demo inspector. |

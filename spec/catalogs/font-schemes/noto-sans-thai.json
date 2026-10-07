@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-thai",
   "name": "Noto Sans Thai",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Thai"
+    "thai"
   ],
   "major": "Noto Sans Thai",
   "minor": "Noto Sans Thai",

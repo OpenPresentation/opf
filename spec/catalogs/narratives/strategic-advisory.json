@@ -9,9 +9,9 @@
     "leadership-teams",
     "clients"
   ],
-  "durationRange": {
-    "minMinutes": 15,
-    "maxMinutes": 45
+  "duration": {
+    "min": 15,
+    "max": 45
   },
   "tags": [
     "consulting",
@@ -24,9 +24,9 @@
       "id": "title",
       "name": "Title",
       "description": "Open with a one-line summary statement that captures the recommendation, not the topic. The title slide is the headline of the entire engagement — make it specific enough that someone reading only this slide already understands the position.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Brief summary sentence",
-      "slideType": "text"
+      "type": "text"
     },
     {
       "id": "scq",
@@ -38,48 +38,48 @@
       "name": "Answer",
       "description": "Deliver the recommendation in a single sentence. No arguments yet, no caveats. The answer is the apex of the pyramid; the rest of the deck supports it.",
       "instructions": "A solution in one sentence, no arguments yet",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "arguments",
       "name": "Arguments",
       "description": "Preview the three top-level arguments that defend the answer. One slide naming all three so the audience knows where the deck is going. Each argument should be a complete claim, not a topic.",
       "instructions": "Support the solution",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "argument-1",
       "name": "Argument 1",
       "description": "Develop the first argument with supporting data, examples, and reasoning. Lead with the claim, then the evidence — Minto-style. The slide should stand alone if pulled out.",
       "instructions": "First key point",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "argument-2",
       "name": "Argument 2",
       "description": "Develop the second argument the same way. Vary the type of evidence — quantitative, qualitative, comparative — so the audience hears the case from multiple angles.",
       "instructions": "Second key point",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "argument-3",
       "name": "Argument 3",
       "description": "Develop the third argument and walk through the supporting process or methodology. This is often where the 'how' lives — the implementation insight that makes the recommendation feel actionable.",
       "instructions": "Third key point with a process",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "id": "summary",
       "name": "Summary",
       "description": "Recap the answer and arguments in a single slide and point to additional resources. Close with the explicit next step you want the audience to take.",
-      "layoutHint": "title",
+      "layout": "title",
       "instructions": "Recap the answer, provide additional resources",
-      "slideType": "text"
+      "type": "text"
     }
   ]
 }

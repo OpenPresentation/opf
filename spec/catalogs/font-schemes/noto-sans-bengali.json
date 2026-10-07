@@ -2,11 +2,11 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-bengali",
   "name": "Noto Sans Bengali",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Bengali",
-    "Chittagonian"
+    "bengali",
+    "chittagonian"
   ],
   "major": "Noto Sans Bengali",
   "minor": "Noto Sans Bengali",

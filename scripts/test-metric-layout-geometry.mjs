@@ -47,7 +47,8 @@ const {resolvePresentation}=await load('@openpresentation/opf-render','./svg');
 const {validatePresentation}=await load('@openpresentation/opf','.');
 const {loadOfficeFontRegistry}=await load('@openpresentation/opf-render','./fonts-node');
 const registry=await loadOfficeFontRegistry(),results=[];
-for (const fixture of metricLayoutFixtures()) {
+const coreVersion=packages.find(p=>p.name==='@openpresentation/opf')?.version;
+for (const fixture of metricLayoutFixtures({coreVersion})) {
   const {id,family,dimensions,document,metric,minFontSize,overflow}=fixture,before=JSON.stringify(document);
   assert.equal(validatePresentation(document).valid,true);
   let rendererRejected=false;

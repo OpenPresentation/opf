@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "conference-talk",
-    "description": "Water Stewardship Grower Brief uses a compact evidence-to-decision arc for Sunfield Cooperative.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "water-stewardship-grower-brief-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#0F172A",
-        "risk": "#14B8A6"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "calibri",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:9",
     "background": {
@@ -173,7 +137,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-area-2x",
+        "type": "100pct-stacked-area",
         "data": {
           "columns": [
             "Quarter",
@@ -521,7 +485,7 @@
     },
     "metric-data": {
       "src": "./data/water-stewardship-grower-brief.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Water Stewardship Grower Brief data"
     },
     "watermark": {
@@ -551,24 +515,25 @@
           "id": "water-stewardship-grower-brief-arc",
           "name": "Agriculture Decision Arc",
           "summary": "A custom arc for Sunfield Cooperative.",
+          "description": "Water Stewardship Grower Brief uses a compact evidence-to-decision arc for Sunfield Cooperative.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

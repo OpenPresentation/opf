@@ -4,20 +4,12 @@
   "name": "Kpi_Scorecard",
   "summary": "Row of KPIs with current value, target, and RAG status. The health check at a glance.",
   "description": "Row of KPIs with current value, target, and RAG status. The health check at a glance.",
-  "contentType": "Metric",
-  "contentMultiple": "3x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -37,7 +29,9 @@
     "Tracking",
     "Status"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/kpi-scorecard.svg"
+  },
   "composition": {
     "mode": "row"
   }

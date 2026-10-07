@@ -131,11 +131,11 @@ describe("bundlePresentation", () => {
     assert.deepEqual(report.added.fontSchemes, ["tenorite"]);
   });
 
-  test("resolves transitive layout hints an inline narrative record carries", () => {
+  test("resolves the transitive beat layouts an inline narrative record carries", () => {
     const { report } = bundlePresentation({
       name: "Inline Narrative Record",
       narrative: "my-arc",
-      catalogs: { narratives: { records: [{ id: "my-arc", name: "My Arc", beats: [{ layoutHint: "title" }] }] } },
+      catalogs: { narratives: { records: [{ id: "my-arc", name: "My Arc", beats: [{ id: "open", name: "Open", layout: "title" }] }] } },
       slides: [{ title: "x" }],
     });
     assert.deepEqual(report.alreadyInline.narratives, ["my-arc"]);
@@ -164,14 +164,16 @@ describe("bundlePresentation", () => {
     assert.deepEqual(report.added.fontSchemes, ["aptos", "meiryo", "noto-sans-jp"]);
   });
 
-  test("never reports a fully custom narrative object", () => {
+  test("never reports a custom narrative record the document defines", () => {
     const { report } = bundlePresentation({
       name: "Custom Narrative",
-      narrative: { id: "my-own-arc", name: "My Own Arc", beats: [{ name: "Opening", purpose: "Set the scene" }] },
+      narrative: "my-own-arc",
+      catalogs: { narratives: { records: [{ id: "my-own-arc", name: "My Own Arc", beats: [{ id: "open", name: "Opening" }] }] } },
       slides: [{ title: "x" }],
     });
     assert.equal(report.unresolved.narratives, undefined);
     assert.deepEqual(report.unresolved, {});
+    assert.deepEqual(report.alreadyInline.narratives, ["my-own-arc"]);
   });
 
   test("never reports schema-blessed non-catalog shorthands", () => {
@@ -254,9 +256,10 @@ describe("bundlePresentation", () => {
   test("reports exactly the ids the validator warns about", () => {
     const cases = {
       "stock deck": deck(),
-      "custom narrative object": {
+      "custom narrative record": {
         name: "D",
-        narrative: { id: "my-own-arc", name: "Mine", beats: [{ name: "Open", purpose: "Set the scene" }] },
+        narrative: "my-own-arc",
+        catalogs: { narratives: { records: [{ id: "my-own-arc", name: "Mine", beats: [{ id: "open", name: "Open" }] }] } },
         slides: [{ title: "x" }],
       },
       shorthands: { name: "D", language: "fr", tone: "upbeat", slides: [{ layout: "custom-grid", title: "x" }] },

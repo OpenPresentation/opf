@@ -1,0 +1,57 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Chart Highlight",
+  "description": "Technical fixture for chart emphasis: chart.highlight names the series or category that carries the message, the engines draw those marks in the deck primary color and mute the rest from the theme.",
+  "slides": [
+    {
+      "title": "Revenue stays ahead of costs",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": ["Quarter", "Revenue", "Costs"],
+          "rows": [
+            ["Q1", 12, 8],
+            ["Q2", 18, 11],
+            ["Q3", 24, 15],
+            ["Q4", 22, 14]
+          ]
+        },
+        "axisTitles": { "value": "$M" },
+        "highlight": { "series": ["Revenue"] }
+      }
+    },
+    {
+      "title": "Q3 is the peak quarter",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": ["Quarter", "Revenue"],
+          "rows": [
+            ["Q1", 12],
+            ["Q2", 18],
+            ["Q3", 24],
+            ["Q4", 22]
+          ]
+        },
+        "dataLabels": { "position": "inside-end" },
+        "highlight": { "categories": ["Q3"] }
+      }
+    },
+    {
+      "title": "EMEA is the largest region",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": ["Region", "Share of revenue"],
+          "rows": [
+            ["EMEA", 42],
+            ["APAC", 31],
+            ["Americas", 27]
+          ]
+        },
+        "dataLabels": { "content": ["category", "percent"], "position": "outside-end" },
+        "highlight": { "categories": ["EMEA"] }
+      }
+    }
+  ]
+}

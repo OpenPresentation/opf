@@ -9,9 +9,9 @@
     "team-leads",
     "cross-functional-teams"
   ],
-  "durationRange": {
-    "minMinutes": 15,
-    "maxMinutes": 45
+  "duration": {
+    "min": 15,
+    "max": 45
   },
   "tags": [
     "change-management",
@@ -25,40 +25,40 @@
       "name": "Why Change",
       "description": "Acknowledge the current state and the external or internal forces requiring change. Don't skip the burning platform.",
       "instructions": "Explain why the current state cannot continue.",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "id": "why-now",
       "name": "Why Now",
       "description": "Explain the urgency. What changes if we wait? What window is closing?",
       "instructions": "Make the timing urgent and concrete.",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     },
     {
       "id": "why-this-way",
       "name": "Why This Way",
       "description": "Show that alternatives were considered. Build trust by demonstrating thoughtful decision-making.",
       "instructions": "Describe the proposed path and why it fits.",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "id": "whats-at-stake",
       "name": "What's at Stake",
       "description": "Make consequences concrete for the organization, the team, and individuals. Avoid abstract language.",
       "instructions": "Show the risks and rewards attached to the choice.",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "id": "how-we-win-together",
       "name": "How We Win Together",
       "description": "Paint a shared vision of success. Make the audience the protagonist of the new story.",
       "instructions": "Close with shared ownership and first commitments.",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     }
   ]
 }

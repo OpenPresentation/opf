@@ -1,5 +1,5 @@
 {
-  "description": "FF-28 mapping from pptx.gallery narrative beat layout slugs to bundled core layout ids. check:spec rule (e) requires every narrative layoutHint to be a bundled layout id, so the gallery slugs were mapped when the records were imported. 'layoutHint' may contain {n}, the gallery beat's options.multiple count (1x -> 1). 'withSubtitle' replaces layoutHint when the gallery beat shows a subtitle placeholder. 'beats' is the resolved per-beat record that sync-gallery-catalogs.mjs writes and --check verifies; use it to restore gallery layout ids mechanically (FF-37).",
+  "description": "FF-28 mapping from pptx.gallery narrative beat layout slugs to bundled core layout ids. check:spec rule (e) requires every narrative beat layout to be a bundled layout id, so the gallery slugs were mapped when the records were imported. 'layout' may contain {n}, the gallery beat's options.multiple count (1x -> 1). 'withSubtitle' replaces layout when the gallery beat shows a subtitle placeholder. 'beats' is the resolved per-beat record that sync-gallery-catalogs.mjs writes and --check verifies; use it to restore gallery layout ids mechanically (FF-37).",
   "source": {
     "repository": "pptx-gallery",
     "commit": "f17e9ae",
@@ -10,75 +10,75 @@
   },
   "layouts": {
     "title-center": {
-      "layoutHint": "title",
+      "layout": "title",
       "withSubtitle": "title-subtitle",
-      "slideType": "text"
+      "type": "text"
     },
     "title-left": {
-      "layoutHint": "title",
+      "layout": "title",
       "withSubtitle": "title-subtitle",
-      "slideType": "text"
+      "type": "text"
     },
     "thank-you-cta": {
-      "layoutHint": "title",
+      "layout": "title",
       "withSubtitle": "title-subtitle",
-      "slideType": "text"
+      "type": "text"
     },
     "text-1x-left": {
-      "layoutHint": "text-{n}x",
-      "slideType": "text"
+      "layout": "text-{n}x",
+      "type": "text"
     },
     "product-feature": {
-      "layoutHint": "text-{n}x",
-      "slideType": "text"
+      "layout": "text-{n}x",
+      "type": "text"
     },
     "comparison": {
-      "layoutHint": "text-{n}x",
-      "slideType": "text"
+      "layout": "text-{n}x",
+      "type": "text"
     },
     "before-after": {
-      "layoutHint": "text-{n}x",
-      "slideType": "text"
+      "layout": "text-{n}x",
+      "type": "text"
     },
     "matrix-quadrant": {
-      "layoutHint": "text-{n}x",
-      "slideType": "text"
+      "layout": "text-{n}x",
+      "type": "text"
     },
     "testimonial-grid": {
-      "layoutHint": "text-{n}x",
-      "slideType": "text"
+      "layout": "text-{n}x",
+      "type": "text"
     },
     "three-column": {
-      "layoutHint": "text-3x",
-      "slideType": "text"
+      "layout": "text-3x",
+      "type": "text"
     },
     "stats-metrics": {
-      "layoutHint": "number-{n}x",
-      "slideType": "metric"
+      "layout": "number-{n}x",
+      "type": "metric"
     },
     "data-visualization": {
-      "layoutHint": "chart-{n}x",
-      "slideType": "chart"
+      "layout": "chart-{n}x",
+      "type": "chart"
     },
     "image-focus": {
-      "layoutHint": "image-bleed",
-      "slideType": "image"
+      "layout": "image-bleed",
+      "type": "image"
     },
     "timeline": {
-      "layoutHint": "timeline-1x",
-      "slideType": "timeline"
+      "layout": "timeline-1x",
+      "type": "timeline"
     },
     "roadmap": {
-      "layoutHint": "timeline-1x",
-      "slideType": "timeline"
+      "layout": "timeline-1x",
+      "type": "timeline"
     },
     "agenda": {
-      "layoutHint": "list-1x",
-      "slideType": "list"
+      "layout": "list-1x",
+      "type": "list"
     },
     "list-2x-title-center": {
-      "layoutHint": "list-2x",
-      "slideType": "list"
+      "layout": "list-2x",
+      "type": "list"
     }
   },
   "beats": [
@@ -89,8 +89,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": true,
       "gallerySlideType": "text",
-      "slideType": "image",
-      "layoutHint": "image-bleed"
+      "type": "image",
+      "layout": "image-bleed"
     },
     {
       "narrative": "heros-journey",
@@ -99,8 +99,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "narrative": "heros-journey",
@@ -109,8 +109,8 @@
       "galleryMultiple": "3x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "narrative": "heros-journey",
@@ -119,8 +119,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "heros-journey",
@@ -129,8 +129,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "what-so-what-now-what",
@@ -139,8 +139,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "chart",
-      "layoutHint": "chart-1x"
+      "type": "chart",
+      "layout": "chart-1x"
     },
     {
       "narrative": "what-so-what-now-what",
@@ -149,8 +149,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "metric",
-      "layoutHint": "number-2x"
+      "type": "metric",
+      "layout": "number-2x"
     },
     {
       "narrative": "what-so-what-now-what",
@@ -159,8 +159,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "narrative": "situation-complication-resolution",
@@ -169,8 +169,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "list",
-      "layoutHint": "list-1x"
+      "type": "list",
+      "layout": "list-1x"
     },
     {
       "narrative": "situation-complication-resolution",
@@ -179,8 +179,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "situation-complication-resolution",
@@ -189,8 +189,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "narrative": "situation-complication-resolution",
@@ -199,8 +199,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "narrative": "star-method",
@@ -209,8 +209,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "narrative": "star-method",
@@ -219,8 +219,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "list",
-      "layoutHint": "list-2x"
+      "type": "list",
+      "layout": "list-2x"
     },
     {
       "narrative": "star-method",
@@ -229,8 +229,8 @@
       "galleryMultiple": "3x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "narrative": "star-method",
@@ -239,8 +239,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     },
     {
       "narrative": "pyramid-principle",
@@ -249,8 +249,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "narrative": "pyramid-principle",
@@ -259,8 +259,8 @@
       "galleryMultiple": "3x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-3x"
+      "type": "text",
+      "layout": "text-3x"
     },
     {
       "narrative": "pyramid-principle",
@@ -269,8 +269,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "chart",
-      "layoutHint": "chart-1x"
+      "type": "chart",
+      "layout": "chart-1x"
     },
     {
       "narrative": "sparkline",
@@ -279,8 +279,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "sparkline",
@@ -289,8 +289,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "narrative": "sparkline",
@@ -299,8 +299,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-1x"
+      "type": "text",
+      "layout": "text-1x"
     },
     {
       "narrative": "sparkline",
@@ -309,8 +309,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     },
     {
       "narrative": "data-story",
@@ -319,8 +319,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "list",
-      "layoutHint": "list-1x"
+      "type": "list",
+      "layout": "list-1x"
     },
     {
       "narrative": "data-story",
@@ -329,8 +329,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     },
     {
       "narrative": "data-story",
@@ -339,8 +339,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "chart",
-      "layoutHint": "chart-1x"
+      "type": "chart",
+      "layout": "chart-1x"
     },
     {
       "narrative": "data-story",
@@ -349,8 +349,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "data-story",
@@ -359,8 +359,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "narrative": "change-story",
@@ -369,8 +369,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "change-story",
@@ -379,8 +379,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "chart",
-      "slideType": "metric",
-      "layoutHint": "number-1x"
+      "type": "metric",
+      "layout": "number-1x"
     },
     {
       "narrative": "change-story",
@@ -389,8 +389,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "narrative": "change-story",
@@ -399,8 +399,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "change-story",
@@ -409,8 +409,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     },
     {
       "narrative": "vision-roadmap",
@@ -419,8 +419,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": true,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title-subtitle"
+      "type": "text",
+      "layout": "title-subtitle"
     },
     {
       "narrative": "vision-roadmap",
@@ -429,8 +429,8 @@
       "galleryMultiple": "2x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-2x"
+      "type": "text",
+      "layout": "text-2x"
     },
     {
       "narrative": "vision-roadmap",
@@ -439,8 +439,8 @@
       "galleryMultiple": "3x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "text-3x"
+      "type": "text",
+      "layout": "text-3x"
     },
     {
       "narrative": "vision-roadmap",
@@ -449,8 +449,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "timeline",
-      "layoutHint": "timeline-1x"
+      "type": "timeline",
+      "layout": "timeline-1x"
     },
     {
       "narrative": "vision-roadmap",
@@ -459,8 +459,8 @@
       "galleryMultiple": "1x",
       "gallerySubtitle": false,
       "gallerySlideType": "text",
-      "slideType": "text",
-      "layoutHint": "title"
+      "type": "text",
+      "layout": "title"
     }
   ]
 }

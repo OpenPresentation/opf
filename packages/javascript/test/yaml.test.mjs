@@ -27,8 +27,8 @@ const where = (diagnostic) => [diagnostic.location.line, diagnostic.location.col
 describe("example decks", () => {
   const files = [...exampleFiles(examplesRoot)];
 
-  test("there are 126 example decks", () => {
-    assert.equal(files.length, 126);
+  test("there are 127 example decks", () => {
+    assert.equal(files.length, 127);
   });
 
   test("every example round-trips JSON to YAML to JSON deep-equal, and YAML to JSON to YAML byte for byte", () => {

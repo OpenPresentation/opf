@@ -2,12 +2,12 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "sakkal-majalla",
   "name": "Sakkal Majalla",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Arabic",
-    "Urdu",
-    "Persian"
+    "arabic",
+    "urdu",
+    "persian"
   ],
   "major": "Sakkal Majalla",
   "minor": "Sakkal Majalla",

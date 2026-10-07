@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "lucida-sans",
   "name": "Lucida Sans",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Lucida Sans",

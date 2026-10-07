@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-georgian",
   "name": "Noto Sans Georgian",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Georgian"
+    "georgian"
   ],
   "major": "Noto Sans Georgian",
   "minor": "Noto Sans Georgian",

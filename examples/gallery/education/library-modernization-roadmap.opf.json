@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "performance-review",
-    "description": "Library Modernization Roadmap uses a compact evidence-to-decision arc for Easton University Library.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "library-modernization-roadmap-arc",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#047857",
-        "risk": "#1D4ED8"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-sc",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:10",
     "background": "dark1",
@@ -165,7 +129,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "sparkline-5x",
+        "type": "line",
         "data": {
           "columns": [
             "Quarter",
@@ -335,7 +299,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "stacked-line-3x",
+            "type": "stacked-line",
             "data": {
               "columns": [
                 "Quarter",
@@ -512,7 +476,7 @@
     },
     "metric-data": {
       "src": "./data/library-modernization-roadmap.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Library Modernization Roadmap data"
     },
     "watermark": {
@@ -542,24 +506,25 @@
           "id": "library-modernization-roadmap-arc",
           "name": "Academic Library Decision Arc",
           "summary": "A custom arc for Easton University Library.",
+          "description": "Library Modernization Roadmap uses a compact evidence-to-decision arc for Easton University Library.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

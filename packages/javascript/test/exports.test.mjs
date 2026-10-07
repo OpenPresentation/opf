@@ -55,18 +55,24 @@ describe("catalog export shapes", () => {
     assert.ok(catalogs.chartTypes.length > 0);
   });
 
-  test("chartTypes catalog keeps 'united-kingdom' and drops the removed typo id", () => {
-    const removedUnitedKingdomChartId = ["united", "kindom"].join("-");
-    assert.ok(catalogs.chartTypes.some((record) => record.id === "united-kingdom"));
-    assert.equal(catalogs.chartTypes.some((record) => record.id === removedUnitedKingdomChartId), false);
+  test("chartTypes catalog has one record per chart type: no -3x suffixes and no country maps", () => {
+    const ids = catalogs.chartTypes.map((record) => record.id);
+    assert.ok(ids.includes("world"));
+    assert.ok(ids.includes("stacked-column"));
+    assert.deepEqual(ids.filter((id) => /-[0-9]x$/.test(id)), []);
+    for (const removed of ["united-kingdom", "united-states", "canada", "australia"]) assert.equal(ids.includes(removed), false, removed);
+    for (const record of catalogs.chartTypes) {
+      assert.equal(record.label, undefined, `${record.id} has no label`);
+      assert.match(record.name, /^[A-Z0-9]/, `${record.id} name is the display name`);
+      assert.equal(record.name.includes("_"), false, `${record.id} name is not an enum constant`);
+    }
   });
 
   test("chartTypes catalogEntries entry has the expected schemaName and files", () => {
-    const removedUnitedKingdomChartId = ["united", "kindom"].join("-");
     const entry = catalogEntries.find((candidate) => candidate.kind === "chartTypes");
     assert.equal(entry?.schemaName, "chartType");
-    assert.ok(entry?.files.includes("united-kingdom.json"));
-    assert.equal(entry?.files.includes(`${removedUnitedKingdomChartId}.json`), false);
+    assert.ok(entry?.files.includes("world.json"));
+    assert.equal(entry?.files.includes("united-kingdom.json"), false);
   });
 
   test("socialPlatforms catalogEntries entry has the expected schemaName", () => {
@@ -125,7 +131,7 @@ describe("catalog cross-links resolve", () => {
   });
 
   test("broken cross-links in a catalog record warn, never error", () => {
-    const audienceTemplate = audiences.find((record) => record.id === "executives");
+    const audienceTemplate = audiences.find((record) => record.id === "executive");
     const brokenAudienceResult = validateCatalogRecord("audiences", {
       ...audienceTemplate,
       recommendedNarratives: ["no-such-narrative", "classic-story"],

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-chart-type/v1",
   "title": "Chart Type",
-  "description": "Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType). Each record describes a named chart variant, its Open XML mapping, its series/category cardinality, the column structure of the underlying workbook, and a small sample dataset suitable for previews. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.",
+  "description": "Schema for chart-type records in the pptx.gallery catalog. The bundled catalog holds one record per chart type that Aspose.Slides officially supports (see mappings.renderers[\"aspose-slides\"].chartType), plus the column-and-line combination 'combo' (mappings.openxml.composition \"mixed\"). Each record names a chart variant, its Open XML mapping, how many data series it expects and how pickers group it. Chart types are referenced from OPF chart content payloads; the engine resolves the reference against catalogs.chartTypes (inline) -> catalogs.chartTypes.source -> the default catalog at https://www.pptx.gallery/chart-types.",
   "type": "object",
   "additionalProperties": false,
   "patternProperties": {
@@ -25,29 +25,19 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*$",
-      "description": "Stable slug used by OPF documents to reference this chart type. Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming.",
+      "description": "Stable slug used by OPF documents to reference this chart type (`chart.type`). Lowercase kebab-case. Chart type ids may start with a digit (e.g., '100pct-stacked-column', '3d-column') to mirror conventional chart naming.",
       "examples": [
         "column",
         "bar",
-        "stacked-column-3x",
+        "stacked-column",
         "doughnut",
         "treemap",
-        "100pct-stacked-column-3x"
+        "100pct-stacked-column"
       ]
     },
     "name": {
       "type": "string",
-      "description": "Stable display/programmatic name for this chart type.",
-      "examples": [
-        "COLUMN",
-        "STACKED_COLUMN_3X",
-        "DOUGHNUT",
-        "TREEMAP"
-      ]
-    },
-    "label": {
-      "type": "string",
-      "description": "Human-readable label shown in chart pickers.",
+      "description": "Human-readable name of the chart type, as a chart picker shows it.",
       "examples": [
         "Column",
         "Stacked Column",
@@ -60,14 +50,14 @@
       "description": "One-sentence positioning: when to reach for this chart variant.",
       "examples": [
         "Single-series vertical column chart for comparing values across categories.",
-        "Bullet chart that benchmarks one value against ranked threshold bands."
+        "Stacked column chart that shows how the parts of each category add up to its total."
       ]
     },
     "description": {
       "type": "string",
       "description": "Longer prose describing the chart and ideal use cases.",
       "examples": [
-        "Use a clustered column when you want to compare a small number of series across the same categories — e.g., revenue by quarter for two product lines. Best with 2–4 series and ≤12 categories."
+        "Use a stacked column when you want to compare totals across categories and also show how each series contributes — e.g., revenue by quarter split by product line. Best with 2–4 series and ≤12 categories."
       ]
     },
     "mappings": {
@@ -76,11 +66,11 @@
     },
     "deprecation": {
       "$ref": "#/$defs/ChartTypeDeprecation",
-      "description": "Present when this chart type is deprecated. Deprecated records stay resolvable so existing documents keep validating, but pickers and default listings exclude them, validators warn when a document references them, and they are removed in the release named by `removal`."
+      "description": "Present when this chart type is deprecated. A deprecated record stays resolvable so existing documents keep validating, validators warn when a document references it, and pickers and generators should not offer it. The bundled default catalog holds no deprecated records; a publisher or an inline `catalogs.chartTypes.records` entry can still use the field."
     },
     "group": {
       "type": "string",
-      "description": "Top-level grouping in the chart picker (column, bar, line, area, pie, radar, etc.).",
+      "description": "Top-level grouping in the chart picker.",
       "examples": [
         "Column",
         "Bar",
@@ -91,9 +81,8 @@
         "Histogram",
         "XY (Scatter)",
         "Treemap",
-        "Bullet",
-        "Sparkline",
         "Map",
+        "Combo",
         "Other"
       ]
     },
@@ -115,153 +104,16 @@
         "hierarchical",
         "normalized"
       ],
-      "description": "Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized')."
+      "description": "Shape of the underlying data: a flat series ('simple'), one with engine-side calculation ('calculated'), parent-child rows ('hierarchical'), or pre-normalized rows ('normalized'). The editor offers only 'simple' types as switch targets for a chart's existing data."
     },
     "series": {
       "type": "integer",
       "minimum": 0,
-      "description": "Number of data series this chart type expects.",
-      "examples": [
-        1,
-        2,
-        3,
-        4
-      ]
-    },
-    "categories": {
-      "type": "integer",
-      "minimum": 0,
-      "description": "Number of category labels this chart type expects on the primary axis.",
-      "examples": [
-        4,
-        6,
-        8,
-        12
-      ]
-    },
-    "seriesGroups": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "Number of series groups (axis bands) this chart type uses; >1 for combo or banded charts.",
+      "description": "Number of data series this chart type expects: exactly that many, except that a stacked or percent-stacked type and a combination (composition 'mixed', such as combo) expect at least that many. The editor offers a type that expects more than one series only for data with a fitting number of value columns; a one-series type fits one value column, and column, bar, line, area and radar types fit any number.",
       "examples": [
         1,
         2,
         3
-      ]
-    },
-    "useSecondaryCategories": {
-      "type": "boolean",
-      "description": "Whether the chart type uses a secondary category axis.",
-      "examples": [
-        false,
-        true
-      ]
-    },
-    "workbookRange": {
-      "type": "string",
-      "description": "A1 reference to the source range in the embedded workbook.",
-      "examples": [
-        "Sheet1!$A$1:$I$2",
-        "Sheet1!$A$1:$G$3"
-      ]
-    },
-    "columns": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Column header names of the embedded workbook, in left-to-right order.",
-      "examples": [
-        [
-          "Series 1",
-          "Value"
-        ],
-        [
-          "Series 1",
-          "Value 1",
-          "Value 2"
-        ]
-      ]
-    },
-    "dataColumns": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/ChartDataColumn"
-      },
-      "description": "Per-column metadata describing the role and position of each column in the workbook source.",
-      "examples": [
-        [
-          {
-            "name": "Series 1",
-            "role": "categoryLabel",
-            "type": "string",
-            "position": "row0_col0"
-          },
-          {
-            "name": "Value 1",
-            "role": "series",
-            "type": "number",
-            "position": "row1_col0"
-          },
-          {
-            "name": "Value 2",
-            "role": "series",
-            "type": "number",
-            "position": "row2_col0"
-          }
-        ]
-      ]
-    },
-    "helperColumns": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Optional auxiliary column names used by calculated or banded charts (e.g., 'Excellent', 'Good', 'Fair', 'Poor' for a bullet chart).",
-      "examples": [
-        [
-          "Excellent",
-          "Good",
-          "Fair",
-          "Poor"
-        ],
-        [
-          "Band"
-        ]
-      ]
-    },
-    "sampleData": {
-      "$ref": "#/$defs/ChartSampleData",
-      "description": "Inline sample dataset for previews and pickers.",
-      "examples": [
-        {
-          "headers": [
-            "Series 1",
-            "Q1 2024",
-            "Q2 2024",
-            "Q3 2024",
-            "Q4 2024"
-          ],
-          "rows": [
-            [
-              "Value",
-              93810,
-              24592,
-              13278,
-              46048
-            ]
-          ]
-        }
-      ]
-    },
-    "slideNumber": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "Source slide number in the original chart-gallery deck. Carried for traceability.",
-      "examples": [
-        1,
-        2,
-        48
       ]
     },
     "tags": {
@@ -276,9 +128,8 @@
           "comparison"
         ],
         [
-          "bullet",
-          "kpi",
-          "benchmark"
+          "stacked",
+          "composition"
         ]
       ]
     },
@@ -291,7 +142,7 @@
           "format": "uri",
           "description": "Main preview image (PNG/JPG). Used as the primary visual in picker UIs and previews of the record.",
           "examples": [
-            "https://www.pptx.gallery/chart-types/clustered-column.png"
+            "https://www.pptx.gallery/chart-types/column.png"
           ]
         },
         "thumbnailSrc": {
@@ -299,7 +150,7 @@
           "format": "uri",
           "description": "Smaller thumbnail preview suited to dense grid views.",
           "examples": [
-            "https://www.pptx.gallery/chart-types/clustered-column.thumbnail.png"
+            "https://www.pptx.gallery/chart-types/column.thumbnail.png"
           ]
         },
         "vectorSrc": {
@@ -307,7 +158,7 @@
           "format": "uri",
           "description": "SVG / vector preview for crisp scaling at any size.",
           "examples": [
-            "https://www.pptx.gallery/chart-types/clustered-column.svg"
+            "https://www.pptx.gallery/chart-types/column.svg"
           ]
         }
       }
@@ -327,7 +178,7 @@
           "description": "Id of the non-deprecated chart type that documents should reference instead.",
           "examples": [
             "column",
-            "stacked-column-3x"
+            "stacked-column"
           ]
         },
         "reason": {
@@ -356,7 +207,7 @@
         },
         "renderers": {
           "type": "object",
-          "description": "Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records the matching Aspose.Slides ChartType enumeration member under the \"aspose-slides\" key, e.g. {\"aspose-slides\": {\"chartType\": \"StackedColumn\"}}.",
+          "description": "Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records the matching Aspose.Slides ChartType enumeration member under the \"aspose-slides\" key, e.g. {\"aspose-slides\": {\"chartType\": \"StackedColumn\"}}; a mixed composition names the ChartType it starts from and the series type it switches series to, e.g. {\"chartType\": \"ClusteredColumn\", \"lineSeriesType\": \"LineWithMarkers\"}.",
           "additionalProperties": {
             "type": "object",
             "additionalProperties": true
@@ -453,128 +304,6 @@
         "notes": {
           "type": "string",
           "description": "Short implementation note for mappings that need renderer interpretation."
-        }
-      }
-    },
-    "ChartDataColumn": {
-      "type": "object",
-      "description": "One column of the embedded chart workbook, annotated with its role and grid position.",
-      "required": [
-        "name",
-        "role",
-        "type"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Column header name (e.g. 'Series 1', 'Value', 'Level1', 'Level2').",
-          "examples": [
-            "Series 1",
-            "Value",
-            "Level1",
-            "Level2"
-          ]
-        },
-        "role": {
-          "type": "string",
-          "enum": [
-            "categoryLabel",
-            "series",
-            "helper"
-          ],
-          "description": "Role this column plays: a category label (axis tick), a series (plotted values), or a helper (calculated/auxiliary)."
-        },
-        "type": {
-          "type": "string",
-          "enum": [
-            "string",
-            "number"
-          ],
-          "description": "Cell value type for the column."
-        },
-        "position": {
-          "type": "string",
-          "pattern": "^row[0-9]+_col[0-9]+$",
-          "description": "Grid position of the column header in the source workbook, as 'row<N>_col<M>' (zero-indexed).",
-          "examples": [
-            "row0_col0",
-            "row1_col0",
-            "row2_col0"
-          ]
-        }
-      }
-    },
-    "ChartSampleData": {
-      "type": "object",
-      "description": "Inline sample dataset for previews. Mirrors a small workbook with header row plus data rows.",
-      "required": [
-        "headers",
-        "rows"
-      ],
-      "properties": {
-        "headers": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Header row labels. The first cell typically labels the series column; the rest are category labels.",
-          "examples": [
-            [
-              "Series 1",
-              "Q1 2024",
-              "Q2 2024",
-              "Q3 2024",
-              "Q4 2024",
-              "Q1 2025",
-              "Q2 2025",
-              "Q3 2025",
-              "Q4 2025"
-            ]
-          ]
-        },
-        "rows": {
-          "type": "array",
-          "items": {
-            "type": "array",
-            "items": {
-              "type": [
-                "string",
-                "number"
-              ]
-            }
-          },
-          "description": "Two-dimensional sample data. Each row aligns by index with the headers — first cell is the row label, remaining cells are values.",
-          "examples": [
-            [
-              [
-                "Value",
-                93810,
-                24592,
-                13278,
-                46048,
-                42098,
-                39256,
-                28289,
-                23434
-              ]
-            ],
-            [
-              [
-                "Value 1",
-                98696,
-                81482,
-                21395,
-                87397
-              ],
-              [
-                "Value 2",
-                38657,
-                40495,
-                76237,
-                88907
-              ]
-            ]
-          ]
         }
       }
     }

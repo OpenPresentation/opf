@@ -4,20 +4,12 @@
   "name": "Customer_Logos",
   "summary": "Grid of recognizable customer brand logos. Social proof at a glance.",
   "description": "Grid of recognizable customer brand logos. Social proof at a glance.",
-  "contentType": "Text",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,7 +23,9 @@
     "Logos",
     "Proof"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/customer-logos.svg"
+  },
   "composition": {
     "padding": 0.04
   }

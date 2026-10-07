@@ -2,13 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans",
   "name": "Noto Sans",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Russian",
-    "Ukrainian",
-    "Serbian (Cyrillic)",
-    "Tajik"
+    "russian",
+    "ukrainian",
+    "serbian-cyrillic",
+    "tajik"
   ],
   "major": "Noto Sans",
   "minor": "Noto Sans",

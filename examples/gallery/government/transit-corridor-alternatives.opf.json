@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "scqa",
-    "description": "Transit Corridor Alternatives uses a compact evidence-to-decision arc for Metro Transit Authority.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "transit-corridor-alternatives-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#0F172A",
-        "risk": "#14B8A6"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "raavi",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:9",
     "background": {
@@ -168,7 +132,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "stacked-line-with-markers-2x",
+        "type": "stacked-line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -338,7 +302,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-bullet-bar",
+            "type": "100pct-stacked-bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -512,7 +476,7 @@
     },
     "metric-data": {
       "src": "./data/transit-corridor-alternatives.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Transit Corridor Alternatives data"
     },
     "watermark": {
@@ -542,24 +506,25 @@
           "id": "transit-corridor-alternatives-arc",
           "name": "Transportation Decision Arc",
           "summary": "A custom arc for Metro Transit Authority.",
+          "description": "Transit Corridor Alternatives uses a compact evidence-to-decision arc for Metro Transit Authority.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

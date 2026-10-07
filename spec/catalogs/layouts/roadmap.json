@@ -4,20 +4,12 @@
   "name": "Roadmap",
   "summary": "Strategic timeline showing planned initiatives across phases or quarters. Communicates direction and commitment.",
   "description": "Strategic timeline showing planned initiatives across phases or quarters. Communicates direction and commitment.",
-  "contentType": "Timeline",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +23,7 @@
     "Strategy",
     "Future"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/roadmap.svg"
+  }
 }

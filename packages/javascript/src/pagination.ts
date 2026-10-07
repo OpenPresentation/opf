@@ -1,3 +1,4 @@
+import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { catalogs } from "./catalogs.js";
 import { DEFAULT_FONT_SCHEME, resolveFontFamilies, resolveFontSchemeReference, type FontSchemeDiagnostic, resolveCanvasDimensions, composeSlide, type ComposeSlideOptions, type LayoutDiagnostic, type TextMeasurement } from './composition.js';
@@ -72,8 +73,18 @@ function leafFor(path: string, field: string, value: any): Leaf {
   if (field === 'text') { text = textOf(value); leaf.slice = (a,b) => sliceRichText(value,a,b); }
   if (field === 'code' || field === 'quote') {
     const key = field === 'code' ? 'source' : 'text';
-    text = typeof value === 'string' ? value : value[key];
-    leaf.slice = (a,b) => typeof value === 'string' ? value.slice(a,b) : { ...value, [key]: text!.slice(a,b) };
+    // A quote text may be TextRun[] (FA-10): it slices like body text, keeping each run's formatting.
+    text = typeof value === 'string' ? value : field === 'quote' ? textOf(value[key]) : value[key];
+    leaf.slice = (a,b) => {
+      if (typeof value === 'string') return value.slice(a,b);
+      const piece: Record<string, any> = { ...value, [key]: field === 'quote' ? sliceRichText(value[key],a,b) : text!.slice(a,b) };
+      // code.highlight lines are numbered per code block: a page keeps the marked lines it holds, renumbered from 1.
+      if (field === 'code' && value.highlight !== undefined) {
+        const highlight = codeHighlightSlice(value.highlight, text!, a, b);
+        if (highlight) piece.highlight = highlight; else delete piece.highlight;
+      }
+      return piece;
+    };
   }
   if (text !== undefined) {
     leaf.unit = 'utf16';
@@ -217,7 +228,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     while (true) {
       const make = (limit: number): Portion => ({leaf,start,end:limit,value:leaf.slice ? leaf.slice(start,limit) : leaf.value});
       let candidate = new Map(selected).set(leaf.path,make(end));
-      let issues = diagnosticsFor(candidate);
+      const issues = diagnosticsFor(candidate);
       if (!issues.length) { selected = candidate; break; }
       let best = start;
       if (leaf.slice && end > start) {
@@ -302,7 +313,7 @@ export function paginatePresentation(input: unknown, options: PresentationPagina
       const {scheme:fontScheme,diagnostic} = resolveFontSchemeReference(fontReference,id=>resolve('fontSchemes',id),fontPath);
       if (diagnostic && !reported.has(diagnostic.path)) { reported.add(diagnostic.path); options.onDiagnostic?.(diagnostic); }
       const fonts = resolveFontFamilies(fontScheme);
-      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,contentAlignment:design.contentAlignment,titleAlignment:design.titleAlignment,contentBox:design.contentBox,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,socialPlatforms:catalogs.socialPlatforms,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
+      const result = paginateSlide(slide,{...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),layout,fonts,textMeasurement:options.textMeasurement,textRasterPadding:options.textRasterPadding,socialPlatforms:catalogs.socialPlatforms,...overrides,presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds});
       const outputStart = output.length;
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});

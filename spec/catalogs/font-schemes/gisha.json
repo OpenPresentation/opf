@@ -2,11 +2,11 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "gisha",
   "name": "Gisha",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Hebrew",
-    "Arabic"
+    "hebrew",
+    "arabic"
   ],
   "major": "Gisha",
   "minor": "Gisha",

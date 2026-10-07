@@ -118,7 +118,7 @@
     "attentionBudgetMinutes": {
       "type": "number",
       "exclusiveMinimum": 0,
-      "description": "Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's durationRange."
+      "description": "Realistic upper bound on this audience's focused attention for a single presentation, in minutes. Used as a hint when comparing against duration and the resolved narrative's duration range."
     },
     "recommendedNarratives": {
       "type": "array",

@@ -136,9 +136,12 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
     }
     case "quote": {
       const quote = typeof content === "string" ? { text: content } : content;
-      const lines = splitRuns([quote.text]);
-      if (quote.attribution) lines.push([`— ${quote.attribution}`]);
-      if (quote.source) lines.push([quote.attribution ? `— ${quote.source}` : quote.source]);
+      const lines = splitRuns(runsOf(quote.text));
+      // A text quote has one attribution line, `— Name, Title`: the role joins the attribution after a comma.
+      const credit = [quote.attribution, quote.role].filter(Boolean).join(", ");
+      if (quote.photo !== undefined) loss.note("quote photo");
+      if (credit) lines.push([`— ${credit}`]);
+      if (quote.source) lines.push([credit ? `— ${quote.source}` : quote.source]);
       return lines;
     }
     case "metric": {
@@ -147,6 +150,7 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
       const lines: Run[][] = [[value]];
       for (const part of [metric.label, metric.description, metric.delta === undefined ? undefined : String(metric.delta)]) if (part !== undefined && part !== "") lines.push(...splitRuns([part]));
       if (metric.trend) loss.note("metric trend");
+      if (metric.sentiment) loss.note("metric sentiment");
       return lines;
     }
     case "code": {
@@ -162,6 +166,7 @@ function toLines(kind: ContentKind, content: Json, options: ConvertOptions, loss
         if (content.name) loss.note("timeline name");
         if (content.description) loss.note("timeline description");
       }
+      if (events.some((event) => event.status)) loss.note("timeline event status");
       const lines: Run[][] = [];
       for (const event of events) {
         lines.push([event.when ? `${event.when}: ${event.what}` : event.what]);
@@ -277,6 +282,7 @@ function timelineToList(timeline: Json, loss: Loss): Field {
     if (timeline.name) loss.note("timeline name");
     if (timeline.description) loss.note("timeline description");
   }
+  if (events.some((event) => event.status)) loss.note("timeline event status");
   return {
     key: "items",
     value: events.map((event) => {
@@ -294,7 +300,7 @@ function chartToTable(chart: Json, loss: Loss): Field {
     if (chart.type) loss.note("chart type");
     return { key: "table", value: { dataset: data.dataset, ...(Array.isArray(data.fields) ? { fields: clone(data.fields) } : {}) } };
   }
-  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) throw refuse("This chart reads external data. Only a chart with inline columns and rows converts to a table.");
+  if (!data || !Array.isArray(data.columns) || !Array.isArray(data.rows)) throw refuse("This chart has no inline columns and rows. Only a chart with inline columns and rows, or a dataset, converts to a table.");
   if (chart.type) loss.note("chart type");
   if (data.source !== undefined) loss.note("data source");
   return { key: "table", value: { columns: clone(data.columns), rows: clone(data.rows) } };

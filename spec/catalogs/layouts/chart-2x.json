@@ -2,6 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "chart-2x",
   "name": "Chart 2x",
+  "summary": "Reach for it when two charts are read together, each with its own note.",
+  "description": "A title above two charts, each followed by a text block, in two columns. Use it to compare two series, two periods or two segments side by side.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -22,5 +29,13 @@
   "composition": {
     "mode": "grid",
     "columns": 2
+  },
+  "tags": [
+    "Charts",
+    "Multi-chart",
+    "Comparison"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-2x.svg"
   }
 }

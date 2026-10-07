@@ -15,6 +15,8 @@ export const BLOCK_OPTION_KEYS = ["id", "type", "as", "region"] as const;
 // --- line classes ------------------------------------------------------------------------------
 
 const BLANK = /^\s*$/;
+const TIMELINE_STATUS_PREFIX = /^\[([x> ])\]\s+(?=\S)/;
+const TIMELINE_STATUS_OF_MARK: Record<string, string> = { x: "done", ">": "current", " ": "planned" };
 const FENCE_OPEN = /^( {0,3})(`{3,}|~{3,})(.*)$/;
 const SEPARATOR = /^-{3,}[ \t]*$/;
 const HEADING = /^ {0,3}(#{1,6})(?:[ \t]+(.*?))?[ \t]*$/;
@@ -183,8 +185,8 @@ class SlideParser {
   private slideOptions: Obj | undefined;
   private slideOptionsRange: Range | undefined;
   private pending: Pending | undefined;
-  private title: string | undefined;
-  private subtitle: string | undefined;
+  private title: string | Run[] | undefined;
+  private subtitle: string | Run[] | undefined;
   private notes: string | undefined;
   private extras: Obj | undefined;
   private notesRange: Range | undefined;
@@ -318,13 +320,13 @@ class SlideParser {
     if (level === 1) {
       if (this.title !== undefined) ctx.error("duplicate-title", "A slide has more than one # title.", "Use --- to start a new slide, or `##` for the subtitle.", range, `${this.path}/title`);
       else {
-        this.title = this.plain(text, range);
+        this.title = this.inline(text, range);
         ctx.ranges.set(`${this.path}/title`, range);
       }
     } else if (level === 2) {
       if (this.subtitle !== undefined) ctx.error("duplicate-subtitle", "A slide has more than one ## subtitle.", "A slide has one subtitle. Use a paragraph for further lines.", range, `${this.path}/subtitle`);
       else {
-        this.subtitle = this.plain(text, range);
+        this.subtitle = this.inline(text, range);
         ctx.ranges.set(`${this.path}/subtitle`, range);
       }
     } else {
@@ -365,7 +367,8 @@ class SlideParser {
       if (BLANK.test(row)) paragraphs.push([]);
       else paragraphs.at(-1)!.push(row);
     }
-    const text = this.plain(
+    // The quote text keeps inline formatting (a string, or TextRun[] when any run is formatted); attribution and source are plain strings.
+    const text = this.inline(
       paragraphs
         .filter((paragraph) => paragraph.length)
         .map(joinParagraph)
@@ -375,7 +378,8 @@ class SlideParser {
     const value: Obj = { text };
     if (parsed.attribution !== undefined) value.attribution = this.plain(parsed.attribution, range);
     if (parsed.source !== undefined) value.source = this.plain(parsed.source, range);
-    this.native("quote", Object.keys(value).length === 1 ? value.text : value, range);
+    // The string shorthand exists only for a plain string; a rich text stays in its { text } object.
+    this.native("quote", Object.keys(value).length === 1 && typeof value.text === "string" ? value.text : value, range);
   }
 
   // --- lists -----------------------------------------------------------------------------------
@@ -536,6 +540,14 @@ class SlideParser {
       ctx.error("chart-type", "A chart block names its type after `chart`.", "Write ```chart column (or line, pie, bar, ...), then the data.", range, this.path);
       return;
     }
+    // FA-09: ```chart column alt="What the data shows" (alt="" marks the chart decorative).
+    const { pairs, error } = parseAttributes(rest.slice(type.length));
+    const meta: Obj = {};
+    if (error) ctx.error("chart-attributes", error, 'Write ```chart column alt="What the data shows" (alt is optional).', range, this.path);
+    for (const [key, value] of pairs) {
+      if (key === "alt" && typeof value === "string") meta.alt = value;
+      else ctx.error("chart-attributes", `Unknown chart attribute ${JSON.stringify(key)}.`, "A chart fence takes alt, a text alternative in double quotes.", range, this.path);
+    }
     const trimmed = text.trim();
     if (!trimmed) {
       ctx.error("chart-data", "A chart block has no data.", "Write CSV with a header row, or a JSON object with columns and rows or a data source.", range, this.path);
@@ -545,7 +557,7 @@ class SlideParser {
       try {
         const data = JSON.parse(trimmed) as unknown;
         if (!isRecord(data)) throw new Error("not an object");
-        this.native("chart", { type, data }, range);
+        this.native("chart", { type, ...meta, data }, range);
       } catch (error) {
         ctx.error("chart-data", `Chart JSON is invalid: ${(error as Error).message}.`, "Write a JSON object: {\"columns\": [...], \"rows\": [[...]]} or {\"src\": ...}.", range, this.path);
       }
@@ -565,12 +577,12 @@ class SlideParser {
     const typed = (field: { value: string; quoted: boolean }): unknown => (field.quoted ? field.value : field.value === "" ? null : DECIMAL.test(field.value) ? Number(field.value) : field.value === "true" ? true : field.value === "false" ? false : field.value);
     const rows = body.map((row) => row.map((field, index) => (index === 0 ? field.value : typed(field))));
     if (rows.some((row) => row.length !== head.length)) ctx.warn("chart-ragged", `A chart row has a different number of values than the ${head.length} columns.`, "Give every row one value per column.", range, this.path);
-    this.native("chart", { type, data: { columns: head.map((field) => field.value), rows } }, range);
+    this.native("chart", { type, ...meta, data: { columns: head.map((field) => field.value), rows } }, range);
   }
 
   private metric(body: Line[], range: Range): void {
     const { ctx } = this;
-    const allowed = ["value", "label", "description", "unit", "delta", "trend"];
+    const allowed = ["value", "label", "description", "unit", "delta", "trend", "sentiment"];
     const help = `A metric block is key: value lines. Keys: ${allowed.join(", ")}. A value is plain text, or a JSON string in double quotes.`;
     const out: Obj = {};
     for (const line of body) {
@@ -615,7 +627,7 @@ class SlideParser {
       if ((key === "name" || key === "description") && typeof value === "string") meta[key] = value;
       else ctx.error("timeline-attributes", `Unknown timeline attribute ${JSON.stringify(key)}.`, "A timeline fence takes name and description.", range, this.path);
     }
-    const events: Obj[] = [];
+    const events: Obj[] = [], statuses: (string | undefined)[] = [];
     for (const line of body) {
       if (BLANK.test(line.text)) continue;
       if (/^[ \t]+\S/.test(line.text)) {
@@ -627,12 +639,19 @@ class SlideParser {
         event.description = event.description === undefined ? line.text.trim() : `${event.description} ${line.text.trim()}`;
         continue;
       }
-      const text = line.text.trim();
+      let text = line.text.trim();
+      // A task-list style prefix sets the event's status: [x] done, [>] current, [ ] planned.
+      const marked = TIMELINE_STATUS_PREFIX.exec(text);
+      const status = marked ? TIMELINE_STATUS_OF_MARK[marked[1]!] : undefined;
+      if (marked) text = text.slice(marked[0].length).trim();
       // `when — what` (a spaced em dash) is the dialect's separator; the date rules of the conversions module also apply.
       const dash = text.indexOf(" — ");
       const split = dash > 0 && text.slice(dash + 3).trim() ? { when: text.slice(0, dash).trim(), what: text.slice(dash + 3).trim() } : splitWhen(text);
       events.push(split ? { when: split.when, what: split.what } : { what: text });
+      statuses.push(status);
     }
+    // The status key goes last, after any description, which is the canonical key order.
+    events.forEach((event, index) => { if (statuses[index]) event.status = statuses[index]; });
     if (!events.length) {
       ctx.error("timeline-events", "A timeline has no events.", "Write one event per line: `2024 Q1 — Pilot`.", range, this.path);
       return;

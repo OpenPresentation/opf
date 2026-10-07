@@ -1,8 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
   "id": "doughnut",
-  "name": "DOUGHNUT",
-  "label": "Doughnut",
+  "name": "Doughnut",
   "mappings": {
     "openxml": {
       "element": "doughnutChart",
@@ -14,45 +13,8 @@
       }
     }
   },
-  "categories": 2,
-  "columns": [
-    "Segment",
-    "Value 1"
-  ],
   "group": "Pie",
   "groupSort": 3,
   "series": 1,
-  "seriesGroups": 1,
-  "slideNumber": 20,
-  "useSecondaryCategories": false,
-  "workbookRange": "Sheet1!$A$1:$C$2",
-  "complexity": "simple",
-  "dataColumns": [
-    {
-      "name": "Segment",
-      "role": "categoryLabel",
-      "type": "string",
-      "position": "row0_col0"
-    },
-    {
-      "name": "Value 1",
-      "role": "series",
-      "type": "number",
-      "position": "row1_col0"
-    }
-  ],
-  "sampleData": {
-    "headers": [
-      "Segment",
-      "Q1 2024",
-      "Q2 2024"
-    ],
-    "rows": [
-      [
-        "Value 1",
-        63264,
-        91351
-      ]
-    ]
-  }
+  "complexity": "simple"
 }

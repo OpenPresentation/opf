@@ -325,7 +325,7 @@ function assetsFor(spec, index) {
     },
     "metric-data": {
       src: `./data/${slug(spec.title)}.csv`,
-      format: "csv",
+      mediaType: "text/csv",
       title: `${spec.title} data`,
     },
     watermark: {
@@ -357,18 +357,14 @@ function designFor(spec, index, catalogs, density) {
           dark2: '#334155',
           light1: '#FFFFFF',
           light2: '#F8FAFC',
-          custom: {
-            signal: color(index, 5),
-            risk: color(index, 4),
-          },
         },
     fontScheme: compact
       ? pick(catalogs.fontSchemes, index)
       : {
           id: pick(catalogs.fontSchemes, index),
-          heading: { family: "Aptos Display", weight: 700 },
-          body: { family: "Aptos", weight: 400 },
-          code: { family: "Consolas", weight: 400 },
+          heading: "Aptos Display",
+          body: "Aptos",
+          code: "Consolas",
         },
     dimensions: index % 9 === 0
       ? { preset: "16:10", widthInches: 13.333, heightInches: 8.333 }
@@ -428,17 +424,6 @@ function chartRows(index) {
 
 function chartPayload(spec, index, catalogs, density) {
   const chartType = pick(catalogs.chartTypes, index);
-  if (density === "dense" && index % 4 === 0) {
-    return {
-      type: chartType,
-      data: {
-        src: "asset:metric-data",
-        sheet: "Summary",
-        range: "A1:C8",
-        columns: ["Quarter", "Current", "Baseline"],
-      },
-    };
-  }
   return {
     type: chartType,
     data: {
@@ -767,10 +752,11 @@ function catalogOverrides(spec, index, catalogs) {
           id: customId,
           name: `${titleCase(spec.area)} Decision Arc`,
           summary: `A custom arc for ${spec.org}.`,
+          description: `${spec.title} uses a compact evidence-to-decision arc for ${spec.org}.`,
           beats: [
-            { id: "context", name: "Context", slideType: "text", layoutHint: "text-1x" },
-            { id: "evidence", name: "Evidence", slideType: "chart", layoutHint: "chart-1x" },
-            { id: "decision", name: "Decision", slideType: "list", layoutHint: "list-3x" },
+            { id: "context", name: "Context", type: "text", layout: "text-1x" },
+            { id: "evidence", name: "Evidence", type: "chart", layout: "chart-1x" },
+            { id: "decision", name: "Decision", type: "list", layout: "list-3x" },
           ],
         },
       ],
@@ -906,17 +892,8 @@ function deckFor(rawSpec, index, catalogs) {
             "Do not over-explain obvious context.",
           ],
         },
-    narrative: density === "dense"
-      ? {
-          id: narrative,
-          description: `${title} uses a compact evidence-to-decision arc for ${org}.`,
-          beats: [
-            { id: "context", name: "Context", slideType: "text", layoutHint: "text-1x" },
-            { id: "evidence", name: "Evidence", slideType: "chart", layoutHint: "chart-1x" },
-            { id: "commitment", name: "Commitment", slideType: "list", layoutHint: "list-3x" },
-          ],
-        }
-      : narrative,
+    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
   } : {
@@ -955,17 +932,8 @@ function deckFor(rawSpec, index, catalogs) {
         "Do not over-explain obvious context.",
       ],
     },
-    narrative: density === "dense"
-      ? {
-          id: narrative,
-          description: `${title} uses a compact evidence-to-decision arc for ${org}.`,
-          beats: [
-            { id: "context", name: "Context", slideType: "text", layoutHint: "text-1x" },
-            { id: "evidence", name: "Evidence", slideType: "chart", layoutHint: "chart-1x" },
-            { id: "commitment", name: "Commitment", slideType: "list", layoutHint: "list-3x" },
-          ],
-        }
-      : narrative,
+    // A dense deck points at its own record in catalogs.narratives.records (see catalogOverrides).
+    narrative: density === "dense" ? `${slug(title)}-arc` : narrative,
     design: designFor(spec, index, catalogs, density),
     slides: slidesFor(spec, index, catalogs, density),
   };

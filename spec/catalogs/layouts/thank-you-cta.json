@@ -4,20 +4,11 @@
   "name": "Thank_You_Cta",
   "summary": "Closing slide with clear next steps, contact info, or a call to action. End with direction, not a whimper.",
   "description": "Closing slide with clear next steps, contact info, or a call to action. End with direction, not a whimper.",
-  "contentType": "Title",
-  "contentMultiple": "None",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": true,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "None",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +22,7 @@
     "Action",
     "Contact"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/thank-you-cta.svg"
+  }
 }

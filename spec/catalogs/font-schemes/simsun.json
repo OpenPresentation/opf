@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "simsun",
   "name": "SimSun",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (simplified)"
+    "chinese-simplified"
   ],
   "major": "SimSun",
   "minor": "SimSun",

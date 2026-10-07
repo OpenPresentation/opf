@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-jp",
   "name": "Noto Sans JP",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "ea",
   "languages": [
-    "Japanese"
+    "japanese"
   ],
   "major": "Noto Sans JP",
   "minor": "Noto Sans JP",

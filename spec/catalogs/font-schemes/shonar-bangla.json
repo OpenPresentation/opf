@@ -2,11 +2,11 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "shonar-bangla",
   "name": "Shonar Bangla",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Bengali",
-    "Chittagonian"
+    "bengali",
+    "chittagonian"
   ],
   "major": "Shonar Bangla",
   "minor": "Shonar Bangla",

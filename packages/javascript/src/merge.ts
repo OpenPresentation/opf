@@ -11,6 +11,7 @@
 // content, then similarity. Insertions from both sides are kept (ours first at
 // the same position), a deletion beats an untouched element, and a move on
 // one side is applied unless the other side moved the same element elsewhere.
+import { annotationText } from "./annotations.js";
 import { jsonEqual, formatPointer } from "./patch.js";
 import { matchArrays, idOf, DEFAULT_MATCH_THRESHOLD, type MatchOptions } from "./diff-match.js";
 
@@ -54,7 +55,7 @@ const ABSENT = Symbol("absent");
 type Maybe = unknown;
 
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === "object" && !Array.isArray(value);
-const has = (value: object, key: string) => Object.prototype.hasOwnProperty.call(value, key);
+const has = (value: object, key: string) => Object.hasOwn(value, key);
 const same = (x: Maybe, y: Maybe) => (x === ABSENT || y === ABSENT ? x === y : jsonEqual(x, y));
 const kindOf = (value: Maybe) => (value === ABSENT ? "absent" : Array.isArray(value) ? "array" : value === null ? "null" : typeof value);
 
@@ -199,7 +200,7 @@ function mergeArray(base: unknown[], ours: unknown[], theirs: unknown[], path: (
     const savedSlide = ctx.slide;
     if (isSlides) {
       const sample = node.o >= 0 ? ours[node.o] : node.t >= 0 ? theirs[node.t] : base[node.b];
-      ctx.slide = { index: out.length, ...(idOf(sample) !== undefined ? { id: idOf(sample) } : {}), ...(isObject(sample) && typeof sample.title === "string" ? { title: sample.title } : {}) };
+      ctx.slide = { index: out.length, ...(idOf(sample) !== undefined ? { id: idOf(sample) } : {}), ...(isObject(sample) && (typeof sample.title === "string" || Array.isArray(sample.title)) && annotationText(sample.title) ? { title: annotationText(sample.title) } : {}) };
     }
     try {
       const b = node.b >= 0 ? base[node.b] : ABSENT, o = node.o >= 0 ? ours[node.o] : ABSENT, t = node.t >= 0 ? theirs[node.t] : ABSENT;

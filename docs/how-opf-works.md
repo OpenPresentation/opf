@@ -152,23 +152,34 @@ Region keys on one slide must not overlap, and regions cannot be mixed with a ro
 
 The principle, used throughout OPF: **slides are the source of truth**. Layouts, narratives, and design records guide rendering; they never invalidate content.
 
-## Narrative is intent, not structure
+## Narrative is a plan; the deck holds a pointer
 
-`narrative` declares the deck's story arc. It resolves to a record in the `narratives` catalog (e.g. `"classic-story"`, `"pitch-deck"`), each of which defines ordered **beats** — labeled segments of the arc such as `hook`, `problem`, `evidence`, `ask` — with optional slide-blueprint hints (`slideType`, `layoutHint`, `instructions`, `thoughtCues`).
+A narrative is a **plan**: a story arc, its ordered **beats** (labeled segments such as `hook`, `problem`, `evidence`, `ask`) and what each beat must do. A deck is the **product**. So the plan lives in the `narratives` catalog and the deck holds only a pointer: `narrative` is a string, a catalog id (`"classic-story"`, `"pitch-deck"`), an HTTPS URL or a `pkg:` reference. A beat carries its blueprint: `type` is the slide's `Slide.type`, `layout` is its `Slide.layout`, and `instructions` and `thoughtCues` guide the author. A record's `duration { min, max }` is the talk length in minutes it suits.
 
-Slides opt into beats via `Slide.beat`. Nothing forces them to: validators warn on drift (orphan slides, unused beats) but never error.
+Slides link themselves to beats with `Slide.beat`. Nothing forces them to, and the preview and the PPTX export draw nothing from the narrative. Lint warns about a `slides[].beat` id the narrative does not define (`opf/unknown-beat`) and about a root `duration` outside the narrative's range (`opf/duration-outside-narrative`). The audit reports a beat that no slide references (`audit/unused-beat`, info).
+
+A custom narrative is a record in `catalogs.narratives.records`, and `narrative` names its id. There is one shape, the catalog record:
 
 ```json
 {
   "name": "Schema Pitch",
-  "narrative": {
-    "id": "technical-proof",
-    "name": "Technical Proof",
-    "beats": [
-      { "id": "contract", "name": "Contract", "slideType": "text", "instructions": "State what stays stable." },
-      { "id": "evidence", "name": "Evidence", "slideType": "chart" },
-      { "id": "adoption", "name": "Adoption", "slideType": "list" }
-    ]
+  "narrative": "technical-proof",
+  "duration": 12,
+  "catalogs": {
+    "narratives": {
+      "records": [
+        {
+          "id": "technical-proof",
+          "name": "Technical Proof",
+          "duration": { "min": 8, "max": 20 },
+          "beats": [
+            { "id": "contract", "name": "Contract", "type": "text", "instructions": "State what stays stable." },
+            { "id": "evidence", "name": "Evidence", "type": "chart" },
+            { "id": "adoption", "name": "Adoption", "type": "list" }
+          ]
+        }
+      ]
+    }
   },
   "slides": [
     { "beat": "contract", "title": "The Contract", "text": "Beats describe intent without constraining slides." },
@@ -177,7 +188,7 @@ Slides opt into beats via `Slide.beat`. Nothing forces them to: validators warn 
 }
 ```
 
-Object form supports overrides: `{ "id": "classic-story", "beats": [...] }` merges inline beats into the catalog record by beat `id`. An object whose `id` matches no record — like `technical-proof` above — is a fully custom inline narrative. Deck-level concerns that aren't part of the storyline (`audience`, `tone`, `takeaway`, `duration`) live as siblings on the presentation root, not inside the narrative.
+The plan is also a skeleton deck: a planner emits slides that carry `beat`, `type`, `layout`, `title` and `notes`, which is a valid deck from the start. Deck-level concerns that are not part of the storyline (`audience`, `tone`, `takeaway`, `duration`) live as siblings on the presentation root.
 
 ## Catalog references and how they resolve
 
@@ -282,7 +293,7 @@ Everything above, together — intent metadata, a catalog-backed narrative with 
       "title": "Adoption Doubled",
       "left": { "metric": { "value": "2.1x", "label": "Quarter-over-quarter adoption", "trend": "up" } },
       "center+right": {
-        "chart": { "type": "line", "data": { "src": "asset:adoption-csv", "columns": ["Month", "Active Teams"] } }
+        "chart": { "type": "line", "data": { "columns": ["Month", "Active Teams"], "rows": [["Jul", 8], ["Aug", 12], ["Sep", 17]], "source": { "src": "asset:adoption-csv" } } }
       },
       "notes": "Pause here; this is the slide the decision hangs on."
     },

@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-kannada",
   "name": "Noto Sans Kannada",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Kannada"
+    "kannada"
   ],
   "major": "Noto Sans Kannada",
   "minor": "Noto Sans Kannada",

@@ -2,6 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "table-1x",
   "name": "Table 1x",
+  "summary": "Reach for it when rows and columns of values need a table and a note on how to read it.",
+  "description": "A title above one table with a text block beside it. Use it for a comparison across several attributes, a schedule or a reference grid.",
   "placeholders": [
     {
       "type": "title"
@@ -15,5 +17,13 @@
   ],
   "composition": {
     "mode": "row"
+  },
+  "tags": [
+    "Table",
+    "Reference",
+    "Data"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/table-1x.svg"
   }
 }

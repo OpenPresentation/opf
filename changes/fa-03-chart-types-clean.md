@@ -1,0 +1,9 @@
+---
+type: changed
+packages: [opf, cli]
+---
+FA-03 (breaking catalog and schema change, pre-v1, no aliases; needs a minor bump): the chart-type and audience catalogs are clean. The 50 deprecated chart-type records and the 6 deprecated plural audience records are deleted, so the bundled catalog holds no deprecated record and a retired id (`clustered-column`, `sparkline`, `dot-plot`, `australia`, `executives`, ...) is an `unknown <kind> catalog id` warning. The `deprecation` field, the validator warning and the lint rule stay for after v1.
+    - **Ids:** every active chart-type id loses its `-3x` suffix: `stacked-column`, `stacked-bar`, `stacked-line`, `stacked-line-with-markers`, `stacked-area`, `100pct-stacked-column`, `100pct-stacked-bar` and `100pct-stacked-area`. There is no alias for the old ids. The bundled examples, `spec/reference/engine-defaults.json` and `chartOptionTarget` use the new ids (`chartOptionTarget` no longer resolves deprecated ids).
+    - **Chart-type record shape:** `name` is now the human display name (`Stacked Column`, the old `label`); `label` is removed. `slideNumber` is removed, and so are the template-workbook fields no engine reads: `workbookRange`, `columns`, `dataColumns` (with its `position`), `helperColumns`, `sampleData`, `categories`, `seriesGroups` and `useSecondaryCategories` (and the `ChartDataColumn` and `ChartSampleData` definitions). `series` and `complexity` stay: the editor's chart-type picker reads both. pptx.gallery keeps its own copy of the workbook fields under `x-gallery`.
+    - **Audit:** the `chart-color-only` rule skips only the chart types that exist (`histogram`, `box`, `pareto`, `waterfall`, `world`, `map`), not the deleted aliases.
+    - **Sync waiver:** `scripts/sync-gallery-catalog.mjs --allow-removed <kind>:<id>[,<id>...]` is the explicit, per-id waiver of the "snapshot never loses an id" rule for removals decided on purpose; see [docs/default-catalog.md](docs/default-catalog.md).

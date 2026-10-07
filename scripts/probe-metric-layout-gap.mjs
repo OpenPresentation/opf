@@ -42,7 +42,7 @@ const {toPptx}=await load('@openpresentation/opf-pptx');
 const JSZip=require('jszip');const fonts=await loadOfficeFontRegistry();
 const fontHashes=[];
 for(const file of fonts.fontFiles){const actual=await realpath(file);assert.ok(actual.startsWith(modules+path.sep));fontHashes.push({file:path.relative(modules,actual).replaceAll('\\','/'),sha256:hash(await readFile(actual))});}
-const design={fontScheme:{heading:{family:'Carlito'},body:{family:'Carlito'},code:{family:'Cousine'}}};
+const design={fontScheme:{heading:'Carlito',body:'Carlito',code:'Cousine'}};
 const cases=[
  {id:'visible-metadata',document:{design,slides:[{metric:{value:42,label:'Latency',unit:'ms',delta:0,trend:'flat'}}]}},
  {id:'readability-floor',document:{design,slides:[{composition:{minFontSize:32},metric:{value:42,label:'Latency'}}]}},

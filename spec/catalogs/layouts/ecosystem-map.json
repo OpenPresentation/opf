@@ -4,26 +4,22 @@
   "name": "Ecosystem_Map",
   "summary": "Network of players around a central business, industry, or product. Shows who matters and how they connect.",
   "description": "Network of players around a central business, industry, or product. Shows who matters and how they connect.",
-  "contentType": "Image",
-  "contentMultiple": "1x",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Center",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
     },
     {
-      "type": "picture"
+      "type": "image"
     }
   ],
   "tags": [
@@ -31,5 +27,7 @@
     "Network",
     "Ecosystem"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/ecosystem-map.svg"
+  }
 }

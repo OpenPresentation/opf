@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-tc",
   "name": "Noto Sans TC",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "ea",
   "languages": [
-    "Chinese (traditional)"
+    "chinese-traditional"
   ],
   "major": "Noto Sans TC",
   "minor": "Noto Sans TC",

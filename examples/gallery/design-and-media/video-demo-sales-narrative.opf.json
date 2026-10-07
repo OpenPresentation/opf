@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "performance-review",
-    "description": "Video Demo Sales Narrative uses a compact evidence-to-decision arc for SignalKit.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "video-demo-sales-narrative-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#6D28D9",
-        "risk": "#BE123C"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "calibri",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "widescreen",
     "background": "light1",
@@ -167,15 +131,34 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bullet-bar-2x",
+        "type": "bar",
         "data": {
-          "src": "asset:metric-data",
-          "sheet": "Summary",
-          "range": "A1:C8",
           "columns": [
             "Quarter",
             "Current",
             "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              16,
+              10
+            ],
+            [
+              "Q3",
+              21,
+              13
+            ],
+            [
+              "Q4",
+              26,
+              15
+            ]
           ]
         }
       }
@@ -318,7 +301,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "dot-plot",
+            "type": "scatter",
             "data": {
               "columns": [
                 "Quarter",
@@ -511,7 +494,7 @@
     },
     "metric-data": {
       "src": "./data/video-demo-sales-narrative.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Video Demo Sales Narrative data"
     },
     "watermark": {
@@ -541,24 +524,25 @@
           "id": "video-demo-sales-narrative-arc",
           "name": "Sales Demo Decision Arc",
           "summary": "A custom arc for SignalKit.",
+          "description": "Video Demo Sales Narrative uses a compact evidence-to-decision arc for SignalKit.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

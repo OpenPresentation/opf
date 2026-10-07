@@ -4,20 +4,12 @@
   "name": "Timeline",
   "summary": "Horizontal or vertical progression showing events, milestones, or phases in chronological order.",
   "description": "Horizontal or vertical progression showing events, milestones, or phases in chronological order.",
-  "contentType": "Timeline",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,7 +23,9 @@
     "Progress",
     "Milestones"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+  },
   "composition": {
     "padding": 0.04
   }

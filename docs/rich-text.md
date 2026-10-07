@@ -10,6 +10,12 @@ Native PPTX output preserves these run styles and shared wrapping. Each fitted l
 
 The canvas supports native SVG text selection with a formatting toolbar for bold, italic, underline, strikethrough, color, font family, point size, links, and scripts. Double-click a rich text block (or focus it and press Enter) to select its full contents. For a plain text payload, start an inline edit and choose **Format text**. **Selected text** and **Replace text** replace the selected range; **Edit runs** opens structured controls. Each action validates and creates one undo step. A continuous mixed-style typing caret and IME handling remain open work; selection and formatting currently use the rendered SVG itself. List entries and descriptions use the same formatting controls at their own source paths. Complex-script shaping, bidi layout, and font-feature parity remain additional work.
 
+## Inline code and run language
+
+A run with `code: true` is an inline code span. It is set in the design's code font (the font scheme's `code` family, else Roboto Mono) unless the run names its own `fontFamily`. Only the font changes: a PPTX run cannot carry a background, so neither engine draws one. Composition measures the run in the code font (`RichTextOptions.codeFontFamily`, `TableLayoutOptions.codeFontFamily`; `composeSlide` passes `fonts.code`). Markdown backticks read and write code runs (see [Markdown](markdown.md)).
+
+A run with `lang` (a BCP-47 tag such as `fr-FR` or `ja-JP`) overrides the deck language for that run. It reaches the layout as `style.lang` on the run's fragments, the preview writes it as the `lang` of the run's text, and PPTX export writes `a:rPr/@lang` (with the run's own East Asian and complex-script theme fonts for that language). PPTX import reads `lang` back only when it differs from the deck language. Without `lang` a run follows the deck language.
+
 ```js
 import {fitRichText} from '@openpresentation/opf/composition';
 const fit = fitRichText(
@@ -23,6 +29,21 @@ const fit = fitRichText(
 ```
 
 Verification: `node packages/javascript/test/rich-text.mjs`, composition/pagination regressions, and `pnpm test:rich-text`. The latter produces SVG, OPF, and PPTX specimens under `artifacts/rich-text/`. The SVG specimen has been visually inspected in the browser; PPTX verification currently inspects native run XML, not a PowerPoint raster comparison.
+
+## Rich headings and quotes
+
+`title`, `subtitle`, `tag` and `quote.text` accept a string or `TextRun[]` (FA-10), with the same `TextRun` definition as body text, including `color` (a hex value, scheme slot or role, or `var:<id>`), links, `superscript`/`subscript`, `cite` and `footnote`. A string keeps exactly the layout it always had.
+
+- **Composition.** A `TextRun[]` heading fits through the same rich-text layouter as body text (`composeSlide` reports a `RichTextFit` with `richLines` on the item), with the heading's own size, shrink floor and box rules. The heading font weight (700 for the title) is the default for every run, so `bold: false` on a run is the way to lighten a word. `layoutQuote` accepts a `TextRun[]` quote text and fits the body the same way: the quotation marks join the first and last run (so run indexes and marker paths never shift) and the part reports `runs` and a `RichTextFit`; the footer (attribution and source) stays a plain string.
+- **Citations.** A marked heading run draws its marker after the run, and its note joins the slide's footnote area. Numbering follows reading order, with the heading group first: `tag`, `title`, `subtitle`, then regions, blocks and the root payload (see [footnotes-citations-captions.md](footnotes-citations-captions.md)).
+- **Variables.** A whole-field `var:<id>` whose text variable holds `TextRun[]` keeps the runs in a heading; `{{id}}` inside a run's text resolves as in body text.
+- **Markdown.** `# Title`, `## Subtitle` and the quote text keep [inline formatting](markdown.md#inline-text) both ways.
+- **Audit.** Contrast is checked for each run color; a title of runs counts as a title (`missing-slide-title`, `duplicate-slide-title` compare plain text); link text in a heading is checked like body link text.
+- **Pagination.** A long rich quote splits by text offset like body text, each piece keeping its run formatting; the heading group repeats on every page.
+
+```json
+{ "title": ["Revenue grew ", { "text": "28%", "color": "accent1", "cite": "annual-report" }], "quote": { "text": ["Cut review time by ", { "text": "40%", "bold": true }, " in a quarter"], "attribution": "VP Operations" } }
+```
 
 ## Headless range editing
 

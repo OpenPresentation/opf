@@ -4,20 +4,11 @@
   "name": "Section_Divider",
   "summary": "Simple transitional slides that signal a new topic. Help your audience follow the presentation flow.",
   "description": "Simple transitional slides that signal a new topic. Help your audience follow the presentation flow.",
-  "contentType": "Title",
-  "contentMultiple": "None",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": true,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "None",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +22,7 @@
     "Structure",
     "Navigation"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/section-divider.svg"
+  }
 }

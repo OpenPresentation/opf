@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-mongolian",
   "name": "Noto Sans Mongolian",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "cs",
   "languages": [
-    "Mongolian"
+    "mongolian"
   ],
   "major": "Noto Sans Mongolian",
   "minor": "Noto Sans Mongolian",

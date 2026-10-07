@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "daunpenh",
   "name": "DaunPenh",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "cs",
   "languages": [
-    "Khmer"
+    "khmer"
   ],
   "major": "DaunPenh",
   "minor": "DaunPenh",

@@ -4,7 +4,8 @@
 // HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
 // reduction (one non-deprecated record per Aspose.Slides ChartType), the
 // default-catalog snapshot's manifest hashes (spec/catalogs/manifest.json), and
-// deprecation links in every other kind.
+// deprecation links in every other kind, and layout-record design hints against
+// the deck's Design.
 //
 // Zero external dependencies by design. Run via `pnpm check:spec` (root) or
 // `node scripts/check-spec-integrity.mjs` directly. Exits non-zero with a
@@ -28,14 +29,16 @@ const LAYOUT_PREVIEW_INDEX_SCHEMA_ID = "https://openpresentation.org/schema/opf-
 // per-record $schema URI (https://openpresentation.org/schema/opf-<singular>/v1).
 //
 // defName maps to the matching inline $defs/<Name> entry embedded in
-// spec/schemas/opf.schema.json, when one exists. Three kinds are referenced
+// spec/schemas/opf.schema.json, when one exists. Four kinds are referenced
 // from OPF documents as bare strings with no inline object mirror, so they
 // have no matching root $def:
+//   - narratives: the root narrative is a bare string catalog reference (FA-02);
+//     a custom narrative is an inline catalogs.narratives.records entry.
 //   - layouts: Slide.layout is a bare string catalog reference.
 //   - chartTypes: Chart.type is a bare string catalog reference.
 //   - socialPlatforms: Socials is a string-valued map keyed by platform id,
 //     not an inline SocialPlatform object.
-// Those three are skipped by the companion-schema parity check (b) below,
+// Those four are skipped by the companion-schema parity check (b) below,
 // per the task's own note to skip rather than fail when there's no def.
 const CATALOG_KINDS = [
   { dir: "audiences", singular: "audience", defName: "Audience" },
@@ -44,7 +47,7 @@ const CATALOG_KINDS = [
   { dir: "font-schemes", singular: "font-scheme", defName: "FontScheme" },
   { dir: "languages", singular: "language", defName: "Language" },
   { dir: "layouts", singular: "layout", defName: null },
-  { dir: "narratives", singular: "narrative", defName: "Narrative" },
+  { dir: "narratives", singular: "narrative", defName: null },
   { dir: "purposes", singular: "purpose", defName: "Purpose" },
   { dir: "social-platforms", singular: "social-platform", defName: null },
   { dir: "themes", singular: "theme", defName: "Theme" },
@@ -73,15 +76,11 @@ const CATALOG_KINDS = [
 //   - `deprecation` marks a catalog record as deprecated in favour of another
 //     record of the same catalog. It describes the catalog itself, so inline
 //     OPF objects never carry it.
-//   - Narrative's companion schema requires `beats`; the embedded $def does
-//     not, since an inline narrative may reference a catalog id and override
-//     only some fields without repeating all beats.
 const KNOWN_DEF_DIFFERENCES = {
   Audience: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
   Purpose: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
   Tone: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
   Theme: { schemaOnlyProps: ["preview", "deprecation"], schemaOnlyRequired: ["id", "name"] },
-  Narrative: { schemaOnlyProps: ["deprecation"], schemaOnlyRequired: ["id", "name", "beats"] },
   ColorScheme: {
     schemaOnlyProps: ["name", "summary", "description", "tags", "preview", "deprecation"],
     defOnlyProps: ["primary", "secondary", "accent", "background", "surface", "text", "textSecondary", "custom"],
@@ -236,8 +235,9 @@ async function checkCompanionSchemaParity(opfSchema) {
 
 // (c) Preview index <-> on-disk HTML parity, exact byte-length check, no
 // orphan HTML files.
-// (e) Narrative beat layoutHint values must resolve to a bundled layout id.
-async function checkNarrativeLayoutHints() {
+// (e) Narrative beat layout values must resolve to a bundled layout id, and a
+// record's duration range (and its index entry's) must not be inverted (FA-02).
+async function checkNarrativeRecords() {
   const layoutDir = path.join(catalogsRoot, "layouts");
   const layoutFiles = await listJsonRecordFiles(layoutDir);
   const layoutIds = new Set(layoutFiles.map((file) => file.replace(/\.json$/, "")));
@@ -247,15 +247,24 @@ async function checkNarrativeLayoutHints() {
   for (const file of narrativeFiles) {
     const recordPath = path.join(narrativeDir, file);
     const record = await readJson(recordPath);
+    if (record.duration && record.duration.min > record.duration.max) {
+      fail(`[e] ${displayPath(recordPath)} duration.min ${record.duration.min} is greater than duration.max ${record.duration.max}`);
+    }
     if (!Array.isArray(record.beats)) continue;
     for (let index = 0; index < record.beats.length; index++) {
       const beat = record.beats[index];
-      if (!beat || typeof beat.layoutHint !== "string") continue;
-      if (!layoutIds.has(beat.layoutHint)) {
+      if (!beat || typeof beat.layout !== "string") continue;
+      if (!layoutIds.has(beat.layout)) {
         fail(
-          `[e] ${displayPath(recordPath)} beats[${index}].layoutHint '${beat.layoutHint}' is not a bundled layout id`,
+          `[e] ${displayPath(recordPath)} beats[${index}].layout '${beat.layout}' is not a bundled layout id`,
         );
       }
+    }
+  }
+  const index = await readJson(path.join(narrativeDir, "index.json"));
+  for (const entry of index.records ?? []) {
+    if (entry.duration && entry.duration.min > entry.duration.max) {
+      fail(`[e] narratives/index.json entry '${entry.id}' duration.min ${entry.duration.min} is greater than duration.max ${entry.duration.max}`);
     }
   }
 }
@@ -323,7 +332,10 @@ async function checkIndexSchemaUris() {
 // mappings.renderers["aspose-slides"].chartType (compositions with no single
 // ChartType may omit it, but only when deprecated); the non-deprecated records
 // hold exactly one record per ChartType; and every deprecated record points
-// at a non-deprecated replacement and is flagged in index.json. Source:
+// at a non-deprecated replacement and is flagged in index.json. A combination
+// record (mappings.openxml.composition "mixed", FA-15 combo) names the ChartType
+// its chart starts from plus the series types it switches to (every
+// "*SeriesType" key), all Aspose.Slides members; it owns no ChartType. Source:
 // https://reference.aspose.com/slides/net/aspose.slides.charts/charttype/
 // (see docs/programs/font-fidelity-everywhere/aspose-chart-types.md).
 const ASPOSE_SLIDES_CHART_TYPES = new Set([
@@ -355,12 +367,17 @@ async function checkChartTypesAsposeSupported() {
     records.set(record.id, record);
   }
   const owners = new Map();
+  let combinations = 0;
   for (const [id, record] of records) {
     const where = `[f] chart-types/${id}.json`;
     const chartType = record.mappings?.renderers?.["aspose-slides"]?.chartType;
     const deprecation = record.deprecation;
     if (chartType !== undefined && !ASPOSE_SLIDES_CHART_TYPES.has(chartType)) {
       fail(`${where}: '${chartType}' is not an Aspose.Slides ChartType member`);
+    }
+    const aspose = record.mappings?.renderers?.["aspose-slides"] ?? {};
+    for (const [key, value] of Object.entries(aspose)) {
+      if (/SeriesType$/.test(key) && !ASPOSE_SLIDES_CHART_TYPES.has(value)) fail(`${where}: ${key} '${value}' is not an Aspose.Slides ChartType member`);
     }
     if (chartType === "SeriesOfMixedTypes") {
       fail(`${where}: SeriesOfMixedTypes is read-only in Aspose.Slides and cannot back a chart type`);
@@ -383,12 +400,17 @@ async function checkChartTypesAsposeSupported() {
       fail(`${where}: non-deprecated chart types must name an Aspose.Slides ChartType in mappings.renderers["aspose-slides"].chartType`);
       continue;
     }
+    if (record.mappings?.openxml?.composition === "mixed") {
+      if (!Object.keys(aspose).some((key) => /SeriesType$/.test(key))) fail(`${where}: a mixed composition names the series type it switches to (for example lineSeriesType)`);
+      combinations += 1;
+      continue;
+    }
     if (owners.has(chartType)) {
       fail(`${where}: Aspose.Slides ChartType '${chartType}' is already covered by '${owners.get(chartType)}'; deprecate one of them`);
     }
     owners.set(chartType, id);
   }
-  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${records.size - owners.size} deprecated`);
+  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${combinations} combination${combinations === 1 ? '' : 's'}, ${records.size - owners.size - combinations} deprecated`);
 }
 
 // (g) spec/catalogs is a pinned snapshot of the default catalog published by
@@ -432,17 +454,73 @@ async function checkDeprecationLinks() {
   }
 }
 
+// (i) Layout records share the deck's design vocabulary (FA-01). layout.schema.json's DesignHints repeats the
+// keys of opf.schema.json's Design that a layout can carry, and a cross-file $ref cannot express that subset,
+// so this rule keeps the two copies from drifting: every DesignHints key must exist in Design with the same
+// type and enum values (slideImage compares the position enum of its object form). Bundled layout records must
+// carry only fields the layout schema defines, so a removed field (contentType, slideTitle, ...) cannot come back.
+async function checkLayoutDesignHints(opfSchema) {
+  const layoutSchema = await readJson(path.join(schemasRoot, "layout.schema.json"));
+  const hints = layoutSchema.$defs?.DesignHints?.properties;
+  const design = opfSchema.$defs?.Design?.properties;
+  if (!hints || !design) {
+    fail("[i] layout.schema.json $defs/DesignHints or opf.schema.json $defs/Design is missing");
+    return;
+  }
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  for (const [key, hint] of Object.entries(hints)) {
+    const counterpart = design[key];
+    if (!counterpart) {
+      fail(`[i] layout.schema.json DesignHints.${key} has no counterpart in opf.schema.json Design`);
+      continue;
+    }
+    if (key === "slideImage") {
+      const object = (counterpart.oneOf ?? []).find((option) => option.properties?.position);
+      if (!same(hint.properties?.position?.enum, object?.properties?.position?.enum)) {
+        fail("[i] DesignHints.slideImage.position values differ from Design.slideImage.position");
+      }
+      continue;
+    }
+    if (hint.type !== counterpart.type || !same(hint.enum, counterpart.enum)) {
+      fail(`[i] DesignHints.${key} type/values differ from Design.${key}`);
+    }
+  }
+  const layoutDir = path.join(catalogsRoot, "layouts");
+  const known = new Set(Object.keys(layoutSchema.properties));
+  for (const file of await listJsonRecordFiles(layoutDir)) {
+    const record = await readJson(path.join(layoutDir, file));
+    for (const key of Object.keys(record)) {
+      if (!known.has(key) && !key.startsWith("x-")) fail(`[i] layouts/${file}: '${key}' is not a layout schema field`);
+    }
+  }
+}
+
+// (j) A font scheme's `languages` entries are languages catalog ids (FA-16), so the list joins that catalog: every
+// entry must be the id of a bundled language record.
+async function checkFontSchemeLanguages() {
+  const languageIds = new Set((await listJsonRecordFiles(path.join(catalogsRoot, "languages"))).map((file) => file.replace(/.json$/, "")));
+  const dir = path.join(catalogsRoot, "font-schemes");
+  for (const file of await listJsonRecordFiles(dir)) {
+    const record = await readJson(path.join(dir, file));
+    for (const entry of record.languages ?? []) {
+      if (!languageIds.has(entry)) fail(`[j] font-schemes/${file}: languages entry '${entry}' is not a bundled language id`);
+    }
+  }
+}
+
 async function main() {
   const opfSchema = await readJson(path.join(schemasRoot, "opf.schema.json"));
 
   await checkCatalogRecordParity();
   await checkCompanionSchemaParity(opfSchema);
-  await checkNarrativeLayoutHints();
+  await checkNarrativeRecords();
   await checkPreviewIndex();
   await checkIndexSchemaUris();
   await checkChartTypesAsposeSupported();
   await checkSnapshotManifest();
   await checkDeprecationLinks();
+  await checkLayoutDesignHints(opfSchema);
+  await checkFontSchemeLanguages();
 
   if (failures.length > 0) {
     process.stderr.write(`spec integrity check failed: ${failures.length} problem(s) found\n\n`);

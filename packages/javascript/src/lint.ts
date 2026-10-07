@@ -23,9 +23,17 @@ import { unusedReferenceWarnings } from './annotation-validation.js';
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import type { AuditFix } from './audit-types.js';
+import {
+	describeDurationRange,
+	durationOutsideNarrative,
+	durationRangeInverted,
+	resolveNarrative,
+	unknownBeatReferences,
+} from './narrative-plan.js';
 
 // RR-54: chart and table data warnings keep their validator code as the rule id.
-const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-data-source-unresolved', 'chart-mapping-adapted']);
+const CODE_HIGHLIGHT_WARNING_CODES = new Set(['code-highlight-out-of-range', 'code-highlight-range-reversed']);
+const DATA_WARNING_CODES = new Set(['chart-value-not-numeric', 'chart-mapping-adapted', 'chart-highlight-adapted', 'slide-theme-dimensions']);
 
 export type LintSeverity = 'error' | 'warning' | 'info';
 export interface LintLocation {
@@ -689,13 +697,6 @@ export function lintPresentation(
 			continue;
 		// These schema forms deliberately allow arbitrary human descriptions.
 		if (kind !== 'layouts' && /free-form/i.test(field.description)) continue;
-		if (
-			kind === 'narratives' &&
-			(object(field.value) ||
-				(field.cursor.root.$id === schemas.presentation.$id &&
-					field.cursor.path === '/$defs/Narrative/properties/id'))
-		)
-			continue;
 		const value = object(field.value) ? field.value.id : field.value,
 			path = object(field.value) ? `${field.path}/id` : field.path;
 		if (
@@ -769,6 +770,15 @@ export function lintPresentation(
 	const numberFixes = validation.warnings.some((issue) => issue.params.code === 'chart-value-not-numeric') ? chartNumberFixPaths(document) : new Map<string, ChartNumberFix>();
 	// Retain any existing reference warning not covered by the schema walk.
 	for (const issue of validation.warnings) {
+		if (typeof issue.params.code === 'string' && CODE_HIGHLIGHT_WARNING_CODES.has(issue.params.code)) {
+			diagnostics.push({
+				...schemaDiagnostic(issue),
+				ruleId: `opf/${issue.params.code}`,
+				severity: 'warning',
+				help: 'Marked lines count from 1 by line break in code.source. The entry marks nothing past the last line; change it to a line the code has, or remove it.',
+			});
+			continue;
+		}
 		if (typeof issue.params.code === 'string' && DATA_WARNING_CODES.has(issue.params.code)) {
 			const fix = issue.params.code === 'chart-value-not-numeric' ? numberFixes.get(issue.path) : undefined;
 			if (fix) {
@@ -787,8 +797,8 @@ export function lintPresentation(
 				severity: 'warning',
 				help: issue.params.code === 'chart-value-not-numeric'
 					? 'Write chart values as numbers (or strict decimal strings such as "12.5" or "1e6"); put currency, percent and units in the column format ({ "name": "Revenue", "format": "$#,##0" }). The value is plotted as a gap.'
-					: issue.params.code === 'chart-data-source-unresolved'
-						? 'No engine loads chart data sources. Import the data inline (columns and rows, recording the origin in data.source) or reference a top-level dataset.'
+					: issue.params.code === 'slide-theme-dimensions'
+						? 'A PPTX has one slide size. Set design.dimensions on the deck, or give every slide the same theme dimensions.'
 						: 'The mapping entry is ignored. Remove it, or name a different column.',
 			});
 			continue;
@@ -876,6 +886,64 @@ export function lintPresentation(
 			}
 		}
 	}
+	// FA-02: the narrative is a pointer; check the slides' beat links and the target duration against the plan.
+	const narrative = resolveNarrative(document, options.catalogs?.narratives);
+	if (narrative) {
+		const id = String((document as Record<string, unknown>).narrative);
+				const beatSuggestions = (beat: string): LintSuggestion[] =>
+			narrative.beats
+				.slice()
+				.sort(
+					(a, b) =>
+						distance(beat, a) - distance(beat, b) || (a < b ? -1 : a > b ? 1 : 0),
+				)
+				.slice(0, 5)
+				.map((value) => ({
+					value,
+					label: value,
+					origin: narrative.origin === 'built-in' ? 'built-in' : narrative.origin,
+					definition: `narratives/${id}#/beats`,
+				}));
+		for (const reference of unknownBeatReferences(document, narrative))
+			diagnostics.push({
+				ruleId: 'opf/unknown-beat',
+				severity: 'warning',
+				scope: 'document',
+				path: reference.path,
+				message: `Slide ${reference.slide + 1} names beat ${JSON.stringify(reference.beat)}, which narrative ${JSON.stringify(id)} does not define.`,
+				help: `Use one of the narrative's beat ids (${narrative.beats.join(', ')}), add the beat to the narrative record (an inline record in catalogs.narratives.records), or remove the beat link. Nothing is drawn from a beat.`,
+				definition: schemas.presentation.$id + '#/$defs/Slide/properties/beat',
+				lookup: ['opf', 'catalog', 'narratives'],
+				suggestions: beatSuggestions(reference.beat),
+			});
+		const outside = durationOutsideNarrative(document, narrative);
+		if (outside)
+			diagnostics.push({
+				ruleId: 'opf/duration-outside-narrative',
+				severity: 'warning',
+				scope: 'document',
+				path: '/duration',
+				message: `The target duration of ${outside.duration} minutes is outside the ${describeDurationRange(outside.range)} narrative ${JSON.stringify(id)} suits.`,
+				help: 'Change the target duration, choose a narrative that suits it, or widen the range of an inline narrative record. The range describes the narrative, so nothing is drawn or exported differently.',
+				definition: schemas.presentation.$id + '#/properties/duration',
+				lookup: ['opf', 'catalog', 'narratives'],
+			});
+	}
+	const inlineNarratives = object(document) && object(document.catalogs) && object(document.catalogs.narratives) ? document.catalogs.narratives.records : undefined;
+	if (Array.isArray(inlineNarratives))
+		inlineNarratives.forEach((record, index) => {
+			if (durationRangeInverted(record))
+				diagnostics.push({
+					ruleId: 'opf/narrative-duration-range',
+					severity: 'warning',
+					scope: 'document',
+					path: `/catalogs/narratives/records/${index}/duration`,
+					message: 'The narrative duration range has min greater than max.',
+					help: 'Swap the bounds so min is the shortest and max the longest talk length, in minutes.',
+					definition: schemas.narrative.$id + '#/properties/duration',
+					lookup: ['opf', 'schema', 'narrative', '/properties/duration'],
+				});
+		});
 	// RR-34: a reference no run cites is advisory; cite it or remove it.
 	for (const issue of unusedReferenceWarnings(document))
 		diagnostics.push({

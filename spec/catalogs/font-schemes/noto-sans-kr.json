@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "noto-sans-kr",
   "name": "Noto Sans KR",
-  "app": "Google Slides",
+  "app": "google-slides",
   "languageFamily": "ea",
   "languages": [
-    "Korean"
+    "korean"
   ],
   "major": "Noto Sans KR",
   "minor": "Noto Sans KR",

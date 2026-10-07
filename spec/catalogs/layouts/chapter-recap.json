@@ -4,20 +4,11 @@
   "name": "Chapter_Recap",
   "summary": "Mid-deck checkpoint that shows what you've covered and what is next. Keeps long presentations navigable.",
   "description": "Mid-deck checkpoint that shows what you've covered and what is next. Keeps long presentations navigable.",
-  "contentType": "Title",
-  "contentMultiple": "None",
-  "contentAlignment": "Center",
-  "contentBox": false,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": true,
-  "slideTitleAlignment": "Center",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "None",
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center",
+    "contentBox": false
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +22,7 @@
     "Pacing",
     "Recap"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/chapter-recap.svg"
+  }
 }

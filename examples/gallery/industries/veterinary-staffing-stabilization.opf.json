@@ -51,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#B45309",
-        "risk": "#047857"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "impact",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": {
@@ -149,7 +136,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "bullet-column",
+        "type": "column",
         "data": {
           "columns": [
             "Quarter",
@@ -341,7 +328,7 @@
     },
     "metric-data": {
       "src": "./data/veterinary-staffing-stabilization.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Veterinary Staffing Stabilization data"
     },
     "watermark": {

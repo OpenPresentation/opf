@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "status-update",
-    "description": "S&OP Exception Review uses a compact evidence-to-decision arc for Cobalt Supply.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "s-and-op-exception-review-arc",
   "design": {
     "theme": "classic",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F59E0B",
-        "risk": "#E2E8F0"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "mangal",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "a4",
     "background": {
@@ -181,7 +145,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "dot-plot",
+        "type": "scatter",
         "data": {
           "columns": [
             "Quarter",
@@ -525,7 +489,7 @@
     },
     "metric-data": {
       "src": "./data/s-and-op-exception-review.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "S&OP Exception Review data"
     },
     "watermark": {
@@ -555,24 +519,25 @@
           "id": "s-and-op-exception-review-arc",
           "name": "Operations Decision Arc",
           "summary": "A custom arc for Cobalt Supply.",
+          "description": "S&OP Exception Review uses a compact evidence-to-decision arc for Cobalt Supply.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

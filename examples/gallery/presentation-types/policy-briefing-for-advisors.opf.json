@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "educate",
-    "description": "Policy Briefing for Advisors uses a compact evidence-to-decision arc for Civic Futures Lab.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "policy-briefing-for-advisors-arc",
   "design": {
     "theme": "minimal",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F8FAFC",
-        "risk": "#334155"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "vrinda",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "16:10",
     "background": {
@@ -173,7 +137,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column-2x",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -343,7 +307,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bullet-bar-2x",
+            "type": "bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -519,7 +483,7 @@
     },
     "metric-data": {
       "src": "./data/policy-briefing-for-advisors.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Policy Briefing for Advisors data"
     },
     "watermark": {
@@ -549,24 +513,25 @@
           "id": "policy-briefing-for-advisors-arc",
           "name": "Policy Briefing Decision Arc",
           "summary": "A custom arc for Civic Futures Lab.",
+          "description": "Policy Briefing for Advisors uses a compact evidence-to-decision arc for Civic Futures Lab.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

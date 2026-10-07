@@ -2,10 +2,10 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "malgun-gothic",
   "name": "Malgun Gothic",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "ea",
   "languages": [
-    "Korean"
+    "korean"
   ],
   "major": "Malgun Gothic",
   "minor": "Malgun Gothic",

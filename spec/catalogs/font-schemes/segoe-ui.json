@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
   "id": "segoe-ui",
   "name": "Segoe UI",
-  "app": "PowerPoint",
+  "app": "powerpoint",
   "languageFamily": "latin",
   "languages": [],
   "major": "Segoe UI Semibold",

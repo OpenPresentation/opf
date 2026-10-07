@@ -8,9 +8,9 @@
     "general-audience",
     "industry-peers"
   ],
-  "durationRange": {
-    "minMinutes": 15,
-    "maxMinutes": 45
+  "duration": {
+    "min": 15,
+    "max": 45
   },
   "tags": [
     "talk",
@@ -48,7 +48,7 @@
       "id": "recap",
       "name": "Recap",
       "description": "Restate the promise, the mechanism, and the call to action in a single short slide. Give the audience the line they'll repeat to a colleague and the one image that will stick with them after the lights come up.",
-      "layoutHint": "title"
+      "layout": "title"
     }
   ]
 }

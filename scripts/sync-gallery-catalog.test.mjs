@@ -137,6 +137,43 @@ describe("planSnapshot", () => {
   });
 });
 
+describe("--allow-removed waiver", () => {
+  const dropped = (gallery, kind, id) => {
+    const at = gallery[kind].index.records.findIndex((entry) => entry.id === id);
+    gallery[kind].records.splice(at, 1);
+    gallery[kind].index.records.splice(at, 1);
+    gallery[kind].index.contentSha256 = catalogContentSha256(gallery[kind].records);
+  };
+
+  test("lets exactly the listed ids disappear and still refuses any other lost id", () => {
+    const gallery = publishedFromSnapshot();
+    dropped(gallery, "chart-types", "pie");
+    dropped(gallery, "chart-types", "funnel");
+    const refused = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source, allowRemoved: { "chart-types": ["pie"] } });
+    assert.equal(refused.problems.filter((problem) => /no longer publishes/.test(problem)).length, 1, refused.problems.join(String.fromCharCode(10)));
+    assert.ok(refused.problems.some((problem) => /chart-types: the gallery no longer publishes 'funnel'/.test(problem)));
+
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source, allowRemoved: { "chart-types": ["pie", "funnel"] } });
+    assert.deepEqual(plan.problems, []);
+    assert.deepEqual(plan.kinds["chart-types"].removed.sort(), ["funnel", "pie"]);
+    assert.equal(plan.kinds["chart-types"].records.some((record) => record.id === "pie"), false);
+    assert.equal(plan.kinds["chart-types"].manifestEntry.records, snapshot.current["chart-types"].records.length - 2);
+  });
+
+  test("drops an id the gallery still publishes and rejects an id the snapshot does not hold", () => {
+    const gallery = publishedFromSnapshot();
+    const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source, allowRemoved: { "chart-types": ["pie", "no-such-id"] } });
+    assert.ok(plan.problems.some((problem) => /--allow-removed 'no-such-id' is not in the snapshot/.test(problem)), plan.problems.join(String.fromCharCode(10)));
+    assert.deepEqual(plan.kinds["chart-types"].removed, ["pie"]);
+    assert.equal(plan.kinds["chart-types"].records.some((record) => record.id === "pie"), false);
+  });
+
+  test("parseIncludes reads the same shape for --allow-removed", () => {
+    assert.deepEqual(parseIncludes(["--allow-removed", "chart-types:a,b", "--include", "layouts:c"], "--allow-removed"), { "chart-types": ["a", "b"] });
+    assert.throws(() => parseIncludes(["--allow-removed", "chart-types"], "--allow-removed"), /--allow-removed needs/);
+  });
+});
+
 describe("applySnapshot", () => {
   let workdir;
   before(async () => {
@@ -204,6 +241,26 @@ describe("rehashSnapshot (core-first edits)", () => {
     await rehashSnapshot(workdir);
     const problems = await verifySnapshot(workdir);
     assert.ok(problems.some((problem) => problem.includes("a mirrored kind must match the gallery hash")), problems.join("\n"));
+  });
+});
+
+describe("rehashSnapshot --match-gallery", () => {
+  test("sets the gallery block of a mirrored kind to the rehashed records", async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), "opf-catalog-match-"));
+    try {
+      await cp(catalogsRoot, dir, { recursive: true });
+      const file = path.join(dir, "tones", "formal.json");
+      const record = JSON.parse(await readFile(file, "utf8"));
+      await writeFile(file, `${JSON.stringify({ ...record, summary: "Edited in core first." }, null, 2)}
+`);
+      const changed = await rehashSnapshot(dir, { matchGallery: true });
+      assert.deepEqual(changed.sort(), ["manifest.json (tones)", "tones/index.json"]);
+      assert.deepEqual(await verifySnapshot(dir), []);
+      const manifest = await readJson(path.join(dir, "manifest.json"));
+      assert.equal(manifest.kinds.tones.gallery.contentSha256, manifest.kinds.tones.contentSha256);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
   });
 });
 

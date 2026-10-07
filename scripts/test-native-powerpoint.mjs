@@ -39,7 +39,7 @@ if (mode === 'generate') {
   const faces = [['calibri.ttf',400,false],['calibrib.ttf',700,false],['calibrii.ttf',400,true],['calibriz.ttf',700,true]];
   const fontFiles = faces.map(([file]) => path.join(fontDir,file));
   const fonts = createFontRegistry(await Promise.all(faces.map(async ([file,weight,italic]) => ({data:new Uint8Array(await readFile(path.join(fontDir,file))),family:'Calibri',weight,italic}))),{substitutionPolicy:'none'});
-  const document = {design:{fontScheme:{id:'calibri',code:{family:'Calibri'}},dimensions:{widthInches:1280/96,heightInches:720/96}},slides:[
+  const document = {design:{fontScheme:{id:'calibri',code:'Calibri'},dimensions:{widthInches:1280/96,heightInches:720/96}},slides:[
     {title:'Native text verification',text:'PowerPoint keeps this content editable. Calibri uses the same installed font bytes for measurement and the SVG raster comparison.'},
     {title:'Styled and merged table',table:{columns:['Team','Stage','Status'],rows:[
       [{value:['Mixed ',{text:'bold',bold:true},' text'],rowSpan:2,style:{fill:'#DDEEFF',verticalAlign:'bottom',align:'right',padding:{left:12,right:18,top:4,bottom:8},borders:{right:{color:'#225588',width:3,dash:'dash'}}}},'Editable cell',{value:'Ready',style:{fill:'#E5F5EA',align:'center'}}],

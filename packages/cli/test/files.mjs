@@ -63,12 +63,12 @@ try {
   assert.equal(first.ok, true); assert.equal(first.written, true); assert.equal(first.format, 'svg');
   assert.equal(first.valid, true); assert.equal(first.schemaValid, true); assert.deepEqual(Object.keys(first.counts), ['error', 'warning', 'info']);
   assert.equal(first.sha256, sha(await read('deck.opf.json')), 'report digest equals the opf validate/lint digest of the input');
-  assert.deepEqual((await readdir(path.join(temp, 'svg1'))).sort(), ['deck-001.svg', 'deck-002.svg', 'deck-003.svg']);
+  assert.deepEqual((await readdir(path.join(temp, 'svg1'))).sort(), ['Files-test-001.svg', 'Files-test-002.svg', 'Files-test-003.svg']);
   assert.deepEqual(first.outputs.map(item => item.slide), [1, 2, 3]);
   for (const item of first.outputs) {assert.equal(item.sha256, sha(await readFile(item.file))); assert.equal(item.width, 1280); assert.equal(item.height, 720);}
   assert.ok(first.fonts.substitutions.some(item => item.requested === 'Aptos' && item.resolved === 'Intos'), 'bundled Intos stands in for Aptos');
   assert.equal(first.fonts.userFonts.length, 0);
-  const svgText = (await read('svg1/deck-001.svg')).toString('utf8');
+  const svgText = (await read('svg1/Files-test-001.svg')).toString('utf8');
   assert.ok(svgText.includes('Quarterly review') && svgText.includes('@font-face'), 'SVG is standalone: it carries the faces its text names');
   assert.ok(!/(?:href|src)="https?:|url\(\s*["']?https?:/i.test(svgText), 'no remote reference in the SVG (font license text may name URLs)');
   assert.ok(svgText.length < 8 * 1024 * 1024, 'only the used faces are embedded');
@@ -90,8 +90,8 @@ try {
   // render: PNG at a scale, a slide selection, one slide to stdout.
   const pngs = run(['render', 'deck.opf.json', '--format', 'png', '--scale', '0.5', '--slides', '1,3', '--out', 'png1']).report;
   assert.deepEqual(pngs.outputs.map(item => [item.slide, item.width, item.height]), [[1, 640, 360], [3, 640, 360]]);
-  assert.deepEqual((await readdir(path.join(temp, 'png1'))).sort(), ['deck-001.png', 'deck-003.png']);
-  assert.deepEqual([...(await read('png1/deck-001.png')).subarray(0, 4)], [0x89, 0x50, 0x4e, 0x47]);
+  assert.deepEqual((await readdir(path.join(temp, 'png1'))).sort(), ['Files-test-001.png', 'Files-test-003.png']);
+  assert.deepEqual([...(await read('png1/Files-test-001.png')).subarray(0, 4)], [0x89, 0x50, 0x4e, 0x47]);
   const again = run(['render', 'deck.opf.json', '--format', 'png', '--scale', '0.5', '--slides', '1,3', '--out', 'png2']).report;
   assert.deepEqual(again.outputs.map(item => item.sha256), pngs.outputs.map(item => item.sha256), 'deterministic PNG');
   const piped = run(['render', 'deck.opf.json', '--format', 'png', '--slides', '2', '--out', '-', '--scale', '0.25']);
@@ -134,7 +134,9 @@ try {
   ]};
   await writeFile(path.join(temp, 'media', 'images.opf.json'), JSON.stringify(images));
   const imgReport = run(['render', 'media/images.opf.json', '--out', 'media-out']).report;
-  assert.ok((await read('media-out/images-001.svg')).toString('utf8').includes('data:image/png;base64'), 'inside image embedded');
+  // Output files are named by the deck's `name` ("Images"); readdir checks the exact case, also on case-insensitive file systems.
+  assert.ok((await readdir(path.join(temp, 'media-out'))).includes('Images-001.svg'), 'the output file is named after the deck name, case kept');
+  assert.ok((await read('media-out/Images-001.svg')).toString('utf8').includes('data:image/png;base64'), 'inside image embedded');
   const found = new Set(imgReport.diagnostics.filter(item => /asset/.test(item.ruleId)).map(item => `${item.path} ${item.ruleId}`));
   assert.ok(found.has('/slides/2/image cli/asset-blocked') && found.has('/slides/3/image cli/asset-blocked'), 'files outside the folder or not images are blocked');
   assert.ok(found.has('/slides/1/image render/unresolved-asset') && found.has('/slides/4/image render/unresolved-asset'));
@@ -160,7 +162,7 @@ try {
   assert.ok(noTags.outputs[0].bytes < pptx.outputs[0].bytes);
 
   const pdf = run(['export', 'deck.opf.json', '--format', 'pdf']).report;
-  assert.equal((await read('deck.pdf')).subarray(0, 5).toString(), '%PDF-'); assert.ok(['vector', 'raster'].includes(pdf.pdf.mode)); assert.equal(pdf.outputs[0].pages, 3);
+  assert.equal((await read('Files-test.pdf')).subarray(0, 5).toString(), '%PDF-'); assert.ok(['vector', 'raster'].includes(pdf.pdf.mode)); assert.equal(pdf.outputs[0].pages, 3);
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--out', 'again.pdf']).report.outputs[0].sha256, pdf.outputs[0].sha256, 'deterministic PDF');
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'raster', '--out', 'raster.pdf']).report.pdf.mode, 'raster');
   if (pdf.pdf.vectorSupported) {
@@ -175,8 +177,8 @@ try {
 
   const zip = run(['export', 'deck.opf.json', '--format', 'png', '--scale', '0.25', '--out', 'slides.zip']).report;
   const zipBytes = await read('slides.zip');
-  assert.deepEqual(zipNames(zipBytes), ['deck-001.png', 'deck-002.png', 'deck-003.png']);
-  assert.deepEqual([...zipEntry(zipBytes, 'deck-002.png').subarray(0, 4)], [0x89, 0x50, 0x4e, 0x47]);
+  assert.deepEqual(zipNames(zipBytes), ['Files-test-001.png', 'Files-test-002.png', 'Files-test-003.png']);
+  assert.deepEqual([...zipEntry(zipBytes, 'Files-test-002.png').subarray(0, 4)], [0x89, 0x50, 0x4e, 0x47]);
   assert.equal(run(['export', 'deck.opf.json', '--format', 'png', '--scale', '0.25', '--out', 'slides2.zip']).report.outputs[0].sha256, zip.outputs[0].sha256, 'deterministic archive');
   run(['export', 'deck.opf.json', '--format', 'svg', '--svg-fonts', 'none', '--out', 'svgs.zip']);
   assert.equal(zipNames(await read('svgs.zip')).length, 3);
@@ -184,7 +186,7 @@ try {
   assert.ok((await read('two.svg')).toString('utf8').includes('Priorities'));
   run(['export', 'deck.opf.json', '--format', 'svg', '--out', 'all.svg'], {status: 2});
   run(['export', 'deck.opf.json', '--format', 'png', '--out', 'png-dir', '--slides', '1-2']);
-  assert.deepEqual((await readdir(path.join(temp, 'png-dir'))).sort(), ['deck-001.png', 'deck-002.png']);
+  assert.deepEqual((await readdir(path.join(temp, 'png-dir'))).sort(), ['Files-test-001.png', 'Files-test-002.png']);
   const pipedPdf = run(['export', 'deck.opf.json', '--format', 'pdf', '--out', '-']);
   assert.equal(pipedPdf.raw.subarray(0, 5).toString(), '%PDF-'); assert.equal(pipedPdf.stderrJson.outputs[0].sha256, sha(pipedPdf.raw));
 
@@ -231,6 +233,38 @@ try {
     assert.equal(signalsRun.status, 2); assert.equal(JSON.parse(signalsRun.stderr).code, 'peer-too-old'); checks++;
     console.log('NOTE the installed opf-pptx predates import signals; --signals was refused as documented.');
   }
+
+  // FA-08: per-slide output and PDF skip hidden slides unless --include-hidden; slides named with --slides are always written.
+  const hiddenDeck = {name: 'Hidden test', slides: [{id: 'h1', title: 'Shown one'}, {id: 'h2', title: 'Backup slide', hidden: true}, {id: 'h3', title: 'Shown two'}]};
+  await writeFile(path.join(temp, 'hidden.opf.json'), JSON.stringify(hiddenDeck));
+  const skipped = run(['render', 'hidden.opf.json', '--out', 'hid-default']).report;
+  assert.deepEqual(skipped.outputs.map(item => item.slide), [1, 3], 'hidden slide 2 is not rendered'); assert.deepEqual(skipped.skippedHidden, [2]);
+  assert.deepEqual((await readdir(path.join(temp, 'hid-default'))).sort(), ['Hidden-test-001.svg', 'Hidden-test-003.svg'], 'file numbers stay the slide numbers');
+  const included = run(['render', 'hidden.opf.json', '--out', 'hid-all', '--include-hidden']).report;
+  assert.deepEqual(included.outputs.map(item => item.slide), [1, 2, 3]); assert.deepEqual(included.skippedHidden, []);
+  assert.deepEqual(run(['render', 'hidden.opf.json', '--slides', '2', '--out', 'hid-named']).report.outputs.map(item => item.slide), [2], 'a named hidden slide is written');
+  assert.equal(run(['export', 'hidden.opf.json', '--format', 'pdf', '--out', 'hid-default.pdf']).report.outputs[0].pages, 2, 'the PDF skips the hidden slide');
+  assert.equal(run(['export', 'hidden.opf.json', '--format', 'pdf', '--out', 'hid-all.pdf', '--include-hidden']).report.outputs[0].pages, 3);
+  run(['export', 'hidden.opf.json', '--format', 'png', '--scale', '0.25', '--out', 'hid-zip.zip']);
+  assert.deepEqual(zipNames(await read('hid-zip.zip')), ['Hidden-test-001.png', 'Hidden-test-003.png'], 'the zip skips the hidden slide');
+  run(['export', 'hidden.opf.json', '--format', 'pptx', '--out', 'hid.pptx', '--include-hidden'], {status: 2});
+  run(['export', 'hidden.opf.json', '--format', 'pptx', '--out', 'hid.pptx']);
+  await writeFile(path.join(temp, 'allhidden.opf.json'), JSON.stringify({name: 'All hidden', slides: [{title: 'One', hidden: true}, {title: 'Two', hidden: true}]}));
+  const none = run(['render', 'allhidden.opf.json', '--out', 'all-hidden'], {status: 1});
+  assert.match(none.stderrJson.error, /Every slide is hidden/);
+  assert.equal(run(['render', 'allhidden.opf.json', '--out', 'all-hidden', '--include-hidden']).report.outputs.length, 2);
+
+  // FA-08: output files are named by the deck's filename, else its slugified name, else the input file name (the editor's rule).
+  const named = async (document, file) => { await writeFile(path.join(temp, file), JSON.stringify(document)); return run(['export', file, '--format', 'pdf']).report.outputs[0].file; };
+  const base = file => path.basename(file);
+  assert.equal(base(await named({filename: 'Board Pack.PDF', name: 'Ignored', slides: [{title: 'A'}]}, 'n1.opf.json')), 'Board-Pack.pdf', 'filename wins, its extension is dropped');
+  assert.equal(base(await named({name: 'Q4: Review / 2026', slides: [{title: 'A'}]}, 'n2.opf.json')), 'Q4-Review-2026.pdf', 'name is slugified');
+  assert.equal(base(await named({slides: [{title: 'A'}]}, 'n3.opf.json')), 'n3.pdf', 'the input file name is the last resort');
+  assert.equal(base(await named({filename: '  .pptx', name: 'Fallback name', slides: [{title: 'A'}]}, 'n4.opf.json')), 'Fallback-name.pdf', 'an empty filename falls through to name');
+  assert.equal(base(run(['export', 'n1.opf.json', '--format', 'pptx', '--force']).report.outputs[0].file), 'Board-Pack.pptx');
+  assert.deepEqual((await readdir(temp)).filter(file => file.startsWith('Board-Pack')).sort(), ['Board-Pack.pdf', 'Board-Pack.pptx']);
+  const dir = run(['render', 'n2.opf.json']).report.outputs[0].file;
+  assert.equal(path.basename(path.dirname(dir)), 'Q4-Review-2026-slides'); assert.equal(path.basename(dir), 'Q4-Review-2026-001.svg');
 
   // Fonts and options: bad inputs are usage errors.
   run(['render', 'deck.opf.json', '--font-dir', 'does-not-exist'], {status: 2});

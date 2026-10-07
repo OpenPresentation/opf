@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "conference-talk",
-    "description": "Revenue Forecast Inspection uses a compact evidence-to-decision arc for FoundryGrid.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "revenue-forecast-inspection-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#B45309",
-        "risk": "#047857"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "noto-sans-georgian",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": {
@@ -172,7 +136,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "line-with-markers-2x",
+        "type": "line-with-markers",
         "data": {
           "columns": [
             "Quarter",
@@ -342,7 +306,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "sparkline-3x",
+            "type": "line",
             "data": {
               "columns": [
                 "Quarter",
@@ -517,7 +481,7 @@
     },
     "metric-data": {
       "src": "./data/revenue-forecast-inspection.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Revenue Forecast Inspection data"
     },
     "watermark": {
@@ -547,24 +511,25 @@
           "id": "revenue-forecast-inspection-arc",
           "name": "Revenue Operations Decision Arc",
           "summary": "A custom arc for FoundryGrid.",
+          "description": "Revenue Forecast Inspection uses a compact evidence-to-decision arc for FoundryGrid.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

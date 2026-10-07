@@ -51,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#6D28D9",
-        "risk": "#BE123C"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "seaford",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": {
       "preset": "16:10",
@@ -148,7 +135,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "united-kingdom",
+        "type": "world",
         "data": {
           "columns": [
             "Quarter",
@@ -358,7 +345,7 @@
     },
     "metric-data": {
       "src": "./data/regulatory-risk-brief.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Regulatory Risk Brief data"
     },
     "watermark": {

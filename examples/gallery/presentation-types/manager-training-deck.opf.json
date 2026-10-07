@@ -47,30 +47,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "employee-review",
-    "description": "Manager Training Deck uses a compact evidence-to-decision arc for PeopleCraft.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "manager-training-deck-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -83,26 +60,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#E2E8F0",
-        "risk": "#F8FAFC"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "yu-gothic",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": "light1",
@@ -176,15 +140,34 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-stacked-column-3x",
+        "type": "100pct-stacked-column",
         "data": {
-          "src": "asset:metric-data",
-          "sheet": "Summary",
-          "range": "A1:C8",
           "columns": [
             "Quarter",
             "Current",
             "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              16,
+              10
+            ],
+            [
+              "Q3",
+              21,
+              13
+            ],
+            [
+              "Q4",
+              26,
+              15
+            ]
           ]
         }
       }
@@ -327,7 +310,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "bullet-bar-3x",
+            "type": "bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -505,7 +488,7 @@
     },
     "metric-data": {
       "src": "./data/manager-training-deck.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Manager Training Deck data"
     },
     "watermark": {
@@ -535,24 +518,25 @@
           "id": "manager-training-deck-arc",
           "name": "Training Decision Arc",
           "summary": "A custom arc for PeopleCraft.",
+          "description": "Manager Training Deck uses a compact evidence-to-decision arc for PeopleCraft.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

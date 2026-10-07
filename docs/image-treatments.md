@@ -7,7 +7,7 @@ This page covers `design.slideImage`: the slide-level image and the treatments t
 Core composition (`composeSlide`) resolves `design.slideImage` into `geometry.slideImage`. Both engines draw exactly that frame. It applies to a slide in three cases:
 
 - The slide sets its own `design.slideImage`.
-- The deck sets it and the slide's layout declares `slideImage: true`.
+- The deck sets it and the slide's layout record sets `design.slideImage`.
 - The deck sets it and the slide's root `image` is the same source.
 
 When the slide's root `image` is the same source, or when the treatment has no `src`, the root image becomes the slide image instead of a content item. Other slides ignore a deck-level value. See [dynamic composition](dynamic-composition.md#slide-level-images).

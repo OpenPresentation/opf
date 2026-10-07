@@ -423,7 +423,7 @@
         "type": "title"
       },
       {
-        "type": "picture"
+        "type": "image"
       },
       {
         "type": "text"
@@ -441,13 +441,13 @@
         "type": "title"
       },
       {
-        "type": "picture"
+        "type": "image"
       },
       {
         "type": "text"
       },
       {
-        "type": "picture"
+        "type": "image"
       },
       {
         "type": "text"
@@ -466,19 +466,19 @@
         "type": "title"
       },
       {
-        "type": "picture"
+        "type": "image"
       },
       {
         "type": "text"
       },
       {
-        "type": "picture"
+        "type": "image"
       },
       {
         "type": "text"
       },
       {
-        "type": "picture"
+        "type": "image"
       },
       {
         "type": "text"
@@ -533,7 +533,7 @@
         "type": "title"
       },
       {
-        "type": "media"
+        "type": "video"
       },
       {
         "type": "text"
@@ -548,7 +548,7 @@
     "name": "Image Bleed",
     "placeholders": [
       {
-        "type": "picture"
+        "type": "image"
       }
     ]
   },

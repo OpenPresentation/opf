@@ -45,7 +45,7 @@ for(const file of fonts.fontFiles) {
   await verifyPackage(name);
   fontHashes.push({file:relative,sha256:hash(await readFile(actual))});
 }
-const document={design:{fontScheme:{heading:{family:'Carlito'},body:{family:'Carlito'},code:{family:'Cousine'}}},slides:[
+const document={design:{fontScheme:{heading:'Carlito',body:'Carlito',code:'Cousine'}},slides:[
   {quote:{text:'A short, readable quote.',attribution:'Long attribution '.repeat(100)}},
   {code:{source:'const value = 42;',language:'very-long-language-label-'.repeat(20)}},
 ]};

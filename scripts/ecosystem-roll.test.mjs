@@ -4,7 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { REPOSITORIES, readLock } from "./ecosystem-lock.mjs";
-import { CHECK_WORKFLOWS, candidateLock, goldenOverrideOf, ROLL_BRANCH, run, serializeLock } from "./ecosystem-roll.mjs";
+import { CHECK_WORKFLOWS, candidateLock, goldenOverrideOf, plan, ROLL_BRANCH, run, serializeLock } from "./ecosystem-roll.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sha = (digit) => digit.repeat(40);
@@ -39,7 +39,26 @@ test("the candidate is the four mains, keeps the lock's golden and reports what 
   assert.equal(golden.goldenChanged, true);
   assert.deepEqual([golden.candidate.golden.repository, golden.candidate.golden.path], ["opf-render", "test/golden/opf-examples-png.next"]);
   assert.throws(() => candidateLock(lock, same, { at, renderOverride: "opf/scripts/x" }), /does not name an opf-render baseline/);
+  assert.throws(() => candidateLock(lock, same, { at, renderOverride: "opf-pptx/test/golden/x" }), /does not name an opf-render baseline/);
+  assert.throws(() => candidateLock(lock, same, { at, renderOverride: "opf/scripts/fixtures/../x.sha256.json" }), /does not name an opf-render baseline/);
   assert.throws(() => candidateLock(lock, { ...same, opf: "main" }, { at }), /candidate lock is invalid/);
+});
+
+test("a core fixture named by the renderer's golden-override becomes the lock's golden, with its provenance", () => {
+  const core = candidateLock(lock, same, { at, renderOverride: "opf/scripts/fixtures/opf-examples-png.fa-0-14.sha256.json" });
+  assert.equal(core.goldenChanged, true);
+  assert.deepEqual([core.candidate.golden.repository, core.candidate.golden.path], ["opf", "scripts/fixtures/opf-examples-png.fa-0-14.sha256.json"]);
+  assert.equal(core.candidate.golden.note, "golden adopted from opf-render golden-override (core fixture)");
+  assert.match(core.candidate.provenance.note, /Golden adopted from opf-render golden-override \(core fixture\)\./);
+});
+
+test("the roll fails when the core fixture the override names does not exist at the core SHA being rolled", async () => {
+  const { api } = fakeGitHub({ renderCi: "golden-override: 'opf/scripts/fixtures/missing.sha256.json'" });
+  const missing = async (route, options) => {
+    if (route.startsWith("/repos/OpenPresentation/opf/contents/scripts/fixtures/missing.sha256.json")) throw Object.assign(new Error("HTTP 404 Not Found"), { status: 404 });
+    return api(route, options);
+  };
+  await assert.rejects(run(missing, quiet), /golden opf:scripts\/fixtures\/missing\.sha256\.json does not exist at/);
 });
 
 test("the roller writes the lock in the checked-in format", () => {
@@ -138,4 +157,28 @@ test("the workflow is dispatch-only, never cancels a roll, and swaps to the App 
   assert.match(workflow, /GITHUB_TOKEN: \$\{\{ steps\.app\.outputs\.token \|\| github\.token \}\}/);
   assert.match(workflow, /if: vars\.ECOSYSTEM_APP_ID != '' && github\.event_name != 'pull_request'/);
   assert.match(workflow, /Plan only[^\n]*\n\s+if: github\.event_name == 'pull_request'/);
+});
+
+test("plan-only on a pull request: the lock's own golden is checked in the local checkout, an adopted override at the rolled core SHA", async () => {
+  // The pull request adds the fixture its lock selects; main does not have it yet, so the REST lookup would 404.
+  const { api } = fakeGitHub();
+  const noFixturesOnMain = async (route, options) => {
+    if (route.startsWith("/repos/OpenPresentation/opf/contents/scripts/fixtures/")) throw Object.assign(new Error("HTTP 404 Not Found"), { status: 404 });
+    return api(route, options);
+  };
+  const local = { ...lock, golden: { repository: "opf", path: "scripts/fixtures/opf-examples-png.pr-only.sha256.json", note: "PR" } };
+  const seen = [];
+  const planned = await plan(noFixturesOnMain, { lock: local, root: "/checkout", exists: (file) => { seen.push(file); return true; } });
+  assert.equal(planned.candidate.golden.path, "scripts/fixtures/opf-examples-png.pr-only.sha256.json");
+  assert.deepEqual(seen, [path.join("/checkout", "scripts/fixtures/opf-examples-png.pr-only.sha256.json")]);
+  await assert.rejects(plan(noFixturesOnMain, { lock: local, root: "/checkout", exists: () => false }), /does not exist in the checkout/);
+  // Without a local root (the roller itself) the lock's golden is looked up at the rolled core SHA.
+  await assert.rejects(plan(noFixturesOnMain, { lock: local }), /does not exist at/);
+  // A golden adopted from the renderer's override is looked up at the rolled SHA even when planning a local lock.
+  const adopting = fakeGitHub({ renderCi: "golden-override: 'opf/scripts/fixtures/adopted.sha256.json'" });
+  const adoptedMissing = async (route, options) => {
+    if (route.startsWith("/repos/OpenPresentation/opf/contents/scripts/fixtures/adopted.sha256.json")) throw Object.assign(new Error("HTTP 404 Not Found"), { status: 404 });
+    return adopting.api(route, options);
+  };
+  await assert.rejects(plan(adoptedMissing, { lock: local, root: "/checkout", exists: () => true }), /golden opf:scripts\/fixtures\/adopted\.sha256\.json does not exist at/);
 });

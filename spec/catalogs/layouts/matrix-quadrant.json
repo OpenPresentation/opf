@@ -4,20 +4,12 @@
   "name": "Matrix_Quadrant",
   "summary": "2x2 framework with labeled axes. Plot items in quadrants to reveal patterns and priorities.",
   "description": "2x2 framework with labeled axes. Plot items in quadrants to reveal patterns and priorities.",
-  "contentType": "Text",
-  "contentMultiple": "4x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "None",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": false,
-  "slideImageAlignment": "None",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -40,7 +32,9 @@
     "Analysis",
     "Positioning"
   ],
-  "preview": {},
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/matrix-quadrant.svg"
+  },
   "composition": {
     "mode": "grid",
     "columns": 2

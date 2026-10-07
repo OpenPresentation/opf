@@ -162,7 +162,7 @@ const chartMembers = new Map(CHART_LEVELS.map((level) => {
 }));
 assert.equal(CHART_CLASSES.size, CHART_LEVELS.length, `the catalog has ${CHART_CLASSES.size} chart export paths: ${[...CHART_CLASSES.keys()]}`);
 const chartData = (record) => {
-  const width = Math.max(record.columns.length, 2);
+  const width = Math.max(record.series + 1, 2);
   return {columns: ['Quarter', ...Array.from({length: width - 1}, (_, index) => `Series ${index + 1}`)], rows: ['Q1', 'Q2', 'Q3', 'Q4'].map((quarter, row) => [quarter, ...Array.from({length: width - 1}, (_, column) => (row + 1) * (column + 2) + column)])};
 };
 
@@ -193,7 +193,7 @@ const TEXT = {
 // Scripts outside the pairwise array use the catalog's own text sample for their language.
 for (const id of CHAIN_LANGUAGES) {
   const language = byId('languages', id);
-  const scheme = catalogs.fontSchemes.find((entry) => entry.textSample && entry.languages?.some((name) => name.toLowerCase() === language.name.toLowerCase()));
+  const scheme = catalogs.fontSchemes.find((entry) => entry.textSample && entry.languages?.includes(language.id));
   assert.ok(scheme, `the catalog has a text sample for ${language.name}`);
   const sample = scheme.textSample;
   TEXT[id] = {title: sample, subtitle: sample, body: `${sample} ${sample}`, items: [sample, sample, sample], cells: [sample, sample, sample, sample]};
@@ -219,11 +219,10 @@ const contentBlocks = {
 // A layout's family is its primary content kind, read from its placeholders, so the family list does not change when the
 // bundled catalog gains layouts (FF-55 bundles the 70 legacy gallery ids next to the structural ones): the first
 // placeholder that is not a heading names the family, a heading-only layout is a title, and no placeholder is blank.
-const FAMILY_OF_KIND = {text: 'text', list: 'list', metric: 'number', chart: 'chart', picture: 'image', diagram: 'image', media: 'media', quote: 'quote', table: 'table', code: 'code', timeline: 'timeline'};
 const layoutFamily = (record) => {
   const types = (record.placeholders ?? []).map((placeholder) => placeholder.type);
   const body = types.find((type) => !['title', 'subtitle', 'tag'].includes(type));
-  if (body !== undefined) return FAMILY_OF_KIND[body] ?? assert.fail(`layout ${record.id} has a placeholder kind with no family: ${body}`);
+  if (body !== undefined) return body;
   return types.length ? 'title' : 'blank';
 };
 const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
@@ -237,15 +236,15 @@ const placeholderBlock = {
   code: () => ({code: {source: 'let x = 1;', language: 'ts'}}),
   quote: (text) => ({quote: {text: text.body, attribution: text.cells[0]}}),
   timeline: (text) => ({timeline: {events: [{when: 'Q1', what: text.items[0]}, {when: 'Q2', what: text.items[1]}]}}),
-  picture: () => ({image: 'asset:hero'}),
-  media: () => ({video: 'asset:clip'})
+  image: () => ({image: 'asset:hero'}),
+  video: () => ({video: 'asset:clip'})
 };
 function layoutSlide(id, layoutId, text) {
   const types = byId('layouts', layoutId).placeholders.map((placeholder) => placeholder.type);
   const content = types.filter((type) => type !== 'title' && type !== 'subtitle');
   return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => placeholderBlock[type](text))} : {})};
 }
-assert.deepEqual(LAYOUT_FAMILIES, ['blank', 'chart', 'code', 'image', 'list', 'media', 'number', 'quote', 'table', 'text', 'timeline', 'title'], 'the catalog has the expected layout families');
+assert.deepEqual(LAYOUT_FAMILIES, ['blank', 'chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'title', 'video'], 'the catalog has the expected layout families');
 
 const FOOTERS = {
   off: () => ({header: false, footer: false}),
@@ -882,7 +881,7 @@ if (FULL) {
 if (FULL) {
   const text = TEXT.english;
   const deck = {
-    name: 'scheme overrides', language: 'english', design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: {family: 'Georgia'}, code: {family: 'Courier New'}}},
+    name: 'scheme overrides', language: 'english', design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: 'Georgia', code: 'Courier New'}},
     slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]
   };
   await runSwitch('scheme-overrides', deck, [
@@ -1115,7 +1114,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
 {
   const id = 'single-series-histogram-chart';
   const histogram = byId('chartTypes', 'histogram');
-  assert.equal(histogram.columns.length, 1, 'the catalog histogram has one data column');
+  assert.equal(histogram.series, 1, 'the catalog histogram expects one series');
   const deck = {name: id, language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
   const exportDiagnostics = [];
   const bytes = await toPptx(deck, {...engineOptions(deck), onDiagnostic: (diagnostic) => exportDiagnostics.push(diagnostic)});

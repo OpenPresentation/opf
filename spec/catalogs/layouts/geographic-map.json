@@ -4,20 +4,16 @@
   "name": "Geographic_Map",
   "summary": "Map-based visualization of regions, territories, or location-based data. Turns spreadsheets into geography.",
   "description": "Map-based visualization of regions, territories, or location-based data. Turns spreadsheets into geography.",
-  "contentType": "Chart",
-  "contentMultiple": "1x",
-  "contentAlignment": "Left",
-  "contentBox": true,
-  "contentTypeChartPrimary": "None",
-  "contentTypeImageFill": "Crop",
-  "contentTypeListBullet": "None",
-  "contentTypeListHeading": false,
-  "slideTitle": true,
-  "slideSubtitle": false,
-  "slideTitleAlignment": "Left",
-  "slideImage": true,
-  "slideImageAlignment": "Background",
-  "slideLayoutDirection": "Horizontal",
+  "design": {
+    "titleAlignment": "left",
+    "contentAlignment": "left",
+    "contentBox": true,
+    "contentDirection": "horizontal",
+    "imageFill": "crop",
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
     {
       "type": "title"
@@ -31,5 +27,7 @@
     "Territory",
     "Regional"
   ],
-  "preview": {}
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/geographic-map.svg"
+  }
 }

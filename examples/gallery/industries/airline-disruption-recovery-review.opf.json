@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "performance-review",
-    "description": "Airline Disruption Recovery Review uses a compact evidence-to-decision arc for AeroVista Airlines.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "airline-disruption-recovery-review-arc",
   "design": {
     "theme": "dark",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#14B8A6",
-        "risk": "#F59E0B"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "georgia",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": {
       "preset": "16:10",
@@ -169,7 +133,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "box-and-whisker-3x",
+        "type": "box-and-whisker",
         "data": {
           "columns": [
             "Quarter",
@@ -339,7 +303,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "clustered-column",
+            "type": "column",
             "data": {
               "columns": [
                 "Quarter",
@@ -529,7 +493,7 @@
     },
     "metric-data": {
       "src": "./data/airline-disruption-recovery-review.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Airline Disruption Recovery Review data"
     },
     "watermark": {
@@ -559,24 +523,25 @@
           "id": "airline-disruption-recovery-review-arc",
           "name": "Air Travel Decision Arc",
           "summary": "A custom arc for AeroVista Airlines.",
+          "description": "Airline Disruption Recovery Review uses a compact evidence-to-decision arc for AeroVista Airlines.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

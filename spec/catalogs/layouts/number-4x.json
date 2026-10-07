@@ -2,6 +2,13 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "number-4x",
   "name": "Number 4x",
+  "summary": "Reach for it when four figures fit a two-by-two scorecard.",
+  "description": "A title above four metrics in a two-column grid. Use it for a compact scorecard of four equally weighted measures.",
+  "design": {
+    "contentAlignment": "center",
+    "contentBox": false,
+    "contentDirection": "horizontal"
+  },
   "placeholders": [
     {
       "type": "title"
@@ -22,5 +29,13 @@
   "composition": {
     "mode": "grid",
     "columns": 2
+  },
+  "tags": [
+    "Numbers",
+    "KPIs",
+    "Matrix"
+  ],
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
   }
 }

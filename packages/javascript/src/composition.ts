@@ -1,7 +1,9 @@
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
 import {intrinsicImageAspect} from './image-aspect.js';
+import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
+import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection} from './script-fonts.js';
@@ -11,7 +13,7 @@ export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,
 import {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,DEFAULT_SLIDE_NUMBER_FORMAT,formatFurnitureDate,formatSlideNumber,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE} from './color.js';
+export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartHighlightColors, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST} from './color.js';
 import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
 export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
@@ -34,7 +36,9 @@ export interface LayoutDiagnostic {
 }
 /** Physical legacy-family selection supplied by a font provider, independently of its numeric weight. */
 export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
-export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection }
+export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection;
+  /** BCP-47 tag of a run that overrides the deck language (`TextRun.lang`); absent when the deck language applies. */
+  lang?: string }
 /** Role families. `accent` is present only when the scheme defines an accent role; the slide tag and quote body use it. */
 export interface FontFamilies { heading: string; body: string; code: string; accent?: string }
 /** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
@@ -77,11 +81,11 @@ export function resolveFontSchemeReference(reference: unknown, lookup: (id: stri
  * A scheme that names no heading or body family gets the DEFAULT_FONT_SCHEME families (Aptos Display, Aptos).
  * `code` comes from the scheme's `code` role, which catalog records such as consolas and courier-new
  * carry; otherwise it is Roboto Mono. Heading and body families are never reused for code.
- * `accent` is returned only when the scheme defines an `accent` role (a family string or Font object);
+ * `accent` is returned only when the scheme defines an `accent` role (a family name string);
  * the slide tag and the quote body use it in place of the body and heading families. */
 export function resolveFontFamilies(input: unknown): FontFamilies {
   const scheme = record(input);
-  const family = (value: unknown) => typeof value === "string" ? value : record(value).family;
+  const family = (value: unknown) => typeof value === "string" && value ? value : undefined;
   const accent = family(scheme.accent);
   return {
     heading: family(scheme.heading) ?? scheme.major ?? scheme.minor ?? DEFAULT_FONT_FAMILIES.heading,
@@ -218,15 +222,15 @@ export interface ComposedItem {
   composition: Composition;
   /**
    * Resolved horizontal text alignment for this item: titleAlignment for the
-   * title, contentAlignment for every other item (slide design, then host
-   * option, then left). Engines anchor native and preview text to this value.
+   * title, contentAlignment for every other item (slide design, deck design, layout design,
+   * then left). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
 }
 /**
  * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
- * design.slideImage, or when the deck sets one and either the slide's layout record declares
- * slideImage: true or the slide's root image is the same source.
+ * design.slideImage, or when the deck sets one and either the slide's layout record sets
+ * design.slideImage, or the slide's root image is the same source.
  * Content composes in the part of the slide the image does not occupy; 'background' leaves the whole slide.
  */
 export interface ComposedSlideImage {
@@ -338,6 +342,12 @@ export interface SlideComposition {
   composition: Composition;
   /** Repeated furniture is measured separately from body pagination leaves. */
   furniture?: FurnitureLayout;
+  /**
+   * Effective shared design hints of this slide: slide design, then deck design, then the layout record's design,
+   * per key. Renderers and exporters read titleAlignment, contentAlignment, contentBox, imageFill and
+   * listBullet here instead of re-deriving them from the document.
+   */
+  design: ResolvedDesignHints;
   /** Active slide-level image; absent when design.slideImage does not apply to this slide. */
   slideImage?: ComposedSlideImage;
   /** Deck logo on a cover or section slide; absent on content slides and when no logo resolves. */
@@ -353,7 +363,7 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown }; organization?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
@@ -383,12 +393,12 @@ export interface ComposeSlideOptions {
    * reports each paragraph's direction. Alignment stays logical: `left` is the start edge.
    */
   direction?: TextDirection;
-  /** Host-resolved alignment for shared content; slide design can override it. */
+  /** Deck-level alignment a host resolved itself. It ranks with `presentation.design`, above the layout record's design and below the slide's own design; hosts normally omit it because composition reads `presentation.design` and the layout. */
   contentAlignment?: 'left' | 'center' | 'right';
   titleAlignment?: 'left' | 'center' | 'right';
   /** Unscaled reference pixels around provided vector outlines; defaults to 1 for body text and 2 for furniture. Explicit values apply to both. */
   textRasterPadding?: number;
-  /** Host-resolved body cards. A slide's explicit design.contentBox overrides this value. */
+  /** Deck-level body cards a host resolved itself, ranked like contentAlignment. A slide's explicit design.contentBox overrides this value. */
   contentBox?: boolean;
   textMeasurement?: TextMeasurement;
   width?: number;
@@ -455,8 +465,8 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const configured: unknown = local ? own.slideImage : deck.slideImage;
   if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
   const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
-  const alignment = typeof layout.slideImageAlignment === 'string' ? layout.slideImageAlignment.toLowerCase() : undefined;
-  const authoredPosition = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === alignment) ?? 'background') as SlideImagePosition;
+  const layoutImage = record(record(layout.design).slideImage), layoutPosition = layoutImage.position;
+  const authoredPosition = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === layoutPosition) ?? 'background') as SlideImagePosition;
   if (!SLIDE_IMAGE_POSITIONS.includes(authoredPosition)) return undefined;
   // A right-to-left deck mirrors a banded image: `left` is the start side, drawn at the right.
   const mirrorSide = <T extends string>(side: T): T => !rtl ? side : side === 'left' ? 'right' as T : side === 'right' ? 'left' as T : side;
@@ -466,7 +476,7 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
   // A deck-wide slide image applies where the layout reserves one, or where the slide's own image is that
   // same source. Other slides keep their geometry, so existing decks with an unused deck value are unchanged.
-  if (!local && layout.slideImage !== true && !sameSource) return undefined;
+  if (!local && record(layout.design).slideImage === undefined && !sameSource) return undefined;
   const replacesContent = root !== undefined && (designSource === undefined || sameSource);
   const value = replacesContent ? root : designSource;
   const source = assetSource(value);
@@ -575,7 +585,7 @@ export function resolveLogo(presentation: unknown, slide: unknown, options: Reso
 export interface FurniturePartBase {
   kind: 'header' | 'footer';
   zone: 'left' | 'center' | 'right';
-  field: 'text' | 'image' | 'logo' | 'organization' | 'socials' | 'section' | 'slideNumber' | 'date';
+  field: 'text' | 'image' | 'logo' | 'organization' | 'speaker' | 'socials' | 'section' | 'slideNumber' | 'date';
   /** Literal field or controlling flag, with the actual inherited/local path. */
   path: string;
   /** String/asset source, when different from a generated field's flag. */
@@ -681,6 +691,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const sourceRoot=`slides.${options.slideIndex??0}`,organizations=Array.isArray(options.presentation?.organization)?options.presentation.organization:[options.presentation?.organization];
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
   const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization',organizationPath=`${organizationRoot}.name`;
+  const speakers=Array.isArray(options.presentation?.speaker)?options.presentation.speaker:[options.presentation?.speaker],speaker=record(speakers[0]),speakerRoot=Array.isArray(options.presentation?.speaker)?'speaker.0':'speaker';
   const inlinePlatforms=record(record(options.presentation?.catalogs).socialPlatforms).records,platformRecords=[...(Array.isArray(inlinePlatforms)?inlinePlatforms:[]),...(options.socialPlatforms??[])];
   const fontFamily=options.fonts?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
@@ -737,6 +748,7 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
       }
       add('text',content.text);
       if(content.organization===true){if(typeof organization.name==='string')add('organization',organization.name,true,organizationPath);else error(`${path}.organization`,'Generated organization name needs a named organization in the presentation.','unresolved-content');}
+      if(content.speaker===true){if(typeof speaker.name==='string'&&speaker.name.trim())add('speaker',typeof speaker.title==='string'&&speaker.title.trim()?`${speaker.name}, ${speaker.title}`:speaker.name,true,`${speakerRoot}.name`);else error(`${path}.speaker`,'Generated speaker needs a named speaker in the presentation.','unresolved-content');}
       if(content.socials===true){
         const links:FurnitureSocialLink[]=Object.entries(record(organization.socials)).filter(([,value])=>typeof value==='string'&&value.trim()).map(([platform,value])=>({platform,sourcePath:`${organizationRoot}.socials.${platform}`,...resolveSocialProfile(platform,value as string,platformRecords,'organization')}));
         if(links.length)add('socials',links.map(link=>link.text).join('\n'),true,`${organizationRoot}.socials`,{links});else error(`${path}.socials`,'Generated social profiles need a primary organization with socials.','unresolved-content');
@@ -827,7 +839,10 @@ function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,reques
   }
   throw new Error('Text fitting did not evaluate its bounded floor trial.');
 }
-export interface QuoteContent { text: string; attribution?: string; source?: string }
+/** Photo diameter as a multiple of the footer font size, and the gap beside it as a multiple of that size (FA-12). */
+const PHOTO_RATIO = 3, PHOTO_GAP = .75;
+/** `text` is a string or TextRun[] (FA-10); attribution, role and source stay plain strings. */
+export interface QuoteContent { text: string | readonly (string | RichTextRun)[]; attribution?: string; role?: string; photo?: unknown; source?: string }
 /** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
 export interface QuoteTextSource {
   path: string;
@@ -847,17 +862,39 @@ export interface QuoteTextPart {
   minFontSize: number;
   requestedStyle: TextStyle;
   style: TextStyle;
-  /** Absent when the available box is invalid; never fit against an invented one-pixel box. */
-  fit?: TextFit;
+  /**
+   * The displayed runs of a rich quote body (FA-10): the quote's TextRun[] with the quotation marks joined to its first and
+   * last run, so a run's index and a citation marker's position never shift. Absent for a string body and for the footer.
+   */
+  runs?: (string | RichTextRun)[];
+  /** Absent when the available box is invalid; never fit against an invented one-pixel box. A rich body reports a RichTextFit. */
+  fit?: TextFit | RichTextFit;
 }
 export interface QuoteLayoutDiagnostic extends LayoutDiagnostic {
-  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap';
+  reason: 'invalid-part-box' | 'part-outside-cell' | 'text-fit' | 'part-overlap' | 'photo-fit';
   parts: QuoteTextPart['role'][];
+}
+/**
+ * The attributed person's headshot (FA-12): a circle at the start edge of the footer row, beside the
+ * attribution and role lines (the left in a left-to-right deck, the right in a right-to-left one). Its diameter is
+ * three times the footer font size, so it follows the text when the footer shrinks toward the readability floor.
+ */
+export interface QuotePhoto {
+  /** Path of the photo value, `<quote path>.photo`. */
+  path: string;
+  /** Asset value (string or Asset object) that engines resolve like any other image; crop to cover the frame. */
+  value: unknown;
+  /** Square frame, in reference pixels. */
+  box: LayoutBox;
+  /** Circle mask: the `ellipse` DrawingML preset and the same outline as an SVG path, as design.slideImage shape 'circle'. */
+  shape: SlideImageShape;
 }
 export interface QuoteLayout {
   algorithm: 'quote-flow-v1';
   textMeasurement: 'estimated' | 'provided';
   parts: QuoteTextPart[];
+  /** Present when the quote has a photo; absent otherwise, and then the layout is the footer-only layout. */
+  photo?: QuotePhoto;
   diagnostics: QuoteLayoutDiagnostic[];
   overflow: boolean;
 }
@@ -872,6 +909,17 @@ export interface QuoteLayoutOptions {
   textMeasurement?: TextMeasurement;
   /** Deck direction; in a right-to-left deck every part fit reports its paragraphs' directions (RR-05). */
   direction?: TextDirection;
+  /** Marker text for a rich body run by its dotted path (`<path>.text.<runIndex>`); composeSlide supplies the deck numbering. */
+  citationMarker?: (runPath: string) => string | undefined;
+}
+/** The displayed runs of a rich quote body: the quotation marks join the first and last run. */
+function quoteBodyRuns(runs: readonly (string | RichTextRun)[]): (string | RichTextRun)[] {
+  if (!runs.length) return ['""'];
+  const last = runs.length - 1;
+  return runs.map((run, index) => {
+    const before = index === 0 ? '"' : '', after = index === last ? '"' : '';
+    return typeof run === 'string' ? before + run + after : {...run, text: before + run.text + after};
+  });
 }
 /**
  * Allocate and measure quote body/footer space for composition, rendering and export. Callers must
@@ -880,10 +928,14 @@ export interface QuoteLayoutOptions {
 export function layoutQuote(value: string | QuoteContent, box: LayoutBox, options: QuoteLayoutOptions = {}): QuoteLayout {
   const shorthand = typeof value === 'string';
   const quote = shorthand ? {text:value} : value;
-  if (!quote || Array.isArray(quote) || typeof quote.text !== 'string' ||
-    [quote.attribution, quote.source].some(field => field !== undefined && typeof field !== 'string')) {
-    throw new TypeError('Quote content must be a string or a text object with optional string attribution/source.');
+  const photoValue = (quote as QuoteContent | null)?.photo;
+  if (!quote || Array.isArray(quote) || (typeof quote.text !== 'string' && !Array.isArray(quote.text)) ||
+    [quote.attribution, quote.role, quote.source].some(field => field !== undefined && typeof field !== 'string') ||
+    photoValue !== undefined && typeof photoValue !== 'string' && !(typeof photoValue === 'object' && photoValue !== null && typeof (photoValue as {src?:unknown}).src === 'string')) {
+    throw new TypeError('Quote content must be a string or a text object (text a string or TextRun[]) with optional string attribution/role/source and an asset photo.');
   }
+  const richBody = Array.isArray(quote.text) ? quote.text as readonly (string | RichTextRun)[] : undefined;
+  const quoteText = richBody ? annotationText(richBody) : quote.text as string;
   const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) ||
     box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) {
@@ -896,70 +948,92 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     diagnostics.push({code:'text-overflow',reason,path:diagnosticPath,parts:roles,message});
   const source = (sourcePath:string, text:string, outputStart:number):QuoteTextSource =>
     ({path:sourcePath,start:0,end:text.length,outputStart,outputEnd:outputStart+text.length});
-  const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string) => {
+  const add = (role:QuoteTextPart['role'], text:string, sources:QuoteTextSource[], area:LayoutBox, fontSize:number, fontFamily:string, fontWeight:number, partPath:string, runs?:(string|RichTextRun)[]) => {
     const requestedStyle:TextStyle = {fontFamily,fontWeight,italic:false,path:partPath};
     const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
     // An explicit readability floor can raise the nominal size.
     const requestedFontSize = gridFontSize(fontSize * scale, minimum);
-    const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style};
+    const part:QuoteTextPart = {role,path:partPath,text,sources,box:area,requestedFontSize,minFontSize:minimum,requestedStyle,style,...(runs?{runs}:{})};
     parts.push(part);
     return part;
   };
+  // Footer lines: the attribution, the role on its own line below it, and the source after ' - ' on the last line.
   let footer = '';
   const footerSources:QuoteTextSource[] = [];
-  for (const field of ['attribution','source'] as const) {
+  for (const field of ['attribution','role','source'] as const) {
     const text = quote[field];
     if (!text) continue;
-    if (footer) footer += ' - ';
+    if (footer) footer += field === 'role' ? '\n' : ' - ';
     footerSources.push(source(`${path}.${field}`,text,footer.length));
     footer += text;
   }
+  const hasPhoto = photoValue !== undefined, hasFooter = footer !== '', hasBlock = hasPhoto || hasFooter;
+  const photoPath = `${path}.photo`, rtl = options.direction === 'rtl';
   const bodyPath = shorthand ? path : `${path}.text`;
-  const body = add('body',`"${quote.text}"`,[source(bodyPath,quote.text,1)],
-    {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(footer?94:36)},
-    28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath);
-  const attribution = footer ? add('footer',footer,footerSources,
+  const body = add('body',`"${quoteText}"`,[source(bodyPath,quoteText,1)],
+    {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
+    28,options.fonts?.accent??options.fonts?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody):undefined);
+  const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
     17,options.fonts?.body??'sans-serif',500,path) : undefined;
+  // A photo with no footer text still sizes from the nominal footer size.
+  const footerRequested = attribution?.requestedFontSize ?? gridFontSize(17 * scale, minimum);
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
-  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum) => usable(area)
-    ? fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction) : undefined;
+  // A rich body fits through the rich-text layouter (the one body text uses); every other part keeps the plain fitter.
+  const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => !usable(area) ? undefined
+    : part.runs ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{})})
+    : fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
+  const heightOf = (fit:TextFit|RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length*fit.lineHeight;
   const inner = {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
-  if (!attribution) body.fit=fit(body,body.box);
+  let photo: QuotePhoto | undefined, photoFits = true;
+  if (!hasBlock) body.fit=fit(body,body.box);
   else if (usable(inner) && inner.height>18) {
     const available=inner.height-18;
     const preferredBody=fit(body,inner,body.requestedFontSize,body.requestedFontSize)!;
     const minimumBody=body.requestedFontSize===minimum ? preferredBody : fit(body,inner,minimum,minimum)!;
-    const preferredBodyHeight=preferredBody.lines.length*preferredBody.lineHeight;
-    const minimumBodyHeight=minimumBody.lines.length*minimumBody.lineHeight;
-    let selected:{bodyBox:LayoutBox;footerBox:LayoutBox;bodyFit?:TextFit;footerFit?:TextFit;score:number;overflow:boolean}|undefined;
+    const preferredBodyHeight=heightOf(preferredBody);
+    const minimumBodyHeight=heightOf(minimumBody);
+    interface Selection {bodyBox:LayoutBox;footerBox:LayoutBox;textBox?:LayoutBox;photoBox?:LayoutBox;bodyFit?:TextFit|RichTextFit;footerFit?:TextFit;score:number;overflow:boolean;photoFits:boolean}
+    let selected:Selection|undefined;
     // At most two footer sizes: its nominal request and the readability floor. Retain
     // the fitting pair with the least total font reduction. A 40px footer is only a
     // whitespace preference; it must not cause unnecessary shrinking or grid movement.
-    for (const size of new Set([attribution.requestedFontSize,minimum])) {
-      const natural=fit(attribution,inner,size,size)!;
-      const naturalHeight=natural.lines.length*natural.lineHeight;
-      const preferredHeight=Math.max(40,naturalHeight);
-      const bodyReservation=Math.min(minimumBodyHeight,Math.max(minimumBody.lineHeight,available-natural.lineHeight));
+    // A photo is three times the footer font size and sits beside the text, which takes the remaining width.
+    for (const size of new Set([footerRequested,minimum])) {
+      const diameter=hasPhoto ? PHOTO_RATIO*size : 0, gap=hasPhoto ? PHOTO_GAP*size : 0;
+      const textArea={...inner,width:inner.width-diameter-gap,x:rtl?inner.x:inner.x+diameter+gap};
+      const natural=attribution ? fit(attribution,textArea,size,size) : undefined;
+      const naturalHeight=natural ? natural.lines.length*natural.lineHeight : 0;
+      const blockHeight=Math.max(naturalHeight,diameter);
+      const lineHeight=natural?.lineHeight ?? size*1.22;
+      const preferredHeight=Math.max(40,blockHeight);
+      const bodyReservation=Math.min(minimumBodyHeight,Math.max(minimumBody.lineHeight,available-lineHeight));
       const footerHeight=preferredBodyHeight+preferredHeight<=available+.01 ? preferredHeight
-        : Math.min(naturalHeight,Math.max(0,available-bodyReservation));
+        : Math.min(blockHeight,Math.max(0,available-bodyReservation));
       const bodyBox={...inner,height:available-footerHeight};
       const footerBox={...inner,y:inner.y+inner.height-footerHeight,height:footerHeight};
       const bodyFit=fit(body,bodyBox);
-      const footerFit=usable(footerBox) ? {...natural,overflow:natural.overflow||naturalHeight>footerHeight+.01} : undefined;
-      const overflow=!bodyFit||!footerFit||bodyFit.overflow||footerFit.overflow;
-      const score=(body.requestedFontSize-(bodyFit?.fontSize??minimum)+attribution.requestedFontSize-size)/scale;
+      const photoBox=hasPhoto ? {x:rtl?inner.x+inner.width-diameter:inner.x,y:footerBox.y+(footerHeight-diameter)/2,width:diameter,height:diameter} : undefined;
+      // Beside a photo the text block is centered against it; alone, it starts at the top of the footer.
+      const textBox=attribution ? hasPhoto ? {...textArea,y:footerBox.y+Math.max(0,footerHeight-naturalHeight)/2,height:Math.min(naturalHeight,footerHeight)} : footerBox : undefined;
+      const footerFit=attribution && natural && usable(footerBox) ? {...natural,overflow:natural.overflow||naturalHeight>footerHeight+.01} : undefined;
+      const fitsPhoto=!hasPhoto || diameter<=footerHeight+.01 && (!attribution || usable(textArea));
+      const overflow=!bodyFit||bodyFit.overflow||(attribution?!footerFit||footerFit.overflow:false)||!fitsPhoto;
+      const score=(body.requestedFontSize-(bodyFit?.fontSize??minimum)+footerRequested-size)/scale;
       // When neither size fits, retain the floor-size trial so failure diagnostics
       // describe the irreducible result, not a rejected larger-font attempt.
       if (!selected || !overflow && (selected.overflow||score<selected.score) || overflow && selected.overflow) {
-        selected={bodyBox,footerBox,bodyFit,footerFit,score,overflow};
+        selected={bodyBox,footerBox,textBox,photoBox,bodyFit,footerFit,score,overflow,photoFits:fitsPhoto};
       }
     }
     if (selected) {
       body.box=selected.bodyBox;body.fit=selected.bodyFit;
-      attribution.box=selected.footerBox;attribution.fit=selected.footerFit;
+      if (attribution) {attribution.box=selected.textBox ?? selected.footerBox;attribution.fit=selected.footerFit;}
+      if (selected.photoBox) photo={path:photoPath,value:photoValue,box:selected.photoBox,shape:slideImageShape('circle',selected.photoBox)};
+      photoFits=selected.photoFits;
     }
   }
+  if (hasPhoto && !photo) photoFits=false;
   for (const part of parts) {
     const area=part.box;
     if (!part.fit) {
@@ -971,14 +1045,17 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
       report('part-outside-cell',part.path,[part.role],`Quote ${part.role} extends outside its cell; increase the cell size or change the arrangement.`);
     }
   }
+  if (hasPhoto && !photoFits) report('photo-fit',photoPath,['footer'],'Quote photo does not fit beside the attribution at the readability floor; increase the cell size, shorten the text or remove the photo.');
   // Conservative occupied line rectangles, not actual glyph outlines. Reserved boxes alone
   // are insufficient: an overflowing body's rendered lines can reach an otherwise fitting footer.
-  if (body?.fit && attribution?.fit && body.box.y+body.fit.lines.length*body.fit.lineHeight > attribution.box.y+.01 &&
+  if (body?.fit && attribution?.fit && body.box.y+heightOf(body.fit) > attribution.box.y+.01 &&
     attribution.box.y+attribution.fit.lines.length*attribution.fit.lineHeight > body.box.y+.01) {
     report('part-overlap',path,['body','footer'],'Quote body and footer line boxes overlap; do not accept this layout without more space.');
+  } else if (body?.fit && photo && body.box.y+heightOf(body.fit) > photo.box.y+.01) {
+    report('part-overlap',path,['body','footer'],'Quote body and photo overlap; do not accept this layout without more space.');
   }
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface MetricContent {
@@ -988,11 +1065,15 @@ export interface MetricContent {
   unit?: string;
   delta?: string | number;
   trend?: 'up' | 'down' | 'flat';
+  /** Whether the change is good news; colours the trend arrow, trend word and delta text (see metricTrendColor). */
+  sentiment?: MetricSentiment;
 }
+/** The text fields of a metric, each laid out as its own part. `sentiment` is metadata, not text. */
+type MetricTextRole = Exclude<keyof MetricContent, 'sentiment'>;
 /** Ranges address String(sourceValue), not the numeric token spelling in serialized JSON. */
 export interface MetricTextSource { path: string; value: string | number; start: number; end: number }
 export interface MetricTextPart {
-  role: keyof MetricContent;
+  role: MetricTextRole;
   path: string;
   text: string;
   sources: MetricTextSource[];
@@ -1017,6 +1098,8 @@ export interface MetricLayout {
   alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
   arrangement: 'inline-unit' | 'stacked';
+  /** The metric's `sentiment`, passed through for metricTrendMark; omitted when the content has none. */
+  sentiment?: MetricSentiment;
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -1042,7 +1125,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   if (!metric || Array.isArray(metric) || !isValue(metric.value) ||
       [metric.label,metric.description,metric.unit].some(field=>field!==undefined&&typeof field!=='string') ||
       metric.delta!==undefined&&!isValue(metric.delta) ||
-      metric.trend!==undefined&&!['up','down','flat'].includes(metric.trend)) {
+      metric.trend!==undefined&&!['up','down','flat'].includes(metric.trend)||
+      metric.sentiment!==undefined&&!['positive','negative','neutral'].includes(metric.sentiment)) {
     throw new TypeError('Metric content requires a finite numeric or string value and schema-valid display metadata.');
   }
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale);
@@ -1197,14 +1281,21 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
-export interface TimelineEvent { when?: string; what: string; description?: string }
+/** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
+export type TimelineStatus = 'done' | 'current' | 'planned';
+const TIMELINE_STATUS_VALUES: readonly string[] = ['done', 'current', 'planned'];
+/** The 'current' ring is this multiple of the marker radius. */
+const TIMELINE_RING_RATIO = 1.6;
+export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus }
 export interface TimelineContent { name?: string; description?: string; events: TimelineEvent[] }
 export interface TimelineTextPart {
   role: 'name' | 'description' | 'when' | 'what' | 'event-description';
   eventIndex?: number;
+  /** The event's status; absent for metadata parts and for events without a status. */
+  status?: TimelineStatus;
   path: string;
   text: string;
   sources: {path:string;start:number;end:number}[];
@@ -1227,7 +1318,13 @@ export interface TimelineLayout {
   textMeasurement: 'provided' | 'estimated';
   textOutlines: 'provided' | 'unavailable';
   parts: TimelineTextPart[];
-  markers: {path:string;eventIndex:number;x:number;y:number;radius:number}[];
+  /**
+   * One marker per event. `radius` is the marker's own radius; `status` repeats the event's status
+   * (absent without one). A 'current' marker also has `ring.radius`, 1.6 times `radius`, and a
+   * 'current' or 'planned' marker has the `strokeWidth` of its outline and ring. Every radius is that
+   * of the drawn ellipse; an outline is centered on the ellipse edge, so it reaches half a stroke beyond.
+   */
+  markers: {path:string;eventIndex:number;x:number;y:number;radius:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
   diagnostics: TimelineLayoutDiagnostic[];
   overflow: boolean;
@@ -1242,6 +1339,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     timeline.events.some(event=>!event||typeof event.what!=='string'||[event.when,event.description].some(field=>field!==undefined&&typeof field!=='string'))) {
     throw new TypeError('Timeline content requires ordered events with string labels and optional string metadata.');
   }
+  if(timeline.events.some(event=>event.status!==undefined&&!TIMELINE_STATUS_VALUES.includes(event.status)))throw new TypeError("Timeline event status must be 'done', 'current' or 'planned'.");
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale;
   if(![box.x,box.y,box.width,box.height,scale,minimum,padding].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding.');
   if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
@@ -1251,8 +1349,10 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const fonts=resolveFontFamilies(options.fonts),source:TimelineTextPart[]=[];
   const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,size:number,weight:number,eventIndex?:number)=>{
     if(text===undefined)return;
-    const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:weight,italic:false,path:partPath};
-    source.push({role,eventIndex,path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
+    // A current event's label is bold ("we are here"); every other part keeps its weight.
+    const status=eventIndex===undefined?undefined:timeline.events[eventIndex]!.status;
+    const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:status==='current'&&role==='what'?700:weight,italic:false,path:partPath};
+    source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
   timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,16,500,index);add('what',event.what,`${eventPath(index)}.what`,16,500,index);add('event-description',event.description,`${eventPath(index)}.description`,16,500,index);});
@@ -1299,25 +1399,34 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       let y=box.y;
       for(const part of metadata){const placed=place(part,box.x,y,box.width,'center');y+=placed.box.height+8*scale;}
       const available=box.y+box.height-y,count=events.length,radius=Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,available)*.04);
+      // Status geometry (FA-11): only a 'current' event gets a ring, and only a 'current' or 'planned' marker has an outline.
+      const statusOf=(index:number)=>timeline.events[index]!.status,ringRadius=radius*TIMELINE_RING_RATIO,strokeWidth=Math.min(2*scale,radius/2);
+      const hasRing=timeline.events.some(event=>event.status==='current');
+      const marker=(index:number,x:number,y:number):TimelineLayout['markers'][number]=>{
+        const status=statusOf(index);
+        return {path:eventPath(index),eventIndex:index,x,y,radius,...(status?{status}:{}),...(status==='current'?{ring:{radius:ringRadius}}:{}),...(status==='current'||status==='planned'?{strokeWidth}:{})};
+      };
       if(arrangement==='alternating'){
         const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
         const lineY=y+Math.max(scale,available)*.46;
         events.forEach((fields,index)=>{
           const x=start+(rtl?count-1-index:index)*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
-          markers.push({path:eventPath(index),eventIndex:index,x,y:lineY,radius});let cursor=top;
+          markers.push(marker(index,x,lineY));let cursor=top;
           for(const part of fields){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);}
         });
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
-        const x=rtl?box.x+box.width-radius:box.x+radius,textX=rtl?box.x:box.x+24*scale,width=box.width-24*scale;
+        // A ring widens the rail, and the text keeps its usual distance from the marker's edge.
+        const lead=hasRing?ringRadius+strokeWidth/2:radius,gap=24*scale+(lead-radius);
+        const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;
           for(const part of fields){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;}
-          markers.push({path:eventPath(index),eventIndex:index,x,y:top+Math.min(first?.box.height??2*radius,2*radius)/2,radius});
+          markers.push(marker(index,x,top+Math.min(first?.box.height??2*radius,2*radius)/2));
           y+=16*scale;
         });
       }
-      for(const marker of markers)if(marker.x-marker.radius<box.x-.01||marker.y-marker.radius<box.y-.01||marker.x+marker.radius>box.x+box.width+.01||marker.y+marker.radius>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}
+      for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const first=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(first.x,last.x),y1:first.y,x2:Math.max(first.x,last.x),y2:last.y}:{x1:first.x,y1:first.y,x2:last.x,y2:last.y};
       const candidate={arrangement,parts,markers,connector,diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
@@ -1528,6 +1637,10 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
 export interface RichTextRun {
   text: string; bold?: boolean; italic?: boolean; underline?: boolean; strikethrough?: boolean;
   color?: string; fontSize?: number; fontFamily?: string; link?: string; superscript?: boolean; subscript?: boolean;
+  /** Inline code: the run takes the design's code font (`RichTextOptions.codeFontFamily`) unless it names its own `fontFamily`. */
+  code?: boolean;
+  /** BCP-47 tag that overrides the deck language for this run; it reaches the fragment style as `style.lang`. */
+  lang?: string;
   /** RR-34: reference ids this run cites (a marker follows the run; the deck's `references` list resolves them). */
   cite?: string | string[];
   /** RR-34: an inline footnote for this run (a marker follows the run; the note is listed in the slide's footnote area). */
@@ -1550,6 +1663,8 @@ export interface RichTextLine { fragments: RichTextFragment[]; width: number; y:
 export interface RichTextFit extends TextFit { richLines: RichTextLine[]; height: number }
 export interface RichTextOptions {
   style: TextStyle;
+  /** The design's code family for runs with `code: true`; `monospace` when absent. */
+  codeFontFamily?: string;
   textMeasurement?: TextMeasurement;
   /** Use one measured line advance for every line, as native table cells do. */
   uniformLineHeight?: boolean;
@@ -1585,7 +1700,9 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const run:RichTextRun=typeof value==='string'?{text:value}:value;
     if(typeof run?.text!=='string'||(run.fontSize!==undefined&&(!Number.isFinite(run.fontSize)||run.fontSize<=0))) throw new RangeError('Rich text runs need text and a positive finite font size.');
     const start=offset;offset+=run.text.length;
-    const style=resolveTextStyle({...options.style,fontFamily:run.fontFamily??options.style.fontFamily,fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
+    const resolvedStyle=resolveTextStyle({...options.style,fontFamily:run.fontFamily??(run.code===true?options.codeFontFamily??'monospace':options.style.fontFamily),fontWeight:run.bold===undefined?options.style.fontWeight:run.bold?700:400,italic:run.italic??options.style.italic,path:options.style.path?`${options.style.path}.${runIndex}`:undefined},options.textMeasurement);
+    // A run language reaches the measurement and the engines as `style.lang`, after the host resolved the family (it may rebuild the style).
+    const style:TextStyle=typeof run.lang==='string'&&run.lang?{...resolvedStyle,lang:run.lang}:resolvedStyle;
     // RR-34: a citation/footnote marker belongs to the run end; it needs a path and text to attach to.
     const marker=options.citationMarker&&options.style.path&&run.text?options.citationMarker(`${options.style.path}.${runIndex}`):undefined;
     return {run,runIndex,start,end:offset,style,...(marker?{marker}:{})};
@@ -1790,6 +1907,8 @@ export interface TableLayoutOptions {
   scale?: number;
   minFontSize?: number;
   fontFamily?: string;
+  /** The design's code family for cell runs with `code: true`. */
+  codeFontFamily?: string;
   textMeasurement?: TextMeasurement;
   path?: string;
   /** RR-54: the document, for a dataset-backed table (`{ dataset }`): its headers, rows and column formats come from `datasets`. */
@@ -1848,7 +1967,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
     return Array.isArray(cell.value)
-      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
+      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
       : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
@@ -1856,7 +1975,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(requested,floor):floor,floor);
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:scale};
     const fit=Array.isArray(cell.value)
-      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
+      ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
       :fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
     return textHeight(fit)+(cell.padding.top+cell.padding.bottom)*scale;
   };
@@ -1893,7 +2012,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   return {rows,columnCount,height:sum(heights),overflow};
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
-  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fonts?.body,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -1957,7 +2076,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const scale = Math.min(width, height) / 720;
   const deckDirection: TextDirection = options.direction ?? resolveSlideDirection(options.presentation, options.slideIndex);
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
-  const hasCards = record(slide.design).contentBox ?? options.contentBox ?? false;
+  // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the layout record's design.
+  const hints = resolveDesignHints({ slide, layout, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
+  const hasCards = hints.contentBox ?? false;
   const composition: Composition = { ...record(layout.composition), ...record(slide.composition) };
   assertComposition(composition);
   const padding = (composition.padding ?? 0.08) * Math.min(width, height);
@@ -1970,19 +2091,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // follow titleAlignment; only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
   let coverGroup = false;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && record(slide.design).contentAlignment === undefined)
-      ? record(slide.design).titleAlignment ?? options.titleAlignment : record(slide.design).contentAlignment ?? options.contentAlignment) ?? 'left';
+    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && hints.sources.contentAlignment !== 'slide')
+      ? hints.titleAlignment : hints.contentAlignment) ?? 'left';
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fonts?.heading : field === "code" ? options.fonts?.code : field === "tag" ? options.fonts?.accent ?? options.fonts?.body : options.fonts?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
-  // Effective design hints: slide design, then deck design (per field).
-  const slideDesign = record(slide.design), deckDesign = record(record(options.presentation).design);
-  const designHint = (field: 'contentDirection' | 'chartPrimary' | 'listBullet'): { value: unknown; path: string } | undefined =>
-    slideDesign[field] !== undefined ? { value: slideDesign[field], path: `slides.${options.slideIndex ?? 0}.design.${field}` }
-    : deckDesign[field] !== undefined ? { value: deckDesign[field], path: `design.${field}` } : undefined;
-  const listBullet = designHint('listBullet');
+  const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
   const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
     const resolved = resolveLogo(options.presentation, slide, { slot: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
     return resolved ? { source: resolved.source, path: resolved.path } : undefined;
@@ -1992,9 +2108,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // whose runs cite or carry footnotes get a marker resolver and a footnote area; others are unchanged.
   const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
-  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
+  const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fonts?.code?{codeFontFamily:options.fonts.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
-    const style=styleFor(field,path),rich=field==='text'&&Array.isArray(value);
+    const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
     const alignment=explicitAlignment??alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,richOptions(style),minimum):undefined;
@@ -2091,12 +2207,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
   const headingItems: ComposedItem[] = [];
   for (const field of ["tag", "title", "subtitle"]) {
-    if (!slide[field]) continue;
+    if (!slide[field] || (Array.isArray(slide[field]) && !annotationText(slide[field]))) continue;
     const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
     const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
     const box = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: maxHeight };
-    const text = fitPlacedText(field,slide[field],String(slide[field]),box,requested,minSize,`${path}.${field}`);
-    box.height = Math.min(maxHeight, Math.max(text.lines.length * text.lineHeight,text.placement?.height??0));
+    // A TextRun[] heading wraps and fits like rich body text (richTextLayouter); a string keeps the plain fitter.
+    const text = fitPlacedText(field,slide[field],annotationText(slide[field]),box,requested,minSize,`${path}.${field}`);
+    box.height = Math.min(maxHeight, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight,text.placement?.height??0));
     if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
     const item: ComposedItem = { path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) };
     headingItems.push(item);
@@ -2165,6 +2282,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
+    ...(citationMarker?{citationMarker}:{}),
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fonts:options.fonts,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
@@ -2279,27 +2397,25 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
   // The root image drawn as the slide image no longer needs its content slot.
-  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'picture'); if (picture >= 0) placeholders.splice(picture, 1); }
+  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'image'); if (picture >= 0) placeholders.splice(picture, 1); }
   // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
-  // geometry contract), then design.contentDirection (slide, then deck), then the layout record's
-  // slideLayoutDirection, then auto. pptx.gallery derives contentDirection from slideLayoutDirection, so
-  // the hint ranks with that direction and never flattens a layout's own grid.
+  // geometry contract), then the effective design.contentDirection (slide, then deck, then the layout record's
+  // own), then auto. The hint ranks with the layout's own direction, so it never flattens a layout's own grid.
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
-  const direction = designHint('contentDirection')?.value;
-  const directionMode: Composition['mode'] | undefined = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : undefined;
-  const layoutDirectionMode: Composition['mode'] = layout.slideLayoutDirection === "Vertical" ? "column" : layout.slideLayoutDirection === "Horizontal" ? "row" : "auto";
-  // design.chartPrimary (slide, deck, then the layout's contentTypeChartPrimary) splits the root into a
+  const direction = hints.contentDirection;
+  const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
+  // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions
   // and no composition.mode of its own, and the root nodes mix at least one chart leaf with other nodes.
   // Unlike contentDirection it is an author opt-in (no bundled layout derives it), so it overrides the
   // layout record's composition, including its columns and weights.
-  const chartHint = designHint('chartPrimary')?.value ?? (typeof layout.contentTypeChartPrimary === 'string' ? layout.contentTypeChartPrimary.toLowerCase() : undefined);
+  const chartHint = hints.chartPrimary;
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !ownMode && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
   const rootSettings: Composition = chartPrimary
     ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', columns: undefined, weights: chartPrimary === 'left' || chartPrimary === 'top' ? [3, 2] : [2, 3] }
-    : { ...composition, mode: composition.mode ?? directionMode ?? layoutDirectionMode };
+    : { ...composition, mode: composition.mode ?? directionMode };
   if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const container: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
@@ -2342,14 +2458,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
 export function resolveCanvasDimensions(input: unknown): { width: number; height: number } {
   const presets: Record<string, [number, number]> = {
     widescreen: [40 / 3, 7.5], '16:9': [40 / 3, 7.5], standard: [10, 7.5],
-    '4:3': [10, 7.5], '16:10': [10, 6.25], letter: [11, 8.5], a4: [11.69, 8.27],
+    '4:3': [10, 7.5], '16:10': [10, 6.25], '1:1': [7.5, 7.5], '4:5': [7.5, 9.375], '9:16': [7.5, 40 / 3], letter: [11, 8.5], a4: [11.69, 8.27],
   };
   const value = record(input);
   const preset = presets[typeof input === 'string' ? input : value.preset] ?? presets.widescreen!;
@@ -2358,8 +2474,11 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   if (![width, height].every(n => Number.isFinite(n) && n > 0)) throw new RangeError('Canvas dimensions must be finite and positive.');
   return { width, height };
 }
-export {chartOptionSupport,chartOptionTarget,resolveChartOptions,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
-export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartOptions} from './chart-options.js';
+export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
+export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,excelNumberFormat,numberFormatFromExcel,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';
-export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
+export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
+
+export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
+export { layoutContent, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';

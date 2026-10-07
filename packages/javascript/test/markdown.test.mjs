@@ -148,7 +148,8 @@ describe("blocks", () => {
     // The first column is the category labels and stays text; the other columns are typed.
     assert.deepEqual(one("```chart line\nYear,Sales\n2024,5\n2025,6.5\n```").chart.data.rows, [["2024", 5], ["2025", 6.5]]);
     assert.deepEqual(one("```chart bar\n{\"columns\":[\"a\"],\"rows\":[[1]]}\n```").chart, { type: "bar", data: { columns: ["a"], rows: [[1]] } });
-    assert.deepEqual(one("```chart column\n{\"src\":\"data.csv\",\"columns\":[\"a\"]}\n```", {}).chart.data, { src: "data.csv", columns: ["a"] });
+    // A data source by file or asset is not part of the format: the fence is read as written and the OPF validation reports it.
+    assert.ok(errors("```chart column\n{\"src\":\"data.csv\",\"columns\":[\"a\"]}\n```").some((d) => d.ruleId.startsWith("opf/") && d.path === "/slides/0/chart/data"));
   });
 
   test("metric fences are key: value lines; a bare number is a number, a quoted value is text", () => {
@@ -202,19 +203,22 @@ describe("inline text", () => {
       { text: "b", bold: true }, " ", { text: "i", italic: true }, " ", { text: "i2", italic: true }, " ", { text: "b2", bold: true }, " ",
       { text: "s", strikethrough: true }, " ", { text: "u", underline: true }, " x", { text: "2", superscript: true }, " H", { text: "2", subscript: true }, "O",
     ]);
-    assert.deepEqual(text("[a](https://x.y/z_1) and <https://auto.link> and [b](<a b>)"), [
-      { text: "a", link: "https://x.y/z_1" }, " and ", { text: "https://auto.link", link: "https://auto.link" }, " and ", { text: "b", link: "a b" },
+    assert.deepEqual(text("[a](https://x.y/z_1) and <https://auto.link> and [b](<mailto:a@b.co>) and [c](tel:+15551234567)"), [
+      { text: "a", link: "https://x.y/z_1" }, " and ", { text: "https://auto.link", link: "https://auto.link" }, " and ", { text: "b", link: "mailto:a@b.co" }, " and ", { text: "c", link: "tel:+15551234567" },
     ]);
     assert.deepEqual(text("[red]{color=#FF0000 size=24 font=\"Open Sans\" bold}"), [{ text: "red", bold: true, color: "#FF0000", fontSize: 24, fontFamily: "Open Sans" }]);
   });
 
   test("nesting merges into one run per style and ***both*** is bold italic", () => {
     assert.deepEqual(text("***both*** **a *b* c**"), [{ text: "both", bold: true, italic: true }, " ", { text: "a ", bold: true }, { text: "b", bold: true, italic: true }, { text: " c", bold: true }]);
-    assert.deepEqual(text("[**bold link**](u)"), [{ text: "bold link", bold: true, link: "u" }]);
+    assert.deepEqual(text("[**bold link**](https://u.example)"), [{ text: "bold link", bold: true, link: "https://u.example" }]);
   });
 
-  test("escapes make characters literal; intraword underscores and spaced stars are text; there is no inline code or entity", () => {
-    assert.equal(text("\\*not\\* \\[x\\] snake_case_name 2 * 3 * 4 a\\\\b `code` &amp;"), "*not* [x] snake_case_name 2 * 3 * 4 a\\b `code` &amp;");
+  test("escapes make characters literal; intraword underscores and spaced stars are text; there is no entity", () => {
+    assert.equal(text("\\*not\\* \\[x\\] snake_case_name 2 * 3 * 4 a\\\\b \\`code` &amp;"), "*not* [x] snake_case_name 2 * 3 * 4 a\\b `code` &amp;");
+    // A backtick pair is an inline code span (FA-13); an unpaired backtick is text.
+    assert.deepEqual(text("run `x` now"), ["run ", { text: "x", code: true }, " now"]);
+    assert.equal(text("one ` tick"), "one ` tick");
     assert.equal(text("2*(3+4)*5"), "2*(3+4)*5");
     assert.equal(text("unclosed **bold and [link"), "unclosed **bold and [link");
   });
@@ -226,10 +230,37 @@ describe("inline text", () => {
     assert.equal(error.location.line, 1);
   });
 
-  test("title, quote and cell text is plain: formatting is dropped with a warning", () => {
-    const result = convert("# **Big** news\n\n> *quoted*");
-    assert.deepEqual(result.document.slides[0], { title: "Big news", quote: "quoted" });
-    assert.equal(result.diagnostics.filter((d) => d.ruleId === "markdown/formatting-dropped").length, 2);
+  test("title, subtitle and quote text keep inline formatting; attribution and source are plain and drop it with a warning", () => {
+    const result = convert("# **Big** news\n\n## a [b]{color=accent1} c\n\n> *quoted* words\n> — **Ada**");
+    assert.deepEqual(result.document.slides[0], {
+      title: [{ text: "Big", bold: true }, " news"],
+      subtitle: ["a ", { text: "b", color: "accent1" }, " c"],
+      quote: { text: [{ text: "quoted", italic: true }, " words"], attribution: "Ada" },
+    });
+    assert.deepEqual(result.diagnostics.map((d) => d.ruleId), ["markdown/formatting-dropped"]);
+    // A plain title or quote still reads as strings, and the quote shorthand stays a string.
+    assert.deepEqual(convert("# Plain\n\n> just text").document.slides[0], { title: "Plain", quote: "just text" });
+    // A formatted quote with no attribution stays in its { text } object: the shorthand is for a plain string.
+    assert.deepEqual(convert("> *quoted*").document.slides[0], { quote: { text: [{ text: "quoted", italic: true }] } });
+  });
+
+  test("rich titles and quotes write back natively and round-trip; a cite has no Markdown form and is embedded", () => {
+    const deck = {
+      references: [{ id: "r1", text: "Report" }],
+      slides: [
+        { title: ["Revenue grew ", { text: "28%", color: "accent1", bold: true }], subtitle: [{ text: "see", link: "https://example.com" }, " more"], quote: { text: ["One ", { text: "two", italic: true }, "\n\nThree"], attribution: "Ada" } },
+        { title: ["Cited", { text: " claim", cite: "r1" }], text: "x" },
+      ],
+    };
+    const first = opfToMarkdown(deck);
+    assert.match(first.markdown, /^# Revenue grew \*\*\[28%\]\{color=accent1\}\*\*$/m);
+    assert.match(first.markdown, /^> One \*two\*$/m);
+    assert.equal(first.report.embedded.length, 1);
+    assert.equal(first.report.embedded[0].path, "/slides/1/title");
+    const back = convert(first.markdown).document;
+    assert.deepEqual(back.slides[0], deck.slides[0]);
+    assert.deepEqual(back.slides[1], deck.slides[1]);
+    assert.equal(opfToMarkdown(back).markdown, first.markdown);
   });
 });
 
@@ -285,8 +316,8 @@ describe("errors carry line and column in the lint shape", () => {
     assert.equal(bad.path, "/slides/1/type");
     assert.equal(bad.location.line, 5);
     assert.equal(at(source, bad), "<!-- slide: type=bogus -->");
-    const table = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n```chart bar\n{\"src\":\"asset:missing\"}\n```").diagnostics.find((d) => d.ruleId === "opf/asset-reference");
-    assert.equal(table.location.line, 7);
+    const image = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n![alt](asset:missing)").diagnostics.find((d) => d.ruleId === "opf/asset-reference");
+    assert.equal(image.location.line, 7);
   });
 
   test("validate:false skips the OPF lint, a non-string input throws", () => {
@@ -366,6 +397,20 @@ describe("OPF to Markdown", () => {
     assert.deepEqual(markdownToOpf(opfToMarkdown(years).markdown).document, years);
   });
 
+  test("a chart fence takes alt after the type, and the writer puts it back (FA-09)", () => {
+    assert.deepEqual(one('```chart column alt="Revenue rose 50% in Q2."\nQuarter,Revenue\nQ1,12\nQ2,18\n```').chart, { type: "column", alt: "Revenue rose 50% in Q2.", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18]] } });
+    assert.deepEqual(one('```chart bar alt=""\n{"columns":["a"],"rows":[[1]]}\n```').chart, { type: "bar", alt: "", data: { columns: ["a"], rows: [[1]] } });
+    assert.ok(rule('```chart bar colour="red"\nA,B\nx,1\n```', "markdown/chart-attributes"));
+    const deck = { slides: [{ chart: { type: "line", alt: 'Sales: "up" 2024 to 2025', data: { columns: ["Year", "Sales"], rows: [["2024", 5], ["2025", 6.5]] } } }] };
+    const { markdown, report } = opfToMarkdown(deck);
+    assert.equal(report.native, true);
+    assert.equal(markdown, '```chart line alt="Sales: \\"up\\" 2024 to 2025"\nYear,Sales\n2024,5\n2025,6.5\n```\n');
+    assert.deepEqual(markdownToOpf(markdown).document, deck);
+    // An alt with a backtick cannot sit in a backtick fence's info string: the chart is embedded and still round-trips.
+    const ticks = { slides: [{ chart: { type: "line", alt: "Uses `code`", data: { columns: ["Year", "Sales"], rows: [["2024", 5]] } } }] };
+    assert.deepEqual(markdownToOpf(opfToMarkdown(ticks).markdown).document, ticks);
+  });
+
   test("a leading --- line whose block holds only comments warns that the slide was not read", () => {
     const result = convert("---\n# Not a deck property\n---\n# Real title\n");
     assert.deepEqual(result.document.slides, [{ title: "Real title" }]);
@@ -421,7 +466,6 @@ describe("round trips", () => {
     assert.deepEqual(result.document, expected);
     assert.equal(validatePresentation(expected).valid, true);
     assert.deepEqual(result.diagnostics.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
-      ["markdown/formatting-dropped", "warning", 11, 1],
       ["markdown/numbered-list", "warning", 23, 1],
       ["markdown/heading-demoted", "warning", 70, 1],
     ]);
@@ -485,7 +529,7 @@ describe("round trips", () => {
   }
 
   test("property: every example deck survives OPF to Markdown to OPF with all text and block kinds", () => {
-    assert.equal(examples.length, 126);
+    assert.equal(examples.length, 127);
     let nativeSlides = 0;
     let total = 0;
     const reasons = new Map();
@@ -505,8 +549,9 @@ describe("round trips", () => {
       total += deck.slides.length;
       for (const entry of report.embedded) reasons.set(entry.reason.replace(/"[^"]*"/g, '"key"'), (reasons.get(entry.reason.replace(/"[^"]*"/g, '"key"')) ?? 0) + 1);
     }
-    // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML.
-    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|"key" has no Markdown form|a block with several fields)/, reason);
+    // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML. A chart block carries type,
+    // alt and data only, so a chart with options (FA-14 `highlight`; the FA-15 combo example: line, secondaryAxis, axis titles) is embedded.
+    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|chart content|"key" has no Markdown form|a block with several fields)/, reason);
     assert.ok(nativeSlides / total > 0.9, `${nativeSlides} of ${total} slides are plain Markdown`);
   });
 

@@ -38,30 +38,7 @@
       "Do not over-explain obvious context."
     ]
   },
-  "narrative": {
-    "id": "venture-pitch",
-    "description": "Recycling Participation Campaign uses a compact evidence-to-decision arc for City Sanitation Bureau.",
-    "beats": [
-      {
-        "id": "context",
-        "name": "Context",
-        "slideType": "text",
-        "layoutHint": "text-1x"
-      },
-      {
-        "id": "evidence",
-        "name": "Evidence",
-        "slideType": "chart",
-        "layoutHint": "chart-1x"
-      },
-      {
-        "id": "commitment",
-        "name": "Commitment",
-        "slideType": "list",
-        "layoutHint": "list-3x"
-      }
-    ]
-  },
+  "narrative": "recycling-participation-campaign-arc",
   "design": {
     "theme": "bold",
     "colorScheme": {
@@ -74,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#E2E8F0",
-        "risk": "#F8FAFC"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "shruti",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "letter",
     "background": {
@@ -174,15 +138,34 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-bullet-bar",
+        "type": "100pct-stacked-bar",
         "data": {
-          "src": "asset:metric-data",
-          "sheet": "Summary",
-          "range": "A1:C8",
           "columns": [
             "Quarter",
             "Current",
             "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8
+            ],
+            [
+              "Q2",
+              16,
+              10
+            ],
+            [
+              "Q3",
+              21,
+              13
+            ],
+            [
+              "Q4",
+              26,
+              15
+            ]
           ]
         }
       }
@@ -325,7 +308,7 @@
       "blocks": [
         {
           "chart": {
-            "type": "100pct-stacked-bar-2x",
+            "type": "100pct-stacked-bar",
             "data": {
               "columns": [
                 "Quarter",
@@ -502,7 +485,7 @@
     },
     "metric-data": {
       "src": "./data/recycling-participation-campaign.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Recycling Participation Campaign data"
     },
     "watermark": {
@@ -532,24 +515,25 @@
           "id": "recycling-participation-campaign-arc",
           "name": "Sanitation Decision Arc",
           "summary": "A custom arc for City Sanitation Bureau.",
+          "description": "Recycling Participation Campaign uses a compact evidence-to-decision arc for City Sanitation Bureau.",
           "beats": [
             {
               "id": "context",
               "name": "Context",
-              "slideType": "text",
-              "layoutHint": "text-1x"
+              "type": "text",
+              "layout": "text-1x"
             },
             {
               "id": "evidence",
               "name": "Evidence",
-              "slideType": "chart",
-              "layoutHint": "chart-1x"
+              "type": "chart",
+              "layout": "chart-1x"
             },
             {
               "id": "decision",
               "name": "Decision",
-              "slideType": "list",
-              "layoutHint": "list-3x"
+              "type": "list",
+              "layout": "list-3x"
             }
           ]
         }

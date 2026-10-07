@@ -51,26 +51,13 @@
       "dark1": "#0F172A",
       "dark2": "#334155",
       "light1": "#FFFFFF",
-      "light2": "#F8FAFC",
-      "custom": {
-        "signal": "#F59E0B",
-        "risk": "#E2E8F0"
-      }
+      "light2": "#F8FAFC"
     },
     "fontScheme": {
       "id": "batang",
-      "heading": {
-        "family": "Aptos Display",
-        "weight": 700
-      },
-      "body": {
-        "family": "Aptos",
-        "weight": 400
-      },
-      "code": {
-        "family": "Consolas",
-        "weight": 400
-      }
+      "heading": "Aptos Display",
+      "body": "Aptos",
+      "code": "Consolas"
     },
     "dimensions": "a4",
     "background": {
@@ -151,7 +138,7 @@
       "title": "Signal Trend",
       "type": "chart",
       "chart": {
-        "type": "100pct-bullet-column-3x",
+        "type": "100pct-stacked-column",
         "data": {
           "columns": [
             "Quarter",
@@ -343,7 +330,7 @@
     },
     "metric-data": {
       "src": "./data/streaming-churn-winback-strategy.csv",
-      "format": "csv",
+      "mediaType": "text/csv",
       "title": "Streaming Churn Winback Strategy data"
     },
     "watermark": {

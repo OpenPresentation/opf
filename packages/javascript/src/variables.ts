@@ -1,5 +1,6 @@
 import { isRecord, pathFor } from "./content-walk.js";
 import { formatFurnitureDate, parseIsoDate } from "./furniture-fields.js";
+import { organizationsOf, primaryOrganization, primarySpeaker, speakersOf } from "./deck-metadata.js";
 
 /**
  * Template variables: typed, named values a deck declares once and uses in many
@@ -46,6 +47,8 @@ export type VariableDiagnosticCode =
   | "variable-invalid-value"
   | "variable-unknown"
   | "variable-unknown-value"
+  | "variable-unknown-builtin"
+  | "variable-builtin-missing"
   | "variable-unused"
   | "variable-rich-flattened"
   | "variable-format";
@@ -107,13 +110,21 @@ export class OPFVariableError extends Error {
 }
 
 const idPattern = /^[a-z][a-z0-9-]*$/;
-const referencePattern = /^var:([a-z][a-z0-9-]*)$/;
+/**
+ * A user-defined id, or a built-in name: `speakers`, or `deck`/`speaker`/`organization` plus one or two dotted
+ * segments (`speaker.name`, `organization.acme.logo`). A user id never contains a dot, so the two cannot collide.
+ */
+const nameSource = String.raw`[a-z][a-z0-9-]*|(?:deck|speaker|organization)(?:\.[A-Za-z0-9_-]+){1,2}`;
+const referencePattern = new RegExp(String.raw`^var:(${nameSource})$`);
+const builtinNamePattern = /^(?:speakers|(?:deck|speaker|organization)(?:\.[A-Za-z0-9_-]+){1,2})$/;
+/** Cheap pre-check: does this string carry a built-in token or a whole-field reference? */
+const builtinUsePattern = /\{\{\s*(?:speakers\b|(?:deck|speaker|organization)\.)|^var:(?:speakers$|(?:deck|speaker|organization)\.)/;
 const hexPattern = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 const urlPattern = /^(?:https?:\/\/|mailto:|tel:)\S+$/;
 const datePrefixPattern = /^(\d{4}-\d{2}-\d{2})(?:[T ].*)?$/;
 const decimalPattern = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
 /** One alternation: the escape `\{{`, or a token `{{id}}` / `{{id|format}}`. */
-const tokenPattern = /\\\{\{|\{\{\s*([a-z][a-z0-9-]*)\s*(?:\|([^{}]*))?\}\}/g;
+const tokenPattern = new RegExp(String.raw`\\\{\{|\{\{\s*(${nameSource})\s*(?:\|([^{}]*))?\}\}`, "g");
 
 /** Values used to type-check a template whose variable has neither value nor example. */
 const SAMPLES: Record<VariableKind, unknown> = {
@@ -220,9 +231,24 @@ export function variableDeclarations(presentation: unknown): VariableDeclaration
   return out;
 }
 
-/** True when the document declares a non-color variable or is marked as a template. */
+/** True when any string outside `variables`, `catalogs`, `extensions` carries a built-in token or whole-field reference. */
+function usesBuiltins(value: unknown, root = true): boolean {
+  if (typeof value === "string") return value.length >= 6 && builtinUsePattern.test(value);
+  if (Array.isArray(value)) return value.some((entry) => usesBuiltins(entry, false));
+  if (!isRecord(value)) return false;
+  for (const [key, entry] of Object.entries(value)) {
+    if (skippedKeys.has(key) || (root && skippedRootKeys.has(key))) continue;
+    if (usesBuiltins(entry, false)) return true;
+  }
+  return false;
+}
+
+/**
+ * True when the document declares a non-color variable, is marked as a template, or uses a built-in variable
+ * (`{{speaker.name}}`, `var:organization.logo`): the cases where resolveVariables changes the document.
+ */
 export function hasContentVariables(presentation: unknown): boolean {
-  return isTemplate(presentation) || variableDeclarations(presentation).some((declaration) => declaration.kind !== "color");
+  return isTemplate(presentation) || variableDeclarations(presentation).some((declaration) => declaration.kind !== "color") || usesBuiltins(presentation);
 }
 
 const POSITIVE_ZERO = "0";
@@ -281,6 +307,12 @@ interface Context {
   shape: boolean;
   content: boolean;
   seen: Set<string>;
+  /** The document built-ins read from. */
+  doc: Record<string, unknown>;
+  /** Examples mode (template previews): a built-in with no source value keeps its token visible. */
+  keepMissingBuiltins: boolean;
+  builtins: Map<string, Effective | null>;
+  resolvingBuiltins: Set<string>;
 }
 
 function diag(context: Context, entry: VariableDiagnostic, dedupeKey?: string): void {
@@ -339,6 +371,115 @@ function inlineText(effective: Effective, format: string | undefined, path: stri
   }
 }
 
+// ---------------------------------------------------------------------------
+// Built-in variables: read-only values from the deck's own metadata (docs/templates-and-variables.md).
+// ---------------------------------------------------------------------------
+
+/** Built-in fields per source, with their variable kind. */
+const DECK_FIELDS: Record<string, VariableKind> = { name: "text", description: "text", author: "text" };
+const SPEAKER_FIELDS: Record<string, VariableKind> = { name: "text", title: "text", email: "text", phone: "text", bio: "text", photo: "image" };
+const ORGANIZATION_FIELDS: Record<string, VariableKind> = { name: "text", legalName: "text", tagline: "text", domain: "text", email: "text", phone: "text", logo: "image" };
+
+/** True when `name` has the shape of a built-in (`speakers`, `speaker.name`, `organization.acme.logo`), known or not. */
+function isBuiltinName(name: string): boolean {
+  return builtinNamePattern.test(name);
+}
+
+type BuiltinSource = { ok: true; kind: VariableKind; raw: unknown } | { ok: false; message: string };
+
+function builtinFields(root: string): Record<string, VariableKind> {
+  return root === "deck" ? DECK_FIELDS : root === "speaker" ? SPEAKER_FIELDS : ORGANIZATION_FIELDS;
+}
+
+function present(value: unknown): unknown {
+  if (typeof value === "string") return value.trim() === "" ? undefined : value;
+  if (isRecord(value)) return typeof value.src === "string" && value.src.trim() ? value : undefined;
+  return undefined;
+}
+
+/** Where a built-in name reads its value (kind and raw value, undefined when the document has none), or why the path is unknown. */
+function builtinSource(name: string, doc: Record<string, unknown>): BuiltinSource {
+  if (name === "speakers") {
+    const names = speakersOf(doc).map((speaker) => present(speaker.name)).filter((entry): entry is string => typeof entry === "string");
+    return { ok: true, kind: "list", raw: names.length ? names : undefined };
+  }
+  const parts = name.split(".");
+  const root = parts[0] as string;
+  const fields = builtinFields(root);
+  const list = (names: string[]) => names.map((entry) => `'${entry}'`).join(", ");
+  if (root === "deck") {
+    const field = parts[1] as string;
+    if (parts.length !== 2 || !Object.hasOwn(fields, field)) return { ok: false, message: `'${name}' is not a built-in variable; the deck built-ins are ${list(Object.keys(fields).map((key) => `deck.${key}`))}.` };
+    const value = doc[field];
+    return { ok: true, kind: "text", raw: field === "author" && Array.isArray(value) ? present(value.filter((entry) => typeof entry === "string").join(", ")) : present(value) };
+  }
+  const field = parts[parts.length - 1] as string;
+  if (!Object.hasOwn(fields, field)) {
+    return { ok: false, message: `'${name}' is not a built-in variable: '${field}' is not a ${root} field; the fields are ${list(Object.keys(fields))}.` };
+  }
+  let entity: Record<string, unknown> | undefined;
+  if (parts.length === 2) entity = root === "speaker" ? primarySpeaker(doc) : primaryOrganization(doc);
+  else {
+    const id = parts[1] as string;
+    const entries = root === "speaker" ? speakersOf(doc) : organizationsOf(doc);
+    entity = entries.find((entry) => entry.id === id);
+    if (!entity) return { ok: false, message: `'${name}' names no ${root} with id '${id}'.` };
+  }
+  return { ok: true, kind: fields[field] as VariableKind, raw: present(entity?.[field]) };
+}
+
+/** The effective value of a built-in, or undefined (with an error diagnostic) for an unknown path. */
+function builtinEffective(name: string, path: string, context: Context): Effective | undefined {
+  // A built-in whose own text refers back to it: the inner token stays as written.
+  if (context.resolvingBuiltins.has(name)) return undefined;
+  const cached = context.builtins.get(name);
+  if (cached !== undefined) {
+    if (cached === null) diag(context, unknownBuiltin(name, path, context), `ubi:${name}:${path}`);
+    else if (cached.status === "unfilled") diag(context, missingBuiltin(name, path), `bim:${name}:${path}`);
+    return cached ?? undefined;
+  }
+  const source = builtinSource(name, context.doc);
+  if (!source.ok) {
+    context.builtins.set(name, null);
+    diag(context, unknownBuiltin(name, path, context), `ubi:${name}:${path}`);
+    return undefined;
+  }
+  const declaration: VariableDeclaration = { id: name, kind: source.kind, path: "", required: context.keepMissingBuiltins };
+  let effective: Effective;
+  const coerced = source.raw === undefined ? undefined : coerceVariableValue(source.kind, source.raw);
+  if (coerced?.ok) {
+    let value = coerced.value;
+    // A built-in text can itself carry tokens (a deck name "Review for {{client}}"): resolve it once; a cycle stays as written.
+    if (typeof value === "string" && value.includes("{{")) {
+      context.resolvingBuiltins.add(name);
+      value = interpolate(value, path, context).value;
+      context.resolvingBuiltins.delete(name);
+    }
+    effective = { declaration: { ...declaration, value }, status: "filled", value, provided: false };
+  } else {
+    effective = { declaration, status: "unfilled", provided: false };
+    diag(context, missingBuiltin(name, path), `bim:${name}:${path}`);
+  }
+  context.builtins.set(name, effective);
+  return effective;
+}
+
+function unknownBuiltin(name: string, path: string, context: Context): VariableDiagnostic {
+  const source = builtinSource(name, context.doc);
+  return { code: "variable-unknown-builtin", severity: "error", path, id: name, message: source.ok ? `'${name}' is not a built-in variable.` : source.message };
+}
+
+function missingBuiltin(name: string, path: string): VariableDiagnostic {
+  return { code: "variable-builtin-missing", severity: "warning", path, id: name, message: `Built-in '${name}' has no value in this document, so it resolves to nothing; add the field it reads (see docs/templates-and-variables.md).` };
+}
+
+/** A declared variable, or a built-in read from the document. */
+function lookupVariable(id: string, path: string, context: Context): Effective | undefined {
+  const declared = context.effective.get(id);
+  if (declared || !isBuiltinName(id)) return declared;
+  return builtinEffective(id, path, context);
+}
+
 function interpolate(text: string, path: string, context: Context): { value: string; changed: boolean } {
   let changed = false;
   const value = text.replace(tokenPattern, (match, id: string | undefined, format: string | undefined) => {
@@ -351,9 +492,9 @@ function interpolate(text: string, path: string, context: Context): { value: str
       return match;
     }
     context.uses.push({ id, path, form: "token" });
-    const effective = context.effective.get(id);
+    const effective = lookupVariable(id, path, context);
     if (!effective) {
-      diag(context, { code: "variable-unknown", severity: "warning", path, id, message: `'{{${id}}}' names no declared variable; declare '${id}' in the top-level variables map, or write '\\{{' for literal braces.` }, `unk:${id}:${path}`);
+      if (!isBuiltinName(id)) diag(context, { code: "variable-unknown", severity: "warning", path, id, message: `'{{${id}}}' names no declared variable; declare '${id}' in the top-level variables map, or write '\\{{' for literal braces.` }, `unk:${id}:${path}`);
       return match;
     }
     if (effective.status === "unfilled" && !context.shape) {
@@ -383,7 +524,7 @@ function reduceString(text: string, path: string, parentIsArray: boolean, contex
   const reference = referencePattern.exec(text);
   if (reference) {
     const id = reference[1] as string;
-    const effective = context.effective.get(id);
+    const effective = lookupVariable(id, path, context);
     if (effective && effective.declaration.kind !== "color") {
       context.uses.push({ id, path, form: "reference" });
       if (effective.status === "unfilled" && !context.shape) {
@@ -478,6 +619,10 @@ function plan(presentation: Record<string, unknown>, values: VariableValues, opt
     shape: options.shape === true,
     content: hasContentVariables(presentation) || template,
     seen: new Set(),
+    doc: presentation,
+    keepMissingBuiltins: options.examples === true,
+    builtins: new Map(),
+    resolvingBuiltins: new Set(),
   };
   const unfilled: string[] = [];
   const examplesUsed: string[] = [];
@@ -635,4 +780,51 @@ export function listVariables(presentation: unknown, values: VariableValues = {}
       uses: built.context.uses.filter((use) => use.id === declaration.id),
     };
   });
+}
+
+export interface BuiltinVariableInfo {
+  /** The dotted name, as written inside `{{...}}` or after `var:`. */
+  name: string;
+  kind: VariableKind;
+  /** Short label for pickers, such as "Speaker name". */
+  label: string;
+  /** The value the document gives it, when it has one (a string, an Asset or the list of names). */
+  value?: unknown;
+  /** True when the document has a source value for it. Unavailable built-ins resolve to nothing. */
+  available: boolean;
+  /** Every place the document uses it. */
+  uses: VariableUse[];
+}
+
+const FIELD_LABELS: Record<string, string> = { name: "name", legalName: "legal name", tagline: "tagline", domain: "domain", email: "email", phone: "phone", logo: "logo", title: "title", bio: "bio", photo: "photo", description: "description", author: "author" };
+
+/**
+ * The built-in variables of a deck, for pickers and agents: the generic names (`deck.*`, `speaker.*`, `speakers`,
+ * `organization.*`) first, then the id-addressed ones (`speaker.<id>.*`, `organization.<id>.*`) of each speaker and
+ * organization that has an id. Each carries its kind, current source value and where the document uses it.
+ */
+export function listBuiltinVariables(presentation: unknown): BuiltinVariableInfo[] {
+  if (!isRecord(presentation)) return [];
+  const names: { name: string; label: string }[] = [];
+  for (const field of Object.keys(DECK_FIELDS)) names.push({ name: `deck.${field}`, label: `Deck ${FIELD_LABELS[field]}` });
+  for (const field of Object.keys(SPEAKER_FIELDS)) names.push({ name: `speaker.${field}`, label: `Speaker ${FIELD_LABELS[field]}` });
+  names.push({ name: "speakers", label: "All speaker names" });
+  for (const field of Object.keys(ORGANIZATION_FIELDS)) names.push({ name: `organization.${field}`, label: `Organization ${FIELD_LABELS[field]}` });
+  for (const [root, entries] of [["speaker", speakersOf(presentation)], ["organization", organizationsOf(presentation)]] as const) {
+    for (const entry of entries) {
+      if (typeof entry.id !== "string" || entry.id === "") continue;
+      for (const field of Object.keys(builtinFields(root))) names.push({ name: `${root}.${entry.id}.${field}`, label: `${root === "speaker" ? "Speaker" : "Organization"} ${entry.id} ${FIELD_LABELS[field]}` });
+    }
+  }
+  const built = plan(presentation, {}, { examples: false, partial: true, shape: true });
+  built.context.content = true;
+  walk(presentation, "", false, built.context);
+  const out: BuiltinVariableInfo[] = [];
+  for (const { name, label } of names) {
+    const source = builtinSource(name, presentation);
+    if (!source.ok) continue;
+    const coerced = source.raw === undefined ? undefined : coerceVariableValue(source.kind, source.raw);
+    out.push({ name, kind: source.kind, label, ...(coerced?.ok ? { value: coerced.value } : {}), available: coerced?.ok === true, uses: built.context.uses.filter((use) => use.id === name) });
+  }
+  return out;
 }
