@@ -16,8 +16,16 @@ bundled in `@openpresentation/opf` stays tied to it.
   content.** Since the FF-37 decision (2026-10-02) a record can change here first:
   the gallery's CI checks its published files against the `@openpresentation/opf`
   release in its lockfile (`pnpm check:core-catalog`) and adopts the change with
-  the next core release. A change that begins in the gallery still lands through
-  the sync below.
+  the next core release.
+- **Each id has one owner (RR-58).** Core owns every record bundled in
+  `spec/catalogs/` (the shared records); pptx.gallery owns the records only it
+  publishes (most layouts). A gallery-only record enters the snapshot through the
+  sync below (`--include`) and is core-owned from then on. For a subset kind the
+  sync refuses a published copy of a bundled record that differs in any field,
+  `name` included, and the gallery's `check:core-catalog` fails on a gallery data
+  item that restates a core record differently. A mirrored kind publishes exactly
+  core's records, so an edit may start on either side but lands identically on
+  both.
 - **`spec/catalogs/` is a pinned snapshot.** `spec/catalogs/manifest.json`
   records the gallery commit and a content hash per kind.
 - **Engines never fetch at run time by default.** Renderers, exporters,
@@ -135,8 +143,8 @@ other kind. Inline `catalogs.<kind>.records` may use the same field.
 ```
 
 - **mirror**: the snapshot holds every published record of the kind.
-- **subset**: the snapshot keeps the ids it already bundles, with content taken
-  from the publisher, while the publisher also serves records that are not
+- **subset**: the snapshot keeps the ids it already bundles, with core's content
+  (the publisher must serve those records unchanged), while the publisher also serves records that are not
   reconciled for bundling yet (for example the gallery's extra layouts).
 
 The snapshot never loses an id. Removing a catalog record is a breaking change,

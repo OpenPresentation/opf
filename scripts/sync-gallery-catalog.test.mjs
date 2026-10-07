@@ -135,6 +135,25 @@ describe("planSnapshot", () => {
     assert.ok(problems.some((problem) => /themes\/index\.json: published contentSha256/.test(problem)), problems.join("\n"));
     assert.ok(problems.some((problem) => /purposes\/.*\.json: \/name must be string/.test(problem)), problems.join("\n"));
   });
+
+  test("refuses a gallery copy of a bundled subset record that differs in any field, name included (RR-58)", () => {
+    const gallery = publishedFromSnapshot();
+    const at = gallery.layouts.records.findIndex((record) => record.id === "chart-1x");
+    gallery.layouts.records[at] = { ...gallery.layouts.records[at], name: "Chart_1x" };
+    const bleed = gallery.layouts.records.findIndex((record) => record.id === "image-bleed");
+    const { composition, ...withoutComposition } = gallery.layouts.records[bleed];
+    assert.ok(composition, "image-bleed carries its own composition");
+    gallery.layouts.records[bleed] = withoutComposition;
+    gallery.layouts.index.contentSha256 = catalogContentSha256(gallery.layouts.records);
+    const manifest = structuredClone(snapshot.manifest);
+    manifest.kinds.layouts.mode = "subset";
+
+    const { problems } = planSnapshot({ gallery, current: snapshot.current, manifest, validators, source });
+    const owned = problems.filter((problem) => /core owns this bundled record/.test(problem));
+    assert.equal(owned.length, 2, problems.join("\n"));
+    assert.ok(owned.some((problem) => problem.startsWith("layouts/chart-1x.json:") && /\(name\)/.test(problem)), owned.join("\n"));
+    assert.ok(owned.some((problem) => problem.startsWith("layouts/image-bleed.json:") && /\(composition\)/.test(problem)), owned.join("\n"));
+  });
 });
 
 describe("--allow-removed waiver", () => {

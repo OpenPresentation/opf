@@ -202,6 +202,20 @@ export function planSnapshot({ gallery, current, manifest, validators, source, i
     for (const id of include[kind] ?? []) {
       if (!galleryIdSet.has(id)) problems.push(`${kind}: --include '${id}' is not published by the gallery`);
     }
+    // RR-58: each id has one owner. Core owns a record a subset kind already bundles, so the gallery must publish
+    // exactly that record (every schema field, `name` included); a different copy is an older or independent
+    // source, never an update to take.
+    if (mode === "subset") {
+      const currentById = new Map((current[kind]?.records ?? []).map((record) => [record.id, record]));
+      published.records.forEach((record) => {
+        const bundled = currentById.get(record.id);
+        if (!bundled || waived.has(record.id)) return;
+        const next = stripExtensions(record);
+        if (sameJson(bundled, next)) return;
+        const fields = [...new Set([...Object.keys(bundled), ...Object.keys(next)])].filter((key) => !sameJson(bundled[key] ?? null, next[key] ?? null)).sort();
+        problems.push(`${kind}/${record.id}.json: core owns this bundled record and the gallery publishes a different copy (${fields.join(", ")}); change it in spec/catalogs and let the gallery adopt the core release (build-opf-catalog.mjs --refresh-pending)`);
+      });
+    }
     const keep = mode === "mirror" ? new Set(galleryIdSet) : new Set([...currentIds, ...(include[kind] ?? [])]);
     for (const id of waived) keep.delete(id);
     const selected = [];
