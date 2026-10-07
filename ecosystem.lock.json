@@ -3,20 +3,20 @@
   "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. A pull request may change `golden` (a reviewed golden decision); use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
   "version": 1,
   "repositories": {
-    "opf": { "sha": "e3d55f74cd7f008223ab03384848801e1d68ca09" },
-    "opf-render": { "sha": "759017eca2141c484f52b5405ce13f175c8d2a6a" },
-    "opf-pptx": { "sha": "edd78269e8288d071aa022e633dc1ec3cd5da5c3" },
-    "opf-editor": { "sha": "0fe20f539631d13fcbb1b6bed2e852c4ffec9f0e" }
+    "opf": { "sha": "2b413e6bd3afc97cd3bf7a81f0615ad92855c6fc" },
+    "opf-render": { "sha": "69db707044f8178a894464d454c7cf7f8f813ae7" },
+    "opf-pptx": { "sha": "1b15f283aafc98b86505e9f46a6639f807fcfc0d" },
+    "opf-editor": { "sha": "a0ae59b39a6335c04dd175ac0689e551e6d4e240" }
   },
   "golden": {
     "repository": "opf",
-    "path": "scripts/fixtures/opf-examples-png.fa-0-14-locked-render.sha256.json",
-    "note": "TRANSITIONAL (FA 0.14 integration, opf#429): what the LOCKED renderer (opf-render 759017e, which predates FA) renders the FA corpus to (127 decks, 59 slides in 48 decks moved versus RR-20): the 40+ gallery chart slides draw the renamed chart type ids the old way and technical/design-backgrounds ignores the text role. Produced on Linux CI by regenerate-core-golden.yml dry run 37554992751 (guard passed). The roll to opf-render#151 adopts its golden-override, scripts/fixtures/opf-examples-png.fa-0-14.sha256.json (the true 22-slide FA set), and this file is deleted after the roll. The RR-20 example-decks golden is retained for the published core 0.13.0 (scripts/registry-golden.mjs)."
+    "path": "scripts/fixtures/opf-examples-png.fa-0-14.sha256.json",
+    "note": "golden adopted from opf-render golden-override (core fixture)"
   },
   "provenance": {
     "source": "roller",
-    "at": "2026-10-06T16:12:51Z",
-    "run": "https://github.com/OpenPresentation/opf/actions/runs/37493879177",
-    "note": "Rolled to the four main branches (opf e3d55f7, opf-render 759017e, opf-pptx edd7826, opf-editor 0fe20f5); moved: opf, opf-editor."
+    "at": "2026-10-07T06:31:25Z",
+    "run": "https://github.com/OpenPresentation/opf/actions/runs/37581948822",
+    "note": "Rolled to the four main branches (opf 2b413e6, opf-render 69db707, opf-pptx 1b15f28, opf-editor a0ae59b); moved: opf, opf-render, opf-pptx, opf-editor. Golden adopted from opf-render golden-override (core fixture)."
   }
 }
