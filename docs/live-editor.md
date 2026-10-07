@@ -1,15 +1,15 @@
 # Browser preview and live editing
 
-Published editor 0.12.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Published editor 0.14.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core 0.13.0, renderer 0.13.1, editor 0.12.1 and PPTX 0.13.2:
+Use Node 24 with core 0.14.0, renderer 0.14.0, editor 0.14.1 and PPTX 0.14.0:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.13.0 @openpresentation/opf-render@0.13.1 @openpresentation/opf-editor@0.12.1 @openpresentation/opf-pptx@0.13.2
+npm install --save-exact @openpresentation/opf@0.14.0 @openpresentation/opf-render@0.14.0 @openpresentation/opf-editor@0.14.1 @openpresentation/opf-pptx@0.14.0
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.11.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
@@ -43,24 +43,24 @@ Mount after the host DOM exists. The container controls width; the slide retains
 
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
-import { loadBrowserFontRegistry } from '@openpresentation/opf-render/fonts-browser';
+import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
 
 // Copy these licensed font files into your application's static assets first.
 // Use pinned, static faces; include every weight/style required by your deck.
-const fonts = await loadBrowserFontRegistry([
+const fonts = await loadFonts({ faces: [
   { url: '/fonts/Roboto-Regular.ttf', family: 'Roboto', weight: 400 },
   { url: '/fonts/Roboto-Bold.ttf', family: 'Roboto', weight: 700 },
   { url: '/fonts/RobotoMono-Regular.ttf', family: 'Roboto Mono', weight: 400 },
-]);
+] });
 
 const canvas = createCanvasEditor(document.querySelector('#slide'), {
-  document: {
+  presentation: {
     design: { theme: 'classic', fontScheme: 'roboto' },
     slides: [{ title: 'An editable presentation', text: 'Click to edit.' }],
   },
-  renderOptions: { textMeasurement: fonts.textMeasurement },
+  fonts,
   onCommit: ({ editor }) => {
-    const updatedOPF = editor.document; // Host owns saving and collaboration.
+    const updatedOPF = editor.presentation; // Host owns saving and collaboration.
     console.log(updatedOPF);
   },
   onError: error => console.error(error.message),
@@ -76,16 +76,13 @@ canvas.editor.undo();
 // fonts.dispose();
 ```
 
-`loadBrowserFontRegistry` accepts explicit font-file URLs or `Uint8Array` data. It uses the same bytes for Fontkit measurement and browser `FontFace` registration, awaits loading, reports failures, and exposes `dispose()` for its owned font faces. Cross-origin font URLs need CORS access. Load fonts once and share the registry between canvases. The canvas does not fetch fonts or catalog sources itself.
+`loadFonts` accepts explicit font-file URLs or `Uint8Array` data (`faces`). It uses the same bytes for Fontkit measurement and browser `FontFace` registration, awaits loading, reports failures, and exposes `dispose()` for its owned font faces; the handle's `pending` and `ensure` load the script and vendored faces a document needs, and the canvas waits for them before it renders. Cross-origin font URLs need CORS access. Load fonts once and share the handle between canvases. The canvas does not fetch fonts or catalog sources itself.
 
-For standalone SVG export, pass `fonts.embeddedFonts` to `renderSvg`; the export carries the font bytes and supplied license metadata. In a running browser canvas the registered fonts are already available, so embedding those bytes into every draft is unnecessary.
+For standalone SVG export, pass the handle as `{ fonts }` to `renderSlideSvg` (one slide) or `renderSvg` (every slide); the export carries the font bytes and supplied license metadata. In a running browser canvas the registered fonts are already available, so embedding those bytes into every draft is unnecessary.
 
 ```js
-import { renderSvg } from '@openpresentation/opf-render/svg';
-const svg = renderSvg(canvas.editor.document, {
-  textMeasurement: fonts.textMeasurement,
-  embeddedFonts: fonts.embeddedFonts,
-});
+import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+const svg = renderSlideSvg(canvas.editor.presentation, 0, { fonts });
 ```
 
 The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it for the renderer's root import. The Node root entry additionally supplies `svgToPng` and `svgToPdf`; those functions are not browser APIs.
@@ -104,7 +101,7 @@ The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it
 | Changes elsewhere | Unrelated edits are preserved; a changed selected payload cancels the stale local draft instead of overwriting it. This is conflict protection, not a distributed collaboration protocol. |
 | JSON editing | The demo Source view previews valid JSON beside the source; Apply records the document replacement. Invalid drafts retain the last valid preview. |
 
-`createCanvasEditor` accepts an existing `editor` session or a `document`, plus `slideIndex`, `renderOptions`, `textEntry` (`'click'` by default, or `'dblclick'`), an optional empty `propertiesContainer` to dock forms outside the slide, and callbacks `onSelect`, `onDraft`, `onCommit`, `onCancel`, `onRender`, and `onError`. The returned object exposes `editor`, `ready`, `select`, `beginEdit`, `editProperties`, `commit`, `cancel`, `setSlide`, `setRenderOptions`, `setLayoutEditing`, `render`, and `destroy`. `commit()` and setters return false if a draft cannot be committed. Avoid using public `render(document)` as a second source of truth; normal document changes should flow through the session.
+`createCanvasEditor` accepts an existing `editor` session or a `presentation`, plus `slideIndex`, `fonts` (the renderer's fonts handle), `renderOptions`, `textEntry` (`'click'` by default, or `'dblclick'`), an optional empty `propertiesContainer` to dock forms outside the slide, and callbacks `onSelect`, `onDraft`, `onCommit`, `onCancel`, `onRender`, and `onError`. The returned object exposes `editor`, `ready`, `select`, `beginEdit`, `editProperties`, `commit`, `cancel`, `setSlide`, `setRenderOptions`, `setLayoutEditing`, `render`, and `destroy`. `commit()` and setters return false if a draft cannot be committed. Avoid using public `render(presentation)` as a second source of truth; normal document changes should flow through the session.
 
 ## Text entry gestures
 
@@ -166,20 +163,20 @@ The reusable npm APIs are browser-safe and independent of the demo UI:
 import { parseOpfTransfer, serializeOpfTransfer, prepareOpfImport } from '@openpresentation/opf-editor/transfer';
 import { loadOpfGallery, loadOpfGalleryItem } from '@openpresentation/opf-editor/galleries';
 
-const markdown = serializeOpfTransfer(editor.document, {
+const markdown = serializeOpfTransfer(editor.presentation, {
   scope: 'slide', slideIndex: 0, format: 'markdown',
 });
 const parsed = parseOpfTransfer(markdown);
-const result = prepareOpfImport(editor.document, parsed, {
+const result = prepareOpfImport(editor.presentation, parsed, {
   mode: 'insert', slideIndex: 0,
 });
-// Host previews result.document before applying this single undoable change.
-editor.applyPatch([{ op: 'replace', path: '', value: result.document }], {
+// Host previews result.presentation before applying this single undoable change.
+editor.applyPatch([{ op: 'replace', path: '', value: result.presentation }], {
   source: 'import', rejectInvalid: true,
 });
 
 const gallery = await loadOpfGallery('https://example.com/registry.json');
-const document = await loadOpfGalleryItem(gallery.items[0], { gallery: gallery.url });
+const presentation = await loadOpfGalleryItem(gallery.items[0], { gallery: gallery.url });
 ```
 
 Both gallery functions accept an `AbortSignal` and an injected `fetch` for host integrations and tests. Import/copy tests cover format round trips, invalid inputs, conflicting IDs and references, source isolation, and one-step undo; the generated 854-example snapshot is checked through insertion and SVG rendering.
@@ -188,7 +185,7 @@ Both gallery functions accept an `AbortSignal` and an injected `fetch` for host 
 
 **All properties** opens the schema-driven workspace beside a live SVG preview. Use Presentation, Current slide, Selection, or Design to navigate; add optional fields, select structured value forms, edit arrays/maps, and Apply a validated change with one undo step. Click content in the preview to locate its field. Nonvisual metadata remains part of the OPF document. A dirty draft must be applied or discarded before closing.
 
-The `/schema` and `/schema-inspector` npm exports provide the reusable model and DOM inspector. `createSchemaInspector(container, {editor, path, onDraft})` exposes `navigate`, `commit`, `reset`, `destroy`, and read-only `document`/`dirty` getters. Use `onDraft` to render valid previews. The companion gallery `/spec` reference indexes the same 604 property definitions, and `/editor` embeds the shared browser build.
+The `/schema` and `/schema-inspector` npm exports provide the reusable model and DOM inspector. `createSchemaInspector(container, {editor, path, onDraft})` exposes `navigate`, `commit`, `reset`, `destroy`, and read-only `presentation`/`dirty` getters. Use `onDraft` to render valid previews. The companion gallery `/spec` reference indexes the same 604 property definitions, and `/editor` embeds the shared browser build.
 
 See [spec coverage](plans/spec-editor-coverage.md) for the distinction between complete field discovery and the remaining WYSIWYG rendering work.
 
@@ -205,10 +202,10 @@ import {
   prepareBlockInsert, prepareBlockDuplicate, prepareBlockRemove, createContentBlock,
   listBlockContainers,
 } from '@openpresentation/opf-editor/layout';
-const containers = listBlockContainers(editor.document, {includeImplicit: true});
-const prepared = prepareBlockInsert(editor.document, containers[0].path,
+const containers = listBlockContainers(editor.presentation, {includeImplicit: true});
+const prepared = prepareBlockInsert(editor.presentation, containers[0].path,
   createContentBlock('table')); // omit index to append
-// Render prepared.document with your intended fonts before applying.
+// Render prepared.presentation with your intended fonts before applying.
 editor.applyPatch(prepared.patches, {rejectInvalid: true});
 // Duplicate/remove take complete paths such as /slides/0/blocks/1.
 // canvas.openInsertMenu(containerPath?, index?) opens the browser palette.

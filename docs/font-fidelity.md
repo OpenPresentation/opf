@@ -50,22 +50,22 @@ Some replacements are open families that no renderer pack ships yet, such as Red
 
 | Environment | Open catalog families | Proprietary families | When the real font is required |
 | --- | --- | --- | --- |
-| Local Node, cloud or serverless (`prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'})`) | Exact when a pack ships them (Roboto, Carlito, …, Noto with `scripts`) | Metric replacement: identical widths. Visual replacement: approximate, reported in `registry.substitutions` with the measured delta | Supply licensed files with `prepareNodeFonts({faces: [{path, family, weight, italic}]})`; they resolve as exact faces |
+| Local Node, cloud or serverless (`loadFonts({pack: 'office', substitutionPolicy: 'visual'})` from `/fonts-node`) | Exact when a pack ships them (Roboto, Carlito, …, Noto with `scripts`) | Metric replacement: identical widths. Visual replacement: approximate, reported in `fonts.substitutions` with the measured delta | Supply licensed files with `loadFonts({faces: [{path, family, weight, italic}]})`; they resolve as exact faces |
 | Strict mode (`substitutionPolicy: 'metric'`) | Exact | Metric replacements only | `font-unavailable` names the license class, the declared replacement and tier, the pack, and the caller hook. There is never a silent wrong-metric fallback |
-| Browser (`loadBrowserFontRegistry`) | Exact when the host serves the pack files | Same replacement rules | Same hook: pass the caller's own faces |
+| Browser (`loadFonts` from `/fonts-browser`) | Exact when the host serves the pack files | Same replacement rules | Same hook: pass the caller's own faces |
 | PowerPoint (exported PPTX) | Named; the viewer needs the font or substitutes | The selected name, never the replacement: the real font on Office, Windows or macOS, or through Microsoft 365 cloud fonts | Named; the viewer substitutes |
 
 **Aptos, the default scheme.** Aptos is a Microsoft 365 cloud font and is not redistributable. Under the owner policy of 2026-09-29 it previews with Intos, an OFL font whose advance widths, kerning and vertical metrics equal Aptos 2.01: 0.000% mean and maximum width difference over the 300-string corpus in regular, bold, italic and bold italic, for Aptos, Aptos Display, Aptos Narrow and Aptos Serif (Aptos Serif measured from Microsoft's standalone Aptos Fonts download, the others from the Microsoft 365 cloud fonts). Line breaks, line heights and text sizes therefore agree with Aptos. The letter shapes are Intos's own (Inter-derived, Gelasio-derived for the serif), not Aptos's. The exported PPTX still names Aptos, Aptos Display, Aptos Narrow or Aptos Serif, and no Aptos file is bundled or embedded. Deployments that hold an Aptos license can pass the real files through `faces` for exact previews.
 
-Intos ships in opf-render's default office pack (`prepareNodeFonts({pack: 'office'})`, `loadOfficeFontRegistry()`), about 12 MB of font files, so the default metric policy previews the Aptos family without asking for visual mode. Without those faces, previews fall back to the alternates Roboto and Carlito, marked visual. Like the open families, Intos is an `embed: "used"` face: `registry.embeddedFonts` stays the 33 eager npm faces, `prepareNodeFonts().options.embeddedFonts` supplies it, and a standalone SVG embeds only the Intos faces its text draws (an Aptos slide: Intos regular and Intos Display bold, 14.7 MB with the eager faces, against 20.7 MB with all eight styles). Intos is a single-maintainer project started in September 2026, so it is pinned by commit and SHA-256 and the previous replacements stay as alternates. The pptx.gallery parity scoreboard's `fontResolution` check counts the Aptos family as perfect because the replacement is metric-compatible.
+Intos ships in opf-render's default office pack (`loadFonts({pack: 'office'})`), about 12 MB of font files, so the default metric policy previews the Aptos family without asking for visual mode. Without those faces, previews fall back to the alternates Roboto and Carlito, marked visual. Like the open families, Intos is an `embed: "used"` face: `registry.embeddedFonts` stays the 33 eager npm faces, the handle's `embeddedFonts` supplies it, and a standalone SVG embeds only the Intos faces its text draws (an Aptos slide: Intos regular and Intos Display bold, 14.7 MB with the eager faces, against 20.7 MB with all eight styles). Intos is a single-maintainer project started in September 2026, so it is pinned by commit and SHA-256 and the previous replacements stay as alternates. The pptx.gallery parity scoreboard's `fontResolution` check counts the Aptos family as perfect because the replacement is metric-compatible.
 
-**Browser hosts load the vendored faces on demand.** The eager list is what a host puts in one `fonts.json` (12.6 MB); the vendored faces (Intos and the open families, `registry.lazyFonts`, 51 faces) would add 19.4 MB, so they ship as separate hash-pinned files at their package-relative paths (`fonts/intos/...`, `fonts/<family>/...`) and load through `loadBrowserFontRegistry(faces, {lazyFontsBaseUrl})`. `await registry.ensureLazyFonts(presentation)` fetches and verifies only the faces the document draws (renderer 0.11.5, face level: a plain Aptos deck needs Intos Display Bold and Intos Regular, 2 files, 1.5 MB; an italic or bold run adds one face; before 0.11.5 it was every face of the resolved families, 8 files, 5.9 MB), then adds them to the document and the registry together, so the editor never measures with a face it paints as a fallback. The gallery commits only a pinned manifest, `lazy-fonts.json` (`scripts/gallery-lazy-fonts.mjs`, written by `build-registry-gallery-editor` from the published renderer's manifest when the pinned editor example calls `ensureLazyFonts`, and copied by `prepare-gallery-editor`): exact renderer version, SPDX license, license-file hash and every face's SHA-256, no bytes. The gallery's own build copies the faces from the pinned renderer package's `fonts/` directory into an untracked path, verifying each hash, the way it does for script fonts. The local editor demo (`build-editor-demo`, through `scripts/emit-lazy-fonts.mjs`) copies the files beside the page instead. The editor playground calls `ensureLazyFonts` when a document needs them. `node scripts/test-editor-lazy-fonts.mjs` drives the built playground in Chromium.
+**Browser hosts load the vendored faces on demand.** The eager list is what a host puts in one `fonts.json` (12.6 MB); the vendored faces (Intos and the open families, `registry.lazyFonts`, 51 faces) would add 19.4 MB, so they ship as separate hash-pinned files at their package-relative paths (`fonts/intos/...`, `fonts/<family>/...`) and load through `loadFonts({faces, lazyFontsBaseUrl})` from `/fonts-browser`. `await fonts.ensure(presentation)` (the registry's `ensureLazyFonts` and `ensureScripts` are the lower-level calls) fetches and verifies only the faces the document draws (renderer 0.11.5, face level: a plain Aptos deck needs Intos Display Bold and Intos Regular, 2 files, 1.5 MB; an italic or bold run adds one face; before 0.11.5 it was every face of the resolved families, 8 files, 5.9 MB), then adds them to the document and the registry together, so the editor never measures with a face it paints as a fallback. The gallery commits only a pinned manifest, `lazy-fonts.json` (`scripts/gallery-lazy-fonts.mjs`, written by `build-registry-gallery-editor` from the published renderer's manifest when the pinned editor example sets `lazyFontsBaseUrl`, and copied by `prepare-gallery-editor`): exact renderer version, SPDX license, license-file hash and every face's SHA-256, no bytes. The gallery's own build copies the faces from the pinned renderer package's `fonts/` directory into an untracked path, verifying each hash, the way it does for script fonts. The local editor demo (`build-editor-demo`, through `scripts/emit-lazy-fonts.mjs`) copies the files beside the page instead. The editor playground calls `fonts.ensure(presentation)` when a document needs them. `node scripts/test-editor-lazy-fonts.mjs` drives the built playground in Chromium.
 
 The [Windows reference-font advance study](evidence/shared-metric-native-anchor/font-study-comparison.json) is exploratory source-checkpoint evidence, not an additional compatibility certification. It measures 1,024 cases across regular/bold Calibri, Arial, Times New Roman and Courier New, recording local reference-file versions/hashes and native font-slot names. Disabling optional ligatures and rounding base glyph advances to eighth-point steps predicts 949 observations within 0.02pt; 75 outliers remain, including combining marks, Arabic and Calibri kerning. Office theme tokens and per-glyph fallback are not resolved to exact native files by these name properties. No runtime provider or open-font mapping changes from this hypothesis, and no reference font is redistributed.
 
 The composition API accepts a `textMeasurement` provider. A provider resolves font faces and returns actual text widths; callers pass the same provider to pagination (as `{ fonts: { textMeasurement } }`), editor geometry, SVG rendering, and PPTX export. Without one, the existing deterministic character-width estimate remains available.
 
-Renderer 0.8.0 publishes `prepareNodeFonts` from `/fonts-node`. Its returned `options` combine the same registry measurement, embedded SVG fonts and explicit raster files, with system/bundled fallback disabled for raster calls. Pass these options to pagination as `{ fonts: options }` (deck-level verbs take the fonts handle under `fonts`), and to editor geometry, SVG, PPTX and PNG/PDF export directly. `pack: 'base'` is the default for authored Roboto decks; `pack: 'office'` adds the six Office substitute families and retains metric policy unless visual substitution is explicitly requested. `registry.substitutions` records actual substitutions; the helper does not rewrite the authored document or add native embedding.
+`loadFonts(options)` from `/fonts-node` returns the fonts handle: the same registry measurement (`textMeasurement`), the faces to embed in SVG (`embeddedFonts`) and the explicit raster files (`fontFiles`), with system and bundled fallback disabled for raster calls (`useBundledFonts: false`, `loadSystemFonts: false`). Pass it as `{ fonts }` to every deck-level call: `paginate`, editor geometry, `renderSvg`, `renderSlideSvg`, `toPptx`, `svgToPng` and `svgToPdf`. `pack: 'base'` is the default for authored Roboto decks; `pack: 'office'` adds the six Office substitute families and retains metric policy unless visual substitution is explicitly requested. `fonts.substitutions` records actual substitutions; the loader does not rewrite the authored document or add native embedding.
 
 Renderer 0.8.0 groups static files by their OpenType preferred family while retaining legacy family names and explicit custom namespaces. `Roboto` requests at 500/600/800 now select the actual Medium/SemiBold/ExtraBold files instead of nearby 400/700 faces. Optional `TextStyle.fontFace` carries the physical legacy family and native bold/italic flags independently of CSS numeric weight: SemiBold/ExtraBold are regular within their legacy families. The converter consumes this metadata; providers without it retain their prior behavior. Nine actual base faces pass metadata/measurement/outline checks and offline Chromium advances on Node 20/24. Seven payload slides cover serialized native selectors, deterministic output and source/reimport. These checks do not establish native Office paint, embedding or broader script coverage; see the [Mac candidate evidence](evidence/mac-font-variants/README.md).
 
@@ -73,41 +73,34 @@ Renderer 0.8.0 uses adjacent SVG spans when no measurement provider is supplied.
 
 Both Node loaders verify exact package versions, 33 font-file hashes and eight license-notice hashes against the immutable `BUNDLED_FONT_MANIFEST` exported from `/fonts-node`. The office loader also verifies the vendored faces: the Carlito files, the 35 open-family files and the 16 Intos files, with the hashes of their licenses and, for Intos, its provenance notice. Missing/modified resources reject with actionable errors. Default raster loading now includes all nine base faces instead of omitting Roboto semibold, italic and bold italic. Font files must remain available and unchanged between preparation and raster export. Browser loading, actual glyph coverage, variant naming, rich spacing, and native compatibility remain separate requirements. These APIs are available in [renderer 0.8.0](https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.8.0), published against core 0.10.0 with Node 24. Prepared HarfBuzz shaping and variable-instance work remain separate drafts.
 
-The renderer's optional font registry uses [Fontkit](https://github.com/foliojs/fontkit) to shape text and measure glyph advances from local font bytes. It does not discover system fonts or fetch fonts. The Node helper loads the renderer's bundled Roboto and Roboto Mono faces:
+The renderer's optional font registry uses [Fontkit](https://github.com/foliojs/fontkit) to shape text and measure glyph advances from local font bytes. It does not discover system fonts or fetch fonts. The Node loader loads the renderer's bundled Roboto and Roboto Mono faces:
 
 ```js
-import { loadBundledFontRegistry } from '@openpresentation/opf-render/fonts-node';
-import { renderSvg, svgToPng } from '@openpresentation/opf-render';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
+import { renderSlideSvg, svgToPng } from '@openpresentation/opf-render';
 import { paginate } from '@openpresentation/opf/pagination';
 import { toPptx } from '@openpresentation/opf-pptx';
 
-const registry = await loadBundledFontRegistry();
-const options = { textMeasurement: registry.textMeasurement };
+const fonts = await loadFonts(); // pack: 'base', the bundled Roboto faces
 // Use design.fontScheme: 'roboto', or supply the document's actual font files.
-const { presentation } = paginate(deck, { fonts: options });
-const svg = renderSvg(presentation, {
-  ...options,
-  embeddedFonts: registry.embeddedFonts,
-});
-const png = await svgToPng(svg, {
-  fontFiles: registry.fontFiles,
-  useBundledFonts: false,
-  loadSystemFonts: false,
-});
-const pptx = await toPptx(presentation, options);
+const { presentation } = paginate(deck, { fonts });
+const svg = renderSlideSvg(presentation, 0, { fonts }); // embeds the faces it draws
+const png = await svgToPng(svg, { fonts }); // draws with fonts.fontFiles only
+const pptx = await toPptx(presentation, { fonts });
 ```
 
-`createFontRegistry` from `@openpresentation/opf-render/fonts` accepts `{data: Uint8Array, weight, italic?, family?, postscriptName?, license?}` entries in Node or the browser. Weights are explicit, with 400 as the default. Supply each style that the document uses. Missing font families and unsupported glyphs fail with `OPFFontError`, including the source path where available. Collection fonts require a `postscriptName` selecting one face.
+`loadFonts({ faces })` (from `/fonts-node` or `/fonts-browser`) accepts `{data: Uint8Array, weight, italic?, family?, postscriptName?, license?}` entries in Node or the browser, and `{path}` entries in Node. Weights are explicit, with 400 as the default. Supply each style that the document uses. Missing font families and unsupported glyphs fail with `OPFFontError`, including the source path where available. Collection fonts require a `postscriptName` selecting one face.
 
 Aliases and fallback families are explicit choices:
 
 ```js
-const registry = createFontRegistry(faces, {
+const fonts = await loadFonts({
+  pack: 'none', faces,
   aliases: { Aptos: 'Roboto', 'Aptos Display': 'Roboto' },
   fallbackFamily: 'Roboto',
 });
-console.log(registry.substitutions);
-registry.clearSubstitutions(); // Start a fresh render's diagnostic collection.
+console.log(fonts.substitutions);
+fonts.registry.clearSubstitutions(); // Start a fresh render's diagnostic collection.
 ```
 
 An available exact family takes precedence over aliases. The registry resolves a requested weight to the closest supplied weight, reports the substitution, and makes the resolved style available to rendering. Missing italic/upright styles fail instead of synthesizing an unmeasured style. `strictGlyphs: false` is an explicit escape hatch for hosts with their own glyph-fallback policy; it is unsuitable for fidelity verification.
@@ -118,17 +111,18 @@ SVG embeds supplied fonts using data URIs and includes supplied license notices 
 
 ## Office compatibility pack
 
-`loadOfficeFontRegistry` from `@openpresentation/opf-render/fonts-node` supplies regular, bold, italic, and bold italic faces of Carlito, Caladea, Arimo, Tinos, Cousine, and Gelasio, plus the base Roboto pack. Package versions are pinned and each face carries its distribution's license notice. `includeBaseFonts: false` omits Roboto. Loading never installs fonts into the operating system or downloads fonts at render time.
+`loadFonts({ pack: 'office' })` from `@openpresentation/opf-render/fonts-node` supplies regular, bold, italic, and bold italic faces of Carlito, Caladea, Arimo, Tinos, Cousine, and Gelasio, plus the base Roboto pack. Package versions are pinned and each face carries its distribution's license notice. `includeBaseFonts: false` omits Roboto. Loading never installs fonts into the operating system or downloads fonts at render time.
 
 ```js
-const registry = await loadOfficeFontRegistry({
-  substitutionPolicy: 'metric', // Default for this loader; no visual fallback.
+const fonts = await loadFonts({
+  pack: 'office',
+  substitutionPolicy: 'metric', // Default for the office pack; no visual fallback.
 });
-registry.resolveFont({fontFamily: 'Calibri', fontWeight: 400});
+fonts.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 400});
 // requestedFamily: Calibri, resolvedFamily: Carlito, compatibility: metric
 ```
 
-`createFontRegistry` defaults to `substitutionPolicy: 'none'`. Policies are `none`, `metric`, and `visual`; visual permits both curated tiers. An explicit `fallbackFamily` is a separate, reported `generic` fallback. Aliases are explicit visual substitutions and never establish metric compatibility. `resolveFont` reports exact resolutions as well; `substitutions` only collects changes. Resolution records include requested/resolved weights, italic, source path, and supporting upstream information where available.
+`loadFonts` defaults to `substitutionPolicy: 'none'` (the office pack to `'metric'`). Policies are `none`, `metric`, and `visual`; visual permits both curated tiers. An explicit `fallbackFamily` is a separate, reported `generic` fallback. Aliases are explicit visual substitutions and never establish metric compatibility. `resolveFont` reports exact resolutions as well; `substitutions` only collects changes. Resolution records include requested/resolved weights, italic, source path, and supporting upstream information where available.
 
 | Requested family | Bundled substitute | Current automatic tier |
 | --- | --- | --- |

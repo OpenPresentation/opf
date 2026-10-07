@@ -90,6 +90,9 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {renderSvg, svgToPng} from '@openpresentation/opf-render';
 export {checkTypefaces, fromPptx, toPptx} from '@openpresentation/opf-pptx';
 export {createEditorSession} from '@openpresentation/opf-editor';
+// The harness of the plan core's release tag (published-matrix.yml runs opf-v<core> as released) reads the deck of an editor session through
+// this accessor; the current harness uses editor.presentation. Drop it when the plan's core tag has a harness without it.
+export const presentationOf = (editor) => editor.presentation;
 export {catalogs} from '@openpresentation/opf/catalogs';
 export {resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {validate} from '@openpresentation/opf';

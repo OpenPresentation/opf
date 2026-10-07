@@ -153,8 +153,8 @@ Every engine shares one last resort, `aptos`, so a custom theme without `fontSch
 
 Aptos is not openly licensed, so no OPF package bundles it. Previews take the same path for the last resort as for any `aptos` deck:
 
-- **Estimated layout** (no `textMeasurement`): the SVG names `Aptos` and `Aptos Display`, and the default raster engine draws them with its bundled sans-serif fallback (Roboto).
-- **Measured layout** with the opf-render office font pack (the default for `prepareNodeFonts({pack: 'office'})`): `Aptos` and `Aptos Display` resolve to Intos and Intos Display, metric-compatible replacements from the OPF font policy (0.000% mean width difference against Aptos 2.01), and the substitution report lists both. With only the base pack and `substitutionPolicy: "visual"` they fall back to the visual alternates Roboto and Carlito. The PPTX always names Aptos. See [font-fidelity.md](font-fidelity.md#font-policy-ff-31).
+- **Estimated layout** (no `fonts`): the SVG names `Aptos` and `Aptos Display`, and the default raster engine draws them with its bundled sans-serif fallback (Roboto).
+- **Measured layout** with the opf-render office font pack (`loadFonts({pack: 'office'})`): `Aptos` and `Aptos Display` resolve to Intos and Intos Display, metric-compatible replacements from the OPF font policy (0.000% mean width difference against Aptos 2.01), and the substitution report lists both. With only the base pack and `substitutionPolicy: "visual"` they fall back to the visual alternates Roboto and Carlito. The PPTX always names Aptos. See [font-fidelity.md](font-fidelity.md#font-policy-ff-31).
 - **Measured layout with only the base pack under the metric policy**: `font-unavailable` for Aptos, as for a document with no `design`. Supply licensed Aptos faces, allow visual substitution, or set a `fallbackFamily`.
 
 Until FF-35 (font-fidelity-everywhere), core pagination, opf-render and opf-editor fell back to `roboto` while opf-pptx used `aptos`, so such a deck was measured in Roboto but exported with Aptos. None of the 126 bundled examples reaches the last resort: all 805 renderer golden rasters and all 126 exported PPTX files are byte-identical before and after the change. `packages/javascript/test/font-scheme-defaults.test.mjs` checks the shared default in core pagination, and each sibling repository has a parity test.
@@ -182,7 +182,7 @@ A font-scheme id that matches no inline or bundled record (`"fontScheme": "no-su
 | Engine | Diagnostic channel | Reported |
 | --- | --- | --- |
 | Core pagination | `paginate(..., { onDiagnostic })` | once per path per call |
-| opf-render preview | `renderSvg` / `renderSvgDeck` `onDiagnostic` | once per path per rendered slide |
+| opf-render preview | `renderSvg` / `renderSlideSvg` `onDiagnostic` | once per path per rendered slide |
 | opf-editor | `session.composeSlide` / `paginateSlide` `onDiagnostic` option | once per call |
 | opf-pptx export | `toPptx(..., { onDiagnostic })` | once per path per export |
 

@@ -1,19 +1,19 @@
 # Editor and transfer APIs
 
-These entrypoints are published in editor 0.8.0 and later. Use core 0.13.0, renderer 0.13.1, editor 0.12.1 and PPTX 0.13.2 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
+These entrypoints are published in editor 0.8.0 and later. Use core 0.14.0, renderer 0.14.0, editor 0.14.1 and PPTX 0.14.0 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
 
 ## Atomic patching
 
 ```js
 import { createEditorSession } from '@openpresentation/opf-editor';
 const editor = createEditorSession(document, {rejectInvalid: true});
-const index = editor.document.slides.findIndex(slide => slide.id === targetId);
+const index = editor.presentation.slides.findIndex(slide => slide.id === targetId);
 if (index < 0) throw new Error('Slide ID not found');
 editor.applyPatch([
   {op: 'test', path: `/slides/${index}/id`, value: targetId},
   {op: 'replace', path: `/slides/${index}/title`, value: newTitle},
 ], {source: 'agent', rejectInvalid: true});
-// Read editor.document for saving; editor.undo() reverses this transaction.
+// Read editor.presentation for saving; editor.undo() reverses this transaction.
 ```
 
 The patch assumes `title` already exists; use `add` or `createValuePatch` for optional fields. A stable-ID `test` detects a moved/replaced target, not every concurrent content change; add an expected-value test or host revision check as needed. Never build pointer paths by joining unescaped user keys.
@@ -27,28 +27,28 @@ Core's `@openpresentation/opf/convert` (RR-26, after the release that lists it) 
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
 import { createSchemaInspector } from '@openpresentation/opf-editor/schema-inspector';
-const canvas = createCanvasEditor(slideContainer, {editor, slideIndex: 0, renderOptions});
+const canvas = createCanvasEditor(slideContainer, {editor, slideIndex: 0, fonts});
 await canvas.ready;
 const inspector = createSchemaInspector(propertyContainer, {
   editor,
   path: '/slides/0',
-  onDraft: ({document: draft}) => previewDraft(draft),
+  onDraft: ({presentation: draft}) => previewDraft(draft),
 });
 // inspector.commit() validates and applies one undoable change.
 // On unmount: inspector.destroy(); canvas.destroy();
 ```
 
-Containers, render options, and `previewDraft` belong to the host. Mount after DOM creation. A schema-inspector draft is deliberately staged; avoid creating a second authoritative document. When the session changes concurrently, stale drafts must be discarded/rebased. Nonvisual metadata is edited as properties, not drawn as slide text.
+Containers, the fonts handle (`loadFonts()` from `@openpresentation/opf-render/fonts-browser`), and `previewDraft` belong to the host. Mount after DOM creation. A schema-inspector draft is deliberately staged; avoid creating a second authoritative document. When the session changes concurrently, stale drafts must be discarded/rebased. Nonvisual metadata is edited as properties, not drawn as slide text.
 
 ## Copy and import
 
 ```js
 import { parseOpfTransfer, serializeOpfTransfer, prepareOpfImport } from '@openpresentation/opf-editor/transfer';
-const copied = serializeOpfTransfer(editor.document, {scope: 'slide', slideIndex: 0, format: 'markdown'});
+const copied = serializeOpfTransfer(editor.presentation, {scope: 'slide', slideIndex: 0, format: 'markdown'});
 const parsed = parseOpfTransfer(copied);
-const proposed = prepareOpfImport(editor.document, parsed, {mode: 'insert', slideIndex: 0});
-// Preview proposed.document, then apply the intended import as one transaction.
-editor.applyPatch([{op: 'replace', path: '', value: proposed.document}], {source: 'import', rejectInvalid: true});
+const proposed = prepareOpfImport(editor.presentation, parsed, {mode: 'insert', slideIndex: 0});
+// Preview proposed.presentation, then apply the intended import as one transaction.
+editor.applyPatch([{op: 'replace', path: '', value: proposed.presentation}], {source: 'import', rejectInvalid: true});
 ```
 
 Copy scopes are presentation, slide, and selection; formats are pretty, compact, and markdown. Selection needs `path`. Import modes are insert, replace, and selection; selection also needs `path`.
@@ -71,14 +71,14 @@ The canvas toolbar selects and formats the actual SVG glyphs. `beginEdit(path)` 
 
 ## Moving complete blocks
 
-Use `prepareBlockMove(document, fromPath, toContainerPath, toIndex)` from `@openpresentation/opf-editor/layout`. Choose complete block paths, not their text/data subfields. `toIndex` is an insertion position before removal. The helper accounts for shifted group addresses, preserves nested content and metadata, validates the full result, and returns guarded remove/add patches with the new `path`. No-op moves return no patches. Apply the prepared patches atomically; do not discard their test guards. Parent weights remain attached to positions. Empty source containers and moves into a group's own descendants are rejected. Render the candidate before applying to catch strict overflow or unavailable fonts. `listBlockContainers` discovers eligible existing groups/slides without traversing arbitrary extension data.
+Use `prepareBlockMove(presentation, fromPath, toContainerPath, toIndex)` from `@openpresentation/opf-editor/layout`. Choose complete block paths, not their text/data subfields. `toIndex` is an insertion position before removal. The helper accounts for shifted group addresses, preserves nested content and metadata, validates the full result, and returns guarded remove/add patches with the new `path`. No-op moves return no patches. Apply the prepared patches atomically; do not discard their test guards. Parent weights remain attached to positions. Empty source containers and moves into a group's own descendants are rejected. Render the candidate before applying to catch strict overflow or unavailable fonts. `listBlockContainers` discovers eligible existing groups/slides without traversing arbitrary extension data.
 
 For list formatting, edit the exact entry or description path, such as `slides.0.items.1.text` or `slides.0.items.1.description`. Strings edit inline; rich arrays support range formatting. The parent `items` or `bullets` array is structural content, not a text-run array. Numbering is the payload's `numbering` field (for example `slides.0.numbering`, or `slides.0.left.numbering`), a style name, a `{style,start,suffix}` object or an array per level; an entry's own `start` restarts its count. Preserve each item's level and description when moving or replacing entries.
 
 ## Creating and removing content
 
-Use `prepareBlockInsert(document, containerPath, block, index?)`, `prepareBlockDuplicate(document, blockPath)` and `prepareBlockRemove(document, blockPath)` from the editor's `/layout` export. `createContentBlock(kind, {source?})` supplies small starting points; image/video kinds need a source. `listBlockContainers(document, {includeImplicit:true})` also discovers implicit slides and named-region leaves that can become groups. Insertion preserves existing root metadata while normalizing payload fields to blocks. Deletion prunes empty ancestor groups, never the slide; weights stay positional. All helpers return guarded patches and a validated candidate. Render that candidate before applying, then commit one transaction. The browser exposes the same operations through Add content and Arrange handles. Video-source insertion does not establish playback or export fidelity.
+Use `prepareBlockInsert(presentation, containerPath, block, index?)`, `prepareBlockDuplicate(presentation, blockPath)` and `prepareBlockRemove(presentation, blockPath)` from the editor's `/layout` export. `createContentBlock(kind, {source?})` supplies small starting points; image/video kinds need a source. `listBlockContainers(document, {includeImplicit:true})` also discovers implicit slides and named-region leaves that can become groups. Insertion preserves existing root metadata while normalizing payload fields to blocks. Deletion prunes empty ancestor groups, never the slide; weights stay positional. All helpers return guarded patches and a validated candidate. Render that candidate before applying, then commit one transaction. The browser exposes the same operations through Add content and Arrange handles. Video-source insertion does not establish playback or export fidelity.
 
 ## Citations, footnotes and captions
 
-`@openpresentation/opf-editor/annotations` edits the RR-34 fields as validated, undoable session edits: `readCaption(document, blockPath)` / `setCaption(editor, blockPath, caption | null)` on image, chart, table and video blocks (and a one-payload slide root); `listReferences(document)`, `addReference(editor, {id, text, url?})`, `updateReference(editor, id, fields)`, `removeReference(editor, id, {force?})` (refuses while a run still cites the id unless forced, which also removes those cites); `citeRun(editor, runPath, ids)` / `unciteRun(editor, runPath)` and `setFootnote(editor, runPath, text | null)` on a run path such as `slides.0.text.2`, `slides.0.title.1` (the tag, title and subtitle may carry markers when they are `TextRun[]`) or `slides.0.quote.text.1` (a string run is converted to an object run; a text payload that is a plain string must be converted to runs first); `listCitations(document)` returns the deck numbering (markers per slide, notes and unused ids) and `referencesSlideFor(document, {title})` the references slide to insert. Every `prepare*` variant returns the guarded patches and the validated candidate without applying them.
+`@openpresentation/opf-editor/annotations` edits the RR-34 fields as validated, undoable session edits: `readCaption(presentation, blockPath)` / `setCaption(editor, blockPath, caption | null)` on image, chart, table and video blocks (and a one-payload slide root); `listReferences(document)`, `addReference(editor, {id, text, url?})`, `updateReference(editor, id, fields)`, `removeReference(editor, id, {force?})` (refuses while a run still cites the id unless forced, which also removes those cites); `citeRun(editor, runPath, ids)` / `unciteRun(editor, runPath)` and `setFootnote(editor, runPath, text | null)` on a run path such as `slides.0.text.2`, `slides.0.title.1` (the tag, title and subtitle may carry markers when they are `TextRun[]`) or `slides.0.quote.text.1` (a string run is converted to an object run; a text payload that is a plain string must be converted to runs first); `listCitations(document)` returns the deck numbering (markers per slide, notes and unused ids) and `referencesSlideFor(document, {title})` the references slide to insert. Every `prepare*` variant returns the guarded patches and the validated candidate without applying them.

@@ -108,12 +108,12 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
 | Offline catalog bundle | `bundle` / `opf bundle` | Inlines resolved catalog records; remote media/data and custom catalog sources remain explicit host concerns. |
-| Offline fonts | `prepareNodeFonts` (`/fonts-node`) | Bundled Roboto pack; hashed files |
+| Offline fonts | `loadFonts` (`/fonts-node`) | Bundled Roboto pack (`pack: 'base'`) or the office pack; hashed files; the handle is passed as `{ fonts }` to every deck-level call |
 | Composition | `composeSlide` | Includes shared headers/footers |
 | Pagination | `paginate` / `opf paginate` | Returns mappings; preserves source |
 | Edit + undo | `@openpresentation/opf-editor` `createEditorSession` | JSON Patch undo/redo |
 | JSON Patch CLI | `opf edit` | No persistent CLI undo history |
-| SVG preview | `renderSvg` / `renderSvgDeck` | Local; same options as layout |
+| SVG preview | `renderSvg` (every slide) / `renderSlideSvg` (one slide) | Local; the same `{ fonts }` as layout |
 | PNG | `svgToPng` | Node raster of SVG |
 | PDF | `svgToPdf` | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `mode: "raster"` keeps the image-per-slide output. Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
 | Editable PPTX export | `toPptx` | OPF → PPTX serialization. Furniture is tagged slide shapes (`OPF_FURNITURE_V1`), not native `p:hf` / notes-master Header/Footer objects |

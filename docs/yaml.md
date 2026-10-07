@@ -69,7 +69,7 @@ is the same deck as the JSON it converts to: `name`, `language` and `slides` wit
 | No anchors, aliases or merge keys | `yaml/alias`, with help that points at `aliases: true` |
 | Syntax | `yaml/syntax` for anything the parser rejects, at the position it reports |
 
-A leading byte order mark and CRLF line endings are accepted. Offsets are UTF-16 units into the text you passed (a BOM counts as one); lines and columns are one-based and ignore the BOM. After the YAML parses, the deck goes through the OPF lint and each finding (`opf/...` rule ids) is located at the YAML node of the field it names: the value for a scalar, the key through the value for a mapping or a list, and the nearest existing ancestor for something that is missing.
+A leading byte order mark and CRLF line endings are accepted. Offsets are UTF-16 units into the text you passed (a BOM counts as one); lines and columns are one-based and ignore the BOM. After the YAML parses, the deck goes through `validate` and each finding (`opf/...` rule ids) is located at the YAML node of the field it names: the value for a scalar, the key through the value for a mapping or a list, and the nearest existing ancestor for something that is missing.
 
 ### `aliases: true`
 

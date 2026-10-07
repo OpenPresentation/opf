@@ -195,7 +195,7 @@ Diagnostic codes: `variable-unfilled` (error in a deck, info in a template or pa
 
 The renderer, the PPTX exporter and the editor call `resolveVariables` at their entry points, so preview and export agree on text, numbers, dates, images and lists:
 
-- `renderSvg`, `renderSvgDeck`, `resolvePresentation` and `toPptx` accept `variables` (the values) and resolve the deck first when it uses content variables or is a template. A deck without them is untouched, byte for byte.
+- `renderSvg`, `renderSlideSvg`, `resolvePresentation` and `toPptx` accept `variables` (the values) and resolve the deck first when it uses content variables or is a template. A deck without them is untouched, byte for byte.
 - A template is previewed and exported with each unfilled variable's `example`, and reports `variable-example-used` through `onDiagnostic` (PPTX) so the sample content is never silent. A variable with no example keeps its `{{id}}` text visible; nothing is made up.
 - A normal deck with an unfilled required variable is refused: `OPFRenderError` or `OPFPptxError` with code `unfilled-variables`.
 - `variables: false` draws the document as authored, tokens and `var:` references visible (the editor canvas's view of a template).

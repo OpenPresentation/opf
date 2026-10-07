@@ -42,7 +42,7 @@ Below that level, `composeSlide(slide, { width, height, layout, fontFamilies, te
 
 Core 0.8.0 adds opt-in `explain: true` to these options. `geometry.explanation` reports versioned automatic candidate scores, selected columns, reasons for preserving explicit modes/regions, and paths whose complete internal fit is unmeasured. `textMeasurement: "provided"` means a width provider was supplied, not that shaping or native fidelity was verified. Core 0.7.0 does not include this option. Costs add cell-aspect deviation, font reduction, 1,000 per overflowing text/table/quote leaf, 100 per small cell, and 2 per unused final-row position. Lower is preferred; costs are not quality percentages. Parent scores use geometric seeds for automatic descendants; final child optimization can differ. Explanations do not apply repairs or change content.
 
-`textMeasurement` above is a host input, not an automatic global. In the editor, `editor.composeSlide(index, {textMeasurement})` performs its design resolution. In the renderer, use `resolvePresentation(document, options).slides[index].geometry`.
+`textMeasurement` above is a host input, not an automatic global. In the editor, `editor.composeSlide(index, {fonts})` performs its design resolution. In the renderer, use `resolvePresentation(presentation, {fonts}).slides[index].geometry`.
 
 For explicit page splitting:
 

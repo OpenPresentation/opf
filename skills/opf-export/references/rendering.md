@@ -10,68 +10,64 @@ opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|x.zip] [--pdf
 opf import deck.pptx [--out deck.opf.json] [--signals signals.json]
 ```
 
-Each prints one JSON report (the `opf validate` shape: `ok`, `findings` with `ruleId`/`severity`/`category`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on findings at or above `--fail-on` (nothing is written then). The CLI uses the same `prepareNodeFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). `--pdf-mode vector` and `--signals` need an opf-render and opf-pptx that have them; the CLI refuses them otherwise. Per-slide images and PDF skip slides marked `hidden: true` unless `--include-hidden`, and output files are named by the deck's `filename`, else its slugified `name`, else the input file's name. Full reference: `docs/cli.md` in the core repository.
+Each prints one JSON report (the `opf validate` shape: `ok`, `findings` with `ruleId`/`severity`/`category`/`path`/`help`, `counts`, plus `outputs` with SHA-256 digests) and exits 1 on errors, or on findings at or above `--fail-on` (nothing is written then). The CLI uses the same `loadFonts` office pack as the recipe below (visual substitution, `scripts: 'auto'`) plus `.ttf`/`.otf` files from `--font-dir`, resolves relative images only inside the deck folder (`--asset-dir`), supplies opf-render as the PNG rasterizer for SVG pictures in a PPTX, and never reads a clock (`--date`). PDF is vector by default (`--pdf-mode raster` for one image per page). Per-slide images and PDF skip slides marked `hidden: true` unless `--include-hidden`, and output files are named by the deck's `filename`, else its slugified `name`, else the input file's name. Full reference: `docs/cli.md` in the core repository.
 
 ## Prepared font inputs
 
-Published renderer 0.8.0 and later provides `prepareNodeFonts` in `/fonts-node`
-(current coordinated set: core 0.13.0, renderer 0.13.1, PPTX 0.13.2, editor 0.12.1):
+`loadFonts` in `/fonts-node` returns the fonts handle
+(current coordinated set: core 0.14.0, renderer 0.14.0, PPTX 0.14.0, editor 0.14.1):
 
 ```js
-const {registry, options} = await prepareNodeFonts({
+const fonts = await loadFonts({
   pack: 'office', substitutionPolicy: 'visual',
 });
-const {presentation} = paginate(document, {fonts: options});
-const slides = renderSvgDeck(presentation, options);
-const png = await svgToPng(slides[0], options);
-const pptx = await toPptx(presentation, options);
-console.log(registry.substitutions);
+const {presentation} = paginate(document, {fonts});
+const slides = renderSvg(presentation, {fonts}); // one SVG per slide
+const png = await svgToPng(slides[0], {fonts});
+const pptx = await toPptx(presentation, {fonts});
+console.log(fonts.substitutions);
 ```
 
-Import the named functions from the same public modules shown below. This helper verifies pinned font/notice hashes and supplies one consistent measurement/SVG/raster option set. `pack: 'base'` suits authored Roboto decks; Office visual substitutions are explicit. It leaves source content, font choices and native font installation unchanged. Renderer 0.7.0 lacks this helper; inspect installed exports before following a recipe for an older package. Native PPTX embedding and pixel equivalence are separate gates.
+Import the named functions from the same public modules shown below. The loader verifies pinned font/notice hashes and the handle supplies one consistent measurement, SVG embedding and raster font set to every deck-level call as `{ fonts }`. `pack: 'base'` suits authored Roboto decks; Office visual substitutions are explicit. It leaves source content, font choices and native font installation unchanged. Native PPTX embedding and pixel equivalence are separate gates.
 
 ## Node export
 
 ```js
-import { renderSvgDeck, svgToPng, svgToPdf } from '@openpresentation/opf-render';
-import { loadOfficeFontRegistry } from '@openpresentation/opf-render/fonts-node';
+import { renderSvg, svgToPng, svgToPdf } from '@openpresentation/opf-render';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { toPptx, fromPptx } from '@openpresentation/opf-pptx';
 
-const fonts = await loadOfficeFontRegistry();
+const fonts = await loadFonts({pack: 'office'});
 const diagnostics = [];
-const options = {
-  textMeasurement: fonts.textMeasurement,
-  onDiagnostic: issue => diagnostics.push(issue),
-};
-const slides = renderSvgDeck(document, {...options, embeddedFonts: fonts.embeddedFonts});
-const rasterOptions = {fontFiles: fonts.fontFiles, useBundledFonts: false, loadSystemFonts: false};
-const firstSlidePng = await svgToPng(slides[0], rasterOptions);
-const deckPdf = await svgToPdf(slides, rasterOptions);
+const options = {fonts, onDiagnostic: issue => diagnostics.push(issue)};
+const slides = renderSvg(document, options); // embeds the faces each slide draws
+const firstSlidePng = await svgToPng(slides[0], {fonts});
+const deckPdf = await svgToPdf(slides, {fonts});
 const pptx = await toPptx(document, options);
 // Write the returned strings/bytes to the user's requested local output paths.
 // const imported = await fromPptx(inputPptxBytes);
 ```
 
-The current Node `svgToPdf` accepts one SVG or an array, creating one PDF page per slide. The Node font loader requires its installed font resources. If unavailable, supply explicitly licensed font files through the supported registry API rather than claiming the starter pack was loaded. Pass those same font files to PNG/PDF conversion; embedding fonts in SVG does not by itself configure the Node rasterizer.
+The current Node `svgToPdf` accepts one SVG or an array, creating one PDF page per slide. The Node font loader requires its installed font resources. If unavailable, supply explicitly licensed font files through the supported registry API rather than claiming the starter pack was loaded. Pass the same handle to PNG/PDF conversion (`{ fonts }`); embedding fonts in SVG does not by itself configure the Node rasterizer.
 
-`loadOfficeFontRegistry()` defaults to metric substitutions, and its pack includes Intos, a metric-compatible replacement for the Aptos family, so default-scheme (Aptos) decks measure and draw with it. Opt into `{substitutionPolicy:'visual'}` only when a visual-only look-alike is acceptable as a documented fallback (a known layout-fidelity gap), for example Roboto or Carlito for Aptos in a registry without the office pack. Inspect `fonts.substitutions`. An SVG embeds only the bundled font families its text names. Replacements affect previews and measurement only; the exported PPTX keeps the selected font name. Synchronous SVG calls without `textMeasurement` estimate widths; loading a named font only at painting time can create gaps or overlaps between rich runs. Supply the registry to both layout and drawing. Current scalar and code layout preserve authored source whitespace through separate source-mapping contracts; general native rich-text round-trip remains a separate limit.
+`loadFonts({pack: 'office'})` defaults to metric substitutions, and its pack includes Intos, a metric-compatible replacement for the Aptos family, so default-scheme (Aptos) decks measure and draw with it. Opt into `{substitutionPolicy:'visual'}` only when a visual-only look-alike is acceptable as a documented fallback (a known layout-fidelity gap), for example Roboto or Carlito for Aptos in a registry without the office pack. Inspect `fonts.substitutions`. An SVG embeds only the bundled font families its text names. Replacements affect previews and measurement only; the exported PPTX keeps the selected font name. Synchronous SVG calls without `fonts` estimate widths; loading a named font only at painting time can create gaps or overlaps between rich runs. Supply the handle to both layout and drawing. Current scalar and code layout preserve authored source whitespace through separate source-mapping contracts; general native rich-text round-trip remains a separate limit.
 
 A raster snapshot embedded into PPTX is not equivalent to editable native shapes. The OPF PPTX converter writes supported native content, but visual and import coverage are incomplete. Verify what the requested deck uses.
 
 ## Templates and variables
 
-A deck that declares content variables, uses a built-in (`{{speaker.name}}`, `var:organization.logo`) or is a template (`"template": true`) is resolved by core `resolveVariables` before it is composed, so preview and PPTX agree. Pass the values as the `variables` option of `renderSvg`, `renderSvgDeck`, `resolvePresentation` and `toPptx`. A template previews and exports with each variable's `example` (PPTX reports `variable-example-used` through `onDiagnostic`); a normal deck with an unfilled required variable is refused with code `unfilled-variables`. The PPTX holds the resolved text, so re-import returns the filled deck, not the template. Fill a template into a concrete deck first (`opf fill`) when the deliverable is a finished deck.
+A deck that declares content variables, uses a built-in (`{{speaker.name}}`, `var:organization.logo`) or is a template (`"template": true`) is resolved by core `resolveVariables` before it is composed, so preview and PPTX agree. Pass the values as the `variables` option of `renderSvg`, `renderSlideSvg`, `resolvePresentation` and `toPptx`. A template previews and exports with each variable's `example` (PPTX reports `variable-example-used` through `onDiagnostic`); a normal deck with an unfilled required variable is refused with code `unfilled-variables`. The PPTX holds the resolved text, so re-import returns the filled deck, not the template. Fill a template into a concrete deck first (`opf fill`) when the deliverable is a finished deck.
 
 ## Browser rendering
 
 ```js
-import { renderSvg } from '@openpresentation/opf-render/svg';
-import { loadBrowserFontRegistry } from '@openpresentation/opf-render/fonts-browser';
-const fonts = await loadBrowserFontRegistry([
+import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
+const fonts = await loadFonts({faces: [
   {url: '/fonts/Roboto-Regular.ttf', family: 'Roboto', weight: 400},
   {url: '/fonts/Roboto-Bold.ttf', family: 'Roboto', weight: 700},
-]);
-const svg = renderSvg(document, {textMeasurement: fonts.textMeasurement});
+]});
+const svg = renderSlideSvg(document, 0, {fonts});
 // fonts.dispose() on final owner cleanup, not after each slide.
 ```
 
