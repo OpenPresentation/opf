@@ -76,6 +76,18 @@ try {
       transaction.oncomplete = () => { request.result.close(); resolve(keys.result.map((key, index) => ({ key, record: values.result[index] }))); };
     };
   }));
+  // Wait until the stored copy is the page's current document. Closing a page aborts an IndexedDB write that has not committed, so a
+  // test that reopens the page expecting the latest state waits for that write first (an autosave status line can be from an earlier write).
+  const storedCurrent = async page => {
+    const expected = JSON.stringify(await doc(page));
+    const started = Date.now();
+    for (;;) {
+      const record = (await stored(page)).find(entry => !String(entry.key).endsWith('#earlier'))?.record;
+      if (JSON.stringify(record?.presentation) === expected) return;
+      if (Date.now() - started > 10000) assert.fail(`the stored copy never became the current document: ${JSON.stringify(record?.presentation?.slides?.map(slide => slide.title))}`);
+      await page.waitForTimeout(50);
+    }
+  };
   const unload = async page => page.evaluate(() => { const event = new Event('beforeunload', { cancelable: true }); window.dispatchEvent(event); return event.defaultPrevented; });
   const banner = page => page.locator('#restore-banner');
   // axe-core on one part of the page: no WCAG 2.x A/AA or best-practice violation (contrast included).
@@ -133,6 +145,9 @@ try {
   assert.equal(await unload(page), true, 'restored unsaved work is still unsaved');
   mark('Restore brings back the copy with its undo history, from the keyboard');
   assert.deepEqual(errors, []);
+  // On a slow runner the debounced autosave can store the Undo state (the default document, which is never offered) while the Redo write
+  // is still in flight when the page closes; wait for the restored copy to be stored again.
+  await storedCurrent(page);
   await page.close();
 
   // The restored copy is still stored and still differs from the default document, so it is offered again. The offer appears once

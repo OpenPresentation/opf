@@ -3,7 +3,8 @@ name: CI
 # The Node 22 and Node 26 engines-range legs run on push to main, the weekly schedule, workflow_dispatch and the merge
 # queue, and on a pull request that carries the label `full-ci` (add it when a change touches Node-version-specific
 # code). The `labeled` event starts them without a new push; any other label starts nothing and, being in its own
-# concurrency group, cancels nothing.
+# concurrency group, cancels nothing. The `macos-playground` job runs on the weekly schedule, workflow_dispatch and `full-ci`
+# only (RR-20).
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
@@ -243,3 +244,91 @@ jobs:
           node scripts/link-ecosystem.mjs --packages-only
       - run: npm run typecheck
       - run: npm test
+
+  # RR-20: the playground browser suite on macOS. Chromium follows platform conventions there (ArrowDown on a closed
+  # <select> opens its popup, Ctrl+click is a context-menu click), and two such test failures went unseen on the
+  # Linux-only gate (#117). Runs on the weekly schedule, manual runs and a pull request labelled `full-ci`; not on a plain
+  # pull request, push or the merge queue (a macOS runner minute costs about ten Linux minutes).
+  macos-playground:
+    name: macOS playground
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci')) }}
+    runs-on: macos-15
+    # The suite takes about 8 minutes on an M4; a hosted runner is slower.
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: opf-editor
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          path: opf-editor
+      - name: Resolve the coordinated commits from core's ecosystem.lock.json
+        id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-editor
+          export-golden: 'true'
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ steps.refs.outputs.opf }}
+          path: opf
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ steps.refs.outputs.opf_render }}
+          path: opf-render
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-pptx
+          ref: ${{ steps.refs.outputs.opf_pptx }}
+          path: opf-pptx
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: opf-editor/package-lock.json
+      - name: Install locked coordinated dependencies
+        shell: bash
+        working-directory: .
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-pptx opf-editor; do
+            npm ci --prefix "$repo"
+          done
+      # No Playwright container on macOS: install the Chromium build that the locked playwright version expects.
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium
+      - name: Build and link coordinated sources
+        working-directory: opf
+        run: |
+          pnpm build
+          node scripts/link-ecosystem.mjs --packages-only
+      - name: Playground browser suite
+        run: node scripts/quarantine.mjs run-suite playground
+      - name: Quarantined tests (non-blocking)
+        if: always()
+        continue-on-error: true
+        run: node scripts/quarantine.mjs run-deferred
+      - name: Preserve failure evidence
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playground-opf-editor-macOS-node24
+          path: |
+            opf-editor/artifacts/**/*.json
+            opf-editor/artifacts/**/*.png
+            !opf-editor/artifacts/playground/**
+          retention-days: 7
+          if-no-files-found: ignore
