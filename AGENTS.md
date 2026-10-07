@@ -27,6 +27,10 @@ After each change run `pnpm check:changed`: it checks only what the branch chang
 
 GitHub API: every agent on the account shares one REST quota (5000 an hour), and it ran out three times on 2026-10-06. Watch CI with at most one batched GraphQL `statusCheckRollup` query every 3 to 5 minutes; never loop per-run or per-job REST calls (`gh pr checks`, `gh run view`). Give any data-collection job an explicit call budget.
 
+## CI cost
+
+A pull request runs the Linux jobs on the current Node; the macOS and Windows legs and the Node 22 and 26 engines-range legs run in the merge queue. Add the `full-ci` label when a change touches OS- or Node-version-specific code, to get them on the pull request too (RR-57; `ecosystem-full` keeps its own meaning for the sibling suites).
+
 ## Active programs
 
 Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state. Release readiness uses `codex/rr-<nn>-<slug>` branches and `RR-<nn>: ` PR titles.

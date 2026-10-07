@@ -1,6 +1,12 @@
 name: CLI portability
+# RR-57: Windows and macOS legs of the CLI (about 22 runner minutes per run). A pull request no longer runs them unless it
+# carries the label `full-ci` and changes one of the paths below: add the label when a change touches OS-specific code (paths, spawn, line endings, the Windows
+# package-manager helpers). The `labeled` event starts the run without a new push; any other label starts nothing. The merge
+# queue (merge_group) runs them when the entry changes one of the paths below (the `paths:` filter does not apply to
+# merge_group, so the first job applies it), which replaces the push-to-main run: the queue tested that exact commit.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - 'packages/cli/**'
       - 'packages/javascript/**'
@@ -16,33 +22,47 @@ on:
       - 'pnpm-lock.yaml'
       - '.gitattributes'
       - '.github/workflows/cli-windows.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'packages/cli/**'
-      - 'packages/javascript/**'
-      - 'skills/**'
-      - 'scripts/run-tests.mjs'
-      - 'scripts/package-manager.mjs'
-      - 'scripts/typecheck.mjs'
-      - 'scripts/check-packed-types.mjs'
-      - 'package.json'
-      - 'scripts/link-ecosystem.mjs'
-      - 'scripts/test-ecosystem-links.mjs'
-      - 'scripts/test-package-ecosystem.mjs'
-      - 'pnpm-lock.yaml'
-      - '.gitattributes'
-      - '.github/workflows/cli-windows.yml'
+  merge_group:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: cli-windows-${{ github.ref }}
-  cancel-in-progress: true
+  group: cli-windows-${{ github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'ignored' || 'run' }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 jobs:
+  # Merge queue only: does this entry change a path above? Any other event answers true and the next job decides.
+  scope:
+    if: ${{ github.event_name == 'merge_group' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.paths.outputs.run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: paths
+        uses: ./.github/actions/paths-changed
+        with:
+          paths: |
+            packages/cli/**
+            packages/javascript/**
+            skills/**
+            scripts/run-tests.mjs
+            scripts/package-manager.mjs
+            scripts/typecheck.mjs
+            scripts/check-packed-types.mjs
+            package.json
+            scripts/link-ecosystem.mjs
+            scripts/test-ecosystem-links.mjs
+            scripts/test-package-ecosystem.mjs
+            pnpm-lock.yaml
+            .gitattributes
+            .github/workflows/cli-windows.yml
   cli:
+    needs: scope
+    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || (github.event_name == 'merge_group' && needs.scope.outputs.run == 'true') || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci'))) }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    # RR-57: about 2x the p90 (13.4 min on Windows, 9.0 on macOS over the last 10 runs); the old limit of 15 was 1.1x.
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:

@@ -88,7 +88,7 @@ test("a pull request that can change what the contract tier trusts runs the full
 test("the installed-candidate legs always report under their required names and run on their OS outside plain pull requests", () => {
   const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
   const job = workflow.slice(workflow.indexOf("\n  installed-portability:\n"), workflow.indexOf("\n  main-status:"));
-  const policy = "(github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full'))";
+  const policy = "(github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci'))";
   assert.ok(job.includes("    name: Installed candidates (${{ matrix.os }})\n"));
   assert.ok(job.includes(`    runs-on: \${{ ${policy} && matrix.os || 'ubuntu-24.04' }}\n`));
   assert.ok(job.includes(`      PORTABILITY: \${{ ${policy} && 'run' || 'policy-skip' }}\n`));
@@ -102,10 +102,12 @@ test("every tier-defining file exists, so a rename cannot silently lower the tie
   for (const file of FULL_TIER_PATHS) assert.ok(readFileSync(new URL(`../${file}`, import.meta.url)), file);
 });
 
-test("the workflow runs the contract tier on pull requests and the full suites on merge_group, push and a nightly schedule", () => {
+test("the workflow runs the contract tier on pull requests and the full suites on merge_group and a nightly schedule, with no push-to-main run", () => {
   const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
   const triggers = workflow.slice(workflow.indexOf("\non:"), workflow.indexOf("\npermissions:"));
-  for (const trigger of ["pull_request:", "merge_group:", "push:", "schedule:", "workflow_dispatch:"]) assert.ok(triggers.includes(`\n  ${trigger}`), trigger);
+  for (const trigger of ["pull_request:", "merge_group:", "schedule:", "workflow_dispatch:"]) assert.ok(triggers.includes(`\n  ${trigger}`), trigger);
+  // RR-57: the queue fast-forwards main to the commit its merge_group run tested, so a push run repeats the same SHA.
+  assert.ok(!triggers.includes("\n  push:"), "no push-to-main trigger");
   // The tier is decided by tierForEvent and handed to every sibling shard; a shard cannot hard-code a depth.
   assert.equal([...workflow.matchAll(/test-package-ecosystem\.mjs --siblings [^\n]*--tier \$\{\{ steps\.scope\.outputs\.tier \}\}/g)].length, 2);
   assert.doesNotMatch(workflow, /--tier (contract|full)\b/);

@@ -4,8 +4,13 @@ name: Installed parity audit
 # then compared across the three systems: same values, same class, same outcome of every check. The harness itself is
 # unchanged; PARITY_FONT_HOST=gallery models the gallery editor's bundled font host, so no host font is read.
 # Not a required check, so the path filter below cannot leave a required status pending (docs/programs/release-readiness/ci-cd.md, section 1).
+# RR-57: a pull request runs only the Linux leg (and no cross-OS comparison) unless it carries the label `full-ci`; add the
+# label when a change touches OS-specific code. The merge queue (merge_group) runs all three systems when the entry changes one
+# of the paths below (`paths:` does not apply to merge_group, so the first job applies it), instead of the old push-to-main run
+# of the commit the queue had just tested. The `labeled` event starts the run without a new push; any other label starts nothing.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - '.github/workflows/installed-parity.yml'
       - 'scripts/published-matrix/installed-parity.mjs'
@@ -13,15 +18,7 @@ on:
       - 'scripts/published-matrix/fixtures/**'
       - 'docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/**'
       - 'release-plan.json'
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/installed-parity.yml'
-      - 'scripts/published-matrix/installed-parity.mjs'
-      - 'scripts/published-matrix/compare-parity.mjs'
-      - 'scripts/published-matrix/fixtures/**'
-      - 'docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/**'
-      - 'release-plan.json'
+  merge_group:
   schedule:
     # Weekly, with the published matrix, to notice registry, runner image or dependency drift that no commit caused.
     - cron: '41 5 * * 1'
@@ -34,22 +31,46 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: installed-parity-${{ github.ref }}
-  cancel-in-progress: true
+  group: installed-parity-${{ github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'ignored' || 'run' }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
 env:
   # The same Node patch release as the published matrix: identical ICU, Unicode and tz data on all three systems.
   NODE_VERSION: 24.21.0
   # Planned versions are release-plan.json; this replaces entries the plan does not carry yet.
   OPF_PARITY_OVERRIDES: ${{ inputs.overrides || vars.OPF_PARITY_OVERRIDES || '' }}
 jobs:
+  # Merge queue only: does this entry change a path above? Any other event answers true.
+  scope:
+    if: ${{ github.event_name == 'merge_group' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.paths.outputs.run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: paths
+        uses: ./.github/actions/paths-changed
+        with:
+          paths: |
+            .github/workflows/installed-parity.yml
+            scripts/published-matrix/installed-parity.mjs
+            scripts/published-matrix/compare-parity.mjs
+            scripts/published-matrix/fixtures/**
+            docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/**
+            release-plan.json
   parity:
     name: Installed parity (${{ matrix.os }})
+    needs: scope
+    # The Linux leg runs on every path-matching pull request; the other systems only with the label `full-ci`, and in the queue,
+    # on the weekly schedule and on workflow_dispatch.
+    if: ${{ !cancelled() && (github.event_name != 'merge_group' || needs.scope.outputs.run == 'true') && (github.event_name != 'pull_request' || github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-latest, macos-latest]
+        # RR-57: a pull request without the label `full-ci` runs the Linux leg only.
+        os: ${{ fromJSON((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) && '["ubuntu-24.04","windows-latest","macos-latest"]' || '["ubuntu-24.04"]') }}
     defaults:
       run:
         shell: bash
@@ -82,7 +103,8 @@ jobs:
   compare:
     name: Cross-OS comparison
     needs: parity
-    if: always() && needs.parity.result != 'cancelled'
+    # RR-57: only when all three systems ran; a Linux-only pull request has nothing to compare.
+    if: ${{ always() && needs.parity.result != 'cancelled' && needs.parity.result != 'skipped' && (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
