@@ -611,10 +611,11 @@ function codeSlide(spec, index, catalogs) {
 
 function mediaSlide(spec, index, catalogs) {
   if (index % 2 === 0) {
+    const layout = imageLayout(Math.floor(index / 2));
     return {
       id: `s${index + 1}-image`,
       section: "Context",
-      layout: imageLayout(Math.floor(index / 2)),
+      layout,
       title: "Field Context",
       type: "image",
       image: {
@@ -622,6 +623,9 @@ function mediaSlide(spec, index, catalogs) {
         alt: `${spec.area} context photo for ${spec.org}`,
         title: `${spec.area} context`,
       },
+      // RR-58: image-bleed draws the slide's picture full-bleed behind the title. The slide names it as its slide image
+      // (same source), and the layout record places it at position background.
+      ...(layout === "image-bleed" ? { design: { slideImage: "asset:supporting-photo" } } : {}),
       notes: "Use the image as context, not decoration.",
     };
   }

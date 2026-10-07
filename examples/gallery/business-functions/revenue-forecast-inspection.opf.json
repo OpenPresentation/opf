@@ -367,6 +367,9 @@
         "alt": "Revenue operations context photo for FoundryGrid",
         "title": "Revenue operations context"
       },
+      "design": {
+        "slideImage": "asset:supporting-photo"
+      },
       "notes": "Use the image as context, not decoration."
     },
     {

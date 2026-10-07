@@ -367,6 +367,9 @@
         "alt": "Ports and logistics context photo for Bluewater Logistics",
         "title": "Ports and logistics context"
       },
+      "design": {
+        "slideImage": "asset:supporting-photo"
+      },
       "notes": "Use the image as context, not decoration."
     },
     {

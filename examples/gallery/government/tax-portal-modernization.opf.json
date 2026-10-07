@@ -367,6 +367,9 @@
         "alt": "Tax administration context photo for Department of Revenue Services",
         "title": "Tax administration context"
       },
+      "design": {
+        "slideImage": "asset:supporting-photo"
+      },
       "notes": "Use the image as context, not decoration."
     },
     {

@@ -367,6 +367,9 @@
         "alt": "Analytics context photo for ClearLake Data",
         "title": "Analytics context"
       },
+      "design": {
+        "slideImage": "asset:supporting-photo"
+      },
       "notes": "Use the image as context, not decoration."
     },
     {
