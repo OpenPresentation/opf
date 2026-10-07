@@ -16,7 +16,14 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from 'playwright';
+import { gateSkipped } from '../scripts/published-core-gate.mjs';
 
+// RR-55: this packs the tarball and installs it with its PUBLISHED dependencies, which cannot work while the package needs an
+// unreleased core (opf.requiresUnreleasedCore, scripts/published-core-gate.mjs; CI's gate step exports OPF_PUBLISHED_CORE_GATE=skip).
+if (gateSkipped()) {
+  console.log('::notice::RR-55: packed browser bundle skipped: the published-core gate says opf.requiresUnreleasedCore is not yet published. Unset OPF_PUBLISHED_CORE_GATE to run it locally.');
+  process.exit(0);
+}
 const root = fileURLToPath(new URL('../', import.meta.url));
 // npm_execpath is set under `npm run`; scripts/quarantine.mjs runs the command directly, so fall back to the npm that
 // ships with this Node.

@@ -13,6 +13,9 @@
 //   node scripts/published-core-gate.mjs            report; with $GITHUB_OUTPUT set, write skip=true|false and, when
 //                                                   skipping, a ::notice::
 //   node scripts/published-core-gate.mjs --forbid   exit 1 when package.json declares the field (release workflows)
+//   $GITHUB_ENV, when set and skipping, also receives OPF_PUBLISHED_CORE_GATE=skip so that every later step honours the
+//   gate: a test that installs or bundles this package against published dependencies calls gateSkipped() and exits 0 with a
+//   notice (opf-pptx: test/packed-bundle-browser.mjs). A run without the variable, such as a local one, still runs them.
 //   --root <dir>                                    the package to read (default: this repository; used by the test)
 //
 // Identical in the sibling repositories (opf-render, opf-pptx, opf-editor).
@@ -21,6 +24,12 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 export const CORE = '@openpresentation/opf';
+export const GATE_ENV = 'OPF_PUBLISHED_CORE_GATE';
+
+/** True when the gate step decided to skip (it exported OPF_PUBLISHED_CORE_GATE=skip through $GITHUB_ENV). */
+export function gateSkipped(env = process.env) {
+  return env[GATE_ENV] === 'skip';
+}
 
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
@@ -69,7 +78,7 @@ export function decide({ declared, installed }) {
   if (compareVersions(installed, declared) >= 0) return { skip: false, note: `the installed published ${CORE} ${installed} already satisfies opf.requiresUnreleasedCore ${declared}; the packed install runs` };
   return {
     skip: true,
-    message: `RR-55: package.json declares opf.requiresUnreleasedCore ${declared} and the installed published ${CORE} is ${installed}, so the packed install against published dependencies (npm run test:packed) is skipped. Every linked-ecosystem step still runs. The release-prep PR deletes the field.`,
+    message: `RR-55: package.json declares opf.requiresUnreleasedCore ${declared} and the installed published ${CORE} is ${installed}, so the packed install and the packed browser bundle against published dependencies (npm run test:packed, test/packed-bundle-browser.mjs) are skipped. Every linked-ecosystem step still runs. The release-prep PR deletes the field.`,
   };
 }
 
@@ -100,6 +109,7 @@ function main(argv, env = process.env) {
   if (result.skip) console.log(`::notice::${result.message}`);
   else if (result.note) console.log(result.note);
   if (env.GITHUB_OUTPUT) appendFileSync(env.GITHUB_OUTPUT, `skip=${result.skip}\n`);
+  if (result.skip && env.GITHUB_ENV) appendFileSync(env.GITHUB_ENV, `${GATE_ENV}=skip\n`);
   return 0;
 }
 

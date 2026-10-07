@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { compareVersions, decide, declaredFloor, gate, installedCoreVersion, parseVersion } from '../scripts/published-core-gate.mjs';
+import { GATE_ENV, compareVersions, decide, declaredFloor, gate, gateSkipped, installedCoreVersion, parseVersion } from '../scripts/published-core-gate.mjs';
 
 // RR-55: the gate that skips only the packed install against published core while a declared unreleased core is not on npm.
 const cmp = (a, b) => compareVersions(a, b);
@@ -69,18 +69,22 @@ try {
   // The CLI as CI runs it: a notice and skip=true in $GITHUB_OUTPUT, exit 0; no field leaves skip=false; a bad field exits 1.
   const script = fileURLToPath(new URL('../scripts/published-core-gate.mjs', import.meta.url));
   const out = path.join(scratch, 'github-output');
+  const envFile = path.join(scratch, 'github-env');
   const run = (root, args = []) => {
     writeFileSync(out, '');
-    const result = spawnSync(process.execPath, [script, '--root', root, ...args], { encoding: 'utf8', env: { ...process.env, GITHUB_OUTPUT: out } });
-    return { ...result, output: readFileSync(out, 'utf8') };
+    writeFileSync(envFile, '');
+    const result = spawnSync(process.execPath, [script, '--root', root, ...args], { encoding: 'utf8', env: { ...process.env, GITHUB_OUTPUT: out, GITHUB_ENV: envFile } });
+    return { ...result, output: readFileSync(out, 'utf8'), exported: readFileSync(envFile, 'utf8') };
   };
   const skipping = run(pkg({ opf: { requiresUnreleasedCore: '0.14.0' } }, '0.13.1'));
   assert.equal(skipping.status, 0, skipping.stderr);
   assert.equal(skipping.output, 'skip=true\n');
+  assert.equal(skipping.exported, 'OPF_PUBLISHED_CORE_GATE=skip\n', 'a skip is exported to the later steps through $GITHUB_ENV');
   assert.match(skipping.stdout, /^::notice::RR-55: .*0\.14\.0.*0\.13\.1/m);
   const plain = run(pkg({}, '0.13.1'));
   assert.equal(plain.status, 0, plain.stderr);
   assert.equal(plain.output, 'skip=false\n');
+  assert.equal(plain.exported, '', 'no skip, nothing exported');
   assert.equal(plain.stdout.includes('::notice::'), false, 'no field: silent');
   assert.equal(run(pkg({ opf: { requiresUnreleasedCore: '0.14.0' } }, '0.14.0')).output, 'skip=false\n');
   const invalid = run(pkg({ opf: { requiresUnreleasedCore: 'soon' } }, '0.13.1'));
@@ -88,6 +92,18 @@ try {
   assert.match(invalid.stdout + invalid.stderr, /::error::package\.json opf\.requiresUnreleasedCore must be a version/);
   assert.equal(run(pkg({ opf: { requiresUnreleasedCore: '0.14.0' } }, '0.14.0'), ['--forbid']).status, 1);
   assert.equal(run(pkg({}, null), ['--forbid']).status, 0);
+
+  // The tests that install or bundle against published dependencies honour the exported variable.
+  assert.equal(GATE_ENV, 'OPF_PUBLISHED_CORE_GATE');
+  assert.equal(gateSkipped({ OPF_PUBLISHED_CORE_GATE: 'skip' }), true);
+  assert.equal(gateSkipped({}), false, 'a local run without the variable still runs them');
+  assert.equal(gateSkipped({ OPF_PUBLISHED_CORE_GATE: 'run' }), false);
+  const bundleTest = fileURLToPath(new URL('./packed-bundle-browser.mjs', import.meta.url));
+  const env = { ...process.env, OPF_PUBLISHED_CORE_GATE: 'skip' };
+  const skipped = spawnSync(process.execPath, [bundleTest], { encoding: 'utf8', env, timeout: 60000 });
+  assert.equal(skipped.status, 0, skipped.stdout + skipped.stderr);
+  assert.match(skipped.stdout, /^::notice::RR-55: packed browser bundle skipped/m);
+  assert.doesNotMatch(skipped.stdout, /Packed browser bundle passed/);
 } finally {
   rmSync(scratch, { recursive: true, force: true });
 }
