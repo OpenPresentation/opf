@@ -6,8 +6,7 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The pin set below matches the 21 September 2026 published verification
-checkpoint in `release-plan.json`. Immutable tag commits pin
+dated handoff as current. The pin set below matches the published 0.13 set recorded in `release-plan.json` (RR-20, 6 October 2026). Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
 accepted fixes and release prerequisites. Those source changes have not updated
@@ -17,7 +16,7 @@ the versions below or established complete native compatibility.
 
 | Requirement | Status |
 | --- | --- |
-| Node.js | **24.x** on every package below (`engines.node`) |
+| Node.js | `engines.node` is `>=22` on every package below; **Node 24** is the coordinated toolchain these records are verified on (the 0.12.2 set and later are tested on Node 22, 24 and 26) |
 | Package managers | npm for published installs; this repo uses pnpm 10.33.2 for core development |
 | Account / model / hosted API | Not required |
 | Operating systems | macOS, Linux, Windows for Node APIs; browser entrypoints are separate |
@@ -26,16 +25,16 @@ the versions below or established complete native compatibility.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/opf` | 0.12.1 | — |
-| `@openpresentation/cli` | 0.10.0 | Bundles core 0.12.0; registry metadata has no runtime `dependencies` |
-| `@openpresentation/opf-render` | 0.12.0 | `@openpresentation/opf@^0.12.0` |
-| `@openpresentation/opf-editor` | 0.11.2 | `@openpresentation/opf@^0.12.0`; optional peer `@openpresentation/opf-render@^0.12.0` |
-| `@openpresentation/opf-pptx` | 0.12.3 | `@openpresentation/opf@^0.12.0`; optional peer `@openpresentation/opf-render@^0.12.0` |
+| `@openpresentation/opf` | 0.13.0 | — |
+| `@openpresentation/cli` | 0.11.0 | Bundles core 0.13.0; registry metadata has no runtime `dependencies`; optional peers `@openpresentation/opf-render@^0.13.1` and `@openpresentation/opf-pptx@^0.13.2` |
+| `@openpresentation/opf-render` | 0.13.1 | `@openpresentation/opf@^0.13.0` |
+| `@openpresentation/opf-editor` | 0.12.1 | `@openpresentation/opf@^0.13.0`; optional peer `@openpresentation/opf-render@^0.13.1` |
+| `@openpresentation/opf-pptx` | 0.13.2 | `@openpresentation/opf@^0.13.0`; optional peer `@openpresentation/opf-render@^0.13.1` |
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.12.1 with renderer 0.12.0, PPTX 0.12.3 and editor 0.11.2), so
+core in lockstep (core 0.13.0 with renderer 0.13.1, PPTX 0.13.2 and editor 0.12.1), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -345,6 +344,7 @@ APIs stay Node-only; renderer 0.12.0 adds the separate `@openpresentation/opf-re
 
 | Older set | Relationship |
 | --- | --- |
+| core 0.12.2, CLI 0.10.1, renderer 0.12.2, PPTX 0.12.4, editor 0.11.3 | Previous coordinated set (the first set whose `engines.node` is the open-ended `>=22`). The 0.13 set adds chart and table data (RR-54, [contract](chart-table-data.md)): strict chart numbers (a value is a finite number or a strict decimal string; `"12%"`, `"$5"` and `"Q1"` are a gap with a `chart-value-not-numeric` warning, never a guessed number), number formats (`DataColumn` `{ name, format }`), top-level `datasets` with `{ "dataset", "fields" }` references and `chart.mapping`, in core 0.13.0, previewed by renderer 0.13.0, exported and re-imported by PPTX 0.13.0 (`OPF_DATASETS_V1` and `OPF_DATA_V1` provenance), edited in the editor 0.12.x data grid and imported by CLI 0.11.0 (`opf import-data --dataset`). PPTX 0.13.0 also vendors pptxgenjs-plus 4.3.4 (was PptxGenJS 4.0.1) and PPTX 0.13.1 bundles for browsers again. Renderer 0.13.1 and PPTX 0.13.2 pin Sharp 0.35.5 (GHSA-wq5f-xc86-pv6w; output unchanged); editor 0.12.1 replaces 0.12.0, which was never published. Renderer, PPTX and editor raise their core floor to `^0.13.0` and the renderer peer to `^0.13.1` together. |
 | core 0.12.1, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.2, editor 0.11.2 | Previous coordinated set. PPTX 0.12.3 corrects the table range of a chart's embedded workbook (apostrophe-quoted sheet references and bubble-series references), which made Keynote drop category charts on import (opf-pptx#162, opf-pptx#163; every other part of the package is byte-identical). Core, renderer and editor are unchanged and keep the core floor `^0.12.0` and the renderer peer `^0.12.0`. |
 | core 0.12.0, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.2, editor 0.11.2 | Previous coordinated set. Core 0.12.1 deprecates the six plural audience ids (`executives`, `investors`, `customers`, `sales-team`, `marketing-team`, `regulators`) in favour of the singular ids: additive catalog data, validation warns and never errors, and no geometry moves, so renderer, PPTX and editor keep the core floor `^0.12.0`. |
 | core 0.12.0, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.1, editor 0.11.1 | Previous coordinated set (PowerPoint lists only the deck's fonts). PPTX 0.12.2 also names the deck's font in the theme's `Viet` (Vietnamese) and `Uigh` (Uyghur) per-language script entries, which PowerPoint applies to `vi-VN` and `ug` runs and which kept Office's Times New Roman and Arial for those two languages (RR-17; every other language is byte-identical). Editor 0.11.2 adds the `slide-sizes` and `purposes` switch dimensions, `SLIDE_SIZE_PRESETS` and the Slide size and Purpose selects in the Design panel (RR-41, additive API). Both keep the core floor `^0.12.0` and the renderer peer `^0.12.0`. |
@@ -359,7 +359,8 @@ APIs stay Node-only; renderer 0.12.0 adds the separate `@openpresentation/opf-re
 | core 0.11.2, CLI 0.9.0, renderer 0.11.1, PPTX 0.11.0, editor 0.10.0 | Previous coordinated set (lockstep floors, Intos and the open families, selected-name export). Renderer 0.11.2 adds script-face loading (`scripts: 'auto'`); PPTX 0.11.1 adds `design.watermark` export; editor 0.10.2 loads the fonts a document needs before every render (FF-41). Renderer 0.11.3 previews every kept classic chart type natively; PPTX 0.11.2 exports the native construct for each kept classic chart type (with `chart-data-adapted` diagnostics where data is adapted) and writes theme colour references for table and text colours. Renderer 0.11.4 previews the seven chartex chart types natively (the world map as a non-geographic tile grid), keeps the Latin Noto Sans replacement for script schemes under `scripts: 'auto'`, shapes Noto Sans Mongolian, and bundles Raleway and Playfair Display (94 lazy faces); PPTX 0.11.3 adds the opt-in `toPptx({chartex: 'native'})` export of the chartex chart types (the default output is unchanged) and always imports chartex charts. |
 | core 0.11.0, CLI 0.9.0, renderer 0.9.0, PPTX 0.9.1, editor 0.8.0 | Previous coordinated Node 24 set (ColorRef, shared furniture). Renderer and PPTX had different core floors from 0.10.x. |
 | core 0.10.0, renderer/PPTX/CLI 0.8.0, editor 0.7.0 | Previous coordinated Node 24 baseline. Lint and furniture landed across 0.10.0/0.8.0 then layout-placeholder fixes in 0.10.1/0.8.1/0.7.1. |
-| Node 20 / 22 | Not valid for these packages |
+| Node 20 | Not valid for these packages |
+| Node 22 / 26 | Declared by the current set (`engines.node` `>=22`) and tested, but Node 24 is the toolchain the evidence runs on. Releases up to core 0.12.1, CLI 0.10.0, renderer 0.12.0, PPTX 0.12.3 and editor 0.11.2 declared `24.x`, so npm on Node 22 or 26 silently picked an older release |
 
 Do not install sibling `../opf-render` dist folders when following the
 quickstart. Packed and registry consumers must resolve `@openpresentation/*`

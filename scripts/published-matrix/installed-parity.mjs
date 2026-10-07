@@ -15,12 +15,13 @@
 // pptx-gallery is a private repository that the workflow token cannot read. No tolerance or check of the harness changes.
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
-import {appendFile, cp, mkdir, readdir, readFile, rm, symlink, writeFile} from 'node:fs/promises';
+import {appendFile, cp, mkdir, readdir, readFile, rm, writeFile} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
+import {linkModules} from './link-modules.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..', '..');
@@ -65,9 +66,6 @@ export async function plannedVersions() {
   return versions;
 }
 
-// A directory junction on Windows (no administrator right needed), a symlink elsewhere.
-const link = (target, at) => symlink(target, at, process.platform === 'win32' ? 'junction' : 'dir');
-
 async function prepare() {
   const versions = await plannedVersions();
   console.log('Installed set:', JSON.stringify(versions));
@@ -105,7 +103,7 @@ async function prepare() {
   };
   const core = path.join(sources, 'parity-opf', 'packages', 'javascript');
   await copyPackage('@openpresentation/opf', core);
-  await link(modules, path.join(core, 'node_modules'));
+  await linkModules(modules, path.join(core, 'node_modules'));
   // The harness reads the head of each source from its root package.json gitHead when the root is not a git checkout.
   await writeFile(path.join(sources, 'parity-opf', 'package.json'), JSON.stringify({name: 'parity-opf', private: true, gitHead: installed['@openpresentation/opf'].gitHead}, null, 2));
   await mkdir(path.join(sources, 'parity-opf', 'scripts'), {recursive: true});
@@ -113,7 +111,7 @@ async function prepare() {
   for (const [name, dir] of [['@openpresentation/opf-render', 'parity-opf-render'], ['@openpresentation/opf-pptx', 'parity-opf-pptx']]) {
     const target = path.join(sources, dir);
     await copyPackage(name, target);
-    await link(modules, path.join(target, 'node_modules'));
+    await linkModules(modules, path.join(target, 'node_modules'));
   }
   // The harness never imports the editor; it is installed and recorded because the audited set includes it.
   await mkdir(out, {recursive: true});

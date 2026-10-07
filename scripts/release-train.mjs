@@ -160,6 +160,55 @@ export function editManifestText(text, { version, changes = [] }) {
   return out;
 }
 
+/**
+ * RR-55: a sibling whose CI needs a core that is not on npm yet declares `"opf": { "requiresUnreleasedCore": "X.Y.Z" }`
+ * in package.json; its CI then skips only the packed install against published core while the installed published core
+ * is lower. The field is a pull-request-time device and must never reach a release: `prep` deletes it and `plan`
+ * flags a release commit that still carries it.
+ */
+export function unreleasedCoreOf(manifest) {
+  const value = manifest?.opf?.requiresUnreleasedCore;
+  return value === undefined ? null : value;
+}
+
+const FIELD = String.raw`"requiresUnreleasedCore"\s*:\s*"(?:[^"\\]|\\.)*"`;
+const ONLY_FIELD = String.raw`"opf"\s*:\s*\{\s*${FIELD}\s*\}`;
+const REMOVALS = [
+  // the only key of "opf", which is not the first property: take the comma before it
+  new RegExp(String.raw`,\s*${ONLY_FIELD}`),
+  // the only key of "opf", which is the first property: take the comma after it
+  new RegExp(String.raw`${ONLY_FIELD}\s*,\s*`),
+  // "opf" holds other keys too: drop only this property
+  new RegExp(String.raw`,\s*${FIELD}(?=\s*\})`),
+  new RegExp(String.raw`${FIELD}\s*,\s*`),
+  // "opf" is the only property of the manifest
+  new RegExp(ONLY_FIELD),
+];
+
+/**
+ * package.json text without `opf.requiresUnreleasedCore` (and without the `opf` object when that was its only key),
+ * keeping the file's formatting. Returns { text, removed } where removed is the field's value, or null when the manifest
+ * does not carry it (the text is then returned unchanged).
+ */
+export function removeUnreleasedCoreText(text) {
+  const before = JSON.parse(text);
+  const removed = unreleasedCoreOf(before);
+  if (removed === null) return { text, removed: null };
+  const expected = structuredClone(before);
+  delete expected.opf.requiresUnreleasedCore;
+  if (Object.keys(expected.opf).length === 0) delete expected.opf;
+  for (const pattern of REMOVALS) {
+    const out = text.replace(pattern, "");
+    if (out === text) continue;
+    try {
+      if (JSON.stringify(JSON.parse(out)) === JSON.stringify(expected)) return { text: out, removed };
+    } catch {
+      // try the next form
+    }
+  }
+  throw new Error('cannot remove "opf.requiresUnreleasedCore" from the manifest text without changing anything else');
+}
+
 /** The CLI's PEER_RANGES in peers.ts follow its peerDependencies: replaces `"<old>"` for the named constant entries. */
 export function editPeersText(text, changes) {
   let out = text;
@@ -446,6 +495,11 @@ export async function packageState(deps, pkg, version, train) {
     state.step = state.pull ? "prep-open" : "prep-needed";
     const targets = upstreamTargets(pkg, train);
     state.floorChanges = floorChanges(headManifest, targets);
+    const pending = unreleasedCoreOf(headManifest);
+    if (pending !== null) {
+      const tooHigh = train.core && isVersion(pending) && compareVersions(pending, train.core) > 0;
+      state.notes.push(`main's ${pkg.manifest} declares opf.requiresUnreleasedCore ${pending}; the release-prep PR deletes it${tooHigh ? `, but core ${train.core} of this train is below it, so \`prep\` stops` : ""}`);
+    }
     if (state.pull) state.notes.push(`release-prep PR open: ${state.pull.url} (merge it once its CI is green)`);
     else state.notes.push(`no release-prep PR: main carries ${state.headVersion}; \`prep ${pkg.key}\` opens it${state.floorChanges.length ? ` and raises ${state.floorChanges.map((c) => `${c.name} ${c.from} -> ${c.to}`).join(", ")}` : ""}`);
     return state;
@@ -467,6 +521,8 @@ export async function packageState(deps, pkg, version, train) {
   if (state.checks.advisoryFailing.length) state.notes.push(`non-required checks failing on the release commit: ${state.checks.advisoryFailing.join(", ")}`);
   const releaseManifest = release.sha === state.head ? headManifest : await manifestAt(deps, pkg, release.sha);
   state.manifest = releaseManifest;
+  const stillDeclared = unreleasedCoreOf(releaseManifest);
+  if (stillDeclared !== null) state.problems.push(`the release commit keeps opf.requiresUnreleasedCore ${stillDeclared} in ${pkg.manifest}; the field is for pull requests and must be deleted before a release (\`prep\` removes it)`);
   const lagging = floorChanges(releaseManifest, upstreamTargets(pkg, train));
   for (const change of lagging) state.problems.push(`the release commit keeps ${change.field} ${change.name} ${change.from}, below the train's ${change.to.replace(/^[^\d]*/, "")}`);
   state.step = state.tagCommit ? "tagged" : "ready-to-tag";
@@ -832,13 +888,14 @@ function must(result, what) {
   return result.stdout ?? "";
 }
 
-export function prepBody({ pkg, version, previous, item, changes, fragments, prose, summary, train }) {
+export function prepBody({ pkg, version, previous, item, changes, fragments, prose, summary, train, removedField = null }) {
   const floors = changes.length ? changes.map((c) => `| \`${c.field}\` | \`${c.name}\` | \`${c.from}\` | \`${c.to}\` |`).join("\n") : "";
   return `${item ? `${item}: ` : ""}release-prep PR for ${pkg.name} ${version} (from ${previous}), opened by \`scripts/release-train.mjs prep\` (RR-51).
 
 - \`${pkg.manifest}\`: version ${previous} -> ${version}.
 - \`${pkg.changelog.file}\`: \`node scripts/changelog-fragments.mjs assemble --version ${version}${pkg.changelog.package ? ` --package ${pkg.changelog.package}` : ""}\` moved ${fragments} fragment(s) into the release section.${summary ? ` Summary: ${summary}` : ""}
-- Lockfile refreshed with \`${pkg.lockfile === "pnpm" ? "pnpm install --lockfile-only" : "npm install --package-lock-only"}\` against the registry.
+- Lockfile refreshed with \`${pkg.lockfile === "pnpm" ? "pnpm install --lockfile-only" : "npm install --package-lock-only"}\` against the registry.${removedField ? `
+- \`${pkg.manifest}\`: \`opf.requiresUnreleasedCore\` (${removedField}) deleted; it gated CI's packed install on a core that was not yet published, and must not reach a release.` : ""}
 ${changes.length ? `
 Dependency floors raised to the train's versions (each already on npm):
 
@@ -887,7 +944,13 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
   const manifestFile = path.join(dir, pkg.manifest);
   const cloned = readFileSync(manifestFile, "utf8");
   if (JSON.parse(cloned).version !== manifest.version) throw new Error(`the clone of ${pkg.repo} is not at main ${head.slice(0, 12)}`);
-  writeFileSync(manifestFile, editManifestText(cloned, { version, changes }));
+  const declared = unreleasedCoreOf(JSON.parse(cloned));
+  if (declared !== null && (!isVersion(declared) || (train.core && compareVersions(declared, train.core) > 0))) {
+    throw new TrainStop(`${pkg.manifest} declares opf.requiresUnreleasedCore ${declared}, ${isVersion(declared) ? `above core ${train.core} of this train` : "which is not a version"}: ${pkg.name}@${version} would not install against published core. Release the core it needs first (--core), or fix the field`);
+  }
+  const edited = removeUnreleasedCoreText(editManifestText(cloned, { version, changes }));
+  const removedField = edited.removed;
+  writeFileSync(manifestFile, edited.text);
   if (pkg.peersFile && existsSync(path.join(dir, pkg.peersFile))) {
     const peers = editPeersText(readFileSync(path.join(dir, pkg.peersFile), "utf8"), changes);
     if (peers.applied.length) writeFileSync(path.join(dir, pkg.peersFile), peers.text);
@@ -907,18 +970,18 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
   if (stray.length) throw new Error(`a release-prep PR changes only versions, the changelog, ranges and the lockfile; this one also changed: ${stray.join(", ")} (clone left at ${dir})`);
   const prose = proseMentions(dir, pkg, manifest.version);
   const title = `${item ? `${item}: ` : ""}release ${pkg.key === "core" ? "core" : pkg.key === "cli" ? "CLI" : pkg.repo} ${version}`;
-  const body = prepBody({ pkg, version, previous: manifest.version, item, changes, fragments, prose, summary, train });
+  const body = prepBody({ pkg, version, previous: manifest.version, item, changes, fragments, prose, summary, train, removedField });
   const stat = git(["diff", "--stat", "HEAD"]);
   if (!execute) {
     deps.log(`dry run: ${title}\nbranch ${branchName} in ${dir} (not committed, not pushed)\n${stat}\n${body}\n\nPass --execute to commit, push and open the PR.`);
-    return { status: "dry-run", dir, title, body, changed, changes };
+    return { status: "dry-run", dir, title, body, changed, changes, removedField };
   }
   git(["add", "-A"]);
-  git(["commit", "-m", `${title}\n\n${pkg.manifest} ${manifest.version} -> ${version}; changelog fragments assembled; ${changes.length ? `floors: ${changes.map((c) => `${c.name} ${c.to}`).join(", ")}; ` : ""}lockfile refreshed.`]);
+  git(["commit", "-m", `${title}\n\n${pkg.manifest} ${manifest.version} -> ${version}; changelog fragments assembled; ${removedField ? `opf.requiresUnreleasedCore ${removedField} removed; ` : ""}${changes.length ? `floors: ${changes.map((c) => `${c.name} ${c.to}`).join(", ")}; ` : ""}lockfile refreshed.`]);
   git(["-c", "credential.helper=", "-c", "credential.helper=!gh auth git-credential", "push", "origin", `HEAD:refs/heads/${branchName}`], "git push");
   const pull = await deps.api(`/repos/${OWNER}/${pkg.repo}/pulls`, { method: "POST", body: { title, head: branchName, base: "main", body } });
   deps.log(`opened ${pull.html_url} (${title}); it merges after CI is green and a person merges it.`);
-  return { status: "opened", pull: { number: pull.number, url: pull.html_url }, dir, changes };
+  return { status: "opened", pull: { number: pull.number, url: pull.html_url }, dir, changes, removedField };
 }
 
 // ---------------------------------------------------------------------------------------------------------------

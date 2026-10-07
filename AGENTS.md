@@ -21,6 +21,12 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 - Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
 - Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
 
+## Checks for agents
+
+After each change run `pnpm check:changed`: it checks only what the branch changed (Biome, the mapped checks, the type check and package tests when relevant). Leave the full `pnpm test` to CI and the last run before a PR. Heavy commands (`pnpm typecheck`, `pnpm test`, the package tests in `check:changed`) wait for one of three machine-wide slots (`OPF_AGENT_SLOTS`; no limit in CI), so concurrent sessions do not starve each other. A hook in `.claude/settings.json` runs Biome on each file you edit, applies its safe fixes and reports the errors that fail `pnpm lint`; re-read a file it says it changed.
+
+GitHub API: every agent on the account shares one REST quota (5000 an hour), and it ran out three times on 2026-10-06. Watch CI with at most one batched GraphQL `statusCheckRollup` query every 3 to 5 minutes; never loop per-run or per-job REST calls (`gh pr checks`, `gh run view`). Give any data-collection job an explicit call budget.
+
 ## CI cost
 
 A pull request runs the Linux jobs on the current Node; the macOS and Windows legs and the Node 22 and 26 engines-range legs run in the merge queue. Add the `full-ci` label when a change touches OS- or Node-version-specific code, to get them on the pull request too (RR-57; `ecosystem-full` keeps its own meaning for the sibling suites).

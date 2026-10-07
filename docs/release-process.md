@@ -43,6 +43,8 @@ npm (`npm install --package-lock-only`), so merge sibling release PRs only after
 the upstream publish. `@openpresentation/cli` bundles core and is released
 separately by `cli-publish.yml` (`cli-vX.Y.Z`) when a fresh bundle is needed.
 
+A sibling pull request that needs a core that is not on npm yet (a breaking core release and its sibling PRs, `Depends-On: OpenPresentation/opf#N`) declares it in its `package.json` as `"opf": { "requiresUnreleasedCore": "X.Y.Z" }` (RR-55). Its CI then skips only the packed install against published dependencies (`npm run test:packed`, with a `::notice::`) while the installed published `@openpresentation/opf` is lower than `X.Y.Z`; every linked-ecosystem step still runs. The field is for pull requests only: `release-train.mjs prep` deletes it (and refuses a field above the core of the train), and `plan` flags a release commit whose `package.json` still carries it.
+
 Release-prep PRs contain only version bumps, changelog entries, dependency ranges
 and lockfile changes (plus current-instruction docs). The changelog entries are
 not written by hand: every change adds a fragment `changes/<slug>.md` in its own
@@ -110,7 +112,7 @@ What each step checks:
   (`npm install --package-lock-only` in the siblings, `pnpm install --lockfile-only` in core). It fails if a fragment
   for the package is left or if anything other than the manifest, changelog, fragments, lockfile and peers file
   changed. The PR body lists README lines that name the previous version for a person to review; prose is not
-  rewritten. Branch `codex/release-<package>-<x-y-z>` unless `--branch` is given. An open release-prep PR (found by
+  rewritten. It also deletes `opf.requiresUnreleasedCore` from the manifest when the sibling declares it (see above; `plan` flags a release commit that keeps it). Branch `codex/release-<package>-<x-y-z>` unless `--branch` is given. An open release-prep PR (found by
   branch or by a "release <package> X.Y.Z" title) or a merged one is detected and nothing is written.
 - `tag` re-verifies right before tagging: the version at the release commit, that the commit is on `main`, green
   required checks, every upstream of the train on npm and every runtime floor naming a version npm has. It then creates
