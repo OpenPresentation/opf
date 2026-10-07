@@ -99,7 +99,11 @@ jobs:
           for repo in opf-render opf-pptx opf-editor; do
             npm ci --prefix "$repo"
           done
+      - name: Gate the published-dependency check (RR-55 opf.requiresUnreleasedCore)
+        id: published-core
+        run: node scripts/published-core-gate.mjs
       - name: Verify renderer with published core
+        if: steps.published-core.outputs.skip != 'true'
         run: npm run test:packed
       - name: Build and link coordinated sources
         working-directory: opf
@@ -245,7 +249,11 @@ jobs:
           for repo in opf-render opf-pptx opf-editor; do
             npm ci --prefix "$repo"
           done
+      - name: Gate the published-dependency check (RR-55 opf.requiresUnreleasedCore)
+        id: published-core
+        run: node scripts/published-core-gate.mjs
       - name: Verify renderer with published dependencies
+        if: steps.published-core.outputs.skip != 'true'
         run: npm run test:packed
       - name: Build and link coordinated sources
         working-directory: opf

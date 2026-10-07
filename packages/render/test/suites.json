@@ -37,6 +37,7 @@
     "lazy-face-fallback.mjs": "Lazy script-face loading and glyph fallback of the renderer for the Aptos scheme.",
     "pdf-vector-visual.mjs": "Appearance of the vector PDF writer; the raster golden already renders the same core examples.",
     "pdf-vector.mjs": "Structure of the vector PDF writer (text extraction, tagging, embedding), renderer internal.",
+    "published-core-gate.mjs": "Version arithmetic of the CI gate on opf.requiresUnreleasedCore (RR-55); package machinery, no core input.",
     "raster-script-clusters.mjs": "Cluster-by-cluster raster text path of the renderer, no core input."
   }
 }
