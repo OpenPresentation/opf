@@ -61,9 +61,11 @@ try {
   const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, ...peers].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');
   assert.equal(rendered.ok, true);
-  assert.deepEqual(await readdir(path.join(work, 'png')), ['deck-001.png']);
+  // FA-08: output files are named by the deck's `name` ("Npx"), not the input file's stem.
+  assert.deepEqual(await readdir(path.join(work, 'png')), ['Npx-001.png']);
   assert.equal(npx('export', 'deck.opf.json', '--format', 'pptx').ok, true);
-  assert.equal(npx('import', 'deck.pptx', '--out', 'round.opf.json').valid, true);
+  assert.ok((await readdir(work)).includes('Npx.pptx'), 'export without --out names the file after the deck');
+  assert.equal(npx('import', 'Npx.pptx', '--out', 'round.opf.json').valid, true);
   console.log(`CLI plus optional peers passed (${peers.join(', ')}). Tarball: ${tarball}`);
 } finally {
   const actual = await realpath(temp), parent = await realpath(tmpdir());
