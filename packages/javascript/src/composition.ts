@@ -481,7 +481,7 @@ export function slideImageShape(kind: SlideImageShape['kind'], box: LayoutBox, c
   return { kind: 'rectangle', preset: 'rect', adjust: {}, path: rect };
 }
 
-function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[], rtl = false): ComposedSlideImage | undefined {
+function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[], rtl = false, imageFill?: ResolvedDesignHints['imageFill']): ComposedSlideImage | undefined {
   const own = record(slide.design), deck = record(record(presentation).design);
   const local = own.slideImage !== undefined;
   const configured: unknown = local ? own.slideImage : deck.slideImage;
@@ -504,7 +504,8 @@ function resolveSlideImage(slide: Record<string, any>, layout: Record<string, an
   const source = assetSource(value);
   if (typeof source !== 'string' || !source) return undefined;
   const t = treatment ?? {};
-  const fill: 'crop' | 'fit' = t.fill === 'crop' || t.fill === 'fit' ? t.fill : (own.imageFill ?? deck.imageFill) === 'fit' ? 'fit' : 'crop';
+  // The treatment's own fill, else the effective design.imageFill (slide, deck, then the layout record: FA-17), else crop.
+  const fill: 'crop' | 'fit' = t.fill === 'crop' || t.fill === 'fit' ? t.fill : imageFill === 'fit' ? 'fit' : 'crop';
   const share = finite(t.size, 0.1, 0.9) ?? SLIDE_IMAGE_BAND;
   const band = { width: round(width * share), height: round(height * share) };
   const region: LayoutBox = position === 'left' ? { x: 0, y: 0, width: band.width, height }
@@ -2180,7 +2181,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
   const annotationOptions = { scale, minFontSize: minSize, fit: annotationFit, textStyle: (fitPath: string) => styleFor('text', fitPath) };
   const slideImageDiagnostics: LayoutDiagnostic[] = [];
-  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics, rtl);
+  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics, rtl, hints.imageFill);
   // Free area for headings and content: the whole slide unless a banded slide image takes one side.
   const area = { left: 0, top: 0, right: width, bottom: height };
   if (slideImage?.position === 'left') area.left = slideImage.region.width;

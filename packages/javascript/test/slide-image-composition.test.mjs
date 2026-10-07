@@ -74,6 +74,14 @@ test('fill follows imageFill, crop by default', () => {
   assert.equal(composeSlide(slide()).slideImage.fill, 'crop');
   assert.equal(composeSlide(slide('fit')).slideImage.fill, 'fit');
   assert.equal(composeSlide({ title: 'Heading', design: { slideImage: { src: photo, position: 'left' } } }, { presentation: { design: { imageFill: 'fit' } } }).slideImage.fill, 'fit');
+  // RR-58: the layout record's design.imageFill is the lowest-precedence default for the slide image too (FA-17), so a
+  // slide that names a fit layout needs no copy of it; the deck, the slide and the treatment's own fill still win.
+  const layout = { design: { imageFill: 'fit', slideImage: { position: 'background' } } };
+  const bare = { title: 'Heading', design: { slideImage: { src: photo } } };
+  assert.equal(composeSlide(bare, { layout }).slideImage.fill, 'fit');
+  assert.equal(composeSlide(bare, { layout, presentation: { design: { imageFill: 'crop' } } }).slideImage.fill, 'crop');
+  assert.equal(composeSlide({ ...bare, design: { ...bare.design, imageFill: 'crop' } }, { layout }).slideImage.fill, 'crop');
+  assert.equal(composeSlide({ title: 'Heading', design: { slideImage: { src: photo, position: 'background', fill: 'crop' } } }, { layout }).slideImage.fill, 'crop');
 });
 
 test('asset shorthand uses the layout alignment and missing sources stay inactive', () => {
