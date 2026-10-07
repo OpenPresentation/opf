@@ -4,7 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { selectChecks } from './run-checks.mjs';
-import { buildPlan, formatTable, matches, referencedPaths, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
+import { biomeBatches, buildPlan, formatTable, matches, referencedPaths, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
@@ -74,4 +74,15 @@ test('formatTable prints a row per step and a total', () => {
   assert.match(table, /biome +passed +1\.2 s +2 files/);
   assert.match(table, /typecheck +skipped +- +no \.ts/);
   assert.match(table, /total +2\.5 s$/);
+});
+
+test('biomeBatches keeps every file, in order, within the command-line budget', () => {
+  const files = Array.from({ length: 486 }, (_, i) => `packages/javascript/src/some/deeply/nested/module-${i}.ts`);
+  const batches = biomeBatches(files);
+  assert.ok(batches.length > 1, 'a long list is split');
+  assert.deepEqual(batches.flat(), files, 'no file is lost or reordered');
+  for (const batch of batches) assert.ok(batch.join(' ').length <= 6000, 'each batch fits the Windows cmd.exe limit');
+  assert.deepEqual(biomeBatches(['a.ts', 'b.ts']), [['a.ts', 'b.ts']], 'a short list is one batch');
+  assert.deepEqual(biomeBatches([]), [], 'no files, no batch');
+  assert.deepEqual(biomeBatches(['x'.repeat(50)], 10), [['x'.repeat(50)]], 'an over-long single path still runs on its own');
 });
