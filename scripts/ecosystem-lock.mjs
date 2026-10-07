@@ -23,13 +23,16 @@
 // request body (read through the REST API, so editing the body and re-running the job picks it up) makes `resolve`
 // check out that pull request instead of the lock entry: its test merge commit while it is open and mergeable, its
 // head otherwise, and its merge commit (on main) once merged. A closed, unmerged dependency fails the step.
+// FA-19: when opf-render comes from a Depends-On pull request (and no --golden-override is given), resolve also adopts
+// that pull request's own golden selection, the `golden-override` of its .github/workflows/ci.yml, with the roller's
+// rule (adoptableGolden) and only when the baseline exists at the commit that is checked out; otherwise the lock's.
 //   node scripts/ecosystem-lock.mjs depends-on [--body-file <file>]   # prints what a body declares (no network)
 //
 // `guard` checks, through the GitHub REST API (no clone), that every locked SHA is an ancestor of its repository's
 // main (the REST equivalent of `git merge-base --is-ancestor <sha> main`), and warns when a pull request edits a
 // locked SHA from a branch other than the roller's. It only warns unless `--blocking` is given or
 // ECOSYSTEM_LOCK_GUARD=blocking is set (the migration in ci-cd.md adds it as a warning first).
-import { appendFileSync, readFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -290,8 +293,61 @@ export async function dependsOnOverrides(api, pullRequest, consumer) {
   return { overrides, warnings, dependencies };
 }
 
-/** The workspace-relative golden selection: the lock's, or a workspace-relative override such as `opf-render/test/golden/x`. */
-export function goldenSelection(lock, override) {
+/** A renderer's own golden selection in its ci.yml (the `golden-override` input of the ecosystem-refs step), or "". */
+export function goldenOverrideOf(ciYaml) {
+  const match = /^\s*golden-override:\s*(?:'([^']*)'|"([^"]*)"|([^\s#'"]*))\s*(?:#.*)?$/m.exec(ciYaml ?? "");
+  return match ? (match[1] ?? match[2] ?? match[3] ?? "") : "";
+}
+
+/**
+ * The golden a renderer's `golden-override` may hand to the lock (the roller) or to a Depends-On run (resolve): a
+ * renderer baseline directory (`opf-render/test/golden/<name>`) or a reviewed core fixture
+ * (`opf/scripts/fixtures/<name>.sha256.json`), which a coordinated release's renderer pull request selects while the
+ * lock still records the previous renderer's output. Returns { repository, path, coreFixture }; throws otherwise.
+ */
+export function adoptableGolden(override, owner = "opf-render's") {
+  const [repository, ...rest] = String(override).split("/");
+  const goldenPath = rest.join("/");
+  const renderBaseline = repository === "opf-render" && /^test\/golden\/[\w.-]+$/.test(goldenPath);
+  const coreFixture = repository === "opf" && /^scripts\/fixtures\/[\w.-]+\.sha256\.json$/.test(goldenPath);
+  if (!isSafeRelativePath(goldenPath) || (!renderBaseline && !coreFixture)) {
+    throw new Error(`${owner} golden-override ${override} does not name an opf-render baseline (opf-render/test/golden/<name>) or a core scripts/fixtures/<name>.sha256.json fixture`);
+  }
+  return { repository, path: goldenPath, coreFixture };
+}
+
+/**
+ * FA-19: the golden of a Depends-On opf-render pull request. Reads its ci.yml at the commit that is checked out and
+ * adopts its `golden-override` (adoptableGolden) when the baseline exists there: a renderer baseline at that commit, a
+ * core fixture at the opf commit of this run (this checkout, `root`, when core is the consumer). Returns undefined
+ * when opf-render is not a Depends-On or its ci.yml selects nothing.
+ */
+export async function dependsOnGolden(api, { dependencies = [], refs, consumer, root: localRoot = root, exists = existsSync } = {}) {
+  const render = dependencies.find((dependency) => dependency.repository === "opf-render");
+  if (!render || consumer === "opf-render") return undefined;
+  const name = `${OWNER}/opf-render#${render.number}`;
+  const ci = await api(`/repos/${OWNER}/opf-render/contents/.github/workflows/ci.yml?ref=${encodeURIComponent(render.ref)}`);
+  const override = goldenOverrideOf(Buffer.from(ci.content ?? "", ci.encoding === "base64" ? "base64" : "utf8").toString("utf8"));
+  if (!override) return undefined;
+  const golden = adoptableGolden(override, `Depends-On ${name}'s`);
+  const ref = golden.repository === "opf-render" ? render.ref : refs.opf.ref;
+  if (golden.repository === consumer) {
+    if (!exists(path.join(localRoot, golden.path))) throw new Error(`Depends-On ${name} selects the golden ${override}, which does not exist in this checkout`);
+  } else {
+    try {
+      await api(`/repos/${OWNER}/${golden.repository}/contents/${golden.path}?ref=${encodeURIComponent(ref)}`);
+    } catch (error) {
+      throw new Error(`Depends-On ${name} selects the golden ${override}, which does not exist at ${golden.repository} ${short(ref)} (${error.message})`);
+    }
+  }
+  return { repository: golden.repository, path: golden.path, source: `adopted from Depends-On ${name} (golden-override in its ci.yml)` };
+}
+
+/**
+ * The workspace-relative golden selection: an explicit override such as `opf-render/test/golden/x`, else a golden
+ * adopted from a Depends-On renderer (dependsOnGolden), else the lock's.
+ */
+export function goldenSelection(lock, override, adopted) {
   if (override) {
     const [repository, ...rest] = override.split("/");
     if (!REPOSITORIES.includes(repository) || !isSafeRelativePath(rest.join("/"))) {
@@ -299,6 +355,7 @@ export function goldenSelection(lock, override) {
     }
     return { repository, path: rest.join("/"), source: "override" };
   }
+  if (adopted) return adopted;
   return { repository: lock.golden.repository, path: lock.golden.path, source: "lock" };
 }
 
@@ -306,14 +363,14 @@ export function goldenSelection(lock, override) {
  * The commit each checkout uses: the locked SHA for every repository. The consumer's own entry is reported too (its
  * CI checks out its own head, not the lock). The golden is relative to the workspace (`<repository>/<path>`).
  */
-export function resolveRefs(lock, { consumer, goldenOverride, overrides = {} } = {}) {
+export function resolveRefs(lock, { consumer, goldenOverride, overrides = {}, adoptedGolden } = {}) {
   if (consumer !== undefined && !REPOSITORIES.includes(consumer)) throw new Error(`--consumer must be one of ${REPOSITORIES.join(", ")}`);
   const refs = {};
   for (const name of REPOSITORIES) {
     if (overrides[name] && name !== consumer) refs[name] = { ref: overrides[name].ref, source: overrides[name].source };
     else refs[name] = { ref: lock.repositories[name].sha, source: name === consumer ? "own head (lock entry shown)" : "lock" };
   }
-  const golden = goldenSelection(lock, goldenOverride);
+  const golden = goldenSelection(lock, goldenOverride, adoptedGolden);
   return { consumer, refs, golden: { ...golden, workspacePath: `${golden.repository}/${golden.path}` } };
 }
 
@@ -374,9 +431,14 @@ async function main(argv) {
   if (command === "resolve") {
     const lock = readLock(lockFile);
     const consumer = option(args, "--consumer");
-    const { overrides, warnings } = await dependsOnOverrides(githubApi(), pullRequestOfEvent(), consumer);
+    const api = githubApi();
+    const { overrides, warnings, dependencies } = await dependsOnOverrides(api, pullRequestOfEvent(), consumer);
     for (const warning of warnings) annotate("warning", "Depends-On", warning);
-    const resolved = resolveRefs(lock, { consumer, goldenOverride: option(args, "--golden-override") || undefined, overrides });
+    const goldenOverride = option(args, "--golden-override") || undefined;
+    const { refs } = resolveRefs(lock, { consumer, overrides });
+    const adoptedGolden = goldenOverride ? undefined : await dependsOnGolden(api, { dependencies, refs, consumer });
+    if (adoptedGolden) annotate("notice", "Depends-On golden", `golden ${adoptedGolden.repository}/${adoptedGolden.path} ${adoptedGolden.source}, instead of the lock's ${lock.golden.repository}/${lock.golden.path}`);
+    const resolved = resolveRefs(lock, { consumer, goldenOverride, overrides, adoptedGolden });
     for (const name of REPOSITORIES) console.log(`${name.padEnd(10)} ${resolved.refs[name].ref} (${resolved.refs[name].source})`);
     console.log(`golden     ${resolved.golden.workspacePath} (${resolved.golden.source})`);
     if (args.includes("--github-output")) {

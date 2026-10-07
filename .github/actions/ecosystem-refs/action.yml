@@ -9,6 +9,8 @@
 # request body: that repository is checked out at the named pull request (its test merge commit while open, its merge
 # commit once merged) instead of the lock. It reads the current body through the REST API, so edit the body and
 # re-run the job. Other events (push, merge_group, workflow_dispatch, schedule) use the lock only.
+# FA-19: a Depends-On opf-render pull request also brings its golden: without golden-override here, the golden-override
+# of that pull request's ci.yml is adopted (scripts/ecosystem-lock.mjs, dependsOnGolden), and the log says so.
 #
 # Needs only `node` on the runner (every GitHub-hosted runner and the pinned Playwright image have it); run it before
 # actions/setup-node if you like.

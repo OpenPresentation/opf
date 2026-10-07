@@ -28,31 +28,25 @@
 import { appendFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { githubApi, isSafeRelativePath, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
+import { adoptableGolden, githubApi, goldenOverrideOf, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
+
+export { goldenOverrideOf };
 
 export const ROLL_BRANCH = `${ROLLER_BRANCH_PREFIX}main`;
 export const CORE = `${OWNER}/opf`;
 /** The workflows whose jobs are the required checks of a core pull request. */
 export const CHECK_WORKFLOWS = ["ecosystem-ci.yml", "opf-ci.yml"];
 
-/** The renderer's own golden selection in its ci.yml (the `golden-override` input of the ecosystem-refs step), or "". */
-export function goldenOverrideOf(ciYaml) {
-  const match = /^\s*golden-override:\s*(?:'([^']*)'|"([^"]*)"|([^\s#'"]*))\s*(?:#.*)?$/m.exec(ciYaml ?? "");
-  return match ? (match[1] ?? match[2] ?? match[3] ?? "") : "";
-}
-
 /** The candidate lock for the four `main` SHAs. `renderOverride` is opf-render main's golden-override ("" for none). */
 export function candidateLock(lock, mains, { renderOverride = "", at, run } = {}) {
   let golden = lock.golden;
   let adopted = "";
   if (renderOverride) {
-    const [repository, ...rest] = renderOverride.split("/");
-    const goldenPath = rest.join("/");
     // A renderer baseline directory, or a reviewed core fixture: a coordinated release whose renderer pull request
     // renders core's new examples selects it while core's lock still records the pre-roll renderer's output.
-    // plan() then requires the fixture to exist at the core SHA being rolled.
-    const coreFixture = repository === "opf" && isSafeRelativePath(goldenPath) && /^scripts\/fixtures\/[\w.-]+\.sha256\.json$/.test(goldenPath);
-    if (repository !== "opf-render" && !coreFixture) throw new Error(`opf-render main's golden-override ${renderOverride} does not name an opf-render baseline or a core scripts/fixtures/<name>.sha256.json fixture`);
+    // plan() then requires the fixture to exist at the core SHA being rolled. Resolve applies the same rule to a
+    // Depends-On renderer (dependsOnGolden in ecosystem-lock.mjs).
+    const { repository, path: goldenPath, coreFixture } = adoptableGolden(renderOverride, "opf-render main's");
     golden = { repository, path: goldenPath, note: coreFixture ? "golden adopted from opf-render golden-override (core fixture)" : "opf-render main's own golden selection (golden-override in its ci.yml)" };
     if (coreFixture) adopted = " Golden adopted from opf-render golden-override (core fixture).";
   }
