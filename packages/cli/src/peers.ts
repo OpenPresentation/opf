@@ -12,7 +12,7 @@ import { FileCommandError } from "./io.js";
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.13.1", [PPTX_PACKAGE]: "^0.13.2" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.14.0", [PPTX_PACKAGE]: "^0.14.0" } as const;
 
 export interface Diagnostic {
 	code: string;
@@ -20,30 +20,45 @@ export interface Diagnostic {
 	message: string;
 	[detail: string]: unknown;
 }
-export interface FontOptions {
+export interface EmbeddedFace {
+	family: string;
+	weight: number;
+	italic?: boolean;
+	dataUrl: string;
+}
+/** What the renderer's deck-level functions read from `{ fonts }` (opf-render `RenderFonts`). */
+export interface RenderFonts {
+	textMeasurement?: unknown;
+	embeddedFonts?: readonly EmbeddedFace[];
+	fontFiles?: readonly string[];
+	useBundledFonts?: boolean;
+	loadSystemFonts?: boolean;
+}
+export interface FontRegistry {
+	scriptSelection?: { detected: string[]; scripts: string[]; unavailable: string[]; packages?: string[]; notInstalled?: string[]; uncovered?: string[] };
+}
+/** The handle `loadFonts()` of opf-render `/fonts-node` returns: pass it as `{ fonts }` to every deck-level call. */
+export interface FontsHandle extends RenderFonts {
 	textMeasurement: unknown;
-	embeddedFonts: { family: string; weight: number; italic?: boolean; dataUrl: string }[];
+	embeddedFonts: EmbeddedFace[];
 	fontFiles: string[];
 	useBundledFonts: false;
 	loadSystemFonts: false;
-}
-export interface FontRegistry {
+	registry: FontRegistry;
 	substitutions: { requestedFamily: string; resolvedFamily: string; compatibility: string; substitute: boolean }[];
-	scriptSelection?: { detected: string[]; scripts: string[]; unavailable: string[]; packages?: string[]; notInstalled?: string[]; uncovered?: string[] };
 }
 export interface RenderModule {
-	renderSvg(input: unknown, options?: Record<string, unknown>): string;
+	renderSlideSvg(presentation: unknown, index: number, options?: Record<string, unknown>): string;
 	svgToPng(svg: string, options?: Record<string, unknown>): Promise<Uint8Array>;
 	svgToPdf(svgs: string | string[], options?: Record<string, unknown>): Promise<Uint8Array>;
 }
 export interface FontsNodeModule {
-	prepareNodeFonts(options?: Record<string, unknown>): Promise<{ registry: FontRegistry; options: FontOptions }>;
+	loadFonts(options?: Record<string, unknown>): Promise<FontsHandle>;
 }
 export interface PptxModule {
-	toPptx(input: unknown, options?: Record<string, unknown>): Promise<Uint8Array>;
+	toPptx(presentation: unknown, options?: Record<string, unknown>): Promise<Uint8Array>;
+	/** Without `signals` the presentation itself; with `signals: true`, `{ presentation, signals }`. */
 	fromPptx(input: Uint8Array, options?: Record<string, unknown>): Promise<Record<string, unknown>>;
-	/** Present from opf-pptx 0.11.9: `fromPptx(bytes, {signals: true})` resolves to `{document, signals}`. */
-	SIGNALS_VERSION?: number;
 }
 export interface Peer<T> {
 	module: T;
@@ -109,14 +124,15 @@ export interface Renderer {
 
 export async function loadRenderer(): Promise<Renderer> {
 	const render = await loadPeer<RenderModule>(RENDER_PACKAGE);
-	requireFeature(render, ["renderSvg", "svgToPng", "svgToPdf"]);
+	requireFeature(render, ["renderSlideSvg", "svgToPng", "svgToPdf"]);
 	const fonts = await loadPeer<FontsNodeModule>(RENDER_PACKAGE, "/fonts-node");
-	requireFeature(fonts, ["prepareNodeFonts"]);
+	requireFeature(fonts, ["loadFonts"]);
 	return { render, fonts: fonts.module };
 }
 
 export async function loadPptx(): Promise<Peer<PptxModule>> {
 	const pptx = await loadPeer<PptxModule>(PPTX_PACKAGE);
-	requireFeature(pptx, ["toPptx", "fromPptx"]);
+	// `inventoryTypefaces` is the 0.14 name of `inventoryPptxTypefaces`: the check that tells the 0.14 API (`{ fonts }`, `{ presentation, signals }`) from the 0.13 one.
+	requireFeature(pptx, ["toPptx", "fromPptx", "inventoryTypefaces"]);
 	return pptx;
 }

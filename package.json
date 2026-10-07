@@ -8,6 +8,7 @@
     "typecheck": "node scripts/agent-slot.mjs -- pnpm run typecheck:run",
     "typecheck:run": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck",
     "check:text": "node --test scripts/check-text-integrity.test.mjs && node scripts/check-text-integrity.mjs",
+    "check:release-plan-cli": "node --test scripts/release-plan-cli.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:changed": "node scripts/check-changed.mjs",
     "check:agent-tools": "node --test scripts/agent-slot.test.mjs scripts/agent-format.test.mjs scripts/check-changed.test.mjs",

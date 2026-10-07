@@ -44,13 +44,13 @@ async function load(name,entrypoint) {
   return import(pathToFileURL(path.resolve(dir,typeof entry==='string'?entry:entry.import??entry.default)).href);
 }
 const {resolvePresentation}=await load('@openpresentation/opf-render','./svg');
-const {validatePresentation}=await load('@openpresentation/opf','.');
-const {loadOfficeFontRegistry}=await load('@openpresentation/opf-render','./fonts-node');
-const registry=await loadOfficeFontRegistry(),results=[];
-const coreVersion=packages.find(p=>p.name==='@openpresentation/opf')?.version;
-for (const fixture of metricLayoutFixtures({coreVersion})) {
+const {validate}=await load('@openpresentation/opf','.');
+const valid=value=>validate(value,{only:['format']}).valid;
+const {loadFonts}=await load('@openpresentation/opf-render','./fonts-node');
+const registry=await loadFonts({pack:'office'}),results=[];
+for (const fixture of metricLayoutFixtures()) {
   const {id,family,dimensions,document,metric,minFontSize,overflow}=fixture,before=JSON.stringify(document);
-  assert.equal(validatePresentation(document).valid,true);
+  assert.equal(valid(document),true);
   let rendererRejected=false;
   if (fixture.missingGlyph) {
     // Renderers up to 0.11.0 rejected the missing glyph before returning a slide. Renderer 0.11.1 resolves such a slide
@@ -58,14 +58,14 @@ for (const fixture of metricLayoutFixtures({coreVersion})) {
     // independent measured-core rejection below is the assertion this fixture exists for. The estimated path only
     // supplies an outer cell for it.
     try {
-      resolvePresentation(document,{textMeasurement:registry.textMeasurement});
+      resolvePresentation(document,{fonts:registry});
     } catch (actual) {
       assert.equal(actual.code,'missing-glyph');assert.equal(actual.details.character,fixture.missingGlyph);
       assert.equal(actual.details.path,'slides.0.metric.label');assert.equal(actual.details.fontFamily,family);
       rendererRejected=true;
     }
   }
-  const bound=resolvePresentation(document,fixture.missingGlyph?{}:{textMeasurement:registry.textMeasurement}).slides[0];
+  const bound=resolvePresentation(document,fixture.missingGlyph?{}:{fonts:registry}).slides[0];
   assert.deepEqual(bound.design.dimensions,dimensions);
   const box=bound.geometry.items[0].box,scale=Math.min(dimensions.width,dimensions.height)/720;
   const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.metric',minFontSize,scale};

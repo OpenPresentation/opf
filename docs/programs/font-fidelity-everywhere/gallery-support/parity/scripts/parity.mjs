@@ -257,7 +257,7 @@ function compareValue(doc) {
   const add = (check, status, reason, detail) => { diffs.push({check, status, reason, ...(detail ? {detail} : {})}); };
   // Preview
   const pdiag = []; let svgs, resolved;
-  try { resolved = render.resolvePresentation(structuredClone(doc), {}); svgs = render.renderSvgDeck(structuredClone(doc), {trace: true, onDiagnostic: d => pdiag.push(d.code)}); }
+  try { resolved = render.resolvePresentation(structuredClone(doc), {}); svgs = render.renderSvg(structuredClone(doc), {trace: true, onDiagnostic: d => pdiag.push(d.code)}); }
   catch (e) { return {fatal: `preview threw ${e.code ?? e.name}`, message: String(e.message).slice(0, 200)}; }
   return {resolved, svgs, pdiag};
 }

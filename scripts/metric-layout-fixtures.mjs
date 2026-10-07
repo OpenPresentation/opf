@@ -1,9 +1,6 @@
 // Shared inputs for the standalone metric geometry and controlled browser probes.
-// `coreVersion` is the core the documents are validated and rendered with: FontScheme roles are family strings from
-// core 0.14 (FA-07) and { family } objects before, so a registry run against an older published core keeps its shape.
-export function metricLayoutFixtures({coreVersion}={}) {
-  const [major,minor]=String(coreVersion??'0.14.0').split('.').map(Number);
-  const font=family=>major===0&&minor<14?{family}:family;
+// FontScheme roles are family strings (core 0.14, FA-07).
+export function metricLayoutFixtures() {
   const scenarios=[
     {id:'scalar-zero',metric:0},
     {id:'all-metadata',metric:{value:-12.5,unit:'ms',label:'Latency',description:'Median across completed requests',delta:0,trend:'flat'}},
@@ -19,7 +16,7 @@ export function metricLayoutFixtures({coreVersion}={}) {
   return ['Carlito','Caladea','Roboto'].flatMap(family=>[{width:1280,height:720},{width:540,height:960}].flatMap(dimensions=>scenarios.map(scenario=>({
     ...scenario,family,dimensions,minFontSize:scenario.minFontSize??24,overflow:scenario.overflow??false,
     ...(family==='Carlito'&&scenario.id==='combining-mark'?{missingGlyph:'\u0301'}:family==='Caladea'&&scenario.id==='greek-symbol'?{missingGlyph:'Ω'}:{}),
-    document:{design:{fontScheme:{heading:font(family),body:font(family),code:font('Cousine')},
+    document:{design:{fontScheme:{heading:family,body:family,code:'Cousine'},
       dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric:scenario.metric}]},
   }))));
 }

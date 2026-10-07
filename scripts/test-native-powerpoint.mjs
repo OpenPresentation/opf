@@ -19,9 +19,9 @@ const load = async name => {
   assert.equal(typeof target,'string','Expected a Node ESM package export');
   return import(pathToFileURL(path.resolve(path.dirname(manifestPath),target)).href);
 };
-const {validatePresentation} = await load('@openpresentation/opf');
-const {renderSvgDeck, svgToPng} = await load('@openpresentation/opf-render');
-const {createFontRegistry} = await load('@openpresentation/opf-render/fonts');
+const {validate} = await load('@openpresentation/opf');
+const {renderSvg, svgToPng} = await load('@openpresentation/opf-render');
+const {loadFonts} = await load('@openpresentation/opf-render/fonts-node');
 const {toPptx, fromPptx} = await load('@openpresentation/opf-pptx');
 const output = path.join(consumer, 'evidence');
 await mkdir(output, {recursive:true});
@@ -38,7 +38,7 @@ if (mode === 'generate') {
   const fontDir = process.env.OPF_NATIVE_FONT_DIR ?? path.join(process.env.WINDIR ?? 'C:/Windows','Fonts');
   const faces = [['calibri.ttf',400,false],['calibrib.ttf',700,false],['calibrii.ttf',400,true],['calibriz.ttf',700,true]];
   const fontFiles = faces.map(([file]) => path.join(fontDir,file));
-  const fonts = createFontRegistry(await Promise.all(faces.map(async ([file,weight,italic]) => ({data:new Uint8Array(await readFile(path.join(fontDir,file))),family:'Calibri',weight,italic}))),{substitutionPolicy:'none'});
+  const fonts = await loadFonts({pack:'none',substitutionPolicy:'none',faces:await Promise.all(faces.map(async ([file,weight,italic]) => ({data:new Uint8Array(await readFile(path.join(fontDir,file))),family:'Calibri',weight,italic})))});
   const document = {design:{fontScheme:{id:'calibri',code:'Calibri'},dimensions:{widthInches:1280/96,heightInches:720/96}},slides:[
     {title:'Native text verification',text:'PowerPoint keeps this content editable. Calibri uses the same installed font bytes for measurement and the SVG raster comparison.'},
     {title:'Styled and merged table',table:{columns:['Team','Stage','Status'],rows:[
@@ -51,15 +51,15 @@ if (mode === 'generate') {
       ['Bottom left','Bottom middle','Bottom right']
     ]}}
   ]};
-  const validation = validatePresentation(document);
+  const validation = validate(document,{only:['format']});
   assert.equal(validation.valid,true,JSON.stringify(validation));
   const diagnostics=[];
-  const options={textMeasurement:fonts.textMeasurement,onDiagnostic:d=>diagnostics.push(d)};
-  const slides=renderSvgDeck(document,options);
+  const options={fonts,onDiagnostic:d=>diagnostics.push(d)};
+  const slides=renderSvg(document,options);
   for(let index=0;index<slides.length;index++) {
     // No embedded proprietary font bytes in evidence SVGs.
     await writeFile(path.join(output,`renderer-${index+1}.svg`),slides[index]);
-    await writeFile(path.join(output,`renderer-${index+1}.png`),await svgToPng(slides[index],{fontFiles,useBundledFonts:false,loadSystemFonts:false}));
+    await writeFile(path.join(output,`renderer-${index+1}.png`),await svgToPng(slides[index],{fonts:{fontFiles,useBundledFonts:false,loadSystemFonts:false}}));
   }
   await writeFile(path.join(output,'source.pptx'),await toPptx(document,options));
   await writeJson('source.opf.json',document);
@@ -113,7 +113,7 @@ if (mode === 'generate') {
   for(const name of ['source','native-saved','native-edited']) {
     const diagnostics=[];
     const document=await fromPptx(new Uint8Array(await readFile(path.join(output,name+'.pptx'))),{onDiagnostic:d=>diagnostics.push(d)});
-    assert.equal(validatePresentation(document).valid,true);
+    assert.equal(validate(document,{only:['format']}).valid,true);
     assert.equal(document.slides.length,3);
     // opf-pptx 0.11.7 restores a root table as slide.table; earlier importers returned a table block.
     const tables=document.slides.flatMap(slide=>[slide,...(slide.blocks??[])].filter(block=>block.table).map(block=>block.table));

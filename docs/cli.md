@@ -53,7 +53,7 @@ opf export deck.opf.json --format pptx|pdf|png|svg [--out file|dir|.zip|-] [--sl
 | Format | Output | Notes |
 | --- | --- | --- |
 | `pptx` | `<name>.pptx` | opf-pptx `toPptx`. The whole deck (`--slides` is refused). `--chartex`, `--provenance` and `--image-format` are the `toPptx` options of the same names (`none` writes no provenance tags). |
-| `pdf` | `<name>.pdf` | One page per selected slide. `--pdf-mode` picks `vector` (selectable text, from the opf-render release that carries opf-render#90) or `raster` (one image per page); omitted, the installed renderer's default. `--pdf-mode vector` on a renderer without it exits 2. The report states the mode used (`pdf.mode`). |
+| `pdf` | `<name>.pdf` | One page per selected slide. `--pdf-mode` picks `vector` (selectable text, the default) or `raster` (one image per page). The report states the mode used (`pdf.mode`). |
 | `png`, `svg` | a directory, one file (`--out x.png`, one slide), or a zip (`--out x.zip`) | As `render`. Zip entries are stored (not deflated) with a fixed timestamp, so the archive is byte-identical everywhere. |
 
 The format is taken from `--out`'s extension when `--format` is omitted (`.pptx`, `.pdf`, `.png`, `.svg`).
@@ -68,8 +68,8 @@ opf import deck.pptx [--out deck.opf.json|-] [--signals signals.json]
 
 `fromPptx` to an OPF document (default `<name>.opf.json` in the working directory; `-` reads or writes stdin/stdout).
 Import is a conversion, not a lossless round trip for arbitrary decks: what it cannot keep is reported as `import/...`
-diagnostics. `--signals` also writes the raw per-shape layout and style signals (`fromPptx` with `signals: true`,
-opf-pptx 0.11.9 and later; an older peer exits 2). The signals are deterministic data; they never leave the machine.
+diagnostics. `--signals` also writes the raw per-shape layout and style signals (`fromPptx` with `signals: true`, which returns
+`{ presentation, signals }`). The signals are deterministic data; they never leave the machine.
 AI reconstruction of third-party decks is not part of the CLI (it lives in pptx.dev).
 
 ## Options shared by `render` and `export`

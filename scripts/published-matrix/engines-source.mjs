@@ -9,8 +9,6 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {renderSvg, svgToPng} from '../../../opf-render/dist/index.js';
 export {checkTypefaces, fromPptx, toPptx} from '../../../opf-pptx/dist/index.js';
 export {createEditorSession} from '../../../opf-editor/dist/index.js';
-/** The open presentation of an editor session: `editor.presentation` (the published 0.13 editor called it `editor.document`). */
-export const presentationOf = (editor) => editor.presentation;
 export {catalogs} from '@openpresentation/opf/catalogs';
 export {resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {validate} from '@openpresentation/opf';

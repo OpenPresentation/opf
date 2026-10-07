@@ -1,6 +1,6 @@
 // `opf import deck.pptx`: a PowerPoint file to an OPF document through opf-pptx `fromPptx`. Import is a conversion,
 // not a lossless round trip for arbitrary decks: what it cannot keep is reported as diagnostics. With --signals it also
-// writes the raw per-shape layout and style signals of the deck (opf-pptx 0.11.9 and later), deterministic and local.
+// writes the raw per-shape layout and style signals of the deck (`fromPptx(bytes, { signals: true })`), deterministic and local.
 import { type FindingSeverity, type ValidationReport, validate } from "@openpresentation/opf";
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches } from "./check.js";
@@ -39,23 +39,18 @@ async function run(args: string[], host: Host) {
 	if (signalsFile !== undefined && path.resolve(signalsFile) === path.resolve(out)) throw new FileCommandError("--signals and --out name the same file.");
 
 	const pptx = await loadPptx();
-	const signalsSupported = typeof pptx.module.SIGNALS_VERSION === "number";
-	if (signalsFile !== undefined && !signalsSupported)
-		throw new FileCommandError(`--signals needs ${PPTX_PACKAGE} 0.11.9 or later (raw import signals); the installed version is ${pptx.version}.`, 2, { code: "peer-too-old", package: PPTX_PACKAGE });
 
 	const source = await readBytes(input);
 	const reporter = new Reporter();
 	let imported: Record<string, unknown>;
-	let signals: unknown;
+	let signals: { version?: number } | undefined;
 	try {
-		const result = await pptx.module.fromPptx(source.bytes, {
-			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("import", diagnostic),
-			...(signalsFile !== undefined ? { signals: true } : {}),
-		});
+		const onDiagnostic = (diagnostic: Diagnostic) => reporter.add("import", diagnostic);
 		if (signalsFile !== undefined) {
-			imported = (result as { document: Record<string, unknown> }).document;
-			signals = (result as { signals: unknown }).signals;
-		} else imported = result;
+			const result = (await pptx.module.fromPptx(source.bytes, { onDiagnostic, signals: true })) as unknown as { presentation: Record<string, unknown>; signals: { version?: number } };
+			imported = result.presentation;
+			signals = result.signals;
+		} else imported = await pptx.module.fromPptx(source.bytes, { onDiagnostic });
 	} catch (error) {
 		reportThrown(reporter, "import", error);
 		finishAndPrint(host, pptx.version, input, source.bytes, reporter, undefined, undefined, undefined, failOn, false);
@@ -78,7 +73,7 @@ async function run(args: string[], host: Host) {
 	if (signalsFile !== undefined && signalsText !== undefined) planned.push({ file: signalsFile, bytes: new TextEncoder().encode(signalsText) });
 	if (toStdout) process.stdout.write(text);
 	else await writeFiles(planned, !!options.force);
-	finishAndPrint(host, pptx.version, input, source.bytes, reporter, { check, text }, toStdout ? "-" : path.resolve(out), signalsFile === undefined || signalsText === undefined ? undefined : { file: path.resolve(signalsFile), sha256: sha256(signalsText), version: pptx.module.SIGNALS_VERSION }, failOn, true, toStdout);
+	finishAndPrint(host, pptx.version, input, source.bytes, reporter, { check, text }, toStdout ? "-" : path.resolve(out), signalsFile === undefined || signalsText === undefined ? undefined : { file: path.resolve(signalsFile), sha256: sha256(signalsText), version: signals?.version }, failOn, true, toStdout);
 }
 
 function finishAndPrint(

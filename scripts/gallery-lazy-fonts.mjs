@@ -2,7 +2,7 @@
 //
 // The editor previews the default Aptos scheme with Intos, and the open families with their own faces, using the renderer's
 // vendored faces. They are not in fonts.json: the editor fetches them on demand from `<page>/fonts/<family>/`
-// (`registry.ensureLazyFonts`). The faces are binaries (about 19 MB in 51 files), so they are never committed to the gallery
+// (`fonts.ensure(presentation)` of a browser fonts handle built with `lazyFontsBaseUrl`). The faces are binaries (about 19 MB in 51 files), so they are never committed to the gallery
 // repository. This module builds the small, reviewable half that is committed: `lazy-fonts.json`, listing every vendored
 // package with its pinned upstream version, SPDX license, license-file hash and every face with its SHA-256, taken from the
 // published renderer's own manifest. The gallery's build copies the faces from the pinned `@openpresentation/opf-render`
@@ -38,13 +38,13 @@ export function galleryLazyFontManifest(renderFonts, rendererVersion) {
 
 /**
  * The manifest the gallery editor build ships, decided by the pinned editor example. An example that never calls
- * `ensureLazyFonts` needs none (undefined). An example that does, with a renderer that vendors no faces, would ship an editor
+ * `lazyFontsBaseUrl` (the browser fonts handle's option that fetches the vendored faces) needs none (undefined). An example that does, with a renderer that vendors no faces, would ship an editor
  * whose Aptos and open-family previews fall back to other faces, so that fails loudly instead of building silently.
  */
 export function galleryLazyFontManifestForExample(renderFonts, rendererVersion, exampleSource) {
-  if (!/ensureLazyFonts/.test(exampleSource)) return undefined;
+  if (!/lazyFontsBaseUrl/.test(exampleSource)) return undefined;
   const manifest = galleryLazyFontManifest(renderFonts, rendererVersion);
-  if (!manifest) throw new Error('The pinned editor example calls ensureLazyFonts but the pinned @openpresentation/opf-render vendors no lazy fonts (Intos and the open families, after 0.10.0). Move release-plan.json to a renderer release that ships them, or pin an editor example that does not load them.');
+  if (!manifest) throw new Error('The pinned editor example sets lazyFontsBaseUrl but the pinned @openpresentation/opf-render vendors no lazy fonts (Intos and the open families, after 0.10.0). Move release-plan.json to a renderer release that ships them, or pin an editor example that does not load them.');
   return manifest;
 }
 

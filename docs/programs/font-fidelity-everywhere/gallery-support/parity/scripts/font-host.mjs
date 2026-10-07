@@ -3,7 +3,7 @@
 // The check asks what a preview of a value draws with. That depends on the host, so the harness names the host it models:
 //
 //   gallery      (default) The pptx.gallery editor. opf-editor 0.10.x builds its browser registry with
-//                loadBrowserFontRegistry(<the office pack's eager faces>, {substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
+//                loadFonts({faces: <the office pack's eager faces>, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
 //                scriptBaseUrl, lazyFontsBaseUrl}) and, before any document is rendered or measured, runs its font gate
 //                (createFontGate, src/font-gate.js): registry.ensureLazyFonts(document) then registry.ensureScripts(document), repeated
 //                until nothing is pending. That loads the vendored preview faces (Intos, the open pack) and the script (Noto) faces the
@@ -11,7 +11,7 @@
 //                stand-in for the Font Loading API (document.fonts, FontFace) and for fetch (the files come from the installed
 //                opf-render and @expo-google-fonts packages, hash-verified by the renderer as in a browser). It is a model of the
 //                browser host in Node, not a browser: no pixel is drawn.
-//   node-auto    opf-render in Node: prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation}).
+//   node-auto    opf-render in Node: loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation}).
 //                Same families to load, different loader (see the Sylfaen note in the parity report).
 //   office-only  The model before 2026-09-30: the office pack and no script faces.
 //
@@ -44,7 +44,7 @@ export async function createFontHosts({renderDir, model = 'gallery'}) {
   const require = createRequire(path.join(renderDir, 'package.json'));
   // The eager faces the editor ships: fonts.json is the office pack's embeddedFonts (scripts/build-playground.mjs), decoded as playground.js does.
   const eager = model === 'gallery'
-    ? JSON.parse(JSON.stringify((await nodeFonts.loadOfficeFontRegistry()).embeddedFonts))
+    ? JSON.parse(JSON.stringify((await nodeFonts.loadFonts({pack: 'office'})).registry.embeddedFonts))
       .map(face => ({family: face.family, weight: face.weight, italic: face.italic, license: face.license, data: Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1], 'base64'))}))
     : null;
   const served = async url => {
@@ -68,8 +68,9 @@ export async function createFontHosts({renderDir, model = 'gallery'}) {
     : [...browserFonts.presentationFamilies(structuredClone(doc))].sort();
 
   async function galleryHost(doc) {
-    const registry = await browserFonts.loadBrowserFontRegistry(eager, {document: fakeFontLoading(), fetch: served, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
+    const handle = await browserFonts.loadFonts({faces: eager, document: fakeFontLoading(), fetch: served, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
       scriptBaseUrl: 'https://fonts.example/script-fonts/', lazyFontsBaseUrl: 'https://fonts.example/'});
+    const registry = handle.registry;
     // The editor's font gate (opf-editor src/font-gate.js), unchanged in logic.
     const pending = () => [...(registry.pendingLazyFonts?.(doc) ?? []).map(f => f.file), ...(registry.pendingScripts?.(doc) ?? [])];
     let gate = {ok: true};
@@ -85,23 +86,23 @@ export async function createFontHosts({renderDir, model = 'gallery'}) {
     let unloaded = null;
     if (undrawn.length) {
       // A second registry, given what the gate would load once an edit draws text in each such family (heading and body of a probe slide).
-      const probe = await browserFonts.loadBrowserFontRegistry(eager, {document: fakeFontLoading(), fetch: served, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
-        scriptBaseUrl: 'https://fonts.example/script-fonts/', lazyFontsBaseUrl: 'https://fonts.example/'});
+      const probe = (await browserFonts.loadFonts({faces: eager, document: fakeFontLoading(), fetch: served, substitutionPolicy: 'visual', fallbackFamily: 'Roboto',
+        scriptBaseUrl: 'https://fonts.example/script-fonts/', lazyFontsBaseUrl: 'https://fonts.example/'})).registry;
       for (const family of undrawn) {
         const probeDoc = {name: 'probe', design: {fontScheme: {id: 'probe', name: 'probe', major: family, minor: family}}, slides: [{title: 'Probe', text: 'Probe'}]};
         try { await probe.ensureLazyFonts(probeDoc); } catch { /* the family keeps whatever the registry resolves without it */ }
       }
       unloaded = {registry: probe, resolutions: new Map()};
     }
-    return {registry, options: {textMeasurement: registry.textMeasurement}, gate, diagnostics: [], selection: {...sel, packages: registry.loadedScriptPackages}, drawn, unloaded};
+    return {registry, fonts: {textMeasurement: handle.textMeasurement}, gate, diagnostics: [], selection: {...sel, packages: registry.loadedScriptPackages}, drawn, unloaded};
   }
 
   async function nodeHost(doc, withScripts) {
     const diagnostics = [];
     const opts = {pack: 'office', substitutionPolicy: 'visual'};
     if (withScripts) Object.assign(opts, {scripts: 'auto', presentation: structuredClone(doc), onDiagnostic: d => diagnostics.push({code: d.code, ...(d.script ? {script: d.script} : {}), ...(d.package ? {package: d.package} : {})})});
-    const {registry, options} = await nodeFonts.prepareNodeFonts(opts); const sel = registry.scriptSelection;
-    return {registry, options, gate: {ok: true}, diagnostics, selection: sel ? {detected: sel.detected, scripts: sel.scripts, unavailable: sel.unavailable, packages: sel.packages, notInstalled: sel.notInstalled, uncovered: sel.uncovered ?? []} : null};
+    const handle = await nodeFonts.loadFonts(opts), registry = handle.registry; const sel = registry.scriptSelection;
+    return {registry, fonts: handle, gate: {ok: true}, diagnostics, selection: sel ? {detected: sel.detected, scripts: sel.scripts, unavailable: sel.unavailable, packages: sel.packages, notInstalled: sel.notInstalled, uncovered: sel.uncovered ?? []} : null};
   }
 
   const cache = new Map();

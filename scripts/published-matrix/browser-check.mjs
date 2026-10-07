@@ -24,11 +24,11 @@ const argv = process.argv.slice(2);
 const option = (name, fallback) => (argv.includes(name) ? argv[argv.indexOf(name) + 1] : fallback);
 const consumer = path.resolve(option('--consumer', path.join(core, 'artifacts', 'published-matrix', 'consumer')));
 const outDir = path.resolve(option('--out', path.join(core, 'artifacts', 'published-matrix', 'out')));
-const {prepareNodeFonts, renderSvgDeck, createScriptTextMeasurement, resolveScriptFonts} = await import(pathToFileURL(path.join(consumer, 'engines-installed.mjs')).href);
+const {loadFonts, renderSvg, createScriptTextMeasurement, resolveScriptFonts} = await import(pathToFileURL(path.join(consumer, 'engines-installed.mjs')).href);
 const {chromium} = createRequire(path.join(consumer, 'package.json'))('playwright');
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 
-const {registry, options} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
+const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
 const TEXT = {title: 'Quarterly review', body: 'Revenue grew while costs stayed flat across every region', code: 'const score = urgency * confidence;'};
 const deckFor = (scheme) => ({
   name: `browser ${scheme}`,
@@ -40,11 +40,11 @@ const deckFor = (scheme) => ({
   ]
 });
 // Only the faces the three schemes draw with are embedded (the registry holds 33, 12 MB of base64 per slide).
-const embedded = registry.selectEmbeddedFonts((face) => ['Carlito', 'Gelasio', 'Cousine', 'Roboto Mono'].includes(face.family));
+const embedded = fonts.registry.selectEmbeddedFonts((face) => ['Carlito', 'Gelasio', 'Cousine', 'Roboto Mono'].includes(face.family));
 assert.ok(embedded.length >= 6, 'the registry holds the faces the schemes draw with');
 function render(scheme) {
   const deck = deckFor(scheme);
-  return renderSvgDeck(deck, {...options, embeddedFonts: embedded, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(deck))});
+  return renderSvg(deck, {fonts: {embeddedFonts: embedded, textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck))}});
 }
 const SCHEMES = ['calibri', 'georgia', 'consolas'];
 const svgs = Object.fromEntries(SCHEMES.map((scheme) => [scheme, render(scheme)]));

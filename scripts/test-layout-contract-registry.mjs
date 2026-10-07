@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {registryToolchain} from './registry-toolchain.mjs';
 const registry=await registryToolchain();
 const {layouts}=await registry.import('@openpresentation/opf/catalogs');
-const {validatePresentation}=await registry.import('@openpresentation/opf/validator');
+const {validate}=await registry.import('@openpresentation/opf/validator');
 const {getJsonFieldContext,replaceFieldOption,fieldOptionEdit}=await registry.import('@openpresentation/opf-editor/json-options');
 const original=JSON.stringify({slides:[{layout:'title-subtitle',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
 const context=getJsonFieldContext(original,original.indexOf('"layout"')+1);
@@ -10,7 +10,7 @@ for(const layout of layouts){
  const result=replaceFieldOption(context,layout.id),edit=fieldOptionEdit(context,layout.id);
  assert.equal(original.slice(0,edit.from)+edit.insert+original.slice(edit.to),result);
  const document=JSON.parse(result),slide=document.slides[0];
- assert.equal(validatePresentation(document).valid,true,layout.id);
+ assert.equal(validate(document,{only:['format']}).valid,true,layout.id);
  assert.equal(slide.title,'Keep title');assert.equal(slide.subtitle,'Keep subtitle');assert.equal(slide.notes,'Keep notes');
  if(/^number-[1-6]x$/.test(layout.id)){
   const count=Number(layout.id.match(/\d/)[0]);

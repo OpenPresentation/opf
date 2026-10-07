@@ -109,11 +109,11 @@ import {toPptx} from '@openpresentation/opf-pptx';
 import {validate} from '@openpresentation/opf';
 const editor = createEditorSession({slides: [{title: 'Compiler compatibility'}]});
 editor.set('slides.0.title', 'Packed downstream');
-assert.equal(validate(editor.document, {only: ['format']}).valid, true);
-assert.match(renderSvg(editor.document), /Packed downstream/);
-assert.ok((await toPptx(editor.document)).length > 1000);
+assert.equal(validate(editor.presentation, {only: ['format']}).valid, true);
+assert.match(renderSvg(editor.presentation).join(""), /Packed downstream/);
+assert.ok((await toPptx(editor.presentation)).length > 1000);
 editor.undo();
-assert.equal(editor.document.slides[0].title, 'Compiler compatibility');
+assert.equal(editor.presentation.slides[0].title, 'Compiler compatibility');
 `);
     await run(process.execPath, ['downstream.mjs'], {cwd: projectDir});
   }

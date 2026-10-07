@@ -2,19 +2,19 @@
   "packages": [
     {
       "name": "@openpresentation/opf",
-      "version": "0.13.0"
+      "version": "0.14.0"
     },
     {
       "name": "@openpresentation/opf-render",
-      "version": "0.13.1"
+      "version": "0.14.0"
     },
     {
       "name": "@openpresentation/opf-editor",
-      "version": "0.12.1"
+      "version": "0.14.2"
     },
     {
       "name": "@openpresentation/opf-pptx",
-      "version": "0.13.2"
+      "version": "0.14.0"
     },
     {
       "name": "@openpresentation/cli",
@@ -25,13 +25,13 @@
     "@openpresentation/cli": "0.13.0"
   },
   "exampleRefs": {
-    "opf-editor": "1d4af4e9ce791176c53552b746426dda0ce482bd"
+    "opf-editor": "d4216427117d2c2a30fd0abc45fa8c18b5391793"
   },
   "verificationRefs": {
-    "opf": "209e3a25b1605bc72dc51da45e72854e0b33a0d1",
+    "opf": "f9e94334e6f60947ee1ab643bf2b0eaf9ab32861",
     "cli": "1bd4923e4cc906a971a716b8ae98686c8837220b",
-    "opf-render": "e6665f1483de47206c84519d7fcb224e1d0fca8d",
-    "opf-editor": "1d4af4e9ce791176c53552b746426dda0ce482bd",
-    "opf-pptx": "673dbba6fb1ac7b204eadd1bb2ed7c8b377ca0ce"
+    "opf-render": "66866e5c32d0cdf9eb0b960b09dc521c226f1f13",
+    "opf-editor": "d4216427117d2c2a30fd0abc45fa8c18b5391793",
+    "opf-pptx": "ac946771db5f980e435b48bea533ba71a7f5461b"
   }
 }

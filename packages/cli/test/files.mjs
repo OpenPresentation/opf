@@ -162,17 +162,12 @@ try {
   assert.ok(noTags.outputs[0].bytes < pptx.outputs[0].bytes);
 
   const pdf = run(['export', 'deck.opf.json', '--format', 'pdf']).report;
-  assert.equal((await read('Files-test.pdf')).subarray(0, 5).toString(), '%PDF-'); assert.ok(['vector', 'raster'].includes(pdf.pdf.mode)); assert.equal(pdf.outputs[0].pages, 3);
+  assert.equal((await read('Files-test.pdf')).subarray(0, 5).toString(), '%PDF-'); assert.equal(pdf.pdf.mode, 'vector', 'vector is the default PDF mode'); assert.equal(pdf.outputs[0].pages, 3);
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--out', 'again.pdf']).report.outputs[0].sha256, pdf.outputs[0].sha256, 'deterministic PDF');
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'raster', '--out', 'raster.pdf']).report.pdf.mode, 'raster');
-  if (pdf.pdf.vectorSupported) {
-    const vector = run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'vector', '--out', 'vector.pdf']).report;
-    assert.equal(vector.pdf.mode, 'vector'); assert.ok(vector.findings.some(item => item.ruleId === 'pdf/pdf-font-embedded'));
-  } else {
-    const tooOld = run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'vector', '--out', 'vector.pdf'], {status: 2});
-    assert.equal(tooOld.stderrJson.code, 'peer-too-old');
-    console.log('NOTE the installed opf-render writes raster PDF only; --pdf-mode vector was refused as documented.');
-  }
+  const vector = run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'vector', '--out', 'vector.pdf']).report;
+  assert.equal(vector.pdf.mode, 'vector'); assert.ok(vector.findings.some(item => item.ruleId === 'pdf/pdf-font-embedded'));
+  assert.equal(vector.outputs[0].sha256, pdf.outputs[0].sha256, 'vector is the default mode');
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--slides', '2-3', '--out', 'partial.pdf']).report.outputs[0].pages, 2);
 
   const zip = run(['export', 'deck.opf.json', '--format', 'png', '--scale', '0.25', '--out', 'slides.zip']).report;
@@ -190,13 +185,13 @@ try {
   const pipedPdf = run(['export', 'deck.opf.json', '--format', 'pdf', '--out', '-']);
   assert.equal(pipedPdf.raw.subarray(0, 5).toString(), '%PDF-'); assert.equal(pipedPdf.stderrJson.outputs[0].sha256, sha(pipedPdf.raw));
 
-  // SVG pictures export with the CLI's renderer as the PNG rasterizer (opf-pptx 0.11.9+ writes them natively).
+  // SVG pictures export with the CLI's renderer as the PNG rasterizer; opf-pptx writes them natively over a PNG fallback.
   await writeFile(path.join(temp, 'logo.opf.json'), JSON.stringify({name: 'Logo', slides: [{title: 'Logo', image: 'media/assets/logo.svg'}]}));
   const logoExport = run(['export', 'logo.opf.json', '--format', 'pptx', '--out', 'logo.pptx']).report;
   assert.equal(logoExport.ok, true);
   const logoNames = zipNames(await read('logo.pptx'));
-  if (logoNames.some(name => name.endsWith('.svg'))) assert.ok(logoNames.some(name => /media\/image.*\.png$/.test(name)), 'native SVG carries a PNG fallback');
-  else console.log('NOTE the installed opf-pptx predates native SVG pictures; the SVG exports as a placeholder.');
+  assert.ok(logoNames.some(name => name.endsWith('.svg')), 'the SVG picture is native');
+  assert.ok(logoNames.some(name => /media\/image.*\.png$/.test(name)), 'native SVG carries a PNG fallback');
 
   // import: PPTX back to OPF; text survives the round trip. Reflow notes are warnings the library reports for
   // wrapped native text, so the round trip itself is not run under --fail-on warning.
@@ -222,16 +217,11 @@ try {
   run(['import', 'missing.pptx'], {status: 2}); run(['import'], {status: 2}); run(['import', 'deck.pptx', '--signals', 'both.json', '--out', '-'], {status: 2});
   const strictImport = run(['import', 'deck.pptx', '--out', 'strict.opf.json', '--fail-on', 'warning'], {status: imported.counts.warning ? 1 : 0}).report;
   assert.equal(strictImport.written, imported.counts.warning === 0);
-  // Raw signals need opf-pptx 0.11.9+: supported installs write them, older installs refuse before reading anything.
-  const signalsRun = spawnSync(process.execPath, [executable, 'import', 'deck.pptx', '--out', 'signals.opf.json', '--signals', 'signals.json'], {cwd: temp, encoding: 'utf8'});
-  if (signalsRun.status === 0) {
-    const report = JSON.parse(signalsRun.stdout);
-    assert.equal(report.signals.sha256, sha(await read('signals.json'))); assert.equal(JSON.parse(await read('signals.json')).slides.length, 3);
-    assert.deepEqual(JSON.parse(await read('signals.opf.json')), back, 'signals do not change the document'); checks++;
-  } else {
-    assert.equal(signalsRun.status, 2); assert.equal(JSON.parse(signalsRun.stderr).code, 'peer-too-old'); checks++;
-    console.log('NOTE the installed opf-pptx predates import signals; --signals was refused as documented.');
-  }
+  // Raw signals (`fromPptx(bytes, {signals: true})`): written beside the document, which they do not change.
+  const signalsReport = run(['import', 'deck.pptx', '--out', 'signals.opf.json', '--signals', 'signals.json']).report;
+  assert.equal(signalsReport.signals.sha256, sha(await read('signals.json'))); assert.equal(JSON.parse(await read('signals.json')).slides.length, 3);
+  assert.equal(signalsReport.signals.version, JSON.parse(await read('signals.json')).version, 'the report names the signals format version');
+  assert.deepEqual(JSON.parse(await read('signals.opf.json')), back, 'signals do not change the document');
 
   // FA-08: per-slide output and PDF skip hidden slides unless --include-hidden; slides named with --slides are always written.
   const hiddenDeck = {name: 'Hidden test', slides: [{id: 'h1', title: 'Shown one'}, {id: 'h2', title: 'Backup slide', hidden: true}, {id: 'h3', title: 'Shown two'}]};

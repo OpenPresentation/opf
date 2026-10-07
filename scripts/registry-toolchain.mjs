@@ -1,6 +1,7 @@
 import { readFile, realpath, writeFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
+import { installablePackages } from './release-plan-cli.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source', '@openpresentation/opf-editor/font-gate'];
@@ -13,7 +14,8 @@ export async function registryToolchain() {
   const lock = JSON.parse(await readFile(path.join(consumer, 'package-lock.json'), 'utf8'));
   const modules = await realpath(path.join(consumer, 'node_modules'));
   const packages = [];
-  for (const { name, version } of plan.packages) {
+  // The consumer holds the plan's libraries only while the plan's CLI peer ranges conflict with them (release-plan-cli.mjs).
+  for (const { name, version } of await installablePackages(plan)) {
     const directory = await realpath(path.join(modules, name));
     const installed = JSON.parse(await readFile(path.join(directory, 'package.json'), 'utf8'));
     const record = lock.packages[`node_modules/${name}`];

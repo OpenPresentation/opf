@@ -19,7 +19,7 @@ After integrating reviewed layout PR #43, the combined source passes all 420 cor
 
 Coordinated CI `34384776504` and `34385059710` caught an older isolated-link fixture copying the linker without its new helper, causing `ERR_MODULE_NOT_FOUND` before package tests ran. The fixture now copies both files, passes directly on Windows Node 20/24, and runs in the Windows/macOS matrix as well as coordinated CI. This failure was fixed rather than waived; renewed combined-source CI was required at that checkpoint.
 
-The current published compatible set is core 0.13.0, CLI 0.11.0, renderer 0.13.1, PPTX 0.13.2 and editor 0.12.1 on Node 24. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
+The current published compatible set is core 0.14.0, CLI 0.11.0, renderer 0.14.0, PPTX 0.14.0 and editor 0.14.2 on Node 24. Clean registry installs include shared composition and styled table rows without sibling links. `release-plan.json` records exact versions and immutable verification sources; `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` exercise those installed packages. Source links are for coordinated development.
 
 Execute the installed-package browser harnesses after their corresponding build:
 

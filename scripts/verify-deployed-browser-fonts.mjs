@@ -12,12 +12,12 @@ assert.equal(origin.protocol, 'https:', 'Verify an HTTPS deployment');
 assert.equal(origin.username + origin.password + origin.search + origin.hash, '', 'Use a public deployment URL without credentials or query parameters');
 const require = createRequire(path.resolve(consumer, 'package.json'));
 const moduleUrl = pathToFileURL(require.resolve('@openpresentation/opf-render/fonts-node'));
-const { loadOfficeFontRegistry } = await import(moduleUrl.href);
+const { loadFonts } = await import(moduleUrl.href);
 const manifest = JSON.parse(await readFile(new URL('../package.json', moduleUrl), 'utf8'));
-const registry = await loadOfficeFontRegistry();
+// The eager faces are the registry's (the 33 npm faces the site serves); the handle's own list also holds the vendored faces.
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const key = face => JSON.stringify([face.family, face.weight, Boolean(face.italic)]);
-const expected = new Map(registry.embeddedFonts.map(face => [key(face), {
+const expected = new Map((await loadFonts({ pack: 'office' })).registry.embeddedFonts.map(face => [key(face), {
   sha256: digest(Buffer.from(face.dataUrl.split(',')[1], 'base64')), license: face.license,
 }]));
 async function get(url) {

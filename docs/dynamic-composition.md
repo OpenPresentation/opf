@@ -2,7 +2,7 @@
 
 OPF keeps authoring intent in JSON. Use `blocks` when content can reflow; use promoted regions when relative placement is meaningful. `composition` on a slide overrides fields in the resolved layout's `composition`. Existing documents remain valid.
 
-The current published Node 24 train is core 0.13.0, renderer 0.13.1, PPTX 0.13.2, editor 0.12.1 and CLI 0.11.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
+The current published Node 24 train is core 0.14.0, renderer 0.14.0, PPTX 0.14.0, editor 0.14.2 and CLI 0.11.0. Use the exact pins in [release-plan.json](../release-plan.json); the [compatibility matrix](compatibility-matrix.md) separates package support from native Office and font gates. Older version references below identify when individual contracts were introduced.
 
 ```json
 {
@@ -72,7 +72,7 @@ The slide's root `image` becomes the slide image, not a second content item, in 
 
 ### Shared content cards
 
-Shared content cards are published in core 0.10.0 and later, including current core 0.13.0. For `design.contentBox: true`, each body leaf carries a `frameBox` at its outer allocation and a `box` padded inward by 12 reference pixels at a 720-pixel short edge, capped at one quarter of the frame's width or height. Scoring, accepted payload measurement, strict overflow and pagination all use that rounded interior. Headings remain unframed, nested groups keep their original padding, and explicit outer regions/track weights remain authoritative. Automatic candidates may change because their available content space changes.
+Shared content cards are published in core 0.10.0 and later, including current core 0.14.0. For `design.contentBox: true`, each body leaf carries a `frameBox` at its outer allocation and a `box` padded inward by 12 reference pixels at a 720-pixel short edge, capped at one quarter of the frame's width or height. Scoring, accepted payload measurement, strict overflow and pagination all use that rounded interior. Headings remain unframed, nested groups keep their original padding, and explicit outer regions/track weights remain authoritative. Automatic candidates may change because their available content space changes.
 
 Every composed item carries its resolved horizontal text `alignment` (`left`, `center` or `right`). The title uses `titleAlignment`; every other item, including subtitle, tag, body text, lists, tables and metrics, uses `contentAlignment`. The value is the effective `design` key: the slide's design, then the deck's design (or the host option), then the layout record's `design`, then `left`, so a layout that sets `contentAlignment: center` centers its content with no deck or slide value. The title never inherits `contentAlignment`. A cover (a slide with no body payload on a heading-only layout) has no content region, so its tag and subtitle join the title's alignment: they follow `titleAlignment`, and only a `contentAlignment` set on the slide's own design keeps them apart (a deck or layout value does not). Accepted outline placement and metric internals use the same value. The renderer and the PPTX exporter anchor preview and native text to `item.alignment`, so both engines place a layout's text the same way.
 
@@ -124,7 +124,7 @@ console.log(result.explanation.textMeasurement);
 console.log(result.explanation.unmeasuredPayloads);
 ```
 
-`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. Core 0.8.0 identifies its explanation as `grid-score-v2`; core 0.9.0 advances to `grid-score-v3` to include complete code metadata/body measurements. Current core 0.13.0 reports `grid-score-v9`. These versions record containers in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
+`resolvedOptions` supplies the same dimensions, layout, fonts and optional width provider as the preview. Core 0.8.0 identifies its explanation as `grid-score-v2`; core 0.9.0 advances to `grid-score-v3` to include complete code metadata/body measurements. Current core 0.14.0 reports `grid-score-v9`. These versions record containers in parent-before-child order. `lowest-score` reports the candidates actually tried; `configured-mode` respects resolved row/column/grid intent and returns no invented candidates. `promoted-regions` leaves region placement fixed and has no selected column count. Empty slides have no decisions. Automatic search tries one through `min(slotCount, columns ?? 6)` columns, in ascending order; ties retain the first candidate. Reserved placeholders count as slots. The schema caps an explicit candidate limit at twelve columns.
 
 Each candidate has `columns`, `rows`, `score` and additive `penalties`:
 
@@ -279,11 +279,11 @@ Agents can prepare the same guarded change without a DOM:
 ```js
 import {prepareTrackResize} from '@openpresentation/opf-editor/layout';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
-const geometry = resolvePresentation(editor.document, renderOptions).slides[0].geometry;
+const geometry = resolvePresentation(editor.presentation, { fonts }).slides[0].geometry;
 const flow = geometry.flows.find(flow => flow.path === 'slides.0');
-const prepared = prepareTrackResize(editor.document, flow, 0, 0.65);
+const prepared = prepareTrackResize(editor.presentation, flow, 0, 0.65);
 // Boundary 0: give the first track 65% of the adjacent pair's combined space.
-// Preview prepared.document with the same renderer and font provider before applying.
+// Preview prepared.presentation with the same renderer and fonts handle before applying.
 editor.applyPatch(prepared.patches, {rejectInvalid: true});
 ```
 
@@ -300,8 +300,8 @@ A move preserves the entire block and its nested content, formatting, data, and 
 
 ```js
 import {prepareBlockMove, listBlockContainers} from '@openpresentation/opf-editor/layout';
-const containers = listBlockContainers(editor.document);
-const prepared = prepareBlockMove(editor.document,
+const containers = listBlockContainers(editor.presentation);
+const prepared = prepareBlockMove(editor.presentation,
   '/slides/0/blocks/0', '/slides/0/blocks/1', 1);
 // Insert the first block before child 1 of the second block's group.
 // Destination indexes refer to the document before removal.
@@ -309,6 +309,6 @@ const prepared = prepareBlockMove(editor.document,
 editor.applyPatch(prepared.patches, {rejectInvalid: true});
 ```
 
-`prepareBlockMove` returns `{document, patches, path, changed}`. It validates the complete result and emits guarded remove/add patches, so the editor or CLI can apply it atomically. No-op moves return `changed: false` and no patches. `listBlockContainers(document, {slideIndex})` optionally limits discovery to a single slide and excludes arbitrary extension data. Headless callers should render the candidate with their intended font provider before applying. The browser and installed-package block harnesses exercise nested moves, undo, stale menus, keyboard access, strict-fit rejection, and native drag reordering.
+`prepareBlockMove` returns `{presentation, patches, path, changed}`. It validates the complete result and emits guarded remove/add patches, so the editor or CLI can apply it atomically. No-op moves return `changed: false` and no patches. `listBlockContainers(presentation, {slideIndex})` optionally limits discovery to a single slide and excludes arbitrary extension data. Headless callers should render the candidate with their intended font provider before applying. The browser and installed-package block harnesses exercise nested moves, undo, stale menus, keyboard access, strict-fit rejection, and native drag reordering.
 
 Creation and deletion use the same layout engine: insertions can normalize implicit payloads into explicit blocks; deletions prune empty groups while retaining the slide. Existing track weights stay positional. See the [editor creation guide](live-editor.md#create-duplicate-and-delete-content) for the guarded APIs and canvas controls.
