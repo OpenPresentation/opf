@@ -27,7 +27,11 @@ const option = (name, fallback) => (argv.includes(name) ? argv[argv.indexOf(name
 const consumer = realpathSync(path.resolve(option('--consumer', path.join(core, 'artifacts', 'published-matrix', 'consumer'))));
 const outDir = path.resolve(option('--out', path.join(core, 'artifacts', 'published-matrix', 'determinism')));
 const concurrency = Number(option('--concurrency', '2'));
-const matrixScript = path.join(core, 'scripts', 'test-font-switch-ecosystem.mjs');
+// The published-matrix workflow sets OPF_FONT_SWITCH_HARNESS to the harness of the published core's release tag, so the
+// published packages are checked with the harness that shipped with them (the checkout's copy may target an unreleased
+// catalog shape); a local run uses the checkout's.
+const matrixScript = process.env.OPF_FONT_SWITCH_HARNESS ? path.resolve(process.env.OPF_FONT_SWITCH_HARNESS) : path.join(core, 'scripts', 'test-font-switch-ecosystem.mjs');
+assert.ok(existsSync(matrixScript), `the font-switch harness ${matrixScript} is missing`);
 const engines = path.join(consumer, 'engines-installed.mjs');
 assert.ok(existsSync(engines), `prepare the consumer first: ${engines} is missing`);
 
@@ -52,7 +56,9 @@ const inside = (base, file) => {
 };
 
 function sandboxFlags(childOut) {
-  const reads = [consumer, path.join(core, 'scripts'), path.join(core, 'docs', 'fixtures')];
+  // The harness directory (the checkout's scripts, or the tag-extracted copy with its docs/fixtures beside it).
+  const harnessRoot = path.resolve(path.dirname(matrixScript), '..');
+  const reads = [consumer, path.join(core, 'scripts'), path.join(core, 'docs', 'fixtures'), path.join(harnessRoot, 'scripts'), path.join(harnessRoot, 'docs', 'fixtures')];
   // detect-libc (sharp) reads the running executable on Linux to tell glibc from musl.
   if (process.platform === 'linux') reads.push('/proc/self/exe', realpathSync(process.execPath));
   for (const base of reads) for (const fonts of fontDirectories) assert.ok(!inside(base, fonts), `sandbox read root ${base} would allow the font directory ${fonts}`);
