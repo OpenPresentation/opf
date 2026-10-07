@@ -12,7 +12,8 @@ jobs:
   npm:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-    timeout-minutes: 20
+    # RR-20: the gated test set now takes about 20 min; at 20 the opf-editor 0.14.1 publish was cancelled 4 s before npm publish.
+    timeout-minutes: 45
     permissions:
       contents: read
       id-token: write
