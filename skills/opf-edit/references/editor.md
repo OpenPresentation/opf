@@ -1,6 +1,6 @@
 # Editor and transfer APIs
 
-These entrypoints are published in editor 0.8.0 and later. Use core 0.12.0, renderer 0.12.0, editor 0.11.2 and PPTX 0.12.3 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
+These entrypoints are published in editor 0.8.0 and later. Use core 0.13.0, renderer 0.13.1, editor 0.12.1 and PPTX 0.13.2 on Node 24 for the coordinated workflow. Check installed package exports when using older releases; repository changes can precede publication.
 
 ## Atomic patching
 

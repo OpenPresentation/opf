@@ -219,3 +219,9 @@ test("the workflow is valid YAML with the expected jobs", async () => {
   assert.deepEqual(parsed.jobs.push.permissions, { contents: "write", actions: "write" });
   assert.equal(parsed.jobs.regenerate.permissions, undefined);
 });
+
+test("run steps use only POSIX sh expansions (the container's default shell is sh, not bash)", () => {
+  // `${VAR:0:12}` substrings, `[[ ]]`, here-strings and arrays are bash-only and fail under sh with "Bad substitution".
+  assert.doesNotMatch(workflowText, /\$\{[A-Za-z_][A-Za-z0-9_]*:-?[0-9]/u);
+  assert.doesNotMatch(workflowText, /\[\[|<<<|\bdeclare\b|\bset -o pipefail\b/u);
+});
