@@ -171,7 +171,7 @@ export function createReviewPanel(container, options) {
       h(doc, "label", { for: inputId, text: "Alt text" }), input,
       h(doc, "button", { type: "submit", class: "opf-review-fix", text: "Save alt text" }),
       h(doc, "button", { type: "button", class: "opf-review-fix quiet", text: "Cancel", onclick: () => closeAlt(finding) }),
-      h(doc, "span", { id: `${inputId}-help`, class: "opf-review-meta", text: "Describe what the picture shows. Press Escape to cancel." }), error);
+      h(doc, "span", { id: `${inputId}-help`, class: "opf-review-meta", text: `${finding.ruleId === "audit/chart-text-alternative" || String(finding.path ?? "").includes("/chart") ? "Describe what the chart shows: its point and the key numbers." : "Describe what the picture shows."} Press Escape to cancel.` }), error);
     input.addEventListener("input", () => { altDraft = input.value; });
     form.addEventListener("keydown", (event) => { if (event.key === "Escape") { event.stopPropagation(); closeAlt(finding); } });
     form.addEventListener("submit", (event) => {

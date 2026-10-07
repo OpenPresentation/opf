@@ -29,7 +29,7 @@ const source = {
   language: 'english',
   narrative: 'problem-solution',
   tone: 'formal',
-  audience: ['executives'],
+  audience: ['executive'],
   speaker: { id: 'alice', name: 'Alice Chen' },
   organization: { id: 'acme', name: 'Acme Corp' },
   assets: { logo: PIXEL, mark: PIXEL, photo: PIXEL },
@@ -305,6 +305,7 @@ try {
     await write('text', current => current.design.footer?.left?.text === 'Acme Corp', 'Text', 'Acme Corp');
     await toggle('logo', current => current.design.footer?.left?.logo === true, 'Show the logo');
     await toggle('organization', current => current.design.footer?.left?.organization === true, 'Show the organization name');
+    await toggle('speaker', current => current.design.footer?.left?.speaker === true, 'Show the speaker name and title');
     await toggle('section', current => current.design.footer?.left?.section === true, 'Show the section label');
     await write('image by address', current => current.design.footer?.left?.image === 'https://example.com/badge.png', 'Image source', 'https://example.com/badge.png');
     await field(design, 'Zone').selectOption('right');
@@ -313,7 +314,7 @@ try {
     await toggle('current date', current => current.design.footer?.right?.date === true, 'Show the current date');
     await write('fixed date', current => current.design.footer?.right?.date === '2026-10-01', 'Fixed date', '2026-10-01');
     await write('date format', current => current.design.footer?.right?.dateFormat === 'MMMM d, yyyy', 'Date format', 'MMMM d, yyyy');
-    mark('every header and footer part (text, logo, image, organization, section, slide number and format, date and format) in its zone');
+    mark('every header and footer part (text, logo, image, organization, speaker, section, slide number and format, date and format) in its zone');
     // Parts that need something say so, and bad values are refused.
     await design.getByLabel('Show the slide number').check();
     await waitDoc(current => current.design.footer?.right?.slideNumber === true, 'slide number for the format check');

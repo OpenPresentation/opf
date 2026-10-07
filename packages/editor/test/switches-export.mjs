@@ -93,7 +93,7 @@ for (const [id, record, expected] of [
   ["consolas", undefined, ["Consolas"]],
   ["courier-new", undefined, ["Courier New"]],
   ["times-new-roman", undefined, ["Times New Roman"]],
-  ["team-mono", { id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter", code: { family: "JetBrains Mono" } }, ["Inter", "JetBrains Mono"]],
+  ["team-mono", { id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter", code: "JetBrains Mono" }, ["Inter", "JetBrains Mono"]],
 ]) {
   const editor = createEditorSession(deck(), { rejectInvalid: true });
   switchDimension(editor, "font-schemes", id, record ? { record } : {});

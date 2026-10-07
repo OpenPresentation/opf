@@ -129,7 +129,8 @@ export function prepareOpfImport(
     document = clone(current);
   // Freeze the source deck defaults on inserted slides before changing their catalog ids.
   incoming.slides = incoming.slides.map((slide) => {
-    const design = { ...incoming.design, ...slide.design };
+    // A slide's design cannot set dimensions (a PPTX has one slide size): the inserted slide takes the host deck's.
+    const { dimensions: _deckSize, ...design } = { ...incoming.design, ...slide.design };
     const theme = themeFor(incoming, design.theme ?? "minimal");
     return {
       ...slide,
@@ -138,7 +139,6 @@ export function prepareOpfImport(
         theme: design.theme ?? "minimal",
         colorScheme: design.colorScheme ?? theme.colorScheme ?? "cool-horizon",
         fontScheme: design.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
-        dimensions: design.dimensions ?? theme.dimensions ?? "widescreen",
         background: design.background ?? theme.background ?? "#FFFFFF",
         header: design.header ?? false,
         footer: design.footer ?? false,

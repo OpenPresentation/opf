@@ -8,10 +8,12 @@ import {
   createTemplateFill,
   insertVariableToken,
   isTemplateDocument,
+  listBuiltins,
   setTemplate,
   suggestVariableId,
   templatesAvailable,
 } from "./templates.js";
+import { slideTitle } from "./slides.js";
 
 const KIND_LABELS = { text: "Text", number: "Number", date: "Date", image: "Image", url: "Link", list: "List", color: "Color" };
 const STATUS_TEXT = { filled: "Filled", default: "Default value", unfilled: "Needs a value", optional: "Optional" };
@@ -19,6 +21,13 @@ const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const NEW_VARIABLE_KINDS = ["text", "number", "date", "image", "url", "list"];
 
 let panelCounter = 0;
+
+/** A short display of a built-in's source value. */
+function builtinValueText(entry) {
+  const value = entry.value;
+  const text = Array.isArray(value) ? value.join(", ") : value && typeof value === "object" ? String(value.src ?? "") : String(value ?? "");
+  return text.length > 60 ? `${text.slice(0, 57)}...` : text;
+}
 
 function h(doc, tag, attributes = {}, ...children) {
   const element = doc.createElement(tag);
@@ -56,6 +65,12 @@ export function createTemplatePanel(container, options) {
   const modeBox = h(doc, "input", { type: "checkbox", id: `${id}-mode` });
   modeLabel.append(modeBox, " This presentation is a template (it may have unfilled variables)");
   const fieldList = h(doc, "div", { class: "opf-template-fields" });
+  // Built-in variables: read-only values from the document's own speaker, organization and deck fields.
+  const builtinList = h(doc, "ul", { class: "opf-template-builtin-list" });
+  const builtinSection = h(doc, "details", { class: "opf-template-builtins", "data-opf-component": "template-builtins" },
+    h(doc, "summary", { text: "Built-in variables" }),
+    h(doc, "p", { class: "opf-template-help", text: "Read from the presentation's own speaker, organization and deck fields; edit those fields to change them. Use them like any variable: {{speaker.name}} inside text, or var:speaker.photo as a whole image field." }),
+    builtinList);
   const live = h(doc, "p", { class: "opf-template-live", role: "status", "aria-live": "polite" });
   const applyButton = h(doc, "button", { type: "button", class: "opf-template-apply primary", text: "Fill the presentation" });
   const partialButton = h(doc, "button", { type: "button", class: "opf-template-partial secondary", text: "Fill what is ready" });
@@ -85,7 +100,7 @@ export function createTemplatePanel(container, options) {
         h(doc, "label", { for: `${id}-new-sample`, text: "Sample value" }), newSample, newButton))
     : null;
 
-  root.append(summary, modeLabel, fieldList, actions, live);
+  root.append(summary, modeLabel, fieldList, builtinSection, actions, live);
   if (previewSection) root.append(previewSection);
   if (insertSection) root.append(insertSection);
   container.append(root);
@@ -214,8 +229,19 @@ export function createTemplatePanel(container, options) {
       rows.set(field.id, row);
       fieldList.append(row.element);
     }
-    insertSelect.replaceChildren(...fields.map((field) => h(doc, "option", { value: field.id, text: `${field.label} (${KIND_LABELS[field.kind]})` })));
-    slideSelect.replaceChildren(...(editor.document.slides ?? []).map((slide, index) => h(doc, "option", { value: String(index), text: `${index + 1}. ${typeof slide.title === "string" && slide.title ? slide.title : "Untitled"}` })));
+    const builtins = listBuiltins(editor.document);
+    insertSelect.replaceChildren(
+      ...fields.map((field) => h(doc, "option", { value: field.id, text: `${field.label} (${KIND_LABELS[field.kind]})` })),
+      ...(builtins.length ? [h(doc, "optgroup", { label: "Built-in variables" }, ...builtins.map((entry) => h(doc, "option", { value: entry.name, text: `${entry.label} (${entry.name})` })))] : []),
+    );
+    builtinSection.hidden = !builtins.length;
+    builtinList.replaceChildren(...builtins.map((entry) => {
+      const shown = builtinValueText(entry);
+      const uses = entry.uses.length;
+      return h(doc, "li", { "data-builtin": entry.name, "data-kind": entry.kind, "data-available": entry.available ? "true" : "false" },
+        h(doc, "code", { text: `{{${entry.name}}}` }), ` ${entry.label}: `, entry.available ? shown : h(doc, "em", { text: "not set" }), uses ? ` (used ${uses} time${uses === 1 ? "" : "s"})` : "");
+    }));
+    slideSelect.replaceChildren(...(editor.document.slides ?? []).map((slide, index) => h(doc, "option", { value: String(index), text: `${index + 1}. ${slideTitle(slide) || "Untitled"}` })));
     previewSlide = Math.min(previewSlide, Math.max(0, (editor.document.slides?.length ?? 1) - 1));
     slideSelect.value = String(previewSlide);
     modeBox.checked = isTemplateDocument(editor.document);

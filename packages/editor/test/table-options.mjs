@@ -161,7 +161,16 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   const banded = prepareTableStyle(before, T, "banded").document.slides[0].blocks[0].table;
   assert.equal(banded.columns[0], "Region", "the theme header is left alone");
   assert.equal(banded.rows[0][0], "North", "an even body row stays plain");
-  assert.deepEqual(banded.rows[1][0], { value: "South", style: { fill: "background" } }, "an odd body row alternates");
+  assert.deepEqual(banded.rows[1][0], { value: "South", style: { fill: "surfaceAlt" } }, "an odd body row alternates");
+  // The band is visible on a dark theme (minimal) and a light one (classic): alternate rows draw a different fill.
+  for (const theme of ["minimal", "classic"]) {
+    const themed = structuredClone(before);
+    themed.design.theme = theme;
+    const drawn = svg(prepareTableStyle(themed, T, "banded").document);
+    const cells = [...drawn.matchAll(/<rect fill="(#[0-9A-Fa-f]{6})"[^>]*height="54"/g)].map((match) => match[1]);
+    const bodyFills = cells.slice(themed.slides[0].blocks[0].table.columns.length); // drop the header row
+    assert.ok(new Set(bodyFills).size >= 2, `${theme}: banded rows draw two different fills (${[...new Set(bodyFills)].join(", ")})`);
+  }
   const minimal = prepareTableStyle(before, T, "minimal").document.slides[0].blocks[0].table;
   assert.deepEqual(minimal.columns[1], {
     value: "Q1",
@@ -192,7 +201,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   mergeTableCells(editor, T, body(1, 1), { colSpan: 2 });
   setTableCellStyle(editor, T, body(1, 1), { align: "center", color: "accent", fill: "accent" });
   setTableStyle(editor, T, "banded");
-  assert.deepEqual(editor.get(`${T}.rows.1.1`), { value: "", colSpan: 2, style: { align: "center", color: "accent", fill: "background" } }, "a table style replaces the fill but keeps alignment, color and the merge");
+  assert.deepEqual(editor.get(`${T}.rows.1.1`), { value: "", colSpan: 2, style: { align: "center", color: "accent", fill: "surfaceAlt" } }, "a table style replaces the fill but keeps alignment, color and the merge");
   assert.equal(editor.get(`${T}.rows.1.2`), null, "covered positions stay null");
   setTableStyle(editor, T, "theme");
   assert.deepEqual(editor.get(`${T}.rows.1.1`), { value: "", colSpan: 2, style: { align: "center", color: "accent" } });

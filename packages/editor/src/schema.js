@@ -3,9 +3,22 @@ import { getValueAtPath, splitOpfPath, opfPathToJsonPointer } from './index.js';
 export const opfSchemas = schemas;
 const documents = new Map(Object.values(schemas).map(schema => [schema.$id, schema]));
 const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+// An allOf of shaping members (the SlideDesign definition is Design plus a `not` constraint) reads as one schema: members are
+// merged, properties included; constraint-only members (`not`, `required`) shape nothing a picker can show and are dropped.
+function mergeAllOf(schema, root, seen) {
+  if (!Array.isArray(schema.allOf)) return schema;
+  const {allOf, ...base} = schema;
+  let merged = base;
+  for (const member of allOf) {
+    const resolved = resolveSchema(member, root, new Set(seen));
+    if (!resolved.properties && !resolved.type && !resolved.oneOf && !resolved.anyOf) continue;
+    merged = {...resolved, ...merged, ...(resolved.properties || merged.properties ? {properties: {...resolved.properties, ...merged.properties}} : {})};
+  }
+  return merged;
+}
 export function resolveSchema(schema, root = schemas.presentation, seen = new Set()) {
   if (!schema || typeof schema !== 'object') return {};
-  if (!schema.$ref) return schema;
+  if (!schema.$ref) return mergeAllOf(schema, root, seen);
   const ref = schema.$ref;
   if (seen.has(ref)) return {};
   seen.add(ref);
@@ -15,7 +28,7 @@ export function resolveSchema(schema, root = schemas.presentation, seen = new Se
   const resolved = fragment ? getValueAtPath(target, fragment) : target;
   if (!resolved) throw new Error(`Unresolved OPF schema: ${ref}`);
   const { $ref, ...rest } = schema;
-  return {...resolveSchema(resolved, target, seen), ...rest};
+  return mergeAllOf({...resolveSchema(resolved, target, seen), ...rest}, target, seen);
 }
 export function schemaVariants(schema, root = schemas.presentation) {
   const resolved = resolveSchema(schema, root);
@@ -23,7 +36,14 @@ export function schemaVariants(schema, root = schemas.presentation) {
   const variants = resolved.oneOf ?? resolved.anyOf;
   if (!variants) return [resolved];
   const {$ref, oneOf, anyOf, ...base} = resolved;
-  return variants.flatMap(child => schemaVariants(child, root).map(variant => ({...base, ...variant, properties: base.properties || variant.properties ? {...base.properties,...variant.properties} : undefined})));
+  return variants.flatMap(child => schemaVariants(child, root).map(variant => {
+    // A branch that only names required fields (Watermark: exactly one of src and text) adds to the base's required list and is
+    // labelled by them, so the generic form offers "src" and "text" as two forms of one object.
+    const requiredOnly = !variant.type && !variant.properties && !variant.$ref && Array.isArray(variant.required);
+    return {...base, ...variant, properties: base.properties || variant.properties ? {...base.properties,...variant.properties} : undefined,
+      ...(base.required || variant.required ? {required: [...new Set([...(base.required ?? []), ...(variant.required ?? [])])]} : {}),
+      ...(requiredOnly && !variant.title ? {title: variant.required.join(' + ')} : {})};
+  }));
 }
 export function schemaType(schema, value) {
   return schema.type ?? (schema.properties || schema.additionalProperties ? 'object' : schema.items ? 'array' : schema.const !== undefined ? typeof schema.const : value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value === 'undefined' ? 'string' : typeof value);

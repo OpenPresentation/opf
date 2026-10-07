@@ -8,6 +8,8 @@ import * as core from "@openpresentation/opf";
 import { OPFEditorError, getValueAtPath, opfPathToJsonPointer } from "./index.js";
 
 const VARIABLE_ID = /^[a-z][a-z0-9-]*$/;
+// A built-in variable name (core FA-04): `speakers`, or deck/speaker/organization plus one or two dotted segments.
+const BUILTIN_NAME = /^(?:speakers|(?:deck|speaker|organization)(?:.[A-Za-z0-9_-]+){1,2})$/;
 const KINDS = ["color", "text", "number", "date", "image", "url", "list"];
 
 /** The form control each variable kind uses. */
@@ -52,6 +54,15 @@ export function isTemplateDocument(document) {
 /** True when the document is a template or declares a variable that is not a color. */
 export function hasTemplateVariables(document) {
   return templatesAvailable() && core.hasContentVariables(document);
+}
+
+/**
+ * The document's built-in variables (read-only values from its own speaker, organization and deck metadata) with
+ * kind, label, current value, whether the document has a source value and where each is used. Empty on a core
+ * that predates built-ins.
+ */
+export function listBuiltins(document) {
+  return typeof core.listBuiltinVariables === "function" ? core.listBuiltinVariables(document) : [];
 }
 
 function humanize(id) {
@@ -239,9 +250,9 @@ export function createTemplateFill(editor, options = {}) {
   return api;
 }
 
-/** The token text for a variable: `{{id}}`, or `{{id|format}}` with a one-off format. */
+/** The token text for a variable or a built-in name: `{{id}}`, or `{{id|format}}` with a one-off format. */
 export function variableToken(id, format) {
-  if (!VARIABLE_ID.test(id)) throw fail("invalid-variable-id", "A variable id is lowercase kebab-case: letters, digits and hyphens, starting with a letter.", { id });
+  if (!VARIABLE_ID.test(id) && !BUILTIN_NAME.test(id)) throw fail("invalid-variable-id", "A variable id is lowercase kebab-case: letters, digits and hyphens, starting with a letter.", { id });
   return format ? `{{${id}|${format}}}` : `{{${id}}}`;
 }
 
@@ -300,7 +311,8 @@ export function insertVariableToken(editor, path, id, { start, end, runIndex, fo
   const document = editor.document;
   const token = variableToken(id, format);
   const patches = [];
-  const declaredNow = isObject(document.variables) && Object.hasOwn(document.variables, id);
+  // A built-in needs no declaration; an unknown built-in path fails the validated edit.
+  const declaredNow = BUILTIN_NAME.test(id) || (isObject(document.variables) && Object.hasOwn(document.variables, id));
   if (!declaredNow) {
     if (declare === undefined) throw fail("unknown-variable", `No variable '${id}' is declared. Declare it first, or pass its declaration.`, { id });
     patches.push(...declarationPatches(document, id, declare));

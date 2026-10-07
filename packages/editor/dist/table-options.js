@@ -27,7 +27,7 @@ export const TABLE_BORDER_STYLES = Object.freeze(["theme", "none", "horizontal",
 // The style fields a table style owns; text color, alignment and padding are never touched.
 const STYLE_KEYS = ["fill", "borders"];
 const HEADER_FILL = Object.freeze({ plain: "surface", accent: "accent" });
-const BAND_FILL = "background";
+const BAND_FILL = "surfaceAlt";
 const RULE_COLOR = "textSecondary";
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -329,7 +329,7 @@ function resolveStyle(preset) {
  * `theme`/false) or a named preset from `TABLE_STYLE_PRESETS`. It sets the header fill, the
  * alternating body-row fill and the cell borders, and clears those fields on every other cell, so
  * `theme` removes a previous style. Text color, alignment, padding, values and merges are kept.
- * Fills use scheme roles (surface, accent, background), so they follow the color scheme and the
+ * Fills use scheme roles (surface, surfaceAlt, accent, background), so they follow the color scheme and the
  * renderers' automatic text contrast keeps text readable.
  */
 export function prepareTableStyle(document, tablePath, preset) {

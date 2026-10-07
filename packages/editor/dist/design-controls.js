@@ -592,10 +592,10 @@ export function createDesignControls(container, options = {}) {
       onCommit: (value) => image({ size: value }, "Image size changed."),
     });
     const inset = checkField("image-inset", "Inset inside the slide padding", { onChange: (checked) => image({ inset: checked ? true : null }, "Image inset changed.") });
-    const placeholderFill = selectField("image-placeholder-fill", "Picture placeholders", {
+    const placeholderFill = selectField("image-placeholder-fill", "Image placeholders", {
       empty: "Presentation default",
-      help: "How pictures fill their layout placeholders across the presentation.",
-      onChange: (value) => run(() => switchDimension(editor, "image-treatments", { imageFill: value === "" ? null : value }), "Picture placeholder fill changed."),
+      help: "How images fill their layout placeholders across the presentation.",
+      onChange: (value) => run(() => switchDimension(editor, "image-treatments", { imageFill: value === "" ? null : value }), "Image placeholder fill changed."),
     });
     placeholderFill.setOptions([
       { value: "crop", label: "Crop to fill" },
@@ -632,7 +632,7 @@ export function createDesignControls(container, options = {}) {
       { value: "footer", label: "Footer" },
     ]);
     furniture.set(pick.which);
-    const zoneSelect = selectField("hf-zone", "Zone", { help: "Each zone stacks its parts top to bottom: logo, image, text, organization, socials, section, slide number, date." });
+    const zoneSelect = selectField("hf-zone", "Zone", { help: "Each zone stacks its parts top to bottom: logo, image, text, organization, speaker, socials, section, slide number, date." });
     zoneSelect.setOptions(HEADER_FOOTER_ZONES.map((value) => ({ value, label: titleCase(value) })));
     zoneSelect.set(pick.zone);
     furniture.select.addEventListener("change", () => {
@@ -678,11 +678,12 @@ export function createDesignControls(container, options = {}) {
       onCommit: (value) => edit({ dateFormat: value.trim() }, `${where()} date format changed.`),
     });
     const organization = checkField("hf-organization", "Show the organization name", { onChange: (checked) => edit({ organization: checked }, `${where()} organization ${checked ? "shown" : "removed"}.`) });
+    const speaker = checkField("hf-speaker", "Show the speaker name and title", { onChange: (checked) => edit({ speaker: checked }, `${where()} speaker ${checked ? "shown" : "removed"}.`) });
     const socials = checkField("hf-socials", "Show the organization's social profiles", { onChange: (checked) => edit({ socials: checked }, `${where()} social profiles ${checked ? "shown" : "removed"}.`) });
     const section = checkField("hf-section", "Show the section label", { onChange: (checked) => edit({ section: checked }, `${where()} section label ${checked ? "shown" : "removed"}.`) });
     const summary = h("ul", { class: "opf-dc-summary", "aria-label": "Zones in use" });
     const warnings = h("ul", { class: "opf-dc-warnings", "aria-label": "Header and footer warnings" });
-    const controls = [text, logo, image, number, numberFormat, dateNow, dateFixed, dateFormat, organization, socials, section];
+    const controls = [text, logo, image, number, numberFormat, dateNow, dateFixed, dateFormat, organization, speaker, socials, section];
     body.append(furniture.wrap, hide.wrap, zoneSelect.wrap, summary, ...controls.map((control) => control.wrap), warnings);
     const describe = (fields) =>
       Object.entries(fields)
@@ -703,6 +704,7 @@ export function createDesignControls(container, options = {}) {
       dateFixed.set(typeof fields.date === "string" ? fields.date : "");
       dateFormat.set(typeof fields.dateFormat === "string" ? fields.dateFormat : "");
       organization.set(fields.organization === true);
+      speaker.set(fields.speaker === true);
       socials.set(fields.socials === true);
       section.set(fields.section === true);
       for (const control of controls) for (const input of control.wrap.querySelectorAll("input,select,button")) input.disabled = state.hidden;
@@ -752,6 +754,18 @@ export function createDesignControls(container, options = {}) {
       apply: (ref) => setDesignOption(editor, "watermark", ref === null ? null : { src: ref }, scoped()),
       build: (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }, scoped()),
     });
+    // FA-13: a watermark is an image or a text stamp; the text field and the image cluster replace each other.
+    const watermarkText = textField("watermark-text", "Watermark text", {
+      placeholder: "DRAFT",
+      help: "A text stamp centered on the slide, drawn diagonally in the theme text color at the opacity below. Press Enter to apply; clear the field to remove it. It replaces a watermark image.",
+      onCommit: (value) => run(() => {
+        const text = value.trim();
+        const current = getDesignOption(editor.document, "watermark", scoped()).value;
+        if (text === "") return current && typeof current === "object" && typeof current.text === "string" ? setDesignOption(editor, "watermark", null, scoped()) : { changed: false };
+        const opacity = current && typeof current === "object" && typeof current.opacity === "number" ? current.opacity : 0.1;
+        return setDesignOption(editor, "watermark", { text, opacity }, scoped());
+      }, value.trim() === "" ? "Watermark removed." : "Watermark text set."),
+    });
     const watermarkOpacity = numberField("watermark-opacity", "Watermark opacity (0 to 1)", {
       min: 0,
       max: 1,
@@ -761,7 +775,7 @@ export function createDesignControls(container, options = {}) {
     const watermarkOff = checkField("watermark-off", "Hide the inherited watermark", {
       onChange: (checked) => run(() => setDesignOption(editor, "watermark", checked ? false : null, scoped()), checked ? "Watermark hidden." : "Watermark restored."),
     });
-    body.append(variant.wrap, logoSource.wrap, orgLogo.wrap, bullet.wrap, accent.wrap, watermarkSource.wrap, watermarkOpacity.wrap, watermarkOff.wrap);
+    body.append(variant.wrap, logoSource.wrap, orgLogo.wrap, bullet.wrap, accent.wrap, watermarkSource.wrap, watermarkText.wrap, watermarkOpacity.wrap, watermarkOff.wrap);
     const warningList = h("ul", { class: "opf-dc-warnings", "aria-label": "Logo warnings" });
     body.append(warningList);
     syncs.push(() => {
@@ -777,8 +791,9 @@ export function createDesignControls(container, options = {}) {
       accent.set(accentOption.value ?? "", sourceNote(accentOption.scope, accentOption.value !== undefined));
       const watermark = getDesignOption(editor.document, "watermark", scoped());
       const mark = watermark.value;
-      // The opacity belongs to a watermark image; without one there is nothing to fade.
-      for (const input of watermarkOpacity.wrap.querySelectorAll("input")) input.disabled = !(typeof mark === "string" || (mark && typeof mark === "object" && typeof mark.src === "string"));
+      // The opacity belongs to a watermark image or text; without one there is nothing to fade.
+      for (const input of watermarkOpacity.wrap.querySelectorAll("input")) input.disabled = !(typeof mark === "string" || (mark && typeof mark === "object" && (typeof mark.src === "string" || typeof mark.text === "string")));
+      watermarkText.set(mark && typeof mark === "object" && typeof mark.text === "string" ? mark.text : "", sourceNote(watermark.scope, mark !== undefined));
       watermarkSource.set(typeof mark === "string" ? mark : mark && typeof mark === "object" ? stringOf(mark) : "", sourceNote(watermark.scope, mark !== undefined), target());
       watermarkOpacity.set(mark && typeof mark === "object" && typeof mark.opacity === "number" ? String(mark.opacity) : "");
       const own = scopeIndex() === undefined ? editor.document.design?.watermark : editor.document.slides?.[scopeIndex()]?.design?.watermark;
@@ -836,7 +851,7 @@ export function createDesignControls(container, options = {}) {
         field.set(currentSwitchValue(editor.document, dimension).value);
       });
     };
-    single("narrative", "Narrative", "narratives", "The storyline the deck follows. Authoring metadata: the slides do not change.");
+    single("narrative", "Narrative", "narratives", "The narrative plan the deck points at (a catalog id; a custom one is a record in the JSON source). The slides do not change, and keep their beat links.");
     single("tone", "Tone", "tones");
     single("purpose", "Purpose", "purposes", "What the deck is for. Authoring metadata: the slides do not change. A goal written in the JSON source shows as custom.");
     const audience = selectField("audience", "Audience", {
@@ -851,8 +866,10 @@ export function createDesignControls(container, options = {}) {
     body.append(audience.wrap);
     syncs.push(() => {
       audience.setOptions(listSwitchOptions(editor.document, "audiences", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
+      // The root audience is a string, one inline Audience object or an array of both: the picker shows the catalog ids.
       const value = editor.document.audience;
-      audience.set(Array.isArray(value) ? value : value === undefined ? [] : [value]);
+      const entries = Array.isArray(value) ? value : value === undefined ? [] : [value];
+      audience.set(entries.map((entry) => (entry && typeof entry === "object" ? entry.id : entry)).filter((id) => typeof id === "string"));
     });
 
     const owner = selectField("social-owner", "Socials belong to");

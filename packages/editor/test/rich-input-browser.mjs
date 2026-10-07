@@ -74,7 +74,7 @@ try{
   await page.goto('https://opf-rich.test/');await page.addScriptTag({type:'module',content:bundle});
   const paint=()=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   const original=[{text:'First\r\n',bold:true,link:'https://example.org',fontSize:24},{text:'Second\rThird',italic:true,fontSize:24}];
-  const deckFor=text=>({name:'Keep deck metadata',design:{fontScheme:{id:'roboto',heading:{family:'Arimo'},body:{family:'Arimo'},code:{family:'Arimo'}}},slides:[{id:'rich',text,notes:'Keep notes'}],extensions:{keep:{value:42}}});
+  const deckFor=text=>({name:'Keep deck metadata',design:{fontScheme:{id:'roboto',heading: 'Arimo',body: 'Arimo',code: 'Arimo'}},slides:[{id:'rich',text,notes:'Keep notes'}],extensions:{keep:{value:42}}});
   const deck=deckFor(original),document=()=>page.evaluate(()=>editor.document);
   const text=()=>page.evaluate(()=>editor.get('slides.0.text'));
   const input=()=>page.getByRole('textbox',{name:'Edit rich text inline',exact:true});
@@ -164,6 +164,26 @@ try{
   });assert.equal(blankCaret.sourceOffset,23);assert.ok(Math.abs(blankCaret.dx)<1&&Math.abs(blankCaret.dy)<1);
   await commit();assert.deepEqual(await text(),[original[0],{...original[1],text:'Second\rThird\r\n\r\n'}]);
   await page.evaluate(()=>editor.undo());assert.deepEqual(await text(),original);await passed('Trailing blank lines keep their source offset and insertion caret',{blankCaret});
+  // FA-10: a TextRun[] title, subtitle and quote text open the same rich input; a plain title offers Format text; quotation marks do not shift the caret.
+  const beginAt=async field=>{const node=page.locator(`[data-canvas-target][data-opf-path="slides.0.${field}"]`);await node.focus();await page.keyboard.press('Enter');await paint();assert.equal(await input().count(),1);};
+  const headings={name:'Headings',design:{fontScheme:{id:'roboto',heading:'Arimo',body:'Arimo',code:'Arimo'}},slides:[{id:'h',title:['Revenue grew ',{text:'28%',bold:true}],subtitle:'A plain subtitle',quote:{text:['Cut it by ',{text:'40%',italic:true}],attribution:'Ada'}}]};
+  await mount(headings);await beginAt('title');assert.equal(await input().inputValue(),'Revenue grew 28%');
+  await select(16);await input().pressSequentially(' more');await commit();
+  assert.deepEqual(await page.evaluate(()=>editor.get('slides.0.title')),['Revenue grew ',{text:'28% more',bold:true}]);
+  await page.evaluate(()=>editor.undo());assert.deepEqual(await page.evaluate(()=>editor.get('slides.0.title')),headings.slides[0].title);
+  await passed('A rich title opens the rich input, keeps its run formatting while typing and undoes exactly');
+  await mount(headings);await beginAt('quote.text');assert.equal(await input().inputValue(),'Cut it by 40%');
+  const quoteTrace=await page.locator('.opf-canvas-preview [data-opf-path="slides.0.quote.text"] [data-opf-text-start]').evaluateAll(nodes=>nodes.map(node=>({text:node.textContent,start:Number(node.dataset.opfTextStart),end:Number(node.dataset.opfTextEnd)})));
+  assert.deepEqual(quoteTrace.map(part=>part.text).join(''),'"Cut it by 40%"');
+  assert.equal(quoteTrace.find(part=>part.text.includes('40%')).start,10,'a rich quote body traces offsets of the authored text, not of the drawn quotation marks');
+  await select(13);await input().pressSequentially('!');await commit();
+  assert.deepEqual(await page.evaluate(()=>editor.get('slides.0.quote.text')),['Cut it by ',{text:'40%!',italic:true}]);
+  await passed('A rich quote opens the rich input and the quotation marks do not shift the caret');
+  await mount(headings);await page.locator('[data-canvas-target][data-opf-path="slides.0.subtitle"]').focus();await page.keyboard.press('Enter');await paint();
+  assert.equal(await page.getByRole('button',{name:'Format text',exact:true}).count(),1);
+  await page.getByRole('button',{name:'Format text',exact:true}).click();await paint();
+  assert.deepEqual(await page.evaluate(()=>editor.get('slides.0.subtitle')),['A plain subtitle']);
+  await passed('A plain subtitle offers Format text and converts to runs');
   await page.evaluate(()=>{canvas.destroy();fonts.dispose();});assert.equal(await page.locator('#host > *').count(),0);
   assert.equal(await page.evaluate(()=>document.fonts.size),0);assert.deepEqual(report.errors,[]);assert.deepEqual(report.externalRequests,[]);
   for(const [file,digest] of Object.entries(inputs))assert.equal(hash(await readFile(file)),digest,'Browser verification must not rebuild runtime files');

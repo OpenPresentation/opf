@@ -28,6 +28,7 @@ const source = {
   template: true,
   name: 'Quarterly review for {{client}}',
   design: { theme: 'classic', fontScheme: 'roboto' },
+  speaker: { id: 'ada', name: 'Ada Lovelace', title: 'CTO' },
   variables: {
     client: { type: 'text', label: 'Client name', example: 'Acme Corp' },
     revenue: { type: 'number', format: '$#,##0', example: 1250000 },
@@ -86,6 +87,14 @@ try {
   assert.equal(await dialog.getByLabel(/^Client name/).getAttribute('placeholder'), 'Acme Corp');
   assert.equal(await dialog.getByRole('button', { name: 'Fill the presentation' }).isDisabled(), true);
   mark('typed fields with unfilled state');
+
+  // FA-04: the document's built-in variables are listed read-only, with their source values.
+  const builtins = dialog.locator('.opf-template-builtins');
+  await builtins.locator('summary').click();
+  assert.equal(await builtins.locator('li[data-builtin="speaker.name"]').textContent().then(text => text.includes('{{speaker.name}}') && text.includes('Ada Lovelace')), true);
+  assert.equal(await builtins.locator('li[data-builtin="speaker.photo"]').getAttribute('data-available'), 'false');
+  assert.equal(await builtins.locator('input,textarea').count(), 0);
+  mark('built-in variables listed read-only');
 
   // The preview shows examples until values are typed, then the values.
   const previewText = () => dialog.locator('.opf-template-preview svg').first().textContent();

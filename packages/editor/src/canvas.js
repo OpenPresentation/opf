@@ -12,6 +12,8 @@ import {
 } from "@openpresentation/opf-render/svg";
 import {
   getEditableFields,
+  emptyLike,
+  fieldChoices,
   parseCanvasValue,
   createCanvasDraft,
 } from "./canvas-fields.js";
@@ -706,10 +708,20 @@ export function createCanvasEditor(container, options = {}) {
       label.style.cssText =
         "display:block;margin-top:10px;color:#756b85;font-size:11px";
       label.textContent = field.label;
+      const choices = field.type === "string" ? fieldChoices(field) : undefined;
       const input = doc.createElement(
-        field.type === "boolean" ? "input" : "textarea",
+        choices ? "select" : field.type === "boolean" ? "input" : "textarea",
       );
-      if (field.type === "boolean") {
+      if (choices) {
+        // A fixed set of values (a timeline event's status) is a menu, not free text.
+        for (const choice of choices) {
+          const option = doc.createElement("option");
+          option.value = choice;
+          option.textContent = choice;
+          input.append(option);
+        }
+        input.value = field.value;
+      } else if (field.type === "boolean") {
         input.type = "checkbox";
         input.checked = field.value;
       } else {
@@ -780,26 +792,9 @@ export function createCanvasEditor(container, options = {}) {
           if (!commit()) return;
           try {
             const values = editor.get(array.path);
-            const empty = (value, key = "") =>
-              Array.isArray(value)
-                ? value.map((child) => empty(child))
-                : value && typeof value === "object"
-                  ? Object.fromEntries(
-                      Object.entries(value).map(([key, child]) => [
-                        key,
-                        empty(child, key),
-                      ]),
-                    )
-                  : typeof value === "number"
-                    ? 0
-                    : typeof value === "boolean"
-                      ? false
-                      : ["type", "mode", "language"].includes(key)
-                        ? value
-                        : "";
             const next = remove
               ? values.slice(0, -1)
-              : [...values, empty(values.at(-1) ?? "")];
+              : [...values, emptyLike(values.at(-1) ?? "")];
             editor.set(array.path, next, {
               source: "canvas-collection",
               rejectInvalid: true,

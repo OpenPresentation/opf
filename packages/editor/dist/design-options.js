@@ -23,8 +23,8 @@ export const LOGO_VARIANTS = Object.freeze([
 ]);
 export const HEADER_FOOTER_ZONES = Object.freeze(["left", "center", "right"]);
 // Flag fields of a header/footer zone: false is stored as "absent" (so is a `date` of false).
-const ZONE_FLAGS = ["logo", "slideNumber", "organization", "socials", "section"];
-export const ZONE_FIELDS = Object.freeze(["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "socials", "section"]);
+const ZONE_FLAGS = ["logo", "slideNumber", "organization", "speaker", "socials", "section"];
+export const ZONE_FIELDS = Object.freeze(["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "speaker", "socials", "section"]);
 /** Date tokens a `dateFormat` understands (English names, independent of the host locale). */
 export const DATE_FORMAT_TOKENS = Object.freeze(["yyyy", "yy", "MMMM", "MMM", "MM", "M", "dd", "d", "EEEE", "EEE"]);
 const ISO_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
@@ -32,7 +32,7 @@ const ISO_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 // Friendly validation of one zone field before the schema sees it.
 function checkZoneField(key, value) {
   const bad = (message) => fail("invalid-design-value", message, { field: key, value });
-  if (["logo", "slideNumber", "organization", "socials", "section"].includes(key) && typeof value !== "boolean") throw bad(`${key} is true or false.`);
+  if (ZONE_FLAGS.includes(key) && typeof value !== "boolean") throw bad(`${key} is true or false.`);
   if (key === "text" && typeof value !== "string") throw bad("Text is a string.");
   if (key === "image" && typeof value !== "string" && !isObject(value)) throw bad("An image is a source, an asset reference or an asset object.");
   if (key === "slideNumberFormat" && (typeof value !== "string" || !value.includes("{current}"))) throw bad("The slide number format must contain {current}, for example Page {current} of {total}.");
@@ -62,7 +62,7 @@ export const DESIGN_OPTIONS = Object.freeze([
   { id: "chartPrimary", label: "Primary chart position", type: "enum", values: ENUMS.chartPrimary, scopes: ["deck", "slide"], path: "design.chartPrimary" },
   { id: "listBullet", label: "List bullets", type: "enum", values: ENUMS.listBullet, scopes: ["deck", "slide"], path: "design.listBullet" },
   { id: "contentBox", label: "Content box", type: "boolean", scopes: ["deck", "slide"], path: "design.contentBox" },
-  { id: "accentFont", label: "Accent font", type: "font", scopes: ["deck", "slide"], path: "design.fontScheme.accent.family" },
+  { id: "accentFont", label: "Accent font", type: "font", scopes: ["deck", "slide"], path: "design.fontScheme.accent" },
   { id: "logo", label: "Logo", type: "logo", scopes: ["deck", "slide"], path: "design.logo" },
   { id: "organizationLogo", label: "Organization logo", type: "organization-logo", scopes: ["deck"], path: "organization.logo" },
   { id: "watermark", label: "Watermark", type: "watermark", scopes: ["deck", "slide"], path: "design.watermark" },
@@ -90,6 +90,11 @@ function primaryOrganization(document) {
   return list.find((entry) => entry?.role === "primary") ?? list[0];
 }
 
+function firstSpeaker(document) {
+  const list = Array.isArray(document.speaker) ? document.speaker : document.speaker ? [document.speaker] : [];
+  return list[0];
+}
+
 /** Whether a logo resolves for the slide: slide design, then deck design, then the primary organization. */
 export function hasResolvableLogo(document, slideIndex) {
   return Boolean(document.slides?.[slideIndex]?.design?.logo ?? document.design?.logo ?? primaryOrganization(document)?.logo);
@@ -115,6 +120,8 @@ export function designWarnings(document, slideIndex = 0) {
       const item = isObject(design[which]) ? design[which][zone] : undefined;
       if (item?.organization === true && !organization)
         warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.organization`, message: `The ${which} ${zone} zone shows the organization, but the presentation has none.` });
+      if (item?.speaker === true && !firstSpeaker(document)?.name)
+        warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.speaker`, message: `The ${which} ${zone} zone shows the speaker, but the presentation has no named speaker.` });
       if (item?.socials === true && !organization?.socials)
         warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.socials`, message: `The ${which} ${zone} zone shows social profiles, but the organization has none.` });
     }
@@ -145,16 +152,20 @@ function finish(document, patches, extra) {
 function mergedWatermark(existing, value) {
   if (value === null || value === false) return value;
   if (typeof value === "string") return value;
-  if (!isObject(value)) throw fail("invalid-design-value", "A watermark is false, an image source or { src, opacity }.", { value });
+  if (!isObject(value)) throw fail("invalid-design-value", "A watermark is false, an image source, { src, opacity } or { text, opacity }.", { value });
   const base = typeof existing === "string" ? { src: existing } : isObject(existing) ? { ...existing } : {};
   const merged = { ...base };
   for (const [key, entry] of Object.entries(value)) {
     if (entry === null || entry === undefined) delete merged[key];
     else merged[key] = entry;
   }
+  // FA-13: a watermark is an image (src) or a text stamp (text), never both: the field set last replaces the other.
+  if (value.text !== undefined && value.text !== null && value.src === undefined) delete merged.src;
+  else if (value.src !== undefined && value.src !== null && value.text === undefined) delete merged.text;
+  if (merged.text !== undefined && (typeof merged.text !== "string" || !merged.text.trim())) throw fail("invalid-design-value", "Watermark text is a non-empty string.", { value });
   if (merged.opacity !== undefined && (typeof merged.opacity !== "number" || merged.opacity < 0 || merged.opacity > 1))
     throw fail("invalid-design-value", "Watermark opacity is a number from 0 to 1.", { value });
-  if (merged.src === undefined && Object.keys(merged).length) throw fail("invalid-design-value", "Choose the watermark image before setting its opacity.", { value });
+  if (merged.src === undefined && merged.text === undefined && Object.keys(merged).length) throw fail("invalid-design-value", "Choose the watermark image before setting its opacity (or give it text instead).", { value });
   if (Object.keys(merged).length === 1 && typeof merged.src === "string") return merged.src;
   if (!Object.keys(merged).length) return null;
   if (merged.opacity === undefined) throw fail("invalid-design-value", "Set an opacity from 0 to 1 for the watermark.", { value });
@@ -187,7 +198,7 @@ function fontSchemeWithAccent(document, base, family) {
     delete object.accent;
   } else {
     if (typeof family !== "string" || !family.trim()) throw fail("invalid-design-value", "Accent font is a non-empty family name, or null to clear it.", { value: family });
-    object.accent = { ...(isObject(object.accent) ? object.accent : {}), family: family.trim() };
+    object.accent = family.trim();
   }
   const keys = Object.keys(object);
   if (!keys.length) return null;
@@ -295,7 +306,7 @@ export function setDesignOption(editor, option, value, options = {}) {
 /**
  * Read one design option for a panel: `{ value, scope, inherited }` where `scope` is "slide" when the
  * slide's own design sets it, "deck" when the deck does, and "default" when neither does.
- * `accentFont` reads the family; `organizationLogo` reads the organization.
+ * `accentFont` reads the family name; `organizationLogo` reads the organization.
  */
 export function getDesignOption(document, option, options = {}) {
   const descriptor = BY_ID[option];
@@ -308,7 +319,7 @@ export function getDesignOption(document, option, options = {}) {
   const key = descriptor.type === "font" ? "fontScheme" : option;
   const pick = (design) => {
     const value = design?.[key];
-    return descriptor.type === "font" ? (isObject(value) ? value.accent?.family : undefined) : value;
+    return descriptor.type === "font" ? (isObject(value) ? value.accent : undefined) : value;
   };
   const slideValue = options.slideIndex === undefined ? undefined : pick(document.slides?.[options.slideIndex]?.design);
   if (slideValue !== undefined) return { value: slideValue, scope: "slide", inherited: false };
@@ -351,7 +362,7 @@ export function readLogoVariants(document, options = {}) {
 
 /**
  * Compute the patch that edits one header or footer zone. `fields` merges into the zone (logo, text,
- * image, slideNumber, slideNumberFormat, date, dateFormat, organization, socials, section); `null`,
+ * image, slideNumber, slideNumberFormat, date, dateFormat, organization, speaker, socials, section); `null`,
  * `false` for a flag, or an empty string removes a field. A zone left empty is removed, then an empty
  * header or footer, so a slide never carries `{}`. A slide's own header or footer replaces the deck's
  * whole one, so the first edit on a slide that has none of its own starts from a copy of the deck's

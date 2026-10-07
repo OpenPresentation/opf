@@ -119,28 +119,15 @@ export async function loadOpfGallery(input, options = {}) {
 }
 const FONT_SCHEME_ENUMS = {
   type: ["sans-serif", "serif", "monospace"],
-  app: ["PowerPoint", "Google Slides"],
-  languageFamily: ["latin", "ea", "cs"],
+  app: ["powerpoint", "google-slides"],
+  languageFamily: ["latin", "ea", "cs", "eastAsian", "complexScript"],
 };
-// A Font role object ({ family, weight?, style?, letterSpacing? }), or undefined.
+// A font role is a family name (a non-empty string), or undefined.
 function fontRole(value) {
-  if (typeof value === "string") return value ? { family: value } : undefined;
-  if (!value || typeof value !== "object" || typeof value.family !== "string")
-    return undefined;
-  const role = { family: value.family };
-  if (typeof value.weight === "number" && Number.isFinite(value.weight))
-    role.weight = value.weight;
-  if (value.style === "normal" || value.style === "italic")
-    role.style = value.style;
-  if (
-    typeof value.letterSpacing === "number" &&
-    Number.isFinite(value.letterSpacing)
-  )
-    role.letterSpacing = value.letterSpacing;
-  return role;
+  return typeof value === "string" && value ? value : undefined;
 }
 // Keep every font-scheme role that the catalog record schema defines: the OOXML
-// pair and `code`. Gallery `heading`/`body` (string or Font object) map onto
+// pair and `code`. Gallery `heading`/`body` (family names) map onto
 // major/minor only, never role objects, so a later inline design.fontScheme
 // major/minor override still wins (resolveFontFamilies checks roles before the
 // pair). `accent` is not part of the record schema and is dropped.
@@ -152,11 +139,11 @@ function fontSchemeRecord(source, id) {
     major:
       typeof source.major === "string"
         ? source.major
-        : fontRole(source.heading)?.family,
+        : fontRole(source.heading),
     minor:
       typeof source.minor === "string"
         ? source.minor
-        : fontRole(source.body)?.family,
+        : fontRole(source.body),
   };
   for (const [field, values] of Object.entries(FONT_SCHEME_ENUMS))
     if (values.includes(source[field])) record[field] = source[field];
@@ -184,28 +171,25 @@ function attachDefinition(document, descriptor) {
     return;
   let record;
   if (kind === "layouts") {
-    const n = Math.min(
-      12,
-      Number(String(source.contentMultiple ?? "").replace("x", "")) || 1,
-    );
-    const type =
-      { Image: "picture", Chart: "chart", List: "list" }[source.contentType] ??
-      "text";
+    // A gallery layout item is a layout record: its placeholders, design hints and composition are the
+    // record's own. Only an item that declares no placeholders gets the default title and text.
+    const placeholders = Array.isArray(source.placeholders)
+      ? source.placeholders
+          .filter((placeholder) => typeof placeholder?.type === "string")
+          .map((placeholder) => ({ type: placeholder.type }))
+      : [{ type: "title" }, { type: "text" }];
+    const plain = (value) =>
+      value && typeof value === "object" && !Array.isArray(value)
+        ? structuredClone(value)
+        : undefined;
     record = {
       $schema: "https://openpresentation.org/schema/opf-layout/v1",
       id,
       name: source.label ?? source.name ?? id,
-      placeholders: [
-        { type: "title" },
-        ...Array.from({ length: n }, () => ({ type })),
-      ],
-      ...(n > 1
-        ? {
-            composition: {
-              mode: n <= 3 ? "row" : "grid",
-              ...(n > 3 ? { columns: 2 } : {}),
-            },
-          }
+      ...(plain(source.design) ? { design: plain(source.design) } : {}),
+      placeholders,
+      ...(plain(source.composition)
+        ? { composition: plain(source.composition) }
         : {}),
     };
   } else if (kind === "fontSchemes") record = fontSchemeRecord(source, id);

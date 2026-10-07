@@ -11,7 +11,7 @@ export const IMAGE_BACKGROUND_FITS = Object.freeze(["cover", "contain", "tile"])
 /** Scheme slots and roles a ColorRef may name (the schema's ColorRef enum), besides hex colors and `var:<id>`. */
 export const COLOR_NAMES = Object.freeze([
   "accent1", "accent2", "accent3", "accent4", "accent5", "accent6", "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
-  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary",
+  "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary",
 ]);
 /**
  * The 54 DrawingML preset patterns (ECMA-376 ST_PresetPatternVal) by family. PPTX export writes them as

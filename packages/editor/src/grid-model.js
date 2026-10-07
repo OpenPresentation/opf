@@ -80,8 +80,7 @@ function datasetOf(document, ref, path, refParts) {
 
 /**
  * Find the data a path points at. A chart path ends in `chart` (or `chart.data`) and a table path in `table`.
- * Throws `grid-target-not-found`, `table-not-found`, `chart-data-source` (a chart that reads its data from a source
- * has no inline data to edit) or `dataset-unavailable` (the shared dataset or one of its `fields` is missing).
+ * Throws `grid-target-not-found` (also for a chart without inline columns and rows), `table-not-found` or `dataset-unavailable` (the shared dataset or one of its `fields` is missing).
  * A chart or table that takes its data from a dataset (RR-54) is located at the dataset: `data` is the dataset, `dataParts`
  * is `["datasets", id]` and `dataset` is `{ id, fields, indices, refParts, ref }` (`indices` maps each shown column to the
  * dataset's own column).
@@ -104,7 +103,7 @@ export function locateGridData(document, path) {
       return { kind: "chart", parts, dataParts: ["datasets", data.dataset], data: found.data, chartType, owner, dataset: found.dataset };
     }
     if (!Array.isArray(data.columns) || !Array.isArray(data.rows))
-      throw fail("chart-data-source", "This chart reads its data from a source (src), not from inline columns and rows. The data grid edits inline chart data.", { path });
+      throw fail("grid-target-not-found", "This chart has no inline columns and rows. The data grid edits inline chart data.", { path });
     return { kind: "chart", parts, dataParts: [...parts, "data"], data, chartType, owner };
   }
   if (parts.at(-1) === "table") {
@@ -144,7 +143,7 @@ export function resolveDataGridTarget(document, selectedPath) {
       }
       return target;
     } catch (error) {
-      if (error.code === "chart-data-source" || error.code === "dataset-unavailable") return { kind: parts[index], path: head.join("."), editable: false, reason: error.message };
+      if (error.code === "dataset-unavailable") return { kind: parts[index], path: head.join("."), editable: false, reason: error.message };
     }
   }
   return undefined;

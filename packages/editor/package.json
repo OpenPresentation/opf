@@ -1,4 +1,5 @@
 {
+  "opf": { "requiresUnreleasedCore": "0.14.0" },
   "name": "@openpresentation/opf-editor",
   "version": "0.12.1",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",

@@ -30,7 +30,7 @@ const source = {
   language: 'english',
   narrative: 'problem-solution',
   tone: 'formal',
-  audience: ['executives'],
+  audience: ['executive'],
   speaker: { id: 'alice', name: 'Alice Chen' },
   organization: { id: 'acme', name: 'Acme' },
   assets: { logo: PIXEL, mark: PIXEL, photo: PIXEL },
@@ -166,15 +166,15 @@ try {
   await step('layouts', () => field(design, 'Layout of this slide').selectOption('text-2x'), current => current.slides[0].layout === 'text-2x', { preview: true });
   await step('narratives', () => field(design, 'Narrative').selectOption('scqa'), current => current.narrative === 'scqa');
   await step('tones', () => field(design, 'Tone').selectOption('casual'), current => current.tone === 'casual');
-  await step('audiences', () => field(design, 'Audience').selectOption(['executives', 'investors']), current => JSON.stringify(current.audience) === '["executives","investors"]');
+  await step('audiences', () => field(design, 'Audience').selectOption(['executive', 'investor']), current => JSON.stringify(current.audience) === '["executive","investor"]');
   await step('socials', async () => { await field(design, 'Platform').selectOption('linkedin'); const input = field(design, 'Handle or address'); await input.fill('alice-chen'); await input.press('Enter'); }, current => current.speaker.socials?.linkedin === 'alice-chen');
   await step('headers-footers', async () => { const input = field(design, 'Text'); await input.fill('Confidential'); await input.press('Enter'); }, current => current.design.footer?.center?.text === 'Confidential');
   await step('image-treatments (slide image)', () => field(design, 'Position').selectOption('right'), current => current.design.slideImage?.position === 'right');
-  await step('picture placeholder fill', () => field(design, 'Picture placeholders').selectOption('fit'), current => current.design.imageFill === 'fit');
+  await step('image placeholder fill', () => field(design, 'Image placeholders').selectOption('fit'), current => current.design.imageFill === 'fit');
   // RR-41: slide size and purpose. The size is one deck-level choice; the preview recomposes at it.
   const previewBox = () => page.locator('#preview svg').first().getAttribute('viewBox');
   assert.equal(await previewBox(), '0 0 1280 720', 'the classic theme composes at widescreen');
-  assert.deepEqual(await field(design, 'Slide size').locator('option').evaluateAll(nodes => nodes.map(node => node.value)), ['16:9', '4:3', '16:10', 'letter', 'a4', 'widescreen', 'standard'], 'the seven presets');
+  assert.deepEqual(await field(design, 'Slide size').locator('option').evaluateAll(nodes => nodes.map(node => node.value)), ['16:9', '4:3', '16:10', '1:1', '4:5', '9:16', 'letter', 'a4', 'widescreen', 'standard'], 'the ten presets');
   assert.equal(await field(design, 'Slide size').inputValue(), 'widescreen', 'the control shows the theme size');
   await step('slide-sizes', async () => {
     await field(design, 'Slide size').selectOption('4:3');
@@ -217,20 +217,20 @@ try {
   await step('content direction', () => field(design, 'Content direction').selectOption('vertical'), current => current.design.contentDirection === 'vertical');
   await step('primary chart position', () => field(design, 'Primary chart position').selectOption('left'), current => current.design.chartPrimary === 'left');
   await step('content box', () => field(design, 'Content box').selectOption('yes'), current => current.design.contentBox === true);
-  await step('accent font', async () => { const input = field(design, 'Accent font'); await input.fill('Georgia'); await input.press('Enter'); }, current => current.design.fontScheme?.accent?.family === 'Georgia');
+  await step('accent font', async () => { const input = field(design, 'Accent font'); await input.fill('Georgia'); await input.press('Enter'); }, current => current.design.fontScheme?.accent === 'Georgia');
   {
     const before = await doc();
     const accent = field(design, 'Accent font');
     await accent.fill('Georgia');
     await accent.press('Enter');
-    await waitDoc(current => current.design.fontScheme?.accent?.family === 'Georgia', 'accent font for the Typography check');
+    await waitDoc(current => current.design.fontScheme?.accent === 'Georgia', 'accent font for the Typography check');
     await settle();
     assert.equal(await page.locator('#font').inputValue(), 'roboto', 'the Typography select shows the scheme id');
     await page.locator('#font').selectOption('calibri');
-    await waitDoc(current => current.design.fontScheme?.id === 'calibri' && current.design.fontScheme.accent?.family === 'Georgia', 'the Typography select keeps the accent font');
+    await waitDoc(current => current.design.fontScheme?.id === 'calibri' && current.design.fontScheme.accent === 'Georgia', 'the Typography select keeps the accent font');
     await settle();
     await field(design, 'Font scheme').selectOption('georgia');
-    await waitDoc(current => current.design.fontScheme?.id === 'georgia' && current.design.fontScheme.accent?.family === 'Georgia', 'a font scheme switch keeps the accent font');
+    await waitDoc(current => current.design.fontScheme?.id === 'georgia' && current.design.fontScheme.accent === 'Georgia', 'a font scheme switch keeps the accent font');
     await settle();
     await button('Undo').click();
     await button('Undo').click();
@@ -348,7 +348,7 @@ try {
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.2.blocks.0.chart"]').click();
   await selection.getByLabel(label('Chart type')).waitFor();
   const chartTypes = await selection.getByLabel(label('Chart type')).locator('option').evaluateAll(options => options.map(option => option.value));
-  assert.ok(chartTypes.includes('line') && chartTypes.includes('pie') && !chartTypes.includes('stacked-column-3x') && !chartTypes.includes('world'), 'chart types follow the data');
+  assert.ok(chartTypes.includes('line') && chartTypes.includes('pie') && !chartTypes.includes('stacked-column') && !chartTypes.includes('world'), 'chart types follow the data');
   await step('charts', () => selection.getByLabel(label('Chart type')).selectOption('line'), current => current.slides[2].blocks[0].chart.type === 'line', { preview: true });
   await step('chart to table conversion', () => selection.getByLabel(label('Content type')).selectOption('table'), current => current.slides[2].blocks[0].table?.columns?.[0] === 'Quarter');
 
@@ -359,7 +359,7 @@ try {
   await selection.getByLabel(label('Header row')).waitFor();
   assert.match(await selection.locator('[data-role="cell-summary"]').textContent(), /Row 2, column 1/);
   await step('table header style', () => selection.getByLabel(label('Header row')).selectOption('plain'), current => current.slides[2].blocks[1].table.columns[0].style?.fill === 'surface', { preview: true });
-  await step('table banded rows', () => selection.getByLabel('Banded rows').check(), current => current.slides[2].blocks[1].table.rows[1][0].style?.fill === 'background', { preview: true });
+  await step('table banded rows', () => selection.getByLabel('Banded rows').check(), current => current.slides[2].blocks[1].table.rows[1][0].style?.fill === 'surfaceAlt', { preview: true });
   await step('table borders', () => selection.getByLabel(label('Borders')).selectOption('none'), current => current.slides[2].blocks[1].table.rows[0][0].style?.borders?.top?.width === 0, { preview: true });
   await selection.getByLabel(label('Borders')).selectOption('grid');
   await waitDoc(current => current.slides[2].blocks[1].table.rows[0][0].style?.borders?.left?.width === 1, 'grid borders');

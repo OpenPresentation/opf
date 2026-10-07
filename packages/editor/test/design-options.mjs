@@ -56,7 +56,7 @@ const cases = [
   { option: "contentDirection", value: "vertical", slide: 2, patch: { op: "add", path: "/design/contentDirection", value: "vertical" } },
   { option: "chartPrimary", value: "left", slide: 2, patch: { op: "add", path: "/design/chartPrimary", value: "left" } },
   { option: "contentBox", value: true, slide: 1, patch: { op: "add", path: "/design/contentBox", value: true }, preview: true },
-  { option: "accentFont", value: "Georgia", slide: 0, patch: { op: "replace", path: "/design/fontScheme", value: { id: "aptos", accent: { family: "Georgia" } } } },
+  { option: "accentFont", value: "Georgia", slide: 0, patch: { op: "replace", path: "/design/fontScheme", value: { id: "aptos", accent: "Georgia" } } },
   { option: "logo", value: "asset:logo", slide: 0, patch: { op: "add", path: "/design/logo", value: "asset:logo" } },
   { option: "organizationLogo", value: "asset:logo", slide: 0, patch: { op: "add", path: "/organization/logo", value: "asset:logo" } },
   { option: "watermark", value: { src: "asset:mark", opacity: 0.1 }, slide: 1, patch: { op: "add", path: "/design/watermark", value: { src: "asset:mark", opacity: 0.1 } }, preview: true },
@@ -191,15 +191,15 @@ for (const entry of cases) {
   }
   const editor = session();
   setDesignOption(editor, "accentFont", "Georgia");
-  assert.deepEqual(editor.get("design.fontScheme"), { id: "aptos", accent: { family: "Georgia" } });
+  assert.deepEqual(editor.get("design.fontScheme"), { id: "aptos", accent: "Georgia" });
   assert.deepEqual(getDesignOption(editor.document, "accentFont"), { value: "Georgia", scope: "deck", inherited: false });
   setDesignOption(editor, "accentFont", "Lora");
-  assert.equal(editor.get("design.fontScheme.accent.family"), "Lora");
+  assert.equal(editor.get("design.fontScheme.accent"), "Lora");
   setDesignOption(editor, "accentFont", null);
   assert.equal(editor.get("design.fontScheme"), "aptos", "a lone id collapses to the string form");
   // A slide inherits the deck's scheme and adds its own accent.
   const slide = setDesignOption(editor, "accentFont", "Georgia", { slideIndex: 1 });
-  assert.deepEqual(slide.patches, [{ op: "add", path: "/slides/1/design", value: { fontScheme: { id: "aptos", accent: { family: "Georgia" } } } }]);
+  assert.deepEqual(slide.patches, [{ op: "add", path: "/slides/1/design", value: { fontScheme: { id: "aptos", accent: "Georgia" } } }]);
   assert.deepEqual(getDesignOption(editor.document, "accentFont", { slideIndex: 1 }), { value: "Georgia", scope: "slide", inherited: false });
 }
 
@@ -319,14 +319,14 @@ for (const entry of cases) {
   assert.equal(editor.snapshot().undoDepth, 0);
   setDesignOption(editor, "accentFont", "Georgia");
   const switched = switchDimension(editor, "font-schemes", "georgia");
-  assert.deepEqual(editor.get("design.fontScheme"), { id: "georgia", accent: { family: "Georgia" } }, "the accent font survives a font scheme switch");
+  assert.deepEqual(editor.get("design.fontScheme"), { id: "georgia", accent: "Georgia" }, "the accent font survives a font scheme switch");
   assert.equal(switched.changed, true);
   setDesignOption(editor, "accentFont", null);
   assert.equal(editor.get("design.fontScheme"), "georgia");
   // A slide switch keeps the slide's own accent too.
   setDesignOption(editor, "accentFont", "Lora", { slideIndex: 1 });
   switchDimension(editor, "font-schemes", "tahoma", { slideIndex: 1 });
-  assert.deepEqual(editor.get("slides.1.design.fontScheme"), { id: "tahoma", accent: { family: "Lora" } });
+  assert.deepEqual(editor.get("slides.1.design.fontScheme"), { id: "tahoma", accent: "Lora" });
 }
 
 // Every header/footer part the schema has, per zone: validation, flags, date and format, warnings, export.

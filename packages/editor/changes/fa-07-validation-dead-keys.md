@@ -1,0 +1,4 @@
+---
+type: changed
+---
+FA-07 (needs the core release that ships the FA-07 schema; lockstep with core, the renderer and PPTX): the editor follows the tightened format. `accentFont` reads and writes `design.fontScheme.accent` as a family-name string (a Font object is no longer part of the format), gallery font-scheme records take `app` as `powerpoint | google-slides` and `languageFamily` with `eastAsian`/`complexScript`, the link field accepts `http(s)`, `mailto:` and `tel:` links without spaces, and the audience picker shows the id of a single inline Audience object. A slide's design cannot set `dimensions`: inserting slides no longer freezes the source deck's size onto them, a slide-scope theme switch writes no dimensions, and slide sizes are deck-only (nothing can shadow them). The data grid no longer has a `chart-data-source` case; a chart without inline columns and rows is `grid-target-not-found`. The schema picker reads the new `SlideDesign` definition.

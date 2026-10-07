@@ -22,3 +22,19 @@ assert.equal(new Set(fields.map(f=>`${f.schema}:${f.path}`)).size,fields.length)
 console.log(`Schema controls: ${fields.length} documented fields, nested paths, catalog records, background forms, required defaults passed.`);
 
 assert.deepEqual(schemaVariants({type:['string','number']}).map(s=>s.type),['string','number']);
+
+// FA-11: the schema inspector (the generic form) offers a timeline event's status as a menu of done, current and planned.
+{
+  const deck = { slides: [{ title: 'Roadmap', timeline: [{ when: 'Q1', what: 'Pilot' }] }, { timeline: { events: [{ what: 'Scale' }] } }] };
+  for (const path of ['/slides/0/timeline/0', '/slides/1/timeline/events/0']) {
+    const event = schemaAtPath(deck, path), status = event.properties.status;
+    assert.deepEqual(status.enum, ['done', 'current', 'planned'], path);
+    assert.equal(event.required.includes('status'), false, 'status is optional: an event may have none');
+    assert.equal(createSchemaValue(status), 'done');
+  }
+  assert.ok(listSchemaFields().some(field => field.name === 'status' && field.values?.join() === 'done,current,planned'));
+  const session = createEditorSession(deck);
+  session.set('/slides/0/timeline/0/status', 'current');
+  assert.equal(session.document.slides[0].timeline[0].status, 'current');
+  assert.throws(() => session.set('/slides/0/timeline/0/status', 'blocked', { rejectInvalid: true }));
+}

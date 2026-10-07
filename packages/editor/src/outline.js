@@ -51,9 +51,10 @@ export function readOutline(document) {
   const rows = [];
   document.slides.forEach((slide, slideIndex) => {
     const base = `slides.${slideIndex}`;
-    const title = typeof slide?.title === "string" ? slide.title : "";
+    // FA-10: a title or subtitle may be TextRun[]: the row shows its plain text and is edited as runs elsewhere (a text row writes a string).
+    const title = flatten(slide?.title);
     rows.push({ key: `slide:${base}`, kind: "slide", slideIndex, level: 0, text: title, path: `${base}.title`, editable: slide?.title === undefined || typeof slide.title === "string", hidden: slide?.hidden === true, section: typeof slide?.section === "string" ? slide.section : undefined, id: slide?.id });
-    if (typeof slide?.subtitle === "string") rows.push({ key: `subtitle:${base}.subtitle`, kind: "subtitle", slideIndex, level: 1, text: slide.subtitle, path: `${base}.subtitle`, editable: true });
+    if (typeof slide?.subtitle === "string" || Array.isArray(slide?.subtitle)) rows.push({ key: `subtitle:${base}.subtitle`, kind: "subtitle", slideIndex, level: 1, text: flatten(slide.subtitle), path: `${base}.subtitle`, editable: typeof slide.subtitle === "string" });
     if (!isObject(slide)) return;
     walkPayload(slide, base, slideIndex, rows);
     visitContentPayloads(slide, base, (payload, path) => walkPayload(payload, path, slideIndex, rows));

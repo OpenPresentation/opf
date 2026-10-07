@@ -18,14 +18,17 @@ import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
 import { populateLayoutPlaceholders } from "./layout-placeholders.js";
 import { blockConversionTargets, prepareBlockConversion } from "./block-convert.js";
 
-/** The schema's DimensionPreset values (RR-41), the values of the slide-sizes switch. */
-export const SLIDE_SIZE_PRESETS = Object.freeze(["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"]);
+/** The schema's DimensionPreset values (RR-41, FA-13: with the social-feed ratios), the values of the slide-sizes switch. */
+export const SLIDE_SIZE_PRESETS = Object.freeze(["16:9", "4:3", "16:10", "1:1", "4:5", "9:16", "letter", "a4", "widescreen", "standard"]);
 
 // Slide size in inches per preset, as core's resolveCanvasDimensions composes it (for picker labels).
 const SLIDE_SIZE_LABELS = Object.freeze({
   "16:9": "16:9 (13.33 x 7.5 in)",
   "4:3": "4:3 (10 x 7.5 in)",
   "16:10": "16:10 (10 x 6.25 in)",
+  "1:1": "1:1 square (7.5 x 7.5 in)",
+  "4:5": "4:5 portrait (7.5 x 9.375 in)",
+  "9:16": "9:16 portrait (7.5 x 13.33 in)",
   letter: "Letter (11 x 8.5 in)",
   a4: "A4 (11.69 x 8.27 in)",
   widescreen: "Widescreen (13.33 x 7.5 in)",
@@ -213,12 +216,8 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
     const own = document.design?.dimensions;
     // {preset} alone is the same size as the bare preset string.
     const sameSize = own && typeof own === "object" && !Array.isArray(own) && own.preset === value && Object.keys(own).length === 1;
+    // A slide's design cannot set dimensions (FA-07), so no slide can shadow the deck's size.
     patches = sameSize ? [] : designPatches(document, [], { dimensions: value });
-    shadowed = shadowedSlides(document, ["dimensions"]);
-    if (options.clearSlideOverrides) {
-      for (const index of shadowed) patches.push({ op: "remove", path: opfPathToJsonPointer(["slides", String(index), "design", "dimensions"]) });
-      shadowed = [];
-    }
   } else if (dimension === "purposes") {
     // A catalog id, free-form goal text (no id check: any goal is valid) or an inline Purpose object; the schema validates it.
     if (typeof value !== "string" && !(value && typeof value === "object" && !Array.isArray(value)))
@@ -252,7 +251,7 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
       throw fail("path-slide-mismatch", "options.path is not on the slide named by options.slideIndex.", { slideIndex, path: options.path });
     const chart = owner && getValueAtPath(document, [...owner, "chart"]);
     if (!chart || typeof chart !== "object") throw fail("chart-not-found", "This slide has no chart to switch. Insert a chart block first.", { slideIndex, path: options.path });
-    patches = [...catalogRecordPatches(document, dimension, options), ...(chart.type === value ? [] : [...createValuePatch(document, [...owner, "chart", "type"], value), ...staleMappingPatches(document, owner, chart, value)])];
+    patches = [...catalogRecordPatches(document, dimension, options), ...(chart.type === value ? [] : [...createValuePatch(document, [...owner, "chart", "type"], value), ...staleMappingPatches(document, owner, chart, value), ...staleComboPatches(document, owner, chart, value)])];
   } else if (dimension === "blocks") {
     if (options.path === undefined) throw fail("missing-path", "Choose the block to replace with options.path.");
     // convert: true moves the block's own text into the new kind (block-convert.js) instead of replacing it.
@@ -289,7 +288,8 @@ export function prepareDimensionSwitch(document, dimension, value, options = {})
       if (options.bundle !== false) {
         // The gallery's theme snippet writes the whole bundle, so an explicit deck choice
         // does not keep the previous theme's fonts, colors or background.
-        for (const key of ["colorScheme", "fontScheme", "background", "dimensions"]) if (record[key] !== undefined) entries[key] = record[key];
+        // A slide's design cannot set dimensions (a PPTX has one slide size), so only a deck-scope switch writes the theme's.
+        for (const key of ["colorScheme", "fontScheme", "background", ...(scopeIndex === undefined ? ["dimensions"] : [])]) if (record[key] !== undefined) entries[key] = record[key];
       }
       patches = catalogRecordPatches(document, dimension, options);
     } else if (dimension === "color-schemes" || dimension === "font-schemes") {
@@ -367,7 +367,7 @@ export function switchDimension(editor, dimension, value, options = {}) {
 
 // --- options for pickers and current values ---------------------------------------------------
 
-const labelOf = (record) => record.label ?? record.name ?? record.id;
+const labelOf = (record) => record.name ?? record.id;
 
 /**
  * The values a picker can offer for a catalog-backed dimension, in document order: the document's
@@ -393,6 +393,7 @@ export function listSwitchOptions(document, dimension, options = {}) {
 
 const SINGLE_SERIES_ONLY = new Set(["pieChart", "doughnutChart", "funnelChart", "treemapChart", "waterfallChart"]);
 const MULTI_SERIES_CAPABLE = new Set(["barChart", "lineChart", "areaChart", "radarChart"]);
+const STACKED_GROUPINGS = new Set(["stacked", "percentStacked"]);
 const DISTRIBUTION_ELEMENTS = new Set(["histogramChart", "boxWhiskerChart", "mapChart"]);
 
 // RR-54: `mapping.x` names the X column of an XY chart; a type without an X axis ignores it (core warns chart-mapping-adapted). Switching to such a
@@ -404,6 +405,20 @@ function staleMappingPatches(document, owner, chart, type) {
   const { x: _x, ...rest } = mapping;
   const parts = [...owner, "chart", "mapping"];
   return Object.keys(rest).length ? createValuePatch(document, parts, rest) : [{ op: "remove", path: opfPathToJsonPointer(parts) }];
+}
+
+// FA-15: `line`, `secondaryAxis` and the secondary axis title belong to combo charts; any other type ignores them (core warns
+// chart-option-adapted). Switching away from combo removes them, and an `axisTitles` left empty.
+function staleComboPatches(document, owner, chart, type) {
+  if (typeof core.chartOptionTarget !== "function" || core.chartOptionTarget(type)?.kind === "combo") return [];
+  const parts = [...owner, "chart"];
+  const patches = ["line", "secondaryAxis"].filter((key) => chart[key] !== undefined).map((key) => ({ op: "remove", path: opfPathToJsonPointer([...parts, key]) }));
+  const titles = chart.axisTitles;
+  if (titles && typeof titles === "object" && !Array.isArray(titles) && titles.secondary !== undefined) {
+    const { secondary: _secondary, ...rest } = titles;
+    patches.push(Object.keys(rest).length ? { op: "remove", path: opfPathToJsonPointer([...parts, "axisTitles", "secondary"]) } : { op: "remove", path: opfPathToJsonPointer([...parts, "axisTitles"]) });
+  }
+  return patches;
 }
 
 function chartDataShape(chart, document) {
@@ -422,7 +437,8 @@ function chartDataShape(chart, document) {
  * Chart types the chart's inline data can use as it is, from the chartTypes catalog: simple,
  * non-geographic, non-distribution types whose series count fits the data (the first column labels
  * the categories and each further column is a series; a type with N series needs exactly N value
- * columns; column, bar, line, area and radar take any number). Data that is read from
+ * columns, except that a stacked or percent-stacked type and a combination such as combo take N or more;
+ * column, bar, line, area and radar take any number). Data that is read from
  * an external source returns every simple type. This is data-shape compatibility, not a claim that
  * an engine draws the type. `path` or `slideIndex` picks the chart (default: the slide's first).
  * Each entry has `current: true` for the chart's present type, which is always listed.
@@ -438,9 +454,17 @@ export function compatibleChartTypes(document, options = {}) {
     const record = option.record;
     const element = record.mappings?.openxml?.element;
     const current = option.id === chart.type;
-    const simple = record.complexity === "simple" && record.mappings?.openxml?.composition !== "mixed" && !DISTRIBUTION_ELEMENTS.has(element);
+    const simple = record.complexity === "simple" && !DISTRIBUTION_ELEMENTS.has(element);
+    // A combination (composition "mixed", the FA-15 combo chart) needs at least its series count, like a stacked type.
+    const atLeast = STACKED_GROUPINGS.has(record.mappings?.openxml?.grouping) || record.mappings?.openxml?.composition === "mixed";
     const seriesOk =
-      !shape || !record.series || (record.series > 1 ? record.series === shape.series : shape.series === 1 || (MULTI_SERIES_CAPABLE.has(element) && !SINGLE_SERIES_ONLY.has(element)));
+      !shape ||
+      !record.series ||
+      (record.series > 1
+        ? atLeast
+          ? shape.series >= record.series
+          : record.series === shape.series
+        : shape.series === 1 || (MULTI_SERIES_CAPABLE.has(element) && !SINGLE_SERIES_ONLY.has(element)));
     if (current || (simple && seriesOk)) result.push({ id: option.id, label: option.label, current, record });
   }
   return result;
@@ -468,15 +492,12 @@ export function currentSwitchValue(document, dimension, options = {}) {
   if (dimension === "slide-sizes") {
     // The size the deck composes at: its own design.dimensions, else the theme's; a {preset} object reads as its preset.
     // A custom size (inches without a preset) reads as the object itself. Unset reads as undefined (composed as widescreen).
-    const own = design("dimensions");
-    let size = own.value;
-    let scope = own.scope;
+    let size = document.design?.dimensions;
     if (size === undefined) {
-      const themeId = idOf(design("theme").value);
+      const themeId = idOf(document.design?.theme);
       size = themeId ? findCatalogRecord(document, "themes", themeId, {})?.dimensions : undefined;
-      scope = "deck";
     }
-    return { value: size && typeof size === "object" && !Array.isArray(size) && Object.keys(size).length === 1 && size.preset ? size.preset : size, scope };
+    return { value: size && typeof size === "object" && !Array.isArray(size) && Object.keys(size).length === 1 && size.preset ? size.preset : size, scope: "deck" };
   }
   if (dimension === "purposes") {
     // A catalog id or goal text reads as itself, a Purpose object as its id (else the object).

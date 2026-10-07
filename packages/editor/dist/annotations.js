@@ -14,7 +14,8 @@ import * as opfCore from "@openpresentation/opf";
 export const CAPTION_POSITIONS = Object.freeze(["below", "above"]);
 export const CAPTION_ALIGNMENTS = Object.freeze(["left", "center", "right"]);
 export const CAPTIONABLE_FIELDS = Object.freeze(["image", "chart", "table", "video"]);
-const TEXT_FIELDS = ["text", "bullets", "items"];
+// Fields whose runs can carry a marker: the slide heading group (FA-10) plus text, quote text, bullets and items.
+const TEXT_FIELDS = ["title", "subtitle", "tag", "text", "bullets", "items"];
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const clone = (value) => structuredClone(value);
@@ -206,7 +207,7 @@ export function runAt(document, runPath) {
   const arrayParts = parts.slice(0, -1), index = Number(parts[parts.length - 1]);
   const runs = getValueAtPath(document, arrayParts);
   const field = [...arrayParts].reverse().find((segment) => TEXT_FIELDS.includes(segment));
-  if (!Array.isArray(runs) || !field || !(index in runs)) throw fail("invalid-path", `${parts.join(".")} is not a run of a text, bullets or items payload.`);
+  if (!Array.isArray(runs) || !field || !(index in runs)) throw fail("invalid-path", `${parts.join(".")} is not a run of a title, subtitle, tag, text, bullets or items field.`);
   const run = runs[index];
   if (typeof run !== "string" && !(isObject(run) && typeof run.text === "string")) throw fail("invalid-path", `${parts.join(".")} is not a text run.`);
   return { parts: arrayParts, index, run };

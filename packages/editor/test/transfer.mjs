@@ -197,6 +197,14 @@ assert.equal(
   galleryItemUrl("https://www.pptx.gallery/blocks/pitch-deck-intro"),
   "https://www.pptx.gallery/api/blocks.json#opf-item=pitch-deck-intro",
 );
+// FA-07: inserted slides freeze the source deck's design but never its size (a slide's design cannot set dimensions).
+{
+  const source = { name: "Source", design: { theme: "minimal", dimensions: "4:3" }, slides: [{ id: "wide", title: "Sized deck" }] };
+  const target = { name: "Target", design: { theme: "minimal", dimensions: "letter" }, slides: [{ id: "host", title: "Host" }] };
+  const inserted = prepareOpfImport(target, parseOpfTransfer(JSON.stringify(source)), { mode: "insert", slideIndex: 0 }).document;
+  assert.equal(inserted.design.dimensions, "letter");
+  for (const slide of inserted.slides) assert.equal(slide.design?.dimensions, undefined, "no slide carries dimensions");
+}
 console.log(
   "Transfer: clipboard formats, code fences, fragments, collision-safe insertion, design/assets, undo and explicit gallery fetches passed.",
 );

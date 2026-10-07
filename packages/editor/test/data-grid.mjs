@@ -134,12 +134,16 @@ const refuses = (editor, name, action, code) => {
   assert.deepEqual(grid.resolveDataGridTarget(document, "/slides/0/blocks/1/table/rows/0/0"), { kind: "table", path: "slides.0.blocks.1.table" });
   assert.equal(grid.resolveDataGridTarget(document, "slides.0.title"), undefined);
   assert.equal(grid.resolveDataGridTarget(document, "slides.0.blocks.0"), undefined);
-  const sourced = deck();
-  sourced.slides[0].blocks[0] = { chart: { type: "column", data: { src: "asset:rev" } } };
-  const target = grid.resolveDataGridTarget(sourced, "slides.0.blocks.0.chart");
+  // A chart that shows a dataset the document does not hold has no grid; a data source by file or asset is not part of the format.
+  const missing = deck();
+  missing.slides[0].blocks[0] = { chart: { type: "column", data: { dataset: "gone" } } };
+  const target = grid.resolveDataGridTarget(missing, "slides.0.blocks.0.chart");
   assert.equal(target.editable, false);
-  assert.match(target.reason, /source/);
-  assert.throws(() => grid.describeDataGrid(sourced, "slides.0.blocks.0.chart"), (error) => error.code === "chart-data-source");
+  assert.match(target.reason, /which the document does not hold/);
+  assert.throws(() => grid.describeDataGrid(missing, "slides.0.blocks.0.chart"), (error) => error.code === "dataset-unavailable");
+  const loose = deck();
+  loose.slides[0].blocks[0] = { chart: { type: "column", data: { src: "asset:rev" } } };
+  assert.throws(() => grid.describeDataGrid(loose, "slides.0.blocks.0.chart"), (error) => error.code === "grid-target-not-found" && /no inline columns and rows/.test(error.message));
   assert.throws(() => grid.describeDataGrid(document, "slides.0.title"), (error) => error.code === "grid-target-not-found");
 
   const model = grid.describeDataGrid(document, C);

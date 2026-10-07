@@ -19,8 +19,10 @@ function range(value, start, end, allowEmpty) {
   if (!boundaries.has(start) || !boundaries.has(end)) throw new RangeError('Text ranges must end at whole grapheme boundaries.');
   return runs(value);
 }
-const booleans = ['bold','italic','underline','strikethrough','superscript','subscript'];
-const strings = ['color','fontFamily','link'];
+const booleans = ['bold','italic','underline','strikethrough','superscript','subscript','code'];
+const strings = ['color','fontFamily','link','lang'];
+// TextRun.lang is a BCP-47 tag (core schema pattern).
+const languageTag = /^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$/;
 function checkedFormat(format) {
   if (!format || typeof format !== 'object' || Array.isArray(format)) throw new TypeError('Expected a run formatting object.');
   for (const [key,value] of Object.entries(format)) {
@@ -29,6 +31,7 @@ function checkedFormat(format) {
     if (booleans.includes(key) && typeof value !== 'boolean' || strings.includes(key) && typeof value !== 'string' || key === 'fontSize' && (!Number.isFinite(value) || value <= 0))
       throw new TypeError(`Invalid run style: ${key}`);
   }
+  if (typeof format.lang === 'string' && !languageTag.test(format.lang)) throw new TypeError('Use a BCP-47 language tag such as fr-FR or ja-JP.');
   if (format.superscript && format.subscript) throw new TypeError('Choose superscript or subscript, not both.');
   return {...format, ...(format.superscript ? {subscript:false} : {}), ...(format.subscript ? {superscript:false} : {})};
 }

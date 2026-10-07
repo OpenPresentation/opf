@@ -23,7 +23,7 @@ function resolveCompositionOptions(document, slideIndex, { onDiagnostic, ...opti
       const fontPath = slide.design?.fontScheme !== undefined ? `slides.${slideIndex}.design.fontScheme` : document.design?.fontScheme !== undefined ? "design.fontScheme" : slide.design?.theme !== undefined ? `slides.${slideIndex}.design.theme` : "design.theme";
       const { scheme: fontScheme, diagnostic } = resolveFontSchemeReference(reference, id => document.catalogs?.fontSchemes?.records?.find(record=>record.id===id) ?? bundledCatalogs.fontSchemes.find(record=>record.id===id), fontPath);
       if (diagnostic) onDiagnostic?.(diagnostic);
-      return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), contentAlignment:slide.design?.contentAlignment??document.design?.contentAlignment, titleAlignment:slide.design?.titleAlignment??document.design?.titleAlignment, contentBox:slide.design?.contentBox??document.design?.contentBox, presentation:document, ...options, layout, slideIndex };
+      return { ...resolveCanvasDimensions(slide.design?.dimensions ?? document.design?.dimensions ?? theme?.dimensions), fonts:resolveFontFamilies(fontScheme), presentation:document, ...options, layout, slideIndex };
 }
 
 /**

@@ -33,10 +33,11 @@ for (const [dimension, kind] of [
   assert.equal(options.length, catalogs.fontSchemes.length + 2);
   assert.deepEqual(listSwitchOptions({}, "blocks").map((option) => option.id), ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group", "image", "video"]);
   assert.deepEqual(listSwitchOptions({}, "backgrounds"), [], "free-form dimensions have no catalog");
-  // RR-41: the slide sizes are the schema's seven presets, each labelled with its size in inches.
+  // RR-41: the slide sizes are the schema's ten presets, each labelled with its size in inches.
   const sizes = listSwitchOptions({}, "slide-sizes");
   assert.deepEqual(sizes.map((option) => option.id), [...SLIDE_SIZE_PRESETS]);
-  assert.deepEqual(sizes.map((option) => option.id), ["16:9", "4:3", "16:10", "letter", "a4", "widescreen", "standard"]);
+  assert.deepEqual(sizes.map((option) => option.id), ["16:9", "4:3", "16:10", "1:1", "4:5", "9:16", "letter", "a4", "widescreen", "standard"]);
+  assert.equal(sizes.find((option) => option.id === "4:5").label, "4:5 portrait (7.5 x 9.375 in)");
   assert.equal(sizes.find((option) => option.id === "a4").label, "A4 (11.69 x 8.27 in)");
   assert.ok(sizes.every((option) => /\d in\)$/.test(option.label)));
   assert.deepEqual(catalogs.purposes.map((record) => record.id), ["inform", "decide", "align", "persuade", "educate", "report", "pitch", "sell", "plan"]);
@@ -50,15 +51,17 @@ for (const [dimension, kind] of [
   const ids = (document, options) => compatibleChartTypes(document, { slideIndex: 0, ...options }).map((entry) => entry.id);
   const one = ids(chart(data("Revenue")));
   for (const expected of ["column", "bar", "line", "area", "pie", "doughnut", "radar", "funnel", "treemap", "waterfall"]) assert.ok(one.includes(expected), `${expected} suits one series`);
-  for (const rejected of ["stacked-column-3x", "scatter", "dot-plot", "sparkline", "histogram", "world", "box-and-whisker", "bullet-bar"]) assert.ok(!one.includes(rejected), `${rejected} does not suit one series`);
+  for (const rejected of ["stacked-column", "scatter", "histogram", "world", "box-and-whisker"]) assert.ok(!one.includes(rejected), `${rejected} does not suit one series`);
   const two = ids(chart(data("Revenue", "Cost")));
-  assert.ok(two.includes("line") && two.includes("column") && two.includes("clustered-column") && two.includes("stacked-column-2x") && two.includes("scatter"));
-  assert.ok(!two.includes("pie") && !two.includes("doughnut") && !two.includes("stacked-column-3x"), "single-series types and other series counts are excluded");
+  assert.ok(two.includes("line") && two.includes("column") && two.includes("stacked-column") && two.includes("stacked-line") && two.includes("scatter"));
+  assert.ok(!two.includes("pie") && !two.includes("doughnut"), "single-series types are excluded");
   const three = ids(chart(data("A", "B", "C")));
-  assert.ok(three.includes("stacked-column-3x") && three.includes("line-3x") && !three.includes("stacked-column-2x"));
+  assert.ok(three.includes("stacked-column") && three.includes("100pct-stacked-area") && !three.includes("scatter"), "a stacked type takes any series count from two up; scatter needs exactly two");
+  const five = ids(chart(data("A", "B", "C", "D", "E")));
+  assert.ok(five.includes("stacked-bar") && !five.includes("scatter"));
   // The current type is always listed and flagged, even when the data would not suit it.
-  const current = compatibleChartTypes(chart(data("Revenue"), "stacked-column-3x"), { slideIndex: 0 });
-  assert.deepEqual(current.filter((entry) => entry.current).map((entry) => entry.id), ["stacked-column-3x"]);
+  const current = compatibleChartTypes(chart(data("Revenue"), "stacked-column"), { slideIndex: 0 });
+  assert.deepEqual(current.filter((entry) => entry.current).map((entry) => entry.id), ["stacked-column"]);
   // Every offered type is a valid switch for that chart.
   for (const id of one) {
     const editor = createEditorSession(chart(data("Revenue")), { rejectInvalid: true });
@@ -88,7 +91,7 @@ for (const [dimension, kind] of [
   assert.deepEqual(at("languages"), { value: "english", scope: "deck" });
   assert.deepEqual(at("narratives"), { value: "problem-solution", scope: "deck" });
   assert.deepEqual(at("tones"), { value: "formal", scope: "deck" });
-  assert.deepEqual(at("audiences"), { value: ["executives"], scope: "deck" });
+  assert.deepEqual(at("audiences"), { value: ["executive"], scope: "deck" });
   assert.deepEqual(at("backgrounds"), { scope: "deck" });
   assert.deepEqual(at("backgrounds", { slideIndex: 1 }), { value: "light1", scope: "slide" });
   assert.deepEqual(at("charts", { slideIndex: 1 }), { value: "column", scope: "slide" });
@@ -105,9 +108,8 @@ for (const [dimension, kind] of [
   assert.deepEqual(currentSwitchValue(sized("a4"), "slide-sizes"), { value: "a4", scope: "deck" });
   assert.deepEqual(currentSwitchValue(sized({ preset: "letter" }), "slide-sizes"), { value: "letter", scope: "deck" }, "{preset} reads as the preset");
   assert.deepEqual(currentSwitchValue(sized({ preset: "a4", widthInches: 12 }), "slide-sizes").value, { preset: "a4", widthInches: 12 }, "a custom size reads as the object");
-  const own = sized("4:3");
-  own.slides = [{ ...own.slides[0] }, { ...own.slides[1], design: { dimensions: "letter" } }];
-  assert.deepEqual(currentSwitchValue(own, "slide-sizes", { slideIndex: 1 }), { value: "letter", scope: "slide" });
+  // A slide cannot set its own size (FA-07): a slideIndex reads the deck's size.
+  assert.deepEqual(currentSwitchValue(sized("4:3"), "slide-sizes", { slideIndex: 1 }), { value: "4:3", scope: "deck" });
   assert.deepEqual(currentSwitchValue({ slides: [] }, "slide-sizes"), { value: undefined, scope: "deck" }, "unset");
   assert.deepEqual(at("purposes"), { value: undefined, scope: "deck" });
   assert.deepEqual(currentSwitchValue({ ...document, purpose: "decide" }, "purposes"), { value: "decide", scope: "deck" });

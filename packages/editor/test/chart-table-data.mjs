@@ -487,8 +487,8 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   // chart type compatibility reads the resolved data (dataset, fields and mapping).
   const ids = (path) => switches.compatibleChartTypes(editor.document, { path }).map((entry) => entry.id);
   assert.ok(ids("slides.0.blocks.1").includes("pie"), "a dataset chart with fields that select one series suits a pie");
-  assert.ok(ids("slides.0.blocks.5").includes("pie") && !ids("slides.0.blocks.5").includes("stacked-column-3x"), "a mapping that plots one series suits a pie");
-  assert.ok(ids("slides.0.blocks.0").includes("clustered-column"), "inline DataColumn data suits two series");
+  assert.ok(ids("slides.0.blocks.5").includes("pie") && !ids("slides.0.blocks.5").includes("stacked-column"), "a mapping that plots one series suits a pie");
+  assert.ok(ids("slides.0.blocks.0").includes("stacked-column"), "inline DataColumn data suits two series");
 
   // Table style reads of a dataset table are refused with a reason; the panel treats that as "no inline table".
   assert.throws(() => tables.readTableStyle(editor.document, T_DATASET), (error) => error.code === "table-dataset-backed");

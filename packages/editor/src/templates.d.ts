@@ -103,8 +103,21 @@ export interface TemplateFill {
 }
 export declare function createTemplateFill(editor: EditorSession, options?: TemplateFillOptions): TemplateFill;
 
-/** `{{id}}`, or `{{id|format}}`. */
+/** The token for a declared variable id or a built-in name such as `speaker.name`. */
 export declare function variableToken(id: string, format?: string): string;
+/** One built-in variable of a document (core `listBuiltinVariables`). */
+export interface BuiltinInfo {
+  /** Dotted name, as written inside `{{...}}`. */
+  name: string;
+  kind: "text" | "image" | "list";
+  label: string;
+  /** The source value, when the document has one. */
+  value?: unknown;
+  available: boolean;
+  uses: { id: string; path: string; form: "token" | "reference" }[];
+}
+/** The document's built-in variables, read-only; empty on a core without built-ins. */
+export declare function listBuiltins(document: unknown): BuiltinInfo[];
 export declare function suggestVariableId(document: unknown, label?: string): string;
 /** Declare a variable as one undoable edit. */
 export declare function declareVariable(editor: EditorSession, id: string, declaration: string | Record<string, unknown>, meta?: Record<string, unknown>): unknown;

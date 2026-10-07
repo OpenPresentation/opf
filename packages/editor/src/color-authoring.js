@@ -6,7 +6,7 @@ const SCHEME_SLOTS = new Set([
 ]);
 
 const ROLE_KEYS = new Set([
-  "primary", "secondary", "accent", "background", "surface", "text", "textSecondary",
+  "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary",
 ]);
 
 /** Whether a toolbar-authored text color matches documented ColorRef / TextRun forms. */

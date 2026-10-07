@@ -31,6 +31,7 @@ const source = {
   slides: [
     { id: 'column', title: 'Column', blocks: [{ chart: { type: 'column', data } }, { text: 'Notes' }] },
     { id: 'pie', title: 'Pie', blocks: [{ chart: { type: 'pie', data } }] },
+    { id: 'combo', title: 'Combo', blocks: [{ chart: { type: 'combo', data: { columns: ['Quarter', 'Revenue', { name: 'Margin', format: '0%' }], rows: [['Q1', 10, 0.3], ['Q2', 20, 0.34], ['Q3', 15, 0.29]] } } }] },
   ],
 };
 
@@ -115,6 +116,21 @@ try {
   await step('label content', () => panel.locator('[data-opf-chart-option="dataLabels.content.category"]').check(), current => JSON.stringify(chartOf(current).dataLabels?.content) === '["category","value"]');
   mark('only supported label positions and contents are offered');
 
+  // FA-14: the highlight lists one checkbox per series and per category; each commits one undoable change and the preview redraws.
+  assert.deepEqual(await panel.locator('[data-choices="series"] input').evaluateAll(inputs => inputs.map(input => input.value)), ['North', 'South']);
+  assert.deepEqual(await panel.locator('[data-choices="categories"] input').evaluateAll(inputs => inputs.map(input => input.value)), ['Q1', 'Q2', 'Q3']);
+  await step('highlight a series', () => field('Highlight series North').check(), current => JSON.stringify(chartOf(current).highlight) === '{"series":["North"]}');
+  await step('highlight a category', () => field('Highlight category Q2').check(), current => JSON.stringify(chartOf(current).highlight) === '{"categories":["Q2"]}');
+  await field('Highlight series South').check();
+  await waitDoc(current => JSON.stringify(chartOf(current).highlight) === '{"series":["South"]}', 'highlight for the follow-up step');
+  await field('Highlight category Q3').check();
+  await waitDoc(current => JSON.stringify(chartOf(current).highlight) === '{"series":["South"],"categories":["Q3"]}', 'both parts together');
+  await field('Highlight series South').uncheck();
+  await field('Highlight category Q3').uncheck();
+  await waitDoc(current => chartOf(current).highlight === undefined, 'clearing both lists removes the field');
+  await settle();
+  mark('the highlight lists series and categories');
+
   // A pie offers percent and a different position set, and no axis titles.
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.0.chart"]').waitFor().catch(() => {});
   await page.locator('#slide-list button').nth(1).click();
@@ -122,6 +138,8 @@ try {
   await panel.waitFor({ state: 'visible' });
   assert.equal(await panel.locator('[data-group="axisTitles"]').isHidden(), true, 'a pie has no axis titles');
   assert.equal(await panel.locator('[data-opf-chart-option="dataLabels.content.percent"]').evaluate(input => input.closest('label').hidden), false, 'a pie offers percent');
+  assert.equal(await panel.locator('[data-part="series"]').isHidden(), true, 'a pie highlights slices, not series');
+  assert.equal(await panel.locator('[data-part="categories"]').isVisible(), true, 'a pie highlights categories');
   mark('the panel follows the chart type');
 
   // The panel follows Undo done elsewhere.
@@ -134,6 +152,31 @@ try {
   await waitDoc(current => chartOf(current).legend === undefined, 'legend undone');
   assert.equal(await field('Legend').inputValue(), 'default', 'the control follows Undo');
   mark('the panel follows Undo');
+
+  // FA-15: a combo chart lists its series; a line can move to the secondary axis, which brings the secondary axis title.
+  await page.locator('#slide-list button').nth(2).click();
+  await page.locator('#preview [data-canvas-target][data-opf-path="slides.2.blocks.0.chart"]').click();
+  await panel.waitFor({ state: 'visible' });
+  assert.equal(await panel.locator('[data-group="combo"]').isHidden(), false, 'a combo chart shows its series');
+  assert.deepEqual(await panel.locator('[data-opf-chart-option="line"]').evaluateAll(inputs => inputs.map(input => [input.value, input.checked])), [['Revenue', false], ['Margin', true]], 'the last series is the line');
+  assert.equal(await panel.locator('[data-axis="secondary"]').isHidden(), true, 'no secondary axis title without a secondary axis');
+  const comboOf = current => current.slides[2].blocks[0].chart;
+  const before = await doc();
+  await step('secondary axis', () => panel.getByLabel('Margin on the secondary axis', { exact: true }).check(), current => JSON.stringify(comboOf(current).secondaryAxis) === '["Margin"]');
+  await panel.getByLabel('Margin on the secondary axis', { exact: true }).check();
+  await waitDoc(current => JSON.stringify(comboOf(current).secondaryAxis) === '["Margin"]', 'secondary axis for the title step');
+  await settle();
+  assert.equal(await panel.locator('[data-axis="secondary"]').isHidden(), false, 'the secondary axis title is offered');
+  await step('secondary axis title', async () => { await field('Secondary axis title').fill('Margin'); await field('Secondary axis title').press('Enter'); }, current => comboOf(current).axisTitles?.secondary === 'Margin');
+  await button('Undo').click();
+  await waitDoc(current => JSON.stringify(current) === JSON.stringify(before), 'combo reset');
+  await settle();
+  assert.equal(await panel.locator('[data-group="combo"]').isHidden(), false);
+  mark('combo series lines and the secondary axis');
+  await page.locator('#slide-list button').nth(0).click();
+  await page.locator('#preview [data-canvas-target][data-opf-path="slides.0.blocks.0.chart"]').click();
+  await panel.waitFor({ state: 'visible' });
+  assert.equal(await panel.locator('[data-group="combo"]').isHidden(), true, 'a column chart has no combo series');
 
   // Selecting something that is not a chart hides the panel again.
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.0.title"]').click();

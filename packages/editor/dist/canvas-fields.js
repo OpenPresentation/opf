@@ -64,3 +64,31 @@ export function createCanvasDraft(document, path, value) {
     );
   return draft;
 }
+
+/** The progress states of a timeline event (`TimelineEvent.status`). */
+export const TIMELINE_STATUS_CHOICES = Object.freeze(["done", "current", "planned"]);
+/** The fixed choices of a form field, or undefined for free text: an event's `status` inside a timeline payload. */
+export function fieldChoices(field) {
+  const segments = splitOpfPath(field.path);
+  return segments.at(-1) === "status" && segments.at(-3) === "timeline"
+    ? TIMELINE_STATUS_CHOICES
+    : segments.at(-1) === "status" && segments.at(-3) === "events" && segments.at(-4) === "timeline"
+      ? TIMELINE_STATUS_CHOICES
+      : undefined;
+}
+/**
+ * A blank copy of `value`'s shape for the "Add" button: texts empty, numbers 0, booleans false, `type`, `mode` and
+ * `language` kept. A timeline event's `status` is left out, so a new event starts with no status instead of a copy.
+ */
+export function emptyLike(value, key = "") {
+  if (Array.isArray(value)) return value.map((child) => emptyLike(child));
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([name]) => name !== "status")
+        .map(([name, child]) => [name, emptyLike(child, name)]),
+    );
+  if (typeof value === "number") return 0;
+  if (typeof value === "boolean") return false;
+  return ["type", "mode", "language"].includes(key) ? value : "";
+}

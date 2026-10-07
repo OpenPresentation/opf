@@ -33,17 +33,17 @@ function measured(document, slideIndex = 0) {
   return families;
 }
 
-// Current pptx.gallery descriptor shape: string heading/body plus a code role.
+// Current pptx.gallery descriptor shape: family-name heading/body plus a code role.
 const gallery = await apply({
   $schema: "https://pptx.dev/schema/opf-font-scheme/v1",
   id: "team-mono",
   name: "Team Mono",
   heading: "Inter",
   body: "Inter",
-  code: { family: "JetBrains Mono", weight: 400, bogus: true },
+  code: "JetBrains Mono",
   accent: "Georgia",
   type: "sans-serif",
-  app: "Google Slides",
+  app: "google-slides",
   languageFamily: "latin",
   headingStack: '"Inter", sans-serif',
 });
@@ -54,9 +54,9 @@ assert.deepEqual(attached(gallery), {
   major: "Inter",
   minor: "Inter",
   type: "sans-serif",
-  app: "Google Slides",
+  app: "google-slides",
   languageFamily: "latin",
-  code: { family: "JetBrains Mono", weight: 400 },
+  code: "JetBrains Mono",
 });
 // accent is not part of the font-scheme record schema, so it is not attached.
 assert.equal(validatePresentation(gallery).valid, true);
@@ -64,13 +64,13 @@ const galleryFamilies = measured(gallery);
 assert.ok(galleryFamilies.has("JetBrains Mono"), "code keeps the gallery role");
 assert.ok(!galleryFamilies.has("Roboto Mono"), "no Roboto Mono fallback");
 
-// Font-object heading/body map onto the pair only; code is kept as a role.
+// String heading/body map onto the pair only; code is kept as a role.
 const roles = await apply(
   {
     id: "role-scheme",
     name: "Role scheme",
-    heading: { family: "Source Serif 4", weight: 700 },
-    body: { family: "Source Sans 3" },
+    heading: "Source Serif 4",
+    body: "Source Sans 3",
     code: "Source Code Pro",
   },
   [textSlide, codeSlide],
@@ -81,7 +81,7 @@ assert.deepEqual(attached(roles), {
   name: "Role scheme",
   major: "Source Serif 4",
   minor: "Source Sans 3",
-  code: { family: "Source Code Pro" },
+  code: "Source Code Pro",
 });
 assert.equal(validatePresentation(roles).valid, true);
 assert.deepEqual([...measured(roles)].sort(), ["Source Sans 3", "Source Serif 4"]);

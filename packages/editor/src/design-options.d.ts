@@ -25,7 +25,7 @@ export declare const DESIGN_OPTIONS: readonly DesignOptionDescriptor[];
 export declare const LOGO_VARIANTS: readonly ["default", "light", "dark", "stacked", "stackedLight", "stackedDark", "icon", "iconLight", "iconDark", "wordmark", "wordmarkLight", "wordmarkDark"];
 export type LogoVariant = (typeof LOGO_VARIANTS)[number];
 /** Every field a header or footer zone can hold. */
-export declare const ZONE_FIELDS: readonly ["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "socials", "section"];
+export declare const ZONE_FIELDS: readonly ["logo", "text", "image", "slideNumber", "slideNumberFormat", "date", "dateFormat", "organization", "speaker", "socials", "section"];
 /** Date format tokens (English names). */
 export declare const DATE_FORMAT_TOKENS: readonly string[];
 export declare const HEADER_FOOTER_ZONES: readonly ["left", "center", "right"];
@@ -92,6 +92,8 @@ export interface HeaderFooterZoneFields {
   date?: boolean | string | null;
   dateFormat?: string | null;
   organization?: boolean | null;
+  /** The first speaker's name and title ("Ada Lovelace, CTO"). */
+  speaker?: boolean | null;
   socials?: boolean | null;
   section?: boolean | null;
 }
@@ -104,5 +106,5 @@ export declare function readHeaderFooterZone(document: unknown, which: "header" 
 export declare function headerFooterState(document: unknown, which: "header" | "footer", options?: Pick<DesignOptionOptions, "slideIndex">): { own: boolean; inherited: boolean; hidden: boolean };
 /** Whether a logo resolves for the slide: slide design, deck design, then the primary organization. */
 export declare function hasResolvableLogo(document: unknown, slideIndex: number): boolean;
-/** Settings that need content the document does not have: a logo (zones with `logo: true`, picture bullets), or an organization or its social profiles for zones that show them. */
+/** Settings that need content the document does not have: a logo (zones with `logo: true`, picture bullets), an organization or its social profiles, or a named speaker, for zones that show them. */
 export declare function designWarnings(document: unknown, slideIndex?: number): DesignWarning[];

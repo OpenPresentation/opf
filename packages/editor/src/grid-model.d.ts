@@ -136,7 +136,7 @@ export declare function chartColumnRoles(columnCount: number, chartType?: string
 /** The text a cell shows. */
 export declare function cellText(raw: unknown, kind: "chart" | "table", decimal?: "." | ","): string;
 /**
- * Find the data a path points at (`…chart`, `…chart.data`, `…table`). Throws `grid-target-not-found`, `table-not-found`, `chart-data-source` or
+ * Find the data a path points at (`…chart`, `…chart.data`, `…table`). Throws `grid-target-not-found`, `table-not-found` or
  * `dataset-unavailable`. For a chart or table that shows a shared dataset, `data` is the dataset, `dataParts` is `["datasets", id]` and `dataset`
  * says which columns `fields` selects (`indices`, into the dataset's own columns) and where the reference is (`refParts`).
  */

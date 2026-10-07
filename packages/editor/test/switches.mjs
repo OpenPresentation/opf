@@ -164,7 +164,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 // Gallery records: an item's own record is added inline in the same undoable transaction.
 {
   const editor = session();
-  const record = { id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter", code: { family: "JetBrains Mono" } };
+  const record = { id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter", code: "JetBrains Mono" };
   assert.throws(() => switchDimension(editor, "font-schemes", "team-mono"), (error) => error.code === "unknown-catalog-id");
   const change = switchDimension(editor, "font-schemes", "team-mono", { record });
   assert.deepEqual(change.patches.map((patch) => [patch.op, patch.path]), [["add", "/catalogs"], ["replace", "/design/fontScheme"]]);
@@ -208,6 +208,18 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.deepEqual(change.patches, [{ op: "replace", path: "/slides/1/blocks/1/chart/type", value: "area" }]);
   assert.deepEqual(editor.get("slides.1.blocks.1.chart.data"), document.slides[1].blocks[1].chart.data);
   assert.throws(() => switchDimension(editor, "charts", "area", { slideIndex: 0 }), (error) => error.code === "chart-not-found");
+}
+
+// FA-07: the root audience may be one inline Audience object; the document stays valid and a switch replaces it with catalog ids.
+{
+  const document = baseDeck();
+  document.audience = { id: "executive", attentionBudgetMinutes: 20 };
+  assert.equal(validatePresentation(document).valid, true);
+  assert.deepEqual(currentSwitchValue(document, "audiences"), { value: { id: "executive", attentionBudgetMinutes: 20 }, scope: "deck" });
+  const editor = session(document);
+  const change = switchDimension(editor, "audiences", ["investor"]);
+  assert.deepEqual(change.patches, [{ op: "replace", path: "/audience", value: ["investor"] }]);
+  assert.deepEqual(editor.get("audience"), ["investor"]);
 }
 
 // Backgrounds accept the schema's shorthand strings as well as objects.
@@ -294,7 +306,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.equal(fresh.get("slides.2.blocks.1.items.0"), "Changed since preview");
 }
 
-// Slide sizes (RR-41): each of the seven presets is one patch and one undo step, the shared composition
+// Slide sizes (RR-41): each of the ten presets is one patch and one undo step, the shared composition
 // and the SVG preview recompose at the new canvas, and undo restores the exact size.
 {
   const canvas = (document) => {
@@ -343,20 +355,13 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   // A theme's own size is what a document without design.dimensions has; the switch makes the choice explicit.
   const themed = session({ ...baseDeck(), design: { theme: "minimal" } });
   assert.deepEqual(currentSwitchValue(themed.document, "slide-sizes"), { value: "widescreen", scope: "deck" });
-  // A slide with its own size hides the deck switch: it is reported, and clearSlideOverrides joins the same transaction.
-  const shadow = baseDeck();
-  shadow.slides[1].design = { dimensions: "letter" };
-  const deck = session(shadow);
-  const shadowed = switchDimension(deck, "slide-sizes", "4:3");
-  assert.deepEqual(shadowed.shadowed, [1]);
-  const cleared = switchDimension(deck, "slide-sizes", "16:10", { clearSlideOverrides: true });
-  assert.deepEqual(cleared.patches, [
-    { op: "replace", path: "/design/dimensions", value: "16:10" },
-    { op: "remove", path: "/slides/1/design/dimensions" },
-  ]);
-  assert.deepEqual(cleared.shadowed, []);
-  assert.equal(deck.snapshot().undoDepth, 2);
-  assert.equal(deck.undo().document.slides[1].design.dimensions, "letter");
+  // A slide's design cannot set dimensions (FA-07): the deck switch is never shadowed, and a slide scope is refused.
+  const deck = session();
+  assert.deepEqual(switchDimension(deck, "slide-sizes", "4:3").shadowed, []);
+  assert.throws(() => switchDimension(deck, "slide-sizes", "16:10", { slideIndex: 1 }), (error) => error.code === "deck-scope-only");
+  // A slide-scope theme switch writes no dimensions into the slide's design (the deck's size stays the one size).
+  const slideTheme = switchDimension(session(), "themes", "classic", { slideIndex: 1 });
+  assert.equal(slideTheme.patches.some((patch) => /dimensions/.test(patch.path) || (patch.value && typeof patch.value === "object" && "dimensions" in patch.value)), false);
   // A theme switch still carries its own size and is a separate step from a slide-size switch.
   const bundle = session();
   switchDimension(bundle, "slide-sizes", "4:3");
@@ -414,7 +419,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("font-schemes", "", {}, "invalid-catalog-id");
   reject("themes", "no-such-theme", {}, "unknown-catalog-id");
   reject("narratives", "no-such-narrative", {}, "unknown-catalog-id");
-  reject("audiences", ["executives", "nobody"], {}, "unknown-catalog-id");
+  reject("audiences", ["executive", "nobody"], {}, "unknown-catalog-id");
   reject("audiences", [], {}, "invalid-catalog-id");
   reject("languages", "klingon-ish", {}, "unknown-catalog-id");
   reject("tones", "sarcastic", {}, "unknown-catalog-id");

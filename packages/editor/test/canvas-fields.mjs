@@ -54,3 +54,23 @@ assert.deepEqual(editor.document, original);
 console.log(
   "Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.",
 );
+
+// FA-11: a timeline event's status is a menu, and a new event does not copy the last event's status.
+{
+  const { fieldChoices, emptyLike, TIMELINE_STATUS_CHOICES } = await import("../dist/canvas-fields.js");
+  assert.deepEqual([...TIMELINE_STATUS_CHOICES], ["done", "current", "planned"]);
+  const shorthand = { timeline: [{ when: "Q1", what: "Pilot", status: "done" }] };
+  const object = { timeline: { name: "Plan", events: [{ what: "Pilot", status: "current" }] } };
+  for (const [slide, path] of [[shorthand, "slides.0.timeline"], [object, "slides.0.timeline"]]) {
+    const { fields } = getEditableFields(slide.timeline, path);
+    const status = fields.find((field) => field.path.endsWith("/status"));
+    assert.deepEqual(fieldChoices(status), ["done", "current", "planned"], path);
+    for (const other of fields.filter((field) => field !== status)) assert.equal(fieldChoices(other), undefined, other.path);
+  }
+  const inBlock = getEditableFields([{ what: "A", status: "planned" }], "slides.0.blocks.1.timeline");
+  assert.deepEqual(fieldChoices(inBlock.fields.find((field) => field.path.endsWith("/status"))), ["done", "current", "planned"]);
+  // A `status` elsewhere (not a timeline event) stays free text.
+  assert.equal(fieldChoices({ path: "/slides/0/status" }), undefined);
+  assert.deepEqual(emptyLike({ when: "Q1", what: "Pilot", description: "d", status: "done" }), { when: "", what: "", description: "" });
+  assert.deepEqual(emptyLike({ type: "bar", n: 3, ok: true, text: "x" }), { type: "bar", n: 0, ok: false, text: "" });
+}

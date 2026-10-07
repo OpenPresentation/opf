@@ -27,14 +27,15 @@ export function createRichTextInput(root, overlay, {path, value, getTarget, onIn
     const range=doc.createRange();range.setStart(node.firstChild,start);range.setEnd(node.firstChild,end);return range.getBoundingClientRect();
   }
   function boundaries() {
-    const result=[];
+    // A rich quote draws its quotation marks inside its first and last run (FA-10): they sit just outside the text, so their offsets clamp to its ends.
+    const result=[],total=richTextContent(current).length,clampOffset=offset=>Math.max(0,Math.min(total,offset));
     for(const node of fragments()) {
       if(!node.firstChild)continue;
       const start=Number(node.dataset.opfTextStart),text=node.textContent;
       for(const part of new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(text)) {
         const box=rect(node,part.index,part.index+part.segment.length),rtl=win.getComputedStyle(node).direction==='rtl';
-        result.push({offset:start+part.index,x:rtl?box.right:box.left,y:box.top,height:box.height,node});
-        result.push({offset:start+part.index+part.segment.length,x:rtl?box.left:box.right,y:box.top,height:box.height,node});
+        result.push({offset:clampOffset(start+part.index),x:rtl?box.right:box.left,y:box.top,height:box.height,node});
+        result.push({offset:clampOffset(start+part.index+part.segment.length),x:rtl?box.left:box.right,y:box.top,height:box.height,node});
       }
     }
     const target=getTarget(path),matrix=target?.getScreenCTM();

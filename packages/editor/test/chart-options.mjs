@@ -27,13 +27,15 @@ assert.equal(parseChartPath("slides.0.blocks.1.text"), undefined);
 assert.equal(parseChartPath("not a path ["), undefined);
 
 // The offered fields follow core's support table for every chart type.
-for (const type of ["column", "bar", "stacked-column-3x", "line", "area", "pie", "doughnut", "scatter", "radar", "histogram", "pareto", "waterfall", "funnel", "treemap", "box-and-whisker", "world"]) {
+for (const type of ["column", "bar", "stacked-column", "line", "area", "pie", "doughnut", "scatter", "radar", "histogram", "pareto", "waterfall", "funnel", "treemap", "box-and-whisker", "world"]) {
   const { fields } = readChartOptions({ type, data });
-  assert.deepEqual(fields, (({ axisTitles, legend, dataLabels }) => ({ axisTitles, legend, dataLabels }))(chartOptionSupport(chartOptionTarget(type))), `${type}: the fields are core's support table`);
+  assert.deepEqual(fields, (({ axisTitles, legend, dataLabels, highlight }) => ({ axisTitles, legend, dataLabels, highlight }))(chartOptionSupport(chartOptionTarget(type))), `${type}: the fields are core's support table`);
 }
 assert.deepEqual(readChartOptions({ type: "column", data }).state, {
-  axisTitles: { category: "", value: "" }, legend: "default",
+  alt: "", decorative: false,
+  axisTitles: { category: "", value: "", secondary: "" }, legend: "default",
   dataLabels: { on: false, explicit: false, content: ["value"], position: "auto", separator: ", " },
+  highlight: { series: [], categories: [] },
 });
 // A chart type outside the catalog offers everything.
 assert.equal(readChartOptions({ type: "mystery", data }).fields.dataLabels.positions.includes("outside-end"), true);
@@ -135,7 +137,7 @@ assert.equal(readChartOptions({ type: "treemap", data, dataLabels: false }).stat
   const doughnut = session("doughnut");
   setChartOptions(doughnut, C, { dataLabels: { content: ["percent"], position: "center" } });
   assert.deepEqual(doughnut.get(`${C}.dataLabels`), { content: ["percent"] }, "a doughnut has no label position choice");
-  const stacked = session("stacked-column-3x");
+  const stacked = session("stacked-column");
   setChartOptions(stacked, C, { dataLabels: { position: "outside-end" } });
   assert.equal(stacked.get(`${C}.dataLabels`), true, "a stacked column has no outside-end");
   const line = session("line");
