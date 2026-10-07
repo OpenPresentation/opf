@@ -60,23 +60,26 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # RR-57: from here the job has two lines of work that never touch each other's files, run as parallel steps
+      # (https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax, `background` and `wait`):
+      #   - `pnpm test` (the Test step below) starts in the background: it only reads the single build (every
+      #     `pnpm build` inside it is a scripts/reuse-build.mjs hit, OPF_REUSE_BUILD) and writes artifacts/checks;
+      #   - the packed and registry chain runs in the foreground, one step after the other, each step with its own log:
+      #     it writes artifacts/cli and its own temp directories, and its `pnpm build` calls are the same reuse hits.
+      # `wait: test` joins them; it fails the job when `pnpm test` failed, whatever the foreground steps did, and it always
+      # runs, so a foreground failure cannot leave `pnpm test` unreported or its logs unpreserved. Nothing here rebuilds
+      # or writes dist/, src/generated or a shared temp path; keep it so when adding a step to either line.
+      #
       # RR-46: the generated trackers are regenerated after merge (tracker-refresh.yml), so a pull request or a merge
       # queue run only warns about a stale one; main, tags and a local run fail (scripts/tracker-staleness.mjs).
       # RR-45 (opf#368, item 5): scripts/run-checks.mjs runs the root checks four at a time, one log per check
       # (artifacts/checks); a failing check's whole log is printed at the end and uploaded below.
       - name: Test
+        id: test
+        background: true
         run: pnpm test
         env:
           OPF_TRACKER_STALE: ${{ (github.event_name == 'pull_request' || github.event_name == 'merge_group') && 'warn' || 'fail' }}
-
-      - name: Preserve the check logs
-        if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: check-logs
-          path: artifacts/checks/*.log
-          retention-days: 7
-          if-no-files-found: ignore
 
       - name: Validate examples
         run: pnpm run check:examples
@@ -108,6 +111,18 @@ jobs:
 
       - name: Verify developer quickstart from the npm registry
         run: pnpm test:developer-quickstart
+
+      - name: Wait for the tests
+        wait: test
+
+      - name: Preserve the check logs
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: check-logs
+          path: artifacts/checks/*.log
+          retention-days: 7
+          if-no-files-found: ignore
 
       # RR-46: a reminder, never a failure: package code or a schema or catalog changed without a changelog fragment.
       - name: Changelog fragment
