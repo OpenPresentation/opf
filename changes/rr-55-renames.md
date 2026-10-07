@@ -1,6 +1,6 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-55 (breaking, no deprecation; core 0.14.0 and CLI): short verbs that mirror the CLI, and `presentation` for the deck. Old names are deleted, not aliased.
     - **Renamed functions:** `paginatePresentation` is `paginate`, `bundlePresentation` is `bundle`, `formatPresentation` is `format`, `diffPresentations` is `diff`, `mergePresentations` is `merge`, `markdownToOpf` is `fromMarkdown`, `opfToMarkdown` is `toMarkdown`, `createDataContent` is `importData`, `excelNumberFormat` is `toExcelNumberFormat` and `numberFormatFromExcel` is `fromExcelNumberFormat`. `paginateSlide` and the other slide-level and `resolveX`/`layoutX`/`fitX`/`formatX` names stay.

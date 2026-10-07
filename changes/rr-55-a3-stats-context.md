@@ -1,6 +1,6 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-55 part A3 (breaking, no aliases; lockstep with the renderer, PPTX and editor later): `stats`, `resolveSlideContext`, the `fonts` handle, and a smaller package root. Guide: [docs/stats.md](docs/stats.md).
     - **New `stats(presentation, options?)` and `opf stats <file|-> [--format json|text] [--per-slide]`:** neutral, structural facts about a deck, never severities or thresholds: deck metadata and references, people, slides (hidden, sections, layouts), payload kinds, words in content and in notes, notes coverage, images (alt, decorative, missing alt, logos, watermarks, backgrounds), charts, tables, datasets and their sources, citations, variables, assets (embedded, files, remote, registry), header and footer, fonts, colour variables, and an estimated speaking time (130 wpm, labelled `estimate`). It does not compose, measure or validate, so it needs no fonts and works on a deck that fails validation; the 126 bundled examples take 18 ms in total (0.14 ms each) against 46 ms for `validate(deck, { only: ['format'] })`. Output is deterministic with a stable key order.
