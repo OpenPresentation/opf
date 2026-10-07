@@ -19,10 +19,13 @@
 // `--golden-override` replaces the lock's golden with a workspace-relative path (a renderer pull request that moves
 // pixels selects its own baseline this way).
 //
-// Depends-On (pull_request events only): a line `Depends-On: OpenPresentation/<repository>#<number>` in the pull
+// Depends-On (pull_request and merge_group events): a line `Depends-On: OpenPresentation/<repository>#<number>` in the pull
 // request body (read through the REST API, so editing the body and re-running the job picks it up) makes `resolve`
 // check out that pull request instead of the lock entry: its test merge commit while it is open and mergeable, its
 // head otherwise, and its merge commit (on main) once merged. A closed, unmerged dependency fails the step.
+// In the merge queue the pull request is the one named by the queue branch (`gh-readonly-queue/<base>/pr-<n>-<sha>`),
+// so a breaking coordinated change is checked against its open sibling pull requests there too; in a batch of several
+// pull requests only that head pull request's Depends-On applies, so a coordinated change should queue alone.
 // FA-19: when opf-render comes from a Depends-On pull request (and no --golden-override is given), resolve also adopts
 // that pull request's own golden selection, the `golden-override` of its .github/workflows/ci.yml, with the roller's
 // rule (adoptableGolden) and only when the baseline exists at the commit that is checked out; otherwise the lock's.
@@ -255,8 +258,18 @@ export async function resolveDependency(api, { repository, number }) {
   return { ref: pull.head.sha, source: `Depends-On ${name} (open; its head, because GitHub reports mergeable=${pull.mergeable})`, state: "open" };
 }
 
-/** The pull request this run tests, from the event payload (pull_request events only). */
+/** The queue branch of a merge_group run, `[refs/heads/]gh-readonly-queue/<base>/pr-<number>-<40-hex sha>`. */
+const MERGE_QUEUE_REF = /^(?:refs\/heads\/)?gh-readonly-queue\/.+\/pr-(\d+)-[0-9a-f]{40}$/;
+
+/**
+ * The pull request this run tests: a pull_request event's own, or a merge_group event's head pull request (parsed from
+ * `merge_group.head_ref`; its body is read through the REST API by dependsOnOverrides). Other events have none.
+ */
 export function pullRequestOfEvent(env = process.env) {
+  if (env.GITHUB_EVENT_NAME === "merge_group" && env.GITHUB_EVENT_PATH) {
+    const match = MERGE_QUEUE_REF.exec(JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8")).merge_group?.head_ref ?? "");
+    return match ? { repository: env.GITHUB_REPOSITORY, number: Number(match[1]), body: "" } : undefined;
+  }
   if (!["pull_request", "pull_request_target"].includes(env.GITHUB_EVENT_NAME) || !env.GITHUB_EVENT_PATH) return undefined;
   const event = JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, "utf8"));
   if (!event.pull_request) return undefined;

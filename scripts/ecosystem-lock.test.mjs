@@ -293,5 +293,23 @@ test("only pull_request events carry a pull request", () => {
   const eventPath = path.join(directory, "event.json");
   writeFileSync(eventPath, JSON.stringify({ pull_request: { number: 12, body: "Depends-On: OpenPresentation/opf#1" } }));
   assert.deepEqual(pullRequestOfEvent({ GITHUB_EVENT_NAME: "pull_request", GITHUB_EVENT_PATH: eventPath, GITHUB_REPOSITORY: "OpenPresentation/opf-editor" }), { repository: "OpenPresentation/opf-editor", number: 12, body: "Depends-On: OpenPresentation/opf#1" });
-  for (const event of ["push", "merge_group", "workflow_dispatch", "schedule"]) assert.equal(pullRequestOfEvent({ GITHUB_EVENT_NAME: event, GITHUB_EVENT_PATH: eventPath }), undefined, event);
+  for (const event of ["push", "workflow_dispatch", "schedule"]) assert.equal(pullRequestOfEvent({ GITHUB_EVENT_NAME: event, GITHUB_EVENT_PATH: eventPath }), undefined, event);
+});
+
+test("a merge_group run tests the head pull request of its queue branch", () => {
+  const directory = mkdtempSync(path.join(tmpdir(), "ecosystem-lock-"));
+  const queue = (headRef) => {
+    const eventPath = path.join(directory, "merge-group.json");
+    writeFileSync(eventPath, JSON.stringify({ merge_group: { head_ref: headRef, head_sha: sha("a"), base_ref: "refs/heads/main" } }));
+    return pullRequestOfEvent({ GITHUB_EVENT_NAME: "merge_group", GITHUB_EVENT_PATH: eventPath, GITHUB_REPOSITORY: "OpenPresentation/opf" });
+  };
+  const expected = { repository: "OpenPresentation/opf", number: 429, body: "" };
+  assert.deepEqual(queue(`refs/heads/gh-readonly-queue/main/pr-429-${sha("b")}`), expected);
+  assert.deepEqual(queue(`gh-readonly-queue/main/pr-429-${sha("b")}`), expected);
+  assert.deepEqual(queue(`refs/heads/gh-readonly-queue/release/0.14/pr-7-${sha("c")}`), { ...expected, number: 7 });
+  for (const bad of ["refs/heads/main", `refs/heads/gh-readonly-queue/main/pr-429-${"b".repeat(39)}`, "refs/heads/gh-readonly-queue/main/pr-x-1", "", undefined]) assert.equal(queue(bad), undefined, String(bad));
+  // A pull_request-shaped payload on a merge_group event is not read as one.
+  const eventPath = path.join(directory, "event.json");
+  writeFileSync(eventPath, JSON.stringify({ pull_request: { number: 12, body: "Depends-On: OpenPresentation/opf#1" } }));
+  assert.equal(pullRequestOfEvent({ GITHUB_EVENT_NAME: "merge_group", GITHUB_EVENT_PATH: eventPath }), undefined);
 });

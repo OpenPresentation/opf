@@ -5,10 +5,12 @@
 # `OpenPresentation/opf/.github/actions/ecosystem-refs@main`), so the lock and its reader always match. The lock is
 # written by the roller, never by hand (docs/ecosystem-development.md, "Coordinated CI: the ecosystem lock").
 #
-# On pull_request events it also honours `Depends-On: OpenPresentation/<repository>#<number>` lines in the pull
+# On pull_request and merge_group events it also honours `Depends-On: OpenPresentation/<repository>#<number>` lines in the pull
 # request body: that repository is checked out at the named pull request (its test merge commit while open, its merge
 # commit once merged) instead of the lock. It reads the current body through the REST API, so edit the body and
-# re-run the job. Other events (push, merge_group, workflow_dispatch, schedule) use the lock only.
+# re-run the job. In the merge queue the pull request is the queue branch's head pull request (pr-<n> in
+# gh-readonly-queue/<base>/pr-<n>-<sha>); in a batch only its Depends-On applies, so queue a coordinated change alone.
+# Other events (push, workflow_dispatch, schedule) use the lock only.
 # FA-19: a Depends-On opf-render pull request also brings its golden: without golden-override here, the golden-override
 # of that pull request's ci.yml is adopted (scripts/ecosystem-lock.mjs, dependsOnGolden), and the log says so.
 #
