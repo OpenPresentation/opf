@@ -1,23 +1,35 @@
 name: CI
+# RR-57 (CI diet): a pull request runs the Linux `package` job on the current Node (no Windows leg, no Node 22 or 26 legs).
+# The Windows leg and the Node 22 and Node 26 engines-range legs run on push to main, the weekly schedule, workflow_dispatch and the merge
+# queue, and on a pull request that carries the label `full-ci` (add it when a change touches OS- or Node-version-specific
+# code). The `labeled` event starts them without a new push; any other label starts nothing and, being in its own
+# concurrency group, cancels nothing.
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
   # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
   # pull_request payload, so the concurrency group falls back to its own gh-readonly-queue ref, and a
   # queue run is never cancelled by a newer push.
   merge_group:
   push:
     branches: [main]
+  schedule:
+    # Weekly full run (every leg) on an unchanged main, to notice runner image, registry and dependency drift.
+    - cron: '29 6 * * 1'
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name != 'merge_group' }}
+  group: ci-${{ github.event.pull_request.number || github.ref }}${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && '-ignored' || github.event_name == 'schedule' && '-schedule' || '' }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' && github.event_name != 'schedule' }}
 jobs:
   package:
+    # An unrelated label starts nothing.
+    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'full-ci' }}
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.os == 'ubuntu-latest' && 'mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27' || '' }}
-    timeout-minutes: 35
+    # RR-57: about 2x the p90 (Linux 14 min, Windows 25 min over the last 30 pushes).
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && 50 || 30 }}
     defaults:
       run:
         working-directory: opf-pptx
@@ -27,7 +39,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        # RR-57: a pull request without the label `full-ci` runs the Linux leg only (Windows: p50 23 min, p90 25 min).
+        os: ${{ fromJSON((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) && '["ubuntu-latest","windows-latest"]' || '["ubuntu-latest"]') }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -193,9 +206,12 @@ jobs:
   # unit suite on the oldest supported major and the current release. Browser, golden and native gates stay on Node 24.
   node-range:
     name: Node ${{ matrix.node }} (engines range)
+    # Not on a plain pull request (see the header); an unrelated label starts nothing.
+    if: ${{ github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci')) }}
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-    timeout-minutes: 30
+    # RR-57: about 2x the p90 (10.6 min).
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
