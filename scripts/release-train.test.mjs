@@ -24,9 +24,11 @@ import {
   plan,
   prep,
   raiseRange,
+  removeUnreleasedCoreText,
   runTrain,
   TrainStop,
   tagRelease,
+  unreleasedCoreOf,
   verify,
 } from "./release-train.mjs";
 
@@ -51,6 +53,32 @@ test("versions and ranges", () => {
   assert.equal(raiseRange("~0.12.0", "0.12.3"), "~0.12.3");
   assert.equal(raiseRange("^0.12.2", "0.12.1"), null, "a floor is never lowered");
   assert.equal(raiseRange("workspace:*", "0.12.1"), null);
+});
+
+test("RR-55: removeUnreleasedCoreText deletes the field in every layout and changes nothing else", () => {
+  const field = '"requiresUnreleasedCore": "0.14.0"';
+  const cases = {
+    "only key, not first property": `{\n  "name": "x",\n  "opf": {\n    ${field}\n  },\n  "version": "1.0.0"\n}\n`,
+    "only key, last property": `{\n  "name": "x",\n  "version": "1.0.0",\n  "opf": { ${field} }\n}\n`,
+    "only key, first property": `{\n  "opf": {\n    ${field}\n  },\n  "name": "x"\n}\n`,
+    "alongside another key": `{\n  "name": "x",\n  "opf": {\n    ${field},\n    "other": 1\n  }\n}\n`,
+    "after another key": `{\n  "name": "x",\n  "opf": {\n    "other": 1,\n    ${field}\n  }\n}\n`,
+    "the only property": `{ "opf": { ${field} } }\n`,
+  };
+  for (const [name, text] of Object.entries(cases)) {
+    const result = removeUnreleasedCoreText(text);
+    assert.equal(result.removed, "0.14.0", name);
+    const expected = JSON.parse(text);
+    delete expected.opf.requiresUnreleasedCore;
+    if (!Object.keys(expected.opf).length) delete expected.opf;
+    assert.deepEqual(JSON.parse(result.text), expected, name);
+    assert.equal(unreleasedCoreOf(JSON.parse(result.text)), null, name);
+    assert.ok(result.text.endsWith("\n"), name);
+  }
+  assert.equal(removeUnreleasedCoreText(cases["only key, not first property"]).text, '{\n  "name": "x",\n  "version": "1.0.0"\n}\n');
+  const none = '{\n  "name": "x"\n}\n';
+  assert.deepEqual(removeUnreleasedCoreText(none), { text: none, removed: null });
+  assert.equal(unreleasedCoreOf({ opf: {} }), null);
 });
 
 test("packages, specs, lockstep order and release-prep titles", () => {
@@ -556,6 +584,24 @@ test("plan: a merged release-prep PR on a green commit is ready to tag; red or l
   assert.match(result.states.find((s) => s.key === "pptx").problems.join("\n"), /keeps dependencies @openpresentation\/opf \^0\.12\.0, below the train's 0\.12\.1/);
 });
 
+test("RR-55: plan flags a release commit that still carries opf.requiresUnreleasedCore, and notes it on a pending package", async () => {
+  const world = publishedWorld();
+  const carrying = (version) => manifestText("@openpresentation/opf-pptx", version, { opf: { requiresUnreleasedCore: "0.14.0" }, dependencies: { "@openpresentation/opf": "^0.12.0" } });
+  world.commit("opf-pptx", "declares", { "package.json": carrying("0.12.2") });
+  let result = await plan(world.deps, { pptx: "0.12.3" });
+  assert.equal(result.states[0].step, "prep-needed");
+  assert.match(result.states[0].notes.join("\n"), /declares opf\.requiresUnreleasedCore 0\.14\.0; the release-prep PR deletes it/);
+  assert.deepEqual(result.states[0].problems, []);
+
+  const release = world.commit("opf-pptx", "pptx-0.12.3", { "package.json": carrying("0.12.3") }, { pull: 161 });
+  world.green("opf-pptx", release);
+  result = await plan(world.deps, { pptx: "0.12.3" });
+  assert.equal(result.states[0].step, "ready-to-tag");
+  assert.match(result.states[0].problems.join("\n"), /the release commit keeps opf\.requiresUnreleasedCore 0\.14\.0 in package\.json/);
+  await assert.rejects(tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true }));
+  assert.ok(!world.calls.some(isWrite));
+});
+
 // ---------------------------------------------------------------------------------------------------------------
 // tag
 
@@ -667,7 +713,7 @@ function git(cwd, ...args) {
 const gitEnv = { ...process.env, GIT_AUTHOR_NAME: "Test", GIT_AUTHOR_EMAIL: "test@example.com", GIT_COMMITTER_NAME: "Test", GIT_COMMITTER_EMAIL: "test@example.com", GIT_CONFIG_NOSYSTEM: "1" };
 
 /** A bare "origin" for opf-editor with a manifest, lockfile, changelog and one fragment, mirrored in the fake API. */
-function prepFixture() {
+function prepFixture({ declare = null } = {}) {
   const base = mkdtempSync(path.join(os.tmpdir(), "release-train-test-"));
   const work = path.join(base, "seed");
   mkdirSync(path.join(work, "changes"), { recursive: true });
@@ -675,7 +721,10 @@ function prepFixture() {
   copyFileSync(path.join(root, "scripts", "changelog-fragments.mjs"), path.join(work, "scripts", "changelog-fragments.mjs"));
   const manifest = `{
   "name": "@openpresentation/opf-editor",
-  "version": "0.11.2",
+  "version": "0.11.2",${declare ? `
+  "opf": {
+    "requiresUnreleasedCore": "${declare}"
+  },` : ""}
   "dependencies": {
     "@openpresentation/opf": "^0.12.0"
   },
@@ -758,6 +807,32 @@ test("prep --execute commits, pushes the branch and opens the PR; it refuses bef
   const writes = world.writes.length;
   assert.equal((await prep(world.deps, packageOf("editor"), { pptx: "0.12.3", editor: "0.11.3" }, { execute: true })).status, "open");
   assert.equal(world.writes.length, writes);
+});
+
+test("RR-55: prep deletes opf.requiresUnreleasedCore, says so in the PR, and leaves the rest of the manifest alone", async (t) => {
+  const { world, base } = prepFixture({ declare: "0.14.0" });
+  t.after(() => rmSync(base, { recursive: true, force: true }));
+  const result = await prep(world.deps, packageOf("editor"), { pptx: "0.12.3", editor: "0.11.3" }, { date: "2026-10-04" });
+  assert.equal(result.status, "dry-run");
+  assert.equal(result.removedField, "0.14.0");
+  const manifest = JSON.parse(readFileSync(path.join(result.dir, "package.json"), "utf8"));
+  assert.equal(unreleasedCoreOf(manifest), null);
+  assert.deepEqual(Object.keys(manifest), ["name", "version", "dependencies", "devDependencies"], "the emptied opf object is gone too");
+  assert.equal(manifest.version, "0.11.3");
+  assert.match(result.body, /`opf\.requiresUnreleasedCore` \(0\.14\.0\) deleted/);
+  assert.deepEqual(result.changed.sort(), ["CHANGELOG.md", "changes/rr-99-fix.md", "package-lock.json", "package.json"]);
+});
+
+test("RR-55: prep refuses a field above the core of the train and a field that is not a version", async (t) => {
+  const high = prepFixture({ declare: "0.14.0" });
+  t.after(() => rmSync(high.base, { recursive: true, force: true }));
+  await assert.rejects(prep(high.world.deps, packageOf("editor"), { core: "0.12.0", pptx: "0.12.3", editor: "0.11.3" }), /declares opf\.requiresUnreleasedCore 0\.14\.0, above core 0\.12\.0 of this train/);
+  const bad = prepFixture({ declare: "latest" });
+  t.after(() => rmSync(bad.base, { recursive: true, force: true }));
+  await assert.rejects(prep(bad.world.deps, packageOf("editor"), { pptx: "0.12.3", editor: "0.11.3" }), /requiresUnreleasedCore latest, which is not a version/);
+  const equal = prepFixture({ declare: "0.12.0" });
+  t.after(() => rmSync(equal.base, { recursive: true, force: true }));
+  assert.equal((await prep(equal.world.deps, packageOf("editor"), { core: "0.12.0", pptx: "0.12.3", editor: "0.11.3" })).removedField, "0.12.0");
 });
 
 // ---------------------------------------------------------------------------------------------------------------
