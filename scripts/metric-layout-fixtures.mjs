@@ -15,7 +15,7 @@ export function metricLayoutFixtures() {
   return ['Carlito','Caladea','Roboto'].flatMap(family=>[{width:1280,height:720},{width:540,height:960}].flatMap(dimensions=>scenarios.map(scenario=>({
     ...scenario,family,dimensions,minFontSize:scenario.minFontSize??24,overflow:scenario.overflow??false,
     ...(family==='Carlito'&&scenario.id==='combining-mark'?{missingGlyph:'\u0301'}:family==='Caladea'&&scenario.id==='greek-symbol'?{missingGlyph:'Ω'}:{}),
-    document:{design:{fontScheme:{heading:{family},body:{family},code:{family:'Cousine'}},
+    document:{design:{fontScheme:{heading:family,body:family,code:'Cousine'},
       dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric:scenario.metric}]},
   }))));
 }

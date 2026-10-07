@@ -17,7 +17,7 @@ const pairs=[['Calibri','Carlito'],['Cambria','Caladea'],['Arial','Arimo'],['Tim
 const registry=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
 const options={textMeasurement:registry.textMeasurement};
 const source={name:'Open-source Office font compatibility',slides:pairs.map(([requested,resolved],index)=>({
-  id:`font-${index}`, design:{fontScheme:{major:requested,minor:requested,code:{family:'Cousine'}}},
+  id:`font-${index}`, design:{fontScheme:{major:requested,minor:requested,code:'Cousine'}},
   title:`${requested} to ${resolved}`,composition:{mode:'row',weights:[2,1]},
   blocks:[{text:'The words should keep their rhythm. Actual glyph advances determine wrapping, so previews and exports share the same measured layout. AVATAR office affine 0123456789. '.repeat(3)},
   {text:'Regular and bold, serif and sans serif: use the same font bytes and make every substitution visible.'}]

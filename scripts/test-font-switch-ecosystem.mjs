@@ -881,7 +881,7 @@ if (FULL) {
 if (FULL) {
   const text = TEXT.english;
   const deck = {
-    name: 'scheme overrides', language: 'english', design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: {family: 'Georgia'}, code: {family: 'Courier New'}}},
+    name: 'scheme overrides', language: 'english', design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: 'Georgia', code: 'Courier New'}},
     slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]
   };
   await runSwitch('scheme-overrides', deck, [

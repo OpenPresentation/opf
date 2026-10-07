@@ -45,7 +45,7 @@ for(const file of fonts.fontFiles) {
   await verifyPackage(name);
   fontHashes.push({file:relative,sha256:hash(await readFile(actual))});
 }
-const document={design:{fontScheme:{heading:{family:'Carlito'},body:{family:'Carlito'},code:{family:'Cousine'}}},slides:[
+const document={design:{fontScheme:{heading:'Carlito',body:'Carlito',code:'Cousine'}},slides:[
   {code:{source:'const value = 42;',language:'very-long-language-label-'.repeat(20)}},
   {code:{source:'def check():\r\n    value = "two  spaces"\r\n    return value  \r\n',language:'python',filename:'src/check.py'}},
 ]};

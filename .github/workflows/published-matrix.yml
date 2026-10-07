@@ -70,9 +70,12 @@ jobs:
         run: |
           core="$(node -p "require('./release-plan.json').packages.find((entry) => entry.name === '@openpresentation/opf').version")"
           harness="$RUNNER_TEMP/published-harness"
-          mkdir -p "$harness"
           git fetch --no-tags --depth=1 origin "refs/tags/opf-v$core:refs/tags/opf-v$core"
-          git archive "opf-v$core" scripts/test-font-switch-ecosystem.mjs docs/fixtures/image-treatments.opf.json | tar -x -C "$harness"
+          # git show, not git archive | tar: GNU tar under Git Bash reads a Windows "D:" path as a remote host.
+          for file in scripts/test-font-switch-ecosystem.mjs docs/fixtures/image-treatments.opf.json; do
+            mkdir -p "$harness/$(dirname "$file")"
+            git show "opf-v$core:$file" > "$harness/$file"
+          done
           echo "OPF_FONT_SWITCH_HARNESS=$harness/scripts/test-font-switch-ecosystem.mjs" >> "$GITHUB_ENV"
       - name: Pairwise font-switch matrix
         run: node "$OPF_FONT_SWITCH_HARNESS"

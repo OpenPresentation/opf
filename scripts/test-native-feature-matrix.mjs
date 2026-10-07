@@ -101,12 +101,12 @@ if (mode === 'generate') {
         const field = at + '/' + key;
         if (key === 'fontFamily' || key === 'fontScheme') {
           fontChanges.push({path: field, original: value, replacement: 'Calibri'});
-          node[key] = key === 'fontFamily' ? 'Calibri' : {id: 'calibri', code: {family: 'Calibri'}};
+          node[key] = key === 'fontFamily' ? 'Calibri' : {id: 'calibri', code: 'Calibri'};
         } else normalizeFonts(value, field);
       }
     };
     normalizeFonts(document);
-    document.design = {...document.design, fontScheme: {id: 'calibri', code: {family: 'Calibri'}}, dimensions: {widthInches: 1280 / 96, heightInches: 720 / 96}};
+    document.design = {...document.design, fontScheme: {id: 'calibri', code: 'Calibri'}, dimensions: {widthInches: 1280 / 96, heightInches: 720 / 96}};
     assert.equal(validatePresentation(document).valid, true, id);
     const diagnostics = [], options = {textMeasurement: fonts.textMeasurement, strictAssets: true, onDiagnostic: issue => diagnostics.push(issue)};
     const svgs = renderSvgDeck(document, options), hashes = {};

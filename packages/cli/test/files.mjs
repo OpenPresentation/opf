@@ -134,7 +134,9 @@ try {
   ]};
   await writeFile(path.join(temp, 'media', 'images.opf.json'), JSON.stringify(images));
   const imgReport = run(['render', 'media/images.opf.json', '--out', 'media-out']).report;
-  assert.ok((await read('media-out/images-001.svg')).toString('utf8').includes('data:image/png;base64'), 'inside image embedded');
+  // Output files are named by the deck's `name` ("Images"); readdir checks the exact case, also on case-insensitive file systems.
+  assert.ok((await readdir(path.join(temp, 'media-out'))).includes('Images-001.svg'), 'the output file is named after the deck name, case kept');
+  assert.ok((await read('media-out/Images-001.svg')).toString('utf8').includes('data:image/png;base64'), 'inside image embedded');
   const found = new Set(imgReport.diagnostics.filter(item => /asset/.test(item.ruleId)).map(item => `${item.path} ${item.ruleId}`));
   assert.ok(found.has('/slides/2/image cli/asset-blocked') && found.has('/slides/3/image cli/asset-blocked'), 'files outside the folder or not images are blocked');
   assert.ok(found.has('/slides/1/image render/unresolved-asset') && found.has('/slides/4/image render/unresolved-asset'));
