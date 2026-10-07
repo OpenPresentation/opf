@@ -8,7 +8,7 @@ import {prepareNodeFonts} from '../src/fonts-node.js';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const fixtureRuns=[{text:'Lead\t',fontSize:18},{text:'Large evidence phrase ',fontSize:30,bold:true},{text:'continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ',fontSize:18},{text:'Second large phrase ',fontSize:30},{text:'finishes the control with exact source runs.',fontSize:18}];
-const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading:{family:'Carlito'},body:{family:'Carlito'},accent:{family:'Carlito'},code:{family:'Cousine'}}},slides:[{table:{rows:[[fixtureRuns]]}}]};
+const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{table:{rows:[[fixtureRuns]]}}]};
 const sourceBytes=Buffer.from(JSON.stringify(deck)),sourceText=fixtureRuns.map(run=>run.text).join('');
 const prepared=await prepareNodeFonts({pack:'office'}),options={trace:true,...prepared.options};
 const bound=resolvePresentation(deck,options).slides[0],item=bound.geometry.items.find(value=>value.field==='table');

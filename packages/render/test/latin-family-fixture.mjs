@@ -72,7 +72,7 @@ export function familyDeck(family) {
   return {
     name: `Latin fixture ${family}`,
     design: {fontScheme: 'x-latin-fixture'},
-    catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x-latin-fixture', name: family, app: 'PowerPoint', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}]}},
+    catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x-latin-fixture', name: family, app: 'powerpoint', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}]}},
     slides: [{id: 'a', title: 'Quarterly review', text: [{text: 'Regular'}, ' ', {text: 'Bold', bold: true}, ' ', {text: 'Italic', italic: true}, ' ', {text: 'BoldItalic', bold: true, italic: true}]}],
   };
 }

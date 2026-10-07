@@ -17,7 +17,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (
   filename:{source:'<&> "two  spaces"',filename:'a-long-file-path/'.repeat(15)},
   wrapped:{source:'  meaningful indentation '+ 'longtoken'.repeat(30)+'\r\n\treturn value;  \n',language:'ts'},
 })) {
-  const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code:{family:'Courier New'}}},slides:[{composition:{minFontSize:24},code}]};
+  const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code: 'Courier New'}},slides:[{composition:{minFontSize:24},code}]};
   const options={trace:true,textMeasurement:fonts.textMeasurement},bound=resolvePresentation(deck,options).slides[0];
   assert.deepEqual(bound.geometry.diagnostics,[]);
   const svg=renderSvg(deck,options),item=bound.geometry.items[0];

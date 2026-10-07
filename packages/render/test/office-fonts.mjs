@@ -74,7 +74,7 @@ for(const [weight,italic,name] of [[400,false,'Regular'],[700,false,'Bold'],[400
   assert.equal(metricOnly.textMeasurement.measure(sample,size,{fontFamily:'Calibri',fontWeight:weight,italic}),carlito.layout(sample).positions.reduce((sum,position)=>sum+position.xAdvance,0)/carlito.unitsPerEm*size);
 }
 // The SVG says the same to browsers, only on text drawn with Gelasio.
-const deck=family=>({design:{fontScheme:{major:family,minor:family,code:{family:'Cousine'}}},slides:[{title:'Office affine',text:'A finite field of flat office files. '.repeat(4)}]});
+const deck=family=>({design:{fontScheme:{major:family,minor:family,code: 'Cousine'}},slides:[{title:'Office affine',text:'A finite field of flat office files. '.repeat(4)}]});
 const svgOf=family=>renderSvg(deck(family),{textMeasurement:metricOnly.textMeasurement});
 const georgia=svgOf('Georgia'),calibri=svgOf('Calibri');
 assert.match(georgia,/<text[^>]*font-family="Gelasio, [a-z-]+"[^>]*style="[^"]*font-variant-ligatures:none;font-feature-settings:'liga' 0,'clig' 0"/);
@@ -83,14 +83,14 @@ assert.doesNotMatch(calibri,/font-variant-ligatures|font-feature-settings/);
 assert.deepEqual(georgia,svgOf('Georgia'));
 // Flow lines (estimated measurement): the outer text element carries no style; each tspan names its own family,
 // so a Cousine run inside a Gelasio-first line does not inherit ligatures:none.
-const flow=renderSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code:{family:'Cousine'}}},slides:[{title:'Flow',text:[{text:'office fluffy '},{text:'code ff',fontFamily:'Cousine'}]}]},{});
+const flow=renderSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Flow',text:[{text:'office fluffy '},{text:'code ff',fontFamily:'Cousine'}]}]},{});
 const flowText=flow.split('\n').find(line=>line.includes('office fluffy'));
 assert.match(flowText,/<text(?![^>]*font-variant-ligatures)[^>]*>/);
 assert.match(flowText,/<tspan[^>]*font-family="Gelasio[^"]*"[^>]*font-variant-ligatures:none[^>]*>office fluffy /);
 assert.match(flowText,/<tspan(?![^>]*font-variant-ligatures)[^>]*font-family="Cousine[^"]*"[^>]*>code ff/);
 // Nested script runs inside a Gelasio run go back to default shaping.
 {const scripts=await prepareNodeFonts({pack:'office',scripts:['Arab'],substitutionPolicy:'metric'});
-const mixed=renderSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code:{family:'Cousine'}}},slides:[{title:'Mixed',text:'office fluffy \u0633\u0644\u0627\u0645 fi'}]},scripts.options);
+const mixed=renderSvg({design:{fontScheme:{major:'Gelasio',minor:'Gelasio',code: 'Cousine'}},slides:[{title:'Mixed',text:'office fluffy \u0633\u0644\u0627\u0645 fi'}]},scripts.options);
 assert.match(mixed,/<text[^>]*font-variant-ligatures:none[^>]*>/);
 assert.match(mixed,/<tspan[^>]*font-family="[^"]*"[^>]*style="font-variant-ligatures:normal;font-feature-settings:normal"[^>]*>\u0633\u0644\u0627\u0645/);}}
 // Raster: resvg ignores the SVG properties, so the rasterizer separates the letters a ligature would join

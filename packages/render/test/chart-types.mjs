@@ -1,16 +1,16 @@
 import assert from 'node:assert/strict';
 import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {CHART_TYPES,DEPRECATED_CHART_TYPES,CHART_SERIES_COLORS,chartSeriesPalette,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
+import {CHART_TYPES,CHART_SERIES_COLORS,chartSeriesPalette,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
 
 // FF-22: every kept catalog chart type previews its native construct.
-const CLASSIC=['column','stacked-column-3x','100pct-stacked-column-3x','bar','stacked-bar-3x','100pct-stacked-bar-3x','line','line-with-markers','stacked-line-3x','stacked-line-with-markers-3x','area','stacked-area-3x','100pct-stacked-area-3x','pie','doughnut','scatter','radar','radar-with-markers','filled-radar'];
+// FA-15: combo (clustered columns with line series) is a classic construct too: one barChart and one lineChart per value axis.
+const CLASSIC=['combo','column','stacked-column','100pct-stacked-column','bar','stacked-bar','100pct-stacked-bar','line','line-with-markers','stacked-line','stacked-line-with-markers','area','stacked-area','100pct-stacked-area','pie','doughnut','scatter','radar','radar-with-markers','filled-radar'];
 const CHARTEX=['treemap','histogram','pareto','box-and-whisker','waterfall','funnel','world'];
-assert.deepEqual(Object.keys(CHART_TYPES).sort(),[...CLASSIC,...CHARTEX].sort(),'26 kept chart type ids');
-assert.equal(Object.keys(DEPRECATED_CHART_TYPES).length,50,'50 deprecated chart type ids');
+assert.deepEqual(Object.keys(CHART_TYPES).sort(),[...CLASSIC,...CHARTEX].sort(),'27 kept chart type ids');
 for(const id of Object.keys(CHART_TYPES))assert.equal(resolveChartType(id),id);
-for(const [id,replacement] of Object.entries(DEPRECATED_CHART_TYPES)){assert.ok(CHART_TYPES[replacement],`${id} -> ${replacement}`);assert.equal(resolveChartType(id),replacement);}
 assert.equal(resolveChartType('donut'),'doughnut');
-assert.equal(resolveChartType(' Stacked-Column-2X '),'stacked-column-3x');
+assert.equal(resolveChartType(' Stacked-Column '),'stacked-column');
+for(const id of ['stacked-column-3x','stacked-column-2x','clustered-column','sparkline','dot-plot','australia'])assert.equal(resolveChartType(id),null,`${id} is not a chart type`);
 for(const id of ['mystery-chart','gantt','',undefined])assert.equal(resolveChartType(id),null);
 
 const PATH='slides.0.chart';
@@ -34,7 +34,7 @@ for(const id of CLASSIC){
 }
 
 // Column and bar: one rect per non-empty value, palette in exporter order.
-for(const id of ['column','stacked-column-3x','100pct-stacked-column-3x','bar','stacked-bar-3x','100pct-stacked-bar-3x']){
+for(const id of ['column','stacked-column','100pct-stacked-column','bar','stacked-bar','100pct-stacked-bar']){
   const svg=render(id),rects=marks(svg,'rect',point);
   assert.equal(rects.length,11,`${id}: 11 non-empty values`);
   for(const r of rects){const j=Number(r['data-opf-path'].split('.').at(-1))-1;assert.equal(r.fill,palette[j],`${id}: series colour ${j}`);}
@@ -46,7 +46,7 @@ for(const id of ['column','stacked-column-3x','100pct-stacked-column-3x','bar','
 }
 {
   // Clustered bars sit side by side; stacked bars share one slot and stack edge to edge.
-  const clustered=marks(render('column'),'rect',/rows\.0\.\d$/),stacked=marks(render('stacked-column-3x'),'rect',/rows\.0\.\d$/);
+  const clustered=marks(render('column'),'rect',/rows\.0\.\d$/),stacked=marks(render('stacked-column'),'rect',/rows\.0\.\d$/);
   assert.equal(new Set(clustered.map(r=>r.x)).size,3);
   assert.equal(new Set(stacked.map(r=>r.x)).size,1);
   const [north,south,east]=stacked.map(r=>({y:Number(r.y),bottom:Number(r.y)+Number(r.height)}));
@@ -83,7 +83,7 @@ assert.deepEqual(niceScale(-0.2,1,10,{percent:true}).min,-1);
 checks++;
 
 // Lines: markers only for the -with-markers ids; stacked lines plot cumulative totals.
-for(const [id,markers] of [['line',false],['line-with-markers',true],['stacked-line-3x',false],['stacked-line-with-markers-3x',true]]){
+for(const [id,markers] of [['line',false],['line-with-markers',true],['stacked-line',false],['stacked-line-with-markers',true]]){
   const svg=render(id);
   assert.equal(marks(svg,'circle',point).length,markers?11:0,`${id}: markers`);
   assert.equal(marks(svg,'polyline',series).length,6,`${id}: three legend keys and one line per series`);
@@ -92,13 +92,13 @@ for(const [id,markers] of [['line',false],['line-with-markers',true],['stacked-l
 {
   // Stacked lines plot cumulative totals: South Q1 = 12 + 8 = 20 sits above North Q2 = 16.
   const ys=(svg,column)=>marks(svg,'polyline',new RegExp(`columns\.${column}$`)).at(-1).points.split(' ').map(p=>Number(p.split(',')[1]));
-  const stacked=render('stacked-line-3x'),standard=render('line');
+  const stacked=render('stacked-line'),standard=render('line');
   assert.ok(ys(stacked,2)[0]<ys(stacked,1)[1],'stacked: 20 above 16');
   assert.ok(ys(standard,2)[0]>ys(standard,1)[1],'standard: 8 below 16');
 }
 
 // Areas: one filled path per series.
-for(const id of ['area','stacked-area-3x','100pct-stacked-area-3x']){
+for(const id of ['area','stacked-area','100pct-stacked-area']){
   const paths=marks(render(id),'path',series);
   assert.equal(paths.length,3,`${id}: three area paths`);
   paths.forEach((p,j)=>assert.equal(p.fill,palette[j]));
@@ -145,9 +145,8 @@ for(const [id,markers,filled] of [['radar',false,false],['radar-with-markers',tr
   checks++;
 }
 
-// Single series: no legend; deprecated ids render exactly like their replacement.
+// Single series: no legend.
 assert.equal(marks(render('column',{columns:['Q','Only'],rows:[['Q1',1],['Q2',2]]}),'rect',series).length,0,'single series has no legend');
-for(const [id,replacement] of Object.entries(DEPRECATED_CHART_TYPES)){assert.equal(render(id),render(replacement),`${id} renders as ${replacement}`);checks++;}
 
 // Chartex constructs (FF-22b): every chartex id takes the catalog path with marks traced to its data.
 for(const id of CHARTEX){
@@ -275,8 +274,9 @@ for(const id of CHARTEX){
   const svg=render('mystery-chart');
   assert.doesNotMatch(svg,/data-opf-chart=/);
   assert.equal(marks(svg,'rect',/^slides\.0\.chart\.data\.rows\.\d+$/).length,4,'legacy single-series bars');
-  assert.ok(render('column',{src:'asset:missing'}).includes('No chart data'));
+  // A data source by asset is not part of the format (FA-07): it is rejected at the boundary.
+  assert.throws(()=>render('column',{src:'asset:missing'}),error=>error.code==='invalid-opf');
   checks++;
 }
 
-console.log(`Chart types passed: ${checks} checks; ${CLASSIC.length} classic and ${CHARTEX.length} chartex ids on the catalog renderer, ${Object.keys(DEPRECATED_CHART_TYPES).length} deprecated ids identical to their replacement, unknown ids on the legacy preview.`);
+console.log(`Chart types passed: ${checks} checks; ${CLASSIC.length} classic and ${CHARTEX.length} chartex ids on the catalog renderer, unknown ids on the legacy preview.`);

@@ -53,9 +53,9 @@ export const engineDefaults = Object.freeze({
     google: Object.freeze({ latin: "roboto", ea: "noto-sans-sc", cs: "noto-sans" })
   }),
   chartTypes: Object.freeze([
-    "stacked-column-3x",
-    "stacked-area-3x",
-    "line-with-markers-3x"
+    "stacked-column",
+    "stacked-area",
+    "line-with-markers"
   ])
 });
 
@@ -208,7 +208,7 @@ function resolveTemplateInput(presentation, options) {
     });
   }
   for (const entry of result.diagnostics) {
-    if (entry.code === "variable-example-used") options.onDiagnostic?.({ code: "variable-example-used", path: entry.path, message: entry.message, id: entry.id });
+    if (entry.code === "variable-example-used" || entry.code === "variable-builtin-missing") options.onDiagnostic?.({ code: entry.code, path: entry.path, message: entry.message, id: entry.id });
   }
   return result.presentation;
 }
@@ -421,14 +421,17 @@ function resolveBackgroundColor(value, design, fallback) {
   return resolveColorRefIn(value, { colorScheme: design.colorScheme, colors: { primary, secondary, accent }, variables: design.variables }, fallback);
 }
 
+// The slide's single background color, or null when there is none (a gradient, or no color the engine can read).
+// With no definition, or a picture, the scheme's default slide background (core defaultSlideBackground) is the canvas.
 function resolveBackground(background, colorScheme, design) {
-  if (!background) return colorFromScheme(colorScheme, "light1", "#FFFFFF");
-  if (typeof background === "string") return colorFromScheme(colorScheme, background, "#FFFFFF");
-  if (background.type === "theme") return colorFromScheme(colorScheme, background.slot, "#FFFFFF");
+  const canvas = opfCore.defaultSlideBackground(colorScheme);
+  if (!background) return canvas;
+  if (typeof background === "string") return colorFromScheme(colorScheme, background, canvas);
+  if (background.type === "theme") return colorFromScheme(colorScheme, background.slot, canvas);
   if (background.type === "solid") return resolveBackgroundColor(background.color, design, "#FFFFFF");
   if (background.type === "gradient") return null;
   if (background.type === "pattern") return resolveBackgroundColor(background.pattern?.backgroundColor, design, "#FFFFFF");
-  return colorFromScheme(colorScheme, "light1", "#FFFFFF");
+  return canvas;
 }
 
 
@@ -456,6 +459,8 @@ function tagFill(design) {
   return contrastRatio(design.colors.primary, background) < TAG_MIN_CONTRAST ? design.colors.text : design.colors.primary;
 }
 
+const LINK_URL = /^(https?:|mailto:|tel:)/i;
+
 function resolveDesign(presentation, slide, context, index) {
   const deckDesign = presentation.design ?? {};
   const slideDesign = slide.design ?? {};
@@ -482,14 +487,13 @@ function resolveDesign(presentation, slide, context, index) {
   );
   const dimensions = resolveDimensions(slideDesign.dimensions ?? deckDesign.dimensions ?? theme.dimensions);
   const backgroundDefinition = slideDesign.background ?? deckDesign.background ?? theme.background;
-  const primary = normalizeColor(colorScheme.primary, null) ?? colorFromScheme(colorScheme, "accent1", "#2563EB");
-  const secondary = normalizeColor(colorScheme.secondary, null) ?? colorFromScheme(colorScheme, "accent2", "#0F766E");
-  const accent = normalizeColor(colorScheme.accent, null) ?? colorFromScheme(colorScheme, "accent3", "#F59E0B");
+  const { primary, secondary, accent } = opfCore.resolveColorRoles(colorScheme);
   const variables = presentation.variables ?? {};
   // background/surface/text roles depend on the background itself, so a background reference sees only the scheme and the three accent roles.
   const backgroundColor = resolveBackground(backgroundDefinition, colorScheme, { colorScheme, colors: { primary, secondary, accent }, variables });
-  const darkBackground = colorLuminance(backgroundColor ?? "#FFFFFF") < 0.179;
-  const textColor = colorFromScheme(colorScheme, darkBackground ? "light1" : "dark1", darkBackground ? "#FFFFFF" : "#111827");
+  // One resolution for every role (core resolveColorRoles), shared with the PPTX export and the audit.
+  const roles = opfCore.resolveColorRoles(colorScheme, { background: backgroundColor });
+  const darkBackground = roles.dark;
 
   return {
     ...deckDesign,
@@ -502,13 +506,15 @@ function resolveDesign(presentation, slide, context, index) {
     background: backgroundDefinition,
     backgroundColor,
     colors: {
-      background: colorFromScheme(colorScheme, "light1", "#FFFFFF"),
-      surface: colorFromScheme(colorScheme, darkBackground ? "dark2" : "light2", darkBackground ? "#1E293B" : "#F8FAFC"),
-      text: textColor,
-      mutedText: colorFromScheme(colorScheme, darkBackground ? "light2" : "dark2", darkBackground ? "#E2E8F0" : "#334155"),
+      background: roles.background,
+      surface: roles.surface,
+      text: roles.text,
+      mutedText: roles.textSecondary,
       primary,
       secondary,
       accent,
+      hyperlink: roles.hyperlink,
+      followedHyperlink: roles.followedHyperlink,
       border: colorFromScheme(colorScheme, "accent5", "#CBD5E1")
     },
     fonts: resolveFontFamilies(fontScheme),
@@ -523,10 +529,10 @@ function resolveDesign(presentation, slide, context, index) {
  * font; a script slot that core fills from the latin family follows it too.
  * Without core support every slot repeats the latin family.
  */
-function scriptProfile(presentation, index, design, context) {
+function scriptProfile(presentation, index, design, context, language) {
   let resolved;
   if (typeof opfCore.resolveScriptFonts === "function") {
-    try { resolved = opfCore.resolveScriptFonts(presentation, { slideIndex: index }); }
+    try { resolved = opfCore.resolveScriptFonts(presentation, { slideIndex: index, ...(language === undefined ? {} : { language }) }); }
     catch (error) {
       reportLanguageDiagnostic(context, { code: "language-preview-unresolved", path: "language",
         message: "Script fonts could not be resolved (" + (error instanceof Error ? error.message : String(error)) + "), so the preview uses the design font for every script, sets no lang and lays out every paragraph left to right." });
@@ -722,7 +728,30 @@ function bindSlide(presentation, slide, layout, index, context) {
     glyphFallback: context.options.glyphFallback,
     onFallback: note => reportGlyphFallback(context, note)
   });
-  const textMeasurement = scriptFonts.textMeasurement ?? context.options.textMeasurement;
+  // FA-13: a run with its own language (TextRun.lang, which core puts on the fragment style as `lang`) is measured and drawn with the
+  // script fonts of that language (the Japanese or the Simplified Chinese face for Han text); every other run uses the deck's.
+  const languageScripts = new Map();
+  const scriptFontsFor = lang => {
+    if (typeof lang !== "string" || !lang || typeof opfCore.resolveScriptFonts !== "function") return undefined;
+    if (!languageScripts.has(lang)) {
+      let own;
+      try {
+        const profile = scriptProfile(presentation, index, design, context, lang);
+        own = profile.languageSource === "option" && profile.bcp47?.toLowerCase() !== scriptFonts.profile?.bcp47?.toLowerCase()
+          ? createScriptFonts(profile, context.options.textMeasurement, { glyphFallback: context.options.glyphFallback, onFallback: note => reportGlyphFallback(context, note) })
+          : undefined;
+      } catch { own = undefined; }
+      languageScripts.set(lang, own);
+    }
+    return languageScripts.get(lang);
+  };
+  let textMeasurement = scriptFonts.textMeasurement ?? context.options.textMeasurement;
+  if (scriptFonts.textMeasurement) {
+    const deckMeasurement = scriptFonts.textMeasurement;
+    const pick = style => scriptFontsFor(style?.lang)?.textMeasurement ?? deckMeasurement;
+    textMeasurement = { ...deckMeasurement, measure: (text, size, style) => pick(style).measure(text, size, style) };
+    if (typeof deckMeasurement.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, style) => (pick(style).outlineBounds ?? deckMeasurement.outlineBounds)(text, size, style);
+  }
   // fontScheme.accent (the tag and quote text) exists only with a core that resolves it; it takes the same look-alike policy.
   // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
   // resolves it again and draws the replacement's encoded weight (Montserrat 900, Red Hat Display 600 and 300); resolving the role to the
@@ -731,9 +760,10 @@ function bindSlide(presentation, slide, layout, index, context) {
     const named = design.fonts[role], resolved = resolveTextStyle({fontFamily:named,fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
     design.fonts[role] = fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
   }
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, contentAlignment:design.contentAlignment, titleAlignment:design.titleAlignment, textRasterPadding:context.options.textRasterPadding, contentBox:design.contentBox, darkBackground: design.darkBackground, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
+  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, textRasterPadding:context.options.textRasterPadding, darkBackground: design.darkBackground, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
   return {
     scriptFonts,
+    scriptFontsFor,
     textMeasurement,
     geometry,
     assets: presentation.assets ?? {},
@@ -781,9 +811,12 @@ export function renderSvg(input, options = {}) {
   return renderResolvedSlide(resolved, slideIndex, options);
 }
 
+// One SVG per slide, in slide order. `skipHidden: true` leaves out slides marked `hidden` (the sequence the player presents);
+// the result is then shorter than `slides`, so an index no longer names the slide at that index.
 export function renderSvgDeck(input, options = {}) {
   const resolved = resolvePresentation(input, options);
-  return resolved.slides.map((_, index) => renderResolvedSlide(resolved, index, options));
+  const indexes = resolved.slides.map((_, index) => index).filter(index => !(options.skipHidden === true && resolved.presentation.slides[index]?.hidden === true));
+  return indexes.map(index => renderResolvedSlide(resolved, index, options));
 }
 
 function renderResolvedSlide(resolved, slideIndex, options) {
@@ -794,7 +827,8 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   // Only a language the document names sets lang; the renderer default does not.
   const lang = script?.languageSource === "document" || script?.languageSource === "option" ? script.bcp47 : undefined;
   const { width, height } = bound.design.dimensions;
-  const title = bound.slide.title ?? resolved.presentation.name ?? `Slide ${slideIndex + 1}`;
+  // The title may be TextRun[] (FA-10): the accessible name is its plain text.
+  const title = (Array.isArray(bound.slide.title) ? flattenText(bound.slide.title) : bound.slide.title) ?? resolved.presentation.name ?? `Slide ${slideIndex + 1}`;
   const content = [
     renderBackground(bound, width, height, options),
     renderSlideImage(bound, options),
@@ -970,12 +1004,19 @@ function reportDiagnostic(diagnostic, options) {
   options.onDiagnostic?.(diagnostic);
 }
 
+// FA-09: Chart.alt is the chart's accessible name: a role="img" group with aria-label, which also makes the drawn marks and labels
+// inside presentational. An empty alt marks the chart decorative (aria-hidden). Without alt the SVG is unchanged.
+function chartText(chart, alt) {
+  if (typeof alt !== "string" || !chart) return chart;
+  return alt === "" ? tag("g", { "aria-hidden": "true" }, chart) : tag("g", { role: "img", "aria-label": alt }, chart);
+}
+
 function renderPayload(item, box, bound, options) {
   if (!box) return "";
   if (item.field === "items" || item.field === "bullets") return renderList(item, box, bound, options);
   switch (item.type) {
     case "chart":
-      return renderChart(item, box, bound, options);
+      return chartText(renderChart(item, box, bound, options), item.value?.alt);
     case "table":
       return renderTable(item, box, bound, options);
     case "image":
@@ -1000,10 +1041,9 @@ function renderPayload(item, box, bound, options) {
 function renderTextPayload(item, box, bound, options) {
   return (Array.isArray(item.value) ? renderRichTextBox : renderTextBox)(Array.isArray(item.value) ? item.value : flattenText(item.value), box, bound, {
     path: item.path,
-    // Core resolves one alignment per composed item for every engine. The
-    // fallback keeps cores published before item.alignment working: titles
-    // follow design.titleAlignment only (unset is left, as in core composition).
-    align: item.alignment ?? (item.field === "title" ? bound.design.titleAlignment ?? "left" : bound.design.contentAlignment),
+    // Core resolves one alignment per composed item for every engine, from the slide's design, the deck's design
+    // and the layout record's design (SlideComposition.design).
+    align: item.alignment,
     fontSize: item.field === "title" ? 54 : item.field === "tag" ? 16 : 25,
     // fontScheme.accent draws the tag; core's textStyle (item.textStyle) already carries it, this is the fallback family.
     fontFamily: item.field === "title" ? bound.design.fonts.heading : item.field === "tag" ? bound.design.fonts.accent ?? bound.design.fonts.body : bound.design.fonts.body,
@@ -1021,7 +1061,7 @@ function renderTextPayload(item, box, bound, options) {
 
 function renderList(item, box, bound, options) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-  const fit=item.text?.listEntries?item.text:fitList(item.value,box,25*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:bound.design.fonts.body,fontWeight:400,path:item.path},textMeasurement:options.textMeasurement,...(item.payload?.numbering!==undefined?{numbering:item.payload.numbering}:{})});
+  const fit=item.text?.listEntries?item.text:fitList(item.value,box,25*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:bound.design.fonts.body,fontWeight:400,path:item.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:options.textMeasurement,...(item.payload?.numbering!==undefined?{numbering:item.payload.numbering}:{})});
   const children=[];
   // design.listBullet=image: core attaches the icon logo as item.bulletImage and its box (entry.bulletBox: 0.65 em, as PowerPoint draws a:buBlip). An icon that cannot be drawn keeps the glyph marker.
   const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
@@ -1213,7 +1253,7 @@ function renderImage(item, box, bound, options) {
   const { asset, source, drawable, missingReference } = resolveImageSource(item, bound, options);
   if (drawable) {
     return tag("image", { x: box.x, y: box.y, width: box.width, height: box.height,
-      href: source, preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : options.imageAnchor === "right" ? "xMaxYMid meet" : (options.imageFit ?? (bound.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image",
+      href: source, preserveAspectRatio: options.imageAnchor === "left" ? "xMinYMid meet" : options.imageAnchor === "right" ? "xMaxYMid meet" : (options.imageFit ?? (bound.geometry.design.imageFill === "crop" ? "cover" : "contain")) === "cover" ? "xMidYMid slice" : "xMidYMid meet", role: "img", "aria-label": asset.alt ?? options.imageLabel ?? "Image",
       ...traceAttrs(options, item.path), ...generatedAttrs(options) });
   }
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
@@ -1311,6 +1351,7 @@ function renderCode(item, box, bound, options) {
     if (invalid) throw new OPFRenderError('invalid-code-text', `Code text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`, {path:part.path});
   }
   const syntax = codeSyntax(item, layout, bound, options);
+  const highlight = codeHighlight(item, layout, bound);
   const children = [
     tag("rect", {
       x: box.x,
@@ -1323,13 +1364,27 @@ function renderCode(item, box, bound, options) {
       ...traceAttrs(options, item.path)
     })
   ];
+  // FA-13: code.highlight is one band per run of marked lines, behind the line text; the marked lines keep the syntax colours and
+  // the others are dimmed (core's codeHighlight* helpers, the same ones the PPTX export calls).
+  if (highlight) {
+    const body = layout.parts.find(part => part.role === "body");
+    for (const band of highlight.bands) {
+      children.push(tag("rect", {
+        x: stableNumber(box.x + 1), y: stableNumber(body.box.y + band.first * body.fit.lineHeight), width: stableNumber(box.width - 2),
+        height: stableNumber((band.last - band.first + 1) * body.fit.lineHeight), fill: highlight.colors.band,
+        ...(options.trace ? { "data-opf-code-highlight": "true" } : {})
+      }));
+    }
+  }
   for (const part of layout.parts) {
     if (!part.fit) throw new OPFRenderError('layout-overflow', 'Code content has no usable internal space; increase its cell size before rendering.', {path:part.path,issues:layout.diagnostics});
-    const lines=part.fit.sourceLines.map((line,index)=>tag('text',{
+    const lines=part.fit.sourceLines.map((line,index)=>{
+    const lineColors=highlight&&part.role==='body'?(highlight.marked.has(highlight.numbers[index])?highlight.colors.lit:highlight.colors.dim):undefined;
+    return tag('text',{
       x:stableNumber(part.box.x),y:stableNumber(part.box.y+part.fit.fontSize+index*part.fit.lineHeight),
       'text-anchor':'start','font-family':fontStack(part.style.fontFamily,'monospace'),
       'font-size':stableNumber(part.fit.fontSize),'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
-      'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='body'?'#E5E7EB':'#93C5FD',
+      'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='body'?(lineColors?.plain??'#E5E7EB'):'#93C5FD',
       ...traceAttrs(options,part.path),...(options.trace?{'data-opf-code-role':part.role,'data-opf-generated':part.generated?'true':undefined,
         'data-opf-text-start':line.start,'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
     },line.segments.map(segment=>segmentSpan({
@@ -1338,7 +1393,8 @@ function renderCode(item, box, bound, options) {
       ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
       ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
       // Code stays left to right; script runs still take their slot fonts.
-    },segment,part.text.slice(segment.start,segment.end),part.style,bound,'monospace',{rtl:false,fontSize:part.fit.fontSize},part.role==='body'?syntax:undefined)).join('')));
+    },segment,part.text.slice(segment.start,segment.end),part.style,bound,'monospace',{rtl:false,fontSize:part.fit.fontSize},part.role==='body'?(syntax&&lineColors?{...syntax,palette:lineColors}:syntax):undefined)).join(''));
+    });
     children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-code-role':part.role,'data-opf-generated':part.generated?'true':undefined,
       'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
       ...(part.fit.overflow?{'data-opf-overflow':'true'}:{})},lines.join('\n')));
@@ -1404,13 +1460,26 @@ function renderQuote(item, box, bound, options) {
   if (!layout) throw new OPFRenderError('missing-quote-layout', 'Quote rendering requires a coordinated core build with shared quote geometry.', {path:item.path});
   const children = layout.parts.map(part => {
     if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,issues:layout.diagnostics});
+    const fill=part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text;
+    // FA-10: a TextRun[] quote body is laid out by core's rich-text layouter; its runs (quotation marks joined to the first and last) draw like body runs.
+    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:-1,options});
     return renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,
-      fill:part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text,
+      fill,
       diagnosticsHandled:true,options,
     });
   });
+  // FA-12: the attributed person's headshot, cropped to fill the core circle frame (the clip is the outline the native ellipse picture uses).
+  if (layout.photo) children.push(renderQuotePhoto(layout.photo, item, bound, options));
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
+}
+
+function renderQuotePhoto(photo, item, bound, options) {
+  const picture = renderImage({ value: photo.value, path: photo.path }, photo.box, bound, { ...options, imageFit: 'cover' });
+  // An unresolved source keeps the ordinary placeholder, unmasked, like the export.
+  if (!picture.startsWith('<image')) return picture;
+  const id = `opf-s${bound.index + 1}-quote-photo-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}`;
+  return tag('g', {}, tag('defs', {}, tag('clipPath', { id }, tag('path', { d: photo.shape.path }))) + tag('g', { 'clip-path': `url(#${id})` }, picture));
 }
 
 function renderTimeline(item, box, bound, options) {
@@ -1418,12 +1487,21 @@ function renderTimeline(item, box, bound, options) {
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const children=[tag('line',{...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
-  for(const marker of layout.markers)children.push(tag('circle',{cx:marker.x,cy:marker.y,r:marker.radius,fill:bound.design.colors.primary,...traceAttrs(options,marker.path)}));
+  // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); an older core draws plain markers.
+  const background=bound.design.backgroundColor??bound.design.colors.background;
+  const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
+  for(const marker of layout.markers){
+    if(typeof opfCore.timelineMarkerShapes!=='function'||!marker.status){
+      children.push(tag('circle',{cx:marker.x,cy:marker.y,r:marker.radius,fill:bound.design.colors.primary,...traceAttrs(options,marker.path)}));
+      continue;
+    }
+    for(const shape of opfCore.timelineMarkerShapes(marker,statusColors))children.push(tag('circle',{cx:shape.cx,cy:shape.cy,r:shape.radius,fill:shape.fill??'none',...(shape.stroke?{stroke:shape.stroke.color,'stroke-width':shape.stroke.width}:{}),...traceAttrs(options,marker.path),...(options.trace?{'data-opf-timeline-status':marker.status,'data-opf-timeline-shape':shape.role}:{})}));
+  }
   for(const part of layout.parts){
     if(!part.fit)throw new OPFRenderError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
     children.push(tag('g',options.trace?{'data-opf-timeline-role':part.role}:{},renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,align:part.alignment,
-      fill:bound.design.colors.text,diagnosticsHandled:true,options,
+      fill:part.status&&typeof opfCore.timelineTextColor==='function'?opfCore.timelineTextColor(part,statusColors):bound.design.colors.text,diagnosticsHandled:true,options,
     })));
   }
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));
@@ -1431,7 +1509,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
   const children = [];
   // RR-54: a dataset table has no rows or columns of its own to point at; every cell reports the table's authored path.
   const own = isDatasetTable(item, bound) ? () => item.path : (path) => path;
@@ -1512,7 +1590,7 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
 }
 
 function renderChart(item, box, bound, options) {
-  // Catalog chart types (kept, deprecated and aliased ids) preview the native
+  // Catalog chart types preview the native
   // construct opf-pptx exports; other ids keep the legacy single-series preview.
   const rendered = renderCatalogChart(item, box, bound, options, { tag, traceAttrs, stableNumber, renderTextBox, reportDiagnostic });
   if (rendered) return rendered;
@@ -1648,7 +1726,17 @@ function renderFurniture(bound, presentation, width, height, options, kind) {
 function renderBranding(bound,presentation,width,height,options) {
   const design={...presentation.design,...bound.slide.design}, pieces=[];
   const rootFor=key=>bound.slide.design?.[key]!==undefined?`${bound.path}.design.${key}`:`design.${key}`;
-  if(design.watermark){
+  // FA-13: a text watermark is one line of the heading font in the theme text colour, centered and rotated as core's layoutWatermark says.
+  if(design.watermark&&typeof design.watermark==='object'&&typeof design.watermark.text==='string'){
+    const mark=typeof opfCore.layoutWatermark==='function'?opfCore.layoutWatermark(design.watermark.text,{width,height},{fontFamily:bound.design.fonts.heading,fontWeight:700,textMeasurement:options.textMeasurement}):undefined;
+    if(mark){
+      const opacity=typeof design.watermark.opacity==='number'&&Number.isFinite(design.watermark.opacity)?Math.min(1,Math.max(0,design.watermark.opacity)):.08;
+      const cx=width/2,cy=height/2;
+      pieces.push(tag('g',{opacity:stableNumber(opacity),transform:`rotate(${stableNumber(mark.rotation)} ${stableNumber(cx)} ${stableNumber(cy)})`,...traceAttrs(options,rootFor('watermark'))},
+        tag('text',{x:stableNumber(cx),y:stableNumber(cy+mark.fontSize*.35),'text-anchor':'middle','font-family':fontStack(mark.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(mark.fontSize),'font-weight':mark.fontWeight,
+          fill:bound.design.colors.text,'xml:space':'preserve','text-rendering':'geometricPrecision'},escapeText(mark.text))));
+    }
+  } else if(design.watermark){
     pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain'})));
   }
   // Cover and section slides: the deck logo core composed at the top-left of the free area, anchored left.
@@ -1710,7 +1798,7 @@ function nestedReset(style, run) {
 
 function scriptLine(text, style, bound, type, { rtl = false, placement, trace, fontSize } = {}) {
   const value = String(text ?? "");
-  const scripts = bound.scriptFonts;
+  const scripts = (style?.lang && bound.scriptFontsFor?.(style.lang)) || bound.scriptFonts;
   rtl = rtl && value !== "";
   const isolate = content => rtl ? `${RIGHT_TO_LEFT_ISOLATE}${content}${POP_DIRECTIONAL_ISOLATE}` : content;
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
@@ -1771,6 +1859,18 @@ function segmentSpan(attrs, segment, text, style, bound, type, options, syntax) 
     }).join("");
   }
   return tag("tspan", { ...attrs, "font-family": scripted.family, "font-size": scripted.sizeAdjust && options?.fontSize > 0 ? stableNumber(adjustedFontSize(options.fontSize, scripted.sizeAdjust)) : undefined }, scripted.content);
+}
+
+// FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colours, from core (the PPTX
+// export calls the same functions); undefined when the code marks no line or core has no highlight helpers.
+function codeHighlight(item, layout, bound) {
+  const highlight = item.value?.highlight;
+  if (!Array.isArray(highlight) || typeof opfCore.codeHighlightLines !== "function") return undefined;
+  const body = layout.parts.find(part => part.role === "body");
+  if (!body?.fit) return undefined;
+  const lines = opfCore.codeHighlightLines(highlight, body.text).lines;
+  if (!lines.length) return undefined;
+  return { marked: new Set(lines), numbers: opfCore.codeLineNumbers(body.fit.sourceLines), bands: opfCore.codeHighlightBands(body.fit.sourceLines, lines), colors: opfCore.codeHighlightColors(bound.design.colorScheme) };
 }
 
 // Token ranges of the code body and the palette to paint them with; undefined for plain code (an unknown language,
@@ -1840,7 +1940,7 @@ function renderEmbeddedFonts(fonts = []) {
 
 function renderRichTextBox(value, box, bound, config) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-  const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},textMeasurement:config.options.textMeasurement});
+  const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:config.options.textMeasurement});
   if(fit.overflow&&!config.diagnosticsHandled){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
   return renderRichLines(value,fit,box,bound,config);
 }
@@ -1866,10 +1966,11 @@ function trimRichLineEdges(line,textMeasurement) {
 }
 
 function renderRichLines(value,fit,box,bound,config) {
-  const logicalAlignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
+  const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
   // Each line takes its paragraph's direction from core (every wrapped line shares it) and its physical edge from that.
   const lineAlignment=index=>fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
-  let textOffset=0;
+  // A rich quote body draws its quotation marks inside the first and last run; config.textOffset (-1) keeps every traced offset on the authored text.
+  let textOffset=config.textOffset??0;
   const runOffsets=value.map(run=>{const start=textOffset;textOffset+=(typeof run==='string'?run:run.text).length;return start;});
   const richRtl=paragraphRtl(bound,value.map(run=>typeof run==='string'?run:run.text).join(''));
   // With no measurement provider, fragment advances are estimates. Let SVG
@@ -1901,19 +2002,23 @@ function renderRichLines(value,fit,box,bound,config) {
     // Estimated (natural-flow) lines keep logical order; the browser reorders them.
     const fragmentX=rtl&&!naturalFlow?line.width-fragment.x-fragment.width:fragment.x;
     const position=asFlow?{'baseline-shift':fragment.baselineShift?stableNumber(-fragment.baselineShift):undefined}:{x:stableNumber(originX+fragmentX),y:stableNumber(baseline+fragment.baselineShift)};
+    // A link run is drawn as PowerPoint draws one: underlined, in the scheme hyperlink color unless the run sets its own color.
+    const linked = fragment.kind !== 'marker' && typeof run.link === 'string' && LINK_URL.test(run.link);
     const runFill = run.color == null
-      ? config.fill
+      ? (linked ? bound.design.colors.hyperlink : config.fill)
       : resolveColorRef(run.color, bound, config.fill);
     let fixedAdvance=(fragment.kind==='tab'||placed)&&fragment.width>0;
-    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(fragment.text,fragment.style,bound,bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
+    // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
+    const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
+    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(fragment.text,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
       placement:fixedAdvance&&!asFlow?{x:originX+fragmentX,width:fragment.width,fontSize:fragment.fontSize}:undefined,fontSize:fragment.fontSize});
     if(scripted.positioned)fixedAdvance=false;
     const content=`${edges.first?RIGHT_TO_LEFT_ISOLATE:''}${scripted.content}${edges.last?POP_DIRECTIONAL_ISOLATE:''}`;
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
-    if(!marker&&run.link&&/^(https?:|mailto:)/i.test(run.link))return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
+    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(fragment.width):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };
     if(naturalFlow&&lineHasTab) {
@@ -1964,7 +2069,7 @@ function renderTextBox(text, box, bound, config) {
   const totalHeight = fit.lines.length * fit.lineHeight;
   const startY = config.verticalAlign === "middle"
     ? box.y + Math.max(0, (box.height - totalHeight) / 2) + size : box.y + size;
-  const logicalAlignment=fit.placement?.alignment??config.align??bound.design.contentAlignment;
+  const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
   const type = config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type;
   const source = String(text ?? ""), boxRtl = paragraphRtl(bound, source);
   let cursor = 0;

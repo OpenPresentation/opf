@@ -28,7 +28,7 @@ export declare const engineDefaults: Readonly<{
     pptx: Readonly<{ latin: "aptos"; ea: "microsoft-yahei"; cs: "nirmala-ui" }>;
     google: Readonly<{ latin: "roboto"; ea: "noto-sans-sc"; cs: "noto-sans" }>;
   }>;
-  chartTypes: readonly ["stacked-column-3x", "stacked-area-3x", "line-with-markers-3x"];
+  chartTypes: readonly ["stacked-column", "stacked-area", "line-with-markers"];
 }>;
 
 export type RenderDiagnostic = LayoutDiagnostic | {
@@ -41,7 +41,7 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   scripts: string[];
   characters: string[];
 } | {
-  code: "unsupported-pattern" | "variable-example-used" | "date-needs-value" | "language-preview-unavailable" | "language-preview-unresolved" | "paragraph-direction-unavailable";
+  code: "unsupported-pattern" | "variable-example-used" | "variable-builtin-missing" | "date-needs-value" | "language-preview-unavailable" | "language-preview-unresolved" | "paragraph-direction-unavailable";
   path: string;
   message: string;
 } | {
@@ -62,6 +62,11 @@ export type RenderDiagnostic = LayoutDiagnostic | {
   placeholder: "label" | "icon";
 };
 
+export interface RenderSvgDeckOptions {
+  /** Leave out slides marked `hidden: true`, as the player does. Default false: one SVG per slide. With true the result holds only the visible slides, in order. */
+  skipHidden?: boolean;
+}
+
 export interface RenderSvgOptions {
   textMeasurement?: TextMeasurement;
   /** `"chain"` (default): a character the resolved face lacks is drawn with the first bundled face that has it, and reported as `font-glyph-fallback`. `"none"`: exact faces, a missing glyph raises `missing-glyph`. */
@@ -77,7 +82,7 @@ export interface RenderSvgOptions {
   /**
    * Values for the deck's template variables, keyed by variable id (core `resolveVariables`). A deck that uses
    * content variables, or is marked `template: true`, is resolved to a concrete deck first. A template previews with
-   * each unfilled variable's example (reported as `variable-example-used`); a normal deck with an unfilled required
+   * each unfilled variable's example (reported as `variable-example-used`; a built-in such as `{{speaker.name}}` with no source value is reported as `variable-builtin-missing`); a normal deck with an unfilled required
    * variable throws `unfilled-variables`. `false` draws the document as authored, with `{{id}}` tokens and
    * `var:id` references visible and nothing resolved: the view an editor uses while the template itself is edited.
    */
@@ -166,6 +171,6 @@ export declare function resolvePresentation(input: unknown, options?: RenderSvgO
 
 export declare function renderSvg(input: unknown, options?: RenderSvgOptions): string;
 
-export declare function renderSvgDeck(input: unknown, options?: RenderSvgOptions): string[];
+export declare function renderSvgDeck(input: unknown, options?: RenderSvgOptions & RenderSvgDeckOptions): string[];
 
 

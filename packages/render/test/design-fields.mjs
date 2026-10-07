@@ -188,7 +188,7 @@ let checked = 0;
 // fontScheme.accent: the slide tag and the quote body draw in the accent family; titles and body stay.
 {
   const accent = 'Playfair Display';
-  const deck = { design: { fontScheme: { id: 'aptos', accent: { family: accent } } }, slides: [
+  const deck = { design: { fontScheme: { id: 'aptos', accent: accent } }, slides: [
     { tag: 'Eyebrow', title: 'Accent check', text: 'Body copy.' },
     { title: 'Quote', quote: { text: 'Design is how it works.', attribution: 'Someone' } },
   ] };
@@ -209,7 +209,7 @@ let checked = 0;
   assert.ok(families(plain, 'slides.0.tag').every(family => !family.includes(accent)));
   // The preview prepares the accent face like any other family (look-alike policy and embedding).
   const { options } = await prepareNodeFonts({ pack: 'office' });
-  const georgia = { design: { fontScheme: { id: 'aptos', accent: { family: 'Georgia' } } }, slides: deck.slides };
+  const georgia = { design: { fontScheme: { id: 'aptos', accent: 'Georgia' } }, slides: deck.slides };
   assert.ok(presentationFamilies(georgia).has('Georgia'), 'the accent family is collected like heading, body and code');
   assert.ok(presentationFaces(georgia).some(face => face.family === 'Georgia'), 'tag and quote request the accent face');
   const measured = resolvePresentation(georgia, options);

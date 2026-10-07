@@ -181,7 +181,7 @@ assert.equal(defaults.options.fontFiles.length, 131);
 assert.equal((await prepareNodeFonts({pack: 'base'})).options.embeddedFonts.length, 9);
 const schemeDocument = family => ({
   design: {fontScheme: 'x-open'},
-  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x-open', name: family, app: 'Google Slides', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}]}},
+  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x-open', name: family, app: 'google-slides', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}]}},
   slides: [{title: 'Quarterly review', text: 'Revenue grew in every region.'}],
 });
 const embeddedFamilies = svg => [...new Set([...svg.matchAll(/font-family:"([^"]+)"/g)].map(match => match[1]))].sort();

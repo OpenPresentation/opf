@@ -1,0 +1,4 @@
+---
+type: added
+---
+FA-14 (needs the core that ships `chart.highlight`; a chart without `highlight` draws the same SVG as before): the preview draws chart emphasis. Highlighted marks take the deck primary and every other mark a muted neutral derived from the chart panel and text colors, both from core (`chartHighlightMarks`, `chartHighlightColors`), so the preview and the PPTX export color the same marks the same way. Columns, bars, line series (a category highlight marks a line's points, also on a line without markers), areas, scatter and radar series, and pie and doughnut slices are covered; legend keys follow the mark colors and a data label inside a muted mark contrasts with it. Series keep their order. The chartex constructs and the parts a type cannot highlight draw as before, and the `chart-option-adapted` diagnostic is now reported even when no other chart option is set.

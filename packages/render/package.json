@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "private": false,
+  "opf": { "requiresUnreleasedCore": "0.14.0" },
   "engines": {
     "node": ">=22"
   },

@@ -77,7 +77,9 @@ assert.equal(solid('primary'), (scheme.primary ?? scheme.accent1).toUpperCase())
 assert.equal(solid('dark1'), scheme.dark1.toUpperCase());
 // Unresolvable references fall back as a bad literal does (white).
 assert.equal(solid('var:missing'), '#FFFFFF');
-assert.equal(solid('not-a-colour'), '#FFFFFF');
+// A value outside ColorRef is a schema error (FA-07); with validation off the preview still falls back the same way.
+assert.throws(() => solid('not-a-colour'), error => error.code === 'invalid-opf');
+assert.equal(firstRect(renderSvg(withBackground({type: 'solid', color: 'not-a-colour'}), {validate: false})), '#FFFFFF');
 // The resolved fill also decides light/dark text defaults.
 const darkText = renderSvg(withBackground({type: 'solid', color: 'var:brand'}, {variables: {brand: '#000000'}}));
 assert.equal(firstRect(darkText), '#000000');

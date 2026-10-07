@@ -1,12 +1,10 @@
 // Chart previews for the OPF chart type catalog (FF-22).
 //
-// The core catalog keeps one chart type per Office chart construct and
-// deprecates the rest with a replacement id (`deprecation.replacedBy`,
-// `mappings.openxml`). The tables below are carried here so the preview stays
-// synchronous and self-contained; test/chart-catalog.mjs checks them against
-// the installed core catalog. Kept ids render the construct PowerPoint shows
-// for the exported chart; deprecated ids render exactly like their replacement;
-// any other id returns null so the caller keeps its legacy single-series preview.
+// The core catalog keeps one chart type per Office chart construct (`mappings.openxml`).
+// The table below is carried here so the preview stays synchronous and
+// self-contained; test/chart-catalog.mjs checks it against the installed core
+// catalog. Catalog ids render the construct PowerPoint shows for the exported
+// chart; any other id returns null so the caller keeps its legacy single-series preview.
 import { chartColorForFill, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 // chartPaletteForFill ships with core RR-29 (opf#270); an older published core still loads and clamps each colour on its own.
 import * as opfComposition from "@openpresentation/opf/composition";
@@ -27,6 +25,31 @@ export function chartSeriesPalette(surface) {
     : CHART_SERIES_COLORS.map((color) => chartColorForFill(surface, color));
 }
 
+// FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
+// (chartHighlightColors); a highlighted mark takes the accent, every other mark the muted neutral. A chart without a
+// highlight has no `c.highlight`, and every colour below is the palette colour it always was.
+function highlightFor(c, resolved, spec, data) {
+  if (!resolved.highlight || typeof opfComposition.chartHighlightMarks !== "function" || typeof opfComposition.chartHighlightColors !== "function") return undefined;
+  const marks = opfComposition.chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.columns.length > 2, rows: data.rows });
+  if (!marks) return undefined;
+  return { ...marks, ...opfComposition.chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
+}
+
+/** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
+function seriesColor(c, j) {
+  return c.highlight ? (c.highlight.series[j] ? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
+}
+
+/** The colour of the mark of series `j` at row `i`: highlighted when its series or its category is named. */
+function markColor(c, j, i) {
+  return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
+}
+
+/** The colour of the pie or doughnut slice of row `i`. */
+function sliceColor(c, i) {
+  return c.highlight ? (c.highlight.categories[i] ? c.highlight.accent : c.highlight.muted) : c.colors[i % c.colors.length];
+}
+
 const bar = (dir, grouping) => ({ kind: "bar", dir, grouping });
 const line = (grouping, markers) => ({ kind: "line", grouping, markers });
 const area = (grouping) => ({ kind: "area", grouping });
@@ -34,18 +57,18 @@ const radar = (style) => ({ kind: "radar", style, markers: style === "marker" })
 
 export const CHART_TYPES = Object.freeze({
   column: bar("col", "clustered"),
-  "stacked-column-3x": bar("col", "stacked"),
-  "100pct-stacked-column-3x": bar("col", "percentStacked"),
+  "stacked-column": bar("col", "stacked"),
+  "100pct-stacked-column": bar("col", "percentStacked"),
   bar: bar("bar", "clustered"),
-  "stacked-bar-3x": bar("bar", "stacked"),
-  "100pct-stacked-bar-3x": bar("bar", "percentStacked"),
+  "stacked-bar": bar("bar", "stacked"),
+  "100pct-stacked-bar": bar("bar", "percentStacked"),
   line: line("standard", false),
   "line-with-markers": line("standard", true),
-  "stacked-line-3x": line("stacked", false),
-  "stacked-line-with-markers-3x": line("stacked", true),
+  "stacked-line": line("stacked", false),
+  "stacked-line-with-markers": line("stacked", true),
   area: area("standard"),
-  "stacked-area-3x": area("stacked"),
-  "100pct-stacked-area-3x": area("percentStacked"),
+  "stacked-area": area("stacked"),
+  "100pct-stacked-area": area("percentStacked"),
   pie: { kind: "pie" },
   doughnut: { kind: "doughnut" },
   scatter: { kind: "scatter" },
@@ -58,46 +81,9 @@ export const CHART_TYPES = Object.freeze({
   "box-and-whisker": { kind: "box" },
   waterfall: { kind: "waterfall" },
   funnel: { kind: "funnel" },
-  world: { kind: "map" }
-});
-
-const variants = (base, target) => Object.fromEntries([base, `${base}-2x`, `${base}-3x`].map((id) => [id, target]));
-const suffixes = (base, target) => Object.fromEntries(["", "-2x", "-3x", "-4x", "-5x", "-6x"].map((suffix) => [`${base}${suffix}`, target]));
-
-// Deprecated core ids -> kept replacement (core spec/catalogs/chart-types `deprecation.replacedBy`).
-export const DEPRECATED_CHART_TYPES = Object.freeze({
-  ...variants("100pct-bullet-bar", "100pct-stacked-bar-3x"),
-  "100pct-progress-bar": "100pct-stacked-bar-3x",
-  "100pct-stacked-bar-2x": "100pct-stacked-bar-3x",
-  ...variants("100pct-bullet-column", "100pct-stacked-column-3x"),
-  "100pct-stacked-column-2x": "100pct-stacked-column-3x",
-  "100pct-stacked-area-2x": "100pct-stacked-area-3x",
-  australia: "world",
-  canada: "world",
-  "united-kingdom": "world",
-  "united-states": "world",
-  "box-and-whisker-2x": "box-and-whisker",
-  "box-and-whisker-3x": "box-and-whisker",
-  ...variants("bullet-bar", "bar"),
-  "clustered-bar-2x": "bar",
-  ...variants("bullet-column", "column"),
-  "clustered-column": "column",
-  ...suffixes("dot-plot", "scatter"),
-  dumbbell: "scatter",
-  "line-2x": "line",
-  "line-3x": "line",
-  "line-with-high-low": "line",
-  ...suffixes("sparkline", "line"),
-  "line-with-high-low-and-markers": "line-with-markers",
-  "line-with-markers-2x": "line-with-markers",
-  "line-with-markers-3x": "line-with-markers",
-  "stacked-area-2x": "stacked-area-3x",
-  "stacked-bar-2x": "stacked-bar-3x",
-  "stacked-column-2x": "stacked-column-3x",
-  "stacked-line-2x": "stacked-line-3x",
-  "stacked-line-with-markers-2x": "stacked-line-with-markers-3x",
-  "treemap-2x": "treemap",
-  "treemap-3x": "treemap"
+  world: { kind: "map" },
+  // FA-15: clustered columns with line series (markers), the lines optionally on a secondary value axis (core resolves the plan).
+  combo: { kind: "combo", dir: "col", grouping: "clustered", markers: true }
 });
 
 const ALIASES = Object.freeze({ donut: "doughnut" });
@@ -105,7 +91,7 @@ const ALIASES = Object.freeze({ donut: "doughnut" });
 /** Resolve a chart type id to its kept catalog id, or null for ids outside the catalog. */
 export function resolveChartType(type) {
   const raw = String(type ?? "").trim().toLowerCase();
-  const id = ALIASES[raw] ?? DEPRECATED_CHART_TYPES[raw] ?? raw;
+  const id = ALIASES[raw] ?? raw;
   return Object.hasOwn(CHART_TYPES, id) ? id : null;
 }
 
@@ -124,7 +110,8 @@ const RENDERERS = {
   box: renderBoxWhiskerChart,
   waterfall: renderWaterfallChart,
   funnel: renderFunnelChart,
-  map: renderRegionMapChart
+  map: renderRegionMapChart,
+  combo: renderComboChart
 };
 
 // Chartex constructs also accept a lone value column (the exporter plots it
@@ -147,6 +134,9 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
   // with none of them skips this block entirely, so its output is unchanged.
   const resolved = resolveOptions(item.value, spec);
+  // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
+  c.highlight = highlightFor(c, resolved, spec, data);
+  if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
     reportOptionDiagnostics(c, resolved);
     c.dataLabels = resolved.dataLabels;
@@ -170,7 +160,7 @@ export function chartData(item, bound) {
     const resolved = opfComposition.resolveChartData(chart, bound?.presentation, { path: item.path });
     if (!resolved.ok) return null;
     const formats = resolved.formats.map((format) => typeof format === "string" && format !== "" && !opfComposition.numberFormatError?.(format) ? format : undefined);
-    return { columns: resolved.columns, rows: resolved.rows, formats, trace: tracePaths(item, bound, resolved) };
+    return { columns: resolved.columns, rows: resolved.rows, formats, trace: tracePaths(item, bound, resolved), ...(resolved.combo ? { combo: resolved.combo } : {}) };
   }
   const data = chart?.data;
   const rows = Array.isArray(data?.rows) ? data.rows.map((row) => Array.isArray(row) ? row : [row]) : [];
@@ -202,19 +192,19 @@ export function isDatasetTable(item, bound) {
 }
 
 // Where a mark's trace path points. A dataset-backed chart has no `data.rows` or `data.columns` of its own, so every part reports
-// the chart's authored path; a chart with `mapping` reports the authored column index of each plotted column (the resolved
-// order is category, X, then the mapped series).
+// the chart's authored path; a chart with `mapping` (or a combo chart, whose column series come before its lines) reports the
+// authored column index of each plotted column (the resolved order is category, X, then the mapped series).
 function tracePaths(item, bound, resolved) {
   if (isDatasetChart(item, bound)) return { collapse: true };
   const authored = authoredAt(bound?.presentation, item.path);
   const authoredData = authored && typeof authored === "object" ? authored.data : undefined;
-  if (!authored || typeof authored !== "object" || !authored.mapping || !Array.isArray(authoredData?.columns)) return null;
+  if (!authored || typeof authored !== "object" || (!authored.mapping && !resolved.combo) || !Array.isArray(authoredData?.columns)) return null;
   const names = authoredData.columns.map((column) => column !== null && typeof column === "object" ? column.name : column);
   const columnMap = resolved.columns.map((name, index) => { const found = names.indexOf(name); return found < 0 ? index : found; });
   return columnMap.every((column, index) => column === index) ? null : { columnMap };
 }
 
-function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace }) {
+function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo }) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   const requested = 14, fontPx = Math.max(requested, composition.minFontSize ?? 16) * u;
@@ -232,7 +222,7 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
     return path.replace(/^(.*\.data\.(?:columns\.|rows\.\d+\.))(\d+)$/, (whole, head, column) => `${head}${trace.columnMap[Number(column)] ?? column}`);
   };
   const c = {
-    item, box, bound, options, svg, rows, columns, formats, children, u, fontPx, surface, labelColor,
+    item, box, bound, options, svg, rows, columns, formats, combo, children, u, fontPx, surface, labelColor,
     path: item.path,
     pt: u * 4 / 3,
     pad: 10 * u,
@@ -435,16 +425,17 @@ function legendEntries(c, entries) {
 
 // RR-35: the legend entries of a chart whatever the series count (an explicit legend position shows a single series too).
 function legendSource(c, spec) {
-  const fromSeries = (series, key, marker = false) => series.map((s) => ({ name: s.name, color: c.colors[s.index % c.colors.length], path: `${c.path}.data.columns.${s.column}`, key, marker }));
+  const fromSeries = (series, key, marker = false) => series.map((s) => ({ name: s.name, color: seriesColor(c, s.index), path: `${c.path}.data.columns.${s.column}`, key, marker }));
   switch (spec.kind) {
     case "pie":
-    case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: c.colors[i % c.colors.length], path: `${c.path}.data.rows.${i}.0` }));
+    case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0` }));
     case "scatter": return fromSeries(scatterSeries(c.rows, c.columns, c.formats).series, "marker");
     case "line": return fromSeries(c.series(), "line", spec.markers);
     case "radar": return fromSeries(c.series(), spec.style === "filled" ? undefined : "line", spec.markers);
     case "box": return fromSeries(c.columns.length === 1 ? [{ name: c.label(c.columns[0]), column: 0, index: 0 }] : c.series());
     case "bar":
     case "area": return fromSeries(c.series());
+    case "combo": return comboLegendEntries(c, c.series());
     default: return [];
   }
 }
@@ -494,7 +485,7 @@ function placeLegend(c, spec, position) {
 
 function seriesLegend(c, series, key, marker = false) {
   return series.length > 1
-    ? legendEntries(c, series.map((s) => ({ name: s.name, color: c.colors[s.index % c.colors.length], path: `${c.path}.data.columns.${s.column}`, key, marker })))
+    ? legendEntries(c, series.map((s) => ({ name: s.name, color: seriesColor(c, s.index), path: `${c.path}.data.columns.${s.column}`, key, marker })))
     : 0;
 }
 
@@ -845,9 +836,9 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
   const geometry = barGeometry(band, series.length, spec.grouping);
   const labels = [];
   series.forEach((s, j) => {
-    const color = c.colors[j % c.colors.length];
     stacks[j].forEach((point, i) => {
       if (!point) return;
+      const color = markColor(c, j, i);
       const slot = geometry.clustered ? j * geometry.width : 0;
       const a = at(base(point.from)), b = at(point.to);
       const path = `${c.path}.data.rows.${i}.${s.column}`;
@@ -871,8 +862,8 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
 
 function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i) => i }) {
   const radius = 3 * c.pt;
-  series.forEach((s, j) => {
-    const color = c.colors[j % c.colors.length];
+  for (let j = 0; j < series.length; j++) {
+    const s = series[j], color = seriesColor(c, j);
     let run = [];
     const flush = () => {
       if (run.length > 1) c.mark("polyline", { points: run.map(([x, y]) => `${c.num(x)},${c.num(y)}`).join(" "), fill: "none", stroke: color, "stroke-width": 2 * c.pt, "stroke-linejoin": "round", "stroke-linecap": "round" }, `${c.path}.data.columns.${s.column}`);
@@ -883,10 +874,13 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
       run.push([plot.x + (categorySlot(i) + 0.5) * band, at(point.to)]);
     });
     flush();
-    if (spec.markers) stacks[j].forEach((point, i) => {
-      if (point) c.mark("circle", { cx: plot.x + (categorySlot(i) + 0.5) * band, cy: at(point.to), r: radius, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${i}.${s.column}`);
+    // FA-14: with a highlight each point takes its own colour, and a line without markers marks the highlighted categories' points.
+    if (spec.markers || c.highlight?.categories.some(Boolean)) stacks[j].forEach((point, i) => {
+      if (!point || (!spec.markers && !c.highlight.categories[i])) return;
+      const fill = markColor(c, j, i);
+      c.mark("circle", { cx: plot.x + (categorySlot(i) + 0.5) * band, cy: at(point.to), r: radius, fill, stroke: fill, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${i}.${s.column}`);
     });
-  });
+  }
   // RR-35: data labels sit beside each point, over every line.
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), [plot.x + (i + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
@@ -894,18 +888,131 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
 }
 
 function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot = (i) => i }) {
-  series.forEach((s, j) => {
+  for (let j = 0; j < series.length; j++) {
+    const s = series[j];
     const points = stacks[j].map((point, i) => ({ x: plot.x + (categorySlot(i) + 0.5) * band, from: point.from, to: point.to }));
     const upper = points.map((p) => `${c.num(p.x)} ${c.num(at(p.to))}`);
     const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
-    c.mark("path", { d: `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`, fill: c.colors[j % c.colors.length] }, `${c.path}.data.columns.${s.column}`);
-  });
+    c.mark("path", { d: `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`, fill: seriesColor(c, j) }, `${c.path}.data.columns.${s.column}`);
+  }
   // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge.
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (!point) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
-    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (i + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, c.colors[j % c.colors.length]);
+    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (i + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
+}
+
+// ---------------------------------------------------------------------------
+// Combo (FA-15): clustered columns and line series with markers in one plot. Core's resolveChartData orders the series
+// (column series first, then lines) and says which lines use the secondary value axis. That axis sits at the right (the left,
+// right to left) with its own scale and its tick labels in the first secondary series' number format; the gridlines follow
+// the primary axis, whose ticks take the first column series' format. The PPTX export writes the same plan natively.
+
+/** The combo plan of a chart: core's, or (a core without it) every series a column except the last, a line, all on the primary axis. */
+function comboPlan(c, series) {
+  if (Array.isArray(c.combo) && c.combo.length === series.length) return c.combo;
+  return series.map((_, index) => ({ role: series.length > 1 && index === series.length - 1 ? "line" : "bar", axis: "primary" }));
+}
+
+/** Legend entries in series order: a square key for a column series, a line with a marker for a line series. */
+function comboLegendEntries(c, series) {
+  const plan = comboPlan(c, series);
+  return series.map((s, index) => ({ name: s.name, color: c.colors[s.index % c.colors.length], path: `${c.path}.data.columns.${s.column}`, ...(plan[index].role === "line" ? { key: "line", marker: true } : {}) }));
+}
+
+function renderComboChart(c, spec) {
+  const { box, pad, fontPx } = c;
+  const series = c.series();
+  const plan = comboPlan(c, series);
+  const bars = series.filter((_, index) => plan[index].role === "bar");
+  const lines = series.filter((_, index) => plan[index].role === "line");
+  const onSecondary = (s) => plan[s.index].axis === "secondary";
+  const primaryLines = lines.filter((s) => !onSecondary(s)), secondaryLines = lines.filter(onSecondary);
+  const categories = c.rows.map((row) => c.label(row[0]));
+  const count = categories.length;
+  // Right to left (RR-05): the categories run from the right, the primary value axis moves to the right and the secondary one to the left.
+  const rtl = c.bound.geometry?.direction === "rtl";
+  const categorySlot = (i) => rtl ? count - 1 - i : i;
+  const extent = (list) => {
+    const values = list.flatMap((s) => s.values).filter((value) => value !== null);
+    return values.length ? [Math.min(...values), Math.max(...values)] : [0, 1];
+  };
+  const [primaryMin, primaryMax] = extent([...bars, ...primaryLines]);
+  const [secondaryMin, secondaryMax] = extent(secondaryLines);
+  const primaryFormat = (bars[0] ?? primaryLines[0])?.format, secondaryFormat = secondaryLines[0]?.format;
+  // The default legend sits at the far right, outside a right axis title (the secondary axis title, or right to left the primary
+  // one), as PowerPoint places it: the legend is laid out against the box before the title band was carved, and the title moves in.
+  const rightTitle = c.axisTitleBands?.some((band) => band.side === "right") && !c.legendManaged;
+  let legendWidth = 0;
+  if (series.length > 1) {
+    const inner = c.box;
+    if (rightTitle) c.box = { ...inner, width: inner.width + c.lineHeight };
+    legendWidth = legendEntries(c, comboLegendEntries(c, series));
+    c.box = inner;
+    if (rightTitle) c.axisTitleRightInset = legendWidth + c.pad / 2;
+  }
+  const right = box.x + box.width - pad - legendWidth;
+  const top = box.y + pad + c.lineHeight / 2;
+  const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
+  if (rtl) entries.reverse();
+  const tickWidthOf = (scale, format) => Math.max(...scale.ticks.map((tick) => c.width(formatTick(tick, false, format)))) + fontPx * 0.5;
+  const axis = planCategoryAxis(c, entries, (reserve) => {
+    const height = Math.max(1, box.y + box.height - pad - reserve - top);
+    const intervals = maxIntervalsFor(height, c.lineHeight * 1.2);
+    const scale = niceScale(primaryMin, primaryMax, intervals);
+    const secondary = secondaryLines.length ? niceScale(secondaryMin, secondaryMax, intervals) : null;
+    const primaryWidth = tickWidthOf(scale, primaryFormat), secondaryWidth = secondary ? tickWidthOf(secondary, secondaryFormat) : 0;
+    const leftWidth = rtl ? secondaryWidth : primaryWidth, rightWidth = rtl ? primaryWidth : secondaryWidth;
+    const x = box.x + pad + (leftWidth || fontPx / 2);
+    const plotRight = right - (rightWidth || fontPx / 2);
+    return { scale, secondary, primaryWidth, secondaryWidth, plot: { x, y: top, width: Math.max(1, plotRight - x), height } };
+  });
+  const { plot, scale, secondary } = axis;
+  drawBottomLabels(c, axis.plan, plot, entries);
+  c.plotArea = plot;
+  const valueAt = (axisScale) => (value) => plot.y + axisFraction(value, axisScale, true) * plot.height;
+  const at = valueAt(scale), atSecondary = secondary ? valueAt(secondary) : at;
+  const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
+  const tickLabel = (label, position, side, width) => side === "left"
+    ? c.text(label, { x: box.x + pad, y: position - c.lineHeight / 2, width: Math.max(1, plot.x - box.x - pad - fontPx * 0.35), height: c.lineHeight }, c.path, "right")
+    : c.text(label, { x: plot.x + plot.width + fontPx * 0.35, y: position - c.lineHeight / 2, width: Math.max(1, width - fontPx * 0.35), height: c.lineHeight }, c.path, "left");
+  for (const tick of scale.ticks) {
+    const position = at(tick);
+    gridline(c, plot.x, position, plot.x + plot.width, position);
+    tickLabel(formatTick(tick, false, primaryFormat), position, rtl ? "right" : "left", axis.primaryWidth);
+  }
+  if (secondary) for (const tick of secondary.ticks) tickLabel(formatTick(tick, false, secondaryFormat), atSecondary(tick), rtl ? "left" : "right", axis.secondaryWidth);
+  const band = plot.width / count;
+  // Column series come first in core's order, so a column's palette index is its series index.
+  if (bars.length) drawBars(c, spec, bars, stackCategoryValues(bars, count, "bar", "clustered", c.path), { plot, band, at, horizontal: false, scale, categorySlot });
+  const point = (s, i, value) => [plot.x + (categorySlot(i) + 0.5) * band, (onSecondary(s) ? atSecondary : at)(value)];
+  const radius = 3 * c.pt;
+  for (const s of lines) {
+    const color = c.colors[s.index % c.colors.length];
+    let run = [];
+    const flush = () => {
+      if (run.length > 1) c.mark("polyline", { points: run.map(([x, y]) => `${c.num(x)},${c.num(y)}`).join(" "), fill: "none", stroke: color, "stroke-width": 2 * c.pt, "stroke-linejoin": "round", "stroke-linecap": "round" }, `${c.path}.data.columns.${s.column}`);
+      run = [];
+    };
+    s.values.forEach((value, i) => { if (value === null) flush(); else run.push(point(s, i, value)); });
+    flush();
+    s.values.forEach((value, i) => {
+      if (value === null) return;
+      const [cx, cy] = point(s, i, value);
+      c.mark("circle", { cx, cy, r: radius, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${i}.${s.column}`);
+    });
+  }
+  // Line labels sit beside each point at the combo's line position (core: above unless a point position was asked for).
+  if (c.dataLabels) for (const s of lines) s.values.forEach((value, i) => {
+    if (value === null) return;
+    const category = c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]);
+    drawPointLabel(c, labelString(c, { category, value, format: s.format }), point(s, i, value), `${c.path}.data.rows.${i}.${s.column}`, c.dataLabels.linePosition ?? "above");
+  });
+  const primaryX = rtl ? plot.x + plot.width : plot.x, secondaryX = rtl ? plot.x : plot.x + plot.width;
+  axisLine(c, primaryX, plot.y, primaryX, plot.y + plot.height);
+  if (secondary) axisLine(c, secondaryX, plot.y, secondaryX, plot.y + plot.height);
+  axisLine(c, plot.x, crossing, plot.x + plot.width, crossing);
 }
 
 // ---------------------------------------------------------------------------
@@ -916,7 +1023,7 @@ function renderCircularChart(c, spec) {
   const categories = c.rows.map((row) => c.label(row[0]));
   const values = c.rows.map((row) => Math.abs(chartNumber(row[1]) ?? 0));
   const legendWidth = legendEntries(c, categories.map((name, i) => ({
-    name, color: c.colors[i % c.colors.length], path: `${c.path}.data.rows.${i}.0`
+    name, color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0`
   })));
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
@@ -936,7 +1043,7 @@ function renderCircularChart(c, spec) {
   let angle = -Math.PI / 2;
   values.forEach((value, i) => {
     const delta = value / total * Math.PI * 2, end = angle + delta;
-    const fill = c.colors[i % c.colors.length], path = `${c.path}.data.rows.${i}.1`;
+    const fill = sliceColor(c, i), path = `${c.path}.data.rows.${i}.1`;
     if (delta >= Math.PI * 2 - 1e-9) {
       if (inner) c.mark("path", { d: `${circlePath(c, cx, cy, r)} ${circlePath(c, cx, cy, inner)}`, fill, "fill-rule": "evenodd", ...border }, path);
       else c.mark("circle", { cx, cy, r, fill, ...border }, path);
@@ -949,7 +1056,7 @@ function renderCircularChart(c, spec) {
     let start = -Math.PI / 2;
     values.forEach((value, i) => {
       const delta = value / total * Math.PI * 2;
-      if (delta > 0) drawSliceLabel(c, sliceTexts[i], { cx, cy, r, inner, mid: start + delta / 2 }, `${c.path}.data.rows.${i}.1`, c.colors[i % c.colors.length]);
+      if (delta > 0) drawSliceLabel(c, sliceTexts[i], { cx, cy, r, inner, mid: start + delta / 2 }, `${c.path}.data.rows.${i}.1`, sliceColor(c, i));
       start += delta;
     });
   }
@@ -1020,10 +1127,10 @@ function renderScatterChart(c) {
   const yCross = yAt(Math.min(yScale.max, Math.max(yScale.min, 0))), xCross = xAt(Math.min(xScale.max, Math.max(xScale.min, 0)));
   axisLine(c, xCross, plot.y, xCross, plot.y + plot.height);
   axisLine(c, plot.x, yCross, plot.x + plot.width, yCross);
-  series.forEach((s, j) => {
-    const color = c.colors[j % c.colors.length];
+  for (let j = 0; j < series.length; j++) {
+    const s = series[j], color = seriesColor(c, j);
     for (const point of s.points) c.mark("circle", { cx: xAt(point.x), cy: yAt(point.y), r: 3 * c.pt, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${point.row}.${s.column}`);
-  });
+  }
   // RR-35: a scatter label shows the Y value, and the X value as its category.
   if (c.dataLabels) series.forEach((s) => {
     for (const point of s.points) drawPointLabel(c, labelString(c, { category: formatChartValue(point.x, xFormat), value: point.y, format: s.format }), [xAt(point.x), yAt(point.y)], `${c.path}.data.rows.${point.row}.${s.column}`);
@@ -1092,12 +1199,12 @@ function renderRadarChart(c, spec) {
     c.text(text, rect, label.path, align);
   });
   reportTruncatedLabels(c, truncated);
-  series.forEach((s, j) => {
-    const color = c.colors[j % c.colors.length], path = `${c.path}.data.columns.${s.column}`;
+  for (let j = 0; j < series.length; j++) {
+    const s = series[j], color = seriesColor(c, j), path = `${c.path}.data.columns.${s.column}`;
     if (spec.style === "filled") {
       const outline = s.values.map((v, i) => point(i, v ?? scale.min).map(n).join(" "));
       c.mark("path", { d: `M ${outline.join(" L ")} Z`, fill: color }, path);
-      return;
+      continue;
     }
     const at = (i) => point(i, s.values[i]).map(n).join(" ");
     let d = "";
@@ -1112,7 +1219,7 @@ function renderRadarChart(c, spec) {
       const [x, y] = point(i, v);
       c.mark("circle", { cx: x, cy: y, r: 3 * c.pt, fill: color, stroke: color, "stroke-width": 0.75 * c.pt }, `${c.path}.data.rows.${i}.${s.column}`);
     });
-  });
+  }
   // Value axis labels sit on top of filled series, as in PowerPoint.
   for (const tick of scale.ticks) {
     const label = formatTick(tick, false, valueFormat), width = c.width(label) + fontPx * 0.5;

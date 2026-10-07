@@ -24,9 +24,9 @@ const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 // ---------------------------------------------------------------------------------------------------------------------
 // 0. Documents that use none of the new fields draw byte for byte as before. The digests below were taken from the renderer
 //    before RR-54 (RR54_PRINT_DIGESTS=1 prints them): one traced render per catalog chart type with numeric data, a legacy
-//    sketch, and a styled table. A change here is a change to existing output and needs a reason.
+//    sketch, and a styled table. A change here is a change to existing output and needs a reason. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests.
 
-const CATALOG_TYPES = ['column', 'stacked-column-3x', '100pct-stacked-column-3x', 'bar', 'stacked-bar-3x', '100pct-stacked-bar-3x', 'line', 'line-with-markers', 'stacked-line-3x', 'stacked-line-with-markers-3x', 'area', 'stacked-area-3x', '100pct-stacked-area-3x', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
+const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
 const plainRows = [['Q1', 12.4, 3, 8], ['Q2', 18.1, 5, 9], ['Q3', 21.75, 2, 4], ['Q4', 9, 7, 6]];
 const plainDocuments = {
   ...Object.fromEntries(CATALOG_TYPES.map((type) => [type, chartDoc({ type, dataLabels: { content: ['category', 'value'] }, data: { columns: ['Quarter', 'North', 'South', 'West'], rows: plainRows } })])),
@@ -43,18 +43,18 @@ if (process.env.RR54_PRINT_DIGESTS) {
 }
 const BEFORE_RR54 = {
   'column': '250d9583576169028249f1ff',
-  'stacked-column-3x': 'ec2cb3ef738231d3717f5aa8',
-  '100pct-stacked-column-3x': '72aed895252b46e15aca11bd',
+  'stacked-column': 'c8f67cd32d124baa63e88287',
+  '100pct-stacked-column': 'f250aea7ced24668d23bc19a',
   'bar': 'a3fb7125850235bc75a85867',
-  'stacked-bar-3x': '68417103a85eba8d6b3af3d1',
-  '100pct-stacked-bar-3x': '7159df22525fad7a41919a02',
+  'stacked-bar': '30680d68905a1b916b2f2d53',
+  '100pct-stacked-bar': '31ae783a5d551833f171e61f',
   'line': 'b3040f42616b1850faa2136d',
   'line-with-markers': 'b9cb6e665dab2085131cfa58',
-  'stacked-line-3x': '7be866e2349fa6cdb629002b',
-  'stacked-line-with-markers-3x': 'd4f9e206b03b9164c9886bdb',
+  'stacked-line': '41660c2bc2a391b5785ac3e6',
+  'stacked-line-with-markers': '1d3fc80d8be817470f8eb6bd',
   'area': '501727b02b6375319c2fb769',
-  'stacked-area-3x': '5457c98c1e75c7d9f450f49e',
-  '100pct-stacked-area-3x': '830d1bbe4078786abe080283',
+  'stacked-area': '8477247b74361541cdc1bcb6',
+  '100pct-stacked-area': '68e391c29a46caf4dcb19314',
   'pie': '16b4eec05114e54f2e855625',
   'doughnut': 'd301f4344cb0f7e7cfa6b446',
   'scatter': '3e660de4623a826a57ee56e8',
@@ -128,7 +128,7 @@ const rows = [['Q1', 12.4, 0.31], ['Q2', 18.1, 0.34], ['Q3', 21.75, 0.4]];
     assert.ok(shownEx.includes('$10.0'), `${type}: label formatted (${shownEx.join(' | ')})`);
   }
   // Percent-stacked axes stay percent; the format moves to the data labels only.
-  const stacked = words(render(chartDoc({ type: '100pct-stacked-column-3x', dataLabels: { content: ['value'] }, data: { columns: ['Quarter', money, { name: 'Costs', format: '$#,##0.0' }], rows: [['Q1', 10, 10], ['Q2', 20, 5]] } })));
+  const stacked = words(render(chartDoc({ type: '100pct-stacked-column', dataLabels: { content: ['value'] }, data: { columns: ['Quarter', money, { name: 'Costs', format: '$#,##0.0' }], rows: [['Q1', 10, 10], ['Q2', 20, 5]] } })));
   assert.ok(stacked.includes('100%') && stacked.includes('$10.0'), `100% stacked: percent axis, formatted labels (${stacked.join(' | ')})`);
 }
 // An invalid format never reaches the drawing (core reports number-format-invalid); formatTick takes a format or none.
@@ -179,8 +179,8 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
   assert.throws(() => render(chartDoc({ type: 'column', mapping: { series: ['Nope'] }, data: { columns: ['A', 'B'], rows: [['x', 1]] } })), (error) => error.details.issues.some((issue) => issue.params?.code === 'chart-mapping-unknown-column'), 'an unknown mapping column is rejected at the boundary');
 }
 {
-  const external = render(chartDoc({ type: 'column', data: { src: 'revenue.csv' } }));
-  assert.ok(words(external).includes('No chart data'), 'a ChartDataSource still draws the placeholder');
+  // ChartDataSource is removed from the format (opf#240, descoped): a data source by file is rejected at the boundary.
+  assert.throws(() => render(chartDoc({ type: 'column', data: { src: 'revenue.csv' } })), (error) => error.code === 'invalid-opf', 'a data source by file is a validation error');
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -281,7 +281,7 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
     return textBoxes(svg).filter((box) => box.left + 8 < rect.left || box.right - 8 > rect.right).map((box) => box.text);
   };
   const values = [['Q1', 12400.4, 3000.5], ['Q2', 18100.1, -5000], ['Q3', 21750.75, 2], ['Q4', 9000, 7]];
-  for (const type of ['bar', 'stacked-bar-3x']) {
+  for (const type of ['bar', 'stacked-bar']) {
     assert.deepEqual(outside(type, ['Q', { name: 'N', format: long }, { name: 'S', format: long }], values), [], `${type}: formatted value-axis labels stay inside the chart`);
   }
   assert.deepEqual(outside('scatter', ['P', { name: 'X', format: long }, { name: 'Y', format: long }], values), [], 'scatter: formatted X-axis labels stay inside the chart');

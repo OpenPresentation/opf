@@ -36,9 +36,10 @@ assert.ok(workflow.includes(`image: ${pins.image}`), 'regenerate-goldens.yml mus
 assert.ok(workflow.includes(`OPF_PLAYWRIGHT_IMAGE: ${pins.image}`), 'The job env repeats the image the guard compares with ci.yml');
 assert.ok(workflow.indexOf('golden-pinned-image.mjs') < workflow.indexOf('npm ci'), 'The guard runs before any install');
 assert.equal(/runs-on:\s*(\S+)/.exec(workflow)[1], /runs-on:\s*(\S+)/.exec(ci)[1], 'The workflow uses the runner label of the ci.yml package job');
-// RR-50: ci.yml pins no sibling and no golden by hand; its golden-override is empty (the lock's golden) or a renderer
-// baseline directory (legacy .sha256.json name accepted).
-assert.match(pins.goldenOverride, /^$|^opf-render\/test\/golden\/[\w.-]+$/, 'ci.yml golden-override is empty or a renderer baseline directory');
+// RR-50: ci.yml pins no sibling and no golden by hand; its golden-override is empty (the lock's golden), a renderer
+// baseline directory (legacy .sha256.json name accepted), or, for a coordinated release, a reviewed core fixture
+// (opf/scripts/fixtures/<name>.sha256.json; core's roller adopts it as the lock's golden).
+assert.match(pins.goldenOverride, /^$|^opf-render\/test\/golden\/[\w.-]+$|^opf\/scripts\/fixtures\/[\w.-]+\.sha256\.json$/, 'ci.yml golden-override is empty, a renderer baseline directory or a core fixture');
 const lock = {
   version: 1,
   repositories: { opf: { sha: '1'.repeat(40) }, 'opf-render': { sha: '2'.repeat(40) }, 'opf-pptx': { sha: '3'.repeat(40) }, 'opf-editor': { sha: '4'.repeat(40) } },

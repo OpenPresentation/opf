@@ -70,7 +70,7 @@ Metric lines without tabs now anchor at their accepted alignment edge, as native
 
 Slide-level images (`design.slideImage`, composed by core as `geometry.slideImage`) change 1 of 805 slides, with an unchanged source digest: `technical/slide-design-overrides.opf.json#3`. The same entry changes in both `opf-examples-png.furniture.sha256.json` and `opf-examples-png.ff25-wdupdiag.sha256.json`. That slide sets its own `design.slideImage` with `position: "right"` and uses the same asset as its root image. The image now fills the right half of the slide and the title wraps in the left half. Before, the image was a content item below the title. The asset is not embedded, so both versions show the ordinary "Image unavailable" placeholder. The before and after renders were reviewed at half scale.
 
-A deck-level slide image applies only where the layout declares `slideImage: true`, or where the slide's root `image` is the same source. None of the 81 decks with a deck-level `slideImage` meets either condition, so they keep their hashes. The other 804 hashes are unchanged.
+A deck-level slide image applies only where the layout record sets `design.slideImage`, or where the slide's root `image` is the same source. None of the 81 decks with a deck-level `slideImage` meets either condition, so they keep their hashes. The other 804 hashes are unchanged.
 
 CI pins the FF-26 core, which also contains the opf#127 `wdUpDiag` examples, so `OPF_GOLDEN_BASELINE` selects the FF-25 manifest there.
 

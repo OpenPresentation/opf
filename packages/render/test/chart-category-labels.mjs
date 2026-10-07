@@ -235,7 +235,7 @@ for (const count of [12, 49]) {
   for (const kind of ['short', 'long']) {
     const names = Array.from({ length: count }, (_, i) => labelKinds[kind](i));
     const rows = names.map((name, i) => [name, 10 + (i * 5) % 17]);
-    for (const type of ['stacked-column-3x', '100pct-stacked-column-3x', 'area', 'stacked-area-3x', 'line-with-markers', 'stacked-bar-3x', 'waterfall', 'funnel', 'box-and-whisker']) {
+    for (const type of ['stacked-column', '100pct-stacked-column', 'area', 'stacked-area', 'line-with-markers', 'stacked-bar', 'waterfall', 'funnel', 'box-and-whisker']) {
       const label = `${type}/${count}/${kind}`;
       const data = type.includes('stacked') ? rows.map((row) => [...row, row[1] + 3]) : rows;
       const rendered = render(type, data, { columns: type.includes('stacked') ? ['Category', 'A', 'B'] : ['Category', 'Value'] });

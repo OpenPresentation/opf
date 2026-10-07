@@ -55,17 +55,17 @@ export function scriptPackageEntries(packages, {baseUrl}) {
 // Fields a preview never draws (checked against what the renderer and core composition draw).
 // Everywhere: the schema URL, embedded assets, catalog records, speaker notes, ids, image alt text and sources,
 // links, metadata and typed `extensions` passthrough. On the presentation: name (aria-label fallback), description,
-// filename, author, speaker, audience, purpose, tone, takeaway, duration, tags, narrative, language and version.
-// On a slide: beat. The organization (name) and a slide's section are drawn only as generated header/footer
-// furniture (`organization: true` / `section: true` in a design), so they count only when a design asks for
-// them. Everything else is drawn text: titles, text blocks, list items, runs, table cells, chart labels,
+// filename, author, audience, purpose, tone, takeaway, duration, tags, narrative, language and version.
+// On a slide: beat. The organization (name), the speaker (name and title) and a slide's section are drawn only as
+// generated header/footer furniture (`organization: true` / `speaker: true` / `section: true` in a design), so they count
+// only when a design asks for them; built-in variables copy their values into slide strings before this runs. Everything else is drawn text: titles, text blocks, list items, runs, table cells, chart labels,
 // categories and series names, code, quotes, metrics, timelines, furniture text.
 const UNDRAWN_KEYS = Object.freeze(["$schema", "assets", "catalogs", "notes", "id", "alt", "altText", "src", "url", "href", "link", "metadata", "extensions"]);
-const UNDRAWN_ROOT_KEYS = Object.freeze(["name", "description", "filename", "author", "authors", "creator", "speaker", "audience", "purpose", "tone", "takeaway", "duration", "tags", "narrative", "language", "license", "version", "keywords"]);
+const UNDRAWN_ROOT_KEYS = Object.freeze(["name", "description", "filename", "author", "authors", "creator", "audience", "purpose", "tone", "takeaway", "duration", "tags", "narrative", "language", "license", "version", "keywords"]);
 const UNDRAWN_SLIDE_KEYS = Object.freeze(["beat"]);
 const UNDRAWN_VALUE = /^(?:https?|data|blob|pkg|file|mailto):\S*$/i;
 
-/** True when a design in the presentation turns on generated `field` furniture (`organization` or `section`). */
+/** True when a design in the presentation turns on generated `field` furniture (`organization`, `speaker` or `section`). */
 function furnitureUses(presentation, field) {
   const designs = [presentation?.design, ...(Array.isArray(presentation?.slides) ? presentation.slides.map(slide => slide?.design) : [])];
   const pattern = new RegExp(`"${field}"\\s*:\\s*true`);
@@ -76,6 +76,7 @@ function furnitureUses(presentation, field) {
 export function* drawnStrings(presentation) {
   const undrawn = new Set(UNDRAWN_KEYS), undrawnRoot = new Set(UNDRAWN_ROOT_KEYS), undrawnSlide = new Set(UNDRAWN_SLIDE_KEYS);
   if (!furnitureUses(presentation, "organization")) undrawnRoot.add("organization");
+  if (!furnitureUses(presentation, "speaker")) undrawnRoot.add("speaker");
   if (!furnitureUses(presentation, "section")) undrawnSlide.add("section");
   function* visit(item, level) {
     if (typeof item === "string") { if (!UNDRAWN_VALUE.test(item)) yield item; }

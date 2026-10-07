@@ -144,13 +144,13 @@ for (const type of ['funnel', 'treemap']) {
   assert.ok(mixed.some((entry) => entry.text === 'Q2 | 20'), 'category then value, joined by the separator');
   // Stacked column: an unsupported position falls back to center and reports.
   const diagnostics = [];
-  renderSvg(deck({ type: 'stacked-column-3x', dataLabels: { position: 'outside-end' } }), { trace: true, onDiagnostic: (d) => diagnostics.push(d) });
+  renderSvg(deck({ type: 'stacked-column', dataLabels: { position: 'outside-end' } }), { trace: true, onDiagnostic: (d) => diagnostics.push(d) });
   assert.deepEqual(diagnostics.filter((d) => d.code === 'chart-option-adapted').map((d) => d.option), ['dataLabels.position']);
   // Pie: percent and category.
   const pie = texts(render({ type: 'pie', dataLabels: { content: ['category', 'percent'] } })).filter((entry) => /\.data\.rows\.\d\.1$/.test(entry.path));
   assert.deepEqual(pie.map((entry) => entry.text), ['Q1, 15%', 'Q2, 30%', 'Q3, 22%', 'Q4, 33%']);
   // Line, scatter, area, radar, doughnut: one label per point, number format General.
-  for (const type of ['line', 'line-with-markers', 'stacked-area-3x', 'radar', 'doughnut', 'scatter', 'waterfall', 'histogram']) {
+  for (const type of ['line', 'line-with-markers', 'stacked-area', 'radar', 'doughnut', 'scatter', 'waterfall', 'histogram']) {
     const count = labelPaths(render({ type, dataLabels: true })).length + texts(render({ type, dataLabels: true })).filter((entry) => /\.data\.rows\.\d\.1$/.test(entry.path) && type === 'doughnut').length;
     assert.ok(count > 0, `${type}: draws data labels`);
   }

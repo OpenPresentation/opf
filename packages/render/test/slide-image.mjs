@@ -52,7 +52,7 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
 // Deck-level images apply only to layouts that reserve a slide image.
 {
   const deck = { design: { theme: 'classic', slideImage: { src: uri, position: 'right' } },
-    catalogs: { layouts: { records: [{ id: 'hero-right', name: 'Hero right', slideImage: true, placeholders: [{ type: 'title' }] }] } },
+    catalogs: { layouts: { records: [{ id: 'hero-right', name: 'Hero right', design: { slideImage: { position: 'background' } }, placeholders: [{ type: 'title' }] }] } },
     slides: [{ title: 'Uses the deck image', layout: 'hero-right' }, { title: 'Default layout, no image' }] };
   assert.ok(imageTag(renderSvg(deck, { slideIndex: 0 })));
   assert.equal(imageTag(renderSvg(deck, { slideIndex: 1 })), undefined);

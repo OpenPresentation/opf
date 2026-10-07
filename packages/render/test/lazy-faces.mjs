@@ -208,7 +208,7 @@ assert.throws(() => withDefaults.pendingLazyFonts(catalogDeck, {catalogs: {}}), 
 assert.equal((await withDefaults.ensureLazyFonts(catalogDeck, {signal: new AbortController().signal})).length, 2);
 withDefaults.dispose();
 // A font scheme that exists only in the host's catalogs and names a script font selects that font's script package.
-const yuScheme = {id: 'host-yu', name: 'Host Yu', app: 'PowerPoint', languageFamily: 'latin', languages: [], major: 'Yu Gothic', minor: 'Yu Gothic', textSample: 'x', type: 'sans-serif', $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1'};
+const yuScheme = {id: 'host-yu', name: 'Host Yu', app: 'powerpoint', languageFamily: 'latin', languages: [], major: 'Yu Gothic', minor: 'Yu Gothic', textSample: 'x', type: 'sans-serif', $schema: 'https://openpresentation.org/schema/opf-font-scheme/v1'};
 const yuDeck = {name: 'yu', design: {fontScheme: 'host-yu'}, slides: [{title: 'Review', text: 'Text'}]};
 const scriptRegistry = await load({scriptBaseUrl: 'https://fonts.example/scripts/'});
 assert.deepEqual(scriptRegistry.pendingScripts(yuDeck), [], 'core does not know the host scheme, so without catalogs no script face is named');

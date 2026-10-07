@@ -111,7 +111,7 @@ for (const [name, values] of ranges) {
 
 // Aggregates outside the representable range are an explicit fidelity limit.
 // Reject with an actionable path; never hang, invent zero, or emit invalid SVG.
-const overflowTypes = ["stacked-column-3x", "stacked-bar-3x", "stacked-line-3x", "stacked-area-3x", "100pct-stacked-column-3x", "100pct-stacked-area-3x", "pie", "doughnut"];
+const overflowTypes = ["stacked-column", "stacked-bar", "stacked-line", "stacked-area", "100pct-stacked-column", "100pct-stacked-area", "pie", "doughnut"];
 for (const type of overflowTypes) {
   const circular = type === "pie" || type === "doughnut";
   const data = circular

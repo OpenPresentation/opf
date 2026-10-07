@@ -10,7 +10,7 @@ export function acceptedTextFixtures() {
     const id=`${dimensions.widthInches>10?'wide':'portrait'}-${contentBox?'card':'plain'}-${alignment}-${Array.isArray(text)?'rich':'scalar'}`;
     cases.push({id,deck:{design:{contentBox,dimensions,titleAlignment:alignment,contentAlignment:alignment,
       // FF-31: choose Carlito itself so the accepted-text browser gate compares one exact open face.
-      fontScheme:{heading:{family:'Carlito'},body:{family:'Carlito'}}},
+      fontScheme:{heading: 'Carlito',body: 'Carlito'}},
       slides:[{tag:'Source',title:'A measured title that wraps when space is narrow',subtitle:'Supporting text',composition:{mode:'column',minFontSize:24},text}]}});
   }
   return cases;

@@ -21,7 +21,7 @@ const EMOJI = {
 // above shapes to 1.3730 em there (fontkit; Segoe draws a regional-indicator pair as two 0.55/0.42 em letters, not a flag).
 const SEGOE_UI_EMOJI_ADVANCE = 1.3730, NOTO_COLOR_EMOJI_ADVANCE = 1275 / 1024, NOTO_EMOJI_ADVANCE = 2600 / 2048; // 1.2451 em and 1.2695 em
 const deck = (title, text = 'Body', extra = {}) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-45', slides: [{title, text}], ...extra});
-const scheme = (family, id = 'aptos') => ({design: {fontScheme: {id, heading: {family}, body: {family}}}});
+const scheme = (family, id = 'aptos') => ({design: {fontScheme: {id, heading: family, body: family}}});
 const em = (registry, text, family, style = {}) => registry.textMeasurement.measure(text, 1000, {fontFamily: family, fontWeight: 400, ...style}) / 1000;
 const near = (actual, expected, tolerance, label) => assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: ${actual} is not within ${tolerance} of ${expected}`);
 const strictCovers = (registry, family, text) => { try { registry.textMeasurement.measure(text, 20, {fontFamily: family, fontWeight: 400}); return true; } catch (error) { if (error.code === 'missing-glyph') return false; throw error; } };

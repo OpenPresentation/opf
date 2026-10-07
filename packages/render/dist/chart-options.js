@@ -22,9 +22,13 @@ export function reportOptionDiagnostics(c, resolved) {
   }
 }
 
-/** Which edge carries which axis title: the category axis of a bar or funnel chart is vertical (left). */
-function titleSides(spec) {
+/**
+ * Which edge carries which axis title: the category axis of a bar or funnel chart is vertical (left). A combo chart titles its
+ * secondary value axis at the right, next to that axis; right to left, its two value axes trade sides (FA-15).
+ */
+function titleSides(spec, rtl = false) {
   const verticalCategory = (spec.kind === "bar" && spec.dir === "bar") || spec.kind === "funnel";
+  if (spec.kind === "combo") return rtl ? { category: "bottom", value: "right", secondary: "left" } : { category: "bottom", value: "left", secondary: "right" };
   return verticalCategory ? { category: "left", value: "bottom" } : { category: "bottom", value: "left" };
 }
 
@@ -33,12 +37,13 @@ function titleSides(spec) {
  * The renderers lay the plot out inside `c.box`, so they need no knowledge of the bands.
  */
 export function reserveAxisTitles(c, spec, titles) {
-  const sides = titleSides(spec);
-  const bands = { left: 0, bottom: 0 };
+  const sides = titleSides(spec, spec.kind === "combo" && c.bound.geometry?.direction === "rtl");
+  const bands = { left: 0, bottom: 0, right: 0 };
   c.axisTitleBands = [];
-  for (const axis of ["category", "value"]) {
+  for (const axis of ["category", "value", "secondary"]) {
     const text = titles[axis];
-    if (!text) continue;
+    // A secondary title is drawn only when the combo chart has a secondary axis (core reports the title it drops).
+    if (!text || !sides[axis] || (axis === "secondary" && !c.combo?.some((entry) => entry.axis === "secondary"))) continue;
     const side = sides[axis];
     bands[side] = c.lineHeight;
     c.axisTitleBands.push({ axis, side, text });
@@ -46,7 +51,7 @@ export function reserveAxisTitles(c, spec, titles) {
   if (!c.axisTitleBands.length) return;
   const outer = c.box;
   c.axisTitleOuter = outer;
-  c.box = { x: outer.x + bands.left, y: outer.y, width: Math.max(1, outer.width - bands.left), height: Math.max(1, outer.height - bands.bottom) };
+  c.box = { x: outer.x + bands.left, y: outer.y, width: Math.max(1, outer.width - bands.left - bands.right), height: Math.max(1, outer.height - bands.bottom) };
 }
 
 /**
@@ -65,8 +70,10 @@ export function drawAxisTitles(c) {
       c.text(text, rect, path, "center");
     } else {
       const span = plot ? { y: plot.y, height: plot.height } : { y: inner.y, height: inner.height };
-      // The rotated text box is laid out horizontally, `length` wide and one line tall, then turned about its centre.
-      const length = Math.max(1, span.height), centreX = outer.x + c.lineHeight / 2, centreY = span.y + span.height / 2;
+      // The rotated text box is laid out horizontally, `length` wide and one line tall, then turned about its centre. A right title
+      // (a combo chart's secondary axis) is rotated the same way, as PowerPoint draws every vertical axis title by default.
+      const length = Math.max(1, span.height), centreY = span.y + span.height / 2;
+      const centreX = side === "right" ? outer.x + outer.width - (c.axisTitleRightInset ?? 0) - c.lineHeight / 2 : outer.x + c.lineHeight / 2;
       const rect = { x: centreX - length / 2, y: centreY - c.lineHeight / 2, width: length, height: c.lineHeight };
       const element = c.textElement(text, rect, path, "center");
       if (element) c.children.push(c.svg.tag("g", { transform: `rotate(-90 ${c.num(centreX)} ${c.num(centreY)})` }, element));
@@ -133,9 +140,8 @@ export function drawBarLabel(c, text, rect, direction, path, fill) {
   drawLabel(c, text, { x, y, width, height }, path, labelFill(c, position, fill));
 }
 
-/** A label beside a point mark (line and scatter): above, below, left, right or centred on it. */
-export function drawPointLabel(c, text, point, path) {
-  const position = c.dataLabels.position ?? "above";
+/** A label beside a point mark (line and scatter): above, below, left, right or centred on it. `position` overrides the chart's (a combo chart's line series). */
+export function drawPointLabel(c, text, point, path, position = c.dataLabels.position ?? "above") {
   const { width, height } = labelSize(c, text);
   const gap = 3 * c.pt + c.fontPx * 0.25;
   const [px, py] = point;

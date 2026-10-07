@@ -157,7 +157,7 @@ for (const [name, values, dropsZero, edge] of autoZero) {
   }
 }
 // Stacked and percentage groupings plot from a base, so their totals keep zero on the axis.
-for (const type of ["stacked-column-3x", "stacked-area-3x"]) {
+for (const type of ["stacked-column", "stacked-area"]) {
   const input = { slides: [{ chart: { type, data: { columns: ["Category", "A", "B"], rows: [["x", 100, 5], ["y", 104, 6], ["z", 102, 7]] } } }] };
   const svg = renderSvg(input, { trace: true });
   const first = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]

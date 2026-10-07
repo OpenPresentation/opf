@@ -4,7 +4,7 @@ import {layoutTable} from '@openpresentation/opf/composition';
 import {prepareNodeFonts} from '../src/fonts-node.js';
 
 const fixtureRuns=[{text:'Lead\t',fontSize:18},{text:'Large evidence phrase ',fontSize:30,bold:true},{text:'continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ',fontSize:18},{text:'Second large phrase ',fontSize:30},{text:'finishes the control with exact source runs.',fontSize:18}];
-const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading:{family:'Carlito'},body:{family:'Carlito'},accent:{family:'Carlito'},code:{family:'Cousine'}}},slides:[{table:{rows:[[fixtureRuns]]}}]};
+const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{table:{rows:[[fixtureRuns]]}}]};
 const source=JSON.stringify(deck),sourceText=deck.slides[0].table.rows[0][0].map(run=>run.text).join('');
 const prepared=await prepareNodeFonts({pack:'office'}),base=prepared.options.textMeasurement;
 let measureCalls=0,outlineCalls=0;
@@ -48,7 +48,7 @@ assert.match(estimatedSvg,/data-opf-segment="tab"/);
 
 // The shared rich-outline consumer must skip the layout control while retaining
 // glyph outlines on both sides. A strict registry would reject U+0009 here.
-const outlineDeck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading:{family:'Carlito'},body:{family:'Carlito'},accent:{family:'Carlito'},code:{family:'Cousine'}}},slides:[{text:[{text:'Before\t',fontFamily:'Carlito'},{text:'After',fontFamily:'Carlito',bold:true}]}]};
+const outlineDeck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{text:[{text:'Before\t',fontFamily:'Carlito'},{text:'After',fontFamily:'Carlito',bold:true}]}]};
 assert.doesNotThrow(()=>renderSvg(outlineDeck,renderOptions));
 assert.ok(measureCalls>0);
 assert.ok(outlineCalls>0);

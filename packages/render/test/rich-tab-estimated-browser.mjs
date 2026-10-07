@@ -4,7 +4,7 @@ import {renderSvg} from '../dist/index.js';
 import {prepareNodeFonts} from '../src/fonts-node.js';
 
 const runs=[{text:'A',fontSize:18},{text:'B',fontSize:30,bold:true},{text:'\t',fontSize:18},{text:'C',fontSize:18},{text:'D',fontSize:30,italic:true}];
-const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading:{family:'Carlito'},body:{family:'Carlito'},accent:{family:'Carlito'},code:{family:'Cousine'}}},slides:[{table:{rows:[[runs]]}}]};
+const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{table:{rows:[[runs]]}}]};
 const prepared=await prepareNodeFonts({pack:'office'}),options={trace:true,embeddedFonts:prepared.options.embeddedFonts};
 assert.equal(options.textMeasurement,undefined);
 const svg=renderSvg(deck,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});

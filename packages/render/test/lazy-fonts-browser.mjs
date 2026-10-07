@@ -44,7 +44,7 @@ const nearestFile = (family, weight) => vendoredFaces(family).filter(face => !fa
 const vendoredFaces = family => BUNDLED_FONT_MANIFEST.packages.filter(pkg => pkg.vendored).flatMap(pkg => pkg.faces.filter(face => face.family === family).map(face => ({file: `${pkg.vendored}/${face.file}`, weight: face.weight, italic: face.italic})));
 const pairDeck = pair => ({
   design: {fontScheme: pair.name},
-  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: pair.name, name: pair.name, app: 'PowerPoint', languageFamily: 'latin', languages: [], major: pair.major, minor: pair.minor, textSample: 'x', type: 'sans-serif'}]}},
+  catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: pair.name, name: pair.name, app: 'powerpoint', languageFamily: 'latin', languages: [], major: pair.major, minor: pair.minor, textSample: 'x', type: 'sans-serif'}]}},
   name: pair.name,
   slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region, led by the enterprise segment.'}],
 });

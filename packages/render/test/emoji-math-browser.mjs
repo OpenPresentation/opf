@@ -21,8 +21,8 @@ const render = document => renderSvg(document, {...options, textMeasurement: cre
 const cases = [
   {id: 'emoji-latin', document: deck('emoji-latin', `Launch ${EMOJI.rocket} ${EMOJI.family} ${EMOJI.flag} ${EMOJI.thumbsMedium}`)},
   {id: 'emoji-sequences', document: deck('emoji-sequences', `${EMOJI.keycap} ${EMOJI.heartVS16} ${EMOJI.scotland} ${EMOJI.womanTechnologist}`)},
-  {id: 'segoe-ui-emoji', document: deck('segoe-ui-emoji', `Score 42 ${EMOJI.rocket}${EMOJI.family}`, {fontScheme: {id: 'aptos', heading: {family: 'Segoe UI Emoji'}, body: {family: 'Segoe UI Emoji'}}})},
-  {id: 'cambria-math', document: deck('cambria-math', '∑ ∫ √ \u{1D44E}\u{1D44F} ℝ ≤ ∞ αβ', {fontScheme: {id: 'aptos', heading: {family: 'Cambria Math'}, body: {family: 'Cambria Math'}}})},
+  {id: 'segoe-ui-emoji', document: deck('segoe-ui-emoji', `Score 42 ${EMOJI.rocket}${EMOJI.family}`, {fontScheme: {id: 'aptos', heading: 'Segoe UI Emoji', body: 'Segoe UI Emoji'}})},
+  {id: 'cambria-math', document: deck('cambria-math', '∑ ∫ √ \u{1D44E}\u{1D44F} ℝ ≤ ∞ αβ', {fontScheme: {id: 'aptos', heading: 'Cambria Math', body: 'Cambria Math'}})},
 ].map(item => ({...item, svg: render(item.document)}));
 
 // Serve every loaded face from a local route; nothing else may load.
