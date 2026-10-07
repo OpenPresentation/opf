@@ -192,6 +192,28 @@ function runCommand(argv, cwd, log) {
   });
 }
 
+// Windows caps a command line at 32,767 characters (8,191 through cmd.exe), and a long branch can change hundreds of
+// files, so Biome gets the changed files in batches whose joined length stays well under the smaller limit.
+export const BIOME_BATCH_CHARS = 6000;
+
+/** The changed files split into batches whose space-joined length stays at or under `limit` characters. */
+export function biomeBatches(files, limit = BIOME_BATCH_CHARS) {
+  const batches = [];
+  let batch = [];
+  let length = 0;
+  for (const file of files) {
+    if (batch.length && length + file.length + 1 > limit) {
+      batches.push(batch);
+      batch = [];
+      length = 0;
+    }
+    batch.push(file);
+    length += file.length + 1;
+  }
+  if (batch.length) batches.push(batch);
+  return batches;
+}
+
 function biomeCommand(files) {
   const bin = createRequire(path.join(root, 'package.json')).resolve('@biomejs/biome/bin/biome');
   return [process.execPath, bin, 'check', '--colors=off', '--files-ignore-unknown=true', '--no-errors-on-unmatched', ...files];
@@ -202,7 +224,7 @@ async function runStep(step, logs) {
   if (step.skip) return { ...step, status: 'skipped', seconds: 0 };
   const logFile = path.join(logs, `${step.name.replace(/[^A-Za-z0-9._-]+/g, '_')}.log`);
   const log = createWriteStream(logFile);
-  const commands = step.biome ? [{ argv: biomeCommand(step.biome) }] : step.commands;
+  const commands = step.biome ? biomeBatches(step.biome).map((files) => ({ argv: biomeCommand(files) })) : step.commands;
   let status = 0;
   for (const { argv, cwd = root } of commands) {
     status = await runCommand(argv, cwd, log);
