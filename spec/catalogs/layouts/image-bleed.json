@@ -2,9 +2,17 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
   "id": "image-bleed",
   "name": "Image Bleed",
-  "summary": "Reach for it when a single image should fill the slide with no text on it.",
-  "description": "One image placeholder and no title or text. Use it for a full-bleed photograph or illustration that carries a mood or a transition between sections.",
+  "summary": "Reach for it when a single image should fill the slide edge to edge, behind an optional title.",
+  "description": "One image drawn full-bleed behind the slide, with an optional title that keeps the normal slide padding. A slide names its picture as its slide image (design.slideImage, the same source as its image) and the layout places it at position background. Use it for a photograph or illustration that carries a mood or a transition between sections.",
+  "design": {
+    "slideImage": {
+      "position": "background"
+    }
+  },
   "placeholders": [
+    {
+      "type": "title"
+    },
     {
       "type": "image"
     }
