@@ -51,7 +51,8 @@ try {
  editor.set('slides.0.text','Plain text');canvas.beginEdit('slides.0.text');
  const format=[...host.querySelectorAll('button')].find(b=>b.textContent==='Format text');check(!!format,'plain text exposes the formatting entry');format.click();button('Bold').click();
  check(editor.get('slides.0.text').some(r=>r.text==='Plain text'&&r.bold),'plain text can become formatted runs on the canvas');
- canvas.beginEdit('slides.0.title');check(![...host.querySelectorAll('button')].some(b=>b.textContent==='Format text'),'scalar-only title does not offer an invalid rich conversion');canvas.cancel();
+ // FA-10: titles accept string | TextRun[], so a plain title offers the rich conversion the schema allows.
+ canvas.beginEdit('slides.0.title');check([...host.querySelectorAll('button')].some(b=>b.textContent==='Format text'),'a plain title offers the rich conversion its schema allows');canvas.cancel();
  editor.set('slides.0.text',[{text:'Hello ',bold:true},{text:'world',italic:true}]);
  canvas.beginEdit('slides.0.text');
  let native=host.querySelector('.opf-rich-input');
