@@ -25,8 +25,8 @@ for (const [dimension, kind] of [
   assert.ok(options.every((option) => typeof option.label === "string" && option.label), `${dimension} labels`);
 }
 {
-  const document = { catalogs: { fontSchemes: { records: [{ id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter" }, { id: "georgia", name: "Georgia (team)", major: "Georgia", minor: "Georgia" }] } } };
-  const options = listSwitchOptions(document, "font-schemes", { catalogs: { fontSchemes: { records: [{ id: "caller", name: "Caller" }] } } });
+  const presentation = { catalogs: { fontSchemes: { records: [{ id: "team-mono", name: "Team Mono", major: "Inter", minor: "Inter" }, { id: "georgia", name: "Georgia (team)", major: "Georgia", minor: "Georgia" }] } } };
+  const options = listSwitchOptions(presentation, "font-schemes", { catalogs: { fontSchemes: { records: [{ id: "caller", name: "Caller" }] } } });
   assert.deepEqual(options.slice(0, 3).map((option) => option.id), ["team-mono", "georgia", "caller"]);
   assert.equal(options[1].label, "Georgia (team)", "a document record overrides the bundled one");
   assert.equal(options.filter((option) => option.id === "georgia").length, 1, "no duplicates");
@@ -48,7 +48,7 @@ for (const [dimension, kind] of [
 {
   const data = (...series) => ({ columns: ["Quarter", ...series], rows: [["Q1", ...series.map(() => 1)], ["Q2", ...series.map(() => 2)]] });
   const chart = (shape, type = "column") => ({ slides: [{ title: "x", blocks: [{ chart: { type, data: shape } }] }] });
-  const ids = (document, options) => compatibleChartTypes(document, { slideIndex: 0, ...options }).map((entry) => entry.id);
+  const ids = (presentation, options) => compatibleChartTypes(presentation, { slideIndex: 0, ...options }).map((entry) => entry.id);
   const one = ids(chart(data("Revenue")));
   for (const expected of ["column", "bar", "line", "area", "pie", "doughnut", "radar", "funnel", "treemap", "waterfall"]) assert.ok(one.includes(expected), `${expected} suits one series`);
   for (const rejected of ["stacked-column", "scatter", "histogram", "world", "box-and-whisker"]) assert.ok(!one.includes(rejected), `${rejected} does not suit one series`);
@@ -78,10 +78,10 @@ for (const [dimension, kind] of [
 
 // currentSwitchValue for every dimension, at deck and slide scope.
 {
-  const document = baseDeck();
-  document.speaker = { id: "alice", name: "Alice", socials: { linkedin: "alice" } };
-  document.slides[1].design = { fontScheme: { id: "georgia", major: "X" }, background: "light1", header: { left: { text: "H" } } };
-  const at = (dimension, options) => currentSwitchValue(document, dimension, options);
+  const presentation = baseDeck();
+  presentation.speaker = { id: "alice", name: "Alice", socials: { linkedin: "alice" } };
+  presentation.slides[1].design = { fontScheme: { id: "georgia", major: "X" }, background: "light1", header: { left: { text: "H" } } };
+  const at = (dimension, options) => currentSwitchValue(presentation, dimension, options);
   assert.deepEqual(at("layouts", { slideIndex: 1 }), { value: "chart-1x", scope: "slide" });
   assert.deepEqual(at("color-schemes"), { value: "cool-horizon", scope: "deck" });
   assert.deepEqual(at("font-schemes"), { value: "aptos", scope: "deck" });
@@ -104,7 +104,7 @@ for (const [dimension, kind] of [
   // RR-41: slide sizes read the deck's design.dimensions, else the theme's; purposes read the goal text or Purpose id.
   assert.deepEqual(at("slide-sizes"), { value: "widescreen", scope: "deck" }, "no design.dimensions: the theme's size");
   assert.deepEqual(at("slide-sizes", { slideIndex: 1 }), { value: "widescreen", scope: "deck" });
-  const sized = (dimensions, extra = {}) => ({ ...document, design: { ...document.design, dimensions }, ...extra });
+  const sized = (dimensions, extra = {}) => ({ ...presentation, design: { ...presentation.design, dimensions }, ...extra });
   assert.deepEqual(currentSwitchValue(sized("a4"), "slide-sizes"), { value: "a4", scope: "deck" });
   assert.deepEqual(currentSwitchValue(sized({ preset: "letter" }), "slide-sizes"), { value: "letter", scope: "deck" }, "{preset} reads as the preset");
   assert.deepEqual(currentSwitchValue(sized({ preset: "a4", widthInches: 12 }), "slide-sizes").value, { preset: "a4", widthInches: 12 }, "a custom size reads as the object");
@@ -112,9 +112,9 @@ for (const [dimension, kind] of [
   assert.deepEqual(currentSwitchValue(sized("4:3"), "slide-sizes", { slideIndex: 1 }), { value: "4:3", scope: "deck" });
   assert.deepEqual(currentSwitchValue({ slides: [] }, "slide-sizes"), { value: undefined, scope: "deck" }, "unset");
   assert.deepEqual(at("purposes"), { value: undefined, scope: "deck" });
-  assert.deepEqual(currentSwitchValue({ ...document, purpose: "decide" }, "purposes"), { value: "decide", scope: "deck" });
-  assert.deepEqual(currentSwitchValue({ ...document, purpose: "Raise a Series B round" }, "purposes"), { value: "Raise a Series B round", scope: "deck" });
-  assert.deepEqual(currentSwitchValue({ ...document, purpose: { id: "decide", outcome: "Approve it" } }, "purposes"), { value: "decide", scope: "deck" }, "an object reads as its id");
+  assert.deepEqual(currentSwitchValue({ ...presentation, purpose: "decide" }, "purposes"), { value: "decide", scope: "deck" });
+  assert.deepEqual(currentSwitchValue({ ...presentation, purpose: "Raise a Series B round" }, "purposes"), { value: "Raise a Series B round", scope: "deck" });
+  assert.deepEqual(currentSwitchValue({ ...presentation, purpose: { id: "decide", outcome: "Approve it" } }, "purposes"), { value: "decide", scope: "deck" }, "an object reads as its id");
   for (const dimension of SWITCH_DIMENSIONS) assert.ok(at(dimension, { slideIndex: 1 }), `${dimension} has a reader`);
 }
 

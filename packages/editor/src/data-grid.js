@@ -33,7 +33,6 @@ import {
   setGridColumnFormat,
   setGridHeader,
   sortGridRows,
-  supportsChartTableData,
   transposeGridData,
 } from "./grid-model.js";
 import { NUMBER_FORMATS, parseDelimited, resolveNumberFormat, toDelimited } from "./grid-text.js";
@@ -456,7 +455,7 @@ export function createDataGrid(container, options = {}) {
   function resolveTarget() {
     const path = getPath();
     if (!path) return undefined;
-    return resolveDataGridTarget(editor.document, path);
+    return resolveDataGridTarget(editor.presentation, path);
   }
 
   function rebuild() {
@@ -486,7 +485,7 @@ export function createDataGrid(container, options = {}) {
       grid = undefined;
       return;
     }
-    grid = describeDataGrid(editor.document, next.path, opts());
+    grid = describeDataGrid(editor.presentation, next.path, opts());
     buildTable();
     buildDatasetRow();
     buildMapping();
@@ -505,7 +504,7 @@ export function createDataGrid(container, options = {}) {
   function dataSignature() {
     if (!target || target.editable === false) return "";
     try {
-      return JSON.stringify([target.path, editor.get(target.path), target.dataset ? editor.document.datasets?.[target.dataset.id] : undefined, numberFormat]);
+      return JSON.stringify([target.path, editor.get(target.path), target.dataset ? editor.presentation.datasets?.[target.dataset.id] : undefined, numberFormat]);
     } catch {
       return "";
     }
@@ -551,7 +550,7 @@ export function createDataGrid(container, options = {}) {
   // moves the selection before the field's change event fires, and the format typed for one column must not land on the next.
   let formatBound = 0;
   function updateFormatRow() {
-    const visible = Boolean(grid?.hasHeader) && target?.editable !== false && supportsChartTableData;
+    const visible = Boolean(grid?.hasHeader) && target?.editable !== false;
     formatRow.hidden = !visible;
     if (!visible) return;
     if (doc.activeElement !== formatInput) {
@@ -613,11 +612,11 @@ export function createDataGrid(container, options = {}) {
 
   function buildMapping() {
     mappingBody.replaceChildren();
-    mappingBox.hidden = !grid || target?.kind !== "chart" || !supportsChartTableData;
+    mappingBox.hidden = !grid || target?.kind !== "chart";
     if (mappingBox.hidden) return;
     let view;
     try {
-      view = describeChartMapping(editor.document, target.path);
+      view = describeChartMapping(editor.presentation, target.path);
     } catch {
       mappingBox.hidden = true;
       return;
@@ -694,7 +693,7 @@ export function createDataGrid(container, options = {}) {
   }
 
   function checkLive(area, u, c) {
-    const issues = gridCellIssues(editor.document, target.path, [{ ...addr(u, c), text: area.value }], opts());
+    const issues = gridCellIssues(editor.presentation, target.path, [{ ...addr(u, c), text: area.value }], opts());
     if (issues.length) {
       area.setAttribute("aria-invalid", "true");
       complain(issues[0].message);

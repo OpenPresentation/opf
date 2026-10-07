@@ -134,27 +134,27 @@ function furnitureFields(fields, state, base, design) {
  * the deck, `pointer` is the JSON pointer of the string or run array, and `runs` says it is a run array. Options:
  * `notes: false` leaves speaker notes out, `slideIndex` limits the list to one slide.
  */
-export function collectSearchFields(document, options = {}) {
+export function collectSearchFields(presentation, options = {}) {
   const fields = [];
-  if (!isObject(document)) return fields;
+  if (!isObject(presentation)) return fields;
   const only = Number.isInteger(options.slideIndex) ? options.slideIndex : undefined;
   if (only === undefined) {
     const deck = { slideIndex: -1 };
-    field(fields, deck, ["name"], document.name, "Presentation name", "deck");
-    field(fields, deck, ["description"], document.description, "Presentation description", "deck");
-    furnitureFields(fields, deck, [], document.design);
+    field(fields, deck, ["name"], presentation.name, "Presentation name", "deck");
+    field(fields, deck, ["description"], presentation.description, "Presentation description", "deck");
+    furnitureFields(fields, deck, [], presentation.design);
   }
   // RR-54: the text cells of a shared dataset belong to the deck. Its column names are left alone (`fields` and `mapping` address them).
-  if (only === undefined && isObject(document.datasets)) {
+  if (only === undefined && isObject(presentation.datasets)) {
     const deck = { slideIndex: -1 };
-    for (const [id, dataset] of Object.entries(document.datasets)) {
+    for (const [id, dataset] of Object.entries(presentation.datasets)) {
       if (!isObject(dataset) || !Array.isArray(dataset.rows)) continue;
       dataset.rows.forEach((row, r) => Array.isArray(row) && row.forEach((value, c) => {
         if (typeof value === "string") field(fields, deck, ["datasets", id, "rows", String(r), String(c)], value, `Dataset ${id}, row ${r + 1}, column ${c + 1}`, "dataset");
       }));
     }
   }
-  (Array.isArray(document.slides) ? document.slides : []).forEach((slide, slideIndex) => {
+  (Array.isArray(presentation.slides) ? presentation.slides : []).forEach((slide, slideIndex) => {
     if (only !== undefined && slideIndex !== only) return;
     if (!isObject(slide)) return;
     const state = { slideIndex };
@@ -206,12 +206,12 @@ function snippet(text, start, end) {
  * are offsets into the field's text. Options: those of `compileSearch`, plus `notes` and `slideIndex` of
  * `collectSearchFields`. Matches that are empty (a regular expression that matches nothing) are skipped.
  */
-export function findMatches(document, query, options = {}) {
+export function findMatches(presentation, query, options = {}) {
   const compiled = compileSearch(query, options);
   const result = { matches: [], fieldCount: 0, slideCount: 0, truncated: false, error: compiled.error };
   if (!compiled.regex) return result;
   const slides = new Set();
-  const fields = collectSearchFields(document, options);
+  const fields = collectSearchFields(presentation, options);
   outer: for (const item of fields) {
     compiled.regex.lastIndex = 0;
     let found;
@@ -323,8 +323,8 @@ export function applyTextEdits(value, edits) {
   return result;
 }
 
-function readField(document, match) {
-  const value = getValueAtPath(document, match.pointer);
+function readField(presentation, match) {
+  const value = getValueAtPath(presentation, match.pointer);
   return typeof value === "string" || Array.isArray(value) ? value : undefined;
 }
 
@@ -333,7 +333,7 @@ function readField(document, match) {
  * `{ patches, count, fieldCount }`; a replacement that leaves a field unchanged adds no patch. Throws `stale-match`
  * when a match no longer reads the same text in the document.
  */
-export function planReplace(document, matches, replacement, options = {}) {
+export function planReplace(presentation, matches, replacement, options = {}) {
   const byField = new Map();
   for (const match of matches) {
     if (!byField.has(match.pointer)) byField.set(match.pointer, []);
@@ -342,7 +342,7 @@ export function planReplace(document, matches, replacement, options = {}) {
   const patches = [];
   let count = 0;
   for (const [pointer, list] of byField) {
-    const value = readField(document, list[0]);
+    const value = readField(presentation, list[0]);
     const text = value === undefined ? undefined : textOf(value);
     const ordered = [...list].sort((a, b) => a.start - b.start);
     if (text === undefined || ordered.some((match) => text.slice(match.start, match.end) !== match.text)) {
@@ -356,8 +356,8 @@ export function planReplace(document, matches, replacement, options = {}) {
   return { patches, count, fieldCount: byField.size };
 }
 
-function search(document, query, options) {
-  const found = findMatches(document, query, options);
+function search(presentation, query, options) {
+  const found = findMatches(presentation, query, options);
   if (found.error) throw new OPFEditorError("invalid-search", found.error, {});
   return found;
 }
@@ -367,8 +367,8 @@ function search(document, query, options) {
  * the session's result (or null when nothing changed). One undo restores every replaced field.
  */
 export function replaceAll(editor, query, replacement, options = {}) {
-  const found = search(editor.document, query, options);
-  const plan = planReplace(editor.document, found.matches, String(replacement ?? ""), options);
+  const found = search(editor.presentation, query, options);
+  const plan = planReplace(editor.presentation, found.matches, String(replacement ?? ""), options);
   if (!plan.patches.length) return { count: 0, fieldCount: 0, change: null };
   const change = editor.applyPatch(plan.patches, { source: "find-replace", rejectInvalid: true, replaced: plan.count });
   return { count: plan.count, fieldCount: plan.fieldCount, change };
@@ -379,10 +379,10 @@ export function replaceAll(editor, query, replacement, options = {}) {
  * current document first: `stale-match` is thrown when the text changed underneath it.
  */
 export function replaceMatch(editor, match, query, replacement, options = {}) {
-  const found = search(editor.document, query, options);
+  const found = search(editor.presentation, query, options);
   const current = found.matches.find((candidate) => candidate.pointer === match.pointer && candidate.start === match.start && candidate.end === match.end && candidate.text === match.text);
   if (!current) throw new OPFEditorError("stale-match", "That match is no longer in the document. Search again.", { path: match.path });
-  const plan = planReplace(editor.document, [current], String(replacement ?? ""), options);
+  const plan = planReplace(editor.presentation, [current], String(replacement ?? ""), options);
   if (!plan.patches.length) return { count: 0, change: null };
   const change = editor.applyPatch(plan.patches, { source: "find-replace", rejectInvalid: true, replaced: 1 });
   return { count: 1, change };

@@ -8,7 +8,6 @@ import {
   NUMBERING_STYLE_OPTIONS,
   NUMBERING_SUFFIX_OPTIONS,
   findNumberableLists,
-  numberingAvailable,
   numberingState,
   numberingValue,
   setEntryStart,
@@ -36,7 +35,6 @@ function h(doc, tag, attributes = {}, ...children) {
  * `onStatus(message, {error})`.
  */
 export function createNumberingPanel(container, options) {
-  if (!numberingAvailable()) throw new Error("The numbering control needs a core release that ships numbering.");
   const { editor, getTarget, getSlideIndex, onStatus } = options;
   const doc = container.ownerDocument;
   const id = `opf-numbering-${++panelCounter}`;
@@ -58,9 +56,9 @@ export function createNumberingPanel(container, options) {
 
   const currentPath = () => {
     const slide = getSlideIndex?.() ?? 0;
-    const lists = findNumberableLists(editor.document, slide);
+    const lists = findNumberableLists(editor.presentation, slide);
     const wanted = explicit ?? getTarget?.();
-    if (wanted && numberingState(editor.document, wanted)) return { path: wanted, lists };
+    if (wanted && numberingState(editor.presentation, wanted)) return { path: wanted, lists };
     return { path: lists[0]?.path, lists };
   };
 
@@ -100,7 +98,7 @@ export function createNumberingPanel(container, options) {
   function draw(force = false) {
     if (destroyed) return;
     const { path, lists } = currentPath();
-    const state = path ? numberingState(editor.document, path) : undefined;
+    const state = path ? numberingState(editor.presentation, path) : undefined;
     const signature = JSON.stringify([path, state, lists.map((entry) => [entry.path, entry.numbered])]);
     if (!force && signature === drawn) return;
     drawn = signature;

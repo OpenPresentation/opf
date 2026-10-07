@@ -6,10 +6,10 @@
 // canvas redraws and Undo restores the document. Nothing here invents text or ids: a reference is
 // what the caller supplies, and removing a cited reference refuses unless `force` also removes its
 // cites. Numbering comes from core (`collectCitations`), so the panel shows what the engines draw.
-import { getValueAtPath, opfPathToJsonPointer, splitOpfPath, validateOpfDocument } from "./index.js";
+import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail } from "./edit-helpers.js";
-// Namespace import: a core published before RR-34 has no citation helpers; the verbs then throw annotations-unavailable.
-import * as opfCore from "@openpresentation/opf";
+import { captionSettings, collectCitations, referencesSlide, walkCitationRuns } from "@openpresentation/opf/composition";
+import { checkFormat } from "./checks.js";
 
 export const CAPTION_POSITIONS = Object.freeze(["below", "above"]);
 export const CAPTION_ALIGNMENTS = Object.freeze(["left", "center", "right"]);
@@ -25,29 +25,29 @@ function checkEditor(editor) {
   if (!editor || typeof editor.applyPatch !== "function" || typeof editor.subscribe !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
 }
 function commit(editor, prepared, meta = {}) {
-  const { document, patches, ...summary } = prepared;
-  void document;
-  if (!prepared.changed) return { ...summary, document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  const { presentation, patches, ...summary } = prepared;
+  void presentation;
+  if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   const change = editor.applyPatch(patches, { ...meta, source: meta.source ?? "annotation", action: prepared.action, path: prepared.path });
   return { ...change, ...summary };
 }
 // One guarded replace of the container at `parts`; the candidate must validate when the document did.
-function transaction(document, parts, next, extra) {
-  const current = getValueAtPath(document, parts);
+function transaction(presentation, parts, next, extra) {
+  const current = getValueAtPath(presentation, parts);
   const pointer = opfPathToJsonPointer(parts);
   const changed = JSON.stringify(current) !== JSON.stringify(next);
   const patches = changed ? [{ op: "test", path: pointer, value: clone(current) }, { op: "replace", path: pointer, value: clone(next) }] : [];
-  const before = validateOpfDocument(document);
-  const result = changed ? checkedDocument(document, patches, before) : document;
-  return { ...extra, path: parts.join("."), document: clone(result), patches, changed };
+  const before = checkFormat(presentation);
+  const result = changed ? checkedDocument(presentation, patches, before) : presentation;
+  return { ...extra, path: parts.join("."), presentation: clone(result), patches, changed };
 }
 
 // --- captions -----------------------------------------------------------------------------------
 
-function captionHost(document, blockPath) {
+function captionHost(presentation, blockPath) {
   let parts;
   try { parts = splitOpfPath(blockPath); } catch { throw fail("invalid-path", `Invalid block path ${JSON.stringify(blockPath)}.`); }
-  const host = getValueAtPath(document, parts);
+  const host = getValueAtPath(presentation, parts);
   if (!isObject(host)) throw fail("invalid-path", `No block at ${parts.join(".")}.`);
   if (Array.isArray(host.blocks)) throw fail("caption-unsupported", "A group cannot carry a caption; choose one of its blocks.", { path: parts.join(".") });
   const fields = CAPTIONABLE_FIELDS.filter((field) => host[field] !== undefined);
@@ -57,15 +57,11 @@ function captionHost(document, blockPath) {
 
 /** Normalize a caption value to `{ text, position, align }`, or undefined. */
 export function normalizeCaption(value) {
-  if (typeof opfCore.captionSettings === "function") return opfCore.captionSettings(value);
-  if (value === undefined || value === null) return undefined;
-  if (typeof value === "string" || Array.isArray(value)) return { text: value, position: "below", align: "left" };
-  if (!isObject(value) || value.text === undefined) return undefined;
-  return { text: value.text, position: value.position === "above" ? "above" : "below", align: CAPTION_ALIGNMENTS.includes(value.align) ? value.align : "left" };
+  return captionSettings(value);
 }
 
 /** Every block (and one-payload slide root) that can carry a caption, with its current caption. */
-export function captionTargets(document) {
+export function captionTargets(presentation) {
   const targets = [];
   const visit = (host, path) => {
     if (!isObject(host)) return;
@@ -73,7 +69,7 @@ export function captionTargets(document) {
     const fields = CAPTIONABLE_FIELDS.filter((field) => host[field] !== undefined);
     if (fields.length === 1) targets.push({ blockPath: path, field: fields[0], caption: normalizeCaption(host.caption) });
   };
-  (document?.slides ?? []).forEach((slide, index) => {
+  (presentation?.slides ?? []).forEach((slide, index) => {
     if (!isObject(slide)) return;
     const regions = Object.keys(slide).filter((key) => /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key) && isObject(slide[key])).sort();
     if (regions.length) for (const key of regions) visit(slide[key], `slides.${index}.${key}`);
@@ -83,8 +79,8 @@ export function captionTargets(document) {
 }
 
 /** The caption of the block at `blockPath` (`{ field, caption }`; `caption` undefined when none). */
-export function readCaption(document, blockPath) {
-  const { host, field } = captionHost(document, blockPath);
+export function readCaption(presentation, blockPath) {
+  const { host, field } = captionHost(presentation, blockPath);
   return { blockPath: splitOpfPath(blockPath).join("."), field, caption: normalizeCaption(host.caption) };
 }
 
@@ -92,8 +88,8 @@ export function readCaption(document, blockPath) {
  * Set (a string, TextRun[] or `{ text, position?, align? }`) or remove (`null`) the caption of the
  * block at `blockPath`. A caption at the default position and alignment is stored in its short form.
  */
-export function prepareCaption(document, blockPath, caption) {
-  const { parts, host, field } = captionHost(document, blockPath);
+export function prepareCaption(presentation, blockPath, caption) {
+  const { parts, host, field } = captionHost(presentation, blockPath);
   const next = clone(host);
   if (caption === null || caption === undefined) delete next.caption;
   else {
@@ -103,21 +99,17 @@ export function prepareCaption(document, blockPath, caption) {
       throw fail("invalid-caption", "A caption is a string, TextRun[] or { text, position: below|above, align: left|center|right }.");
     next.caption = settings.position === "below" && settings.align === "left" ? clone(settings.text) : { text: clone(settings.text), position: settings.position, align: settings.align };
   }
-  return transaction(document, parts, next, { action: "caption", field });
+  return transaction(presentation, parts, next, { action: "caption", field });
 }
 export function setCaption(editor, blockPath, caption, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareCaption(editor.document, blockPath, caption), meta);
+  return commit(editor, prepareCaption(editor.presentation, blockPath, caption), meta);
 }
 
 // --- references ---------------------------------------------------------------------------------
 
-function citationsOf(document) {
-  if (typeof opfCore.collectCitations !== "function") throw fail("annotations-unavailable", "The installed @openpresentation/opf has no citation helpers (needs the core that ships RR-34).");
-  return opfCore.collectCitations(document);
-}
-function referenceList(document) {
-  return Array.isArray(document?.references) ? document.references : [];
+function referenceList(presentation) {
+  return Array.isArray(presentation?.references) ? presentation.references : [];
 }
 function checkReference(reference, existing, { allowExisting = false } = {}) {
   if (!isObject(reference) || typeof reference.id !== "string" || !reference.id) throw fail("invalid-reference", "A reference needs a non-empty string id.");
@@ -130,46 +122,46 @@ function checkReference(reference, existing, { allowExisting = false } = {}) {
 }
 
 /** The deck's references with their marker numbers and whether a run cites them. */
-export function listReferences(document) {
-  const list = referenceList(document);
-  const citations = typeof opfCore.collectCitations === "function" ? opfCore.collectCitations(document) : undefined;
+export function listReferences(presentation) {
+  const list = referenceList(presentation);
+  const citations = collectCitations(presentation);
   return list.map((reference, index) => {
-    const note = citations?.references.find((item) => item.id === reference?.id);
+    const note = citations.references.find((item) => item.id === reference?.id);
     return { index, id: reference?.id, text: reference?.text, url: reference?.url, cited: Boolean(note), ...(note ? { number: note.number } : {}) };
   });
 }
 /** Append a reference `{ id, text, url? }`; ids must be unique. */
-export function prepareReference(document, reference) {
-  const list = referenceList(document);
+export function prepareReference(presentation, reference) {
+  const list = referenceList(presentation);
   const next = [...clone(list), checkReference(reference, list)];
-  return transaction(document, ["references"], next, { action: "add-reference", id: reference.id });
+  return transaction(presentation, ["references"], next, { action: "add-reference", id: reference.id });
 }
 export function addReference(editor, reference, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareReference(editor.document, reference), meta);
+  return commit(editor, prepareReference(editor.presentation, reference), meta);
 }
 /** Change the text and/or url of the reference `id` (`url: null` removes the url); the id itself does not change. */
-export function prepareReferenceUpdate(document, id, fields) {
-  const list = referenceList(document), index = list.findIndex((item) => item?.id === id);
+export function prepareReferenceUpdate(presentation, id, fields) {
+  const list = referenceList(presentation), index = list.findIndex((item) => item?.id === id);
   if (index < 0) throw fail("unknown-reference", `No reference '${id}'.`, { id });
   const merged = { ...list[index], ...(fields?.text !== undefined ? { text: fields.text } : {}), ...(fields?.url !== undefined ? { url: fields.url } : {}) };
   if (fields?.url === null) delete merged.url;
   const next = clone(list);
   next[index] = checkReference(merged, list, { allowExisting: true });
-  return transaction(document, ["references"], next, { action: "update-reference", id });
+  return transaction(presentation, ["references"], next, { action: "update-reference", id });
 }
 export function updateReference(editor, id, fields, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareReferenceUpdate(editor.document, id, fields), meta);
+  return commit(editor, prepareReferenceUpdate(editor.presentation, id, fields), meta);
 }
 /** Remove the reference `id`. Refuses while a run cites it unless `force`, which also removes those cites. */
-export function prepareReferenceRemoval(document, id, { force = false } = {}) {
-  const list = referenceList(document), index = list.findIndex((item) => item?.id === id);
+export function prepareReferenceRemoval(presentation, id, { force = false } = {}) {
+  const list = referenceList(presentation), index = list.findIndex((item) => item?.id === id);
   if (index < 0) throw fail("unknown-reference", `No reference '${id}'.`, { id });
   const citing = [];
-  if (typeof opfCore.walkCitationRuns === "function") (document.slides ?? []).forEach((slide, slideIndex) => opfCore.walkCitationRuns(slide, `slides.${slideIndex}`, (entry) => { if (entry.cite.includes(id)) citing.push(entry.path); }));
+  (presentation.slides ?? []).forEach((slide, slideIndex) => walkCitationRuns(slide, `slides.${slideIndex}`, (entry) => { if (entry.cite.includes(id)) citing.push(entry.path); }));
   if (citing.length && !force) throw fail("reference-cited", `Reference '${id}' is cited by ${citing.length} run${citing.length === 1 ? "" : "s"}; pass force to remove the citations too.`, { id, runs: citing });
-  const next = clone(document);
+  const next = clone(presentation);
   next.references = list.filter((_, position) => position !== index);
   if (!next.references.length) delete next.references;
   for (const runPath of citing) {
@@ -178,15 +170,15 @@ export function prepareReferenceRemoval(document, id, { force = false } = {}) {
     runs[runIndex] = withoutCite(run, id);
   }
   const pointer = "";
-  const changed = JSON.stringify(document) !== JSON.stringify(next);
-  const patches = changed ? [{ op: "test", path: pointer, value: clone(document) }, { op: "replace", path: pointer, value: clone(next) }] : [];
-  const before = validateOpfDocument(document);
-  const result = changed ? checkedDocument(document, patches, before) : document;
-  return { action: "remove-reference", id, removedCites: citing, path: "references", document: clone(result), patches, changed };
+  const changed = JSON.stringify(presentation) !== JSON.stringify(next);
+  const patches = changed ? [{ op: "test", path: pointer, value: clone(presentation) }, { op: "replace", path: pointer, value: clone(next) }] : [];
+  const before = checkFormat(presentation);
+  const result = changed ? checkedDocument(presentation, patches, before) : presentation;
+  return { action: "remove-reference", id, removedCites: citing, path: "references", presentation: clone(result), patches, changed };
 }
 export function removeReference(editor, id, options = {}, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareReferenceRemoval(editor.document, id, options), meta);
+  return commit(editor, prepareReferenceRemoval(editor.presentation, id, options), meta);
 }
 
 // --- citations and footnotes --------------------------------------------------------------------
@@ -200,12 +192,12 @@ function withoutCite(run, id) {
 const simplifyRun = (run) => Object.keys(run).length === 1 && typeof run.text === "string" ? run.text : run;
 
 /** The run at `runPath` (`slides.0.text.2`, `slides.0.blocks.1.items.0.text.1`): its run array path, index and value. */
-export function runAt(document, runPath) {
+export function runAt(presentation, runPath) {
   let parts;
   try { parts = splitOpfPath(runPath); } catch { throw fail("invalid-path", `Invalid run path ${JSON.stringify(runPath)}.`); }
   if (parts.length < 3 || !/^(0|[1-9]\d*)$/.test(parts[parts.length - 1])) throw fail("invalid-path", `${parts.join(".")} is not a run path.`);
   const arrayParts = parts.slice(0, -1), index = Number(parts[parts.length - 1]);
-  const runs = getValueAtPath(document, arrayParts);
+  const runs = getValueAtPath(presentation, arrayParts);
   const field = [...arrayParts].reverse().find((segment) => TEXT_FIELDS.includes(segment));
   if (!Array.isArray(runs) || !field || !(index in runs)) throw fail("invalid-path", `${parts.join(".")} is not a run of a title, subtitle, tag, text, bullets or items field.`);
   const run = runs[index];
@@ -214,42 +206,42 @@ export function runAt(document, runPath) {
 }
 
 /** Make the run at `runPath` cite `ids` (a string or array; replaces its current cites). The ids must exist in references. */
-export function prepareCite(document, runPath, ids) {
+export function prepareCite(presentation, runPath, ids) {
   const list = Array.isArray(ids) ? ids : [ids];
   if (!list.length || !list.every((id) => typeof id === "string" && id)) throw fail("invalid-reference", "cite needs one or more reference ids.");
-  const known = new Set(referenceList(document).map((item) => item?.id));
+  const known = new Set(referenceList(presentation).map((item) => item?.id));
   const unknown = list.filter((id) => !known.has(id));
   if (unknown.length) throw fail("unknown-reference", `Unknown reference${unknown.length === 1 ? "" : "s"} ${unknown.map((id) => `'${id}'`).join(", ")}; add them with addReference first.`, { ids: unknown });
-  const { parts, index, run } = runAt(document, runPath);
-  const runs = clone(getValueAtPath(document, parts));
+  const { parts, index, run } = runAt(presentation, runPath);
+  const runs = clone(getValueAtPath(presentation, parts));
   const next = typeof run === "string" ? { text: run } : { ...clone(run) };
   if (!next.text) throw fail("invalid-run", "An empty run cannot carry a marker.", { path: runPath });
   const unique = [...new Set(list)];
   next.cite = unique.length === 1 ? unique[0] : unique;
   runs[index] = next;
-  return transaction(document, parts, runs, { action: "cite", runPath: [...parts, index].join("."), ids: unique });
+  return transaction(presentation, parts, runs, { action: "cite", runPath: [...parts, index].join("."), ids: unique });
 }
 export function citeRun(editor, runPath, ids, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareCite(editor.document, runPath, ids), meta);
+  return commit(editor, prepareCite(editor.presentation, runPath, ids), meta);
 }
 /** Remove every cite from the run at `runPath`. */
-export function prepareUncite(document, runPath) {
-  const { parts, index, run } = runAt(document, runPath);
-  const runs = clone(getValueAtPath(document, parts));
+export function prepareUncite(presentation, runPath) {
+  const { parts, index, run } = runAt(presentation, runPath);
+  const runs = clone(getValueAtPath(presentation, parts));
   const next = typeof run === "string" ? run : { ...clone(run) };
   if (typeof next === "object") delete next.cite;
   runs[index] = typeof next === "object" ? simplifyRun(next) : next;
-  return transaction(document, parts, runs, { action: "uncite", runPath: [...parts, index].join(".") });
+  return transaction(presentation, parts, runs, { action: "uncite", runPath: [...parts, index].join(".") });
 }
 export function unciteRun(editor, runPath, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareUncite(editor.document, runPath), meta);
+  return commit(editor, prepareUncite(editor.presentation, runPath), meta);
 }
 /** Set (a string or TextRun[]) or remove (`null`) the inline footnote of the run at `runPath`. */
-export function prepareFootnote(document, runPath, text) {
-  const { parts, index, run } = runAt(document, runPath);
-  const runs = clone(getValueAtPath(document, parts));
+export function prepareFootnote(presentation, runPath, text) {
+  const { parts, index, run } = runAt(presentation, runPath);
+  const runs = clone(getValueAtPath(presentation, parts));
   const next = typeof run === "string" ? { text: run } : { ...clone(run) };
   if (text === null || text === undefined) delete next.footnote;
   else {
@@ -258,16 +250,16 @@ export function prepareFootnote(document, runPath, text) {
     next.footnote = clone(text);
   }
   runs[index] = simplifyRun(next);
-  return transaction(document, parts, runs, { action: "footnote", runPath: [...parts, index].join(".") });
+  return transaction(presentation, parts, runs, { action: "footnote", runPath: [...parts, index].join(".") });
 }
 export function setFootnote(editor, runPath, text, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareFootnote(editor.document, runPath, text), meta);
+  return commit(editor, prepareFootnote(editor.presentation, runPath, text), meta);
 }
 
 /** The deck numbering the engines draw: notes in number order, cited references, per-slide markers, unused ids. */
-export function listCitations(document) {
-  const citations = citationsOf(document);
+export function listCitations(presentation) {
+  const citations = collectCitations(presentation);
   return {
     notes: citations.notes.map((note) => ({ ...note })),
     references: citations.references.map((note) => ({ ...note })),
@@ -276,7 +268,6 @@ export function listCitations(document) {
   };
 }
 /** An ordinary list slide of the cited references (core `referencesSlide`), ready for `prepareBlockInsert` or a slide insert. */
-export function referencesSlideFor(document, options = {}) {
-  if (typeof opfCore.referencesSlide !== "function") throw fail("annotations-unavailable", "The installed @openpresentation/opf has no referencesSlide (needs the core that ships RR-34).");
-  return opfCore.referencesSlide(document, options);
+export function referencesSlideFor(presentation, options = {}) {
+  return referencesSlide(presentation, options);
 }

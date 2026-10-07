@@ -50,7 +50,7 @@ assert.throws(() =>
 const editor = createEditorSession(original, { rejectInvalid: true });
 editor.set("/slides/0/table/rows/0/0", 5);
 editor.undo();
-assert.deepEqual(editor.document, original);
+assert.deepEqual(editor.presentation, original);
 console.log(
   "Canvas fields: escaped keys, types, immutable drafts, validation and undo passed.",
 );

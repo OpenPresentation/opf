@@ -26,7 +26,7 @@ export type BackgroundSpec =
 export declare function isColorRef(value: unknown): boolean;
 /** Validate a background description and return the value to store (a theme slot or plain hex stays the shorthand string). Throws `invalid-background`. */
 export declare function normalizeBackground(spec: BackgroundSpec): string | Record<string, unknown>;
-export declare function prepareBackground(document: unknown, spec: BackgroundSpec | null, options?: DimensionSwitchOptions): PreparedDimensionSwitch;
+export declare function prepareBackground(presentation: unknown, spec: BackgroundSpec | null, options?: DimensionSwitchOptions): PreparedDimensionSwitch;
 /** Set the background as one undoable transaction; `null` removes it. */
 export declare function setBackground(editor: EditorSession, spec: BackgroundSpec | null, options?: DimensionSwitchOptions): DimensionSwitchChange;
 export interface BackgroundState {
@@ -45,4 +45,4 @@ export interface BackgroundState {
   value?: unknown;
 }
 /** The background that applies at a scope, flattened for a form. */
-export declare function readBackground(document: unknown, options?: { slideIndex?: number }): BackgroundState;
+export declare function readBackground(presentation: unknown, options?: { slideIndex?: number }): BackgroundState;

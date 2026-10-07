@@ -4,11 +4,11 @@ import type { TemplateFill, TemplateFillApplyResult } from "./templates.js";
 export interface TemplatePanelOptions {
   editor: EditorSession;
   /**
-   * Draw the live preview: return the SVG of one slide of `document` with `variables` (the values typed so far)
-   * as an SVG string, or a promise of one. Typically `renderSvg(document, { variables, slideIndex, ... })` from
+   * Draw the live preview: return the SVG of one slide of `presentation` with `variables` (the values typed so far)
+   * as an SVG string, or a promise of one. Typically `renderSlideSvg(presentation, slideIndex, { variables, ... })` from
    * `@openpresentation/opf-render` with the host's fonts. Omit for no preview.
    */
-  renderPreview?: (input: { document: unknown; variables: Record<string, unknown>; slideIndex: number }) => string | Promise<string>;
+  renderPreview?: (input: { presentation: unknown; variables: Record<string, unknown>; slideIndex: number }) => string | Promise<string>;
   /** The slide the preview starts on. Call `refresh()` when it changes. */
   getSlideIndex?: () => number;
   /** The text field a variable token is inserted into: its OPF path and, optionally, the selection as UTF-16 offsets. Omit to hide the insert section. */

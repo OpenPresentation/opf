@@ -34,18 +34,18 @@ export interface PreparedGridChange {
   path: string;
   /** The id of the shared dataset the edit changes, when the chart or table shows one (RR-54). */
   dataset?: string;
-  document: unknown;
+  presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   [key: string]: unknown;
 }
-export interface GridChange extends Omit<EditorChange, "document" | "patches"> {
+export interface GridChange extends Omit<EditorChange, "presentation" | "patches"> {
   action: string;
   kind: "chart" | "table";
   path: string;
   /** The id of the shared dataset the edit changed, when the chart or table shows one. */
   dataset?: string;
-  document: unknown;
+  presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   [key: string]: unknown;
@@ -140,7 +140,7 @@ export declare function cellText(raw: unknown, kind: "chart" | "table", decimal?
  * `dataset-unavailable`. For a chart or table that shows a shared dataset, `data` is the dataset, `dataParts` is `["datasets", id]` and `dataset`
  * says which columns `fields` selects (`indices`, into the dataset's own columns) and where the reference is (`refParts`).
  */
-export declare function locateGridData(document: unknown, path: string | string[]): {
+export declare function locateGridData(presentation: unknown, path: string | string[]): {
   kind: "chart" | "table";
   parts: string[];
   dataParts: string[];
@@ -150,48 +150,46 @@ export declare function locateGridData(document: unknown, path: string | string[
   dataset?: { id: string; fields?: string[]; indices: number[]; refParts: string[]; ref: Record<string, unknown> };
 };
 /** The chart or table a selection path belongs to, or undefined. */
-export declare function resolveDataGridTarget(document: unknown, selectedPath: string): DataGridTarget | undefined;
+export declare function resolveDataGridTarget(presentation: unknown, selectedPath: string): DataGridTarget | undefined;
 /** The grid view of a chart or table: lines of cells with spans, covered positions, text, warnings. */
-export declare function describeDataGrid(document: unknown, path: string, options?: GridOptions): DataGridDescription;
+export declare function describeDataGrid(presentation: unknown, path: string, options?: GridOptions): DataGridDescription;
 /** The smallest guarded patch from `before` to `after` at `parts`. */
 export declare function gridPatches(parts: string[], before: unknown, after: unknown): JsonPatchOperation[];
 /** The problems the edits would have, without applying them or validating the document. */
-export declare function gridCellIssues(document: unknown, path: string, edits: GridCellEdit[], options?: GridOptions): GridIssue[];
+export declare function gridCellIssues(presentation: unknown, path: string, edits: GridCellEdit[], options?: GridOptions): GridIssue[];
 /** The text of a range (`{ from, to }` addresses; the whole grid when omitted) as TSV, or another delimiter. */
-export declare function gridRangeText(document: unknown, path: string, range?: { from: GridAddress; to: GridAddress }, options?: GridOptions): string;
+export declare function gridRangeText(presentation: unknown, path: string, range?: { from: GridAddress; to: GridAddress }, options?: GridOptions): string;
 
-export declare function prepareGridCells(document: unknown, path: string, edits: GridCellEdit[], options?: GridOptions): PreparedGridChange;
-export declare function preparePaste(document: unknown, path: string, anchor: GridAddress, source: string | string[][], options?: GridOptions): PreparedGridChange;
-export declare function prepareInsertRows(document: unknown, path: string, at: number, count?: number, options?: GridOptions): PreparedGridChange;
-export declare function prepareDeleteRows(document: unknown, path: string, indices: number[], options?: GridOptions): PreparedGridChange;
-export declare function prepareMoveRows(document: unknown, path: string, from: number, to: number, count?: number, options?: GridOptions): PreparedGridChange;
-export declare function prepareInsertColumns(document: unknown, path: string, at: number, count?: number, options?: GridOptions): PreparedGridChange;
-export declare function prepareDeleteColumns(document: unknown, path: string, indices: number[], options?: GridOptions): PreparedGridChange;
-export declare function prepareMoveColumns(document: unknown, path: string, from: number, to: number, count?: number, options?: GridOptions): PreparedGridChange;
-export declare function prepareSortRows(document: unknown, path: string, column: number, options?: GridSortOptions): PreparedGridChange;
-export declare function prepareSetHeader(document: unknown, path: string, enabled: boolean, options?: { use?: "first-row" | "new" }): PreparedGridChange;
-export declare function prepareTranspose(document: unknown, path: string): PreparedGridChange;
+export declare function prepareGridCells(presentation: unknown, path: string, edits: GridCellEdit[], options?: GridOptions): PreparedGridChange;
+export declare function preparePaste(presentation: unknown, path: string, anchor: GridAddress, source: string | string[][], options?: GridOptions): PreparedGridChange;
+export declare function prepareInsertRows(presentation: unknown, path: string, at: number, count?: number, options?: GridOptions): PreparedGridChange;
+export declare function prepareDeleteRows(presentation: unknown, path: string, indices: number[], options?: GridOptions): PreparedGridChange;
+export declare function prepareMoveRows(presentation: unknown, path: string, from: number, to: number, count?: number, options?: GridOptions): PreparedGridChange;
+export declare function prepareInsertColumns(presentation: unknown, path: string, at: number, count?: number, options?: GridOptions): PreparedGridChange;
+export declare function prepareDeleteColumns(presentation: unknown, path: string, indices: number[], options?: GridOptions): PreparedGridChange;
+export declare function prepareMoveColumns(presentation: unknown, path: string, from: number, to: number, count?: number, options?: GridOptions): PreparedGridChange;
+export declare function prepareSortRows(presentation: unknown, path: string, column: number, options?: GridSortOptions): PreparedGridChange;
+export declare function prepareSetHeader(presentation: unknown, path: string, enabled: boolean, options?: { use?: "first-row" | "new" }): PreparedGridChange;
+export declare function prepareTranspose(presentation: unknown, path: string): PreparedGridChange;
 /** Why `format` is not a valid number format ("#,##0", "0.0%", "$#,##0.00"), or undefined when it is valid or empty (empty clears the format). */
 export declare function columnFormatError(format: unknown): string | undefined;
-/** Whether the installed core has the RR-54 chart and table data contract (number formats, datasets, strict chart numbers). An older core edits documents that use none of it. */
-export declare const supportsChartTableData: boolean;
 /**
  * Set or clear (`null` or "") the number format of column `column` (its header cell). A string header becomes `{ name, format }` and returns to a string
  * when the format is cleared. Throws `number-format-invalid` with the reason, or `grid-no-header` for a table without a header row.
  */
-export declare function prepareGridColumnFormat(document: unknown, path: string, column: number, format: string | null | undefined, options?: GridOptions): PreparedGridChange;
+export declare function prepareGridColumnFormat(presentation: unknown, path: string, column: number, format: string | null | undefined, options?: GridOptions): PreparedGridChange;
 /** The columns a chart plots and how they got that role (the chart's `mapping`, or core's positional default). */
-export declare function describeChartMapping(document: unknown, path: string): ChartMappingDescription;
+export declare function describeChartMapping(presentation: unknown, path: string): ChartMappingDescription;
 /**
  * Set a chart's category, X and series columns by name; what `wanted` leaves out keeps its current value. A field that equals the default is not
  * written, and `chart.mapping` is removed when nothing is left. One patch. Throws `chart-mapping-unknown-column`, `chart-mapping-x-unsupported`,
  * `chart-mapping-conflict` or `chart-mapping-no-series`.
  */
-export declare function prepareChartMapping(document: unknown, path: string, wanted?: ChartMappingColumns): PreparedGridChange;
+export declare function prepareChartMapping(presentation: unknown, path: string, wanted?: ChartMappingColumns): PreparedGridChange;
 /** Replace the chart's or table's dataset reference with its own inline copy of the data. The dataset stays for the other items. One patch. */
-export declare function prepareDetachDataset(document: unknown, path: string): PreparedGridChange;
+export declare function prepareDetachDataset(presentation: unknown, path: string): PreparedGridChange;
 /** The charts and tables that use dataset `id`, in document order. */
-export declare function datasetUsage(document: unknown, id: string): Array<{ kind: "chart" | "table"; path: string; parts: string[] }>;
+export declare function datasetUsage(presentation: unknown, id: string): Array<{ kind: "chart" | "table"; path: string; parts: string[] }>;
 
 export declare function setGridCells(editor: EditorSession, path: string, edits: GridCellEdit[], options?: GridOptions): GridChange;
 export declare function pasteGridText(editor: EditorSession, path: string, anchor: GridAddress, source: string | string[][], options?: GridOptions): GridChange;

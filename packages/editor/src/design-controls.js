@@ -143,7 +143,7 @@ export function createDesignControls(container, options = {}) {
   };
   const reselect = (blockPath) => {
     if (!blockPath || !options.onSelectPath) return;
-    const content = readBlockContent(editor.document, blockPath);
+    const content = readBlockContent(editor.presentation, blockPath);
     options.onSelectPath(content && !content.explicit ? `${blockPath}.${content.key}` : blockPath);
   };
   /** Run a change; report its outcome; on failure restore every control to the document. */
@@ -299,7 +299,7 @@ export function createDesignControls(container, options = {}) {
       help: "Describes the image for screen readers. Saved with the image's asset; typed before an upload, it is used for that upload. Press Enter to apply.",
       onCommit: (value) => {
         const id = assetIdOf(lastRef);
-        if (!id || editor.document.assets?.[id] === undefined) return;
+        if (!id || editor.presentation.assets?.[id] === undefined) return;
         run(() => setAssetAlt(editor, id, value), "Alt text saved.");
       },
     });
@@ -333,7 +333,7 @@ export function createDesignControls(container, options = {}) {
         source.setList(assetList());
         source.set(lastRef, note);
         const id = assetIdOf(lastRef);
-        const entry = id ? editor.document.assets?.[id] : undefined;
+        const entry = id ? editor.presentation.assets?.[id] : undefined;
         // Alt text belongs to one image: another target (variant, zone, slide) never inherits what was typed for the last one.
         alt.set(entry && typeof entry === "object" && typeof entry.alt === "string" ? entry.alt : "");
         // The field keeps what is being typed, except when the image it describes has changed.
@@ -372,7 +372,7 @@ export function createDesignControls(container, options = {}) {
     root.append(scopeField.wrap);
   }
 
-  const assetList = () => Object.keys(editor.document.assets ?? {}).map((id) => `asset:${id}`);
+  const assetList = () => Object.keys(editor.presentation.assets ?? {}).map((id) => `asset:${id}`);
   const stringOf = (value) => (typeof value === "string" ? value : value && typeof value === "object" && typeof value.src === "string" ? value.src : "");
   const isCustomObject = (value) => Boolean(value) && typeof value === "object";
 
@@ -392,8 +392,8 @@ export function createDesignControls(container, options = {}) {
       });
       body.append(field.wrap);
       syncs.push(() => {
-        field.setOptions(listSwitchOptions(editor.document, dimension, catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
-        const current = currentSwitchValue(editor.document, dimension, perSlide ? scoped() : {});
+        field.setOptions(listSwitchOptions(editor.presentation, dimension, catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
+        const current = currentSwitchValue(editor.presentation, dimension, perSlide ? scoped() : {});
         field.set(current.value, perSlide ? sourceNote(current.scope, current.value !== undefined) : "");
       });
       return field;
@@ -409,8 +409,8 @@ export function createDesignControls(container, options = {}) {
     });
     body.append(slideSize.wrap);
     syncs.push(() => {
-      slideSize.setOptions(listSwitchOptions(editor.document, "slide-sizes").map((entry) => ({ value: entry.id, label: entry.label })));
-      const { value } = currentSwitchValue(editor.document, "slide-sizes");
+      slideSize.setOptions(listSwitchOptions(editor.presentation, "slide-sizes").map((entry) => ({ value: entry.id, label: entry.label })));
+      const { value } = currentSwitchValue(editor.presentation, "slide-sizes");
       slideSize.set(value && typeof value === "object" ? "Custom size" : value);
     });
 
@@ -420,8 +420,8 @@ export function createDesignControls(container, options = {}) {
     });
     body.append(layout.wrap);
     syncs.push(() => {
-      layout.setOptions(listSwitchOptions(editor.document, "layouts", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
-      layout.set(currentSwitchValue(editor.document, "layouts", { slideIndex: getSlide() }).value);
+      layout.setOptions(listSwitchOptions(editor.presentation, "layouts", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
+      layout.set(currentSwitchValue(editor.presentation, "layouts", { slideIndex: getSlide() }).value);
     });
   }
 
@@ -525,7 +525,7 @@ export function createDesignControls(container, options = {}) {
     body.append(typeSelect.wrap, themePanel, solidPanel, gradientPanel, imagePanel, patternPanel, opacity.wrap, h("div", { class: "opf-dc-actions" }, apply, remove));
 
     const load = () => {
-      const current = readBackground(editor.document, scoped());
+      const current = readBackground(editor.presentation, scoped());
       const note = sourceNote(current.scope, current.type !== undefined);
       typeSelect.set(current.type ?? "theme", note);
       slot.set(current.type === "theme" ? current.slot : "light1");
@@ -603,7 +603,7 @@ export function createDesignControls(container, options = {}) {
     ]);
     body.append(position.wrap, source.wrap, fill.wrap, shape.wrap, size.wrap, inset.wrap, placeholderFill.wrap);
     syncs.push(() => {
-      const option = getDesignOption(editor.document, "slideImage", scoped());
+      const option = getDesignOption(editor.presentation, "slideImage", scoped());
       const value = option.value;
       const object = value && typeof value === "object" && !Array.isArray(value) && value.position ? value : undefined;
       const note = sourceNote(option.scope, option.value !== undefined);
@@ -615,7 +615,7 @@ export function createDesignControls(container, options = {}) {
       inset.set(object?.inset === true);
       // Fit, shape, size and inset only make sense once the image has a position.
       for (const control of [fill, shape, size, inset]) control.wrap.hidden = !object;
-      placeholderFill.set(editor.document.design?.imageFill ?? "");
+      placeholderFill.set(editor.presentation.design?.imageFill ?? "");
     });
   }
 
@@ -690,11 +690,11 @@ export function createDesignControls(container, options = {}) {
         .map(([key, value]) => (typeof value === "boolean" ? key : `${key} ${typeof value === "string" ? `“${value}”` : ""}`.trim()))
         .join(", ");
     syncs.push(() => {
-      const state = headerFooterState(editor.document, which(), scoped());
+      const state = headerFooterState(editor.presentation, which(), scoped());
       // Offered on a slide that inherits the deck's furniture or already hides it, never over zones the slide set itself; at the deck only to undo a hidden state.
       hide.wrap.hidden = scopeIndex() === undefined ? !state.hidden : state.own && !state.hidden;
       hide.set(state.hidden, state.inherited && !state.hidden ? "from the presentation" : "");
-      const fields = readHeaderFooterZone(editor.document, which(), zone(), scoped());
+      const fields = readHeaderFooterZone(editor.presentation, which(), zone(), scoped());
       text.set(typeof fields.text === "string" ? fields.text : "");
       logo.set(fields.logo === true);
       image.set(stringOf(fields.image), "", `${target()}:${which()}:${zone()}`);
@@ -710,11 +710,11 @@ export function createDesignControls(container, options = {}) {
       for (const control of controls) for (const input of control.wrap.querySelectorAll("input,select,button")) input.disabled = state.hidden;
       summary.replaceChildren(
         ...HEADER_FOOTER_ZONES.map((name) => {
-          const zoneFields = readHeaderFooterZone(editor.document, which(), name, scoped());
+          const zoneFields = readHeaderFooterZone(editor.presentation, which(), name, scoped());
           return h("li", {}, `${titleCase(name)}: ${Object.keys(zoneFields).length ? describe(zoneFields) : "empty"}`);
         }),
       );
-      warnings.replaceChildren(...designWarnings(editor.document, getSlide()).filter((warning) => /^design\.(header|footer)/.test(warning.path)).map((warning) => h("li", {}, warning.message)));
+      warnings.replaceChildren(...designWarnings(editor.presentation, getSlide()).filter((warning) => /^design\.(header|footer)/.test(warning.path)).map((warning) => h("li", {}, warning.message)));
     });
   }
 
@@ -760,7 +760,7 @@ export function createDesignControls(container, options = {}) {
       help: "A text stamp centered on the slide, drawn diagonally in the theme text color at the opacity below. Press Enter to apply; clear the field to remove it. It replaces a watermark image.",
       onCommit: (value) => run(() => {
         const text = value.trim();
-        const current = getDesignOption(editor.document, "watermark", scoped()).value;
+        const current = getDesignOption(editor.presentation, "watermark", scoped()).value;
         if (text === "") return current && typeof current === "object" && typeof current.text === "string" ? setDesignOption(editor, "watermark", null, scoped()) : { changed: false };
         const opacity = current && typeof current === "object" && typeof current.opacity === "number" ? current.opacity : 0.1;
         return setDesignOption(editor, "watermark", { text, opacity }, scoped());
@@ -779,27 +779,27 @@ export function createDesignControls(container, options = {}) {
     const warningList = h("ul", { class: "opf-dc-warnings", "aria-label": "Logo warnings" });
     body.append(warningList);
     syncs.push(() => {
-      const variants = readLogoVariants(editor.document, scoped());
+      const variants = readLogoVariants(editor.presentation, scoped());
       logoSource.set(stringOf(variants[variant.select.value]), "", `${target()}:${variant.select.value}`);
-      const organization = editor.document.organization;
+      const organization = editor.presentation.organization;
       const owner = Array.isArray(organization) ? organization[0] : organization;
       orgLogo.set(stringOf(owner?.logo), "", "org");
       for (const input of orgLogo.wrap.querySelectorAll("input")) input.disabled = !owner;
-      const bulletOption = getDesignOption(editor.document, "listBullet", scoped());
+      const bulletOption = getDesignOption(editor.presentation, "listBullet", scoped());
       bullet.set(bulletOption.value ?? "", sourceNote(bulletOption.scope, bulletOption.value !== undefined));
-      const accentOption = getDesignOption(editor.document, "accentFont", scoped());
+      const accentOption = getDesignOption(editor.presentation, "accentFont", scoped());
       accent.set(accentOption.value ?? "", sourceNote(accentOption.scope, accentOption.value !== undefined));
-      const watermark = getDesignOption(editor.document, "watermark", scoped());
+      const watermark = getDesignOption(editor.presentation, "watermark", scoped());
       const mark = watermark.value;
       // The opacity belongs to a watermark image or text; without one there is nothing to fade.
       for (const input of watermarkOpacity.wrap.querySelectorAll("input")) input.disabled = !(typeof mark === "string" || (mark && typeof mark === "object" && (typeof mark.src === "string" || typeof mark.text === "string")));
       watermarkText.set(mark && typeof mark === "object" && typeof mark.text === "string" ? mark.text : "", sourceNote(watermark.scope, mark !== undefined));
       watermarkSource.set(typeof mark === "string" ? mark : mark && typeof mark === "object" ? stringOf(mark) : "", sourceNote(watermark.scope, mark !== undefined), target());
       watermarkOpacity.set(mark && typeof mark === "object" && typeof mark.opacity === "number" ? String(mark.opacity) : "");
-      const own = scopeIndex() === undefined ? editor.document.design?.watermark : editor.document.slides?.[scopeIndex()]?.design?.watermark;
+      const own = scopeIndex() === undefined ? editor.presentation.design?.watermark : editor.presentation.slides?.[scopeIndex()]?.design?.watermark;
       watermarkOff.set(own === false);
       watermarkOff.wrap.hidden = state.scope !== "slide";
-      warningList.replaceChildren(...designWarnings(editor.document, getSlide()).filter((warning) => warning.path === "design.listBullet").map((warning) => h("li", {}, warning.message)));
+      warningList.replaceChildren(...designWarnings(editor.presentation, getSlide()).filter((warning) => warning.path === "design.listBullet").map((warning) => h("li", {}, warning.message)));
     });
   }
 
@@ -816,7 +816,7 @@ export function createDesignControls(container, options = {}) {
       field.setOptions(values.map((value) => ({ value, label: labels[value] ?? titleCase(value) })));
       body.append(field.wrap);
       syncs.push(() => {
-        const option = getDesignOption(editor.document, id, scoped());
+        const option = getDesignOption(editor.presentation, id, scoped());
         field.set(option.value ?? "", sourceNote(option.scope, option.value !== undefined));
       });
     };
@@ -834,7 +834,7 @@ export function createDesignControls(container, options = {}) {
     ]);
     body.append(box.wrap);
     syncs.push(() => {
-      const option = getDesignOption(editor.document, "contentBox", scoped());
+      const option = getDesignOption(editor.presentation, "contentBox", scoped());
       box.set(option.value === undefined ? "" : option.value ? "yes" : "no", sourceNote(option.scope, option.value !== undefined));
     });
   }
@@ -847,8 +847,8 @@ export function createDesignControls(container, options = {}) {
       const field = selectField(name, label, { help, onChange: (value) => run(() => switchDimension(editor, dimension, value, catalogOptions()), `${label} set to ${field.select.selectedOptions[0]?.textContent ?? value}.`) });
       body.append(field.wrap);
       syncs.push(() => {
-        field.setOptions(listSwitchOptions(editor.document, dimension, catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
-        field.set(currentSwitchValue(editor.document, dimension).value);
+        field.setOptions(listSwitchOptions(editor.presentation, dimension, catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
+        field.set(currentSwitchValue(editor.presentation, dimension).value);
       });
     };
     single("narrative", "Narrative", "narratives", "The narrative plan the deck points at (a catalog id; a custom one is a record in the JSON source). The slides do not change, and keep their beat links.");
@@ -865,9 +865,9 @@ export function createDesignControls(container, options = {}) {
     });
     body.append(audience.wrap);
     syncs.push(() => {
-      audience.setOptions(listSwitchOptions(editor.document, "audiences", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
+      audience.setOptions(listSwitchOptions(editor.presentation, "audiences", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
       // The root audience is a string, one inline Audience object or an array of both: the picker shows the catalog ids.
-      const value = editor.document.audience;
+      const value = editor.presentation.audience;
       const entries = Array.isArray(value) ? value : value === undefined ? [] : [value];
       audience.set(entries.map((entry) => (entry && typeof entry === "object" ? entry.id : entry)).filter((id) => typeof id === "string"));
     });
@@ -883,17 +883,17 @@ export function createDesignControls(container, options = {}) {
     handle.input.addEventListener("change", applySocial);
     body.append(owner.wrap, platform.wrap, handle.wrap, button("Save handle", applySocial));
     const showHandle = () => {
-      const host = editor.document[owner.select.value];
+      const host = editor.presentation[owner.select.value];
       const target = Array.isArray(host) ? host[0] : host;
       handle.set(typeof target?.socials?.[platform.select.value] === "string" ? target.socials[platform.select.value] : "");
     };
     owner.select.addEventListener("change", showHandle);
     platform.select.addEventListener("change", showHandle);
     syncs.push(() => {
-      const owners = ["speaker", "organization"].filter((name) => editor.document[name]);
+      const owners = ["speaker", "organization"].filter((name) => editor.presentation[name]);
       owner.setOptions(owners.length ? owners.map((name) => ({ value: name, label: titleCase(name) })) : [{ value: "speaker", label: "Speaker (add one first)", disabled: true }]);
       if (!owner.select.value || !owners.includes(owner.select.value)) owner.select.value = owners[0] ?? "speaker";
-      platform.setOptions(listSwitchOptions(editor.document, "socials", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
+      platform.setOptions(listSwitchOptions(editor.presentation, "socials", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
       showHandle();
     });
   }
@@ -989,7 +989,7 @@ export function createDesignControls(container, options = {}) {
 
   function syncSelection() {
     const selected = getSelected();
-    const document_ = editor.document;
+    const document_ = editor.presentation;
     const blockPath = selected ? blockPathForSelection(document_, selected) : undefined;
     const content = blockPath ? readBlockContent(document_, blockPath) : undefined;
     dynamic.blockPath = blockPath;

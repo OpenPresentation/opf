@@ -1,8 +1,8 @@
 // RR-06: safe content-type conversion. A conversion keeps the block's text, never adds content,
 // reports what it cannot carry, refuses pairs with no meaning, and is one undoable patch.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import { createEditorSession } from "../dist/index.js";
 import { BLOCK_CONVERSIONS, BLOCK_KIND_LABELS, blockConversionTargets, blockPathForSelection, convertBlock, metricGroupForSelection, prepareBlockConversion, readBlockContent } from "../dist/block-convert.js";
 import { switchDimension } from "../dist/switches.js";
@@ -31,9 +31,9 @@ const deck = () => ({
   ],
 });
 const withImage = () => {
-  const document = deck();
-  document.assets = { none: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=" };
-  return document;
+  const presentation = deck();
+  presentation.assets = { none: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jP0cAAAAASUVORK5CYII=" };
+  return presentation;
 };
 const session = () => createEditorSession(withImage(), { rejectInvalid: true });
 const at = (index) => `slides.0.blocks.${index}`;
@@ -50,25 +50,25 @@ assert.equal(BLOCK_KIND_LABELS.list, "List");
 
 // Targets: what each block can convert to, with its loss report.
 {
-  const document = withImage();
-  const targets = (index) => Object.fromEntries(blockConversionTargets(document, at(index)).map((entry) => [entry.kind, entry]));
+  const presentation = withImage();
+  const targets = (index) => Object.fromEntries(blockConversionTargets(presentation, at(index)).map((entry) => [entry.kind, entry]));
   assert.deepEqual(Object.keys(targets(0)), ["list", "quote", "metric", "code", "timeline", "table"]);
   assert.equal(targets(0).quote.lossless, true);
   assert.equal(targets(0).table.available, false, "plain lines are not a table");
   assert.match(targets(0).table.reason, /no table structure/);
   assert.deepEqual(targets(1).text, { kind: "text", label: "Text", available: true, lossless: true, loss: [] });
-  assert.deepEqual(blockConversionTargets(document, at(8)), [], "an image has no text to convert");
-  assert.deepEqual(blockConversionTargets(document, "slides.0"), [], "a slide with blocks is a group, not one block");
+  assert.deepEqual(blockConversionTargets(presentation, at(8)), [], "an image has no text to convert");
+  assert.deepEqual(blockConversionTargets(presentation, "slides.0"), [], "a slide with blocks is a group, not one block");
   assert.deepEqual(Object.keys(targets(6)), ["table"]);
   assert.deepEqual(targets(6).table.loss, ["chart type"]);
-  assert.equal(readBlockContent(document, at(1)).kind, "list");
-  assert.equal(readBlockContent(document, "slides.1").kind, "text", "a slide holding one payload inline");
+  assert.equal(readBlockContent(presentation, at(1)).kind, "list");
+  assert.equal(readBlockContent(presentation, "slides.1").kind, "text", "a slide holding one payload inline");
 }
 
 // text -> list -> text keeps every line.
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const toList = convertBlock(editor, at(0), "list");
   assert.deepEqual(editor.get(`${at(0)}`), { id: "plain", items: ["One", "Two", "Three"] });
   assert.deepEqual([toList.from, toList.to, toList.lossless], ["text", "list", true]);
@@ -78,28 +78,28 @@ assert.equal(BLOCK_KIND_LABELS.list, "List");
   assert.equal(editor.get(`${at(0)}.text`), "One\nTwo\nThree");
   assert.equal(back.lossless, true);
   assert.equal(editor.get(`${at(0)}.id`), "plain", "the block id survives");
-  assert.deepEqual(editor.document, before, "text to list to text returns the same document");
+  assert.deepEqual(editor.presentation, before, "text to list to text returns the same document");
   editor.undo();
   editor.undo();
-  assert.deepEqual(editor.document, before);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.deepEqual(editor.presentation, before);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }
 
 // Rich text keeps its runs per line; plain lines stay plain strings.
 {
-  const document = withImage();
-  document.slides[0].blocks[0] = { text: ["Bold ", { text: "start", bold: true }, "\nsecond line"] };
-  const editor = createEditorSession(document, { rejectInvalid: true });
+  const presentation = withImage();
+  presentation.slides[0].blocks[0] = { text: ["Bold ", { text: "start", bold: true }, "\nsecond line"] };
+  const editor = createEditorSession(presentation, { rejectInvalid: true });
   convertBlock(editor, at(0), "list");
   assert.deepEqual(editor.get(`${at(0)}.items`), [["Bold ", { text: "start", bold: true }], "second line"]);
   convertBlock(editor, at(0), "text");
   assert.deepEqual(editor.get(`${at(0)}.text`), ["Bold ", { text: "start", bold: true }, "\nsecond line"]);
-  const toQuote = prepareBlockConversion(editor.document, at(0), "quote");
+  const toQuote = prepareBlockConversion(editor.presentation, at(0), "quote");
   assert.deepEqual(toQuote.loss, ["text formatting"], "a quote is plain text, so formatting is reported");
-  assert.equal(readValue(toQuote.document, at(0)).quote.text, "Bold start\nsecond line");
+  assert.equal(readValue(toQuote.presentation, at(0)).quote.text, "Bold start\nsecond line");
 }
-function readValue(document, path) {
-  return path.split(".").reduce((value, key) => value[key], document);
+function readValue(presentation, path) {
+  return path.split(".").reduce((value, key) => value[key], presentation);
 }
 
 // list <-> timeline, text <-> timeline: events keep only `what` (nothing is invented for `when`).
@@ -141,8 +141,8 @@ function readValue(document, path) {
 
 // Refusals: nothing is invented and nothing is hidden.
 {
-  const document = withImage();
-  const fails = (path, kind, pattern) => assert.throws(() => prepareBlockConversion(document, path, kind), (error) => error.code === "block-not-convertible" && pattern.test(error.message), `${path} -> ${kind}`);
+  const presentation = withImage();
+  const fails = (path, kind, pattern) => assert.throws(() => prepareBlockConversion(presentation, path, kind), (error) => error.code === "block-not-convertible" && pattern.test(error.message), `${path} -> ${kind}`);
   fails(at(2), "list", /cannot be converted/);
   fails(at(3), "metric", /cannot be converted/);
   fails(at(8), "text", /Image content cannot be converted to text/);
@@ -162,21 +162,21 @@ function readValue(document, path) {
 
 // Metric values: a numeric first line becomes a number, other text stays text; label and description follow.
 {
-  const document = withImage();
-  document.slides[0].blocks[0] = { text: "$12.4M\nRevenue\nRecognized in Q4" };
-  const result = prepareBlockConversion(document, at(0), "metric");
-  assert.deepEqual(result.document.slides[0].blocks[0], { metric: { value: "$12.4M", label: "Revenue", description: "Recognized in Q4" } });
-  document.slides[0].blocks[0] = { text: "007" };
-  assert.equal(prepareBlockConversion(document, at(0), "metric").document.slides[0].blocks[0].metric.value, "007", "text that is not a canonical number is kept verbatim");
+  const presentation = withImage();
+  presentation.slides[0].blocks[0] = { text: "$12.4M\nRevenue\nRecognized in Q4" };
+  const result = prepareBlockConversion(presentation, at(0), "metric");
+  assert.deepEqual(result.presentation.slides[0].blocks[0], { metric: { value: "$12.4M", label: "Revenue", description: "Recognized in Q4" } });
+  presentation.slides[0].blocks[0] = { text: "007" };
+  assert.equal(prepareBlockConversion(presentation, at(0), "metric").presentation.slides[0].blocks[0].metric.value, "007", "text that is not a canonical number is kept verbatim");
 }
 
 // Blank lines are dropped for structured targets and reported.
 {
-  const document = withImage();
-  document.slides[0].blocks[0] = { text: "A\n\nB" };
-  const result = prepareBlockConversion(document, at(0), "list");
+  const presentation = withImage();
+  presentation.slides[0].blocks[0] = { text: "A\n\nB" };
+  const result = prepareBlockConversion(presentation, at(0), "list");
   assert.deepEqual(result.loss, ["blank lines"]);
-  assert.deepEqual(result.document.slides[0].blocks[0].items, ["A", "B"]);
+  assert.deepEqual(result.presentation.slides[0].blocks[0].items, ["A", "B"]);
 }
 
 // Chart <-> table with inline data; external data and styled cells are refused.
@@ -209,7 +209,7 @@ function readValue(document, path) {
   assert.deepEqual(editor.get("slides.1"), { id: "inline", title: "Implicit", items: ["Only text"] });
   convertBlock(editor, "slides.2.blocks.0", "list");
   assert.deepEqual(editor.get("slides.2.blocks.0"), { type: "list", items: ["Typed text"] }, "an explicit type follows the new kind");
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }
 
 // Converting to the current kind commits nothing; an unchanged repeat is no history entry.
@@ -222,12 +222,12 @@ function readValue(document, path) {
 
 // Selection mapping: a selection inside a block maps to the block; inline slide payloads only for their own field.
 {
-  const document = withImage();
-  assert.equal(blockPathForSelection(document, "slides.0.blocks.6.chart.data.rows.0.0"), "slides.0.blocks.6");
-  assert.equal(blockPathForSelection(document, "slides.0.blocks.0.text"), "slides.0.blocks.0");
-  assert.equal(blockPathForSelection(document, "slides.1.text"), "slides.1");
-  assert.equal(blockPathForSelection(document, "slides.1.title"), undefined, "the title of a one-payload slide is not its payload");
-  assert.equal(blockPathForSelection(document, "slides.0.title"), undefined);
+  const presentation = withImage();
+  assert.equal(blockPathForSelection(presentation, "slides.0.blocks.6.chart.data.rows.0.0"), "slides.0.blocks.6");
+  assert.equal(blockPathForSelection(presentation, "slides.0.blocks.0.text"), "slides.0.blocks.0");
+  assert.equal(blockPathForSelection(presentation, "slides.1.text"), "slides.1");
+  assert.equal(blockPathForSelection(presentation, "slides.1.title"), undefined, "the title of a one-payload slide is not its payload");
+  assert.equal(blockPathForSelection(presentation, "slides.0.title"), undefined);
 }
 
 // Through the dimension switch: convert is opt-in, replacement stays the default.
@@ -248,9 +248,9 @@ function readValue(document, path) {
 // The preview follows: the converted list renders its items.
 {
   const editor = session();
-  const before = renderSvg(editor.document, { slideIndex: 0 });
+  const before = renderSlideSvg(editor.presentation, 0);
   convertBlock(editor, at(0), "list");
-  const after = renderSvg(editor.document, { slideIndex: 0 });
+  const after = renderSlideSvg(editor.presentation, 0);
   assert.notEqual(after, before, "the preview redraws the converted block");
   for (const word of ["One", "Two", "Three"]) assert.ok(after.includes(word), `${word} survives in the preview`);
 }
@@ -258,7 +258,7 @@ function readValue(document, path) {
 // Stale guard: converting a block that changed since it was read is rejected by the patch itself.
 {
   const editor = session();
-  const prepared = prepareBlockConversion(editor.document, at(0), "list");
+  const prepared = prepareBlockConversion(editor.presentation, at(0), "list");
   editor.set(`${at(0)}.text`, "Changed elsewhere");
   assert.throws(() => editor.applyPatch(prepared.patches), (error) => error.code === "patch-test-failed");
 }
@@ -266,7 +266,7 @@ function readValue(document, path) {
 // RR-26: the conversions core added are reachable through the same transaction (one undo step, loss reported).
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   // list <-> table
   const listToTable = convertBlock(editor, at(1), "table");
   assert.deepEqual(editor.get(`${at(1)}.table`), { rows: [["First"], ["Second"]] });
@@ -282,35 +282,35 @@ function readValue(document, path) {
   convertBlock(editor, at(5), "timeline");
   assert.deepEqual(editor.get(`${at(5)}.timeline`), [{ when: "Now", what: "Prototype" }, { what: "Review" }]);
   // table to a list names what the list cannot keep.
-  const tableList = prepareBlockConversion(editor.document, at(7), "list");
+  const tableList = prepareBlockConversion(editor.presentation, at(7), "list");
   assert.deepEqual(tableList.loss, ["column headings"]);
-  assert.deepEqual(tableList.document.slides[0].blocks[7].items, [{ text: "Q1", description: "12" }, { text: "Q2", description: "18" }]);
+  assert.deepEqual(tableList.presentation.slides[0].blocks[7].items, [{ text: "Q1", description: "12" }, { text: "Q2", description: "18" }]);
   // text parsing: a timeline with dates, a quote with its attribution, a fenced code block.
-  const document = withImage();
-  document.slides[0].blocks[0] = { text: "2024 — Launch\nQ1 2026: Pilot" };
-  assert.deepEqual(prepareBlockConversion(document, at(0), "timeline").document.slides[0].blocks[0].timeline, [{ when: "2024", what: "Launch" }, { when: "Q1 2026", what: "Pilot" }]);
-  document.slides[0].blocks[0] = { text: "Be brave.\n— Jane Doe, CTO" };
-  assert.deepEqual(prepareBlockConversion(document, at(0), "quote").document.slides[0].blocks[0].quote, { text: "Be brave.", attribution: "Jane Doe, CTO" });
-  document.slides[0].blocks[0] = { text: "```py\nprint(1)\n```" };
-  assert.deepEqual(prepareBlockConversion(document, at(0), "code").document.slides[0].blocks[0].code, { source: "print(1)", language: "py" });
+  const presentation = withImage();
+  presentation.slides[0].blocks[0] = { text: "2024 — Launch\nQ1 2026: Pilot" };
+  assert.deepEqual(prepareBlockConversion(presentation, at(0), "timeline").presentation.slides[0].blocks[0].timeline, [{ when: "2024", what: "Launch" }, { when: "Q1 2026", what: "Pilot" }]);
+  presentation.slides[0].blocks[0] = { text: "Be brave.\n— Jane Doe, CTO" };
+  assert.deepEqual(prepareBlockConversion(presentation, at(0), "quote").presentation.slides[0].blocks[0].quote, { text: "Be brave.", attribution: "Jane Doe, CTO" });
+  presentation.slides[0].blocks[0] = { text: "```py\nprint(1)\n```" };
+  assert.deepEqual(prepareBlockConversion(presentation, at(0), "code").presentation.slides[0].blocks[0].code, { source: "print(1)", language: "py" });
   // Everything above is undoable back to the start.
   while (editor.snapshot().canUndo) editor.undo();
-  assert.deepEqual(editor.document, before);
+  assert.deepEqual(editor.presentation, before);
 }
 
 // A group of metric blocks converts to a table as a whole (on a slide, a region or a group) and back.
 {
-  const document = withImage();
-  document.slides.push({ id: "kpis", title: "KPIs", blocks: [{ metric: { value: 42, label: "Customers", unit: "k" } }, { metric: { value: "$1.2M", label: "Revenue" } }] });
-  document.slides.push({ id: "mixed", title: "Mixed", blocks: [{ blocks: [{ metric: 1 }, { metric: 2 }] }, { text: "Context" }] });
-  const editor = createEditorSession(document, { rejectInvalid: true });
+  const presentation = withImage();
+  presentation.slides.push({ id: "kpis", title: "KPIs", blocks: [{ metric: { value: 42, label: "Customers", unit: "k" } }, { metric: { value: "$1.2M", label: "Revenue" } }] });
+  presentation.slides.push({ id: "mixed", title: "Mixed", blocks: [{ blocks: [{ metric: 1 }, { metric: 2 }] }, { text: "Context" }] });
+  const editor = createEditorSession(presentation, { rejectInvalid: true });
   const group = "slides.3";
-  assert.equal(readBlockContent(editor.document, group).kind, "group");
-  assert.deepEqual(blockConversionTargets(editor.document, group).map((target) => [target.kind, target.available, target.lossless]), [["table", true, true]]);
-  assert.equal(readBlockContent(editor.document, "slides.0"), undefined, "a group of mixed blocks has no conversion");
-  assert.equal(metricGroupForSelection(editor.document, "slides.3.blocks.1.metric"), group);
-  assert.equal(metricGroupForSelection(editor.document, "slides.4.blocks.0.blocks.1.metric"), "slides.4.blocks.0");
-  assert.equal(metricGroupForSelection(editor.document, "slides.0.blocks.0.text"), undefined);
+  assert.equal(readBlockContent(editor.presentation, group).kind, "group");
+  assert.deepEqual(blockConversionTargets(editor.presentation, group).map((target) => [target.kind, target.available, target.lossless]), [["table", true, true]]);
+  assert.equal(readBlockContent(editor.presentation, "slides.0"), undefined, "a group of mixed blocks has no conversion");
+  assert.equal(metricGroupForSelection(editor.presentation, "slides.3.blocks.1.metric"), group);
+  assert.equal(metricGroupForSelection(editor.presentation, "slides.4.blocks.0.blocks.1.metric"), "slides.4.blocks.0");
+  assert.equal(metricGroupForSelection(editor.presentation, "slides.0.blocks.0.text"), undefined);
   const change = convertBlock(editor, group, "table");
   assert.deepEqual(editor.get(`${group}.table`), { columns: ["Label", "Value", "Unit"], rows: [["Customers", 42, "k"], ["Revenue", "$1.2M", null]] });
   assert.equal(editor.get(`${group}.title`), "KPIs", "the slide's own fields stay");
@@ -318,22 +318,22 @@ function readValue(document, path) {
   assert.equal(change.lossless, true);
   assert.equal(editor.snapshot().undoDepth, 1);
   convertBlock(editor, group, "metrics");
-  assert.deepEqual(editor.get(`${group}.blocks`), document.slides[3].blocks);
+  assert.deepEqual(editor.get(`${group}.blocks`), presentation.slides[3].blocks);
   // A nested group converts in place; its composition cannot sit on a table and is reported.
   const nested = convertBlock(editor, "slides.4.blocks.0", "table");
   assert.deepEqual(editor.get("slides.4.blocks.0"), { table: { columns: ["Value"], rows: [[1], [2]] } });
   assert.equal(nested.lossless, true);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }
 
 // Conversion options reach core: a delimiter reads comma separated text as a table.
 {
-  const document = withImage();
-  document.slides[0].blocks[0] = { text: "a,b\nc,d" };
-  assert.deepEqual(blockConversionTargets(document, at(0)).find((target) => target.kind === "table").available, false);
-  const result = prepareBlockConversion(document, at(0), "table", { delimiter: ",", header: true });
-  assert.deepEqual(result.document.slides[0].blocks[0].table, { columns: ["a", "b"], rows: [["c", "d"]] });
-  const editor = createEditorSession(document, { rejectInvalid: true });
+  const presentation = withImage();
+  presentation.slides[0].blocks[0] = { text: "a,b\nc,d" };
+  assert.deepEqual(blockConversionTargets(presentation, at(0)).find((target) => target.kind === "table").available, false);
+  const result = prepareBlockConversion(presentation, at(0), "table", { delimiter: ",", header: true });
+  assert.deepEqual(result.presentation.slides[0].blocks[0].table, { columns: ["a", "b"], rows: [["c", "d"]] });
+  const editor = createEditorSession(presentation, { rejectInvalid: true });
   switchDimension(editor, "blocks", "table", { path: at(0), convert: true, conversion: { delimiter: "," } });
   assert.deepEqual(editor.get(`${at(0)}.table`), { rows: [["a", "b"], ["c", "d"]] });
 }

@@ -1,13 +1,14 @@
 // RR-23: download a deck as PDF, PNG or SVG from the editor, next to the PowerPoint export. Everything runs in the page:
-// the slides are drawn by the same renderer the preview uses (`renderSvgDeck`, with the editor's own text measurement), so
-// a download is the preview, not a second layout. Fonts are the registry's: the faces the document needs load through the
-// font gate first, and only faces the registry holds (bundled or hash-pinned, permissively licensed) are embedded, as
+// the slides are drawn by the same renderer the preview uses (`renderSvg`, with the fonts handle's text measurement), so
+// a download is the preview, not a second layout. Fonts are the renderer's fonts handle's: the faces the document needs load through
+// the handle first, and only faces its registry holds (bundled or hash-pinned, permissively licensed) are embedded, as
 // @font-face data in each SVG and as subsets in the PDF. No system font is read and nothing is fetched at export time.
 //
-//   const result = await exportDeck(editor.document, { format: "pdf", renderOptions, fonts: gate, registry, signal, onProgress });
+//   const result = await exportDeck(editor.presentation, { format: "pdf", fonts, renderOptions, signal, onProgress });
 //   // result.download is { name, type, bytes }: one PDF, one PNG or SVG, or a ZIP of the slides.
 
-import { renderSvgDeck } from "@openpresentation/opf-render/svg";
+import { renderSvg } from "@openpresentation/opf-render/svg";
+import { fontGate } from "./font-gate.js";
 import { createZip } from "./zip.js";
 
 export const EXPORT_FORMATS = Object.freeze({
@@ -69,6 +70,19 @@ function exportError(code, message, cause) {
   return error;
 }
 
+// The faces a PDF may embed: the same permissive-license list as the SVG (`embeddableFonts`), as the bytes the converter reads. The fonts
+// handle itself is never given to `svgToPdf`: it would embed every face the registry holds, whatever its license.
+function pdfFontData(faces) {
+  return faces.map((face) => {
+    const text = String(face.dataUrl ?? "");
+    const base64 = text.slice(text.indexOf(",") + 1);
+    const binary = atob(base64);
+    const data = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) data[index] = binary.charCodeAt(index);
+    return { family: face.family, data };
+  });
+}
+
 const fontLabel = (face) => `${face.family} ${face.weight}${face.italic ? " italic" : ""}`;
 
 function slideOf(path) {
@@ -110,12 +124,17 @@ async function loadConverters(options) {
  * - `slides`: "current" (with `slideIndex`), "all" (default; hidden slides only with `includeHidden`) or an array of slide numbers.
  * - `pdfMode`: "vector" (default: selectable text, vector shapes) or "raster" (each slide an image).
  * - `scale`: PNG pixel density, 1 to 4 (default 2); also the raster PDF's density.
- * - `renderOptions`: the render options the host draws with (`textMeasurement`, `catalogs`, ...), the same as its preview.
- * - `fonts`: a font gate (`createFontGate`); the faces the deck needs load before anything is drawn.
- * - `registry`: the browser font registry; its faces are what gets embedded.
+ * - `renderOptions`: the render options the host draws with (`catalogs`, `date`, ...), the same as its preview.
+ * - `fonts`: the renderer's fonts handle (`loadFonts()` from `@openpresentation/opf-render/fonts-browser`), the one the preview uses. Its
+ *   `textMeasurement` lays the slides out, the faces the deck needs load through its `ensure` before anything is drawn, and its registry's
+ *   faces are what gets embedded: the SVG carries the faces its slides draw, and the PDF embeds the registry's faces (script faces included).
+ *   Both apply the same license rule (OFL-1.1, Apache-2.0, MIT or UFL-1.0): a face whose license text names none of them is left out of the SVG
+ *   and the PDF and reported once as `export-font-license`. Text that needed it is drawn with another face the registry holds and
+ *   reported by the converter (`pdf-font-substituted`, `pdf-glyph-missing`); when no face is left at all the PDF rejects with
+ *   `export-fonts-unlicensed` (the converter's error is its `cause`).
  * - `signal`, `onProgress({ stage, done, total, message })`, `onDiagnostic(diagnostic)`.
  * Resolves `{ download, files, diagnostics, slides }`. Rejects with an error whose `code` is `export-aborted`,
- * `export-no-slides`, `export-unavailable`, `fonts-unavailable` or a renderer code.
+ * `export-fonts-unlicensed`, `export-no-slides`, `export-unavailable`, `fonts-unavailable` or a renderer code.
  */
 export async function exportDeck(deck, options = {}) {
   const format = EXPORT_FORMATS[options.format];
@@ -133,20 +152,22 @@ export async function exportDeck(deck, options = {}) {
   const renderOptions = options.renderOptions ?? {};
 
   check();
-  if (options.fonts?.pending?.(deck, renderOptions)?.length) {
+  const gate = fontGate(options.fonts);
+  if (gate?.pending(deck, renderOptions).length) {
     progress("fonts", 0, 1, "Loading fonts…");
-    try { await options.fonts.ensure(deck, { signal, renderOptions }); }
+    try { await gate.ensure(deck, { signal, renderOptions }); }
     catch (error) { if (signal?.aborted) throw exportError("export-aborted", "The export was cancelled."); throw error; }
   }
   check();
   const converters = format.extension === "svg" ? null : await loadConverters(options);
 
-  const embeddedFonts = options.embeddedFonts ?? embeddableFonts(options.registry, (face) => note({ code: "export-font-license", severity: "warning", message: `${fontLabel(face)} is not embedded: its license is not one of OFL-1.1, Apache-2.0, MIT or UFL-1.0.`, family: face.family }));
+  const dropped = [];
+  const embeddedFonts = options.embeddedFonts ?? embeddableFonts(options.fonts?.registry, (face) => { dropped.push(face); note({ code: "export-font-license", severity: "warning", message: `${fontLabel(face)} is not embedded: its license is not one of OFL-1.1, Apache-2.0, MIT or UFL-1.0.`, family: face.family }); });
   progress("render", 0, indexes.length, "Drawing slides…");
   await yieldToHost();
-  const rendered = renderSvgDeck(deck, {
+  const rendered = renderSvg(deck, {
     ...renderOptions,
-    embeddedFonts,
+    fonts: { textMeasurement: options.fonts?.textMeasurement, embeddedFonts },
     // The PDF reports problems by element path; the SVG and PNG are the plain drawing.
     trace: format.extension === "pdf",
     onDiagnostic: (diagnostic) => {
@@ -186,12 +207,17 @@ export async function exportDeck(deck, options = {}) {
         scale,
         metadata,
         signal,
+        fontData: pdfFontData(embeddedFonts),
         ...(options.fallbackFamily ? { defaultFontFamily: options.fallbackFamily } : {}),
         onDiagnostic: (diagnostic) => { const described = describeDiagnostic(diagnostic, "pdf"); if (keep(described)) note(described); },
         onProgress: ({ page, pages }) => progress("convert", page, pages, `Page ${page} of ${pages}`),
       });
     } catch (error) {
       if (signal?.aborted) throw exportError("export-aborted", "The export was cancelled.");
+      // The license rule can leave the converter with no face for some text (every face of a family was dropped): say why, not only what.
+      if (dropped.length && /font face/i.test(String(error?.message))) {
+        throw exportError("export-fonts-unlicensed", `The PDF could not be written: ${dropped.map(fontLabel).join(", ")} ${dropped.length === 1 ? "is" : "are"} not embedded because the license is not one of OFL-1.1, Apache-2.0, MIT or UFL-1.0, and no other face is available. ${error.message}`, error);
+      }
       throw error;
     }
     files = [{ name: exportFileName(deck, "pdf"), type: format.type, bytes }];

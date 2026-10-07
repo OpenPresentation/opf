@@ -13,7 +13,7 @@ let editor = createEditorSession(structuredClone(document), {rejectInvalid: true
 assert.equal(alignment(editor, 'title'), 'center', 'layout titleAlignment');
 assert.equal(alignment(editor, 'text'), 'right', 'layout contentAlignment');
 assert.equal(frames(editor), 1, 'layout contentBox');
-assert.deepEqual(editor.composeSlide(0).items, resolvePresentation(editor.document).slides[0].geometry.items, 'editor and preview compose the same items');
+assert.deepEqual(editor.composeSlide(0).items, resolvePresentation(editor.presentation).slides[0].geometry.items, 'editor and preview compose the same items');
 
 // The deck's design overrides the layout key by key; the slide's design overrides both.
 editor.set('design.titleAlignment', 'left');

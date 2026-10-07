@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {validatePresentation} from '@openpresentation/opf';
+import { validate } from '@openpresentation/opf';
 import {schemaAtPath, createSchemaValue, listSchemaFields} from '../src/schema.js';
 import {createEditorSession} from '../src/index.js';
 
@@ -17,15 +17,15 @@ assert.deepEqual(field.values, ['positive', 'negative', 'neutral']);
 
 const session = createEditorSession(structuredClone(deck));
 session.set('slides.0.metric.sentiment', 'positive');
-assert.equal(session.document.slides[0].metric.sentiment, 'positive');
-assert.equal(session.document.slides[0].metric.trend, 'down', 'the trend and its word are untouched');
-assert.equal(validatePresentation(session.document).valid, true);
+assert.equal(session.presentation.slides[0].metric.sentiment, 'positive');
+assert.equal(session.presentation.slides[0].metric.trend, 'down', 'the trend and its word are untouched');
+assert.equal(validate(session.presentation, { only: ["format"] }).valid, true);
 // The composed metric carries it, so the preview and export colour the arrow from the session document.
 assert.equal(session.composeSlide(0).items.find(item => item.metricLayout).metricLayout.sentiment, 'positive');
 session.undo();
-assert.deepEqual(session.document, deck, 'undo removes the sentiment again');
+assert.deepEqual(session.presentation, deck, 'undo removes the sentiment again');
 session.redo();
-assert.equal(session.document.slides[0].metric.sentiment, 'positive');
+assert.equal(session.presentation.slides[0].metric.sentiment, 'positive');
 // An invalid sentiment is reported by validation, and refused outright by a session that rejects invalid edits.
 session.set('slides.0.metric.sentiment', 'good');
 assert.equal(session.validation.valid, false);
@@ -33,5 +33,5 @@ session.undo();
 assert.equal(session.validation.valid, true);
 const strict = createEditorSession(structuredClone(deck), {rejectInvalid: true});
 assert.throws(() => strict.set('slides.0.metric.sentiment', 'good'), /invalid/i);
-assert.deepEqual(strict.document, deck);
+assert.deepEqual(strict.presentation, deck);
 console.log('FA-06 editor: Metric.sentiment is a schema-driven enum field, set, validated, undone and composed through the session.');

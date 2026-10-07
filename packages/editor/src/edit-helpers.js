@@ -1,6 +1,7 @@
 // Helpers shared by the dimension switches, the design options, the block conversions and the
 // table options: the error constructor, structural equality and the design-key patch rules.
-import { OPFEditorError, applyJsonPatch, getValueAtPath, opfPathToJsonPointer, validateOpfDocument } from "./index.js";
+import { OPFEditorError, applyJsonPatch, getValueAtPath, opfPathToJsonPointer } from "./index.js";
+import { firstErrorMessage, errorFindings, checkFormat } from "./checks.js";
 
 export function fail(code, message, details) {
   return new OPFEditorError(code, message, details);
@@ -19,8 +20,8 @@ export function same(a, b) {
 }
 
 // Set (value) or remove (null) design keys at deck or slide scope.
-export function designPatches(document, base, entries) {
-  const design = getValueAtPath(document, base.length ? [...base, "design"] : ["design"]);
+export function designPatches(presentation, base, entries) {
+  const design = getValueAtPath(presentation, base.length ? [...base, "design"] : ["design"]);
   const at = (key) => opfPathToJsonPointer([...base, "design", key]);
   const set = Object.entries(entries).filter(([, value]) => value !== undefined && value !== null);
   if (!design || typeof design !== "object" || Array.isArray(design))
@@ -41,12 +42,12 @@ export function designPatches(document, base, entries) {
  * Validate a candidate patch the way every switch does: the result must be valid OPF unless the
  * input document was already invalid (then nothing new may be reported as the cause).
  */
-export function checkedDocument(document, patches, before) {
-  const next = patches.length ? applyJsonPatch(document, patches) : document;
+export function checkedDocument(presentation, patches, before) {
+  const next = patches.length ? applyJsonPatch(presentation, patches) : presentation;
   if (patches.length) {
-    const validation = validateOpfDocument(next);
+    const validation = checkFormat(next);
     if (!validation.valid && before.valid)
-      throw fail("invalid-opf-edit", validation.errors[0]?.message ?? "This change produces an invalid document.", { issues: validation.errors, patches });
+      throw fail("invalid-opf-edit", firstErrorMessage(validation, "This change produces an invalid document."), { issues: errorFindings(validation), patches });
   }
   return next;
 }

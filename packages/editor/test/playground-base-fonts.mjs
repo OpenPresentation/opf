@@ -17,12 +17,6 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
-import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
-
-if (typeof browserFonts.splitStartupFaces !== 'function') {
-  console.log('Playground base fonts skipped: the installed renderer predates extraLazyFonts (0.11.7).');
-  process.exit(0);
-}
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const root = path.join(repo, 'artifacts/playground-split');
 const output = path.resolve(repo, process.argv[2] ?? 'artifacts/playground-base-fonts');

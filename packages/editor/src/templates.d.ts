@@ -55,25 +55,23 @@ export interface TemplatePreview {
   complete: boolean;
 }
 
-/** True when the core this editor runs on can resolve template variables. */
-export declare function templatesAvailable(): boolean;
-export declare function isTemplateDocument(document: unknown): boolean;
+export declare function isTemplateDocument(presentation: unknown): boolean;
 /** True when the document is a template or declares a variable that is not a color. */
-export declare function hasTemplateVariables(document: unknown): boolean;
+export declare function hasTemplateVariables(presentation: unknown): boolean;
 export declare function valueToFieldText(kind: TemplateVariableKind, value: unknown): string;
 /** Parse a form control's text. A blank control clears the value. */
 export declare function fieldTextToValue(kind: TemplateVariableKind, text: string): { ok: true; value: unknown } | { ok: false; message: string };
-export declare function listTemplateFields(document: unknown, values?: Record<string, unknown>): TemplateField[];
-export declare function templateStatus(document: unknown, values?: Record<string, unknown>): TemplateStatus;
+export declare function listTemplateFields(presentation: unknown, values?: Record<string, unknown>): TemplateField[];
+export declare function templateStatus(presentation: unknown, values?: Record<string, unknown>): TemplateStatus;
 /** The concrete deck for the values with each unfilled variable's example. Never throws for missing values. */
-export declare function previewTemplate(document: unknown, values?: Record<string, unknown>): TemplatePreview;
+export declare function previewTemplate(presentation: unknown, values?: Record<string, unknown>): TemplatePreview;
 
 export interface TemplateFillOptions {
   /** Extra session meta for the fill edit. */
   meta?: Record<string, unknown>;
 }
 export interface TemplateFillApplyResult {
-  document: unknown;
+  presentation: unknown;
   patches: unknown[];
   inversePatches: unknown[];
   validation: unknown;
@@ -116,9 +114,9 @@ export interface BuiltinInfo {
   available: boolean;
   uses: { id: string; path: string; form: "token" | "reference" }[];
 }
-/** The document's built-in variables, read-only; empty on a core without built-ins. */
-export declare function listBuiltins(document: unknown): BuiltinInfo[];
-export declare function suggestVariableId(document: unknown, label?: string): string;
+/** The presentation's built-in variables, read-only. */
+export declare function listBuiltins(presentation: unknown): BuiltinInfo[];
+export declare function suggestVariableId(presentation: unknown, label?: string): string;
 /** Declare a variable as one undoable edit. */
 export declare function declareVariable(editor: EditorSession, id: string, declaration: string | Record<string, unknown>, meta?: Record<string, unknown>): unknown;
 /** Mark the document as a template, or as a normal deck with `false`, as one undoable edit. */
@@ -136,4 +134,4 @@ export interface InsertVariableTokenOptions {
   meta?: Record<string, unknown>;
 }
 /** Insert a variable token into a text field as one undoable edit. */
-export declare function insertVariableToken(editor: EditorSession, path: string, id: string, options?: InsertVariableTokenOptions): { token: string; document: unknown; patches: unknown[]; inversePatches: unknown[]; validation: unknown };
+export declare function insertVariableToken(editor: EditorSession, path: string, id: string, options?: InsertVariableTokenOptions): { token: string; presentation: unknown; patches: unknown[]; inversePatches: unknown[]; validation: unknown };

@@ -52,7 +52,7 @@ export function opfCatalogSelect(node, params) {
     replaceOptions(node, getCatalogOptions(catalogKind, {
       catalogs: nextParams.catalogs,
       catalogSources: nextParams.catalogSources,
-      presentation: nextParams.presentation ?? editor.document
+      presentation: nextParams.presentation ?? editor.presentation
     }));
 
     const sync = () => {

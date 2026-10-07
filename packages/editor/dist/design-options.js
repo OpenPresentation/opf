@@ -3,8 +3,9 @@
 // by default or on one slide with `slideIndex`, exactly like the dimension switches. Every
 // function has a `prepare…` form that returns the patch without touching a session, and a
 // session form that commits it with `meta.source: "design-option"`.
-import { getValueAtPath, opfPathToJsonPointer, validateOpfDocument } from "./index.js";
+import { getValueAtPath, opfPathToJsonPointer } from "./index.js";
 import { checkedDocument, designPatches, fail, same } from "./edit-helpers.js";
+import { checkFormat } from "./checks.js";
 
 /** The `design.logo` variant slots of a LogoSet, in schema order. */
 export const LOGO_VARIANTS = Object.freeze([
@@ -72,32 +73,32 @@ const BY_ID = Object.fromEntries(DESIGN_OPTIONS.map((option) => [option.id, opti
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
-function scopeOf(document, option, options) {
+function scopeOf(presentation, option, options) {
   const index = options.slideIndex;
   if (index === undefined) return { scope: "deck", base: [] };
   if (!BY_ID[option]?.scopes.includes("slide")) throw fail("invalid-scope", `${BY_ID[option]?.label ?? option} applies to the whole presentation, not one slide.`, { option });
-  if (!Number.isInteger(index) || !document.slides?.[index]) throw fail("slide-index-out-of-range", "Choose an existing slide for this option.", { slideIndex: index });
+  if (!Number.isInteger(index) || !presentation.slides?.[index]) throw fail("slide-index-out-of-range", "Choose an existing slide for this option.", { slideIndex: index });
   return { scope: "slide", base: ["slides", String(index)], slideIndex: index };
 }
 
-function ownDesign(document, base) {
-  const design = getValueAtPath(document, base.length ? [...base, "design"] : ["design"]);
+function ownDesign(presentation, base) {
+  const design = getValueAtPath(presentation, base.length ? [...base, "design"] : ["design"]);
   return isObject(design) ? design : {};
 }
 
-function primaryOrganization(document) {
-  const list = Array.isArray(document.organization) ? document.organization : document.organization ? [document.organization] : [];
+function primaryOrganization(presentation) {
+  const list = Array.isArray(presentation.organization) ? presentation.organization : presentation.organization ? [presentation.organization] : [];
   return list.find((entry) => entry?.role === "primary") ?? list[0];
 }
 
-function firstSpeaker(document) {
-  const list = Array.isArray(document.speaker) ? document.speaker : document.speaker ? [document.speaker] : [];
+function firstSpeaker(presentation) {
+  const list = Array.isArray(presentation.speaker) ? presentation.speaker : presentation.speaker ? [presentation.speaker] : [];
   return list[0];
 }
 
 /** Whether a logo resolves for the slide: slide design, then deck design, then the primary organization. */
-export function hasResolvableLogo(document, slideIndex) {
-  return Boolean(document.slides?.[slideIndex]?.design?.logo ?? document.design?.logo ?? primaryOrganization(document)?.logo);
+export function hasResolvableLogo(presentation, slideIndex) {
+  return Boolean(presentation.slides?.[slideIndex]?.design?.logo ?? presentation.design?.logo ?? primaryOrganization(presentation)?.logo);
 }
 
 /**
@@ -105,22 +106,22 @@ export function hasResolvableLogo(document, slideIndex) {
  * footer zone with `logo: true`, or picture bullets. The renderers fall back to a glyph or report
  * unresolved content; the editor surfaces it before export.
  */
-export function designWarnings(document, slideIndex = 0) {
-  const slide = document.slides?.[slideIndex];
-  const design = { ...document.design, ...slide?.design };
+export function designWarnings(presentation, slideIndex = 0) {
+  const slide = presentation.slides?.[slideIndex];
+  const design = { ...presentation.design, ...slide?.design };
   const warnings = [];
-  const hasLogo = hasResolvableLogo(document, slideIndex);
+  const hasLogo = hasResolvableLogo(presentation, slideIndex);
   for (const which of ["header", "footer"])
     for (const zone of HEADER_FOOTER_ZONES)
       if (!hasLogo && isObject(design[which]) && design[which][zone]?.logo === true)
         warnings.push({ code: "unresolved-logo", path: `design.${which}.${zone}.logo`, message: `The ${which} ${zone} zone shows the logo, but no logo is set. Add a logo or an organization logo.` });
-  const organization = primaryOrganization(document);
+  const organization = primaryOrganization(presentation);
   for (const which of ["header", "footer"])
     for (const zone of HEADER_FOOTER_ZONES) {
       const item = isObject(design[which]) ? design[which][zone] : undefined;
       if (item?.organization === true && !organization)
         warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.organization`, message: `The ${which} ${zone} zone shows the organization, but the presentation has none.` });
-      if (item?.speaker === true && !firstSpeaker(document)?.name)
+      if (item?.speaker === true && !firstSpeaker(presentation)?.name)
         warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.speaker`, message: `The ${which} ${zone} zone shows the speaker, but the presentation has no named speaker.` });
       if (item?.socials === true && !organization?.socials)
         warnings.push({ code: "unresolved-content", path: `design.${which}.${zone}.socials`, message: `The ${which} ${zone} zone shows social profiles, but the organization has none.` });
@@ -130,17 +131,17 @@ export function designWarnings(document, slideIndex = 0) {
   return warnings;
 }
 
-function shadowed(document, keys) {
-  return (document.slides ?? []).flatMap((slide, index) => (keys.some((key) => slide?.design?.[key] !== undefined) ? [index] : []));
+function shadowed(presentation, keys) {
+  return (presentation.slides ?? []).flatMap((slide, index) => (keys.some((key) => slide?.design?.[key] !== undefined) ? [index] : []));
 }
 
-function finish(document, patches, extra) {
-  const before = validateOpfDocument(document);
-  const next = checkedDocument(document, patches, before);
+function finish(presentation, patches, extra) {
+  const before = checkFormat(presentation);
+  const next = checkedDocument(presentation, patches, before);
   const slideIndex = extra.slideIndex;
   return {
     ...extra,
-    document: structuredClone(next),
+    presentation: structuredClone(next),
     patches,
     changed: patches.length > 0,
     warnings: designWarnings(next, slideIndex ?? 0),
@@ -188,10 +189,10 @@ function mergedSlideImage(existing, value) {
   return merged;
 }
 
-function fontSchemeWithAccent(document, base, family) {
+function fontSchemeWithAccent(presentation, base, family) {
   // The slide's own font scheme, else the deck's: an object form is kept with its overrides.
-  const own = ownDesign(document, base).fontScheme;
-  const inherited = base.length ? document.design?.fontScheme : undefined;
+  const own = ownDesign(presentation, base).fontScheme;
+  const inherited = base.length ? presentation.design?.fontScheme : undefined;
   const source = own !== undefined ? own : inherited;
   const object = typeof source === "string" ? { id: source } : isObject(source) ? structuredClone(source) : {};
   if (family === null) {
@@ -228,17 +229,17 @@ function collapseLogo(set) {
  * remove slide-level values that hide it) and `index` (organizationLogo with several
  * organizations).
  */
-export function prepareDesignOption(document, option, value, options = {}) {
+export function prepareDesignOption(presentation, option, value, options = {}) {
   const descriptor = BY_ID[option];
   if (!descriptor) throw fail("unknown-design-option", `Unknown design option: ${option}. Use one of ${DESIGN_OPTIONS.map((entry) => entry.id).join(", ")}.`, { option });
-  if (!isObject(document)) throw fail("invalid-input", "Design options need an OPF document object.");
+  if (!isObject(presentation)) throw fail("invalid-input", "Design options need an OPF document object.");
   if (value === undefined) throw fail("invalid-design-value", "Pass a value, or null to remove the option.", { option });
-  const { scope, base, slideIndex } = scopeOf(document, option, options);
+  const { scope, base, slideIndex } = scopeOf(presentation, option, options);
   let patches = [];
   let keys = [];
 
   if (descriptor.type === "organization-logo") {
-    const organization = document.organization;
+    const organization = presentation.organization;
     const index = options.index ?? 0;
     const owner = Array.isArray(organization) ? organization[index] : organization;
     if (!isObject(owner)) throw fail("missing-owner", "Add an organization to the document before setting its logo.", { option });
@@ -256,38 +257,38 @@ export function prepareDesignOption(document, option, value, options = {}) {
       if (value !== null && typeof value !== "boolean") throw fail("invalid-design-value", `${descriptor.label} is true or false.`, { option, value });
       entries = { [option]: value };
     } else if (descriptor.type === "font") {
-      entries = { fontScheme: fontSchemeWithAccent(document, base, value) };
+      entries = { fontScheme: fontSchemeWithAccent(presentation, base, value) };
     } else if (descriptor.type === "logo") {
       if (value !== null && typeof value !== "string" && !isObject(value)) throw fail("invalid-design-value", "A logo is an image source, an asset object or a set of logo variants.", { option });
       entries = { logo: value };
     } else if (descriptor.type === "watermark") {
-      const existing = ownDesign(document, base).watermark;
+      const existing = ownDesign(presentation, base).watermark;
       entries = { watermark: mergedWatermark(existing, value) };
     } else {
-      const existing = ownDesign(document, base).slideImage;
+      const existing = ownDesign(presentation, base).slideImage;
       entries = { slideImage: mergedSlideImage(existing, value) };
     }
     keys = Object.keys(entries);
-    patches = designPatches(document, base, entries);
+    patches = designPatches(presentation, base, entries);
   }
 
   let shadowedSlides = [];
   if (scope === "deck" && keys.length) {
-    shadowedSlides = shadowed(document, keys);
+    shadowedSlides = shadowed(presentation, keys);
     if (options.clearSlideOverrides) {
       for (const index of shadowedSlides)
         for (const key of keys)
-          if (document.slides[index].design?.[key] !== undefined) patches.push({ op: "remove", path: opfPathToJsonPointer(["slides", String(index), "design", key]) });
+          if (presentation.slides[index].design?.[key] !== undefined) patches.push({ op: "remove", path: opfPathToJsonPointer(["slides", String(index), "design", key]) });
       shadowedSlides = [];
     }
   }
-  return finish(document, patches, { option, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: shadowedSlides });
+  return finish(presentation, patches, { option, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: shadowedSlides });
 }
 
 function apply(editor, prepared, meta = {}) {
-  const { document, patches, ...summary } = prepared;
-  void document;
-  if (!prepared.changed) return { ...summary, document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  const { presentation, patches, ...summary } = prepared;
+  void presentation;
+  if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   const change = editor.applyPatch(patches, { ...meta, source: meta.source ?? "design-option", option: prepared.option, scope: prepared.scope });
   return { ...change, ...summary };
 }
@@ -300,7 +301,7 @@ function checkEditor(editor) {
 export function setDesignOption(editor, option, value, options = {}) {
   checkEditor(editor);
   const { meta, ...rest } = options;
-  return apply(editor, prepareDesignOption(editor.document, option, value, rest), meta);
+  return apply(editor, prepareDesignOption(editor.presentation, option, value, rest), meta);
 }
 
 /**
@@ -308,11 +309,11 @@ export function setDesignOption(editor, option, value, options = {}) {
  * slide's own design sets it, "deck" when the deck does, and "default" when neither does.
  * `accentFont` reads the family name; `organizationLogo` reads the organization.
  */
-export function getDesignOption(document, option, options = {}) {
+export function getDesignOption(presentation, option, options = {}) {
   const descriptor = BY_ID[option];
   if (!descriptor) throw fail("unknown-design-option", `Unknown design option: ${option}.`, { option });
   if (descriptor.type === "organization-logo") {
-    const organization = document.organization;
+    const organization = presentation.organization;
     const owner = Array.isArray(organization) ? organization[options.index ?? 0] : organization;
     return { value: owner?.logo, scope: owner?.logo === undefined ? "default" : "deck", inherited: false };
   }
@@ -321,9 +322,9 @@ export function getDesignOption(document, option, options = {}) {
     const value = design?.[key];
     return descriptor.type === "font" ? (isObject(value) ? value.accent : undefined) : value;
   };
-  const slideValue = options.slideIndex === undefined ? undefined : pick(document.slides?.[options.slideIndex]?.design);
+  const slideValue = options.slideIndex === undefined ? undefined : pick(presentation.slides?.[options.slideIndex]?.design);
   if (slideValue !== undefined) return { value: slideValue, scope: "slide", inherited: false };
-  const deckValue = pick(document.design);
+  const deckValue = pick(presentation.design);
   if (deckValue !== undefined) return { value: deckValue, scope: "deck", inherited: options.slideIndex !== undefined };
   return { value: undefined, scope: "default", inherited: false };
 }
@@ -335,26 +336,26 @@ export function getDesignOption(document, option, options = {}) {
  * variant of `design.logo`. A single default logo stays a bare source; adding a second variant turns
  * it into a LogoSet, and clearing back to the default collapses it again.
  */
-export function prepareLogoVariant(document, variant, source, options = {}) {
+export function prepareLogoVariant(presentation, variant, source, options = {}) {
   if (!LOGO_VARIANTS.includes(variant)) throw fail("invalid-design-value", `Logo variant is one of ${LOGO_VARIANTS.join(", ")}.`, { variant });
   if (source !== null && typeof source !== "string" && !isObject(source)) throw fail("invalid-design-value", "A logo variant is an image source, an asset object, or null to clear it.", { variant });
   if (typeof source === "string" && !source.trim()) throw fail("invalid-design-value", "Enter an image source or asset reference, or clear the variant.", { variant });
-  const { scope, base, slideIndex } = scopeOf(document, "logo", options);
-  const set = logoSetOf(ownDesign(document, base).logo);
+  const { scope, base, slideIndex } = scopeOf(presentation, "logo", options);
+  const set = logoSetOf(ownDesign(presentation, base).logo);
   if (source === null) delete set[variant];
   else set[variant] = typeof source === "string" ? source.trim() : source;
-  const patches = designPatches(document, base, { logo: collapseLogo(set) });
-  return finish(document, patches, { option: "logo", variant, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: [] });
+  const patches = designPatches(presentation, base, { logo: collapseLogo(set) });
+  return finish(presentation, patches, { option: "logo", variant, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: [] });
 }
 /** Set or clear one logo variant as a single undoable transaction. */
 export function setLogoVariant(editor, variant, source, options = {}) {
   checkEditor(editor);
   const { meta, ...rest } = options;
-  return apply(editor, prepareLogoVariant(editor.document, variant, source, rest), meta);
+  return apply(editor, prepareLogoVariant(editor.presentation, variant, source, rest), meta);
 }
 /** The variants `design.logo` sets at a scope: `{ variant: source }`, a bare logo reported as `default`. */
-export function readLogoVariants(document, options = {}) {
-  const own = options.slideIndex === undefined ? document.design?.logo : document.slides?.[options.slideIndex]?.design?.logo;
+export function readLogoVariants(presentation, options = {}) {
+  const own = options.slideIndex === undefined ? presentation.design?.logo : presentation.slides?.[options.slideIndex]?.design?.logo;
   return logoSetOf(own);
 }
 
@@ -370,15 +371,15 @@ export function readLogoVariants(document, options = {}) {
  * inheriting it again. Setting a field on a suppressed (`false`) header replaces the suppression.
  * `logo: true` reports a warning when no logo resolves.
  */
-export function prepareHeaderFooterZone(document, which, zone, fields, options = {}) {
+export function prepareHeaderFooterZone(presentation, which, zone, fields, options = {}) {
   if (!["header", "footer"].includes(which)) throw fail("invalid-design-value", "Choose header or footer.", { which });
   if (!HEADER_FOOTER_ZONES.includes(zone)) throw fail("invalid-design-value", `Zone is one of ${HEADER_FOOTER_ZONES.join(", ")}.`, { zone });
   if (!isObject(fields)) throw fail("invalid-design-value", "Pass the zone fields to change.", { fields });
   const unknown = Object.keys(fields).filter((key) => !ZONE_FIELDS.includes(key));
   if (unknown.length) throw fail("invalid-design-value", `Unknown header/footer field: ${unknown[0]}.`, { fields });
-  const { scope, base, slideIndex } = scopeOf(document, "logo", options);
-  const own = ownDesign(document, base)[which];
-  const inherited = base.length ? document.design?.[which] : undefined;
+  const { scope, base, slideIndex } = scopeOf(presentation, "logo", options);
+  const own = ownDesign(presentation, base)[which];
+  const inherited = base.length ? presentation.design?.[which] : undefined;
   const current = own !== undefined ? own : inherited;
   const container = isObject(current) ? structuredClone(current) : {};
   const item = isObject(container[zone]) ? container[zone] : {};
@@ -397,27 +398,27 @@ export function prepareHeaderFooterZone(document, which, zone, fields, options =
   let next = Object.keys(container).length ? container : null;
   // Emptied: a deck value that would show through again is hidden explicitly; a suppressed header stays suppressed.
   if (next === null && (own === false || isObject(inherited))) next = false;
-  const patches = designPatches(document, base, { [which]: next });
-  return finish(document, patches, { option: which, zone, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: [] });
+  const patches = designPatches(presentation, base, { [which]: next });
+  return finish(presentation, patches, { option: which, zone, scope, ...(slideIndex !== undefined ? { slideIndex } : {}), shadowed: [] });
 }
 /** Edit one header or footer zone as a single undoable transaction. */
 export function setHeaderFooterZone(editor, which, zone, fields, options = {}) {
   checkEditor(editor);
   const { meta, ...rest } = options;
-  return apply(editor, prepareHeaderFooterZone(editor.document, which, zone, fields, rest), meta);
+  return apply(editor, prepareHeaderFooterZone(editor.presentation, which, zone, fields, rest), meta);
 }
 /**
  * One header or footer zone's fields as they apply at a scope: the slide's own header (or footer) when it
  * has one, else the deck's (`{}` when absent or suppressed). `headerFooterState` says which.
  */
-export function readHeaderFooterZone(document, which, zone, options = {}) {
-  const own = options.slideIndex === undefined ? undefined : document.slides?.[options.slideIndex]?.design?.[which];
-  const effective = own !== undefined ? own : document.design?.[which];
+export function readHeaderFooterZone(presentation, which, zone, options = {}) {
+  const own = options.slideIndex === undefined ? undefined : presentation.slides?.[options.slideIndex]?.design?.[which];
+  const effective = own !== undefined ? own : presentation.design?.[which];
   return isObject(effective) && isObject(effective[zone]) ? structuredClone(effective[zone]) : {};
 }
 /** `{ own, inherited, hidden }` for a header or footer at a scope: whether the scope sets it itself, shows the deck's, or hides it with `false`. */
-export function headerFooterState(document, which, options = {}) {
-  const own = options.slideIndex === undefined ? document.design?.[which] : document.slides?.[options.slideIndex]?.design?.[which];
-  const inherited = options.slideIndex !== undefined && own === undefined && document.design?.[which] !== undefined;
-  return { own: own !== undefined, inherited, hidden: (own !== undefined ? own : options.slideIndex !== undefined ? document.design?.[which] : undefined) === false };
+export function headerFooterState(presentation, which, options = {}) {
+  const own = options.slideIndex === undefined ? presentation.design?.[which] : presentation.slides?.[options.slideIndex]?.design?.[which];
+  const inherited = options.slideIndex !== undefined && own === undefined && presentation.design?.[which] !== undefined;
+  return { own: own !== undefined, inherited, hidden: (own !== undefined ? own : options.slideIndex !== undefined ? presentation.design?.[which] : undefined) === false };
 }

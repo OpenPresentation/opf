@@ -129,7 +129,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
 // Replace all: one undo step, formatting kept, validation intact.
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const found = findMatches(before, "Acme");
   assert.ok(found.matches.length >= 20);
   const depth = editor.snapshot().undoDepth;
@@ -137,7 +137,7 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(result.count, found.matches.length);
   assert.equal(editor.snapshot().undoDepth, depth + 1, "replace all is one undo step");
   assert.equal(editor.validation.valid, true);
-  const after = editor.document;
+  const after = editor.presentation;
   assert.equal(after.name, "Globex review");
   assert.equal(after.slides[0].title, "Globex grows");
   assert.equal(after.slides[0].notes, "Mention Globex first.");
@@ -157,9 +157,9 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   assert.equal(after.slides[2].design.header.left.text, "Globex header");
   assert.equal(findMatches(after, "Acme").matches.length, 0);
   editor.undo();
-  assert.deepEqual(editor.document, before, "one undo restores every field");
+  assert.deepEqual(editor.presentation, before, "one undo restores every field");
   editor.redo();
-  assert.equal(editor.document.name, "Globex review");
+  assert.equal(editor.presentation.name, "Globex review");
   // Nothing found: no history entry.
   const empty = replaceAll(editor, "zzz-not-there", "x");
   assert.equal(empty.count, 0);
@@ -169,70 +169,70 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
 // Replace one: stale matches are refused, indexes stay valid after each replacement.
 {
   const editor = session();
-  let found = findMatches(editor.document, "Acme");
+  let found = findMatches(editor.presentation, "Acme");
   const total = found.matches.length;
   const first = found.matches[0];
   const depth = editor.snapshot().undoDepth;
   replaceMatch(editor, first, "Acme", "Globex");
   assert.equal(editor.snapshot().undoDepth, depth + 1);
-  found = findMatches(editor.document, "Acme");
+  found = findMatches(editor.presentation, "Acme");
   assert.equal(found.matches.length, total - 1);
   assert.throws(() => replaceMatch(editor, first, "Acme", "Globex"), (error) => error.code === "stale-match");
   // Two matches in one field: replacing the first leaves the second at a new offset.
   const two = createEditorSession({ slides: [{ title: "cat and cat" }] });
-  const [one] = findMatches(two.document, "cat").matches;
+  const [one] = findMatches(two.presentation, "cat").matches;
   replaceMatch(two, one, "cat", "elephant");
-  assert.equal(two.document.slides[0].title, "elephant and cat");
-  const [rest] = findMatches(two.document, "cat").matches;
+  assert.equal(two.presentation.slides[0].title, "elephant and cat");
+  const [rest] = findMatches(two.presentation, "cat").matches;
   assert.equal(rest.start, 13);
   replaceMatch(two, rest, "cat", "x");
-  assert.equal(two.document.slides[0].title, "elephant and x");
+  assert.equal(two.presentation.slides[0].title, "elephant and x");
   two.undo();
   two.undo();
-  assert.equal(two.document.slides[0].title, "cat and cat");
+  assert.equal(two.presentation.slides[0].title, "cat and cat");
 }
 
 // Rich text: a match inside a run and across runs, through the session.
 {
   const editor = createEditorSession({ slides: [{ title: "T", text: [{ text: "The ", bold: true }, { text: "quick ", italic: true }, { text: "brown", underline: true }, " fox"] }] });
   replaceAll(editor, "quick", "slow");
-  assert.deepEqual(editor.document.slides[0].text, [{ text: "The ", bold: true }, { text: "slow ", italic: true }, { text: "brown", underline: true }, " fox"]);
+  assert.deepEqual(editor.presentation.slides[0].text, [{ text: "The ", bold: true }, { text: "slow ", italic: true }, { text: "brown", underline: true }, " fox"]);
   replaceAll(editor, "slow brown", "red");
-  assert.deepEqual(editor.document.slides[0].text, [{ text: "The ", bold: true }, { text: "red", italic: true }, " fox"], "the replacement takes the first run's formatting; the emptied run goes");
+  assert.deepEqual(editor.presentation.slides[0].text, [{ text: "The ", bold: true }, { text: "red", italic: true }, " fox"], "the replacement takes the first run's formatting; the emptied run goes");
   editor.undo();
-  assert.equal(editor.document.slides[0].text[1].text, "slow ");
+  assert.equal(editor.presentation.slides[0].text[1].text, "slow ");
 }
 
 // Regular expression replacements.
 {
   const editor = createEditorSession({ slides: [{ title: "Q1 2026 and Q2 2027" }] });
   replaceAll(editor, "Q(\\d) (\\d{4})", "$2-Q$1", { regex: true });
-  assert.equal(editor.document.slides[0].title, "2026-Q1 and 2027-Q2");
+  assert.equal(editor.presentation.slides[0].title, "2026-Q1 and 2027-Q2");
   replaceAll(editor, "(?<year>\\d{4})", "[$<year>|$&|$$]", { regex: true });
-  assert.equal(editor.document.slides[0].title, "[2026|2026|$]-Q1 and [2027|2027|$]-Q2");
+  assert.equal(editor.presentation.slides[0].title, "[2026|2026|$]-Q1 and [2027|2027|$]-Q2");
   // Without the regex option a $ in the replacement is literal.
   const literal = createEditorSession({ slides: [{ title: "price" }] });
   replaceAll(literal, "price", "$1 $&");
-  assert.equal(literal.document.slides[0].title, "$1 $&");
+  assert.equal(literal.presentation.slides[0].title, "$1 $&");
   assert.throws(() => replaceAll(literal, "(", "x", { regex: true }), (error) => error.code === "invalid-search");
   // A group number the pattern does not have stays literal.
   const unknown = createEditorSession({ slides: [{ title: "ab" }] });
   replaceAll(unknown, "(a)", "$1$3", { regex: true });
-  assert.equal(unknown.document.slides[0].title, "a$3b");
+  assert.equal(unknown.presentation.slides[0].title, "a$3b");
 }
 
 // A plan is refused when the text changed since the search.
 {
   const editor = createEditorSession({ slides: [{ title: "T", quote: { text: "keep", attribution: "x" } }] }, { rejectInvalid: true });
-  const stale = findMatches(editor.document, "keep").matches;
-  const plan = planReplace(editor.document, stale, "");
+  const stale = findMatches(editor.presentation, "keep").matches;
+  const plan = planReplace(editor.presentation, stale, "");
   assert.equal(plan.patches.length, 1);
   editor.set("slides.0.quote.text", "other");
-  assert.throws(() => planReplace(editor.document, stale, "x"), (error) => error.code === "stale-match");
+  assert.throws(() => planReplace(editor.presentation, stale, "x"), (error) => error.code === "stale-match");
   // A replacement the schema rejects changes nothing (an empty required list item is still valid text, so use a bad run).
   const strict = createEditorSession({ slides: [{ title: "T" }] }, { rejectInvalid: true });
   assert.throws(() => strict.applyPatch([{ op: "replace", path: "/slides/0/title", value: 5 }], { rejectInvalid: true }));
-  assert.equal(strict.document.slides[0].title, "T");
+  assert.equal(strict.presentation.slides[0].title, "T");
 }
 
 // Slide scope.
@@ -240,9 +240,9 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const editor = session();
   const result = replaceAll(editor, "Acme", "Globex", { slideIndex: 2 });
   assert.equal(result.count, 3);
-  assert.equal(editor.document.slides[2].left.text, "Globex left");
-  assert.equal(editor.document.slides[0].title, "Acme grows");
-  assert.equal(editor.document.name, "Acme review");
+  assert.equal(editor.presentation.slides[2].left.text, "Globex left");
+  assert.equal(editor.presentation.slides[0].title, "Acme grows");
+  assert.equal(editor.presentation.name, "Acme review");
 }
 
 console.log("find-replace: ok");

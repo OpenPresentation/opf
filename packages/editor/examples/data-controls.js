@@ -1,8 +1,9 @@
-import {createDataContent,parseTabularData} from '@openpresentation/opf/data';
+import {importData,parseTabularData} from '@openpresentation/opf/data';
 import {prepareDatasetImport} from '../src/data.js';
-import {renderSvg} from '@openpresentation/opf-render/svg';
+import {renderSlideSvg} from '@openpresentation/opf-render/svg';
+import {previewFonts, whenFontsReady} from '../src/font-gate.js';
 
-export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedPath,setSlideIndex,status,renderOptions,fonts}) {
+export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedPath,setSlideIndex,status,fonts}) {
  const button=document.createElement('button');button.id='import-data';button.textContent='Import data';button.className='quiet';
  document.querySelector('.header-actions').prepend(button);
  const dialog=document.createElement('dialog');dialog.id='data-dialog';dialog.setAttribute('aria-labelledby','data-title');
@@ -30,7 +31,7 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
  }
  function prepare() {
    if(!content)throw new Error('Choose valid data first.');
-   const deck=editor.document;
+   const deck=editor.presentation;
    // "Store as a shared dataset" writes datasets.<id> and places { dataset: id } where the rows would go: one undoable edit.
    let placed=content,before=[];
    if($('data-dataset').checked) {
@@ -48,7 +49,7 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
   const on=$('data-dataset').checked;
   $('data-dataset-id-label').hidden=!on;$('data-dataset-note').hidden=!on;
   if(!on)return;
-  const id=$('data-dataset-id').value.trim(),existing=editor.document.datasets?.[id];
+  const id=$('data-dataset-id').value.trim(),existing=editor.presentation.datasets?.[id];
   $('data-dataset-note').textContent=existing?`Dataset '${id}' exists: its columns and rows are replaced for every chart and table that uses it.`:'The rows are stored once in the deck; the slide refers to them by id.';
  }
  function update() {
@@ -60,24 +61,23 @@ export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedP
    if(!$('data-text').value.trim())return;
    const data=parseTabularData($('data-text').value,options()),key=JSON.stringify(data.columns);
    if(columnsKey!==key){columnsKey=key;$('data-category').replaceChildren(...data.columns.map(name=>new Option(name,name)));$('data-series').replaceChildren(...data.columns.map((name,i)=>{const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=name;input.checked=i>0;label.append(input,document.createTextNode(name));input.onchange=update;return label;}));}
-   content=createDataContent($('data-text').value,{...options(),as:$('data-as').value,chartType:$('data-chart-type').value,category:$('data-category').value,series:[...$('data-series').querySelectorAll('input:checked')].map(input=>input.value)});
+   content=importData($('data-text').value,{...options(),as:$('data-as').value,chartType:$('data-chart-type').value,category:$('data-category').value,series:[...$('data-series').querySelectorAll('input:checked')].map(input=>input.value)});
    // A one-slide draft inherits deck design/assets for an accurate content preview.
-   const deck=editor.document, preview={...deck,slides:[{title:$('data-slide-title').value,...content}]};
+   const deck=editor.presentation, preview={...deck,slides:[{title:$('data-slide-title').value,...content}]};
    // FF-41: the preview draws only once the faces the data needs (a CSV in Japanese or Arabic, an Aptos deck) are loaded.
    const show=()=>{
-    $('data-preview').innerHTML=renderSvg(preview,{...renderOptions,slideIndex:0,trace:false});
+    $('data-preview').innerHTML=renderSlideSvg(preview,0,{fonts:previewFonts(fonts),trace:false});
     const table=document.createElement('table');
     for(const [i,row]of [data.columns,...data.rows.slice(0,8)].entries()){const tr=document.createElement('tr');for(const value of row){const td=document.createElement(i?'td':'th');td.textContent=value===null?'—':String(value);tr.append(td);}table.append(tr);}
     $('data-grid').append(table);$('data-summary').textContent=`${data.rows.length} rows · ${data.columns.length} columns${data.rows.length>8?' · first 8 rows shown below':''}`;
     try{prepare();}catch(error){failed(error);return;}$('data-apply').disabled=false;
    };
    const failed=error=>{content=undefined;$('data-apply').disabled=true;$('data-error').textContent=error.message;};
-   if(fonts)fonts.run(preview,{isCurrent:()=>run===previewRun,loading:()=>{$('data-summary').textContent='Loading fonts for this document…';},ready:show,failed});
-   else show();
+   whenFontsReady(fonts,preview,{isCurrent:()=>run===previewRun,loading:()=>{$('data-summary').textContent='Loading fonts for this document…';},ready:show,failed});
   }catch(error){content=undefined;$('data-error').textContent=error.message;}
  }
  // The dataset id starts as the first one the deck does not hold, so a second import does not replace the first one's rows. Typing an id (to replace one on purpose) keeps it.
- function freeDatasetId(){const taken=editor.document.datasets&&typeof editor.document.datasets==='object'?editor.document.datasets:{};let id='data',n=1;while(Object.hasOwn(taken,id))id=`data-${++n}`;return id;}
+ function freeDatasetId(){const taken=editor.presentation.datasets&&typeof editor.presentation.datasets==='object'?editor.presentation.datasets:{};let id='data',n=1;while(Object.hasOwn(taken,id))id=`data-${++n}`;return id;}
  button.onclick=()=>{if(getCanvas()&&!getCanvas().commit())return;if($('data-dataset-id').dataset.typed!=='1')$('data-dataset-id').value=freeDatasetId();dialog.showModal();update();$('data-text').focus();};
  $('data-close').onclick=()=>dialog.close();dialog.onclose=()=>{if(!dialog.open)revision++;};
  $('data-text').oninput=()=>{revision++;update();};

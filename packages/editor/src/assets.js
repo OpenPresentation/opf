@@ -90,9 +90,9 @@ export function imageDataUri(bytes, mediaType) {
 }
 
 /** An asset id for a file name that is free in the document (`logo`, then `logo-2`, ...). */
-export function uniqueAssetId(document, name) {
+export function uniqueAssetId(presentation, name) {
   const base = String(name ?? "image").replace(/\.[a-z0-9]+$/i, "").toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "image";
-  const taken = document?.assets && typeof document.assets === "object" ? document.assets : {};
+  const taken = presentation?.assets && typeof presentation.assets === "object" ? presentation.assets : {};
   if (!Object.hasOwn(taken, base)) return base;
   for (let n = 2; ; n += 1) if (!Object.hasOwn(taken, `${base}-${n}`)) return `${base}-${n}`;
 }
@@ -101,19 +101,19 @@ export function uniqueAssetId(document, name) {
  * The patch that adds one validated image to `assets` (the entry is `{ src: dataUri, mediaType, title, alt? }`),
  * with the `asset:<id>` reference to use. Pure: touches no session.
  */
-export function prepareImageAsset(document, image, { alt, id } = {}) {
-  const assetId = id ?? uniqueAssetId(document, image.name);
-  if (document?.assets && Object.hasOwn(document.assets, assetId)) throw fail("asset-exists", `An asset named "${assetId}" already exists.`, { id: assetId });
+export function prepareImageAsset(presentation, image, { alt, id } = {}) {
+  const assetId = id ?? uniqueAssetId(presentation, image.name);
+  if (presentation?.assets && Object.hasOwn(presentation.assets, assetId)) throw fail("asset-exists", `An asset named "${assetId}" already exists.`, { id: assetId });
   const entry = { src: imageDataUri(image.bytes, image.mediaType), mediaType: image.mediaType, title: image.name };
   if (typeof alt === "string" && alt.trim()) entry.alt = alt.trim();
-  const patches = document?.assets && typeof document.assets === "object" && !Array.isArray(document.assets)
+  const patches = presentation?.assets && typeof presentation.assets === "object" && !Array.isArray(presentation.assets)
     ? [{ op: "add", path: opfPathToJsonPointer(["assets", assetId]), value: entry }]
     : [{ op: "add", path: "/assets", value: { [assetId]: entry } }];
   return { id: assetId, reference: `asset:${assetId}`, entry, patches };
 }
 
 /**
- * Add an uploaded image and use it in one undoable transaction. `build(reference, document)` returns the
+ * Add an uploaded image and use it in one undoable transaction. `build(reference, presentation)` returns the
  * prepared change that uses the image (any `prepare...` function of this package, for example
  * `(ref, doc) => prepareLogoVariant(doc, "light", ref)`); its patches run after the asset patch.
  *
@@ -134,23 +134,23 @@ export async function applyImageUpload(editor, file, build, options = {}) {
     if (typeof reference !== "string" || !reference.trim()) throw fail("invalid-asset-reference", "The host's onAddAsset must return the image's reference (a web address or an asset: id).", {});
   } else {
     // Build against the document as it is after the read: the file may have taken a moment to arrive.
-    const added = prepareImageAsset(editor.document, image, { alt });
+    const added = prepareImageAsset(editor.presentation, image, { alt });
     reference = added.reference;
     assetPatches = added.patches;
     assetId = added.id;
   }
-  const document = assetPatches.length ? applyJsonPatch(editor.document, assetPatches) : editor.document;
-  const prepared = build(reference, document);
+  const presentation = assetPatches.length ? applyJsonPatch(editor.presentation, assetPatches) : editor.presentation;
+  const prepared = build(reference, presentation);
   const patches = [...assetPatches, ...prepared.patches];
   const summary = { assetId, reference, changed: patches.length > 0, prepared };
-  if (!patches.length) return { ...summary, document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  if (!patches.length) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   const change = editor.applyPatch(patches, { ...meta, source: meta?.source ?? "image-upload", ...(assetId ? { assetId } : {}), reference });
   return { ...change, ...summary };
 }
 
 /** The patch that sets (or, for an empty string, removes) an asset's alt text. The asset must exist in `assets`. */
-export function prepareAssetAlt(document, assetId, alt) {
-  const entry = getValueAtPath(document, ["assets", assetId]);
+export function prepareAssetAlt(presentation, assetId, alt) {
+  const entry = getValueAtPath(presentation, ["assets", assetId]);
   if (entry === undefined) throw fail("unknown-asset", `There is no asset named "${assetId}".`, { assetId });
   const object = typeof entry === "string" ? { src: entry } : { ...entry };
   const text = typeof alt === "string" ? alt.trim() : "";
@@ -164,8 +164,8 @@ export function prepareAssetAlt(document, assetId, alt) {
 /** Set an asset's alt text as one undoable transaction. */
 export function setAssetAlt(editor, assetId, alt, meta = {}) {
   if (!editor || typeof editor.applyPatch !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
-  const prepared = prepareAssetAlt(editor.document, assetId, alt);
-  if (!prepared.changed) return { ...prepared, document: editor.document, inversePatches: [], validation: editor.validation };
+  const prepared = prepareAssetAlt(editor.presentation, assetId, alt);
+  if (!prepared.changed) return { ...prepared, presentation: editor.presentation, inversePatches: [], validation: editor.validation };
   return { ...editor.applyPatch(prepared.patches, { ...meta, source: meta.source ?? "asset-alt", assetId }), assetId, changed: true };
 }
 

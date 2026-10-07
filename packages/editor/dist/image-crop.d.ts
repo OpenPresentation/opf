@@ -41,14 +41,14 @@ export interface ImageDescription {
   entry?: unknown;
 }
 /** What a path holds when it is a picture, or `{ error }` with the reason it is not croppable (not a picture, a missing asset, SVG). */
-export declare function describeImage(document: unknown, path: string): ImageDescription | { error: string };
-export declare function countAssetReferences(document: unknown, id: string): number;
+export declare function describeImage(presentation: unknown, path: string): ImageDescription | { error: string };
+export declare function countAssetReferences(presentation: unknown, id: string): number;
 export interface CroppedPixels { dataUri: string; mediaType: string; width: number; height: number; bytes?: number }
 export interface PreparedCrop { patches: JsonPatchOperation[]; assetId: string; reference: string; origin?: string; image: ImageDescription }
 /** The patches that apply a cropped picture: a new asset and the image pointing at it (pure). Throws `not-croppable`. */
-export declare function prepareCrop(document: unknown, path: string, pixels: CroppedPixels): PreparedCrop;
+export declare function prepareCrop(presentation: unknown, path: string, pixels: CroppedPixels): PreparedCrop;
 /** The patches that put a cropped picture back to its original asset, or null. */
-export declare function prepareRestore(document: unknown, path: string): { patches: JsonPatchOperation[]; origin: string; image: ImageDescription } | null;
+export declare function prepareRestore(presentation: unknown, path: string): { patches: JsonPatchOperation[]; origin: string; image: ImageDescription } | null;
 /** Restore the original as one undoable change; null when there is no original. */
 export declare function restoreOriginal(editor: EditorSession, path: string, meta?: Record<string, unknown>): (EditorChange & { origin: string }) | null;
 export interface LoadedImage { image: HTMLImageElement; width: number; height: number }

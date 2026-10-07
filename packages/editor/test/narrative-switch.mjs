@@ -1,7 +1,7 @@
 // FA-02: the root `narrative` is a string pointer; a custom narrative is a record in catalogs.narratives.records.
 // The Narrative picker lists the document's own records first and switches by id, so it needs no inline-object editing.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";
 import { currentSwitchValue, listSwitchOptions, switchDimension } from "../dist/switches.js";
 
@@ -18,7 +18,7 @@ const document = {
   catalogs: { narratives: { records: [record] } },
   slides: [{ beat: "contract", title: "Contract" }, { beat: "evidence", title: "Evidence" }],
 };
-assert.equal(validatePresentation(document).valid, true);
+assert.equal(validate(document, { only: ["format"] }).valid, true);
 
 const options = listSwitchOptions(document, "narratives");
 assert.equal(options[0].id, "proof-arc", "the document's own record comes first");
@@ -28,13 +28,13 @@ assert.deepEqual(currentSwitchValue(document, "narratives"), { value: "proof-arc
 
 const editor = createEditorSession(structuredClone(document), { rejectInvalid: true });
 const change = switchDimension(editor, "narratives", "scqa");
-assert.equal(editor.document.narrative, "scqa");
-assert.deepEqual(editor.document.slides.map((slide) => slide.beat), ["contract", "evidence"], "slides keep their beat links");
-assert.equal(editor.document.catalogs.narratives.records[0].id, "proof-arc", "the custom record stays");
-assert.equal(typeof editor.document.narrative, "string");
+assert.equal(editor.presentation.narrative, "scqa");
+assert.deepEqual(editor.presentation.slides.map((slide) => slide.beat), ["contract", "evidence"], "slides keep their beat links");
+assert.equal(editor.presentation.catalogs.narratives.records[0].id, "proof-arc", "the custom record stays");
+assert.equal(typeof editor.presentation.narrative, "string");
 assert.ok(change.patches.every((patch) => patch.path === "/narrative"), "one root string replace");
 editor.undo();
-assert.equal(editor.document.narrative, "proof-arc");
+assert.equal(editor.presentation.narrative, "proof-arc");
 switchDimension(editor, "narratives", "proof-arc");
-assert.equal(editor.document.narrative, "proof-arc");
+assert.equal(editor.presentation.narrative, "proof-arc");
 console.log("narrative switch: ok");

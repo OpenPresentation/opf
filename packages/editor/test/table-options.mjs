@@ -2,8 +2,8 @@
 // draws the styled and merged table, text is never hidden by a merge, and the PPTX export carries
 // merges and fills.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import {
@@ -44,8 +44,8 @@ const deck = () => ({
     },
   ],
 });
-const session = (document = deck()) => createEditorSession(document, { rejectInvalid: true });
-const svg = (document) => renderSvg(document, { slideIndex: 0 });
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
+const svg = (presentation) => renderSlideSvg(presentation, 0);
 const body = (row, column) => ({ section: "body", row, column });
 const header = (column) => ({ section: "header", column });
 
@@ -58,15 +58,15 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
 // Merge: one patch, one undo step, covered positions null, and the preview changes.
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const beforeSvg = svg(before);
   const change = mergeTableCells(editor, T, body(1, 1), { colSpan: 2 });
   assert.equal(change.changed, true);
   assert.deepEqual(change.patches.map((patch) => patch.op), ["test", "replace"], "guarded by a test of the table");
   assert.deepEqual(editor.get(`${T}.rows.1`), ["South", { value: "", colSpan: 2 }, null, 8]);
   assert.equal(editor.snapshot().undoDepth, 1);
-  assert.equal(validatePresentation(editor.document).valid, true);
-  assert.notEqual(svg(editor.document), beforeSvg, "the preview draws the merge");
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
+  assert.notEqual(svg(editor.presentation), beforeSvg, "the preview draws the merge");
   assert.deepEqual(tableMerges(editor.get(T)), [{ section: "body", row: 1, column: 1, rowSpan: 1, colSpan: 2 }]);
   const state = describeTableCell(editor.get(T), body(1, 2));
   assert.deepEqual([state.covered, state.anchor, state.merged], [true, false, true]);
@@ -74,12 +74,12 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   const anchor = describeTableCell(editor.get(T), body(1, 1));
   assert.deepEqual([anchor.anchor, anchor.colSpan, anchor.rowSpan], [true, 2, 1]);
   // The merged table exports and its merge survives a round trip through PowerPoint.
-  const bytes = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
   const back = await pptx.fromPptx(bytes);
-  assert.ok(JSON.stringify(back.document ?? back).includes("colSpan"), "the exported merge reimports with a column span");
+  assert.ok(JSON.stringify(back.presentation ?? back).includes("colSpan"), "the exported merge reimports with a column span");
   editor.undo();
-  assert.deepEqual(editor.document, before);
-  assert.equal(svg(editor.document), beforeSvg);
+  assert.deepEqual(editor.presentation, before);
+  assert.equal(svg(editor.presentation), beforeSvg);
   editor.redo();
   assert.equal(editor.get(`${T}.rows.1.1.colSpan`), 2);
 }
@@ -93,7 +93,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
 }
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   mergeTableCells(editor, T, body(1, 1), { colSpan: 2 });
   const split = splitTableCell(editor, T, body(1, 1));
   assert.equal(split.changed, true);
@@ -102,7 +102,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   assert.equal(editor.snapshot().undoDepth, 2);
   editor.undo();
   editor.undo();
-  assert.deepEqual(editor.document, before);
+  assert.deepEqual(editor.presentation, before);
 }
 
 // Merging never hides text: refused without `join`, joined with it (formatting kept).
@@ -146,19 +146,19 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
 // Table styles: presets set header fill, banding and borders; Theme removes them; values and merges stay.
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const beforeSvg = svg(before);
   assert.deepEqual(readTableStyle(before, T), { header: "theme", banding: false, borders: "theme", preset: "theme" });
   for (const preset of Object.keys(TABLE_STYLE_PRESETS).filter((id) => id !== "theme")) {
     const change = setTableStyle(editor, T, preset);
     assert.equal(change.changed, true, preset);
-    assert.equal(readTableStyle(editor.document, T).preset, preset, `${preset} reads back`);
-    assert.notEqual(svg(editor.document), beforeSvg, `${preset}: the preview draws the style`);
-    assert.equal(validatePresentation(editor.document).valid, true);
-    const bytes = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
+    assert.equal(readTableStyle(editor.presentation, T).preset, preset, `${preset} reads back`);
+    assert.notEqual(svg(editor.presentation), beforeSvg, `${preset}: the preview draws the style`);
+    assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
+    const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
     assert.ok(bytes.byteLength > 0, `${preset} exports`);
   }
-  const banded = prepareTableStyle(before, T, "banded").document.slides[0].blocks[0].table;
+  const banded = prepareTableStyle(before, T, "banded").presentation.slides[0].blocks[0].table;
   assert.equal(banded.columns[0], "Region", "the theme header is left alone");
   assert.equal(banded.rows[0][0], "North", "an even body row stays plain");
   assert.deepEqual(banded.rows[1][0], { value: "South", style: { fill: "surfaceAlt" } }, "an odd body row alternates");
@@ -166,12 +166,12 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   for (const theme of ["minimal", "classic"]) {
     const themed = structuredClone(before);
     themed.design.theme = theme;
-    const drawn = svg(prepareTableStyle(themed, T, "banded").document);
+    const drawn = svg(prepareTableStyle(themed, T, "banded").presentation);
     const cells = [...drawn.matchAll(/<rect fill="(#[0-9A-Fa-f]{6})"[^>]*height="54"/g)].map((match) => match[1]);
     const bodyFills = cells.slice(themed.slides[0].blocks[0].table.columns.length); // drop the header row
     assert.ok(new Set(bodyFills).size >= 2, `${theme}: banded rows draw two different fills (${[...new Set(bodyFills)].join(", ")})`);
   }
-  const minimal = prepareTableStyle(before, T, "minimal").document.slides[0].blocks[0].table;
+  const minimal = prepareTableStyle(before, T, "minimal").presentation.slides[0].blocks[0].table;
   assert.deepEqual(minimal.columns[1], {
     value: "Q1",
     style: { fill: "surface", borders: { top: { color: "textSecondary", width: 1 }, right: { color: "textSecondary", width: 0 }, bottom: { color: "textSecondary", width: 1 }, left: { color: "textSecondary", width: 0 } } },
@@ -179,11 +179,11 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   // An explicit object sets each axis; the three axes read back.
   const mixed = setTableStyle(editor, T, { header: "accent", banding: true, borders: "grid" });
   assert.equal(mixed.changed, true);
-  assert.deepEqual(readTableStyle(editor.document, T), { header: "accent", banding: true, borders: "grid", preset: "custom" });
+  assert.deepEqual(readTableStyle(editor.presentation, T), { header: "accent", banding: true, borders: "grid", preset: "custom" });
   assert.equal(editor.get(`${T}.columns.0.style.fill`), "accent");
   const theme = setTableStyle(editor, T, "theme");
   assert.equal(theme.changed, true);
-  assert.deepEqual(editor.document, before, "Theme removes every style it added and returns plain values");
+  assert.deepEqual(editor.presentation, before, "Theme removes every style it added and returns plain values");
   assert.equal(setTableStyle(editor, T, "theme").changed, false);
   assert.equal(editor.snapshot().undoDepth, Object.keys(TABLE_STYLE_PRESETS).length - 1 + 2, "one step per style change");
   assert.throws(() => setTableStyle(editor, T, "fancy"), (error) => error.code === "invalid-table-style");
@@ -191,8 +191,8 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   assert.throws(() => setTableStyle(editor, T, { borders: "double" }), (error) => error.code === "invalid-table-style");
   // Hand-set fills read as custom.
   setTableCellStyle(editor, T, body(0, 0), { fill: "#FFEEEE" });
-  assert.equal(readTableStyle(editor.document, T).preset, "custom");
-  assert.equal(readTableStyle(editor.document, T).header, "custom");
+  assert.equal(readTableStyle(editor.presentation, T).preset, "custom");
+  assert.equal(readTableStyle(editor.presentation, T).header, "custom");
 }
 
 // Styles keep merges, alignment and text color; only the fill and border fields belong to a table style.
@@ -205,7 +205,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   assert.equal(editor.get(`${T}.rows.1.2`), null, "covered positions stay null");
   setTableStyle(editor, T, "theme");
   assert.deepEqual(editor.get(`${T}.rows.1.1`), { value: "", colSpan: 2, style: { align: "center", color: "accent" } });
-  assert.equal(readTableStyle(editor.document, T).preset, "theme");
+  assert.equal(readTableStyle(editor.presentation, T).preset, "theme");
 }
 
 // Single-cell style: merge fields, null removes a field, null style clears, covered cells are skipped.
@@ -228,22 +228,22 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
 
 // prepareTableMerge is the same patch without a session and does not touch its input.
 {
-  const document = deck();
-  const prepared = prepareTableMerge(document, T, body(1, 1), { colSpan: 2 });
-  assert.deepEqual(document, deck());
-  assert.deepEqual(prepared.document.slides[0].blocks[0].table.rows[1][1], { value: "", colSpan: 2 });
+  const presentation = deck();
+  const prepared = prepareTableMerge(presentation, T, body(1, 1), { colSpan: 2 });
+  assert.deepEqual(presentation, deck());
+  assert.deepEqual(prepared.presentation.slides[0].blocks[0].table.rows[1][1], { value: "", colSpan: 2 });
   const editor = session();
   assert.deepEqual(mergeTableCells(editor, T, body(1, 1), { colSpan: 2 }).patches, prepared.patches);
 }
 
 // A table on a slide with the table inline (no blocks) works the same.
 {
-  const document = { slides: [{ title: "Inline", table: { columns: ["A", "B"], rows: [["1", ""]] } }] };
-  const editor = createEditorSession(document, { rejectInvalid: true });
+  const presentation = { slides: [{ title: "Inline", table: { columns: ["A", "B"], rows: [["1", ""]] } }] };
+  const editor = createEditorSession(presentation, { rejectInvalid: true });
   mergeTableCells(editor, "slides.0.table", body(0, 0), { colSpan: 2 }, { join: true });
   assert.deepEqual(editor.get("slides.0.table.rows.0"), [{ value: "1", colSpan: 2 }, null]);
   setTableStyle(editor, "slides.0.table", "minimal");
-  assert.equal(readTableStyle(editor.document, "slides.0.table").preset, "minimal");
+  assert.equal(readTableStyle(editor.presentation, "slides.0.table").preset, "minimal");
 }
 
 console.log("Table options: merge, join, split, refusals, 5 style presets plus per-axis styles and Theme reset, cell styles, preview and PPTX export/reimport, one undo step each.");

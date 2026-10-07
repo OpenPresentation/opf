@@ -12,7 +12,7 @@ export interface SlideManagerOptions {
   /** Called when the user chooses or moves to a slide; the host shows it and calls `render()`. */
   setSlideIndex: (index: number) => void;
   /** The thumbnail of one slide as an HTML string (usually the renderer's SVG). Cache it: it is called for every card on every render. */
-  renderThumbnail?: (document: unknown, index: number) => string;
+  renderThumbnail?: (presentation: unknown, index: number) => string;
   /** `"navigator"` (a vertical list, the default) or `"sorter"` (a grid with arrow keys in both directions). */
   variant?: "navigator" | "sorter";
   /** An element to fill with the Duplicate, Delete, Hide and More buttons. */
@@ -20,7 +20,7 @@ export interface SlideManagerOptions {
   /** Show Split and Merge in the slide menu. */
   contentActions?: SlideContentActions;
   /** Layout choices for "Add slide with layout" (default: the layouts catalog, via `listSwitchOptions`). */
-  layoutOptions?: (document: unknown) => { id: string; label: string; record?: Record<string, any> }[];
+  layoutOptions?: (presentation: unknown) => { id: string; label: string; record?: Record<string, any> }[];
   /** Every message the manager announces in its live region, for a visual status line. */
   onStatus?: (message: string) => void;
   onError?: (error: unknown) => void;

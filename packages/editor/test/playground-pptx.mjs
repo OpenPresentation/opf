@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { fromPptx, toPptx } from '@openpresentation/opf-pptx';
-import { validatePresentation } from '@openpresentation/opf';
+import { validate } from '@openpresentation/opf';
 // RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
 import JSZip from 'jszip';
 
@@ -34,9 +33,9 @@ try {
   const button = name => page.getByRole('button', { name, exact: true });
   const source = async () => {
     await button('Source').click();
-    const document = JSON.parse(await page.locator('#json').inputValue());
+    const presentation = JSON.parse(await page.locator('#json').inputValue());
     await button('Close source editor').click();
-    return document;
+    return presentation;
   };
   const deck = {
     name: 'Local browser PowerPoint', design: { theme: 'classic', fontScheme: 'roboto' },
@@ -48,11 +47,9 @@ try {
   await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
   await page.locator('#preview svg').waitFor();
   await page.waitForFunction(() => !!document.querySelector('#export-pptx').onclick);
-  // A renderer that vendors no lazy faces (published 0.10.0 and earlier) has nothing to preload.
-  const lazyFaces = existsSync(path.join(root, 'fonts', 'intos'));
   // FF-31: the default Aptos scheme previews with Intos, fetched on demand from the page's own fonts/ directory. Preview an Aptos
   // draft while still online so the vendored faces are loaded (and held by the document); everything after runs offline.
-  if (lazyFaces) {
+  {
     await button('Source').click();
     await page.locator('#json').fill(JSON.stringify({ name: 'Aptos preload', slides: [{ id: 'aptos', title: 'Aptos preview', text: 'Loads Intos.' }] }));
     await page.waitForFunction(() => [...document.fonts].some(face => face.family.replace(/"/g, '') === 'Intos' && face.status === 'loaded'), undefined, { timeout: 60000 });
@@ -100,7 +97,7 @@ try {
   assert.match(xml, /<a:tbl>/); // Actual native table, not a slide screenshot.
   assert.match(xml, /gridSpan="2"/);
   const expectedImport = await fromPptx(bytes);
-  assert.equal(validatePresentation(expectedImport).valid, true);
+  assert.equal(validate(expectedImport, { only: ["format"] }).valid, true);
   await button('Close PowerPoint export').click();
   const edited = await source();
   assert.equal(edited.slides[0].title, 'Edited before export');
@@ -198,7 +195,7 @@ try {
   assert.equal(await quoteDownload.failure(),null);
   const quoteBytes=await readFile(await quoteDownload.path());
   const quoteImport=await fromPptx(quoteBytes);
-  assert.equal(validatePresentation(quoteImport).valid,true);
+  assert.equal(validate(quoteImport, { only: ["format"] }).valid,true);
   assert.equal(quoteImport.slides.length,1);
   // Before opf-pptx#90 these native lines imported as plain strings. Since then it
   // keeps current native run formatting, so a styled line is a schema-valid TextRun[].

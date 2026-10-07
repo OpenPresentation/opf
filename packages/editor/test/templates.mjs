@@ -14,12 +14,9 @@ import {
   setTemplate,
   suggestVariableId,
   templateStatus,
-  templatesAvailable,
   valueToFieldText,
   variableToken,
 } from "../dist/templates.js";
-
-assert.equal(templatesAvailable(), true);
 
 const template = () => ({
   template: true,
@@ -42,13 +39,13 @@ const template = () => ({
 
 const editor = createEditorSession(template(), { rejectInvalid: true });
 assert.equal(editor.validation.valid, true, "a template is a valid document in the session");
-assert.equal(isTemplateDocument(editor.document), true);
-assert.equal(hasTemplateVariables(editor.document), true);
+assert.equal(isTemplateDocument(editor.presentation), true);
+assert.equal(hasTemplateVariables(editor.presentation), true);
 assert.equal(hasTemplateVariables({ variables: { risk: "#fff" }, slides: [] }), false);
 assert.deepEqual(TEMPLATE_INPUT_TYPES.list, "list");
 
 // Fields: typed, labelled, with state and uses.
-const fields = Object.fromEntries(listTemplateFields(editor.document).map((field) => [field.id, field]));
+const fields = Object.fromEntries(listTemplateFields(editor.presentation).map((field) => [field.id, field]));
 assert.deepEqual(Object.keys(fields), ["client", "revenue", "kickoff", "wins", "logo", "accent"]);
 assert.equal(fields.client.label, "Client name");
 assert.equal(fields.revenue.label, "Revenue");
@@ -61,7 +58,7 @@ assert.equal(fields.logo.status, "optional");
 assert.equal(fields.accent.status, "default");
 assert.deepEqual(fields.client.uses.map((use) => use.path), ["/name", "/slides/0/title"]);
 assert.deepEqual(fields.revenue.uses.map((use) => `${use.form}:${use.path}`), ["token:/slides/0/text/1/text", "token:/slides/1/bullets/0", "reference:/slides/2/chart/data/rows/0/1"]);
-assert.deepEqual(templateStatus(editor.document), { template: true, fieldCount: 6, requiredCount: 6 - 1, filledRequiredCount: 2, unfilled: ["client", "revenue", "wins"], complete: false });
+assert.deepEqual(templateStatus(editor.presentation), { template: true, fieldCount: 6, requiredCount: 6 - 1, filledRequiredCount: 2, unfilled: ["client", "revenue", "wins"], complete: false });
 
 // Form text parses per kind; blank clears.
 assert.deepEqual(fieldTextToValue("number", " 12.5 "), { ok: true, value: 12.5 });
@@ -88,12 +85,12 @@ assert.deepEqual(fill.status().unfilled, ["revenue", "wins"]);
 const preview = fill.preview();
 assert.equal(preview.presentation.slides[0].title, "Quarterly review: Globex");
 assert.equal(preview.presentation.slides[1].bullets[0], "Revenue $1,250,000", "an unfilled variable previews with its example");
-assert.deepEqual(editor.document, template(), "previewing never edits the document");
+assert.deepEqual(editor.presentation, template(), "previewing never edits the document");
 assert.equal(editor.canUndo, false);
 
 // Applying the fill: refused while required variables are unfilled, then one undoable edit.
 assert.throws(() => fill.apply(), (error) => error.code === "unfilled-variables" && error.details.unfilled.join() === "revenue,wins");
-assert.deepEqual(editor.document, template());
+assert.deepEqual(editor.presentation, template());
 fill.setText("revenue", "1234567");
 fill.set("wins", ["Shipped v2", "Won renewal"]);
 fill.setText("logo", "asset:mark");
@@ -101,7 +98,7 @@ assert.equal(fill.status().complete, true);
 const applied = fill.apply();
 assert.equal(applied.complete, true);
 assert.equal(editor.canUndo, true);
-const filled = editor.document;
+const filled = editor.presentation;
 assert.equal("template" in filled, false);
 assert.deepEqual(Object.keys(filled.variables), ["accent"]);
 assert.equal(filled.name, "Quarterly review for Globex");
@@ -112,9 +109,9 @@ assert.deepEqual(filled.slides[0].text, [{ text: "Revenue " }, { text: "$1,234,5
 assert.equal(editor.validation.valid, true);
 assert.deepEqual(fill.values, {}, "values are consumed by the fill");
 editor.undo();
-assert.deepEqual(editor.document, template(), "one undo restores the template");
+assert.deepEqual(editor.presentation, template(), "one undo restores the template");
 editor.redo();
-assert.deepEqual(editor.document, filled);
+assert.deepEqual(editor.presentation, filled);
 
 // A partial fill keeps the unfilled variables declared.
 {
@@ -123,18 +120,18 @@ assert.deepEqual(editor.document, filled);
   partial.set("client", "Initech");
   assert.throws(() => partial.apply(), (error) => error.code === "unfilled-variables");
   partial.apply({ partial: true });
-  const document = session.document;
-  assert.equal(document.template, true);
-  assert.deepEqual(Object.keys(document.variables).sort(), ["accent", "revenue", "wins"]);
-  assert.equal(document.slides[0].title, "Quarterly review: Initech");
-  assert.equal(document.slides[1].bullets[0], "Revenue {{revenue}}");
+  const presentation = session.presentation;
+  assert.equal(presentation.template, true);
+  assert.deepEqual(Object.keys(presentation.variables).sort(), ["accent", "revenue", "wins"]);
+  assert.equal(presentation.slides[0].title, "Quarterly review: Initech");
+  assert.equal(presentation.slides[1].bullets[0], "Revenue {{revenue}}");
   assert.equal(session.validation.valid, true);
 }
 
 // Declaring variables, marking a template and inserting tokens are validated, undoable session edits.
 {
   const session = createEditorSession({ slides: [{ id: "s", title: "Hello", text: [{ text: "Plain " }, { text: "bold", bold: true }] }] }, { rejectInvalid: true });
-  assert.equal(suggestVariableId(session.document, "Client Name!"), "client-name");
+  assert.equal(suggestVariableId(session.presentation, "Client Name!"), "client-name");
   assert.equal(suggestVariableId({ variables: { "client-name": "#fff" } }, "Client Name"), "client-name-2");
   assert.equal(variableToken("client-name"), "{{client-name}}");
   assert.equal(variableToken("when", "dd MMM yyyy"), "{{when|dd MMM yyyy}}");
@@ -142,9 +139,9 @@ assert.deepEqual(editor.document, filled);
 
   // A required variable with no value is an error in a normal deck, so declaring it needs template mode first.
   assert.throws(() => declareVariable(session, "client", { type: "text" }), (error) => error.code === "invalid-opf-edit");
-  assert.equal(session.document.variables, undefined);
+  assert.equal(session.presentation.variables, undefined);
   setTemplate(session, true);
-  assert.equal(session.document.template, true);
+  assert.equal(session.presentation.template, true);
   const declared = declareVariable(session, "client", { type: "text", example: "Acme" });
   assert.deepEqual(declared.patches, [{ op: "add", path: "/variables", value: { client: { type: "text", example: "Acme" } } }]);
   assert.throws(() => declareVariable(session, "client", { type: "text" }), (error) => error.code === "variable-exists");
@@ -167,14 +164,14 @@ assert.deepEqual(editor.document, filled);
   const depth = session.snapshot().undoDepth;
   insertVariableToken(session, "slides.0.title", "total", { declare: { type: "number", example: 3, format: "0" } });
   assert.equal(session.snapshot().undoDepth, depth + 1);
-  assert.equal(session.document.variables.total.type, "number");
+  assert.equal(session.presentation.variables.total.type, "number");
   session.undo();
-  assert.equal(session.document.variables.total, undefined);
+  assert.equal(session.presentation.variables.total, undefined);
   assert.equal(session.get("slides.0.title"), "{{client}}{{client}}");
 
   // Back to a normal deck: leaving template mode with an unfilled variable is refused.
   assert.throws(() => setTemplate(session, false), (error) => error.code === "invalid-opf-edit");
-  assert.equal(session.document.template, true);
+  assert.equal(session.presentation.template, true);
 }
 
 console.log("Templates passed fields, previews, one undoable fill, partial fills, declarations and token insertion.");

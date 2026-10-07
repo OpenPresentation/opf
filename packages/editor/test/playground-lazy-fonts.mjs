@@ -9,12 +9,6 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
-import * as renderFonts from '@openpresentation/opf-render/fonts-node';
-
-if (!(await renderFonts.loadOfficeFontRegistry()).lazyFonts?.length) {
-  console.log('Playground lazy fonts skipped: the installed renderer vendors no lazy fonts.');
-  process.exit(0);
-}
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const output = path.resolve(fileURLToPath(new URL('../', import.meta.url)), process.argv[2] ?? 'artifacts/playground-lazy-fonts');
 await mkdir(output, { recursive: true });

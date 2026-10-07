@@ -1,5 +1,5 @@
 import type { RenderSvgOptions } from "@openpresentation/opf-render";
-import type { FontGate } from "./canvas.js";
+import type { EditorFonts } from "./canvas.js";
 
 export type ExportFormat = "pdf" | "png" | "svg";
 export declare const EXPORT_FORMATS: Readonly<Record<ExportFormat, { extension: string; type: string; label: string }>>;
@@ -44,12 +44,10 @@ export interface ExportOptions {
   pdfMode?: "vector" | "raster";
   /** PNG pixel density (and the raster PDF's), 1 to 4; default 2. */
   scale?: number;
-  /** The options the host draws its preview with (`textMeasurement`, `catalogs`, ...). */
+  /** The options the host draws its preview with (`catalogs`, `date`, ...); the fonts go in `fonts`. */
   renderOptions?: RenderSvgOptions;
-  /** A font gate: the faces the deck needs load before anything is drawn. */
-  fonts?: Pick<FontGate, "pending" | "ensure">;
-  /** The browser font registry; its faces are what gets embedded. */
-  registry?: object;
+  /** The renderer's fonts handle (`loadFonts()`): it measures the text, loads the faces the deck needs before anything is drawn, and its registry's faces are what gets embedded. */
+  fonts?: EditorFonts;
   /** Faces to embed instead of the registry's. */
   embeddedFonts?: Array<Record<string, unknown>>;
   /** PDF document properties beyond the title and subject taken from the deck. */
@@ -71,7 +69,7 @@ export interface ExportResult {
   slides: number[];
 }
 /**
- * Draw the deck with the renderer the preview uses and convert it. Rejects with an error whose `code` is `export-aborted`, `export-no-slides`,
+ * Draw the deck with the renderer the preview uses and convert it. Rejects with an error whose `code` is `export-aborted`, `export-fonts-unlicensed` (the license rule left the PDF converter no face for some text), `export-no-slides`,
  * `export-format`, `export-unavailable` (PDF and PNG need the renderer's `export-browser` entry), `fonts-unavailable` or a renderer code.
  */
 export declare function exportDeck(deck: unknown, options: ExportOptions): Promise<ExportResult>;

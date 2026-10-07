@@ -11,7 +11,6 @@ import {
   listBuiltins,
   setTemplate,
   suggestVariableId,
-  templatesAvailable,
 } from "./templates.js";
 import { slideTitle } from "./slides.js";
 
@@ -43,13 +42,12 @@ function h(doc, tag, attributes = {}, ...children) {
 }
 
 /**
- * Mount the Fill template panel. Options: `editor` (a session), `renderPreview({document, variables, slideIndex})`
+ * Mount the Fill template panel. Options: `editor` (a session), `renderPreview({presentation, variables, slideIndex})`
  * returning an SVG string (or a promise of one) for the live preview (omit for no preview), `getSlideIndex`,
  * `getTarget()` returning `{path, start?, end?}` for the text field a token is inserted into, `onStatus(message,
  * {error})`, `onApply(result)`, `readFile(file)` (default: FileReader as a data URL) for image uploads.
  */
 export function createTemplatePanel(container, options) {
-  if (!templatesAvailable()) throw new Error("The Fill template panel needs a core release that ships resolveVariables.");
   const { editor, renderPreview, getTarget, onStatus, onApply } = options;
   const doc = container.ownerDocument;
   const fill = createTemplateFill(editor);
@@ -167,7 +165,7 @@ export function createTemplatePanel(container, options) {
       extras.push(colorInput);
     }
     if (field.kind === "image") {
-      const assets = editor.document.assets && typeof editor.document.assets === "object" ? Object.keys(editor.document.assets) : [];
+      const assets = editor.presentation.assets && typeof editor.presentation.assets === "object" ? Object.keys(editor.presentation.assets) : [];
       if (assets.length) {
         assetSelect = h(doc, "select", { "aria-label": `${field.label}: pick a registered asset` }, h(doc, "option", { value: "", text: "Pick an asset…" }), ...assets.map((key) => h(doc, "option", { value: `asset:${key}`, text: key })));
         assetSelect.addEventListener("change", () => {
@@ -229,7 +227,7 @@ export function createTemplatePanel(container, options) {
       rows.set(field.id, row);
       fieldList.append(row.element);
     }
-    const builtins = listBuiltins(editor.document);
+    const builtins = listBuiltins(editor.presentation);
     insertSelect.replaceChildren(
       ...fields.map((field) => h(doc, "option", { value: field.id, text: `${field.label} (${KIND_LABELS[field.kind]})` })),
       ...(builtins.length ? [h(doc, "optgroup", { label: "Built-in variables" }, ...builtins.map((entry) => h(doc, "option", { value: entry.name, text: `${entry.label} (${entry.name})` })))] : []),
@@ -241,10 +239,10 @@ export function createTemplatePanel(container, options) {
       return h(doc, "li", { "data-builtin": entry.name, "data-kind": entry.kind, "data-available": entry.available ? "true" : "false" },
         h(doc, "code", { text: `{{${entry.name}}}` }), ` ${entry.label}: `, entry.available ? shown : h(doc, "em", { text: "not set" }), uses ? ` (used ${uses} time${uses === 1 ? "" : "s"})` : "");
     }));
-    slideSelect.replaceChildren(...(editor.document.slides ?? []).map((slide, index) => h(doc, "option", { value: String(index), text: `${index + 1}. ${slideTitle(slide) || "Untitled"}` })));
-    previewSlide = Math.min(previewSlide, Math.max(0, (editor.document.slides?.length ?? 1) - 1));
+    slideSelect.replaceChildren(...(editor.presentation.slides ?? []).map((slide, index) => h(doc, "option", { value: String(index), text: `${index + 1}. ${slideTitle(slide) || "Untitled"}` })));
+    previewSlide = Math.min(previewSlide, Math.max(0, (editor.presentation.slides?.length ?? 1) - 1));
     slideSelect.value = String(previewSlide);
-    modeBox.checked = isTemplateDocument(editor.document);
+    modeBox.checked = isTemplateDocument(editor.presentation);
     update();
   }
 
@@ -289,7 +287,7 @@ export function createTemplatePanel(container, options) {
     if (!renderPreview) return;
     const token = ++previewToken;
     try {
-      const svg = await renderPreview({ document: editor.document, variables: fill.values, slideIndex: previewSlide });
+      const svg = await renderPreview({ presentation: editor.presentation, variables: fill.values, slideIndex: previewSlide });
       if (token !== previewToken || destroyed) return;
       previewBox.innerHTML = svg;
       const preview = fill.preview();
@@ -330,7 +328,7 @@ export function createTemplatePanel(container, options) {
       setTemplate(editor, modeBox.checked);
       say(modeBox.checked ? "Marked as a template." : "Marked as a normal presentation.");
     } catch (error) {
-      modeBox.checked = isTemplateDocument(editor.document);
+      modeBox.checked = isTemplateDocument(editor.presentation);
       say(messageOf(error), true);
     }
   });
@@ -361,13 +359,13 @@ export function createTemplatePanel(container, options) {
       say("Give the new variable a name.", true);
       return;
     }
-    const variableId = suggestVariableId(editor.document, name);
+    const variableId = suggestVariableId(editor.presentation, name);
     const kind = newKind.value;
     const declaration = { type: kind, label: name };
     const sample = newSample.value.trim();
     if (sample) {
       // A template keeps the sample as an example (the slot stays unfilled); a normal deck needs a real value.
-      const field = isTemplateDocument(editor.document) ? "example" : "value";
+      const field = isTemplateDocument(editor.presentation) ? "example" : "value";
       declaration[field] = kind === "number" && Number.isFinite(Number(sample)) ? Number(sample) : kind === "list" ? sample.split(/\r?\n|,/).map((entry) => entry.trim()).filter(Boolean) : sample;
     }
     try {

@@ -1,7 +1,7 @@
 // RR-25: image crop and focal point, the model: rectangle maths with aspect lock and bounds, and the one-patch change that
 // applies a crop (a new asset plus the image pointing at it), restores the original, and keeps the document valid.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";
 import {
   CROP_ASPECTS,
@@ -137,40 +137,40 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
 // prepareCrop / applyPatch: one undo step, valid document, alt and untouched fields kept.
 {
   const editor = session();
-  const before = editor.document;
-  const prepared = prepareCrop(editor.document, "slides.0.blocks.0.image", cropped());
+  const before = editor.presentation;
+  const prepared = prepareCrop(editor.presentation, "slides.0.blocks.0.image", cropped());
   assert.equal(prepared.assetId, "photo-crop");
   const depth = editor.snapshot().undoDepth;
   editor.applyPatch(prepared.patches, { rejectInvalid: true });
   assert.equal(editor.snapshot().undoDepth, depth + 1, "a crop is one undo step");
-  const after = editor.document;
+  const after = editor.presentation;
   assert.deepEqual(after.slides[0].blocks[0].image, { src: "asset:photo-crop", alt: "Block alt" });
   assert.equal(after.assets["photo-crop"].description, "Cropped from asset:photo");
   assert.equal(after.assets["photo-crop"].alt, "Block alt");
   assert.equal(after.assets["photo-crop"].mediaType, "image/png");
   assert.equal(after.assets.photo.src, PNG, "the original asset stays");
-  assert.equal(validatePresentation(after).valid, true, JSON.stringify(validatePresentation(after).errors));
+  assert.equal(validate(after, { only: ["format"] }).valid, true, JSON.stringify(validate(after, { only: ["format"] }).findings));
   editor.undo();
-  assert.deepEqual(editor.document, before, "one undo restores the document");
+  assert.deepEqual(editor.presentation, before, "one undo restores the document");
 
   // Re-crop: provenance points at the original, the earlier crop's asset (used nowhere else) is removed.
   editor.redo();
-  const again = prepareCrop(editor.document, "slides.0.blocks.0.image", cropped("b"));
+  const again = prepareCrop(editor.presentation, "slides.0.blocks.0.image", cropped("b"));
   assert.equal(again.origin, "photo");
   assert.ok(again.patches.some((patch) => patch.op === "remove" && patch.path === "/assets/photo-crop"), "the previous crop is dropped");
   editor.applyPatch(again.patches, { rejectInvalid: true });
-  assert.equal(editor.document.assets["photo-crop"], undefined);
-  assert.equal(editor.document.assets["photo-crop-2"].description, "Cropped from asset:photo");
-  assert.equal(editor.document.slides[0].blocks[0].image.src, "asset:photo-crop-2");
+  assert.equal(editor.presentation.assets["photo-crop"], undefined);
+  assert.equal(editor.presentation.assets["photo-crop-2"].description, "Cropped from asset:photo");
+  assert.equal(editor.presentation.slides[0].blocks[0].image.src, "asset:photo-crop-2");
   // Restore: one step back to the original, the crop asset is removed.
   const restored = restoreOriginal(editor, "slides.0.blocks.0.image");
   assert.equal(restored.origin, "photo");
-  assert.equal(editor.document.slides[0].blocks[0].image.src, "asset:photo");
-  assert.equal(editor.document.assets["photo-crop-2"], undefined);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(editor.presentation.slides[0].blocks[0].image.src, "asset:photo");
+  assert.equal(editor.presentation.assets["photo-crop-2"], undefined);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   assert.equal(restoreOriginal(editor, "slides.0.blocks.0.image"), null, "nothing to restore on an original");
   editor.undo();
-  assert.equal(editor.document.slides[0].blocks[0].image.src, "asset:photo-crop-2", "restore is one undo step");
+  assert.equal(editor.presentation.slides[0].blocks[0].image.src, "asset:photo-crop-2", "restore is one undo step");
 }
 
 // A crop used by two images is kept when one of them is restored.
@@ -178,30 +178,30 @@ const session = () => createEditorSession(deck(), { rejectInvalid: true });
   const d = deck();
   d.slides[1].image = { src: "asset:photo" };
   const editor = createEditorSession(d, { rejectInvalid: true });
-  editor.applyPatch(prepareCrop(editor.document, "slides.0.blocks.0.image", cropped()).patches, { rejectInvalid: true });
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.0.blocks.0.image", cropped()).patches, { rejectInvalid: true });
   editor.set("slides.1.image", { src: "asset:photo-crop" });
-  assert.equal(countAssetReferences(editor.document, "photo-crop"), 2);
-  assert.equal(prepareRestore(editor.document, "slides.0.blocks.0.image").patches.some((patch) => patch.op === "remove"), false);
+  assert.equal(countAssetReferences(editor.presentation, "photo-crop"), 2);
+  assert.equal(prepareRestore(editor.presentation, "slides.0.blocks.0.image").patches.some((patch) => patch.op === "remove"), false);
 }
 
 // Other forms: string image, inline data image, slide image (object and string), no assets map.
 {
   const editor = session();
-  editor.applyPatch(prepareCrop(editor.document, "slides.1.image", cropped()).patches, { rejectInvalid: true });
-  assert.equal(editor.document.slides[1].image, "asset:plain-crop", "a string image stays a string");
-  assert.equal(editor.document.assets["plain-crop"].description, "Cropped from asset:plain");
-  editor.applyPatch(prepareCrop(editor.document, "slides.2.image", cropped()).patches, { rejectInvalid: true });
-  assert.deepEqual(editor.document.slides[2].image, { src: "asset:image-crop", alt: "inline" }, "an inline picture becomes an asset; its alt stays on the image");
-  assert.equal(editor.document.assets["image-crop"].description, undefined, "no provenance for an inline original");
-  assert.equal(prepareRestore(editor.document, "slides.2.image"), null);
-  editor.applyPatch(prepareCrop(editor.document, "slides.3.design.slideImage", cropped()).patches, { rejectInvalid: true });
-  assert.deepEqual(editor.document.slides[3].design.slideImage, { src: "asset:photo-crop", position: "right", size: 0.4 }, "slide image placement is kept");
-  editor.applyPatch(prepareCrop(editor.document, "slides.4.design.slideImage", cropped()).patches, { rejectInvalid: true });
-  assert.equal(typeof editor.document.slides[4].design.slideImage, "string");
-  assert.equal(validatePresentation(editor.document).valid, true, JSON.stringify(validatePresentation(editor.document).errors));
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.1.image", cropped()).patches, { rejectInvalid: true });
+  assert.equal(editor.presentation.slides[1].image, "asset:plain-crop", "a string image stays a string");
+  assert.equal(editor.presentation.assets["plain-crop"].description, "Cropped from asset:plain");
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.2.image", cropped()).patches, { rejectInvalid: true });
+  assert.deepEqual(editor.presentation.slides[2].image, { src: "asset:image-crop", alt: "inline" }, "an inline picture becomes an asset; its alt stays on the image");
+  assert.equal(editor.presentation.assets["image-crop"].description, undefined, "no provenance for an inline original");
+  assert.equal(prepareRestore(editor.presentation, "slides.2.image"), null);
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.3.design.slideImage", cropped()).patches, { rejectInvalid: true });
+  assert.deepEqual(editor.presentation.slides[3].design.slideImage, { src: "asset:photo-crop", position: "right", size: 0.4 }, "slide image placement is kept");
+  editor.applyPatch(prepareCrop(editor.presentation, "slides.4.design.slideImage", cropped()).patches, { rejectInvalid: true });
+  assert.equal(typeof editor.presentation.slides[4].design.slideImage, "string");
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, JSON.stringify(validate(editor.presentation, { only: ["format"] }).findings));
   const bare = createEditorSession({ slides: [{ title: "x", image: { src: PNG } }] }, { rejectInvalid: true });
-  bare.applyPatch(prepareCrop(bare.document, "slides.0.image", cropped()).patches, { rejectInvalid: true });
-  assert.ok(bare.document.assets["image-crop"], "a deck without assets gets the map");
+  bare.applyPatch(prepareCrop(bare.presentation, "slides.0.image", cropped()).patches, { rejectInvalid: true });
+  assert.ok(bare.presentation.assets["image-crop"], "a deck without assets gets the map");
   assert.throws(() => prepareCrop(deck(), "slides.5.image", cropped()), (error) => error.code === "not-croppable");
   assert.throws(() => prepareCrop(deck(), "slides.0.title", cropped()), (error) => error.code === "not-croppable");
 }

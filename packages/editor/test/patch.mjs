@@ -23,7 +23,7 @@ const deck = () => ({
     { id: "c", title: "C" }
   ]
 });
-const ids = document => document.slides.map(slide => slide.id);
+const ids = presentation => presentation.slides.map(slide => slide.id);
 let checks = 0;
 const check = (condition, message) => { assert.ok(condition, message); checks++; };
 const equal = (actual, expected, message) => { assert.deepEqual(actual, expected, message); checks++; };
@@ -45,7 +45,7 @@ const throwsCode = (fn, code) => {
   const events = [];
   editor.subscribe(event => events.push(event));
   const change = editor.applyPatch([{ op: "move", from: "/slides/2", path: "/slides/0" }, { op: "copy", from: "/slides/0", path: "/slides/-" }], { source: "test" });
-  equal(ids(editor.document), ["c", "a", "b", "c"]);
+  equal(ids(editor.presentation), ["c", "a", "b", "c"]);
   equal(change.patches.map(patch => patch.op), ["move", "copy"]);
   equal(change.inversePatches.map(patch => patch.op), ["remove", "remove", "add"], "the inverse runs in reverse order: undo the copy, then the move (remove and add)");
   equal(events.length, 1);
@@ -55,17 +55,17 @@ const throwsCode = (fn, code) => {
   check(editor.canUndo && !editor.canRedo, "one undo step for the whole transaction");
   equal(editor.snapshot().undoDepth, 1);
   const undone = editor.undo();
-  equal(ids(editor.document), ["a", "b", "c"]);
+  equal(ids(editor.presentation), ["a", "b", "c"]);
   equal(undone.patches, change.inversePatches);
   equal(undone.redoPatches, change.patches);
   equal(events[1].type, "undo");
   check(!editor.canUndo && editor.canRedo, "redo available after undo");
   const redone = editor.redo();
-  equal(ids(editor.document), ["c", "a", "b", "c"]);
+  equal(ids(editor.presentation), ["c", "a", "b", "c"]);
   equal(redone.patches, change.patches);
   equal(events[2].type, "redo");
   editor.undo();
-  equal(editor.document, deck(), "undo restores the exact original document");
+  equal(editor.presentation, deck(), "undo restores the exact original document");
   equal(editor.undo(), null);
 }
 
@@ -75,7 +75,7 @@ const throwsCode = (fn, code) => {
   let events = 0;
   editor.subscribe(() => { events++; });
   throwsCode(() => editor.applyPatch([{ op: "replace", path: "/slides/0/title", value: "never" }, { op: "test", path: "/slides/1/id", value: "stale" }]), "patch-test-failed");
-  equal(editor.document, deck());
+  equal(editor.presentation, deck());
   equal(events, 0);
   check(!editor.canUndo, "a failed patch records no history");
   throwsCode(() => editor.applyPatch([{ op: "replace", path: "/missing", value: 1 }]), "patch-path-missing");
@@ -88,7 +88,7 @@ const throwsCode = (fn, code) => {
   throwsCode(() => editor.applyPatch({}), "invalid-patch");
   throwsCode(() => editor.applyPatch([{ op: "test", path: "/name" }]), "invalid-patch-operation");
   throwsCode(() => editor.applyPatch([{ op: "add", path: "no-slash-is-dotted-so-fine", value: 1 }, { op: "test", path: "/x~2", value: 1 }]), "invalid-json-pointer");
-  equal(editor.document, deck());
+  equal(editor.presentation, deck());
 }
 
 // Errors carry the operation index and path in details.
@@ -136,13 +136,13 @@ const throwsCode = (fn, code) => {
   editor.undo();
   equal(editor.get("slides.0.bullets"), ["x", "y", "z"]);
   editor.undo();
-  check(!hasValueAtPath(editor.document, "slides.1.subtitle"), "added optional field is removed by undo");
+  check(!hasValueAtPath(editor.presentation, "slides.1.subtitle"), "added optional field is removed by undo");
   editor.redo();
   equal(editor.get("slides.1.subtitle"), "S");
   editor.applyPatch([{ op: "replace", path: "/name", value: "N" }]);
   check(!editor.canRedo, "a new edit clears redo");
   while (editor.canUndo) editor.undo();
-  equal(editor.document, deck());
+  equal(editor.presentation, deck());
 }
 
 // Path helpers share core's pointer rules; dotted OPF paths still work.
@@ -165,11 +165,11 @@ const throwsCode = (fn, code) => {
 {
   const editor = createEditorSession(deck());
   editor.applyPatch([{ op: "add", path: "/extensions", value: {} }, { op: "add", path: "/extensions/a.b~1c", value: 1 }, { op: "add", path: "/extensions/__proto__", value: { safe: true } }]);
-  equal(Object.getPrototypeOf(editor.document.extensions), Object.prototype);
+  equal(Object.getPrototypeOf(editor.presentation.extensions), Object.prototype);
   equal(editor.get(["extensions", "a.b/c"]), 1);
   check(!({}).safe, "no prototype pollution");
   editor.undo();
-  equal(editor.document, deck());
+  equal(editor.presentation, deck());
 }
 
 // Inverse patches of random edits restore the document (undo is exact).
@@ -180,7 +180,7 @@ const throwsCode = (fn, code) => {
     const editor = createEditorSession(deck());
     const steps = 1 + rand(5);
     for (let step = 0; step < steps; step++) {
-      const count = editor.document.slides.length;
+      const count = editor.presentation.slides.length;
       const kinds = [
         [{ op: "move", from: `/slides/${rand(count)}`, path: `/slides/${rand(count)}` }],
         [{ op: "copy", from: `/slides/${rand(count)}`, path: "/slides/-" }],
@@ -191,11 +191,11 @@ const throwsCode = (fn, code) => {
       const patch = kinds[rand(kinds.length)];
       if (patch.length) editor.applyPatch(patch);
     }
-    const after = editor.document;
+    const after = editor.presentation;
     while (editor.canUndo) editor.undo();
-    equal(editor.document, deck(), `round ${round}`);
+    equal(editor.presentation, deck(), `round ${round}`);
     while (editor.canRedo) editor.redo();
-    equal(editor.document, after, `round ${round} redo`);
+    equal(editor.presentation, after, `round ${round} redo`);
   }
 }
 

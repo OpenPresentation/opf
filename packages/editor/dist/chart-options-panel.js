@@ -5,7 +5,7 @@
 // the selected chart type can show (core's support table), and hides itself when no chart is selected. On a combo chart
 // (FA-15) a "Series" group sets which series are lines and which lines use the secondary value axis, and a secondary axis
 // title field appears while a line uses that axis.
-import { CHART_LABEL_CONTENT, CHART_LEGEND_POSITIONS, chartOptionsAvailable, parseChartPath, readChartOptions, setChartOptions } from "./chart-options.js";
+import { CHART_LABEL_CONTENT, CHART_LEGEND_POSITIONS, parseChartPath, readChartOptions, setChartOptions } from "./chart-options.js";
 
 const LEGEND_LABELS = { default: "Default", none: "None", top: "Top", bottom: "Bottom", left: "Left", right: "Right" };
 const CONTENT_LABELS = { category: "Category", value: "Value", percent: "Percent" };
@@ -20,7 +20,6 @@ const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&"
  * call `refresh()` when the selection changes (the panel also refreshes on every editor change).
  */
 export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatus = () => {} }) {
-  if (!chartOptionsAvailable()) return { refresh() {}, destroy() {}, element: undefined };
   const id = `opf-chart-options-${++counter}`;
   const root = document.createElement("section");
   root.className = "opf-chart-options";
@@ -71,7 +70,7 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
       return;
     }
     chartPath = path;
-    const { fields: support, state, choices, combo } = readChartOptions(chart, editor.document);
+    const { fields: support, state, choices, combo } = readChartOptions(chart, editor.presentation);
     root.hidden = false;
     const setValue = (input, value) => { if (input !== document.activeElement && input.value !== value) input.value = value; };
     setValue(fields.alt, state.alt);

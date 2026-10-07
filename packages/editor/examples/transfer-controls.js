@@ -11,8 +11,8 @@ import {
   galleryItemUrl,
   normalizeGalleryUrl,
 } from "../src/galleries.js";
-import { renderSvg } from "@openpresentation/opf-render/svg";
-import { whenFontsReady } from "../src/font-gate.js";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { previewFonts, whenFontsReady } from "../src/font-gate.js";
 import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
 
 export function installTransferControls({
@@ -22,7 +22,6 @@ export function installTransferControls({
   getSelectedPath,
   setSlideIndex,
   status,
-  renderOptions,
   galleries,
   fonts,
 }) {
@@ -96,28 +95,25 @@ export function installTransferControls({
     };
     try {
       const mode = $("import-action").value;
-      const result = prepareOpfImport(editor.document, transfer, {
+      const result = prepareOpfImport(editor.presentation, transfer, {
         mode,
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
       });
       // FF-41: the preview draws only once the faces the imported document needs (an Arabic .pptx, a Japanese deck) are loaded.
-      whenFontsReady(fonts, result.document, {
+      whenFontsReady(fonts, result.presentation, {
         isCurrent: () => run === previewRun && importDialog.open,
         loading: () => {
           $("import-preview").replaceChildren();
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          const svg = renderSvg(result.document, {
-            ...renderOptions,
-            slideIndex: result.slideIndex,
-          });
+          const svg = renderSlideSvg(result.presentation, result.slideIndex, { fonts: previewFonts(fonts) });
           $("import-preview").innerHTML = svg;
           prepared = result;
           error("");
           $("import-apply").disabled = false;
-          const count = transfer.document?.slides.length;
+          const count = transfer.presentation?.slides.length;
           $("import-summary").textContent =
             mode === "selection"
               ? "Replace selected content"
@@ -140,7 +136,7 @@ export function installTransferControls({
       typeof value === "string"
         ? parseOpfTransfer(value)
         : parseOpfTransfer(JSON.stringify(value));
-    if (!transfer.document) $("import-action").value = "selection";
+    if (!transfer.presentation) $("import-action").value = "selection";
     updatePreview();
   }
   function showTab(name) {
@@ -201,7 +197,7 @@ export function installTransferControls({
     }
   }
   function copyValue() {
-    const text = serializeOpfTransfer(editor.document, {
+    const text = serializeOpfTransfer(editor.presentation, {
       scope: $("copy-scope").value,
       slideIndex: getSlideIndex(),
       path: getSelectedPath(),
@@ -291,18 +287,18 @@ export function installTransferControls({
       if (file.size > MAX_OPF_BYTES)
         throw new Error("Choose a file smaller than 20 MB.");
       const pptx = /\.pptx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-      const result = pptx ? await readPptxFile(file) : { document: await file.text() };
+      const result = pptx ? await readPptxFile(file) : { presentation: await file.text() };
       if (id !== requestId || !importDialog.open) return;
       if (pptx) {
         $("import-conversion").hidden = false;
         showConversionDiagnostics($("import-diagnostics"), result.diagnostics);
         // Converted binary input is already structured OPF. Validate its shape
         // without applying the unrelated JSON paste byte cap to embedded images.
-        const document = assertOpf(result.document);
-        transfer = { kind: 'presentation', value: document, document };
+        const presentation = assertOpf(result.presentation);
+        transfer = { kind: 'presentation', value: presentation, presentation };
         updatePreview();
       } else {
-        receive(result.document);
+        receive(result.presentation);
       }
       $("file-name").textContent = file.name;
     } catch (cause) {
@@ -318,12 +314,12 @@ export function installTransferControls({
     const { id, signal } = beginRequest();
     busy("Loading OPF…");
     try {
-      const document = await loadOpfGalleryItem(
+      const presentation = await loadOpfGalleryItem(
         { url: galleryItemUrl($("opf-url").value, location.href) },
         { signal, base: location.href },
       );
       if (id !== requestId) return;
-      receive(document);
+      receive(presentation);
     } catch (cause) {
       if (id === requestId)
         error(`${cause.message} The source must allow browser access (CORS).`);
@@ -428,12 +424,12 @@ export function installTransferControls({
     for (const child of $("gallery-results").children)
       child.setAttribute("aria-pressed", String(child === button));
     try {
-      const document = await loadOpfGalleryItem(item, {
+      const presentation = await loadOpfGalleryItem(item, {
         gallery: loadedGallery.url,
         signal,
       });
       if (id !== requestId) return;
-      receive(document);
+      receive(presentation);
     } catch (cause) {
       if (id === requestId) error(cause.message);
     }
@@ -465,30 +461,27 @@ export function installTransferControls({
   };
   $("import-copy").onclick = () => {
     if (transfer)
-      copyText(JSON.stringify(transfer.document ?? transfer.value, null, 2));
+      copyText(JSON.stringify(transfer.presentation ?? transfer.value, null, 2));
   };
   $("import-apply").onclick = () => {
     if (!transfer || !prepared || !commit()) return;
     try {
-      const result = prepareOpfImport(editor.document, transfer, {
+      const result = prepareOpfImport(editor.presentation, transfer, {
         mode: $("import-action").value,
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),
       });
       // The imported document becomes the document only after its faces are loaded (at once when they already are).
-      whenFontsReady(fonts, result.document, {
+      whenFontsReady(fonts, result.presentation, {
         isCurrent: () => importDialog.open,
         loading: () => {
           $("import-apply").disabled = true;
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          renderSvg(result.document, {
-            ...renderOptions,
-            slideIndex: result.slideIndex,
-          });
+          renderSlideSvg(result.presentation, result.slideIndex, { fonts: previewFonts(fonts) });
           setSlideIndex(result.slideIndex);
-          editor.applyPatch([{ op: "replace", path: "", value: result.document }], {
+          editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",
             rejectInvalid: true,
           });
@@ -511,7 +504,7 @@ export function installTransferControls({
     if (!commit()) return;
     event.clipboardData.setData(
       "text/plain",
-      serializeOpfTransfer(editor.document, {
+      serializeOpfTransfer(editor.presentation, {
         scope: event.target.closest?.("#preview") ? "selection" : "slide",
         slideIndex: getSlideIndex(),
         path: getSelectedPath(),

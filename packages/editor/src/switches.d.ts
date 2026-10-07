@@ -66,7 +66,7 @@ export interface PreparedDimensionSwitch {
   dimension: SwitchDimension;
   scope: "deck" | "slide" | "block";
   slideIndex?: number;
-  document: unknown;
+  presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   /** Slides whose own design hides a deck-level switch. */
@@ -75,8 +75,8 @@ export interface PreparedDimensionSwitch {
   loss?: string[];
 }
 
-export interface DimensionSwitchChange extends Omit<EditorChange, "document" | "patches"> {
-  document: unknown;
+export interface DimensionSwitchChange extends Omit<EditorChange, "presentation" | "patches"> {
+  presentation: unknown;
   patches: JsonPatchOperation[];
   dimension: SwitchDimension;
   scope: "deck" | "slide" | "block";
@@ -87,7 +87,7 @@ export interface DimensionSwitchChange extends Omit<EditorChange, "document" | "
 }
 
 /** Compute and validate the patch for one dimension without changing any session. */
-export declare function prepareDimensionSwitch(document: unknown, dimension: SwitchDimension, value: DimensionSwitchValue, options?: DimensionSwitchOptions): PreparedDimensionSwitch;
+export declare function prepareDimensionSwitch(presentation: unknown, dimension: SwitchDimension, value: DimensionSwitchValue, options?: DimensionSwitchOptions): PreparedDimensionSwitch;
 /** Apply one dimension switch to a session as a single undoable transaction. */
 export declare function switchDimension(editor: EditorSession, dimension: SwitchDimension, value: DimensionSwitchValue, options?: DimensionSwitchOptions): DimensionSwitchChange;
 
@@ -101,9 +101,9 @@ export interface CompatibleChartType extends SwitchOption {
   current: boolean;
 }
 /** Values a picker can offer for a catalog-backed dimension (document inline records, caller catalogs, then the bundled catalog, without duplicates); `blocks` lists the content kinds and `slide-sizes` the presets (labelled with their inches). `purposes` lists the catalog; any other goal text is also a valid switch value. */
-export declare function listSwitchOptions(document: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "catalogSources">): SwitchOption[];
+export declare function listSwitchOptions(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "catalogs" | "catalogSources">): SwitchOption[];
 /** Chart types the chart's inline data can use as it is (data-shape compatibility, not an engine-support claim). `path` or `slideIndex` picks the chart. */
-export declare function compatibleChartTypes(document: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "catalogSources">): CompatibleChartType[];
+export declare function compatibleChartTypes(presentation: unknown, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "catalogs" | "catalogSources">): CompatibleChartType[];
 /** The value a dimension currently has: `{ value, scope }`, with the catalog id for catalog dimensions. `slide-sizes` reads the deck's design.dimensions, else its theme's (a preset string, or the object for a custom size); `purposes` reads the goal text or Purpose id. */
-export declare function currentSwitchValue(document: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index">): { value: unknown; scope: "deck" | "slide" | "block" };
+export declare function currentSwitchValue(presentation: unknown, dimension: SwitchDimension, options?: Pick<DimensionSwitchOptions, "slideIndex" | "path" | "owner" | "index">): { value: unknown; scope: "deck" | "slide" | "block" };
 export { blockConversionTargets } from "./block-convert.js";

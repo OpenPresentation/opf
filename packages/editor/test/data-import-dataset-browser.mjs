@@ -53,7 +53,7 @@ try {
     area.dispatchEvent(new Event('input'));
     return { id: document.getElementById('data-dataset-id').value };
   }, csv);
-  const datasets = () => page.evaluate(() => window.editor.document.datasets);
+  const datasets = () => page.evaluate(() => window.editor.presentation.datasets);
   const depth = () => page.evaluate(() => window.editor.snapshot().undoDepth);
 
   await imports('Quarter,Revenue\nQ1,12\nQ2,18');
@@ -64,7 +64,7 @@ try {
   await page.locator('#data-apply').click();
   assert.deepEqual((await datasets()).data.rows, [['Q1', 12], ['Q2', 18]]);
   assert.equal(await depth(), 1, 'the dataset and the slide are one undo step');
-  assert.deepEqual(await page.evaluate(() => window.editor.document.slides[1].chart.data), { dataset: 'data' });
+  assert.deepEqual(await page.evaluate(() => window.editor.presentation.slides[1].chart.data), { dataset: 'data' });
 
   // A second import takes the next free id instead of replacing the first dataset.
   await imports('Region,Share\nEMEA,0.4\nAPAC,0.6');

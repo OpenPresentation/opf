@@ -156,11 +156,11 @@ export const isFullRect = (rect, bounds) => rect.x < 0.5 && rect.y < 0.5 && Math
  * (the field is `{ src, ... }`); `assetSrc` is what `src` resolves to (the asset's own `src`), and `origin` is the asset a
  * crop of this picture was made from, when there is one.
  */
-export function describeImage(document, path) {
+export function describeImage(presentation, path) {
   const segments = String(path).split(".");
   const last = segments.at(-1);
   if (!["image", "slideImage"].includes(last)) return { error: "This is not a picture." };
-  const value = getValueAtPath(document, path);
+  const value = getValueAtPath(presentation, path);
   const pointer = opfPathToJsonPointer(segments);
   let form;
   let src;
@@ -177,7 +177,7 @@ export function describeImage(document, path) {
   let assetSrc = src;
   let entry;
   if (assetId !== undefined) {
-    entry = getValueAtPath(document, ["assets", assetId]);
+    entry = getValueAtPath(presentation, ["assets", assetId]);
     if (entry === undefined) return { error: `The picture asset "${assetId}" is missing from this presentation.` };
     assetSrc = typeof entry === "string" ? entry : entry?.src;
     if (typeof assetSrc !== "string") return { error: `The picture asset "${assetId}" has no source.` };
@@ -193,22 +193,22 @@ export function describeImage(document, path) {
 }
 
 /** How many places in the document use `asset:<id>` (the `assets` map itself is not counted). */
-export function countAssetReferences(document, id) {
+export function countAssetReferences(presentation, id) {
   const reference = `asset:${id}`;
   let count = 0;
   const walk = (value) => {
     if (typeof value === "string") count += value === reference ? 1 : 0;
     else if (Array.isArray(value)) value.forEach(walk);
-    else if (isObject(value)) for (const [key, child] of Object.entries(value)) if (key !== "assets" || value !== document) walk(child);
+    else if (isObject(value)) for (const [key, child] of Object.entries(value)) if (key !== "assets" || value !== presentation) walk(child);
   };
-  walk(document);
+  walk(presentation);
   return count;
 }
 
 // ---- the change --------------------------------------------------------------------------------------------------------
 
-function assetPatches(document, id, entry) {
-  const assets = document?.assets;
+function assetPatches(presentation, id, entry) {
+  const assets = presentation?.assets;
   return isObject(assets)
     ? [{ op: "add", path: opfPathToJsonPointer(["assets", id]), value: entry }]
     : [{ op: "add", path: "/assets", value: { [id]: entry } }];
@@ -219,33 +219,33 @@ function assetPatches(document, id, entry) {
  * pointing at it. `pixels` is `{ dataUri, mediaType, width, height }` (from `cropImagePixels`). A previous crop's asset that
  * nothing else uses is removed in the same change. Pure.
  */
-export function prepareCrop(document, path, pixels) {
-  const image = describeImage(document, path);
+export function prepareCrop(presentation, path, pixels) {
+  const image = describeImage(presentation, path);
   if (image.error) throw fail("not-croppable", image.error, { path });
   const origin = image.origin ?? image.assetId;
-  const id = uniqueAssetId(document, `${origin ?? "image"}-crop`);
+  const id = uniqueAssetId(presentation, `${origin ?? "image"}-crop`);
   const title = (isObject(image.entry) && typeof image.entry.title === "string" ? image.entry.title : origin ?? "Picture").replace(/ \(cropped\)$/, "");
   const entry = { src: pixels.dataUri, mediaType: pixels.mediaType, title: `${title} (cropped)` };
   if (image.alt) entry.alt = image.alt;
   if (origin) entry.description = `Cropped from asset:${origin}`;
-  const patches = assetPatches(document, id, entry);
+  const patches = assetPatches(presentation, id, entry);
   patches.push({ op: "replace", path: image.srcPointer, value: `asset:${id}` });
-  if (image.origin && image.assetId && countAssetReferences(document, image.assetId) === 1) patches.push({ op: "remove", path: opfPathToJsonPointer(["assets", image.assetId]) });
+  if (image.origin && image.assetId && countAssetReferences(presentation, image.assetId) === 1) patches.push({ op: "remove", path: opfPathToJsonPointer(["assets", image.assetId]) });
   return { patches, assetId: id, reference: `asset:${id}`, origin, image };
 }
 
 /** The patches that put a cropped picture back to the asset it was cropped from, or null when there is none. */
-export function prepareRestore(document, path) {
-  const image = describeImage(document, path);
-  if (image.error || !image.origin || getValueAtPath(document, ["assets", image.origin]) === undefined) return null;
+export function prepareRestore(presentation, path) {
+  const image = describeImage(presentation, path);
+  if (image.error || !image.origin || getValueAtPath(presentation, ["assets", image.origin]) === undefined) return null;
   const patches = [{ op: "replace", path: image.srcPointer, value: `asset:${image.origin}` }];
-  if (countAssetReferences(document, image.assetId) === 1) patches.push({ op: "remove", path: opfPathToJsonPointer(["assets", image.assetId]) });
+  if (countAssetReferences(presentation, image.assetId) === 1) patches.push({ op: "remove", path: opfPathToJsonPointer(["assets", image.assetId]) });
   return { patches, origin: image.origin, image };
 }
 
 /** Put a cropped picture back to its original as one undoable change. Returns null when there is no original to restore. */
 export function restoreOriginal(editor, path, meta = {}) {
-  const prepared = prepareRestore(editor.document, path);
+  const prepared = prepareRestore(editor.presentation, path);
   if (!prepared) return null;
   return { ...editor.applyPatch(prepared.patches, { ...meta, source: meta.source ?? "image-restore", path }), origin: prepared.origin };
 }
@@ -325,12 +325,12 @@ export async function cropImagePixels(loaded, rect, { mediaType, maxBytes = DEFA
  * `{ assetId, reference, width, height }`.
  */
 export async function applyCrop(editor, path, rect, options = {}) {
-  const image = describeImage(editor.document, path);
+  const image = describeImage(editor.presentation, path);
   if (image.error) throw fail("not-croppable", image.error, { path });
   const loaded = options.loaded ?? await loadImagePixels(image.assetSrc);
   const pixels = await cropImagePixels(loaded, rect, { mediaType: image.mediaType, maxBytes: options.maxBytes });
   // The document may have changed while the picture was encoding.
-  const prepared = prepareCrop(editor.document, path, pixels);
+  const prepared = prepareCrop(editor.presentation, path, pixels);
   const change = editor.applyPatch(prepared.patches, { ...options.meta, source: options.meta?.source ?? "image-crop", path, assetId: prepared.assetId });
   return { ...change, assetId: prepared.assetId, reference: prepared.reference, width: pixels.width, height: pixels.height };
 }

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { toPptx } from '@openpresentation/opf-pptx';
-import { renderSvg } from '@openpresentation/opf-render/svg';
+import { renderSlideSvg } from '@openpresentation/opf-render/svg';
 import { startPlayground } from './support/playground-harness.mjs';
 
 // RR-25 in a real browser, on the built playground: the in-canvas crop tool and the focal point picker. A 400 x 200 picture
@@ -245,7 +245,7 @@ try {
     for (const fill of [undefined, 'crop']) {
       const variant = structuredClone(deck);
       if (fill) variant.design.imageFill = fill;
-      const svg = renderSvg(variant, { slideIndex, trace: true });
+      const svg = renderSlideSvg(variant, slideIndex, { trace: true });
       const tag = svg.match(/<image\b[^>]*data-opf-path="slides\.\d+\.(?:blocks\.0\.)?image"[^>]*>|<image\b[^>]*data-opf-path="slides\.\d+\.design\.slideImage"[^>]*>/)[0];
       const attr = (name) => tag.match(new RegExp(`\\s${name}="([^"]*)"`))[1];
       const frame = { x: +attr('x'), y: +attr('y'), width: +attr('width'), height: +attr('height') };

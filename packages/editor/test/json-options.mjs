@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import {getJsonFieldContext,replaceFieldOption,fieldOptionEdit} from '../dist/json-options.js';
-import {validatePresentation,schemas} from '@openpresentation/opf';
-const metricSlots=schemas.layout.$defs.Placeholder.properties.type.enum.includes('metric');
+import {validate} from '@openpresentation/opf';
 const record=(id,name=id)=>({id,name,placeholders:[{type:'title'},{type:'text'}]});
 const deck={name:'Two  spaces',tone:'formal',slides:[{layout:'text-1x',title:'Keep title',text:'e\u0302',notes:'Keep\r\nnotes'}],catalogs:{layouts:{source:'https://example.invalid/catalog.json',records:[record('text-1x','Local override'),record('local')]}},'x-data':{layout:'text-1x'}};
 const original=JSON.stringify(deck,null,2).replace('"name":','"name"  :').replaceAll('\n','\r\n');
@@ -78,13 +77,12 @@ const choose=(deck,value,catalogs={})=>{
   const changed=replaceFieldOption(context,value);
   const edit=fieldOptionEdit(context,value);
   assert.equal(source.slice(0,edit.from)+edit.insert+source.slice(edit.to),changed);
-  const result=JSON.parse(changed),validation=validatePresentation(result);
-  assert.equal(validation.valid,true,JSON.stringify(validation.errors));
+  const result=JSON.parse(changed),validation=validate(result, { only: ["format"] });
+  assert.equal(validation.valid,true,JSON.stringify(validation.findings));
   return result;
 };
 assert.deepEqual(choose({slides:[{layout:'text-1x',text:'Keep'}]},'text-3x').slides[0].blocks,[{text:'Keep'},{text:''},{text:''}]);
 assert.equal(choose({slides:[{layout:'text-1x',text:'Keep'}]},'title-subtitle').slides[0].subtitle,'');
-if(metricSlots){
 const cover={slides:[{layout:'title-subtitle',title:'Keep',subtitle:'Keep support',notes:'Keep notes',metric:0}]};
 const metricContext=at(JSON.stringify(cover),'"layout"',{});
 assert.equal(metricContext.options.find(option=>option.value==='number-1x').placeholders,'Title + Metric');
@@ -119,4 +117,3 @@ for(const layout of ['chart-1x','table-1x','image-1x','list-1x','quote-1x','time
 assert.equal(replaceFieldOption(metricContext,'title-subtitle'),metricContext.source,'Current choice is a no-op');
 console.log('Layout edits: blank metrics, repeated slots, rich text, zero values, nested blocks, regions, explicit types, local/app catalogs and atomic source edits pass.');
 
-} else console.log('Metric-specific layout regressions require the core metric-placeholder schema; text scaffolding passes with the published core.');

@@ -81,6 +81,10 @@
           "command": "node test/review-panel-browser.mjs"
         },
         {
+          "id": "playground:review-hook-browser",
+          "command": "node test/review-hook-browser.mjs"
+        },
+        {
           "id": "playground:playground-download",
           "command": "node test/playground-download.mjs artifacts/playground-download"
         }
@@ -124,6 +128,10 @@
         {
           "id": "browser:rich-input-estimated",
           "command": "npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated"
+        },
+        {
+          "id": "browser:export-license",
+          "command": "npm run test:export-license-browser"
         }
       ]
     }

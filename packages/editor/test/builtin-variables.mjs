@@ -14,8 +14,8 @@ const document = () => ({
 
 // Listing: kinds, availability, current values, uses; the generic names first, then the id-addressed ones.
 const editor = createEditorSession(document(), { rejectInvalid: true });
-assert.equal(hasTemplateVariables(editor.document), false, "a deck that uses no built-in is not a template");
-const list = listBuiltins(editor.document);
+assert.equal(hasTemplateVariables(editor.presentation), false, "a deck that uses no built-in is not a template");
+const list = listBuiltins(editor.presentation);
 const byName = Object.fromEntries(list.map((entry) => [entry.name, entry]));
 assert.deepEqual(list.slice(0, 3).map((entry) => entry.name), ["deck.name", "deck.description", "deck.author"]);
 assert.equal(byName["speaker.name"].value, "Ada Lovelace");
@@ -31,28 +31,28 @@ assert.equal(variableToken("speaker.name"), "{{speaker.name}}");
 assert.throws(() => variableToken("Speaker.Name"), /kebab-case/);
 const inserted = insertVariableToken(editor, ["slides", 0, "subtitle"], "speaker.name");
 assert.equal(inserted.token, "{{speaker.name}}");
-assert.equal(editor.document.slides[0].subtitle, "By {{speaker.name}}");
-assert.equal(editor.document.variables, undefined, "no variable is declared");
-assert.equal(hasTemplateVariables(editor.document), true);
-assert.deepEqual(listBuiltins(editor.document).find((entry) => entry.name === "speaker.name").uses.map((use) => use.path), ["/slides/0/subtitle"]);
+assert.equal(editor.presentation.slides[0].subtitle, "By {{speaker.name}}");
+assert.equal(editor.presentation.variables, undefined, "no variable is declared");
+assert.equal(hasTemplateVariables(editor.presentation), true);
+assert.deepEqual(listBuiltins(editor.presentation).find((entry) => entry.name === "speaker.name").uses.map((use) => use.path), ["/slides/0/subtitle"]);
 editor.undo();
-assert.equal(editor.document.slides[0].subtitle, "By ");
+assert.equal(editor.presentation.slides[0].subtitle, "By ");
 assert.throws(() => insertVariableToken(editor, ["slides", 0, "subtitle"], "speaker.nickname"));
-assert.equal(editor.document.slides[0].subtitle, "By ", "the refused edit changed nothing");
+assert.equal(editor.presentation.slides[0].subtitle, "By ", "the refused edit changed nothing");
 
 // The speaker zone field.
 assert.ok(ZONE_FIELDS.includes("speaker"));
 const change = setHeaderFooterZone(editor, "footer", "left", { organization: true, speaker: true });
-assert.deepEqual(readHeaderFooterZone(editor.document, "footer", "left"), { organization: true, speaker: true });
-assert.equal(editor.document.design.footer.left.speaker, true);
+assert.deepEqual(readHeaderFooterZone(editor.presentation, "footer", "left"), { organization: true, speaker: true });
+assert.equal(editor.presentation.design.footer.left.speaker, true);
 setHeaderFooterZone(editor, "footer", "left", { speaker: false });
-assert.deepEqual(editor.document.design.footer.left, { organization: true }, "false removes the flag");
-assert.throws(() => prepareHeaderFooterZone(editor.document, "footer", "left", { speaker: "yes" }), /true or false/);
+assert.deepEqual(editor.presentation.design.footer.left, { organization: true }, "false removes the flag");
+assert.throws(() => prepareHeaderFooterZone(editor.presentation, "footer", "left", { speaker: "yes" }), /true or false/);
 assert.ok(change);
 
 // A zone that shows the speaker warns when the deck has no named speaker.
 setHeaderFooterZone(editor, "footer", "right", { speaker: true });
-assert.deepEqual(designWarnings(editor.document, 0).filter((warning) => warning.path.endsWith(".speaker")), []);
+assert.deepEqual(designWarnings(editor.presentation, 0).filter((warning) => warning.path.endsWith(".speaker")), []);
 const noSpeaker = { ...document(), design: { footer: { right: { speaker: true } } } };
 delete noSpeaker.speaker;
 assert.deepEqual(designWarnings(noSpeaker, 0).map((warning) => [warning.code, warning.path]), [["unresolved-content", "design.footer.right.speaker"]]);

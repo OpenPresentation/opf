@@ -52,9 +52,9 @@ const isMac = () => /Mac|iPhone|iPad/.test(globalThis.navigator?.platform ?? "")
 
 /**
  * Mount the slide list into `container` (a `nav` or `div`; one `.slide-card` button per slide, with section headers between when the deck has
- * sections). Options: `editor`, `getSlideIndex()`, `setSlideIndex(index)`, `renderThumbnail(document, index)` (an HTML string), `variant`
+ * sections). Options: `editor`, `getSlideIndex()`, `setSlideIndex(index)`, `renderThumbnail(presentation, index)` (an HTML string), `variant`
  * (`"navigator"` or `"sorter"`), `toolbar` (an element to fill with the action buttons), `contentActions` (the RR-26 split and merge
- * functions: `{ splitSlideByBlocks, mergeSlides }`), `layoutOptions(document)` (layout choices for "Add slide with layout"), `onStatus(message)`
+ * functions: `{ splitSlideByBlocks, mergeSlides }`), `layoutOptions(presentation)` (layout choices for "Add slide with layout"), `onStatus(message)`
  * `autoRender` (false to skip the first draw) and `onError(error)`. Returns `{ render, getSelection, setSelection, openLayoutPicker, destroy }`.
  */
 export function createSlideManager(container, options) {
@@ -79,7 +79,7 @@ export function createSlideManager(container, options) {
     : "Up and Down arrows move between slides. Shift plus arrow keys extend the selection. Alt plus Up or Down moves the selected slides. Delete removes them. Press the context menu key for more actions." });
   container.after(hint);
 
-  const deck = () => editor.document;
+  const deck = () => editor.presentation;
   const count = () => deck().slides.length;
   const current = () => Math.max(0, Math.min(count() - 1, options.getSlideIndex()));
   const announce = (message) => {
@@ -107,9 +107,9 @@ export function createSlideManager(container, options) {
     return `${occurrence}:${section.name ?? ""}`;
   }
   function render() {
-    const document = deck();
-    const sections = hasSections(document) ? listSections(document) : [];
-    const slideCount = document.slides.length;
+    const presentation = deck();
+    const sections = hasSections(presentation) ? listSections(presentation) : [];
+    const slideCount = presentation.slides.length;
     selection = new Set([...selection].filter((index) => index < slideCount));
     selection.add(current());
     if (selection.size === 1) anchor = current();
@@ -122,19 +122,19 @@ export function createSlideManager(container, options) {
     const nodes = [];
     const sectionAtStart = new Map(sections.map((section) => [section.start, section]));
     const sectionOfIndex = (index) => sections.find((section) => index >= section.start && index < section.start + section.count);
-    document.slides.forEach((slide, index) => {
+    presentation.slides.forEach((slide, index) => {
       const section = sectionAtStart.get(index);
       if (section) nodes.push(sectionHeader(sections, section));
       const owner = sectionOfIndex(index);
       if (owner && collapsed.has(sectionKey(sections, owner))) return;
-      nodes.push(card(document, slide, index, slideCount));
+      nodes.push(card(presentation, slide, index, slideCount));
     });
     container.replaceChildren(...nodes);
     container.setAttribute("aria-label", variant === "sorter" ? "Slide sorter" : "Slides");
     if (hadFocus) container.querySelector(`.slide-card[data-index="${focusIndex}"]`)?.focus({ preventScroll: false });
     renderToolbar();
   }
-  function card(document, slide, index, slideCount) {
+  function card(presentation, slide, index, slideCount) {
     const selected = selection.has(index);
     const title = slideTitle(slide) || "Untitled slide";
     const hidden = slide.hidden === true;
@@ -150,7 +150,7 @@ export function createSlideManager(container, options) {
     const number = el("span", { class: "thumbnail-number", draggable: "true", text: String(index + 1).padStart(2, "0") });
     const thumbnail = el("span", { class: "thumbnail", "aria-hidden": "true" });
     let html = "";
-    try { html = options.renderThumbnail?.(document, index) ?? ""; } catch { html = "Preview unavailable"; }
+    try { html = options.renderThumbnail?.(presentation, index) ?? ""; } catch { html = "Preview unavailable"; }
     thumbnail.innerHTML = html;
     thumbnail.querySelectorAll("[tabindex]").forEach((node) => node.removeAttribute("tabindex"));
     const label = el("span", { class: "thumbnail-title", text: slideTitle(slide) || "Untitled slide" });
@@ -281,9 +281,9 @@ export function createSlideManager(container, options) {
     } catch (error) { report(error); }
   }
   function sectionNote(index) {
-    const document = deck();
-    if (!hasSections(document)) return "";
-    const name = document.slides[index].section;
+    const presentation = deck();
+    if (!hasSections(presentation)) return "";
+    const name = presentation.slides[index].section;
     return name ? `, in section ${name}` : ", with no section";
   }
   function moveTo(indices, edge) {
@@ -339,8 +339,8 @@ export function createSlideManager(container, options) {
     } catch (error) { report(error); }
   }
   async function sectionPrompt(index) {
-    const document = deck();
-    const hasAny = hasSections(document);
+    const presentation = deck();
+    const hasAny = hasSections(presentation);
     const name = await ask("Add section", "Section name", hasAny ? "" : "Section 1", `The section starts at slide ${index + 1}.`);
     if (name === null) { focusCard(index); return; }
     try {
@@ -380,9 +380,9 @@ export function createSlideManager(container, options) {
 
   function slideMenu() {
     const list = selectedList();
-    const document = deck();
-    const sections = hasSections(document) ? listSections(document) : [];
-    const everyHidden = list.every((index) => document.slides[index].hidden === true);
+    const presentation = deck();
+    const sections = hasSections(presentation) ? listSections(presentation) : [];
+    const everyHidden = list.every((index) => presentation.slides[index].hidden === true);
     const first = list[0];
     const items = [
       { label: list.length > 1 ? `Duplicate ${list.length} slides` : "Duplicate slide", shortcut: `${isMac() ? "⌘" : "Ctrl"}+D`, run: () => act("duplicate") },

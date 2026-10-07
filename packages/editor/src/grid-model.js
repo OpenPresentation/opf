@@ -14,15 +14,16 @@
 // dataset keeps it). Renaming a column keeps every `fields` and `mapping` that names it in step.
 //
 // Both are read as "lines": the header line (when there is one) followed by the body rows. The operations below
-// change lines and columns, keep merged cells whole or refuse with a reason, and return a `{ document, patches,
+// change lines and columns, keep merged cells whole or refuse with a reason, and return a `{ presentation, patches,
 // changed }` description like table-options.js does. Nothing here touches a DOM.
-import * as core from "@openpresentation/opf";
-import { getValueAtPath, opfPathToJsonPointer, splitOpfPath, validateOpfDocument } from "./index.js";
+import { chartNumber, formatDataNumber, inlineChartData, inlineTableData, isXYChartType, numberFormatError } from "@openpresentation/opf";
+import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { datasetUsage, isDatasetRef, walkDatasetItems } from "./dataset-refs.js";
 import { richTextContent, updateRichTextInput } from "./rich-text.js";
 import { formatGridNumber, isCanonicalNumber, parseDelimited, parseGridNumber, resolveNumberFormat, toDelimited } from "./grid-text.js";
 import { applyTableStyleToTable, readTableStyleOfTable } from "./table-options.js";
+import { checkFormat } from "./checks.js";
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const isStyled = (cell) => isObject(cell) && Object.hasOwn(cell, "value");
@@ -58,12 +59,12 @@ const decimalOf = (options = {}) => (options.decimal === "," || options.decimal 
 
 // --- locating ----------------------------------------------------------------------------------
 
-const datasetsOf = (document) => (isObject(document) && isObject(document.datasets) ? document.datasets : {});
+const datasetsOf = (presentation) => (isObject(presentation) && isObject(presentation.datasets) ? presentation.datasets : {});
 
 /** The dataset a chart or table reference points at, and the dataset columns its `fields` select (by index). */
-function datasetOf(document, ref, path, refParts) {
+function datasetOf(presentation, ref, path, refParts) {
   const id = ref.dataset;
-  const datasets = datasetsOf(document);
+  const datasets = datasetsOf(presentation);
   const data = Object.hasOwn(datasets, id) ? datasets[id] : undefined;
   if (!isObject(data) || !Array.isArray(data.columns) || !Array.isArray(data.rows))
     throw fail("dataset-unavailable", `This item uses the shared dataset '${id}', which the document does not hold.`, { path, dataset: id });
@@ -85,7 +86,7 @@ function datasetOf(document, ref, path, refParts) {
  * is `["datasets", id]` and `dataset` is `{ id, fields, indices, refParts, ref }` (`indices` maps each shown column to the
  * dataset's own column).
  */
-export function locateGridData(document, path) {
+export function locateGridData(presentation, path) {
   let parts;
   try {
     parts = Array.isArray(path) ? [...path] : splitOpfPath(path);
@@ -93,13 +94,13 @@ export function locateGridData(document, path) {
     throw fail("grid-target-not-found", "Choose a chart or a table.", { path });
   }
   if (parts.at(-1) === "data" && parts.at(-2) === "chart") parts = parts.slice(0, -1);
-  const owner = getValueAtPath(document, parts);
+  const owner = getValueAtPath(presentation, parts);
   if (parts.at(-1) === "chart") {
     if (!isObject(owner) || !isObject(owner.data)) throw fail("grid-target-not-found", "This chart has no data.", { path });
     const data = owner.data;
     const chartType = typeof owner.type === "string" ? owner.type : undefined;
     if (isDatasetRef(data)) {
-      const found = datasetOf(document, data, path, [...parts, "data"]);
+      const found = datasetOf(presentation, data, path, [...parts, "data"]);
       return { kind: "chart", parts, dataParts: ["datasets", data.dataset], data: found.data, chartType, owner, dataset: found.dataset };
     }
     if (!Array.isArray(data.columns) || !Array.isArray(data.rows))
@@ -108,7 +109,7 @@ export function locateGridData(document, path) {
   }
   if (parts.at(-1) === "table") {
     if (isObject(owner) && isDatasetRef(owner) && !Array.isArray(owner.rows)) {
-      const found = datasetOf(document, owner, path, parts);
+      const found = datasetOf(presentation, owner, path, parts);
       return { kind: "table", parts, dataParts: ["datasets", owner.dataset], data: found.data, owner, dataset: found.dataset };
     }
     if (!isObject(owner) || !Array.isArray(owner.rows)) throw fail("table-not-found", "Choose a table (a path ending in .table).", { path });
@@ -124,7 +125,7 @@ export function locateGridData(document, path) {
  * `dataset: { id, fields, count, items }` (`items` are the paths of every chart and table that uses the dataset).
  * Returns undefined when the path is not inside a chart or table.
  */
-export function resolveDataGridTarget(document, selectedPath) {
+export function resolveDataGridTarget(presentation, selectedPath) {
   let parts;
   try {
     parts = splitOpfPath(selectedPath);
@@ -135,10 +136,10 @@ export function resolveDataGridTarget(document, selectedPath) {
     if (parts[index] !== "chart" && parts[index] !== "table") continue;
     const head = parts.slice(0, index + 1);
     try {
-      const found = locateGridData(document, head);
+      const found = locateGridData(presentation, head);
       const target = { kind: found.kind, path: head.join(".") };
       if (found.dataset) {
-        const items = datasetUsage(document, found.dataset.id).map((entry) => entry.path);
+        const items = datasetUsage(presentation, found.dataset.id).map((entry) => entry.path);
         target.dataset = { id: found.dataset.id, ...(found.dataset.fields ? { fields: [...found.dataset.fields] } : {}), count: items.length, items };
       }
       return target;
@@ -295,13 +296,6 @@ export function cellText(raw, kind, decimal = ".") {
 
 const isScatter = (type) => typeof type === "string" && /^(scatter|bubble)/.test(type);
 
-// RR-54: core's strict chart number and XY test. A core that predates them (the installed range still allows one) keeps the
-// editor working on documents that use none of the new fields: numbers and scatter-like type ids read as the editor always read them.
-const chartNumber = (value) =>
-  typeof core.chartNumber === "function" ? core.chartNumber(value) : typeof value === "number" ? (Number.isFinite(value) ? value : null) : typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value)) ? Number(value) : null;
-/** Whether the installed core has the RR-54 chart and table data contract (number formats, datasets, `chartNumber`); an older core edits documents that use none of it. */
-export const supportsChartTableData = ["chartNumber", "numberFormatError", "inlineChartData", "inlineTableData", "isXYChartType"].every((name) => typeof core[name] === "function");
-const isXYType = (type) => (typeof core.isXYChartType === "function" ? core.isXYChartType(type) : isScatter(type));
 
 /**
  * A number as the slide draws it: the column's format (a table body cell's own format wins) through core's `formatDataNumber`, or undefined when
@@ -310,15 +304,14 @@ const isXYType = (type) => (typeof core.isXYChartType === "function" ? core.isXY
  * replaced: editing and copying use it.
  */
 function displayText(model, raw, column, role, text) {
-  if (!supportsChartTableData || typeof core.formatDataNumber !== "function") return undefined;
   const format = (model.kind === "table" ? formatOf(raw) : undefined) ?? (model.hasHeader ? formatOf(model.lines[0]?.[column]) : undefined);
-  if (format === undefined || core.numberFormatError(format) !== undefined) return undefined;
+  if (format === undefined || numberFormatError(format) !== undefined) return undefined;
   const value = valueOf(raw);
   let number = null;
   if (model.kind === "chart") number = isNumericRole(role) && (typeof value === "number" || typeof value === "string") ? chartNumber(value) : null;
   else if (typeof value === "number" && Number.isFinite(value)) number = value;
   if (number === null) return undefined;
-  const shown = core.formatDataNumber(number, format);
+  const shown = formatDataNumber(number, format);
   return shown === text ? undefined : shown;
 }
 
@@ -366,7 +359,7 @@ function mappingColumns(count, xy, mapping, names) {
  */
 export function chartColumnRoles(columnCount, chartType, mapping, names) {
   if (isObject(mapping) && Array.isArray(names) && columnCount > 0) {
-    const xy = isXYType(chartType);
+    const xy = isXYChartType(chartType);
     const { category, x, series } = mappingColumns(columnCount, xy, mapping, names);
     const roles = Array(columnCount).fill("other");
     for (const index of series) roles[index] = "series";
@@ -390,8 +383,8 @@ const isNumericRole = (role) => role === undefined || role === "series" || role 
  * cell has `covered: true` and its anchor in `owner`; its `text` is "". `warnings` lists data problems the document
  * already has (text in a series column the renderer draws as a gap, an empty or repeated series name, a missing category).
  */
-export function describeDataGrid(document, path, options = {}) {
-  const found = locateGridData(document, path);
+export function describeDataGrid(presentation, path, options = {}) {
+  const found = locateGridData(presentation, path);
   const decimal = decimalOf(options);
   const model = toModel(found);
   padLines(model);
@@ -457,7 +450,7 @@ export function describeDataGrid(document, path, options = {}) {
     columnRoles: roles,
     columnFormats: Array.from({ length: model.width }, (_, column) => (model.hasHeader ? formatOf(model.lines[0]?.[column]) : undefined)),
     ...(model.hasHeader ? { columnNames: namesOfModel(model) } : {}),
-    ...(found.dataset ? { dataset: { id: found.dataset.id, ...(found.dataset.fields ? { fields: [...found.dataset.fields] } : {}), items: datasetUsage(document, found.dataset.id).map((entry) => entry.path) } } : {}),
+    ...(found.dataset ? { dataset: { id: found.dataset.id, ...(found.dataset.fields ? { fields: [...found.dataset.fields] } : {}), items: datasetUsage(presentation, found.dataset.id).map((entry) => entry.path) } } : {}),
     ...(model.mapping ? { mapping: clone(model.mapping) } : {}),
     lines,
     warnings,
@@ -576,7 +569,7 @@ function inlineChanges(found, model, style) {
  * `fields` selects leaves only `fields` when deleted; without `fields` it leaves the dataset, which another item's `fields` or
  * `mapping` that names it forbids.
  */
-function datasetChanges(document, found, model) {
+function datasetChanges(presentation, found, model) {
   const { dataset, data } = found;
   padLines(model);
   const header = model.lines[0];
@@ -614,7 +607,7 @@ function datasetChanges(document, found, model) {
   const renames = renamesOf(model);
   const others = [];
   const ownPath = found.parts.join(".");
-  walkDatasetItems(document, (entry) => {
+  walkDatasetItems(presentation, (entry) => {
     if (entry.id === dataset.id && entry.parts.join(".") !== ownPath) others.push(entry);
   });
   if (!dataset.fields) {
@@ -649,8 +642,8 @@ function datasetChanges(document, found, model) {
   return changes;
 }
 
-function transact(document, path, action, mutate, extra = {}) {
-  const found = locateGridData(document, path);
+function transact(presentation, path, action, mutate, extra = {}) {
+  const found = locateGridData(presentation, path);
   if (extra.kind && extra.kind !== found.kind) throw fail("grid-wrong-kind", `This operation works on a ${extra.kind}, and the path points at a ${found.kind}.`, { path });
   const model = toModel(found);
   const problemsBefore = mergeProblems(model).length;
@@ -658,14 +651,14 @@ function transact(document, path, action, mutate, extra = {}) {
   const style = info.restyle && found.kind === "table" && !found.dataset ? readTableStyleOfTable(found.data) : undefined;
   if (info.touchesStructure) assertMerges(model, problemsBefore, info.what ?? "This change");
   if (style && style.preset !== "custom") padLines(model);
-  const changes = found.dataset ? datasetChanges(document, found, model) : inlineChanges(found, model, style);
+  const changes = found.dataset ? datasetChanges(presentation, found, model) : inlineChanges(found, model, style);
   const patches = changes.flatMap((entry) => valuePatches(entry.parts, entry.before, entry.after));
   const changed = patches.length > 0;
-  const before = validateOpfDocument(document);
-  const result = changed ? checkedDocument(document, patches, before) : document;
+  const before = checkFormat(presentation);
+  const result = changed ? checkedDocument(presentation, patches, before) : presentation;
   // `restyle`, `touchesStructure` and `what` steer this function only; the rest of what the operation reports is the caller's.
   const { restyle: _restyle, touchesStructure: _structure, what: _what, ...summary } = info;
-  return { action, ...summary, kind: found.kind, path: found.parts.join("."), ...(found.dataset ? { dataset: found.dataset.id } : {}), document: clone(result), patches, changed };
+  return { action, ...summary, kind: found.kind, path: found.parts.join("."), ...(found.dataset ? { dataset: found.dataset.id } : {}), presentation: clone(result), patches, changed };
 }
 
 // --- row and column structure ------------------------------------------------------------------
@@ -1029,8 +1022,8 @@ function pasteRows(model, anchor, matrix, options) {
  * The problems `edits` would have, without applying or validating the document (cheap enough to run on every keystroke): a list of
  * `{ section, row, column, message }`, empty when every edit is fine.
  */
-export function gridCellIssues(document, path, edits, options = {}) {
-  const model = toModel(locateGridData(document, path));
+export function gridCellIssues(presentation, path, edits, options = {}) {
+  const model = toModel(locateGridData(presentation, path));
   return applyEdits(model, edits, decimalOf(options), ownersOf(model));
 }
 
@@ -1043,8 +1036,8 @@ const countOf = (count) => {
 const kindOf = (options) => (options?.kind ? { kind: options.kind } : {});
 
 /** Set cells from text (or typed `value`s): `edits` are `{ section, row, column, text | value }`. One patch; every problem is listed in `error.issues` and nothing is applied. */
-export function prepareGridCells(document, path, edits, options = {}) {
-  return transact(document, path, "set-cells", (model) => setCells(model, edits, options), kindOf(options));
+export function prepareGridCells(presentation, path, edits, options = {}) {
+  return transact(presentation, path, "set-cells", (model) => setCells(model, edits, options), kindOf(options));
 }
 
 /**
@@ -1053,54 +1046,54 @@ export function prepareGridCells(document, path, edits, options = {}) {
  * `options` (`decimal`, or `numberFormat` and `locale`); when that fails and the other format reads all of the paste, that is used and
  * reported as `decimal`. A table paste over a merged cell's covered positions is refused. One patch.
  */
-export function preparePaste(document, path, anchor, source, options = {}) {
+export function preparePaste(presentation, path, anchor, source, options = {}) {
   const rows = typeof source === "string" ? parseDelimited(source, { delimiter: options.delimiter }).rows : source;
-  return transact(document, path, "paste", (model) => pasteRows(model, anchor, rows, options), kindOf(options));
+  return transact(presentation, path, "paste", (model) => pasteRows(model, anchor, rows, options), kindOf(options));
 }
 
 /** Insert `count` empty rows so the first is body row `at` (0 is above the first row; the row count appends). A merged cell that spans the position grows. */
-export function prepareInsertRows(document, path, at, count = 1, options = {}) {
-  return transact(document, path, "insert-rows", (model) => {
+export function prepareInsertRows(presentation, path, at, count = 1, options = {}) {
+  return transact(presentation, path, "insert-rows", (model) => {
     insertRows(model, at, countOf(count));
     return { at, count, restyle: true, touchesStructure: true, what: "Inserting rows" };
   }, kindOf(options));
 }
 
 /** Delete the body rows at `indices`. A merged cell that spans a deleted row shrinks and keeps its text. The last row cannot be deleted. */
-export function prepareDeleteRows(document, path, indices, options = {}) {
-  return transact(document, path, "delete-rows", (model) => {
+export function prepareDeleteRows(presentation, path, indices, options = {}) {
+  return transact(presentation, path, "delete-rows", (model) => {
     deleteRows(model, indices);
     return { indices: [...indices], restyle: true, touchesStructure: true, what: "Deleting rows" };
   }, kindOf(options));
 }
 
 /** Move `count` rows starting at body row `from` so the first is at `to`. Refused with the reason when it would split a merged cell. */
-export function prepareMoveRows(document, path, from, to, count = 1, options = {}) {
-  return transact(document, path, "move-rows", (model) => {
+export function prepareMoveRows(presentation, path, from, to, count = 1, options = {}) {
+  return transact(presentation, path, "move-rows", (model) => {
     moveRows(model, from, count, to);
     return { from, to, count, restyle: true, touchesStructure: true, what: "Moving rows" };
   }, kindOf(options));
 }
 
 /** Insert `count` empty columns so the first is column `at`. A merged cell that spans the position grows. */
-export function prepareInsertColumns(document, path, at, count = 1, options = {}) {
-  return transact(document, path, "insert-columns", (model) => {
+export function prepareInsertColumns(presentation, path, at, count = 1, options = {}) {
+  return transact(presentation, path, "insert-columns", (model) => {
     insertColumns(model, at, countOf(count));
     return { at, count, restyle: true, touchesStructure: true, what: "Inserting columns" };
   }, kindOf(options));
 }
 
 /** Delete the columns at `indices`. A merged cell that spans a deleted column shrinks and keeps its text. The last column cannot be deleted. */
-export function prepareDeleteColumns(document, path, indices, options = {}) {
-  return transact(document, path, "delete-columns", (model) => {
+export function prepareDeleteColumns(presentation, path, indices, options = {}) {
+  return transact(presentation, path, "delete-columns", (model) => {
     deleteColumns(model, indices);
     return { indices: [...indices], restyle: true, touchesStructure: true, what: "Deleting columns" };
   }, kindOf(options));
 }
 
 /** Move `count` columns starting at `from` so the first is at `to`. Refused with the reason when it would split a merged cell. */
-export function prepareMoveColumns(document, path, from, to, count = 1, options = {}) {
-  return transact(document, path, "move-columns", (model) => {
+export function prepareMoveColumns(presentation, path, from, to, count = 1, options = {}) {
+  return transact(presentation, path, "move-columns", (model) => {
     moveColumns(model, from, count, to);
     return { from, to, count, restyle: true, touchesStructure: true, what: "Moving columns" };
   }, kindOf(options));
@@ -1111,18 +1104,18 @@ export function prepareMoveColumns(document, path, from, to, count = 1, options 
  * before text, "text" compares everything as text with numbers inside the text in numeric order, "number" and "date" read that type only. Empty cells
  * always sort last, in either direction. Rows joined by a merged cell that spans rows move as one block. Equal keys keep their order.
  */
-export function prepareSortRows(document, path, column, options = {}) {
-  return transact(document, path, "sort-rows", (model) => ({ ...sortRows(model, column, options), column, direction: options.direction ?? "asc", restyle: true }), kindOf(options));
+export function prepareSortRows(presentation, path, column, options = {}) {
+  return transact(presentation, path, "sort-rows", (model) => ({ ...sortRows(model, column, options), column, direction: options.direction ?? "asc", restyle: true }), kindOf(options));
 }
 
 /** Turn a table's header row on or off. On uses the first row as the header (`use: "first-row"`, the default when there are two or more rows) or adds a new empty one (`use: "new"`). */
-export function prepareSetHeader(document, path, enabled, options = {}) {
-  return transact(document, path, "set-header", (model) => setHeader(model, Boolean(enabled), options), { kind: "table" });
+export function prepareSetHeader(presentation, path, enabled, options = {}) {
+  return transact(presentation, path, "set-header", (model) => setHeader(model, Boolean(enabled), options), { kind: "table" });
 }
 
 /** Swap a chart's categories and series: the first column's values become the series names and the series become the rows. */
-export function prepareTranspose(document, path) {
-  return transact(document, path, "transpose", (model) => transposeChart(model), { kind: "chart" });
+export function prepareTranspose(presentation, path) {
+  return transact(presentation, path, "transpose", (model) => transposeChart(model), { kind: "chart" });
 }
 
 // --- number format of a column (RR-54) ---------------------------------------------------------
@@ -1130,8 +1123,7 @@ export function prepareTranspose(document, path) {
 /** Why `format` is not a valid number format ("#,##0", "0.0%", "$#,##0.00"), or undefined when it is valid or empty (empty clears the format). */
 export function columnFormatError(format) {
   if (format === undefined || format === null || format === "") return undefined;
-  if (!supportsChartTableData) return "This version of OPF has no number formats; update @openpresentation/opf.";
-  return core.numberFormatError(format);
+  return numberFormatError(format);
 }
 
 /** The header `raw` with `format` set, or cleared (`undefined`). A string header becomes `{ name, format }` and goes back to a string when the format is cleared. */
@@ -1167,8 +1159,8 @@ function setColumnFormat(model, column, format) {
 }
 
 /** Set or clear (`null` or "") the number format of column `column` (its header cell). A string header becomes `{ name, format }` and returns to a string when the format is cleared. Refused with the reason when the format is invalid or the table has no header row. */
-export function prepareGridColumnFormat(document, path, column, format, options = {}) {
-  return transact(document, path, "set-column-format", (model) => setColumnFormat(model, column, format), kindOf(options));
+export function prepareGridColumnFormat(presentation, path, column, format, options = {}) {
+  return transact(presentation, path, "set-column-format", (model) => setColumnFormat(model, column, format), kindOf(options));
 }
 
 // --- chart mapping (RR-54) -----------------------------------------------------------------------
@@ -1179,13 +1171,13 @@ export function prepareGridColumnFormat(document, path, column, format, options 
  * with an X axis (scatter); `authored` is the chart's own `mapping`, when it has one. Roles are "category", "label", "x", "series"
  * and "other" (a column nothing plots).
  */
-export function describeChartMapping(document, path) {
-  const found = locateGridData(document, path);
+export function describeChartMapping(presentation, path) {
+  const found = locateGridData(presentation, path);
   if (found.kind !== "chart") throw fail("grid-wrong-kind", "Only a chart has a series mapping.", { path });
   const model = toModel(found);
   padLines(model);
   const names = namesOfModel(model);
-  const xy = isXYType(found.chartType);
+  const xy = isXYChartType(found.chartType);
   const { category, x, series } = mappingColumns(names.length, xy, model.mapping, names);
   const roles = chartColumnRoles(names.length, found.chartType, { ...(model.mapping ?? {}) }, names);
   return {
@@ -1204,13 +1196,13 @@ export function describeChartMapping(document, path) {
  * current value. A field that equals the default (the first column is the category, the second the X column, every other column a
  * series, in order) is not written, and `chart.mapping` is removed when nothing is left. One patch.
  */
-export function prepareChartMapping(document, path, wanted = {}) {
-  const found = locateGridData(document, path);
+export function prepareChartMapping(presentation, path, wanted = {}) {
+  const found = locateGridData(presentation, path);
   if (found.kind !== "chart") throw fail("grid-wrong-kind", "Only a chart has a series mapping.", { path });
   const model = toModel(found);
   padLines(model);
   const names = namesOfModel(model);
-  const xy = isXYType(found.chartType);
+  const xy = isXYChartType(found.chartType);
   const current = mappingColumns(names.length, xy, model.mapping, names);
   const pick = (name, what) => {
     const index = typeof name === "string" ? names.indexOf(name) : -1;
@@ -1233,11 +1225,11 @@ export function prepareChartMapping(document, path, wanted = {}) {
   if (xy && x !== undefined && x !== defaultX(category, names.length)) next.x = names[x];
   if (series.length !== defaultSeries.length || series.some((index, position) => index !== defaultSeries[position])) next.series = series.map((index) => names[index]);
   const after = Object.keys(next).length ? next : undefined;
-  const before = validateOpfDocument(document);
+  const before = checkFormat(presentation);
   const patches = valuePatches([...found.parts, "mapping"], found.owner.mapping, after);
   const changed = patches.length > 0;
-  const result = changed ? checkedDocument(document, patches, before) : document;
-  return { action: "set-mapping", kind: "chart", path: found.parts.join("."), mapping: after ? clone(after) : null, document: clone(result), patches, changed };
+  const result = changed ? checkedDocument(presentation, patches, before) : presentation;
+  return { action: "set-mapping", kind: "chart", path: found.parts.join("."), mapping: after ? clone(after) : null, presentation: clone(result), patches, changed };
 }
 
 // --- shared datasets (RR-54) -----------------------------------------------------------------------
@@ -1247,15 +1239,14 @@ export function prepareChartMapping(document, path, wanted = {}) {
  * the dataset's `source` kept). The dataset stays in the document for the other items. One patch; after it the item's edits no longer
  * reach the shared dataset.
  */
-export function prepareDetachDataset(document, path) {
-  const found = locateGridData(document, path);
+export function prepareDetachDataset(presentation, path) {
+  const found = locateGridData(presentation, path);
   if (!found.dataset) throw fail("grid-not-dataset", "This chart or table does not use a shared dataset.", { path });
-  if (!supportsChartTableData) throw fail("grid-core-too-old", "This version of OPF cannot copy a shared dataset; update @openpresentation/opf.", { path });
-  const inline = found.kind === "chart" ? core.inlineChartData(found.owner, document).data : core.inlineTableData(found.owner, document);
+  const inline = found.kind === "chart" ? inlineChartData(found.owner, presentation).data : inlineTableData(found.owner, presentation);
   const pointer = opfPathToJsonPointer(found.dataset.refParts);
   const patches = [{ op: "test", path: pointer, value: clone(found.dataset.ref) }, { op: "replace", path: pointer, value: clone(inline) }];
-  const result = checkedDocument(document, patches, validateOpfDocument(document));
-  return { action: "detach-dataset", kind: found.kind, path: found.parts.join("."), dataset: found.dataset.id, document: clone(result), patches, changed: true };
+  const result = checkedDocument(presentation, patches, checkFormat(presentation));
+  return { action: "detach-dataset", kind: found.kind, path: found.parts.join("."), dataset: found.dataset.id, presentation: clone(result), patches, changed: true };
 }
 
 export { datasetUsage };
@@ -1267,8 +1258,8 @@ export { datasetUsage };
  * another `delimiter`). `range` is `{ from, to }` of `{ section, row, column }` addresses; omit it for the whole grid. A merged cell's text is
  * in its first position and its covered positions are empty, as a spreadsheet copies them.
  */
-export function gridRangeText(document, path, range, options = {}) {
-  const grid = describeDataGrid(document, path, options);
+export function gridRangeText(presentation, path, range, options = {}) {
+  const grid = describeDataGrid(presentation, path, options);
   const find = (address) => {
     const u = address.section === "header" ? 0 : address.row + (grid.hasHeader ? 1 : 0);
     if (address.section === "header" && !grid.hasHeader) throw fail("grid-cell-not-found", "This table has no header row.", { cell: address });
@@ -1288,34 +1279,34 @@ export function gridRangeText(document, path, range, options = {}) {
 
 function commit(editor, prepared, meta = {}) {
   if (!editor || typeof editor.applyPatch !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
-  const { document, patches, ...summary } = prepared;
-  void document;
-  if (!prepared.changed) return { ...summary, document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  const { presentation, patches, ...summary } = prepared;
+  void presentation;
+  if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   const change = editor.applyPatch(patches, { ...meta, source: meta.source ?? "data-grid", action: prepared.action, path: prepared.path });
   return { ...change, ...summary };
 }
 
 const run = (editor, prepare, options = {}) => {
   if (!editor || typeof editor.applyPatch !== "function" || typeof editor.subscribe !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
-  return commit(editor, prepare(editor.document), options.meta);
+  return commit(editor, prepare(editor.presentation), options.meta);
 };
 
 /** Set cells as one undoable transaction. See {@link prepareGridCells}. */
-export const setGridCells = (editor, path, edits, options = {}) => run(editor, (document) => prepareGridCells(document, path, edits, options), options);
+export const setGridCells = (editor, path, edits, options = {}) => run(editor, (presentation) => prepareGridCells(presentation, path, edits, options), options);
 /** Paste text or rows as one undoable transaction. See {@link preparePaste}. */
-export const pasteGridText = (editor, path, anchor, source, options = {}) => run(editor, (document) => preparePaste(document, path, anchor, source, options), options);
-export const insertGridRows = (editor, path, at, count = 1, options = {}) => run(editor, (document) => prepareInsertRows(document, path, at, count, options), options);
-export const deleteGridRows = (editor, path, indices, options = {}) => run(editor, (document) => prepareDeleteRows(document, path, indices, options), options);
-export const moveGridRows = (editor, path, from, to, count = 1, options = {}) => run(editor, (document) => prepareMoveRows(document, path, from, to, count, options), options);
-export const insertGridColumns = (editor, path, at, count = 1, options = {}) => run(editor, (document) => prepareInsertColumns(document, path, at, count, options), options);
-export const deleteGridColumns = (editor, path, indices, options = {}) => run(editor, (document) => prepareDeleteColumns(document, path, indices, options), options);
-export const moveGridColumns = (editor, path, from, to, count = 1, options = {}) => run(editor, (document) => prepareMoveColumns(document, path, from, to, count, options), options);
-export const sortGridRows = (editor, path, column, options = {}) => run(editor, (document) => prepareSortRows(document, path, column, options), options);
-export const setGridHeader = (editor, path, enabled, options = {}) => run(editor, (document) => prepareSetHeader(document, path, enabled, options), options);
-export const transposeGridData = (editor, path, options = {}) => run(editor, (document) => prepareTranspose(document, path), options);
+export const pasteGridText = (editor, path, anchor, source, options = {}) => run(editor, (presentation) => preparePaste(presentation, path, anchor, source, options), options);
+export const insertGridRows = (editor, path, at, count = 1, options = {}) => run(editor, (presentation) => prepareInsertRows(presentation, path, at, count, options), options);
+export const deleteGridRows = (editor, path, indices, options = {}) => run(editor, (presentation) => prepareDeleteRows(presentation, path, indices, options), options);
+export const moveGridRows = (editor, path, from, to, count = 1, options = {}) => run(editor, (presentation) => prepareMoveRows(presentation, path, from, to, count, options), options);
+export const insertGridColumns = (editor, path, at, count = 1, options = {}) => run(editor, (presentation) => prepareInsertColumns(presentation, path, at, count, options), options);
+export const deleteGridColumns = (editor, path, indices, options = {}) => run(editor, (presentation) => prepareDeleteColumns(presentation, path, indices, options), options);
+export const moveGridColumns = (editor, path, from, to, count = 1, options = {}) => run(editor, (presentation) => prepareMoveColumns(presentation, path, from, to, count, options), options);
+export const sortGridRows = (editor, path, column, options = {}) => run(editor, (presentation) => prepareSortRows(presentation, path, column, options), options);
+export const setGridHeader = (editor, path, enabled, options = {}) => run(editor, (presentation) => prepareSetHeader(presentation, path, enabled, options), options);
+export const transposeGridData = (editor, path, options = {}) => run(editor, (presentation) => prepareTranspose(presentation, path), options);
 /** Set (or clear, with `null` or "") the number format of a column's header as one undoable transaction. Throws `number-format-invalid` with the reason. See {@link columnFormatError}. */
-export const setGridColumnFormat = (editor, path, column, format, options = {}) => run(editor, (document) => prepareGridColumnFormat(document, path, column, format, options), options);
+export const setGridColumnFormat = (editor, path, column, format, options = {}) => run(editor, (presentation) => prepareGridColumnFormat(presentation, path, column, format, options), options);
 /** Set a chart's category, X and series columns as one undoable transaction. See {@link prepareChartMapping}. */
-export const setChartMapping = (editor, path, wanted, options = {}) => run(editor, (document) => prepareChartMapping(document, path, wanted), options);
+export const setChartMapping = (editor, path, wanted, options = {}) => run(editor, (presentation) => prepareChartMapping(presentation, path, wanted), options);
 /** Give a chart or table its own copy of a shared dataset's data, as one undoable transaction. See {@link prepareDetachDataset}. */
-export const detachGridDataset = (editor, path, options = {}) => run(editor, (document) => prepareDetachDataset(document, path), options);
+export const detachGridDataset = (editor, path, options = {}) => run(editor, (presentation) => prepareDetachDataset(presentation, path), options);

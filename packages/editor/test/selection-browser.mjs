@@ -2,22 +2,22 @@ import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 
 // Real-browser check that the canvas selection outline uses the placeholder's allocated bounds
 // (composeSlide item box), not the glyph ink returned by getBBox().
-const faces = (await loadOfficeFontRegistry()).embeddedFonts.filter((face) => ['Roboto'].includes(face.family) && [400, 700].includes(face.weight) && !face.italic);
+const faces = (await loadFonts({ pack: 'office' })).registry.embeddedFonts.filter((face) => ['Roboto'].includes(face.family) && [400, 700].includes(face.weight) && !face.italic);
 const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', import.meta.url)), contents: `
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
-  import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
+  import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
   window.mountSelection = async ({deck, faces}) => {
     window.selectionCanvas?.destroy(); window.fonts?.dispose();
-    window.fonts = await loadBrowserFontRegistry(faces.map((face) => ({...face, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0))})), {substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
+    window.fonts = await loadFonts({ faces: faces.map((face) => ({...face, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0))})), substitutionPolicy: 'visual', fallbackFamily: 'Roboto' });
     window.editor = createEditorSession(deck, {rejectInvalid: true});
-    window.selectionCanvas = createCanvasEditor(document.querySelector('#canvas'), {editor, renderOptions: {textMeasurement: fonts.textMeasurement}});
+    window.selectionCanvas = createCanvasEditor(document.querySelector('#canvas'), {editor, fonts});
     await selectionCanvas.ready;
-    window.accepted = (index) => editor.composeSlide(index, {textMeasurement: fonts.textMeasurement});
+    window.accepted = (index) => editor.composeSlide(index, {fonts});
   };`}, bundle: true, platform: 'browser', format: 'iife', write: false, minify: true});
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined});
 const errors = [], results = [];

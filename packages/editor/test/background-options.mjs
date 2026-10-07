@@ -1,8 +1,8 @@
 // RR-06 gaps: every background form (theme slot, solid, gradient, image, pattern) with validation,
 // one undo step, scope, removal, and export. The 54 pattern presets all survive a PPTX round trip.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import {
@@ -28,7 +28,7 @@ const deck = () => ({
   ],
 });
 const session = () => createEditorSession(deck(), { rejectInvalid: true });
-const svg = (document, index = 0) => renderSvg(document, { slideIndex: index });
+const svg = (presentation, index = 0) => renderSlideSvg(presentation, index);
 
 // The pattern list is the 54 DrawingML presets, once each, in five families.
 assert.equal(PATTERN_PRESETS.length, 54);
@@ -63,17 +63,17 @@ const forms = [
 ];
 for (const form of forms) {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const beforeSvg = svg(before);
   const change = setBackground(editor, form.spec);
   assert.equal(change.changed, true, form.name);
   assert.deepEqual(editor.get("design.background"), form.stored, form.name);
   assert.equal(editor.snapshot().undoDepth, 1, `${form.name}: one undo step`);
-  assert.equal(validatePresentation(editor.document).valid, true, form.name);
-  if (form.draws) assert.notEqual(svg(editor.document), beforeSvg, `${form.name}: the preview draws it`);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, form.name);
+  if (form.draws) assert.notEqual(svg(editor.presentation), beforeSvg, `${form.name}: the preview draws it`);
   assert.deepEqual(prepareBackground(before, form.spec).patches, change.patches, `${form.name}: prepare is the same patch`);
-  assert.ok((await pptx.toPptx(structuredClone(editor.document), { strictAssets: true })).byteLength > 0, `${form.name}: exports`);
-  assert.deepEqual(editor.undo().document, before);
+  assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true })).byteLength > 0, `${form.name}: exports`);
+  assert.deepEqual(editor.undo().presentation, before);
   editor.redo();
   assert.equal(setBackground(editor, form.spec).changed, false, `${form.name}: repeat commits nothing`);
   assert.equal(editor.snapshot().undoDepth, 1);
@@ -111,11 +111,11 @@ for (const preset of PATTERN_PRESETS) {
   const editor = session();
   setBackground(editor, { type: "pattern", pattern: { preset, foregroundColor: "#112233", backgroundColor: "#EEEEEE" } });
   assert.equal(editor.get("design.background.pattern.preset"), preset);
-  assert.equal(validatePresentation(editor.document).valid, true, preset);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, preset);
   assert.equal(editor.snapshot().undoDepth, 1, preset);
-  const bytes = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
   const back = await pptx.fromPptx(bytes);
-  const background = (back.document ?? back).design?.background ?? (back.document ?? back).slides?.[0]?.design?.background;
+  const background = (back.presentation ?? back).design?.background ?? (back.presentation ?? back).slides?.[0]?.design?.background;
   assert.equal(background?.pattern?.preset, preset, `${preset} survives export and reimport`);
 }
 
@@ -125,14 +125,14 @@ for (const preset of PATTERN_PRESETS) {
   setBackground(editor, "#112233");
   const slide = setBackground(editor, { type: "pattern", pattern: { preset: "pct50" } }, { slideIndex: 1 });
   assert.equal(slide.scope, "slide");
-  assert.deepEqual(readBackground(editor.document, { slideIndex: 1 }), { type: "pattern", preset: "pct50", foregroundColor: undefined, backgroundColor: undefined, opacity: undefined, scope: "slide", value: { type: "pattern", pattern: { preset: "pct50" } } });
-  assert.equal(readBackground(editor.document, { slideIndex: 0 }).scope, "deck");
-  assert.equal(readBackground(editor.document, { slideIndex: 0 }).type, "solid");
+  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "pattern", preset: "pct50", foregroundColor: undefined, backgroundColor: undefined, opacity: undefined, scope: "slide", value: { type: "pattern", pattern: { preset: "pct50" } } });
+  assert.equal(readBackground(editor.presentation, { slideIndex: 0 }).scope, "deck");
+  assert.equal(readBackground(editor.presentation, { slideIndex: 0 }).type, "solid");
   const deckChange = setBackground(editor, "dark2");
   assert.deepEqual(deckChange.shadowed, [1]);
   const removed = setBackground(editor, null, { slideIndex: 1 });
   assert.deepEqual(removed.patches, [{ op: "remove", path: "/slides/1/design/background" }]);
-  assert.equal(readBackground(editor.document, { slideIndex: 1 }).value, "dark2", "removal inherits the deck's");
+  assert.equal(readBackground(editor.presentation, { slideIndex: 1 }).value, "dark2", "removal inherits the deck's");
   const none = setBackground(editor, null);
   assert.equal(none.changed, true);
   assert.equal(editor.get("design.background"), undefined);

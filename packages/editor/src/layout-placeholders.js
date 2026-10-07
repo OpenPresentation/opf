@@ -16,8 +16,8 @@ function emptyPayload(field){
 }
 
 /** Supply authored slots without replacing content, metadata or region placement. */
-export function populateLayoutPlaceholders(document,slideIndex,types){
-  let next=structuredClone(document),slide=next.slides[slideIndex];
+export function populateLayoutPlaceholders(presentation,slideIndex,types){
+  let next=structuredClone(presentation),slide=next.slides[slideIndex];
   const counts=new Map();
   function count(host){
     if(!host||typeof host!=='object')return;
@@ -48,7 +48,7 @@ export function populateLayoutPlaceholders(document,slideIndex,types){
       const path=regions.length?`/slides/${slideIndex}/${regions.at(-1)}`:`/slides/${slideIndex}`;
       const containers=listBlockContainers(next,{slideIndex,includeImplicit:true});
       if(!containers.some(container=>container.path===path))throw new Error('This slide has no editable content container for the new placeholder.');
-      next=prepareBlockInsert(next,path,{[field]:value}).document;
+      next=prepareBlockInsert(next,path,{[field]:value}).presentation;
       slide=next.slides[slideIndex];
     }
   }

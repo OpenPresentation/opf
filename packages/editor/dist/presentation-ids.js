@@ -47,9 +47,9 @@ export function slideIds(slide) {
   return ids;
 }
 
-export function collectReservedPresentationIds(document) {
+export function collectReservedPresentationIds(presentation) {
   const ids = [];
-  for (const slide of document.slides ?? []) ids.push(...slideIds(slide));
+  for (const slide of presentation.slides ?? []) ids.push(...slideIds(slide));
   return ids.filter(Boolean);
 }
 

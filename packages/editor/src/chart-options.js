@@ -8,22 +8,18 @@
 // choices come from the chart's resolved data, so a dataset chart offers its dataset's columns and rows); a pie
 // highlights slices (categories), an area only series. Nothing here invents text. A combo chart (FA-15) also offers which series are lines (`line`), which lines use the secondary value
 // axis (`secondaryAxis`) and that axis's title.
-import * as core from "@openpresentation/opf";
-import { getValueAtPath, opfPathToJsonPointer, splitOpfPath, validateOpfDocument } from "./index.js";
+import { resolveChartData } from "@openpresentation/opf";
+import { chartOptionSupport, chartOptionTarget } from "@openpresentation/opf/composition";
+import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
+import { checkFormat } from "./checks.js";
 
 export const CHART_LEGEND_POSITIONS = Object.freeze(["default", "none", "top", "bottom", "left", "right"]);
 export const CHART_LABEL_CONTENT = Object.freeze(["category", "value", "percent"]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const CONTENT_ORDER = CHART_LABEL_CONTENT;
-const NO_HIGHLIGHT = Object.freeze({ series: false, categories: false });
 const POSITIONS = new Set(["center", "inside-end", "inside-base", "outside-end", "above", "below", "left", "right"]);
-
-/** True when the installed core knows the chart option fields; an older core leaves the panel out. */
-export function chartOptionsAvailable() {
-  return typeof core.chartOptionSupport === "function" && typeof core.chartOptionTarget === "function" && typeof core.resolveChartOptions === "function";
-}
 
 /** The chart path a selection path points at (`…chart`, `…chart.data.rows.0.1`), or undefined. */
 export function parseChartPath(path) {
@@ -37,9 +33,9 @@ export function parseChartPath(path) {
   return index >= 1 ? parts.slice(0, index + 1).join(".") : undefined;
 }
 
-function chartAt(document, chartPath) {
+function chartAt(presentation, chartPath) {
   const parts = splitOpfPath(chartPath);
-  const chart = getValueAtPath(document, parts);
+  const chart = getValueAtPath(presentation, parts);
   if (!isObject(chart) || typeof chart.type !== "string") throw fail("chart-not-found", "Choose a chart (a path ending in .chart).", { chartPath });
   return { parts, chart };
 }
@@ -48,9 +44,8 @@ function chartAt(document, chartPath) {
 // scatter chart, the X column) and the distinct non-empty row labels. Empty when the data does not resolve.
 function highlightChoices(chart, document) {
   const none = { series: [], categories: [] };
-  if (typeof core.resolveChartData !== "function") return none;
   let resolved;
-  try { resolved = core.resolveChartData(chart, document); } catch { return none; }
+  try { resolved = resolveChartData(chart, document); } catch { return none; }
   if (!resolved?.ok || resolved.columns.length < 2) return none;
   const first = resolved.hasX ? 2 : 1;
   const label = (cell) => (cell === null || cell === undefined ? "" : String(cell));
@@ -60,18 +55,17 @@ function highlightChoices(chart, document) {
 const names = (value) => (Array.isArray(value) ? [...new Set(value.filter((entry) => typeof entry === "string"))] : []);
 
 /**
- * What the chart options offer for `chart`, and the form state of the fields. `document` (optional) resolves a dataset-backed
+ * What the chart options offer for `chart`, and the form state of the fields. `presentation` (optional) resolves a dataset-backed
  * chart's columns and rows for the highlight choices.
  * `fields.axisTitles.category` and `.value` say whether the type has that axis; `fields.legend` whether it has a legend;
  * `fields.dataLabels` the contents and positions it accepts (`positions` is empty when labels have no position choice).
  * `fields.axisTitles.secondary` is true on a combo chart, whose `combo.series` lists the plotted series ({ name, role, axis });
- * pass the `document` for a dataset-backed chart.
+ * pass the `presentation` for a dataset-backed chart.
  */
-export function readChartOptions(chart, document) {
-  if (!chartOptionsAvailable()) throw fail("chart-options-unavailable", "The installed @openpresentation/opf does not know the chart option fields.");
-  const target = core.chartOptionTarget(chart?.type);
+export function readChartOptions(chart, presentation) {
+  const target = chartOptionTarget(chart?.type);
   // A chart type outside the catalog is never restricted: every field is offered (a secondary axis exists only on combo charts).
-  const support = target ? core.chartOptionSupport(target) : {
+  const support = target ? chartOptionSupport(target) : {
     axisTitles: { category: true, value: true, secondary: false }, legend: true,
     dataLabels: { supported: true, content: CONTENT_ORDER, positions: [...POSITIONS], defaultPosition: null, defaultOn: false },
     highlight: { series: true, categories: true },
@@ -79,19 +73,18 @@ export function readChartOptions(chart, document) {
   const titles = isObject(chart?.axisTitles) ? chart.axisTitles : {};
   const labels = chart?.dataLabels;
   const labelObject = isObject(labels) ? labels : {};
-  const combo = target?.kind === "combo" ? comboSeries(chart, document) : undefined;
+  const combo = target?.kind === "combo" ? comboSeries(chart, presentation) : undefined;
   return {
     target,
     fields: {
       axisTitles: { ...support.axisTitles, secondary: support.axisTitles.secondary === true },
       legend: support.legend,
       dataLabels: { ...support.dataLabels, content: [...support.dataLabels.content], positions: [...support.dataLabels.positions] },
-      // An older core without the highlight support entry offers none.
-      highlight: { ...(support.highlight ?? NO_HIGHLIGHT) },
+      highlight: { ...support.highlight },
     },
     // FA-15: a combo chart's plotted series, each drawn as columns ("bar") or as a line, on the primary or secondary value axis.
     ...(combo ? { combo: { series: combo } } : {}),
-    choices: highlightChoices(chart, document),
+    choices: highlightChoices(chart, presentation),
     state: {
       // FA-09: the text alternative. `decorative` is the empty alt, a reviewed choice, not a missing one.
       alt: typeof chart?.alt === "string" ? chart.alt : "",
@@ -116,12 +109,11 @@ export function readChartOptions(chart, document) {
  * the role and axis core resolves for each; [] when the data does not resolve.
  */
 function comboSeries(chart, document) {
-  if (typeof core.resolveChartData !== "function") return [];
-  const resolved = core.resolveChartData(chart, document);
+  const resolved = resolveChartData(chart, document);
   if (!resolved.ok || !Array.isArray(resolved.combo)) return [];
   const plan = new Map(resolved.columns.slice(1).map((name, index) => [name, resolved.combo[index]]));
   const { line: _line, secondaryAxis: _secondary, ...plain } = chart;
-  const plotted = core.resolveChartData({ ...plain, type: "column" }, document);
+  const plotted = resolveChartData({ ...plain, type: "column" }, document);
   const names = plotted.ok ? plotted.columns.slice(1) : [...plan.keys()];
   return names.filter((name) => plan.has(name)).map((name) => ({ name, role: plan.get(name)?.role ?? "bar", axis: plan.get(name)?.axis ?? "primary" }));
 }
@@ -224,12 +216,11 @@ function desired(chart, change, support, choices, current, document) {
  * is written only when it differs from the default (the last series), and the secondary axis title goes when no series uses that axis.
  * Fields the chart type cannot show are never written. The document is not modified.
  */
-export function prepareChartOptions(document, chartPath, change) {
-  if (!chartOptionsAvailable()) throw fail("chart-options-unavailable", "The installed @openpresentation/opf does not know the chart option fields.");
-  const before = validateOpfDocument(document);
-  const { parts, chart } = chartAt(document, chartPath);
-  const read = readChartOptions(chart, document);
-  const wanted = desired(chart, change, read.fields, read.choices, read.state, document);
+export function prepareChartOptions(presentation, chartPath, change) {
+  const before = checkFormat(presentation);
+  const { parts, chart } = chartAt(presentation, chartPath);
+  const read = readChartOptions(chart, presentation);
+  const wanted = desired(chart, change, read.fields, read.choices, read.state, presentation);
   const patches = [];
   for (const [key, value] of Object.entries(wanted)) {
     const path = opfPathToJsonPointer([...parts, key]);
@@ -239,8 +230,8 @@ export function prepareChartOptions(document, chartPath, change) {
     } else if (!present) patches.push({ op: "add", path, value: structuredClone(value) });
     else if (!same(chart[key], value)) patches.push({ op: "replace", path, value: structuredClone(value) });
   }
-  const next = checkedDocument(document, patches, before);
-  return { action: "chart-options", chartPath, changed: patches.length > 0, patches, document: next };
+  const next = checkedDocument(presentation, patches, before);
+  return { action: "chart-options", chartPath, changed: patches.length > 0, patches, presentation: next };
 }
 
 function checkEditor(editor) {
@@ -250,10 +241,10 @@ function checkEditor(editor) {
 /** Apply a chart option change to an editor session as one undoable edit. Returns the editor change. */
 export function setChartOptions(editor, chartPath, change, meta = {}) {
   checkEditor(editor);
-  const prepared = prepareChartOptions(editor.document, chartPath, change);
-  const { document, patches, ...summary } = prepared;
-  void document;
-  if (!prepared.changed) return { ...summary, document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  const prepared = prepareChartOptions(editor.presentation, chartPath, change);
+  const { presentation, patches, ...summary } = prepared;
+  void presentation;
+  if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   const applied = editor.applyPatch(patches, { ...meta, source: meta.source ?? "chart-option", action: prepared.action, path: chartPath });
   return { ...applied, ...summary };
 }

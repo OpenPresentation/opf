@@ -2,9 +2,10 @@
 // Each dimension produces the expected patch, one undoable transaction, and a preview that
 // recomposes to the new fonts and content. Exports after a switch: switches-export.mjs.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
-import { OPFEditorError, createEditorSession, resolveSlideFonts } from "../dist/index.js";
+import { resolveSlideContext, validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
+import { OPFEditorError, createEditorSession } from "../dist/index.js";
+const fontFamiliesOf = (presentation, index) => resolveSlideContext(presentation, index).options.fontFamilies;
 import { prepareBlockReplace } from "../dist/layout.js";
 import { currentSwitchValue, prepareDimensionSwitch, switchDimension, SWITCH_DIMENSIONS } from "../dist/switches.js";
 import { EXTRA_DIMENSIONS, GALLERY_DIMENSIONS, SLIDE_SIZES, baseDeck, cases } from "./switch-fixture.mjs";
@@ -14,29 +15,21 @@ const ALL_DIMENSIONS = [...GALLERY_DIMENSIONS, ...EXTRA_DIMENSIONS];
 assert.deepEqual([...SWITCH_DIMENSIONS], ALL_DIMENSIONS);
 assert.deepEqual(cases.map((entry) => entry.dimension), ALL_DIMENSIONS);
 
-const session = (document = baseDeck()) => createEditorSession(document, { rejectInvalid: true });
-const svg = (document, slideIndex) => renderSvg(document, { slideIndex });
-function measuredFamilies(document, slideIndex) {
+const session = (presentation = baseDeck()) => createEditorSession(presentation, { rejectInvalid: true });
+const svg = (presentation, slideIndex) => renderSlideSvg(presentation, slideIndex);
+function measuredFamilies(presentation, slideIndex) {
   const families = new Set();
-  createEditorSession(document).composeSlide(slideIndex, {
-    textMeasurement: { measure: (text, size, style) => (families.add(style.fontFamily), text.length * size * 0.5) },
+  createEditorSession(presentation).composeSlide(slideIndex, {
+    fonts: { textMeasurement: { measure: (text, size, style) => (families.add(style.fontFamily), text.length * size * 0.5) } },
   });
   return [...families].sort();
 }
-// Whether the installed renderer draws design.slideImage (unpublished FF-26 in renderer main).
-const slideImageSupported = (() => {
-  const document = baseDeck();
-  const plain = svg(document, 0);
-  document.slides[0].design = { slideImage: { src: "asset:cover", position: "right" } };
-  return svg(document, 0) !== plain;
-})();
-
 const summary = [];
-let languagePreview = "skipped: installed renderer does not mark the language in the SVG";
+let languagePreview = "unchanged by these switches";
 for (const entry of cases) {
   const { dimension, value, options, slide } = entry;
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const beforeSvg = svg(original, slide);
   const events = [];
   editor.subscribe((event) => events.push(event));
@@ -48,23 +41,23 @@ for (const entry of cases) {
   assert.equal(change.dimension, dimension);
   if (entry.patches) assert.deepEqual(change.patches, entry.patches, `${dimension} patch`);
   if (entry.patchPaths) assert.deepEqual(change.patches.map((patch) => patch.path), entry.patchPaths, `${dimension} patch paths`);
-  entry.check?.(change.document);
+  entry.check?.(change.presentation);
   assert.equal(editor.validation.valid, true, `${dimension} valid`);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   assert.equal(editor.snapshot().undoDepth, 1, `${dimension} is one undo step`);
   assert.equal(events.length, 1);
   assert.equal(events[0].type, "patch");
   assert.equal(events[0].meta.source, "dimension-switch");
   assert.equal(events[0].meta.dimension, dimension);
-  assert.deepEqual(events[0].snapshot.document, editor.document, "the event carries the switched document");
+  assert.deepEqual(events[0].snapshot.presentation, editor.presentation, "the event carries the switched document");
   // prepareDimensionSwitch is the same patch without a session, and does not mutate its input.
   const prepared = prepareDimensionSwitch(original, dimension, value, options);
   assert.deepEqual(prepared.patches, change.patches);
-  assert.deepEqual(prepared.document, editor.document);
+  assert.deepEqual(prepared.presentation, editor.presentation);
   assert.deepEqual(original, baseDeck());
 
   // Preview refresh: the shared composition and SVG render follow the switched document.
-  const switched = editor.document;
+  const switched = editor.presentation;
   const afterSvg = svg(switched, slide);
   if (entry.preview === "svg") assert.notEqual(afterSvg, beforeSvg, `${dimension}: preview changes`);
   else if (entry.preview === "metadata") assert.equal(afterSvg, beforeSvg, `${dimension}: authoring metadata leaves the preview as is`);
@@ -73,23 +66,23 @@ for (const entry of cases) {
       languagePreview = "checked";
       assert.match(afterSvg, /xml:lang="ja"/, "the preview marks the new language");
     }
-  } else if (slideImageSupported) assert.notEqual(afterSvg, beforeSvg, `${dimension}: preview changes`);
+  } else assert.notEqual(afterSvg, beforeSvg, `${dimension}: preview changes`);
   if (entry.fonts) {
-    assert.deepEqual(resolveSlideFonts(switched, slide), { ...resolveSlideFonts(original, slide), ...entry.fonts }, `${dimension}: resolved fonts`);
+    assert.deepEqual(fontFamiliesOf(switched, slide), { ...fontFamiliesOf(original, slide), ...entry.fonts }, `${dimension}: resolved fonts`);
     assert.deepEqual(measuredFamilies(switched, slide), [...new Set(Object.values(entry.fonts))].sort(), `${dimension}: composition measures the new fonts`);
     assert.ok(afterSvg.includes(entry.fonts.body), `${dimension}: SVG names ${entry.fonts.body}`);
     assert.ok(!beforeSvg.includes(entry.fonts.body));
   }
 
   // Undo and redo restore exact documents and previews.
-  assert.deepEqual(editor.undo().document, original, `${dimension} undo`);
+  assert.deepEqual(editor.undo().presentation, original, `${dimension} undo`);
   assert.equal(editor.canUndo, false);
-  assert.equal(svg(editor.document, slide), beforeSvg, `${dimension}: undo restores the preview`);
-  assert.deepEqual(editor.redo().document, switched, `${dimension} redo`);
-  assert.equal(svg(editor.document, slide), afterSvg, `${dimension}: redo restores the preview`);
+  assert.equal(svg(editor.presentation, slide), beforeSvg, `${dimension}: undo restores the preview`);
+  assert.deepEqual(editor.redo().presentation, switched, `${dimension} redo`);
+  assert.equal(svg(editor.presentation, slide), afterSvg, `${dimension}: redo restores the preview`);
   assert.deepEqual(events.map((event) => event.type), ["patch", "undo", "redo"]);
-  assert.deepEqual(events[1].snapshot.document, original);
-  assert.deepEqual(events[2].snapshot.document, switched);
+  assert.deepEqual(events[1].snapshot.presentation, original);
+  assert.deepEqual(events[2].snapshot.presentation, switched);
 
   // Switching to the value the document already has is a no-op with no history entry.
   editor.undo();
@@ -109,13 +102,13 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   const change = switchDimension(editor, "font-schemes", "georgia", { slideIndex: 1 });
   assert.deepEqual(change.patches, [{ op: "add", path: "/slides/1/design", value: { fontScheme: "georgia" } }]);
   assert.equal(change.scope, "slide");
-  assert.deepEqual(measuredFamilies(editor.document, 1), ["Georgia"]);
-  assert.deepEqual(measuredFamilies(editor.document, 0), ["Aptos", "Aptos Display"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 1), ["Georgia"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Aptos", "Aptos Display"]);
   // A deck switch cannot reach a slide with its own font scheme: it says so instead of hiding it.
   const deck = switchDimension(editor, "font-schemes", "roboto");
   assert.deepEqual(deck.patches, [{ op: "replace", path: "/design/fontScheme", value: "roboto" }]);
   assert.deepEqual(deck.shadowed, [1]);
-  assert.deepEqual(measuredFamilies(editor.document, 1), ["Georgia"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 1), ["Georgia"]);
   // Clearing the overrides is opt-in and joins the same transaction.
   const depth = editor.snapshot().undoDepth;
   const cleared = switchDimension(editor, "font-schemes", "tahoma", { clearSlideOverrides: true });
@@ -124,16 +117,16 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
     { op: "remove", path: "/slides/1/design/fontScheme" },
   ]);
   assert.deepEqual(cleared.shadowed, []);
-  assert.deepEqual(measuredFamilies(editor.document, 1), ["Tahoma"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 1), ["Tahoma"]);
   assert.equal(editor.snapshot().undoDepth, depth + 1);
   editor.undo();
-  assert.deepEqual(measuredFamilies(editor.document, 1), ["Georgia"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 1), ["Georgia"]);
   // An inline object value is replaced by the bare id: its overrides belong to the old scheme.
   const custom = session({ ...baseDeck(), design: { fontScheme: { id: "aptos", major: "Override Display", minor: "Override Text" } } });
-  assert.deepEqual(measuredFamilies(custom.document, 0), ["Override Display", "Override Text"]);
+  assert.deepEqual(measuredFamilies(custom.presentation, 0), ["Override Display", "Override Text"]);
   switchDimension(custom, "font-schemes", "georgia");
   assert.equal(custom.get("design.fontScheme"), "georgia");
-  assert.deepEqual(measuredFamilies(custom.document, 0), ["Georgia"]);
+  assert.deepEqual(measuredFamilies(custom.presentation, 0), ["Georgia"]);
 }
 
 // Image treatments at deck scope write the gallery's snippet: slideImage and imageFill.
@@ -155,10 +148,10 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   const plain = switchDimension(editor, "themes", "classic", { bundle: false });
   assert.deepEqual(plain.patches, [{ op: "replace", path: "/design/theme", value: "classic" }]);
   // The deck's explicit font scheme still wins, so the fonts did not change.
-  assert.deepEqual(measuredFamilies(editor.document, 0), ["Aptos", "Aptos Display"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Aptos", "Aptos Display"]);
   editor.undo();
   switchDimension(editor, "themes", "classic");
-  assert.deepEqual(measuredFamilies(editor.document, 0), ["Tenorite", "Tenorite Display"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Tenorite", "Tenorite Display"]);
 }
 
 // Gallery records: an item's own record is added inline in the same undoable transaction.
@@ -169,16 +162,16 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   const change = switchDimension(editor, "font-schemes", "team-mono", { record });
   assert.deepEqual(change.patches.map((patch) => [patch.op, patch.path]), [["add", "/catalogs"], ["replace", "/design/fontScheme"]]);
   assert.equal(editor.get("catalogs.fontSchemes.records.0.id"), "team-mono");
-  assert.deepEqual(resolveSlideFonts(editor.document, 0), { heading: "Inter", body: "Inter", code: "JetBrains Mono" });
-  assert.deepEqual(measuredFamilies(editor.document, 0), ["Inter"]);
+  assert.deepEqual(fontFamiliesOf(editor.presentation, 0), { heading: "Inter", body: "Inter", code: "JetBrains Mono" });
+  assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Inter"]);
   // With another inline catalog present, bundled ids stay available and records append.
   switchDimension(editor, "font-schemes", "georgia");
   const second = switchDimension(editor, "font-schemes", "team-serif", { record: { id: "team-serif", name: "Team Serif", major: "Lora", minor: "Lora" } });
   assert.deepEqual(second.patches.map((patch) => patch.path), ["/catalogs/fontSchemes/records/-", "/design/fontScheme"]);
-  assert.deepEqual(measuredFamilies(editor.document, 0), ["Lora"]);
+  assert.deepEqual(measuredFamilies(editor.presentation, 0), ["Lora"]);
   assert.throws(() => switchDimension(editor, "font-schemes", "other", { record }), (error) => error.code === "record-id-mismatch");
   while (editor.canUndo) editor.undo();
-  assert.deepEqual(editor.document, baseDeck());
+  assert.deepEqual(editor.presentation, baseDeck());
   // A gallery-only layout arrives with its own record.
   const layout = { id: "gallery-hero", name: "Gallery hero", placeholders: [{ type: "title" }, { type: "text" }] };
   const hero = switchDimension(editor, "layouts", "gallery-hero", { slideIndex: 0, record: layout });
@@ -201,12 +194,12 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 
 // Charts: type switch keeps the data; the chart may sit inside a block.
 {
-  const document = baseDeck();
-  document.slides[1] = { id: "chart", title: "Revenue", blocks: [{ text: "Note" }, { chart: document.slides[1].chart }] };
-  const editor = session(document);
+  const presentation = baseDeck();
+  presentation.slides[1] = { id: "chart", title: "Revenue", blocks: [{ text: "Note" }, { chart: presentation.slides[1].chart }] };
+  const editor = session(presentation);
   const change = switchDimension(editor, "charts", "area", { slideIndex: 1 });
   assert.deepEqual(change.patches, [{ op: "replace", path: "/slides/1/blocks/1/chart/type", value: "area" }]);
-  assert.deepEqual(editor.get("slides.1.blocks.1.chart.data"), document.slides[1].blocks[1].chart.data);
+  assert.deepEqual(editor.get("slides.1.blocks.1.chart.data"), presentation.slides[1].blocks[1].chart.data);
   assert.throws(() => switchDimension(editor, "charts", "area", { slideIndex: 0 }), (error) => error.code === "chart-not-found");
 }
 
@@ -214,7 +207,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 {
   const document = baseDeck();
   document.audience = { id: "executive", attentionBudgetMinutes: 20 };
-  assert.equal(validatePresentation(document).valid, true);
+  assert.equal(validate(document, { only: ["format"] }).valid, true);
   assert.deepEqual(currentSwitchValue(document, "audiences"), { value: { id: "executive", attentionBudgetMinutes: 20 }, scope: "deck" });
   const editor = session(document);
   const change = switchDimension(editor, "audiences", ["investor"]);
@@ -230,7 +223,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
     assert.deepEqual(change.patches, [{ op: change.patches[0].op, path: "/design/background", value: shorthand }]);
     assert.equal(editor.get("design.background"), shorthand);
     assert.equal(editor.validation.valid, true);
-    assert.notEqual(svg(editor.document, 0), svg(baseDeck(), 0));
+    assert.notEqual(svg(editor.presentation, 0), svg(baseDeck(), 0));
   }
   const scoped = switchDimension(editor, "backgrounds", "#00ff00", { slideIndex: 1 });
   assert.deepEqual(scoped.patches, [{ op: "add", path: "/slides/1/design", value: { background: "#00ff00" } }]);
@@ -241,9 +234,9 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 
 // Socials: the organization, arrays of speakers and replacing a handle.
 {
-  const document = baseDeck();
-  document.speaker = [{ id: "alice", name: "Alice" }, { id: "bo", name: "Bo", socials: { x: "@bo" } }];
-  const editor = session(document);
+  const presentation = baseDeck();
+  presentation.speaker = [{ id: "alice", name: "Alice" }, { id: "bo", name: "Bo", socials: { x: "@bo" } }];
+  const editor = session(presentation);
   const change = switchDimension(editor, "socials", { platform: "github", handle: "bo-dev" }, { index: 1 });
   assert.deepEqual(change.patches, [{ op: "add", path: "/speaker/1/socials/github", value: "bo-dev" }]);
   const replaced = switchDimension(editor, "socials", { platform: "x", handle: "@bo2" }, { index: 1 });
@@ -267,14 +260,14 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 
 // Blocks: replacement only. The old payload is discarded, never converted, and stable ids stay.
 {
-  const document = baseDeck();
-  document.slides[2].blocks[0] = { id: "intro", text: [{ text: "Rich ", bold: true }, { text: "text" }], extensions: { review: "kept" } };
-  document.slides[3] = { id: "single", title: "Single", text: "Only text" };
-  const editor = session(document);
+  const presentation = baseDeck();
+  presentation.slides[2].blocks[0] = { id: "intro", text: [{ text: "Rich ", bold: true }, { text: "text" }], extensions: { review: "kept" } };
+  presentation.slides[3] = { id: "single", title: "Single", text: "Only text" };
+  const editor = session(presentation);
   const change = switchDimension(editor, "blocks", "list", { path: "slides.2.blocks.0" });
   assert.deepEqual(editor.get("slides.2.blocks.0"), { id: "intro", extensions: { review: "kept" }, items: ["First point", "Second point"] });
-  assert.equal(JSON.stringify(editor.document).includes("Rich"), false, "the old text is discarded, not converted into list items");
-  assert.deepEqual(change.patches[0], { op: "test", path: "/slides/2/blocks/0", value: document.slides[2].blocks[0] });
+  assert.equal(JSON.stringify(editor.presentation).includes("Rich"), false, "the old text is discarded, not converted into list items");
+  assert.deepEqual(change.patches[0], { op: "test", path: "/slides/2/blocks/0", value: presentation.slides[2].blocks[0] });
   // An explicit block object is used as given.
   switchDimension(editor, "blocks", { metric: { value: 7, label: "Wins" } }, { path: "slides.2.blocks.1" });
   assert.deepEqual(editor.get("slides.2.blocks.1"), { metric: { value: 7, label: "Wins" } });
@@ -293,12 +286,12 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.throws(() => switchDimension(editor, "blocks", "image", { path: "slides.2.blocks.0" }), /media file/);
   switchDimension(editor, "blocks", "image", { path: "slides.2.blocks.0", source: "asset:cover" });
   assert.equal(editor.get("slides.2.blocks.0.image"), "asset:cover");
-  assert.throws(() => prepareBlockReplace(document, "slides.2", { text: "x" }), /one content field|complete block/);
-  assert.throws(() => prepareBlockReplace(document, "slides.2.blocks.0.text", { text: "x" }), /complete block/);
+  assert.throws(() => prepareBlockReplace(presentation, "slides.2", { text: "x" }), /one content field|complete block/);
+  assert.throws(() => prepareBlockReplace(presentation, "slides.2.blocks.0.text", { text: "x" }), /complete block/);
   assert.throws(() => switchDimension(editor, "blocks", "text", {}), (error) => error.code === "missing-path");
   // The guard rejects a stale prepared patch and leaves state and history untouched.
-  const fresh = session(document);
-  const prepared = prepareDimensionSwitch(fresh.document, "blocks", "table", { path: "slides.2.blocks.1" });
+  const fresh = session(presentation);
+  const prepared = prepareDimensionSwitch(fresh.presentation, "blocks", "table", { path: "slides.2.blocks.1" });
   fresh.set("slides.2.blocks.1.items.0", "Changed since preview");
   const depth = fresh.snapshot().undoDepth;
   assert.throws(() => fresh.applyPatch(prepared.patches), /changed/);
@@ -309,37 +302,37 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
 // Slide sizes (RR-41): each of the ten presets is one patch and one undo step, the shared composition
 // and the SVG preview recompose at the new canvas, and undo restores the exact size.
 {
-  const canvas = (document) => {
-    const composed = createEditorSession(document).composeSlide(0);
+  const canvas = (presentation) => {
+    const composed = createEditorSession(presentation).composeSlide(0);
     return { width: composed.width, height: composed.height };
   };
-  const viewBox = (document) => svg(document, 0).match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/).slice(1).map(Number);
+  const viewBox = (presentation) => svg(presentation, 0).match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/).slice(1).map(Number);
   assert.deepEqual(canvas(baseDeck()), { width: 1280, height: 720 }, "the fixture starts at widescreen");
   for (const [preset, size] of Object.entries(SLIDE_SIZES)) {
     const editor = session();
-    const original = editor.document;
+    const original = editor.presentation;
     const beforeBoxes = JSON.stringify(editor.composeSlide(0).items);
     const change = switchDimension(editor, "slide-sizes", preset);
     assert.deepEqual(change.patches, [{ op: "add", path: "/design/dimensions", value: preset }], preset);
     assert.equal(change.scope, "deck");
     assert.equal(editor.snapshot().undoDepth, 1, `${preset} is one undo step`);
-    assert.deepEqual(canvas(editor.document), { width: size.width, height: size.height }, `${preset}: composition canvas`);
-    assert.deepEqual(viewBox(editor.document), [size.width, size.height], `${preset}: preview viewBox`);
+    assert.deepEqual(canvas(editor.presentation), { width: size.width, height: size.height }, `${preset}: composition canvas`);
+    assert.deepEqual(viewBox(editor.presentation), [size.width, size.height], `${preset}: preview viewBox`);
     // The slide's content is laid out again at the new canvas, not just cropped or scaled.
     if (size.width !== 1280) assert.notEqual(JSON.stringify(editor.composeSlide(0).items), beforeBoxes, `${preset}: boxes recomposed`);
     assert.equal(editor.validation.valid, true);
-    assert.deepEqual(editor.undo().document, original, `${preset} undo`);
-    assert.deepEqual(canvas(editor.document), { width: 1280, height: 720 });
-    assert.deepEqual(viewBox(editor.document), [1280, 720]);
+    assert.deepEqual(editor.undo().presentation, original, `${preset} undo`);
+    assert.deepEqual(canvas(editor.presentation), { width: 1280, height: 720 });
+    assert.deepEqual(viewBox(editor.presentation), [1280, 720]);
     editor.redo();
-    assert.deepEqual(viewBox(editor.document), [size.width, size.height], `${preset}: redo restores the preview`);
+    assert.deepEqual(viewBox(editor.presentation), [size.width, size.height], `${preset}: redo restores the preview`);
     assert.equal(switchDimension(editor, "slide-sizes", preset).changed, false, `${preset}: repeat switch`);
   }
   // Switching from one size to another replaces the value in place.
   const editor = session();
   switchDimension(editor, "slide-sizes", "4:3");
   assert.deepEqual(switchDimension(editor, "slide-sizes", "letter").patches, [{ op: "replace", path: "/design/dimensions", value: "letter" }]);
-  assert.deepEqual(viewBox(editor.document), [1056, 816]);
+  assert.deepEqual(viewBox(editor.presentation), [1056, 816]);
   // The aliases are separate values: the document keeps what was chosen.
   assert.equal(switchDimension(editor, "slide-sizes", "standard").changed, true);
   assert.equal(editor.get("design.dimensions"), "standard");
@@ -347,14 +340,14 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   const object = session({ ...baseDeck(), design: { ...baseDeck().design, dimensions: { preset: "a4" } } });
   assert.equal(switchDimension(object, "slide-sizes", "a4").changed, false);
   const custom = session({ ...baseDeck(), design: { ...baseDeck().design, dimensions: { preset: "a4", widthInches: 12 } } });
-  assert.deepEqual(viewBox(custom.document), [1152, 793.92]);
+  assert.deepEqual(viewBox(custom.presentation), [1152, 793.92]);
   assert.deepEqual(switchDimension(custom, "slide-sizes", "a4").patches, [{ op: "replace", path: "/design/dimensions", value: "a4" }]);
-  assert.deepEqual(viewBox(custom.document), [1122.24, 793.92]);
+  assert.deepEqual(viewBox(custom.presentation), [1122.24, 793.92]);
   custom.undo();
   assert.deepEqual(custom.get("design.dimensions"), { preset: "a4", widthInches: 12 });
   // A theme's own size is what a document without design.dimensions has; the switch makes the choice explicit.
   const themed = session({ ...baseDeck(), design: { theme: "minimal" } });
-  assert.deepEqual(currentSwitchValue(themed.document, "slide-sizes"), { value: "widescreen", scope: "deck" });
+  assert.deepEqual(currentSwitchValue(themed.presentation, "slide-sizes"), { value: "widescreen", scope: "deck" });
   // A slide's design cannot set dimensions (FA-07): the deck switch is never shadowed, and a slide scope is refused.
   const deck = session();
   assert.deepEqual(switchDimension(deck, "slide-sizes", "4:3").shadowed, []);
@@ -368,13 +361,13 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   switchDimension(bundle, "themes", "classic");
   assert.equal(bundle.get("design.dimensions"), "widescreen");
   assert.equal(bundle.snapshot().undoDepth, 2);
-  assert.equal(bundle.undo().document.design.dimensions, "4:3");
+  assert.equal(bundle.undo().presentation.design.dimensions, "4:3");
 }
 
 // Purposes (RR-41): a catalog id, free-form goal text or a Purpose object, one patch, exact undo.
 {
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   assert.deepEqual(switchDimension(editor, "purposes", "decide").patches, [{ op: "add", path: "/purpose", value: "decide" }]);
   assert.deepEqual(switchDimension(editor, "purposes", "pitch").patches, [{ op: "replace", path: "/purpose", value: "pitch" }]);
   // Any goal text is valid, in or out of the catalog.
@@ -388,30 +381,30 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   assert.equal(switchDimension(editor, "purposes", { id: "decide", outcome: "Approve the Q4 hiring plan" }).changed, false);
   assert.equal(editor.snapshot().undoDepth, 4);
   while (editor.canUndo) editor.undo();
-  assert.deepEqual(editor.document, original);
-  assert.equal("purpose" in editor.document, false);
+  assert.deepEqual(editor.presentation, original);
+  assert.equal("purpose" in editor.presentation, false);
   // The preview does not change: purpose is authoring metadata.
   switchDimension(editor, "purposes", "sell");
-  assert.equal(svg(editor.document, 0), svg(original, 0));
+  assert.equal(svg(editor.presentation, 0), svg(original, 0));
   // A gallery item's record is added inline in the same transaction, then the purpose names it.
   const record = { id: "fundraise", name: "Fundraise", summary: "Raise a round.", outcome: "A term sheet." };
   const withRecord = switchDimension(session(), "purposes", "fundraise", { record });
   assert.deepEqual(withRecord.patches.map((patch) => [patch.op, patch.path]), [["add", "/catalogs"], ["add", "/purpose"]]);
-  assert.equal(withRecord.document.catalogs.purposes.records[0].id, "fundraise");
+  assert.equal(withRecord.presentation.catalogs.purposes.records[0].id, "fundraise");
   assert.throws(() => switchDimension(session(), "purposes", "other", { record }), (error) => error.code === "record-id-mismatch");
 }
 
 // Rejections leave the document and history unchanged.
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const reject = (dimension, value, options, code) => {
     assert.throws(
       () => switchDimension(editor, dimension, value, options),
       (error) => error instanceof OPFEditorError && error.code === code,
       `${dimension} ${JSON.stringify(value)}`,
     );
-    assert.deepEqual(editor.document, before);
+    assert.deepEqual(editor.presentation, before);
     assert.equal(editor.canUndo, false);
   };
   reject("not-a-dimension", "x", {}, "unknown-dimension");
@@ -455,4 +448,4 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("purposes", { outcome: 5 }, {}, "invalid-opf-edit");
 }
 
-console.log(`Dimension switches passed: ${summary.length} dimensions (patch, one undo step, undo/redo, preview refresh; slide image preview ${slideImageSupported ? "checked" : "skipped: installed renderer lacks design.slideImage"}; language preview ${languagePreview}).`);
+console.log(`Dimension switches passed: ${summary.length} dimensions (patch, one undo step, undo/redo, preview refresh; slide image preview checked; language preview ${languagePreview}).`);

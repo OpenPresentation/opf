@@ -28,8 +28,8 @@ export function installCropControls({ editor, getCanvas, getSelectedPath, getSli
   const slideImagePath = () => `slides.${getSlideIndex()}.design.slideImage`;
   function targets() {
     const selected = getSelectedPath();
-    const picture = selected && !describeImage(editor.document, selected).error ? selected : null;
-    const slideImage = !describeImage(editor.document, slideImagePath()).error ? slideImagePath() : null;
+    const picture = selected && !describeImage(editor.presentation, selected).error ? selected : null;
+    const slideImage = !describeImage(editor.presentation, slideImagePath()).error ? slideImagePath() : null;
     return { picture, slideImage };
   }
   function refresh() {

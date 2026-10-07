@@ -16,25 +16,21 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createFontGate } from "../dist/font-gate.js";
-import { BUNDLED_FONT_MANIFEST, prepareNodeFonts } from "@openpresentation/opf-render/fonts-node";
+import { fontGate } from "../dist/font-gate.js";
+import { BUNDLED_FONT_MANIFEST, loadFonts } from "@openpresentation/opf-render/fonts-node";
 import { FONT_POLICY, fontPolicyFor } from "@openpresentation/opf-render/fonts";
 import * as browserFonts from "@openpresentation/opf-render/fonts-browser";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 
-if (typeof browserFonts.presentationFaces !== "function") {
-  console.log("Font gate Latin families skipped: the installed renderer predates face-level lazy fonts (0.11.5).");
-  process.exit(0);
-}
 const packageRoot = path.dirname(fileURLToPath(import.meta.resolve("@openpresentation/opf-render/package.json")));
 const outDirectory = path.resolve(process.argv[2] ?? "artifacts/latin-family-hosts");
 // The 33 eager office and base faces, as a gallery or playground registry starts.
-const eagerFaces = (await prepareNodeFonts({ pack: "office" })).registry.embeddedFonts.map((face, index) => ({ index, family: face.family, weight: face.weight, italic: !!face.italic, data: new Uint8Array(Buffer.from(face.dataUrl.split(",")[1], "base64")) }));
+const eagerFaces = (await loadFonts({ pack: "office" })).registry.embeddedFonts.map((face, index) => ({ index, family: face.family, weight: face.weight, italic: !!face.italic, data: new Uint8Array(Buffer.from(face.dataUrl.split(",")[1], "base64")) }));
 assert.equal(eagerFaces.length, 33, "the eager list is the 33 office and base faces");
 
 class Face { constructor(family, bytes, descriptors) { Object.assign(this, { family, bytes, descriptors }); } async load() { return this; } }
-const fonts = new Set(); fonts.ready = Promise.resolve();
-const document = { fonts, defaultView: { FontFace: Face } };
+const documentFonts = new Set(); documentFonts.ready = Promise.resolve();
+const domDocument = { fonts: documentFonts, defaultView: { FontFace: Face } };
 const served = [];
 const fetchLocal = async (url) => {
   const file = url.replace("https://fonts.example/", "");
@@ -44,8 +40,9 @@ const fetchLocal = async (url) => {
     return { ok: true, arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) };
   } catch { return { ok: false, status: 404 }; }
 };
-const registry = await browserFonts.loadBrowserFontRegistry(eagerFaces.map((face) => ({ ...face })), { document, fetch: fetchLocal, substitutionPolicy: "visual", fallbackFamily: "Roboto", lazyFontsBaseUrl: "https://fonts.example/" });
-const gate = createFontGate(registry);
+const fonts = await browserFonts.loadFonts({ faces: eagerFaces.map((face) => ({ ...face })), document: domDocument, fetch: fetchLocal, substitutionPolicy: "visual", fallbackFamily: "Roboto", lazyFontsBaseUrl: "https://fonts.example/" });
+const registry = fonts.registry;
+const gate = fontGate(fonts);
 
 // ---- the families and their routes, from the renderer's own policy and manifest ----
 const LATIN_PACKS = new Set(["base", "office", "open"]);
@@ -54,7 +51,7 @@ const lazyPackage = (pkg) => Boolean(pkg.vendored) && (pkg.pack === "open" || pk
 const facesOf = (family) => manifest.flatMap((pkg) => pkg.faces.filter((face) => face.family.toLowerCase() === family.toLowerCase()).map((face) => ({ ...face, pack: pkg.pack, lazy: lazyPackage(pkg), file: pkg.vendored ? `${pkg.vendored}/${face.file}` : null })));
 const aliases = Object.fromEntries(manifest.filter((pkg) => pkg.pack === "open" && pkg.renamedFrom).map((pkg) => [pkg.renamedFrom.toLowerCase(), pkg.faces[0].family]));
 const families = [];
-for (const row of FONT_POLICY) {
+for (const row of FONT_POLICY.families) {
   let route, tier;
   if (row.replacement) { route = row.replacement.family; tier = row.replacement.compatibility; } else if (facesOf(row.family).length) { route = row.family; tier = "exact"; } else continue;
   if (aliases[row.family.toLowerCase()]) { route = aliases[row.family.toLowerCase()]; tier = "visual"; }
@@ -104,15 +101,15 @@ for (const entry of families) {
     assert.ok(held.has(key(face)), `${entry.family}: ${face.family} ${face.weight}${face.italic ? "i" : ""} is loaded`);
   }
   // Strict render with the registry's measurement: a style gap never refuses the deck.
-  const svg = renderSvg(deck, { textMeasurement: registry.textMeasurement });
+  const svg = renderSlideSvg(deck, 0, { fonts });
   assert.ok(svg.includes("Regular") && svg.includes("BoldItalic"), `${entry.family}: the deck renders`);
   // What a deck of this family needs (face level), independent of what earlier families already loaded in this session.
   const needed = [...new Set(drawn.map((face) => fileOfKey.get(key(face))).filter(Boolean))].sort();
   report.push({ family: entry.family, route: entry.route, files: needed, lazyBytes: (await Promise.all(needed.map(size))).reduce((a, b) => a + b, 0), fetchedAfterEarlierFamilies: fetched.length, faces: drawn.length });
 }
-assert.deepEqual(document.fonts.size, registry.describeFaces().length, "the document holds the registry's faces");
-registry.dispose();
-assert.equal(fonts.size, 0, "dispose removes every face");
+assert.deepEqual(domDocument.fonts.size, registry.describeFaces().length, "the document holds the registry's faces");
+fonts.dispose();
+assert.equal(documentFonts.size, 0, "dispose removes every face");
 const total = new Set(served);
 await mkdir(outDirectory, { recursive: true });
 await writeFile(path.join(outDirectory, "editor.json"), `${JSON.stringify({ node: process.version, renderer: JSON.parse(await readFile(path.join(packageRoot, "package.json"), "utf8")).version, families: report.length, styleChecks, filesFetchedInTotal: total.size, report }, null, 1)}\n`);

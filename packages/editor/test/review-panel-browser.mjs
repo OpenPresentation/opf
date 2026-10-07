@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
-// RR-29 in a real browser, on the built playground (npm run build:playground): the Review tab lists the audit's
+// RR-29 in a real browser, on the built playground (npm run build:playground): the Review tab lists core's validate
 // findings with severity words (never colour alone), goes to the content a finding is about, applies safe quick
 // fixes (the readable text colour; alt text typed in the panel; marking a picture decorative) as undoable edits,
 // updates live as the document changes (an edit, an undo), is operable from the keyboard and keeps focus.
@@ -59,9 +59,9 @@ try {
     }
   };
   const review = page.locator('#review-controls');
-  const item = rule => review.locator(`.opf-review-item[data-rule="audit/${rule}"]`);
+  const item = rule => review.locator(`.opf-review-item[data-rule="opf/${rule}"]`);
   const findingCount = () => review.locator('.opf-review-item').count();
-  // The panel re-audits in a microtask after a change and after each redraw: wait for the list to show what we expect.
+  // The panel re-checks a moment after a change (the playground redraw checks at once): wait for the list to show what we expect.
   const waitItems = async (rule, count, message) => {
     const started = Date.now();
     for (;;) {
@@ -92,6 +92,8 @@ try {
   await page.waitForFunction(() => document.querySelectorAll('#review-controls .opf-review-item').length > 0);
   assert.match(await tab.textContent(), /^Review \(\d+\)$/, 'the tab carries the number of findings');
   assert.match(await tab.getAttribute('aria-label'), /^Review, \d+ findings?$/);
+  // The panel checks the applied document a moment after the redraw (it never checks per keystroke), so the list first shows the deck the page had.
+  await waitItems('text-contrast', 1, 'the applied source is checked');
   mark('the Review tab lists findings and shows their number');
 
   // Keyboard: the tablist cycles Content, Design, Review with the arrow keys.
@@ -108,7 +110,7 @@ try {
   assert.equal(await contrast.getAttribute('data-severity'), 'warning');
   assert.match(await contrast.locator('.opf-review-sev').textContent(), /^Warning$/);
   assert.match(await contrast.locator('.opf-review-msg').textContent(), /contrast ratio of 1\.\d+:1; 3:1 is needed/);
-  assert.match(await contrast.locator('.opf-review-meta').textContent(), /^Slide 1 · audit\/text-contrast$/);
+  assert.match(await contrast.locator('.opf-review-meta').textContent(), /^Slide 1 · opf\/text-contrast$/);
   assert.match(await contrast.locator('.opf-review-goto').getAttribute('aria-label'), /^Warning, Slide 1: .*Go to it\.$/);
   assert.equal(await item('missing-alt-text').count(), 2, 'both pictures lack alt text');
   assert.equal(await item('missing-slide-title').count(), 1);
@@ -243,7 +245,7 @@ try {
   assert.match(await review.locator('.opf-review-ignored summary').textContent(), /Hidden checks \(1\)/);
   assert.match(await page.locator('.opf-review-counts').textContent(), /1 finding hidden/);
   await review.locator('.opf-review-ignored summary').click();
-  await review.getByRole('button', { name: 'Show audit/missing-slide-title findings again' }).click();
+  await review.getByRole('button', { name: 'Show opf/missing-slide-title findings again' }).click();
   await waitItems('missing-slide-title', 1, 'Show again restores it');
   mark('filters narrow the list and a check can be hidden and shown again');
 

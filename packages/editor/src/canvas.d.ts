@@ -1,55 +1,47 @@
 import type { EditorSession } from "./index.js";
 import type { RenderSvgOptions } from "@openpresentation/opf-render";
+import type { BrowserFontsHandle } from "@openpresentation/opf-render/fonts-browser";
 import type { SlideComposition } from "@openpresentation/opf/composition";
-/** Faces a document needs (script packages and vendored files) that are not loaded yet, and the way to load them. */
-export interface FontGate {
-  /** Synchronous. Empty means the document can render now. Never throws. `renderOptions` are the options the host renders with (`catalogs`, ...); the canvas passes its current ones. */
-  pending(document: unknown, renderOptions?: RenderSvgOptions): string[];
-  /** Load every pending face (vendored faces first, then script faces). Rejects with a `fonts-unavailable` error; never retries by itself. */
-  ensure(document: unknown, options?: { signal?: AbortSignal; renderOptions?: RenderSvgOptions }): Promise<void>;
-  /** `whenFontsReady` on this gate. */
-  run(document: unknown, handlers?: FontGateHandlers): Promise<void>;
-}
-export interface FontGateHandlers {
+/**
+ * The fonts the canvas, the export and `whenFontsReady` take: the renderer's handle from `loadFonts()` (`@openpresentation/opf-render/fonts-browser`).
+ * Only `textMeasurement` is required to measure; `pending` and `ensure` make the canvas load script and vendored faces before it draws.
+ */
+export type EditorFonts = Pick<BrowserFontsHandle, "textMeasurement"> & Partial<Pick<BrowserFontsHandle, "embeddedFonts" | "pending" | "ensure" | "registry">>;
+export interface FontsReadyHandlers {
   /** Return false once the document was superseded; the late result is then dropped. */
   isCurrent?: () => boolean;
   loading?: (pending: string[]) => void;
   ready?: () => void;
   failed?: (error: Error) => void;
-  /** The options the host renders with (`catalogs`, ...), passed to the gate. */
+  /** The options the host renders with (`catalogs`, ...), passed to the fonts handle. */
   renderOptions?: RenderSvgOptions;
 }
 export declare const FONTS_PENDING: "fonts-pending";
 export declare const FONTS_UNAVAILABLE: "fonts-unavailable";
-/** Wrap a browser font registry (`loadBrowserFontRegistry`). Registries without the lazy loaders gate nothing. */
 /**
- * `options.renderOptions` (an object, or a function called on every use) are the default render options passed to the registry
- * (`catalogs`, ...), under a call's own; the canvas passes its current `renderOptions` itself, so a gate needs none.
- */
-export declare function createFontGate(registry: object, options?: { renderOptions?: RenderSvgOptions | (() => RenderSvgOptions | undefined) }): FontGate;
-/**
- * Ensure fonts for a document, then run `ready` (synchronously when nothing is pending). The one
- * "ensure fonts, then render" helper: load failures and exceptions from `ready` go to `failed`.
+ * Ensure fonts for a presentation, then run `ready` (synchronously when nothing is pending). The one
+ * "ensure fonts, then render" helper: load failures and exceptions from `ready` go to `failed`. `fonts` is the renderer's fonts handle.
  */
 export declare function whenFontsReady(
-  gate: Pick<FontGate, "pending" | "ensure"> | undefined,
-  document: unknown,
-  handlers?: FontGateHandlers,
+  fonts: Pick<EditorFonts, "pending" | "ensure"> | undefined,
+  presentation: unknown,
+  handlers?: FontsReadyHandlers,
 ): Promise<void>;
 export interface CanvasEditorOptions {
   editor?: EditorSession;
-  document?: unknown;
+  presentation?: unknown;
   slideIndex?: number;
   /** Show keyboard-accessible dividers for resizing composition tracks. */
   layoutEditing?: boolean;
   /** Render options. The canvas draws the document as authored (`variables: false`: a template's `{{tokens}}` stay visible, so inline edits never overwrite them); pass `variables` to draw resolved values instead. */
   renderOptions?: RenderSvgOptions;
   /**
-   * A font gate (`createFontGate(registry)`). With one, the canvas never renders a document whose faces are still
-   * loading: it shows "Loading fonts…", loads them and then renders, on every path (editor changes, undo/redo,
-   * imports, dimension switches, slide changes, drafts). Without one every document renders at once.
+   * The renderer's fonts handle (`loadFonts()` from `@openpresentation/opf-render/fonts-browser`). Its `textMeasurement` lays the slide out and
+   * its faces draw it. With its `pending` and `ensure` the canvas never renders a document whose faces are still loading: it shows
+   * "Loading fonts…", loads them and then renders, on every path (editor changes, undo/redo, imports, dimension switches, slide
+   * changes, drafts). Without a handle every document renders at once, laid out with core's portable text estimate.
    */
-  fonts?: Pick<FontGate, "pending" | "ensure">;
+  fonts?: EditorFonts;
   /**
    * How a pointer enters text editing. "click" (default): a single press on editable text starts editing with the caret at the
    * pressed character, and a press-drag selects a range. "dblclick": a click selects, a double-click enters with the caret at the
@@ -68,7 +60,7 @@ export interface CanvasEditorOptions {
     editor: EditorSession;
   }) => void;
   onDraft?: (draft: {
-    document: unknown;
+    presentation: unknown;
     path: string;
     value: unknown;
   }) => void;
@@ -78,7 +70,7 @@ export interface CanvasEditorOptions {
   /** Font loading progress of the canvas: `loading`, `error` (a face could not be loaded; the canvas offers a retry) and `ready`. */
   onFonts?: (event: { state: "loading"; pending: string[] } | { state: "error"; error: Error } | { state: "ready" }) => void;
   onRender?: (event: {
-    document: unknown;
+    presentation: unknown;
     slideIndex: number;
     svg: SVGSVGElement;
     geometry: SlideComposition;
@@ -110,7 +102,7 @@ export interface CanvasEditor {
   editProperties(path: string): boolean;
   commit(): boolean;
   cancel(): void;
-  render(document?: unknown): void;
+  render(presentation?: unknown): void;
   setSlide(index: number): boolean;
   /**
    * Select the content at `path`, or the closest enclosing content the canvas can select (a list item selects its list),

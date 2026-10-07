@@ -22,7 +22,7 @@ export interface RestoreOffer {
   dirty: boolean;
   /** Whether the undo history is stored with it. */
   hasHistory: boolean;
-  document: unknown;
+  presentation: unknown;
   /** An older copy that was moved aside when the user kept editing while an earlier offer was open. */
   earlier?: { savedAt: number; name?: string; slideCount?: number };
 }

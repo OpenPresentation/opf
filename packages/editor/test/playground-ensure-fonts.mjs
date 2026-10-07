@@ -12,14 +12,8 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
-import * as renderFonts from '@openpresentation/opf-render/fonts-node';
 import { toPptx } from '@openpresentation/opf-pptx';
 
-const browserFonts = await readFile(fileURLToPath(import.meta.resolve('@openpresentation/opf-render/fonts-browser')), 'utf8');
-if (typeof renderFonts.scriptFontPackages !== 'function' || !/\bpendingScripts\s*\(/.test(browserFonts) || !/\bpendingLazyFonts\b/.test(browserFonts) || !(await renderFonts.loadOfficeFontRegistry()).lazyFonts?.length) {
-  console.log('Playground ensure-fonts skipped: the installed renderer has no lazy script or preview font loaders.');
-  process.exit(0);
-}
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
 const output = path.resolve(fileURLToPath(new URL('../', import.meta.url)), process.argv[2] ?? 'artifacts/playground-ensure-fonts');
 await mkdir(output, { recursive: true });

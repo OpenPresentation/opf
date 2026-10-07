@@ -92,9 +92,9 @@ export function createOutlineView(container, options) {
     const firstDraw = !lastSnapshot;
     if (snapshot === lastSnapshot && !pendingFocus) return;
     lastSnapshot = snapshot;
-    const document = editor.document;
-    rows = readOutline(document).rows;
-    const sections = hasSections(document);
+    const presentation = editor.presentation;
+    rows = readOutline(presentation).rows;
+    const sections = hasSections(presentation);
     const entries = [];
     let lastSection;
     for (const row of rows) {
@@ -143,18 +143,18 @@ export function createOutlineView(container, options) {
   function activeRow() { return activeKey ? rowByKey(activeKey) : undefined; }
   function updateTools() {
     const row = activeRow();
-    const document = editor.document;
+    const presentation = editor.presentation;
     const can = { promote: false, demote: false, up: false, down: false, add: Boolean(row) };
     if (row) {
       try {
         if (row.kind === "item") {
-          can.demote = prepareShiftOutlineItem(document, row, 1).changed;
-          can.promote = row.level > 1 ? prepareShiftOutlineItem(document, row, -1).changed : row.editable;
-          can.up = prepareMoveOutlineItem(document, row, -1).changed;
-          can.down = prepareMoveOutlineItem(document, row, 1).changed;
+          can.demote = prepareShiftOutlineItem(presentation, row, 1).changed;
+          can.promote = row.level > 1 ? prepareShiftOutlineItem(presentation, row, -1).changed : row.editable;
+          can.up = prepareMoveOutlineItem(presentation, row, -1).changed;
+          can.down = prepareMoveOutlineItem(presentation, row, 1).changed;
         } else if (row.kind === "slide") {
           can.up = row.slideIndex > 0;
-          can.down = row.slideIndex < document.slides.length - 1;
+          can.down = row.slideIndex < presentation.slides.length - 1;
           can.demote = row.slideIndex > 0;
         }
       } catch { /* a row that vanished mid-edit leaves the tools off */ }
@@ -167,7 +167,7 @@ export function createOutlineView(container, options) {
     if (!row?.editable) return false;
     if (input.value === row.text) return false;
     try {
-      const prepared = prepareSetOutlineText(editor.document, row, input.value);
+      const prepared = prepareSetOutlineText(editor.presentation, row, input.value);
       if (!prepared.changed) return false;
       applyOutlineChange(editor, prepared);
       render();
@@ -203,25 +203,25 @@ export function createOutlineView(container, options) {
     const key = activeKey;
     const row = settle(input ?? inputFor(key), key);
     if (!row) return;
-    const document = editor.document;
+    const presentation = editor.presentation;
     if (action === "add") {
-      if (row.kind === "item") apply(() => prepareInsertOutlineItem(document, row), "Line added");
-      else if (row.kind === "slide") apply(() => prepareAddOutlineBullet(document, row.slideIndex), "Bullet added under the slide title");
+      if (row.kind === "item") apply(() => prepareInsertOutlineItem(presentation, row), "Line added");
+      else if (row.kind === "slide") apply(() => prepareAddOutlineBullet(presentation, row.slideIndex), "Bullet added under the slide title");
       else announce("Add a line from a title or a bullet");
     } else if (action === "demote") {
-      if (row.kind === "item") apply(() => prepareShiftOutlineItem(document, row, 1), () => "Demoted");
-      else if (row.kind === "slide") apply(() => prepareOutlineDemoteSlide(document, row.slideIndex), "Slide joined the slide before it as a bullet");
+      if (row.kind === "item") apply(() => prepareShiftOutlineItem(presentation, row, 1), () => "Demoted");
+      else if (row.kind === "slide") apply(() => prepareOutlineDemoteSlide(presentation, row.slideIndex), "Slide joined the slide before it as a bullet");
       else announce("Only titles and bullets change level");
     } else if (action === "promote") {
       if (row.kind === "item") {
-        if (row.level > 1) apply(() => prepareShiftOutlineItem(document, row, -1), "Promoted");
-        else apply(() => prepareOutlinePromote(document, row), (prepared) => `Promoted to slide ${prepared.newSlideIndex + 1}`);
+        if (row.level > 1) apply(() => prepareShiftOutlineItem(presentation, row, -1), "Promoted");
+        else apply(() => prepareOutlinePromote(presentation, row), (prepared) => `Promoted to slide ${prepared.newSlideIndex + 1}`);
       } else if (row.kind === "slide") announce("Slide titles are already the top level");
       else announce("Only titles and bullets change level");
     } else if (action === "up" || action === "down") {
       const delta = action === "up" ? -1 : 1;
-      if (row.kind === "item") apply(() => prepareMoveOutlineItem(document, row, delta), `Moved ${action}`);
-      else if (row.kind === "slide") apply(() => prepareMoveOutlineSlide(document, row.slideIndex, delta), (prepared) => `Slide moved to position ${prepared.selection[0] + 1} of ${document.slides.length}`);
+      if (row.kind === "item") apply(() => prepareMoveOutlineItem(presentation, row, delta), `Moved ${action}`);
+      else if (row.kind === "slide") apply(() => prepareMoveOutlineSlide(presentation, row.slideIndex, delta), (prepared) => `Slide moved to position ${prepared.selection[0] + 1} of ${presentation.slides.length}`);
       else announce("Move bullets or slides");
     }
   }
@@ -244,18 +244,18 @@ export function createOutlineView(container, options) {
       event.preventDefault();
       const settled = settle(input, key);
       if (!settled) return;
-      const document = editor.document;
-      if (settled.kind === "item") apply(() => prepareInsertOutlineItem(document, settled), "Line added");
-      else if (settled.kind === "slide") apply(() => prepareInsertOutlineSlide(document, settled.slideIndex), (prepared) => `Slide ${prepared.index + 1} added`);
+      const presentation = editor.presentation;
+      if (settled.kind === "item") apply(() => prepareInsertOutlineItem(presentation, settled), "Line added");
+      else if (settled.kind === "slide") apply(() => prepareInsertOutlineSlide(presentation, settled.slideIndex), (prepared) => `Slide ${prepared.index + 1} added`);
       else focusAt(index + 1);
       return;
     }
     if (event.key === "Backspace" && input.value === "" && input.selectionStart === 0 && !input.readOnly) {
-      if (row.kind === "item") { event.preventDefault(); apply(() => prepareRemoveOutlineItem(editor.document, row), "Line removed"); }
+      if (row.kind === "item") { event.preventDefault(); apply(() => prepareRemoveOutlineItem(editor.presentation, row), "Line removed"); }
       else if (row.kind === "slide" && !rows.some((other) => other.slideIndex === row.slideIndex && other.kind !== "slide")) {
         event.preventDefault();
         apply(() => {
-          const prepared = prepareRemoveSlides(editor.document, [row.slideIndex]);
+          const prepared = prepareRemoveSlides(editor.presentation, [row.slideIndex]);
           return { ...prepared, focus: `slide:slides.${Math.max(0, row.slideIndex - 1)}` };
         }, `Slide ${row.slideIndex + 1} removed`);
       }

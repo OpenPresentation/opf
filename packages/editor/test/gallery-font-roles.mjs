@@ -1,7 +1,7 @@
 // FF-17 (font-fidelity-everywhere): gallery apply keeps every font-scheme
 // role the record schema defines (major/minor and code).
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 import { loadOpfGalleryItem } from "../dist/galleries.js";
 import { createEditorSession } from "../dist/index.js";
 
@@ -19,14 +19,16 @@ const apply = (source, slides = [codeSlide]) =>
       metadata: { category: "font-schemes", source },
     },
   });
-const attached = (document) => document.catalogs.fontSchemes.records[0];
-function measured(document, slideIndex = 0) {
+const attached = (presentation) => presentation.catalogs.fontSchemes.records[0];
+function measured(presentation, slideIndex = 0) {
   const families = new Set();
-  createEditorSession(document).composeSlide(slideIndex, {
-    textMeasurement: {
-      measure: (text, size, style) => {
-        families.add(style.fontFamily);
-        return text.length * size * 0.5;
+  createEditorSession(presentation).composeSlide(slideIndex, {
+    fonts: {
+      textMeasurement: {
+        measure: (text, size, style) => {
+          families.add(style.fontFamily);
+          return text.length * size * 0.5;
+        },
       },
     },
   });
@@ -59,7 +61,7 @@ assert.deepEqual(attached(gallery), {
   code: "JetBrains Mono",
 });
 // accent is not part of the font-scheme record schema, so it is not attached.
-assert.equal(validatePresentation(gallery).valid, true);
+assert.equal(validate(gallery, { only: ["format"] }).valid, true);
 const galleryFamilies = measured(gallery);
 assert.ok(galleryFamilies.has("JetBrains Mono"), "code keeps the gallery role");
 assert.ok(!galleryFamilies.has("Roboto Mono"), "no Roboto Mono fallback");
@@ -83,7 +85,7 @@ assert.deepEqual(attached(roles), {
   minor: "Source Sans 3",
   code: "Source Code Pro",
 });
-assert.equal(validatePresentation(roles).valid, true);
+assert.equal(validate(roles, { only: ["format"] }).valid, true);
 assert.deepEqual([...measured(roles)].sort(), ["Source Sans 3", "Source Serif 4"]);
 assert.ok(measured(roles, 1).has("Source Code Pro"));
 // A later inline major/minor override on the applied scheme still wins.
@@ -92,7 +94,7 @@ roles.design.fontScheme = {
   major: "Override Display",
   minor: "Override Text",
 };
-assert.equal(validatePresentation(roles).valid, true);
+assert.equal(validate(roles, { only: ["format"] }).valid, true);
 assert.deepEqual([...measured(roles)].sort(), ["Override Display", "Override Text"]);
 assert.ok(measured(roles, 1).has("Source Code Pro"));
 

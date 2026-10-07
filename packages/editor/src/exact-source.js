@@ -228,11 +228,11 @@ function typingSignature(previous, ops) {
 /**
  * Change only the affected values. Keeps authored indentation, escaping and all unrelated
  * metadata/content byte-for-byte, including across canvas Escape, Undo and Redo.
- * Throws when `source` is not valid JSON. The result always parses to `document`; if an
+ * Throws when `source` is not valid JSON. The result always parses to `presentation`; if an
  * in-place edit cannot achieve that (for example the source repeats an object key), the whole
  * document is written as indented JSON instead.
  */
-export function updateJsonSource(source, document, memory = sharedMemory) {
+export function updateJsonSource(source, presentation, memory = sharedMemory) {
   const previous = JSON.parse(source);
   const previousKey = JSON.stringify(previous);
   memory.limited = source.length > MAX_EXACT_SOURCE_LENGTH;
@@ -243,9 +243,9 @@ export function updateJsonSource(source, document, memory = sharedMemory) {
     memory.last = null;
   }
   const ops = [];
-  diff(previous, document, [], ops);
+  diff(previous, presentation, [], ops);
   if (!ops.length) return source;
-  const key = JSON.stringify(document);
+  const key = JSON.stringify(presentation);
   const remembered = recall(memory, key);
   if (remembered !== undefined && equalOutside(source, remembered, maskPaths(ops))) {
     memory.last = null;
@@ -306,7 +306,7 @@ export function updateJsonSource(source, document, memory = sharedMemory) {
     valid = JSON.stringify(parsed) === key || canonical(parsed) === canonical(JSON.parse(key));
   } catch { /* Fall back below. */ }
   if (!valid) {
-    result = JSON.stringify(document, null, indent).replaceAll("\n", eol);
+    result = JSON.stringify(presentation, null, indent).replaceAll("\n", eol);
     if (/\n$/.test(source)) result += eol;
   }
 

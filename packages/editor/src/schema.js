@@ -65,8 +65,8 @@ function score(schema, value) {
 export function activeSchema(schema, value, root=schemas.presentation) {
   return schemaVariants(schema,root).sort((a,b)=>score(b,value)-score(a,value))[0] ?? {};
 }
-export function schemaAtPath(document, path, root = schemas.presentation) {
-  const parts=splitOpfPath(path);let current=root,value=document;
+export function schemaAtPath(presentation, path, root = schemas.presentation) {
+  const parts=splitOpfPath(path);let current=root,value=presentation;
   for(let index=0; index<parts.length;index++) {
     const key=parts[index], resolved=activeSchema(current,value,root);
     if(parts[0]==='catalogs' && parts[2]==='records' && index===3) current=schemas[catalogSchemaNames[parts[1]]]??{};

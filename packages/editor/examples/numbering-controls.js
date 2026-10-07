@@ -2,10 +2,8 @@
 // (src/numbering-panel.js) over the playground's editor session: number a list, pick the style, start and
 // suffix (per level if wanted), restart the count at the selected entry. Every change is one undoable edit.
 import { createNumberingPanel } from '../src/numbering-panel.js';
-import { numberingAvailable } from '../src/numbering.js';
 
 export function installNumberingControls({ editor, getCanvas, getSlideIndex, getSelectedPath, status }) {
-  if (!numberingAvailable()) return;
   const button = document.createElement('button');
   button.id = 'list-numbering';
   button.textContent = 'List numbering';

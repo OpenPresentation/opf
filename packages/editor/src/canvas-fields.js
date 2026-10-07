@@ -1,11 +1,6 @@
-import {
-  applyJsonPatch,
-  createValuePatch,
-  validateOpfDocument,
-  splitOpfPath,
-  opfPathToJsonPointer,
-} from "./index.js";
+import { applyJsonPatch, createValuePatch, splitOpfPath, opfPathToJsonPointer } from "./index.js";
 import {preserveTextLineEndings} from './text-input.js';
+import { firstErrorMessage, checkFormat } from "./checks.js";
 export {preserveTextLineEndings} from './text-input.js';
 /** Scalar fields and collection paths use JSON Pointer to preserve arbitrary object keys. */
 export function getEditableFields(value, path) {
@@ -52,15 +47,15 @@ export function parseCanvasValue(text, type, original) {
   return type === 'string' && typeof original === 'string' ? preserveTextLineEndings(original,String(text)) : text;
 }
 
-export function createCanvasDraft(document, path, value) {
+export function createCanvasDraft(presentation, path, value) {
   const draft = applyJsonPatch(
-    document,
-    createValuePatch(document, path, value),
+    presentation,
+    createValuePatch(presentation, path, value),
   );
-  const validation = validateOpfDocument(draft);
+  const validation = checkFormat(draft);
   if (!validation.valid)
     throw new Error(
-      validation.errors[0]?.message ?? "This change is not valid OPF.",
+      firstErrorMessage(validation, "This change is not valid OPF."),
     );
   return draft;
 }

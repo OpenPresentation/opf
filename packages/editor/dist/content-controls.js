@@ -104,7 +104,7 @@ export function createContentControls(ctx) {
     const prepare = (delta) => (state) => {
       const item = index(state);
       if (item === undefined) return { changed: false, loss: [], reason: "Select a list item to change its level." };
-      return prepareListShift(editor.document, state.blockPath, [item], delta, { validate: false });
+      return prepareListShift(editor.presentation, state.blockPath, [item], delta, { validate: false });
     };
     const apply = (delta) => () => {
       const state = ctxState.current;
@@ -140,7 +140,7 @@ export function createContentControls(ctx) {
   updaters.push((state) => {
     metrics.wrap.hidden = !state.metricGroupPath;
     if (!state.metricGroupPath) return;
-    const targets = blockConversionTargets(editor.document, state.metricGroupPath);
+    const targets = blockConversionTargets(editor.presentation, state.metricGroupPath);
     metrics.setOptions(
       targets.map((target) => ({
         value: target.kind,
@@ -172,7 +172,7 @@ export function createContentControls(ctx) {
       prepare: (state) => {
         const indices = next(state);
         if (!indices) return { changed: false, loss: [], reason: "There is no block after this one in its container." };
-        return prepareGroupBlocks(editor.document, containerPath(state), indices, { validate: false });
+        return prepareGroupBlocks(editor.presentation, containerPath(state), indices, { validate: false });
       },
       apply: () => {
         const state = ctxState.current;
@@ -190,7 +190,7 @@ export function createContentControls(ctx) {
       prepare: (state) => {
         const path = parentGroup(state);
         if (!path) return { changed: false, loss: [], reason: "This block is not inside a group." };
-        return prepareUngroupBlock(editor.document, path, { validate: false });
+        return prepareUngroupBlock(editor.presentation, path, { validate: false });
       },
       apply: () => ungroupBlock(editor, parentGroup(ctxState.current)),
       selectAfter: (change) => change.path,
@@ -222,7 +222,7 @@ export function createContentControls(ctx) {
         image.setOptions(
           IMAGE_DESTINATIONS.map((entry) => {
             try {
-              const prepared = prepareImageToDesign(editor.document, state.blockPath, entry.target, { ...entry.options, validate: false });
+              const prepared = prepareImageToDesign(editor.presentation, state.blockPath, entry.target, { ...entry.options, validate: false });
               return { value: entry.value, label: `${entry.label}${prepared.loss.length ? ` (loses ${prepared.loss.join(", ")})` : ""}` };
             } catch (error) {
               return { value: entry.value, label: `${entry.label} (unavailable)`, disabled: true, title: messageOf(error) };
@@ -251,21 +251,21 @@ export function createContentControls(ctx) {
     });
     const toBlocks = action("Turn regions into blocks", {
       role: "regions-to-blocks",
-      prepare: () => prepareRegionsToBlocks(editor.document, getSlide(), { validate: false }),
+      prepare: () => prepareRegionsToBlocks(editor.presentation, getSlide(), { validate: false }),
       apply: () => regionsAsBlocks(editor, getSlide()),
       done: "Regions are now blocks, in reading order.",
     });
     const designImages = Object.keys(DESIGN_IMAGE_LABELS).map((source) =>
       action(`Move the ${DESIGN_IMAGE_LABELS[source]} into the content`, {
         role: `back-${source}`,
-        prepare: () => prepareImageToContent(editor.document, getSlide(), source, { validate: false }),
+        prepare: () => prepareImageToContent(editor.presentation, getSlide(), source, { validate: false }),
         apply: () => moveImageToContent(editor, getSlide(), source),
         done: `The ${DESIGN_IMAGE_LABELS[source]} is now an image block.`,
       }),
     );
     slideBox.append(layouts.wrap, toBlocks.wrap, ...designImages.map((entry) => entry.wrap));
     updaters.push((state) => {
-      const slide = editor.document.slides?.[state.slideIndex];
+      const slide = editor.presentation.slides?.[state.slideIndex];
       if (!slide) return;
       const regions = regionKeysOfSlide(slide);
       const count = blockCount(state.slideIndex);
@@ -275,7 +275,7 @@ export function createContentControls(ctx) {
         layouts.setOptions(
           choices.map((choice) => {
             try {
-              const prepared = prepareBlocksToRegions(editor.document, state.slideIndex, choice.regions, { validate: false });
+              const prepared = prepareBlocksToRegions(editor.presentation, state.slideIndex, choice.regions, { validate: false });
               return { value: choice.id, label: `${choice.label}${prepared.loss.length ? ` (loses ${prepared.loss.join(", ")})` : ""}` };
             } catch (error) {
               return { value: choice.id, label: `${choice.label} (unavailable)`, disabled: true, title: messageOf(error) };
@@ -296,7 +296,7 @@ export function createContentControls(ctx) {
 
   /** The number of blocks a slide can place in regions: its `blocks`, or the content fields it holds inline. */
   function blockCount(slideIndex) {
-    const slide = editor.document.slides?.[slideIndex];
+    const slide = editor.presentation.slides?.[slideIndex];
     if (!slide) return 0;
     if (Array.isArray(slide.blocks)) return slide.blocks.length;
     return ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"].filter((key) => slide[key] !== undefined).length;
@@ -309,9 +309,9 @@ export function createContentControls(ctx) {
     slideNode: slideBox,
     /** Update every control from the session and the current selection. */
     sync(state) {
-      const slide = editor.document.slides?.[state.slideIndex];
+      const slide = editor.presentation.slides?.[state.slideIndex];
       const imageBlock = state.blockPath ? isImageBlock(editor, state.blockPath) : false;
-      const full = { ...state, imageBlock, metricGroupPath: state.selectedPath ? metricGroupForSelection(editor.document, state.selectedPath) : undefined, slide };
+      const full = { ...state, imageBlock, metricGroupPath: state.selectedPath ? metricGroupForSelection(editor.presentation, state.selectedPath) : undefined, slide };
       ctxState.current = full;
       for (const update of updaters) update(full);
     },

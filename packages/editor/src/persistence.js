@@ -14,8 +14,9 @@
 //     shows, and the editor keeps working.
 import { fail } from "./edit-helpers.js";
 
-const VERSION = 1;
-const PREFIX = "opf-editor/v1/";
+// 2: the stored record holds `presentation` (it held `document` in version 1). A record of another version is never read.
+const VERSION = 2;
+const PREFIX = "opf-editor/v2/";
 export const DEFAULT_DEBOUNCE_MS = 800;
 export const DEFAULT_MAX_WAIT_MS = 5000;
 export const DEFAULT_MAX_HISTORY_ENTRIES = 200;
@@ -155,7 +156,7 @@ export function createPersistence(editor, options = {}) {
   const limits = { entries: options.maxHistoryEntries ?? DEFAULT_MAX_HISTORY_ENTRIES, bytes: options.maxHistoryBytes ?? DEFAULT_MAX_HISTORY_BYTES };
 
   let adapter;
-  let baseline = jsonOf(editor.document); // JSON of the document last saved elsewhere; null means "unsaved in a way we cannot compare"
+  let baseline = jsonOf(editor.presentation); // JSON of the document last saved elsewhere; null means "unsaved in a way we cannot compare"
   let touched = false; // the document changed (or was saved) since this controller was created: only then is a copy written
   let pending; // the stored record on offer
   let stashed = false; // the offered record has been moved aside (earlierKey) because the user kept editing
@@ -172,20 +173,20 @@ export function createPersistence(editor, options = {}) {
     options.onStatus?.(status);
   };
   function isDirty() {
-    return baseline === null || jsonOf(editor.document) !== baseline;
+    return baseline === null || jsonOf(editor.presentation) !== baseline;
   }
 
   // --- writing --------------------------------------------------------------------------------------
 
   async function writeRecord() {
     if (!adapter || destroyed) return false;
-    const document = editor.document;
-    const json = jsonOf(document);
+    const presentation = editor.presentation;
+    const json = jsonOf(presentation);
     const dirty = baseline === null || json !== baseline;
     const history = includeHistory ? trimHistory(editor.exportHistory(), limits) : undefined;
     const signature = `${json}|${dirty}|${history ? history.undo.length + ":" + history.redo.length : ""}`;
     if (signature === lastWritten) return true;
-    const record = { version: VERSION, key: options.key, savedAt: now(), name: typeof document.name === "string" ? document.name : undefined, slideCount: Array.isArray(document.slides) ? document.slides.length : 0, dirty, document, ...(history ? { undo: history.undo, redo: history.redo } : {}) };
+    const record = { version: VERSION, key: options.key, savedAt: now(), name: typeof presentation.name === "string" ? presentation.name : undefined, slideCount: Array.isArray(presentation.slides) ? presentation.slides.length : 0, dirty, presentation, ...(history ? { undo: history.undo, redo: history.redo } : {}) };
     setStatus({ state: "saving" });
     try {
       // The first write while an offer is open moves the offered copy aside, so ignoring the prompt never loses it.
@@ -233,24 +234,24 @@ export function createPersistence(editor, options = {}) {
 
   // --- offering and restoring -------------------------------------------------------------------------
 
-  const validRecord = (record) => isRecordObject(record) && record.version === VERSION && isRecordObject(record.document) && Array.isArray(record.document.slides);
-  const offerOf = (record) => ({ key: options.key, savedAt: record.savedAt, name: record.name, slideCount: record.slideCount, dirty: record.dirty !== false, hasHistory: Boolean(record.undo?.length || record.redo?.length), document: record.document });
+  const validRecord = (record) => isRecordObject(record) && record.version === VERSION && isRecordObject(record.presentation) && Array.isArray(record.presentation.slides);
+  const offerOf = (record) => ({ key: options.key, savedAt: record.savedAt, name: record.name, slideCount: record.slideCount, dirty: record.dirty !== false, hasHistory: Boolean(record.undo?.length || record.redo?.length), presentation: record.presentation });
 
   async function applyRecord(record) {
     const pristine = !touched && !editor.canUndo && !editor.canRedo;
-    const state = { document: record.document, undo: record.undo ?? [], redo: record.redo ?? [] };
+    const state = { presentation: record.presentation, undo: record.undo ?? [], redo: record.redo ?? [] };
     if (pristine) {
       try { editor.restoreState(state, { source: "restore" }); }
       catch (error) {
         if (error?.code !== "invalid-history") throw error;
-        editor.restoreState({ document: record.document }, { source: "restore" });
+        editor.restoreState({ presentation: record.presentation }, { source: "restore" });
       }
     } else {
       // The user already worked in this session: bring the copy back as one undoable change instead of replacing their history.
-      editor.applyPatch([{ op: "replace", path: "", value: structuredClone(record.document) }], { source: "restore" });
+      editor.applyPatch([{ op: "replace", path: "", value: structuredClone(record.presentation) }], { source: "restore" });
     }
     touched = true;
-    baseline = record.dirty === false ? jsonOf(editor.document) : null;
+    baseline = record.dirty === false ? jsonOf(editor.presentation) : null;
   }
 
   /** Put the offered copy back. Resolves true when it was restored, false when there was nothing on offer or it was refused. */
@@ -294,7 +295,7 @@ export function createPersistence(editor, options = {}) {
     let record;
     try { record = await adapter.get(earlierKey); } catch { return false; }
     if (!validRecord(record)) return false;
-    try { editor.applyPatch([{ op: "replace", path: "", value: structuredClone(record.document) }], { source: "restore" }); }
+    try { editor.applyPatch([{ op: "replace", path: "", value: structuredClone(record.presentation) }], { source: "restore" }); }
     catch { return false; }
     pending = undefined;
     touched = true;
@@ -309,13 +310,13 @@ export function createPersistence(editor, options = {}) {
 
   /** The host saved the document somewhere of its own (a download, a server): it is no longer "unsaved", and the stored copy says so. */
   function markSaved() {
-    baseline = jsonOf(editor.document);
+    baseline = jsonOf(editor.presentation);
     touched = true;
     return flush();
   }
   /** Treat the current document as the starting point (a host that loads a document into the editor): no write, and not dirty, until the next change. */
   function rebase() {
-    baseline = jsonOf(editor.document);
+    baseline = jsonOf(editor.presentation);
     touched = false;
     clearTimeout(timer);
     firstDirtyAt = 0;
@@ -329,7 +330,7 @@ export function createPersistence(editor, options = {}) {
     await dropEarlier();
     lastWritten = "";
     touched = false;
-    baseline = jsonOf(editor.document);
+    baseline = jsonOf(editor.presentation);
     setStatus({ state: status.available ? "idle" : status.state, message: "" });
   }
 
@@ -371,7 +372,7 @@ export function createPersistence(editor, options = {}) {
       setStatus({ state: "error", message: `Saved work could not be read (${String(error?.message ?? error)}).` });
       return { available: true, offered: false };
     }
-    if (!validRecord(record) || jsonOf(record.document) === jsonOf(editor.document)) return { available: true, offered: false };
+    if (!validRecord(record) || jsonOf(record.presentation) === jsonOf(editor.presentation)) return { available: true, offered: false };
     try {
       const earlier = await adapter.get(earlierKey);
       hasEarlier = validRecord(earlier);

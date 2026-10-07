@@ -1,9 +1,11 @@
-import { applyJsonPatch, createValuePatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath, validateOpfDocument } from './index.js';
+import { applyJsonPatch, createValuePatch, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from './index.js';
 import { schemaAtPath, schemaVariants, activeSchema, schemaType, schemaLabel, createSchemaValue } from './schema.js';
+import { validate } from "@openpresentation/opf";
+import { checkFormat } from "./checks.js";
 /** A staged form editor; valid drafts preview immediately and Apply creates one undo step. */
 export function createSchemaInspector(container, {editor,path='',onDraft,onCommit,onCancel,onError}={}) {
   if(!editor)throw new Error('An editor session is required.');
-  let base=JSON.stringify(editor.document), draft=structuredClone(editor.document), selected=opfPathToJsonPointer(path), dirty=false, destroyed=false, suppress=false;
+  let base=JSON.stringify(editor.presentation), draft=structuredClone(editor.presentation), selected=opfPathToJsonPointer(path), dirty=false, destroyed=false, suppress=false;
   const doc=container.ownerDocument;
   const el=(tag,text,cls)=>{const node=doc.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;};
   const button=(text,action)=>{const node=el('button',text);node.type='button';node.onclick=()=>{try{action();}catch(error){showError(error.message);onError?.(error);}};return node;};
@@ -15,24 +17,27 @@ export function createSchemaInspector(container, {editor,path='',onDraft,onCommi
   container.replaceChildren(nav,body,errorBox,actions);container.classList.add('opf-schema-inspector');
   function showError(message){errorBox.textContent=message;}
   function check(){
-    const validation=validateOpfDocument(draft);
+    // The draft must be valid OPF (the format category, as every edit); unresolved references (an unknown variable, a missing asset) are listed as notes.
+    const report=validate(draft,{only:['format','references']});
+    const errors=report.findings.filter(finding=>finding.severity==='error'&&finding.category==='format'),warnings=report.findings.filter(finding=>finding.category!=='format'&&finding.severity!=='info');
+    const validation={valid:!errors.length};
     apply.disabled=!dirty||!validation.valid;
-    const warningNote=validation.warnings?.length?` · ${validation.warnings.length} warning${validation.warnings.length===1?'':'s'}`:'';
+    const warningNote=warnings.length?` · ${warnings.length} warning${warnings.length===1?'':'s'}`:'';
     status.textContent=dirty?`Draft changes · apply to save${warningNote}`:`No pending changes${warningNote}`;
-    const issues=[...(validation.valid?[]:validation.errors.slice(0,3).map(error=>`${error.path||'/'}: ${error.message}`)),...(validation.warnings?.slice(0,2).map(warning=>`${warning.path||'/'}: ${warning.message}`)??[])];
+    const issues=[...(validation.valid?[]:errors.slice(0,3).map(error=>`${error.path||'/'}: ${error.message}`)),...warnings.slice(0,2).map(warning=>`${warning.path||'/'}: ${warning.message}`)];
     showError(issues.join('\n'));
-    if(validation.valid)try{onDraft?.({document:structuredClone(draft),path:selected,dirty});}catch(error){showError(`Preview: ${error.message}`);onError?.(error);}
+    if(validation.valid)try{onDraft?.({presentation:structuredClone(draft),path:selected,dirty});}catch(error){showError(`Preview: ${error.message}`);onError?.(error);}
   }
   function mutate(operations,redraw=true){draft=applyJsonPatch(draft,operations);dirty=JSON.stringify(draft)!==base;if(redraw)render();check();}
   function set(path,value,redraw=true){mutate(createValuePatch(draft,path,value),redraw);}
   function navigate(path){selected=opfPathToJsonPointer(path);render();check();}
-  function reset(){base=JSON.stringify(editor.document);draft=structuredClone(editor.document);dirty=false;render();check();onCancel?.();}
+  function reset(){base=JSON.stringify(editor.presentation);draft=structuredClone(editor.presentation);dirty=false;render();check();onCancel?.();}
   function commit(){
     if(!dirty)return true;
-    if(JSON.stringify(editor.document)!==base){showError('The document changed elsewhere. Discard this draft and reopen the field to avoid overwriting newer changes.');return false;}
-    const result=validateOpfDocument(draft);if(!result.valid){check();return false;}
+    if(JSON.stringify(editor.presentation)!==base){showError('The document changed elsewhere. Discard this draft and reopen the field to avoid overwriting newer changes.');return false;}
+    const result=checkFormat(draft);if(!result.valid){check();return false;}
     suppress=true;
-    try{editor.applyPatch([{op:'replace',path:'',value:draft}],{source:'schema-inspector',rejectInvalid:true});base=JSON.stringify(editor.document);draft=structuredClone(editor.document);dirty=false;render();check();onCommit?.({editor,path:selected});return true;}finally{suppress=false;}
+    try{editor.applyPatch([{op:'replace',path:'',value:draft}],{source:'schema-inspector',rejectInvalid:true});base=JSON.stringify(editor.presentation);draft=structuredClone(editor.presentation);dirty=false;render();check();onCommit?.({editor,path:selected});return true;}finally{suppress=false;}
   }
   function summary(value){return Array.isArray(value)?`${value.length} items`:value&&typeof value==='object'?`${Object.keys(value).length} fields`:String(value??'').slice(0,80);}
   function render(){
@@ -98,5 +103,5 @@ export function createSchemaInspector(container, {editor,path='',onDraft,onCommi
   }
   const unsubscribe=editor.subscribe(()=>{if(suppress)return;if(dirty){showError('The document changed elsewhere. Discard the draft to load the latest version.');apply.disabled=true;}else reset();});
   render();check();
-  return {navigate,commit,reset,get document(){return structuredClone(draft);},get dirty(){return dirty;},destroy(){destroyed=true;unsubscribe();container.replaceChildren();}};
+  return {navigate,commit,reset,get presentation(){return structuredClone(draft);},get dirty(){return dirty;},destroy(){destroyed=true;unsubscribe();container.replaceChildren();}};
 }

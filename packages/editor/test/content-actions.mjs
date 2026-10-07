@@ -1,8 +1,8 @@
 // RR-26: list levels, grouping, regions, images between content and design, and slide split and merge as editor
 // transactions. Each is one guarded, validated, undoable step that reports what it cannot carry.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import { createEditorSession } from "../dist/index.js";
 import {
   groupBlocks,
@@ -42,7 +42,7 @@ const deck = () => ({
 const session = () => createEditorSession(deck(), { rejectInvalid: true });
 const undoAll = (editor, original) => {
   while (editor.snapshot().canUndo) editor.undo();
-  assert.deepEqual(editor.document, original);
+  assert.deepEqual(editor.presentation, original);
 };
 const refused = (action, pattern) => assert.throws(action, (error) => error.code === "content-action-refused" && pattern.test(error.message));
 
@@ -54,14 +54,14 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.equal(listItemIndexForSelection("slides.0.blocks.0", "slides.0.blocks.0"), undefined);
   assert.equal(listItemIndexForSelection("slides.0.blocks.10.items.1", "slides.0.blocks.1"), undefined, "a block path is matched whole");
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const demote = shiftListItems(editor, "slides.0.blocks.0", [1], 1);
   assert.deepEqual(editor.get("slides.0.blocks.0.items"), ["Plan", { text: "Build", level: 1 }, { text: "Ship", description: "June" }, "Review"]);
   assert.deepEqual([demote.changed, demote.lossless, demote.levels], [true, true, [0, 1, 0, 0]]);
   assert.equal(demote.patches[0].op, "test", "guarded against a concurrent edit");
   assert.equal(editor.snapshot().undoDepth, 1, "one undo step");
   const promote = shiftListItems(editor, "slides.0.blocks.0", [1], -1);
-  assert.deepEqual(editor.document, original, "demote then promote returns the same document");
+  assert.deepEqual(editor.presentation, original, "demote then promote returns the same document");
   assert.equal(promote.changed, true);
   const none = shiftListItems(editor, "slides.0.blocks.0", [0], 1);
   assert.equal(none.changed, false);
@@ -69,20 +69,20 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.equal(editor.snapshot().undoDepth, 2, "a refused move adds no history entry");
   refused(() => shiftListItems(editor, "slides.0.blocks.1", [0], 1), /Choose a list block/);
   refused(() => shiftListItems(editor, "slides.0.blocks.0", [9], 1), /exist/);
-  const stale = prepareListShift(editor.document, "slides.0.blocks.0", [2], 1);
+  const stale = prepareListShift(editor.presentation, "slides.0.blocks.0", [2], 1);
   editor.set("slides.0.blocks.0.items.0", "Changed elsewhere");
   assert.throws(() => editor.applyPatch(stale.patches), (error) => error.code === "patch-test-failed");
   undoAll(editor, original);
   // The preview follows: the nested item draws.
-  const before = renderSvg(editor.document, { slideIndex: 0 });
+  const before = renderSlideSvg(editor.presentation, 0);
   shiftListItems(editor, "slides.0.blocks.0", [1, 2], 1);
-  assert.notEqual(renderSvg(editor.document, { slideIndex: 0 }), before);
+  assert.notEqual(renderSlideSvg(editor.presentation, 0), before);
 }
 
 // --- group and ungroup -------------------------------------------------------------------------
 {
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const grouped = groupBlocks(editor, "slides.1", [1, 2], { composition: { mode: "row" } });
   assert.deepEqual(editor.get("slides.1.blocks").map((block) => block.id ?? "group"), ["a", "group", "d"]);
   assert.equal(grouped.path, "slides.1.blocks.1");
@@ -96,14 +96,14 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   refused(() => groupBlocks(editor, "slides.1", [7]), /exist/);
   refused(() => groupBlocks(editor, "nowhere", [0]), /Choose a container/);
   refused(() => ungroupBlock(editor, "slides.1.blocks.0"), /Choose a group/);
-  assert.equal(prepareGroupBlocks(editor.document, "slides.1", [0, 1]).patches.length, 2);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(prepareGroupBlocks(editor.presentation, "slides.1", [0, 1]).patches.length, 2);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }
 
 // --- regions -----------------------------------------------------------------------------------
 {
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const placed = placeBlocksInRegions(editor, 1, ["top:left", "top:right", "bottom:left", "bottom:right"]);
   assert.deepEqual(Object.keys(editor.get("slides.1")).filter((key) => key.includes(":")), ["top:left", "top:right", "bottom:left", "bottom:right"]);
   assert.equal(placed.lossless, true);
@@ -123,7 +123,7 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
 // --- images ------------------------------------------------------------------------------------
 {
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const promoted = moveImageToDesign(editor, "slides.3.blocks.0", "slideImage", { position: "right" });
   assert.deepEqual(editor.get("slides.3.design.slideImage"), { src: "asset:photo", position: "right", alt: "A pixel" });
   assert.deepEqual(editor.get("slides.3.blocks"), [{ text: "Body" }]);
@@ -147,52 +147,52 @@ const refused = (action, pattern) => assert.throws(action, (error) => error.code
   assert.equal(slideImage.changed, true);
   refused(() => moveImageToDesign(editor, "slides.3.blocks.1", "slideImage"), /only an image/);
   refused(() => moveImageToContent(editor, 3, "background"), /does not set/);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 }
 
 // --- slides ------------------------------------------------------------------------------------
 {
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const split = splitSlideByBlocks(editor, 1, { at: [2] });
-  assert.equal(editor.document.slides.length, original.slides.length + 1);
-  assert.deepEqual(editor.document.slides.slice(1, 3).map((slide) => [slide.id, slide.title, slide.blocks.map((block) => block.id)]), [["blocks", "Blocks", ["a", "b"]], ["blocks--2", "Blocks", ["c", "d"]]]);
+  assert.equal(editor.presentation.slides.length, original.slides.length + 1);
+  assert.deepEqual(editor.presentation.slides.slice(1, 3).map((slide) => [slide.id, slide.title, slide.blocks.map((block) => block.id)]), [["blocks", "Blocks", ["a", "b"]], ["blocks--2", "Blocks", ["c", "d"]]]);
   assert.equal(editor.get("slides.1.notes"), "Say hi");
   assert.equal(editor.get("slides.2.notes"), undefined);
   assert.equal(split.slideCount, 2);
   assert.equal(editor.snapshot().undoDepth, 1, "a split is one undo step");
   assert.equal(split.patches.filter((patch) => patch.op === "test").length, 1);
   const merged = mergeSlides(editor, 1, 2);
-  assert.deepEqual(editor.document.slides[1].blocks.map((block) => block.id), ["a", "b", "c", "d"]);
+  assert.deepEqual(editor.presentation.slides[1].blocks.map((block) => block.id), ["a", "b", "c", "d"]);
   assert.deepEqual(merged.loss, ['slide id "blocks--2"']);
-  assert.equal(editor.document.slides.length, original.slides.length);
+  assert.equal(editor.presentation.slides.length, original.slides.length);
   undoAll(editor, original);
-  const preview = renderSvg(editor.document, { slideIndex: 1 });
+  const preview = renderSlideSvg(editor.presentation, 1);
   splitSlideByBlocks(editor, 1, { each: true });
-  assert.notEqual(renderSvg(editor.document, { slideIndex: 1 }), preview, "the preview follows the split");
+  assert.notEqual(renderSlideSvg(editor.presentation, 1), preview, "the preview follows the split");
   undoAll(editor, original);
   refused(() => splitSlideByBlocks(editor, 6, { each: true }), /one block/);
   refused(() => mergeSlides(editor, 6, 2), /exist/);
-  assert.equal(prepareMergeSlides(editor.document, 0, 2).range.deleteCount, 2);
-  refused(() => prepareMergeSlides(editor.document, 1, 2), /named regions/);
+  assert.equal(prepareMergeSlides(editor.presentation, 0, 2).range.deleteCount, 2);
+  refused(() => prepareMergeSlides(editor.presentation, 1, 2), /named regions/);
 }
 
 // --- split on overflow and un-paginate ---------------------------------------------------------
 {
   const editor = session();
-  const original = editor.document;
+  const original = editor.presentation;
   const split = splitSlideOnOverflow(editor, 5);
   assert.equal(split.changed, true);
   assert.ok(split.slideCount > 2);
-  assert.equal(editor.document.slides.length, original.slides.length - 1 + split.slideCount);
-  assert.equal(editor.document.slides[0].id, "list");
-  assert.equal(editor.document.slides.at(-1).id, "last");
+  assert.equal(editor.presentation.slides.length, original.slides.length - 1 + split.slideCount);
+  assert.equal(editor.presentation.slides[0].id, "list");
+  assert.equal(editor.presentation.slides.at(-1).id, "last");
   assert.ok(Array.isArray(split.pages) && split.pages.length === split.slideCount);
   assert.equal(editor.snapshot().undoDepth, 1, "a split on overflow is one undo step");
-  assert.equal(validatePresentation(editor.document).valid, true);
-  assert.equal(editor.document.slides.slice(5, 5 + split.slideCount).flatMap((slide) => slide.blocks).filter((block) => block.text !== undefined).map((block) => block.text).join(""), long);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
+  assert.equal(editor.presentation.slides.slice(5, 5 + split.slideCount).flatMap((slide) => slide.blocks).filter((block) => block.text !== undefined).map((block) => block.text).join(""), long);
   const back = unpaginateSlides(editor, split.pages);
-  assert.equal(editor.document.slides.length, original.slides.length);
+  assert.equal(editor.presentation.slides.length, original.slides.length);
   assert.equal(editor.get("slides.5.blocks.0.text"), long);
   assert.equal(editor.get("slides.5.blocks.1.items").length, 50);
   assert.equal(back.changed, true);

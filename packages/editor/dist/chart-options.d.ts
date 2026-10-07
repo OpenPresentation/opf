@@ -64,14 +64,12 @@ export interface PreparedChartOptions {
   chartPath: string;
   changed: boolean;
   patches: JsonPatchOperation[];
-  document: unknown;
+  presentation: unknown;
 }
 
-/** True when the installed core knows the chart option fields. */
-export declare function chartOptionsAvailable(): boolean;
 /** The chart path a selection path points at, or undefined. */
 export declare function parseChartPath(path: string): string | undefined;
 /** `combo` is present on a combo chart: its plotted series in data order. Pass the `document` for a dataset-backed chart. */
-export declare function readChartOptions(chart: unknown, document?: unknown): { target: unknown; fields: ChartOptionFields; choices: ChartHighlightChoices; state: ChartOptionState; combo?: { series: ChartComboSeriesState[] } };
-export declare function prepareChartOptions(document: unknown, chartPath: string, change: ChartOptionChange): PreparedChartOptions;
+export declare function readChartOptions(chart: unknown, presentation?: unknown): { target: unknown; fields: ChartOptionFields; choices: ChartHighlightChoices; state: ChartOptionState; combo?: { series: ChartComboSeriesState[] } };
+export declare function prepareChartOptions(presentation: unknown, chartPath: string, change: ChartOptionChange): PreparedChartOptions;
 export declare function setChartOptions(editor: EditorSession, chartPath: string, change: ChartOptionChange, meta?: Record<string, unknown>): EditorChange & { action: "chart-options"; chartPath: string; changed: boolean };

@@ -121,7 +121,7 @@ export function createImageCropper(root, overlay, options) {
 
   function placePill() {
     const target = selected && !session ? frameImage(selected) : null;
-    if (!target || !editor || describeImage(editor.document, selected).error) { pill.hidden = true; return; }
+    if (!target || !editor || describeImage(editor.presentation, selected).error) { pill.hidden = true; return; }
     const box = target.getBoundingClientRect();
     const base = root.getBoundingClientRect();
     if (!box.width || !box.height) { pill.hidden = true; return; }
@@ -135,7 +135,7 @@ export function createImageCropper(root, overlay, options) {
   async function open(path, openOptions = {}) {
     if (destroyed || session) return false;
     if (options.beforeOpen && !options.beforeOpen()) return false;
-    const image = describeImage(editor.document, path);
+    const image = describeImage(editor.presentation, path);
     if (image.error) {
       options.report?.(new Error(image.error));
       return false;
@@ -483,7 +483,7 @@ export function createImageCropper(root, overlay, options) {
     aspectSelect.querySelector('option[value="frame"]').disabled = !frame;
     s.rect = fullRect(s.loaded.width, s.loaded.height);
     layout();
-    restoreButton.hidden = !prepareRestore(editor.document, path);
+    restoreButton.hidden = !prepareRestore(editor.presentation, path);
     if (s.tool === "focus") {
       s.tool = "crop";
       setTool("focus");

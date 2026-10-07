@@ -1,9 +1,8 @@
 // List numbering (RR-33): the headless model behind the numbering control. A list payload (`items` or `bullets`) can
 // carry `numbering`: a style name, a { style, start, suffix } object, or an array with one entry per list level. Every
 // write goes through the session as a validated JSON Patch edit, so each change is one undoable edit. Importing this
-// module needs no DOM. Core is read from the namespace so an older core still loads this module; the writes then
-// throw "numbering-unavailable".
-import * as core from "@openpresentation/opf";
+// module needs no DOM.
+import { listNumbers } from "@openpresentation/opf/composition";
 import { OPFEditorError, getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 
 /** The number styles and how each draws, in the order a picker lists them. */
@@ -41,21 +40,12 @@ function checkEditor(editor) {
   }
 }
 
-/** True when the core this editor runs on composes numbered lists (the core that ships `numbering`). */
-export function numberingAvailable() {
-  return typeof core.listNumbers === "function" && typeof core.formatListNumber === "function";
-}
-
-function requireCore() {
-  if (!numberingAvailable()) throw fail("numbering-unavailable", "List numbering needs a core release that ships numbering (@openpresentation/opf after 0.11.4).");
-}
-
 /**
  * Where a list lives for a path that points at it or into it: `slides.0.items`, `slides.0.items.2` or
  * `slides.0.left.items.1.text` all resolve to the payload that owns the list. Returns undefined when the path is not
  * inside a list.
  */
-export function listPayloadAt(document, path) {
+export function listPayloadAt(presentation, path) {
   let segments;
   try {
     segments = splitOpfPath(path);
@@ -67,7 +57,7 @@ export function listPayloadAt(document, path) {
     const next = segments[index + 1];
     if (next !== undefined && !/^\d+$/.test(next)) continue;
     const payloadPath = segments.slice(0, index);
-    const payload = payloadPath.length ? getValueAtPath(document, payloadPath) : document;
+    const payload = payloadPath.length ? getValueAtPath(presentation, payloadPath) : presentation;
     if (!isObject(payload) || !Array.isArray(payload[segments[index]])) continue;
     const entry = next === undefined ? undefined : Number(next);
     return { payloadPath: payloadPath.join("."), field: segments[index], path: [...payloadPath, segments[index]].join("."), payload, entry };
@@ -78,8 +68,8 @@ export function listPayloadAt(document, path) {
 const isRegionKey = (key) => /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/.test(key);
 
 /** Every list (`items` or `bullets`) of a slide: its path, label, entry count and whether it is numbered. */
-export function findNumberableLists(document, slideIndex) {
-  const slide = document?.slides?.[slideIndex];
+export function findNumberableLists(presentation, slideIndex) {
+  const slide = presentation?.slides?.[slideIndex];
   if (!isObject(slide)) return [];
   const found = [];
   const visit = (payload, base, label, depth = 0) => {
@@ -137,8 +127,8 @@ const maxLevelOf = (items) => items.reduce((max, item) => Math.max(max, isObject
  * numbering applies to every level), the number of levels the list uses, the markers it draws and which entry (if any)
  * the path selects with that entry's own `start`.
  */
-export function numberingState(document, path) {
-  const target = listPayloadAt(document, path);
+export function numberingState(presentation, path) {
+  const target = listPayloadAt(presentation, path);
   if (!target) return undefined;
   const { payload, field, entry } = target;
   const items = payload[field];
@@ -147,9 +137,9 @@ export function numberingState(document, path) {
   const levels = numbered ? resolveLevels(numbering) : [{ ...DEFAULT_LEVEL }];
   const depth = Math.min(MAX_NUMBERING_LEVELS, maxLevelOf(items) + 1);
   let markers = [];
-  if (numbered && numberingAvailable()) {
+  if (numbered) {
     try {
-      markers = core.listNumbers(items, numbering).map((number) => ({ index: number.index, level: number.level, text: number.text, value: number.value, adapted: number.adapted }));
+      markers = listNumbers(items, numbering).map((number) => ({ index: number.index, level: number.level, text: number.text, value: number.value, adapted: number.adapted }));
     } catch {
       markers = [];
     }
@@ -180,14 +170,13 @@ function numberingPointer(target) {
  * the entry `start` values, which mean nothing without it. `path` addresses the list or anything inside it.
  */
 export function setNumbering(editor, path, value, meta = {}) {
-  requireCore();
   checkEditor(editor);
-  const target = listPayloadAt(editor.document, path);
+  const target = listPayloadAt(editor.presentation, path);
   if (!target) throw fail("not-a-list", "Select a list (items or bullets) to number.", { path });
   const patches = [];
   const present = Object.hasOwn(target.payload, "numbering");
   if (value === undefined || value === null) {
-    if (!present) return { document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+    if (!present) return { presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
     patches.push({ op: "remove", path: numberingPointer(target) });
     target.payload[target.field].forEach((item, index) => {
       if (isObject(item) && item.start !== undefined) patches.push({ op: "remove", path: opfPathToJsonPointer(`${target.path}.${index}.start`) });
@@ -203,9 +192,8 @@ export function setNumbering(editor, path, value, meta = {}) {
  * removes the restart. A plain entry (a string or runs) becomes the object form to carry it. One undoable validated edit.
  */
 export function setEntryStart(editor, itemPath, start, meta = {}) {
-  requireCore();
   checkEditor(editor);
-  const target = listPayloadAt(editor.document, itemPath);
+  const target = listPayloadAt(editor.presentation, itemPath);
   if (!target || target.entry === undefined) throw fail("not-an-entry", "Select a list entry to restart its numbering.", { path: itemPath });
   if (target.payload.numbering === undefined) throw fail("not-numbered", "Number the list first; an entry start has no effect on a bulleted list.", { path: itemPath });
   const item = target.payload[target.field][target.entry];
@@ -218,6 +206,6 @@ export function setEntryStart(editor, itemPath, start, meta = {}) {
     if (isObject(item)) patches.push({ op: item.start === undefined ? "add" : "replace", path: `${pointer}/start`, value: start });
     else patches.push({ op: "replace", path: pointer, value: { text: structuredClone(item), start } });
   }
-  if (!patches.length) return { document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  if (!patches.length) return { presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   return editor.applyPatch(patches, { source: "list-numbering-start", rejectInvalid: true, ...meta });
 }

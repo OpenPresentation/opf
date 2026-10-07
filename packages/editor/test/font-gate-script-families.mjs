@@ -16,17 +16,13 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import * as core from "@openpresentation/opf";
-import { createFontGate } from "../dist/font-gate.js";
-import { BUNDLED_FONT_MANIFEST, prepareNodeFonts } from "@openpresentation/opf-render/fonts-node";
+import { resolveScriptFonts } from "@openpresentation/opf/composition";
+import { fontGate } from "../dist/font-gate.js";
+import { BUNDLED_FONT_MANIFEST, loadFonts } from "@openpresentation/opf-render/fonts-node";
 import { createScriptTextMeasurement } from "@openpresentation/opf-render/fonts";
 import * as browserFonts from "@openpresentation/opf-render/fonts-browser";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 
-if (typeof browserFonts.presentationFaces !== "function" || typeof createScriptTextMeasurement !== "function") {
-  console.log("Font gate script families skipped: the installed renderer predates face-level lazy fonts (0.11.5) or script-aware measurement.");
-  process.exit(0);
-}
 const root = fileURLToPath(new URL("../", import.meta.url));
 const packageRoot = path.dirname(fileURLToPath(import.meta.resolve("@openpresentation/opf-render/package.json")));
 const outDirectory = path.resolve(process.argv[2] ?? "artifacts/script-family-hosts");
@@ -35,12 +31,12 @@ const SCRIPTS_ROOT = path.join(root, "node_modules/@expo-google-fonts");
 const shortName = (name) => name.replace("@expo-google-fonts/", "");
 
 // The 33 eager office and base faces, as a gallery or playground registry starts.
-const eagerFaces = (await prepareNodeFonts({ pack: "office" })).registry.embeddedFonts.map((face, index) => ({ index, family: face.family, weight: face.weight, italic: !!face.italic, data: new Uint8Array(Buffer.from(face.dataUrl.split(",")[1], "base64")) }));
+const eagerFaces = (await loadFonts({ pack: "office" })).registry.embeddedFonts.map((face, index) => ({ index, family: face.family, weight: face.weight, italic: !!face.italic, data: new Uint8Array(Buffer.from(face.dataUrl.split(",")[1], "base64")) }));
 assert.equal(eagerFaces.length, 33, "the eager list is the 33 office and base faces");
 
 class Face { constructor(family, bytes, descriptors) { Object.assign(this, { family, bytes, descriptors }); } async load() { return this; } }
-const fonts = new Set(); fonts.ready = Promise.resolve();
-const document = { fonts, defaultView: { FontFace: Face } };
+const documentFonts = new Set(); documentFonts.ready = Promise.resolve();
+const domDocument = { fonts: documentFonts, defaultView: { FontFace: Face } };
 const served = [];
 const fetchLocal = async (url) => {
   const file = url.replace("https://fonts.example/pack/", "");
@@ -50,8 +46,9 @@ const fetchLocal = async (url) => {
     return { ok: true, arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) };
   } catch { return { ok: false, status: 404 }; }
 };
-const registry = await browserFonts.loadBrowserFontRegistry(eagerFaces.map((face) => ({ ...face })), { document, fetch: fetchLocal, substitutionPolicy: "visual", fallbackFamily: "Roboto", scriptBaseUrl: "https://fonts.example/pack/" });
-const gate = createFontGate(registry);
+const fonts = await browserFonts.loadFonts({ faces: eagerFaces.map((face) => ({ ...face })), document: domDocument, fetch: fetchLocal, substitutionPolicy: "visual", fallbackFamily: "Roboto", scriptBaseUrl: "https://fonts.example/pack/" });
+const registry = fonts.registry;
+const gate = fontGate(fonts);
 
 // ---- the families and their packages, from the renderer's own manifest ----
 const SYMBOL_ONLY = ["Zsym"];
@@ -125,8 +122,8 @@ for (const entry of families) {
     }
     // Strict render with the registry's measurement: every run is drawn in the family.
     const notes = [];
-    const strict = createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(deck), { glyphFallback: "none", onFallback: (note) => notes.push(note) });
-    const svg = renderSvg(deck, { textMeasurement: strict, glyphFallback: "none", onDiagnostic: (value) => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); } });
+    const strict = createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(deck), { glyphFallback: "none", onFallback: (note) => notes.push(note) });
+    const svg = renderSlideSvg(deck, 0, { fonts: { textMeasurement: strict }, glyphFallback: "none", onDiagnostic: (value) => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); } });
     assert.deepEqual(notes, [], `${where} ${sample.id}: no glyph fallback`);
     const runs = drawnRuns(svg);
     assert.ok(runs.length >= 3, `${where} ${sample.id}: the deck draws its title and two body runs (${runs.length})`);
@@ -145,9 +142,9 @@ for (const entry of families) {
   row.lazyBytes = await size(entry);
   report.push(row);
 }
-assert.equal(document.fonts.size, registry.describeFaces().length, "the document holds the registry's faces");
-registry.dispose();
-assert.equal(fonts.size, 0, "dispose removes every face");
+assert.equal(domDocument.fonts.size, registry.describeFaces().length, "the document holds the registry's faces");
+fonts.dispose();
+assert.equal(documentFonts.size, 0, "dispose removes every face");
 const total = new Set(served);
 await mkdir(outDirectory, { recursive: true });
 await writeFile(path.join(outDirectory, "editor.json"), `${JSON.stringify({ node: process.version, renderer: JSON.parse(await readFile(path.join(packageRoot, "package.json"), "utf8")).version, families: report.length, styleChecks, runChecks, filesFetchedInTotal: total.size, report }, null, 1)}\n`);

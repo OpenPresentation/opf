@@ -2,8 +2,8 @@
 // row, pasting TSV/CSV and number reading. Every operation is one validated patch and one undo step; none of them ever turns a gap
 // into 0 or hides text.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import * as grid from "../dist/data-grid.js";
@@ -27,8 +27,8 @@ const deck = () => ({
     },
   ],
 });
-const session = (document = deck()) => createEditorSession(document, { rejectInvalid: true });
-const svg = (document) => renderSvg(document, { slideIndex: 0 });
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
+const svg = (presentation) => renderSlideSvg(presentation, 0);
 const body = (row, column) => ({ section: "body", row, column });
 const header = (column) => ({ section: "header", column });
 const dataOf = (editor) => editor.get(`${C}.data`);
@@ -36,27 +36,27 @@ const rowsOf = (editor) => editor.get(`${T}.rows`);
 
 // One operation = one undo step that restores the document exactly, and redo that returns it. The document is left as it was before.
 function step(editor, name, action, expectation) {
-  const before = editor.document;
+  const before = editor.presentation;
   const depth = editor.snapshot().undoDepth;
   const change = action();
   assert.equal(change.changed, true, `${name} changed the document`);
   assert.equal(editor.snapshot().undoDepth, depth + 1, `${name} is one undo step`);
-  assert.equal(validatePresentation(editor.document).valid, true, `${name} leaves valid OPF`);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, `${name} leaves valid OPF`);
   expectation?.(change);
-  const after = editor.document;
+  const after = editor.presentation;
   editor.undo();
-  assert.deepEqual(editor.document, before, `${name} undoes in one step`);
+  assert.deepEqual(editor.presentation, before, `${name} undoes in one step`);
   editor.redo();
-  assert.deepEqual(editor.document, after, `${name} redoes`);
+  assert.deepEqual(editor.presentation, after, `${name} redoes`);
   editor.undo();
-  assert.deepEqual(editor.document, before, `${name} undoes again`);
+  assert.deepEqual(editor.presentation, before, `${name} undoes again`);
   return change;
 }
 const refuses = (editor, name, action, code) => {
-  const before = editor.document;
+  const before = editor.presentation;
   const depth = editor.snapshot().undoDepth;
   assert.throws(action, (error) => (code ? error.code === code : true), name);
-  assert.deepEqual(editor.document, before, `${name} leaves the document alone`);
+  assert.deepEqual(editor.presentation, before, `${name} leaves the document alone`);
   assert.equal(editor.snapshot().undoDepth, depth, `${name} records no undo step`);
 };
 
@@ -127,13 +127,13 @@ const refuses = (editor, name, action, code) => {
 // --- locating and describing ---------------------------------------------------------------------
 
 {
-  const document = deck();
-  assert.deepEqual(grid.resolveDataGridTarget(document, "slides.0.blocks.0.chart"), { kind: "chart", path: "slides.0.blocks.0.chart" });
-  assert.deepEqual(grid.resolveDataGridTarget(document, "slides.0.blocks.0.chart.data.columns.1"), { kind: "chart", path: "slides.0.blocks.0.chart" });
-  assert.deepEqual(grid.resolveDataGridTarget(document, "slides.0.blocks.1.table.rows.2.1.value"), { kind: "table", path: "slides.0.blocks.1.table" });
-  assert.deepEqual(grid.resolveDataGridTarget(document, "/slides/0/blocks/1/table/rows/0/0"), { kind: "table", path: "slides.0.blocks.1.table" });
-  assert.equal(grid.resolveDataGridTarget(document, "slides.0.title"), undefined);
-  assert.equal(grid.resolveDataGridTarget(document, "slides.0.blocks.0"), undefined);
+  const presentation = deck();
+  assert.deepEqual(grid.resolveDataGridTarget(presentation, "slides.0.blocks.0.chart"), { kind: "chart", path: "slides.0.blocks.0.chart" });
+  assert.deepEqual(grid.resolveDataGridTarget(presentation, "slides.0.blocks.0.chart.data.columns.1"), { kind: "chart", path: "slides.0.blocks.0.chart" });
+  assert.deepEqual(grid.resolveDataGridTarget(presentation, "slides.0.blocks.1.table.rows.2.1.value"), { kind: "table", path: "slides.0.blocks.1.table" });
+  assert.deepEqual(grid.resolveDataGridTarget(presentation, "/slides/0/blocks/1/table/rows/0/0"), { kind: "table", path: "slides.0.blocks.1.table" });
+  assert.equal(grid.resolveDataGridTarget(presentation, "slides.0.title"), undefined);
+  assert.equal(grid.resolveDataGridTarget(presentation, "slides.0.blocks.0"), undefined);
   // A chart that shows a dataset the document does not hold has no grid; a data source by file or asset is not part of the format.
   const missing = deck();
   missing.slides[0].blocks[0] = { chart: { type: "column", data: { dataset: "gone" } } };
@@ -144,16 +144,16 @@ const refuses = (editor, name, action, code) => {
   const loose = deck();
   loose.slides[0].blocks[0] = { chart: { type: "column", data: { src: "asset:rev" } } };
   assert.throws(() => grid.describeDataGrid(loose, "slides.0.blocks.0.chart"), (error) => error.code === "grid-target-not-found" && /no inline columns and rows/.test(error.message));
-  assert.throws(() => grid.describeDataGrid(document, "slides.0.title"), (error) => error.code === "grid-target-not-found");
+  assert.throws(() => grid.describeDataGrid(presentation, "slides.0.title"), (error) => error.code === "grid-target-not-found");
 
-  const model = grid.describeDataGrid(document, C);
+  const model = grid.describeDataGrid(presentation, C);
   assert.deepEqual([model.kind, model.hasHeader, model.rowCount, model.columnCount], ["chart", true, 3, 3]);
   assert.deepEqual(model.columnRoles, ["category", "series", "series"]);
   assert.deepEqual(model.lines.map((line) => line.map((cell) => cell.text)), [["Quarter", "Revenue", "Costs"], ["Q1", "12", "5"], ["Q2", "18", ""], ["Q3", "24", "9"]]);
   assert.equal(model.lines[2][2].text, "", "a gap shows as empty, not 0");
   assert.deepEqual(model.warnings, []);
-  assert.equal(grid.describeDataGrid(document, C, { decimal: "," }).lines[1][1].text, "12");
-  assert.equal(grid.describeDataGrid(document, C, { numberFormat: "auto", locale: "de" }).kind, "chart");
+  assert.equal(grid.describeDataGrid(presentation, C, { decimal: "," }).lines[1][1].text, "12");
+  assert.equal(grid.describeDataGrid(presentation, C, { numberFormat: "auto", locale: "de" }).kind, "chart");
   const decimals = deck();
   decimals.slides[0].blocks[0].chart.data.rows[0][1] = 12.5;
   assert.equal(grid.describeDataGrid(decimals, C, { decimal: "," }).lines[1][1].text, "12,5", "numbers show in the chosen format");
@@ -180,10 +180,10 @@ const refuses = (editor, name, action, code) => {
 
 {
   const editor = session();
-  const before = svg(editor.document);
+  const before = svg(editor.presentation);
   const change = step(editor, "edit a chart value", () => chart.setChartCells(editor, C, [{ ...body(0, 1), text: "15.5" }]), () => {
     assert.equal(dataOf(editor).rows[0][1], 15.5);
-    assert.notEqual(svg(editor.document), before, "the preview draws the new value");
+    assert.notEqual(svg(editor.presentation), before, "the preview draws the new value");
   });
   assert.deepEqual(change.patches.map((patch) => patch.op), ["test", "replace"], "one cell is one guarded replace");
   assert.equal(change.patches[1].path, "/slides/0/blocks/0/chart/data/rows/0/1");
@@ -218,7 +218,7 @@ const refuses = (editor, name, action, code) => {
   assert.equal(dataOf(editor).rows[0][0], "2024", "a category typed as digits stays text");
   chart.setChartCells(editor, C, [{ ...body(2, 0), text: "" }]);
   assert.equal(dataOf(editor).rows[2][0], null, "a cleared category is blank");
-  assert.deepEqual(grid.describeDataGrid(editor.document, C).warnings.map((warning) => warning.message), ["Row 3, column A: This row has no category label."]);
+  assert.deepEqual(grid.describeDataGrid(editor.presentation, C).warnings.map((warning) => warning.message), ["Row 3, column A: This row has no category label."]);
   // Typed values.
   chart.setChartCells(editor, C, [{ ...body(0, 2), value: 7 }]);
   assert.equal(dataOf(editor).rows[0][2], 7);
@@ -268,7 +268,7 @@ const refuses = (editor, name, action, code) => {
   refuses(editor, "inserting nothing", () => chart.insertChartRows(editor, C, 0, 0), "invalid-count");
   assert.equal(chart.moveChartRows(editor, C, 1, 1).changed, false, "moving a row onto itself is a no-op");
   // The chart still draws after every operation.
-  assert.ok(svg(editor.document).includes("<svg"));
+  assert.ok(svg(editor.presentation).includes("<svg"));
 }
 
 // --- chart transpose ---------------------------------------------------------------------------------
@@ -298,12 +298,12 @@ const refuses = (editor, name, action, code) => {
 // --- sorting ------------------------------------------------------------------------------------------
 
 {
-  const document = deck();
-  document.slides[0].blocks[1].table = {
+  const presentation = deck();
+  presentation.slides[0].blocks[1].table = {
     columns: ["Item", "Qty", "Due"],
     rows: [["Item 10", "10", "2026-03-01"], ["item 2", 2, "2026-01-15"], ["Item 1", "1,000", ""], ["", 7, "2025-12-31"], ["Item 2", "n/a", "2026-02-01"], ["Item 2b", 2, "2026-01-15"]],
   };
-  const editor = session(document);
+  const editor = session(presentation);
   // Numbers (number strings in the number format too) sort as numbers, then text; empty last either way.
   tables.sortTableRows(editor, T, 1);
   assert.deepEqual(rowsOf(editor).map((row) => row[1]), [2, 2, 7, "10", "1,000", "n/a"], "numeric order, then text; equal keys keep their order");
@@ -335,7 +335,7 @@ const refuses = (editor, name, action, code) => {
   assert.equal(again.changed, false);
   assert.equal(editor.snapshot().undoDepth, 1);
   // The comma format reads "1,000" as one, not a thousand.
-  const euro = session(document);
+  const euro = session(presentation);
   tables.sortTableRows(euro, T, 1, { decimal: "," });
   assert.deepEqual(rowsOf(euro).map((row) => row[1]).slice(0, 3), ["1,000", 2, 2], "1,000 is 1.0 in the comma format");
   assert.throws(() => tables.sortTableRows(euro, T, 9), (error) => error.code === "grid-column-out-of-range");
@@ -371,9 +371,9 @@ const refuses = (editor, name, action, code) => {
   tables.setTableCells(rich, T, [{ ...body(1, 0), text: "Southeast" }]);
   assert.deepEqual(rich.get(`${T}.rows.1.0`), { value: "Southeast", style: { fill: "accent" }, colSpan: 2 });
   refuses(rich, "a covered cell", () => tables.setTableCells(rich, T, [{ ...body(1, 1), text: "x" }]), "invalid-grid-values");
-  assert.match(grid.gridCellIssues(rich.document, T, [{ ...body(1, 1), text: "x" }])[0].message, /covered by a merged cell/);
-  assert.deepEqual(grid.gridCellIssues(rich.document, T, [{ ...body(0, 1), text: "x" }]), [], "the live check is clean for a good edit");
-  assert.equal(grid.describeDataGrid(rich.document, T).lines[1][0].rich, true);
+  assert.match(grid.gridCellIssues(rich.presentation, T, [{ ...body(1, 1), text: "x" }])[0].message, /covered by a merged cell/);
+  assert.deepEqual(grid.gridCellIssues(rich.presentation, T, [{ ...body(0, 1), text: "x" }]), [], "the live check is clean for a good edit");
+  assert.equal(grid.describeDataGrid(rich.presentation, T).lines[1][0].rich, true);
   // The grid shows what the slide draws.
   assert.equal(grid.describeDataGrid(deck(), T, { decimal: "," }).lines[1][1].text, "10");
   const decimals = deck();
@@ -384,9 +384,9 @@ const refuses = (editor, name, action, code) => {
 // --- table rows and columns, merged cells ------------------------------------------------------------
 
 const withMerges = () => {
-  const document = deck();
+  const presentation = deck();
   // North/South merged down (rows 0-1, column 0); a 2 x 2 block at rows 2-3, columns 1-2.
-  document.slides[0].blocks[1].table = {
+  presentation.slides[0].blocks[1].table = {
     columns: [{ value: "Region", style: { color: "accent" } }, { value: "Q1 and Q2", colSpan: 2 }, null],
     rows: [
       [{ value: "North", rowSpan: 2 }, 1, 2],
@@ -396,13 +396,13 @@ const withMerges = () => {
       ["Total", 9, 10],
     ],
   };
-  return document;
+  return presentation;
 };
 {
   const editor = session(withMerges());
-  const merges = () => grid.describeDataGrid(editor.document, T).merges.map((merge) => `${merge.section}:${merge.row}:${merge.column}:${merge.rowSpan}x${merge.colSpan}`);
+  const merges = () => grid.describeDataGrid(editor.presentation, T).merges.map((merge) => `${merge.section}:${merge.row}:${merge.column}:${merge.rowSpan}x${merge.colSpan}`);
   assert.deepEqual(merges(), ["header:0:1:1x2", "body:0:0:2x1", "body:2:1:2x2"]);
-  const model = grid.describeDataGrid(editor.document, T);
+  const model = grid.describeDataGrid(editor.presentation, T);
   assert.deepEqual([model.lines[2][0].covered, model.lines[2][0].owner], [true, { line: 1, column: 0 }]);
   assert.equal(model.lines[2][0].text, "", "a covered cell has no text of its own");
 
@@ -463,8 +463,8 @@ const withMerges = () => {
   refuses(editor, "moving a column out of a column merge", () => tables.moveTableColumns(editor, T, 1, 0), "table-merge-conflict");
   step(editor, "move a column", () => tables.moveTableColumns(editor, T, 0, 2), () => assert.equal(editor.get(`${T}.columns.2`).value, "Region"));
   // The table still validates, previews and exports after everything above.
-  assert.equal(validatePresentation(editor.document).valid, true);
-  assert.ok(svg(editor.document).includes("<svg"));
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
+  assert.ok(svg(editor.presentation).includes("<svg"));
 }
 {
   // A merge that holds the whole of a moved block moves with it; a column move keeps a column merge whole.
@@ -490,15 +490,15 @@ const withMerges = () => {
   step(editor, "turn off a header with a merged cell", () => tables.setTableHeader(editor, T, false), () => {
     assert.equal(editor.get(`${T}.columns`), undefined);
     assert.deepEqual(rowsOf(editor)[0][1], { value: "Q1 and Q2", colSpan: 2 }, "the header's column merge is a body merge now");
-    assert.equal(grid.describeDataGrid(editor.document, T).hasHeader, false);
-    assert.equal(grid.describeDataGrid(editor.document, T).rowCount, 6);
+    assert.equal(grid.describeDataGrid(editor.presentation, T).hasHeader, false);
+    assert.equal(grid.describeDataGrid(editor.presentation, T).rowCount, 6);
   });
-  const document = deck();
-  document.slides[0].blocks[1].table = {
+  const presentation = deck();
+  presentation.slides[0].blocks[1].table = {
     columns: ["Name", "Score", "Note"],
     rows: [["c", { value: "30", colSpan: 2 }, null], ["a", 5, "x"], ["b", { value: "12", colSpan: 2 }, null]],
   };
-  const sorted = session(document);
+  const sorted = session(presentation);
   tables.sortTableRows(sorted, T, 2, { decimal: "." });
   assert.deepEqual(rowsOf(sorted).map((row) => row[0]), ["b", "c", "a"], "a covered cell in the sort column sorts as the merged cell's text: 12 and 30 are numbers and come before the text x");
 }
@@ -508,11 +508,11 @@ const withMerges = () => {
   const editor = session();
   tables.setTableStyle(editor, T, "banded");
   tables.insertTableRows(editor, T, 1);
-  assert.equal(tables.readTableStyle(editor.document, T).preset, "banded", "the banded style is still intact after an insert");
+  assert.equal(tables.readTableStyle(editor.presentation, T).preset, "banded", "the banded style is still intact after an insert");
   tables.deleteTableRows(editor, T, [0]);
-  assert.equal(tables.readTableStyle(editor.document, T).preset, "banded");
+  assert.equal(tables.readTableStyle(editor.presentation, T).preset, "banded");
   tables.sortTableRows(editor, T, 1, { direction: "desc" });
-  assert.equal(tables.readTableStyle(editor.document, T).preset, "banded", "and after a sort");
+  assert.equal(tables.readTableStyle(editor.presentation, T).preset, "banded", "and after a sort");
   const custom = session();
   custom.set(`${T}.rows.0.1`, { value: 10, style: { align: "right", fill: "#ffeecc" } });
   tables.insertTableRows(custom, T, 1);
@@ -536,7 +536,7 @@ const withMerges = () => {
     assert.equal(change.use, "first-row");
   });
   tables.setTableHeader(editor, T, true);
-  assert.deepEqual(editor.document, deck(), "off and on again is the identity");
+  assert.deepEqual(editor.presentation, deck(), "off and on again is the identity");
   assert.equal(tables.setTableHeader(editor, T, true).changed, false, "already on");
   tables.setTableHeader(editor, T, false);
   tables.setTableCells(editor, T, [{ ...body(0, 1), value: 5 }, { ...body(0, 2), value: true }]);
@@ -568,7 +568,7 @@ const withMerges = () => {
   const styled = session();
   tables.setTableStyle(styled, T, "banded");
   tables.setTableHeader(styled, T, false);
-  assert.equal(tables.readTableStyle(styled.document, T).preset, "banded");
+  assert.equal(tables.readTableStyle(styled.presentation, T).preset, "banded");
 }
 
 // --- paste ------------------------------------------------------------------------------------------------
@@ -629,7 +629,7 @@ const withMerges = () => {
   tables.pasteTableText(csv, T, body(3, 1), "p\tq\tr\ns\tt\tu");
   assert.equal(rowsOf(csv).length, 5);
   assert.deepEqual(csv.get(`${T}.columns`).length, 4, "a table column is added when the paste is wider");
-  assert.equal(tables.readTableStyle(csv.document, T).preset, "banded");
+  assert.equal(tables.readTableStyle(csv.presentation, T).preset, "banded");
   // Pasting over merged cells: onto the merge's own cell is fine, across its covered positions is refused, never hiding text.
   const merged = session(withMerges());
   refuses(merged, "pasting across covered cells", () => tables.pasteTableText(merged, T, body(0, 0), "a\nb"), "invalid-grid-values");
@@ -648,19 +648,19 @@ const withMerges = () => {
 // --- copy -----------------------------------------------------------------------------------------------------
 
 {
-  const document = deck();
-  assert.equal(grid.gridRangeText(document, C), "Quarter\tRevenue\tCosts\nQ1\t12\t5\nQ2\t18\t\nQ3\t24\t9", "a gap copies as an empty cell");
-  assert.equal(grid.gridRangeText(document, C, { from: body(0, 1), to: body(1, 2) }), "12\t5\n18\t");
-  assert.equal(grid.gridRangeText(document, C, { from: body(1, 2), to: body(0, 1) }), "12\t5\n18\t", "a range may run backwards");
-  assert.equal(grid.gridRangeText(document, C, undefined, { delimiter: ";" }), "Quarter;Revenue;Costs\nQ1;12;5\nQ2;18;\nQ3;24;9");
+  const presentation = deck();
+  assert.equal(grid.gridRangeText(presentation, C), "Quarter\tRevenue\tCosts\nQ1\t12\t5\nQ2\t18\t\nQ3\t24\t9", "a gap copies as an empty cell");
+  assert.equal(grid.gridRangeText(presentation, C, { from: body(0, 1), to: body(1, 2) }), "12\t5\n18\t");
+  assert.equal(grid.gridRangeText(presentation, C, { from: body(1, 2), to: body(0, 1) }), "12\t5\n18\t", "a range may run backwards");
+  assert.equal(grid.gridRangeText(presentation, C, undefined, { delimiter: ";" }), "Quarter;Revenue;Costs\nQ1;12;5\nQ2;18;\nQ3;24;9");
   const decimals = deck();
   decimals.slides[0].blocks[0].chart.data.rows[0][1] = 12.5;
   assert.ok(grid.gridRangeText(decimals, C, { from: body(0, 1), to: body(0, 1) }, { decimal: "," }) === "12,5", "numbers copy in the grid's number format");
-  assert.deepEqual(text.parseDelimited(grid.gridRangeText(document, C)).rows[2], ["Q2", "18", ""], "what is copied reads back cell for cell");
+  assert.deepEqual(text.parseDelimited(grid.gridRangeText(presentation, C)).rows[2], ["Q2", "18", ""], "what is copied reads back cell for cell");
   const merged = withMerges();
   assert.equal(grid.gridRangeText(merged, T).split("\n")[1], "North\t1\t2", "a merged cell copies as its text and empty covered cells");
   assert.equal(grid.gridRangeText(merged, T).split("\n")[2], "\t3\t4");
-  assert.throws(() => grid.gridRangeText(document, C, { from: body(0, 0), to: body(9, 0) }), (error) => error.code === "grid-cell-not-found");
+  assert.throws(() => grid.gridRangeText(presentation, C, { from: body(0, 0), to: body(9, 0) }), (error) => error.code === "grid-cell-not-found");
 }
 
 // --- a patch is the smallest guarded change; large ones are one guarded replacement --------------------------
@@ -685,7 +685,7 @@ const withMerges = () => {
 {
   const editor = session();
   const seen = new Set();
-  const sig = () => svg(editor.document);
+  const sig = () => svg(editor.presentation);
   seen.add(sig());
   chart.setChartCells(editor, C, [{ ...body(0, 1), text: "40" }]);
   seen.add(sig());
@@ -704,10 +704,10 @@ const withMerges = () => {
   const out = session(withMerges());
   tables.insertTableRows(out, T, 1);
   tables.sortTableRows(out, T, 0, { direction: "desc" });
-  const bytes = await pptx.toPptx(structuredClone(out.document), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(out.presentation), { strictAssets: true });
   const back = await pptx.fromPptx(bytes);
-  assert.ok(JSON.stringify(back.document ?? back).includes("rowSpan"), "a table after row operations exports with its merges");
-  const chartBytes = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
+  assert.ok(JSON.stringify(back.presentation ?? back).includes("rowSpan"), "a table after row operations exports with its merges");
+  const chartBytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
   assert.ok(chartBytes.byteLength > 1000, "a chart after grid edits exports");
 }
 

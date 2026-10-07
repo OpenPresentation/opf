@@ -151,7 +151,7 @@ function fontSchemeRecord(source, id) {
   if (code) record.code = code;
   return record;
 }
-function attachDefinition(document, descriptor) {
+function attachDefinition(presentation, descriptor) {
   const source = descriptor.metadata?.source,
     category = descriptor.category ?? descriptor.metadata?.category;
   if (!source) return;
@@ -166,7 +166,7 @@ function attachDefinition(document, descriptor) {
   if (!id) return;
   if (
     catalogs[kind]?.some((record) => record.id === id) ||
-    document.catalogs?.[kind]?.records?.some((record) => record.id === id)
+    presentation.catalogs?.[kind]?.records?.some((record) => record.id === id)
   )
     return;
   let record;
@@ -199,10 +199,10 @@ function attachDefinition(document, descriptor) {
       $schema: `https://openpresentation.org/schema/opf-${kind === "themes" ? "theme" : "color-scheme"}/v1`,
     };
   }
-  document.catalogs ??= {};
-  document.catalogs[kind] ??= { records: [] };
-  document.catalogs[kind].records ??= [];
-  document.catalogs[kind].records.push(record);
+  presentation.catalogs ??= {};
+  presentation.catalogs[kind] ??= { records: [] };
+  presentation.catalogs[kind].records ??= [];
+  presentation.catalogs[kind].records.push(record);
 }
 export async function loadOpfGalleryItem(item, { gallery, ...options } = {}) {
   const base = gallery ?? options.base;
@@ -218,10 +218,10 @@ export async function loadOpfGalleryItem(item, { gallery, ...options } = {}) {
     );
     if (!descriptor) throw new Error("This gallery item was not found.");
   }
-  const document = structuredClone(unwrapOpf(descriptor));
-  if (!document?.slides)
+  const presentation = structuredClone(unwrapOpf(descriptor));
+  if (!presentation?.slides)
     throw new Error("This gallery item does not include a presentation.");
-  attachDefinition(document, descriptor);
+  attachDefinition(presentation, descriptor);
   // PPTX.gallery's older descriptors omit inline layout records. Resolve only named
   // layout references from its known, same-origin registry; no arbitrary dependency crawl.
   if (
@@ -230,13 +230,13 @@ export async function loadOpfGalleryItem(item, { gallery, ...options } = {}) {
   ) {
     const missing = [
       ...new Set(
-        document.slides
+        presentation.slides
           .map((slide) => slide.layout)
           .filter(
             (id) =>
               typeof id === "string" &&
               !catalogs.layouts.some((record) => record.id === id) &&
-              !document.catalogs?.layouts?.records?.some(
+              !presentation.catalogs?.layouts?.records?.some(
                 (record) => record.id === id,
               ),
           ),
@@ -253,9 +253,9 @@ export async function loadOpfGalleryItem(item, { gallery, ...options } = {}) {
         `/registry/layouts/${id}.json`,
         { ...options, base: url, origin: new URL(url).origin },
       );
-      attachDefinition(document, dependency);
+      attachDefinition(presentation, dependency);
     }
   }
-  assertOpf(document);
-  return document;
+  assertOpf(presentation);
+  return presentation;
 }

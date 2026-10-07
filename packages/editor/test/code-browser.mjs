@@ -4,28 +4,28 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 // Keyboard entry (Enter) selects all text; a pointer press places the caret instead (see test/click-entry-browser.mjs).
 const enter=async locator=>{await locator.focus();await locator.page().keyboard.press('Enter');};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const faces=(await loadOfficeFontRegistry()).embeddedFonts.filter(face=>['Roboto','Roboto Mono'].includes(face.family)&&[400,700].includes(face.weight)&&!face.italic);
+const faces=(await loadFonts({ pack: 'office' })).registry.embeddedFonts.filter(face=>['Roboto','Roboto Mono'].includes(face.family)&&[400,700].includes(face.weight)&&!face.italic);
 const bundled=await build({stdin:{resolveDir:fileURLToPath(new URL('../',import.meta.url)),contents:`
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
-  import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
+  import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
   import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
   window.mountCode=async({deck,faces})=>{
     window.codeCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;
     // Use the existing playground's explicit fallback policy; import currently
     // loses its original font scheme, which remains a separate fidelity gap.
-    window.fonts=await loadBrowserFontRegistry(faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto'});
+    window.fonts=await loadFonts({ faces: faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})), substitutionPolicy:'visual',fallbackFamily:'Roboto' });
     window.editor=createEditorSession(deck,{rejectInvalid:true});
-    window.codeCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,renderOptions:{textMeasurement:fonts.textMeasurement},onError:error=>failures.push(error.message)});
+    window.codeCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,fonts,onError:error=>failures.push(error.message)});
     await codeCanvas.ready;
     const action=(id,run)=>document.getElementById(id).onclick=async()=>{try{await run();}catch(error){failures.push(error.message);}};
     action('undo',()=>editor.undo());action('redo',()=>editor.redo());
-    action('paginate',()=>{codeCanvas.commit();window.pagination=editor.paginateSlide(0,{minFontSize:24,textMeasurement:fonts.textMeasurement});});
-    action('export',async()=>{codeCanvas.commit();window.accepted=editor.composeSlide(0,{textMeasurement:fonts.textMeasurement});window.lastExport=await toPptx(editor.document,{textMeasurement:fonts.textMeasurement});});
+    action('paginate',()=>{codeCanvas.commit();window.pagination=editor.paginateSlide(0,{minFontSize:24,fonts});});
+    action('export',async()=>{codeCanvas.commit();window.accepted=editor.composeSlide(0,{fonts});window.lastExport=await toPptx(editor.presentation,{fonts});});
     action('import',async()=>{window.lastImport=await fromPptx(lastExport);editor.set('',lastImport,{rejectInvalid:true});});
   };`},bundle:true,platform:'browser',format:'iife',write:false,minify:true});
 const bundle=bundled.outputFiles[0].text,browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
@@ -34,7 +34,7 @@ try {
   const page=await browser.newPage({viewport:{width:1440,height:1200}});page.on('pageerror',error=>errors.push(error.message));page.on('request',request=>{if(/^https?:/.test(request.url()))requests.push(request.url());});
   await page.setContent('<button id="undo">Undo</button><button id="redo">Redo</button><button id="paginate">Paginate</button><button id="export">Export</button><button id="import">Import</button><div id="canvas" style="width:1000px"></div>');
   await page.addScriptTag({content:bundle});await page.context().setOffline(true);
-  const document=()=>page.evaluate(()=>editor.document);
+  const presentation=()=>page.evaluate(()=>editor.presentation);
   const visibleSelection=async input=>{
     const state=await input.evaluate(node=>({color:getComputedStyle(node).color,selectionColor:getComputedStyle(node,'::selection').color,start:node.selectionStart,end:node.selectionEnd,length:node.value.length}));
     assert.equal(state.start,0);assert.equal(state.end,state.length);assert.ok(state.length>0);
@@ -48,34 +48,34 @@ try {
     const body=page.locator('[data-canvas-target][data-opf-path="slides.0.code.source"]');
     await enter(body);let input=page.getByRole('textbox',{name:'Edit source inline',exact:true});
     const sourceSelection=await visibleSelection(input);
-    await input.press('Control+Enter');assert.deepEqual(await document(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false,'Opening CRLF source must not create an edit');
+    await input.press('Control+Enter');assert.deepEqual(await presentation(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false,'Opening CRLF source must not create an edit');
     await enter(body);input=page.getByRole('textbox',{name:'Edit source inline',exact:true});
     const editedSource=source.replace('const value','const renamed');
-    await input.fill(editedSource);await input.press('Control+Enter');assert.equal((await document()).slides[0].code.source,editedSource);
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),deck);
-    await page.getByRole('button',{name:'Redo',exact:true}).click();assert.equal((await document()).slides[0].code.source,editedSource);
+    await input.fill(editedSource);await input.press('Control+Enter');assert.equal((await presentation()).slides[0].code.source,editedSource);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),deck);
+    await page.getByRole('button',{name:'Redo',exact:true}).click();assert.equal((await presentation()).slides[0].code.source,editedSource);
     const filename=page.locator('[data-canvas-target][data-opf-path="slides.0.code.filename"]');await enter(filename);
     const filenameSelection=await visibleSelection(page.getByRole('textbox',{name:'Edit filename inline',exact:true}));
     await page.getByRole('textbox',{name:'Edit filename inline',exact:true}).fill('src/Renamed.ts');await page.getByRole('textbox',{name:'Edit filename inline',exact:true}).press('Control+Enter');
-    assert.equal((await document()).slides[0].code.filename,'src/Renamed.ts');
+    assert.equal((await presentation()).slides[0].code.filename,'src/Renamed.ts');
     await enter(body);input=page.getByRole('textbox',{name:'Edit source inline',exact:true});await input.press('ArrowRight');await input.press('Tab');
-    assert.ok((await input.inputValue()).endsWith('\t'),'Tab inserts a literal source tab');await input.press('Escape');assert.equal((await document()).slides[0].code.source,editedSource);
-    const beforePagination=await document();await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await document()).slides[0].composition.minFontSize,24);
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),beforePagination);
-    await page.getByRole('button',{name:'Redo',exact:true}).click();const accepted=await document();
+    assert.ok((await input.inputValue()).endsWith('\t'),'Tab inserts a literal source tab');await input.press('Escape');assert.equal((await presentation()).slides[0].code.source,editedSource);
+    const beforePagination=await presentation();await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await presentation()).slides[0].composition.minFontSize,24);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),beforePagination);
+    await page.getByRole('button',{name:'Redo',exact:true}).click();const accepted=await presentation();
     // Selecting source text must not expose invalid rich-formatting operations.
     for(const role of ['body','filename','language']){
       await page.evaluate(role=>{const node=[...document.querySelectorAll('text[data-opf-code-role="'+role+'"] tspan')].find(node=>/\S/.test(node.textContent));if(!node?.firstChild)throw Error('Missing code text span');const range=document.createRange();range.setStart(node.firstChild,0);range.setEnd(node.firstChild,node.textContent.length);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);document.dispatchEvent(new Event('selectionchange'));},role);
       assert.equal(await page.getByRole('toolbar',{name:'Text formatting'}).isVisible(),false,role+' must stay plain when selecting its nested text node');
-      assert.deepEqual(await document(),accepted);
+      assert.deepEqual(await presentation(),accepted);
     }
     await page.getByRole('button',{name:'Export',exact:true}).click();await page.waitForFunction(()=>lastExport||failures.length);assert.deepEqual(await page.evaluate(()=>failures),[]);
     const bytes=await page.evaluate(()=>Array.from(lastExport));assert.ok(bytes.length>1000);
     await page.getByRole('button',{name:'Import',exact:true}).click();await page.waitForFunction(()=>lastImport||failures.length);assert.deepEqual(await page.evaluate(()=>failures),[]);
-    const imported=await document();assert.deepEqual(imported,await page.evaluate(()=>lastImport));
+    const imported=await presentation();assert.deepEqual(imported,await page.evaluate(()=>lastImport));
     const displayed=await page.evaluate(()=>accepted.items[0].codeLayout.parts.flatMap(part=>part.fit.lines));
     /* opf-pptx with content topology (spec-gap P1) returns the root code payload as slides.0.code; earlier releases return one code block. */assert.deepEqual(imported.slides[0].code??imported.slides[0].blocks?.[0]?.code,accepted.slides[0].code,'Code semantics, metadata and every source newline round-trip exactly');assert.ok(imported.slides[0].code!==undefined||imported.slides[0].blocks.length===1,'One code payload');
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),accepted);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),accepted);
     assert.deepEqual(await page.evaluate(()=>failures),[]);
     results.push({dimensions,exportSha256:hash(new Uint8Array(bytes)),exportBytes:bytes.length,acceptedLines:displayed.length,exactCodeRoundTrip:true,selectionVisibility:{source:sourceSelection,filename:filenameSelection},substitutions:await page.evaluate(()=>fonts.substitutions)});
   }
@@ -87,14 +87,14 @@ try {
     const blank='\r\n\r\n\n',deck={design:{fontScheme:'roboto',dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{code:blank}]};
     await page.evaluate(args=>mountCode(args),{faces,deck});
     const body=page.locator('[data-canvas-target][data-opf-path="slides.0.code"]');
-    const accepted=await page.evaluate(()=>editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].codeLayout.parts.find(part=>part.role==='body'));
+    const accepted=await page.evaluate(()=>editor.composeSlide(0,{fonts}).items[0].codeLayout.parts.find(part=>part.role==='body'));
     const selection=body.locator(':scope > rect.opf-selection');
     assert.equal(Number(await selection.getAttribute('height')),accepted.box.height+8,'Entire blank code part must remain selectable');
     await enter(body);let input=page.getByRole('textbox',{name:'Edit code inline',exact:true});
-    await input.press('Control+Enter');assert.deepEqual(await document(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false);
+    await input.press('Control+Enter');assert.deepEqual(await presentation(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false);
     await enter(body);input=page.getByRole('textbox',{name:'Edit code inline',exact:true});
-    await input.fill('Visible code');await input.press('Control+Enter');assert.equal((await document()).slides[0].code,'Visible code');
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),deck);
+    await input.fill('Visible code');await input.press('Control+Enter');assert.equal((await presentation()).slides[0].code,'Visible code');
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),deck);
     blankTargets.push({dimensions,acceptedHeight:accepted.box.height,selectableHeight:accepted.box.height+8,noOpPreserved:true,editUndoPreserved:true});
   }
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);

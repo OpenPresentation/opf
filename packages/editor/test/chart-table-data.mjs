@@ -3,14 +3,14 @@
 // number format and a chart's series mapping, each as one undoable patch. Documents without the new fields behave as before.
 import assert from "node:assert/strict";
 import * as core from "@openpresentation/opf";
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";
 import * as grid from "../dist/data-grid.js";
 import * as chart from "../dist/chart-data.js";
 import * as tables from "../dist/table-options.js";
 import * as findReplace from "../dist/find-replace.js";
 import * as switches from "../dist/switches.js";
-import { DATASET_ID_PATTERN, createDataContent, prepareDatasetImport } from "../dist/data.js";
+import { DATASET_ID_PATTERN, importData, prepareDatasetImport } from "../dist/data.js";
 import { prepareOpfImport } from "../dist/transfer.js";
 
 const C_INLINE = "slides.0.blocks.0.chart";
@@ -46,36 +46,36 @@ const deck = () => ({
     },
   ],
 });
-const session = (document = deck()) => createEditorSession(document, { rejectInvalid: true });
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
 const body = (row, column) => ({ section: "body", row, column });
 const header = (column) => ({ section: "header", column });
 
 function step(editor, name, action, expectation) {
-  const before = editor.document;
+  const before = editor.presentation;
   const depth = editor.snapshot().undoDepth;
   const change = action();
   assert.equal(change.changed, true, `${name} changed the document`);
   assert.equal(editor.snapshot().undoDepth, depth + 1, `${name} is one undo step`);
-  assert.equal(validatePresentation(editor.document).valid, true, `${name} leaves valid OPF`);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, `${name} leaves valid OPF`);
   expectation?.(change);
-  const after = editor.document;
+  const after = editor.presentation;
   editor.undo();
-  assert.deepEqual(editor.document, before, `${name} undoes in one step`);
+  assert.deepEqual(editor.presentation, before, `${name} undoes in one step`);
   editor.redo();
-  assert.deepEqual(editor.document, after, `${name} redoes`);
+  assert.deepEqual(editor.presentation, after, `${name} redoes`);
   editor.undo();
-  assert.deepEqual(editor.document, before, `${name} undoes again`);
+  assert.deepEqual(editor.presentation, before, `${name} undoes again`);
   return change;
 }
 const refuses = (editor, name, action, code) => {
-  const before = editor.document;
+  const before = editor.presentation;
   const depth = editor.snapshot().undoDepth;
   assert.throws(action, (error) => (code ? error.code === code : true), name);
-  assert.deepEqual(editor.document, before, `${name} leaves the document alone`);
+  assert.deepEqual(editor.presentation, before, `${name} leaves the document alone`);
   assert.equal(editor.snapshot().undoDepth, depth, `${name} records no undo step`);
 };
 
-assert.equal(validatePresentation(deck()).valid, true, "the fixture is valid OPF");
+assert.equal(validate(deck(), { only: ["format"] }).valid, true, "the fixture is valid OPF");
 assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-54)");
 
 // --- documents without the new fields behave exactly as before ---------------------------------------------
@@ -85,7 +85,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     design: { theme: "minimal", fontScheme: "aptos" },
     slides: [{ id: "p", title: "P", blocks: [{ chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 18]] } } }, { table: { columns: ["A", "B"], rows: [["x", 1]] } }] }],
   });
-  const grid0 = grid.describeDataGrid(editor.document, "slides.0.blocks.0.chart");
+  const grid0 = grid.describeDataGrid(editor.presentation, "slides.0.blocks.0.chart");
   assert.deepEqual(grid0.columnRoles, ["category", "series"]);
   assert.equal(grid0.dataset, undefined);
   assert.equal(grid0.mapping, undefined);
@@ -93,7 +93,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   const change = grid.setGridCells(editor, "slides.0.blocks.0.chart", [{ ...body(1, 1), text: "20" }]);
   assert.deepEqual(change.patches, [{ op: "test", path: "/slides/0/blocks/0/chart/data/rows/1/1", value: 18 }, { op: "replace", path: "/slides/0/blocks/0/chart/data/rows/1/1", value: 20 }]);
   assert.equal(change.dataset, undefined);
-  assert.deepEqual(grid.resolveDataGridTarget(editor.document, "slides.0.blocks.0.chart"), { kind: "chart", path: "slides.0.blocks.0.chart" });
+  assert.deepEqual(grid.resolveDataGridTarget(editor.presentation, "slides.0.blocks.0.chart"), { kind: "chart", path: "slides.0.blocks.0.chart" });
   grid.insertGridColumns(editor, "slides.0.blocks.0.chart", 2, 1);
   assert.deepEqual(editor.get("slides.0.blocks.0.chart.data.columns"), ["Quarter", "Revenue", ""], "a new series of an ordinary chart is unnamed, as before");
   assert.equal(editor.get("slides.0.blocks.0.chart.mapping"), undefined);
@@ -102,7 +102,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 // --- DataColumn headers: names edit, formats stay ------------------------------------------------------------
 {
   const editor = session();
-  const view = grid.describeDataGrid(editor.document, C_INLINE);
+  const view = grid.describeDataGrid(editor.presentation, C_INLINE);
   assert.deepEqual(view.columnNames, ["Quarter", "Revenue", "Costs"]);
   assert.equal(view.lines[0][1].text, "Revenue", "a DataColumn header shows its name");
   assert.equal(view.lines[0][1].format, "$#,##0.0");
@@ -159,7 +159,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     design: { theme: "minimal", fontScheme: "aptos" },
     slides: [{ id: "o", title: "O", chart: { type: "column", data: { columns: ["Q", "V"], rows: [["a", "12%"], ["b", "1e3"], ["c", "0x10"], ["d", " 7 "], ["e", "(5)"]] } } }],
   });
-  const warned = grid.describeDataGrid(odd.document, "slides.0.chart").warnings.map((entry) => entry.row);
+  const warned = grid.describeDataGrid(odd.presentation, "slides.0.chart").warnings.map((entry) => entry.row);
   assert.deepEqual(warned, [0, 2, 4], '"12%", "0x10" and "(5)" are gaps under chartNumber; "1e3" and " 7 " are numbers');
   assert.equal(core.chartNumber("1e3"), 1000);
 }
@@ -215,12 +215,12 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 // --- a chart that shows a shared dataset --------------------------------------------------------------------
 {
   const editor = session();
-  const target = grid.resolveDataGridTarget(editor.document, `${C_FIELDS}.data.dataset`);
+  const target = grid.resolveDataGridTarget(editor.presentation, `${C_FIELDS}.data.dataset`);
   assert.equal(target.kind, "chart");
   assert.equal(target.path, C_FIELDS);
   assert.deepEqual(target.dataset, { id: "revenue", fields: ["Quarter", "Costs"], count: 3, items: [C_FIELDS, T_DATASET, C_ALL] }, "the dataset is shared by three items");
 
-  const view = grid.describeDataGrid(editor.document, C_FIELDS);
+  const view = grid.describeDataGrid(editor.presentation, C_FIELDS);
   assert.deepEqual(view.columnNames, ["Quarter", "Costs"], "fields select and order the columns");
   assert.deepEqual(view.lines.map((line) => line.map((cell) => cell.text)), [["Quarter", "Costs"], ["Q1", "5"], ["Q2", "8"], ["Q3", "9"]]);
   assert.deepEqual(view.dataset, { id: "revenue", fields: ["Quarter", "Costs"], items: [C_FIELDS, T_DATASET, C_ALL] });
@@ -301,7 +301,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 // --- a table that shows a shared dataset --------------------------------------------------------------------
 {
   const editor = session();
-  const view = grid.describeDataGrid(editor.document, T_DATASET);
+  const view = grid.describeDataGrid(editor.presentation, T_DATASET);
   assert.equal(view.kind, "table");
   assert.equal(view.hasHeader, true, "a dataset table always has the dataset's column names as its header");
   assert.deepEqual(view.lines.map((line) => line.map((cell) => cell.text)), [["Quarter", "Revenue"], ["Q1", "12.4"], ["Q2", "18.1"], ["Q3", "24"]]);
@@ -340,28 +340,28 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 // --- chart mapping ----------------------------------------------------------------------------------------------
 {
   const editor = session();
-  const view = grid.describeChartMapping(editor.document, C_INLINE);
+  const view = grid.describeChartMapping(editor.presentation, C_INLINE);
   assert.deepEqual({ xy: view.xy, category: view.category, series: view.series, authored: view.authored }, { xy: false, category: "Quarter", series: ["Revenue", "Costs"], authored: undefined });
   assert.deepEqual(view.columns.map((column) => column.role), ["category", "series", "series"]);
   assert.equal(view.columns[1].format, "$#,##0.0");
 
   step(editor, "choose the series", () => grid.setChartMapping(editor, C_INLINE, { series: ["Costs"] }), () => {
     assert.deepEqual(editor.get(`${C_INLINE}.mapping`), { series: ["Costs"] });
-    assert.deepEqual(grid.describeDataGrid(editor.document, C_INLINE).columnRoles, ["category", "other", "series"], "a column the mapping leaves out is not plotted");
+    assert.deepEqual(grid.describeDataGrid(editor.presentation, C_INLINE).columnRoles, ["category", "other", "series"], "a column the mapping leaves out is not plotted");
   });
   step(editor, "series in another order", () => grid.setChartMapping(editor, C_INLINE, { series: ["Costs", "Revenue"] }), () => {
     assert.deepEqual(editor.get(`${C_INLINE}.mapping`), { series: ["Costs", "Revenue"] });
   });
   step(editor, "choose another category", () => grid.setChartMapping(editor, C_INLINE, { category: "Costs" }), () => {
     assert.deepEqual(editor.get(`${C_INLINE}.mapping`), { category: "Costs" }, "the other columns are series by default, so no series field is written");
-    assert.deepEqual(grid.describeChartMapping(editor.document, C_INLINE).series, ["Quarter", "Revenue"]);
+    assert.deepEqual(grid.describeChartMapping(editor.presentation, C_INLINE).series, ["Quarter", "Revenue"]);
   });
   // Setting the default removes the field; setting everything to the default removes the mapping.
   const withMapping = session();
   grid.setChartMapping(withMapping, C_INLINE, { series: ["Costs"] });
   grid.setChartMapping(withMapping, C_INLINE, { series: ["Revenue", "Costs"] });
   assert.equal(withMapping.get(`${C_INLINE}.mapping`), undefined, "the default mapping is not written");
-  assert.deepEqual(withMapping.document, deck(), "the document is back to how it was");
+  assert.deepEqual(withMapping.presentation, deck(), "the document is back to how it was");
   assert.equal(grid.setChartMapping(withMapping, C_INLINE, { category: "Quarter" }).changed, false, "the default again changes nothing");
   refuses(editor, "an unknown column", () => grid.setChartMapping(editor, C_INLINE, { category: "Profit" }), "chart-mapping-unknown-column");
   refuses(editor, "an X column on a column chart", () => grid.setChartMapping(editor, C_INLINE, { x: "Revenue" }), "chart-mapping-x-unsupported");
@@ -369,14 +369,14 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   refuses(editor, "mapping a table", () => grid.setChartMapping(editor, T_INLINE, { category: "Region" }), "grid-wrong-kind");
 
   // A scatter chart: the X column.
-  const xy = grid.describeChartMapping(editor.document, C_SCATTER);
+  const xy = grid.describeChartMapping(editor.presentation, C_SCATTER);
   assert.equal(xy.xy, true);
   assert.equal(xy.x, "Spend");
   assert.deepEqual(xy.series, ["Revenue", "Margin"]);
   step(editor, "choose the X column", () => grid.setChartMapping(editor, C_SCATTER, { x: "Revenue" }), () => {
     assert.deepEqual(editor.get(`${C_SCATTER}.mapping`), { x: "Revenue" });
-    assert.deepEqual(grid.describeChartMapping(editor.document, C_SCATTER).series, ["Spend", "Margin"]);
-    assert.deepEqual(grid.describeDataGrid(editor.document, C_SCATTER).columnRoles, ["label", "series", "x", "series"]);
+    assert.deepEqual(grid.describeChartMapping(editor.presentation, C_SCATTER).series, ["Spend", "Margin"]);
+    assert.deepEqual(grid.describeDataGrid(editor.presentation, C_SCATTER).columnRoles, ["label", "series", "x", "series"]);
   });
   refuses(editor, "X equal to the category", () => grid.setChartMapping(editor, C_SCATTER, { x: "Label" }), "chart-mapping-conflict");
 
@@ -384,7 +384,7 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   step(editor, "map a dataset chart", () => grid.setChartMapping(editor, C_FIELDS, { category: "Costs" }), () => {
     assert.deepEqual(editor.get(`${C_FIELDS}.mapping`), { category: "Costs" });
   });
-  assert.deepEqual(grid.describeChartMapping(editor.document, C_ALL), {
+  assert.deepEqual(grid.describeChartMapping(editor.presentation, C_ALL), {
     path: C_ALL,
     xy: false,
     columns: [{ name: "Quarter", role: "category" }, { name: "Revenue", format: "$#,##0.0", role: "other" }, { name: "Costs", role: "series" }, { name: "Notes", role: "other" }],
@@ -427,8 +427,8 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   const change = step(editor, "use a copy of the data (chart with fields)", () => grid.detachGridDataset(editor, C_FIELDS), () => {
     assert.deepEqual(editor.get(`${C_FIELDS}.data`), { columns: ["Quarter", "Costs"], rows: [["Q1", 5], ["Q2", 8], ["Q3", 9]], source: { src: "./data/revenue.csv", retrieved: "2026-10-05" } });
     assert.ok(editor.get("datasets.revenue"), "the dataset stays for the others");
-    assert.equal(grid.resolveDataGridTarget(editor.document, C_FIELDS).dataset, undefined);
-    assert.equal(grid.resolveDataGridTarget(editor.document, C_ALL).dataset.count, 2);
+    assert.equal(grid.resolveDataGridTarget(editor.presentation, C_FIELDS).dataset, undefined);
+    assert.equal(grid.resolveDataGridTarget(editor.presentation, C_ALL).dataset.count, 2);
   });
   assert.equal(change.dataset, "revenue");
   step(editor, "use a copy of the data (table)", () => grid.detachGridDataset(editor, T_DATASET), () => {
@@ -440,32 +440,32 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 // --- import as a shared dataset ------------------------------------------------------------------------------------
 {
   const csv = "Quarter,Revenue,Costs\nQ1,12,8\nQ2,18,11\n";
-  const content = createDataContent(csv, { as: "chart", chartType: "column" });
+  const content = importData(csv, { as: "chart", chartType: "column" });
   const editor = session({ name: "Import", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "a", title: "A", text: "Hello" }] });
-  const stored = prepareDatasetImport(editor.document, content, { id: "revenue", source: { src: "./revenue.csv", retrieved: "2026-10-05" } });
+  const stored = prepareDatasetImport(editor.presentation, content, { id: "revenue", source: { src: "./revenue.csv", retrieved: "2026-10-05" } });
   assert.deepEqual(stored.content, { chart: { type: "column", data: { dataset: "revenue" } } });
   assert.equal(stored.replaced, false);
   assert.deepEqual(stored.patches.map((patch) => patch.op), ["add"]);
   editor.applyPatch([...stored.patches, { op: "add", path: "/slides/1", value: { id: "data", title: "Data", ...stored.content } }], { label: "Import data" });
   assert.equal(editor.snapshot().undoDepth, 1, "the dataset and the slide are one undo step");
   assert.deepEqual(editor.get("datasets.revenue"), { columns: ["Quarter", "Revenue", "Costs"], rows: [["Q1", 12, 8], ["Q2", 18, 11]], source: { src: "./revenue.csv", retrieved: "2026-10-05" } });
-  assert.equal(validatePresentation(editor.document).valid, true);
-  assert.equal(grid.resolveDataGridTarget(editor.document, "slides.1.chart").dataset.count, 1);
-  assert.equal(core.unusedDatasets(editor.document).length, 0);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
+  assert.equal(grid.resolveDataGridTarget(editor.presentation, "slides.1.chart").dataset.count, 1);
+  assert.equal(core.unusedDatasets(editor.presentation).length, 0);
   editor.undo();
-  assert.equal(editor.document.datasets, undefined, "undo removes the dataset again");
+  assert.equal(editor.presentation.datasets, undefined, "undo removes the dataset again");
   editor.redo();
 
   // Importing into an existing id replaces its columns and rows and keeps its title and source.
-  const again = prepareDatasetImport(editor.document, createDataContent("Quarter,Revenue,Costs\nQ1,1,2\n", { as: "table" }), { id: "revenue" });
+  const again = prepareDatasetImport(editor.presentation, importData("Quarter,Revenue,Costs\nQ1,1,2\n", { as: "table" }), { id: "revenue" });
   assert.equal(again.replaced, true);
   assert.deepEqual(again.content, { table: { dataset: "revenue" } });
   editor.applyPatch([...again.patches, { op: "add", path: "/slides/2", value: { id: "t", title: "T", ...again.content } }]);
   assert.deepEqual(editor.get("datasets.revenue.rows"), [["Q1", "1", "2"]], "a CSV table keeps its cells as text");
   assert.deepEqual(editor.get("datasets.revenue.source"), { src: "./revenue.csv", retrieved: "2026-10-05" });
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 
-  for (const bad of ["", "-x", "a b", "a/b", undefined]) assert.throws(() => prepareDatasetImport(editor.document, content, { id: bad }), (error) => error.code === "dataset-id-invalid", `id ${JSON.stringify(bad)}`);
+  for (const bad of ["", "-x", "a b", "a/b", undefined]) assert.throws(() => prepareDatasetImport(editor.presentation, content, { id: bad }), (error) => error.code === "dataset-id-invalid", `id ${JSON.stringify(bad)}`);
   assert.ok(DATASET_ID_PATTERN.test("pipeline-2026"));
 }
 
@@ -473,25 +473,25 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
 {
   const editor = session();
   // find and replace reads dataset text and DataColumn names, and leaves names that mapping and fields address alone.
-  const fields = findReplace.collectSearchFields(editor.document);
+  const fields = findReplace.collectSearchFields(editor.presentation);
   assert.ok(fields.some((field) => field.path === "datasets.revenue.rows.0.3" && field.text === "first"), "dataset text cells are searchable");
   assert.ok(fields.some((field) => field.path === `${C_INLINE}.data.columns.1.name` && field.text === "Revenue"), "a DataColumn name is searchable");
   assert.ok(!fields.some((field) => field.path.startsWith(`${C_ALL}.data.columns`)), "a chart with a mapping keeps its column names");
   assert.ok(fields.some((field) => field.path === `${T_INLINE}.columns.1.name`), "a table DataColumn header is searchable");
-  const matches = findReplace.findMatches(editor.document, "first");
+  const matches = findReplace.findMatches(editor.presentation, "first");
   assert.equal(matches.matches.length, 1);
   findReplace.replaceAll(editor, "first", "opening");
   assert.equal(editor.get("datasets.revenue.rows.0.3"), "opening");
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
 
   // chart type compatibility reads the resolved data (dataset, fields and mapping).
-  const ids = (path) => switches.compatibleChartTypes(editor.document, { path }).map((entry) => entry.id);
+  const ids = (path) => switches.compatibleChartTypes(editor.presentation, { path }).map((entry) => entry.id);
   assert.ok(ids("slides.0.blocks.1").includes("pie"), "a dataset chart with fields that select one series suits a pie");
   assert.ok(ids("slides.0.blocks.5").includes("pie") && !ids("slides.0.blocks.5").includes("stacked-column"), "a mapping that plots one series suits a pie");
   assert.ok(ids("slides.0.blocks.0").includes("stacked-column"), "inline DataColumn data suits two series");
 
   // Table style reads of a dataset table are refused with a reason; the panel treats that as "no inline table".
-  assert.throws(() => tables.readTableStyle(editor.document, T_DATASET), (error) => error.code === "table-dataset-backed");
+  assert.throws(() => tables.readTableStyle(editor.presentation, T_DATASET), (error) => error.code === "table-dataset-backed");
   assert.equal(tables.parseTableCellPath(`${T_DATASET}.fields`), undefined);
 
   // Block conversion of a dataset chart keeps the reference; a dataset table converts with the document.
@@ -552,10 +552,10 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
     slides: [{ id: "d", title: "D", blocks: [{ chart: { type: "scatter", data: { columns: ["L", "X", "Y", "Z"], rows: [["a", 1, 2, 3]] }, mapping: { x: "Z", series: ["Y"] } } }] }],
   });
   const editor = session(scatter());
-  const warnings = () => (validatePresentation(editor.document).warnings ?? []).map((entry) => entry.params?.code ?? entry.code);
+  const warnings = () => validate(editor.presentation, { only: ["opf/chart-mapping-adapted"] }).findings.map((finding) => finding.ruleId);
   step(editor, "switch a scatter chart with mapping.x to column", () => switches.switchDimension(editor, "charts", "column", { slideIndex: 0, path: "slides.0.blocks.0" }), () => {
     assert.deepEqual(editor.get("slides.0.blocks.0.chart.mapping"), { series: ["Y"] }, "x leaves the mapping");
-    assert.ok(!warnings().includes("chart-mapping-adapted"), "no chart-mapping-adapted warning is left behind");
+    assert.ok(!warnings().includes("opf/chart-mapping-adapted"), "no chart-mapping-adapted warning is left behind");
   });
   const only = session({ ...scatter(), slides: [{ id: "d", title: "D", blocks: [{ chart: { type: "scatter", data: { columns: ["L", "X", "Y"], rows: [["a", 1, 2]] }, mapping: { x: "Y" } } }] }] });
   switches.switchDimension(only, "charts", "column", { slideIndex: 0, path: "slides.0.blocks.0" });
@@ -573,27 +573,27 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   });
   const current = deck();
   // Different rows under a name the deck already uses: the incoming dataset is stored under a new id and the slide follows it.
-  const merged = prepareOpfImport(current, { document: incoming([["Q1", 1]]) }, { mode: "insert", slideIndex: 0 });
-  assert.equal(validatePresentation(merged.document).valid, true, "the merged deck is valid OPF");
-  assert.deepEqual(merged.document.datasets.revenue, current.datasets.revenue, "the deck's own dataset is untouched");
-  assert.deepEqual(merged.document.datasets["revenue-2"].rows, [["Q1", 1]], "the incoming dataset is kept under a free id");
-  assert.equal(merged.document.datasets.spare, undefined, "a dataset no inserted slide uses is not copied");
-  const inserted = merged.document.slides[1].blocks;
+  const merged = prepareOpfImport(current, { presentation: incoming([["Q1", 1]]) }, { mode: "insert", slideIndex: 0 });
+  assert.equal(validate(merged.presentation, { only: ["format"] }).valid, true, "the merged deck is valid OPF");
+  assert.deepEqual(merged.presentation.datasets.revenue, current.datasets.revenue, "the deck's own dataset is untouched");
+  assert.deepEqual(merged.presentation.datasets["revenue-2"].rows, [["Q1", 1]], "the incoming dataset is kept under a free id");
+  assert.equal(merged.presentation.datasets.spare, undefined, "a dataset no inserted slide uses is not copied");
+  const inserted = merged.presentation.slides[1].blocks;
   assert.deepEqual([inserted[0].chart.data, inserted[1].table.dataset], [{ dataset: "revenue-2" }, "revenue-2"], "every reference follows the new id");
   // The same dataset under the same id is shared, not copied.
-  const same = prepareOpfImport(current, { document: { ...incoming(current.datasets.revenue.rows), datasets: { revenue: current.datasets.revenue } } }, { mode: "insert", slideIndex: 0 });
-  assert.deepEqual(Object.keys(same.document.datasets), ["revenue"], "an identical dataset is reused");
-  assert.equal(same.document.slides[1].blocks[0].chart.data.dataset, "revenue");
+  const same = prepareOpfImport(current, { presentation: { ...incoming(current.datasets.revenue.rows), datasets: { revenue: current.datasets.revenue } } }, { mode: "insert", slideIndex: 0 });
+  assert.deepEqual(Object.keys(same.presentation.datasets), ["revenue"], "an identical dataset is reused");
+  assert.equal(same.presentation.slides[1].blocks[0].chart.data.dataset, "revenue");
   // A deck with no datasets takes the incoming ones as they are.
-  const bare = prepareOpfImport({ name: "Bare", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "b", title: "B", blocks: [{ text: "x" }] }] }, { document: incoming([["Q1", 1]]) }, { mode: "insert", slideIndex: 0 });
-  assert.deepEqual(Object.keys(bare.document.datasets), ["revenue"]);
-  assert.equal(validatePresentation(bare.document).valid, true);
+  const bare = prepareOpfImport({ name: "Bare", design: { theme: "minimal", fontScheme: "aptos" }, slides: [{ id: "b", title: "B", blocks: [{ text: "x" }] }] }, { presentation: incoming([["Q1", 1]]) }, { mode: "insert", slideIndex: 0 });
+  assert.deepEqual(Object.keys(bare.presentation.datasets), ["revenue"]);
+  assert.equal(validate(bare.presentation, { only: ["format"] }).valid, true);
 }
 
 // --- numbers show formatted in the grid; the raw value is what editing and copying use ------------------------------------
 {
   const editor = session();
-  const texts = (path, column) => grid.describeDataGrid(editor.document, path).lines.slice(1).map((line) => line[column]);
+  const texts = (path, column) => grid.describeDataGrid(editor.presentation, path).lines.slice(1).map((line) => line[column]);
   // A chart column with a format shows it; the stored value is the cell's text.
   const revenue = texts(C_INLINE, 1);
   assert.deepEqual(revenue.map((cell) => cell.display), ["$12.4", "$18.1"], "a formatted chart column shows its format");
@@ -603,26 +603,26 @@ assert.equal(typeof core.chartNumber, "function", "core exports chartNumber (RR-
   // A dataset column's format shows in every item that shows the column (the `fields` order does not matter).
   assert.deepEqual(texts(T_DATASET, 1).map((cell) => cell.display), ["$12.4", "$18.1", "$24.0"]);
   // A table body cell's own format wins over its column's; text and rich cells are left alone.
-  const table = grid.describeDataGrid(editor.document, T_INLINE);
+  const table = grid.describeDataGrid(editor.presentation, T_INLINE);
   assert.deepEqual(table.lines.slice(1).map((line) => line.map((cell) => cell.display)), [[undefined, "40%", "10.0%"], [undefined, "60%", "20%"]]);
   assert.deepEqual(table.lines.slice(1).map((line) => line[2].text), ["0.1", "0.2"], "a table cell's text is the raw value");
   // A format that does not apply leaves the number as it was, in the grid's own number format.
-  const comma = grid.describeDataGrid(editor.document, C_INLINE, { decimal: "," });
+  const comma = grid.describeDataGrid(editor.presentation, C_INLINE, { decimal: "," });
   assert.equal(comma.lines[1][2].text, "5");
   const plain = session({ ...deck(), slides: [{ id: "p", title: "P", blocks: [{ chart: { type: "column", data: { columns: ["Q", "Revenue"], rows: [["Q1", 12.5]] } } }, { table: { columns: ["A", "B"], rows: [[1.5, 2]] } }] }] });
-  const noFormats = [grid.describeDataGrid(plain.document, "slides.0.blocks.0.chart", { decimal: "," }), grid.describeDataGrid(plain.document, "slides.0.blocks.1.table")];
+  const noFormats = [grid.describeDataGrid(plain.presentation, "slides.0.blocks.0.chart", { decimal: "," }), grid.describeDataGrid(plain.presentation, "slides.0.blocks.1.table")];
   assert.ok(noFormats.every((view) => view.lines.every((line) => line.every((cell) => !("display" in cell)))), "a document without formats has no display text");
   assert.equal(noFormats[0].lines[1][1].text, "12,5", "unformatted numbers follow the locale's decimal separator as before");
   // A table without a header has no column formats: its first body row is not a header.
   const headerless = session({ ...deck(), slides: [{ id: "h", title: "H", blocks: [{ table: { rows: [[{ value: 0.5, format: "0%" }, 2], [0.25, 3]] } }] }] });
-  const headlessView = grid.describeDataGrid(headerless.document, "slides.0.blocks.0.table");
+  const headlessView = grid.describeDataGrid(headerless.presentation, "slides.0.blocks.0.table");
   assert.deepEqual(headlessView.columnFormats, [undefined, undefined], "a body cell's format is not a column format");
   assert.deepEqual(headlessView.lines.map((line) => line[0].display), ["50%", undefined]);
   // Copy writes the raw values; editing a formatted cell sees the raw text and a no-op edit changes nothing.
-  assert.equal(grid.gridRangeText(editor.document, C_INLINE), "Quarter\tRevenue\tCosts\nQ1\t12.4\t5\nQ2\t18.1\t8");
-  assert.equal(grid.prepareGridCells(editor.document, C_INLINE, [{ section: "body", row: 0, column: 1, text: "12.4" }]).changed, false);
-  assert.equal(grid.describeDataGrid(editor.document, C_INLINE, { decimal: "," }).lines[1][1].display, "$12.4", "the format decides the formatted text; the decimal separator is for the raw text");
-  assert.equal(grid.describeDataGrid(editor.document, C_INLINE, { decimal: "," }).lines[1][1].text, "12,4");
+  assert.equal(grid.gridRangeText(editor.presentation, C_INLINE), "Quarter\tRevenue\tCosts\nQ1\t12.4\t5\nQ2\t18.1\t8");
+  assert.equal(grid.prepareGridCells(editor.presentation, C_INLINE, [{ section: "body", row: 0, column: 1, text: "12.4" }]).changed, false);
+  assert.equal(grid.describeDataGrid(editor.presentation, C_INLINE, { decimal: "," }).lines[1][1].display, "$12.4", "the format decides the formatted text; the decimal separator is for the raw text");
+  assert.equal(grid.describeDataGrid(editor.presentation, C_INLINE, { decimal: "," }).lines[1][1].text, "12,4");
 }
 
 {

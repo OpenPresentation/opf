@@ -5,7 +5,6 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as renderFonts from '@openpresentation/opf-render/fonts-node';
-const { loadOfficeFontRegistry } = renderFonts;
 const require = createRequire(import.meta.url);
 
 const root = new URL('../', import.meta.url);
@@ -19,11 +18,12 @@ await build({
   outfile: fileURLToPath(new URL('playground.js', output)),
   bundle: true, platform: 'browser', format: 'esm', minify: true,
 });
-const officeFonts = await loadOfficeFontRegistry();
+// The renderer's fonts handle for the Office pack: its registry's eager faces are the page's startup faces, its registry lists the vendored ones.
+const officeFonts = await renderFonts.loadFonts({ pack: 'office' });
 const isStartup = face => face.family === 'Roboto' && face.weight === 400 && !face.italic;
 if (splitFonts) {
   const base = [];
-  for (const face of officeFonts.embeddedFonts.filter(face => !isStartup(face))) {
+  for (const face of officeFonts.registry.embeddedFonts.filter(face => !isStartup(face))) {
     const bytes = Buffer.from(face.dataUrl.split(',')[1], 'base64'), sha256 = createHash('sha256').update(bytes).digest('hex');
     const file = `${face.family.replace(/[^a-z0-9]+/gi, '-')}-${face.weight}-${face.italic ? 'italic' : 'normal'}-${sha256.slice(0, 12)}.ttf`;
     await writeFile(new URL(file, output), bytes);
@@ -31,31 +31,30 @@ if (splitFonts) {
   }
   await writeFile(new URL('base-fonts.json', output), JSON.stringify(base));
 } else await writeFile(new URL('base-fonts.json', output), '[]');
-await writeFile(new URL('fonts.json', output), JSON.stringify(splitFonts ? officeFonts.embeddedFonts.filter(isStartup) : officeFonts.embeddedFonts));
+await writeFile(new URL('fonts.json', output), JSON.stringify(splitFonts ? officeFonts.registry.embeddedFonts.filter(isStartup) : officeFonts.registry.embeddedFonts));
 // FF-31: the vendored preview faces (Intos for the Aptos scheme, the open families) are not in fonts.json. They are served next to
 // the page at their package-relative paths (fonts/intos/..., fonts/<family>/...) and fetched on demand, only for the font
-// families a document resolves, hash-verified by the renderer (registry.ensureLazyFonts). Never a font CDN. A renderer without
-// lazyFonts (published 0.10.0 and earlier) has none to copy, and the playground then keeps the fonts it has.
+// families a document resolves, hash-verified by the renderer (fonts.ensure). Never a font CDN.
 let lazyFaces = 0;
-if (officeFonts.lazyFonts?.length) {
+const lazyFonts = officeFonts.registry.lazyFonts;
+if (lazyFonts.length) {
   const renderRoot = path.dirname(require.resolve('@openpresentation/opf-render/package.json'));
-  for (const directory of new Set(officeFonts.lazyFonts.map(face => path.posix.dirname(face.file)))) {
+  for (const directory of new Set(lazyFonts.map(face => path.posix.dirname(face.file)))) {
     for (const name of (await readdir(path.join(renderRoot, directory))).sort()) {
       const target = new URL(`${directory}/${name}`, output);
       await mkdir(new URL('./', target), { recursive: true });
       await copyFile(path.join(renderRoot, directory, name), target);
     }
   }
-  for (const face of officeFonts.lazyFonts) {
+  for (const face of lazyFonts) {
     if (createHash('sha256').update(await readFile(new URL(face.file, output))).digest('hex') !== face.sha256) throw new Error(`${face.file} differs from the reviewed font manifest.`);
     lazyFaces++;
   }
 }
 // FF-19: the pinned script faces (OFL Noto) are served next to the page and fetched lazily, only for the scripts a
-// document draws, hash-verified by the renderer. Never a font CDN. A renderer without the script pack (published
-// 0.9.x) has none to copy, and the playground then keeps its Latin fonts.
+// document draws, hash-verified by the renderer. Never a font CDN.
 let scriptFaces = 0;
-if (typeof renderFonts.scriptFontPackages === 'function') {
+{
   for (const pkg of renderFonts.scriptFontPackages('all')) {
     let directory;
     try { directory = path.dirname(require.resolve(`${pkg.name}/package.json`)); }

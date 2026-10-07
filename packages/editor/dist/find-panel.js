@@ -177,7 +177,7 @@ export function createFindPanel(container, options) {
 
   function search(keep) {
     const before = current >= 0 ? result.matches[current] : undefined;
-    result = findMatches(editor.document, state.query, sessionOptions());
+    result = findMatches(editor.presentation, state.query, sessionOptions());
     setError(result.error);
     if (!result.matches.length) current = -1;
     else if (keep && before) {
@@ -231,8 +231,8 @@ export function createFindPanel(container, options) {
   function doReplaceOne() {
     const match = result.matches[current];
     if (!match || !finishCommit()) return;
-    const order = new Map(collectSearchFields(editor.document, sessionOptions()).map((field, index) => [field.pointer, index]));
-    const fieldText = textOf(getValueAtPath(editor.document, match.pointer));
+    const order = new Map(collectSearchFields(editor.presentation, sessionOptions()).map((field, index) => [field.pointer, index]));
+    const fieldText = textOf(getValueAtPath(editor.presentation, match.pointer));
     const written = match.start + expandReplacement(state.replacement, match, fieldText, state.regex).length;
     try {
       replaceMatch(editor, match, state.query, state.replacement, sessionOptions());
@@ -246,8 +246,8 @@ export function createFindPanel(container, options) {
     setError("");
     // Move on to the next match after the replaced text, in reading order (never the text just written).
     const replacedAt = order.get(match.pointer) ?? -1;
-    result = findMatches(editor.document, state.query, sessionOptions());
-    const nextOrder = new Map(collectSearchFields(editor.document, sessionOptions()).map((field, index) => [field.pointer, index]));
+    result = findMatches(editor.presentation, state.query, sessionOptions());
+    const nextOrder = new Map(collectSearchFields(editor.presentation, sessionOptions()).map((field, index) => [field.pointer, index]));
     let next = result.matches.findIndex((candidate) => {
       const position = nextOrder.get(candidate.pointer) ?? Infinity;
       return position > replacedAt || (position === replacedAt && candidate.start >= written);

@@ -9,7 +9,7 @@ const FORMAT_HELP = {
   svg: 'Scalable slides with their fonts embedded, one file per slide. All slides arrive as a ZIP.',
 };
 
-export function installDownloadControls({ editor, getCanvas, getSlideIndex, renderOptions, status, fonts, registry, convert }) {
+export function installDownloadControls({ editor, getCanvas, getSlideIndex, status, fonts, convert }) {
   const header = document.querySelector('.header-actions');
   if (!header) return;
   const button = document.createElement('button');
@@ -56,7 +56,7 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, rend
     return { width: Number(svg?.getAttribute('width')) || 1280, height: Number(svg?.getAttribute('height')) || 720 };
   }
   function labelOptions() {
-    const deck = editor.document, current = getSlideIndex();
+    const deck = editor.presentation, current = getSlideIndex();
     $('#download-current-label').textContent = `Current slide (${current + 1} of ${deck.slides.length})`;
     const all = slidesToExport(deck, { slides: 'all', includeHidden: $('#download-hidden').checked }).length;
     $('#download-all-label').textContent = `All slides (${all})`;
@@ -104,7 +104,7 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, rend
     if (getCanvas() && !getCanvas().commit()) return;
     reset();
     const id = token;
-    const deck = structuredClone(editor.document);
+    const deck = structuredClone(editor.presentation);
     const format = value('download-format');
     controller = new AbortController();
     running(true);
@@ -119,7 +119,7 @@ export function installDownloadControls({ editor, getCanvas, getSlideIndex, rend
         includeHidden: $('#download-hidden').checked,
         pdfMode: format === 'pdf' ? value('download-pdf-mode') : undefined,
         scale: Number($('#download-scale').value),
-        renderOptions, fonts, registry, convert,
+        fonts, convert,
         signal: controller.signal,
         onProgress: ({ stage, done, total, message }) => {
           if (id !== token) return;

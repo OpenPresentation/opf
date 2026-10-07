@@ -78,10 +78,10 @@ export const cases = [
     slide: 0,
     preview: "svg",
     // Populating the declared placeholders replaces the slide in one operation.
-    check: (document) => {
-      assertEqual(document.slides[0].layout, "text-2x");
-      assertEqual(document.slides[0].title, "Quarterly review");
-      assertEqual(document.slides[0].blocks.length, 2);
+    check: (presentation) => {
+      assertEqual(presentation.slides[0].layout, "text-2x");
+      assertEqual(presentation.slides[0].title, "Quarterly review");
+      assertEqual(presentation.slides[0].blocks.length, 2);
     },
     patchPaths: ["/slides/0"],
   },
@@ -192,9 +192,9 @@ export const cases = [
     slide: 2,
     preview: "svg",
     patchPaths: ["/slides/2/blocks/0", "/slides/2/blocks/0"],
-    check: (document) => {
-      assertEqual(Object.keys(document.slides[2].blocks[0]).join(), "chart");
-      assertEqual(document.slides[2].blocks[1].items.length, 2);
+    check: (presentation) => {
+      assertEqual(Object.keys(presentation.slides[2].blocks[0]).join(), "chart");
+      assertEqual(presentation.slides[2].blocks[1].items.length, 2);
     },
   },
   {

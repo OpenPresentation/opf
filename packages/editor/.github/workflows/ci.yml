@@ -107,11 +107,7 @@ jobs:
       - run: npm audit
       - run: npm run typecheck
       - run: npm run validate
-      # FF-16: the linked opf-pptx has checkPptxTypefaces (FF-08), so the exports-after-switch
-      # test must run the check rather than skip it.
       - run: npm test
-        env:
-          OPF_REQUIRE_FF08: "1"
       - name: Verify Playwright image version
         run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
       # RR-47: the commands are test/browser-suites.json; a quarantined test is deferred to the non-blocking step below.
@@ -247,5 +243,3 @@ jobs:
           node scripts/link-ecosystem.mjs --packages-only
       - run: npm run typecheck
       - run: npm test
-        env:
-          OPF_REQUIRE_FF08: "1"

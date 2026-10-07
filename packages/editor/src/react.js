@@ -32,7 +32,7 @@ export function createOPFReactComponents(React) {
     ...props
   }) {
     const snapshot = useEditorSnapshot(editor);
-    const value = getValueAtPath(snapshot.document, path, "");
+    const value = getValueAtPath(snapshot.presentation, path, "");
     const tag = multiline ? "textarea" : "input";
     return React.createElement(tag, {
       ...props,
@@ -60,9 +60,9 @@ export function createOPFReactComponents(React) {
     ...props
   }) {
     const snapshot = useEditorSnapshot(editor);
-    const value = getValueAtPath(snapshot.document, path, "");
+    const value = getValueAtPath(snapshot.presentation, path, "");
     const currentId = value && typeof value === "object" ? value.id : value;
-    const options = catalogOptions ?? getCatalogOptions(catalogKind, { presentation: snapshot.document });
+    const options = catalogOptions ?? getCatalogOptions(catalogKind, { presentation: snapshot.presentation });
 
     return React.createElement(
       "select",

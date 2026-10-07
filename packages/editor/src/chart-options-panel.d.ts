@@ -7,8 +7,8 @@ export interface ChartOptionsPanelOptions {
   onStatus?: (message: string) => void;
 }
 export interface ChartOptionsPanel {
-  /** The panel's root element; undefined when the installed core has no chart option fields. */
-  element: HTMLElement | undefined;
+  /** The panel's root element (hidden while no chart is selected). */
+  element: HTMLElement;
   /** Re-read the selection and the chart; the panel also refreshes on every editor change. */
   refresh(): void;
   destroy(): void;

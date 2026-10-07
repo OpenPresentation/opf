@@ -99,8 +99,8 @@ try {
   await saved(page);
   const afterSave = await stored(page);
   assert.equal(afterSave.length, 1);
-  assert.equal(afterSave[0].key, 'opf-editor/v1/opf-editor-playground');
-  assert.equal(afterSave[0].record.document.slides[0].title, 'Edited once');
+  assert.equal(afterSave[0].key, 'opf-editor/v2/opf-editor-playground');
+  assert.equal(afterSave[0].record.presentation.slides[0].title, 'Edited once');
   assert.equal(afterSave[0].record.dirty, true);
   assert.ok(afterSave[0].record.undo.length >= 1, 'the undo history is stored too');
   assert.match(await page.locator('#autosave-status').textContent(), /Save an OPF file to keep a copy\.$/);
@@ -209,7 +209,7 @@ try {
   assert.equal(await unload(page), false, 'a document loaded by the host is not unsaved work');
   await page.waitForTimeout(1500);
   const afterHandoff = await stored(page);
-  assert.equal(afterHandoff[0].record.document.slides[0].title, 'Real work', 'and it does not overwrite the stored copy');
+  assert.equal(afterHandoff[0].record.presentation.slides[0].title, 'Real work', 'and it does not overwrite the stored copy');
   await page.close();
   mark('a document loaded by the host (the gallery handoff) is neither autosaved nor warned about');
 

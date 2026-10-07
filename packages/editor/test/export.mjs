@@ -2,14 +2,14 @@
 // registry's embedded faces, the permissive-license rule, cancellation, diagnostics and the converter hand-off (the real PDF and
 // PNG conversion is checked in a browser by test/playground-download.mjs).
 import assert from 'node:assert/strict';
-import { loadBundledFontRegistry } from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { EXPORT_FORMATS, describeDiagnostic, embeddableFonts, exportDeck, exportFileName, slidesToExport } from '../src/export.js';
 import { crc32, createZip } from '../src/zip.js';
 
 // RR-17: jszip is a test dependency of its own (opf-pptx 0.13 no longer installs it).
 import JSZip from 'jszip';
-const registry = await loadBundledFontRegistry();
-const renderOptions = { textMeasurement: registry.textMeasurement };
+const fonts = await loadFonts();
+const renderOptions = {};
 const deck = {
   name: 'Quarterly review', filename: 'q3-review.PPTX', design: { fontScheme: 'roboto' },
   slides: [
@@ -57,14 +57,14 @@ assert.equal(crc32(new TextEncoder().encode('123456789')), 0xcbf43926, 'CRC-32 c
   assert.deepEqual(faces.map(face => face.family), ['Open', 'Unlabelled']);
   assert.ok(faces.every(face => face.embed === 'used'), 'each slide embeds only the faces it draws');
   assert.deepEqual(skipped, ['Mystery'], 'a proprietary face is never embedded');
-  const real = embeddableFonts(registry);
+  const real = embeddableFonts(fonts.registry);
   assert.ok(real.length >= 1 && real.every(face => face.embed === 'used' && face.dataUrl.startsWith('data:font/')), 'the bundled registry yields embeddable faces');
 }
 
 // ---- SVG ---------------------------------------------------------------------------------------------------------------------------------
 {
   const progress = [];
-  const result = await exportDeck(deck, { format: 'svg', slides: 'all', renderOptions, registry, onProgress: item => progress.push(item.stage) });
+  const result = await exportDeck(deck, { format: 'svg', slides: 'all', renderOptions, fonts, onProgress: item => progress.push(item.stage) });
   assert.deepEqual(result.slides, [0, 2]);
   assert.deepEqual(result.files.map(file => file.name), ['q3-review-01.svg', 'q3-review-03.svg']);
   assert.equal(result.download.name, 'q3-review-svg.zip');
@@ -78,7 +78,7 @@ assert.equal(crc32(new TextEncoder().encode('123456789')), 0xcbf43926, 'CRC-32 c
   assert.doesNotMatch(first, /data-opf-path/, 'a plain SVG has no trace attributes');
   assert.doesNotMatch(first, /Hidden backup/);
   assert.ok(progress.includes('render') && progress.at(-1) === 'done');
-  const one = await exportDeck(deck, { format: 'svg', slides: 'current', slideIndex: 2, renderOptions, registry });
+  const one = await exportDeck(deck, { format: 'svg', slides: 'current', slideIndex: 2, renderOptions, fonts });
   assert.equal(one.files.length, 1);
   assert.equal(one.download.name, 'q3-review-03.svg');
   assert.equal(one.download.type, 'image/svg+xml');
@@ -98,39 +98,68 @@ assert.equal(crc32(new TextEncoder().encode('123456789')), 0xcbf43926, 'CRC-32 c
     },
     async svgToPng(svg, options) { (seen.png ??= []).push({ svg, options }); return Uint8Array.from([137, 80, 78, 71]); },
   };
-  const pdf = await exportDeck(deck, { format: 'pdf', slides: 'all', pdfMode: 'raster', scale: 9, renderOptions, registry, convert });
+  const pdf = await exportDeck(deck, { format: 'pdf', slides: 'all', pdfMode: 'raster', scale: 9, renderOptions, fonts, convert });
   assert.equal(pdf.download.name, 'q3-review.pdf');
   assert.equal(pdf.download.type, EXPORT_FORMATS.pdf.type);
   assert.equal(seen.pdf.svgs.length, 2);
   assert.equal(seen.pdf.options.mode, 'raster');
+  assert.equal(seen.pdf.options.fonts, undefined, 'the fonts handle itself is never given to the converter: it would embed faces whatever their license');
+  assert.ok(seen.pdf.options.fontData.length > 0 && seen.pdf.options.fontData.every(face => face.family && face.data instanceof Uint8Array && face.data.length > 0), 'the PDF gets the registry faces as bytes, so script faces can be embedded');
   assert.equal(seen.pdf.options.scale, 4, 'the scale is capped');
   assert.equal(seen.pdf.options.metadata.title, 'Quarterly review');
   assert.match(seen.pdf.svgs[0], /data-opf-path/, 'the PDF is drawn with trace paths for its diagnostics');
   assert.deepEqual(pdf.diagnostics.map(item => [item.code, item.severity, item.slide]), [['pdf-font-embedded', 'info', undefined], ['pdf-font-substituted', 'warning', 2]], 'diagnostics are described, and one for a slide that is not exported is dropped');
   assert.equal(describeDiagnostic({ code: 'pdf-font-embedded', family: 'roboto', weight: 700, italic: true, embedding: 'subset', glyphs: 3 }, 'pdf').message, 'Embedded roboto 700 italic (subset, 3 glyphs).');
 
-  const png = await exportDeck(deck, { format: 'png', slides: 'all', scale: 3, renderOptions, registry, convert });
+  const png = await exportDeck(deck, { format: 'png', slides: 'all', scale: 3, renderOptions, fonts, convert });
   assert.equal(seen.png.length, 2);
   assert.equal(seen.png[0].options.scale, 3);
   assert.deepEqual(png.files.map(file => file.name), ['q3-review-01.png', 'q3-review-03.png']);
   assert.equal(png.download.name, 'q3-review-png.zip');
-  const single = await exportDeck(deck, { format: 'png', slides: 'current', slideIndex: 0, renderOptions, registry, convert });
+  const single = await exportDeck(deck, { format: 'png', slides: 'current', slideIndex: 0, renderOptions, fonts, convert });
   assert.equal(single.download.name, 'q3-review-01.png');
   assert.equal(single.download.type, 'image/png');
+}
+
+// ---- PDF font licenses: the SVG rule applies to the PDF too ----------------------------------------------------------------------------
+{
+  const OFL = 'This Font Software is licensed under the SIL Open Font License, Version 1.1.';
+  const face = (family, license, bytes) => ({ family, weight: 400, ...(license ? { license } : {}), dataUrl: 'data:font/ttf;base64,' + Buffer.from(bytes).toString('base64') });
+  const registry = { selectEmbeddedFonts: () => [face('Open Sans', OFL, [1, 2, 3]), face('Proprietary Sans', 'All rights reserved. Commercial.', [9, 9, 9]), face('Noto Sans JP', 'Licensed under the Apache License, Version 2.0', [4, 5]), face('Unlabelled', undefined, [7])] };
+  const handle = { textMeasurement: fonts.textMeasurement, pending: () => [], ensure: async () => {}, registry };
+  let seenPdf;
+  const convert = { async svgToPdf(svgs, options) { seenPdf = options; options.onDiagnostic?.({ code: 'pdf-font-substituted', message: 'Proprietary Sans was drawn with Roboto.', path: 'slides.0.title' }); return Uint8Array.from([37, 80, 68, 70]); }, async svgToPng() { return new Uint8Array(); } };
+  const result = await exportDeck(deck, { format: 'pdf', slides: 'current', slideIndex: 0, fonts: handle, convert });
+  assert.deepEqual(seenPdf.fontData.map(item => item.family), ['Open Sans', 'Noto Sans JP', 'Unlabelled'], 'a face with a non-permissive license is not given to the PDF converter');
+  assert.deepEqual([...seenPdf.fontData[0].data], [1, 2, 3], 'the bytes of the face are the registry\'s');
+  assert.equal(seenPdf.fonts, undefined);
+  const licenseNotes = result.diagnostics.filter(item => item.code === 'export-font-license');
+  assert.equal(licenseNotes.length, 1, 'the dropped face is reported once, for SVG and PDF together');
+  assert.equal(licenseNotes[0].family, 'Proprietary Sans');
+  assert.equal(licenseNotes[0].severity, 'warning');
+  // What the converter then does about text that needed the dropped face is its own report, passed through.
+  assert.ok(result.diagnostics.some(item => item.code === 'pdf-font-substituted' && item.slide === 0), 'the converter\'s substitution notice reaches the caller');
+  // Faces handed in explicitly are filtered by the caller; the PDF uses exactly those.
+  const explicit = await exportDeck(deck, { format: 'pdf', slides: 'current', slideIndex: 0, fonts: handle, embeddedFonts: embeddableFonts(registry), convert });
+  assert.equal(explicit.diagnostics.filter(item => item.code === 'export-font-license').length, 0, 'an explicit embeddedFonts list is the caller\'s choice');
+  assert.deepEqual(seenPdf.fontData.map(item => item.family), ['Open Sans', 'Noto Sans JP', 'Unlabelled']);
+  // The raster PDF draws images and needs no fonts, but the rule is the same.
+  await exportDeck(deck, { format: 'pdf', pdfMode: 'raster', slides: 'current', slideIndex: 0, fonts: handle, convert });
+  assert.ok(!seenPdf.fontData.some(item => item.family === 'Proprietary Sans'));
 }
 
 // ---- Errors and cancellation ------------------------------------------------------------------------------------------------------------------
 await assert.rejects(exportDeck(deck, { format: 'docx', renderOptions }), error => error.code === 'export-format');
 await assert.rejects(exportDeck({ slides: [] }, { format: 'svg', renderOptions }), error => error.code === 'export-no-slides');
-await assert.rejects(exportDeck(deck, { format: 'pdf', renderOptions, registry, convert: undefined, signal: AbortSignal.abort() }), error => error.code === 'export-aborted');
+await assert.rejects(exportDeck(deck, { format: 'pdf', renderOptions, fonts, convert: undefined, signal: AbortSignal.abort() }), error => error.code === 'export-aborted');
 {
   const controller = new AbortController();
   await assert.rejects(exportDeck(deck, {
-    format: 'png', slides: 'all', renderOptions, registry, signal: controller.signal,
+    format: 'png', slides: 'all', renderOptions, fonts, signal: controller.signal,
     convert: { async svgToPng() { controller.abort(); return Uint8Array.from([1]); }, async svgToPdf() { return new Uint8Array(); } },
   }), error => error.code === 'export-aborted', 'a cancel between slides stops the export');
 }
 // A face that cannot load stops the export before anything is drawn.
-await assert.rejects(exportDeck(deck, { format: 'svg', renderOptions, registry, fonts: { pending: () => ['x'], ensure: async () => { const error = new Error('Fonts for this document could not be loaded'); error.code = 'fonts-unavailable'; throw error; } } }), error => error.code === 'fonts-unavailable');
+await assert.rejects(exportDeck(deck, { format: 'svg', renderOptions, fonts: { pending: () => ['x'], ensure: async () => { const error = new Error('Fonts for this document could not be loaded'); error.code = 'fonts-unavailable'; throw error; } } }), error => error.code === 'fonts-unavailable');
 
 console.log('Export API passed: file names, slide choice, ZIP, SVG with embedded faces, license rule, converter hand-off, diagnostics and cancel.');

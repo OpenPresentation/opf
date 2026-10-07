@@ -1,8 +1,17 @@
 import type { PaginationOptions, PaginationResult } from "@openpresentation/opf/pagination";
 import type { Composition, ComposeSlideOptions, SlideComposition } from "@openpresentation/opf/composition";
-/** Reported when a font-scheme id matches no inline or bundled record; the default font scheme (`aptos`) is the base. */
-export interface FontSchemeDiagnostic { code: "unresolved-font-scheme"; path: string; message: string; id: string; fallback: string }
-export interface EditorDiagnosticOptions { onDiagnostic?: (diagnostic: FontSchemeDiagnostic) => void }
+import type { Fonts, PresentationStats, SlideContextDiagnostic, StatsOptions, ValidationReport } from "@openpresentation/opf";
+/**
+ * What the editor adds to the options of `composeSlide` and `paginateSlide`: `fonts` is the renderer's fonts handle (`loadFonts()`), whose
+ * `textMeasurement` measures the text; `catalogs` are host catalog records; `onDiagnostic` hears every `unresolved-font-scheme`,
+ * `unresolved-layout`, `unresolved-theme` and `unresolved-color-scheme` diagnostic of core's `resolveSlideContext`. Any other option overrides
+ * the resolved one.
+ */
+export interface EditorDiagnosticOptions {
+  fonts?: Fonts;
+  catalogs?: Record<string, readonly unknown[]>;
+  onDiagnostic?: (diagnostic: SlideContextDiagnostic) => void;
+}
 export declare const packageName = "@openpresentation/opf-editor";
 
 export declare const releaseLane: Readonly<{
@@ -29,16 +38,9 @@ export type JsonPatchOperation =
   | { op: "copy"; from: string; path: string }
   | { op: "test"; path: string; value: unknown };
 
-export interface OPFValidationSummary {
-  valid: boolean;
-  errors: unknown[];
-  warnings: unknown[];
-  result: unknown;
-}
-
 export interface EditorSnapshot {
-  document: unknown;
-  validation: OPFValidationSummary;
+  presentation: unknown;
+  validation: ValidationReport;
   canUndo: boolean;
   canRedo: boolean;
   undoDepth: number;
@@ -46,11 +48,11 @@ export interface EditorSnapshot {
 }
 
 export interface EditorChange {
-  document: unknown;
+  presentation: unknown;
   patches: JsonPatchOperation[];
   inversePatches?: JsonPatchOperation[];
   redoPatches?: JsonPatchOperation[];
-  validation: OPFValidationSummary;
+  validation: ValidationReport;
 }
 
 export interface EditorEvent {
@@ -58,7 +60,7 @@ export interface EditorEvent {
   patches: JsonPatchOperation[];
   inversePatches?: JsonPatchOperation[];
   redoPatches?: JsonPatchOperation[];
-  validation: OPFValidationSummary;
+  validation: ValidationReport;
   meta?: Record<string, unknown>;
   snapshot: EditorSnapshot;
 }
@@ -70,8 +72,8 @@ export interface EditorSession {
   paginateSlide(slideIndex: number, options?: PaginationOptions & EditorDiagnosticOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
   composeSlide(slideIndex: number, options?: ComposeSlideOptions & EditorDiagnosticOptions): SlideComposition;
   setComposition(slideIndex: number, composition: Composition, meta?: Record<string, unknown>): EditorChange;
-  readonly document: unknown;
-  readonly validation: OPFValidationSummary;
+  readonly presentation: unknown;
+  readonly validation: ValidationReport;
   readonly canUndo: boolean;
   readonly canRedo: boolean;
   snapshot(): EditorSnapshot;
@@ -84,13 +86,13 @@ export interface EditorSession {
   /** The undo and redo stacks as plain data (oldest entry first), for hosts that persist work. */
   exportHistory(): EditorHistory;
   /** Replace the document and, optionally, the history in one step (one `restore` event). A history that does not replay against the document throws `invalid-history` before anything changes. */
-  restoreState(state: { document: unknown; undo?: EditorHistoryEntry[]; redo?: EditorHistoryEntry[] }, meta?: Record<string, unknown>): EditorChange;
+  restoreState(state: { presentation: unknown; undo?: EditorHistoryEntry[]; redo?: EditorHistoryEntry[] }, meta?: Record<string, unknown>): EditorChange;
   undo(meta?: Record<string, unknown>): EditorChange | null;
   redo(meta?: Record<string, unknown>): EditorChange | null;
 }
 
 export interface CreateEditorSessionOptions {
-  validate?: (document: unknown) => unknown;
+  /** Refuse every edit whose result has an error finding (the default per edit is `meta.rejectInvalid`). */
   rejectInvalid?: boolean;
 }
 
@@ -160,20 +162,18 @@ export declare function opfPathToJsonPointer(path: string | string[]): string;
 
 export declare function jsonPointerToOpfPath(pointer: string): string;
 
-export declare function getValueAtPath(document: unknown, path: string | string[], fallback?: unknown): unknown;
+export declare function getValueAtPath(presentation: unknown, path: string | string[], fallback?: unknown): unknown;
 
-export declare function hasValueAtPath(document: unknown, path: string | string[]): boolean;
+export declare function hasValueAtPath(presentation: unknown, path: string | string[]): boolean;
 
-export declare function createValuePatch(document: unknown, path: string | string[], value: unknown): JsonPatchOperation[];
+export declare function createValuePatch(presentation: unknown, path: string | string[], value: unknown): JsonPatchOperation[];
 
-export declare function applyJsonPatch(document: unknown, operations: JsonPatchOperation[]): unknown;
+export declare function applyJsonPatch(presentation: unknown, operations: JsonPatchOperation[]): unknown;
 
-export declare function invertJsonPatch(document: unknown, operations: JsonPatchOperation[]): JsonPatchOperation[];
+export declare function invertJsonPatch(presentation: unknown, operations: JsonPatchOperation[]): JsonPatchOperation[];
 
-export declare function validateOpfDocument(document: unknown, validator?: (document: unknown) => unknown): OPFValidationSummary;
-
-/** Font families the slide resolves to (slide, deck, theme, then the shared default scheme). */
-export declare function resolveSlideFonts(document: unknown, slideIndex?: number, options?: EditorDiagnosticOptions): { heading?: string; body?: string; code?: string; [role: string]: string | undefined };
+/** Core's `stats` of the session's document: neutral facts (counts, words, notes coverage, images and alt text, speaking time), never severities. Reads the JSON only. */
+export declare function deckStats(editor: EditorSession, options?: StatsOptions): PresentationStats;
 
 export declare function createEditorSession(input: unknown, options?: CreateEditorSessionOptions): EditorSession;
 

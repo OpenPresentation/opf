@@ -18,12 +18,12 @@ const source = {
 };
 for (const format of ["pretty", "compact", "markdown"])
   assert.deepEqual(
-    parseOpfTransfer(serializeOpfTransfer(source, { format })).document,
+    parseOpfTransfer(serializeOpfTransfer(source, { format })).presentation,
     source,
   );
 assert.equal(parseOpfTransfer('{"title":"One slide"}').kind, "slides");
 assert.equal(
-  parseOpfTransfer('[{"title":"One"},{"title":"Two"}]').document.slides.length,
+  parseOpfTransfer('[{"title":"One"},{"title":"Two"}]').presentation.slides.length,
   2,
 );
 assert.equal(parseOpfTransfer('"Text fragment"').kind, "selection");
@@ -33,7 +33,7 @@ assert.throws(() => parseOpfTransfer("```json\n{}\n```\n```json\n{}\n```"));
 assert.throws(() => parseOpfTransfer('{"__proto__":{}}'));
 const copy = parseOpfTransfer(
   serializeOpfTransfer(source, { scope: "slide" }),
-).document;
+).presentation;
 assert.deepEqual(copy.assets, source.assets);
 assert.deepEqual(copy.design, source.design);
 assert.equal(
@@ -70,35 +70,35 @@ const result = prepareOpfImport(
   parseOpfTransfer(JSON.stringify(imported)),
 );
 assert.equal(source.slides.length, 1);
-assert.equal(result.document.slides.length, 2);
-assert.equal(result.document.slides[1].id, "same-2");
-assert.equal(result.document.slides[1].image, "asset:logo-2");
-assert.equal(result.document.assets.alias, "asset:logo-2");
-assert.equal(result.document.assets.logo, source.assets.logo);
-assert.equal(result.document.slides[1].text, "asset:logo is literal text");
-assert.equal(result.document.slides[1].design.fontScheme, "import-custom-font");
+assert.equal(result.presentation.slides.length, 2);
+assert.equal(result.presentation.slides[1].id, "same-2");
+assert.equal(result.presentation.slides[1].image, "asset:logo-2");
+assert.equal(result.presentation.assets.alias, "asset:logo-2");
+assert.equal(result.presentation.assets.logo, source.assets.logo);
+assert.equal(result.presentation.slides[1].text, "asset:logo is literal text");
+assert.equal(result.presentation.slides[1].design.fontScheme, "import-custom-font");
 assert.equal(
-  result.document.catalogs.fontSchemes.records[0].id,
+  result.presentation.catalogs.fontSchemes.records[0].id,
   "import-custom-font",
 );
 const twice = prepareOpfImport(
-  result.document,
+  result.presentation,
   parseOpfTransfer(JSON.stringify(imported)),
-).document;
+).presentation;
 assert.ok(
   twice.catalogs.fontSchemes.records.some(
     (record) => record.id === "import-custom-font-2",
   ),
 );
 const editor = createEditorSession(source, { rejectInvalid: true });
-editor.applyPatch([{ op: "replace", path: "", value: result.document }]);
+editor.applyPatch([{ op: "replace", path: "", value: result.presentation }]);
 editor.undo();
-assert.deepEqual(editor.document, source);
+assert.deepEqual(editor.presentation, source);
 const selected = prepareOpfImport(source, parseOpfTransfer('"Revised"'), {
   mode: "selection",
   path: "slides.0.title",
 });
-assert.equal(selected.document.slides[0].title, "Revised");
+assert.equal(selected.presentation.slides[0].title, "Revised");
 assert.throws(() =>
   prepareOpfImport(source, parseOpfTransfer("42"), {
     mode: "selection",
@@ -108,7 +108,7 @@ assert.throws(() =>
 assert.deepEqual(
   prepareOpfImport(source, parseOpfTransfer(JSON.stringify(imported)), {
     mode: "replace",
-  }).document,
+  }).presentation,
   imported,
 );
 assert.throws(() =>
@@ -201,7 +201,7 @@ assert.equal(
 {
   const source = { name: "Source", design: { theme: "minimal", dimensions: "4:3" }, slides: [{ id: "wide", title: "Sized deck" }] };
   const target = { name: "Target", design: { theme: "minimal", dimensions: "letter" }, slides: [{ id: "host", title: "Host" }] };
-  const inserted = prepareOpfImport(target, parseOpfTransfer(JSON.stringify(source)), { mode: "insert", slideIndex: 0 }).document;
+  const inserted = prepareOpfImport(target, parseOpfTransfer(JSON.stringify(source)), { mode: "insert", slideIndex: 0 }).presentation;
   assert.equal(inserted.design.dimensions, "letter");
   for (const slide of inserted.slides) assert.equal(slide.design?.dimensions, undefined, "no slide carries dimensions");
 }

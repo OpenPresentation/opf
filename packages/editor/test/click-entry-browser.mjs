@@ -2,22 +2,22 @@ import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 
 // Real-browser check of the text entry gestures: a single press on editable text enters editing with the caret at the
 // pressed character (PowerPoint / Google Slides), a press-drag selects a range, keyboard entry selects all, and
 // `textEntry: "dblclick"` keeps the older gesture but still places the caret at the pointer.
-const faces = (await loadOfficeFontRegistry()).embeddedFonts.filter((face) => face.family === 'Roboto' && [400, 700].includes(face.weight) && !face.italic);
+const faces = (await loadFonts({ pack: 'office' })).registry.embeddedFonts.filter((face) => face.family === 'Roboto' && [400, 700].includes(face.weight) && !face.italic);
 const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', import.meta.url)), contents: `
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
-  import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
+  import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
   window.mountClickEntry = async ({deck, faces, options = {}}) => {
     window.cv?.destroy(); window.fonts?.dispose();
     window.events = {selects: [], errors: [], commits: [], cancels: []};
-    window.fonts = await loadBrowserFontRegistry(faces.map((face) => ({...face, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0))})), {substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
+    window.fonts = await loadFonts({ faces: faces.map((face) => ({...face, data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), (c) => c.charCodeAt(0))})), substitutionPolicy: 'visual', fallbackFamily: 'Roboto' });
     window.editor = createEditorSession(deck, {rejectInvalid: true});
-    window.cv = createCanvasEditor(document.querySelector('#canvas'), {editor, renderOptions: {textMeasurement: fonts.textMeasurement}, ...options,
+    window.cv = createCanvasEditor(document.querySelector('#canvas'), {editor, fonts, ...options,
       onSelect: (event) => events.selects.push(event.path), onError: (error) => events.errors.push(error.message),
       onCommit: (event) => events.commits.push(event.path), onCancel: (event) => events.cancels.push(event.path)});
     await cv.ready;
@@ -210,7 +210,7 @@ try {
   // 8. Press-drag selects from the press point to the release point; nothing moves.
   await slide(0);
   {
-    const before = JSON.stringify(await page.evaluate(() => editor.document));
+    const before = JSON.stringify(await page.evaluate(() => editor.presentation));
     const a = await point('slides.0.subtitle', 'Wrapped', 0, 'left'), b = await point('slides.0.subtitle', 'double', 2, 'right');
     await page.mouse.move(a.x, a.y);
     await page.mouse.down();
@@ -234,7 +234,7 @@ try {
     const backward = await state();
     assert.deepEqual([backward.start, backward.end, backward.direction], [source.indexOf('tail') + 1, source.indexOf('very long') + 4, 'backward']);
     await discard();
-    assert.equal(JSON.stringify(await page.evaluate(() => editor.document)), before, 'a text drag never changes or moves the document');
+    assert.equal(JSON.stringify(await page.evaluate(() => editor.presentation)), before, 'a text drag never changes or moves the document');
     done('press-drag selects a forward, backward and multi-line range without moving anything');
   }
 

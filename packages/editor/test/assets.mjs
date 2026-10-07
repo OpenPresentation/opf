@@ -1,7 +1,7 @@
 // RR-06 gaps: image upload. A local file becomes an `assets` entry (or goes to the host's onAddAsset)
 // and is used by a logo, watermark, slide image, background or header/footer zone in one undo step.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 import * as pptx from "@openpresentation/opf-pptx";
 import { createEditorSession } from "../dist/index.js";
 import {
@@ -81,27 +81,27 @@ const uploads = [
 ];
 for (const [index, entry] of uploads.entries()) {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   const source = [PNG, JPEG, GIF, WEBP, SVG, PNG][index];
   const name = ["logo.png", "photo.jpg", "anim.gif", "pic.webp", "mark.svg", "badge.png"][index];
   const type = ["image/png", "image/jpeg", "image/gif", "image/webp", "image/svg+xml", "image/png"][index];
   const change = await applyImageUpload(editor, file(source, name, type), entry.build, { alt: "  A short description  " });
   assert.equal(change.changed, true, entry.name);
   assert.equal(change.reference, `asset:${change.assetId}`);
-  entry.check(editor.document, change.reference);
-  const asset = editor.document.assets[change.assetId];
+  entry.check(editor.presentation, change.reference);
+  const asset = editor.presentation.assets[change.assetId];
   assert.match(asset.src, new RegExp(`^data:${type.replace("+", "\\+")};base64,`), `${entry.name}: a data URI of the right type`);
   assert.equal(asset.alt, "A short description");
   assert.equal(asset.title, name);
   assert.equal(asset.mediaType, type);
   assert.equal(editor.snapshot().undoDepth, 1, `${entry.name}: one undo step`);
-  assert.equal(validatePresentation(editor.document).valid, true, entry.name);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true, entry.name);
   assert.equal(change.patches[0].path.startsWith("/assets"), true);
-  if (index === 0) assert.ok((await pptx.toPptx(structuredClone(editor.document), { strictAssets: true })).byteLength > 0, "an uploaded logo exports");
+  if (index === 0) assert.ok((await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true })).byteLength > 0, "an uploaded logo exports");
   editor.undo();
-  assert.deepEqual(editor.document, before, `${entry.name}: one Undo removes the asset and the use`);
+  assert.deepEqual(editor.presentation, before, `${entry.name}: one Undo removes the asset and the use`);
   editor.redo();
-  entry.check(editor.document, change.reference);
+  entry.check(editor.presentation, change.reference);
 }
 assert.equal(LOGO_VARIANTS.length, 12);
 // All 12 logo variants take an upload.
@@ -126,7 +126,7 @@ for (const variant of LOGO_VARIANTS) {
   assert.equal(setAssetAlt(editor, "logo", "Acme logo").changed, false);
   setAssetAlt(editor, "logo", "");
   assert.equal(editor.get("assets.logo.alt"), undefined);
-  assert.throws(() => prepareAssetAlt(editor.document, "nope", "x"), (error) => error.code === "unknown-asset");
+  assert.throws(() => prepareAssetAlt(editor.presentation, "nope", "x"), (error) => error.code === "unknown-asset");
   // A plain string asset becomes an object only when it needs alt text.
   const plain = createEditorSession({ assets: { a: "data:image/png;base64,AAAA" }, slides: [{ title: "x", text: "y" }] });
   setAssetAlt(plain, "a", "Described");
@@ -142,7 +142,7 @@ for (const variant of LOGO_VARIANTS) {
   await assert.rejects(applyImageUpload(editor, file(new TextEncoder().encode("plain text"), "logo.png", "image/png"), build), (error) => error.code === "invalid-image");
   await assert.rejects(applyImageUpload(editor, file(PNG, "logo.png", "image/png"), build, { maxBytes: 20 }), (error) => error.code === "image-too-large");
   assert.equal(editor.snapshot().undoDepth, 0);
-  assert.deepEqual(editor.document, deck());
+  assert.deepEqual(editor.presentation, deck());
   // A build that fails leaves no orphaned asset behind.
   await assert.rejects(applyImageUpload(editor, file(PNG, "logo.png", "image/png"), (ref, doc) => prepareDesignOption(doc, "organizationLogo", ref, { slideIndex: 0 })), (error) => error.code === "invalid-scope");
   assert.equal(editor.get("assets"), undefined);
@@ -180,14 +180,14 @@ for (const variant of LOGO_VARIANTS) {
 
 // prepareImageAsset is pure and adds /assets when the document has none, /assets/<id> when it does.
 {
-  const document = deck();
+  const presentation = deck();
   const image = { name: "Logo.png", mediaType: "image/png", bytes: PNG, size: PNG.length };
-  const first = prepareImageAsset(document, image);
+  const first = prepareImageAsset(presentation, image);
   assert.deepEqual(first.patches.map((patch) => [patch.op, patch.path]), [["add", "/assets"]]);
-  assert.deepEqual(document, deck());
-  const second = prepareImageAsset({ ...document, assets: { x: "y" } }, image);
+  assert.deepEqual(presentation, deck());
+  const second = prepareImageAsset({ ...presentation, assets: { x: "y" } }, image);
   assert.deepEqual(second.patches.map((patch) => patch.path), ["/assets/logo"]);
-  assert.throws(() => prepareImageAsset({ ...document, assets: { logo: "y" } }, image, { id: "logo" }), (error) => error.code === "asset-exists");
+  assert.throws(() => prepareImageAsset({ ...presentation, assets: { logo: "y" } }, image, { id: "logo" }), (error) => error.code === "asset-exists");
 }
 
 console.log("Image uploads: 5 types by their bytes, size cap and type/content/script refusals, one undo step for logo (all 12 variants), organization logo, watermark, slide image, background and zone image, asset ids and alt text, and the onAddAsset host hook.");

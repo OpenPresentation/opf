@@ -80,11 +80,11 @@ export interface TextEdit {
 /** The plain text of a string or a run array. */
 export declare function textOf(value: unknown): string;
 /** Every searchable text field of a document, in reading order. */
-export declare function collectSearchFields(document: unknown, options?: CollectOptions): SearchField[];
+export declare function collectSearchFields(presentation: unknown, options?: CollectOptions): SearchField[];
 /** Compile a search into a global RegExp; `{ error }` for an invalid regular expression, `{ empty: true }` for an empty query. */
 export declare function compileSearch(query: string, options?: SearchOptions): { regex?: RegExp; error?: string; empty?: boolean };
 /** Search a document's text. */
-export declare function findMatches(document: unknown, query: string, options?: SearchOptions): SearchResult;
+export declare function findMatches(presentation: unknown, query: string, options?: SearchOptions): SearchResult;
 /** Expand a replacement for one match (`$&`, `$1`, `$<name>`, `$$` in regex mode; literal otherwise). */
 export declare function expandReplacement(template: string, match: SearchMatch, fieldText: string, regex?: boolean): string;
 /**
@@ -93,7 +93,7 @@ export declare function expandReplacement(template: string, match: SearchMatch, 
  */
 export declare function applyTextEdits<T extends string | unknown[]>(value: T, edits: TextEdit[]): T;
 /** The patches that replace the given matches. Throws `stale-match` when the text changed. */
-export declare function planReplace(document: unknown, matches: SearchMatch[], replacement: string, options?: { regex?: boolean }): ReplacePlan;
+export declare function planReplace(presentation: unknown, matches: SearchMatch[], replacement: string, options?: { regex?: boolean }): ReplacePlan;
 /** Replace every match as one undoable session change. Throws `invalid-search` for a bad regular expression. */
 export declare function replaceAll(editor: EditorSession, query: string, replacement: string, options?: SearchOptions): ReplaceResult;
 /** Replace one match as one undoable change. Throws `stale-match` when it is no longer in the document. */

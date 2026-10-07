@@ -58,7 +58,7 @@ try {
     window.gridApi = window.opfTest.createDataGrid(document.getElementById('host'), { editor, getSelectedPath: () => window.selected, numberFormat: '.' });
   }, deck);
   const text = (selector) => page.locator(selector).first().innerText();
-  const datasetOf = () => page.evaluate(() => window.editor.document.datasets.revenue);
+  const datasetOf = () => page.evaluate(() => window.editor.presentation.datasets.revenue);
   const undoDepth = () => page.evaluate(() => window.editor.snapshot().undoDepth);
   const refresh = (selected) => page.evaluate((path) => { window.selected = path; window.gridApi.refresh(); }, selected);
 
@@ -95,10 +95,10 @@ try {
   // The chart columns panel.
   await page.locator('.opf-grid-mapping summary').click();
   await page.locator('.opf-grid-mapping fieldset input[value="Revenue"]').uncheck();
-  assert.deepEqual(await page.evaluate(() => window.editor.document.slides[0].blocks[0].chart.mapping), { series: ['Costs'] });
+  assert.deepEqual(await page.evaluate(() => window.editor.presentation.slides[0].blocks[0].chart.mapping), { series: ['Costs'] });
   assert.equal(await undoDepth(), 4, 'one change of the mapping is one undo step');
   await page.locator('.opf-grid-mapping fieldset input[value="Revenue"]').check();
-  assert.equal(await page.evaluate(() => window.editor.document.slides[0].blocks[0].chart.mapping), undefined, 'the default mapping is removed');
+  assert.equal(await page.evaluate(() => window.editor.presentation.slides[0].blocks[0].chart.mapping), undefined, 'the default mapping is removed');
   await page.evaluate(() => { while (window.editor.snapshot().undoDepth) window.editor.undo(); });
 
   // A table that shows the dataset has no chart columns panel, and "Use a copy" gives it its own rows.
@@ -107,7 +107,7 @@ try {
   assert.equal(await page.locator('.opf-grid-mapping').isHidden(), true);
   await page.getByRole('button', { name: 'Use a copy of the data' }).click();
   assert.equal(await page.locator('.opf-grid-dataset').isHidden(), true);
-  assert.ok(await page.evaluate(() => Array.isArray(window.editor.document.slides[0].blocks[2].table.rows)));
+  assert.ok(await page.evaluate(() => Array.isArray(window.editor.presentation.slides[0].blocks[2].table.rows)));
 
   // An inline chart with DataColumn headers shows names and the format in the ruler.
   await refresh('slides.0.blocks.1.chart');
@@ -120,7 +120,7 @@ try {
   await page.locator('td[data-line="0"][data-column="2"]').click();
   await page.locator('[data-role="column-format"]').fill('0.00');
   await page.locator('td[data-line="1"][data-column="1"]').click();
-  assert.deepEqual(await page.evaluate(() => window.editor.document.slides[0].blocks[1].chart.data.columns), ['Quarter', { name: 'Revenue', format: '$#,##0.0' }, { name: 'Costs', format: '0.00' }], 'the format went to the column it was typed for, not the one that was clicked');
+  assert.deepEqual(await page.evaluate(() => window.editor.presentation.slides[0].blocks[1].chart.data.columns), ['Quarter', { name: 'Revenue', format: '$#,##0.0' }, { name: 'Costs', format: '0.00' }], 'the format went to the column it was typed for, not the one that was clicked');
   // A formatted column shows its numbers as the slide draws them; editing and copying use the raw value.
   await page.evaluate(() => { while (window.editor.snapshot().undoDepth) window.editor.undo(); });
   await refresh('slides.0.blocks.1.chart');

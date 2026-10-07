@@ -7,7 +7,7 @@ export type SlidePages = readonly (PaginatedPage & { sourceSlideIndex: number })
 
 /** What every prepare function returns without touching a session. A refusal throws `content-action-refused`. */
 export interface PreparedContentAction {
-  document: unknown;
+  presentation: unknown;
   /** A `test` of what was read, then `replace`, or per-slide `remove` and `add`. Empty when nothing changed. */
   patches: JsonPatchOperation[];
   /** The path of the block or slide the change touched: select it again after applying. */
@@ -27,8 +27,8 @@ export interface PreparedContentAction {
   pages?: (PaginatedPage & { sourceSlideIndex: number })[];
 }
 /** The session change of an applied action, with the same report fields. One undo step. */
-export interface ContentActionChange extends Omit<EditorChange, "document" | "patches"> {
-  document: unknown;
+export interface ContentActionChange extends Omit<EditorChange, "presentation" | "patches"> {
+  presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   lossless: boolean;
@@ -53,17 +53,17 @@ export interface ListShiftOptions extends DryRunOptions {
 
 /** The index of the list item a selection points at (`slides.0.blocks.1.items.2.text` gives 2), or undefined. */
 export declare function listItemIndexForSelection(selectedPath: string, blockPath: string): number | undefined;
-export declare function prepareListShift(document: unknown, blockPath: string, indices: number[], delta: number, options?: ListShiftOptions): PreparedContentAction;
+export declare function prepareListShift(presentation: unknown, blockPath: string, indices: number[], delta: number, options?: ListShiftOptions): PreparedContentAction;
 /** Nest (`delta` 1) or un-nest (`delta` -1) list items as one undoable step. */
 export declare function shiftListItems(editor: EditorSession, blockPath: string, indices: number[], delta: number, options?: ListShiftOptions, meta?: Record<string, unknown>): ContentActionChange;
 
-export declare function prepareGroupBlocks(document: unknown, containerPath: string, indices: number[], options?: DryRunOptions & { composition?: Record<string, unknown> }): PreparedContentAction;
-export declare function prepareUngroupBlock(document: unknown, groupPath: string, options?: DryRunOptions): PreparedContentAction;
-export declare function prepareBlocksToRegions(document: unknown, slideIndex: number, regions: string[], options?: DryRunOptions): PreparedContentAction;
-export declare function prepareRegionsToBlocks(document: unknown, slideIndex: number, options?: DryRunOptions): PreparedContentAction;
-export declare function prepareMoveRegion(document: unknown, slideIndex: number, from: string, to: string, options?: DryRunOptions & { swap?: boolean }): PreparedContentAction;
-export declare function prepareImageToDesign(document: unknown, blockPath: string, target: ImageTarget, options?: DryRunOptions & PromoteImageOptions): PreparedContentAction;
-export declare function prepareImageToContent(document: unknown, slideIndex: number, source: ImageTarget, options?: DryRunOptions & { index?: number; region?: string }): PreparedContentAction;
+export declare function prepareGroupBlocks(presentation: unknown, containerPath: string, indices: number[], options?: DryRunOptions & { composition?: Record<string, unknown> }): PreparedContentAction;
+export declare function prepareUngroupBlock(presentation: unknown, groupPath: string, options?: DryRunOptions): PreparedContentAction;
+export declare function prepareBlocksToRegions(presentation: unknown, slideIndex: number, regions: string[], options?: DryRunOptions): PreparedContentAction;
+export declare function prepareRegionsToBlocks(presentation: unknown, slideIndex: number, options?: DryRunOptions): PreparedContentAction;
+export declare function prepareMoveRegion(presentation: unknown, slideIndex: number, from: string, to: string, options?: DryRunOptions & { swap?: boolean }): PreparedContentAction;
+export declare function prepareImageToDesign(presentation: unknown, blockPath: string, target: ImageTarget, options?: DryRunOptions & PromoteImageOptions): PreparedContentAction;
+export declare function prepareImageToContent(presentation: unknown, slideIndex: number, source: ImageTarget, options?: DryRunOptions & { index?: number; region?: string }): PreparedContentAction;
 
 /** Wrap the blocks at `indices` of a slide, group or region group in a new group. */
 export declare function groupBlocks(editor: EditorSession, containerPath: string, indices: number[], options?: { composition?: Record<string, unknown> }, meta?: Record<string, unknown>): ContentActionChange;
@@ -77,10 +77,10 @@ export declare function moveImageToDesign(editor: EditorSession, blockPath: stri
 /** Move a slide's own slide image, background image or watermark back into its content as an image block. */
 export declare function moveImageToContent(editor: EditorSession, slideIndex: number, source: ImageTarget, options?: { index?: number; region?: string }, meta?: Record<string, unknown>): ContentActionChange;
 
-export declare function prepareSplitSlide(document: unknown, slideIndex: number, options?: { at?: number[]; each?: boolean; repeatHeadings?: boolean }): PreparedContentAction;
-export declare function prepareSplitSlideOnOverflow(document: unknown, slideIndex: number, options?: PresentationPaginationOptions): PreparedContentAction;
-export declare function prepareMergeSlides(document: unknown, start: number, count?: number): PreparedContentAction;
-export declare function prepareUnpaginate(document: unknown, pages: SlidePages, options?: { sourceSlideIndex?: number }): PreparedContentAction;
+export declare function prepareSplitSlide(presentation: unknown, slideIndex: number, options?: { at?: number[]; each?: boolean; repeatHeadings?: boolean }): PreparedContentAction;
+export declare function prepareSplitSlideOnOverflow(presentation: unknown, slideIndex: number, options?: PresentationPaginationOptions): PreparedContentAction;
+export declare function prepareMergeSlides(presentation: unknown, start: number, count?: number): PreparedContentAction;
+export declare function prepareUnpaginate(presentation: unknown, pages: SlidePages, options?: { sourceSlideIndex?: number }): PreparedContentAction;
 /** Split a slide by its blocks into several slides, as one undoable step. */
 export declare function splitSlideByBlocks(editor: EditorSession, slideIndex: number, options?: { at?: number[]; each?: boolean; repeatHeadings?: boolean }, meta?: Record<string, unknown>): ContentActionChange;
 /** Split a slide that overflows with the existing pagination; the change carries `pages` for `unpaginateSlides`. */

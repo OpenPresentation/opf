@@ -32,7 +32,7 @@ The cross-repo program tracker lives in core at [docs/programs/font-fidelity-eve
 ## Editor rules
 
 - Every edit goes through the session so it is validated and recorded as JSON Patch with inverse patches; an applied import is one undoable edit. Do not bypass validation or undo history.
-- Canvas rendering and export must use the same `textMeasurement` (and `textRasterPadding`) as preview; load the same font bytes via the renderer's font registry.
+- Canvas rendering and export must use the same fonts handle (`loadFonts()` from the renderer, passed as `fonts`; its `textMeasurement`, and `textRasterPadding`) as preview; load the same font bytes through that handle's registry.
 - `test/native-playground.ps1` opens desktop PowerPoint. Only the root session runs it, on the Windows host; agents do not. Never kill Office or retry a native attempt in place.
 - Browser playground results are browser behavior evidence, not native PowerPoint raster equivalence. The PPTX download does not embed font binaries.
 - Publishing npm packages is authorized by the owner (2026-09-29) whenever a release is required, but only through the release process in `README.md` (Release Lane): a release-prep PR, merge, then the tag-triggered `release.yml` with provenance. No ad hoc publish or version bump outside it.

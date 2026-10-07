@@ -1,7 +1,8 @@
-import {getValueAtPath, createValuePatch, applyJsonPatch, validateOpfDocument, opfPathToJsonPointer} from './index.js';
+import { getValueAtPath, createValuePatch, applyJsonPatch, opfPathToJsonPointer } from './index.js';
+import { firstErrorMessage, checkFormat } from "./checks.js";
 
 /** Prepare a validated track resize; the test operation guards its container revision. */
-export function prepareTrackResize(document, flow, boundary, fraction) {
+export function prepareTrackResize(presentation, flow, boundary, fraction) {
   const vertical = flow?.composition?.mode === 'column';
   const tracks = vertical ? flow?.rows : flow?.columns;
   if (!Array.isArray(tracks) || tracks.length < 2 || tracks.length > 12)
@@ -12,7 +13,7 @@ export function prepareTrackResize(document, flow, boundary, fraction) {
     throw new RangeError('Track boundary is out of range.');
   if (!Number.isFinite(fraction) || fraction < 0 || fraction > 1)
     throw new RangeError('Track fraction must be between zero and one.');
-  const container = getValueAtPath(document,flow.path);
+  const container = getValueAtPath(presentation,flow.path);
   if (!container || typeof container !== 'object') throw new Error('The layout container no longer exists.');
   const effective = flow.composition.weights ?? [];
   const weights = Array.from({length:Math.max(tracks.length,effective.length)},(_,index)=>effective[index]??1);
@@ -25,10 +26,10 @@ export function prepareTrackResize(document, flow, boundary, fraction) {
   const composition={...container.composition,mode:flow.composition.mode??'auto',weights};
   // A drag expresses an explicit arrangement. Preserve the automatic engine's chosen columns.
   if(composition.mode==='auto'){composition.mode='grid';composition.columns=flow.columns.length;}
-  const patches=[{op:'test',path:opfPathToJsonPointer(flow.path),value:structuredClone(container)},...createValuePatch(document,[...flow.path.split('.'),'composition'],composition)];
-  const next=applyJsonPatch(document,patches),validation=validateOpfDocument(next);
-  if(!validation.valid)throw new Error(validation.errors[0]?.message??'Track resize is not valid OPF.');
-  return {document:next,patches,composition,fraction:share};
+  const patches=[{op:'test',path:opfPathToJsonPointer(flow.path),value:structuredClone(container)},...createValuePatch(presentation,[...flow.path.split('.'),'composition'],composition)];
+  const next=applyJsonPatch(presentation,patches),validation=checkFormat(next);
+  if(!validation.valid)throw new Error(firstErrorMessage(validation, 'Track resize is not valid OPF.'));
+  return {presentation:next,patches,composition,fraction:share};
 }
 
 export {prepareBlockMove,listBlockContainers,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove,prepareBlockReplace,createContentBlock} from './blocks.js';

@@ -39,15 +39,15 @@ export interface TableCellState extends TableCellAddress {
 export interface PreparedTableChange {
   action: "merge" | "split" | "style" | "table-style";
   tablePath: string;
-  document: unknown;
+  presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   [key: string]: unknown;
 }
-export interface TableChange extends Omit<EditorChange, "document" | "patches"> {
+export interface TableChange extends Omit<EditorChange, "presentation" | "patches"> {
   action: PreparedTableChange["action"];
   tablePath: string;
-  document: unknown;
+  presentation: unknown;
   patches: JsonPatchOperation[];
   changed: boolean;
   [key: string]: unknown;
@@ -60,14 +60,14 @@ export declare function tableMerges(table: unknown): TableMerge[];
 /** The state of one cell, including merge anchor/covered status. */
 export declare function describeTableCell(table: unknown, cell: TableCellAddress): TableCellState;
 /** Merge `span.colSpan` x `span.rowSpan` cells from `cell`. `join` keeps the text of covered cells by joining it into the anchor; without it, covered text refuses with `merge-would-lose-content`. */
-export declare function prepareTableMerge(document: unknown, tablePath: string, cell: TableCellAddress, span: { colSpan?: number; rowSpan?: number }, options?: { join?: boolean }): PreparedTableChange;
-export declare function prepareTableSplit(document: unknown, tablePath: string, cell: TableCellAddress): PreparedTableChange;
+export declare function prepareTableMerge(presentation: unknown, tablePath: string, cell: TableCellAddress, span: { colSpan?: number; rowSpan?: number }, options?: { join?: boolean }): PreparedTableChange;
+export declare function prepareTableSplit(presentation: unknown, tablePath: string, cell: TableCellAddress): PreparedTableChange;
 /** Merge style fields into the cells' styles (null removes a field, `style: null` clears). */
-export declare function prepareTableCellStyle(document: unknown, tablePath: string, cells: TableCellAddress | TableCellAddress[], style: Record<string, unknown> | null): PreparedTableChange;
+export declare function prepareTableCellStyle(presentation: unknown, tablePath: string, cells: TableCellAddress | TableCellAddress[], style: Record<string, unknown> | null): PreparedTableChange;
 /** Apply `{ header, banding, borders }` (missing fields mean theme/false) or a named preset: sets the header fill, banded-row fill and borders of every cell and clears them elsewhere; `theme` removes a previous style. */
-export declare function prepareTableStyle(document: unknown, tablePath: string, preset: keyof typeof TABLE_STYLE_PRESETS | Partial<TableStyle>): PreparedTableChange;
+export declare function prepareTableStyle(presentation: unknown, tablePath: string, preset: keyof typeof TABLE_STYLE_PRESETS | Partial<TableStyle>): PreparedTableChange;
 /** The current style per axis, or "custom" in every field when the fills and borders are not one this module writes. */
-export declare function readTableStyle(document: unknown, tablePath: string): (TableStyle | { header: "custom"; banding: "custom"; borders: "custom" }) & { preset: keyof typeof TABLE_STYLE_PRESETS | "custom" };
+export declare function readTableStyle(presentation: unknown, tablePath: string): (TableStyle | { header: "custom"; banding: "custom"; borders: "custom" }) & { preset: keyof typeof TABLE_STYLE_PRESETS | "custom" };
 export declare function mergeTableCells(editor: EditorSession, tablePath: string, cell: TableCellAddress, span: { colSpan?: number; rowSpan?: number }, options?: { join?: boolean; meta?: Record<string, unknown> }): TableChange;
 export declare function splitTableCell(editor: EditorSession, tablePath: string, cell: TableCellAddress, meta?: Record<string, unknown>): TableChange;
 export declare function setTableCellStyle(editor: EditorSession, tablePath: string, cells: TableCellAddress | TableCellAddress[], style: Record<string, unknown> | null, meta?: Record<string, unknown>): TableChange;

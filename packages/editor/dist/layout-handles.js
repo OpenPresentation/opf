@@ -22,11 +22,11 @@ export function createLayoutHandles(root, options) {
     const edit=active;
     edit.fraction=fraction;
     try{
-      const prepared=prepareTrackResize(editor.document,active.flow,active.boundary,fraction);
-      options.render(prepared.document);
+      const prepared=prepareTrackResize(editor.presentation,active.flow,active.boundary,fraction);
+      options.render(prepared.presentation);
       if(active!==edit)return false;
       edit.prepared=prepared;edit.valid=true;
-      options.onDraft?.({document:prepared.document,path:active.flow.path+'.composition',value:prepared.composition});
+      options.onDraft?.({presentation:prepared.presentation,path:active.flow.path+'.composition',value:prepared.composition});
       if(active!==edit)return false;
       options.clearError?.();return true;
     }catch(error){if(active===edit)edit.valid=false;options.onError(error);return false;}
@@ -41,7 +41,7 @@ export function createLayoutHandles(root, options) {
     active=null;release(edit);committing=true;
     try{
       // Rebase unrelated document edits, retaining the guarded container.
-      const prepared=prepareTrackResize(editor.document,edit.flow,edit.boundary,edit.fraction);
+      const prepared=prepareTrackResize(editor.presentation,edit.flow,edit.boundary,edit.fraction);
       if(edit.moved)editor.applyPatch(prepared.patches,{source:'canvas-layout',rejectInvalid:true});
       else renderCanonical();
       options.onCommit?.({path:edit.flow.path+'.composition',editor});return true;
@@ -56,7 +56,7 @@ export function createLayoutHandles(root, options) {
     if(event)layer.setPointerCapture(event.pointerId);
     return true;
   }
-  function update(document,geometry) {
+  function update(presentation,geometry) {
     lastGeometry=geometry;
     layer.replaceChildren();
     if(!enabled||options.isTextEditing())return;

@@ -1,7 +1,7 @@
 // FA-01: a gallery layout applied to a deck is inlined as a layout record in the new shape: its own placeholders
 // (one content-kind vocabulary), its design hints and its composition, not a guess from removed metadata fields.
 import assert from "node:assert/strict";
-import { validatePresentation, validateCatalogRecord } from "@openpresentation/opf";
+import { validate, validateCatalogRecord } from "@openpresentation/opf";
 import { loadOpfGalleryItem } from "../dist/galleries.js";
 
 const apply = (source) =>
@@ -30,7 +30,7 @@ assert.deepEqual(record, {
   composition: source.composition,
 });
 assert.equal(validateCatalogRecord("layouts", record).valid, true);
-assert.equal(validatePresentation(document).valid, true);
+assert.equal(validate(document, { only: ["format"] }).valid, true);
 
 // Without placeholders the record falls back to a title and a text region.
 const bare = (await apply({ id: "fa-01-bare", name: "Bare" })).catalogs.layouts.records[0];

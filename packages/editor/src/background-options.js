@@ -102,8 +102,8 @@ export function normalizeBackground(spec) {
 }
 
 /** Compute the patch that sets (or, for `null`, removes) the background, without touching a session. Options as `prepareDimensionSwitch` (`slideIndex`, `clearSlideOverrides`). */
-export function prepareBackground(document, spec, options = {}) {
-  return prepareDimensionSwitch(document, "backgrounds", spec === null ? null : normalizeBackground(spec), options);
+export function prepareBackground(presentation, spec, options = {}) {
+  return prepareDimensionSwitch(presentation, "backgrounds", spec === null ? null : normalizeBackground(spec), options);
 }
 
 /** Set the background as one undoable transaction; `null` removes it so the theme's (or the deck's) shows again. */
@@ -116,9 +116,9 @@ export function setBackground(editor, spec, options = {}) {
  * `{ type, slot?, color?, opacity?, angle?, stops?, src?, fit?, preset?, foregroundColor?, backgroundColor?, scope, value }`.
  * `type` is undefined when nothing is set; `scope` is "slide" when the slide sets its own, else "deck".
  */
-export function readBackground(document, { slideIndex } = {}) {
-  const own = slideIndex === undefined ? undefined : document.slides?.[slideIndex]?.design?.background;
-  const value = own !== undefined ? own : document.design?.background;
+export function readBackground(presentation, { slideIndex } = {}) {
+  const own = slideIndex === undefined ? undefined : presentation.slides?.[slideIndex]?.design?.background;
+  const value = own !== undefined ? own : presentation.design?.background;
   const scope = own !== undefined ? "slide" : "deck";
   if (value === undefined) return { scope };
   if (typeof value === "string") return THEME_BACKGROUND_SLOTS.includes(value) ? { type: "theme", slot: value, scope, value } : { type: "solid", color: value, scope, value };

@@ -81,7 +81,6 @@ jobs:
       - name: Repeat the playground suite
         env:
           REPEAT: ${{ inputs.repeat || '5' }}
-          OPF_REQUIRE_FF08: "1"
         run: node scripts/flake-repeat.mjs --suite playground --repeat "$REPEAT" --out artifacts/flake-repeat/playground
       - name: Repeat the standalone browser suites
         env:

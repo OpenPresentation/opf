@@ -5,8 +5,9 @@
 // Cells are addressed by `{ section: "header" | "body", row, column }`; `row` is ignored for the
 // header section. Nothing here invents text: merging cells that hold text refuses unless you pass
 // `join: true`, which keeps every word in the merged cell.
-import { getValueAtPath, opfPathToJsonPointer, splitOpfPath, validateOpfDocument } from "./index.js";
+import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail } from "./edit-helpers.js";
+import { checkFormat } from "./checks.js";
 
 /**
  * Table styles. A style is `{ header, banding, borders }`. The renderers' table defaults are a header
@@ -59,9 +60,9 @@ export function parseTableCellPath(path) {
   return undefined;
 }
 
-function tableAt(document, tablePath) {
+function tableAt(presentation, tablePath) {
   const parts = splitOpfPath(tablePath);
-  const table = getValueAtPath(document, parts);
+  const table = getValueAtPath(presentation, parts);
   if (isObject(table) && !Array.isArray(table.rows) && typeof table.dataset === "string")
     throw fail("table-dataset-backed", `This table shows the shared dataset '${table.dataset}', which holds no cell styles or merged cells. Use a copy of the data (in the data grid) to style it.`, { tablePath, dataset: table.dataset });
   if (!isObject(table) || !Array.isArray(table.rows)) throw fail("table-not-found", "Choose a table (a path ending in .table).", { tablePath });
@@ -163,16 +164,16 @@ function withCell(cell, patch) {
   return keys.length === 1 && keys[0] === "value" ? merged.value : merged;
 }
 
-function transaction(document, tablePath, change, extra = {}) {
-  const { parts, table } = tableAt(document, tablePath);
+function transaction(presentation, tablePath, change, extra = {}) {
+  const { parts, table } = tableAt(presentation, tablePath);
   const next = clone(table);
   const info = change(next);
   const pointer = opfPathToJsonPointer(parts);
   const changed = JSON.stringify(table) !== JSON.stringify(next);
   const patches = changed ? [{ op: "test", path: pointer, value: clone(table) }, { op: "replace", path: pointer, value: next }] : [];
-  const before = validateOpfDocument(document);
-  const result = changed ? checkedDocument(document, patches, before) : document;
-  return { ...extra, ...info, tablePath: parts.join("."), document: clone(result), patches, changed };
+  const before = checkFormat(presentation);
+  const result = changed ? checkedDocument(presentation, patches, before) : presentation;
+  return { ...extra, ...info, tablePath: parts.join("."), presentation: clone(result), patches, changed };
 }
 
 // --- merge and split ---------------------------------------------------------------------------
@@ -200,11 +201,11 @@ function unmerge(table, cell) {
  * `merge-overlap` for a rectangle that crosses another merged cell. A header cell merges across the
  * header only (`rowSpan` 1). Re-merging an anchor first undoes its old merge.
  */
-export function prepareTableMerge(document, tablePath, cell, span, options = {}) {
+export function prepareTableMerge(presentation, tablePath, cell, span, options = {}) {
   const colSpan = span.colSpan ?? 1;
   const rowSpan = span.rowSpan ?? 1;
   if (!Number.isInteger(colSpan) || colSpan < 1 || !Number.isInteger(rowSpan) || rowSpan < 1) throw fail("invalid-table-span", "Spans are whole numbers of 1 or more.", { span });
-  return transaction(document, tablePath, (table) => {
+  return transaction(presentation, tablePath, (table) => {
     const target = { section: cell.section, row: cell.section === "header" ? 0 : cell.row, column: cell.column };
     const existing = describeTableCell(table, target);
     if (existing.covered) throw fail("merge-overlap", "This cell is covered by a merged cell. Select the merged cell itself.", { cell });
@@ -242,8 +243,8 @@ export function prepareTableMerge(document, tablePath, cell, span, options = {})
 }
 
 /** Compute the patch that splits a merged cell back into single cells (covered positions become empty text). */
-export function prepareTableSplit(document, tablePath, cell) {
-  return transaction(document, tablePath, (table) => {
+export function prepareTableSplit(presentation, tablePath, cell) {
+  return transaction(presentation, tablePath, (table) => {
     const target = { section: cell.section, row: cell.section === "header" ? 0 : cell.row, column: cell.column };
     const entry = describeTableCell(table, target);
     if (entry.covered) throw fail("table-cell-covered", "This position is covered by a merged cell. Select the merged cell to split it.", { cell });
@@ -259,11 +260,11 @@ export function prepareTableSplit(document, tablePath, cell) {
  * clears the whole style. Covered (merged) positions are skipped. A cell left with no style or spans
  * becomes a plain value again. Style is appearance only: values and spans are untouched.
  */
-export function prepareTableCellStyle(document, tablePath, cells, style) {
+export function prepareTableCellStyle(presentation, tablePath, cells, style) {
   const list = Array.isArray(cells) ? cells : [cells];
   if (!list.length) throw fail("table-cell-not-found", "Choose at least one cell.", {});
   if (style !== null && !isObject(style)) throw fail("invalid-table-style", "A cell style is an object, or null to clear it.", { style });
-  return transaction(document, tablePath, (table) => {
+  return transaction(presentation, tablePath, (table) => {
     let skipped = 0;
     for (const cell of list) {
       const target = { section: cell.section, row: cell.section === "header" ? 0 : cell.row, column: cell.column };
@@ -332,9 +333,9 @@ function resolveStyle(preset) {
  * Fills use scheme roles (surface, surfaceAlt, accent, background), so they follow the color scheme and the
  * renderers' automatic text contrast keeps text readable.
  */
-export function prepareTableStyle(document, tablePath, preset) {
+export function prepareTableStyle(presentation, tablePath, preset) {
   const style = resolveStyle(preset);
-  return transaction(document, tablePath, (table) => {
+  return transaction(presentation, tablePath, (table) => {
     styleTable(table, style);
     return {};
   }, { action: "table-style", style });
@@ -367,8 +368,8 @@ export function applyTableStyleToTable(table, preset) {
  * its fills and borders are not one of the styles this module writes (for example hand-set fills).
  * `preset` is the named preset the style equals, or "custom".
  */
-export function readTableStyle(document, tablePath) {
-  return readTableStyleOfTable(tableAt(document, tablePath).table);
+export function readTableStyle(presentation, tablePath) {
+  return readTableStyleOfTable(tableAt(presentation, tablePath).table);
 }
 
 /** {@link readTableStyle} for a table object. */
@@ -396,10 +397,10 @@ export * from "./table-structure.js";
 // --- session forms ----------------------------------------------------------------------------
 
 function commit(editor, prepared, meta = {}) {
-  const { document, patches, ...summary } = prepared;
-  void document;
+  const { presentation, patches, ...summary } = prepared;
+  void presentation;
   if (!editor || typeof editor.applyPatch !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
-  if (!prepared.changed) return { ...summary, document: editor.document, patches: [], inversePatches: [], validation: editor.validation };
+  if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
   const change = editor.applyPatch(patches, { ...meta, source: meta.source ?? "table-option", action: prepared.action, path: prepared.tablePath });
   return { ...change, ...summary };
 }
@@ -410,20 +411,20 @@ function checkEditor(editor) {
 export function mergeTableCells(editor, tablePath, cell, span, options = {}) {
   checkEditor(editor);
   const { meta, ...rest } = options;
-  return commit(editor, prepareTableMerge(editor.document, tablePath, cell, span, rest), meta);
+  return commit(editor, prepareTableMerge(editor.presentation, tablePath, cell, span, rest), meta);
 }
 /** Split a merged cell as one undoable transaction. */
 export function splitTableCell(editor, tablePath, cell, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareTableSplit(editor.document, tablePath, cell), meta);
+  return commit(editor, prepareTableSplit(editor.presentation, tablePath, cell), meta);
 }
 /** Style cells as one undoable transaction. See {@link prepareTableCellStyle}. */
 export function setTableCellStyle(editor, tablePath, cells, style, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareTableCellStyle(editor.document, tablePath, cells, style), meta);
+  return commit(editor, prepareTableCellStyle(editor.presentation, tablePath, cells, style), meta);
 }
 /** Apply a table style as one undoable transaction. See {@link prepareTableStyle}. */
 export function setTableStyle(editor, tablePath, preset, meta = {}) {
   checkEditor(editor);
-  return commit(editor, prepareTableStyle(editor.document, tablePath, preset), meta);
+  return commit(editor, prepareTableStyle(editor.presentation, tablePath, preset), meta);
 }

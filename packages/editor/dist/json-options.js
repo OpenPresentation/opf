@@ -1,4 +1,5 @@
-import { catalogKinds, catalogSchemaNames, schemas, validateCatalogRecord, validatePresentation } from "@openpresentation/opf";
+import { catalogKinds, catalogSchemaNames, schemas, validateCatalogRecord } from "@openpresentation/opf";
+import { checkFormat, firstErrorMessage } from "./checks.js";
 import { getCatalogOptions } from "./index.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
 import { applyEdits, findNodeAtLocation, findNodeAtOffset, getNodePath, modify, parseTree } from "jsonc-parser";
@@ -64,9 +65,9 @@ function describeOptions(choices, records, current, catalog) {
 // The installed schema identifies fields; a document field merely named "layout"
 // inside arbitrary metadata is not mistaken for an OPF layout reference.
 export function getJsonFieldContext(source, position, loadedCatalogs = {}) {
-    let document;
+    let presentation;
     try {
-        document = JSON.parse(source);
+        presentation = JSON.parse(source);
     }
     catch {
         return null;
@@ -84,18 +85,18 @@ export function getJsonFieldContext(source, position, loadedCatalogs = {}) {
     const path = getNodePath(node);
     if (!path.length)
         return null;
-    const schema = schemaAtPath(document, path.map(String));
+    const schema = schemaAtPath(presentation, path.map(String));
     const variants = schemaVariants(schema);
     const description = String(schema.description ?? "");
     let catalog = catalogFor(description);
     // Audience arrays inherit the catalog context from the array property.
     if (!catalog && typeof path.at(-1) === "number")
-        catalog = catalogFor(String(schemaAtPath(document, path.slice(0, -1).map(String)).description ?? ""));
+        catalog = catalogFor(String(schemaAtPath(presentation, path.slice(0, -1).map(String)).description ?? ""));
     const options = new Map();
     const records = new Map();
     let unloadedSource = false;
     if (catalog && typeof node.value === "string") {
-        const entries = document.catalogs;
+        const entries = presentation.catalogs;
         const local = entries?.[catalog];
         unloadedSource = Boolean(local?.source);
         for (const option of getCatalogOptions(catalog)) {
@@ -148,18 +149,18 @@ export function replaceFieldOption(context, value) {
     if (!context.options.some(option => option.value === value))
         throw new Error("This choice is no longer available.");
     let next = context.source.slice(0, context.offset) + JSON.stringify(value) + context.source.slice(context.offset + context.length);
-    const document = JSON.parse(next);
-    if (context.path.reduce((current, key) => current?.[key], document) !== value)
+    const presentation = JSON.parse(next);
+    if (context.path.reduce((current, key) => current?.[key], presentation) !== value)
         throw new Error("This field has a duplicate key. Resolve it in the JSON before choosing an option.");
     const types = context.options.find(option => option.value === value).placeholderTypes;
     if (value !== context.value && types && context.catalog === 'layouts' && context.path.length === 3
-        && context.path[0] === 'slides' && context.path[2] === 'layout' && validatePresentation(document).valid) {
-        const populated = populateLayoutPlaceholders(document, context.path[1], types);
-        next = updateSource(next, document, populated);
+        && context.path[0] === 'slides' && context.path[2] === 'layout' && checkFormat(presentation).valid) {
+        const populated = populateLayoutPlaceholders(presentation, context.path[1], types);
+        next = updateSource(next, presentation, populated);
     }
-    const result = validatePresentation(JSON.parse(next));
-    if (!result.valid && validatePresentation(JSON.parse(context.source)).valid)
-        throw new Error(result.errors[0]?.message ?? "This option is not valid here.");
+    const result = checkFormat(JSON.parse(next));
+    if (!result.valid && checkFormat(JSON.parse(context.source)).valid)
+        throw new Error(firstErrorMessage(result, "This option is not valid here."));
     return next;
 }
 

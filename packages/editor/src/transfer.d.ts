@@ -2,13 +2,13 @@ export declare const MAX_OPF_BYTES: number;
 export interface OpfTransfer {
   kind: "presentation" | "slides" | "selection";
   value: unknown;
-  document?: any;
+  presentation?: any;
 }
-export declare function assertOpf(document: any): any;
+export declare function assertOpf(presentation: any): any;
 export declare function unwrapOpf(value: any): any;
 export declare function parseOpfTransfer(text: string): OpfTransfer;
 export declare function serializeOpfTransfer(
-  document: any,
+  presentation: any,
   options?: {
     scope?: "presentation" | "slide" | "selection";
     slideIndex?: number;
@@ -24,4 +24,4 @@ export declare function prepareOpfImport(
     slideIndex?: number;
     path?: string;
   },
-): { document: any; slideIndex: number };
+): { presentation: any; slideIndex: number };

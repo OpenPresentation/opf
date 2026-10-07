@@ -2,8 +2,8 @@
 // SLIDE_SIZES fixture; this file checks the watermark text option, the inline code and language run styles, the generic form's
 // view of the new schema fields and the preview of an edited code.highlight.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import { OPFEditorError, createEditorSession } from "../dist/index.js";
 import { setDesignOption } from "../dist/design-options.js";
 import { formatRichTextRange } from "../dist/rich-text.js";
@@ -22,14 +22,14 @@ for (const preset of ["1:1", "4:5", "9:16"]) {
   assert.ok(listSwitchOptions({}, "slide-sizes").some((option) => option.id === preset), `${preset} is in the picker`);
   const editor = session();
   switchDimension(editor, "slide-sizes", preset);
-  assert.equal(editor.document.design.dimensions, preset);
-  assert.equal(currentSwitchValue(editor.document, "slide-sizes").value, preset);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(editor.presentation.design.dimensions, preset);
+  assert.equal(currentSwitchValue(editor.presentation, "slide-sizes").value, preset);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   const composed = editor.composeSlide(0);
   assert.equal(composed.width, 720, `${preset} keeps the 7.5 in short edge`);
   assert.equal(composed.height, { "1:1": 720, "4:5": 900, "9:16": 1280 }[preset]);
   editor.undo();
-  assert.equal(editor.document.design.dimensions, undefined);
+  assert.equal(editor.presentation.design.dimensions, undefined);
 }
 
 // --- watermark text --------------------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ for (const preset of ["1:1", "4:5", "9:16"]) {
   assert.throws(() => setDesignOption(session(), "watermark", { opacity: 0.2 }), (error) => error.code === "invalid-design-value" && /image before setting its opacity/.test(error.message));
   setDesignOption(editor, "watermark", { text: "DRAFT", opacity: 0.1 }, { slideIndex: 1 });
   assert.deepEqual(editor.get("slides.1.design.watermark"), { text: "DRAFT", opacity: 0.1 }, "a slide can have its own text watermark");
-  const out = renderSvg(editor.document, { slideIndex: 1 });
+  const out = renderSlideSvg(editor.presentation, 1);
   assert.match(out, /rotate\(-30 /, "the preview draws the diagonal stamp");
   assert.match(out, />DRAFT</);
   while (editor.snapshot().undoDepth) editor.undo();
@@ -67,8 +67,8 @@ for (const preset of ["1:1", "4:5", "9:16"]) {
   assert.throws(() => formatRichTextRange(runs, 0, 3, { code: "yes" }), /Invalid run style: code/);
   const editor = session();
   editor.set("slides.0.text", lang, { rejectInvalid: true });
-  assert.equal(validatePresentation(editor.document).valid, true);
-  const out = renderSvg(editor.document, { slideIndex: 0 });
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
+  const out = renderSlideSvg(editor.presentation, 0);
   assert.match(out, /lang="fr-FR"/, "the preview declares the run language");
   assert.match(out, /font-family="[^"]*Roboto Mono/, "the inline code run draws in the code font");
 }
@@ -94,20 +94,23 @@ for (const preset of ["1:1", "4:5", "9:16"]) {
 // --- code.highlight through the session -----------------------------------------------------------------------------------------------
 {
   const editor = session();
-  const plain = renderSvg(editor.document, { slideIndex: 1, trace: true });
+  const plain = renderSlideSvg(editor.presentation, 1, { trace: true });
   assert.equal(plain.includes("data-opf-code-highlight"), false, "no band without the field");
   editor.set("slides.1.code.highlight", [2, [3, 4]], { rejectInvalid: true });
   assert.deepEqual(editor.get("slides.1.code.highlight"), [2, [3, 4]]);
-  const marked = renderSvg(editor.document, { slideIndex: 1, trace: true });
+  const marked = renderSlideSvg(editor.presentation, 1, { trace: true });
   assert.equal(marked.match(/data-opf-code-highlight="true"/g)?.length, 1, "lines 2-4 are one band");
   assert.throws(() => editor.set("slides.1.code.highlight", [0], { rejectInvalid: true }), OPFEditorError, "line numbers start at 1");
   assert.throws(() => editor.set("slides.1.code.highlight", [[1, 2, 3]], { rejectInvalid: true }), OPFEditorError);
   // A line past the end is a warning, not an error, and draws nothing.
   editor.set("slides.1.code.highlight", [9], { rejectInvalid: true });
-  const result = validatePresentation(editor.document);
+  const result = validate(editor.presentation);
   assert.equal(result.valid, true);
-  assert.ok(result.warnings.some((issue) => issue.params.code === "code-highlight-out-of-range"));
-  assert.equal(renderSvg(editor.document, { slideIndex: 1, trace: true }).includes("data-opf-code-highlight"), false);
+  const outOfRange = result.findings.filter((finding) => finding.ruleId === "opf/code-highlight-out-of-range");
+  assert.equal(outOfRange.length, 1);
+  assert.equal(outOfRange[0].category, "content");
+  assert.equal(outOfRange[0].severity, "warning");
+  assert.equal(renderSlideSvg(editor.presentation, 1, { trace: true }).includes("data-opf-code-highlight"), false);
 }
 
 console.log("FA-13 editor: ten slide sizes, watermark text, inline code and run language, generic-form schema, code.highlight preview.");

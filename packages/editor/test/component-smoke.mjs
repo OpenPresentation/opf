@@ -156,4 +156,4 @@ const beforeSnapshot = editor.snapshot();
 assert.equal(beforeSnapshot, editor.snapshot());
 editor.set("slides.0.title", "New snapshot");
 assert.notEqual(editor.snapshot(), beforeSnapshot);
-assert.equal(Object.isFrozen(editor.snapshot().document), true);
+assert.equal(Object.isFrozen(editor.snapshot().presentation), true);

@@ -12,8 +12,6 @@ export declare const NUMBERING_SUFFIX_OPTIONS: readonly { value: NumberingSuffix
 export declare const MAX_NUMBERING_LEVELS: 9;
 export declare const MAX_NUMBERING_START: 32767;
 
-/** True when the core this editor runs on composes numbered lists. */
-export declare function numberingAvailable(): boolean;
 
 export interface ListPayloadLocation {
   /** The payload that owns the list ("" for a document-level path is not possible; a slide, region or block). */
@@ -26,11 +24,11 @@ export interface ListPayloadLocation {
   entry?: number;
 }
 /** Where a list lives for a path that points at it or into it (`slides.0.items`, `slides.0.items.2`, `slides.0.left.items.1.text`). */
-export declare function listPayloadAt(document: unknown, path: string): ListPayloadLocation | undefined;
+export declare function listPayloadAt(presentation: unknown, path: string): ListPayloadLocation | undefined;
 
 export interface NumberableList { path: string; payloadPath: string; field: "items" | "bullets"; label: string; count: number; numbered: boolean }
 /** Every list of a slide: path, label, entry count and whether it is numbered. */
-export declare function findNumberableLists(document: unknown, slideIndex: number): NumberableList[];
+export declare function findNumberableLists(presentation: unknown, slideIndex: number): NumberableList[];
 
 /** The shortest `numbering` value for per-level settings (a style name, an object of the non-default fields, or an array). */
 export declare function numberingValue(levels: readonly Partial<NumberingLevel>[]): NumberingValue;
@@ -54,7 +52,7 @@ export interface NumberingState {
   /** The entry the path selects, with its own `start` and the marker it draws. */
   entry?: { index: number; start?: number; marker?: string };
 }
-export declare function numberingState(document: unknown, path: string): NumberingState | undefined;
+export declare function numberingState(presentation: unknown, path: string): NumberingState | undefined;
 
 /** Number a list, change its numbering, or (with `undefined` or `null`) turn it off, as one undoable validated edit. Turning it off also removes the entry `start` values. */
 export declare function setNumbering(editor: EditorSession, path: string, value: NumberingValue | undefined | null, meta?: Record<string, unknown>): unknown;

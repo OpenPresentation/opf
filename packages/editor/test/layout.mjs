@@ -13,13 +13,13 @@ const first=geometry.items.find(i=>i.path==='slides.0.blocks.0.text');
 assert.ok(Math.abs(first.box.width-flow.columns[0].size)<1e-6);
 const prepared=prepareTrackResize(deck,flow,0,.5);
 assert.deepEqual(prepared.composition.weights,[1.5,1.5,1]);
-assert.equal(prepared.document.name,deck.name);assert.deepEqual(prepared.document.slides[0].blocks,deck.slides[0].blocks);
+assert.equal(prepared.presentation.name,deck.name);assert.deepEqual(prepared.presentation.slides[0].blocks,deck.slides[0].blocks);
 assert.deepEqual(deck.slides[0].composition.weights,[2,1,1]);
-const resized=composeSlide(prepared.document.slides[0]);
+const resized=composeSlide(prepared.presentation.slides[0]);
 assert.equal(resized.flows[0].columns[2].size,flow.columns[2].size);
 assert.ok(Math.abs(resized.flows[0].columns[0].size-resized.flows[0].columns[1].size)<1e-8);
 const child=prepareTrackResize(deck,nested,0,.75);
-assert.deepEqual(child.document.slides[0].composition,deck.slides[0].composition);
+assert.deepEqual(child.presentation.slides[0].composition,deck.slides[0].composition);
 assert.deepEqual(child.composition.weights,[1.5,.5]);
 const auto={slides:[{blocks:[{text:'A'},{text:'B'},{text:'C'},{text:'D'}]}]};
 const autoFlow=composeSlide(auto.slides[0]).flows[0];assert.ok(autoFlow.columns.length>1);
@@ -27,7 +27,7 @@ const frozen=prepareTrackResize(auto,autoFlow,0,.6);assert.equal(frozen.composit
 const maxDeck={slides:[{composition:{mode:'row',weights:[100,100,100]},blocks:[{text:'A'},{text:'B'},{text:'C'}]}]};
 const maxFlow=composeSlide(maxDeck.slides[0]).flows[0],max=prepareTrackResize(maxDeck,maxFlow,0,.95);
 assert.ok(max.composition.weights.every(w=>w>0&&w<=100));
-const after=composeSlide(max.document.slides[0]).flows[0];assert.ok(Math.abs(after.columns[2].size-maxFlow.columns[2].size)<1e-7);
+const after=composeSlide(max.presentation.slides[0]).flows[0];assert.ok(Math.abs(after.columns[2].size-maxFlow.columns[2].size)<1e-7);
 assert.equal(prepareTrackResize(deck,flow,0,0).fraction,.05);
 for(const [boundary,fraction]of [[-1,.5],[2,.5],[0,NaN],[0,2]])assert.throws(()=>prepareTrackResize(deck,flow,boundary,fraction));
 const reserved=composeSlide(deck.slides[0],{layout:{placeholders:Array.from({length:6},()=>({type:'text'}))}}).flows[0];assert.equal(reserved.slotCount,3); // explicit row ignores slots
@@ -35,7 +35,7 @@ const legacy={slides:[{blocks:[{text:'A'},{text:'B'}]}]};const legacyFlow=compos
 assert.throws(()=>prepareTrackResize(legacy,legacyFlow,0,.6),/explicit arrangement/);
 const promoted=composeSlide({left:{text:'Fixed'},right:{blocks:[{text:'Top'},{text:'Bottom'}],composition:{mode:'column'}}});
 assert.deepEqual(promoted.flows.map(f=>f.path),['slides.0.right']);
-const editor=createEditorSession(deck,{rejectInvalid:true});editor.applyPatch(prepared.patches);editor.undo();assert.deepEqual(editor.document,deck);assert.equal(editor.canUndo,false);
+const editor=createEditorSession(deck,{rejectInvalid:true});editor.applyPatch(prepared.patches);editor.undo();assert.deepEqual(editor.presentation,deck);assert.equal(editor.canUndo,false);
 editor.set('slides.0.title','Newer title');assert.throws(()=>editor.applyPatch(prepared.patches));assert.equal(editor.get('slides.0.title'),'Newer title');
 console.log('Layout resizing passed: exact track geometry, row/column/nested/grid behavior, auto freeze, weight bounds, metadata preservation, stale guards and undo.');
 
@@ -51,6 +51,6 @@ const cardEditor=createEditorSession(cardDocument,{rejectInvalid:true});
 assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox));
 cardEditor.paginateSlide(0,{minFontSize:25});
 assert.ok(cardEditor.composeSlide(0).items.every(item=>item.frameBox));
-cardEditor.undo();assert.deepEqual(cardEditor.document,cardDocument);
+cardEditor.undo();assert.deepEqual(cardEditor.presentation,cardDocument);
 cardEditor.set('slides.0.design',{contentBox:false});assert.ok(cardEditor.composeSlide(0).items.every(item=>!item.frameBox));
-cardEditor.undo();assert.deepEqual(cardEditor.document,cardDocument);
+cardEditor.undo();assert.deepEqual(cardEditor.presentation,cardDocument);

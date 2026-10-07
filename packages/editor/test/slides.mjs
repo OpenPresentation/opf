@@ -1,8 +1,8 @@
 // RR-21: slide management. Every operation is one validated patch, one undo step, exact undo and redo, valid OPF,
 // unique ids, and the right section; a dry run (prepare*) never touches a session.
 import assert from "node:assert/strict";
-import { validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import { createEditorSession } from "../dist/index.js";
 import { collectReservedPresentationIds } from "../dist/presentation-ids.js";
 import {
@@ -21,43 +21,43 @@ const deck = () => ({
     { id: "e", title: "E", text: "Epsilon", section: "End" },
   ],
 });
-const session = (document = deck()) => createEditorSession(document, { rejectInvalid: true });
-const ids = (editor) => editor.document.slides.map((slide) => slide.id);
-const sections = (editor) => editor.document.slides.map((slide) => slide.section ?? "-");
-const valid = (document) => assert.equal(validatePresentation(document).valid, true, JSON.stringify(validatePresentation(document).errors?.slice?.(0, 2)));
-const unique = (document) => {
-  const all = collectReservedPresentationIds(document);
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
+const ids = (editor) => editor.presentation.slides.map((slide) => slide.id);
+const sections = (editor) => editor.presentation.slides.map((slide) => slide.section ?? "-");
+const valid = (presentation) => assert.equal(validate(presentation, { only: ["format"] }).valid, true, JSON.stringify(validate(presentation, { only: ["format"] }).findings.slice(0, 2)));
+const unique = (presentation) => {
+  const all = collectReservedPresentationIds(presentation);
   assert.equal(new Set(all).size, all.length, `ids are unique: ${all}`);
 };
 
 /** One step: exactly one undo entry, exact undo, exact redo, valid document, and the events the preview relies on. */
 function oneStep(editor, run) {
-  const before = editor.document, depth = editor.snapshot().undoDepth, events = [];
+  const before = editor.presentation, depth = editor.snapshot().undoDepth, events = [];
   const stop = editor.subscribe((event) => events.push(event.type));
   const change = run();
   stop();
   assert.equal(change.changed, true);
   assert.deepEqual(events, ["patch"], "one patch event");
   assert.equal(editor.snapshot().undoDepth, depth + 1, "one undo step");
-  valid(editor.document);
-  unique(editor.document);
-  const after = editor.document;
+  valid(editor.presentation);
+  unique(editor.presentation);
+  const after = editor.presentation;
   editor.undo();
-  assert.deepEqual(editor.document, before, "undo restores the deck exactly");
+  assert.deepEqual(editor.presentation, before, "undo restores the deck exactly");
   assert.equal(editor.snapshot().undoDepth, depth);
   editor.redo();
-  assert.deepEqual(editor.document, after, "redo restores the result exactly");
+  assert.deepEqual(editor.presentation, after, "redo restores the result exactly");
   return change;
 }
 
 // --- reading ---------------------------------------------------------------------------------------
 {
-  const document = deck();
-  assert.deepEqual(listSections(document).map(({ name, start, count }) => [name, start, count]), [["Intro", 0, 2], ["Body", 2, 2], ["End", 4, 1]]);
-  assert.equal(hasSections(document), true);
+  const presentation = deck();
+  assert.deepEqual(listSections(presentation).map(({ name, start, count }) => [name, start, count]), [["Intro", 0, 2], ["Body", 2, 2], ["End", 4, 1]]);
+  assert.equal(hasSections(presentation), true);
   assert.equal(hasSections({ slides: [{ title: "x" }] }), false);
-  assert.equal(sectionForSlide(document, 3).name, "Body");
-  assert.deepEqual(slideSummaries(document).map((row) => [row.title, row.hidden, row.section]), [["A", false, "Intro"], ["B", false, "Intro"], ["C", false, "Body"], ["D", true, "Body"], ["E", false, "End"]]);
+  assert.equal(sectionForSlide(presentation, 3).name, "Body");
+  assert.deepEqual(slideSummaries(presentation).map((row) => [row.title, row.hidden, row.section]), [["A", false, "Intro"], ["B", false, "Intro"], ["C", false, "Body"], ["D", true, "Body"], ["E", false, "End"]]);
   // A run without a label is its own, unnamed section; the same name in two places is two sections.
   const split = listSections({ slides: [{ section: "X" }, {}, { section: "X" }, {}] });
   assert.deepEqual(split.map((row) => [row.name, row.unnamed, row.count]), [["X", false, 1], [undefined, true, 1], ["X", false, 1], [undefined, true, 1]]);
@@ -69,50 +69,50 @@ function oneStep(editor, run) {
 // --- add -------------------------------------------------------------------------------------------
 {
   const editor = session();
-  const before = editor.document;
+  const before = editor.presentation;
   // A dry run does not touch the session.
   const prepared = prepareAddSlide(before, { at: 2 });
   assert.equal(prepared.changed, true);
-  assert.deepEqual(editor.document, before);
-  assert.equal(prepared.document.slides[2].id, "slide-6");
+  assert.deepEqual(editor.presentation, before);
+  assert.equal(prepared.presentation.slides[2].id, "slide-6");
   const change = oneStep(editor, () => addSlide(editor, { at: 2 }));
   assert.deepEqual(change.patches.map((patch) => [patch.op, patch.path]), [["add", "/slides/2"]]);
   assert.equal(change.index, 2);
   assert.deepEqual(change.selection, [2]);
-  assert.equal(editor.document.slides[2].title, "New slide");
+  assert.equal(editor.presentation.slides[2].title, "New slide");
   // The new slide joins the section of the slide before it.
-  assert.equal(editor.document.slides[2].section, "Intro");
+  assert.equal(editor.presentation.slides[2].section, "Intro");
   // Default position: the end, in the last section.
   oneStep(editor, () => addSlide(editor));
-  assert.equal(editor.document.slides.at(-1).section, "End");
+  assert.equal(editor.presentation.slides.at(-1).section, "End");
   // An explicit section, none, and a title.
   oneStep(editor, () => addSlide(editor, { at: 0, section: "Cover", title: "Hello", id: "cover" }));
-  assert.equal(editor.document.slides[0].section, "Cover");
-  assert.equal(editor.document.slides[0].id, "cover");
+  assert.equal(editor.presentation.slides[0].section, "Cover");
+  assert.equal(editor.presentation.slides[0].id, "cover");
   oneStep(editor, () => addSlide(editor, { section: null }));
-  assert.equal(Object.hasOwn(editor.document.slides.at(-1), "section"), false);
+  assert.equal(Object.hasOwn(editor.presentation.slides.at(-1), "section"), false);
   assert.throws(() => addSlide(editor, { at: 99 }), { code: "slide-index-out-of-range" });
   // A host-built slide.
   oneStep(editor, () => addSlide(editor, { slide: { id: "mine", title: "Mine", items: ["x"] } }));
-  assert.deepEqual(editor.document.slides.at(-1).items, ["x"]);
+  assert.deepEqual(editor.presentation.slides.at(-1).items, ["x"]);
 }
 
 // A layout choice adds the layout's placeholders, the way switching a slide's layout does.
 {
   const editor = session();
   const change = oneStep(editor, () => addSlide(editor, { layout: "title-subtitle", at: 1 }));
-  const slide = editor.document.slides[1];
+  const slide = editor.presentation.slides[1];
   assert.equal(slide.layout, "title-subtitle");
   assert.equal(typeof slide.title, "string");
   assert.equal(typeof slide.subtitle, "string");
   assert.equal(change.layout, "title-subtitle");
   oneStep(editor, () => addSlide(editor, { layout: "list-2x" }));
-  const last = editor.document.slides.at(-1);
+  const last = editor.presentation.slides.at(-1);
   assert.equal(last.layout, "list-2x");
   assert.ok(Array.isArray(last.blocks) || last.items, "list placeholders exist");
   assert.throws(() => addSlide(editor, { layout: "no-such-layout" }), { code: "unknown-catalog-id" });
   // The preview draws the new slide.
-  assert.ok(renderSvg(editor.document, { slideIndex: 1 }).includes("<svg"));
+  assert.ok(renderSlideSvg(editor.presentation, 1).includes("<svg"));
 }
 
 // --- duplicate -------------------------------------------------------------------------------------
@@ -122,14 +122,14 @@ function oneStep(editor, run) {
   assert.deepEqual(ids(editor), ["a", "b", "c", "c-2", "d", "e"]);
   assert.deepEqual(change.selection, [3]);
   // Content ids are remapped too, and everything else is copied.
-  assert.equal(editor.document.slides[3].blocks[0].id, "c-text-2");
-  assert.deepEqual(editor.document.slides[3].blocks[1], { items: ["one", "two"] });
+  assert.equal(editor.presentation.slides[3].blocks[0].id, "c-text-2");
+  assert.deepEqual(editor.presentation.slides[3].blocks[1], { items: ["one", "two"] });
   assert.equal(change.range.start, 3);
   // Several slides: copies go after the last one, in order; a hidden slide stays hidden.
   const many = session();
   oneStep(many, () => duplicateSlides(many, [3, 1]));
   assert.deepEqual(ids(many), ["a", "b", "c", "d", "b-2", "d-2", "e"]);
-  assert.equal(many.document.slides[5].hidden, true);
+  assert.equal(many.presentation.slides[5].hidden, true);
   // Copies take the section of the slide they follow.
   assert.deepEqual(sections(many), ["Intro", "Intro", "Body", "Body", "Body", "Body", "End"]);
   assert.throws(() => duplicateSlides(many, []), { code: "no-slides-chosen" });
@@ -138,7 +138,7 @@ function oneStep(editor, run) {
   const twice = session();
   duplicateSlides(twice, [0]);
   duplicateSlides(twice, [0]);
-  unique(twice.document);
+  unique(twice.presentation);
 }
 
 // --- remove ----------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ function oneStep(editor, run) {
   const start = session();
   oneStep(start, () => moveSlides(start, [4], 0));
   assert.deepEqual(ids(start), ["e", "a", "b", "c", "d"]);
-  assert.equal(start.document.slides[0].section, "Intro");
+  assert.equal(start.presentation.slides[0].section, "Intro");
   // An explicit section, and none.
   const named = session();
   oneStep(named, () => moveSlides(named, [0, 1], 5, { section: "End" }));
@@ -185,7 +185,7 @@ function oneStep(editor, run) {
   assert.deepEqual(sections(named), ["Body", "Body", "End", "End", "End"]);
   const none = session();
   oneStep(none, () => moveSlides(none, [4], 0, { section: null }));
-  assert.equal(Object.hasOwn(none.document.slides[0], "section"), false);
+  assert.equal(Object.hasOwn(none.presentation.slides[0], "section"), false);
   // Several slides keep their relative order and land together.
   const group = session();
   oneStep(group, () => moveSlides(group, [3, 1], 5, { section: "keep" }));
@@ -215,7 +215,7 @@ function oneStep(editor, run) {
   const change = oneStep(cross, () => moveSlidesBy(cross, [1], 1));
   assert.deepEqual(ids(cross), ["a", "c", "b", "d", "e"]);
   assert.deepEqual(change.selection, [2]);
-  assert.equal(cross.document.slides[2].section, "Body");
+  assert.equal(cross.presentation.slides[2].section, "Body");
   // A contiguous block moves together; a scattered selection moves each slide one place.
   const block = session();
   oneStep(block, () => moveSlidesBy(block, [1, 2], 1, { section: "keep" }));
@@ -236,24 +236,24 @@ function oneStep(editor, run) {
   const editor = session();
   const hide = oneStep(editor, () => setHidden(editor, [0, 1], true));
   assert.deepEqual(hide.patches.map((patch) => [patch.op, patch.path, patch.value]), [["add", "/slides/0/hidden", true], ["add", "/slides/1/hidden", true]]);
-  assert.deepEqual(editor.document.slides.map((slide) => slide.hidden === true), [true, true, false, true, false]);
+  assert.deepEqual(editor.presentation.slides.map((slide) => slide.hidden === true), [true, true, false, true, false]);
   // Showing removes the field rather than writing false.
   const show = oneStep(editor, () => setHidden(editor, [3], false));
   assert.deepEqual(show.patches.map((patch) => [patch.op, patch.path]), [["remove", "/slides/3/hidden"]]);
-  assert.equal(Object.hasOwn(editor.document.slides[3], "hidden"), false);
+  assert.equal(Object.hasOwn(editor.presentation.slides[3], "hidden"), false);
   // Hiding what is already hidden commits nothing; toggling flips the whole selection one way.
   assert.equal(setHidden(editor, [0], true).changed, false);
   const toggle = oneStep(editor, () => setHidden(editor, [0, 2]));
   assert.equal(toggle.hidden, true, "a mixed selection hides");
-  assert.equal(editor.document.slides[2].hidden, true);
+  assert.equal(editor.presentation.slides[2].hidden, true);
   oneStep(editor, () => setHidden(editor, [0, 2]));
-  assert.equal(editor.document.slides[0].hidden, undefined, "an all-hidden selection shows");
+  assert.equal(editor.presentation.slides[0].hidden, undefined, "an all-hidden selection shows");
   // A stored false counts as shown and is cleared.
   const stored = session({ slides: [{ title: "x", hidden: false }, { title: "y" }] });
   assert.equal(setHidden(stored, [0], true).patches[0].op, "replace");
   assert.equal(setHidden(stored, [0], false).patches[0].op, "remove");
   // Hidden slides still render for the editor (they are only skipped when presenting).
-  assert.ok(renderSvg(editor.document, { slideIndex: 3 }).includes("<svg"));
+  assert.ok(renderSlideSvg(editor.presentation, 3).includes("<svg"));
 }
 
 // --- sections --------------------------------------------------------------------------------------
@@ -318,12 +318,12 @@ function oneStep(editor, run) {
 {
   const editor = session();
   moveSlides(editor, [0], 5, { section: "keep" });
-  assert.equal(editor.document.slides.at(-1).id, "a");
+  assert.equal(editor.presentation.slides.at(-1).id, "a");
   editor.set("slides.4.title", "Moved A");
   editor.undo();
   editor.undo();
   assert.deepEqual(ids(editor), ["a", "b", "c", "d", "e"]);
-  assert.equal(editor.document.slides[0].title, "A");
+  assert.equal(editor.presentation.slides[0].title, "A");
   assert.equal(editor.canUndo, false);
 }
 

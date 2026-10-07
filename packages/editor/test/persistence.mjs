@@ -6,12 +6,12 @@ import { createEditorSession } from "../dist/index.js";
 import { createMemoryStorage, createPersistence, describeAutosave } from "../dist/persistence.js";
 
 const deck = (title = "Start") => ({ name: "Autosave", design: { theme: "classic", fontScheme: "roboto" }, slides: [{ id: "a", title, text: "Alpha" }, { id: "b", title: "Beta", text: "Beta text" }] });
-const session = (document = deck()) => createEditorSession(document, { rejectInvalid: true });
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const KEY = "opf-editor/v1/doc";
+const KEY = "opf-editor/v2/doc";
 const windowStub = () => {
   const target = new EventTarget();
-  target.document = new EventTarget();
+  target.presentation = new EventTarget();
   return target;
 };
 const unload = (win) => {
@@ -46,29 +46,29 @@ const make = (editor, storage, extra = {}) => createPersistence(editor, { key: "
   const events = [];
   const other = session(deck());
   other.subscribe((event) => events.push(event.type));
-  const document = editor.document;
-  other.restoreState({ document, ...history }, { source: "test" });
+  const presentation = editor.presentation;
+  other.restoreState({ presentation, ...history }, { source: "test" });
   assert.deepEqual(events, ["restore"]);
-  assert.deepEqual(other.document, document);
+  assert.deepEqual(other.presentation, presentation);
   assert.equal(other.canUndo, true);
   assert.equal(other.canRedo, true);
   other.undo();
-  assert.equal(other.document.slides[0].title, "Start", "the restored history walks back");
+  assert.equal(other.presentation.slides[0].title, "Start", "the restored history walks back");
   other.redo();
   other.redo();
-  assert.equal(other.document.slides[1].title, "Two");
+  assert.equal(other.presentation.slides[1].title, "Two");
   // A history that does not belong to the document is refused before anything changes.
   const bystander = session();
-  const before = bystander.document;
-  assert.throws(() => bystander.restoreState({ document: deck("Elsewhere"), ...history }), { code: "invalid-history" });
-  assert.deepEqual(bystander.document, before);
+  const before = bystander.presentation;
+  assert.throws(() => bystander.restoreState({ presentation: deck("Elsewhere"), ...history }), { code: "invalid-history" });
+  assert.deepEqual(bystander.presentation, before);
   assert.equal(bystander.canUndo, false);
-  assert.throws(() => bystander.restoreState({ document: { slides: [] }, undo: [] }), (error) => error.code === "invalid-opf-edit");
-  assert.throws(() => bystander.restoreState({ document: deck(), undo: [{ nope: true }] }), { code: "invalid-history" });
+  assert.throws(() => bystander.restoreState({ presentation: { slides: [] }, undo: [] }), (error) => error.code === "invalid-opf-edit");
+  assert.throws(() => bystander.restoreState({ presentation: deck(), undo: [{ nope: true }] }), { code: "invalid-history" });
   // Without a history it just replaces the document and clears both stacks.
   bystander.set("name", "x");
-  bystander.restoreState({ document: deck("Fresh") });
-  assert.equal(bystander.document.slides[0].title, "Fresh");
+  bystander.restoreState({ presentation: deck("Fresh") });
+  assert.equal(bystander.presentation.slides[0].title, "Fresh");
   assert.equal(bystander.canUndo, false);
 }
 
@@ -92,11 +92,11 @@ const make = (editor, storage, extra = {}) => createPersistence(editor, { key: "
   await wait(80);
   assert.equal(storage.calls.set.length, 1, "three quick edits are one write");
   const record = await storage.get(KEY);
-  assert.equal(record.version, 1);
+  assert.equal(record.version, 2);
   assert.equal(record.dirty, true);
   assert.equal(record.name, "Autosave");
   assert.equal(record.slideCount, 2);
-  assert.equal(record.document.slides[0].title, "Two");
+  assert.equal(record.presentation.slides[0].title, "Two");
   assert.equal(record.undo.length, 3, "the undo history is stored with it");
   assert.equal(persistence.status.state, "saved");
   assert.match(describeAutosave(persistence.status, { locale: "en-US" }), /^Saved on this device at /);
@@ -117,7 +117,7 @@ const make = (editor, storage, extra = {}) => createPersistence(editor, { key: "
   for (let step = 0; step < 12; step += 1) { editor.set("slides.0.title", `Edit ${step}`); await wait(15); }
   assert.ok(storage.calls.set.length >= 1, "a continuous stream of edits is still written before it pauses");
   await persistence.flush();
-  assert.equal((await storage.get(KEY)).document.slides[0].title, "Edit 11");
+  assert.equal((await storage.get(KEY)).presentation.slides[0].title, "Edit 11");
   persistence.destroy();
 }
 
@@ -145,12 +145,12 @@ async function stored(edit) {
   assert.equal(offer.dirty, true);
   assert.equal(offer.hasHistory, true);
   assert.equal(offer.slideCount, 2);
-  assert.equal(fresh.document.slides[0].title, "Edited", "restore puts the copy back");
+  assert.equal(fresh.presentation.slides[0].title, "Edited", "restore puts the copy back");
   assert.equal(fresh.canUndo, true, "and the undo history with it");
   fresh.undo();
-  assert.equal(fresh.document.slides[1].title, "Beta");
+  assert.equal(fresh.presentation.slides[1].title, "Beta");
   fresh.undo();
-  assert.equal(fresh.document.slides[0].title, "Start");
+  assert.equal(fresh.presentation.slides[0].title, "Start");
   fresh.redo(); fresh.redo();
   assert.equal(persistence.dirty, true, "restored unsaved work is still unsaved");
   assert.equal(persistence.pending, undefined);
@@ -171,9 +171,9 @@ async function stored(edit) {
   const editor = session();
   const persistence = make(editor, storage);
   assert.equal((await persistence.ready).offered, true);
-  assert.equal(persistence.pending.document.slides[0].title, "Stored");
+  assert.equal(persistence.pending.presentation.slides[0].title, "Stored");
   assert.equal(await persistence.restore(), true);
-  assert.equal(editor.document.slides[0].title, "Stored");
+  assert.equal(editor.presentation.slides[0].title, "Stored");
   assert.equal(persistence.pending, undefined);
   assert.equal(await persistence.restore(), false, "nothing left to restore");
   persistence.destroy();
@@ -185,9 +185,9 @@ async function stored(edit) {
   const depth = second.snapshot().undoDepth;
   assert.equal(await handler.restore(), true);
   assert.equal(second.snapshot().undoDepth, depth + 1, "restoring into an edited session is one undo step");
-  assert.equal(second.document.slides[0].title, "Stored");
+  assert.equal(second.presentation.slides[0].title, "Stored");
   second.undo();
-  assert.equal(second.document.slides[1].title, "Typed before deciding", "and Undo returns to the edit that was open");
+  assert.equal(second.presentation.slides[1].title, "Typed before deciding", "and Undo returns to the edit that was open");
   handler.destroy();
 }
 
@@ -211,16 +211,16 @@ async function stored(edit) {
   editor.set("slides.0.title", "New work");
   await persistence.flush();
   assert.ok(storage.keys().includes(`${KEY}#earlier`), "the offered copy is kept aside");
-  assert.equal((await storage.get(KEY)).document.slides[0].title, "New work");
+  assert.equal((await storage.get(KEY)).presentation.slides[0].title, "New work");
   persistence.destroy();
 
   const reloaded = session();
   const again = make(reloaded, storage);
   const ready = await again.ready;
-  assert.equal(ready.offer.document.slides[0].title, "New work");
+  assert.equal(ready.offer.presentation.slides[0].title, "New work");
   assert.equal(ready.offer.earlier.slideCount, 2, "the older copy is mentioned");
   assert.equal(await again.restoreEarlier(), true);
-  assert.equal(reloaded.document.slides[0].title, "Old work");
+  assert.equal(reloaded.presentation.slides[0].title, "Old work");
   assert.deepEqual(storage.keys().filter((key) => key.endsWith("#earlier")), [], "deciding drops the older copy");
   again.destroy();
 }
@@ -263,7 +263,7 @@ async function stored(edit) {
   const editor = session();
   const persistence = make(editor, storage);
   await persistence.ready;
-  editor.restoreState({ document: deck("From the host") });
+  editor.restoreState({ presentation: deck("From the host") });
   persistence.rebase();
   assert.equal(persistence.dirty, false);
   await wait(60);
@@ -336,7 +336,7 @@ async function stored(edit) {
   await reader.ready;
   await reader.restore();
   for (let step = 0; step < 3; step += 1) reopened.undo();
-  assert.equal(reopened.document.slides[0].title, "Edit 4", "three steps back");
+  assert.equal(reopened.presentation.slides[0].title, "Edit 4", "three steps back");
   assert.equal(reopened.canUndo, false, "the trimmed history ends there");
   reader.destroy();
 
@@ -370,12 +370,12 @@ async function stored(edit) {
   const persistence = make(editor, storage);
   await persistence.ready;
   assert.equal(await persistence.restore(), true);
-  assert.equal(editor.document.slides[0].title, "B");
+  assert.equal(editor.presentation.slides[0].title, "B");
   assert.equal(editor.canUndo, false, "a damaged history is dropped, the document is kept");
   persistence.destroy();
   // A corrupt record is ignored.
   const corrupt = createMemoryStorage();
-  await corrupt.set(KEY, { version: 9, document: 5 });
+  await corrupt.set(KEY, { version: 9, presentation: 5 });
   const ignoring = make(session(), corrupt);
   assert.equal((await ignoring.ready).offered, false);
   ignoring.destroy();

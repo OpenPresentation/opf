@@ -14,8 +14,8 @@ export const isDatasetRef = (value) => isObject(value) && typeof value.dataset =
  * `item` is the chart or table object, `parts` its path, and `ref` the object that holds `dataset` and `fields`
  * (`chart.data` for a chart, the table itself for a table) at `refParts`.
  */
-export function walkDatasetItems(document, visit) {
-  if (!isObject(document) || !Array.isArray(document.slides)) return;
+export function walkDatasetItems(presentation, visit) {
+  if (!isObject(presentation) || !Array.isArray(presentation.slides)) return;
   const walk = (payload, base, depth, ancestors) => {
     if (isObject(payload.chart) && isDatasetRef(payload.chart.data))
       visit({ kind: "chart", id: payload.chart.data.dataset, parts: [...base, "chart"], item: payload.chart, refParts: [...base, "chart", "data"], ref: payload.chart.data });
@@ -27,7 +27,7 @@ export function walkDatasetItems(document, visit) {
       if (isObject(block)) walk(block, [...base, "blocks", String(index)], depth + 1, nested);
     });
   };
-  document.slides.forEach((slide, index) => {
+  presentation.slides.forEach((slide, index) => {
     if (!isObject(slide)) return;
     const base = ["slides", String(index)];
     walk(slide, base, 0, []);
@@ -36,9 +36,9 @@ export function walkDatasetItems(document, visit) {
 }
 
 /** The charts and tables that use dataset `id`: `[{ kind, path, parts }]` in document order. */
-export function datasetUsage(document, id) {
+export function datasetUsage(presentation, id) {
   const items = [];
-  walkDatasetItems(document, (entry) => {
+  walkDatasetItems(presentation, (entry) => {
     if (entry.id === id) items.push({ kind: entry.kind, path: entry.parts.join("."), parts: entry.parts });
   });
   return items;

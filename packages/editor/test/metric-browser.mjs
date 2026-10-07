@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 
 // Keyboard entry (Enter) selects all text; a pointer press places the caret instead (see test/click-entry-browser.mjs).
 const enter=async locator=>{await locator.focus();await locator.page().keyboard.press('Enter');};
@@ -21,23 +21,23 @@ const fingerprint=async()=>{
   return runtime;
 };
 const runtime=await fingerprint();
-const faces=(await loadOfficeFontRegistry()).embeddedFonts.filter(face=>/^Roboto(?: Medium| SemiBold| ExtraBold)?$/.test(face.family)&&!face.italic);
+const faces=(await loadFonts({ pack: 'office' })).registry.embeddedFonts.filter(face=>/^Roboto(?: Medium| SemiBold| ExtraBold)?$/.test(face.family)&&!face.italic);
 assert.deepEqual(faces.map(face=>face.weight).sort((a,b)=>a-b),[400,500,600,700,800]);
 const bundled=await build({stdin:{resolveDir:fileURLToPath(new URL('../',import.meta.url)),contents:`
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
-  import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
+  import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
   import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
   window.mountMetric=async({deck,faces})=>{
     window.metricCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;window.diagnostics=[];
-    window.fonts=await loadBrowserFontRegistry(faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto'});
+    window.fonts=await loadFonts({ faces: faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})), substitutionPolicy:'visual',fallbackFamily:'Roboto' });
     window.editor=createEditorSession(deck,{rejectInvalid:true});
-    window.metricCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,renderOptions:{textMeasurement:fonts.textMeasurement},onError:error=>failures.push(error.message)});
+    window.metricCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,fonts,onError:error=>failures.push(error.message)});
     await metricCanvas.ready;
     const action=(id,run)=>document.getElementById(id).onclick=async()=>{try{await run();}catch(error){failures.push(error.message);}};
     action('undo',()=>editor.undo());action('redo',()=>editor.redo());
-    action('paginate',()=>{metricCanvas.commit();window.pagination=editor.paginateSlide(0,{minFontSize:24,textMeasurement:fonts.textMeasurement});});
-    action('export',async()=>{metricCanvas.commit();window.accepted=editor.composeSlide(0,{textMeasurement:fonts.textMeasurement});window.lastExport=await toPptx(editor.document,{textMeasurement:fonts.textMeasurement});});
+    action('paginate',()=>{metricCanvas.commit();window.pagination=editor.paginateSlide(0,{minFontSize:24,fonts});});
+    action('export',async()=>{metricCanvas.commit();window.accepted=editor.composeSlide(0,{fonts});window.lastExport=await toPptx(editor.presentation,{fonts});});
     action('import',async()=>{window.lastImport=await fromPptx(lastExport,{onDiagnostic:d=>diagnostics.push(d)});editor.set('',lastImport,{rejectInvalid:true});});
   };`},bundle:true,platform:'browser',format:'iife',write:false,minify:true});
 const bundle=bundled.outputFiles[0].text;
@@ -49,7 +49,7 @@ try {
   page.on('request',request=>{if(/^https?:/.test(request.url()))requests.push(request.url());});
   await page.setContent('<button id="undo">Undo</button><button id="redo">Redo</button><button id="paginate">Paginate</button><button id="export">Export</button><button id="import">Import</button><div id="canvas" style="width:800px"></div>');
   await page.addScriptTag({content:bundle});await page.context().setOffline(true);
-  const document=()=>page.evaluate(()=>editor.document);
+  const presentation=()=>page.evaluate(()=>editor.presentation);
   const target=path=>page.locator(`[data-canvas-target][data-opf-path="${path}"]`);
   const edit=async(path,value)=>{
     await enter(target(path));
@@ -61,8 +61,8 @@ try {
     const metric={value:42,unit:'ms',label:'Left\tRight  ',description:'Exact\r\n\r\ncontext',delta:0,trend:'flat'};
     const deck={design:{fontScheme:'roboto',...(cards?{contentBox:true}:{}),contentAlignment:alignment,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
-    const geometry=await page.evaluate(()=>editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].metricLayout);
-    assert.equal(await page.evaluate(()=>Boolean(editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].frameBox)),cards);
+    const geometry=await page.evaluate(()=>editor.composeSlide(0,{fonts}).items[0].metricLayout);
+    assert.equal(await page.evaluate(()=>Boolean(editor.composeSlide(0,{fonts}).items[0].frameBox)),cards);
     assert.equal(geometry.alignment,alignment);
     for(const part of geometry.parts){
       assert.equal(await target(part.path).count(),1);
@@ -78,7 +78,7 @@ try {
         assert.ok(Math.abs(origin.x-(part.linePositions[i].x+(edge?line.width*factor:0)))<=.00051,'SVG serializes accepted positions to three decimal places');
         assert.ok(Math.abs(origin.baseline-part.linePositions[i].baseline)<=.00051,'SVG serializes accepted positions to three decimal places');
       }
-      await edit(part.path);assert.deepEqual(await document(),deck);
+      await edit(part.path);assert.deepEqual(await presentation(),deck);
       assert.equal(await page.evaluate(()=>editor.canUndo),false,'Opening any metric field must preserve source and scalar types');
     }
     await enter(target('slides.0.metric.description'));
@@ -95,24 +95,24 @@ try {
     assert.ok(Math.abs(selection.width/selection.scale-part.box.width)<.01);
     if(process.argv[2]&&alignment==='center')await page.locator('#canvas').screenshot({path:process.argv[2]+`.${dimensions.width}-selection.png`});
     const changed='Edited\r\n\r\ncontext';await input.fill(changed);await input.press('Control+Enter');
-    assert.equal((await document()).slides[0].metric.description,changed);
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),deck);
-    await page.getByRole('button',{name:'Redo',exact:true}).click();assert.equal((await document()).slides[0].metric.description,changed);
-    await edit('slides.0.metric.value','43');assert.equal((await document()).slides[0].metric.value,43);
-    await edit('slides.0.metric.delta','1');assert.equal((await document()).slides[0].metric.delta,1);
-    await edit('slides.0.metric.trend','down');assert.equal((await document()).slides[0].metric.trend,'down');
+    assert.equal((await presentation()).slides[0].metric.description,changed);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),deck);
+    await page.getByRole('button',{name:'Redo',exact:true}).click();assert.equal((await presentation()).slides[0].metric.description,changed);
+    await edit('slides.0.metric.value','43');assert.equal((await presentation()).slides[0].metric.value,43);
+    await edit('slides.0.metric.delta','1');assert.equal((await presentation()).slides[0].metric.delta,1);
+    await edit('slides.0.metric.trend','down');assert.equal((await presentation()).slides[0].metric.trend,'down');
     await edit('slides.0.metric.unit','seconds');await edit('slides.0.metric.label','New\tLabel  ');
-    const beforePagination=await document();
-    await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await document()).slides[0].composition.minFontSize,24);
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),beforePagination);
-    await page.getByRole('button',{name:'Redo',exact:true}).click();const accepted=await document();
+    const beforePagination=await presentation();
+    await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await presentation()).slides[0].composition.minFontSize,24);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),beforePagination);
+    await page.getByRole('button',{name:'Redo',exact:true}).click();const accepted=await presentation();
     await page.getByRole('button',{name:'Export',exact:true}).click();await page.waitForFunction(()=>lastExport||failures.length);
     assert.deepEqual(await page.evaluate(()=>failures),[]);
     const bytes=await page.evaluate(()=>Array.from(lastExport));assert.ok(bytes.length>1000);
     await page.getByRole('button',{name:'Import',exact:true}).click();await page.waitForFunction(()=>lastImport||failures.length);
-    {const imported=await document();/* opf-pptx with content topology (spec-gap P1) returns the root metric payload as slides.0.metric; earlier releases return one metric block. */assert.deepEqual(imported.slides[0].metric??imported.slides[0].blocks?.[0]?.metric,accepted.slides[0].metric);assert.ok(imported.slides[0].metric!==undefined||imported.slides[0].blocks.length===1);}
+    {const imported=await presentation();/* opf-pptx with content topology (spec-gap P1) returns the root metric payload as slides.0.metric; earlier releases return one metric block. */assert.deepEqual(imported.slides[0].metric??imported.slides[0].blocks?.[0]?.metric,accepted.slides[0].metric);assert.ok(imported.slides[0].metric!==undefined||imported.slides[0].blocks.length===1);}
     assert.ok((await page.evaluate(()=>diagnostics)).some(d=>d.code==='metric-import-reflow'));
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),accepted);
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),accepted);
     assert.deepEqual(await page.evaluate(()=>failures),[]);
     if(process.argv[2]&&alignment==='center')await page.locator('#canvas').screenshot({path:process.argv[2]+`.${dimensions.width}-accepted.png`});
     results.push({dimensions,alignment,selection,parts:geometry.parts.length,exactMetricRoundTrip:true,exportSha256:hash(new Uint8Array(bytes)),exportBytes:bytes.length,substitutions:await page.evaluate(()=>fonts.substitutions)});
@@ -121,21 +121,21 @@ try {
     const deck={design:{fontScheme:'roboto',contentAlignment:'right',dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{metric}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
     const body=target('slides.0.metric');assert.equal(await body.count(),1);assert.equal(await body.getAttribute('data-opf-metric-role'),'value');
-    const part=await page.evaluate(()=>editor.composeSlide(0,{textMeasurement:fonts.textMeasurement}).items[0].metricLayout.parts[0]);
+    const part=await page.evaluate(()=>editor.composeSlide(0,{fonts}).items[0].metricLayout.parts[0]);
     if(typeof metric==='string'&&!metric.trim())assert.equal(Number(await body.locator(':scope > rect.opf-selection').getAttribute('height')),part.box.height+8);
-    await edit('slides.0.metric');assert.deepEqual(await document(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false);
+    await edit('slides.0.metric');assert.deepEqual(await presentation(),deck);assert.equal(await page.evaluate(()=>editor.canUndo),false);
     await edit('slides.0.metric',typeof metric==='number'?'1':'Visible metric');
-    assert.equal((await document()).slides[0].metric,typeof metric==='number'?1:'Visible metric');
-    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await document(),deck);
+    assert.equal((await presentation()).slides[0].metric,typeof metric==='number'?1:'Visible metric');
+    await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),deck);
     scalarResults.push({dimensions,source:metric,type:typeof metric,noOpPreserved:true,editUndoPreserved:true});
   }
   for(const [field,value,invalid] of [['value',42,'not a number'],['trend','flat','sideways']]){
     const deck={design:{fontScheme:'roboto'},slides:[{metric:{value:42,trend:'flat'}}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
     await enter(target(`slides.0.metric.${field}`));const input=page.getByRole('textbox',{name:`Edit ${field} inline`,exact:true});
-    await input.fill(invalid);await input.press('Control+Enter');assert.deepEqual(await document(),deck);
+    await input.fill(invalid);await input.press('Control+Enter');assert.deepEqual(await presentation(),deck);
     assert.ok(await input.isVisible());assert.equal(await page.evaluate(()=>editor.canUndo),false);
-    assert.ok((await page.evaluate(()=>failures)).length>0);await input.press('Escape');assert.deepEqual(await document(),deck);
+    assert.ok((await page.evaluate(()=>failures)).length>0);await input.press('Escape');assert.deepEqual(await presentation(),deck);
     invalidResults.push({field,original:value,rejected:invalid,cancelPreserved:true});
   }
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);

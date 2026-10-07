@@ -39,7 +39,7 @@ assert.deepEqual(titleChange.inversePatches, [
 assert.equal(editor.validation.valid, true);
 
 const inverse = invertJsonPatch(presentation, titleChange.patches);
-assert.deepEqual(applyJsonPatch(editor.document, inverse), presentation);
+assert.deepEqual(applyJsonPatch(editor.presentation, inverse), presentation);
 const appendPatch = [{ op: "add", path: "/slides/-", value: { title: "Appendix" } }];
 const appendInverse = invertJsonPatch(presentation, appendPatch);
 assert.deepEqual(appendInverse, [{ op: "remove", path: "/slides/1" }]);
@@ -49,8 +49,8 @@ const objectAddInverse = invertJsonPatch(presentation, objectAddPatch);
 assert.deepEqual(objectAddInverse, [{ op: "replace", path: "/name", value: "Editor smoke" }]);
 assert.deepEqual(applyJsonPatch(applyJsonPatch(presentation, objectAddPatch), objectAddInverse), presentation);
 
-assert.equal(editor.undo()?.document.slides[0].title, "Original title");
-assert.equal(editor.redo()?.document.slides[0].title, "Edited title");
+assert.equal(editor.undo()?.presentation.slides[0].title, "Original title");
+assert.equal(editor.redo()?.presentation.slides[0].title, "Edited title");
 
 const themeOptions = getCatalogOptions("themes");
 assert.ok(themeOptions.some((option) => option.id === "classic"));
@@ -90,7 +90,7 @@ const boundChange = binding.commit(element, "Edited from trace");
 assert.deepEqual(boundChange.patches, [
   { op: "replace", path: "/slides/0/text", value: "Edited from trace" }
 ]);
-assert.equal(getValueAtPath(editor.document, "slides.0.text"), "Edited from trace");
+assert.equal(getValueAtPath(editor.presentation, "slides.0.text"), "Edited from trace");
 
 binding.destroy();
 assert.equal(element.getAttribute("data-opf-bound"), undefined);
@@ -137,10 +137,10 @@ assert.equal(Object.hasOwn(specialKey, "__proto__"), true);
 assert.equal(Object.getPrototypeOf(specialKey), Object.prototype);
 
 const nestedSession = createEditorSession({ slides: [{ blocks: [{ blocks: [{ text: "One" }, { text: "Two" }] }] }] });
-const nestedOriginal = nestedSession.document;
+const nestedOriginal = nestedSession.presentation;
 nestedSession.setGroupComposition('slides.0.blocks.0', { mode: 'column' });
 assert.equal(nestedSession.composeSlide(0).groups[0].composition.mode, 'column');
-nestedSession.undo(); assert.deepEqual(nestedSession.document, nestedOriginal);
+nestedSession.undo(); assert.deepEqual(nestedSession.presentation, nestedOriginal);
 nestedSession.redo(); assert.equal(nestedSession.get('slides.0.blocks.0.composition.mode'), 'column');
 assert.throws(() => nestedSession.setGroupComposition('slides.0.blocks.0.blocks.0', { mode: 'row' }));
 assert.throws(() => nestedSession.setGroupComposition('slides.0', { mode: 'row' }));
@@ -148,29 +148,29 @@ assert.throws(() => nestedSession.setGroupComposition('slides.0.blocks.0', { mod
 
 const longText = 'Keep these words on readable slides. '.repeat(150);
 const pageEditor = createEditorSession({slides:[{id:'draft',title:'Draft',text:longText},{id:'draft--2',text:'Later slide'}]});
-const pageBefore = pageEditor.document;
+const pageBefore = pageEditor.presentation;
 const pageResult = pageEditor.paginateSlide(0);
 assert.ok(pageResult.pagination.slides.length>1);
-assert.equal(pageEditor.document.slides.slice(0,-1).map(slide=>slide.text).join(''),longText);
-pageEditor.undo(); assert.deepEqual(pageEditor.document,pageBefore);
-pageEditor.redo(); assert.equal(pageEditor.document.slides.length,pageResult.pagination.slides.length+1);
+assert.equal(pageEditor.presentation.slides.slice(0,-1).map(slide=>slide.text).join(''),longText);
+pageEditor.undo(); assert.deepEqual(pageEditor.presentation,pageBefore);
+pageEditor.redo(); assert.equal(pageEditor.presentation.slides.length,pageResult.pagination.slides.length+1);
 pageEditor.undo();
 assert.throws(()=>pageEditor.paginateSlide(0,{maxSlides:1}));
-assert.deepEqual(pageEditor.document,pageBefore);
+assert.deepEqual(pageEditor.presentation,pageBefore);
 assert.ok(pageEditor.paginateSlide(1).change);
-assert.equal(pageEditor.document.slides[1].composition.minFontSize,24);
+assert.equal(pageEditor.presentation.slides[1].composition.minFontSize,24);
 assert.equal(pageEditor.paginateSlide(1).change,null,'An already persisted policy is a no-op');
-pageEditor.undo(); assert.deepEqual(pageEditor.document,pageBefore,'One-page policy changes are undoable');
-pageEditor.redo(); assert.equal(pageEditor.document.slides[1].composition.minFontSize,24);
+pageEditor.undo(); assert.deepEqual(pageEditor.presentation,pageBefore,'One-page policy changes are undoable');
+pageEditor.redo(); assert.equal(pageEditor.presentation.slides[1].composition.minFontSize,24);
 
 const quoteEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{quote:{text:'Keep the source readable.',attribution:'Reviewer',source:'Recorded interview'}}]});
-const quoteBefore=quoteEditor.document;
+const quoteBefore=quoteEditor.presentation;
 const quotePage=quoteEditor.paginateSlide(0);
 assert.equal(quotePage.pagination.slides.length,1);
 assert.ok(quotePage.change);
 assert.equal(quoteEditor.composeSlide(0).items[0].quoteLayout.parts[1].fit.fontSize,24);
 assert.equal(quoteEditor.paginateSlide(0).change,null);
-quoteEditor.undo(); assert.deepEqual(quoteEditor.document,quoteBefore);
+quoteEditor.undo(); assert.deepEqual(quoteEditor.presentation,quoteBefore);
 quoteEditor.redo(); assert.equal(quoteEditor.composeSlide(0).items[0].quoteLayout.parts[1].fit.fontSize,24);
 
 // Object order is not an editorial change. Test ordinary JSON variants through
@@ -180,8 +180,8 @@ const orderedSlide={title:'Keep history',composition:{mode:'column',minFontSize:
 for(const slide of [orderedSlide,reverseKeys(orderedSlide)]){
   const session=createEditorSession({slides:[slide]});
   session.set('slides.0.title','Redo this title');session.undo();
-  const before=JSON.stringify(session.document);
+  const before=JSON.stringify(session.presentation);
   assert.equal(session.paginateSlide(0).change,null,'Already persisted nested policies are unchanged in either JSON key order');
-  assert.equal(JSON.stringify(session.document),before,'No-op pagination must preserve the original document including key order');
-  assert.equal(session.redo()?.document.slides[0].title,'Redo this title','No-op pagination must preserve an existing redo entry');
+  assert.equal(JSON.stringify(session.presentation),before,'No-op pagination must preserve the original document including key order');
+  assert.equal(session.redo()?.presentation.slides[0].title,'Redo this title','No-op pagination must preserve an existing redo entry');
 }

@@ -13,18 +13,18 @@ export function createBlockControls(root, options) {
   function apply(prepared){
     if(!prepared?.changed){cancel();return true;}
     // Retain changes outside the guarded containers and preflight the exact candidate.
-    const candidate=applyJsonPatch(editor.document,prepared.patches);
+    const candidate=applyJsonPatch(editor.presentation,prepared.patches);
     options.validate(candidate);
     committing=true;
     try{cancel();editor.applyPatch(prepared.patches,{source:'canvas-block-edit',rejectInvalid:true});options.onMove?.(prepared.path);([ ...layer.querySelectorAll("[data-block-path]")].find(node=>node.dataset.blockPath===prepared.path)??layer.querySelector('[data-block-add]'))?.focus();options.clearError?.();options.onCommit?.({path:prepared.path,editor});return true;}
     finally{committing=false;}
   }
-  function move(from,to,index,base=editor.document){
+  function move(from,to,index,base=editor.presentation){
     try{return apply(prepareBlockMove(base,from,to,index));}catch(error){cancel();options.onError(error);return false;}
   }
   function open(path){
     if(!options.beforeEdit())return;
-    cancel();returnFocus=doc.activeElement;path=opfPathToJsonPointer(path);const base=editor.document,parts=splitOpfPath(path),container=opfPathToJsonPointer(parts.slice(0,-2)),index=Number(parts.at(-1));
+    cancel();returnFocus=doc.activeElement;path=opfPathToJsonPointer(path);const base=editor.presentation,parts=splitOpfPath(path),container=opfPathToJsonPointer(parts.slice(0,-2)),index=Number(parts.at(-1));
     const source=getValueAtPath(base,[...parts.slice(0,-2),'blocks']);
     if(parts.at(-2)!=='blocks'||!Number.isInteger(index)||index<0||!Array.isArray(source)||index>=source.length){options.onError(new Error('Choose an existing content block.'));return;}
     const count=source.length;
@@ -56,7 +56,7 @@ export function createBlockControls(root, options) {
   }
   function openInsert(containerPath,index) {
     if(!options.beforeEdit())return;
-    cancel();returnFocus=doc.activeElement;const base=editor.document;
+    cancel();returnFocus=doc.activeElement;const base=editor.presentation;
     const containers=listBlockContainers(base,{slideIndex:options.slideIndex(),includeImplicit:true});
     if(!containers.length){options.onError(new Error('No content container is available on this slide.'));return;}
     const requested=containerPath===undefined?containers[0].path:opfPathToJsonPointer(containerPath);
@@ -91,7 +91,7 @@ export function createBlockControls(root, options) {
     panel.append(add,close);panel.onkeydown=event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();cancel();}};
     layer.append(panel);kind.focus();
   }
-  function update(document,nextGeometry){
+  function update(presentation,nextGeometry){
     geometry=nextGeometry;
     if(drag)return;
     cancel();layer.replaceChildren();cells=[];
@@ -99,7 +99,7 @@ export function createBlockControls(root, options) {
     const add=doc.createElement('button');add.type='button';add.textContent='+ Add content';add.setAttribute('aria-label','Add content');add.dataset.blockAdd='';
     add.style.cssText='position:absolute;right:8px;top:8px;pointer-events:auto;padding:5px 9px;background:#f6f3fc;color:#675394;border:1px solid #cfc4e7;border-radius:5px;font:12px system-ui;cursor:pointer';add.onclick=()=>openInsert();layer.append(add);
     for(const flow of geometry.flows??[]){
-      const blocks=getValueAtPath(document,[...splitOpfPath(flow.path),'blocks']);
+      const blocks=getValueAtPath(presentation,[...splitOpfPath(flow.path),'blocks']);
       if(!Array.isArray(blocks)||blocks.length!==flow.itemCount)continue;
       blocks.forEach((block,index)=>{
         const col=flow.columns[index%flow.columns.length],row=flow.rows[Math.floor(index/flow.columns.length)];if(!col||!row)return;
@@ -116,7 +116,7 @@ export function createBlockControls(root, options) {
         node.onkeydown=event=>{if(['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(event.key)){event.preventDefault();event.stopPropagation();if(!options.beforeEdit())return;const delta=['ArrowLeft','ArrowUp'].includes(event.key)?-1:1;if(index+delta>=0&&index+delta<blocks.length)move(path,container,index+(delta>0?2:-1));}};
         node.ondragstart=event=>{
           if(!options.beforeEdit()){event.preventDefault();return;}
-          cancel();drag={from:path,container,index,base:editor.document,signature:signature(container),cells:[...cells],prepared:null};
+          cancel();drag={from:path,container,index,base:editor.presentation,signature:signature(container),cells:[...cells],prepared:null};
           event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',path);
         };
         node.ondragend=()=>{cancel();options.render();};layer.append(node);

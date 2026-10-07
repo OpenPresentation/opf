@@ -2,10 +2,11 @@
 // patch, one undo step, the right scope (deck or slide), and the preview and the PPTX export
 // follow the document.
 import assert from "node:assert/strict";
-import { schemas, validatePresentation } from "@openpresentation/opf";
-import { renderSvg } from "@openpresentation/opf-render/svg";
+import { schemas, validate } from "@openpresentation/opf";
+import { renderSlideSvg } from "@openpresentation/opf-render/svg";
 import * as pptx from "@openpresentation/opf-pptx";
-import { createEditorSession, resolveSlideFonts } from "../dist/index.js";
+import { resolveSlideContext } from "@openpresentation/opf";
+import { createEditorSession } from "../dist/index.js";
 import { switchDimension } from "../dist/switches.js";
 import {
   DESIGN_OPTIONS,
@@ -34,8 +35,8 @@ const deck = () => ({
     { id: "data", title: "Data", blocks: [{ chart: { type: "column", data: { columns: ["Q", "V"], rows: [["Q1", 12], ["Q2", 18]] } } }, { text: "Supporting text" }] },
   ],
 });
-const session = (document = deck()) => createEditorSession(document, { rejectInvalid: true });
-const svg = (document, slideIndex = 0) => renderSvg(document, { slideIndex });
+const session = (presentation = deck()) => createEditorSession(presentation, { rejectInvalid: true });
+const svg = (presentation, slideIndex = 0) => renderSlideSvg(presentation, slideIndex);
 
 // The descriptor list is the documented set, and every enum matches the installed schema.
 {
@@ -64,17 +65,11 @@ const cases = [
   // listBullet "image" needs a logo to draw; the fixture sets one first.
   { option: "listBullet", value: "image", slide: 1, setup: (editor) => setDesignOption(editor, "logo", "asset:logo"), patch: { op: "add", path: "/design/listBullet", value: "image" }, preview: true },
 ];
-const slideImageDrawn = (() => {
-  const document = deck();
-  const plain = svg(document);
-  document.slides[0].design = { slideImage: { src: "asset:photo", position: "right" } };
-  return svg(document) !== plain;
-})();
 for (const entry of cases) {
   const editor = session();
   entry.setup?.(editor);
   const baseline = editor.snapshot().undoDepth;
-  const original = editor.document;
+  const original = editor.presentation;
   const before = svg(original, entry.slide);
   const events = [];
   editor.subscribe((event) => events.push(event));
@@ -84,7 +79,7 @@ for (const entry of cases) {
   assert.deepEqual(change.patches, [entry.patch], `${entry.option} patch`);
   assert.equal(change.scope, "deck");
   assert.equal(editor.validation.valid, true, `${entry.option} valid`);
-  assert.equal(validatePresentation(editor.document).valid, true);
+  assert.equal(validate(editor.presentation, { only: ["format"] }).valid, true);
   assert.equal(editor.snapshot().undoDepth, baseline + 1, `${entry.option} is one undo step`);
   assert.equal(events.length, 1);
   assert.equal(events[0].meta.source, "design-option");
@@ -92,33 +87,33 @@ for (const entry of cases) {
   // prepareDesignOption is the same patch without a session and does not touch its input.
   const prepared = prepareDesignOption(original, entry.option, entry.value);
   assert.deepEqual(prepared.patches, change.patches);
-  assert.deepEqual(prepared.document, editor.document);
+  assert.deepEqual(prepared.presentation, editor.presentation);
   assert.deepEqual(original, entry.setup ? original : deck());
   // Preview and export follow the document.
-  const switched = editor.document;
+  const switched = editor.presentation;
   if (entry.preview) assert.notEqual(svg(switched, entry.slide), before, `${entry.option}: the preview changes`);
   const bytes = await pptx.toPptx(structuredClone(switched), { strictAssets: true });
   assert.ok(bytes.byteLength > 0, `${entry.option}: exports after the change`);
   // Undo and redo.
-  assert.deepEqual(editor.undo().document, original, `${entry.option} undo`);
-  assert.equal(svg(editor.document, entry.slide), before, `${entry.option}: undo restores the preview`);
-  assert.deepEqual(editor.redo().document, switched, `${entry.option} redo`);
+  assert.deepEqual(editor.undo().presentation, original, `${entry.option} undo`);
+  assert.equal(svg(editor.presentation, entry.slide), before, `${entry.option}: undo restores the preview`);
+  assert.deepEqual(editor.redo().presentation, switched, `${entry.option} redo`);
   // The same value again commits nothing.
   const repeat = setDesignOption(editor, entry.option, entry.value);
   assert.equal(repeat.changed, false, `${entry.option} repeat`);
   assert.equal(editor.snapshot().undoDepth, baseline + 1);
   // getDesignOption reads it back.
-  const read = getDesignOption(editor.document, entry.option);
+  const read = getDesignOption(editor.presentation, entry.option);
   assert.notEqual(read.value, undefined, `${entry.option} reads back`);
   assert.equal(read.scope, "deck");
 }
 
-// A slide image on a slide is drawn where the installed renderer supports design.slideImage.
+// A slide image on a slide is drawn by the renderer (design.slideImage).
 {
   const editor = session();
-  const before = svg(editor.document, 0);
+  const before = svg(editor.presentation, 0);
   setDesignOption(editor, "slideImage", { src: "asset:photo", position: "right", size: 0.4 }, { slideIndex: 0 });
-  if (slideImageDrawn) assert.notEqual(svg(editor.document, 0), before, "slideImage: the preview changes");
+  assert.notEqual(svg(editor.presentation, 0), before, "slideImage: the preview changes");
   assert.deepEqual(editor.get("slides.0.design.slideImage"), { src: "asset:photo", position: "right", size: 0.4 });
 }
 
@@ -129,11 +124,11 @@ for (const entry of cases) {
   const change = setDesignOption(editor, "titleAlignment", "left", { slideIndex: 1 });
   assert.deepEqual(change.patches, [{ op: "add", path: "/slides/1/design", value: { titleAlignment: "left" } }]);
   assert.equal(change.scope, "slide");
-  assert.deepEqual(getDesignOption(editor.document, "titleAlignment", { slideIndex: 1 }), { value: "left", scope: "slide", inherited: false });
-  assert.deepEqual(getDesignOption(editor.document, "titleAlignment", { slideIndex: 0 }), { value: "center", scope: "deck", inherited: true });
+  assert.deepEqual(getDesignOption(editor.presentation, "titleAlignment", { slideIndex: 1 }), { value: "left", scope: "slide", inherited: false });
+  assert.deepEqual(getDesignOption(editor.presentation, "titleAlignment", { slideIndex: 0 }), { value: "center", scope: "deck", inherited: true });
   setDesignOption(editor, "titleAlignment", "right", { slideIndex: 0 });
-  assert.notEqual(svg(editor.document, 0), svg(session(deck()).document, 0), "a slide alignment changes that slide");
-  assert.equal(svg(editor.document, 2), svg(session(Object.assign(deck(), { design: { ...deck().design, titleAlignment: "center" } })).document, 2));
+  assert.notEqual(svg(editor.presentation, 0), svg(session(deck()).presentation, 0), "a slide alignment changes that slide");
+  assert.equal(svg(editor.presentation, 2), svg(session(Object.assign(deck(), { design: { ...deck().design, titleAlignment: "center" } })).presentation, 2));
   editor.undo();
   setDesignOption(editor, "titleAlignment", null, { slideIndex: 1 });
   assert.equal(editor.get("slides.1.design.titleAlignment"), undefined);
@@ -166,7 +161,7 @@ for (const entry of cases) {
   for (const [option, value, code] of bad) assert.throws(() => setDesignOption(editor, option, value), (error) => error.code === code, `${option} ${JSON.stringify(value)}`);
   assert.throws(() => setDesignOption(editor, "titleAlignment"), (error) => error.code === "invalid-design-value");
   assert.equal(editor.snapshot().undoDepth, 0);
-  assert.deepEqual(editor.document, deck());
+  assert.deepEqual(editor.presentation, deck());
   assert.throws(() => setDesignOption({}, "titleAlignment", "left"), (error) => error.code === "invalid-editor");
   // The organization logo needs an organization.
   const none = createEditorSession({ slides: [{ title: "x", text: "y" }] });
@@ -175,24 +170,22 @@ for (const entry of cases) {
 
 // Accent font: object-form font scheme overrides, collapsing back to the bare id.
 {
-  // The accent font reaches the resolved fonts and the export names it (FF-08 typeface check when the installed opf-pptx has it).
+  // The accent font reaches the resolved fonts and the export names it (the FF-08 typeface check).
   {
     // The accent font draws the cover tag.
     const editor = session({ ...deck(), slides: [{ id: "cover", title: "Quarterly review", tag: "New", subtitle: "Design options" }] });
     setDesignOption(editor, "accentFont", "Georgia");
-    const fonts = resolveSlideFonts(editor.document, 0);
+    const fonts = resolveSlideContext(editor.presentation, 0).options.fontFamilies;
     assert.equal(fonts.accent, "Georgia");
-    const bytes = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
-    if (typeof pptx.checkPptxTypefaces === "function") {
-      const result = pptx.checkPptxTypefaces(bytes, { fonts: Object.values(fonts), monospace: [fonts.code] });
-      assert.deepEqual(result.violations, [], "the export names only the chosen fonts");
-      assert.ok(result.fontsUsed.includes("Georgia"), "the export uses the accent font");
-    } else assert.notEqual(process.env.OPF_REQUIRE_FF08, "1", "OPF_REQUIRE_FF08=1 but opf-pptx has no checkPptxTypefaces");
+    const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
+    const result = pptx.checkTypefaces(bytes, { families: Object.values(fonts), monospace: [fonts.code] });
+    assert.deepEqual(result.violations, [], "the export names only the chosen fonts");
+    assert.ok(result.fontsUsed.includes("Georgia"), "the export uses the accent font");
   }
   const editor = session();
   setDesignOption(editor, "accentFont", "Georgia");
   assert.deepEqual(editor.get("design.fontScheme"), { id: "aptos", accent: "Georgia" });
-  assert.deepEqual(getDesignOption(editor.document, "accentFont"), { value: "Georgia", scope: "deck", inherited: false });
+  assert.deepEqual(getDesignOption(editor.presentation, "accentFont"), { value: "Georgia", scope: "deck", inherited: false });
   setDesignOption(editor, "accentFont", "Lora");
   assert.equal(editor.get("design.fontScheme.accent"), "Lora");
   setDesignOption(editor, "accentFont", null);
@@ -200,7 +193,7 @@ for (const entry of cases) {
   // A slide inherits the deck's scheme and adds its own accent.
   const slide = setDesignOption(editor, "accentFont", "Georgia", { slideIndex: 1 });
   assert.deepEqual(slide.patches, [{ op: "add", path: "/slides/1/design", value: { fontScheme: { id: "aptos", accent: "Georgia" } } }]);
-  assert.deepEqual(getDesignOption(editor.document, "accentFont", { slideIndex: 1 }), { value: "Georgia", scope: "slide", inherited: false });
+  assert.deepEqual(getDesignOption(editor.presentation, "accentFont", { slideIndex: 1 }), { value: "Georgia", scope: "slide", inherited: false });
 }
 
 // Watermark and slide image merge into the existing object; null fields remove; false suppresses.
@@ -233,9 +226,9 @@ for (const entry of cases) {
   assert.equal(editor.get("design.logo"), "asset:logo");
   setLogoVariant(editor, "light", "asset:mark");
   assert.deepEqual(editor.get("design.logo"), { default: "asset:logo", light: "asset:mark" });
-  assert.deepEqual(readLogoVariants(editor.document), { default: "asset:logo", light: "asset:mark" });
+  assert.deepEqual(readLogoVariants(editor.presentation), { default: "asset:logo", light: "asset:mark" });
   setLogoVariant(editor, "icon", "asset:photo", { slideIndex: 0 });
-  assert.deepEqual(readLogoVariants(editor.document, { slideIndex: 0 }), { icon: "asset:photo" }, "a slide logo starts from the slide's own value");
+  assert.deepEqual(readLogoVariants(editor.presentation, { slideIndex: 0 }), { icon: "asset:photo" }, "a slide logo starts from the slide's own value");
   setLogoVariant(editor, "light", null);
   assert.equal(editor.get("design.logo"), "asset:logo");
   setLogoVariant(editor, "default", null);
@@ -245,7 +238,7 @@ for (const entry of cases) {
   // Variant switching resolves by background: a light variant is chosen for a dark background.
   setLogoVariant(editor, "default", "asset:logo");
   setLogoVariant(editor, "light", "asset:mark");
-  const bytes = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
+  const bytes = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
   assert.ok(bytes.byteLength > 0);
 }
 
@@ -254,16 +247,16 @@ for (const entry of cases) {
   const editor = session();
   const text = setHeaderFooterZone(editor, "footer", "center", { text: "Confidential" });
   assert.deepEqual(text.patches, [{ op: "add", path: "/design/footer", value: { center: { text: "Confidential" } } }]);
-  assert.ok(svg(editor.document, 1).includes("Confidential"), "the footer draws");
+  assert.ok(svg(editor.presentation, 1).includes("Confidential"), "the footer draws");
   setHeaderFooterZone(editor, "footer", "right", { slideNumber: true });
   assert.deepEqual(editor.get("design.footer"), { center: { text: "Confidential" }, right: { slideNumber: true } });
   const logo = setHeaderFooterZone(editor, "header", "left", { logo: true });
   assert.deepEqual(logo.warnings.map((warning) => warning.code), ["unresolved-logo"], "logo: true with no logo is reported");
   assert.equal(logo.warnings[0].path, "design.header.left.logo");
-  assert.deepEqual(designWarnings(editor.document, 0).length, 1);
+  assert.deepEqual(designWarnings(editor.presentation, 0).length, 1);
   setDesignOption(editor, "organizationLogo", "asset:logo");
-  assert.deepEqual(designWarnings(editor.document, 0), [], "an organization logo resolves it");
-  assert.deepEqual(readHeaderFooterZone(editor.document, "header", "left"), { logo: true });
+  assert.deepEqual(designWarnings(editor.presentation, 0), [], "an organization logo resolves it");
+  assert.deepEqual(readHeaderFooterZone(editor.presentation, "header", "left"), { logo: true });
   // Removing the last field removes the zone, then the header.
   setHeaderFooterZone(editor, "header", "left", { logo: false });
   assert.equal(editor.get("design.header"), undefined);
@@ -278,7 +271,7 @@ for (const entry of cases) {
   editor.set("slides.1.design", { footer: false });
   setHeaderFooterZone(editor, "footer", "left", { text: "Only here" }, { slideIndex: 1 });
   assert.deepEqual(editor.get("slides.1.design.footer"), { left: { text: "Only here" } });
-  const export_ = await pptx.toPptx(structuredClone(editor.document), { strictAssets: true });
+  const export_ = await pptx.toPptx(structuredClone(editor.presentation), { strictAssets: true });
   assert.ok(export_.byteLength > 0);
   // Picture bullets without a logo are reported too.
   const bare = session();
@@ -290,11 +283,11 @@ for (const entry of cases) {
   const editor = session();
   setHeaderFooterZone(editor, "footer", "left", { text: "Acme" });
   setHeaderFooterZone(editor, "footer", "right", { slideNumber: true });
-  assert.deepEqual(headerFooterState(editor.document, "footer", { slideIndex: 1 }), { own: false, inherited: true, hidden: false });
-  assert.deepEqual(readHeaderFooterZone(editor.document, "footer", "left", { slideIndex: 1 }), { text: "Acme" }, "a slide reads the deck's zone it inherits");
+  assert.deepEqual(headerFooterState(editor.presentation, "footer", { slideIndex: 1 }), { own: false, inherited: true, hidden: false });
+  assert.deepEqual(readHeaderFooterZone(editor.presentation, "footer", "left", { slideIndex: 1 }), { text: "Acme" }, "a slide reads the deck's zone it inherits");
   const edit = setHeaderFooterZone(editor, "footer", "center", { text: "Draft" }, { slideIndex: 1 });
   assert.deepEqual(edit.patches, [{ op: "add", path: "/slides/1/design", value: { footer: { left: { text: "Acme" }, right: { slideNumber: true }, center: { text: "Draft" } } } }]);
-  assert.deepEqual(headerFooterState(editor.document, "footer", { slideIndex: 1 }), { own: true, inherited: false, hidden: false });
+  assert.deepEqual(headerFooterState(editor.presentation, "footer", { slideIndex: 1 }), { own: true, inherited: false, hidden: false });
   assert.equal(editor.get("design.footer.center"), undefined, "the deck is untouched");
   // Clearing a zone the slide only inherited overrides it for this slide, and the other zones stay.
   setHeaderFooterZone(editor, "footer", "left", { text: null }, { slideIndex: 2 });
@@ -303,7 +296,7 @@ for (const entry of cases) {
   setHeaderFooterZone(editor, "footer", "left", { text: null }, { slideIndex: 0 });
   setHeaderFooterZone(editor, "footer", "right", { slideNumber: null }, { slideIndex: 0 });
   assert.equal(editor.get("slides.0.design.footer"), false);
-  assert.deepEqual(headerFooterState(editor.document, "footer", { slideIndex: 0 }), { own: true, inherited: false, hidden: true });
+  assert.deepEqual(headerFooterState(editor.presentation, "footer", { slideIndex: 0 }), { own: true, inherited: false, hidden: true });
   // The deck without any header or footer stays simple: no copy, no false.
   const bare = session();
   setHeaderFooterZone(bare, "header", "left", { text: "Only" }, { slideIndex: 0 });
@@ -367,9 +360,9 @@ for (const entry of cases) {
   const parts = createEditorSession({ ...deck(), organization: { id: "acme", name: "Acme Corp", socials: { linkedin: "acme" } } }, { rejectInvalid: true });
   setHeaderFooterZone(parts, "footer", "left", { organization: true, text: "Confidential" });
   setHeaderFooterZone(parts, "footer", "right", { slideNumber: true, slideNumberFormat: "Page {current} of {total}" });
-  const drawn = svg(parts.document, 1);
+  const drawn = svg(parts.presentation, 1);
   assert.ok(drawn.includes("Acme Corp") && drawn.includes("Confidential") && /Page 2 of 3/.test(drawn), "the zone parts draw");
-  assert.ok((await pptx.toPptx(structuredClone(parts.document), { strictAssets: true })).byteLength > 0);
+  assert.ok((await pptx.toPptx(structuredClone(parts.presentation), { strictAssets: true })).byteLength > 0);
 }
 
 // Undo and redo through a sequence keep every step separate.
@@ -384,7 +377,7 @@ for (const entry of cases) {
   assert.equal(editor.get("design.contentBox"), true);
   editor.undo();
   editor.undo();
-  assert.deepEqual(editor.document, deck());
+  assert.deepEqual(editor.presentation, deck());
   editor.redo();
   editor.redo();
   editor.redo();

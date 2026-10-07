@@ -8,14 +8,12 @@ import {
   NUMBERING_SUFFIX_OPTIONS,
   findNumberableLists,
   listPayloadAt,
-  numberingAvailable,
   numberingState,
   numberingValue,
   setEntryStart,
   setNumbering,
 } from "../dist/numbering.js";
 
-assert.equal(numberingAvailable(), true);
 assert.deepEqual(NUMBERING_STYLE_OPTIONS.map((option) => option.value), ["arabic", "roman-upper", "roman-lower", "alpha-upper", "alpha-lower"]);
 assert.deepEqual(NUMBERING_SUFFIX_OPTIONS.map((option) => option.value), ["period", "paren", "paren-both"]);
 
@@ -76,26 +74,26 @@ for (const bad of [[], [{ style: "greek" }], [{ suffix: "colon" }], [{ start: 0 
 // ---- number, change, restart and turn off: validated, undoable edits ---------------------------------------------------
 {
   const editor = createEditorSession(deck());
-  const before = structuredClone(editor.document);
+  const before = structuredClone(editor.presentation);
   setNumbering(editor, "slides.0.items", "roman-upper");
-  assert.equal(editor.document.slides[0].numbering, "roman-upper");
-  assert.deepEqual(numberingState(editor.document, "slides.0.items").markers.map((marker) => marker.text), ["I.", "I.", "II."], "nested entries count from their own level");
+  assert.equal(editor.presentation.slides[0].numbering, "roman-upper");
+  assert.deepEqual(numberingState(editor.presentation, "slides.0.items").markers.map((marker) => marker.text), ["I.", "I.", "II."], "nested entries count from their own level");
   // Any path inside the list addresses it.
   setNumbering(editor, "slides.0.items.1.text", { style: "roman-upper", start: 4 });
-  assert.deepEqual(editor.document.slides[0].numbering, { style: "roman-upper", start: 4 });
+  assert.deepEqual(editor.presentation.slides[0].numbering, { style: "roman-upper", start: 4 });
   setNumbering(editor, "slides.0.items", numberingValue([{ style: "arabic" }, { style: "alpha-lower", suffix: "paren" }]));
-  assert.deepEqual(editor.document.slides[0].numbering, ["arabic", { style: "alpha-lower", suffix: "paren" }]);
-  assert.deepEqual(numberingState(editor.document, "slides.0.items").markers.map((marker) => marker.text), ["1.", "a)", "2."]);
+  assert.deepEqual(editor.presentation.slides[0].numbering, ["arabic", { style: "alpha-lower", suffix: "paren" }]);
+  assert.deepEqual(numberingState(editor.presentation, "slides.0.items").markers.map((marker) => marker.text), ["1.", "a)", "2."]);
 
   // A restart at an entry; a plain entry becomes the object form to carry it.
   setEntryStart(editor, "slides.0.items.2", 9);
-  assert.deepEqual(editor.document.slides[0].items[2], { text: "Two", start: 9 });
-  assert.deepEqual(numberingState(editor.document, "slides.0.items.2").markers.map((marker) => marker.text), ["1.", "a)", "9."]);
-  assert.equal(numberingState(editor.document, "slides.0.items.2").entry.start, 9);
+  assert.deepEqual(editor.presentation.slides[0].items[2], { text: "Two", start: 9 });
+  assert.deepEqual(numberingState(editor.presentation, "slides.0.items.2").markers.map((marker) => marker.text), ["1.", "a)", "9."]);
+  assert.equal(numberingState(editor.presentation, "slides.0.items.2").entry.start, 9);
   setEntryStart(editor, "slides.0.items.2", 10);
-  assert.equal(editor.document.slides[0].items[2].start, 10);
+  assert.equal(editor.presentation.slides[0].items[2].start, 10);
   setEntryStart(editor, "slides.0.items.2", undefined);
-  assert.equal(editor.document.slides[0].items[2].start, undefined);
+  assert.equal(editor.presentation.slides[0].items[2].start, undefined);
   assert.throws(() => setEntryStart(editor, "slides.0.items.2", 0), (error) => error.code === "invalid-numbering");
   assert.throws(() => setEntryStart(editor, "slides.0.items", 3), (error) => error.code === "not-an-entry");
   assert.throws(() => setEntryStart(editor, "slides.2.blocks.0.items.0", 3), (error) => error.code === "not-numbered");
@@ -104,33 +102,33 @@ for (const bad of [[], [{ style: "greek" }], [{ suffix: "colon" }], [{ start: 0 
   setEntryStart(editor, "slides.0.items.0", 5);
   const depth = editor.snapshot().undoDepth;
   setNumbering(editor, "slides.0.items", undefined);
-  assert.equal(Object.hasOwn(editor.document.slides[0], "numbering"), false);
-  assert.ok(editor.document.slides[0].items.every((item) => typeof item === "string" || item.start === undefined));
+  assert.equal(Object.hasOwn(editor.presentation.slides[0], "numbering"), false);
+  assert.ok(editor.presentation.slides[0].items.every((item) => typeof item === "string" || item.start === undefined));
   assert.equal(editor.snapshot().undoDepth, depth + 1, "one edit");
   editor.undo();
-  assert.equal(editor.document.slides[0].items[0].start, 5, "undo restores the numbering and the restart");
-  assert.deepEqual(editor.document.slides[0].numbering, ["arabic", { style: "alpha-lower", suffix: "paren" }]);
+  assert.equal(editor.presentation.slides[0].items[0].start, 5, "undo restores the numbering and the restart");
+  assert.deepEqual(editor.presentation.slides[0].numbering, ["arabic", { style: "alpha-lower", suffix: "paren" }]);
   // Turning off a list that is not numbered is no edit.
   const none = setNumbering(editor, "slides.2.blocks.0.items", undefined);
   assert.deepEqual(none.patches, []);
 
   // Regions, blocks and nested groups.
   setNumbering(editor, "slides.1.left.bullets", { style: "roman-lower", suffix: "paren-both" });
-  assert.deepEqual(editor.document.slides[1].left.numbering, { style: "roman-lower", suffix: "paren-both" });
+  assert.deepEqual(editor.presentation.slides[1].left.numbering, { style: "roman-lower", suffix: "paren-both" });
   setNumbering(editor, "slides.2.blocks.2.blocks.0.bullets.1", "alpha-upper");
-  assert.equal(editor.document.slides[2].blocks[2].blocks[0].numbering, "alpha-upper");
+  assert.equal(editor.presentation.slides[2].blocks[2].blocks[0].numbering, "alpha-upper");
   setNumbering(editor, "slides.2.blocks.0.items", "arabic");
-  assert.equal(editor.document.slides[2].blocks[0].numbering, "arabic");
+  assert.equal(editor.presentation.slides[2].blocks[0].numbering, "arabic");
   assert.throws(() => setNumbering(editor, "slides.1.right.text", "arabic"), (error) => error.code === "not-a-list");
   assert.throws(() => setNumbering(editor, "slides.3.text", "arabic"), (error) => error.code === "not-a-list");
   // The session refuses an invalid value and leaves the document as it was.
-  const snapshot = structuredClone(editor.document);
+  const snapshot = structuredClone(editor.presentation);
   assert.throws(() => setNumbering(editor, "slides.0.items", "greek"), (error) => error.code === "invalid-opf-edit");
   assert.throws(() => setNumbering(editor, "slides.0.items", { start: 40000 }), (error) => error.code === "invalid-opf-edit");
-  assert.deepEqual(editor.document, snapshot);
+  assert.deepEqual(editor.presentation, snapshot);
   // Undo all the way back.
   while (editor.snapshot().canUndo) editor.undo();
-  assert.deepEqual(editor.document, before);
+  assert.deepEqual(editor.presentation, before);
 }
 
 // A list that counts past the native limit is refused by validation, not written.

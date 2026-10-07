@@ -1,7 +1,7 @@
 import { createCanvasEditor } from "../src/canvas.js";
 import { createEditorSession } from "../src/index.js";
-import { loadBrowserFontRegistry } from "@openpresentation/opf-render/fonts-browser";
-import { renderSvg } from "@openpresentation/opf-render";
+import { loadFonts } from "@openpresentation/opf-render/fonts-browser";
+import { renderSlideSvg } from "@openpresentation/opf-render";
 const output = document.querySelector("#results"),
   host = document.querySelector("#canvas");
 let checks = 0;
@@ -35,7 +35,7 @@ try {
       c.charCodeAt(0),
     ),
   }));
-  const fonts = await loadBrowserFontRegistry(entries);
+  const fonts = await loadFonts({ faces: entries });
   const loadedFaces = [...document.fonts];
   check(
     loadedFaces.length === entries.length &&
@@ -89,11 +89,11 @@ try {
   const editor = createEditorSession(original, { rejectInvalid: true });
   let draft,
     errors = [];
-  const options = { textMeasurement: fonts.textMeasurement };
+  const options = { fonts };
   const canvas = createCanvasEditor(host, {
     editor,
-    renderOptions: options,
-    onDraft: (event) => (draft = event.document),
+    fonts,
+    onDraft: (event) => (draft = event.presentation),
     onError: (error) => errors.push(error.message),
   });
   await canvas.ready;
@@ -115,7 +115,7 @@ try {
       node.getAttribute("font-size"),
     ]);
   const reference = document.createElement("div");
-  reference.innerHTML = renderSvg(draft, options);
+  reference.innerHTML = renderSlideSvg(draft, 0, options);
   check(
     JSON.stringify(textShapes(host.querySelector("svg"))) ===
       JSON.stringify(textShapes(reference)),
@@ -229,7 +229,7 @@ try {
   const docked = createCanvasEditor(host, {
     editor,
     slideIndex: 1,
-    renderOptions: options,
+    fonts,
     propertiesContainer: propertyHost,
   });
   await docked.ready;
@@ -250,7 +250,7 @@ try {
   check(!propertyHost.children.length, "destroy cleans up docked properties");
   propertyHost.remove();
   editor.set('design.titleAlignment','right');
-  const aligned=createCanvasEditor(host,{editor,slideIndex:0,renderOptions:options});
+  const aligned=createCanvasEditor(host,{editor,slideIndex:0,fonts});
   await aligned.ready;aligned.beginEdit('slides.0.title');
   check(host.querySelector('textarea').style.textAlign==='right','right aligned text uses a matching caret overlay');
   aligned.destroy();

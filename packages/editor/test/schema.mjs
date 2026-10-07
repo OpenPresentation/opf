@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {schemas,validatePresentation} from '@openpresentation/opf';
+import {schemas,validate} from '@openpresentation/opf';
 import {schemaAtPath,schemaVariants,activeSchema,createSchemaValue,listSchemaFields} from '../src/schema.js';
 import {createEditorSession} from '../src/index.js';
 const deck={slides:[{title:'Hello',text:[{text:'bold',bold:true}],blocks:[{composition:{mode:'row'},blocks:[{text:'Nested'}]}]}]};
@@ -12,7 +12,7 @@ for(const type of ['theme','solid','gradient','image','pattern']){
  const value=createSchemaValue(schema);
  assert.equal(value.type,type);
  assert.equal(activeSchema(schemaAtPath(deck,'/design/background'),value).properties.type.const,type);
- assert.equal(validatePresentation({slides:[{title:'Background'}],design:{background:value}}).valid,true,JSON.stringify(value));
+ assert.equal(validate({slides:[{title:'Background'}],design:{background:value}}, { only: ["format"] }).valid,true,JSON.stringify(value));
 }
 assert.equal(schemaAtPath(deck,'/catalogs/layouts/records/0').properties.id.type,'string');
 const fields=listSchemaFields();assert.ok(fields.length>600);
@@ -35,6 +35,6 @@ assert.deepEqual(schemaVariants({type:['string','number']}).map(s=>s.type),['str
   assert.ok(listSchemaFields().some(field => field.name === 'status' && field.values?.join() === 'done,current,planned'));
   const session = createEditorSession(deck);
   session.set('/slides/0/timeline/0/status', 'current');
-  assert.equal(session.document.slides[0].timeline[0].status, 'current');
+  assert.equal(session.presentation.slides[0].timeline[0].status, 'current');
   assert.throws(() => session.set('/slides/0/timeline/0/status', 'blocked', { rejectInvalid: true }));
 }
