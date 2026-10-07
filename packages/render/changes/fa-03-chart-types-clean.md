@@ -1,4 +1,0 @@
----
-type: changed
----
-FA-03 (output-changing for a document that names a retired chart type id; needs the core release that deletes the aliases): the preview follows the clean chart-type catalog. The eight stacked chart types lose their `-3x` suffix (`stacked-column`, `stacked-bar`, `stacked-line`, `stacked-line-with-markers`, `stacked-area`, `100pct-stacked-column`, `100pct-stacked-bar`, `100pct-stacked-area`), and the deprecated aliases are no longer resolved: `resolveChartType` and the `DEPRECATED_CHART_TYPES` table are gone, so an id like `clustered-column`, `sparkline`, `dot-plot`, `australia` or `stacked-column-3x` is outside the catalog and keeps the legacy single-series preview. The engine default chart types are `stacked-column`, `stacked-area` and `line-with-markers`, as in core's `engine-defaults.json`. The SVG names the chart type in `data-opf-chart`, so the eight stacked previews change that attribute and nothing else.

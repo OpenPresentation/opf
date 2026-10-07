@@ -1,11 +1,10 @@
 {
   "name": "@openpresentation/opf-render",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
   "license": "MIT",
   "type": "module",
   "private": false,
-  "opf": { "requiresUnreleasedCore": "0.14.0" },
   "engines": {
     "node": ">=22"
   },
@@ -139,7 +138,7 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf": "^0.13.0",
+    "@openpresentation/opf": "^0.14.0",
     "@resvg/resvg-js": "^2.6.2",
     "bidi-js": "1.1.0",
     "fontkit": "^2.0.4",
