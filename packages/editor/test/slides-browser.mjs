@@ -223,7 +223,8 @@ try {
     current => current.slides.map(slide => `${slide.id}:${slide.section}`).join() === 'a:Intro,e:End,b:End,c:End,d:End,f:End');
   await load(source);
   await card(0).click();
-  await card(4).click({ modifiers: ['Control'] });
+  // ControlOrMeta: Chromium on macOS turns Ctrl+click into a context-menu click; Cmd+click is the platform's add-to-selection.
+  await card(4).click({ modifiers: ['ControlOrMeta'] });
   assert.deepEqual(await cards().evaluateAll(nodes => nodes.map(node => node.dataset.selected)), ['true', 'false', 'false', 'false', 'true', 'false'], 'Ctrl+click adds a slide');
   await oneStep('hiding several selected slides at once', async () => { await page.locator('#slide-toolbar [data-action="hide"]').click(); },
     current => current.slides.filter(slide => slide.hidden).map(slide => slide.id).join() === 'a,e');

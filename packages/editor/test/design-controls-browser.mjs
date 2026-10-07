@@ -81,6 +81,16 @@ try {
   const status = () => page.locator('.opf-dc-status').evaluateAll(nodes => nodes.map(node => node.textContent).join(' '));
   const error = () => page.locator('.opf-dc-error').evaluateAll(nodes => nodes.map(node => node.textContent).join(' '));
   const mark = name => checks.push(name);
+  // Keyboard-only change of a focused, closed <select> to its next option. ArrowDown steps the value on Linux and
+  // Windows; Chromium on macOS follows the platform convention and opens the popup instead (which headless cannot
+  // drive), so there the next option's label is typed (type-ahead changes a closed select on every platform).
+  const keyNextOption = async select => {
+    await select.focus();
+    if (process.platform !== 'darwin') return page.keyboard.press('ArrowDown');
+    const next = await select.evaluate(node => [...node.options].slice(node.selectedIndex + 1).find(option => !option.disabled)?.textContent.trim());
+    assert.ok(next, 'the select has a next option');
+    await page.keyboard.type(next.split(/\s/)[0]);
+  };
 
   await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
   await page.locator('#preview svg').waitFor();
@@ -137,12 +147,10 @@ try {
   assert.deepEqual(unlabeled, [], 'every control is labelled');
   mark('every design control is labelled');
 
-  // Keyboard-only change: ArrowDown on a focused select changes it and commits one undoable change.
+  // Keyboard-only change: the next option from the keyboard changes a focused select and commits one undoable change.
   {
-    const themeSelect = field(design, 'Theme');
-    await themeSelect.focus();
     const before = await doc();
-    await page.keyboard.press('ArrowDown');
+    await keyNextOption(field(design, 'Theme'));
     const after = await waitDoc(current => current.design.theme !== before.design.theme, 'keyboard theme change');
     assert.equal(after.design.theme, 'dark', 'the next theme in the list');
     await settle();
@@ -311,12 +319,10 @@ try {
   assert.deepEqual(targets.at(-1).slice(1), ['Table (unavailable)', true]);
   assert.match(await selection.getByLabel(label('Content type')).locator('option[value="table"]').getAttribute('title'), /no table structure/);
   await step('block conversion text to list', () => selection.getByLabel(label('Content type')).selectOption('list'), current => JSON.stringify(current.slides[1].blocks[0]) === '{"items":["First line","Second line"]}', { preview: true });
-  // Keyboard-only conversion: focus the select and press ArrowDown (the first target is the list).
+  // Keyboard-only conversion: the next option of the focused select (the first target is the list).
   {
     const before = await doc();
-    const type = selection.getByLabel(label('Content type'));
-    await type.focus();
-    await page.keyboard.press('ArrowDown');
+    await keyNextOption(selection.getByLabel(label('Content type')));
     await waitDoc(current => current.slides[1].blocks[0].items !== undefined, 'keyboard conversion');
     await settle();
     await button('Undo').click();
