@@ -3,18 +3,10 @@
   "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. A pull request may change `golden` (a reviewed golden decision); use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
   "version": 1,
   "repositories": {
-    "opf": {
-      "sha": "e3d55f74cd7f008223ab03384848801e1d68ca09"
-    },
-    "opf-render": {
-      "sha": "759017eca2141c484f52b5405ce13f175c8d2a6a"
-    },
-    "opf-pptx": {
-      "sha": "edd78269e8288d071aa022e633dc1ec3cd5da5c3"
-    },
-    "opf-editor": {
-      "sha": "0fe20f539631d13fcbb1b6bed2e852c4ffec9f0e"
-    }
+    "opf": { "sha": "e3d55f74cd7f008223ab03384848801e1d68ca09" },
+    "opf-render": { "sha": "759017eca2141c484f52b5405ce13f175c8d2a6a" },
+    "opf-pptx": { "sha": "edd78269e8288d071aa022e633dc1ec3cd5da5c3" },
+    "opf-editor": { "sha": "0fe20f539631d13fcbb1b6bed2e852c4ffec9f0e" }
   },
   "golden": {
     "repository": "opf",

@@ -39,7 +39,26 @@ test("the candidate is the four mains, keeps the lock's golden and reports what 
   assert.equal(golden.goldenChanged, true);
   assert.deepEqual([golden.candidate.golden.repository, golden.candidate.golden.path], ["opf-render", "test/golden/opf-examples-png.next"]);
   assert.throws(() => candidateLock(lock, same, { at, renderOverride: "opf/scripts/x" }), /does not name an opf-render baseline/);
+  assert.throws(() => candidateLock(lock, same, { at, renderOverride: "opf-pptx/test/golden/x" }), /does not name an opf-render baseline/);
+  assert.throws(() => candidateLock(lock, same, { at, renderOverride: "opf/scripts/fixtures/../x.sha256.json" }), /does not name an opf-render baseline/);
   assert.throws(() => candidateLock(lock, { ...same, opf: "main" }, { at }), /candidate lock is invalid/);
+});
+
+test("a core fixture named by the renderer's golden-override becomes the lock's golden, with its provenance", () => {
+  const core = candidateLock(lock, same, { at, renderOverride: "opf/scripts/fixtures/opf-examples-png.fa-0-14.sha256.json" });
+  assert.equal(core.goldenChanged, true);
+  assert.deepEqual([core.candidate.golden.repository, core.candidate.golden.path], ["opf", "scripts/fixtures/opf-examples-png.fa-0-14.sha256.json"]);
+  assert.equal(core.candidate.golden.note, "golden adopted from opf-render golden-override (core fixture)");
+  assert.match(core.candidate.provenance.note, /Golden adopted from opf-render golden-override \(core fixture\)\./);
+});
+
+test("the roll fails when the core fixture the override names does not exist at the core SHA being rolled", async () => {
+  const { api } = fakeGitHub({ renderCi: "golden-override: 'opf/scripts/fixtures/missing.sha256.json'" });
+  const missing = async (route, options) => {
+    if (route.startsWith("/repos/OpenPresentation/opf/contents/scripts/fixtures/missing.sha256.json")) throw Object.assign(new Error("HTTP 404 Not Found"), { status: 404 });
+    return api(route, options);
+  };
+  await assert.rejects(run(missing, quiet), /golden opf:scripts\/fixtures\/missing\.sha256\.json does not exist at/);
 });
 
 test("the roller writes the lock in the checked-in format", () => {

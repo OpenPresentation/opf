@@ -22,12 +22,13 @@
 //
 // The golden: the candidate keeps the lock's golden (core main's lock, which a pull request that moves goldens may
 // have changed), unless opf-render main's ci.yml selects its own baseline with `golden-override`, which then becomes
-// the lock's golden. If the coordinated checks fail on the four mains (a renderer change that moved pixels, a broken
+// the lock's golden. That override names a renderer baseline directory or, for a coordinated release, a reviewed core
+// fixture (`opf/scripts/fixtures/<name>.sha256.json`, which must exist at the core SHA being rolled). If the coordinated checks fail on the four mains (a renderer change that moved pixels, a broken
 // main, a coupling), nothing is proposed and the run fails with the links: a human fixes main or the golden.
 import { appendFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { githubApi, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
+import { githubApi, isSafeRelativePath, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
 
 export const ROLL_BRANCH = `${ROLLER_BRANCH_PREFIX}main`;
 export const CORE = `${OWNER}/opf`;
@@ -43,10 +44,17 @@ export function goldenOverrideOf(ciYaml) {
 /** The candidate lock for the four `main` SHAs. `renderOverride` is opf-render main's golden-override ("" for none). */
 export function candidateLock(lock, mains, { renderOverride = "", at, run } = {}) {
   let golden = lock.golden;
+  let adopted = "";
   if (renderOverride) {
     const [repository, ...rest] = renderOverride.split("/");
-    if (repository !== "opf-render") throw new Error(`opf-render main's golden-override ${renderOverride} does not name an opf-render baseline`);
-    golden = { repository, path: rest.join("/"), note: "opf-render main's own golden selection (golden-override in its ci.yml)" };
+    const goldenPath = rest.join("/");
+    // A renderer baseline directory, or a reviewed core fixture: a coordinated release whose renderer pull request
+    // renders core's new examples selects it while core's lock still records the pre-roll renderer's output.
+    // plan() then requires the fixture to exist at the core SHA being rolled.
+    const coreFixture = repository === "opf" && isSafeRelativePath(goldenPath) && /^scripts\/fixtures\/[\w.-]+\.sha256\.json$/.test(goldenPath);
+    if (repository !== "opf-render" && !coreFixture) throw new Error(`opf-render main's golden-override ${renderOverride} does not name an opf-render baseline or a core scripts/fixtures/<name>.sha256.json fixture`);
+    golden = { repository, path: goldenPath, note: coreFixture ? "golden adopted from opf-render golden-override (core fixture)" : "opf-render main's own golden selection (golden-override in its ci.yml)" };
+    if (coreFixture) adopted = " Golden adopted from opf-render golden-override (core fixture).";
   }
   const repositories = Object.fromEntries(REPOSITORIES.map((name) => [name, { sha: mains[name] }]));
   const moved = REPOSITORIES.filter((name) => lock.repositories[name].sha !== mains[name]);
@@ -58,7 +66,7 @@ export function candidateLock(lock, mains, { renderOverride = "", at, run } = {}
       source: "roller",
       at,
       ...(run ? { run } : {}),
-      note: `Rolled to the four main branches (${REPOSITORIES.map((name) => `${name} ${mains[name].slice(0, 7)}`).join(", ")}); moved: ${moved.join(", ") || "none"}.`,
+      note: `Rolled to the four main branches (${REPOSITORIES.map((name) => `${name} ${mains[name].slice(0, 7)}`).join(", ")}); moved: ${moved.join(", ") || "none"}.${adopted}`,
     },
   };
   const errors = validateLock(candidate);
