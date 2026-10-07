@@ -63,6 +63,7 @@
   ],
   "contractExclude": {
     "dependency-boundary.mjs": "Proves the vendored pptxgenjs does not load image-size (packaging boundary); no core input.",
+    "published-core-gate.mjs": "Version arithmetic of the CI gate on opf.requiresUnreleasedCore (RR-55); package machinery, no core input.",
     "zip-bundle-boundary.mjs": "Proves browser bundles use the vendored JSZip bundle and never import readable-stream (packaging boundary, RR-20); no core input."
   }
 }
