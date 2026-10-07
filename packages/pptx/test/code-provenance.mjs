@@ -1,20 +1,20 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
-const enc=new TextEncoder(),dec=new TextDecoder(),fonts=await loadOfficeFontRegistry();
+const enc=new TextEncoder(),dec=new TextDecoder(),fonts=await loadFonts({pack: 'office'});
 const deck=code=>({design:{fontScheme:'roboto',dimensions:{widthInches:540/96,heightInches:960/96}},slides:[{code}]});
 const source='  const word = "two  spaces";\r\n'+ 'longtoken'.repeat(25)+'\n\r\n\treturn word;  \r';
 const original={source,filename:'Case.ts',language:'TypeScript'};
-const bytes=await toPptx(deck(original),{textMeasurement:fonts.textMeasurement});
+const bytes=await toPptx(deck(original),{fonts});
 const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipSync(entries);};
 const slide=(entries,mutate)=>entries['ppt/slides/slide1.xml']=enc.encode(mutate(dec.decode(entries['ppt/slides/slide1.xml'])));
 // A root code payload returns as the slide's own field (content topology).
 const importCode=async bytes=>{const slide=(await fromPptx(bytes)).slides[0];return slide.code??slide.blocks?.[0]?.code;};
 assert.deepEqual(await importCode(bytes),original);
 for(const code of ['', '\t\t', 'é\t<&>\r\n\n', {source:'',filename:'',language:''}, {source:'x',filename:'only.ts'}, {source:'x',language:'ts'}]) {
-  assert.deepEqual(await importCode(await toPptx(deck(code),{textMeasurement:fonts.textMeasurement})),code);
+  assert.deepEqual(await importCode(await toPptx(deck(code),{fonts})),code);
 }
 // Astral UTF-16 provenance only: the bundled monospace pack lacks this emoji.
 // Do not describe this heuristic serialization check as glyph support.
@@ -48,7 +48,7 @@ for(const [name,mutate] of Object.entries(corruptions)) {
   assert.ok(result.slides[0].code===undefined&&!result.slides[0].blocks.some(block=>block.type==='code'),name+' must not resurrect the old code');
   assert.ok(diagnostics.some(issue=>issue.code==='invalid-code-provenance'),name+' must explain fallback');
 }
-const shorthand=await toPptx(deck('body'),{textMeasurement:fonts.textMeasurement}),entries=unzipSync(shorthand);
+const shorthand=await toPptx(deck('body'),{fonts}),entries=unzipSync(shorthand);
 slide(entries,xml=>xml.replace('>code</a:t>','>Edited label</a:t>'));
 const diagnostics=[];const changed=await fromPptx(zipSync(entries),{onDiagnostic:issue=>diagnostics.push(issue)});
 assert.ok(diagnostics.some(issue=>issue.code==='invalid-code-provenance'));

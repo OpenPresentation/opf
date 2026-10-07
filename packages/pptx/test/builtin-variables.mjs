@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 
 // FA-04: built-in variables resolve before export, and the `speaker` furniture field exports as static text
 // ("Name, Title") whose flag, speaker id, name and title return on import, as the organization field does.
 const dec = new TextDecoder(), enc = new TextEncoder();
 const slideXml = (entries, index = 1) => dec.decode(entries[`ppt/slides/slide${index}.xml`]);
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
-const read = async (bytes) => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validatePresentation(deck).valid, true, JSON.stringify(validatePresentation(deck).errors)); return {deck, issues}; };
+const read = async (bytes) => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validate(deck, {only: ['format']}).valid, true, JSON.stringify(validate(deck, {only: ['format']}).findings)); return {deck, issues}; };
 
 const source = {
   name: 'Q4 Review',

@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
-import {renderSvg,svgToPng} from '@openpresentation/opf-render';
-import {validatePresentation} from '@openpresentation/opf';
+import {renderSlideSvg,svgToPng} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
 const {toPptx,fromPptx}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const root=new URL('fixtures/native-backgrounds/',import.meta.url);
 const manifest=JSON.parse(await readFile(new URL('manifest.json',root)));
@@ -12,7 +12,7 @@ const nativeBytes=await readFile(new URL(manifest.nativePptx.file,root));
 assert.equal(hash(nativeBytes),manifest.nativePptx.sha256);
 const diagnostics=[],nativeDoc=await fromPptx(nativeBytes,{onDiagnostic:d=>diagnostics.push(d)});
 assert.deepEqual(diagnostics,[],'Keynote-generated linear fills are representable');
-assert.equal(validatePresentation(nativeDoc).valid,true);
+assert.equal(validate(nativeDoc, {only: ['format']}).valid,true);
 assert.equal(nativeDoc.slides.length,6);
 assert.ok(nativeDoc.slides.every(slide=>!slide.title&&!slide.blocks),'Do not invent content on native background-only slides');
 const raw=bytes=>sharp(bytes).toColourspace('srgb').ensureAlpha().raw().toBuffer({resolveWithObject:true});
@@ -31,8 +31,8 @@ for(const group of manifest.groups) {
   const slides=[source.slides[i]];
   if(group.name==='opaque')slides.push(nativeDoc.slides[i]);
   for(const slide of slides) {
-   const svg=renderSvg({design:{dimensions},slides:[slide]},{validate:false});
-   const reference=await raw(await svgToPng(svg,{useBundledFonts:false,background:group.transparent?'transparent':'#FFFFFF'}));
+   const svg=renderSlideSvg({design:{dimensions},slides:[slide]}, 0, {validate:false});
+   const reference=await raw(await svgToPng(svg,{fonts:{useBundledFonts:false},background:group.transparent?'transparent':'#FFFFFF'}));
    assert.equal(reference.info.width,native.info.width);assert.equal(reference.info.height,native.info.height);
    let max=0,total=0,alphaMax=0,premultipliedMax=0,premultipliedTotal=0;
    for(let p=0;p<native.data.length;p+=4) {

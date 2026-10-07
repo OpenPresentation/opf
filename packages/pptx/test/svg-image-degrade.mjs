@@ -5,7 +5,7 @@
 // gets a native raster picture and no diagnostic.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSvg, svgToPng} from '@openpresentation/opf-render';
+import { renderSlideSvg, svgToPng } from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
 
 const decode = bytes => new TextDecoder().decode(bytes);
@@ -90,7 +90,7 @@ for (const [name, source, reason] of broken) {
 const drawnByRendererMain = new Set(['svg that is not closed', 'svg with an external entity']);
 for (const [, source] of broken.filter(([name, source]) => source !== notAPng && !drawnByRendererMain.has(name))) {
   const preview = [];
-  const svg = renderSvg({slides: [{title: 'T', image: source}]}, {onDiagnostic: diagnostic => preview.push(diagnostic)});
+  const svg = renderSlideSvg({slides: [{title: 'T', image: source}]}, 0, {onDiagnostic: diagnostic => preview.push(diagnostic)});
   assert.ok(svg.includes('data-opf-asset-status="unresolved"'), 'preview placeholder');
   checked++;
 }

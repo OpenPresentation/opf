@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-import {validatePresentation} from '@openpresentation/opf';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {validate} from '@openpresentation/opf';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
 
-const fonts = await loadOfficeFontRegistry(), enc = new TextEncoder(), dec = new TextDecoder();
+const fonts = await loadFonts({pack: 'office'}), enc = new TextEncoder(), dec = new TextDecoder();
 const literal = '  Native header\twords\r\nsecond line  \r\n';
 const image = {src: `data:image/png;base64,${(await readFile(new URL('fixtures/images/wide.png', import.meta.url))).toString('base64')}`, alt: '  current picture alt  '};
 const effective = (deck, index, kind) => deck.slides[index].design?.[kind] ?? deck.design?.[kind];
@@ -21,7 +21,7 @@ const read = async bytes => {
   const copy = new Uint8Array(bytes), issues = [];
   const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
   assert.deepEqual(bytes, copy, 'Import leaves its input unchanged.');
-  assert.equal(validatePresentation(deck).valid, true);
+  assert.equal(validate(deck, {only: ['format']}).valid, true);
   imports++;
   return {deck, issues};
 };
@@ -42,15 +42,15 @@ const firstTextTag = entries => tagFiles(entries).find(path => tagData(entries[p
 const furnitureShapes = (content, mutate) => content.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => shape.includes('name="OPF furniture ') ? mutate(shape) : shape);
 
 let matrix = 0;
-for (const textMeasurement of [undefined, fonts.textMeasurement])
+for (const measured of [undefined, fonts])
 for (const dimensions of [{widthInches: 13.333333, heightInches: 7.5}, {widthInches: 5.625, heightInches: 10}])
 for (const local of [false, true]) {
   const definitions = {header: {left: {image, text: literal}, center: {organization: true}, right: {section: true}},
     footer: {left: {date: ' 2026-09-14 '}, center: {text: '', section: false, organization: false}, right: {slideNumber: true}}};
   const source = {organization: {id: 'native_org', name: '  Current Org  '}, design: {fontScheme: 'roboto', dimensions, ...(!local ? definitions : {})},
     slides: ['Overview', ''].map((section, index) => ({title: `Title ${index}`, text: `Body ${index}`, section, ...(local ? {design: definitions} : {})}))};
-  const bytes = await exportDeck(source, {textMeasurement});
-  assert.deepEqual(await exportDeck(source, {textMeasurement}), bytes, 'Furniture tags are deterministic.');
+  const bytes = await exportDeck(source, {fonts: measured});
+  assert.deepEqual(await exportDeck(source, {fonts: measured}), bytes, 'Furniture tags are deterministic.');
   const {deck, issues} = await read(bytes);
   assert.deepEqual(deck.organization, source.organization);
   for (let index = 0; index < 2; index++) {

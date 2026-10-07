@@ -152,7 +152,7 @@ Restores are applied as independent groups, one per OPF field. The deck backgrou
 
 ## Untrusted input
 
-Tags can be written by anyone who can edit the file. The hash is a change detector, not a signature. Tag values are size-limited and decoded as JSON. Only known fields are accepted, media references must name an existing `ppt/media/` part, and every restored field must validate with `validatePresentation`. Nothing in a tag is executed or fetched. A package whose tags were all stripped imports as an ordinary foreign deck without a diagnostic. When only `OPF_DOCUMENT_V1` is missing or unreadable, the slide tags still restore their layout intent (below).
+Tags can be written by anyone who can edit the file. The hash is a change detector, not a signature. Tag values are size-limited and decoded as JSON. Only known fields are accepted, media references must name an existing `ppt/media/` part, and every restored field must pass core's `format` check (`validate(value, { only: ['format'] })`). Nothing in a tag is executed or fetched. A package whose tags were all stripped imports as an ordinary foreign deck without a diagnostic. When only `OPF_DOCUMENT_V1` is missing or unreadable, the slide tags still restore their layout intent (below).
 
 ## Layout intent (FF-29)
 

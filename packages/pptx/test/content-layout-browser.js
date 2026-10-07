@@ -1,6 +1,6 @@
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
-import {renderSvgDeck,resolvePresentation} from '@openpresentation/opf-render/svg';
-import {validatePresentation} from '@openpresentation/opf';
+import {renderSvg,resolvePresentation} from '@openpresentation/opf-render/svg';
+import {validate} from '@openpresentation/opf';
 import {unzipSync} from 'fflate';
 
 const output = document.querySelector('pre');
@@ -17,7 +17,7 @@ try {
   ]};
   // Exercise browser-default measurement on both sides. Loaded-font/native fidelity
   // is checked separately; this is the actual browser conversion/formatting boundary.
-  const svgs = renderSvgDeck(source);
+  const svgs = renderSvg(source);
   const bytes = await toPptx(source), entries = unzipSync(bytes);
   for (const [index, svg] of svgs.entries()) {
     const native = xml(new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]));
@@ -33,7 +33,7 @@ try {
     if (index === 3) check(elements(native, 'a:prstGeom').filter(node => node.getAttribute('prst') === 'ellipse').length === 2, 'Timeline has two editable native markers');
   }
   const imported = await fromPptx(bytes);
-  check(validatePresentation(imported).valid, 'Browser reimport validates');
+  check(validate(imported, {only: ['format']}).valid, 'Browser reimport validates');
   check(imported.slides.length === source.slides.length, 'Slide count survives');
   // The root quote payload returns as the slide's own field (content topology).
   check(JSON.stringify(imported.slides[1].quote) === JSON.stringify(source.slides[1].quote) && imported.slides[1].blocks === undefined, 'Quote text, attribution and source survive browser export/reimport (FF-57)');

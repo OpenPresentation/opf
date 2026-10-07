@@ -2,8 +2,8 @@ import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
-// Namespace import: cores before FF-34 do not export resolveSocialProfile.
-import * as opfCore from '@openpresentation/opf';
+import {catalogs as bundledCatalogs, validateCatalogRecord} from '@openpresentation/opf';
+import {resolveSocialProfile} from '@openpresentation/opf/composition';
 
 // FF-32: document and slide references survive a PPTX round trip.
 //
@@ -61,11 +61,11 @@ const own = (value, key) => object(value) && Object.hasOwn(value, key) && value[
 // still shows exactly what the stored authored value formats to, keep the
 // authored form (a handle stays a handle); an edited line keeps its new URL.
 function authoredSocials(stored, observed, records) {
-  if (!object(stored) || !object(observed) || typeof opfCore.resolveSocialProfile !== 'function') return observed;
+  if (!object(stored) || !object(observed)) return observed;
   return Object.fromEntries(Object.entries(observed).map(([platform, value]) => {
     const authored = stored[platform];
     if (typeof authored !== 'string') return [platform, value];
-    const profile = opfCore.resolveSocialProfile(platform, authored, records, 'organization');
+    const profile = resolveSocialProfile(platform, authored, records, 'organization');
     const shown = profile.href && !/^[a-z][a-z0-9+.-]*:/i.test(profile.text) ? `https://${profile.text}` : profile.text;
     return [platform, shown === value ? authored : value];
   }));
@@ -370,7 +370,7 @@ const layoutRecords = catalogs => array(Array.isArray(catalogs?.layouts) ? catal
 function validLayoutRecord(value) {
   // Inline catalogs already identify the kind. Supply only an omitted
   // standalone identifier for validation; never change the authored record.
-  try { return object(value) && opfCore.validateCatalogRecord('layouts', {$schema: 'https://openpresentation.org/schema/opf-layout/v1', ...value}).valid; }
+  try { return object(value) && validateCatalogRecord('layouts', {$schema: 'https://openpresentation.org/schema/opf-layout/v1', ...value}).valid; }
   catch { return false; }
 }
 
@@ -1124,7 +1124,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
     if (key === 'organization' && object(imported.organization)) {
       const observed = imported.organization;
       // Same order as export: inline records, then the document source, host catalogs and bundled records.
-      const hostRecords = typeof socialPlatformRecords === 'function' ? socialPlatformRecords(document.catalogs) : (opfCore.catalogs?.socialPlatforms ?? []);
+      const hostRecords = typeof socialPlatformRecords === 'function' ? socialPlatformRecords(document.catalogs) : bundledCatalogs.socialPlatforms;
       const records = [...array(document.catalogs?.socialPlatforms?.records ?? document.catalogs?.socialPlatforms), ...hostRecords].filter(object);
       const merge = (stored, current) => object(current.socials) && object(stored?.socials) ? {...current, socials: authoredSocials(stored.socials, current.socials, records)} : current;
       const list = array(value);
@@ -1179,7 +1179,7 @@ export function restoreDocumentProvenance(imported, {entries, presentationRoot, 
  * that the imported document references.
  */
 function layoutIntent(documentRecords, hasDocument, slideRecords, entries, group, report, rejectedDocumentIds) {
-  const bundled = id => array(opfCore.catalogs?.layouts).find(item => item?.id === id);
+  const bundled = id => array(bundledCatalogs.layouts).find(item => item?.id === id);
   const owns = slideRecords.map(entry => {
     if (!entry) return null;
     const {record, native: observed} = entry;

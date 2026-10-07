@@ -5,9 +5,9 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {unzipSync, zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {nativeFurnitureParts, NATIVE_PLACEHOLDERS} from '../dist/native-furniture.js';
 
@@ -15,7 +15,7 @@ const enc = new TextEncoder(), dec = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const hash = value => createHash('sha256').update(value).digest('hex');
-const {options: fontOptions} = await prepareNodeFonts();
+const fontOptions = {fonts: await loadFonts()};
 const DATE = '2026-09-10';
 
 const exportDeck = async (source, extra = {}) => {
@@ -39,7 +39,7 @@ const runsOf = shape => [...shape.matchAll(/<a:(r|fld)\b([^>]*)>[\s\S]*?<a:t>([^
   .map(([, kind, attributes, value]) => kind === 'fld' ? `[${attributes.match(/type="([^"]+)"/)[1]}:${value}]` : value).join('');
 const read = async (bytes, extra = {}) => {
   const issues = [], imported = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue), ...extra});
-  assert.equal(validatePresentation(imported).valid, true, JSON.stringify(validatePresentation(imported).errors));
+  assert.equal(validate(imported, {only: ['format']}).valid, true, JSON.stringify(validate(imported, {only: ['format']}).findings));
   return {imported, issues, invalid: issues.filter(issue => issue.code === 'invalid-furniture-provenance')};
 };
 const mutate = (entries, edits) => {

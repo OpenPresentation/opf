@@ -1,7 +1,7 @@
 // Export ColorRef through published core resolveColorRef(). Keep 8-digit hex
 // alpha locally: normalizeHexColor() strips the AA byte, which PptxGenJS needs.
 
-import { resolveColorRef as resolveCoreColorRef } from "@openpresentation/opf";
+import { resolveColorRef as resolveCoreColorRef } from "@openpresentation/opf/composition";
 
 const UNRESOLVED = "";
 

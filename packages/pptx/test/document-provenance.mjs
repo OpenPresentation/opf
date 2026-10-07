@@ -5,7 +5,7 @@ import {XMLValidator} from 'fast-xml-parser';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {restoreDocumentProvenance} from '../dist/document-provenance.js';
-import {validatePresentation, catalogs} from '@openpresentation/opf';
+import {validate, catalogs} from '@openpresentation/opf';
 
 // FF-32: catalog references, slide layout ids and authoring metadata survive
 // export -> import while the native evidence they produced is unchanged, and a
@@ -33,14 +33,14 @@ const source = {
     {layout: 'title-subtitle', title: 'Third', subtitle: 'Inherits'}
   ]
 };
-assert.equal(validatePresentation(source).valid, true, JSON.stringify(validatePresentation(source).errors));
+assert.equal(validate(source, {only: ['format']}).valid, true, JSON.stringify(validate(source, {only: ['format']}).findings));
 
 const exported = await toPptx(structuredClone(source));
 assert.deepEqual(await toPptx(structuredClone(source)), exported, 'Export stays deterministic.');
 const read = async bytes => {
   const issues = [];
   const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(deck).valid, true);
+  assert.equal(validate(deck, {only: ['format']}).valid, true);
   return {deck, issues, provenance: issues.filter(issue => /provenance|reference|slide-id/.test(issue.code))};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };

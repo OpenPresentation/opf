@@ -7,8 +7,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {chartOptionSupport, chartOptionTarget} from '@openpresentation/opf';
-import {renderSvg} from '@openpresentation/opf-render';
+import {chartOptionSupport, chartOptionTarget} from '@openpresentation/opf/composition';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
@@ -260,7 +260,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   for (const legend of ['top', 'bottom', 'left', 'right', 'none']) {
     for (const type of ['column', 'bar', 'line']) {
       const chart = {type, data, legend, axisTitles: {category: 'Quarter', value: 'Revenue'}, dataLabels: {content: ['category', 'value'], position: type === 'line' ? 'below' : 'inside-end', separator: ' / '}};
-      const svg = renderSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart}]}, {trace: true});
+      const svg = renderSlideSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart}]}, 0, {trace: true});
       const groups = textGroups(svg).filter(group => group.path?.startsWith('slides.0.chart'));
       const extent = plotExtent(svg);
       const exported = await exportDeck(chart);
@@ -287,7 +287,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   }
   // Pie percent labels: the preview's integer percent is the number PowerPoint's 0% shows.
   const pie = {type: 'pie', data, dataLabels: {content: ['category', 'percent']}};
-  const svg = renderSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart: pie}]}, {trace: true});
+  const svg = renderSlideSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart: pie}]}, 0, {trace: true});
   const previewLabels = textGroups(svg).filter(group => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(group.path)).map(group => group.text);
   const total = data.rows.reduce((sum, row) => sum + row[1], 0);
   assert.deepEqual(previewLabels, data.rows.map(row => `${row[0]}, ${Math.round(row[1] / total * 100)}%`));

@@ -45,24 +45,26 @@ import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, phys
 import { webpToPng, svgToPng, readLocalFile } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
-import { layoutTable, composeSlide, fitText, fitRichText, textWidthMeasurer, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
-// chartPaletteForFill ships with core RR-29 (opf#270); an older published core still loads and clamps each colour on its own.
-import * as opfComposition from "@openpresentation/opf/composition";
+import {
+  chartPaletteForFill, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  DEFAULT_FONT_SCHEME, defaultSlideBackground, fitText, layoutTable, layoutWatermark, metricTrendMark, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
+} from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
 import { unzipSync, zipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
 import {
   catalogs as bundledCatalogs,
-  validatePresentation
+  hasContentVariables,
+  isTemplate,
+  resolveSlideContext as resolveCoreSlideContext,
+  resolveVariables,
+  validate
 } from "@openpresentation/opf";
-// Optional core exports (RR-07 syntax colours, trend marks) are read from the namespace so an older published core still loads.
+import {checkFormat, isValidFormat} from "./format-check.js";
 
-// Optional core exports are read from the namespace so an older published core still loads;
-// resolveVariables ships with core RR-32.
-import * as opfCore from "@openpresentation/opf";
-
-export {checkPptxTypefaces, inventoryPptxTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
+export {checkTypefaces, inventoryTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
 export {DEFAULT_SIGNAL_LIMITS, SIGNALS_VERSION, isMonospaceFamily} from './import-signals.js';
 
 export const packageName = "@openpresentation/opf-pptx";
@@ -90,7 +92,8 @@ export class OPFPptxError extends Error {
     this.name = "OPFPptxError";
     this.code = code;
     this.details = details;
-    if (details.issues) this.issues = details.issues;
+    if (details.findings) this.findings = details.findings;
+    if (details.diagnostics) this.diagnostics = details.diagnostics;
     if (details.path) this.path = details.path;
   }
 }
@@ -200,13 +203,6 @@ const DIMENSION_PRESETS = Object.freeze({
   a4: Object.freeze({ widthInches: 11.69, heightInches: 8.27 })
 });
 
-const DEFAULTS = Object.freeze({
-  theme: "minimal",
-  colorScheme: "cool-horizon",
-  // Shared last-resort font scheme (core DEFAULT_FONT_SCHEME): every engine uses aptos.
-  fontScheme: "aptos"
-});
-
 const CHART_COLORS = [
   "2874A6",
   "1B4F72",
@@ -231,7 +227,9 @@ export async function toPptx(input, options = {}) {
   }
   const presentation = resolveTemplateInput(parseInput(input), options);
   assertValidBoundary(presentation);
-  options = {...options, textMeasurement: chosenFamilyMeasurement(options.textMeasurement), svgRasters: new Map()};
+  // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
+  // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
+  options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
 
   const context = resolvePresentationContext(presentation, {...options,textMeasurement:undefined});
   context.listMarkers = new Map();
@@ -287,7 +285,7 @@ export async function toPptx(input, options = {}) {
   }
   context.chartexMode = options.chartex ?? 'auto';
   Object.assign(context, exportTheme(presentation, context));
-  context.reportedFontSchemes = new Set();
+  context.reportedReferences = new Set();
   // Document references and metadata tags (FF-32, docs/document-roundtrip.md).
   context.documentProvenance = options.provenance === false ? null : documentProvenance(presentation, {
     mode: options.provenance ?? "full",
@@ -306,14 +304,14 @@ export async function toPptx(input, options = {}) {
   context.masterBackground = masterBackground(context);
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
-  configurePresentation(pptx, presentation, {...context,fonts:resolveSlideContext(presentation,presentation.slides[0],context,options).fonts});
+  configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
 
   for (let index = 0; index < presentation.slides.length; index += 1) {
     await addSlide(pptx, presentation, presentation.slides[index], index, context, options);
   }
 
   // FF-08: pitchFamily per exported family, from each slide's resolved scheme.
-  context.fontPitch = fontPitchFamilies(presentation.slides.map((slide, index) => resolveSlideContext(presentation, slide, context, options, index).fonts),
+  context.fontPitch = fontPitchFamilies(presentation.slides.map((slide, index) => exportSlideContext(presentation, index, context, options).fonts),
     [...normalizeRecords(presentation.catalogs?.fontSchemes), ...defaultCatalog("fontSchemes")]);
 
   let raw;
@@ -438,7 +436,7 @@ export async function fromPptx(input, options = {}) {
       slides: slidePaths.map((path, index) => ({path, root: furnitureContexts[index].root, relationships: furnitureContexts[index].relationships, contentBounds: furnitureContexts[index].contentBounds}))}, report);
     // The stored language wins while the runs still carry its tag (FF-07).
     restored.groups = reconcileLanguage(restored.groups, observedLanguage, report);
-    imported = applyDocumentProvenance(imported, restored, validatePresentation, report);
+    imported = applyDocumentProvenance(imported, restored, checkFormat, report);
     slideProvenance = restored.slides;
     restoredGroups = restored.groups;
   } catch (error) {
@@ -453,11 +451,11 @@ export async function fromPptx(input, options = {}) {
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
-  const result = validatePresentation(imported);
-  if (!result.valid) {
+  const validation = checkFormat(imported);
+  if (!validation.valid) {
     throw new OPFPptxError("invalid-import-opf", "Imported PPTX did not produce valid OPF.", {
-      issues: result.errors,
-      result
+      findings: validation.findings.filter(finding => finding.severity === "error"),
+      report: validation
     });
   }
 
@@ -468,7 +466,7 @@ export async function fromPptx(input, options = {}) {
   const archive = {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]};
   const signals = extractSignals({archive, presentationRoot, slidePaths, themeFacts: themeFactsFor(slidePaths[0], archive), limits: signalLimits,
     recorded: furnitureContexts.map(context => context.signalSources), slideProvenance, contentPaths});
-  return {document: imported, signals};
+  return {presentation: imported, signals};
 }
 
 // RR-08: run colours named by a ColorRef (variable, scheme slot, role) come back as that name where the document's own
@@ -639,7 +637,7 @@ function readCoreProperties(entries) {
 function importedCodeFamily(design) {
   const reference = design?.fontScheme;
   const id = referenceId(reference);
-  const base = (id && findById(defaultCatalog("fontSchemes"), id)) || findById(defaultCatalog("fontSchemes"), DEFAULTS.fontScheme);
+  const base = (id && findById(defaultCatalog("fontSchemes"), id)) || findById(defaultCatalog("fontSchemes"), DEFAULT_FONT_SCHEME);
   return resolveFontFamilies({...base, ...(isPlainObject(reference) ? reference : {})}).code;
 }
 
@@ -1599,17 +1597,17 @@ function parseInput(input) {
 // required variable is refused. Decks without content variables are returned untouched. The package stores the resolved
 // deck, not the template form, so fromPptx returns the filled deck.
 function resolveTemplateInput(presentation, options) {
-  if (typeof opfCore.resolveVariables !== "function" || !isPlainObject(presentation)) return presentation;
+  if (!isPlainObject(presentation)) return presentation;
   const values = options.variables;
   if (values !== undefined && !isPlainObject(values)) {
     throw new OPFPptxError("invalid-variables", "The variables option must be an object keyed by variable id.", {path: "options.variables"});
   }
-  const template = opfCore.isTemplate(presentation);
-  if (!template && !opfCore.hasContentVariables(presentation) && !(values && Object.keys(values).length)) return presentation;
-  const result = opfCore.resolveVariables(presentation, values ?? {}, {examples: template});
+  const template = isTemplate(presentation);
+  if (!template && !hasContentVariables(presentation) && !(values && Object.keys(values).length)) return presentation;
+  const result = resolveVariables(presentation, values ?? {}, {examples: template});
   const errors = result.diagnostics.filter(entry => entry.severity === "error");
   if (errors.length) {
-    throw new OPFPptxError(errors.some(entry => entry.code === "variable-unfilled") ? "unfilled-variables" : "invalid-variables", errors[0].message, {issues: errors, path: errors[0].path});
+    throw new OPFPptxError(errors.some(entry => entry.code === "variable-unfilled") ? "unfilled-variables" : "invalid-variables", errors[0].message, {findings: errors, path: errors[0].path});
   }
   for (const entry of result.diagnostics) {
     if (entry.code === "variable-example-used" || entry.code === "variable-builtin-missing") options.onDiagnostic?.({code: entry.code, path: entry.path, message: entry.message, id: entry.id});
@@ -1618,41 +1616,43 @@ function resolveTemplateInput(presentation, options) {
 }
 
 function assertValidBoundary(presentation) {
-  const result = validatePresentation(presentation);
-  if (!result.valid) {
+  const report = checkFormat(presentation);
+  if (!report.valid) {
     throw new OPFPptxError("invalid-opf", "OPF validation failed.", {
-      issues: result.errors,
-      result
+      findings: report.findings.filter(finding => finding.severity === "error"),
+      report
     });
   }
 }
 
-function resolvePresentationContext(presentation, options) {
+// RR-55: what a slide (or, for the deck level, an empty slide) resolves to in core, the one chain every engine shares: canvas,
+// layout, font families, alignment and content box as composeSlide's options, plus the theme, colour scheme and font scheme
+// records they came from. `diagnostics` names references that matched no record.
+function coreContext(presentation, index, options) {
+  return resolveCoreSlideContext(presentation, index, {fonts: options.textMeasurement ? {textMeasurement: options.textMeasurement} : undefined, date: options.date});
+}
+
+// The families composition and the package use: core's, with the measurement provider's own resolution of the chosen family
+// (FF-31) applied to the three roles the exporter writes.
+function exportFonts(core, textMeasurement) {
+  const {fontFamilies} = core.options, scheme = core.resolved.fontScheme;
+  const fonts = {id: scheme.id, ...fontFamilies, scheme: {type: scheme.type, major: scheme.major, minor: scheme.minor}};
+  for (const role of ["heading", "body", "code"]) fonts[role] = resolveTextStyle({fontFamily: fonts[role], fontWeight: role === "heading" ? 700 : 400}, textMeasurement).fontFamily;
+  return fonts;
+}
+
+function resolvePresentationContext(presentation, options, core = coreContext({...presentation, slides: [{}]}, 0, {...options, textMeasurement: undefined})) {
   const design = presentation.design ?? {};
-  const theme = resolveDesignRecord(presentation, "themes", design.theme, DEFAULTS.theme);
-  const colorScheme = resolveDesignRecord(
-    presentation,
-    "colorSchemes",
-    design.colorScheme ?? theme?.colorScheme,
-    DEFAULTS.colorScheme
-  );
-  const fontScheme = resolveDesignRecord(
-    presentation,
-    "fontSchemes",
-    design.fontScheme ?? theme?.fontScheme,
-    DEFAULTS.fontScheme
-  );
-  // Shared rule (core resolveFontSchemeReference): an unresolved id falls back to the
-  // DEFAULTS.fontScheme record as the base; resolveSlideContext reports it once per path.
-  const fontSchemeId = referenceId(design.fontScheme ?? theme?.fontScheme);
-  const unresolvedFontScheme = fontSchemeId && !findById(normalizeRecords(presentation.catalogs?.fontSchemes), fontSchemeId) && !findById(defaultCatalog("fontSchemes"), fontSchemeId) ? fontSchemeId : null;
-  const dimensions = resolveDimensions(design.dimensions ?? theme?.dimensions);
+  // `core` defaults to the deck level: the resolution of a slide that sets nothing of its own.
+  // The theme and colour scheme records come from core, which falls back to the default records (reporting unresolved-theme and
+  // unresolved-color-scheme) for a reference that matches no record.
+  const {theme, colorScheme} = core.resolved;
+  const dimensions = {widthInches: core.options.width / 96, heightInches: core.options.height / 96};
   const variables = resolveVariableColors(presentation.variables);
   const background = resolveBackground(design.background ?? theme?.background, colorScheme, variables);
+  const fonts = exportFonts(core, options.textMeasurement);
   // One resolution for every color role (core resolveColorRoles), shared with the SVG preview and the audit.
-  const roles = opfCore.resolveColorRoles(colorScheme, {background: `#${background}`});
-  const fonts = resolveFonts(fontScheme);
-  for (const role of ["heading","body","code"]) fonts[role] = resolveTextStyle({fontFamily:fonts[role],fontWeight:role === "heading" ? 700 : 400},options.textMeasurement).fontFamily;
+  const roles = resolveColorRoles(colorScheme, {background: `#${background}`});
   const textColor = normalizeHex(roles.text);
 
   return {
@@ -1663,10 +1663,10 @@ function resolvePresentationContext(presentation, options) {
     compressionLevel: Number.isInteger(options.compressionLevel) ? options.compressionLevel : 6,
     layoutName: "OPF_CANVAS",
     dimensions,
+    theme,
     colorScheme,
     backgroundDefinition: design.background ?? theme?.background,
     fonts,
-    unresolvedFontScheme,
     // The color roles a ColorRef names (primary, secondary, accent, background, surface, text, textSecondary, hyperlink).
     roles,
     colors: {
@@ -1780,7 +1780,7 @@ function masterBackground(context) {
 function exportTheme(presentation, context) {
   const reference = presentation.design?.theme;
   const id = referenceId(reference);
-  const theme = id ? resolveDesignRecord(presentation, "themes", reference, DEFAULTS.theme) : null;
+  const theme = id ? context.theme : null;
   const scheme = context.colorScheme;
   return {
     themeColors: themeSlotColors(scheme),
@@ -1837,11 +1837,13 @@ function configurePresentation(pptx, presentation, context) {
 
 async function addSlide(pptx, presentation, opfSlide, slideIndex, context, options) {
   const slide = pptx.addSlide();
-  const slideContext = resolveSlideContext(presentation, opfSlide, context, options, slideIndex);
+  const slideContext = exportSlideContext(presentation, slideIndex, context, options);
   const { widthInches, heightInches } = slideContext.dimensions;
-  const layout = resolveCatalogRecord(presentation, "layouts", opfSlide.layout, "blank") ?? {};
-  if (opfSlide.layout && layout.id !== opfSlide.layout) throw new OPFPptxError("catalog-resolution-failed", `Layout '${opfSlide.layout}' needs an inline or bundled catalog record.`, { path: `slides.${slideIndex}.layout` });
-  const composeOptions = { width: widthInches * 96, height: heightInches * 96, layout, presentation, slideIndex, fonts: slideContext.fonts, textRasterPadding:options.textRasterPadding, darkBackground: slideContext.roles.dark, textMeasurement: options.textMeasurement, date: options.date, socialPlatforms: socialPlatformRecords(presentation, options) };
+  // A slide with no layout, or one that names a layout no catalog defines, is composed with no layout record (automatic composition),
+  // as in the preview; core reports the unknown id as unresolved-layout.
+  // Core's resolved options (canvas, layout, families, alignment, content box, darkBackground), with the exporter's own additions:
+  // the families after the measurement provider's resolution of the chosen family, the raster padding and the host's social platform records.
+  const composeOptions = { ...slideContext.core.options, fontFamilies: slideContext.composeFonts, textRasterPadding:options.textRasterPadding, socialPlatforms: socialPlatformRecords(presentation, options) };
   // Core resolves every shared design key once (slide design, deck design, then the layout record's design): the text alignment of
   // each item (item.alignment), and the imageFill that backgrounds and picture placements use (SlideComposition.design).
   const geometry = composeSlide(opfSlide, composeOptions);
@@ -1954,24 +1956,24 @@ async function addSlide(pptx, presentation, opfSlide, slideIndex, context, optio
   }
 }
 
-function resolveSlideContext(presentation, slide, baseContext, options, slideIndex = 0) {
+// One slide's export context: core's resolveSlideContext (`core`: composeSlide's options, the records and the diagnostics) and
+// the exporter's colours and measurement-resolved families derived from it.
+function exportSlideContext(presentation, slideIndex, baseContext, options) {
+  const slide = presentation.slides[slideIndex];
   const effective = { ...presentation, design: { ...presentation.design, ...slide.design } };
-  const resolved = resolvePresentationContext(effective, options);
-  if (resolved.unresolvedFontScheme) {
-    const path = slide.design?.fontScheme !== undefined ? `slides.${slideIndex}.design.fontScheme`
-      : presentation.design?.fontScheme !== undefined ? "design.fontScheme"
-      : slide.design?.theme !== undefined ? `slides.${slideIndex}.design.theme` : "design.theme";
-    if (!baseContext.reportedFontSchemes?.has(path)) {
-      baseContext.reportedFontSchemes?.add(path);
-      const id = resolved.unresolvedFontScheme;
-      options.onDiagnostic?.({ code: "unresolved-font-scheme", path, id, fallback: DEFAULTS.fontScheme, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULTS.fontScheme}'.` });
-    }
+  const core = coreContext(presentation, slideIndex, options);
+  const resolved = resolvePresentationContext(effective, options, core);
+  // A reference that matched no record is reported once per place it is written.
+  for (const diagnostic of core.diagnostics) {
+    if (baseContext.reportedReferences?.has(diagnostic.path)) continue;
+    baseContext.reportedReferences?.add(diagnostic.path);
+    options.onDiagnostic?.(diagnostic);
   }
   if (Math.abs(resolved.dimensions.widthInches - baseContext.dimensions.widthInches) > 1e-6
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  const slideContext = { ...baseContext, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
+  const slideContext = { ...baseContext, core, composeFonts: {...core.options.fontFamilies, heading: resolved.fonts.heading, body: resolved.fonts.body, code: resolved.fonts.code}, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
   // A slide-level color scheme (directly or through a slide theme) pins every
   // named color on that slide to literal sRGB; see schemeColorValue().
   const slideScheme = themeSlotColors(resolved.colorScheme), deckScheme = baseContext.themeColors ?? {};
@@ -2207,15 +2209,9 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
 
 // The stamp takes the slide's own resolved fonts and default text color (readable on that slide's background), as the preview does.
 function addTextWatermark(slide, watermark, slideIndex, size, slideContext, context, options, path) {
-  if (typeof opfCore.layoutWatermark !== 'function') {
-    options.onDiagnostic?.({code: 'watermark-not-exported', path, message: 'The installed @openpresentation/opf has no layoutWatermark, so the text watermark was not exported. Use a core release that exports it.'});
-    return;
-  }
-  const layout = opfCore.layoutWatermark(watermark.text, size, {fontFamily: slideContext.fonts.heading, fontWeight: 700, textMeasurement: options.textMeasurement});
-  if (!layout) {
-    options.onDiagnostic?.({code: 'watermark-not-exported', path, message: 'The text watermark has no text; no watermark was exported for this slide.'});
-    return;
-  }
+  const layout = layoutWatermark(watermark.text, size, {fontFamily: slideContext.fonts.heading, fontWeight: 700, textMeasurement: options.textMeasurement});
+  // The schema requires text, so this is null only for text that draws nothing (the preview draws nothing either).
+  if (!layout) return;
   const opacity = watermarkOpacity(watermark);
   const {box} = layout;
   slide.addText(layout.text, {
@@ -2354,7 +2350,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
   if (typeof chart.alt === 'string') context.chartAlts.set(objectName, chart.alt);
   const preferredPalette = CHART_COLORS.map(color=>`#${color}`);
-  const palette = (typeof opfComposition.chartPaletteForFill === "function" ? opfComposition.chartPaletteForFill(panelFill, preferredPalette) : preferredPalette.map(color=>chartColorForFill(panelFill,color))).map(color=>normalizeHex(color));
+  const palette = chartPaletteForFill(panelFill, preferredPalette).map(color=>normalizeHex(color));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
   // contrast with those colours (src/chart-highlight.js).
   const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor, primary: `#${context.colors.accent}`,
@@ -2609,7 +2605,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
   if (fit.overflow && !config.diagnosticsHandled) {
     const diagnostic = {code: 'text-overflow', path: config.path, message: 'Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide.'};
     options.onDiagnostic?.(diagnostic);
-    if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, issues: [diagnostic]});
+    if (context.composition?.overflow === 'error') throw new OPFPptxError('layout-overflow', diagnostic.message, {path: config.path, diagnostics: [diagnostic]});
   }
   // Generated socials carry one link per explicit source line; wrapped lines share it.
   let sourceLineIndex = 0;
@@ -2715,7 +2711,7 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
     if (invalid) throw new OPFPptxError('invalid-code-text', `Code text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`, {path:part.path});
   }
   const group = String(context.codeTags.size + 1), panelName = `OPF code ${group} panel`;
-  for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+  for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,diagnostics:layout.diagnostics});
   // FA-13: code.highlight is one native rectangle per run of marked lines, between the panel and the line text boxes; marked
   // lines keep the syntax colours, the others are dimmed, from the same core helpers the preview calls.
   const highlight = codeHighlight(value, layout, context);
@@ -2733,13 +2729,13 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
     });
   }
   for (const [partIndex,part] of layout.parts.entries()) {
-    if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+    if (!part.fit) throw new OPFPptxError('layout-overflow', 'Code content has no usable internal space; increase its cell size before exporting.', {path:part.path,diagnostics:layout.diagnostics});
     for (const [index,line] of part.fit.sourceLines.entries()) {
       const tabStops=line.segments.filter(segment=>segment.kind==='tab').map(segment=>({position:(segment.x+segment.width)/96,alignment:'l'}));
       const objectName = `OPF code ${group} ${part.role} line ${index+1}`;
       context.codeTags.set(objectName,{v:1,group,role:'line',part:partIndex,line:index});
       // RR-07: the same token ranges and palette the preview paints; the text of the runs is the line text, unchanged.
-      const runs = syntax && part.role==='body' ? opfCore.codeLineRuns(syntax.tokens,line.start,line.end,part.text) : undefined;
+      const runs = syntax && part.role==='body' ? codeLineRuns(syntax.tokens,line.start,line.end,part.text) : undefined;
       const lineColors = highlight && part.role==='body' ? (highlight.marked.has(highlight.numbers[index]) ? highlight.colors.lit : highlight.colors.dim) : undefined;
       const lineText = part.text.slice(line.start,line.end);
       const lineOptions = {
@@ -2760,9 +2756,9 @@ function codeHighlight(value, layout, context) {
   if (!value || typeof value !== 'object' || !Array.isArray(value.highlight)) return undefined;
   const body = layout.parts.find(part => part.role === 'body');
   if (!body?.fit) return undefined;
-  const lines = opfCore.codeHighlightLines(value.highlight, body.text).lines;
+  const lines = codeHighlightLines(value.highlight, body.text).lines;
   if (!lines.length) return undefined;
-  return {marked: new Set(lines), numbers: opfCore.codeLineNumbers(body.fit.sourceLines), bands: opfCore.codeHighlightBands(body.fit.sourceLines, lines), colors: opfCore.codeHighlightColors(context.colorScheme)};
+  return {marked: new Set(lines), numbers: codeLineNumbers(body.fit.sourceLines), bands: codeHighlightBands(body.fit.sourceLines, lines), colors: codeHighlightColors(context.colorScheme)};
 }
 
 // Token ranges and palette for the code body, from core (the preview calls the same functions); undefined for plain code.
@@ -2770,22 +2766,21 @@ function codeSyntax(value, layout, context, path, options) {
   const body = layout.parts.find(part => part.role === 'body');
   const language = typeof value?.language === 'string' ? value.language : layout.parts.find(part => part.role === 'language')?.text;
   if (!body || !language) return undefined;
-  if (typeof opfCore.tokenizeCode !== 'function') return undefined;
-  const tokens = opfCore.tokenizeCode(body.text, language);
-  return tokens.length ? {tokens, palette: opfCore.codeSyntaxPaletteForScheme(context.colorScheme)} : undefined;
+  const tokens = tokenizeCode(body.text, language);
+  return tokens.length ? {tokens, palette: codeSyntaxPaletteForScheme(context.colorScheme)} : undefined;
 }
 
 function addMetricPayload(slide,value,layout,context,path,options) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
   // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  const trendMark=typeof opfCore.metricTrendMark==='function'?opfCore.metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`}):undefined;
+  const trendMark=metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`});
   const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?context.colors.accent:context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
     if (!part.visible) continue;
-    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFPptxError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,issues:layout.diagnostics});
+    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFPptxError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,diagnostics:layout.diagnostics});
     for (const [index,line] of part.fit.sourceLines.entries()) {
       const origin=part.linePositions[index],objectName=`OPF metric ${group} ${part.role} line ${index+1}`;
       context.metricTags.set(objectName,partIndex===0&&index===0?manifest:{v:1,group,role:'line',part:partIndex,line:index});
@@ -2813,7 +2808,7 @@ function addMetricPayload(slide,value,layout,context,path,options) {
 
 async function addQuotePayload(slide, presentation, value, layout, context, options, path) {
   if (!layout) throw new OPFPptxError('missing-quote-layout', 'Quote export requires a coordinated core build with shared quote geometry.', {path});
-  for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before exporting.', {path:part.path,issues:layout.diagnostics});
+  for (const part of layout.parts) if (!part.fit) throw new OPFPptxError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before exporting.', {path:part.path,diagnostics:layout.diagnostics});
   // Every line shape is tagged (OPF_QUOTE_V1) so an unchanged export re-imports as a quote payload (FF-57).
   const group=String(context.quoteTags.size),anchor=quoteManifest(value,layout);
   for (const [index,part] of layout.parts.entries()) {
@@ -2859,24 +2854,23 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   if(!layout)throw new OPFPptxError('missing-timeline-layout','Timeline export requires a coordinated core build with shared timeline geometry.',{path});
   // Validate optional field fits before the provenance manifest dereferences
   // source lines or any drawing/tag mutation is performed.
-  for(const part of layout.parts)if(!part.fit)throw new OPFPptxError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
+  for(const part of layout.parts)if(!part.fit)throw new OPFPptxError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,diagnostics:layout.diagnostics});
   const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720;
   const group=String(context.timelineTags.size),anchor=timelineManifest(value,layout),connectorName=`OPF timeline ${group} connector`;
   const {x1,y1,x2,y2}=layout.connector;
   slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
   // FA-11: a status draws from the deck's colors through core's shared shapes: native ellipses (solid fill, or the
-  // background fill plus a line for a hollow marker or a ring) and a muted text color for a planned event. An older core draws plain markers.
+  // background fill plus a line for a hollow marker or a ring) and a muted text color for a planned event.
   const statusColors={background:`#${normalizeHex(context.colors.background)}`,primary:`#${context.colors.accent}`,text:`#${normalizeHex(context.colors.text)}`,mutedText:`#${context.colors.mutedText}`};
-  const statusShapes=typeof opfCore.timelineMarkerShapes==='function';
   for(const marker of layout.markers){
-    if(!statusShapes||!marker.status){
+    if(!marker.status){
       const objectName=`OPF timeline ${group} marker ${marker.eventIndex}`;
       slide.addShape('ellipse',{objectName,x:(marker.x-marker.radius)/96,y:(marker.y-marker.radius)/96,w:marker.radius*2/96,h:marker.radius*2/96,fill:{color:context.colors.accent},line:{transparency:100}});
       context.timelineTags.set(objectName,{v:1,group,role:'marker',eventIndex:marker.eventIndex});
       continue;
     }
-    for(const shape of opfCore.timelineMarkerShapes(marker,statusColors)){
+    for(const shape of timelineMarkerShapes(marker,statusColors)){
       const objectName=`OPF timeline ${group} ${shape.role} ${marker.eventIndex}`;
       slide.addShape(shape.shape,{objectName,x:(shape.cx-shape.radius)/96,y:(shape.cy-shape.radius)/96,w:shape.radius*2/96,h:shape.radius*2/96,
         fill:{color:normalizeHex(shape.fill)},line:shape.stroke?{color:normalizeHex(shape.stroke.color),width:shape.stroke.width*.75}:{transparency:100}});
@@ -2884,7 +2878,7 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
     }
   }
   for(const [index,part]of layout.parts.entries()){
-    const statusColor=part.status==='planned'&&typeof opfCore.timelineTextColor==='function'?normalizeHex(opfCore.timelineTextColor(part,statusColors)):undefined;
+    const statusColor=part.status==='planned'?normalizeHex(timelineTextColor(part,statusColors)):undefined;
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(statusColor?{color:statusColor}:{})});
   }
 }
@@ -3175,9 +3169,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation) {
   const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined ? {...result, formats} : result;
   if (data.columns.length === 1) {
     const heading = data.columns[0];
-    // The lone column holds the chart's values. Core (opf#376) already reads it with chartNumber and reports each
-    // non-numeric cell; a core without RR-54 hands it over as authored, so it is read (and its rejects counted) here. A
-    // cell that holds no number is skipped, never plotted as 0.
+    // The lone column holds the chart's values. Each cell is read with chartNumber and each non-numeric cell is counted
+    // as rejected. A cell that holds no number is skipped, never plotted as 0.
     const points = data.rows.map((row, index) => ({row: index + 1, value: chartNumber(row?.[0]), cell: row?.[0]}));
     for (const point of points) if (point.value === null && point.cell !== null && point.cell !== undefined && point.cell !== '') rejected.push({path: `/data/rows/${point.row - 1}/0`, cell: point.cell});
     const plottedPoints = points.filter((point) => point.value !== null);
@@ -3482,23 +3475,6 @@ function assetAlt(asset, presentation) {
   return undefined;
 }
 
-function resolveCatalogRecord(presentation, kind, reference, fallbackId) {
-  const id = referenceId(reference) ?? fallbackId;
-  const inlineRecords = normalizeRecords(presentation.catalogs?.[kind]);
-  return findById(inlineRecords, id)
-    ?? findById(defaultCatalog(kind), id)
-    ?? findById(defaultCatalog(kind), fallbackId)
-    ?? null;
-}
-
-function resolveDesignRecord(presentation, kind, reference, fallbackId) {
-  const base = resolveCatalogRecord(presentation, kind, reference, fallbackId) ?? {};
-  return {
-    ...base,
-    ...(isPlainObject(reference) ? withoutSchema(reference) : {})
-  };
-}
-
 function referenceId(reference) {
   if (typeof reference === "string") return reference;
   if (isPlainObject(reference) && typeof reference.id === "string") return reference.id;
@@ -3538,15 +3514,6 @@ function findById(records, id) {
   return records.find((record) => record?.id === id) ?? null;
 }
 
-function withoutSchema(value) {
-  return Object.fromEntries(Object.entries(value).filter(([key]) => key !== "$schema"));
-}
-
-function resolveDimensions(value) {
-  const { width, height } = resolveCanvasDimensions(value);
-  return { widthInches: width / 96, heightInches: height / 96 };
-}
-
 // A solid color or pattern background color is a ColorRef (hex, `var:` variable, colour-scheme slot or role), resolved
 // as for table fills and run colours. Roles resolve through the colour scheme alone: the background cannot depend on itself.
 function resolveBackgroundColorRef(entry, colorScheme, variables = {}) {
@@ -3558,24 +3525,19 @@ function resolveBackground(value, colorScheme, variables = {}) {
   const reference = entry => normalizeHex(resolveBackgroundColorRef(entry, colorScheme, variables) ?? entry, fallback);
   if (typeof value === "string") {
     if (value.startsWith("#")) return normalizeHex(value, fallback);
-    return normalizeHex(colorScheme[value] ?? opfCore.defaultSlideBackground(colorScheme), fallback);
+    return normalizeHex(colorScheme[value] ?? defaultSlideBackground(colorScheme), fallback);
   }
   if (isPlainObject(value)) {
     if (value.type === "solid" && value.color) return reference(value.color);
     if (value.type === "theme" && value.slot) {
-      return normalizeHex(colorScheme[value.slot] ?? opfCore.defaultSlideBackground(colorScheme), fallback);
+      return normalizeHex(colorScheme[value.slot] ?? defaultSlideBackground(colorScheme), fallback);
     }
     // Like the SVG preview, text contrast follows a pattern's background color.
     if (value.type === "pattern") return reference(value.pattern?.backgroundColor ?? "#FFFFFF");
     if (value.backgroundColor) return normalizeHex(value.backgroundColor, fallback);
   }
-  return normalizeHex(opfCore.defaultSlideBackground(colorScheme), fallback);
+  return normalizeHex(defaultSlideBackground(colorScheme), fallback);
 }
-
-function resolveFonts(fontScheme) {
-  return {id:fontScheme.id,...resolveFontFamilies(fontScheme),scheme:{type:fontScheme.type,major:fontScheme.major,minor:fontScheme.minor}};
-}
-
 
 function normalizeHex(value, fallback = "000000") {
   if (typeof value !== "string") return fallback.replace(/^#/, "").toUpperCase().slice(0, 6);

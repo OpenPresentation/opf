@@ -5,7 +5,7 @@ import {deflateSync, crc32} from 'node:zlib';
 import {readFile} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 const {toPptx, fromPptx} = await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const utf8 = new TextDecoder(), encode = new TextEncoder();
 const slideXml = bytes => utf8.decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
@@ -26,7 +26,7 @@ async function roundTrip(document) {
   for (const [path, part] of Object.entries(unzipSync(bytes))) if (path.endsWith('.xml') || path.endsWith('.rels')) assert.equal(XMLValidator.validate(utf8.decode(part)), true, path);
   assert.deepEqual(bytes, await toPptx(document, {provenance: false}), 'Deterministic native background');
   const back = await fromPptx(bytes, {onDiagnostic: d => imported.push(d)});
-  assert.equal(validatePresentation(back).valid, true);
+  assert.equal(validate(back, {only: ['format']}).valid, true);
   const taggedExport = [], taggedReports = [];
   const tagged = await fromPptx(await toPptx(document, {onDiagnostic: d => taggedExport.push(d)}), {onDiagnostic: d => taggedReports.push(d)});
   const authored = document.slides[0].design?.background ?? document.design?.background;

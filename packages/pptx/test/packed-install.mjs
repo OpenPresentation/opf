@@ -40,7 +40,7 @@ import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 const require = createRequire(import.meta.url);
 for(const name of ['image-size','pptxgenjs','@openpresentation/opf-render']) assert.throws(()=>require.resolve(name),{code:'MODULE_NOT_FOUND'});
 const pkg = new URL('./', import.meta.resolve('@openpresentation/opf-pptx/package.json'));
@@ -60,7 +60,7 @@ const bytes = await toPptx(input);
 assert.ok(bytes.byteLength>1000);
 const restored = await fromPptx(bytes);
 assert.equal(restored.slides.length,input.slides.length);
-assert.equal(validatePresentation(restored).valid,true);
+assert.equal(validate(restored, {only: ['format']}).valid,true);
 assert.ok(JSON.stringify(restored).includes('Quality'));
 // FF-57: the quote re-imports as a quote payload, so its attribution and source are separate fields.
 assert.ok(JSON.stringify(restored.slides[2].quote ?? restored.slides[2].blocks).includes(JSON.stringify(input.slides[2].quote)),'Installed quote payload');

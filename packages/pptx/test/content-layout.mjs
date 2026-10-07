@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {renderSvgDeck} from '@openpresentation/opf-render';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {renderSvg} from '@openpresentation/opf-render';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -11,7 +11,7 @@ const all = (node, name) => {
   return Object.entries(node).flatMap(([key, value]) => [...(key === name ? [value].flat() : []), ...all(value, name)]);
 };
 const content = value => typeof value === 'string' ? value : value?.['#text'] ?? '';
-const fonts = await loadOfficeFontRegistry({fallbackFamily: 'Roboto', strictGlyphs: false});
+const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
 let checkedText = 0;
 for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {widthInches: 1920 / 96, heightInches: 1080 / 96}]) {
   const deck = {design: {fontScheme: 'roboto', dimensions}, slides: [
@@ -21,8 +21,8 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
     {title: 'Timeline', timeline: {events: [{when: 'Q1', what: 'Pilot', description: 'Start small.'}, {when: 'Q2', what: 'Expand'}, {when: 'Q3', what: 'Measure'}]}},
     {title: 'Single event', timeline: {events: [{when: 'Now', what: 'One event'}]}},
   ]};
-  const options = {textMeasurement: fonts.textMeasurement};
-  const svgSlides = renderSvgDeck(deck, options);
+  const options = {fonts};
+  const svgSlides = renderSvg(deck, options);
   const pptx = await toPptx(deck, options), entries = unzipSync(pptx);
   const imported = await fromPptx(pptx);
   // FF-24b: default text on a theme background is a scheme reference. Resolve it
@@ -47,7 +47,7 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       assert.ok(properties, 'Native run formatting required');
       assert.ok(Math.abs(Number(properties.sz) / 100 - Number(text['font-size']) * .75) < .02, `Font size follows fitted SVG text: ${value}`);
       const family=text['font-family'].split(',')[0].trim().replace(/^['"]|['"]$/g,'');
-      const face=fonts.resolveFont({fontFamily:family,fontWeight:Number(text['font-weight']),italic:text['font-style']==='italic'}).fontFace;
+      const face=fonts.registry.resolveFont({fontFamily:family,fontWeight:Number(text['font-weight']),italic:text['font-style']==='italic'}).fontFace;
       assert.equal(properties.b === '1', face.bold, `Physical bold style: ${value}`);
       assert.equal(properties.i === '1', face.italic, `Physical italic style: ${value}`);
       assert.equal(properties['a:latin'].typeface,face.family,`Physical family: ${value}`);
@@ -77,13 +77,13 @@ let separatedQuotes = 0, overflowQuotes = 0;
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (const repeats of [12,16,20,24,80]) {
   const deck = {design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}]};
   const diagnostics = [];
-  const bytes = await toPptx(deck,{textMeasurement:fonts.textMeasurement,onDiagnostic:value=>diagnostics.push(value)});
+  const bytes = await toPptx(deck,{fonts,onDiagnostic:value=>diagnostics.push(value)});
   const size = all(parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/presentation.xml'])),'p:sldSz')[0];
   assert.equal(Number(size.cx),dimensions.width*9525);
   assert.equal(Number(size.cy),dimensions.height*9525);
   if (diagnostics.some(value=>value.code==='text-overflow')) {
     deck.slides[0].composition = {overflow:'error'};
-    await assert.rejects(()=>toPptx(deck,{textMeasurement:fonts.textMeasurement}),{code:'layout-overflow'});
+    await assert.rejects(()=>toPptx(deck,{fonts}),{code:'layout-overflow'});
     overflowQuotes++;
     continue;
   }
@@ -103,8 +103,8 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (
 }
 assert.ok(separatedQuotes>=4&&overflowQuotes>=1,'Native long quotes cover fitting and explicit overflow');
 const chartDeck = {slides: [{title: 'Readable native axes', chart: {type: 'line', data: {columns: ['Quarter', 'Value'], rows: [['Q1', 10], ['Q2', 20]]}}}]};
-const chartOptions = {textMeasurement: fonts.textMeasurement};
-const chartSvg = parser.parse(renderSvgDeck(chartDeck, chartOptions)[0]);
+const chartOptions = {fonts};
+const chartSvg = parser.parse(renderSvg(chartDeck, chartOptions)[0]);
 const axisLabel = all(chartSvg, 'text').find(value => content(value) === 'Q1');
 assert.ok(axisLabel, 'Published renderer axis label required');
 const chartEntries = unzipSync(await toPptx(chartDeck, chartOptions));

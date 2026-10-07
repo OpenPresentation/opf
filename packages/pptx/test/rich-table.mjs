@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser,XMLValidator} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
-import {renderSvg} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {toPptx} from '../dist/index.js';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const all=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -17,14 +17,14 @@ const table={columns:[[{text:'Normal ',bold:false},{text:'bold',bold:true}],'Sca
 ]};
 const deck={design:{theme:'classic',fontScheme:'roboto'},slides:[{table}]},before=structuredClone(deck);
 const measurement={measure:(text,size,style)=>[...text].length*size*(style.fontWeight>=600?.6:.5),resolveStyle:style=>style.fontFamily==='Alias'?{...style,fontFamily:'Resolved'}:style};
-assert.equal(validatePresentation(deck).valid,true);
-const svg=renderSvg(deck,{trace:true,textMeasurement:measurement});
+assert.equal(validate(deck, {only: ['format']}).valid,true);
+const svg=renderSlideSvg(deck, 0,{trace:true,fonts:{textMeasurement:measurement}});
 assert.match(svg,/data-opf-rich-text="true"/);
 assert.match(svg,/data-opf-path="slides\.0\.table\.rows\.0\.0"/);
 assert.ok(/<text(?=[^>]*font-weight="700")(?=[^>]*fill="#A00000")[^>]*>Bold<\/text>/.test(svg));
 assert.match(svg,/href="https:\/\/example.com"/);
 assert.match(svg,/font-family="Resolved,/);
-const entries=unzipSync(await toPptx(deck,{textMeasurement:measurement}));
+const entries=unzipSync(await toPptx(deck,{fonts:{textMeasurement:measurement}}));
 const xml=new TextDecoder().decode(entries['ppt/slides/slide1.xml']);assert.equal(XMLValidator.validate(xml),true);
 const frame=parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:graphicFrame'];
 const native=frame['a:graphic']['a:graphicData']['a:tbl'];

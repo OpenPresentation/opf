@@ -6,11 +6,11 @@ import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {decodeTextTag} from '../dist/code-provenance.js';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-const {options:fontOptions}=await prepareNodeFonts();
+const fontOptions = {fonts: await loadFonts()};
 const OPTIONS={seed:1,timestamp:'2026-01-01T00:00:00Z',zipDate:'2026-01-01T00:00:00Z'};
 const reflow=new Set(['quote-import-reflow','heading-import-reflow']);
 

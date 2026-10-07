@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync} from 'fflate';
-import {renderSvg} from '@openpresentation/opf-render';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 import {toPptx, fromPptx} from '../dist/index.js';
 
@@ -26,7 +26,7 @@ let compared = 0;
 for (const [name, deck, expected] of cases) {
   const bound = resolvePresentation(deck, {}).slides[0];
   for (const item of bound.geometry.items) assert.equal(item.alignment, expected[item.field], `${name}: core ${item.field}`);
-  const svg = renderSvg(deck, {slideIndex: 0, trace: true}), xml = await slideXml(deck);
+  const svg = renderSlideSvg(deck, 0, {trace: true}), xml = await slideXml(deck);
   const shapes = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match => match[0]);
   for (const field of ['title', 'subtitle', 'text']) {
     const path = `slides.0.${field}`;
@@ -46,7 +46,7 @@ const plain = deckOf({}, {});
 assert.ok((await slideXml(plain)).match(/<a:pPr\b[^>]*\salgn="/g) === null || [...(await slideXml(plain)).matchAll(/\balgn="(\w+)"/g)].every(match => match[1] === 'l'));
 
 // contentBox: the layout asks for cards; both engines draw one card per body item, the deck's false removes them.
-const cards = async deck => ({svg: [...renderSvg(deck, {trace: true}).matchAll(/<rect\b[^>]*data-opf-path="slides\.0\.text"/g)].length, native: (await slideXml(deck)).includes('name="OPF card slides.0.text"')});
+const cards = async deck => ({svg: [...renderSlideSvg(deck, 0, {trace: true}).matchAll(/<rect\b[^>]*data-opf-path="slides\.0\.text"/g)].length, native: (await slideXml(deck)).includes('name="OPF card slides.0.text"')});
 assert.deepEqual(await cards(deckOf({contentBox: true}, {})), {svg: 1, native: true}, 'layout contentBox draws a card in both engines');
 assert.deepEqual(await cards(deckOf({contentBox: true}, {}, {contentBox: false})), {svg: 0, native: false}, 'deck contentBox false removes it');
 assert.deepEqual(await cards(deckOf({contentBox: false}, {design: {contentBox: true}})), {svg: 1, native: true}, 'slide contentBox true adds it');
@@ -55,7 +55,7 @@ assert.deepEqual(await cards(deckOf({contentBox: false}, {design: {contentBox: t
 const wide = await readFile(new URL('fixtures/images/wide.png', import.meta.url));
 const image = {src: `data:image/png;base64,${wide.toString('base64')}`, alt: 'Wide image'};
 const fill = async deck => {
-  const svg = renderSvg(deck, {trace: true});
+  const svg = renderSlideSvg(deck, 0, {trace: true});
   const preview = [...svg.matchAll(/<image\b[^>]*>/g)].map(match => match[0]).find(tag => attr(tag, 'data-opf-path') === 'slides.0.image');
   const output = unzipSync(await toPptx(deck, {imageFormat: 'preserve', strictAssets: true}));
   return {preview: attr(preview, 'preserveAspectRatio'), cropped: /<a:srcRect\b/.test(decoder.decode(output['ppt/slides/slide1.xml']))};

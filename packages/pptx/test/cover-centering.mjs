@@ -3,13 +3,13 @@ import {XMLParser} from 'fast-xml-parser';
 import {unzipSync} from 'fflate';
 import {toPptx} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 // Core centers the heading group of cover slides (no body payload on a
 // heading-only layout). Native line shapes must sit where core accepted them:
 // every `a:off` y equals the composed line origin, so the recentered group is
 // what PowerPoint opens. Content slides keep their top-aligned headings.
-const fonts = await loadOfficeFontRegistry({substitutionPolicy: 'none'});
+const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'none'});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const nativeText = shape => array(shape['p:txBody']?.['a:p']).map(p => array(p['a:r']).map(r => r['a:t'] ?? '').join('')).join('\n');
@@ -20,7 +20,7 @@ const deck = {design: {fontScheme: {id: 'carlito', heading: 'Carlito', body: 'Ca
   {layout: 'text-1x', title: 'Content title', text: 'Body text stays below the title.'},
 ]};
 let cover = 0, lines = 0;
-for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
+for (const options of [{}, {fonts}]) {
   const resolved = resolvePresentation(deck, options).slides;
   const zip = unzipSync(await toPptx(deck, options));
   for (const [index, bound] of resolved.entries()) {

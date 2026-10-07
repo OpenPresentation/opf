@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSvg} from '@openpresentation/opf-render';
-import {colorContrast, metricTrendColor} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
+import {colorContrast, metricTrendColor} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 // FA-06: metric.sentiment says whether a change is good news. The export draws the native arrow in the trend's
@@ -37,7 +37,7 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
   // An explicit sentiment equal to the trend's default is the absent one: the same slide XML.
   assert.equal(await slideXml(deckOf({...base, sentiment: DEFAULT[trend]}, design, align)), absentXml, `${trend}/${align}: the default sentiment changes nothing`);
   for (const sentiment of ['positive', 'negative', 'neutral']) {
-    const deck = deckOf({...base, sentiment}, design, align), xml = await slideXml(deck), svg = renderSvg(deck, {trace: true});
+    const deck = deckOf({...base, sentiment}, design, align), xml = await slideXml(deck), svg = renderSlideSvg(deck, 0, {trace: true});
     const native = shapes(xml).filter(shape => / trend mark$/.test(shape.name)), preview = svgArrows(svg);
     assert.equal(native.length, 1, `${trend}/${sentiment}: native arrow`);
     assert.equal(preview.length, 1, `${trend}/${sentiment}: preview arrow`);

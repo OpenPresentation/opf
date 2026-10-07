@@ -74,9 +74,9 @@ for (const [relative, file, expected] of faces) {
   assert.equal(sha(bytes), expected, file); fonts.push({file, sha256: expected, bytes});
 }
 const {toPptx} = await import(pathToFileURL(bindings['@openpresentation/opf-pptx'].entry).href);
-const {validatePresentation} = await import(pathToFileURL(bindings['@openpresentation/opf'].entry).href);
+const {validate} = await import(pathToFileURL(bindings['@openpresentation/opf'].entry).href);
 const source = carlitoOnly ? carlitoOnlySource() : {slides: [{title: 'Plain control', text: 'Current content'}]};
-assert.equal(validatePresentation(source).valid, true);
+assert.equal(validate(source, {only: ['format']}).valid, true);
 const before = JSON.stringify(source), exported = await toPptx(source, {strictAssets: true});
 assert.equal(JSON.stringify(source), before);
 let presentation = exported, carlitoFixture = null;

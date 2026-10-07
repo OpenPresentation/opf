@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unzipSync} from 'fflate';
-import * as opf from '@openpresentation/opf';
+import {catalogs} from '@openpresentation/opf';
+import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import {examples} from '@openpresentation/opf/examples';
 import {resolvePresentation} from '@openpresentation/opf-render';
-import {fromPptx, toPptx, inventoryPptxTypefaces} from '../dist/index.js';
+import {fromPptx, toPptx, inventoryTypefaces} from '../dist/index.js';
 
 // FF-49 / FF-50 (font-fidelity-everywhere). The presentation theme's major and minor `a:ea` / `a:cs` typefaces follow
 // Office's convention and the owner font policy (the PPTX names what the author selected and nothing else):
@@ -17,14 +18,13 @@ import {fromPptx, toPptx, inventoryPptxTypefaces} from '../dist/index.js';
 // names a family, and the latin family where the theme is empty. Export is deterministic; re-import keeps the
 // scheme and language.
 
-const {catalogs, resolveScriptFonts} = opf;
 const slide = text => ({title: text, text});
 const deck = (fontScheme, language, extra = {}) => ({name: 'Theme slots', ...(language === undefined ? {} : {language}), ...(fontScheme === undefined ? {} : {design: {fontScheme}}), ...extra, slides: [slide('Heading'), {title: 'Second', items: ['One', 'Two']}]});
 
 const exported = async (presentation, options = {}) => {
   const diagnostics = [];
   const bytes = await toPptx(structuredClone(presentation), {...options, onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
-  return {bytes, diagnostics, inventory: inventoryPptxTypefaces(bytes)};
+  return {bytes, diagnostics, inventory: inventoryTypefaces(bytes)};
 };
 // The presentation package's own theme (prefix ''), slots as {latin, ea, cs}.
 const theme = inventory => ({major: inventory.themes[''].major, minor: inventory.themes[''].minor});

@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { unzipSync, zipSync } from 'fflate';
 import { XMLParser } from 'fast-xml-parser';
-import { renderSvgDeck } from '@openpresentation/opf-render';
+import { renderSvg } from '@openpresentation/opf-render';
 import { toPptx, fromPptx } from '../dist/index.js';
 
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false });
@@ -69,7 +69,7 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
     for (const opacity of [0.08, 0.15, 1, 0]) {
       const deck = { design: { dimensions: { widthInches: width / 96, heightInches: height / 96 }, watermark: { src: source, opacity } },
         slides: [{ title: 'Watermarked', text: 'Body copy over the watermark.' }] };
-      const svg = renderSvgDeck(deck, { trace: true })[0];
+      const svg = renderSvg(deck, { trace: true })[0];
       const { trees, xml, diagnostics } = await exported(deck);
       assert.equal(diagnostics.filter(d => /watermark/.test(d.path ?? '')).length, 0, 'No diagnostics for a supported watermark');
       assert.equal(watermarkOf(trees[0]).length, 1, `${label} ${imageLabel} ${opacity}: one watermark picture`);
@@ -89,7 +89,7 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
     design: { watermark: 'asset:mark' },
     slides: [{ title: 'Inherits', text: 'a' }, { title: 'Off', text: 'b', design: { watermark: false } },
       { title: 'Own', text: 'c', design: { watermark: { src: 'asset:plain', opacity: 0.3 } } }, { title: 'String', text: 'd', design: { watermark: wide } }] };
-  const svgs = renderSvgDeck(deck, { trace: true });
+  const svgs = renderSvg(deck, { trace: true });
   const { trees, xml } = await exported(deck);
   assert.equal(watermarkOf(trees[0]).length, 1);
   assert.equal(watermarkOf(trees[0])[0]['p:nvPicPr']['p:cNvPr'].descr, 'Acme confidential', 'Alt text comes from the asset');
@@ -111,7 +111,7 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
   for (const position of ['background', 'left', 'right', 'top', 'bottom']) for (const overlay of [false, true]) {
     const slideImage = { src: square, position, ...(overlay ? { overlay: { color: '#000000', opacity: 0.3 } } : {}) };
     const deck = { design: { watermark: { src: wide, opacity: 0.2 } }, slides: [{ title: 'Layered', text: 'Body', design: { slideImage } }] };
-    const svg = renderSvgDeck(deck, { trace: true })[0];
+    const svg = renderSvg(deck, { trace: true })[0];
     const at = path => svg.indexOf(`data-opf-path="${path}"`);
     const previewOrder = [['OPF slide image slides.0', 'slides.0.design.slideImage'], ['OPF watermark', 'design.watermark'], ['OPF heading slides.0.title line 0', 'slides.0.title']]
       .map(([name, path]) => ({ name, at: at(path) })).sort((x, y) => x.at - y.at).map(entry => entry.name);

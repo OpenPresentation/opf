@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx} from '../src/index.js';
 
 // FF-31: a preview font substitute (Carlito for Aptos, Gelasio for Georgia, ...) only
@@ -44,7 +44,7 @@ const cases = [
 // hard-coded name: font policy changes it between renderer releases (Tahoma: Arimo, then Red Hat Text;
 // Aptos: Carlito, then Intos). The known names below are an extra guard for leaks the record would miss.
 const known = ['Carlito', 'Caladea', 'Arimo', 'Tinos', 'Cousine', 'Gelasio', 'Red Hat Text', 'Red Hat Display', 'Intos', 'Intos Display', 'Intos Narrow', 'Intos Serif', 'PT Serif', 'Montserrat', 'Source Sans 3', 'Open Sans', 'Noto Sans'];
-const {options: visual, registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+const visualFonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual'}), {registry} = visualFonts, visual = {fonts: visualFonts};
 const reference = new Map();
 for (const {fontScheme, expected} of cases) {
   const presentation = {name: fontScheme, design: {fontScheme}, slides};
@@ -61,14 +61,14 @@ for (const {fontScheme, expected} of cases) {
 }
 
 // Exact faces keep their native four-style selector names (Roboto Medium is Roboto, not a substitute).
-const {options: base} = await prepareNodeFonts();
+const base = {fonts: await loadFonts()};
 const roboto = unzipSync(new Uint8Array(await toPptx({name: 'Roboto', design: {fontScheme: 'roboto'}, slides: [{id: 'm', title: 'T', text: [{text: 'Regular '}, {text: 'bold', bold: true}]}]}, {...base, strictAssets: true})));
 assert.deepEqual(themePair(roboto), {major: 'Roboto', minor: 'Roboto'});
 assert.ok(!allTypefaces(roboto).has('Carlito'));
 
 // A caller alias is a preview decision as well: the chosen name still reaches the PPTX.
-const aliased = await prepareNodeFonts({aliases: {'Brand Sans': 'Roboto'}});
-const brand = unzipSync(new Uint8Array(await toPptx({name: 'Brand', design: {fontScheme: {id: 'brand', major: 'Brand Sans', minor: 'Brand Sans'}}, slides}, {...aliased.options, strictAssets: true})));
+const aliased = {fonts: await loadFonts({aliases: {'Brand Sans': 'Roboto'}})};
+const brand = unzipSync(new Uint8Array(await toPptx({name: 'Brand', design: {fontScheme: {id: 'brand', major: 'Brand Sans', minor: 'Brand Sans'}}, slides}, {...aliased, strictAssets: true})));
 assert.deepEqual(themePair(brand), {major: 'Brand Sans', minor: 'Brand Sans'});
 assert.ok(allTypefaces(brand).has('Brand Sans') && ![...allTypefaces(brand)].some(face => /^Roboto(?! Mono)/.test(face)), `alias target leaked: ${[...allTypefaces(brand)]}`);
 

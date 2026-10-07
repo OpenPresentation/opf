@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {isValidFormat} from './format-check.js';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 
@@ -105,8 +105,8 @@ function readTags(shape, relationships, entries) {
   return {tags, unreadable};
 }
 
-const validAsset = (id, asset) => /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(id) && validatePresentation({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Media', assets: {[id]: asset}, slides: [{title: 'Media'}]}).valid;
-const validVideo = value => validatePresentation({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Media', slides: [{video: value}]}).valid;
+const validAsset = (id, asset) => /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(id) && isValidFormat({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Media', assets: {[id]: asset}, slides: [{title: 'Media'}]});
+const validVideo = value => isValidFormat({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Media', slides: [{video: value}]});
 
 /**
  * Returns {items, consumed, assets}. items are {shape, payload} for restored

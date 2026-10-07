@@ -4,13 +4,13 @@ import {readFile,mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx,fromPptx} from '../dist/index.js';
 
 const require=createRequire(import.meta.resolve('@openpresentation/opf-render/package.json')),{create}=require('fontkit');
-const {options}=await prepareNodeFonts(),allowed=new Map();
+const fonts = await loadFonts(),options = {fonts},allowed=new Map();
 const key=(family,bold,italic)=>JSON.stringify([family,!!bold,!!italic]);
-for(const file of options.fontFiles){
+for(const file of fonts.fontFiles){
   const font=create(await readFile(file)),style=font['OS/2'].fsSelection;
   allowed.set(key(font.getName('fontFamily','en'),style.bold,style.italic),{family:font.familyName,weight:font['OS/2'].usWeightClass});
 }
@@ -49,10 +49,10 @@ assert.equal(imported.slides[0].title,'Heading');
 assert.deepEqual(imported.slides[4].code,source.slides[4].code,'the root code payload returns as authored (content topology)');
 assert.ok(JSON.stringify(imported).includes('Weight 500 label'));
 // Providers without physical metadata keep the historical numeric-weight contract.
-const legacy={...options,textMeasurement:{...options.textMeasurement,resolveStyle(style){const resolved=options.textMeasurement.resolveStyle(style);delete resolved.fontFace;return resolved;}}};
+const legacy={fonts:{...fonts,textMeasurement:{...fonts.textMeasurement,resolveStyle(style){const resolved=fonts.textMeasurement.resolveStyle(style);delete resolved.fontFace;return resolved;}}}};
 const fallbackZip=unzipSync(await toPptx({design:{fontScheme:'roboto'},slides:[{title:'Legacy provider'}]},legacy));
 assert.match(new TextDecoder().decode(fallbackZip['ppt/slides/slide1.xml']),/b="1"/);
-const invalid={...options,textMeasurement:{...options.textMeasurement,resolveStyle(style){return {...options.textMeasurement.resolveStyle(style),fontFace:{family:'Roboto',bold:'invalid',italic:false}};}}};
+const invalid={fonts:{...fonts,textMeasurement:{...fonts.textMeasurement,resolveStyle(style){return {...fonts.textMeasurement.resolveStyle(style),fontFace:{family:'Roboto',bold:'invalid',italic:false}};}}}};
 await assert.rejects(()=>toPptx({design:{fontScheme:'roboto'},slides:[{text:'Invalid provider metadata'}]},invalid),{code:'invalid-font-selection'});
 const output=path.resolve(process.argv[2]??'artifacts/font-variants.json');
 await mkdir(path.dirname(output),{recursive:true});await writeFile(output,JSON.stringify({node:process.version,slides:source.slides.length,physicalFaces:seen.size,runs,scope:'Actual serialized native font selections, source and reimport. Office paint remains separate.'},null,2)+'\n');

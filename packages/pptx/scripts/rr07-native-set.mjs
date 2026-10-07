@@ -13,21 +13,21 @@
 // opf-render `scripts/derive-pattern-bitmaps.mjs` on the pattern exports) is a separate step.
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
-import {svgToPng, renderSvgDeck} from '@openpresentation/opf-render';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-import {PATTERN_PRESETS, PATTERN_TILE_SIZE, patternBitmap, tokenizeCode, codeSyntaxPaletteForScheme} from '@openpresentation/opf';
+import {svgToPng, renderSvg} from '@openpresentation/opf-render';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {PATTERN_PRESETS, PATTERN_TILE_SIZE, patternBitmap, tokenizeCode, codeSyntaxPaletteForScheme} from '@openpresentation/opf/composition';
 import {toPptx} from '../dist/index.js';
 
 const outDir = path.resolve(process.argv[2] ?? 'rr07-native');
 mkdirSync(path.join(outDir, 'preview'), {recursive: true});
-const fonts = await loadOfficeFontRegistry({fallbackFamily: 'Roboto', strictGlyphs: false});
+const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
 const pad = number => String(number).padStart(2, '0');
 const tile = preset => [...patternBitmap(preset)].map(row => [...Array(8)].map((_, x) => row & (0x80 >> x) ? '#' : '.').join(''));
 const version = name => JSON.parse(readFileSync(new URL(`../node_modules/${name}/package.json`, import.meta.url), 'utf8')).version;
 
 async function build(name, deck, describe) {
-  const svgs = renderSvgDeck(deck, {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts});
-  writeFileSync(path.join(outDir, `${name}.pptx`), await toPptx(deck, {seed: 1, textMeasurement: fonts.textMeasurement}));
+  const svgs = renderSvg(deck, {fonts});
+  writeFileSync(path.join(outDir, `${name}.pptx`), await toPptx(deck, {seed: 1, fonts}));
   const slides = [];
   for (const [index, svg] of svgs.entries()) {
     const info = describe(index);

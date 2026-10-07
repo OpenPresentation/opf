@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {validate} from '@openpresentation/opf';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {FONT_WEIGHT_WORDS, isFaceStyleSuffix, splitWeightFace} from '../src/font-weights.js';
@@ -18,13 +18,13 @@ async function nativeRuns(faces, theme) {
   faces.forEach((face, index) => slide.addText(`Sample ${index}`, {x: 1, y: 0.5 + index * 0.6, w: 6, h: 0.5, fontSize: 18, fontFace: face}));
   const diagnostics = [];
   const deck = await fromPptx(await pptx.write({outputType: 'uint8array'}), {onDiagnostic: item => diagnostics.push(item)});
-  assert.equal(validatePresentation(deck).valid, true);
+  assert.equal(validate(deck, {only: ['format']}).valid, true);
   return {runs: runs(deck), diagnostics};
 }
 const family = run => run.fontFamily;
 
 // 1. Exporter round trip through the real weight faces: heading-weight quote body is Roboto SemiBold, attribution Roboto Medium.
-const {options} = await prepareNodeFonts();
+const options = {fonts: await loadFonts()};
 const source = {design: {fontScheme: 'roboto'}, slides: [{title: 'Weights', quote: {text: 'Retain the selected source.', attribution: 'Reviewer', source: 'Recorded interview'}}]};
 const exported = await toPptx(structuredClone(source), {...options, strictAssets: true});
 const diagnostics = [];
@@ -33,7 +33,7 @@ const diagnostics = [];
 const untagged = unzipSync(exported);
 untagged['ppt/slides/slide1.xml'] = new TextEncoder().encode(new TextDecoder().decode(untagged['ppt/slides/slide1.xml']).replace(/<p:custDataLst>[^]*?<\/p:custDataLst>/g, ''));
 const round = await fromPptx(zipSync(untagged), {onDiagnostic: item => diagnostics.push(item)});
-assert.equal(validatePresentation(round).valid, true);
+assert.equal(validate(round, {only: ['format']}).valid, true);
 assert.ok(!JSON.stringify(round).includes('Roboto SemiBold') && !JSON.stringify(round).includes('Roboto Medium'), 'native weight-face names must not reach OPF');
 const [body, footer] = runs(round);
 assert.deepEqual([family(body), body.bold], ['Roboto', true], 'SemiBold maps to Roboto + bold');

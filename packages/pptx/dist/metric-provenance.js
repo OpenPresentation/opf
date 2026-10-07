@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {isValidFormat} from './format-check.js';
 import {attachTextTags,decodeTextTag} from './code-provenance.js';
 
 const TAG='OPF_METRIC_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
@@ -17,7 +17,7 @@ export function metricManifest(value,layout,group) {
 export function attachMetricTags(entries,records,descriptions) {return attachTextTags(entries,records,TAG,'opfMetric','metric',{descriptions});}
 
 function validateManifest(manifest) {
-  if (!validatePresentation({slides:[{metric:manifest.value}]}).valid) throw new Error('Invalid metric source.');
+  if (!isValidFormat({slides:[{metric:manifest.value}]})) throw new Error('Invalid metric source.');
   const roles=scalar(manifest.value)?['value']:['value','unit','label','description','delta','trend'].filter(role=>manifest.value[role]!==undefined);
   if (!Array.isArray(manifest.parts)||manifest.parts.length!==roles.length||manifest.part!==0||manifest.line!==0) throw new Error('Invalid metric parts.');
   for (const [index,part] of manifest.parts.entries()) {
@@ -87,7 +87,7 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
       if (typeof original!==typeof value[part.role]) typeChanges.push(part.role);
     }
     const metric=scalar(manifest.value)?value.value:value;
-    if (!validatePresentation({slides:[{metric}]}).valid) throw new Error('Edited native text cannot form a valid metric.');
+    if (!isValidFormat({slides:[{metric}]})) throw new Error('Edited native text cannot form a valid metric.');
     for (const item of group) consumed.add(item.shape);
     items.push({shape:anchor.shape,payload:{type:'metric',metric}});
     if (typeChanges.length) report({code:'metric-value-type-changed',message:`Edited numeric ${typeChanges.join(', ')} retained as literal text to avoid discarding spelling or precision.`});

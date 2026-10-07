@@ -56,6 +56,7 @@ for (const name of ['native-text-style.js', 'body-text-import.js', 'font-weights
 await copyFile(new URL('src/table-cell-import.js', root), new URL('table-cell-import.js', dist));
 await copyFile(new URL('src/table-border-import.js', root), new URL('table-border-import.js', dist));
 await copyFile(new URL('src/color-ref.js', root), new URL('color-ref.js', dist));
+await copyFile(new URL('src/format-check.js', root), new URL('format-check.js', dist));
 await copyFile(new URL('src/theme-colors.js', root), new URL('theme-colors.js', dist));
 await copyFile(new URL('src/typeface-inventory.js', root), new URL('typeface-inventory.js', dist));
 await copyFile(new URL('src/package-fonts.js', root), new URL('package-fonts.js', dist));

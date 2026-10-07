@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import sharp from 'sharp';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx} from '../dist/index.js';
 const [mode,directory='artifacts/native-text',caseArgument]=process.argv.slice(2);
 assert.ok(['generate','compare','compare-case'].includes(mode));
@@ -33,7 +33,7 @@ if(mode==='generate') {
   const run=spawnSync(process.execPath,[fileURLToPath(new URL('./accepted-text.mjs',import.meta.url))],{env:{...process.env,OPF_TEXT_OUT:output},encoding:'utf8'});
   const log=(run.stdout??'')+(run.stderr??'')+(run.error?String(run.error)+'\n':'');
   await writeFile(path.join(output,'generation.log'),log);assert.ifError(run.error);assert.equal(run.status,0,log);
-  const report=await json('report.json'),registry=await loadOfficeFontRegistry({substitutionPolicy:'visual'}),faces=registry.embeddedFonts.filter(face=>face.family==='Carlito');
+  const report=await json('report.json'),registry=(await loadFonts({pack:'office',substitutionPolicy:'visual'})).registry,faces=registry.embeddedFonts.filter(face=>face.family==='Carlito');
   assert.equal(faces.length,4);await mkdir(path.join(output,'fonts'),{recursive:true});
   const fonts=[];
   for(const face of faces) {

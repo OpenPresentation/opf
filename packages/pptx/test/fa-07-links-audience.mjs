@@ -3,7 +3,7 @@
 // document provenance like purpose and tone.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 const dec = new TextDecoder();
@@ -13,7 +13,7 @@ const source = {
   audience: {id: 'executive', attentionBudgetMinutes: 20},
   slides: [{title: 'Contact', text: links.flatMap((link, index) => [{text: `link ${index}`, link}, ' '])}]
 };
-assert.equal(validatePresentation(source).valid, true);
+assert.equal(validate(source, {only: ['format']}).valid, true);
 
 const bytes = await toPptx(structuredClone(source));
 const entries = unzipSync(bytes);
@@ -23,7 +23,7 @@ const slideXml = dec.decode(entries['ppt/slides/slide1.xml']);
 assert.equal((slideXml.match(/<a:hlinkClick /g) ?? []).length >= links.length, true, 'one hlinkClick per linked run');
 
 const imported = await fromPptx(bytes);
-assert.equal(validatePresentation(imported).valid, true);
+assert.equal(validate(imported, {only: ['format']}).valid, true);
 const runs = JSON.stringify(imported.slides[0]);
 for (const link of links) assert.ok(runs.includes(JSON.stringify(link)), `${link} survives import`);
 assert.deepEqual(imported.audience, source.audience, 'a single audience object returns');

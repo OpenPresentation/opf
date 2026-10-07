@@ -16,10 +16,7 @@
 // edit in PowerPoint recolours it), the literal sRGB otherwise (a primary that needed a contrast adjustment against the chart panel).
 // The muted colour is a mix of the panel and the text colour, which no single scheme colour with lumMod/lumOff reproduces, so it is
 // an sRGB literal. A chart without a highlight never reaches this module, so its parts are unchanged.
-import * as opfCore from '@openpresentation/opf';
-
-/** True when the installed core resolves highlights (an older core ignores the field on export). */
-export const coreKnowsChartHighlight = () => typeof opfCore.chartHighlightMarks === 'function' && typeof opfCore.chartHighlightColors === 'function';
+import {chartHighlightColors, chartHighlightMarks} from '@openpresentation/opf/composition';
 
 const srgb = hex => `<a:srgbClr val="${String(hex).replace(/^#/, '').toUpperCase()}"/>`;
 
@@ -32,10 +29,10 @@ const srgb = hex => `<a:srgbClr val="${String(hex).replace(/^#/, '').toUpperCase
  * Colours are `{hex, xml}`: `hex` (RRGGBB) feeds the data label contrast, `xml` is the DrawingML colour element.
  */
 export function chartHighlightPlan({options, data, kind, panelFill, labelColor, primary, schemeFor}) {
-  if (!coreKnowsChartHighlight() || !options?.highlight || !data) return undefined;
-  const marks = opfCore.chartHighlightMarks(options.highlight, data);
+  if (!options?.highlight || !data) return undefined;
+  const marks = chartHighlightMarks(options.highlight, data);
   if (!marks) return undefined;
-  const colors = opfCore.chartHighlightColors(panelFill, primary, `#${labelColor}`);
+  const colors = chartHighlightColors(panelFill, primary, `#${labelColor}`);
   const accentHex = colors.accent.replace(/^#/, '').toUpperCase();
   const scheme = schemeFor?.(colors.accent);
   const accent = {hex: accentHex, xml: scheme ? `<a:schemeClr val="${scheme}"/>` : srgb(accentHex)};

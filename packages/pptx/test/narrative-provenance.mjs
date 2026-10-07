@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 
 // FA-02: the deck holds a pointer, `narrative` (a catalog id, URL or pkg: reference), and `slides[].beat` links a slide
 // to a beat of the plan. A custom narrative is a record in catalogs.narratives.records. Export stores the string and
@@ -25,13 +25,13 @@ const deck = narrative => ({
 const read = async bytes => {
   const issues = [];
   const imported = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(imported).valid, true, JSON.stringify(validatePresentation(imported).errors));
+  { const report = validate(imported, {only: ['format']}); assert.equal(report.valid, true, JSON.stringify(report.findings)); }
   return {imported, issues};
 };
 
 for (const id of ['proof-arc', 'classic-story']) {
   const source = deck(id);
-  assert.equal(validatePresentation(source).valid, true, JSON.stringify(validatePresentation(source).errors));
+  { const report = validate(source, {only: ['format']}); assert.equal(report.valid, true, JSON.stringify(report.findings)); }
   const bytes = await toPptx(structuredClone(source));
   const stored = tagValue(dec.decode(unzipSync(bytes)['ppt/tags/opfDocument.xml']));
   assert.equal(stored.metadata.narrative, id, 'the narrative pointer is stored as the string');

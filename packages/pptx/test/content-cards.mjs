@@ -3,8 +3,8 @@ import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {resolvePresentation} from '@openpresentation/opf-render';
-import {loadBundledFontRegistry} from '@openpresentation/opf-render/fonts-node';
-const fonts=await loadBundledFontRegistry(),options={textMeasurement:fonts.textMeasurement};
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+const fonts=await loadFonts({pack: 'base'}),options={fonts};
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),list=v=>v===undefined?[]:Array.isArray(v)?v:[v];
 let cases=0;
 for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const cards of [true,false])for(const alpha of [false,true]){

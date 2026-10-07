@@ -8,7 +8,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {unzipSync} from 'fflate';
-import {renderSvgDeck} from '@openpresentation/opf-render';
+import {renderSvg} from '@openpresentation/opf-render';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 import {toPptx, fromPptx} from '../dist/index.js';
 
@@ -48,7 +48,7 @@ for (const {id, status, document} of fixture.layouts) {
   const slide = document.slides[0];
   assert.equal(slide.layout, id);
   const base = withoutLayout(document);
-  const [svg, baseSvg] = [renderSvgDeck(document, {})[0], renderSvgDeck(base, {})[0]];
+  const [svg, baseSvg] = [renderSvg(document, {})[0], renderSvg(base, {})[0]];
   const [xml, baseXml] = [await slideXml(document), await slideXml(base)];
   const bound = resolvePresentation(document, {}).slides[0];
   assert.equal(bound.layout?.id, id, `${id}: preview resolves the layout`);

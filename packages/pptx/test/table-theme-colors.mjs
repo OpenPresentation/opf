@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs, validatePresentation} from '@openpresentation/opf';
+import {catalogs, validate} from '@openpresentation/opf';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {themeSlotColors, writeThemeColors} from '../dist/theme-colors.js';
 
@@ -174,7 +174,7 @@ const source = await toPptx(deck);
 const importTable = async bytes => {
   const diagnostics = [];
   const document = await fromPptx(bytes, {onDiagnostic: d => diagnostics.push(d)});
-  assert.equal(validatePresentation(document).valid, true);
+  assert.equal(validate(document, {only: ['format']}).valid, true);
   assert.deepEqual(diagnostics.filter(d => /table/.test(d.code)), []);
   const found = [];
   (function visit(node) { if (node && typeof node === 'object') { if (node.table) found.push(node.table); Object.values(node).forEach(visit); } })(document.slides[0]);

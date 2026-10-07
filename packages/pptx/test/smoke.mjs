@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { unzipSync, zipSync } from "fflate";
 import { legacyVendorOutput } from "../dist/vendor-compat.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
-import { validatePresentation } from "@openpresentation/opf";
+import { validate } from "@openpresentation/opf";
 import { fromPptx, OPFPptxError, runtimePolicy, toPptx } from "../dist/index.js";
 
 const deck = {
@@ -74,8 +74,8 @@ assert.match(text(entries["docProps/core.xml"]), /1980-01-01T00:00:00Z/);
 assert.match(text(entries["ppt/slides/slide1.xml"]), /Editable Text/);
 
 const imported = await fromPptx(first);
-const importedValidation = validatePresentation(imported);
-assert.equal(importedValidation.valid, true, JSON.stringify(importedValidation.errors));
+const importedValidation = validate(imported, {only: ['format']});
+assert.equal(importedValidation.valid, true, JSON.stringify(importedValidation.findings));
 assert.equal(imported.name, deck.name);
 assert.equal(imported.author, deck.author);
 assert.equal(imported.description, deck.description);
@@ -99,7 +99,7 @@ assert.match(text(roundTripEntries["ppt/slides/slide1.xml"]), /Editable Text/);
 
 const complexBytes = await makeComplexPptx();
 const complexImport = await fromPptx(complexBytes);
-assert.equal(validatePresentation(complexImport).valid, true);
+assert.equal(validate(complexImport, {only: ['format']}).valid, true);
 assert.equal(complexImport.slides[0].title, "Complex PPTX");
 assert.ok(
   complexImport.slides[0].blocks.some((block) => /PowerPoint shape:/.test(block.text)),
@@ -163,4 +163,9 @@ await assert.rejects(() => toPptx({
   catalogs: { themes: { records: [{ $schema: "https://openpresentation.org/schema/opf-theme/v1", id: "tall-canvas", name: "Tall canvas", dimensions: { widthInches: 4, heightInches: 9 } }] } },
   slides: [{ text: "Custom canvas", design: { theme: "tall-canvas" } }]
 }), error => error.code === "mixed-slide-dimensions");
-await assert.rejects(() => toPptx({ slides: [{ layout: "unknown-layout", text: "Needs a definition" }] }), error => error.code === "catalog-resolution-failed");
+{
+  // An unknown layout id is a hint that matched nothing: the slide is composed automatically and core's diagnostic says so.
+  const unknown = [];
+  assert.ok((await toPptx({ slides: [{ layout: "unknown-layout", text: "Needs a definition" }] }, { onDiagnostic: item => unknown.push(item) })).length > 0);
+  assert.deepEqual(unknown.filter(item => item.code === "unresolved-layout").map(({ path, id }) => ({ path, id })), [{ path: "slides.0.layout", id: "unknown-layout" }]);
+}

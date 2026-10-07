@@ -2,8 +2,8 @@
 // Rendering uses browser-default measurement; physical fonts/native acceptance
 // and exact authoring-source reconstruction remain separate gates.
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-import {validatePresentation} from '@openpresentation/opf';
-import {renderSvg} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
 const output=document.querySelector('pre');
 let checks=0;
@@ -32,7 +32,7 @@ try {
   };
   const diagnostics=[],current=native(body),copy=current.slice(),deck=await fromPptx(current,{onDiagnostic:d=>diagnostics.push(d)}),value=textBlocks(deck)[0];
   check(current.every((byte,index)=>byte===copy[index]),'Import input bytes remain immutable');
-  check(validatePresentation(deck).valid,'Imported browser document validates');
+  check(validate(deck, {only: ['format']}).valid,'Imported browser document validates');
   check(deck.slides[0].title==='Current native formatting','Heading remains scalar and unchanged');
   check(deck.slides[0].notes===source.slides[0].notes&&deck.description===source.description,'Exact notes/description survive');
   check(plain(value)==='\n CURRENT normal\n\t linked & current \n','Ordered current run/field/break/blank/tab text');
@@ -47,7 +47,7 @@ try {
   const deleted=await fromPptx(native('',true));check(textBlocks(deleted).length===0,'Deleted body is not restored');
   const unstyled=await fromPptx(native('<p:txBody><a:bodyPr/><a:lstStyle/><a:p><a:r><a:t> current&#13;\n&#9; &amp;#13; </a:t></a:r></a:p></p:txBody>'));
   check(textBlocks(unstyled)[0]===' current\r\n\t &#13; ','Numeric references and literal entity spelling stay current');
-  document.querySelector('main').innerHTML=renderSvg(deck);
+  document.querySelector('main').innerHTML=renderSlideSvg(deck, 0);
   check(document.querySelector('main').textContent.includes('CURRENT'),'Current imported body appears in preview');
   check(!!document.querySelector('main a[href="https://example.com/current"]'),'Current link appears in preview DOM');
   observations.push({mode,deck,diagnostics});

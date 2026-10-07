@@ -4,7 +4,7 @@
 //   $#,##0.0       -> \$#,##0.0          $#,##0  -> \$#,##0
 //   #,##0 "units"  -> #,##0\ "units"     0.0 "kg" -> 0.0\ "kg"
 //
-// chartEvidence hashes each code in core's canonical form (numberFormatFromExcel), so the re-spelled caches keep their
+// chartEvidence hashes each code in core's canonical form (fromExcelNumberFormat), so the re-spelled caches keep their
 // evidence: the dataset reference, `fields` and `mapping` return (the doughnut included) and the scatter point names stay
 // a, b, c instead of falling back to the cache's 1, 2, 3. A real format change (other decimals, another unit, another
 // code core cannot map) still changes the evidence and is reported as chart-data-provenance-changed.

@@ -3,9 +3,9 @@
 // marker numbers, and the round trip with and without provenance.
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
-import {renderSvg} from '@openpresentation/opf-render';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-import {composeSlide} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {composeSlide} from '@openpresentation/opf/composition';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
@@ -42,14 +42,14 @@ const stripEngine = value => Array.isArray(value) ? value.map(run => {
 let checks = 0;
 const ok = (condition, message) => { assert.ok(condition, message); checks += 1; };
 
-const fonts = await loadOfficeFontRegistry({fallbackFamily: 'Roboto', strictGlyphs: false});
-for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
+const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
+for (const options of [{}, {fonts}]) {
   const source = deck();
   const diagnostics = [];
   const bytes = await toPptx(source, {seed: 1, ...options, onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   assert.deepEqual(diagnostics.filter(d => !/^chart/.test(d.code)), []);
   const {entries, xml} = unzip(bytes);
-  const geometry = index => composeSlide(source.slides[index], {width: 1280, height: 720, presentation: source, slideIndex: index, layout: {id: 'blank'}, fonts: {heading: 'Roboto', body: 'Roboto', code: 'Roboto Mono'}, textMeasurement: options.textMeasurement, date: '2026-10-01'});
+  const geometry = index => composeSlide(source.slides[index], {width: 1280, height: 720, presentation: source, slideIndex: index, layout: {id: 'blank'}, fontFamilies: {heading: 'Roboto', body: 'Roboto', code: 'Roboto Mono'}, textMeasurement: options.fonts?.textMeasurement, date: '2026-10-01'});
 
   // Markers: native superscript runs at baseline 30000 with the marker text, in order.
   assert.deepEqual(markerRuns(xml(0)), ['1', '1,2', '3']);
@@ -94,7 +94,7 @@ for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
   assert.deepEqual(captionTags.map(tag => [tag.path, tag.field, tag.media, tag.position, tag.align]).sort(), [['slides.1.blocks.0.image', 'slides.1.blocks.0.caption', 'OPF image 1', 'below', 'left'], ['slides.1.blocks.1.table', 'slides.1.blocks.1.caption', 'OPF table 1', 'above', 'center'], ['slides.3.chart', 'slides.3.caption', 'OPF chart 1', 'below', 'left']].sort());
 
   // Preview parity: the same boxes and marker numbers read from the SVG.
-  const svg = index => renderSvg(source, {slideIndex: index, trace: true, date: '2026-10-01', ...options});
+  const svg = index => renderSlideSvg(source, index, {trace: true, date: '2026-10-01', ...options});
   const svg0 = svg(0), svg1 = svg(1);
   const previewMarkers = [...svg0.matchAll(/data-opf-marker="([^"]*)"/g)].map(match => match[1]);
   assert.deepEqual(previewMarkers, markerRuns(xml(0)), 'marker numbers agree');
@@ -124,7 +124,7 @@ for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
 {
   const source = {design: {fontScheme: 'roboto'}, references: [{id: 'a', text: 'Source A'}], slides: [{title: 'Wrapped', text: [{text: 'Enterprise adoption doubled in 2025 and kept doubling through the following year as more teams adopted the format', cite: 'a'}, ', revenue grew 18% and headcount stayed flat', {text: ' across every region we measured in the period', cite: 'a'}, '.']}]};
   const diagnostics = [];
-  const imported = await fromPptx(await toPptx(source, {seed: 1, textMeasurement: fonts.textMeasurement}), {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  const imported = await fromPptx(await toPptx(source, {seed: 1, fonts}), {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   ok(!diagnostics.some(d => d.code === 'content-structure-changed'), 'wrapped cited text keeps its stored structure');
   assert.deepEqual(stripEngine(imported.slides[0].text), source.slides[0].text);
 }

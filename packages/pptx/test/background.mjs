@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser,XMLValidator} from 'fast-xml-parser';
-import {renderSvg} from '@openpresentation/opf-render';
-import {validatePresentation} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
 const {toPptx,fromPptx:importTagged}=await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:''});
 const utf8=new TextDecoder(),encode=new TextEncoder();
@@ -25,7 +25,7 @@ for(const [width,height] of [[1280,720],[720,1280],[960,960]]) {
   assert.ok(gradient,'Gradient must remain an editable native fill');
   assert.equal(JSON.stringify(document),source,'Source unchanged');
   assert.ok(!Object.keys(unzipSync(bytes)).some(p=>p.startsWith('ppt/media/') && !p.endsWith('/')),'No rasterized slide or background');
-  const svg=renderSvg(document),svgDoc=parser.parse(svg).svg;
+  const svg=renderSlideSvg(document, 0),svgDoc=parser.parse(svg).svg;
   const defs=Array.isArray(svgDoc.defs)?svgDoc.defs:[svgDoc.defs];
   const g=defs.find(def=>def?.linearGradient)?.linearGradient;
   assert.ok(g);
@@ -47,7 +47,7 @@ for(const [width,height] of [[1280,720],[720,1280],[960,960]]) {
    close(nativePosition,expected);samples++;
   }
   const imported=await fromPptx(bytes),restored=imported.slides[0].design.background;
-  assert.equal(validatePresentation(imported).valid,true);
+  assert.equal(validate(imported, {only: ['format']}).valid,true);
   assert.equal(restored.type,'gradient');close(restored.opacity,.4);
   close(((restored.gradient.angle-angle)%360+540)%360-180,0,.00003);
   restored.gradient.stops.forEach((stop,i)=>{close(stop.position,background.gradient.stops[i].position);assert.equal(stop.color,background.gradient.stops[i].color);});

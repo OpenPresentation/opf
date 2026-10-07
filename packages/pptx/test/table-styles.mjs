@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
-import {renderSvg} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {tableValues} from './table-values.js';
 
@@ -38,7 +38,7 @@ async function fixture({rows=5,columns=5,properties=flags,definition=style,inlin
  const bytes=zipSync(entries),copy=bytes.slice(),diagnostics=[];
  const deck=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
  assert.deepEqual(bytes,copy,'Import must not mutate the archive');
- assert.equal(validatePresentation(deck).valid,true);
+ assert.equal(validate(deck, {only: ['format']}).valid,true);
  return {deck,table:tableOf(deck),diagnostics,bytes};
 }
 const themed=await fixture();
@@ -55,7 +55,7 @@ assert.equal(run(themed.table.rows[0][1]).italic,true);
 assert.equal(run(themed.table.rows[1][1]).italic,false);
 assert.equal(run(themed.table.rows[2][1]).italic,true);
 assert.equal(run(themed.table.rows[0][1]).fontFamily,'Aptos');
-assert.match(renderSvg(themed.deck),/#D0D0D0/i);
+assert.match(renderSlideSvg(themed.deck, 0),/#D0D0D0/i);
 assert.deepEqual(allRows(themed.table).map(r=>r.map(text)),Array.from({length:5},(_,r)=>Array.from({length:5},(_,c)=>`${r},${c}`)));
 const repeated=await fromPptx(await toPptx(themed.deck));
 assert.deepEqual(allRows(tableOf(repeated)).map(row=>row.map(cell=>({color:run(cell).color,bold:run(cell).bold??false,italic:run(cell).italic??false}))),allRows(themed.table).map(row=>row.map(cell=>({color:run(cell).color,bold:run(cell).bold??false,italic:run(cell).italic??false}))));

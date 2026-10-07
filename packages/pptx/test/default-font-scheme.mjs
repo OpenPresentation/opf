@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
-import * as core from '@openpresentation/opf';
-import {resolveFontFamilies} from '@openpresentation/opf/composition';
-import {paginatePresentation} from '@openpresentation/opf/pagination';
+import {fontSchemes} from '@openpresentation/opf/catalogs';
+import {DEFAULT_FONT_SCHEME, resolveFontFamilies} from '@openpresentation/opf/composition';
+import {paginate} from '@openpresentation/opf';
 import {toPptx} from '../src/index.js';
 
 // FF-35 (font-fidelity-everywhere). Every engine shares one last-resort font
@@ -12,8 +12,6 @@ import {toPptx} from '../src/index.js';
 // (opf docs/design-resolution.md, "Engine default font scheme").
 // FF-17: code runs use the shared resolveFontFamilies() code role: the scheme's
 // `code`, else Roboto Mono.
-
-const {fontSchemes} = core;
 
 const theme = 'ppt/theme/theme1.xml';
 const parts = async (presentation) => unzipSync(new Uint8Array(await toPptx(presentation, {strictAssets: true})));
@@ -37,16 +35,13 @@ const bare = await parts({name: 'No font scheme', design: {theme: 'bare'}, catal
 assert.deepEqual(themePair(bare), {major: 'Aptos Display', minor: 'Aptos'});
 assert.deepEqual([...slideFaces(bare)].sort(), ['Aptos', 'Aptos Display']);
 
-// Parity with core. Once the installed core exports DEFAULT_FONT_SCHEME (FF-35),
-// core pagination measures the same deck in exactly the families exported here.
-// Published cores without the constant fall back to roboto in pagination, so the
-// check waits for them.
-if ('DEFAULT_FONT_SCHEME' in core) {
-  assert.equal(core.DEFAULT_FONT_SCHEME, 'aptos');
+// Parity with core: core pagination measures the same deck in exactly the families exported here.
+assert.equal(DEFAULT_FONT_SCHEME, 'aptos');
+{
   const measured = new Set();
-  paginatePresentation(
+  paginate(
     {name: 'No font scheme', design: {theme: 'bare'}, catalogs: {themes: {records: [bareTheme]}}, slides: [textSlide]},
-    {textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}},
+    {fonts: {textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}}},
   );
   assert.deepEqual([...measured].sort(), [...slideFaces(bare)].sort());
 }
@@ -86,16 +81,13 @@ const unknownCases = [
 ];
 const unknownDeck = ({design, slideDesign, catalogs}) => ({name: 'Unknown font scheme', ...(design ? {design} : {}), ...(catalogs ? {catalogs} : {}), slides: [{id: 't', title: 'Title', text: 'Body', ...(slideDesign ? {design: slideDesign} : {})}, {id: 'u', title: 'Second', text: 'Body'}]});
 const expectedDiagnostics = path => path ? [{code: 'unresolved-font-scheme', path, id: 'no-such-scheme', fallback: 'aptos', message: "Font scheme 'no-such-scheme' is not in the inline or bundled catalogs; using the default font scheme 'aptos'."}] : [];
-// Core pagination agreement, checked once the installed core exports
-// resolveFontSchemeReference (opf after FF-35b). Published core 0.11.0 lacks it,
-// so the check is skipped until the sibling installs a core release that has it.
+// Core pagination agreement.
 const corePagination = deck => {
   const diagnostics = [], measured = new Set();
-  core.paginatePresentation(structuredClone(deck), {onDiagnostic: diagnostic => diagnostics.push(diagnostic), textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}});
+  paginate(structuredClone(deck), {onDiagnostic: diagnostic => diagnostics.push(diagnostic), fonts: {textMeasurement: {measure: (text, size, style) => { measured.add(style.fontFamily); return text.length * size * 0.5; }}}});
   return {diagnostics, families: [...measured].sort()};
 };
 const checkCore = (deck, expected, diagnostics, name) => {
-  if (!('resolveFontSchemeReference' in core)) return;
   const reference = corePagination(deck);
   assert.deepEqual(reference.families, expected, `core pagination: ${name}`);
   assert.deepEqual(reference.diagnostics, diagnostics, `core pagination: ${name}`);

@@ -1,24 +1,20 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
-import * as composition from '@openpresentation/opf/composition';
-import {renderSvg, resolvePresentation} from '@openpresentation/opf-render';
-import {checkPptxTypefaces, fromPptx, toPptx} from '../dist/index.js';
+import { renderSlideSvg, resolvePresentation } from '@openpresentation/opf-render';
+import {checkTypefaces, fromPptx, toPptx} from '../dist/index.js';
 
 // Spec-gap closure A (P2): the design fields that used to change nothing export natively.
 // - the deck logo on cover and section slides: one native picture `OPF logo` at core's geometry.logo box
 // - header/footer `logo: true`: a generated image part, re-imported as the flag
 // - design.listBullet: image: native picture bullets (a:buBlip), re-imported as a list
 // - fontScheme.accent: the slide tag and the quote body carry the accent typeface
-// All of them need the core that composes them (resolveLogo). On the published core the export has none
-// of them, and this test asserts exactly that.
 
 const image = async name => new Uint8Array(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url)));
 const uri = (bytes, type = 'image/png') => `data:${type};base64,${Buffer.from(bytes).toString('base64')}`;
 const wideBytes = await image('wide.png'), tallBytes = await image('tall.png'), squareBytes = await image('square.png'), jpgBytes = await image('wide.jpg');
 const wide = uri(wideBytes), tall = uri(tallBytes), square = uri(squareBytes), jpg = uri(jpgBytes, 'image/jpeg');
 const light = {type: 'solid', color: '#FFFFFF'}, dark = {type: 'solid', color: '#0B1220'};
-const hasCore = typeof composition.resolveLogo === 'function';
 
 const decoder = new TextDecoder();
 const open = async (deck, options = {}) => {
@@ -54,17 +50,6 @@ const drawn = (element, intrinsic) => {
 const sizes = new Map([[wide, {width: 120, height: 60}], [tall, {width: 60, height: 120}], [square, {width: 80, height: 80}], [jpg, {width: 120, height: 60}]]);
 let checked = 0;
 
-if (!hasCore) {
-  // Published core: nothing composes a logo, a picture bullet or the accent role, so the export is unchanged.
-  const deck = {design: {logo: wide, listBullet: 'image', fontScheme: {id: 'aptos', accent: 'Georgia'}, background: light}, slides: [
-    {title: 'Cover', layout: 'title'}, {title: 'List', items: ['One', 'Two']}]};
-  const {entries} = await open(deck);
-  assert.ok(!/name="OPF logo"/.test(slideXml(entries, 0)), 'no logo picture without core support');
-  assert.ok(!/<a:buBlip>/.test(slideXml(entries, 1)), 'no picture bullet without core support');
-  console.log('Design fields skipped: the linked @openpresentation/opf has no resolveLogo (published core); the export carries none of them.');
-  process.exit(0);
-}
-
 // ---- Cover and section logos: placement, order, parity with the preview, provenance, re-import.
 {
   const deck = {design: {logo: wide, background: light, watermark: tall}, slides: [
@@ -91,7 +76,7 @@ if (!hasCore) {
     // Paint order: watermark, then the logo, then every heading.
     assert.ok(xml.indexOf('name="OPF watermark"') < xml.indexOf('name="OPF logo"') && xml.indexOf('name="OPF logo"') < xml.indexOf('name="OPF heading'), `slide ${index}: watermark, logo, content`);
     // The preview draws the same rectangle.
-    const svg = renderSvg(deck, {slideIndex: index, trace: true});
+    const svg = renderSlideSvg(deck, index, {trace: true});
     const generated = imageTags(svg).filter(element => attr(element, 'data-opf-generated') === 'true');
     assert.equal(generated.length, 1, 'one preview logo');
     const preview = drawn(generated[0], sizes.get(wide));
@@ -133,7 +118,7 @@ if (!hasCore) {
     const bytes = mediaFor(entries, index, logo.embed);
     assert.ok(sameBytes(bytes, Buffer.from(source.split(',')[1], 'base64')), `slide ${index} draws the ${['dark', 'light', 'slide'][index]} variant`);
     // The same variant the preview chooses.
-    const svg = renderSvg(deck, {slideIndex: index, trace: true});
+    const svg = renderSlideSvg(deck, index, {trace: true});
     const generated = imageTags(svg).find(element => attr(element, 'data-opf-generated') === 'true');
     assert.equal(attr(generated, 'href'), source, `slide ${index} preview variant`);
   }
@@ -156,7 +141,7 @@ if (!hasCore) {
   assert.match(slideXml(entries, 0), /name="OPF image placeholder 1"/, 'the panel stands where the logo would be');
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset').map(item => item.path), ['design.logo']);
   await assert.rejects(() => toPptx(missing, {strictAssets: true}));
-  const svg = renderSvg(missing, {trace: true});
+  const svg = renderSlideSvg(missing, 0, {trace: true});
   assert.match(svg, /data-opf-asset-status="unresolved"/);
   checked++;
 }
@@ -172,7 +157,7 @@ if (!hasCore) {
   assert.equal(parts.length, 2);
   const natives = pictures(slideXml(entries, 0)).filter(picture => /^OPF image \d+$/.test(picture.name));
   assert.equal(natives.length, 2, 'header and footer logo pictures');
-  const svg = renderSvg(deck, {trace: true});
+  const svg = renderSlideSvg(deck, 0, {trace: true});
   const groups = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="logo"[^>]*>[\s\S]*?<\/g>/g)].map(match => match[0]);
   assert.equal(groups.length, 2);
   for (const part of parts) {
@@ -224,7 +209,7 @@ if (!hasCore) {
   assert.equal(new Set(ids).size, ids.length, 'shape ids stay unique');
   assert.match(xml, /<a:buSzPct val="100000"\/><a:buBlip>/, 'the bullet is the text size');
   // The preview marker is a square of the text size.
-  const svg = renderSvg(deck, {trace: true});
+  const svg = renderSlideSvg(deck, 0, {trace: true});
   const markers = imageTags(svg).filter(element => attr(element, 'aria-hidden') === 'true');
   assert.equal(markers.length, entries.length);
   const textSize = Number(xml.match(/name="OPF list [^"]*"[\s\S]*?<a:rPr lang="en-US" sz="(\d+)"/)?.[1]) / 100 / .75;
@@ -285,8 +270,8 @@ if (!hasCore) {
   assert.match(theme, /<a:majorFont><a:latin typeface="Aptos Display"/);
   assert.match(theme, /<a:minorFont><a:latin typeface="Aptos"/);
   assert.match(strFromU8(entries['docProps/app.xml']), /Georgia/);
-  assert.ok(checkPptxTypefaces(bytes, {fonts: ['Aptos', 'Aptos Display', accent, 'Roboto Mono'], monospace: ['Roboto Mono']}).ok, 'chosen fonts including the accent');
-  assert.ok(!checkPptxTypefaces(bytes, {fonts: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']}).ok, 'the accent is a chosen font the author must list');
+  assert.ok(checkTypefaces(bytes, {families: ['Aptos', 'Aptos Display', accent, 'Roboto Mono'], monospace: ['Roboto Mono']}).ok, 'chosen fonts including the accent');
+  assert.ok(!checkTypefaces(bytes, {families: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']}).ok, 'the accent is a chosen font the author must list');
   // Round trip: the scheme returns from provenance.
   const imported = await fromPptx(bytes);
   assert.deepEqual(imported.design.fontScheme, {id: 'aptos', accent: accent});
@@ -294,7 +279,7 @@ if (!hasCore) {
   const plain = await open({design: {fontScheme: 'aptos'}, slides: deck.slides});
   assert.ok(!/Georgia/.test(slideXml(plain.entries, 0)) && !/Georgia/.test(slideXml(plain.entries, 1)));
   // The preview draws the same families.
-  const svg = renderSvg(deck, {slideIndex: 0, trace: true});
+  const svg = renderSlideSvg(deck, 0, {trace: true});
   const tag = [...svg.matchAll(/<text\b([^>]*)>/g)].map(match => match[1]).filter(attrs => attrs.includes('data-opf-path="slides.0.tag"')).map(attrs => attr(` ${attrs}`, 'font-family'));
   assert.ok(tag.length && tag.every(family => family.startsWith(accent)), 'preview tag family');
   checked++;

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {fromPptx,toPptx} from '../dist/index.js';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder();
@@ -22,7 +22,7 @@ async function fixture({definition='',properties='',rows=3,columns=3,direct=()=>
  if(theme){const path=Object.keys(entries).find(path=>/^ppt\/theme\/theme\d+\.xml$/.test(path));entries[path]=encoder.encode(decoder.decode(entries[path]).replace(/<a:lnStyleLst>[\s\S]*?<\/a:lnStyleLst>/,`<a:lnStyleLst>${theme}</a:lnStyleLst>`));}
  const bytes=zipSync(entries),copy=bytes.slice(),diagnostics=[];
  const deck=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
- assert.deepEqual(bytes,copy);assert.equal(validatePresentation(deck).valid,true);
+ assert.deepEqual(bytes,copy);assert.equal(validate(deck, {only: ['format']}).valid,true);
  return {deck,rows:all(tableOf(deck)),diagnostics,bytes};
 }
 const outer={top:'AA0000',right:'00AA00',bottom:'0000AA',left:'AAAA00'};

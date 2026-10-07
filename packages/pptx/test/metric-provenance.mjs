@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-const enc=new TextEncoder(),dec=new TextDecoder(),fonts=await loadOfficeFontRegistry();
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+const enc=new TextEncoder(),dec=new TextDecoder(),fonts=await loadFonts({pack: 'office'});
 const original={value:42,unit:'ms',label:'Left\tRight  ',description:'Unchanged\r\n\r\ncontext',delta:0,trend:'flat'};
-const deck={design:{fontScheme:'roboto'},slides:[{metric:original}]},bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement});
+const deck={design:{fontScheme:'roboto'},slides:[{metric:original}]},bytes=await toPptx(deck,{fonts});
 const slide=(entries,mutate)=>entries['ppt/slides/slide1.xml']=enc.encode(mutate(dec.decode(entries['ppt/slides/slide1.xml'])));
 const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipSync(entries);};
 // A root metric payload returns as the slide's own field (content topology).

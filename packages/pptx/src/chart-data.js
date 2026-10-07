@@ -6,54 +6,15 @@
 // c:numFmt and the embedded workbook cell formats (src/chart-workbook.js). A chart without number formats is written
 // exactly as before.
 //
-// Optional core exports are read from the namespace, so a published core before RR-54 still loads: its schema rejects
-// the new fields, so the fallbacks only need the inline positional form, with the same strict number rule.
-import * as opfCore from '@openpresentation/opf';
+// The core functions are re-exported from one place so the exporter and importer read the same ones: core 0.14 always has
+// them, so there is no fallback to fall into.
+import {
+  chartNumber, fromExcelNumberFormat, inlineChartData, inlineTableData, isDatasetRef, resolveChartData, resolveTableData, tableCellDisplayValue, toExcelNumberFormat
+} from '@openpresentation/opf';
+
+export {chartNumber, fromExcelNumberFormat, inlineChartData, inlineTableData, isDatasetRef, resolveChartData, resolveTableData, tableCellDisplayValue, toExcelNumberFormat};
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-const STRICT_DECIMAL = /^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/;
-
-/** Core `chartNumber` (strict decimal syntax; everything else is a gap). */
-export const chartNumber = typeof opfCore.chartNumber === 'function' ? opfCore.chartNumber : value => {
-  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
-  if (typeof value !== 'string') return null;
-  const text = value.trim();
-  if (!STRICT_DECIMAL.test(text)) return null;
-  const number = Number(text);
-  return Number.isFinite(number) && (!Number.isInteger(number) || Number.isSafeInteger(number)) ? number : null;
-};
-/** NumberFormat -> Excel format code ("General" when absent). */
-export const excelNumberFormat = typeof opfCore.excelNumberFormat === 'function' ? opfCore.excelNumberFormat : () => 'General';
-/** Excel format code -> NumberFormat, or undefined when it has no exact equivalent. */
-export const numberFormatFromExcel = typeof opfCore.numberFormatFromExcel === 'function' ? opfCore.numberFormatFromExcel : () => undefined;
-export const isDatasetRef = typeof opfCore.isDatasetRef === 'function' ? opfCore.isDatasetRef : value => object(value) && typeof value.dataset === 'string';
-export const inlineChartData = typeof opfCore.inlineChartData === 'function' ? opfCore.inlineChartData : chart => chart;
-export const inlineTableData = typeof opfCore.inlineTableData === 'function' ? opfCore.inlineTableData : table => table;
-export const tableCellDisplayValue = typeof opfCore.tableCellDisplayValue === 'function' ? opfCore.tableCellDisplayValue : cell => cell;
-export const resolveTableData = typeof opfCore.resolveTableData === 'function' ? opfCore.resolveTableData
-  : table => ({...(Array.isArray(table?.columns) ? {columns: table.columns} : {}), rows: Array.isArray(table?.rows) ? table.rows : [], formats: [], diagnostics: []});
-
-const columnName = column => typeof column === 'string' ? column : object(column) && typeof column.name === 'string' ? column.name : '';
-
-// Before RR-54 core: inline positional data only (the schema of that core has no datasets or mapping).
-function positionalChartData(chart) {
-  const data = chart?.data;
-  if (!object(data) || !Array.isArray(data.columns)) return {ok: false, reason: 'no-columns', message: 'The chart data has no columns.', diagnostics: []};
-  if (!data.columns.length) return {ok: false, reason: 'no-columns', message: 'The chart data has no columns.', diagnostics: []};
-  if (!Array.isArray(data.rows) || !data.rows.length) return {ok: false, reason: 'no-rows', message: 'The chart data has no rows.', diagnostics: []};
-  const diagnostics = [];
-  const rows = data.rows.map((row, rowIndex) => data.columns.map((_, index) => {
-    const cell = Array.isArray(row) && index < row.length ? row[index] : null;
-    if (index === 0) return cell === undefined ? null : cell;
-    const number = chartNumber(cell);
-    if (number === null && cell !== null && cell !== undefined && cell !== '') diagnostics.push({code: 'chart-value-not-numeric', severity: 'warning', path: `/data/rows/${rowIndex}/${index}`, message: `chart value ${JSON.stringify(cell)} is not a number; it is plotted as a gap.`});
-    return number;
-  }));
-  return {ok: true, columns: data.columns.map(columnName), formats: data.columns.map(() => undefined), rows, diagnostics};
-}
-
-/** Core `resolveChartData`: the canonical positional table [category, (x,) ...series], or {ok: false, reason}. */
-export const resolveChartData = typeof opfCore.resolveChartData === 'function' ? opfCore.resolveChartData : positionalChartData;
 
 /**
  * True when a chart uses an RR-54 data field that the native cache alone cannot carry back, or is a combo chart whose `line` or
@@ -81,7 +42,7 @@ const escapeXml = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&
 /** The Excel code of a NumberFormat, or undefined when it is absent or General (the exporter's default). */
 export function excelCode(format) {
   if (format === undefined) return undefined;
-  const code = excelNumberFormat(format);
+  const code = toExcelNumberFormat(format);
   return code && code !== 'General' ? code : undefined;
 }
 
@@ -153,7 +114,7 @@ export function numericRanges(xml, {series = [], x}) {
  */
 export function formatFromCode(code) {
   if (typeof code !== 'string' || code.trim() === '' || /^general$/i.test(code.trim())) return {};
-  const format = numberFormatFromExcel(code);
+  const format = fromExcelNumberFormat(code);
   return format === undefined ? {unmapped: code} : {format};
 }
 

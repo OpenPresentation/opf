@@ -3,8 +3,8 @@ import {XMLParser} from 'fast-xml-parser';
 import {unzipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {composeSlide} from '@openpresentation/opf/composition';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-const fonts=await loadOfficeFontRegistry(),parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+const fonts=await loadFonts({pack: 'office'}),parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const array=x=>x===undefined?[]:Array.isArray(x)?x:[x];
 let cases=0;
 for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(const align of ['left','center','right'])for(const metric of [0,'',
@@ -13,8 +13,8 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   {value:'42\n-0.5',unit:'milliseconds across all completed production requests',label:'Latency'},
   {value:'',unit:'',label:'',description:'',delta:'',trend:'up'}]) {
   const deck={design:{fontScheme:'roboto',contentAlignment:align,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{composition:{minFontSize:32},metric}]},before=structuredClone(deck);
-  const layout=composeSlide(deck.slides[0],{...dimensions,fonts:{heading:'Roboto',body:'Roboto'},contentAlignment:align,textMeasurement:fonts.textMeasurement}).items[0].metricLayout;
-  const bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement}),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
+  const layout=composeSlide(deck.slides[0],{...dimensions,fontFamilies:{heading:'Roboto',body:'Roboto'},contentAlignment:align,textMeasurement:fonts.textMeasurement}).items[0].metricLayout;
+  const bytes=await toPptx(deck,{fonts}),xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
   // The trend arrow (RR-07) is a separate decoration shape with its own tests (rr-07-preview-polish.mjs); the text shapes are the accepted lines.
   const shapes=array(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']).filter(shape=>!/ trend mark$/.test(shape['p:nvSpPr']['p:cNvPr'].name));
   const expected=layout.parts.flatMap(part=>part.visible?part.fit.sourceLines.map((line,i)=>({part,line,origin:part.linePositions[i]})):[]);

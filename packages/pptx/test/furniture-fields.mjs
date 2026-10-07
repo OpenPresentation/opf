@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {formatDate, parseDate, furniturePartFields, lineFields, nativeFieldType, formatSlideNumber} from '../dist/furniture-fields.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
 const options = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
@@ -20,7 +20,7 @@ const runs = paragraph => [...paragraph.matchAll(/<a:(r|fld)\b([^>]*)>[\s\S]*?<a
   .map(([, kind, attributes, text]) => kind === 'fld' ? `[${attributes.match(/type="([^"]+)"/)[1]}:${text}]` : text).join('');
 const read = async bytes => {
   const issues = [], imported = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(imported).valid, true);
+  assert.equal(validate(imported, {only: ['format']}).valid, true);
   return {imported, issues, invalid: issues.filter(issue => issue.code === 'invalid-furniture-provenance')};
 };
 const edit = (entries, index, mutate) => {

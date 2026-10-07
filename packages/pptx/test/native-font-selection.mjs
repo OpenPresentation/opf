@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import path from 'node:path';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx} from '../dist/index.js';
 import {sha,json,fingerprint} from './native-evidence.mjs';
 const [mode,directory]=process.argv.slice(2);assert.ok(['generate','compare'].includes(mode));
@@ -12,7 +12,7 @@ const write=(f,v)=>writeFile(path.join(root,f),JSON.stringify(v,null,2)+'\n');
 if(mode==='generate'){
  await mkdir(root,{recursive:true});await assert.rejects(readFile(path.join(root,'generation.json')),e=>e.code==='ENOENT');
  execFileSync(process.execPath,['test/font-variants.mjs',path.join(root,'selection.json')],{stdio:'inherit'});
- const require=createRequire(import.meta.resolve('@openpresentation/opf-render/package.json')),{create}=require('fontkit'),{options}=await prepareNodeFonts();
+ const require=createRequire(import.meta.resolve('@openpresentation/opf-render/package.json')),{create}=require('fontkit'),options=await loadFonts();
  const fonts=[];await mkdir(path.join(root,'fonts'));
  for(const [index,source]of options.fontFiles.entries()){
   const bytes=await readFile(source),font=create(bytes),file=`fonts/face-${index}.ttf`,style=font['OS/2'].fsSelection;

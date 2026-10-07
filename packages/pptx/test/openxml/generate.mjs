@@ -10,11 +10,11 @@ const consumer = process.argv[3] ? createRequire(path.join(path.resolve(process.
 const converterModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/opf-pptx')).href : new URL('../../dist/index.js', import.meta.url).href;
 const fontModule = consumer ? pathToFileURL(consumer.resolve('@openpresentation/opf-render/fonts-node')).href : '@openpresentation/opf-render/fonts-node';
 const {toPptx, fromPptx} = await import(converterModule);
-const {prepareNodeFonts} = await import(fontModule);
+const {loadFonts} = await import(fontModule);
 const root = path.resolve(process.argv[2]);
 await mkdir(root, {recursive: false});
 for (const variant of ['original', 'repacked', 'reordered']) await mkdir(path.join(root, variant));
-const {options: fontOptions} = await prepareNodeFonts();
+const fonts = await loadFonts();
 const imageBytes = await readFile(new URL('../fixtures/images/wide.png', import.meta.url));
 const image = {src: `data:image/png;base64,${imageBytes.toString('base64')}`, alt: 'Header image with text'};
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -23,7 +23,7 @@ const repack = entries => zipSync(Object.fromEntries(Object.keys(entries).sort()
 const cases = [];
 for (const measured of [false, true]) for (const [width, height] of [[1280, 720], [720, 1280]]) for (const floor of [16, 32]) for (const local of [false, true]) {
   const source = {organization: {id: 'primary', name: 'Organization'}, design: {fontScheme: 'roboto', dimensions: {widthInches: width / 96, heightInches: height / 96}, header: {left: {text: ' Authored\twords \r\n\r\nlast  \r'}, center: {organization: true}, right: {section: true}}, footer: {left: {date: ' 2026-09-10 '}, right: {slideNumber: true}}}, slides: [{title: 'Furniture', section: 'Section', text: 'Keep body words.', composition: {minFontSize: floor, overflow: 'error'}, ...(local ? {design: {header: {left: {image, text: ''}, right: {text: 'Local'}}}} : {})}]};
-  cases.push({id: `furniture-${measured ? 'measured' : 'estimated'}-${width}-${floor}-${local ? 'local' : 'inherited'}`, source, options: measured ? fontOptions : {}});
+  cases.push({id: `furniture-${measured ? 'measured' : 'estimated'}-${width}-${floor}-${local ? 'local' : 'inherited'}`, source, options: measured ? {fonts} : {}});
 }
 cases.push(
   {id: 'notes-control', source: {slides: [{title: 'Speaker notes', text: 'First slide', notes: 'Keep these speaker notes.\nSecond line.'}, {title: 'Second slide', image, notes: 'Second slide speaker notes.'}]}},

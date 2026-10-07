@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {renderSvgDeck} from '@openpresentation/opf-render';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
-import {composeSlide, listNumbers} from '@openpresentation/opf';
+import {renderSvg} from '@openpresentation/opf-render';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {composeSlide, listNumbers} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 import {autoNumScheme, canonicalNumbering, deriveListNumbering, displayedNumbers, schemeNumbering} from '../dist/numbered-list.js';
 
@@ -10,7 +10,7 @@ import {autoNumScheme, canonicalNumbering, deriveListNumbering, displayedNumbers
 // the same numbers at the same positions, and import maps the auto-numbers back.
 const decoder = new TextDecoder(), encoder = new TextEncoder();
 const EMU = 9525;
-const fonts = await loadOfficeFontRegistry({fallbackFamily: 'Roboto', strictGlyphs: false});
+const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
 
 // ---- an implementation of the native schemes that shares nothing with core's formatter -------------------------------
 const ROMAN = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
@@ -72,10 +72,10 @@ const deck = {design: {theme: 'classic', fontScheme: 'roboto'}, slides: [
   {title: 'Bold lead', items: [[{text: 'Bold', bold: true}, ' lead'], 'Plain lead'], numbering: 'arabic'},
 ]};
 
-for (const [label, options] of [['estimated', {}], ['measured', {textMeasurement: fonts.textMeasurement}]]) {
+for (const [label, options] of [['estimated', {}], ['measured', {fonts}]]) {
   const diagnostics = [];
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options, onDiagnostic: d => diagnostics.push(d)}));
-  const previews = renderSvgDeck(deck, options);
+  const previews = renderSvg(deck, options);
   assert.deepEqual(diagnostics.filter(d => /numbering/.test(d.code)), [], `${label}: no numbering diagnostics`);
   let numbered = 0, bullets = 0;
   for (const [index, slide] of deck.slides.entries()) {

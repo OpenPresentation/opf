@@ -6,7 +6,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { examples } from '@openpresentation/opf/examples';
-import { loadOfficeFontRegistry } from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { toPptx as candidate } from '../dist/index.js';
 assert.ok(process.argv[2], 'Supply an isolated consumer with registry @openpresentation/opf-pptx@0.5.0 installed.');
 const referenceRoot = path.resolve(process.argv[2]);
@@ -20,13 +20,15 @@ assert.equal(source.version, '0.5.0');
 assert.equal(source.resolved, 'https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.5.0.tgz');
 assert.equal(source.integrity, 'sha512-GKVmqWjQ8GRuEMmpJajPs+W+q35MPy6q8+FL8nWH+d17Sh+/O87BBBfSi6m9KLGxQZav2o1I/bfMoftP5DNEfg==');
 const { toPptx: published } = await import(pathToFileURL(path.join(path.dirname(manifestPath), 'dist/index.js')).href);
-const fonts = await loadOfficeFontRegistry({ fallbackFamily: 'Roboto', strictGlyphs: false });
+const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
 const image = new Uint8Array(await readFile(new URL('./fixtures/images/wide.png', import.meta.url)));
-const options = { textMeasurement: fonts.textMeasurement, imageResolver: async () => image };
+// The published 0.5.0 reads the measurement as a top-level option; the candidate reads the fonts handle.
+const options = { fonts, imageResolver: async () => image };
+const publishedOptions = { textMeasurement: fonts.textMeasurement, imageResolver: async () => image };
 const report = { reference: '@openpresentation/opf-pptx@0.5.0', integrity: source.integrity, decks: 0, slides: 0, equal: 0, mismatches: [], scope: 'Deterministic PPTX bytes with explicit image substitution and fallback fonts, not native viewer equivalence.' };
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 for (const { file, deck } of examples) {
-  const before = await published(deck, options);
+  const before = await published(deck, publishedOptions);
   const after = await candidate(deck, options);
   report.decks++;
   report.slides += deck.slides.length;

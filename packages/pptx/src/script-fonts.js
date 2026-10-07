@@ -4,38 +4,21 @@
 // reads it back on import. Design: core docs/programs/font-fidelity-everywhere/
 // script-font-model.md ("OOXML mapping").
 //
-// Core releases before the resolver (0.11.0 and earlier) export no
-// resolveScriptFonts. The exporter then writes exactly what it wrote before
-// FF-07 (lang="en-US", empty theme ea/cs, no rtl) and reports
-// `language-export-unavailable` for a document that names a language. A core
-// with the resolver but without paragraphDirection() marks no paragraph
-// direction and reports `paragraph-direction-unavailable` for an RTL deck.
-import * as opfCore from "@openpresentation/opf";
+// When the resolver throws for a deck, the exporter writes what it wrote before FF-07 (lang="en-US", empty theme ea/cs, no
+// rtl) and reports `language-export-unavailable`.
+import {paragraphDirection, physicalAlignment, resolveScriptFonts as resolver} from "@openpresentation/opf/composition";
 
-const resolver = typeof opfCore.resolveScriptFonts === "function" ? opfCore.resolveScriptFonts : null;
-// RR-05: authored alignment is logical for right-to-left text (`left` is the start edge). Core owns the rule; a core without it
-// reports no line directions either, so the fallback never has anything to flip.
-export const physicalAlignment = typeof opfCore.physicalAlignment === "function" ? opfCore.physicalAlignment : alignment => alignment;
-// The one paragraph-direction rule shared with the renderer (core FF-07).
-const paragraphDirection = typeof opfCore.paragraphDirection === "function" ? opfCore.paragraphDirection : null;
+// RR-05: authored alignment is logical for right-to-left text (`left` is the start edge). Core owns the rule, and the
+// paragraph-direction rule is the one the renderer shares (core FF-07).
+export {physicalAlignment};
 
 const SCRIPT_SLOTS = [["ea", "eastAsian"], ["cs", "complexScript"]];
 
-/** Whether the installed core exports the FF-18 language/script resolver. */
-export function scriptFontsAvailable() {
-  return resolver !== null;
-}
-
 /**
  * Resolve the deck (slide 0, which also sets the theme) and every slide.
- * Returns null when core has no resolver.
+ * Returns null when the resolver throws for the deck.
  */
 export function planScriptFonts(presentation, report) {
-  if (!resolver) {
-    if (presentation.language !== undefined) report?.({code: "language-export-unavailable", path: "language",
-      message: "The installed @openpresentation/opf has no resolveScriptFonts, so the PPTX keeps lang=\"en-US\", empty theme East Asian/complex-script fonts and left-to-right paragraphs. Use a core release with the FF-18 language model."});
-    return null;
-  }
   const count = Array.isArray(presentation.slides) ? presentation.slides.length : 0;
   let slides, deck;
   try {
@@ -51,15 +34,9 @@ export function planScriptFonts(presentation, report) {
     report?.({code: "language-unresolved", path: "language",
       message: `The presentation language could not be resolved locally (a URL, pkg: reference or unknown id), so the PPTX uses ${deck.lang}.`});
   }
-  let rtl = deck.rtl;
-  if (rtl && !paragraphDirection) {
-    rtl = false;
-    report?.({code: "paragraph-direction-unavailable", path: "language",
-      message: "The installed @openpresentation/opf has no paragraphDirection, so right-to-left paragraphs are not marked; the preview and export must share that rule. Use a core release that exports it."});
-  }
   // opf-pptx#168: which slides have notes (a presentation has one notes master; see reportPerSlideNotesScriptFonts).
   const notes = (presentation.slides ?? []).map(slide => typeof slide?.notes === "string" ? slide.notes.trim() !== "" : Boolean(slide?.notes));
-  return {deck, slides, notes, report, lang: deck.lang, rtl, presentation, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
+  return {deck, slides, notes, report, lang: deck.lang, rtl: deck.rtl, presentation, contentEastAsian: contentEastAsianFonts(presentation, deck, report)};
 }
 
 /**
@@ -453,8 +430,7 @@ const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[
  * used when that record exports exactly this tag again: an exact BCP-47 tag,
  * then a curated `ooxmlLang` (preferring the same primary language). A tag
  * that core still resolves to a catalog record (for example en-NZ to English)
- * is imported as the tag itself, so it round-trips. Without core's resolver,
- * a record whose tag is the primary language alone is accepted too.
+ * is imported as the tag itself, so it round-trips.
  * Returns {language, record, shared} or null when nothing matches.
  */
 export function matchCatalogLanguage(lang, catalogs) {
@@ -462,19 +438,15 @@ export function matchCatalogLanguage(lang, catalogs) {
   const key = lang.toLowerCase(), primary = key.split("-")[0];
   const lower = value => typeof value === "string" ? value.toLowerCase() : undefined;
   const shared = records.filter(record => lower(record.bcp47) === key || lower(record.ooxmlLang) === key);
-  const exports = record => !resolver || resolver({language: record.id}).lang.toLowerCase() === key;
+  const exports = record => resolver({language: record.id}).lang.toLowerCase() === key;
   const record = shared.find(record => lower(record.bcp47) === key && exports(record))
     ?? shared.find(record => lower(record.bcp47)?.split("-")[0] === primary && exports(record))
     ?? shared.find(exports);
   if (record) return {language: record.id, record, shared};
-  if (resolver) {
-    const resolved = resolver({language: lang});
-    // A tag core cannot resolve falls back to its default language; that is no match.
-    const matched = resolved.languageSource !== "default" && resolved.languageId && records.find(candidate => candidate.id === resolved.languageId);
-    return matched ? {language: lang, record: matched, shared: []} : null;
-  }
-  const byPrimary = records.find(candidate => lower(candidate.bcp47) === primary);
-  return byPrimary ? {language: byPrimary.id, record: byPrimary, shared: []} : null;
+  const resolved = resolver({language: lang});
+  // A tag core cannot resolve falls back to its default language; that is no match.
+  const matched = resolved.languageSource !== "default" && resolved.languageId && records.find(candidate => candidate.id === resolved.languageId);
+  return matched ? {language: lang, record: matched, shared: []} : null;
 }
 
 /**
@@ -510,7 +482,7 @@ export function observeLanguage({slides, theme, themePath, slideThemes, catalogs
  */
 export function reconcileLanguage(groups, observed, report) {
   const index = groups.findIndex(item => item.field === "language");
-  if (index < 0 || observed.lang === undefined || !resolver) return groups;
+  if (index < 0 || observed.lang === undefined) return groups;
   const stored = groups[index].ops.find(op => op.path?.length === 1 && op.path[0] === "language")?.value;
   if (stored === undefined) return groups;
   const resolved = resolver({language: stored});
@@ -530,7 +502,7 @@ export function reconcileLanguage(groups, observed, report) {
 /** Whether the language observed in the runs is written right to left. */
 export function observedRtl(observed) {
   if (observed.lang === undefined) return false;
-  try { return resolver ? resolver({language: observed.language}).rtl === true : observed.match?.record.direction === "rtl"; } catch { return false; }
+  try { return resolver({language: observed.language}).rtl === true; } catch { return false; }
 }
 
 export function languageDiagnostics(imported, observed, report) {
@@ -552,14 +524,13 @@ export function languageDiagnostics(imported, observed, report) {
     report({code: "language-ambiguous", path: "language",
       message: `Run language ${lang} is the OOXML tag of ${match.shared.map(record => record.id).join(", ")}; ${match.language} was imported.`});
   }
-  const resolved = resolver ? resolver(imported) : null;
-  const rtl = resolved ? resolved.rtl : match?.record.direction === "rtl";
-  if (rtlParagraphs && !rtl) {
+  const resolved = resolver(imported);
+  if (rtlParagraphs && !resolved.rtl) {
     report({code: "rtl-language-mismatch", path: "language", message: `${rtlParagraphs} right-to-left paragraph(s) do not match the left-to-right language ${typeof imported.language === "string" ? imported.language : lang}; paragraph direction is not imported separately.`});
   }
   // The presentation theme carries the first slide's script fonts (planScriptFonts), so it is compared with that slide.
   let themeResolved = resolved;
-  if (resolver && imported.slides?.length) { try { themeResolved = resolver(imported, {slideIndex: 0}); } catch { themeResolved = resolved; } }
+  if (imported.slides?.length) { try { themeResolved = resolver(imported, {slideIndex: 0}); } catch { themeResolved = resolved; } }
   if (theme && themeResolved) {
     for (const {tag, slot, face} of themeScriptMismatches(theme, themeResolved)) {
       report({code: "script-font-not-imported", path: "design.fontScheme",
@@ -567,7 +538,7 @@ export function languageDiagnostics(imported, observed, report) {
     }
   }
   // opf-pptx#168: a slide on another slide master carries its own script fonts in that master's theme.
-  if (resolver && Array.isArray(observed.slideThemes)) {
+  if (Array.isArray(observed.slideThemes)) {
     observed.slideThemes.forEach((slideTheme, index) => {
       if (!slideTheme || slideTheme.path === observed.themePath) return;
       let slideResolved;
@@ -609,8 +580,8 @@ export function stripRunScriptFonts(xml) {
 }
 
 /**
- * Without core's resolver the theme's East Asian slot still repeats the latin family of its font group, which keeps
- * the paragraph end marks from reading an empty font (see themeScriptFonts).
+ * When the resolver throws for a deck (see planScriptFonts) the theme's East Asian slot still repeats the latin family of
+ * its font group, which keeps the paragraph end marks from reading an empty font (see themeScriptFonts).
  */
 export function themeEastAsianFromLatin(xml) {
   return xml.replace(/<a:(majorFont|minorFont)>[\s\S]*?<\/a:\1>/g, block => {

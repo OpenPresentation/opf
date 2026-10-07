@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {validatePresentation, validateCatalogRecord, catalogs} from '@openpresentation/opf';
-import {renderSvgDeck} from '@openpresentation/opf-render';
+import {validate, validateCatalogRecord, catalogs} from '@openpresentation/opf';
+import {renderSvg} from '@openpresentation/opf-render';
 
 // FF-29: slide layout intent (layout id, type, composition, composition hints
 // and the inline catalogs.layouts record) is part of each OPF_SLIDE_V1 record.
@@ -27,15 +27,15 @@ const deckB = {
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck B', catalogs: {layouts: {records: [heroB, sideB]}},
   slides: [{layout: 'gallery-hero', title: 'From B', subtitle: 'Different record'}, {layout: 'gallery-side', title: 'Side', subtitle: 'Only in B'}]
 };
-for (const deck of [deckA, deckB]) assert.equal(validatePresentation(deck).valid, true, JSON.stringify(validatePresentation(deck).errors));
+for (const deck of [deckA, deckB]) assert.equal(validate(deck, {only: ['format']}).valid, true, JSON.stringify(validate(deck, {only: ['format']}).findings));
 const exportedA = await toPptx(structuredClone(deckA)), exportedB = await toPptx(structuredClone(deckB));
 
 const read = async bytes => {
   const issues = [];
   const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(deck).valid, true);
+  assert.equal(validate(deck, {only: ['format']}).valid, true);
   // Every restored layout id resolves, so the imported document always renders.
-  assert.equal(renderSvgDeck(deck).length, deck.slides.length);
+  assert.equal(renderSvg(deck).length, deck.slides.length);
   return {deck, provenance: issues.filter(issue => /provenance|reference|slide-id/.test(issue.code)).map(issue => [issue.code, issue.path])};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
@@ -167,7 +167,7 @@ let cases = 0;
   cases++;
 }
 
-// Catalog objects are not checked by validatePresentation. Untrusted slide and
+// Catalog objects are not checked by validate. Untrusted slide and
 // document records must pass the companion layout schema before restoration.
 {
   const retag = (entries, part, mutate) => text(entries, part, xml => {
@@ -183,7 +183,7 @@ let cases = 0;
   for (const record of malformedRecords) {
     assert.equal(validateCatalogRecord('layouts', record).valid, false);
     // This deliberately passes the presentation schema: it is the regression.
-    assert.equal(validatePresentation({...deckA, catalogs: {layouts: {records: [record]}}}).valid, true);
+    assert.equal(validate({...deckA, catalogs: {layouts: {records: [record]}}}, {only: ['format']}).valid, true);
     const corruptSlide = entries => retag(entries, 'ppt/tags/opfSlide1.xml', value => { value.layoutRecord = record; });
     const corruptDocument = entries => retag(entries, 'ppt/tags/opfDocument.xml', value => { value.catalogs.layouts.records[0] = record; });
     const standalone = await read(modify(exportedA, entries => { stripDocument(entries); corruptSlide(entries); }));
@@ -221,8 +221,8 @@ let cases = 0;
   const record = structuredClone(heroA); delete record.$schema;
   assert.equal(validateCatalogRecord('layouts', {$schema: heroA.$schema, ...record}).valid, true);
   const input = {...structuredClone(deckA), catalogs: {layouts: {records: [record]}}};
-  assert.equal(validatePresentation(input).valid, true);
-  assert.equal(renderSvgDeck(input).length, input.slides.length);
+  assert.equal(validate(input, {only: ['format']}).valid, true);
+  assert.equal(renderSvg(input).length, input.slides.length);
   const bytes = await toPptx(input);
   for (const withoutDocument of [false, true]) {
     const result = await read(withoutDocument ? modify(bytes, stripDocument) : bytes);
@@ -259,7 +259,7 @@ let cases = 0;
   const override = {...structuredClone(base), name: 'Overridden title-subtitle', placeholders: [{type: 'title'}]};
   const deckC = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck C', catalogs: {layouts: {records: [override]}},
     slides: [{layout: 'title-subtitle', title: 'Override one', subtitle: 'C'}, {layout: 'title-subtitle', title: 'Override two', subtitle: 'C'}]};
-  assert.equal(validatePresentation(deckC).valid, true);
+  assert.equal(validate(deckC, {only: ['format']}).valid, true);
   const exportedC = await toPptx(structuredClone(deckC));
   assert.deepEqual(tagValue(unzipSync(exportedC)['ppt/tags/opfSlide1.xml']).layoutRecord, override);
   // Pasted into deck A, whose slide 2 uses the built-in title-subtitle.
@@ -300,7 +300,7 @@ let cases = 0;
   const privateUrl = 'https://intranet.example.com/private/preview.png';
   const withPreview = {...structuredClone(heroA), preview: {src: 'asset:private-preview'}};
   const deckP = {...structuredClone(deckA), assets: {'private-preview': privateUrl}, catalogs: {layouts: {records: [withPreview]}}};
-  assert.equal(validatePresentation(deckP).valid, true);
+  assert.equal(validate(deckP, {only: ['format']}).valid, true);
   const parse = xml => [...xml.matchAll(/ val="([0-9A-F]+)"/g)].map(match => JSON.parse(Buffer.from(match[1], 'hex').toString('utf8')));
   const tagsOf = async provenance => { const entries = unzipSync(await toPptx(structuredClone(deckP), {provenance})); return Object.keys(entries).filter(path => /^ppt\/tags\/opf(Document|Slide)/.test(path)).map(path => dec.decode(entries[path])); };
   const full = await tagsOf('full');

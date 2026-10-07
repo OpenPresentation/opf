@@ -6,10 +6,10 @@ import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {decodeTextTag} from '../dist/code-provenance.js';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
-const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),{options:fontOptions}=await prepareNodeFonts(),results=[];
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),fontOptions = {fonts: await loadFonts()},results=[];
 const fixtures=[
  [{when:' Q1 ',what:'Pilot',description:'First\r\n\r\nLast  '},{what:'Next'}],
  {name:'Migration plan',description:'Context stays attached.',events:[{when:'Now',what:'A\u00a0B\tC',description:'  Keep  spaces  '},{what:'',description:'Blank labels remain fields.'}]},

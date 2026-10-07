@@ -1,4 +1,4 @@
-import type { LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
+import type { Finding, FontSchemeDiagnostic, Fonts, LayoutDiagnostic, SlideContextReferenceDiagnostic } from "@openpresentation/opf";
 export declare const packageName = "@openpresentation/opf-pptx";
 
 export declare const releaseLane: Readonly<{
@@ -33,7 +33,6 @@ export interface ImageResolverContext {
   path: string;
 }
 
-export interface FontSchemeDiagnostic { code: "unresolved-font-scheme"; path: string; message: string; id: string; fallback: string }
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
 export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "dataset-unknown" | "no-rows" | "no-columns" | "single-column-not-numeric" }
@@ -111,11 +110,17 @@ export interface ToPptxOptions {
    * unfilled required variable throws `unfilled-variables`, and a value of the wrong kind throws `invalid-variables`.
    */
   variables?: Record<string, unknown>;
-  textMeasurement?: TextMeasurement;
+  /**
+   * The fonts handle: what the renderer's `loadFonts()` returns (`@openpresentation/opf-render/fonts-node`), or any object with a
+   * `textMeasurement` (core's `Fonts`). The exporter lays text out with `fonts.textMeasurement` and always names the chosen
+   * families, never a substitute face. Without it, layout uses core's portable estimate. This is the only way to pass a measurement:
+   * a top-level `textMeasurement` option is not read.
+   */
+  fonts?: Fonts;
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
-  /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, plus `unresolved-font-scheme` (once per reference path) when a font-scheme id matches no record and the default `aptos` scheme is used as the base, and, from core's slide context, `unresolved-theme`, `unresolved-color-scheme` and `unresolved-layout` (once per reference path) when an id matches no record: the default theme (`minimal`) and colour scheme (`cool-horizon`) are used, and a slide whose layout is unknown, like one with no layout, is composed with no layout record. None of them refuses the export. */
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | FontSchemeDiagnostic | SlideContextReferenceDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
@@ -147,7 +152,7 @@ export interface ToPptxOptions {
   date?: string;
   /** Host-supplied catalog records, as in opf-render. Currently consulted for socialPlatforms (generated socials furniture). */
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
-  /** Records for document `catalogs.<kind>.source` URLs (a single source or each entry of an ordered search path), as in opf-render. Currently consulted for socialPlatforms. */
+  /** Records for presentation `catalogs.<kind>.source` URLs (a single source or each entry of an ordered search path), as in opf-render. Currently consulted for socialPlatforms. */
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
 }
 
@@ -158,12 +163,12 @@ export interface FromPptxOptions {
   schema?: string;
   /** The export's host catalog records (as in ToPptxOptions). Currently used to recognize unedited socials lines, so authored handles return. */
   catalogs?: Record<string, { records?: unknown[] } | unknown[]>;
-  /** The export's records for document `catalogs.<kind>.source` URLs (as in ToPptxOptions). Currently used for socialPlatforms. */
+  /** The export's records for presentation `catalogs.<kind>.source` URLs (as in ToPptxOptions). Currently used for socialPlatforms. */
   catalogSources?: Record<string, { records?: unknown[] } | unknown[]>;
   /**
    * Opt in to raw per-shape signals (see PptxSignals). `true` uses the default limits; an object lowers or raises them.
-   * With it, `fromPptx` resolves to `{document, signals}`; without it (the default, also `false`/`null`) it resolves
-   * to the OPF document exactly as before. The document is the same either way.
+   * With it, `fromPptx` resolves to `{presentation, signals}`; without it (the default, also `false`/`null`) it resolves
+   * to the presentation alone. The presentation is the same either way.
    */
   signals?: boolean | PptxSignalOptions | null;
 }
@@ -171,7 +176,10 @@ export interface FromPptxOptions {
 export declare class OPFPptxError extends Error {
   readonly code: string;
   readonly details: Record<string, unknown>;
-  readonly issues?: unknown[];
+  /** The `error` findings of the `format` check that refused the input or the imported presentation (`invalid-opf`, `invalid-import-opf`), or the variable errors (`unfilled-variables`, `invalid-variables`). */
+  readonly findings?: Finding[];
+  /** The layout diagnostics behind a `layout-overflow` error. */
+  readonly diagnostics?: LayoutDiagnostic[];
   readonly path?: string;
   constructor(code: string, message: string, details?: Record<string, unknown>);
 }
@@ -194,7 +202,7 @@ export declare function fromPptx(input: Uint8Array | ArrayBuffer, options?: From
 
 /** Bounds on the signals. Each is an integer from 1 up to the cap in parentheses; the defaults are DEFAULT_SIGNAL_LIMITS. */
 export interface PptxSignalOptions {
-  /** Slides reported (5000). The document always has every slide. Default 300. */
+  /** Slides reported (5000). The presentation always has every slide. Default 300. */
   maxSlides?: number;
   /** Shapes reported per slide, groups and their members each counting one (5000). Default 300. */
   maxShapesPerSlide?: number;
@@ -220,8 +228,8 @@ export declare const SIGNALS_VERSION: 1;
 export declare function isMonospaceFamily(family: string | undefined): boolean;
 
 export interface PptxImportWithSignals {
-  /** The same OPF document `fromPptx` returns without the option. */
-  document: Record<string, unknown>;
+  /** The same presentation `fromPptx` returns without the option. */
+  presentation: Record<string, unknown>;
   signals: PptxSignals;
 }
 
@@ -251,7 +259,7 @@ export interface PptxSignals {
 }
 
 export interface PptxSlideSignals {
-  /** Slide position, the same index as `document.slides`. */
+  /** Slide position, the same index as `presentation.slides`. */
   index: number;
   /** Package part, for example "ppt/slides/slide1.xml". */
   part: string;
@@ -378,7 +386,7 @@ export interface PptxOutlineSignal extends PptxColor {
   tailArrow?: string;
 }
 
-/** Where a shape went in the OPF document `fromPptx` returned. */
+/** Where a shape went in the presentation `fromPptx` returned. */
 export interface PptxOpfLink {
   /**
    * "block" fed a block (`path`, `blockType`); "title", "subtitle" and "tag" fed that slide field. Other roles name a shape the
@@ -386,7 +394,7 @@ export interface PptxOpfLink {
    * and the members of an OPF-tagged group ("code", "metric", "quote", "timeline", "media", "card-frame").
    */
   role: string;
-  /** Path in the document, for example "slides.2.blocks.1", "slides.0.title", or "slides.1.left" after a tagged round trip. */
+  /** Path in the presentation, for example "slides.2.blocks.1", "slides.0.title", or "slides.1.left" after a tagged round trip. */
   path?: string;
   blockType?: string;
 }
@@ -461,9 +469,9 @@ export interface TypefaceInventory {
   fontsUsed: string[] | null;
 }
 
-export interface CheckPptxTypefacesOptions {
-  /** Family names the document chose (heading, body, code, run fonts). Required. */
-  fonts: string[];
+export interface CheckTypefacesOptions {
+  /** Family names the presentation chose (heading, body, code, run fonts). Required. */
+  families: string[];
   /** Chosen families that are monospace; their pitchFamily must be fixed pitch, and only theirs. */
   monospace?: string[];
   /** Allow empty theme ea/cs slots and references to them (FF-05). Default true. */
@@ -503,11 +511,11 @@ export interface TypefaceViolation {
 
 export declare const THEME_SCRIPT_SUPPLEMENTS: Readonly<Record<"major" | "minor", Readonly<Record<string, string>>>>;
 
-export declare function inventoryPptxTypefaces(input: Uint8Array | ArrayBuffer | Record<string, Uint8Array>, options?: {nested?: boolean}): TypefaceInventory;
+export declare function inventoryTypefaces(input: Uint8Array | ArrayBuffer | Record<string, Uint8Array>, options?: {nested?: boolean}): TypefaceInventory;
 
 export declare function packageFontsUsed(inventory: TypefaceInventory): string[];
 
-export declare function checkPptxTypefaces(input: Uint8Array | ArrayBuffer | Record<string, Uint8Array>, options: CheckPptxTypefacesOptions): {
+export declare function checkTypefaces(input: Uint8Array | ArrayBuffer | Record<string, Uint8Array>, options: CheckTypefacesOptions): {
   ok: boolean;
   violations: TypefaceViolation[];
   inventory: TypefaceInventory;

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 
 // RR-08 import details: author arrays, run ColorRef colours (variable, scheme slot, role), list item descriptions and
 // the `bullets` key come back as authored, from the stored record while the package still matches it and, where PPTX
@@ -36,7 +36,7 @@ const resave = bytes => modify(bytes, entries => {
 const read = async bytes => {
   const issues = [];
   const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(deck).valid, true, JSON.stringify(validatePresentation(deck).errors));
+  assert.equal(validate(deck, {only: ['format']}).valid, true, JSON.stringify(validate(deck, {only: ['format']}).findings));
   return {deck, issues, codes: issues.map(issue => issue.code)};
 };
 const exportDeck = (document, options = {}) => toPptx({name: 'Details', ...document}, {...EXPORT, ...options});

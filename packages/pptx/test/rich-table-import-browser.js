@@ -1,5 +1,5 @@
 import {fromPptx,toPptx} from '@openpresentation/opf-pptx';
-import {renderSvg} from '@openpresentation/opf-render';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 import {unzipSync,zipSync} from 'fflate';
 import {cellValue,tableValues} from './table-values.js';
 const out=document.querySelector('pre');
@@ -28,7 +28,7 @@ try {
  const edited=await fromPptx(zipSync(entries));
  check(text(tableOf(edited).columns[0])===' A 7\n B \n','Native run/field/break order');
  const diagnostics=[];
- document.querySelector('main').innerHTML=renderSvg(deck,{trace:true,onDiagnostic:d=>diagnostics.push(d)});
+ document.querySelector('main').innerHTML=renderSlideSvg(deck, 0,{trace:true,onDiagnostic:d=>diagnostics.push(d)});
  check(!diagnostics.some(d=>d.code==='text-overflow'),'Multiline table uses available space');
  for(const group of document.querySelectorAll('g[data-opf-rich-text="true"]')) {
   const path=group.getAttribute('data-opf-path').replace(/\.value$/,'');

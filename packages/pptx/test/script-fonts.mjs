@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import * as opf from '@openpresentation/opf';
+import {catalogs, validate} from '@openpresentation/opf';
+import {paragraphDirection, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 // FF-07 (font-fidelity-everywhere). Run `lang`, paragraph `rtl` and the theme
@@ -35,18 +36,6 @@ const themeFonts = (xml, tag) => {
 const langs = xml => new Set(Object.values(xml).flatMap(value => [...value.matchAll(/<a:(?:rPr|endParaRPr|defRPr)\b[^>]*?\slang="([^"]*)"/g)].map(match => match[1])));
 const runFaces = (xml, slot) => new Set([...slides(xml).matchAll(new RegExp(`<a:${slot}\\s+typeface="([^"]*)"`, 'g'))].map(match => match[1]).filter(face => !face.startsWith('+')));
 
-if (typeof opf.resolveScriptFonts !== 'function') {
-  // Core without the FF-18 resolver: output stays as before FF-07 and a
-  // language-bearing document is told why.
-  const {xml, diagnostics} = await read(deck('japanese'));
-  assert.deepEqual([...langs(xml)], ['en-US']);
-  assert.equal(themeFonts(xml, 'minorFont').ea, '');
-  assert.deepEqual(diagnostics.map(diagnostic => diagnostic.code).filter(code => code.startsWith('language')), ['language-export-unavailable']);
-  console.log('Script fonts: core has no resolveScriptFonts; pre-FF-07 output and the language-export-unavailable diagnostic are verified.');
-  process.exit(0);
-}
-
-const {resolveScriptFonts, catalogs} = opf;
 const languageRecord = id => catalogs.languages.find(record => record.id === id);
 const schemeFamilies = id => {const scheme = catalogs.fontSchemes.find(record => record.id === id); return {heading: scheme.major, body: scheme.minor};};
 
@@ -130,7 +119,7 @@ for (const expected of cases) {
   }));
   const notes = partsMatching(xml, /^ppt\/notesSlides\/notesSlide\d+\.xml$/).join('');
   for (const paragraph of [...directions(slides(xml)), ...directions(notes)]) {
-    const want = expected.rtl ? (opf.paragraphDirection(paragraph.text, 'rtl') === 'rtl' ? '1' : '0') : undefined;
+    const want = expected.rtl ? (paragraphDirection(paragraph.text, 'rtl') === 'rtl' ? '1' : '0') : undefined;
     assert.equal(paragraph.rtl, want, `${expected.id} paragraph "${paragraph.text}" direction`);
   }
   if (expected.rtl) {
@@ -148,16 +137,14 @@ for (const expected of cases) {
   const flip = {l: 'r', r: 'l', ctr: 'ctr'};
   const ownParagraphs = paragraphs(slides(xml)), baseline = paragraphs(slides((await read(deck(undefined, {}, expected.text))).xml));
   assert.equal(ownParagraphs.length, baseline.length, `${expected.id} paragraph count`);
-  // A core without right-to-left composition (the published 0.11 line, which test:packed runs) keeps the composed absolute alignment.
-  const logical = typeof opf.physicalAlignment === 'function';
-  assert.deepEqual(ownParagraphs.map(paragraph => paragraph.algn), baseline.map((paragraph, index) => logical && ownParagraphs[index].rtl === '1' ? flip[paragraph.algn] : paragraph.algn), `${expected.id} logical alignment`);
+  assert.deepEqual(ownParagraphs.map(paragraph => paragraph.algn), baseline.map((paragraph, index) => ownParagraphs[index].rtl === '1' ? flip[paragraph.algn] : paragraph.algn), `${expected.id} logical alignment`);
 
   // Import maps lang back to the catalog language without new diagnostics.
   const imported = [];
   const restored = await fromPptx((await read(presentation)).bytes, {onDiagnostic: diagnostic => imported.push(diagnostic.code)});
   assert.equal(restored.language, expected.id, `${expected.id} import`);
   assert.deepEqual(imported.filter(code => /language|script-font|rtl/.test(code)), [], `${expected.id} import diagnostics`);
-  assert.equal(opf.validatePresentation(restored).valid, true);
+  assert.equal(validate(restored, {only: ['format']}).valid, true);
 }
 
 // A document without a language is en-US; its theme ea repeats the latin family (FF-05) and cs keeps the vendored empty slot.

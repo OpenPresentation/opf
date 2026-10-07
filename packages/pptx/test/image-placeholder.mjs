@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {renderSvgDeck} from '@openpresentation/opf-render';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {renderSvg} from '@openpresentation/opf-render';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx} from '../dist/index.js';
 
 // FF-38: an image that cannot be embedded exports the preview's placeholder,
@@ -70,9 +70,9 @@ const deck = {
 };
 
 let checked = 0;
-const fonts = await loadOfficeFontRegistry({fallbackFamily: 'Roboto', strictGlyphs: false});
-for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
-  const preview = renderSvgDeck(deck, {trace: true, ...options});
+const fonts = await loadFonts({pack: 'office', fallbackFamily: 'Roboto', strictGlyphs: false});
+for (const options of [{}, {fonts}]) {
+  const preview = renderSvg(deck, {trace: true, ...options});
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options}));
   const native = index => shapes(decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]));
 
@@ -104,12 +104,12 @@ for (const options of [{}, {textMeasurement: fonts.textMeasurement}]) {
       const drawn = item.text[line];
       assert.equal(+shape.size, Math.round(+drawn['font-size'] * PX_PT * 100), `${item.path}: label size`);
       // Measured fonts choose a real 600 face, so the style link is that face's, not necessarily bold.
-      if (options.textMeasurement === undefined) assert.equal(shape.bold, +drawn['font-weight'] >= 600 ? '1' : '0', `${item.path}: label weight`);
+      if (options.fonts === undefined) assert.equal(shape.bold, +drawn['font-weight'] >= 600 ? '1' : '0', `${item.path}: label weight`);
       else assert.equal(+drawn['font-weight'], 600, `${item.path}: the preview keeps its semibold weight`);
       assert.equal(shape.textColor, hex(drawn.fill), `${item.path}: label colour`);
       assert.equal(shape.align, 'ctr', `${item.path}: label alignment`);
       near(shape.y + +drawn['font-size'], +drawn.y, `${item.path}: label baseline`);
-      if (options.textMeasurement === undefined) near(shape.x + shape.w / 2, +drawn.x, `${item.path}: label centre`);
+      if (options.fonts === undefined) near(shape.x + shape.w / 2, +drawn.x, `${item.path}: label centre`);
       checked++;
     }
   }

@@ -4,12 +4,12 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {colorContrast} from '@openpresentation/opf';
+import {colorContrast} from '@openpresentation/opf/composition';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
-const {options:fontOptions}=await prepareNodeFonts();
+const fontOptions={fonts:await loadFonts()};
 const events=[{when:'Q1',what:'Discovery',description:'Interviews.'},{when:'Q2',what:'Pilot'},{when:'Q3',what:'Rollout'},{what:'Review'}];
 const withStatus=(...statuses)=>events.map((event,i)=>statuses[i]?{...event,status:statuses[i]}:{...event});
 const deckOf=timeline=>({design:{fontScheme:'roboto'},slides:[{title:'Roadmap',composition:{minFontSize:24,overflow:'error'},timeline}]});

@@ -174,12 +174,12 @@ export const suites = {
   async registry() {
     // Bundled, SHA-verified font packs: no system font discovery. Every measured
     // export still names the chosen families (see test/export-chosen-fonts.mjs).
-    const {prepareNodeFonts} = await import('@openpresentation/opf-render/fonts-node');
+    const {loadFonts} = await import('@openpresentation/opf-render/fonts-node');
     const cases = {};
     for (const [label, config] of [['base', {pack: 'base'}], ['office-metric', {pack: 'office', substitutionPolicy: 'metric'}], ['office-visual', {pack: 'office', substitutionPolicy: 'visual'}]].map(([label, config]) => [label, {...config, fallbackFamily: 'Roboto', strictGlyphs: false}])) {
-      const {options} = await prepareNodeFonts(config);
-      for (const key of ['latin', 'japanese', 'arabic', 'mixed']) await exportCase(cases, `${label}:${key}`, scriptDeck(key), {...options, strictAssets: true});
-      await exportCase(cases, `${label}:full-feature-tour`, pick(['full-feature-tour'])[0][1], {...options, imageResolver});
+      const fonts = await loadFonts(config);
+      for (const key of ['latin', 'japanese', 'arabic', 'mixed']) await exportCase(cases, `${label}:${key}`, scriptDeck(key), {fonts, strictAssets: true});
+      await exportCase(cases, `${label}:full-feature-tour`, pick(['full-feature-tour'])[0][1], {fonts, imageResolver});
     }
     return cases;
   },

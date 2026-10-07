@@ -53,24 +53,21 @@ for (const [index, slide] of slides.entries()) {
 }
 
 // With a measuring renderer that previews symbol fonts (opf-render with FF-45: resolveFont reports symbolEncoding), the
-// measured export names exactly the same typefaces as the unmeasured one. Skipped on a renderer without the path.
-try {
-  const {prepareNodeFonts} = await import('@openpresentation/opf-render/fonts-node');
+// measured export names exactly the same typefaces as the unmeasured one.
+{
+  const {loadFonts} = await import('@openpresentation/opf-render/fonts-node');
   const fonts = await import('@openpresentation/opf-render/fonts');
-  if (typeof fonts.isSymbolEncodedFamily === 'function') {
-    const {options, registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation});
+  {
+    const handle = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation}), {registry} = handle;
     // Hosts (the editor) pass the renderer's script-aware measurement, which plans symbol runs code by code; the raw registry would
     // measure the private-use characters with the substitute face and report missing-glyph.
-    const textMeasurement = fonts.createScriptTextMeasurement(options.textMeasurement, {});
-    const measured = unzipSync(new Uint8Array(await toPptx(structuredClone(presentation), {...options, textMeasurement, strictAssets: true})));
+    const textMeasurement = fonts.createScriptTextMeasurement(handle.textMeasurement, {});
+    const measured = unzipSync(new Uint8Array(await toPptx(structuredClone(presentation), {fonts: {...handle, textMeasurement}, strictAssets: true})));
     const typefaces = archive => new Set(Object.keys(archive).filter(name => name.endsWith('.xml')).flatMap(name => [...strFromU8(archive[name]).matchAll(/typeface="([^"]*)"/g)].map(match => match[1])));
     assert.deepEqual([...typefaces(measured)].sort(), [...typefaces(entries)].sort(), 'a symbol-previewing renderer changes no typeface');
     assert.ok(registry.substitutions.some(entry => entry.symbolEncoding === 'Wingdings'), 'the preview resolved Wingdings through its encoding');
     for (const [index] of slides.entries()) assert.equal(slideXml(index + 1).replace(/<a:t>[^<]*<\/a:t>/g, ''), strFromU8(measured[`ppt/slides/slide${index + 1}.xml`]).replace(/<a:t>[^<]*<\/a:t>/g, ''), 'the measured export writes the same run properties');
     console.log('Symbol fonts: measured export (opf-render FF-45) names the chosen families and keeps the codes.');
-  } else console.log('Symbol fonts: installed opf-render has no symbol preview path; measured export not exercised.');
-} catch (error) {
-  if (error?.code === 'font-encoding-required') console.log('Symbol fonts: installed opf-render fails symbol fonts with font-encoding-required; measured export not exercised.');
-  else throw error;
+  }
 }
 console.log(`Symbol fonts: ${families.length} families; a:latin names the chosen family, characters byte for byte in private-use and Windows-1252 form, re-import round-trips; no a:sym written (native verification pending).`);

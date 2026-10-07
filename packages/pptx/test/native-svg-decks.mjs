@@ -96,7 +96,7 @@ const pictureRows = (entries, slideNumber) => {
 async function loadRenderer() {
   const target = process.env.OPF_RENDER_DIST ? pathToFileURL(path.resolve(process.env.OPF_RENDER_DIST, 'dist/index.js')).href : '@openpresentation/opf-render';
   const renderer = await import(target);
-  const probe = renderer.renderSvg({slides: [{image: uri(logoWide)}]});
+  const probe = renderer.renderSlideSvg({slides: [{image: uri(logoWide)}]}, 0);
   return {...renderer, drawsSvg: /<image\b/.test(probe) && !probe.includes('data-opf-asset-status'), source: process.env.OPF_RENDER_DIST ?? 'installed @openpresentation/opf-render'};
 }
 
@@ -153,7 +153,7 @@ async function generate(output) {
 
   // Previews (this renderer) and the PNG fallbacks that were embedded.
   for (const [file, deck] of [['rr10-svg-pictures', deckFor()], ['rr10-svg-effects-probe', effectDeck]]) {
-    const svgs = renderer.renderSvgDeck(deck, {});
+    const svgs = renderer.renderSvg(deck, {});
     for (const [index, svg] of svgs.entries()) await writeFile(path.join(output, 'preview', `${file}-${index + 1}.png`), await svgToPng(svg, {scale: 1}));
   }
   for (const [file, entries] of [['rr10-svg-pictures', mainEntries]]) {

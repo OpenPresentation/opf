@@ -3,9 +3,9 @@ import test from 'node:test';
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {resolvePresentation} from '@openpresentation/opf-render';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
 const source = {name: 'Wrapped generated date boundary', design: {fontScheme: 'roboto',
@@ -14,7 +14,7 @@ const source = {name: 'Wrapped generated date boundary', design: {fontScheme: 'r
 slides: [{title: 'Title', design: {footer: false}},
   {title: 'Content', text: 'Keep body content.', composition: {minFontSize: 32, overflow: 'error'}},
   {title: 'Third', text: 'Still current.', composition: {minFontSize: 32, overflow: 'error'}}]};
-const {options: fonts} = await prepareNodeFonts();
+const fonts = {fonts: await loadFonts()};
 const options = {...fonts, date: '2026-09-22', seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
 const emit = async (value = source, extra = {}) => {
   const before = structuredClone(value), issues = [];
@@ -24,7 +24,7 @@ const emit = async (value = source, extra = {}) => {
 };
 const read = async bytes => {
   const issues = [], document = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(document).valid, true);
+  assert.equal(validate(document, {only: ['format']}).valid, true);
   return {document, issues};
 };
 const footer = (document, index = 1) => document.slides[index].design?.footer ?? document.design?.footer;

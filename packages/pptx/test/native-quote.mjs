@@ -5,8 +5,8 @@ import {readFile, writeFile, mkdir, readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {validatePresentation, paginateSlide} from '@openpresentation/opf';
-import {renderSvgDeck, svgToPng, resolvePresentation} from '@openpresentation/opf-render';
+import {validate, paginateSlide} from '@openpresentation/opf';
+import {renderSvg, svgToPng, resolvePresentation} from '@openpresentation/opf-render';
 import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import sharp from 'sharp';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
@@ -53,29 +53,30 @@ if(mode==='generate') {
     fontFaces.push({data:new Uint8Array(bytes),family:'Calibri',weight,italic});
   }
   const fonts=createFontRegistry(fontFaces,{substitutionPolicy:'none'}), decks=[];
+  const handle={textMeasurement:fonts.textMeasurement,embeddedFonts:fonts.embeddedFonts,fontFiles:fontFiles,useBundledFonts:false,loadSystemFonts:false};
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const id='quote-'+dimensions.width;
     const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code: 'Calibri'}},slides:[12,16,20,24].map(repeats=>({title:'A quote and its source',quote:{text:'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:'A reviewer',source:'Recorded interview'}}))};
     document.slides.push({title:'A quote and its source',quote:{text:'Keep the complete source visible.',attribution:'Long attribution '.repeat(60),source:'Recorded interview'}});
-    const readable=paginateSlide({title:'A quote and its source',quote:{text:'This source keeps the selected readability floor.',attribution:'Repeated source '.repeat(15),source:'Recorded interview'}},{...dimensions,fonts:{heading:'Calibri',body:'Calibri',code:'Calibri'},textMeasurement:fonts.textMeasurement});
+    const readable=paginateSlide({title:'A quote and its source',quote:{text:'This source keeps the selected readability floor.',attribution:'Repeated source '.repeat(15),source:'Recorded interview'}},{...dimensions,fontFamilies:{heading:'Calibri',body:'Calibri',code:'Calibri'},fonts:handle});
     assert.equal(readable.slides.length,1);
     assert.equal(readable.slides[0].composition.minFontSize,24,'Return the policy that was evaluated');
     document.slides.push(readable.slides[0]);
-    assert.ok(validatePresentation(document).valid);
-    const diagnostics=[], options={textMeasurement:fonts.textMeasurement,onDiagnostic:value=>diagnostics.push(value)};
+    assert.ok(validate(document, {only: ['format']}).valid);
+    const diagnostics=[], options={fonts:handle,onDiagnostic:value=>diagnostics.push(value)};
     const resolved=resolvePresentation(document,options);
     const layouts=resolved.slides.map(slide=>{
       const item=slide.geometry.items.find(item=>item.field==='quote');
       return {cell:item.box,parts:item.quoteLayout.parts};
     });
-    const svgs=renderSvgDeck(document,options), bytes=await toPptx(document,options), hashes={};
+    const svgs=renderSvg(document,options), bytes=await toPptx(document,options), hashes={};
     assert.ok(!diagnostics.some(value=>value.code==='text-overflow'),'Native cases must fit before comparing');
     const save=async(file,bytes)=>{await writeFile(path.join(output,file),bytes);hashes[file]=hash(bytes);};
     await save(id+'.pptx',bytes);
     await save(id+'.opf.json',JSON.stringify(document,null,2)+'\n');
     for(const [index,svg] of svgs.entries()) {
       assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`),'Actual preview dimensions must match');
-      await save(`${id}-renderer-${index+1}.png`,await svgToPng(svg,{fontFiles,useBundledFonts:false,loadSystemFonts:false}));
+      await save(`${id}-renderer-${index+1}.png`,await svgToPng(svg,{fonts:handle}));
     }
     decks.push({id,...dimensions,slides:document.slides.length,hashes,layouts});
   }
@@ -108,7 +109,7 @@ if(mode==='generate') {
       const file=record.id+suffix+'.pptx', bytes=await readFile(path.join(output,file));
       if(suffix)assert.equal(hash(bytes),suffix==='-native-saved'?observed.savedSha256:observed.editedSha256);
       const restored=await fromPptx(bytes);
-      assert.ok(validatePresentation(restored).valid);assert.equal(restored.slides.length,record.slides);
+      assert.ok(validate(restored, {only: ['format']}).valid);assert.equal(restored.slides.length,record.slides);
       for(const [index,slide] of restored.slides.entries()) {
         const expectedLines=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!=='').map(text=>text));
         assertNativeQuoteImport(slide,expectedLines,suffix==='-native-edited'?`Native edit ${record.id} slide ${index+1}`:'A quote and its source',source.slides[index].quote);

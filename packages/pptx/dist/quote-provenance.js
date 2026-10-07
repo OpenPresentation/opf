@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {isValidFormat} from './format-check.js';
 import {attachTextTags,decodeTextTag} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-heading.js';
@@ -122,7 +122,7 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
       else local.push({code:'quote-photo-missing',message:"The quote's headshot picture is missing or unreadable; the quote is imported without a photo."});
     }
     if(manifest.shorthand&&Object.keys(quote).length===1)quote=quote.text;
-    if(!validatePresentation({slides:[{quote}]}).valid)throw Error('Current native text does not form a valid quote.');
+    if(!isValidFormat({slides:[{quote}]}))throw Error('Current native text does not form a valid quote.');
     for(const item of group)consumed.add(item.shape);
     for(const item of photos)consumedPictures.add(item.picture);
     items.push({shapes:group.map(item=>item.shape),pictures:photos.map(item=>item.picture),payload:{type:'quote',quote}});

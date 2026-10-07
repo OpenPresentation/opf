@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 import PptxGenJS from '../vendor/pptxgenjs/pptxgen.es.js';
-const fonts=await loadOfficeFontRegistry(),enc=new TextEncoder(),dec=new TextDecoder();
+const fonts=await loadFonts({pack: 'office'}),enc=new TextEncoder(),dec=new TextDecoder();
 const deck={design:{fontScheme:'roboto',dimensions:{widthInches:5.625,heightInches:10}},slides:[{tag:'Source',title:'A complete heading with enough words to wrap across lines',subtitle:'Supporting text',text:'Body remains present'}]};
-const bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement}),initial=(await fromPptx(bytes)).slides[0];
+const bytes=await toPptx(deck,{fonts}),initial=(await fromPptx(bytes)).slides[0];
 assert.equal(initial.title,deck.slides[0].title);
-const subtitleOnly=await fromPptx(await toPptx({design:{fontScheme:'roboto'},slides:[{subtitle:'Keep the subtitle role'}]},{textMeasurement:fonts.textMeasurement}));
+const subtitleOnly=await fromPptx(await toPptx({design:{fontScheme:'roboto'},slides:[{subtitle:'Keep the subtitle role'}]},{fonts}));
 assert.equal(subtitleOnly.slides[0].title,undefined);assert.equal(subtitleOnly.slides[0].subtitle,'Keep the subtitle role');
 const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipSync(entries);};
 const slide=(entries,mutate)=>entries['ppt/slides/slide1.xml']=enc.encode(mutate(dec.decode(entries['ppt/slides/slide1.xml'])));
@@ -17,7 +17,7 @@ const data=bytes=>JSON.parse(Buffer.from(dec.decode(bytes).match(/val="([^"]+)"/
 const tagFile=entries=>tags(entries).find(file=>data(entries[file]).field==='title');
 const editTag=(entries,mutate)=>{const file=tagFile(entries),xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(entries[file]);mutate(value);entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));};
 const legacy=await fromPptx(modify(entries=>{for(const file of tags(entries)){const xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],value=data(entries[file]);delete value.boundary;delete value.separator;entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()));}}));
-const oldTitleLines=resolvePresentation(deck,{textMeasurement:fonts.textMeasurement}).slides[0].geometry.items.find(item=>item.field==='title').text.lines;
+const oldTitleLines=resolvePresentation(deck,{fonts}).slides[0].geometry.items.find(item=>item.field==='title').text.lines;
 assert.equal(legacy.slides[0].title,oldTitleLines.join('\n'),'Legacy tags retain current native line breaks without inventing source boundaries');
 const changed=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace('A complete','An edited'))));
 assert.equal(changed.slides[0].title,initial.title.replace('A complete','An edited'),'Current native text wins over authoring source');
@@ -54,11 +54,11 @@ console.log(`Heading provenance: native edits, shape renaming/reordering and ${O
 // A complete role prevents body promotion into *other*, absent heading roles.
 // Compare every quote line, including repeated lines and the final attribution.
 let roleCases=0;
-for(const textMeasurement of [fonts.textMeasurement,undefined])
+for(const measured of [fonts,undefined])
 for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:540/96,heightInches:960/96}]) {
  for(const headings of [{title:'Known title'},{tag:'Known tag'},{subtitle:'Known subtitle'},{title:'Known title',subtitle:'Known subtitle'}]) {
   const document={design:{dimensions,fontScheme:'roboto'},slides:[{...headings,quote:{text:'Keep this body line in the body. '.repeat(6),attribution:'A reviewer',source:'Recorded interview'}}]};
-  const source=structuredClone(document),bound=resolvePresentation(document,{textMeasurement}).slides[0];
+  const source=structuredClone(document),bound=resolvePresentation(document,{fonts:measured}).slides[0];
   const quoteParts=bound.geometry.items.find(item=>item.quoteLayout).quoteLayout.parts;
   const expectedLines=quoteParts.flatMap(part=>part.fit.lines.filter(Boolean));
   const expected=quoteParts.flatMap(part=>part.fit.lines.filter(Boolean).map(text=>({type:'text',text:[{
@@ -69,7 +69,7 @@ for(const dimensions of [{widthInches:1280/96,heightInches:720/96},{widthInches:
    fontFamily:'Roboto',
    color:part.role==='body'?'#FFFFFF':'#F0F0F0'
   }]})));
-  const tagged=await toPptx(document,{textMeasurement}),copy=new Uint8Array(tagged),restored=(await fromPptx(tagged)).slides[0];
+  const tagged=await toPptx(document,{fonts:measured}),copy=new Uint8Array(tagged),restored=(await fromPptx(tagged)).slides[0];
   assert.deepEqual(document,source);assert.deepEqual(tagged,copy);
   // FF-57: the unchanged export restores the quote payload, and no body line is promoted into an absent heading role.
   for(const field of ['title','subtitle','tag'])assert.equal(restored[field],headings[field]);

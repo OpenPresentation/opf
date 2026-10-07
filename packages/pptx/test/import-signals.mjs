@@ -19,7 +19,7 @@ const check = async (name, run) => { cases += 1; try { await run(); } catch (err
 const deck = buildThirdPartyDeck();
 const deckCopy = new Uint8Array(deck);
 const imported = await importWith(deck);
-const {document, signals} = imported;
+const {presentation: document, signals} = imported;
 assert.deepEqual(deck, deckCopy, 'The source bytes stay intact');
 
 await check('default import output is unchanged', async () => {
@@ -30,7 +30,7 @@ await check('default import output is unchanged', async () => {
   for (const off of [undefined, false, null]) assert.deepEqual(await fromPptx(deck, {signals: off}), plain);
   // The same holds for a tagged export and for a generator deck.
   const exported = await toPptx({slides: [{title: 'T', blocks: [{type: 'group', blocks: [{type: 'text', text: 'A'}, {type: 'list', items: ['x', 'y']}]}]}]});
-  assert.deepEqual((await fromPptx(exported, {signals: true})).document, await fromPptx(exported));
+  assert.deepEqual((await fromPptx(exported, {signals: true})).presentation, await fromPptx(exported));
 });
 
 await check('the signals value is deterministic JSON', async () => {
@@ -245,7 +245,7 @@ await check('tagged exports link to groups, regions and root payloads', async ()
   assert.deepEqual([...new Set(paths(result.signals.slides[1]))], ['slides.1.title:title', 'slides.1.left:text', 'slides.1.right:list']);
   assert.deepEqual([...new Set(paths(result.signals.slides[2]))], ['slides.2.title:title', 'slides.2.text:text']);
   assert.deepEqual([...new Set(paths(result.signals.slides[3]))], ['slides.3.title:title', 'slides.3.blocks.0:metric', 'slides.3.blocks.1:quote', 'slides.3.blocks.2:code']);
-  for (const slide of result.signals.slides) for (const shape of slide.shapes) if (shape.opf?.path) assert.notEqual(at(result.document, shape.opf.path), undefined, shape.opf.path);
+  for (const slide of result.signals.slides) for (const shape of slide.shapes) if (shape.opf?.path) assert.notEqual(at(result.presentation, shape.opf.path), undefined, shape.opf.path);
   assert.ok(result.signals.slides[3].shapes.some(shape => shape.opfTagged === true), 'OPF tagged shapes are marked');
   assert.ok(result.signals.slides[3].shapes.some(shape => shape.opf?.role === 'metric' && shape.opf.path === undefined), 'members of a tagged group without a block of their own keep a role');
 });
@@ -263,12 +263,12 @@ await check('PptxGenJS deck: charts, shapes, outline', async () => {
   slide.addShape(pptx.ShapeType.rect, {x: 0.5, y: 5.8, w: 3, h: 0.8, fill: {color: 'FF0000'}, line: {color: '000000', width: 2}});
   const generated = new Uint8Array(await pptx.write({outputType: 'uint8array'}));
   const result = await fromPptx(generated, {signals: true});
-  assert.deepEqual(result.document, await fromPptx(generated));
+  assert.deepEqual(result.presentation, await fromPptx(generated));
   const shapes = result.signals.slides[0].shapes;
   const [bar, pie] = shapes.filter(shape => shape.kind === 'chart');
   assert.deepEqual(bar.chart, {extended: false, part: bar.chart.part, chartTypes: ['bar'], seriesCount: 2, pointCount: 3, barDirection: 'col', grouping: 'clustered', title: 'Revenue vs cost'});
   assert.deepEqual([pie.chart.chartTypes, pie.chart.seriesCount, pie.chart.pointCount], [['pie'], 1, 2]);
-  assert.equal(at(result.document, bar.opf.path).type, 'chart');
+  assert.equal(at(result.presentation, bar.opf.path).type, 'chart');
   const rect = shapes.find(shape => shape.fill?.color === '#FF0000');
   assert.equal(rect.kind, 'shape');
   assert.equal(rect.outline.widthPt, 2);
@@ -285,7 +285,7 @@ await check('limits bound the output and are reported', async () => {
   assert.deepEqual(small.signals.truncated, {slides: 2});
   assert.equal(small.signals.deck.slideCount, 4);
   assert.equal(small.signals.limits.maxShapesPerSlide, 3);
-  assert.equal(small.document.slides.length, 4, 'the document is never truncated');
+  assert.equal(small.presentation.slides.length, 4, 'the document is never truncated');
   const [first, second] = small.signals.slides;
   assert.equal(first.shapes.length, 2);
   assert.equal(second.shapes.length, 3);

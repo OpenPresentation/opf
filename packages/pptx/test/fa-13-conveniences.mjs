@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import * as opf from '@openpresentation/opf';
-import {renderSvg} from '@openpresentation/opf-render/svg';
+import {validate} from '@openpresentation/opf';
+import {colorContrast, resolveCanvasDimensions} from '@openpresentation/opf/composition';
+import {renderSlideSvg} from '@openpresentation/opf-render/svg';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets, exported natively
@@ -36,12 +37,12 @@ for (const [preset, cx, cy] of [['1:1', 6858000, 6858000], ['4:5', 6858000, 8572
     // The exporter's document provenance restores the authored form while the slide size still matches.
     const {document} = await importDeck(bytes);
     assert.deepEqual(document.design.dimensions, dimensions, `${preset} imports as the authored ${typeof dimensions === 'string' ? 'string' : 'object'}`);
-    assert.equal(opf.validatePresentation(document).valid, true);
+    assert.equal(validate(document, {only: ['format']}).valid, true);
     // Without the tags (a deck from another tool) the exact size imports as inches, which compose to the same canvas.
     const stripped = {...unzipSync(bytes)};
     for (const name of Object.keys(stripped)) if (/^ppt\/tags\//.test(name)) delete stripped[name];
     const bare = (await importDeck(zipSync(stripped))).document;
-    assert.deepEqual(opf.resolveCanvasDimensions(bare.design.dimensions), opf.resolveCanvasDimensions(preset));
+    assert.deepEqual(resolveCanvasDimensions(bare.design.dimensions), resolveCanvasDimensions(preset));
   }
 }
 {
@@ -84,7 +85,7 @@ const lineShapes = xml => named(xml, /^OPF code \d+ body line \d+$/);
   for (const [index, line] of lines.entries()) {
     const marked = [1, 2, 4].includes(index);
     const colorsOfLine = [...line.matchAll(/<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/g)].map(match => match[1]);
-    for (const color of colorsOfLine) assert.ok(opf.colorContrast(`#${color}`, marked ? `#${bandFill}` : '#111827') >= 4.5, `line ${index + 1} ${color}`);
+    for (const color of colorsOfLine) assert.ok(colorContrast(`#${color}`, marked ? `#${bandFill}` : '#111827') >= 4.5, `line ${index + 1} ${color}`);
   }
   assert.notEqual(colors[0], colors[1], 'a marked line is not coloured like an unmarked one');
   // The band is not content and the highlight comes back with the source.
@@ -112,7 +113,7 @@ const lineShapes = xml => named(xml, /^OPF code \d+ body line \d+$/);
   // A highlight past the last line draws nothing, validates with a warning, and exports.
   const {slide} = await exportDeck(codeDeck([40]));
   assert.equal(named(slide(), /highlight/).length, 0);
-  assert.ok(opf.validatePresentation(codeDeck([40])).warnings.some(issue => issue.params.code === 'code-highlight-out-of-range'));
+  assert.ok(validate(codeDeck([40])).findings.some(finding => finding.ruleId === 'opf/code-highlight-out-of-range' && finding.severity === 'warning'));
 }
 
 // --- Watermark.text ----------------------------------------------------------------------------------------------------
@@ -141,7 +142,7 @@ const textDeck = (watermark, slideDesign) => ({design: {fontScheme: 'roboto', ..
   assert.deepEqual(document.design.watermark, {text: 'DRAFT', opacity: 0.1});
   assert.equal(document.slides.every(item => item.design === undefined), true);
   assert.equal(JSON.stringify(document.slides).includes('DRAFT'), false);
-  assert.equal(opf.validatePresentation(document).valid, true);
+  assert.equal(validate(document, {only: ['format']}).valid, true);
 }
 {
   // The slide's own watermark replaces the deck's; false suppresses it; a string stays an image watermark.
@@ -163,7 +164,7 @@ const textDeck = (watermark, slideDesign) => ({design: {fontScheme: 'roboto', ..
 }
 {
   // Text and image watermark are one or the other.
-  assert.equal(opf.validatePresentation(textDeck({text: 'DRAFT', src: 'asset:x', opacity: 0.1})).valid, false);
+  assert.equal(validate(textDeck({text: 'DRAFT', src: 'asset:x', opacity: 0.1}), {only: ['format']}).valid, false);
 }
 
 // --- TextRun.code and TextRun.lang -------------------------------------------------------------------------------------
@@ -178,7 +179,7 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   assert.match(found.find(run => run.text === 'Run ').properties, /<a:latin typeface="Roboto"/);
   const {document} = await importDeck(bytes);
   assert.deepEqual(document.slides[0].text.map(run => typeof run === 'string' ? run : [run.text, run.code === true, run.fontFamily]), [['Run ', false, 'Roboto'], ['npm install', true, undefined], [' now', false, 'Roboto']]);
-  assert.equal(opf.validatePresentation(document).valid, true);
+  assert.equal(validate(document, {only: ['format']}).valid, true);
 }
 {
   // A run's own fontFamily wins over code; a body-family run is not mistaken for code.
@@ -238,14 +239,14 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
     const mark = named(slide(index), /^OPF watermark text$/)[0];
     const color = mark.match(/<a:rPr\b[\s\S]*?<a:solidFill><a:(srgbClr|schemeClr) val="(\w+)"/);
     const exported = color[1] === 'srgbClr' ? color[2].toUpperCase() : slot(color[2]);
-    const preview = renderSvg(deck, {slideIndex: index - 1}).match(/<text [^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*>DRAFT/)[1].slice(1).toUpperCase();
+    const preview = renderSlideSvg(deck, index - 1).match(/<text [^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*>DRAFT/)[1].slice(1).toUpperCase();
     assert.equal(exported, preview, `slide ${index}: preview and export use one color`);
     seen.push(exported);
   }
   assert.equal(seen[0], '000000', 'dark text on the white slide');
   assert.equal(seen[1], 'FFFFFF', 'light text on the dark slide');
   const background = ['FFFFFF', '0B1020', undefined];
-  for (const [index, color] of seen.entries()) if (background[index]) assert.ok(opf.colorContrast(`#${color}`, `#${background[index]}`) >= 4.5, `slide ${index + 1} is readable`);
+  for (const [index, color] of seen.entries()) if (background[index]) assert.ok(colorContrast(`#${color}`, `#${background[index]}`) >= 4.5, `slide ${index + 1} is readable`);
 }
 
 console.log('FA-13: presets, code highlight, text watermark, inline code and run language export natively and import back.');

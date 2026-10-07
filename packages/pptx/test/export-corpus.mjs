@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {examples} from '@openpresentation/opf/examples';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {unzipSync} from 'fflate';
 import {XMLParser,XMLValidator} from 'fast-xml-parser';
 import {readFile} from 'node:fs/promises';
-const fonts=await loadOfficeFontRegistry({fallbackFamily:"Roboto",strictGlyphs:false});
+const fonts=await loadFonts({pack: 'office', fallbackFamily:"Roboto",strictGlyphs:false});
 // Structural corpus gate: explicitly substitute fonts and images. This does
 // not establish source-asset, typography, rendering or native viewer fidelity.
 const substituteAssets = true;
@@ -15,7 +15,7 @@ const report={decks:examples.length,slides:0,exported:0,imported:0,failures:[],d
 for(const {file,deck} of examples){
  report.slides+=deck.slides.length;
  try{
-  const bytes=await toPptx(deck,{textMeasurement:fonts.textMeasurement,...(substituteAssets ? {imageResolver:async () => {substitutedAssets++;return syntheticImage;}} : {})});report.exported++;
+  const bytes=await toPptx(deck,{fonts,...(substituteAssets ? {imageResolver:async () => {substitutedAssets++;return syntheticImage;}} : {})});report.exported++;
   const entries=unzipSync(bytes);
   const contentTypes = new TextDecoder().decode(entries['[Content_Types].xml']);
   for (const [, part] of contentTypes.matchAll(/<Override\b[^>]*\bPartName="([^"]+)"/g)) {
@@ -47,7 +47,7 @@ for(const {file,deck} of examples){
   }
   const imported=await fromPptx(bytes);
   if(imported.slides.length!==deck.slides.length)throw new Error('Slide count changed');report.imported++;
- }catch(error){report.failures.push({file,code:error.code,message:error.message,details:error.details,issues:error.issues?.slice(0,3)});}
+ }catch(error){report.failures.push({file,code:error.code,message:error.message,details:error.details,findings:error.findings?.slice(0,3)});}
 }
 assert.equal(report.exported, report.decks, JSON.stringify(report.failures));
 assert.equal(report.imported, report.decks, JSON.stringify(report.failures));

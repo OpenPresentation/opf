@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import * as opf from '@openpresentation/opf';
+import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import {resolvePresentation} from '@openpresentation/opf-render';
-import {checkPptxTypefaces, fromPptx, inventoryPptxTypefaces, toPptx} from '../dist/index.js';
+import {checkTypefaces, fromPptx, inventoryTypefaces, toPptx} from '../dist/index.js';
 
 // opf-pptx#168 (FF-05). A slide may select its own script fonts (slides[].design.fontScheme, a slide theme, or an
 // inline fontScheme with eastAsian/complexScript), and core resolves them per slide. Slide runs name no East Asian /
@@ -11,12 +11,6 @@ import {checkPptxTypefaces, fromPptx, inventoryPptxTypefaces, toPptx} from '../d
 // profile gets its own slide master and theme, and a slide uses the master whose theme carries its script fonts.
 // A deck with one profile keeps one master (its bytes do not change). Notes share the one notes master; a slide on
 // another master that has notes is reported.
-
-if (typeof opf.resolveScriptFonts !== 'function') {
-  console.log('Per-slide script fonts: core has no resolveScriptFonts; nothing is resolved per slide.');
-  process.exit(0);
-}
-const {resolveScriptFonts} = opf;
 
 const exported = async (presentation, options = {}) => {
   const diagnostics = [];
@@ -125,10 +119,10 @@ const repro = {name: 'Per-slide script font', language: 'th', design: {theme: 'c
   const strip = theme => result.xml[theme].replace(/<a:(?:ea|cs) typeface="[^"]*"\/>|<a:font script="Thai" typeface="[^"]*"\/>/g, '');
   assert.equal(strip(chains[1].theme), strip(chains[0].theme).replace(/name="Classic"/, 'name="1_Classic"'), 'repro: themes differ only in their script fonts');
   assert.deepEqual(result.diagnostics.filter(diagnostic => /script|language/.test(diagnostic.code)), [], 'repro: no script diagnostics');
-  assert.deepEqual(checkPptxTypefaces(result.bytes, {fonts: ['Angsana New', 'DilleniaUPC', 'Tenorite', 'Tenorite Display'],
+  assert.deepEqual(checkTypefaces(result.bytes, {families: ['Angsana New', 'DilleniaUPC', 'Tenorite', 'Tenorite Display'],
     themeScripts: {major: {cs: 'Angsana New'}, minor: {cs: 'Angsana New'}}, themeScriptsByPart: {[chains[1].theme]: {major: {cs: 'DilleniaUPC'}, minor: {cs: 'DilleniaUPC'}}}}).violations, [], 'repro: the package names only the chosen fonts');
   // A slide's theme references resolve against its own master's theme.
-  const inventory = inventoryPptxTypefaces(result.bytes);
+  const inventory = inventoryTypefaces(result.bytes);
   assert.equal(inventory.themeParts[chains[1].theme].minor.cs, 'DilleniaUPC');
 }
 

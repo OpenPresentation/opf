@@ -5,7 +5,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {unzipSync, zipSync, strFromU8, strToU8} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const output = path.resolve(process.env.OPF_NATIVE_BODY_ARTIFACTS ?? 'artifacts/native-body-rich-text/source');
@@ -39,7 +39,7 @@ function changeBody(entries, replacement, remove=false) {
 async function imported(bytes,id) {
   const before=sha(bytes),diagnostics=[],deck=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
   assert.equal(sha(bytes),before,'Import does not mutate current input bytes');
-  assert.equal(validatePresentation(deck).valid,true,'Imported public OPF validates');
+  assert.equal(validate(deck, {only: ['format']}).valid,true,'Imported public OPF validates');
   await save(id+'.imported.json',JSON.stringify({deck,diagnostics},null,2)+'\n');
   assert.equal(deck.slides[0].notes,' exact\r\n notes\t ');assert.equal(deck.description,' exact\r\n description ');
   return {deck,diagnostics,value:blocks(deck)[0]};

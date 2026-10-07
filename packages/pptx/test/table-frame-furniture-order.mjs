@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {composeSlide, layoutTable} from '@openpresentation/opf/composition';
-import {renderSvg, renderSvgDeck} from '@openpresentation/opf-render';
+import { renderSlideSvg, renderSvg } from '@openpresentation/opf-render';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 // FF-39: a native table frame is the table the preview draws (composed x/y/width,
@@ -41,7 +41,7 @@ for (const [label, table] of [['short', short], ['tall', tall]]) for (const scal
   for (const [actual, expected, name] of [[frame.x, item.box.x, 'x'], [frame.y, item.box.y, 'y'], [frame.cx, item.box.width, 'width']])
     assert.ok(Math.abs(actual - expected * EMU) <= TOLERANCE_EMU, `${note}: frame ${name} ${actual / EMU} equals composed box ${expected}`);
   const rows = layoutTable(table, item.box, {scale}).rows.reduce((sum, row) => sum + row.box.height, 0);
-  const drawn = drawnExtent(renderSvg(deck, {trace: true}), item.path);
+  const drawn = drawnExtent(renderSlideSvg(deck, 0, {trace: true}), item.path);
   // Each row is rounded to whole EMU independently, hence the per-row allowance.
   const allowance = TOLERANCE_EMU + frame.rows;
   assert.ok(Math.abs(frame.cy - frame.rowSum) <= frame.rows, `${note}: frame cy ${frame.cy} equals the emitted row total ${frame.rowSum}`);
@@ -66,7 +66,7 @@ const decks = [
 let orders = 0;
 for (const deck of decks) {
   const entries = unzipSync(await toPptx(deck, {date: '2026-01-02'}));
-  const svgs = renderSvgDeck(deck, {trace: true, date: '2026-01-02'});
+  const svgs = renderSvg(deck, {trace: true, date: '2026-01-02'});
   for (const [index, slide] of deck.slides.entries()) {
     const xml = dec.decode(entries[`ppt/slides/slide${index + 1}.xml`]), order = names(xml);
     assert.ok(order.some(furniture), `slide ${index + 1} exports furniture`);

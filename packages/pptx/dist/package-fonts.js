@@ -1,5 +1,5 @@
 import {unzipSync, zipSync} from 'fflate';
-import {inventoryPptxTypefaces, packageFontsUsed, headingPairs, titlesOfParts} from './typeface-inventory.js';
+import {inventoryTypefaces, packageFontsUsed, headingPairs, titlesOfParts} from './typeface-inventory.js';
 
 // Package-level font post-processing (FF-08, font-fidelity-everywhere). The
 // vendored PptxGenJS bytes stay untouched; these passes rewrite its output so
@@ -152,7 +152,7 @@ export function finalizeFontsUsed(output) {
   if (!app) return;
   const parts = {};
   for (const [path, [bytes]] of Object.entries(output)) if (/^ppt\/.*\.xml$/.test(path)) parts[path] = bytes;
-  const fonts = packageFontsUsed(inventoryPptxTypefaces(parts, {nested: false}));
+  const fonts = packageFontsUsed(inventoryTypefaces(parts, {nested: false}));
   const themeNames = Object.keys(parts).filter(path => /^ppt\/theme\/theme\d+\.xml$/.test(path)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
     .map(path => /<a:theme\b[^>]*\bname="([^"]*)"/.exec(text(parts[path]))?.[1]).filter(name => name !== undefined).map(unescapeFace);
   output['docProps/app.xml'] = [encoder.encode(writeFontsUsed(text(app[0]), fonts, themeNames)), app[1]];

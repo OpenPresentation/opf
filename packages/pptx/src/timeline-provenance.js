@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {isValidFormat} from './format-check.js';
 import {attachTextTags,decodeTextTag} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 
@@ -83,7 +83,7 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
     }
     for(const [index,status] of statuses)result.events[index].status=status;
     const timeline=manifest.shorthand?result.events:result;
-    if(!validatePresentation({slides:[{timeline}]}).valid)throw Error('Current native text does not form a valid timeline.');
+    if(!isValidFormat({slides:[{timeline}]}))throw Error('Current native text does not form a valid timeline.');
     for(const item of group)consumed.add(item.shape);
     items.push({shapes:group.map(item=>item.shape),payload:{type:'timeline',timeline}});
     report({code:'timeline-import-reflow',message:'Timeline field order, source boundaries and current native text were recovered. Native formatting, positions, marker styling and font theme are not reconstructed; review the reflowed timeline.'});

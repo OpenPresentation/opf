@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import {catalogs, validatePresentation} from '@openpresentation/opf';
+import {catalogs, validate} from '@openpresentation/opf';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 // FF-24 (font-fidelity-everywhere): the exported theme carries the deck color
@@ -39,7 +39,7 @@ const resolve = (fill, colors) => {
 const importWith = async bytes => {
   const diagnostics = [];
   const document = await fromPptx(bytes, {onDiagnostic: d => diagnostics.push(d)});
-  assert.equal(validatePresentation(document).valid, true);
+  assert.equal(validate(document, {only: ['format']}).valid, true);
   return {document, diagnostics, theme: diagnostics.filter(d => d.path?.startsWith('design.'))};
 };
 

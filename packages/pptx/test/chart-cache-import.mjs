@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {unzipSync, zipSync, strToU8, strFromU8} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 const {toPptx, fromPptx} = await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 
 // Edit native chart caches in an actual exported package. No source tags are
@@ -31,7 +31,7 @@ async function imported(options) {
   const bytes = fixture(options), before = bytes.slice();
   const document = await fromPptx(bytes);
   assert.deepEqual(bytes, before, 'fromPptx must not mutate the package');
-  assert.equal(validatePresentation(document).valid, true, 'observed cache data must remain valid OPF');
+  assert.equal(validate(document, {only: ['format']}).valid, true, 'observed cache data must remain valid OPF');
   const slide = document.slides[0], chart = slide.chart ?? slide.blocks?.find(block => block.chart)?.chart;
   assert.ok(chart, 'native chart remains a chart');
   return chart;
@@ -187,7 +187,7 @@ test('ordinary numeric export/import/re-export retains scientific-notation cells
   const originalBytes = bytes.slice();
   const restored = await fromPptx(bytes);
   assert.deepEqual(bytes, originalBytes, 'import must not change the package');
-  assert.equal(validatePresentation(restored).valid, true);
+  assert.equal(validate(restored, {only: ['format']}).valid, true);
   const chart = restored.slides[0].chart ?? restored.slides[0].blocks?.find(block => block.chart)?.chart;
   assert.deepEqual(chart.data, input.slides[0].chart.data);
   const restoredBefore = structuredClone(restored);

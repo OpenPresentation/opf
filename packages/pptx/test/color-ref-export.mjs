@@ -3,7 +3,8 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { unzipSync } from "fflate";
 import { XMLParser } from "fast-xml-parser";
-import { catalogs, normalizeHexColor, resolveColorRef } from "@openpresentation/opf";
+import { catalogs } from "@openpresentation/opf";
+import { normalizeHexColor, resolveColorRef } from "@openpresentation/opf/composition";
 import { resolveColorRefValue, resolveExportColor, colorContext } from "../dist/color-ref.js";
 import { toPptx } from "../dist/index.js";
 

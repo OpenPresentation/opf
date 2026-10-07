@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
-import * as opfCore from '@openpresentation/opf';
+import {catalogs} from '@openpresentation/opf';
 import {examples} from '@openpresentation/opf/examples';
-import {resolveFontFamilies} from '@openpresentation/opf/composition';
+import {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
 import {writeWorkbookFonts} from '../src/package-fonts.js';
-import {toPptx, checkPptxTypefaces, inventoryPptxTypefaces, THEME_SCRIPT_SUPPLEMENTS} from '../src/index.js';
+import {toPptx, checkTypefaces, inventoryTypefaces, THEME_SCRIPT_SUPPLEMENTS} from '../src/index.js';
 
 // FF-08 (font-fidelity-everywhere): the exported package names only the fonts
-// the document chose. checkPptxTypefaces walks every XML part, including the
+// the document chose. checkTypefaces walks every XML part, including the
 // embedded chart workbooks, and allows chosen fonts, theme references that
 // resolve to them, empty theme ea/cs slots (FF-05) and the documented theme
 // script supplements.
@@ -53,7 +53,7 @@ for (const role of ['major', 'minor']) {
   assert.deepEqual(listed, {...THEME_SCRIPT_SUPPLEMENTS[role]}, `${role} script supplements`);
 }
 assert.deepEqual(fontsUsed(plain), ['Aptos', 'Aptos Display']);
-assert.ok(checkPptxTypefaces(plain, {fonts: ['Aptos', 'Aptos Display']}).ok);
+assert.ok(checkTypefaces(plain, {families: ['Aptos', 'Aptos Display']}).ok);
 
 // Chart deck: every chart family, a code slide, a table, notes and a per-slide
 // serif override that carries its own chart.
@@ -65,7 +65,7 @@ const deck = {name: 'Charts', design: {fontScheme: 'consolas'}, slides: [
   {title: 'Table', table: {columns: ['Name', 'Value'], rows: [['A', '1'], ['B', '2']]}},
   {title: 'Serif override', design: {fontScheme: 'georgia'}, chart: {type: 'bar', data}},
 ]};
-const {catalogs} = opfCore;
+
 const consolas = resolveFontFamilies(catalogs.fontSchemes.find(record => record.id === 'consolas'));
 const georgia = resolveFontFamilies(catalogs.fontSchemes.find(record => record.id === 'georgia'));
 const chosen = [...new Set([...Object.values(consolas), ...Object.values(georgia)])];
@@ -74,7 +74,7 @@ const bytes = await toPptx(deck, {strictAssets: true});
 const entries = parts(bytes);
 assert.equal(Buffer.compare(Buffer.from(bytes), Buffer.from(await toPptx(deck, {strictAssets: true}))), 0, 'byte-deterministic');
 
-const result = checkPptxTypefaces(bytes, {fonts: chosen, monospace});
+const result = checkTypefaces(bytes, {families: chosen, monospace});
 assert.deepEqual(result.violations, []);
 const charts = names(entries, /^ppt\/charts\/chart\d+\.xml$/);
 const workbooks = names(entries, /^ppt\/embeddings\/.*\.xlsx$/);
@@ -121,7 +121,7 @@ assert.deepEqual([...pitches.get(consolas.body)], [49]);
 assert.deepEqual([...pitches.get(georgia.body)], [18]);
 if (pitches.has(consolas.code)) assert.deepEqual([...pitches.get(consolas.code)], [49]);
 const aptos = parts(await toPptx({slides: [{title: 'Rule', layout: 'code-1x', code: {source: 'let x = 1;', language: 'ts'}}]}, {strictAssets: true}));
-const aptosCheck = checkPptxTypefaces(aptos, {fonts: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']});
+const aptosCheck = checkTypefaces(aptos, {families: ['Aptos', 'Aptos Display', 'Roboto Mono'], monospace: ['Roboto Mono']});
 assert.deepEqual(aptosCheck.violations, []);
 assert.ok(aptosCheck.inventory.typefaces.some(entry => entry.typeface === 'Aptos Display' && entry.pitchFamily === 34));
 assert.ok(aptosCheck.inventory.typefaces.some(entry => entry.typeface === 'Roboto Mono' && entry.pitchFamily === 49));
@@ -137,7 +137,7 @@ assert.ok(aptosCheck.inventory.typefaces.some(entry => entry.typeface === 'Robot
 
 // Negative controls: each leak class is detected, including nested parts.
 const firstChart = charts[0], firstWorkbook = workbooks[0];
-const control = (edit, options = {}) => reasons(checkPptxTypefaces(repack(bytes, edit), {fonts: chosen, monospace, ...options}));
+const control = (edit, options = {}) => reasons(checkTypefaces(repack(bytes, edit), {families: chosen, monospace, ...options}));
 assert.ok(control(e => replacePart(e, firstChart, /<a:latin typeface="[^"]*"\/>/, '<a:latin typeface="Arial"/>')).includes('foreign-typeface'));
 assert.ok(control(e => { const nested = unzipSync(e[firstWorkbook]); replacePart(nested, 'xl/styles.xml', /<name val="[^"]*"\/>/, '<name val="Geneva"/>'); e[firstWorkbook] = zipSync(nested); })
   .includes('foreign-typeface'));
@@ -147,7 +147,7 @@ assert.ok(control(e => replacePart(e, 'ppt/theme/theme1.xml', '<a:font script="J
 assert.ok(control(e => replacePart(e, 'ppt/theme/theme1.xml', /<a:minorFont><a:latin typeface="[^"]*"/, '<a:minorFont><a:latin typeface="Calibri"')).includes('foreign-theme-reference'));
 assert.ok(control(e => replacePart(e, 'ppt/slides/slide8.xml', /pitchFamily="49"/g, 'pitchFamily="34"')).includes('monospace-not-fixed-pitch'));
 assert.ok(control(() => {}, {allowEmptyThemeScripts: false}).includes('empty-typeface'), 'FF-05 empty theme ea/cs is an explicit allowance');
-assert.throws(() => checkPptxTypefaces(bytes, {}), TypeError);
+assert.throws(() => checkTypefaces(bytes, {}), TypeError);
 
 // Corpus: every example deck, with the fonts its design and runs choose.
 const records = (presentation, kind) => [...[presentation.catalogs?.[kind]?.records ?? presentation.catalogs?.[kind] ?? []].flat(), ...catalogs[kind]];
@@ -161,13 +161,10 @@ const designFonts = (presentation, design) => {
   return {...resolveFontFamilies(scheme), mono: scheme.type === 'monospace' ? [scheme.major, scheme.minor] : []};
 };
 // FF-07 writes the language's script fonts (theme and run ea/cs and the language's
-// own theme supplement) through core resolveScriptFonts(). With a core that has
-// the resolver, those resolved families are chosen fonts too; published cores
-// without it export no script fonts, so nothing is added.
+// own theme supplement) through core resolveScriptFonts(); those resolved families are chosen fonts too.
 const scriptFonts = presentation => {
-  if (typeof opfCore.resolveScriptFonts !== 'function') return [];
   return [undefined, ...presentation.slides.keys()].flatMap(slideIndex => {
-    const resolved = opfCore.resolveScriptFonts(presentation, slideIndex === undefined ? {} : {slideIndex});
+    const resolved = resolveScriptFonts(presentation, slideIndex === undefined ? {} : {slideIndex});
     const slots = [resolved.heading, resolved.body].flatMap(slot => [slot.latin, slot.eastAsian, slot.complexScript]);
     return [...slots, ...(resolved.supplement ? [resolved.supplement.heading, resolved.supplement.body] : [])].filter(Boolean);
   });
@@ -181,9 +178,9 @@ for (const {file, deck: example} of examples) {
   const mono = roles.flatMap(role => [...role.mono, role.code]);
   const exported = await toPptx(example, {imageResolver: async () => new Uint8Array(await readFile(new URL('./fixtures/images/wide.png', import.meta.url)))});
   // FF-49: a theme ea/cs is written exactly where the deck selected a script font (scheme slot or language), else empty.
-  const deckSlots = opfCore.resolveScriptFonts(example);
+  const deckSlots = resolveScriptFonts(example);
   const supplied = role => Object.fromEntries([['ea', 'eastAsian'], ['cs', 'complexScript']].map(([element, key]) => [element, deckSlots.sources[key] === 'latin' ? '' : deckSlots[role][key]]));
-  const checked = checkPptxTypefaces(exported, {fonts, monospace: mono, themeScripts: {major: supplied('heading'), minor: supplied('body')}});
+  const checked = checkTypefaces(exported, {families: fonts, monospace: mono, themeScripts: {major: supplied('heading'), minor: supplied('body')}});
   corpus.decks++;
   corpus.typefaces += checked.inventory.typefaces.length;
   corpus.charts += checked.inventory.typefaces.filter(entry => /^ppt\/charts\/chart\d+\.xml$/.test(entry.part)).length ? 1 : 0;
@@ -193,7 +190,7 @@ for (const {file, deck: example} of examples) {
 assert.equal(corpus.decks, examples.length);
 assert.deepEqual(corpus.failures, [], JSON.stringify(corpus.failures, null, 1));
 assert.ok(corpus.workbooks > 0, 'the corpus exercises embedded chart workbooks');
-assert.equal(typeof inventoryPptxTypefaces, 'function');
+assert.equal(typeof inventoryTypefaces, 'function');
 
 // FF-49: themeScripts flags a slot that should be set but is empty or different, and accepts an empty slot when nothing
 // was selected (Office's convention); a Latin deck selects nothing.
@@ -202,13 +199,13 @@ assert.equal(typeof inventoryPptxTypefaces, 'function');
   const latinDeck = await toPptx({name: 'en', slides: [{title: 'Title', text: 'Body'}]});
   const jaFonts = ['Aptos', 'Aptos Display', 'Meiryo'];
   const selected = {major: {ea: 'Meiryo'}, minor: {ea: 'Meiryo'}};
-  assert.deepEqual(checkPptxTypefaces(japanese, {fonts: jaFonts, themeScripts: selected}).violations, []);
+  assert.deepEqual(checkTypefaces(japanese, {families: jaFonts, themeScripts: selected}).violations, []);
   const emptied = repack(japanese, e => replacePart(e, 'ppt/theme/theme1.xml', /<a:ea typeface="Meiryo"[/]>/, '<a:ea typeface=""/>'));
-  assert.ok(reasons(checkPptxTypefaces(emptied, {fonts: jaFonts, themeScripts: selected})).includes('theme-script-slot'), 'a selected ea that is empty is flagged');
-  assert.deepEqual(checkPptxTypefaces(emptied, {fonts: jaFonts}).violations, [], 'without themeScripts an empty slot stays allowed');
+  assert.ok(reasons(checkTypefaces(emptied, {families: jaFonts, themeScripts: selected})).includes('theme-script-slot'), 'a selected ea that is empty is flagged');
+  assert.deepEqual(checkTypefaces(emptied, {families: jaFonts}).violations, [], 'without themeScripts an empty slot stays allowed');
   const wrong = repack(japanese, e => replacePart(e, 'ppt/theme/theme1.xml', /<a:ea typeface="Meiryo"[/]>/, '<a:ea typeface="Aptos"/>'));
-  assert.ok(reasons(checkPptxTypefaces(wrong, {fonts: jaFonts, themeScripts: selected})).includes('theme-script-slot'), 'a different ea is flagged');
-  assert.deepEqual(checkPptxTypefaces(latinDeck, {fonts: ['Aptos', 'Aptos Display'], themeScripts: {}}).violations, [], 'nothing selected: empty ea/cs are fine');
+  assert.ok(reasons(checkTypefaces(wrong, {families: jaFonts, themeScripts: selected})).includes('theme-script-slot'), 'a different ea is flagged');
+  assert.deepEqual(checkTypefaces(latinDeck, {families: ['Aptos', 'Aptos Display'], themeScripts: {}}).violations, [], 'nothing selected: empty ea/cs are fine');
 }
 
 console.log(JSON.stringify({test: 'typeface-inventory', passed: true, charts: charts.length, corpus: {decks: corpus.decks, decksWithCharts: corpus.charts, workbooks: corpus.workbooks, typefaces: corpus.typefaces}}));

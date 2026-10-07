@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 
 // RR-09: rich text with hard line breaks (a newline inside a run, a blank line, a break between differently
 // styled runs) exports as one native text shape per line and used to re-import as separate blocks with
@@ -12,7 +12,7 @@ const EXPORT = {timestamp: '2026-01-01T00:00:00Z', seed: 1, date: '2026-09-30'};
 const read = async (bytes) => {
   const issues = [];
   const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(deck).valid, true, JSON.stringify(validatePresentation(deck).errors));
+  assert.equal(validate(deck, {only: ['format']}).valid, true, JSON.stringify(validate(deck, {only: ['format']}).findings));
   return {deck, issues, provenance: issues.filter(issue => /provenance|reference|structure|slide-id|block-id/.test(issue.code))};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };

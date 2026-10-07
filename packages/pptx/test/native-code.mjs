@@ -6,8 +6,8 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createFontRegistry} from '@openpresentation/opf-render/fonts';
-import {renderSvgDeck,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
-import {validatePresentation} from '@openpresentation/opf';
+import {renderSvg,resolvePresentation,svgToPng} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
 const [mode,directory='artifacts/native-code',selectedDeck]=process.argv.slice(2);
 assert.ok(['generate','compare','compare-deck'].includes(mode));
@@ -38,19 +38,20 @@ if(mode==='generate') {
     faces.push({data,family:'Courier New',weight,italic:false});fontHashes[file]=hash(data);
   }
   const fonts=createFontRegistry(faces,{substitutionPolicy:'none'}),decks=[];
+  const handle={textMeasurement:fonts.textMeasurement,embeddedFonts:fonts.embeddedFonts,fontFiles,useBundledFonts:false,loadSystemFonts:false};
   for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const id='code-'+dimensions.width,values=['', '\t\t',
       {source:'  const value = "two  spaces";\r\n\r\n'+'longtoken'.repeat(22)+'\n\treturn value;  \r',filename:'src\tCaseSensitive.ts',language:'TypeScript'},
       {source:'',filename:'a-long-path/'.repeat(15),language:'Long-language-label-'.repeat(12)}];
     const family={family:'Courier New'};
     const document={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',heading:family,body:family,code:family}},slides:values.map(code=>({composition:{minFontSize:24},code}))};
-    const options={textMeasurement:fonts.textMeasurement},bound=resolvePresentation(document,options);
+    const options={fonts:handle},bound=resolvePresentation(document,options);
     for(const slide of bound.slides)assert.deepEqual(slide.geometry.diagnostics,[]);
-    const pptx=await toPptx(document,options),svgs=renderSvgDeck(document,{...options,embeddedFonts:fonts.embeddedFonts});
+    const pptx=await toPptx(document,options),svgs=renderSvg(document,options);
     await writeFile(path.join(output,id+'.pptx'),pptx);
     const rasters=[];
     for(const [index,svg] of svgs.entries()) {
-      const png=await svgToPng(svg,{fontFiles,useBundledFonts:false,loadSystemFonts:false});await writeFile(path.join(output,`${id}-svg-${index+1}.png`),png);
+      const png=await svgToPng(svg,{fonts:handle});await writeFile(path.join(output,`${id}-svg-${index+1}.png`),png);
       rasters.push(hash(png));
     }
     decks.push({id,...dimensions,document,pptxSha256:hash(pptx),svgRasterSha256:rasters,layouts:bound.slides.map(slide=>({cell:slide.geometry.items[0].box,...slide.geometry.items[0].codeLayout}))});
@@ -75,7 +76,7 @@ if(mode==='generate') {
     const record=reports.find(item=>item.id===deck.id);
     assert.equal(hash(bytes),state==='original'?deck.pptxSha256:record[state+'Sha256']);
     const diagnostics=[],result=await fromPptx(bytes,{onDiagnostic:issue=>diagnostics.push(issue)});
-    assert.equal(validatePresentation(result).valid,true);assert.equal(result.slides.length,deck.document.slides.length);
+    assert.equal(validate(result, {only: ['format']}).valid,true);assert.equal(result.slides.length,deck.document.slides.length);
     for(const [index,slide] of result.slides.entries()) {
       let code=structuredClone(deck.document.slides[index].code);
       if(state==='edited') {

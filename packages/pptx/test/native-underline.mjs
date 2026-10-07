@@ -5,7 +5,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {unzipSync} from 'fflate';
 import {XMLParser, XMLValidator} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {toPptx} from '../dist/index.js';
 
 // Public exporter controls. No private converter calls or native Office claim.
@@ -41,7 +41,7 @@ const shapes = [
 ];
 const deck = slide => ({design:{fontScheme:'roboto', colorScheme:'forest-green'}, slides:[slide]});
 async function exportAndRetain(name, source) {
-  assert.equal(validatePresentation(source).valid, true, name + ': schema-valid source');
+  assert.equal(validate(source, {only: ['format']}).valid, true, name + ': schema-valid source');
   const before = JSON.stringify(source), diagnostics = [];
   const bytes = await toPptx(source, {...fixed, onDiagnostic:value => diagnostics.push(value)});
   const entries = unzipSync(bytes), xml = new TextDecoder().decode(entries['ppt/slides/slide1.xml']);

@@ -1,6 +1,7 @@
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-import {renderSvg} from '@openpresentation/opf-render';
-import {validatePresentation,colorContrast} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
+import {colorContrast} from '@openpresentation/opf/composition';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
 const output=document.querySelector('pre');let checks=0;
 const check=(ok,message)=>{if(!ok)throw Error(message);checks++;};
@@ -10,9 +11,9 @@ try{
   const data={columns:[' Quarter & Ω\t\n ','Current'],rows:[['Q1',2],['Q2',3]]};
   const source={design:{background,colorScheme:{id:'cool-horizon',dark1:'#000000',light1:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type,data}}]},before=JSON.stringify(source);
   const bytes=await toPptx(source),imported=await fromPptx(bytes);
-  check(validatePresentation(imported).valid,'Reimport validates in the browser');
+  check(validate(imported, {only: ['format']}).valid,'Reimport validates in the browser');
   check(JSON.stringify(chartOf(imported).data)===JSON.stringify(data),'Browser preserves exact heading, labels, series and values');
-  document.querySelector('main').innerHTML=renderSvg(source,{trace:true});
+  document.querySelector('main').innerHTML=renderSlideSvg(source, 0,{trace:true});
   check(document.querySelector('rect[data-opf-path="slides.0.chart"]').getAttribute('fill')===surface,'SVG chart uses its resolved panel');
   check([...document.querySelectorAll('svg text')].every(label=>label.getAttribute('fill')===text),'Live SVG labels use the tested inherited color');
   const marks=[...document.querySelectorAll('[data-opf-path^="slides.0.chart.data"]')].filter(node=>['rect','path','circle','polyline'].includes(node.tagName));

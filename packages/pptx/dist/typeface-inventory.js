@@ -7,7 +7,7 @@ import {unzipSync} from 'fflate';
 // DrawingML `typeface` attributes (latin, ea, cs, sym, buFont, theme script
 // supplements, embedded-font lists), SpreadsheetML font names (styles `name`,
 // rich-text `rFont`) and the docProps/app.xml "Fonts Used" list.
-// checkPptxTypefaces() then applies the owner font policy: a package names only
+// checkTypefaces() then applies the owner font policy: a package names only
 // the fonts its author chose, plus theme references that resolve to them, empty
 // theme script slots when no script font was selected (as in Office's themes; FF-49 checks a selected slot through options.themeScripts) and the documented theme script supplements.
 
@@ -33,7 +33,7 @@ export const THEME_SCRIPT_SUPPLEMENTS = Object.freeze({
   minor: supplement(`Jpan=游ゴシック|Hans=等线|Arab=Arial|Hebr=Arial|Thai=Cordia New|Khmr=DaunPenh|Viet=Arial|${SHARED_SCRIPTS}`)
 });
 
-export function inventoryPptxTypefaces(input, options = {}) {
+export function inventoryTypefaces(input, options = {}) {
   const typefaces = [];
   const themes = {};
   // Every theme part's fonts, and the theme each part of the presentation package resolves its references against.
@@ -90,15 +90,15 @@ export function packageFontsUsed(inventory) {
   return [...used].sort(compareFontNames);
 }
 
-export function checkPptxTypefaces(input, options = {}) {
-  if (!Array.isArray(options.fonts) || options.fonts.some(font => typeof font !== 'string' || !font)) {
-    throw new TypeError('checkPptxTypefaces requires options.fonts, the non-empty family names the author chose.');
+export function checkTypefaces(input, options = {}) {
+  if (!Array.isArray(options.families) || options.families.some(family => typeof family !== 'string' || !family)) {
+    throw new TypeError('checkTypefaces requires options.families, the non-empty family names the author chose.');
   }
-  const chosen = new Set(options.fonts);
+  const chosen = new Set(options.families);
   const monospace = new Set(options.monospace ?? []);
   const allowEmpty = options.allowEmptyThemeScripts ?? true;
   const supplements = options.scriptSupplements ?? THEME_SCRIPT_SUPPLEMENTS;
-  const inventory = inventoryPptxTypefaces(input);
+  const inventory = inventoryTypefaces(input);
   const violations = [];
   const fail = (entry, reason, details = {}) => violations.push({reason, part: entry.part, element: entry.element, typeface: entry.typeface, ...details});
   const emptyAllowed = entry => allowEmpty && entry.theme && (entry.element === 'ea' || entry.element === 'cs');

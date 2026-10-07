@@ -8,17 +8,14 @@
 //   chartex charts   cx:axis/cx:title, cx:legend pos and cx:dataLabels pos (see chartex.js, which calls the helpers here).
 //
 // A chart that carries none of the three fields resolves to `active: false`; nothing below runs and its parts are unchanged.
-import * as opfCore from '@openpresentation/opf';
+import {chartOptionSupport, chartOptionTarget, resolveChartOptions, textColorForFill} from '@openpresentation/opf/composition';
 
 const INACTIVE = Object.freeze({active: false, axisTitles: {}, diagnostics: []});
 
-/** True when the installed core knows the chart option fields (older cores ignore them on export and import). */
-export const coreKnowsChartOptions = () => typeof opfCore.resolveChartOptions === 'function' && typeof opfCore.chartOptionSupport === 'function';
-
-/** The resolved options of a chart (an older core without `resolveChartOptions` ignores the fields). */
+/** The resolved options of a chart. */
 export function resolveChartOptionsFor(chart) {
-  if (typeof opfCore.resolveChartOptions !== 'function' || !chart || typeof chart !== 'object') return INACTIVE;
-  return opfCore.resolveChartOptions(chart, opfCore.chartOptionTarget(chart.type));
+  if (!chart || typeof chart !== 'object') return INACTIVE;
+  return resolveChartOptions(chart, chartOptionTarget(chart.type));
 }
 
 export function reportChartOptionDiagnostics(resolved, path, onDiagnostic) {
@@ -103,7 +100,7 @@ export function applyDataLabels(xml, info) {
   // Where the label sits on its mark: a bar or pie label placed inside the mark, and the labels of an area or a doughnut ring,
   // take the colour that contrasts with the mark; every other label keeps the chart text colour (as the preview does).
   const inside = kind === 'area' || kind === 'doughnut' || (['bar', 'pie', 'histogram', 'pareto', 'waterfall'].includes(kind) && INSIDE.has(labels.position));
-  const contrast = fill => typeof opfCore.textColorForFill === 'function' ? String(opfCore.textColorForFill(`#${fill}`, `#${labelColor}`)).replace(/^#/, '').toUpperCase() : labelColor;
+  const contrast = fill => String(textColorForFill(`#${fill}`, `#${labelColor}`)).replace(/^#/, '').toUpperCase();
   const block = (color, {points = 0, leaderLines = false, fills} = {}) =>
     `<c:dLbls>${Array.from({length: points}, (_, index) => dLbl(index, inside ? contrast(fills?.[index] ?? palette[index % palette.length]) : labelColor, labels, {size: textSize, font})).join('')}` +
     `<c:numFmt formatCode="General" sourceLinked="0"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>${labelText(color, textSize, font)}${labelFlags(labels, {leaderLines})}</c:dLbls>`;
@@ -152,8 +149,6 @@ function titleString(title) {
  * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind.
  */
 export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = [], combo}) {
-  // An older core's schema has no such fields (additionalProperties is false), so nothing is added to the imported chart.
-  if (!coreKnowsChartOptions()) return {options: {}, notes: []};
   const chart = chartSpace?.['c:chart'];
   const plotArea = chart?.['c:plotArea'];
   const out = {};
@@ -207,7 +202,7 @@ function classicDataLabels(chartNode, target, notes, seriesFormats = [], combo) 
   for (const hidden of ['c:showSerName', 'c:showLegendKey', 'c:showBubbleSize']) {
     if (flag(source[hidden])) notes.push({option: 'dataLabels', message: `Data labels that show ${hidden.slice(6)} cannot be expressed; only category, value and percent import.`});
   }
-  const support = target && typeof opfCore.chartOptionSupport === 'function' ? opfCore.chartOptionSupport(target) : undefined;
+  const support = target ? chartOptionSupport(target) : undefined;
   const numberFormat = source['c:numFmt']?.formatCode ?? block['c:numFmt']?.formatCode;
   // RR-54: a label format that is a series' own number format imports with that column's format (or its own note).
   if (numberFormat && numberFormat !== 'General' && numberFormat !== '#,##0' && numberFormat !== '0%' && !seriesFormats.includes(numberFormat)) notes.push({option: 'dataLabels', message: `The label number format '${numberFormat}' cannot be expressed; labels import in the General format.`});
@@ -232,9 +227,9 @@ function classicDataLabels(chartNode, target, notes, seriesFormats = [], combo) 
   return Object.keys(out).length ? out : true;
 }
 
-/** The core option target of a chart type id (undefined for an id outside the catalog or an older core). */
+/** The core option target of a chart type id (undefined for an id outside the catalog). */
 export function chartTargetFor(typeId) {
-  return typeof opfCore.chartOptionTarget === 'function' ? opfCore.chartOptionTarget(typeId) : undefined;
+  return chartOptionTarget(typeId);
 }
 
 // ---------------------------------------------------------------------------
@@ -261,7 +256,6 @@ function axisTitleText(axis) {
  * on a funnel), so only what differs from them is returned.
  */
 export function chartOptionsFromChartex(space, {type, seriesCount}) {
-  if (!coreKnowsChartOptions()) return {options: {}, notes: []};
   const chart = space?.['cx:chart'];
   const out = {};
   const notes = [];
@@ -290,7 +284,7 @@ export function chartOptionsFromChartex(space, {type, seriesCount}) {
     if (cxFlag(visibility.value)) content.push('value');
     if (cxFlag(visibility.seriesName)) notes.push({option: 'dataLabels', message: 'Chartex data labels that show the series name cannot be expressed; only category and value import.'});
     const position = CX_POSITION_BACK[labels.pos];
-    const support = typeof opfCore.chartOptionSupport === 'function' && typeof opfCore.chartOptionTarget === 'function' ? opfCore.chartOptionSupport(opfCore.chartOptionTarget(type) ?? {kind: type}) : undefined;
+    const support = chartOptionSupport(chartOptionTarget(type) ?? {kind: type});
     const isDefault = defaultContent && content.length === defaultContent.length && content.every((part, index) => part === defaultContent[index]) && (!position || position === 'center');
     const separator = text(labels['cx:separator']);
     const result = {};

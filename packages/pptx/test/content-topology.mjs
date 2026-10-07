@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {contentTopology, rebuildContent, validateTopology, softWrappedLines, wrappedLines, joinWrappedText, REGION_KEYS, MAX_GROUP_DEPTH} from '../dist/content-topology.js';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 
 // Spec-gap closure P1: a slide's content structure (nested groups, promoted
 // regions, the root payload form, block ids and extensions, group composition)
@@ -13,7 +13,7 @@ const EXPORT = {timestamp: '2026-01-01T00:00:00Z', seed: 1, date: '2026-09-30'};
 const read = async (bytes, {strip = false} = {}) => {
   const issues = [];
   const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(deck).valid, true, JSON.stringify(validatePresentation(deck).errors));
+  assert.equal(validate(deck, {only: ['format']}).valid, true, JSON.stringify(validate(deck, {only: ['format']}).findings));
   return {deck, issues, provenance: issues.filter(issue => /provenance|reference|structure|slide-id|block-id/.test(issue.code))};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };

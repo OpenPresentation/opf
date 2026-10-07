@@ -2,12 +2,12 @@ import assert from 'node:assert/strict';
 import { unzipSync } from 'fflate';
 import { XMLParser } from 'fast-xml-parser';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { renderSvg } from '@openpresentation/opf-render/svg';
-import { loadOfficeFontRegistry } from '@openpresentation/opf-render/fonts-node';
+import { renderSlideSvg } from '@openpresentation/opf-render/svg';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 import { toPptx } from '../dist/index.js';
 
 const parser = new XMLParser({ ignoreAttributes: false, parseTagValue: false });
-const fonts = await loadOfficeFontRegistry();
+const fonts = await loadFonts({pack: 'office'});
 const array = value => value == null ? [] : Array.isArray(value) ? value : [value];
 function find(value, key) {
   if (!value || typeof value !== 'object') return [];
@@ -33,10 +33,10 @@ for (const align of ['left', 'center', 'right']) {
       title: 'Measured table', composition: { mode: 'row', weights: [1, 4], minFontSize: 14 },
       blocks: [{ composition: { mode: 'column', minFontSize: 8 }, blocks: [{ table }] }, { text: 'Supporting context' }],
     }] };
-    const geometry = composeSlide(deck.slides[0], { width: 1280 * scale, height: 720 * scale, fonts: {body:family,heading:family}, textMeasurement: fonts.textMeasurement });
+    const geometry = composeSlide(deck.slides[0], { width: 1280 * scale, height: 720 * scale, fontFamilies: {body:family,heading:family}, textMeasurement: fonts.textMeasurement });
     const item = geometry.items.find(item => item.field === 'table');
-    const svg = parser.parse(renderSvg(deck, { trace: true, textMeasurement: fonts.textMeasurement }));
-    const bytes = await toPptx(deck, { textMeasurement: fonts.textMeasurement });
+    const svg = parser.parse(renderSlideSvg(deck, 0, { trace: true, fonts }));
+    const bytes = await toPptx(deck, { fonts });
     const themeXml = new TextDecoder().decode(unzipSync(bytes)['ppt/theme/theme1.xml']);
     const xml = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
     const frame = find(xml, 'p:graphicFrame').find(frame => find(frame, 'a:tbl').length);

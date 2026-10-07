@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
 
 const encoder=new TextEncoder(),decoder=new TextDecoder();
@@ -18,7 +18,7 @@ for(const scale of [1,.5]){
  const imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)}),actual=tableOf(imported);
  assert.deepEqual(diagnostics,[]);
  assert.deepEqual(bytes,before);
- assert.equal(validatePresentation(imported).valid,true);
+ assert.equal(validate(imported, {only: ['format']}).valid,true);
  assert.deepEqual(all(actual).map(row=>row.map(plain)),all(table).map(row=>row.map(plain)));
  assert.equal(actual.columns[0].colSpan,2);
  assert.equal(actual.rows[0][0].rowSpan,2);assert.equal(actual.rows[0][0].colSpan,2);
@@ -41,7 +41,7 @@ const base=unzipSync(await toPptx({slides:[{table:{rows:[[{value:'Anchor',rowSpa
 async function native(modify){
  const entries={...base};entries['ppt/slides/slide1.xml']=encoder.encode(modify(decoder.decode(entries['ppt/slides/slide1.xml'])));
  const diagnostics=[],deck=await fromPptx(zipSync(entries),{onDiagnostic:d=>diagnostics.push(d)});
- assert.equal(validatePresentation(deck).valid,true);
+ assert.equal(validate(deck, {only: ['format']}).valid,true);
  return {table:tableOf(deck),diagnostics};
 }
 const crossing=await native(xml=>xml.replace('firstRow="0"','firstRow="1"'));

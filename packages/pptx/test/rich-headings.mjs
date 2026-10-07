@@ -3,12 +3,12 @@
 // differently from one another and as a plain string when they are uniform.
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {composeSlide} from '@openpresentation/opf';
-import {loadOfficeFontRegistry} from '@openpresentation/opf-render/fonts-node';
+import {composeSlide} from '@openpresentation/opf/composition';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {toPptx, fromPptx} from '../dist/index.js';
 
-const fonts = await loadOfficeFontRegistry(), decoder = new TextDecoder(), encoder = new TextEncoder();
-const options = {textMeasurement: fonts.textMeasurement};
+const fonts = await loadFonts({pack: 'office'}), decoder = new TextDecoder(), encoder = new TextEncoder();
+const options = {fonts};
 const deck = () => ({
   design: {fontScheme: 'roboto'},
   references: [{id: 'r1', text: 'Annual report'}],
@@ -46,7 +46,7 @@ assert.ok(titleRuns.some(run => /baseline="30000"/.test(run.props) && run.text =
 assert.ok(first.some(shape => shape.name === 'OPF heading slides.0.tag line 0'));
 assert.ok(runs(first.find(shape => shape.name === 'OPF heading slides.0.subtitle line 0').raw).some(run => /<a:hlinkClick /.test(run.xml) && run.text === 'report'), 'the subtitle link is a hyperlink run');
 // The geometry is core's: every rich title line sits where composeSlide put it.
-const geometry = composeSlide(document.slides[0], {presentation: document, slideIndex: 0, layout: {id: 'blank'}, width: 1280, height: 720, fonts: {heading: 'Roboto', body: 'Roboto'}, textMeasurement: fonts.textMeasurement});
+const geometry = composeSlide(document.slides[0], {presentation: document, slideIndex: 0, layout: {id: 'blank'}, width: 1280, height: 720, fontFamilies: {heading: 'Roboto', body: 'Roboto'}, textMeasurement: fonts.textMeasurement});
 assert.ok(geometry.items.find(item => item.field === 'title').text.richLines.length >= 1);
 // Quote: the lines carry the quote tags and the quotation marks.
 const quoteLines = shapes(slideXml(1)).filter(shape => shape.name.startsWith('OPF quote '));

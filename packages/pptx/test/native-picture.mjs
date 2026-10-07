@@ -46,9 +46,9 @@ for (const name of packageNames) {
   assert.ok(inside(root, await realpath(fileURLToPath(publicEntries[name]))));
   bindings[name] = {version: pkg.version, packageFile, publicEntry: publicEntries[name], resolved: locked.resolved, integrity: locked.integrity, files};
 }
-const {validatePresentation} = await import(publicEntries['@openpresentation/opf']);
+const {validate} = await import(publicEntries['@openpresentation/opf']);
 const {toPptx, fromPptx} = await import(publicEntries['@openpresentation/opf-pptx']);
-const {renderSvg, svgToPng} = await import(publicEntries['@openpresentation/opf-render']);
+const {renderSlideSvg, svgToPng} = await import(publicEntries['@openpresentation/opf-render']);
 const {unzipSync} = resolve('fflate');
 const {XMLParser, XMLValidator} = resolve('fast-xml-parser');
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -57,7 +57,7 @@ const imageFile = fileURLToPath(new URL('fixtures/images/wide.png', import.meta.
 const image = await readFile(imageFile);
 const source = {design: {dimensions: {widthInches: 40 / 3, heightInches: 7.5}, imageFill: 'fit'}, slides: [{image: {src: 'data:image/png;base64,' + image.toString('base64'), alt: 'Four quadrants and a circle'}}]};
 const before = structuredClone(source);
-assert.equal(validatePresentation(source).valid, true);
+assert.equal(validate(source, {only: ['format']}).valid, true);
 const bytes = await toPptx(source, {strictAssets: true});
 assert.deepEqual(source, before);
 const entries = unzipSync(bytes), archive = {xmlParts: 0, internalRelationships: 0, contentTypeOverrides: 0};
@@ -97,7 +97,7 @@ assert.equal(importedPictures.length, 1);
 assert.equal(importedPictures[0].alt, source.slides[0].image.alt);
 assert.equal(sha(Buffer.from(importedPictures[0].src.split(',')[1], 'base64')), sha(image));
 assert.equal(diagnostics.length, 0);
-const svg = renderSvg(source), png = await svgToPng(svg, {loadSystemFonts: false, useBundledFonts: false});
+const svg = renderSlideSvg(source, 0), png = await svgToPng(svg, {fonts: {loadSystemFonts: false, useBundledFonts: false}});
 await mkdir(output, {recursive: false});
 await writeFile(path.join(output, 'source.png'), image);
 await writeJson(path.join(output, 'source.opf.json'), source);

@@ -5,10 +5,10 @@ import path from 'node:path';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx} from '../dist/index.js';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {resolvePresentation} from '@openpresentation/opf-render/svg';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-const hash=value=>createHash('sha256').update(value).digest('hex'),{options:fontOptions}=await prepareNodeFonts(),results=[];
+const hash=value=>createHash('sha256').update(value).digest('hex'),fontOptions = {fonts: await loadFonts()},results=[];
 const imageBytes=await readFile(new URL('fixtures/images/wide.png',import.meta.url));
 const image={src:`data:image/png;base64,${imageBytes.toString('base64')}`,alt:'Header image with text'};
 for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){

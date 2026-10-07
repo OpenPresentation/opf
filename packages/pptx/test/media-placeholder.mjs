@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {XMLParser} from 'fast-xml-parser';
 import {mediaFrameRecord} from '../dist/media-provenance.js';
 import {toPptx, fromPptx} from '../dist/index.js';
@@ -20,12 +20,12 @@ const deck = {
     {title: 'Plain', video: 'https://example.com/plain.mp4'},
   ]
 };
-assert.equal(validatePresentation(deck).valid, true);
+assert.equal(validate(deck, {only: ['format']}).valid, true);
 const exported = await toPptx(structuredClone(deck), {seed: 1});
 const read = async bytes => {
   const issues = [];
   const doc = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)});
-  assert.equal(validatePresentation(doc).valid, true);
+  assert.equal(validate(doc, {only: ['format']}).valid, true);
   return {doc, media: issues.filter(issue => /media/.test(issue.code)).map(issue => [issue.code, issue.path])};
 };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };

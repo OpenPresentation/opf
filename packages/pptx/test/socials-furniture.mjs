@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {attachFurnitureFields} from '../dist/furniture-fields.js';
-import {validatePresentation, catalogs, schemas} from '@openpresentation/opf';
+import {validate, catalogs, schemas} from '@openpresentation/opf';
 import {resolvePresentation} from '@openpresentation/opf-render';
 
 // Generated socials furniture: every line is native text linked to its profile
@@ -10,7 +10,7 @@ import {resolvePresentation} from '@openpresentation/opf-render';
 const enc = new TextEncoder(), dec = new TextDecoder();
 const organization = {id: 'acme', name: 'Acme', socials: {linkedin: 'acme', x: '@acme', bluesky: 'https://bsky.app/profile/acme.bsky.social', custom: 'Visit us', legacy: 'http://acme.example/profile'}};
 const source = {organization, design: {footer: {left: {organization: true}, right: {socials: true}}}, slides: [{title: 'One', text: 'Body'}, {title: 'Two', text: 'Body'}]};
-const read = async bytes => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validatePresentation(deck).valid, true); return {deck, issues}; };
+const read = async bytes => { const issues = []; const deck = await fromPptx(bytes, {onDiagnostic: issue => issues.push(issue)}); assert.equal(validate(deck, {only: ['format']}).valid, true); return {deck, issues}; };
 const modify = (bytes, mutate) => { const entries = unzipSync(bytes); mutate(entries); return zipSync(entries); };
 const slideXml = (entries, index = 1) => dec.decode(entries[`ppt/slides/slide${index}.xml`]);
 const shapeText = (entries, text, replacement) => { for (const index of [1, 2]) entries[`ppt/slides/slide${index}.xml`] = enc.encode(slideXml(entries, index).replace(`<a:t>${text}</a:t>`, `<a:t>${replacement}</a:t>`)); };
@@ -97,7 +97,7 @@ for (const [host, expected] of hosts) for (const deck of [sourced, {...sourced, 
   // Given the export's host catalogs, re-import recognizes the unedited line and
   // restores the authored handle; without them the line keeps its visible URL.
   const back = await fromPptx(hostBytes, host);
-  assert.equal(validatePresentation(back).valid, true);
+  assert.equal(validate(back, {only: ['format']}).valid, true);
   assert.deepEqual(back.organization.socials, organization.socials, `authored socials with host catalogs (${want})`);
   const withoutHost = (await read(hostBytes)).deck.organization.socials;
   assert.equal(withoutHost.x, want === 'x.com/acme' || want === 'inline.test/acme' ? '@acme' : `https://${want}`, `without host catalogs (${want})`);
@@ -117,7 +117,7 @@ for (const [host, expected] of hosts) for (const deck of [sourced, {...sourced, 
   assert.ok((await exportedText(searchPath(['pkg:@openpresentation/opf/social-platforms']))).includes('<a:t>x.com/acme</a:t>'));
   const arrayDeck = searchPath(['https://first.test/socials.json']);
   const reimported = await fromPptx(await toPptx(arrayDeck, {catalogSources}), {catalogSources});
-  assert.equal(validatePresentation(reimported).valid, true);
+  assert.equal(validate(reimported, {only: ['format']}).valid, true);
   assert.deepEqual(reimported.organization.socials, organization.socials, 'authored socials restored with a search path');
 }
 

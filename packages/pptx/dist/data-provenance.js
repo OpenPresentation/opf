@@ -1,7 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
-import {validatePresentation} from '@openpresentation/opf';
+import {checkFormat, isValidFormat} from './format-check.js';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
-import {chartUsesDataFields, isDatasetRef, numberFormatFromExcel, resolveTableData, tableCellDisplayValue, tableUsesDataFields} from './chart-data.js';
+import {chartUsesDataFields, isDatasetRef, fromExcelNumberFormat, resolveTableData, tableCellDisplayValue, tableUsesDataFields} from './chart-data.js';
 
 // RR-54: chart and table data survive a PPTX round trip (core docs/chart-table-data.md).
 //
@@ -81,13 +81,13 @@ const canonicalValue = text => NUMBER.test(text.trim()) && Number.isFinite(Numbe
 // A General format code is left out: on a plain save PowerPoint writes <c:formatCode>General</c:formatCode> into every
 // cache that has none (PptxGenJS writes none on pie and doughnut series), so General and no code are the same evidence.
 const generalCode = code => /^\s*general\s*$/i.test(code);
-// A format code is hashed in core's canonical form (numberFormatFromExcel), because a plain PowerPoint save re-spells codes
+// A format code is hashed in core's canonical form (fromExcelNumberFormat), because a plain PowerPoint save re-spells codes
 // without changing what they show: `$#,##0.0` becomes `\$#,##0.0` and `#,##0 "units"` becomes `#,##0\ "units"` (native
 // check opf#385). Core reads quoted and backslash-escaped literals and literal-safe characters to the same NumberFormat, so
 // both spellings hash equal, while a real change (another number of decimals, another unit) still changes the hash. A code
 // core cannot map is hashed as written; the `opf:` prefix keeps a mapped form apart from a verbatim code of the same text.
 const formatEvidence = code => {
-  const format = numberFormatFromExcel(code);
+  const format = fromExcelNumberFormat(code);
   return typeof format === 'string' ? `format:opf:${format}` : `format:${code}`;
 };
 function hash(text) {
@@ -283,8 +283,9 @@ export function readDatasetsTag(entries, presentationRoot, relationships, report
     const datasets = readTags(entries, presentationRoot?.['p:custDataLst'], relationships, DATASETS_TAG);
     if (datasets === undefined) return undefined;
     if (!object(datasets) || !Object.keys(datasets).length) throw Error('Invalid datasets record.');
-    const result = validatePresentation({slides: [{title: 'Datasets'}], datasets});
-    if (!result.valid) throw Error(`The stored datasets do not validate (${result.errors[0]?.path ?? ''} ${result.errors[0]?.message ?? ''}).`);
+    const report = checkFormat({slides: [{title: 'Datasets'}], datasets});
+    const [first] = report.findings.filter(finding => finding.severity === 'error');
+    if (!report.valid) throw Error(`The stored datasets do not validate (${first?.path ?? ''} ${first?.message ?? ''}).`);
     return datasets;
   } catch (error) {
     report?.({code: 'invalid-data-provenance', path: 'datasets', message: `${error instanceof Error ? error.message : String(error)} The datasets recorded at export were not restored.`});
@@ -312,7 +313,7 @@ export function readDataTag(entries, frame, relationships) {
   return record;
 }
 
-const validWith = (payload, datasets) => validatePresentation({slides: [{title: 'Data', ...payload}], ...(datasets ? {datasets} : {})}).valid;
+const validWith = (payload, datasets) => isValidFormat({slides: [{title: 'Data', ...payload}], ...(datasets ? {datasets} : {})});
 
 /**
  * The authored chart data while the native caches are unchanged: the imported chart (type and options) with the recorded

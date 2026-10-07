@@ -21,7 +21,7 @@ const esmProbe=spawnSync(process.execPath,['--input-type=module','--eval',
 {cwd:consumer,encoding:'utf8',timeout:10000,windowsHide:true});
 assert.equal(esmProbe.status,0,esmProbe.error?.message??esmProbe.stderr);
 const publicEntries=JSON.parse(esmProbe.stdout);
-const [{validatePresentation},{toPptx,fromPptx},{resolvePresentation}]=await Promise.all([
+const [{validate},{toPptx,fromPptx},{resolvePresentation}]=await Promise.all([
   import(publicEntries['@openpresentation/opf']),import(publicEntries['@openpresentation/opf-pptx']),import(publicEntries['@openpresentation/opf-render/svg']),
 ]);
 const {unzipSync,zipSync}=resolve('fflate'), {XMLParser,XMLValidator}=resolve('fast-xml-parser');
@@ -218,7 +218,7 @@ await mkdir(path.join(output,'sources')); await mkdir(path.join(output,'decks'))
 await writeFile(path.join(output,'inputs','wide.png'),imageBytes);
 const sourceRecords={};
 for(const [id,source] of Object.entries(sources)){
-  assert.equal(validatePresentation(source).valid,true,`${id} must satisfy the installed core schema.`);
+  assert.equal(validate(source, {only: ['format']}).valid,true,`${id} must satisfy the installed core schema.`);
   const bytes=jsonBytes(source), file=path.join(output,'sources',`${id}.json`); await writeFile(file,bytes);
   sourceRecords[id]={path:file,sha256:sha(bytes)};
 }
@@ -230,7 +230,7 @@ for(const [id,source] of Object.entries(sources)){
   assert.deepEqual(await toPptx(source,{strictAssets:true}),bytes,`${id}: registry export is not deterministic.`);
   baselineBytes[id]=bytes;
   const inspection=inspectDeck(bytes,source), diagnostics=[], imported=await fromPptx(bytes,{onDiagnostic:item=>diagnostics.push(item)});
-  assert.equal(validatePresentation(imported).valid,true,`${id}: registry reimport must validate.`); assertBodies(imported,source);
+  assert.equal(validate(imported, {only: ['format']}).valid,true,`${id}: registry reimport must validate.`); assertBodies(imported,source);
   const expected=expectedBaselineSummary(source);
   if(id==='baseline-explicit-flags'){expected.design.header=undefined; expected.design.footer=undefined;}
   assert.deepEqual(semanticSummary(imported),expected,`${id}: semantic furniture reimport changed.`);
@@ -246,7 +246,7 @@ for(const [id,variant] of Object.entries(variants)){
   const inspection=inspectDeck(variant.bytes,inherited); assert.equal(inspection.pHfCount,baselineInspection.pHfCount,`${id}: p:hf changed.`);
   assert.deepEqual(inspection.slides.map(slide=>slide.acceptedGeometry.shapes),baselineInspection.slides.map(slide=>slide.acceptedGeometry.shapes),`${id}: shape geometry changed.`);
   const diagnostics=[], imported=await fromPptx(variant.bytes,{onDiagnostic:item=>diagnostics.push(item)});
-  assert.equal(validatePresentation(imported).valid,true,`${id}: registry reimport must validate.`); assertBodies(imported,inherited);
+  assert.equal(validate(imported, {only: ['format']}).valid,true,`${id}: registry reimport must validate.`); assertBodies(imported,inherited);
   const wholeSlideInvalid=['variant-duplicate-shape-tag','variant-changed-shape-tag'].includes(id);
   const expected=id==='variant-metadata-disagreement'
     ?{organization:undefined,headers:[undefined,undefined,undefined],footers:inherited.slides.map((_,index)=>normalize(inherited.slides[index].design?.footer??inherited.design.footer)),retainedCurrentText:['Disagreed Organization','Registry Organization'],diagnostic:'invalid-furniture-provenance'}

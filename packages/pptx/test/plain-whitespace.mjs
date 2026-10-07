@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
-import {resolvePresentation,renderSvg} from '@openpresentation/opf-render/svg';
-const {options:measured}=await prepareNodeFonts(),enc=new TextEncoder(),dec=new TextDecoder();
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {resolvePresentation,renderSlideSvg} from '@openpresentation/opf-render/svg';
+const measured = {fonts: await loadFonts()},enc=new TextEncoder(),dec=new TextDecoder();
 const sources=['  A  B\tC\u00a0D\r\n\r\ntrail  \r','\t\t  ','Line one\n\nLine three\r\n','A long string of ordinary words that must retain every separator across soft wrapping. '.repeat(3),''];
 let cases=0;
 for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1280]])for(const text of sources) {
@@ -53,6 +53,6 @@ assert.equal(bodyOnly.title,undefined);assert.equal(bodyOnly.text,'Body without 
 for(const character of ['\u0000','\u000b','\u000c','\ud800','\uffff']) {
  const invalid={slides:[{text:'Before'+character+'After'}]};
  await assert.rejects(()=>toPptx(invalid),e=>e.code==='invalid-text'&&e.path==='slides.0.text');
- assert.throws(()=>renderSvg(invalid),e=>e.code==='invalid-text'&&e.path==='slides.0.text');
+ assert.throws(()=>renderSlideSvg(invalid, 0),e=>e.code==='invalid-text'&&e.path==='slides.0.text');
 }
 console.log(`${cases} wide/portrait measured/estimated source exports preserve whitespace, tab-stop XML and exact reimport; native edits, clearing, reordering and seven damaged-group fallbacks pass.`);

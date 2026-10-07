@@ -4,7 +4,7 @@
 // from its trace path, and requires the exported classic and chartex parts to name that size for the same role, in every part that carries text.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {renderSvgDeck} from '@openpresentation/opf-render';
+import {renderSvg} from '@openpresentation/opf-render';
 import {strFromU8, unzipSync} from 'fflate';
 import {toPptx} from '../dist/index.js';
 
@@ -26,7 +26,7 @@ const unique = (values) => [...new Set(values)].sort((a, b) => a - b);
 
 // The size the preview draws per role, in points: the SVG is in slide pixels (96 per inch), 0.75 pt per pixel.
 async function previewSizes(deck, type) {
-  const rendered = await renderSvgDeck(deck, {trace: true});
+  const rendered = await renderSvg(deck, {trace: true});
   const svg = typeof rendered[0] === 'string' ? rendered[0] : rendered[0].svg;
   const roles = {axis: [], dataLabels: [], legend: []};
   for (const [, attributes] of svg.matchAll(/<text\b([^>]*)>/g)) {

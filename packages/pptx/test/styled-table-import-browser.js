@@ -1,6 +1,6 @@
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-import {renderSvg} from '@openpresentation/opf-render';
-import {validatePresentation} from '@openpresentation/opf';
+import {renderSlideSvg} from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
 const out=document.querySelector('pre');let checks=0;
 const check=(ok,message)=>{if(!ok)throw Error(message);checks++;};
 try {
@@ -12,14 +12,14 @@ try {
  const diagnostics=[],deck=await fromPptx(await toPptx(source),{onDiagnostic:d=>diagnostics.push(d)});
  check(diagnostics.length===1&&diagnostics[0].code==='heading-import-reflow','Native properties import with one supported heading recovery diagnostic');
  check(deck.slides[0].title===source.slides[0].title,'The tagged native heading retains its current title text');
- check(validatePresentation(deck).valid,'Imported document validates');
+ check(validate(deck, {only: ['format']}).valid,'Imported document validates');
  // The root table payload returns as the slide's own field (content topology).
  const table=deck.slides[0].table??deck.slides[0].blocks?.find(block=>block.table)?.table;
  check(table.rows[0][0].rowSpan===2&&table.rows[1][0]===null,'Vertical anchor and covered slot');
  check(table.rows[2][0].colSpan===3&&table.rows[2][1]===null&&table.rows[2][2]===null,'Horizontal anchor and covered slots');
  check(table.rows[0][0].style.verticalAlign==='middle','Native vertical alignment');
  check(table.rows[2][0].style.borders.top.dash==='dash','Native dashed border');
- document.querySelector('main').innerHTML=renderSvg(deck,{trace:true});
+ document.querySelector('main').innerHTML=renderSlideSvg(deck, 0,{trace:true});
  const tableBlock=deck.slides[0].blocks?.findIndex(block=>block.table)??-1;
  const prefix=deck.slides[0].table!==undefined?'slides.0.table':`slides.0.blocks.${tableBlock}.table`;
  const rect=document.querySelector(`rect[data-opf-path="${prefix}.rows.0.0"]`);

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 import {XMLValidator} from 'fast-xml-parser';
 const {toPptx, fromPptx} = await import(process.env.OPF_TEST_PPTX_MODULE ?? '../dist/index.js');
 const decoder = new TextDecoder(), encoder = new TextEncoder();
@@ -28,7 +28,7 @@ async function check(change, expected, diagnostic) {
   const imported=await fromPptx(bytes,{onDiagnostic:d=>(d.path?.startsWith('design.')?themeReports:reports).push(d)});
   assert.ok(themeReports.every(d=>d.code==='unsupported-theme-colors'),JSON.stringify(themeReports));
   assert.deepEqual(bytes,original,'Native source bytes stay intact');
-  assert.equal(validatePresentation(imported).valid,true);
+  assert.equal(validate(imported, {only: ['format']}).valid,true);
   const comparable = background => background?.opacity === undefined ? background : {...background, opacity: Math.round(background.opacity * 1e12) / 1e12};
   assert.deepEqual(comparable(imported.slides[0].design?.background),expected);
   if(diagnostic) {assert.equal(reports[0]?.code,diagnostic);assert.equal(reports[0]?.path,'slides.0.design.background');}
