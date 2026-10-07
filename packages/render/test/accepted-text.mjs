@@ -1,19 +1,19 @@
 import assert from 'node:assert/strict';
-import {renderSvg,resolvePresentation} from '../dist/index.js';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {acceptedTextFixtures} from './accepted-text-fixtures.mjs';
-const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
+const fonts=(await loadFonts({pack: 'office', substitutionPolicy:'visual'})).registry;
 const escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 let cases=0;
 for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()) {
   const source=JSON.stringify(deck);
   let calls=0,styles=0,inkCalls=0;
-  const options={trace:true,textMeasurement:{measure(...args){calls++;return fonts.textMeasurement.measure(...args);},
+  const options={trace:true,fonts:{textMeasurement:{measure(...args){calls++;return fonts.textMeasurement.measure(...args);},
     resolveStyle(style){styles++;return fonts.textMeasurement.resolveStyle(style);},
-    ...(outlines?{outlineBounds(...args){inkCalls++;return fonts.textMeasurement.outlineBounds(...args);}}:{})}};
+    ...(outlines?{outlineBounds(...args){inkCalls++;return fonts.textMeasurement.outlineBounds(...args);}}:{})}}};
   const bound=resolvePresentation(deck,options).slides[0],expectedCalls=calls,expectedStyles=styles,expectedInkCalls=inkCalls;
   calls=0;styles=0;inkCalls=0;
-  const diagnostics=[],svg=renderSvg(deck,{...options,onDiagnostic:issue=>diagnostics.push(issue)});
+  const diagnostics=[],svg=renderSlideSvg(deck, 0,{...options,onDiagnostic:issue=>diagnostics.push(issue)});
   assert.equal(calls,expectedCalls,`${id}: painting must not measure accepted text again`);
   assert.equal(styles,expectedStyles,`${id}: painting must consume resolved styles`);
   assert.equal(inkCalls,expectedInkCalls,`${id}: painting must consume accepted outlines`);
@@ -44,9 +44,9 @@ for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()
 }
 for(const text of ['Unabridged content. '.repeat(400),[{text:'Unabridged rich content. '.repeat(400),bold:true}]]) {
   const deck={design:{fontScheme:'roboto'},slides:[{text}]},issues=[];
-  renderSvg(deck,{textMeasurement:fonts.textMeasurement,onDiagnostic:issue=>issues.push(issue)});
+  renderSlideSvg(deck, 0,{fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:issue=>issues.push(issue)});
   assert.equal(issues.filter(issue=>issue.code==='text-overflow'&&issue.path==='slides.0.text').length,1);
   deck.slides[0].composition={overflow:'error'};
-  assert.throws(()=>renderSvg(deck,{textMeasurement:fonts.textMeasurement}),{code:'layout-overflow'});
+  assert.throws(()=>renderSlideSvg(deck, 0,{fonts:{textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 }
 console.log(`Accepted text: ${cases} wide/portrait/card/alignment/scalar/rich cases consume exact accepted fits and styles; overflow diagnostics and strict rejection pass.`);

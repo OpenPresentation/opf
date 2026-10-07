@@ -16,8 +16,10 @@
 // is reported as a note. `glyphFallback: "none"` (strict mode) keeps the exact
 // faces and lets a missing glyph raise `missing-glyph`.
 
-import { fontPolicyFor } from "./font-policy.js";
-import { SYMBOL_PLACEHOLDER, SYMBOL_SCRIPT, mapSymbolText, symbolEncodingFor, symbolPreviewFaces } from "./symbol-fonts.js";
+import { fontPolicyFor } from "@openpresentation/opf/font-policy";
+import { scriptFontRole } from "@openpresentation/opf/composition";
+import { SYMBOL_PLACEHOLDER, SYMBOL_SCRIPT, mapSymbolAdvances, symbolEncodingFamily, symbolPreviewFaces } from "./symbol-fonts.js";
+export { scriptFontRole };
 
 const freeze = value => { if (value && typeof value === "object") { for (const child of Object.values(value)) freeze(child); Object.freeze(value); } return value; };
 
@@ -171,22 +173,9 @@ export function adjustedFontSize(size, adjust) {
 export const EMOJI_FONT_FAMILIES = SCRIPT_FONT_REPLACEMENTS.find(rule => rule.script === "Zsye").substitutes;
 const emojiFaces = new Set(EMOJI_FONT_FAMILIES);
 
-const eastAsianScripts = new Set(["Hani", "Hans", "Hant", "Hanb", "Jpan", "Kore", "Hang", "Jamo", "Hira", "Kana", "Hrkt", "Bopo", "Yiii"]);
-const complexScripts = new Set([
-  "Arab", "Hebr", "Syrc", "Thaa", "Nkoo", "Adlm", "Rohg", "Mand", "Samr",
-  "Deva", "Beng", "Guru", "Gujr", "Orya", "Taml", "Telu", "Knda", "Mlym", "Sinh",
-  "Thai", "Laoo", "Tibt", "Mymr", "Khmr", "Mong", "Bali", "Java", "Lana", "Tale", "Talu", "Cakm", "Olck",
-]);
 const rtlScripts = new Set(["Arab", "Hebr", "Syrc", "Thaa", "Nkoo", "Adlm", "Rohg", "Mand", "Samr"]);
 /** Scripts the latin slot covers directly; never split from the surrounding Latin run. */
 const latinGroup = new Set(["Latn", "Cyrl", "Grek", "Zyyy", "Zinh", "Zzzz"]);
-
-/** OOXML script slot for an ISO 15924 script code (the same table as core `scriptFontRole`). */
-export function scriptFontRole(script) {
-  if (eastAsianScripts.has(script)) return "eastAsian";
-  if (complexScripts.has(script)) return "complexScript";
-  return "latin";
-}
 
 const detected = ["Latn", "Cyrl", "Grek", "Hani", "Hira", "Kana", "Hang", "Bopo", "Yiii", "Arab", "Hebr", "Syrc", "Thaa", "Nkoo", "Adlm", "Rohg", "Mand", "Samr",
   "Deva", "Beng", "Guru", "Gujr", "Orya", "Taml", "Telu", "Knda", "Mlym", "Sinh", "Thai", "Laoo", "Tibt", "Mymr", "Khmr", "Mong", "Bali", "Java", "Lana",
@@ -564,7 +553,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
       const hex = item.code.toString(16).toUpperCase().padStart(2, "0");
       if (!entry.codes.includes(hex) && entry.codes.length < 32) { entry.codes.push(hex); if (entry.characters.length < 16) entry.characters.push(item.source); }
     };
-    for (const item of mapSymbolText(encoding, text)) {
+    for (const item of mapSymbolAdvances(encoding, text)) {
       if (item.code === null) { foreign += item.source; continue; }
       flushForeign();
       let drawn = item.unicode, family = null, placeholder = false;
@@ -600,7 +589,7 @@ export function createScriptFonts(profile = {}, measurement, options = {}) {
     text = String(text ?? "");
     // A symbol-encoded family (resolved styles carry `symbolEncoding`; an unresolved style names the family itself) is mapped code by
     // code; `symbolEncoding: null` is the planner's own request for ordinary runs (characters that are not codes).
-    const encoding = style.symbolEncoding === null ? undefined : style.symbolEncoding ?? symbolEncodingFor(style.fontFamily)?.family;
+    const encoding = style.symbolEncoding === null ? undefined : style.symbolEncoding ?? symbolEncodingFamily(style.fontFamily);
     if (encoding) return text ? planSymbols(text, style, encoding) : [{text, family: style.fontFamily, own: true}];
     // An emoji face (Noto Color Emoji for a Segoe UI Emoji run) draws emoji-presentation clusters only: its Latin text and digits
     // are planned per cluster below, where they take a text face (FF-45).

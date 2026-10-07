@@ -1,7 +1,9 @@
 import type {
+  EnsureResult,
   FontFaceInput,
   FontRegistry,
   FontRegistryOptions,
+  FontsHandle,
 } from "./fonts.js";
 import type { AutoScriptSelection, BundledFontPackage, LazyFont, ScriptSelection } from "./fonts-node.js";
 import type { RenderSvgOptions } from "./svg.js";
@@ -53,9 +55,29 @@ export interface BrowserFontRegistry extends FontRegistry {
   /** Names of the script-pack packages loaded so far. */
   readonly loadedScriptPackages: string[];
 }
-export declare function loadBrowserFontRegistry(
-  entries: BrowserFontInput[],
+/**
+ * The fonts handle of a browser: the faces you list, registered with the document, and on demand the script and vendored faces a deck
+ * draws. Pass it as `{ fonts }` to `renderSvg`, `renderSlideSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor.
+ * The registry behind it keeps the lower-level loaders (`ensureLazyFonts`, `ensureScripts`, `loadScripts`, `pendingLazyFonts`, `pendingScripts`).
+ */
+export interface BrowserFontsHandle extends FontsHandle {
+  readonly registry: BrowserFontRegistry;
+  /** Remove every face this handle added from the document. */
+  dispose(): void;
+  /**
+   * Load the vendored and script faces the presentation draws (each hash-verified, all or nothing), repeating while loading changes what
+   * is needed. Cheap when nothing is needed. Besides `signal`, the call takes the `renderSvg` options the document resolves with
+   * (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with what `renderSvg` throws for it; after
+   * `dispose()` it rejects with `font-registry-disposed`.
+   */
+  ensure(presentation: unknown, options?: { signal?: AbortSignal } & Partial<RenderSvgOptions>): Promise<EnsureResult>;
+  /** Synchronous: the vendored files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `renderSvg` throws for a document that does not resolve. */
+  pending(presentation: unknown, renderOptions?: Partial<RenderSvgOptions>): string[];
+}
+export declare function loadFonts(
   options?: FontRegistryOptions & {
+    /** The faces to register at startup (the host's startup set; the rest can be `extraLazyFonts`). Each is fetched from `url` or taken from `data`, and verified when it has a `sha256`. */
+    faces?: BrowserFontInput[];
     document?: Document;
     fetch?: typeof fetch;
     signal?: AbortSignal;
@@ -84,7 +106,7 @@ export declare function loadBrowserFontRegistry(
      */
     renderOptions?: Partial<RenderSvgOptions>;
   },
-): Promise<BrowserFontRegistry>;
+): Promise<BrowserFontsHandle>;
 export declare function scriptFontPackages(scripts: ScriptSelection): BundledFontPackage[];
 /** Hash-pinned browser entries for the script pack, served by the host from `baseUrl`. */
 export declare function scriptFontEntries(

@@ -5,12 +5,12 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 import {examples} from '@openpresentation/opf/examples';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),out=process.argv[2]??'artifacts/rich-spacing-browser';
 if(out)await mkdir(out,{recursive:true});
 // FF-31: the policy now previews Aptos with Roboto; this controlled comparison keeps Carlito explicitly.
-const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual',aliases:{Aptos:'Carlito','Aptos Display':'Carlito'}}),faces=fonts.embeddedFonts.filter(face=>face.family==='Carlito');
+const fonts=(await loadFonts({pack: 'office', substitutionPolicy:'visual',aliases:{Aptos:'Carlito','Aptos Display':'Carlito'}})).registry,faces=fonts.embeddedFonts.filter(face=>face.family==='Carlito');
 assert.equal(faces.length,4);
 const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined}),errors=[],requests=[],results=[];
 try {
@@ -27,8 +27,8 @@ try {
     const source=JSON.stringify(fixture.deck),slideIndex=5;
     if(out)await writeFile(path.join(out,name+'.opf.json'),source+'\n');
     for(const mode of ['estimated','measured']) for(const rendering of ['default','geometricPrecision']) {
-      const options={trace:true,slideIndex,...(mode==='measured'?{textMeasurement:fonts.textMeasurement}:{})};
-      const bound=resolvePresentation(fixture.deck,options).slides[slideIndex],svg=renderSvg(fixture.deck,options).replace('<svg ',rendering==='default'?'<svg ':'<svg text-rendering="geometricPrecision" ');
+      const options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:fonts.textMeasurement}}:{})};
+      const bound=resolvePresentation(fixture.deck,options).slides[slideIndex],svg=renderSlideSvg(fixture.deck, slideIndex,options).replace('<svg ',rendering==='default'?'<svg ':'<svg text-rendering="geometricPrecision" ');
       assert.equal(JSON.stringify(fixture.deck),source);
       const items=bound.geometry.items.filter(item=>item.field==='text'&&item.text?.richLines);assert.ok(items.length);
       const expected=items.map(item=>({path:item.path,source:item.value,lines:item.text.richLines}));

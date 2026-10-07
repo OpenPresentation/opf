@@ -1,4 +1,4 @@
-import type { BrowserFontRegistry } from "./fonts-browser.js";
+import type { BrowserFontsHandle } from "./fonts-browser.js";
 import type { RenderSvgOptions } from "./svg.js";
 
 /**
@@ -16,9 +16,9 @@ export interface PlayerSlideChange { slide: number; total: number; index: number
 export type BlankMode = "none" | "black" | "white";
 
 export interface PresentOptions {
-  /** The self-hosted font root URL (see `copyPreviewFonts`), or a browser font registry the page already has. Without it layout uses estimated widths and system fonts. */
-  fonts?: string | BrowserFontRegistry;
-  /** Extra `renderSvg` options (catalogs, imageResolver, date, ...). */
+  /** The self-hosted font root URL (see `copyPreviewFonts`), or a browser fonts handle the page already has (`loadFonts` from `/fonts-browser`). Without it layout uses estimated widths and system fonts. */
+  fonts?: string | BrowserFontsHandle;
+  /** Extra `renderSlideSvg` options (catalogs, imageResolver, date, ...). */
   renderOptions?: Partial<RenderSvgOptions>;
   /** 1-based slide to start on, in the sequence that plays. Default 1. */
   startSlide?: number;

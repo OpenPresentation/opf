@@ -1,12 +1,12 @@
 // FA-11: TimelineEvent.status in the SVG preview. Absent status is byte-identical to the plain marker; done, current
 // and planned are drawn from the deck's colors and agree with core's timelineMarkerShapes / timelineTextColor.
 import assert from 'node:assert/strict';
-import { colorContrast, timelineMarkerShapes, timelineTextColor } from '@openpresentation/opf';
-import { renderSvg, resolvePresentation } from '../dist/svg.js';
-import { loadBundledFontRegistry } from '../dist/fonts-node.js';
+import { colorContrast, timelineMarkerShapes, timelineTextColor } from '@openpresentation/opf/composition';
+import { resolvePresentation, renderSlideSvg } from '../dist/svg.js';
+import { loadFonts } from '../dist/fonts-node.js';
 
-const fonts = await loadBundledFontRegistry();
-const options = { trace: true, textMeasurement: fonts.textMeasurement };
+const fonts = await loadFonts({ pack: 'base' });
+const options = { trace: true, fonts: { textMeasurement: fonts.textMeasurement } };
 const events = [{ when: 'Q1', what: 'Discovery' }, { when: 'Q2', what: 'Pilot' }, { when: 'Q3', what: 'Rollout' }];
 const deckOf = (statuses, design = {}) => ({ design: { fontScheme: 'roboto', ...design }, slides: [{ title: 'Roadmap', timeline: events.map((event, i) => (statuses[i] ? { ...event, status: statuses[i] } : event)) }] });
 const circles = svg => [...svg.matchAll(/<circle\b([^>]*)\/>/g)].map(match => Object.fromEntries([...match[1].matchAll(/([\w-]+)="([^"]*)"/g)].map(m => [m[1], m[2]])));
@@ -17,17 +17,17 @@ const textFill = (svg, path) => {
 };
 
 // No status: unchanged markers, no status attributes, same bytes as an explicit "done" except the marker status trace.
-const plain = renderSvg(deckOf([]), options);
+const plain = renderSlideSvg(deckOf([]), 0, options);
 assert.ok(!plain.includes('status'));
 assert.equal(circles(plain).length, 3);
 for (const circle of circles(plain)) assert.deepEqual(Object.keys(circle).sort(), ['cx', 'cy', 'data-opf-path', 'fill', 'r']);
-const done = renderSvg(deckOf(['done', 'done', 'done']), options);
+const done = renderSlideSvg(deckOf(['done', 'done', 'done']), 0, options);
 assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(plain));
-assert.equal(renderSvg(deckOf(['done', 'done', 'done']), { textMeasurement: fonts.textMeasurement }), renderSvg(deckOf([]), { textMeasurement: fonts.textMeasurement }));
+assert.equal(renderSlideSvg(deckOf(['done', 'done', 'done']), 0, { fonts: { textMeasurement: fonts.textMeasurement } }), renderSlideSvg(deckOf([]), 0, { fonts: { textMeasurement: fonts.textMeasurement } }));
 
 // All three states.
 for (const design of [{}, { theme: 'dark' }]) {
-  const deck = deckOf(['done', 'current', 'planned'], design), svg = renderSvg(deck, options);
+  const deck = deckOf(['done', 'current', 'planned'], design), svg = renderSlideSvg(deck, 0, options);
   const bound = resolvePresentation(deck, options).slides[0];
   const layout = bound.geometry.items.find(item => item.field === 'timeline').timelineLayout;
   const colors = { background: bound.design.backgroundColor ?? bound.design.colors.background, primary: bound.design.colors.primary, text: bound.design.colors.text, mutedText: bound.design.colors.mutedText };

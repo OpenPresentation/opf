@@ -11,8 +11,8 @@ import assert from 'node:assert/strict';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
 
 const corpora = await loadCorpora();
@@ -34,7 +34,7 @@ for (const [index, face] of faces.entries()) {
   }
 }
 
-const {options: svgOptions} = await prepareNodeFonts({pack: 'office', scripts: 'all'});
+const prepared = await loadFonts({pack: 'office', scripts: 'all'});
 const served = new Map(faces.map((face, index) => [`https://fonts.test/${index}.ttf`, {index, file: face.file}]));
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined}), errors = [], requests = [];
 try {
@@ -89,7 +89,7 @@ try {
   // The renderer's own SVG: a slide whose title is fullwidth punctuation carries text-spacing-trim: space-all, so the browser's natural
   // advance of the title equals the accepted (pinned) textLength instead of being up to 10 percent narrower.
   const punctuation = [['ja', 'jpan-punctuation'], ['zh-Hans', 'hans-punctuation'], ['zh-Hant', 'hant-punctuation']].map(([language, id]) => ({language, id, text: corpora.groups.flatMap(group => group.samples).find(sample => sample.id === id).text}));
-  const slides = punctuation.map(({language, text}) => renderSvg({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, design: {fontScheme: language === 'ja' ? 'meiryo' : language === 'zh-Hans' ? 'microsoft-yahei' : 'microsoft-jhenghei'}, slides: [{title: text, text: 'Body'}]}, svgOptions));
+  const slides = punctuation.map(({language, text}) => renderSlideSvg({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, design: {fontScheme: language === 'ja' ? 'meiryo' : language === 'zh-Hans' ? 'microsoft-yahei' : 'microsoft-jhenghei'}, slides: [{title: text, text: 'Body'}]}, 0, {fonts: prepared}));
   const trimmed = await page.evaluate(markup => markup.map(svg => {
     const host = document.querySelector('main');
     host.innerHTML = svg;

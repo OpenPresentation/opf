@@ -1,21 +1,21 @@
 import assert from "node:assert/strict";
 import { Worker } from "node:worker_threads";
-import { validatePresentation } from "@openpresentation/opf/validator";
+import { validate } from "@openpresentation/opf/validator";
 
 // Exercise the public renderer in a bounded worker: a scale-search regression
 // must fail this test rather than freeze the test runner/browser event loop.
 const renderer = new URL("../dist/svg.js", import.meta.url).href;
 async function render(document) {
-  assert.equal(validatePresentation(document).valid, true);
+  assert.equal(validate(document, { only: ["format"] }).valid, true);
   return new Promise((resolve, reject) => {
     let timer;
     const worker = new Worker(`
       const {parentPort, workerData} = require("node:worker_threads");
-      import(workerData.renderer).then(({renderSvg}) => {
+      import(workerData.renderer).then(({renderSlideSvg}) => {
         const before = JSON.stringify(workerData.document);
         parentPort.postMessage({ready:true});
         try {
-          const svg = renderSvg(workerData.document, {trace:true});
+          const svg = renderSlideSvg(workerData.document, 0, {trace:true});
           parentPort.postMessage({svg, unchanged:before === JSON.stringify(workerData.document)});
         } catch (error) {
           parentPort.postMessage({error:{name:error.name, message:error.message}, unchanged:before === JSON.stringify(workerData.document)});
@@ -27,7 +27,7 @@ async function render(document) {
       if (message.ready) {
         timer = setTimeout(() => {
           void worker.terminate();
-          reject(new Error("renderSvg did not complete within 2 seconds after import"));
+          reject(new Error("renderSlideSvg did not complete within 2 seconds after import"));
         }, 2000);
       } else {
         clearTimeout(timer);

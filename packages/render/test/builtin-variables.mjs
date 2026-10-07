@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg, resolvePresentation, OPFRenderError} from '../dist/index.js';
+import { resolvePresentation, OPFRenderError, renderSlideSvg } from '../dist/index.js';
 
 // FA-04: built-in variables ({{speaker.name}}, var:organization.logo, ...) resolve before composition, so the
 // preview draws the document's own metadata; the `speaker` footer field draws the first speaker's name and title.
@@ -16,7 +16,7 @@ const text = (svg, value) => svg.includes(`>${value}<`);
 
 const source = deck();
 const snapshot = structuredClone(source);
-const svg = renderSvg(source, {trace: true});
+const svg = renderSlideSvg(source, 0, {trace: true});
 assert.deepEqual(source, snapshot);
 assert.ok(text(svg, 'Q4 Review'), 'deck.name');
 assert.ok(svg.includes('Ada Lovelace, CTO · Acme Corp'), 'inline built-ins in a subtitle');
@@ -36,7 +36,7 @@ assert.equal(parts[1].text, 'Ada Lovelace, CTO');
 const bare = deck();
 delete bare.speaker;
 const seen = [];
-const bareSvg = renderSvg(bare, {onDiagnostic: entry => seen.push(entry.code)});
+const bareSvg = renderSlideSvg(bare, 0, {onDiagnostic: entry => seen.push(entry.code)});
 assert.ok(!bareSvg.includes('{{speaker'));
 assert.ok(seen.includes('variable-builtin-missing'));
 assert.deepEqual(resolvePresentation(bare).slides[0].geometry.diagnostics.map(d => [d.code, d.path]), [['unresolved-content', 'design.footer.left.speaker']]);
@@ -44,11 +44,11 @@ assert.deepEqual(resolvePresentation(bare).slides[0].geometry.diagnostics.map(d 
 // An unknown path is refused like any other variable error.
 const typo = deck();
 typo.slides[0].title = '{{speaker.nickname}}';
-assert.throws(() => renderSvg(typo), error => error instanceof OPFRenderError && error.code === 'invalid-variables' && /nickname/.test(error.message));
+assert.throws(() => renderSlideSvg(typo, 0), error => error instanceof OPFRenderError && error.code === 'invalid-variables' && /nickname/.test(error.message));
 
 // A template preview keeps an absent built-in visible and shows present metadata.
 const template = deck();
 template.template = true;
 template.slides[0].title = '{{speaker.name}} / {{organization.legalName}}';
-assert.ok(renderSvg(template).includes('Ada Lovelace / {{organization.legalName}}'));
+assert.ok(renderSlideSvg(template, 0).includes('Ada Lovelace / {{organization.legalName}}'));
 console.log('Built-in variables passed: inline and whole-field forms, speaker furniture, missing and unknown sources, template preview.');

@@ -3,9 +3,9 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-const {registry,options:fontOptions}=await prepareNodeFonts(),output=path.resolve(process.argv[2]??'artifacts/rich-flow-browser');
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
+const prepared = await loadFonts(), {registry} = prepared,output=path.resolve(process.argv[2]??'artifacts/rich-flow-browser');
 await mkdir(output,{recursive:true});
 const fixtures=[
   ['  Keep  ',{text:'bold',bold:true},' and ',{text:'italic',italic:true},' with trailing  '],
@@ -20,8 +20,8 @@ try {
   await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});await page.setContent('<main></main>');
   await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
   for(const mode of ['estimated','measured'])for(const align of ['left','center','right'])for(const [index,text]of fixtures.entries()) {
-    const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{textMeasurement:fontOptions.textMeasurement}:{})};
-    const bound=resolvePresentation(document,options).slides[0],item=bound.geometry.items.find(item=>item.field==='text'),svg=renderSvg(document,options);
+    const document={design:{fontScheme:'roboto',contentAlignment:align},slides:[{text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
+    const bound=resolvePresentation(document,options).slides[0],item=bound.geometry.items.find(item=>item.field==='text'),svg=renderSlideSvg(document, 0,options);
     assert.deepEqual(document,before);
     const actual=await page.evaluate(async({svg,item,mode,align})=>{
       document.querySelector('main').innerHTML=svg;await document.fonts.ready;

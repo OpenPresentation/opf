@@ -1,12 +1,12 @@
 // RR-17 (FF-44): the raster path draws complex scripts cluster by cluster (src/raster-text.js). Covers the cluster segmentation, the
 // rewrite of hand-written SVG text (outlines for Devanagari, pinned clusters for Thai, text-anchor middle and end, textLength, nested
 // and positioned tspans, whitespace collapsing, what is left alone), real renderSvg output through svgToPng and svgToPdf with
-// prepareNodeFonts({pack: 'office', scripts: 'auto', presentation}) for Hindi, Thai, Myanmar, Korean and mixed Latin lines (ink width
+// loadFonts({pack: 'office', scripts: 'auto', presentation}) for Hindi, Thai, Myanmar, Korean and mixed Latin lines (ink width
 // equal to the measured advance, deterministic bytes), and that Latin output is byte-identical to resvg's own.
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import {renderSvg, svgToPng, svgToPdf} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {svgToPng, svgToPdf, renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {clusterPieces, pinScriptClusters} from '../dist/raster-text.js';
 
 const pieces = text => clusterPieces(text).map(piece => text.slice(piece.start, piece.end));
@@ -28,8 +28,8 @@ assert.deepEqual(pieces('Quarterly review 2026'), ['Quarterly review 2026'], 'te
 assert.deepEqual(clusterPieces('한글 한', true).map(piece => piece.affected), [true, true, true, true], 'KOR text pins every grapheme');
 
 const hindi = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Hindi', language: 'hi', slides: [{title: 'हिन्दी भाषा में तिमाही समीक्षा', text: 'रिपोर्ट Q3 2026 और OPF: विज्ञान क्षत्रिय श्रीमान द्वार'}]};
-const {registry, options} = await prepareNodeFonts({pack: 'office', scripts: ['Deva', 'Thai', 'Mymr', 'Kore'], presentation: hindi});
-const fontFiles = options.fontFiles;
+const prepared = await loadFonts({pack: 'office', scripts: ['Deva', 'Thai', 'Mymr', 'Kore'], presentation: hindi}), {registry} = prepared;
+const fontFiles = prepared.fontFiles;
 const measure = (text, size, family, lang) => registry.textMeasurement.measure(text, size, {fontFamily: family, fontWeight: 400, lang});
 const svgOf = (body, attrs = '') => `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="200" xml:lang="hi"${attrs}><rect width="100%" height="100%" fill="#fff"/>${body}</svg>`;
 const firstX = markup => Number(/<path[^>]*transform="translate\(([-\d.]+) |<text x="([-\d.]+)"/.exec(markup).slice(1).find(Boolean));
@@ -137,10 +137,10 @@ const decks = [
 ];
 for (const [language, title, text] of decks) {
   const presentation = {$schema: 'https://openpresentation.org/schema/opf/v1', name: `Raster ${language}`, language, slides: [{title, text}]};
-  const prepared = await prepareNodeFonts({pack: 'office', scripts: 'auto', presentation});
-  const svg = renderSvg(presentation, {...prepared.options, trace: true});
-  const png = await svgToPng(svg, prepared.options);
-  assert.deepEqual(png, await svgToPng(svg, prepared.options), `${language}: deterministic raster`);
+  const prepared = await loadFonts({pack: 'office', scripts: 'auto', presentation});
+  const svg = renderSlideSvg(presentation, 0, {fonts: prepared, trace: true});
+  const png = await svgToPng(svg, {fonts: prepared});
+  assert.deepEqual(png, await svgToPng(svg, {fonts: prepared}), `${language}: deterministic raster`);
   for (const path of ['slides.0.title', 'slides.0.text']) {
     const group = new RegExp(`<g data-opf-box-height="([\\d.]+)" data-opf-box-width="([\\d.]+)" data-opf-box-x="([\\d.]+)" data-opf-box-y="([\\d.]+)" data-opf-path="${path.replace('.', '\\.')}"`).exec(svg);
     assert.ok(group, `${language}: ${path} box`);
@@ -153,17 +153,17 @@ for (const [language, title, text] of decks) {
     // Ink and advance differ by the side bearings of the first and last glyph (a few px at 25 px); the resvg limit lost 15 to 40 percent.
     assert.ok(Math.abs(ink - measured) / measured < 0.05, `${language} ${path}: ink ${ink} px against the measured advance ${measured} px`);
   }
-  const pdf = await svgToPdf(svg, prepared.options);
+  const pdf = await svgToPdf(svg, {fonts: prepared});
   assert.ok(pdf.length > 1000 && Buffer.from(pdf.subarray(0, 5)).toString() === '%PDF-');
-  assert.deepEqual(pdf, await svgToPdf(svg, prepared.options), `${language}: deterministic PDF`);
+  assert.deepEqual(pdf, await svgToPdf(svg, {fonts: prepared}), `${language}: deterministic PDF`);
 }
 
 // A Latin deck's raster input is exactly the SVG resvg always drew.
 {
   const presentation = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Latin', language: 'en', slides: [{title: 'Quarterly review', text: 'Office affluent fi fl ffi ffl first flow'}]};
-  const prepared = await prepareNodeFonts({pack: 'office', scripts: 'auto', presentation});
-  const svg = renderSvg(presentation, prepared.options);
-  assert.equal(await pinScriptClusters(svg, {fontFiles: prepared.options.fontFiles}), svg);
-  assert.deepEqual(await svgToPng(svg, {...prepared.options, scale: 0.25}), await svgToPng(svg, {...prepared.options, scale: 0.25}));
+  const prepared = await loadFonts({pack: 'office', scripts: 'auto', presentation});
+  const svg = renderSlideSvg(presentation, 0, {fonts: prepared});
+  assert.equal(await pinScriptClusters(svg, {fontFiles: prepared.fontFiles}), svg);
+  assert.deepEqual(await svgToPng(svg, {fonts: prepared, scale: 0.25}), await svgToPng(svg, {fonts: prepared, scale: 0.25}));
 }
 console.log('Raster script clusters: segmentation, rewrite, five languages through renderSvg + svgToPng + svgToPdf, Latin untouched.');

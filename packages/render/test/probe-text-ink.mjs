@@ -1,5 +1,5 @@
 import {create} from 'fontkit';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {resolvePresentation} from '../dist/svg.js';
 import {acceptedTextFixtures} from './accepted-text-fixtures.mjs';
 import {chromium} from 'playwright';
@@ -7,10 +7,10 @@ import sharp from 'sharp';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-const registry=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
+const registry=(await loadFonts({pack: 'office', substitutionPolicy:'visual'})).registry;
 const {deck}=acceptedTextFixtures().find(item=>item.id==='portrait-plain-right-scalar');
 // Deliberately inspect the zero-clearance control, independent of the new default.
-const title=resolvePresentation(deck,{textMeasurement:registry.textMeasurement,textRasterPadding:0}).slides[0].geometry.items.find(item=>item.field==='title');
+const title=resolvePresentation(deck,{ fonts: {textMeasurement:registry.textMeasurement},textRasterPadding:0}).slides[0].geometry.items.find(item=>item.field==='title');
 const face=registry.embeddedFonts.find(face=>face.family===title.textStyle.fontFamily&&face.weight===title.textStyle.fontWeight&&!face.italic);
 const font=create(Buffer.from(face.dataUrl.split(',')[1],'base64')),scale=title.text.fontSize/font.unitsPerEm;
 const report={box:title.box,fontSize:title.text.fontSize,style:title.textStyle,lines:title.text.lines.map(text=>{

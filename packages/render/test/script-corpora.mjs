@@ -17,8 +17,8 @@ import assert from 'node:assert/strict';
 import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fontSchemes, languages} from '@openpresentation/opf/catalogs';
-import {renderSvg, svgToPng} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {SCRIPT_FONT_FAMILIES, SCRIPT_FONT_REPLACEMENTS, itemizeScripts} from '../dist/script-fonts.js';
 import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
 
@@ -126,12 +126,12 @@ for (const entry of report.faces) {
 // test/script-corpora-browser.mjs for the browser proof). Only slides that draw such punctuation carry the style.
 {
   const deck = (language, title) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, slides: [{title, text: 'Body'}]});
-  const {options} = await prepareNodeFonts({pack: 'office', scripts: 'all'});
-  assert.match(renderSvg(deck('ja', '「括弧」、（かっこ）。'), options), /<svg[^>]*style="text-spacing-trim:space-all"/);
-  assert.match(renderSvg(deck('zh-Hans', '，。！？；：'), options), /<svg[^>]*style="text-spacing-trim:space-all"/);
-  assert.match(renderSvg(deck('zh-Hans', '“引号”'), options), /<svg[^>]*style="text-spacing-trim:space-all"/);
-  assert.doesNotMatch(renderSvg(deck('ja', '日本語のタイトル'), options), /text-spacing-trim/);
-  assert.doesNotMatch(renderSvg(deck('en', 'Quarterly review “quoted”'), options), /text-spacing-trim/);
+  const {options} = await loadFonts({pack: 'office', scripts: 'all'});
+  assert.match(renderSlideSvg(deck('ja', '「括弧」、（かっこ）。'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
+  assert.match(renderSlideSvg(deck('zh-Hans', '，。！？；：'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
+  assert.match(renderSlideSvg(deck('zh-Hans', '“引号”'), 0, {fonts: prepared}), /<svg[^>]*style="text-spacing-trim:space-all"/);
+  assert.doesNotMatch(renderSlideSvg(deck('ja', '日本語のタイトル'), 0, {fonts: prepared}), /text-spacing-trim/);
+  assert.doesNotMatch(renderSlideSvg(deck('en', 'Quarterly review “quoted”'), 0, {fonts: prepared}), /text-spacing-trim/);
 }
 
 // Host loading, Node: for each corpus script, a document in a language of that script whose text is a corpus sample loads exactly the pinned face
@@ -145,17 +145,17 @@ for (const entry of report.faces) {
     const [first, second] = group.samples, language = group.languages[0];
     const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: `FF-44 ${group.script}`, language, slides: [{title: first.text, text: second.text}]};
     const fallbacks = [];
-    const {registry, options} = await prepareNodeFonts({pack: 'office', scripts: 'auto', presentation: deck, onDiagnostic: note => fallbacks.push(note)});
+    const prepared = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck, onDiagnostic: note => fallbacks.push(note)}), {registry} = prepared;
     const family = designated[group.script];
     if (family) {
       assert.ok(registry.scriptSelection.packages.length > 0, `${group.script}: auto loads a pinned package`);
       assert.ok(registry.describeFaces().some(face => face.family === family), `${group.script}: ${family} is loaded for a ${language} document`);
       loaded++;
     }
-    const svg = renderSvg(deck, options);
+    const svg = renderSlideSvg(deck, 0, {fonts: prepared});
     assert.ok(svg.includes(family ?? 'Noto Sans') || group.script === 'Latn' || group.script === 'Cyrl' || group.script === 'Grek', `${group.script}: the SVG draws ${family}`);
     assert.deepEqual(fallbacks.filter(note => note.code === 'script-font-unavailable' || note.code === 'script-glyph-uncovered'), [], `${group.script}: no unavailable script`);
-    const png = await svgToPng(svg, {...options, scale: 0.25});
+    const png = await svgToPng(svg, {fonts: prepared, scale: 0.25});
     assert.ok(png.length > 1000, `${group.script}: a raster is produced`);
   }
   assert.equal(loaded, Object.keys(designated).length);
@@ -166,16 +166,16 @@ for (const entry of report.faces) {
 // Noto Serif CJK face (here: stand-in bytes of the Noto Sans JP file, renamed) gets it first, through the script-font alias rules.
 {
   const jp = faces.find(face => face.family === 'Noto Sans JP' && face.weight === 400);
-  const {registry: sansOnly} = await prepareNodeFonts({pack: 'office', scripts: ['Jpan']});
+  const {registry: sansOnly} = await loadFonts({pack: 'office', scripts: ['Jpan']});
   assert.equal(sansOnly.textMeasurement.resolveStyle({fontFamily: 'MS Mincho', fontWeight: 400}).fontFamily, 'Noto Sans JP');
-  const {registry: withSerif} = await prepareNodeFonts({pack: 'office', scripts: ['Jpan'], faces: [{path: jp.file, family: 'Noto Serif JP', weight: 400, italic: false, scripts: ['Jpan']}]});
+  const {registry: withSerif} = await loadFonts({pack: 'office', scripts: ['Jpan'], faces: [{path: jp.file, family: 'Noto Serif JP', weight: 400, italic: false, scripts: ['Jpan']}]});
   assert.equal(withSerif.textMeasurement.resolveStyle({fontFamily: 'MS Mincho', fontWeight: 400}).fontFamily, 'Noto Serif JP');
   assert.equal(withSerif.textMeasurement.resolveStyle({fontFamily: 'Meiryo', fontWeight: 400}).fontFamily, 'Noto Sans JP');
 }
 
 // Noto Sans Mongolian ships regular only (upstream has no bold): a bold request draws the regular face and the registry says so (visual).
 {
-  const {registry: mongolian} = await prepareNodeFonts({pack: 'office', scripts: ['Mong']});
+  const {registry: mongolian} = await loadFonts({pack: 'office', scripts: ['Mong']});
   const bold = mongolian.textMeasurement.resolveStyle({fontFamily: 'Noto Sans Mongolian', fontWeight: 700});
   assert.equal(bold.fontFamily, 'Noto Sans Mongolian');
   assert.equal(bold.fontWeight, 400);

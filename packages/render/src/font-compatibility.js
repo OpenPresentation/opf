@@ -1,8 +1,8 @@
-import { FONT_POLICY } from "./font-policy.js";
+import { FONT_POLICY } from "@openpresentation/opf/font-policy";
 /** Curated substitution policy. Metric means upstream intent, not universal pixel identity. */
 const metric = (requestedFamily, substitutes, source, note = "Standard regular, bold, italic and bold italic styles; verify coverage and font versions.") => ({requestedFamily, substitutes, compatibility:"metric", weights:[400,700], source, note});
 const visual = (requestedFamily, substitutes, note = "Approximate appearance; measure again and expect reflow.") => ({requestedFamily, substitutes, compatibility:"visual", note});
-// Rules before FF-31. Families that the OPF font policy table (src/font-policy.js) lists take their
+// Rules before FF-31. Families that the OPF font policy table (core `FONT_POLICY`) lists take their
 // rule from the table below; the remaining legacy rules keep working for other families.
 const LEGACY = [
   metric("Calibri",["Carlito"],"https://github.com/googlefonts/carlito"),
@@ -58,7 +58,7 @@ const describe = replacement => replacement.measured
  * preview never needs a download. Replacements drive measurement and drawing only; exporters keep
  * writing the chosen family.
  */
-const FROM_POLICY = FONT_POLICY.filter(row => row.replacement).map(row => ({
+const FROM_POLICY = FONT_POLICY.families.filter(row => row.replacement).map(row => ({
   requestedFamily: row.family,
   substitutes: [row.replacement.family, ...(row.alternates ?? [])],
   compatibility: row.replacement.compatibility,
@@ -80,7 +80,7 @@ export const FONT_COMPATIBILITY = Object.freeze([...FROM_POLICY, ...LEGACY.filte
 // The row's metric claim is measured that way, so the renderer must shape (fonts.js) and draw (svg.js)
 // the face that way too. Keyed by the replacement family: a Georgia deck is measured and drawn with
 // Gelasio, and Gelasio requested by name is treated identically, so measurement and drawing never disagree.
-const DISABLED_FEATURES = new Map(FONT_POLICY.filter(row => row.replacement?.disabledFeatures?.length).map(row => [row.replacement.family.toLowerCase(), Object.freeze([...row.replacement.disabledFeatures])]));
+const DISABLED_FEATURES = new Map(FONT_POLICY.families.filter(row => row.replacement?.disabledFeatures?.length).map(row => [row.replacement.family.toLowerCase(), Object.freeze([...row.replacement.disabledFeatures])]));
 /** OpenType feature tags to turn off for a preview face, from the font policy; undefined when none. */
 export function disabledFeaturesFor(family) {
   return typeof family === "string" ? DISABLED_FEATURES.get(family.trim().toLowerCase()) : undefined;

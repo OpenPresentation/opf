@@ -6,7 +6,7 @@ import {
   prepareSlideSvg, sanitizeSvgTree, slideInfo, slideLabel, svgDimensions, plainText,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
-import { renderSvg } from "./svg.js";
+import { renderSlideSvg } from "./svg.js";
 
 export { DeckError } from "./deck-runtime.js";
 export { loadPreviewFonts, previewBaseFaces, previewFontLayout } from "./preview-fonts.js";
@@ -74,7 +74,7 @@ function createElementClass() {
   return class OpfDeckElement extends Base {
     static get observedAttributes() { return ["src", "slide", "fonts", "thumbnails", "controls", "present", "include-hidden", "label", "keyboard"]; }
 
-    #root; #parts = {}; #built = false; #store; #cursor; #deck; #generation = 0; #abort; #documentValue; #fontRegistry; #renderOptions = {};
+    #root; #parts = {}; #built = false; #store; #cursor; #deck; #generation = 0; #abort; #documentValue; #fonts; #renderOptions = {};
     #readyPromise = Promise.resolve(); #state = "idle"; #error; #observer; #thumbsBuilt = false; #pointer; #session; #announce = false;
     #slideAttribute; #sheet;
 
@@ -124,13 +124,20 @@ function createElementClass() {
     /** Number of slides in the sequence that plays. */
     get total() { return this.#cursor?.total ?? 0; }
 
-    /** URL of the self-hosted font root (see the package README). Without it, layout uses estimated widths and system fonts. */
-    get fonts() { return this.getAttribute("fonts") ?? ""; }
-    set fonts(value) { if (value) this.setAttribute("fonts", String(value)); else this.removeAttribute("fonts"); }
-
-    /** A browser font registry the page already has (`loadBrowserFontRegistry`). Wins over `fonts`. */
-    get fontRegistry() { return this.#fontRegistry; }
-    set fontRegistry(value) { this.#fontRegistry = value || undefined; if (this.isConnected && this.#built) this.#start(); }
+    /**
+     * The fonts the deck draws with: the URL of the self-hosted font root (the `fonts` attribute; see the package README), or a
+     * browser fonts handle the page already has (`loadFonts` from `/fonts-browser`), which wins over the attribute. Without either,
+     * layout uses estimated widths and system fonts.
+     */
+    get fonts() { return this.#fonts ?? this.getAttribute("fonts") ?? ""; }
+    set fonts(value) {
+      if (value && typeof value === "object") { this.#fonts = value; if (this.isConnected && this.#built) this.#start(); return; }
+      const had = this.#fonts !== undefined, before = this.getAttribute("fonts");
+      this.#fonts = undefined;
+      if (value) this.setAttribute("fonts", String(value)); else this.removeAttribute("fonts");
+      // Dropping a handle changes what draws even when the attribute keeps its value.
+      if (had && before === this.getAttribute("fonts") && this.isConnected && this.#built) this.#start();
+    }
 
     /** Extra `renderSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
     get renderOptions() { return this.#renderOptions; }
@@ -165,7 +172,7 @@ function createElementClass() {
       if (!this.#store || !this.#cursor) throw new DeckError("not-ready", "The deck is not loaded yet.");
       const { present } = await import("./player.js");
       const session = await present(this.#deck, {
-        store: this.#store, fonts: this.#fontRegistry ?? this.#resolvedRegistry, renderOptions: this.#renderOptions,
+        store: this.#store, fonts: this.#fonts ?? this.#resolvedFonts, renderOptions: this.#renderOptions,
         includeHidden: this.includeHidden, startSlide: this.#cursor.number, returnFocus: this.#parts.viewport, ...options,
       });
       this.#session = session;
@@ -182,7 +189,7 @@ function createElementClass() {
 
     // --- loading ----------------------------------------------------------------------------------------------------
 
-    #resolvedRegistry;
+    #resolvedFonts;
 
     #start() {
       this.#abort?.abort();
@@ -202,22 +209,22 @@ function createElementClass() {
         const deck = await this.#readDocument(signal);
         if (stale()) return;
         parseDeckDocument(deck);
-        let registry = this.#fontRegistry;
-        const root = this.fonts;
+        let registry = this.#fonts;
+        const root = this.getAttribute("fonts");
         if (!registry && root) {
           try { registry = await loadPreviewFonts(root, { signal }); } catch (cause) {
             if (stale()) return;
             this.#report(new DeckError("fonts-unavailable", `The fonts at ${root} could not be loaded; the deck draws with estimated layout and system fonts.`, { cause }), false);
           }
         }
-        this.#resolvedRegistry = registry;
+        this.#resolvedFonts = registry;
         const date = this.#renderOptions.date ?? localIsoDate();
         let store = createDeckStore({ document: deck, fonts: registry, renderOptions: this.#renderOptions, date });
         try { await store.ready(signal); } catch (cause) {
           if (stale()) return;
           if (!registry) throw cause;
           this.#report(cause, false);
-          this.#resolvedRegistry = undefined;
+          this.#resolvedFonts = undefined;
           store = createDeckStore({ document: deck, renderOptions: this.#renderOptions, date });
         }
         if (stale()) return;
@@ -491,7 +498,9 @@ const escapeHtml = (value) => String(value).replace(/&/g, "&amp;").replace(/</g,
 /**
  * Server-side markup for a deck: the slides as inline SVG inside the tag, which a page that has not loaded JavaScript (or a
  * crawler, or a reader) shows as it is, and which the element replaces with its own shadow DOM when it upgrades. Pure and
- * synchronous; layout uses estimated widths unless you pass `renderOptions.textMeasurement` (and `embeddedFonts`).
+ * synchronous; layout uses estimated widths unless you pass a fonts handle as `fonts` (an object: `loadFonts()` from
+ * `/fonts-browser`, or one with a `textMeasurement` and `embeddedFonts`). A `fonts` string is the font root URL written to the
+ * element's `fonts` attribute.
  *
  * `slides`: `"first"` (default: the first slide plus a list of titles), `"all"` or a list of 1-based slide numbers.
  * `embed` puts the document in an `application/opf+json` script child, so the element upgrades without a request.
@@ -502,13 +511,14 @@ export function renderDeckHtml(input, options = {}) {
   const sequence = presentableIndexes(deck, { includeHidden: options.includeHidden });
   const wanted = options.slides ?? "first";
   const shown = wanted === "all" ? sequence.map((_, position) => position) : wanted === "first" ? [0] : wanted.map((number) => number - 1).filter((position) => position >= 0 && position < sequence.length);
-  const attributes = { src: options.src, slide: options.slide, fonts: options.fonts, label: options.label, ...options.attributes };
+  const handle = options.fonts !== null && typeof options.fonts === "object" ? options.fonts : undefined;
+  const attributes = { src: options.src, slide: options.slide, fonts: handle ? undefined : options.fonts, label: options.label, ...options.attributes };
   const attributeText = Object.entries(attributes).filter(([, value]) => value !== undefined && value !== false).map(([name, value]) => (value === true ? ` ${name}` : ` ${name}="${escapeHtml(value)}"`)).join("")
     + (options.thumbnails ? " thumbnails" : "") + (options.present ? " present" : "") + (options.includeHidden ? " include-hidden" : "");
   const date = options.renderOptions?.date ?? options.date;
   const figures = shown.map((position) => {
     const index = sequence[position];
-    const svg = renderSvg(deck, { ...options.renderOptions, ...(date ? { date } : {}), slideIndex: index });
+    const svg = renderSlideSvg(deck, index, { ...options.renderOptions, ...(handle ? { fonts: handle } : {}), ...(date ? { date } : {}) });
     const { width, height } = svgDimensions(svg);
     const prepared = prepareSlideSvg(svg).replace(/^<svg\b/, `<svg style="display:block;width:100%;height:auto;aspect-ratio:${width} / ${height}"`);
     const label = slideLabel(slideInfo(deck, index), position + 1, sequence.length);

@@ -7,8 +7,8 @@ import assert from "node:assert/strict";
 import { writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
 import { examples } from "@openpresentation/opf/examples";
-import { renderSvgDeck, svgToPdf, svgToPng } from "../dist/index.js";
-import { loadOfficeFontRegistry } from "../dist/fonts-node.js";
+import {svgToPdf, svgToPng, renderSvg} from "../dist/index.js";
+import { loadFonts } from "../dist/fonts-node.js";
 import { parseXml, textContent } from "../dist/pdf-xml.js";
 import { compareImages, openPdf, pageText, pdfiumText, percentile, renderPdfPage } from "./pdf-helpers.mjs";
 
@@ -19,13 +19,13 @@ const step = all ? 1 : Number(process.env.OPF_PDF_VISUAL_STEP ?? 16);
 // Declared tolerances (mean absolute channel error and share of clearly different pixels, at half size).
 const MAX_MAE = 1.5, MAX_LARGE_PERCENT = 0.5;
 
-const fonts = await loadOfficeFontRegistry({ substitutionPolicy: "visual", scripts: "all" });
-const options = { fontFiles: fonts.fontFiles, useBundledFonts: false };
+const fonts = (await loadFonts({pack: 'office', substitutionPolicy: "visual", scripts: "all"})).registry;
+const options = { fonts: {fontFiles: fonts.fontFiles, useBundledFonts: false}};
 // Slides are processed deck by deck (each SVG carries its embedded fonts, so the whole corpus would not fit in memory).
 const rows = [];
 let corpusSlides = 0, vectorBytes = 0, rasterBytes = 0, vectorMs = 0;
 for (const { file, deck } of [...examples].sort((a, b) => (a.file < b.file ? -1 : 1))) {
-  const svgs = renderSvgDeck(deck, { trace: true, textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts });
+  const svgs = renderSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts}, trace: true});
   for (const [slide, svg] of svgs.entries()) {
     if (corpusSlides++ % step !== 0) continue;
     const key = `${file.replace(/^examples\//, "")}#${slide}`;

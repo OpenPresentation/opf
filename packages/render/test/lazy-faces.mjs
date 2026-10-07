@@ -15,10 +15,10 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {examples} from '@openpresentation/opf/examples';
 import {layouts} from '@openpresentation/opf/catalogs';
-import {renderSvg} from '../dist/svg.js';
-import {createFontRegistry} from '../dist/fonts.js';
-import {prepareNodeFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
-import {loadBrowserFontRegistry, lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies} from '../dist/fonts-browser.js';
+import {renderSlideSvg} from '../dist/svg.js';
+import {createFontRegistry} from '../dist/font-registry.js';
+import {loadFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
+import {loadFonts as loadBrowserFonts, lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies} from '../dist/fonts-browser.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const label = faces => faces.map(face => `${face.family} ${face.weight}${face.italic ? 'i' : ''}`);
@@ -41,7 +41,7 @@ assert.deepEqual(label(presentationFaces(deck([{title: 'Hello', table: {columns:
 assert.deepEqual(label(presentationFaces({name: 'faces', design: {footer: {right: {slideNumber: true}}}, slides: [{title: 'Hello'}]})), ['Aptos 400', 'Aptos Display 700'], 'furniture draws the body role');
 const before = structuredClone(deck([{title: 'Hello', text: 'World'}]));
 const probe = structuredClone(before);
-presentationFaces(probe, {textMeasurement: {measure: () => { throw new Error('the host measurement is not used'); }}, onDiagnostic: () => { throw new Error('the host callback is not called'); }});
+presentationFaces(probe, { fonts: {textMeasurement: {measure: () => { throw new Error('the host measurement is not used'); }}}, onDiagnostic: () => { throw new Error('the host callback is not called'); }});
 assert.deepEqual(probe, before, 'the document is not modified');
 assert.deepEqual(presentationFaces(before), presentationFaces(before), 'deterministic');
 // A script run is requested in its script slot's family (Yu Gothic here), and the text of the other scripts draws in the design font.
@@ -49,7 +49,7 @@ const yu = presentationFaces({name: 'faces', design: {fontScheme: 'yu-gothic'}, 
 assert.ok(yu.length > 0 && yu.every(face => face.weight > 0));
 
 // ---- examples: what a real registry paints is what the plan says it draws, and loading the plan is enough ----
-const policyOf = policy => prepareNodeFonts({pack: 'office', substitutionPolicy: policy});
+const policyOf = policy => loadFonts({pack: 'office', substitutionPolicy: policy});
 const full = {};
 for (const policy of ['metric', 'visual']) full[policy] = await policyOf(policy);
 const eager = full.metric.registry.embeddedFonts.map(face => ({family: face.family, weight: face.weight, italic: face.italic, data: new Uint8Array(Buffer.from(face.dataUrl.split(',')[1], 'base64'))}));
@@ -78,7 +78,7 @@ for (const {file, deck: example} of examples) {
     const drawnKeys = new Set(drawn.map(key));
     // A metric registry cannot draw a deck that names a family with only a visual replacement (Consolas); the plan still covers it.
     let svg;
-    try { svg = renderSvg(example, options); } catch (error) { assert.equal(error.code, 'font-unavailable', `${file} (${policy}): ${error.message}`); }
+    try { svg = renderSlideSvg(example, 0, options); } catch (error) { assert.equal(error.code, 'font-unavailable', `${file} (${policy}): ${error.message}`); }
     if (svg !== undefined) {
       for (const painted of paintedFaces(svg)) {
         const [family, weight, italic] = painted.split('|');
@@ -155,7 +155,7 @@ const fetchLazy = async url => {
   const bytes = Buffer.from(await readFile(path.join(root, file)));
   return {ok: true, arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)};
 };
-const load = options => loadBrowserFontRegistry(eager.map(face => ({...face})), {document, fetch: fetchLazy, substitutionPolicy: 'visual', lazyFontsBaseUrl: 'https://fonts.example/', ...options});
+const load = options => loadBrowserFonts({faces: eager.map(face => ({...face})), document, fetch: fetchLazy, substitutionPolicy: 'visual', lazyFontsBaseUrl: 'https://fonts.example/', ...options}).then(fonts => fonts.registry);
 const registry = await load();
 const homepage = deck([{title: 'Open Presentation', text: 'A deck format for people and agents.'}]);
 assert.deepEqual(fileNames(registry.pendingLazyFonts(homepage)), ['IntosDisplay-Bold.ttf', 'Intos-Regular.ttf'].sort(), 'a homepage-like deck needs two of the sixteen Intos files');
@@ -187,15 +187,17 @@ registry.dispose();
 // ---- host catalogs (FF-41 issue 2) ----
 const bullets = {layouts: [{...layouts.find(entry => entry.id === 'list-1x'), id: 'bullets', name: 'Bullets'}]};
 const catalogDeck = {name: 'x', design: {fontScheme: 'aptos'}, slides: [{layout: 'bullets', title: 'A', items: ['b']}]};
-assert.throws(() => renderSvg(catalogDeck), {code: 'catalog-resolution-failed'});
-assert.ok(renderSvg(catalogDeck, {catalogs: bullets}).startsWith('<svg'));
-for (const call of [() => presentationFamilies(catalogDeck), () => presentationFaces(catalogDeck)]) assert.throws(call, {code: 'catalog-resolution-failed'}, 'an unresolvable document throws what renderSvg throws, not an empty set');
+// A layout id no catalog has never throws: the slide composes with no layout and the render reports `unresolved-layout`.
+const unresolvedLayout = [];
+assert.ok(renderSlideSvg(catalogDeck, 0, {onDiagnostic: item => unresolvedLayout.push(item)}).startsWith('<svg'));
+assert.deepEqual(unresolvedLayout.map(item => [item.code, item.id]), [['unresolved-layout', 'bullets']]);
+assert.ok(renderSlideSvg(catalogDeck, 0, {catalogs: bullets}).startsWith('<svg'));
+assert.deepEqual([...presentationFamilies(catalogDeck)].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono'], 'an unknown layout id does not change the families the deck draws');
 assert.deepEqual([...presentationFamilies(catalogDeck, {catalogs: bullets})].sort(), ['Aptos', 'Aptos Display', 'Roboto Mono']);
 assert.deepEqual(label(presentationFaces(catalogDeck, {catalogs: bullets})), ['Aptos 400', 'Aptos Display 700']);
 const hosted = await load();
-assert.throws(() => hosted.pendingLazyFonts(catalogDeck), {code: 'catalog-resolution-failed'});
+assert.equal(hosted.pendingLazyFonts(catalogDeck).length, 2, 'an unknown layout id still names the faces the deck draws');
 assert.deepEqual(fileNames(hosted.pendingLazyFonts(catalogDeck, {catalogs: bullets})), ['IntosDisplay-Bold.ttf', 'Intos-Regular.ttf'].sort(), 'the catalogs a host passes resolve the document');
-await assert.rejects(hosted.ensureLazyFonts(catalogDeck), {code: 'catalog-resolution-failed'});
 served.length = 0;
 assert.equal((await hosted.ensureLazyFonts(catalogDeck, {catalogs: bullets})).length, 2);
 assert.equal(served.length, 2);
@@ -204,7 +206,6 @@ hosted.dispose();
 const withDefaults = await load({renderOptions: {catalogs: bullets}});
 assert.equal(withDefaults.pendingLazyFonts(catalogDeck).length, 2);
 assert.equal(withDefaults.pendingLazyFonts(catalogDeck, {catalogs: bullets}).length, 2);
-assert.throws(() => withDefaults.pendingLazyFonts(catalogDeck, {catalogs: {}}), {code: 'catalog-resolution-failed'});
 assert.equal((await withDefaults.ensureLazyFonts(catalogDeck, {signal: new AbortController().signal})).length, 2);
 withDefaults.dispose();
 // A font scheme that exists only in the host's catalogs and names a script font selects that font's script package.

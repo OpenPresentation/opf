@@ -1,13 +1,12 @@
 // FF-19: script fonts, lang and RTL in previews. Offline and deterministic.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import * as core from '@openpresentation/opf';
-import {renderSvg,renderSvgDeck,resolvePresentation,svgToPng} from '../dist/index.js';
-import {prepareNodeFonts,scriptFontPackages,BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
+import * as core from '@openpresentation/opf/composition';
+import {renderSvg, resolvePresentation, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {loadFonts,scriptFontPackages,BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
 import {createScriptFonts,createScriptTextMeasurement,detectScripts,itemizeScripts,scriptFontAliases,scriptFontRole,textRole,SCRIPT_FONT_FAMILIES,SCRIPT_FONT_REPLACEMENTS} from '../dist/fonts.js';
 
 const pkg=JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
-const hasCoreResolver=typeof core.resolveScriptFonts==='function';
 
 // Pack metadata: open licenses, exact optional peers, hash-pinned faces.
 const scriptPackages=scriptFontPackages('all');
@@ -70,7 +69,7 @@ assert.equal(typeof core.paragraphDirection,'function','the linked core exports 
     [ch(0x10900)+ch(0x10901)+' abc','rtl'],[ch(0x10A10)+' abc','rtl'],
   ];
   const rendered=(text,language)=>{
-    const svg=renderSvg({$schema:'https://openpresentation.org/schema/opf/v1',name:'direction',language,design:{fontScheme:'roboto'},slides:[{title:'T',text}]});
+    const svg=renderSlideSvg({$schema:'https://openpresentation.org/schema/opf/v1',name:'direction',language,design:{fontScheme:'roboto'},slides:[{title:'T',text}]}, 0);
     const body=/<text [^>]*font-size="25"[^>]*>([\s\S]*?)<\/text>/.exec(svg)[1];
     // The renderer wraps an RTL paragraph in RLI...PDI; no sample text itself ends with PDI.
     return body.startsWith(RLI)&&body.endsWith(PDI)?'rtl':'ltr';
@@ -93,13 +92,13 @@ assert.equal(textRole({path:'slides.0.text'}),'body');assert.equal(textRole({pat
 assert.deepEqual(itemizeScripts('हिन्दी').map(run=>run.role),['complexScript']);
 assert.equal(scriptFontRole('Thai'),'complexScript');assert.equal(scriptFontRole('Cyrl'),'latin');
 assert.deepEqual(detectScripts({slides:[{title:'Привет',text:['日本語です','ไทย']}]}),['Jpan','Thai']);
-if(hasCoreResolver)for(const script of ['Jpan','Hans','Arab','Deva','Thai','Latn','Cyrl','Grek'])assert.equal(scriptFontRole(script),core.scriptFontRole(script),script);
+for(const script of ['Jpan','Hans','Arab','Deva','Thai','Latn','Cyrl','Grek'])assert.equal(scriptFontRole(script),core.scriptFontRole(script),script);
 
 const scriptsNeeded=['Jpan','Hans','Hant','Kore','Arab','Hebr','Deva','Thai','Guru'];
-const fonts=await prepareNodeFonts({pack:'base',scripts:scriptsNeeded});
+const fonts=await loadFonts({pack:'base',scripts:scriptsNeeded});
 assert.equal(fonts.registry.textMeasurement.resolveStyle({fontFamily:'Meiryo',fontWeight:400}).fontFamily,'Noto Sans JP');
-assert.equal(fonts.options.embeddedFonts.length,9,'Script faces stay out of embedded SVG fonts unless requested');
-assert.ok(fonts.options.fontFiles.some(file=>/NotoSansJP_400Regular\.ttf$/.test(file)));
+assert.equal(fonts.embeddedFonts.length,9,'Script faces stay out of embedded SVG fonts unless requested');
+assert.ok(fonts.fontFiles.some(file=>/NotoSansJP_400Regular\.ttf$/.test(file)));
 // No italic CJK faces: italic requests use upright advances, recorded as visual.
 fonts.registry.clearSubstitutions();
 const italic=fonts.registry.resolveFont({fontFamily:'Noto Sans JP',fontWeight:400,italic:true});
@@ -130,24 +129,23 @@ const report=[];
 for(const value of classes){
   const document=deck(value.language,value.scheme,value.title,value.text);
   fonts.registry.clearSubstitutions();
-  const svg=renderSvg(document,{...fonts.options,trace:true});
+  const svg=renderSlideSvg(document, 0,{fonts: fonts, trace:true});
   // Deterministic: identical SVG for identical input and fonts.
-  assert.equal(renderSvg(document,{...fonts.options,trace:true}),svg,`${value.id} SVG is deterministic`);
+  assert.equal(renderSlideSvg(document, 0,{fonts: fonts, trace:true}),svg,`${value.id} SVG is deterministic`);
   const families=svgFamilies(svg);
   assert.ok(families.includes(value.family),`${value.id} draws ${value.family}: ${families}`);
   if(value.substitution)assert.ok(fonts.registry.substitutions.some(item=>item.requestedFamily===value.substitution&&item.resolvedFamily===value.family&&item.compatibility==='visual'),`${value.id} records ${value.substitution}`);
-  if(hasCoreResolver){
     assert.match(svg,new RegExp(` lang="${value.lang}"`),`${value.id} lang`);
-    assert.match(svg,new RegExp(` xml:lang="${value.lang}"`),`${value.id} xml:lang`);
-  }
-  assert.equal(svg.includes('\u2067'),value.rtl&&hasCoreResolver,`${value.id} right-to-left isolates`);
+  assert.match(svg,new RegExp(` xml:lang="${value.lang}"`),`${value.id} xml:lang`);
+
+  assert.equal(svg.includes('\u2067'),value.rtl,`${value.id} right-to-left isolates`);
   report.push({id:value.id,families});
 }
 
 // Script text inside a Latin deck: each run takes its slot's face, and the
 // measured advance is the sum of the per-run advances.
 const mixed=deck('english','roboto','Mixed 日本語 title','Body with 中文 and العربية text');
-const mixedSvg=renderSvg(mixed,fonts.options);
+const mixedSvg=renderSlideSvg(mixed, 0, {fonts: fonts});
 assert.deepEqual(scriptRuns(mixedSvg).map(([family])=>family),['Noto Sans SC','Noto Sans SC','Noto Sans Arabic']);
 for(const element of mixedSvg.match(/<text [^>]*>(?:(?!<\/text>).)*<\/text>/gs).filter(item=>item.includes('<tspan x='))){
   // Positioned runs replace one textLength that would span differently fonted tspans.
@@ -155,7 +153,7 @@ for(const element of mixedSvg.match(/<text [^>]*>(?:(?!<\/text>).)*<\/text>/gs).
   const advances=[...element.matchAll(/<tspan [^>]*textLength="([\d.]+)"[^>]*x="([\d.]+)"/g)].map(match=>[Number(match[1]),Number(match[2])]);
   for(let index=1;index<advances.length;index++)assert.ok(Math.abs(advances[index-1][1]+advances[index-1][0]-advances[index][1])<0.002,'Runs abut at their measured advances');
 }
-const resolvedMixed=resolvePresentation(mixed,fonts.options).slides[0];
+const resolvedMixed=resolvePresentation(mixed, {fonts: fonts}).slides[0];
 const measurement=resolvedMixed.textMeasurement,style={fontFamily:'Roboto',fontWeight:400};
 const parts=[['Body with ','Roboto'],['中文','Noto Sans SC'],[' and ','Roboto'],['العربية ','Noto Sans Arabic'],['text','Roboto']];
 const sum=parts.reduce((total,[text,fontFamily])=>total+fonts.registry.textMeasurement.measure(text,25,{...style,fontFamily}),0);
@@ -166,59 +164,53 @@ assert.ok(measurement.outlineBounds('中文 and',25,style).width>0);
 
 // A Japanese language in a Latin deck: the East Asian slot is the language's
 // font (Meiryo), previewed with its designated replacement.
-const latinJapanese=renderSvg(deck('japanese','roboto','Quarterly 四半期','Body'),fonts.options);
+const latinJapanese=renderSlideSvg(deck('japanese','roboto','Quarterly 四半期','Body'), 0, {fonts: fonts});
 assert.deepEqual(scriptRuns(latinJapanese).map(([family])=>family),['Noto Sans JP']);
 // Han with a Traditional Chinese language uses the TC face.
-assert.deepEqual(scriptRuns(renderSvg(deck('chinese-traditional','roboto','Report 季度','Body'),fonts.options)).map(([family])=>family),['Noto Sans TC']);
+assert.deepEqual(scriptRuns(renderSlideSvg(deck('chinese-traditional','roboto','Report 季度','Body'), 0, {fonts: fonts})).map(([family])=>family),['Noto Sans TC']);
 
 // Right to left: a line with Arabic letters is one isolate; its runs are placed
 // from the right edge. A Latin-only line in the same deck keeps its order.
-const arabicMixed=renderSvg(deck('arabic','roboto','العربية PowerPoint 365.','English only line.'),fonts.options);
-if(hasCoreResolver){
-  const title=arabicMixed.match(/<text [^>]*font-size="54"[^>]*>(.*?)<\/text>/s)[1];
-  const positions=[...title.matchAll(/<tspan [^>]*x="([\d.]+)"[^>]*>\u2067([^<]*)\u2069<\/tspan>/g)].map(match=>[match[2],Number(match[1])]);
-  assert.deepEqual(positions.map(([text])=>text),['العربية ','PowerPoint 365.']);
-  assert.ok(positions[0][1]>positions[1][1],'The first logical run is placed to the right');
-  assert.match(arabicMixed,/>English only line\.</);
-}
+const arabicMixed=renderSlideSvg(deck('arabic','roboto','العربية PowerPoint 365.','English only line.'), 0, {fonts: fonts});
+const title=arabicMixed.match(/<text [^>]*font-size="54"[^>]*>(.*?)<\/text>/s)[1];
+const positions=[...title.matchAll(/<tspan [^>]*x="([\d.]+)"[^>]*>\u2067([^<]*)\u2069<\/tspan>/g)].map(match=>[match[2],Number(match[1])]);
+assert.deepEqual(positions.map(([text])=>text),['العربية ','PowerPoint 365.']);
+assert.ok(positions[0][1]>positions[1][1],'The first logical run is placed to the right');
+assert.match(arabicMixed,/>English only line\.</);
+
 
 // Direction is per paragraph: every wrapped line of an RTL paragraph is isolated,
 // including lines with only Latin words, and each paragraph decides on its own.
-if(hasCoreResolver){
-  const paragraphDeck=deck('arabic','roboto','Title','مرحبا '+'English words wrap here '.repeat(12)+'\nSecond paragraph in English.');
-  const svg=renderSvg(paragraphDeck,fonts.options);
-  const body=[...svg.matchAll(/<text [^>]*font-size="25"[^>]*>([\s\S]*?)<\/text>/g)].map(match=>match[1]);
-  assert.ok(body.length>=3,'the RTL paragraph wraps');
-  assert.ok(body.slice(0,-1).every(line=>line.includes('\u2067')),'every wrapped line of the RTL paragraph is isolated');
-  assert.ok(body.slice(0,-1).some(line=>!/[؀-ۿ]/.test(line)),'a wrapped RTL-paragraph line holds only Latin words');
-  assert.ok(!body.at(-1).includes('\u2067'),'the English paragraph stays left to right');
-  const diagnostics=[];renderSvg(paragraphDeck,{onDiagnostic:item=>diagnostics.push(item)});
-  assert.ok(!diagnostics.some(item=>/^language-preview/.test(item.code)),'no language diagnostic with a resolver');
-}else{
-  const diagnostics=[];renderSvgDeck(deck('arabic','roboto','مرحبا','x'),{onDiagnostic:item=>diagnostics.push(item)});
-  assert.equal(diagnostics.filter(item=>item.code==='language-preview-unavailable').length,1,'published core without the resolver reports once');
-}
+const paragraphDeck=deck('arabic','roboto','Title','مرحبا '+'English words wrap here '.repeat(12)+'\nSecond paragraph in English.');
+const svg=renderSlideSvg(paragraphDeck, 0, {fonts: fonts});
+const body=[...svg.matchAll(/<text [^>]*font-size="25"[^>]*>([\s\S]*?)<\/text>/g)].map(match=>match[1]);
+assert.ok(body.length>=3,'the RTL paragraph wraps');
+assert.ok(body.slice(0,-1).every(line=>line.includes('\u2067')),'every wrapped line of the RTL paragraph is isolated');
+assert.ok(body.slice(0,-1).some(line=>!/[؀-ۿ]/.test(line)),'a wrapped RTL-paragraph line holds only Latin words');
+assert.ok(!body.at(-1).includes('\u2067'),'the English paragraph stays left to right');
+const diagnostics=[];renderSlideSvg(paragraphDeck, 0,{onDiagnostic:item=>diagnostics.push(item)});
+assert.ok(!diagnostics.some(item=>/^language-preview/.test(item.code)),'no language diagnostic with a resolver');
+
 
 // Estimated previews (no registry) name every candidate so the host resolves glyphs.
-const estimated=renderSvg(deck('japanese','roboto','Quarterly 四半期','Body'));
+const estimated=renderSlideSvg(deck('japanese','roboto','Quarterly 四半期','Body'), 0);
 assert.match(estimated,/<tspan font-family="Meiryo, Noto Sans JP, Noto Serif JP, sans-serif">四半期<\/tspan>/);
-assert.doesNotMatch(renderSvg(deck('english','roboto','Quarterly review','Body')),/<tspan/);
+assert.doesNotMatch(renderSlideSvg(deck('english','roboto','Quarterly review','Body'), 0),/<tspan/);
 
 // Raster output is deterministic and draws the script faces from fontFiles.
-const pngA=await svgToPng(renderSvg(deck('japanese','meiryo','四半期レビュー','売上'),fonts.options),{...fonts.options,scale:.25});
-const pngB=await svgToPng(renderSvg(deck('japanese','meiryo','四半期レビュー','売上'),fonts.options),{...fonts.options,scale:.25});
+const pngA=await svgToPng(renderSlideSvg(deck('japanese','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{fonts: fonts, scale:.25});
+const pngB=await svgToPng(renderSlideSvg(deck('japanese','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{fonts: fonts, scale:.25});
 assert.deepEqual(pngA,pngB);
-const withoutFace=await svgToPng(renderSvg(deck('japanese','meiryo','四半期レビュー','売上'),fonts.options),{...fonts.options,fontFiles:fonts.options.fontFiles.filter(file=>!/NotoSansJP/.test(file)),scale:.25});
+const withoutFace=await svgToPng(renderSlideSvg(deck('japanese','meiryo','四半期レビュー','売上'), 0, {fonts: fonts}),{ fonts: {...fonts, fontFiles:fonts.fontFiles.filter(file=>!/NotoSansJP/.test(file))},scale:.25});
 assert.notDeepEqual(pngA,withoutFace,'The raster uses the pinned Noto Sans JP face');
 
 // Deck-level API for pagination and editors: the same wrapper outside the renderer.
-if(hasCoreResolver){
-  const wrapped=createScriptTextMeasurement(fonts.registry.textMeasurement,core.resolveScriptFonts(deck('japanese','roboto','x','y')));
-  assert.ok(wrapped.measure('四半期',20,style)>0);
-  assert.equal(createScriptFonts({},wrapped).textMeasurement.measure('四半期',20,style),wrapped.measure('四半期',20,style),'Wrapping twice does not change measurement');
-}
+const wrapped=createScriptTextMeasurement(fonts.registry.textMeasurement,core.resolveScriptFonts(deck('japanese','roboto','x','y')));
+assert.ok(wrapped.measure('四半期',20,style)>0);
+assert.equal(createScriptFonts({},wrapped).textMeasurement.measure('四半期',20,style),wrapped.measure('四半期',20,style),'Wrapping twice does not change measurement');
+
 // Without the script pack, a strict registry still reports what is missing.
-const strict=await prepareNodeFonts({pack:'base'});
-assert.throws(()=>renderSvgDeck(deck('japanese','roboto','四半期','Body'),strict.options),{code:'missing-glyph'});
-assert.throws(()=>renderSvgDeck(deck('japanese','meiryo','四半期','Body'),strict.options),{code:'font-unavailable'});
+const strict=await loadFonts({pack:'base'});
+assert.throws(()=>renderSvg(deck('japanese','roboto','四半期','Body'), {fonts: strict}),{code:'missing-glyph'});
+assert.throws(()=>renderSvg(deck('japanese','meiryo','四半期','Body'), {fonts: strict}),{code:'font-unavailable'});
 console.log(`Script fonts passed: ${classes.length} script classes (${report.map(item=>`${item.id}:${item.families.join('/')}`).join(', ')}), mixed-script runs, lang, RTL isolates, estimated stacks, deterministic raster and ${scriptPackages.length} pinned OFL packages.`);

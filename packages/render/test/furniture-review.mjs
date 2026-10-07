@@ -105,7 +105,7 @@ if (command === 'prepare') {
   const key = process.argv[3];
   assert.ok(key, 'Pass the exact file#slide key from review-index.json');
   const { examples } = await import('@openpresentation/opf/examples');
-  const { renderSvgDeck, svgToPng } = await import('../dist/index.js');
+  const { renderSvg, svgToPng } = await import('../dist/index.js');
   const { renderSvgDeck: renderBefore } = await import(pathToFileURL(path.join(runtime, 'dist/index.js')).href);
   const split = key.lastIndexOf('#'), file = key.slice(0, split), index = Number(key.slice(split + 1));
   const example = examples.find(example => example.file.replace(/^examples\//, '') === file);
@@ -113,9 +113,9 @@ if (command === 'prepare') {
   const directory = path.join(out, 'full', `${file.replace(/[^a-zA-Z0-9_.-]/g, '_')}-${index}`);
   mkdirSync(directory, { recursive: true });
   const records = [];
-  for (const [side, render] of [['before', renderBefore], ['after', renderSvgDeck]]) {
+  for (const [side, render] of [['before', renderBefore], ['after', renderSvg]]) {
     const svg = render(example.deck, { trace: true })[index];
-    const png = await svgToPng(svg, { loadSystemFonts: false });
+    const png = await svgToPng(svg);
     writeFileSync(path.join(directory, `${side}.svg`), svg);
     writeFileSync(path.join(directory, `${side}.png`), png);
     records.push({ side, svgSha256: hash(svg), pngSha256: hash(png) });

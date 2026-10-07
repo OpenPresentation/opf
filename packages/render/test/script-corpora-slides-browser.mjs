@@ -8,14 +8,14 @@ import assert from 'node:assert/strict';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora} from '../scripts/script-corpora.mjs';
 
 const corpora = await loadCorpora();
 // The pinned faces are served to the page by route below, so the SVGs carry no embedded font data (embeddedFonts: []).
-const {registry, options} = await prepareNodeFonts({pack: 'office', scripts: 'all'});
-const faces = registry.describeFaces(), files = options.fontFiles;
+const prepared = await loadFonts({pack: 'office', scripts: 'all'}), {registry} = prepared;
+const faces = registry.describeFaces(), files = prepared.fontFiles;
 // fontkit limits recorded in the fixture (Myanmar, one Syriac word, Nastaliq): the deviation they bound at 100 px scales with the font size.
 const limits = new Map(corpora.knownShapingLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
 const cases = [];
@@ -23,7 +23,7 @@ for (const group of corpora.groups) {
   for (const sample of group.samples) {
     const language = group.languages.find(tag => tag.split('-')[0] === sample.lang.split('-')[0]) ?? group.languages[0] ?? sample.lang;
     const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: `FF-44 ${sample.id}`, language, slides: [{title: sample.text, text: 'Body'}]};
-    cases.push({id: sample.id, group: group.script, rtl: group.direction === 'rtl', language, svg: renderSvg(deck, {...options, embeddedFonts: []})});
+    cases.push({id: sample.id, group: group.script, rtl: group.direction === 'rtl', language, svg: renderSlideSvg(deck, 0, { fonts: {...prepared, embeddedFonts: []}})});
   }
 }
 const served = new Map(faces.map((face, index) => [`https://fonts.test/${index}.ttf`, {...face, file: files[index]}]));

@@ -15,19 +15,19 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {splitStartupFaces} from '../dist/fonts-browser.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/extra-lazy-fonts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadBrowserFontRegistry} from './dist/fonts-browser.js';import {renderSvg} from './dist/svg.js';window.opf={loadBrowserFontRegistry,renderSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true,
 });
 const script = bundle.outputFiles[0].text;
 
-const {registry: node} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+const {registry: node} = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
 const eager = node.embeddedFonts.map(face => ({family: face.family, weight: face.weight, italic: !!face.italic, license: face.license, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 const {startup, rest} = splitStartupFaces(eager);
 assert.equal(startup.length, 1);
@@ -66,16 +66,14 @@ try {
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
   await page.evaluate(async ({startup, extras, decks}) => {
-    const {loadBrowserFontRegistry} = window.opf;
+    const {loadBrowserFonts} = window.opf;
     window.decks = decks;
-    window.registry = await loadBrowserFontRegistry([{url: '/start.ttf', family: startup.family, weight: startup.weight, italic: startup.italic}], {
-      substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: `${location.origin}/`, extraLazyFonts: extras,
-    });
+    window.registry = (await loadBrowserFonts({faces: [{url: '/start.ttf', family: startup.family, weight: startup.weight, italic: startup.italic}], substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: `${location.origin}/`, extraLazyFonts: extras,})).registry;
   }, {startup: {family: startup[0].family, weight: startup[0].weight, italic: startup[0].italic}, extras, decks});
 
   const state = deckName => page.evaluate(async deckName => {
-    const registry = window.registry, {renderSvg} = window.opf;
-    const host = document.querySelector('main'); host.innerHTML = renderSvg(window.decks[deckName], {textMeasurement: registry.textMeasurement});
+    const registry = window.registry, {renderSlideSvg} = window.opf;
+    const host = document.querySelector('main'); host.innerHTML = renderSlideSvg(window.decks[deckName], 0, { fonts: {textMeasurement: registry.textMeasurement}});
     await document.fonts.ready;
     const family = value => value.split(',')[0].trim().replace(/^"|"$/g, '');
     const runs = [...host.querySelectorAll('text[textLength], tspan[textLength]')].map(element => {

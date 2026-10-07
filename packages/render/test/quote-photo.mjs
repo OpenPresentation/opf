@@ -1,10 +1,10 @@
 // FA-12: a quote's photo is drawn as an image clipped to the core circle frame, beside the footer lines; the role is a footer line.
 import assert from 'node:assert/strict';
 import {deflateSync} from 'node:zlib';
-import {resolvePresentation,renderSvg} from '../dist/svg.js';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import { resolvePresentation, renderSlideSvg } from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
 
-const fonts=await loadOfficeFontRegistry();
+const fonts=await loadFonts({pack:'office'});
 const crcTable=Array.from({length:256},(_,n)=>{let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;return c>>>0;});
 const crc=buffer=>{let c=0xffffffff;for(const byte of buffer)c=crcTable[(c^byte)&255]^(c>>>8);return (c^0xffffffff)>>>0;};
 const chunk=(type,data)=>{const length=Buffer.alloc(4),checksum=Buffer.alloc(4),body=Buffer.concat([Buffer.from(type),data]);length.writeUInt32BE(data.length);checksum.writeUInt32BE(crc(body));return Buffer.concat([length,body,checksum]);};
@@ -18,13 +18,13 @@ const photo={src:`data:image/png;base64,${png(40,60).toString('base64')}`,alt:'P
 const quote={text:'We would rather spend a week on capacity than a month on an outage.',attribution:'Priya Raman',role:'Head of Platform, Acme',photo,source:'Interview'};
 const deck=(value,extra={})=>({design:{fontScheme:'roboto'},...extra,slides:[{title:'Customers',quote:value}]});
 const textMeasurement=fonts.textMeasurement;
-const render=(document,options={})=>{const diagnostics=[];const svg=renderSvg(document,{textMeasurement,trace:true,onDiagnostic:item=>diagnostics.push(item),...options});return {svg,diagnostics};};
+const render=(document,options={})=>{const diagnostics=[];const svg=renderSlideSvg(document, 0,{fonts:{textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item),...options});return {svg,diagnostics};};
 const attr=(source,name)=>new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec(source)?.[1];
 
 // The photo: an <image> inside a clip group whose path is core's circle outline, at core's frame, cropped to cover.
 const {svg,diagnostics}=render(deck(quote));
 assert.deepEqual(diagnostics,[]);
-const layout=resolvePresentation(deck(quote),{textMeasurement}).slides[0].geometry.items.find(item=>item.field==='quote').quoteLayout;
+const layout=resolvePresentation(deck(quote),{fonts:{textMeasurement}}).slides[0].geometry.items.find(item=>item.field==='quote').quoteLayout;
 assert.ok(layout.photo,'core placed a photo');
 const images=[...svg.matchAll(/<image\b([^>]*)\/?>/g)];
 assert.equal(images.length,1);

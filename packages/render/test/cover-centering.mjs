@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg, resolvePresentation} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 
 // Core centers the heading group of cover slides (no body payload on a
 // heading-only layout). The preview must draw that group exactly where core
@@ -23,7 +23,7 @@ const deck = {design: {fontScheme: 'roboto', header: {left: {text: 'Header'}}, f
 const resolved = resolvePresentation(deck);
 let checked = 0;
 for (const bound of resolved.slides) {
-  const svg = renderSvg(deck, {slideIndex: bound.index, trace: true});
+  const svg = renderSlideSvg(deck, bound.index, {trace: true});
   const items = headings(bound.geometry.items);
   assert.ok(items.length, `slide ${bound.index}: headings`);
   for (const item of items) {

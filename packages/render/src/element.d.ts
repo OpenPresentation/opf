@@ -1,4 +1,5 @@
-import type { BrowserFontRegistry } from "./fonts-browser.js";
+import type { BrowserFontsHandle } from "./fonts-browser.js";
+import type { RenderFonts } from "./fonts.js";
 import type { RenderSvgOptions } from "./svg.js";
 import type { PlayerSession, PresentOptions, PlayerSlideChange } from "./player.js";
 export { DeckError } from "./player.js";
@@ -32,10 +33,13 @@ export interface OpfDeckElement extends HTMLElement {
   /** The 1-based number of the showing slide in the sequence that plays; set it to navigate. */
   slide: number;
   readonly total: number;
-  fonts: string;
-  /** A browser font registry the page already has. Wins over `fonts`. */
-  fontRegistry: BrowserFontRegistry | undefined;
-  /** Extra `renderSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
+  /**
+   * The fonts the deck draws with: the URL of the self-hosted font root (the `fonts` attribute), or a browser fonts handle the page
+   * already has (`loadFonts` from `/fonts-browser`), which wins over the attribute. The getter returns the handle when one is set, else the
+   * attribute's URL (an empty string without either).
+   */
+  fonts: string | BrowserFontsHandle;
+  /** Extra `renderSlideSvg` options (catalogs, imageResolver, date, ...). Set before the deck loads, or call `reload()`. */
   renderOptions: Partial<RenderSvgOptions>;
   includeHidden: boolean;
   thumbnails: boolean;
@@ -65,7 +69,8 @@ export interface RenderDeckHtmlOptions {
   includeHidden?: boolean;
   src?: string;
   slide?: number;
-  fonts?: string;
+  /** A string is the font root URL written to the tag's `fonts` attribute; an object (a `loadFonts()` handle, or any `RenderFonts`) draws the markup with those fonts and writes no attribute. */
+  fonts?: string | RenderFonts;
   label?: string;
   thumbnails?: boolean;
   present?: boolean;

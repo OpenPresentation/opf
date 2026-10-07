@@ -19,18 +19,18 @@ import path from 'node:path';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import sharp from 'sharp';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora} from '../scripts/script-corpora.mjs';
 import {FULLWIDTH, assertFindings, expectedWeight, root, scriptDeck, scriptFamilies, shortName} from './script-family-fixture.mjs';
 
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/script-family-hosts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadBrowserFontRegistry} from './dist/fonts-browser.js';import {renderSvg} from './dist/svg.js';window.opf={loadBrowserFontRegistry,renderSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true,
 });
 const script = bundle.outputFiles[0].text;
-const eager = (await prepareNodeFonts({pack: 'office'})).registry.embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
+const eager = (await loadFonts({pack: 'office'})).registry.embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 assert.equal(eager.length, 33, 'the eager list is the 33 office and base faces');
 const corpora = await loadCorpora();
 const limits = new Map(corpora.knownShapingLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
@@ -61,7 +61,7 @@ try {
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
   await page.evaluate(async ({eager}) => {
-    window.registry = await window.opf.loadBrowserFontRegistry(eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), {substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scriptBaseUrl: `${location.origin}/pack/`});
+    window.registry = (await window.opf.loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scriptBaseUrl: `${location.origin}/pack/`})).registry;
   }, {eager: eager.map(({bytes, ...rest}) => rest)});
 
   const loaded = new Set();
@@ -92,10 +92,10 @@ try {
         row.fetched.push(...fetched);
       } else row.fetched.push(...fetched);
       const observed = await page.evaluate(async ({deck, family, weights}) => {
-        const registry = window.registry, {renderSvg} = window.opf;
+        const registry = window.registry, {renderSlideSvg} = window.opf;
         const resolved = weights.map(weight => { const r = registry.resolveFont({fontFamily: family, fontWeight: weight, italic: false}); return {weight, family: r.resolvedFamily, resolvedWeight: r.resolvedWeight, compatibility: r.compatibility, substitute: r.substitute}; });
         const host = document.querySelector('main');
-        host.innerHTML = renderSvg(deck, {textMeasurement: registry.textMeasurement});
+        host.innerHTML = renderSlideSvg(deck, 0, { fonts: {textMeasurement: registry.textMeasurement}});
         await document.fonts.ready;
         const clean = value => value.split(',')[0].trim().replace(/^["']|["']$/g, '');
         const faces = [...document.fonts].map(face => ({family: clean(face.family), weight: Number(face.weight), style: face.style, status: face.status}));
@@ -112,7 +112,7 @@ try {
           const natural = element.getComputedTextLength();
           return {text: element.textContent, family: runFamily, weight, size, accepted, natural, faceLoaded: faces.some(face => face.family === runFamily && face.weight === weight && face.status === 'loaded'), direction: getComputedStyle(element).direction, order: first, box: {x: svgBox.left + box.x * scale, y: svgBox.top + box.y * scale, width: box.width * scale, height: box.height * scale}};
         });
-        host.innerHTML = renderSvg(deck, {textMeasurement: registry.textMeasurement});
+        host.innerHTML = renderSlideSvg(deck, 0, { fonts: {textMeasurement: registry.textMeasurement}});
         await document.fonts.ready;
         return {resolved, runs, registryFaces: registry.describeFaces().map(face => `${face.family}|${face.weight}|${face.italic}`).sort(), documentFaces: faces.map(face => `${face.family}|${face.weight}|${face.style === 'italic'}`).sort(), pendingAfter: registry.pendingScripts(deck)};
       }, {deck, family: entry.family, weights: [400, 700]});

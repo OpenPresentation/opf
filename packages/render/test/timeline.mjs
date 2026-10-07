@@ -1,15 +1,15 @@
 import assert from 'node:assert/strict';
-import { renderSvg, resolvePresentation } from '../dist/svg.js';
-import { loadBundledFontRegistry } from '../dist/fonts-node.js';
-const fonts = await loadBundledFontRegistry();
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import { loadFonts } from '../dist/fonts-node.js';
+const fonts = (await loadFonts({pack: 'base'})).registry;
 for (const count of [1, 2, 4, 8]) {
   for (const dimensions of [{ width: 1280, height: 720 }, { width: 540, height: 960 }]) {
     const deck = { design: { dimensions, fontScheme: 'roboto' }, slides: [{
       title: 'A timeline with bounded labels',
       blocks: [{ timeline: { events: Array.from({ length: count }, (_, i) => ({ when: `Q${i + 1}`, what: `Milestone ${i + 1}`, description: 'Keep every label inside its allocated space.' })) } }],
     }] };
-    const options = { trace: true, textMeasurement: fonts.textMeasurement };
-    const svg = renderSvg(deck, options);
+    const options = { trace: true, fonts: {textMeasurement: fonts.textMeasurement} };
+    const svg = renderSlideSvg(deck, 0, options);
     const bound = resolvePresentation(deck, options).slides[0];
     const box = bound.geometry.items.find(item => item.field === 'timeline').box;
     const circles = [...svg.matchAll(/<circle\b([^>]*)>/g)];

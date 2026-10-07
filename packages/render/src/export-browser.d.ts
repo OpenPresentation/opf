@@ -1,4 +1,5 @@
 import type { PdfDiagnostic, PdfMetadata, SvgToPdfOptions } from "./index.js";
+import type { FontsHandle } from "./fonts.js";
 export type { PdfDiagnostic, PdfMetadata } from "./index.js";
 
 export interface BrowserSvgToPngOptions {
@@ -12,7 +13,12 @@ export interface BrowserSvgToPngOptions {
 export interface BrowserSvgToPdfOptions extends Pick<SvgToPdfOptions, "mode" | "background" | "serifFamily" | "metadata" | "tagged" | "compress" | "strict" | "rasterFallbackScale" | "defaultFontFamily" | "sansSerifFamily" | "monospaceFamily" | "onDiagnostic"> {
   /** Raster mode: pixel density of each page image (default 2). */
   scale?: number;
-  /** Extra font faces as bytes (TrueType outlines). Faces an SVG embeds as `@font-face` data (renderSvg's `embeddedFonts`) need no entry here. */
+  /**
+   * The browser fonts handle (`loadFonts` from `/fonts-browser`): every face it holds can be embedded in the PDF, including script faces
+   * a standalone SVG does not carry. Faces an SVG embeds as `@font-face` data (the `embeddedFonts` of the handle `renderSvg` was given) need no entry.
+   */
+  fonts?: FontsHandle;
+  /** Extra font faces as bytes (TrueType outlines) when there is no handle. */
   fontData?: Array<{ data: Uint8Array; family?: string }>;
   /** Checked between pages; an abort rejects with the signal's reason (an `AbortError`). */
   signal?: AbortSignal;

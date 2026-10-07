@@ -2,19 +2,13 @@
 // and section slides, furniture `logo: true`, picture bullets (design.listBullet: image) and the
 // fontScheme accent family on the tag and the quote body.
 //
-// The fields live in core composition. A core without resolveLogo (the published 0.11.x) draws none of
-// them; the renderer keeps working there, so the core-dependent assertions are skipped, not failed.
+// The fields live in core composition (resolveLogo and the other layout engines).
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import * as composition from '@openpresentation/opf/composition';
-import { renderSvg, resolvePresentation } from '../dist/index.js';
-import { prepareNodeFonts } from '../dist/fonts-node.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
+import { loadFonts } from '../dist/fonts-node.js';
 import { presentationFamilies, presentationFaces } from '../dist/lazy-fonts.js';
-
-if (typeof composition.resolveLogo !== 'function') {
-  console.log('Design fields skipped: the linked @openpresentation/opf has no resolveLogo (published core); the renderer draws none of them there.');
-  process.exit(0);
-}
 
 const png = async (r, g, b, width = 160, height = 40) => `data:image/png;base64,${(await sharp({ create: { width, height, channels: 3, background: { r, g, b } } }).png().toBuffer()).toString('base64')}`;
 const wide = await png(200, 30, 30, 160, 40), tall = await png(30, 30, 200, 40, 160);
@@ -29,7 +23,7 @@ let checked = 0;
   const deck = { design: { logo: wide, background: lightBackground }, slides: [{ title: 'Quarterly review', layout: 'title' }] };
   const geometry = resolvePresentation(deck).slides[0].geometry;
   assert.ok(geometry.logo, 'geometry.logo on a cover');
-  const svg = renderSvg(deck, { trace: true });
+  const svg = renderSlideSvg(deck, 0, { trace: true });
   const [logo, ...rest] = logos(svg);
   assert.ok(logo && rest.length === 0, 'one generated logo image');
   assert.equal(attr(logo, 'preserveAspectRatio'), 'xMinYMid meet');
@@ -40,9 +34,9 @@ let checked = 0;
   assert.equal(attr(logo, 'href'), wide);
   assert.ok(svg.indexOf(logo) < svg.indexOf('data-opf-path="slides.0.title"'), 'logo is drawn before the content');
   // Without tracing the picture carries no editor attributes.
-  assert.ok(!/data-opf-/.test(logos(renderSvg(deck)).join('')) && images(renderSvg(deck)).length === 1);
+  assert.ok(!/data-opf-/.test(logos(renderSlideSvg(deck, 0)).join('')) && images(renderSlideSvg(deck, 0)).length === 1);
   // Authored alt text names the picture.
-  const named = renderSvg({ ...deck, design: { ...deck.design, logo: { src: wide, alt: 'Acme logo' } } });
+  const named = renderSlideSvg({ ...deck, design: { ...deck.design, logo: { src: wide, alt: 'Acme logo' } } }, 0);
   assert.equal(attr(images(named)[0], 'aria-label'), 'Acme logo');
   checked++;
 }
@@ -50,7 +44,7 @@ let checked = 0;
 // The logo comes after the watermark and before every content item.
 {
   const deck = { design: { logo: wide, watermark: tall }, slides: [{ title: 'Quarterly review', layout: 'title' }] };
-  const svg = renderSvg(deck, { trace: true });
+  const svg = renderSlideSvg(deck, 0, { trace: true });
   const all = images(svg);
   assert.equal(all.length, 2);
   assert.equal(attr(all[0], 'data-opf-generated'), undefined, 'the watermark comes first');
@@ -67,13 +61,13 @@ let checked = 0;
   ] };
   const slides = resolvePresentation(deck).slides;
   assert.ok(slides[0].geometry.logo, 'section divider logo');
-  assert.equal(logos(renderSvg(deck, { slideIndex: 0, trace: true })).length, 1);
+  assert.equal(logos(renderSlideSvg(deck, 0, { trace: true })).length, 1);
   for (const index of [1, 2]) {
     assert.equal(slides[index].geometry.logo, undefined, `content slide ${index} has no logo`);
-    assert.equal(images(renderSvg(deck, { slideIndex: index, trace: true })).length, 0, `content slide ${index} draws no image`);
+    assert.equal(images(renderSlideSvg(deck, index, { trace: true })).length, 0, `content slide ${index} draws no image`);
   }
   // No logo anywhere: nothing is drawn.
-  assert.equal(images(renderSvg({ slides: [{ title: 'Quarterly review', layout: 'title' }] })).length, 0);
+  assert.equal(images(renderSlideSvg({ slides: [{ title: 'Quarterly review', layout: 'title' }] }, 0)).length, 0);
   checked++;
 }
 
@@ -83,10 +77,10 @@ let checked = 0;
     { title: 'Own', layout: 'title', design: { logo: tall } },
     { title: 'Inherited', layout: 'title' },
   ] };
-  assert.equal(attr(logos(renderSvg(deck, { slideIndex: 0, trace: true }))[0], 'data-opf-path'), 'slides.0.design.logo');
-  assert.equal(attr(logos(renderSvg(deck, { slideIndex: 1, trace: true }))[0], 'data-opf-path'), 'design.logo');
+  assert.equal(attr(logos(renderSlideSvg(deck, 0, { trace: true }))[0], 'data-opf-path'), 'slides.0.design.logo');
+  assert.equal(attr(logos(renderSlideSvg(deck, 1, { trace: true }))[0], 'data-opf-path'), 'design.logo');
   const fallback = { organization: { id: 'acme', name: 'Acme', logo: tall }, slides: [{ title: 'Org', layout: 'title' }] };
-  assert.equal(attr(logos(renderSvg(fallback, { trace: true }))[0], 'data-opf-path'), 'organization.logo');
+  assert.equal(attr(logos(renderSlideSvg(fallback, 0, { trace: true }))[0], 'data-opf-path'), 'organization.logo');
   checked++;
 }
 
@@ -95,11 +89,11 @@ let checked = 0;
   const set = { light: await png(240, 240, 240), dark: await png(10, 10, 10), default: wide };
   for (const [name, background, path] of [['dark background', darkBackground, 'design.logo.light'], ['light background', lightBackground, 'design.logo.dark']]) {
     const deck = { design: { logo: set, background }, slides: [{ title: 'Quarterly review', layout: 'title' }] };
-    assert.equal(attr(logos(renderSvg(deck, { trace: true }))[0], 'data-opf-path'), path, name);
+    assert.equal(attr(logos(renderSlideSvg(deck, 0, { trace: true }))[0], 'data-opf-path'), path, name);
   }
   // A slide with its own background picks by that background.
   const mixed = { design: { logo: set, background: lightBackground }, slides: [{ title: 'Dark one', layout: 'title', design: { background: darkBackground } }] };
-  assert.equal(attr(logos(renderSvg(mixed, { trace: true }))[0], 'data-opf-path'), 'design.logo.light');
+  assert.equal(attr(logos(renderSlideSvg(mixed, 0, { trace: true }))[0], 'data-opf-path'), 'design.logo.light');
   checked++;
 }
 
@@ -107,14 +101,14 @@ let checked = 0;
 {
   const deck = { design: { logo: 'asset:missing' }, slides: [{ title: 'Quarterly review', layout: 'title' }] };
   const diagnostics = [];
-  const svg = renderSvg(deck, { trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
+  const svg = renderSlideSvg(deck, 0, { trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset').map(item => item.path), ['design.logo']);
   assert.match(svg, /data-opf-asset-status="unresolved"/);
-  assert.throws(() => renderSvg(deck, { strictAssets: true }), { code: 'unresolved-asset' });
+  assert.throws(() => renderSlideSvg(deck, 0, { strictAssets: true }), { code: 'unresolved-asset' });
   // asset: references and host resolvers reach the same drawing.
   const referenced = { assets: { brand: { src: wide, alt: 'Brand' } }, design: { logo: 'asset:brand' }, slides: [{ title: 'Quarterly review', layout: 'title' }] };
-  assert.equal(attr(images(renderSvg(referenced))[0], 'aria-label'), 'Brand');
-  const resolved = renderSvg({ design: { logo: 'logo.png' }, slides: [{ title: 'Quarterly review', layout: 'title' }] }, { imageResolver: () => wide });
+  assert.equal(attr(images(renderSlideSvg(referenced, 0))[0], 'aria-label'), 'Brand');
+  const resolved = renderSlideSvg({ design: { logo: 'logo.png' }, slides: [{ title: 'Quarterly review', layout: 'title' }] }, 0, { imageResolver: () => wide });
   assert.equal(attr(images(resolved)[0], 'href'), wide);
   checked++;
 }
@@ -124,7 +118,7 @@ let checked = 0;
   const icon = await png(20, 160, 20, 48, 48);
   const deck = { design: { logo: { default: wide, icon }, footer: { left: { logo: true } }, header: { right: { logo: true, text: 'Confidential' } } },
     slides: [{ title: 'Content', text: 'Body copy.' }] };
-  const svg = renderSvg(deck, { trace: true });
+  const svg = renderSlideSvg(deck, 0, { trace: true });
   const furniture = [...svg.matchAll(/<g\b[^>]*data-opf-furniture-field="logo"[^>]*>/g)].map(match => match[0]);
   assert.equal(furniture.length, 2, 'header and footer logo parts');
   for (const group of furniture) assert.equal(attr(group, 'data-opf-furniture-generated'), 'true');
@@ -142,7 +136,7 @@ let checked = 0;
   // No logo to resolve: the generated logo is reported at its furniture path and nothing is drawn.
   const missing = { design: { footer: { left: { logo: true } } }, slides: [{ title: 'Content', text: 'Body copy.' }] };
   const reported = [];
-  const bare = renderSvg(missing, { trace: true, onDiagnostic: diagnostic => reported.push(diagnostic) });
+  const bare = renderSlideSvg(missing, 0, { trace: true, onDiagnostic: diagnostic => reported.push(diagnostic) });
   assert.deepEqual(reported.filter(item => item.code === 'unresolved-content').map(item => item.path), ['design.footer.left.logo']);
   assert.ok(!bare.includes('data-opf-furniture-field="logo"'));
   checked++;
@@ -156,7 +150,7 @@ let checked = 0;
   const geometry = resolvePresentation(deck).slides[0].geometry;
   const list = geometry.items.find(item => item.field === 'items');
   assert.ok(list.bulletImage, 'core attaches the picture bullet');
-  const svg = renderSvg(deck, { trace: true });
+  const svg = renderSlideSvg(deck, 0, { trace: true });
   const markers = images(svg).filter(image => attr(image, 'aria-hidden') === 'true');
   assert.equal(markers.length, entries.length, 'one picture marker per entry');
   list.text.listEntries.forEach((entry, index) => {
@@ -172,13 +166,13 @@ let checked = 0;
   });
   assert.ok(!/aria-hidden="true"[^>]*>•/.test(svg) && !svg.includes('>•<'), 'no glyph markers');
   // Character bullets stay the default.
-  const plain = renderSvg({ design: { logo: { default: wide, icon } }, slides: [{ title: 'Items', items: entries }] }, { trace: true });
+  const plain = renderSlideSvg({ design: { logo: { default: wide, icon } }, slides: [{ title: 'Items', items: entries }] }, 0, { trace: true });
   assert.equal(images(plain).length, 0);
   assert.equal((plain.match(/>•</g) ?? []).length, entries.length);
   // An icon that cannot be drawn keeps the glyphs and reports unresolved-asset once.
   const unresolved = { design: { logo: 'https://example.invalid/logo.png', listBullet: 'image' }, slides: [{ title: 'Items', items: entries }] };
   const diagnostics = [];
-  const fallback = renderSvg(unresolved, { trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
+  const fallback = renderSlideSvg(unresolved, 0, { trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
   assert.equal(images(fallback).length, 0);
   assert.equal((fallback.match(/>•</g) ?? []).length, entries.length);
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset').map(item => item.path), ['design.logo']);
@@ -194,28 +188,28 @@ let checked = 0;
   ] };
   const families = (svg, path) => [...svg.matchAll(/<text\b([^>]*)>/g)].map(match => match[1])
     .filter(attrs => attrs.includes(`data-opf-path="${path}"`)).map(attrs => attr(` ${attrs}`, 'font-family'));
-  const first = renderSvg(deck, { slideIndex: 0, trace: true });
+  const first = renderSlideSvg(deck, 0, { trace: true });
   assert.ok(families(first, 'slides.0.tag').every(family => family.startsWith(accent)), `tag family: ${families(first, 'slides.0.tag')}`);
   assert.ok(families(first, 'slides.0.tag').length > 0);
   for (const path of ['slides.0.title', 'slides.0.text']) assert.ok(families(first, path).every(family => !family.includes(accent)), path);
-  const second = renderSvg(deck, { slideIndex: 1, trace: true });
+  const second = renderSlideSvg(deck, 1, { trace: true });
   const quoteFamilies = [...second.matchAll(/<text\b([^>]*)>/g)].map(match => attr(` ${match[1]}`, 'font-family'));
   assert.ok(quoteFamilies.some(family => family.startsWith(accent)), 'quote text uses the accent family');
   // The accent family is a design family like heading and body: every family list includes it.
   const resolved = resolvePresentation(deck);
   assert.equal(resolved.slides[0].design.fonts.accent, accent);
   // Without an accent role nothing changes.
-  const plain = renderSvg({ design: { fontScheme: 'aptos' }, slides: [deck.slides[0]] }, { trace: true });
+  const plain = renderSlideSvg({ design: { fontScheme: 'aptos' }, slides: [deck.slides[0]] }, 0, { trace: true });
   assert.ok(families(plain, 'slides.0.tag').every(family => !family.includes(accent)));
   // The preview prepares the accent face like any other family (look-alike policy and embedding).
-  const { options } = await prepareNodeFonts({ pack: 'office' });
+  const office = await loadFonts({ pack: 'office' }), options = { fonts: office };
   const georgia = { design: { fontScheme: { id: 'aptos', accent: 'Georgia' } }, slides: deck.slides };
   assert.ok(presentationFamilies(georgia).has('Georgia'), 'the accent family is collected like heading, body and code');
   assert.ok(presentationFaces(georgia).some(face => face.family === 'Georgia'), 'tag and quote request the accent face');
   const measured = resolvePresentation(georgia, options);
   assert.equal(measured.slides[0].design.fonts.accent, 'Gelasio', 'the accent family resolves through the font policy');
   for (const [index, prefix] of [[0, 'slides.0.tag'], [1, 'slides.1.quote']]) {
-    const drawn = renderSvg(georgia, { ...options, slideIndex: index, trace: true });
+    const drawn = renderSlideSvg(georgia, index, { ...options, trace: true });
     const used = [...drawn.matchAll(/<text\s([^>]*)>/g)].map(match => match[1]).filter(attrs => new RegExp(`data-opf-path="${prefix}[".]`).test(attrs)).map(attrs => attr(` ${attrs}`, 'font-family'));
     assert.ok(used.length > 0 && (index === 1 ? used.slice(0, 1) : used).every(family => family.startsWith('Gelasio')), `${prefix} draws the policy look-alike: ${used}`);
     assert.ok(drawn.includes('@font-face{font-family:"Gelasio"'), 'the look-alike face is embedded');

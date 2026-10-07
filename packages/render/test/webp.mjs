@@ -3,11 +3,11 @@ import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
 import {PDFDocument,PDFName,PDFRawStream,decodePDFRawStream} from 'pdf-lib';
-import {renderSvg} from '../dist/index.js';
+import {renderSlideSvg} from '../dist/index.js';
 import {prepareRasterImages} from '../dist/raster-images.js';
 const {svgToPng,svgToPdf}=await import(process.env.OPF_TEST_RASTER_MODULE ?? '../dist/index.js');
 const references=JSON.parse(await readFile(new URL('fixtures/webp/webp-references.json',import.meta.url),'utf8'));
-const options={useBundledFonts:false,background:'rgba(0,0,0,0)',mode:'raster'};
+const options={fonts:{useBundledFonts:false},background:'rgba(0,0,0,0)',mode:'raster'};
 const hash=value=>createHash('sha256').update(value).digest('hex');
 let cases=0;
 for(const [file,ref] of Object.entries(references)) {
@@ -66,6 +66,6 @@ const huge=Buffer.from(await readFile(new URL('fixtures/webp/wide-alpha.webp',im
 await assert.rejects(svgToPng(root(image(`href='data:image/webp;base64,${huge.toString('base64')}'`)),options),error=>error.code==='image-conversion-failed');
 const fake=Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>').toString('base64');
 await assert.rejects(svgToPng(root(image(`href='data:image/webp;base64,${fake}'`)),options),error=>error.code==='image-conversion-failed'&&/not a WebP/.test(error.details.cause));
-const deck={slides:[{image:uri}]},original=JSON.stringify(deck);const opfSvg=renderSvg(deck,{trace:true});
+const deck={slides:[{image:uri}]},original=JSON.stringify(deck);const opfSvg=renderSlideSvg(deck, 0,{trace:true});
 const prepared=await prepareRasterImages(opfSvg);assert.match(prepared,/data:image\/png;base64,/);assert.equal(JSON.stringify(deck),original);assert.match(opfSvg,/data:image\/webp;base64,/);
 console.log(`WebP raster passed: ${cases} PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG.`);

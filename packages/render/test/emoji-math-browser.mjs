@@ -5,9 +5,9 @@ import assert from 'node:assert/strict';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import * as core from '@openpresentation/opf';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import * as core from '@openpresentation/opf/composition';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {createScriptTextMeasurement} from '../dist/fonts.js';
 
 const EMOJI = {
@@ -15,9 +15,9 @@ const EMOJI = {
   keycap: '1️⃣', heartVS16: '❤️', scotland: '\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}', womanTechnologist: '\u{1F469}\u{1F3FE}‍\u{1F4BB}',
 };
 const NOTO_COLOR_EMOJI_ADVANCE = 1.2451;
-const {registry, options} = await prepareNodeFonts({pack: 'office', scripts: ['Zsye', 'Zmth']});
+const prepared = await loadFonts({pack: 'office', scripts: ['Zsye', 'Zmth']}), {registry} = prepared;
 const deck = (id, title, design) => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: `FF-45 ${id}`, slides: [{title, text: 'Body'}], ...(design ? {design} : {})});
-const render = document => renderSvg(document, {...options, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(document))});
+const render = document => renderSlideSvg(document, 0, { fonts: {...prepared, textMeasurement: createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(document))}});
 const cases = [
   {id: 'emoji-latin', document: deck('emoji-latin', `Launch ${EMOJI.rocket} ${EMOJI.family} ${EMOJI.flag} ${EMOJI.thumbsMedium}`)},
   {id: 'emoji-sequences', document: deck('emoji-sequences', `${EMOJI.keycap} ${EMOJI.heartVS16} ${EMOJI.scotland} ${EMOJI.womanTechnologist}`)},
@@ -26,7 +26,7 @@ const cases = [
 ].map(item => ({...item, svg: render(item.document)}));
 
 // Serve every loaded face from a local route; nothing else may load.
-const faces = registry.describeFaces(), files = options.fontFiles;
+const faces = registry.describeFaces(), files = prepared.fontFiles;
 assert.equal(faces.length, files.length);
 const served = new Map(faces.map((face, index) => [`https://fonts.test/${index}.ttf`, {...face, file: files[index]}]));
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined}), errors = [], requests = [];

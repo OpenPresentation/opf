@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
-import {colorContrast, codeHighlightColors} from '@openpresentation/opf';
-import {renderSvg} from '../dist/svg.js';
+import {colorContrast, codeHighlightColors} from '@openpresentation/opf/composition';
+import { renderSlideSvg } from '../dist/svg.js';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets in the SVG preview.
 
-const svg = (document, options = {}) => renderSvg(document, {slideIndex: 0, trace: true, ...options});
+const svg = (document, options = {}, index = 0) => renderSlideSvg(document, index, { trace: true, ...options});
 const source = ['const a = 1;', 'const b = 2;', 'const c = a + b;', '', 'console.log(c);', 'return c;'].join('\n');
 const codeDeck = highlight => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Highlight', code: {source, language: 'ts', ...(highlight ? {highlight} : {})}}]});
 
@@ -67,7 +67,7 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   assert.match(own, />FINAL</);
   assert.equal(own.includes('>DRAFT<'), false);
   assert.equal(svg(deck({text: 'DRAFT', opacity: 0.1}, {watermark: false})).includes('>DRAFT<'), false);
-  assert.equal(svg(deck({text: 'DRAFT', opacity: 0.1}), {slideIndex: 1}).includes('>DRAFT<'), true);
+  assert.equal(svg(deck({text: 'DRAFT', opacity: 0.1}), {}, 1).includes('>DRAFT<'), true);
   // Portrait slides keep the stamp inside the slide.
   const portrait = svg({design: {dimensions: '9:16', watermark: {text: 'CONFIDENTIAL', opacity: 0.1}}, slides: [{title: 'T'}]});
   assert.match(portrait, /rotate\(-30 360 640\)/);

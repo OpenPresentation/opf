@@ -6,11 +6,10 @@
 // A language never changes the latin slot. The preview draws a slot's family first and the designated open
 // replacement after it; the PPTX keeps the selected name. Offline and deterministic; no fonts are loaded.
 import assert from 'node:assert/strict';
-import * as core from '@openpresentation/opf';
-import {renderSvg, resolvePresentation} from '../dist/index.js';
+import {catalogs} from '@openpresentation/opf';
+import {resolveScriptFonts} from '@openpresentation/opf/composition';
+import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
 
-const {catalogs, resolveScriptFonts} = core;
-assert.equal(typeof resolveScriptFonts, 'function', 'the linked core exports the FF-18 resolver');
 const scheme = id => catalogs.fontSchemes.find(record => record.id === id);
 const profileOf = presentation => resolvePresentation(structuredClone(presentation)).slides[0].scriptFonts.profile;
 const doc = (fontScheme, language, text = 'Text') => ({name: 'Theme slots', ...(language === undefined ? {} : {language}), design: {fontScheme}, slides: [{title: text, text}]});
@@ -69,7 +68,7 @@ for (const designId of ['aptos', 'calibri', 'georgia', 'meiryo', 'arabic-typeset
 // 4. What the preview draws: a run's first family is the slot's family, then the designated open replacement. The
 // slot's family is the selected name (never the replacement) and the fallback chain follows it.
 const families = svg => [...new Set([...svg.matchAll(/font-family="([^"]*)"/g)].map(match => match[1]))];
-const chain = (designId, languageId, text) => families(renderSvg(doc(designId, languageId, text)));
+const chain = (designId, languageId, text) => families(renderSlideSvg(doc(designId, languageId, text), 0));
 assert.ok(chain('aptos', 'japanese', '日本語のテキスト').includes('Meiryo, Noto Sans JP, Noto Serif JP, sans-serif'), 'Japanese text: Meiryo, then the open replacement');
 // RR-38: Arabic Typesetting carries a preview size multiplier measured on its replacement, so the run names that replacement first (the face a
 // registry resolves it to) and not the selected name: a host with the real font installed would otherwise draw it at the reduced size.

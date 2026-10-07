@@ -21,8 +21,8 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {fontSchemes} from '@openpresentation/opf/catalogs';
-import {renderSvg, svgToPng} from '../dist/index.js';
-import {BUNDLED_FONT_MANIFEST, loadBundledFontRegistry, loadOfficeFontRegistry, prepareNodeFonts} from '../dist/fonts-node.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
 import {fontPolicyFor} from '../dist/fonts.js';
 import {isUnmodifiedUpstreamUrl} from '../scripts/font-license.mjs';
 
@@ -81,25 +81,25 @@ for (const [name, family, repository] of [['raleway', 'Raleway', 'googlefonts/Ra
     await cp(path.join(root, 'fonts'), path.join(copy, 'fonts'), {recursive: true});
     await symlink(path.join(root, 'node_modules'), path.join(copy, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     const isolated = await import(pathToFileURL(path.join(copy, 'dist/fonts-node.js')));
-    await isolated.loadOfficeFontRegistry();
+    await isolated.loadFonts({pack: 'office'});
     const face = path.join(copy, open[0].vendored, open[0].faces[0].file), original = await readFile(face);
     await writeFile(face, Buffer.concat([original, Buffer.from('corrupt')]));
-    await assert.rejects(isolated.loadOfficeFontRegistry(), {code: 'font-integrity-mismatch'});
+    await assert.rejects(isolated.loadFonts({pack: 'office'}), {code: 'font-integrity-mismatch'});
     await writeFile(face, original);
     const notice = path.join(copy, open[0].vendored, open[0].licenseFile), text = await readFile(notice);
     await writeFile(notice, 'Missing original notice');
-    await assert.rejects(isolated.loadOfficeFontRegistry(), {code: 'font-integrity-mismatch'});
+    await assert.rejects(isolated.loadFonts({pack: 'office'}), {code: 'font-integrity-mismatch'});
     await writeFile(notice, text);
     await rm(face);
-    await assert.rejects(isolated.loadOfficeFontRegistry(), {code: 'font-resource-unavailable'});
+    await assert.rejects(isolated.loadFonts({pack: 'office'}), {code: 'font-resource-unavailable'});
     await writeFile(face, original);
-    await isolated.loadOfficeFontRegistry();
+    await isolated.loadFonts({pack: 'office'});
   } finally { await rm(copy, {recursive: true, force: true}); }
 }
 
 // Every open family a font scheme selects (core catalog plus the four gallery-only legacy schemes) that is bundled resolves to its
 // own exact face in a strict office registry.
-const strict = await loadOfficeFontRegistry();
+const strict = (await loadFonts({pack: 'office'})).registry;
 const selected = new Set(SCHEME_FAMILIES);
 for (const record of fontSchemes.records ?? fontSchemes) for (const family of [record.major, record.minor]) if (fontPolicyFor(family)?.licenseClass === 'open' && !/^Noto /.test(family)) selected.add(family);
 for (const family of SCHEME_FAMILIES) assert.ok(selected.has(family) || family === 'Source Sans Pro', `${family} is selected by a font scheme`);
@@ -134,7 +134,7 @@ for (const family of new Set([...selected, 'Source Sans 3', 'Red Hat Display', '
 }
 
 // Declared policy replacements now draw: Segoe UI and Tahoma with Red Hat, Arial Black with Montserrat Black.
-const visual = await loadOfficeFontRegistry({substitutionPolicy: 'visual'});
+const visual = (await loadFonts({pack: 'office', substitutionPolicy: 'visual'})).registry;
 const face = (family, fontWeight = 400, italic = false) => { const resolved = visual.resolveFont({fontFamily: family, fontWeight, italic}); return [resolved.resolvedFamily, resolved.resolvedWeight, resolved.compatibility, resolved.styleFallback === true]; };
 assert.deepEqual(face('Segoe UI'), ['Red Hat Display', 400, 'visual', false]);
 assert.deepEqual(face('Segoe UI', 700), ['Red Hat Display', 700, 'visual', false]);
@@ -159,11 +159,11 @@ for (const family of ['Bodoni MT', 'Didot']) for (const [weight, italic] of [[40
 
 // Packs stay separate: the base pack still has only Roboto and points at the office pack; the office pack can leave the open
 // families out.
-const base = await loadBundledFontRegistry();
+const base = (await loadFonts({pack: 'base'})).registry;
 assert.equal(base.describeFaces().length, 9);
 assert.throws(() => base.resolveFont({fontFamily: 'Open Sans', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.pack === 'office');
 assert.throws(() => base.resolveFont({fontFamily: 'Source Sans Pro', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.packs.includes('office'));
-const without = await loadOfficeFontRegistry({includeOpenFonts: false});
+const without = (await loadFonts({pack: 'office', includeOpenFonts: false})).registry;
 // 33 office and base faces, plus the four default Noto Sans glyph-fallback faces (fallback-only, embed "used").
 assert.equal(without.describeFaces().filter(face => !face.fallbackOnly).length, 33 + 16, 'plus the 16 Intos faces, which are part of the office pack');
 assert.equal(without.describeFaces().filter(face => face.fallbackOnly).length, 4);
@@ -174,44 +174,44 @@ assert.throws(() => without.resolveFont({fontFamily: 'Source Sans Pro', fontWeig
 // whose text names their family.
 assert.equal(strict.embeddedFonts.length, 33);
 assert.ok(strict.embeddedFonts.every(font => font.embed === undefined));
-const defaults = await prepareNodeFonts({pack: 'office'});
-assert.equal(defaults.options.embeddedFonts.length, 131, 'prepareNodeFonts supplies every face (111 office, base, open and Intos faces, plus the four Noto Sans fallback faces); the SVG picks the ones its text uses');
-assert.equal(defaults.options.embeddedFonts.filter(font => font.embed === 'used').length, 78 + 16 + 4, 'the 78 open faces, the 16 Intos faces and the 4 Noto Sans fallback faces');
-assert.equal(defaults.options.fontFiles.length, 131);
-assert.equal((await prepareNodeFonts({pack: 'base'})).options.embeddedFonts.length, 9);
+const defaults = await loadFonts({pack: 'office'});
+assert.equal(defaults.embeddedFonts.length, 131, 'loadFonts supplies every face (111 office, base, open and Intos faces, plus the four Noto Sans fallback faces); the SVG picks the ones its text uses');
+assert.equal(defaults.embeddedFonts.filter(font => font.embed === 'used').length, 78 + 16 + 4, 'the 78 open faces, the 16 Intos faces and the 4 Noto Sans fallback faces');
+assert.equal(defaults.fontFiles.length, 131);
+assert.equal((await loadFonts({pack: 'base'})).embeddedFonts.length, 9);
 const schemeDocument = family => ({
   design: {fontScheme: 'x-open'},
   catalogs: {fontSchemes: {records: [{$schema: 'https://openpresentation.org/schema/opf-font-scheme/v1', id: 'x-open', name: family, app: 'google-slides', languageFamily: 'latin', languages: [], major: family, minor: family, textSample: 'x', type: 'sans-serif'}]}},
   slides: [{title: 'Quarterly review', text: 'Revenue grew in every region.'}],
 });
 const embeddedFamilies = svg => [...new Set([...svg.matchAll(/font-family:"([^"]+)"/g)].map(match => match[1]))].sort();
-const montserrat = renderSvg(schemeDocument('Montserrat'), defaults.options);
+const montserrat = renderSlideSvg(schemeDocument('Montserrat'), 0, {fonts: defaults});
 assert.deepEqual(embeddedFamilies(montserrat), ['Montserrat'].concat(embeddedFamilies(montserrat).filter(family => family !== 'Montserrat' && !open.some(item => item.faces.some(face => face.family === family)))).sort(), 'only Montserrat of the open families is embedded');
-const roboto = renderSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Quarterly review'}]}, defaults.options);
+const roboto = renderSlideSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Quarterly review'}]}, 0, {fonts: defaults});
 assert.deepEqual(embeddedFamilies(roboto).filter(family => open.some(item => item.faces.some(face => face.family === family))), [], 'a slide that names no open family embeds none of them');
 assert.ok(montserrat.length - roboto.length < 3 * 1024 * 1024, `Montserrat adds only its own five faces (${((montserrat.length - roboto.length) / 1048576).toFixed(1)} MiB), not the whole open pack (about 9 MiB)`);
-const allFaces = renderSvg(schemeDocument('Open Sans'), {...defaults.options, embeddedFonts: defaults.registry.selectEmbeddedFonts(() => true)});
+const allFaces = renderSlideSvg(schemeDocument('Open Sans'), 0, { fonts: {...defaults, embeddedFonts: defaults.registry.selectEmbeddedFonts(() => true)}});
 assert.equal(embeddedFamilies(allFaces).filter(family => family === 'Open Sans').length, 1);
 
 // Raster fidelity: for every vendored face, resvg (the Node raster engine) draws exactly that face for the family/weight/style the
 // registry writes into the SVG: same pixels with only that file loaded, different pixels without it.
 const svgFor = (family, weight, italic) => `<svg xmlns="http://www.w3.org/2000/svg" width="700" height="70"><rect width="700" height="70" fill="white"/><text x="8" y="48" font-family="${family}" font-weight="${weight}" font-style="${italic ? 'italic' : 'normal'}" font-size="36">Quarterly review 123 Hamburgefonstiv</text></svg>`;
-const rasterOptions = fontFiles => ({fontFiles, useBundledFonts: false, loadSystemFonts: false});
+const rasterOptions = fontFiles => ({ fonts: {fontFiles, useBundledFonts: false}});
 const slash = file => file.split(String.fromCharCode(92)).join('/');
 for (const item of open) for (const entry of item.faces) {
-  const file = defaults.options.fontFiles.find(candidate => path.basename(candidate) === entry.file && slash(candidate).includes(item.vendored));
+  const file = defaults.fontFiles.find(candidate => path.basename(candidate) === entry.file && slash(candidate).includes(item.vendored));
   assert.ok(file, entry.file);
   const drawn = svgFor(entry.family, entry.weight, entry.italic);
-  const all = sha(await svgToPng(drawn, rasterOptions(defaults.options.fontFiles)));
+  const all = sha(await svgToPng(drawn, rasterOptions(defaults.fontFiles)));
   assert.equal(all, sha(await svgToPng(drawn, rasterOptions([file]))), `${entry.family} ${entry.weight} ${entry.italic}: resvg draws ${entry.file}`);
-  assert.notEqual(all, sha(await svgToPng(drawn, rasterOptions(defaults.options.fontFiles.filter(candidate => candidate !== file)))), `${entry.family} ${entry.weight} ${entry.italic}: ${entry.file} is what paints`);
+  assert.notEqual(all, sha(await svgToPng(drawn, rasterOptions(defaults.fontFiles.filter(candidate => candidate !== file)))), `${entry.family} ${entry.weight} ${entry.italic}: ${entry.file} is what paints`);
 }
 // Every face of a family paints distinctly: with the whole pack loaded, no two faces of a family (300, 400, 600 and 700, upright and italic)
 // produce the same pixels, so no face is drawn by another one (for example a 600 by the Bold, or an italic by the upright).
 for (const item of open) {
   const seen = new Map();
   for (const entry of item.faces) {
-    const digest = sha(await svgToPng(svgFor(entry.family, entry.weight, entry.italic), rasterOptions(defaults.options.fontFiles)));
+    const digest = sha(await svgToPng(svgFor(entry.family, entry.weight, entry.italic), rasterOptions(defaults.fontFiles)));
     assert.ok(!seen.has(digest), `${entry.family} ${entry.weight}${entry.italic ? 'i' : ''} paints the same pixels as ${seen.get(digest)}`);
     seen.set(digest, `${entry.weight}${entry.italic ? 'i' : ''}`);
   }
@@ -220,13 +220,13 @@ for (const item of open) {
 // differently from the others.
 const hashes = new Map();
 for (const family of [...SCHEME_FAMILIES, 'Red Hat Display', 'Red Hat Text', ...NEW_FAMILIES]) {
-  const svg = renderSvg(schemeDocument(family), defaults.options);
+  const svg = renderSlideSvg(schemeDocument(family), 0, {fonts: defaults});
   const drawnFamily = family === 'Source Sans Pro' ? 'Source Sans 3' : family;
   // FF-45: a name with a digit-leading word (Source Sans 3) is single-quoted; unquoted it is invalid CSS that a browser drops.
   const cssName = /^[A-Za-z_][\w-]*( [A-Za-z_][\w-]*)*$/.test(drawnFamily) ? drawnFamily : `'${drawnFamily}'`;
   assert.ok(svg.includes(`font-family="${cssName}, sans-serif"`), `${drawnFamily} is named in the SVG`);
-  const png = await svgToPng(svg, {...defaults.options, scale: 0.5});
-  const fallback = await svgToPng(svg, {fontFiles: [], useBundledFonts: false, loadSystemFonts: false, scale: 0.5});
+  const png = await svgToPng(svg, {fonts: defaults, scale: 0.5});
+  const fallback = await svgToPng(svg, { fonts: {fontFiles: [], useBundledFonts: false}, scale: 0.5});
   const digest = sha(png);
   assert.notEqual(digest, sha(fallback), `${family} paints with its own face`);
   assert.ok(!hashes.has(digest), `${family} differs from ${hashes.get(digest)}`);

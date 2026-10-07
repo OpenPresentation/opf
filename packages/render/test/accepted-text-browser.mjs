@@ -5,16 +5,16 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {chromium} from 'playwright';
 import sharp from 'sharp';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {acceptedTextFixtures} from './accepted-text-fixtures.mjs';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
+const fonts=(await loadFonts({pack: 'office', substitutionPolicy:'visual'})).registry;
 const fixtures=acceptedTextFixtures(),out=process.argv[2],textRasterPadding=Number(process.argv[3]??1);
 if(out)await mkdir(out,{recursive:true});
 const cases=fixtures.map(({id,deck})=>{
-  const options={trace:true,textMeasurement:fonts.textMeasurement,textRasterPadding},bound=resolvePresentation(deck,options).slides[0];
-  const svg=renderSvg(deck,options);
+  const options={trace:true,fonts:{textMeasurement:fonts.textMeasurement},textRasterPadding},bound=resolvePresentation(deck,options).slides[0];
+  const svg=renderSlideSvg(deck, 0,options);
   const expected=bound.geometry.items.flatMap(item=>{
     const fit=item.text,align=item.field==='title'?bound.design.titleAlignment:bound.design.contentAlignment;
     return fit.richLines?fit.richLines.flatMap((line,index)=>line.fragments.map(fragment=>({

@@ -5,10 +5,10 @@
 // chosen family for exporters, and never fail a preview. The raster path draws emoji with the monochrome Noto Emoji, because
 // resvg draws neither COLRv1 nor OT-SVG glyphs; that limit is pinned here. Offline and deterministic.
 import assert from 'node:assert/strict';
-import * as core from '@openpresentation/opf';
+import * as core from '@openpresentation/opf/composition';
 import sharp from 'sharp';
-import {renderSvg, svgToPng} from '../dist/index.js';
-import {BUNDLED_FONT_MANIFEST, detectPresentationScripts, prepareNodeFonts, scriptFontPackages} from '../dist/fonts-node.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {BUNDLED_FONT_MANIFEST, detectPresentationScripts, loadFonts, scriptFontPackages} from '../dist/fonts-node.js';
 import {COLOR_FONT_FACES, EMOJI_FONT_FAMILIES, FONT_COMPATIBILITY, createScriptFonts, createScriptTextMeasurement, designatedFamilies, fontPolicyFor, glyphFallbackFamilies, hasEmojiPresentation, hasMathNotation, scriptFontAliases} from '../dist/fonts.js';
 import {monochromeColorFonts, rasterFontFiles} from '../dist/color-fonts.js';
 
@@ -84,18 +84,18 @@ assert.deepEqual(detectPresentationScripts(deck('Review', 'Body', scheme('Segoe 
 
 // 3. Loading: scripts 'auto' loads the packs a deck needs, by text or by its font scheme; every face resolves under the metric policy.
 {
-  const emoji = await prepareNodeFonts({pack: 'office', scripts: 'auto', presentation: deck(`Hello ${EMOJI.family}`)});
+  const emoji = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck(`Hello ${EMOJI.family}`)});
   assert.deepEqual(emoji.registry.scriptSelection.packages, ['@expo-google-fonts/noto-color-emoji', '@expo-google-fonts/noto-emoji']);
-  const math = await prepareNodeFonts({pack: 'office', scripts: 'auto', presentation: deck('Theorem', 'Proof', scheme('Cambria Math'))});
+  const math = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck('Theorem', 'Proof', scheme('Cambria Math'))});
   assert.deepEqual(math.registry.scriptSelection.packages, ['@expo-google-fonts/stix-two-math', '@expo-google-fonts/noto-sans-math'], 'a Cambria Math scheme loads the math pack');
   assert.equal(math.registry.resolveFont({fontFamily: 'Cambria Math', fontWeight: 700}).resolvedFamily, 'STIX Two Math');
-  const latin = await prepareNodeFonts({pack: 'office', scripts: 'auto', presentation: deck('Quarterly review', 'Plain text, x \u2264 y')});
+  const latin = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck('Quarterly review', 'Plain text, x \u2264 y')});
   assert.deepEqual(latin.registry.scriptSelection.packages, [], 'Latin text with plain operators loads nothing');
   // Without the packs the policy says what to load; nothing falls through to body text silently.
   assert.throws(() => latin.registry.resolveFont({fontFamily: 'Segoe UI Emoji', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.replacement === 'Noto Color Emoji' && error.details.packs.includes('scripts'));
   assert.throws(() => latin.registry.resolveFont({fontFamily: 'Cambria Math', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.replacement === 'STIX Two Math');
 }
-const fonts = await prepareNodeFonts({pack: 'office', scripts: 'all'});
+const fonts = await loadFonts({pack: 'office', scripts: 'all'});
 const {registry} = fonts, raw = registry.textMeasurement;
 const resolved = family => registry.resolveFont({fontFamily: family, fontWeight: 400});
 assert.deepEqual([resolved('Segoe UI Emoji').resolvedFamily, resolved('Segoe UI Emoji').compatibility, resolved('Segoe UI Emoji').sourceFamily], ['Noto Color Emoji', 'visual', 'Segoe UI Emoji']);
@@ -218,10 +218,10 @@ assert.equal(createScriptFonts({...profile, serif: true}, raw).plan('\u{1D465}',
 // COLRv1 or OT-SVG glyphs) and math as STIX outlines; both are deterministic.
 const title = `Launch ${EMOJI.rocket} ${EMOJI.family} ${EMOJI.flag}`;
 const emojiDeck = deck(title, `Keycap ${EMOJI.keycap} heart ${EMOJI.heartVS16}`);
-const svgOptions = document => ({...fonts.options, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))});
+const svgOptions = document => ({ fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}});
 const diagnostics = [];
-const svg = renderSvg(emojiDeck, {...svgOptions(emojiDeck), onDiagnostic: item => diagnostics.push(item)});
-assert.equal(svg, renderSvg(emojiDeck, svgOptions(emojiDeck)), 'deterministic SVG');
+const svg = renderSlideSvg(emojiDeck, 0, {...svgOptions(emojiDeck), onDiagnostic: item => diagnostics.push(item)});
+assert.equal(svg, renderSlideSvg(emojiDeck, 0, svgOptions(emojiDeck)), 'deterministic SVG');
 const emojiRuns = drawnRuns(svg).filter(([family]) => family === 'Noto Color Emoji').map(([, text]) => text);
 assert.deepEqual(emojiRuns, [EMOJI.rocket, EMOJI.family, EMOJI.flag, EMOJI.keycap, EMOJI.heartVS16], 'each sequence is one run in the colour face');
 assert.ok(!svg.includes('Noto Emoji') && !svg.includes('Segoe UI Emoji'), 'the SVG names the colour face; exporters keep the chosen family elsewhere');
@@ -230,27 +230,27 @@ assert.ok(!diagnostics.some(item => item.code === 'missing-glyph'));
 const rasterSvg = monochromeColorFonts(svg);
 assert.ok(!rasterSvg.includes('Noto Color Emoji') && (rasterSvg.match(/"Noto Emoji, sans-serif"/g) ?? []).length === emojiRuns.length, 'the raster pass renames every colour run');
 assert.equal(monochromeColorFonts('<svg><text font-family="Roboto, sans-serif">x</text></svg>'), '<svg><text font-family="Roboto, sans-serif">x</text></svg>');
-const png = await svgToPng(svg, fonts.options);
-assert.deepEqual(await svgToPng(svg, fonts.options), png, 'deterministic raster');
-assert.deepEqual(await svgToPng(svg, {...fonts.options, fontFiles: rasterFontFiles(fonts.options.fontFiles)}), png, 'the colour file never reaches resvg');
+const png = await svgToPng(svg, {fonts: fonts});
+assert.deepEqual(await svgToPng(svg, {fonts: fonts}), png, 'deterministic raster');
+assert.deepEqual(await svgToPng(svg, { fonts: {...fonts, fontFiles: rasterFontFiles(fonts.fontFiles)}}), png, 'the colour file never reaches resvg');
 // A minimal emoji-only SVG on white: ink, monochrome; the same text in a face resvg cannot draw would be blank.
 const probe = text => `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="120" viewBox="0 0 400 120"><rect width="400" height="120" fill="#fff"/><text x="10" y="90" font-family="Noto Color Emoji, sans-serif" font-size="80" fill="#000">${text}</text></svg>`;
 for (const [name, text] of Object.entries(EMOJI)) {
-  const ink = await inkOf(await svgToPng(probe(text), fonts.options));
+  const ink = await inkOf(await svgToPng(probe(text), {fonts: fonts}));
   assert.ok(ink.ink > 500, `${name}: the raster draws a silhouette (${ink.ink} px)`);
   assert.equal(ink.colour, 0, `${name}: the raster is monochrome (documented limit: resvg has no COLRv1 or OT-SVG support)`);
 }
 {
   const {Resvg} = await import('@resvg/resvg-js');
-  const blank = new Resvg(probe(EMOJI.grinning), {font: {loadSystemFonts: false, fontFiles: [colorFile], defaultFontFamily: 'Noto Color Emoji'}, logLevel: 'off'}).render().asPng();
+  const blank = new Resvg(probe(EMOJI.grinning), {font: {fontFiles: [colorFile], defaultFontFamily: 'Noto Color Emoji'}, logLevel: 'off'}).render().asPng();
   assert.equal((await inkOf(blank)).ink, 0, 'resvg 2.6.2 paints nothing from the COLRv1 and SVG tables: the reason for the monochrome stand-in');
 }
 const mathDeck = deck('\u2211 \u222B \u221A \u{1D44E} \u211D \u2264 \u221E', 'f(x) = \u222B g(t) dt', scheme('Cambria Math'));
-const mathSvg = renderSvg(mathDeck, svgOptions(mathDeck));
+const mathSvg = renderSlideSvg(mathDeck, 0, svgOptions(mathDeck));
 assert.ok(drawnRuns(mathSvg).some(([family, text]) => family === 'STIX Two Math' && text.includes('\u2211')), 'the title draws in STIX Two Math');
 assert.ok(!mathSvg.includes('Cambria Math'));
-const mathInk = await inkOf(await svgToPng(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="120" viewBox="0 0 600 120"><rect width="600" height="120" fill="#fff"/><text x="10" y="90" font-family="STIX Two Math, serif" font-size="72" fill="#000">\u2211 \u222B \u221A \u{1D44E} \u211D</text></svg>`, fonts.options));
+const mathInk = await inkOf(await svgToPng(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="120" viewBox="0 0 600 120"><rect width="600" height="120" fill="#fff"/><text x="10" y="90" font-family="STIX Two Math, serif" font-size="72" fill="#000">\u2211 \u222B \u221A \u{1D44E} \u211D</text></svg>`, {fonts: fonts}));
 assert.ok(mathInk.ink > 800, `math glyphs rasterize (${mathInk.ink} px)`);
-assert.ok((await svgToPng(mathSvg, fonts.options)).length > 1000);
+assert.ok((await svgToPng(mathSvg, {fonts: fonts})).length > 1000);
 
 console.log(JSON.stringify({test: 'emoji-math', sequences: Object.keys(EMOJI).length, emojiAdvanceEm: NOTO_COLOR_EMOJI_ADVANCE, segoeAdvanceEm: SEGOE_UI_EMOJI_ADVANCE, mathCorpus: MATH_CORPUS.length, stixMeanAbs: Number((meanAbs * 100).toFixed(2)), stixMaxAbs: Number((maxAbs * 100).toFixed(2)), raster: 'monochrome Noto Emoji'}));

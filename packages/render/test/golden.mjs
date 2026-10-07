@@ -4,7 +4,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { examples } from '@openpresentation/opf/examples';
-import { renderSvgDeck, svgToPng } from '../dist/index.js';
+import {svgToPng, renderSvg} from '../dist/index.js';
 import { diffManifests, readBaseline } from './golden-store.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -36,10 +36,10 @@ const artifactMode = process.env.OPF_GOLDEN_ARTIFACTS;
 const reference = artifactMode === 'changed' ? readBaseline(baselinePath) : undefined;
 const slides = [];
 for (const { file, deck } of corpus) {
-  const svgs = renderSvgDeck(deck, { trace: true });
+  const svgs = renderSvg(deck, { trace: true });
   assert.equal(svgs.length, deck.slides.length, `${file}: slide count`);
   for (const [index, svg] of svgs.entries()) {
-    const png = await svgToPng(svg, { scale, loadSystemFonts: false });
+    const png = await svgToPng(svg, { scale });
     const key = `${file}#${index}`;
     next.entries[key] = { sha256: sha256(png), bytes: png.byteLength };
     const keep = reference ? JSON.stringify(reference.entries[key]) !== JSON.stringify(next.entries[key]) : update || artifactMode === '1';

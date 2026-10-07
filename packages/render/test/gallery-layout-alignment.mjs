@@ -7,7 +7,7 @@
 // box, places every shape exactly as the preview does.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {renderSvg, resolvePresentation} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/gallery-alignment-layouts.json', import.meta.url), 'utf8'));
 assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layouts audit A flagged');
@@ -49,7 +49,7 @@ for (const {id, document} of fixture.layouts) {
   }
 
   // 2. Every traced text anchors at its item's alignment.
-  const svg = renderSvg(document, {slideIndex: 0, trace: true});
+  const svg = renderSlideSvg(document, 0, {trace: true});
   for (const item of bound.geometry.items.filter(item => item.type === 'text' && typeof item.value === 'string')) {
     const texts = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].filter(([, attrs]) => attrs.includes(`data-opf-path="${item.path}"`));
     assert.ok(texts.length, `${id}: traced preview text for ${item.path}`);
@@ -59,7 +59,7 @@ for (const {id, document} of fixture.layouts) {
 
   // 3. With and without the layout, the untraced preview differs only in the
   //    text anchor and its x origin: no box, image, marker or path moves.
-  const [a, b] = [tokens(renderSvg(document, {slideIndex: 0})), tokens(renderSvg(base, {slideIndex: 0}))];
+  const [a, b] = [tokens(renderSlideSvg(document, 0)), tokens(renderSlideSvg(base, 0))];
   assert.equal(a.length, b.length, `${id}: preview token count`);
   assert.deepEqual(boxes(a.join('')), boxes(b.join('')), `${id}: non-text elements with and without the layout`);
   let changes = 0;

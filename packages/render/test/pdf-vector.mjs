@@ -7,8 +7,8 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { PDFArray, PDFDict, PDFDocument, PDFName, PDFNumber, PDFRawStream, PDFRef, PDFString, PDFHexString, decodePDFRawStream } from "pdf-lib";
-import { renderSvgDeck, svgToPdf, svgToPng } from "../dist/index.js";
-import { loadBundledFontRegistry, loadOfficeFontRegistry } from "../dist/fonts-node.js";
+import {svgToPdf, svgToPng, renderSvg} from "../dist/index.js";
+import {loadFonts} from "../dist/fonts-node.js";
 import sharp from "sharp";
 import { compareImages, openPdf, pageItems, pageText, pdfiumText, popplerText, qpdfCheck, renderPdfPage } from "./pdf-helpers.mjs";
 
@@ -19,9 +19,9 @@ const nfkc = (text) => text.normalize("NFKC").replace(/\s+/g, " ").trim();
 const compact = (text) => nfkc(text).replace(/\s/g, "");
 
 async function renderDeck(deck, options = {}) {
-  const fonts = await loadOfficeFontRegistry({ substitutionPolicy: "visual", scripts: "auto", presentation: deck });
-  const svgs = renderSvgDeck(deck, { trace: true, textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts, ...options });
-  return { svgs, pdfOptions: { fontFiles: fonts.fontFiles, useBundledFonts: false } };
+  const fonts = (await loadFonts({pack: 'office', substitutionPolicy: "visual", scripts: "auto", presentation: deck})).registry;
+  const svgs = renderSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts}, trace: true, ...options });
+  return { svgs, pdfOptions: { fonts: {fontFiles: fonts.fontFiles, useBundledFonts: false}} };
 }
 
 async function lowLevel(bytes) {
@@ -40,7 +40,7 @@ async function lowLevel(bytes) {
   const raster = await svgToPdf(svgs, { ...pdfOptions, mode: "raster", scale: 0.25 });
   assert.notDeepEqual(raster, byDefault);
   await assert.rejects(svgToPdf(svgs, { mode: "bitmap" }), (error) => error.code === "invalid-conversion-option" && error.details.option === "mode");
-  await assert.rejects(svgToPdf(svgs, { ...pdfOptions, loadSystemFonts: true }), (error) => error.code === "pdf-system-fonts-unsupported");
+  await assert.rejects(svgToPdf(svgs, { ...pdfOptions, fonts: { ...pdfOptions.fonts, loadSystemFonts: true } }), (error) => error.code === "pdf-system-fonts-unsupported");
   // The raster mode stays an image per page; the vector mode has no page-sized picture and real text.
   const rasterLow = await lowLevel(raster);
   const rasterImages = rasterLow.objects.filter(([, object]) => object instanceof PDFRawStream && object.dict.get(PDFName.of("Subtype"))?.toString() === "/Image");
@@ -130,8 +130,8 @@ for (const { name, deck, expect } of roundTrips) {
 // reordered Indic and Khmer clusters carry /ActualText per cluster. The readers named in `skip` do not read that script
 // correctly from Chromium's own PDF either (PDFium on Thai and Burmese marks) or by design do not honour /ActualText (pdf.js).
 {
-  const registry = await loadBundledFontRegistry({ scripts: "all" });
-  const options = { fontFiles: registry.fontFiles, useBundledFonts: false };
+  const registry = (await loadFonts({pack: 'base', scripts: "all"})).registry;
+  const options = { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}};
   const rtl = (text) => `⁧${text}⁩`;
   const strip = (text) => text.replace(/[\s​‎‏]/g, "").normalize("NFKC");
   const cases = [
@@ -209,9 +209,9 @@ for (const { name, deck, expect } of roundTrips) {
 // group, a link, a rotation) exported with the pinned bundled fonts must hash to the same value on every operating system and
 // Node version. If a dependency or font bump changes the bytes on purpose, review the diff and update the hash.
 {
-  const registry = await loadBundledFontRegistry({ scripts: "all" });
+  const registry = (await loadFonts({pack: 'base', scripts: "all"})).registry;
   const svg = await readFile(new URL("fixtures/pdf/mixed-script-slide.svg", import.meta.url), "utf8");
-  const options = { fontFiles: registry.fontFiles, useBundledFonts: false, metadata: { title: "Fixture", author: "OPF", language: "en-GB", creationDate: "2026-01-01T00:00:00Z" } };
+  const options = { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, metadata: { title: "Fixture", author: "OPF", language: "en-GB", creationDate: "2026-01-01T00:00:00Z" } };
   const pdf = await svgToPdf(svg, options);
   assert.deepEqual(pdf, await svgToPdf(svg, options));
   const digest = createHash("sha256").update(pdf).digest("hex");
@@ -258,7 +258,7 @@ for (const { name, deck, expect } of roundTrips) {
 
 // ---- Fonts: only what is supplied; embedding permissions are honoured; no system fonts --------------------------------
 {
-  const registry = await loadBundledFontRegistry();
+  const registry = (await loadFonts({pack: 'base'})).registry;
   const roboto = registry.fontFiles.find((file) => /Roboto_400Regular\.ttf$/.test(file));
   assert.ok(roboto, "bundled Roboto Regular");
   const bytes = new Uint8Array(await readFile(roboto));
@@ -278,18 +278,18 @@ for (const { name, deck, expect } of roundTrips) {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100" viewBox="0 0 300 100"><text x="10" y="50" font-family="Roboto" font-size="20">Embeddable text</text></svg>`;
     // Only the restricted face is supplied: nothing may be embedded, so the export refuses rather than bypass it.
     const diagnostics = [];
-    await assert.rejects(svgToPdf(svg, { useBundledFonts: false, fontFiles: [restricted], onDiagnostic: (d) => diagnostics.push(d) }), (error) => error.code === "pdf-font-unavailable");
+    await assert.rejects(svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [restricted]}, onDiagnostic: (d) => diagnostics.push(d) }), (error) => error.code === "pdf-font-unavailable");
     assert.ok(diagnostics.some((d) => d.code === "pdf-font-embedding-restricted"), "restriction reported");
     // With a permitted face also available, the permitted one is used and reported as the substitute.
     const both = [];
-    const pdf = await svgToPdf(svg, { useBundledFonts: false, fontFiles: [restricted, registry.fontFiles.find((file) => /Roboto_500Medium\.ttf$/.test(file))], onDiagnostic: (d) => both.push(d) });
+    const pdf = await svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [restricted, registry.fontFiles.find((file) => /Roboto_500Medium\.ttf$/.test(file))]}, onDiagnostic: (d) => both.push(d) });
     assert.match(await pageText(await openPdf(pdf), 1), /Embeddable text/);
     const embedded = both.filter((d) => d.code === "pdf-font-embedded");
     assert.equal(embedded.length, 1);
     assert.equal(embedded[0].weight, 500, "the permitted face was embedded");
     assert.ok(both.some((d) => d.code === "pdf-font-embedding-restricted"));
     // fontDirs are searched too, and every face found there is checked the same way.
-    const fromDirectory = await svgToPdf(svg, { useBundledFonts: false, fontDirs: [path.dirname(roboto)] });
+    const fromDirectory = await svgToPdf(svg, { fonts: {useBundledFonts: false}, fontDirs: [path.dirname(roboto)] });
     assert.match(await pageText(await openPdf(fromDirectory), 1), /Embeddable text/);
   } finally {
     await rm(directory, { recursive: true, force: true });
@@ -470,7 +470,7 @@ for (const { name, deck, expect } of roundTrips) {
 
 // ---- Fonts: corrupt and restricted files, declared families -----------------------------------------------------------------
 {
-  const registry = await loadBundledFontRegistry();
+  const registry = (await loadFonts({pack: 'base'})).registry;
   const roboto = registry.fontFiles.find((file) => /Roboto_400Regular\.ttf$/.test(file));
   const original = new Uint8Array(await readFile(roboto));
   const table = (bytes, tag) => {
@@ -496,7 +496,7 @@ for (const { name, deck, expect } of roundTrips) {
       const file = path.join(directory, `${name}.ttf`);
       await writeFile(file, damaged);
       const diagnostics = [];
-      const pdf = await svgToPdf(svg, { useBundledFonts: false, fontFiles: [file, medium], onDiagnostic: (d) => diagnostics.push(d) });
+      const pdf = await svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [file, medium]}, onDiagnostic: (d) => diagnostics.push(d) });
       assert.ok(diagnostics.some((d) => d.code === "pdf-font-unreadable"), `${name}: the damaged font is reported unreadable`);
       assert.match(await pageText(await openPdf(pdf), 1), /Corrupt font text/);
     }
@@ -507,14 +507,14 @@ for (const { name, deck, expect } of roundTrips) {
     const previewFile = path.join(directory, "preview.ttf");
     await writeFile(previewFile, preview);
     const reports = [];
-    await svgToPdf(svg, { useBundledFonts: false, fontFiles: [previewFile], onDiagnostic: (d) => reports.push(d) });
+    await svgToPdf(svg, { fonts: {useBundledFonts: false, fontFiles: [previewFile]}, onDiagnostic: (d) => reports.push(d) });
     const embedded = reports.find((d) => d.code === "pdf-font-embedded");
     assert.equal(embedded.embeddingRestriction, "preview-and-print");
     assert.equal(embedded.fsType, 4);
     // A font declared by @font-face in the SVG is found by its declared family, whatever its name table says.
     const declared = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="100"><style>@font-face{font-family:"Brand Sans";src:url("data:font/ttf;base64,${Buffer.from(original).toString("base64")}")}</style><text x="10" y="50" font-family="Brand Sans" font-size="20">Declared family</text></svg>`;
     const notes = [];
-    const declaredPdf = await svgToPdf(declared, { useBundledFonts: false, onDiagnostic: (d) => notes.push(d) });
+    const declaredPdf = await svgToPdf(declared, { fonts: {useBundledFonts: false}, onDiagnostic: (d) => notes.push(d) });
     assert.match(await pageText(await openPdf(declaredPdf), 1), /Declared family/);
     assert.ok(!notes.some((d) => d.code === "pdf-font-substituted"), "the declared family is the one drawn");
   } finally {
@@ -536,11 +536,11 @@ console.log(createHash("sha256").update(pdf).digest("hex"));`;
   assert.match(Buffer.from(dated).toString("latin1"), /\/CreationDate\(D:20260304050607Z\)/);
   assert.equal((await lowLevel(dated)).document.getTitle(), "Title", "control characters are stripped from the metadata");
 
-  const registry = await loadBundledFontRegistry({ scripts: "all" });
+  const registry = (await loadFonts({pack: 'base', scripts: "all"})).registry;
   const fixture = await readFile(new URL("fixtures/pdf/mixed-script-slide.svg", import.meta.url), "utf8");
   const samples = [
-    await svgToPdf(fixture, { fontFiles: registry.fontFiles, useBundledFonts: false, metadata: { title: "Fixture", language: "en-GB" } }),
-    await svgToPdf(fixture, { fontFiles: registry.fontFiles, useBundledFonts: false, tagged: false, compress: false }),
+    await svgToPdf(fixture, { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, metadata: { title: "Fixture", language: "en-GB" } }),
+    await svgToPdf(fixture, { fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}, tagged: false, compress: false }),
     await svgToPdf(["<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200'><rect width='300' height='200' fill='#eee'/><text x='10' y='50' font-family='Roboto'>Page one</text></svg>", "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='300'><text x='10' y='50' font-family='Roboto'>Page two</text></svg>"]),
   ];
   for (const [index, bytes] of samples.entries()) {

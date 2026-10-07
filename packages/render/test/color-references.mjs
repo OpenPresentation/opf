@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { colorSchemes } from '@openpresentation/opf';
-import { renderSvg } from '../dist/index.js';
+import {renderSlideSvg} from '../dist/index.js';
 
 const fixture = JSON.parse(
   readFileSync(new URL('fixtures/color-references.opf.json', import.meta.url), 'utf8'),
@@ -11,7 +11,7 @@ const forest = colorSchemes.find((scheme) => scheme.id === 'forest-green');
 assert.ok(forest, 'forest-green color scheme');
 
 const svgDeck = fixture.slides.slice(0, 3).map((_, index) =>
-  renderSvg(fixture, { slideIndex: index }),
+  renderSlideSvg(fixture, index),
 );
 
 const [namedRuns, variableRuns, styledCells] = svgDeck;
@@ -25,12 +25,12 @@ assert.match(variableRuns, new RegExp(`fill="${risk}"`));
 assert.match(variableRuns, new RegExp(`fill="${highlight}"`));
 assert.match(variableRuns, /fill="#0F172A"/);
 
-const authoredHex = renderSvg({
+const authoredHex = renderSlideSvg({
   design: { theme: 'classic', colorScheme: 'cool-horizon' },
   slides: [{
     text: [{ text: 'Toolbar', color: '#2563eb' }],
   }],
-});
+}, 0);
 assert.ok(/<tspan(?=[^>]*fill="#2563eb")[^>]*>Toolbar<\/tspan>/.test(authoredHex));
 assert.doesNotMatch(authoredHex, /fill="#2563EB"/);
 
@@ -39,7 +39,7 @@ assert.match(styledCells, new RegExp(`fill="${risk}"`));
 assert.match(styledCells, new RegExp(`stroke="${forest.accent1.toUpperCase()}"`, 'i'));
 assert.match(styledCells, new RegExp(`fill="${forest.accent3.toUpperCase()}"`, 'i'));
 
-const invalidFallback = renderSvg({
+const invalidFallback = renderSlideSvg({
   design: { theme: 'classic', colorScheme: 'cool-horizon' },
   slides: [{
     table: {
@@ -48,7 +48,7 @@ const invalidFallback = renderSvg({
       ]]],
     },
   }],
-});
+}, 0);
 const themeText = invalidFallback.match(/fill="([^"]+)"/)?.[1];
 assert.ok(themeText);
 assert.doesNotMatch(invalidFallback, /fill="invalid"/i);

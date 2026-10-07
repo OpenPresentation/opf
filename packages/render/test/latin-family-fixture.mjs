@@ -26,7 +26,7 @@ export const ALIASES = Object.fromEntries(packages.filter(pkg => pkg.pack === 'o
 /** The Latin families the fixture covers, with the route each draws. */
 export function latinFamilies() {
   const rows = [];
-  for (const row of FONT_POLICY) {
+  for (const row of FONT_POLICY.families) {
     const own = facesOf(row.family);
     let route, tier, weight;
     if (row.replacement) { route = row.replacement.family; tier = row.replacement.compatibility; weight = row.replacement.weight; }

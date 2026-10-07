@@ -12,13 +12,13 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {create} from 'fontkit';
-import {renderSvg, svgToPng} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {ALIASES, PROBES, RUNS, STYLES, expectedFace, faceFile, familyDeck, label, latinFamilies, neededFaces, runFace} from './latin-family-fixture.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const {registry, options} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
+const prepared = await loadFonts({pack: 'office', substitutionPolicy: 'visual', fallbackFamily: 'Roboto'}), {registry} = prepared;
 const slash = file => file.split(String.fromCharCode(92)).join('/');
 const families = latinFamilies();
 assert.ok(families.length >= 85, `the fixture covers ${families.length} Latin families`);
@@ -32,8 +32,8 @@ const fontOf = async face => {
   return fontCache.get(file);
 };
 const direct = (font, text, size, disabled) => font.layout(text, disabled ? Object.fromEntries(disabled.map(tag => [tag, false])) : undefined).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm * size;
-const rasterOptions = fontFiles => ({fontFiles, useBundledFonts: false, loadSystemFonts: false, scale: 0.5});
-const pathOf = face => options.fontFiles.find(file => slash(file).endsWith(`/${slash(faceFile(face)).replace(/^node_modules\//, '')}`));
+const rasterOptions = fontFiles => ({ fonts: {fontFiles, useBundledFonts: false}, scale: 0.5});
+const pathOf = face => prepared.fontFiles.find(file => slash(file).endsWith(`/${slash(faceFile(face)).replace(/^node_modules\//, '')}`));
 const report = [];
 let styleChecks = 0, paintChecks = 0;
 
@@ -60,7 +60,7 @@ for (const entry of families) {
     styleChecks += 1;
   }
   // One deck per family: heading and body in the family, the four styles in one paragraph.
-  const svg = renderSvg(familyDeck(entry.family), {textMeasurement: registry.textMeasurement});
+  const svg = renderSlideSvg(familyDeck(entry.family), 0, { fonts: {textMeasurement: registry.textMeasurement}});
   const runs = new Map();
   for (const match of svg.matchAll(/<text\b([^>]*)>([^<]*)<\/text>/g)) {
     const [, attributes, content] = match;
@@ -82,9 +82,9 @@ for (const entry of families) {
     const file = pathOf(found.face);
     assert.ok(file, `${entry.family}: ${found.file} is among the registry's font files`);
     const drawn = `<svg xmlns="http://www.w3.org/2000/svg" width="700" height="70"><rect width="700" height="70" fill="white"/><text x="8" y="48" font-family="${found.face.family}" font-weight="${found.face.weight}" font-style="${found.face.italic ? 'italic' : 'normal'}" font-size="36" fill="black">Hamburgefonstiv 1234</text></svg>`;
-    const everything = sha(await svgToPng(drawn, rasterOptions(options.fontFiles)));
+    const everything = sha(await svgToPng(drawn, rasterOptions(prepared.fontFiles)));
     assert.equal(everything, sha(await svgToPng(drawn, rasterOptions([file]))), `${entry.family}: resvg draws ${found.face.family} ${found.face.weight} from ${path.basename(file)}`);
-    assert.notEqual(everything, sha(await svgToPng(drawn, rasterOptions(options.fontFiles.filter(candidate => candidate !== file)))), `${entry.family}: ${path.basename(file)} is what paints`);
+    assert.notEqual(everything, sha(await svgToPng(drawn, rasterOptions(prepared.fontFiles.filter(candidate => candidate !== file)))), `${entry.family}: ${path.basename(file)} is what paints`);
     paintChecks += 1;
   }
   const faces = neededFaces(entry);

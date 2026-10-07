@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { renderSvg } from '../dist/svg.js';
+import {renderSlideSvg} from '../dist/svg.js';
 import { CHART_TYPES } from '../src/charts.js';
 
 // RR-35: chart options (axis titles, legend position, data labels) in the preview. Core owns the support table
@@ -8,7 +8,7 @@ import { CHART_TYPES } from '../src/charts.js';
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]] };
 const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: [{ title: 'Chart', chart: { type: 'column', data, ...chart }, ...extra }] });
-const render = (chart, options = {}) => renderSvg(deck(chart), { trace: true, ...options });
+const render = (chart, options = {}) => renderSlideSvg(deck(chart), 0, { trace: true, ...options });
 
 // The text groups of the chart: path, text and the first <text> element's position.
 function texts(svg, prefix = 'slides.0.chart') {
@@ -30,10 +30,10 @@ const plotExtent = (svg) => {
 
 // 1. Decks without the fields are byte-identical to the same chart with inert option values.
 for (const id of Object.keys(CHART_TYPES)) {
-  const plain = renderSvg(deck({ type: id }), { trace: true });
-  assert.equal(renderSvg(deck({ type: id, axisTitles: {} }), { trace: true }), plain, `${id}: empty axisTitles change nothing`);
+  const plain = renderSlideSvg(deck({ type: id }), 0, { trace: true });
+  assert.equal(renderSlideSvg(deck({ type: id, axisTitles: {} }), 0, { trace: true }), plain, `${id}: empty axisTitles change nothing`);
   // dataLabels false is inert except where a construct labels its marks by default (funnel, treemap), asserted below.
-  if (id !== 'funnel' && id !== 'treemap') assert.equal(renderSvg(deck({ type: id, dataLabels: false }), { trace: true }), plain, `${id}: dataLabels false changes nothing`);
+  if (id !== 'funnel' && id !== 'treemap') assert.equal(renderSlideSvg(deck({ type: id, dataLabels: false }), 0, { trace: true }), plain, `${id}: dataLabels false changes nothing`);
   assert.doesNotMatch(plain, /axisTitles|dataLabels/, `${id}: no option paths in a plain chart`);
 }
 // ... and a funnel or treemap keeps its default labels unless dataLabels says otherwise.
@@ -115,7 +115,7 @@ for (const type of ['funnel', 'treemap']) {
 // 4. Unsupported options are adapted with a diagnostic, never silently.
 {
   const diagnostics = [];
-  const svg = renderSvg(deck({ type: 'pie', axisTitles: { value: 'Revenue' }, dataLabels: { position: 'above' } }), { trace: true, onDiagnostic: (d) => diagnostics.push(d) });
+  const svg = renderSlideSvg(deck({ type: 'pie', axisTitles: { value: 'Revenue' }, dataLabels: { position: 'above' } }), 0, { trace: true, onDiagnostic: (d) => diagnostics.push(d) });
   assert.equal(byPath(svg, 'slides.0.chart.axisTitles.value').length, 0, 'a pie draws no axis title');
   assert.deepEqual(diagnostics.filter((d) => d.code === 'chart-option-adapted').map((d) => d.option).sort(), ['axisTitles.value', 'dataLabels.position']);
   assert.ok(diagnostics.every((d) => typeof d.path === 'string' && d.path.startsWith('slides.0.chart')), 'diagnostics carry the chart path');
@@ -144,7 +144,7 @@ for (const type of ['funnel', 'treemap']) {
   assert.ok(mixed.some((entry) => entry.text === 'Q2 | 20'), 'category then value, joined by the separator');
   // Stacked column: an unsupported position falls back to center and reports.
   const diagnostics = [];
-  renderSvg(deck({ type: 'stacked-column', dataLabels: { position: 'outside-end' } }), { trace: true, onDiagnostic: (d) => diagnostics.push(d) });
+  renderSlideSvg(deck({ type: 'stacked-column', dataLabels: { position: 'outside-end' } }), 0, { trace: true, onDiagnostic: (d) => diagnostics.push(d) });
   assert.deepEqual(diagnostics.filter((d) => d.code === 'chart-option-adapted').map((d) => d.option), ['dataLabels.position']);
   // Pie: percent and category.
   const pie = texts(render({ type: 'pie', dataLabels: { content: ['category', 'percent'] } })).filter((entry) => /\.data\.rows\.\d\.1$/.test(entry.path));
@@ -170,8 +170,8 @@ for (const type of ['funnel', 'treemap']) {
 {
   const input = deck({ axisTitles: { category: 'Quarter', value: 'Revenue' }, legend: 'top', dataLabels: { content: ['category', 'value'] } });
   const before = JSON.stringify(input);
-  const first = renderSvg(input, { trace: true });
-  assert.equal(renderSvg(input, { trace: true }), first, 'deterministic bytes');
+  const first = renderSlideSvg(input, 0, { trace: true });
+  assert.equal(renderSlideSvg(input, 0, { trace: true }), first, 'deterministic bytes');
   assert.equal(JSON.stringify(input), before, 'the authored source is not mutated');
   assert.doesNotMatch(first, /NaN|Infinity|undefined/, 'finite output');
 }

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { renderSvg } from "../dist/svg.js";
+import { renderSlideSvg } from "../dist/svg.js";
 
 // FA-15: combo charts. Core resolves the plan (which series are columns, which are lines, which line uses the secondary
 // value axis); the preview draws clustered columns, lines with markers, a secondary axis at the right with ticks in the
@@ -11,7 +11,7 @@ const rows = [["Q1", 12.4, 0.31], ["Q2", 18.1, 0.34], ["Q3", 21.7, 0.29], ["Q4",
 const deck = (chart, extra = {}) => ({ design: { fontScheme: "roboto" }, slides: [{ title: "Revenue and margin", chart: { type: "combo", data: { columns, rows }, ...chart }, ...extra }] });
 const render = (chart, extra) => {
   const diagnostics = [];
-  const svg = renderSvg(deck(chart, extra), { trace: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
+  const svg = renderSlideSvg(deck(chart, extra), 0, { trace: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
   return { svg, diagnostics };
 };
 const marks = (svg, tag) => [...svg.matchAll(new RegExp(`<${tag}\\b([^>]*)/?>`, "g"))].map(([, attrs]) => attributesOf(attrs));
@@ -58,7 +58,7 @@ const textsAt = (svg, path) => [...svg.matchAll(/<g\b([^>]*data-opf-source-text=
 // 3. Column series first: a line named in the middle of the data is drawn after the columns, traced to its authored column.
 {
   const data = { columns: ["Quarter", "A", "B", "C"], rows: [["Q1", 1, 2, 3], ["Q2", 2, 3, 4]] };
-  const svg = renderSvg({ design: { fontScheme: "roboto" }, slides: [{ title: "Order", chart: { type: "combo", data, line: ["A"] } }] }, { trace: true });
+  const svg = renderSlideSvg({ design: { fontScheme: "roboto" }, slides: [{ title: "Order", chart: { type: "combo", data, line: ["A"] } }] }, 0, { trace: true });
   const line = marks(svg, "polyline").find((polyline) => polyline["data-opf-path"] === "slides.0.chart.data.columns.1");
   assert.ok(line, "the line traces to its authored column A");
   const bars = marks(svg, "rect").filter((rect) => /\.data\.rows\.\d\.[23]$/.test(rect["data-opf-path"] ?? ""));
@@ -89,7 +89,7 @@ const textsAt = (svg, path) => [...svg.matchAll(/<g\b([^>]*data-opf-source-text=
 {
   const bottom = render({ legend: "bottom" });
   assert.ok(marks(bottom.svg, "rect").some((rect) => rect["data-opf-path"] === "slides.0.chart.data.columns.1"), "the bottom legend keeps the column key");
-  const rtl = renderSvg({ ...deck({ secondaryAxis: ["Margin"] }), language: "arabic" }, { trace: true });
+  const rtl = renderSlideSvg({ ...deck({ secondaryAxis: ["Margin"] }), language: "arabic" }, 0, { trace: true });
   const ticks = textsAt(rtl, "slides.0.chart");
   const percent = ticks.filter((tick) => /^\d+%$/.test(tick.text)), dollars = ticks.filter((tick) => /^\$/.test(tick.text));
   if (percent.length && dollars.length) assert.ok(Math.max(...percent.map((tick) => tick.x)) < Math.min(...dollars.map((tick) => tick.x)), "right to left, the secondary axis is at the left");

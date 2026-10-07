@@ -1,15 +1,23 @@
-import { layoutTable, fitList, fitRichText, composeSlide, resolveCanvasDimensions, resolveFontFamilies, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill } from "@openpresentation/opf/composition";
+// The layout engine lives in core's `/composition` entry. Every name is a static import, so a core without one fails to
+// load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
+import {
+  layoutTable, fitList, fitRichText, composeSlide, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
+  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
+  metricTrendMark as coreMetricTrendMark, tokenizeCode, codeLineRuns, codeSyntaxPaletteForScheme, resolveChartData,
+  resolveColorRoles, defaultSlideBackground, timelineMarkerShapes, timelineTextColor, layoutWatermark,
+  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors
+} from "@openpresentation/opf/composition";
 import {
   catalogs as bundledCatalogs,
-  resolveColorRef as resolveCoreColorRef,
-  validatePresentation
+  hasContentVariables,
+  isTemplate,
+  resolveSlideContext,
+  resolveVariables,
+  validate
 } from "@openpresentation/opf";
-// Optional core exports are read from the namespace so an older published core
-// still loads; resolveScriptFonts ships with core FF-18.
-import * as opfCore from "@openpresentation/opf";
 import { adjustedFontSize, baselineShift, createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
-import { fontPolicyFor } from "./font-policy.js";
+import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
 
@@ -59,19 +67,17 @@ export const engineDefaults = Object.freeze({
   ])
 });
 
-// Last-resort font scheme shared by every engine (core pagination, opf-editor and
-// opf-pptx): DEFAULT_FONT_SCHEME in @openpresentation/opf. It applies only when the
-// slide, deck and resolved theme name no font scheme. fontScheme.google is kept for a
-// future Google Slides target and is not used by this renderer.
-const DEFAULT_FONT_SCHEME = engineDefaults.fontScheme.pptx.latin;
-
+/**
+ * `details.findings` (`invalid-opf`) are the error findings of core `validate`; `details.diagnostics` hold the
+ * layout or variable diagnostics that explain the other codes. `findings` and `path` are also set on the error.
+ */
 export class OPFRenderError extends Error {
   constructor(code, message, details = {}) {
     super(message);
     this.name = "OPFRenderError";
     this.code = code;
     this.details = details;
-    if (details.issues) this.issues = details.issues;
+    if (details.findings) this.findings = details.findings;
     if (details.path) this.path = details.path;
   }
 }
@@ -186,24 +192,23 @@ function parseInput(input) {
 // Template variables (core resolveVariables, RR-32): a deck that uses content variables, or a template, is resolved
 // to a concrete deck before composition, so the preview and the PPTX exporter see the same text, numbers, dates and
 // images. A template previews with each unfilled variable's example; a normal deck with an unfilled required
-// variable is refused. Decks without content variables are returned untouched. Read from the namespace so an older
-// published core still loads.
+// variable is refused. Decks without content variables are returned untouched.
 function resolveTemplateInput(presentation, options) {
-  if (typeof opfCore.resolveVariables !== "function" || !isPlainObject(presentation)) return presentation;
+  if (!isPlainObject(presentation)) return presentation;
   const values = options.variables;
   // variables: false draws the document as authored, tokens and var: references included (the template editing view).
   if (values === false) return presentation;
   if (values !== undefined && !isPlainObject(values)) {
     throw new OPFRenderError("invalid-variables", "The variables option must be an object keyed by variable id.", { path: "options.variables" });
   }
-  const template = opfCore.isTemplate(presentation);
-  if (!template && !opfCore.hasContentVariables(presentation) && !(values && Object.keys(values).length)) return presentation;
-  const result = opfCore.resolveVariables(presentation, values ?? {}, { examples: template });
+  const template = isTemplate(presentation);
+  if (!template && !hasContentVariables(presentation) && !(values && Object.keys(values).length)) return presentation;
+  const result = resolveVariables(presentation, values ?? {}, { examples: template });
   const errors = result.diagnostics.filter((entry) => entry.severity === "error");
   if (errors.length) {
     const unfilled = errors.some((entry) => entry.code === "variable-unfilled");
     throw new OPFRenderError(unfilled ? "unfilled-variables" : "invalid-variables", errors[0].message, {
-      issues: errors,
+      diagnostics: errors,
       path: errors[0].path
     });
   }
@@ -213,12 +218,14 @@ function resolveTemplateInput(presentation, options) {
   return result.presentation;
 }
 
+// The boundary check is the format check only (schema and the cross-field rules a schema cannot say): layout, accessibility
+// and content findings are `validate`'s job, and drawing a slide reports what it cannot fit.
 function assertValidBoundary(presentation) {
-  const result = validatePresentation(presentation);
-  if (!result.valid) {
+  const report = validate(presentation, { only: ["format"] });
+  if (!report.valid) {
     throw new OPFRenderError("invalid-opf", "OPF validation failed.", {
-      issues: result.errors,
-      result
+      findings: report.findings.filter((finding) => finding.severity === "error"),
+      report
     });
   }
 }
@@ -239,21 +246,11 @@ function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function referenceId(reference) {
-  if (typeof reference === "string") return reference;
-  if (isPlainObject(reference) && typeof reference.id === "string") return reference.id;
-  return null;
-}
-
 function normalizeSourceRecords(value) {
   if (!value) return [];
   if (Array.isArray(value)) return value;
   if (Array.isArray(value.records)) return value.records;
   return [];
-}
-
-function findById(records, id) {
-  return records.find((record) => record && record.id === id) ?? null;
 }
 
 function defaultCatalogFor(kind) {
@@ -276,85 +273,35 @@ function sourceRecordsFor(kind, source, options) {
   return [];
 }
 
-function engineDefaultId(kind) {
-  if (kind === "fontSchemes") return DEFAULT_FONT_SCHEME;
-  if (kind === "chartTypes") return engineDefaults.chartTypes[0];
-  const key = kind.endsWith("s") ? kind.slice(0, -1) : kind;
-  return engineDefaults[key];
-}
-
-function findCatalogRecord(kind, id, context) {
-  if (!id) return null;
-  const documentCatalog = context.presentation.catalogs?.[kind];
-  return findById(normalizeSourceRecords(documentCatalog), id) ??
-    findById(sourceRecordsFor(kind, documentCatalog?.source, context.options), id) ??
-    findById(normalizeSourceRecords(context.options.catalogs?.[kind]), id) ??
-    findById(sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options), id) ??
-    findById(defaultCatalogFor(kind), id);
-}
-
-// Font schemes follow the shared core rule (resolveFontSchemeReference in
-// @openpresentation/opf): an id that matches no record reports one
-// `unresolved-font-scheme` diagnostic and uses the DEFAULT_FONT_SCHEME record as the
-// base, with sibling overrides on top, so preview and PPTX export use the same fonts.
-function resolveFontSchemeRecord(reference, context, path) {
-  const id = referenceId(reference);
-  const found = findCatalogRecord("fontSchemes", id, context);
-  const base = found ?? findCatalogRecord("fontSchemes", DEFAULT_FONT_SCHEME, context) ?? {};
-  const scheme = cloneWithSortedKeys(isPlainObject(reference) ? { ...base, ...reference } : base);
-  if (!id || found) return { scheme };
-  return { scheme, diagnostic: { code: "unresolved-font-scheme", path, id, fallback: DEFAULT_FONT_SCHEME, message: `Font scheme '${id}' is not in the inline or bundled catalogs; using the default font scheme '${DEFAULT_FONT_SCHEME}'.` } };
+// The records a host adds to core's `resolveSlideContext`, which looks a layout, theme, colour scheme or font scheme up in the
+// deck's inline records, then these, then its bundled catalogs. In the renderer's order they are the records a
+// `catalogs.<kind>.source` names (a bundled source, or `options.catalogSources`), then `options.catalogs`.
+const CONTEXT_CATALOG_KINDS = ["themes", "colorSchemes", "fontSchemes", "layouts"];
+function contextCatalogs(context) {
+  if (context.contextCatalogs) return context.contextCatalogs;
+  const out = {};
+  for (const kind of CONTEXT_CATALOG_KINDS) {
+    const records = [
+      ...sourceRecordsFor(kind, context.presentation.catalogs?.[kind]?.source, context.options),
+      ...normalizeSourceRecords(context.options.catalogs?.[kind]),
+      ...sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options)
+    ];
+    if (records.length) out[kind] = records;
+  }
+  return (context.contextCatalogs = out);
 }
 
 // Generated socials furniture formats handles in core. Core applies inline
-// document records first; the host supplies the rest in resolution order.
-function socialPlatformRecords(context) {
+// document records first; the host supplies the rest in resolution order, ahead of the bundled ones.
+function socialPlatformRecords(context, bundled) {
   const kind = "socialPlatforms";
   return [
     ...sourceRecordsFor(kind, context.presentation.catalogs?.[kind]?.source, context.options),
     ...normalizeSourceRecords(context.options.catalogs?.[kind]),
     ...sourceRecordsFor(kind, engineDefaults.catalogs[kind]?.source, context.options),
-    ...defaultCatalogFor(kind)
+    ...bundled
   ];
 }
-
-function resolveCatalogRecord(kind, reference, context, path, fallbackId = engineDefaultId(kind)) {
-  const id = referenceId(reference) ?? fallbackId;
-  const documentCatalog = context.presentation.catalogs?.[kind];
-  const documentRecords = normalizeSourceRecords(documentCatalog);
-  const injectedRecords = normalizeSourceRecords(context.options.catalogs?.[kind]);
-  const documentSource = documentCatalog?.source;
-  const sourceRecords = sourceRecordsFor(kind, documentSource, context.options);
-  const defaultSource = engineDefaults.catalogs[kind]?.source;
-  const engineSourceRecords = sourceRecordsFor(kind, defaultSource, context.options);
-  const defaultRecords = defaultCatalogFor(kind);
-
-  const record =
-    (id ? findById(documentRecords, id) : null) ??
-    (id ? findById(sourceRecords, id) : null) ??
-    (id ? findById(injectedRecords, id) : null) ??
-    (id ? findById(engineSourceRecords, id) : null) ??
-    (id ? findById(defaultRecords, id) : null);
-
-  if (record) {
-    return isPlainObject(reference)
-      ? cloneWithSortedKeys({ ...record, ...reference })
-      : cloneWithSortedKeys(record);
-  }
-
-  if (isPlainObject(reference)) {
-    return cloneWithSortedKeys(reference);
-  }
-
-  throw new OPFRenderError("catalog-resolution-failed", `Could not resolve ${kind} reference '${id}'.`, {
-    kind,
-    id,
-    path,
-    source: documentSource ?? defaultSource ?? null
-  });
-}
-
-const resolveDimensions = resolveCanvasDimensions;
 
 function colorFromScheme(scheme, slot, fallback) {
   if (!slot) return fallback;
@@ -424,7 +371,7 @@ function resolveBackgroundColor(value, design, fallback) {
 // The slide's single background color, or null when there is none (a gradient, or no color the engine can read).
 // With no definition, or a picture, the scheme's default slide background (core defaultSlideBackground) is the canvas.
 function resolveBackground(background, colorScheme, design) {
-  const canvas = opfCore.defaultSlideBackground(colorScheme);
+  const canvas = defaultSlideBackground(colorScheme);
   if (!background) return canvas;
   if (typeof background === "string") return colorFromScheme(colorScheme, background, canvas);
   if (background.type === "theme") return colorFromScheme(colorScheme, background.slot, canvas);
@@ -461,39 +408,29 @@ function tagFill(design) {
 
 const LINK_URL = /^(https?:|mailto:|tel:)/i;
 
-function resolveDesign(presentation, slide, context, index) {
+// What the renderer paints with, from the records core's `resolveSlideContext` resolved (slide design, then deck design, then
+// theme, then the engine default, per field: the one order every engine uses). The theme and the colour scheme keep their
+// sorted keys, so the output does not depend on the order a catalog lists a field in. An id no catalog has never throws: the
+// context falls back (a theme to `minimal`, a colour scheme to `cool-horizon`, a font scheme to `aptos`, a layout to none) and
+// reports `unresolved-theme`, `unresolved-color-scheme`, `unresolved-font-scheme` or `unresolved-layout`, which are forwarded
+// as render diagnostics.
+function resolveDesign(presentation, slide, slideContext) {
   const deckDesign = presentation.design ?? {};
   const slideDesign = slide.design ?? {};
-
-  const theme = resolveCatalogRecord(
-    "themes",
-    slideDesign.theme ?? deckDesign.theme ?? engineDefaults.theme,
-    context,
-    "design.theme"
-  );
-  const colorScheme = resolveCatalogRecord(
-    "colorSchemes",
-    slideDesign.colorScheme ?? deckDesign.colorScheme ?? theme.colorScheme ?? engineDefaults.colorScheme,
-    context,
-    "design.colorScheme"
-  );
-  const fontPath = slideDesign.fontScheme !== undefined ? `slides.${index}.design.fontScheme`
-    : deckDesign.fontScheme !== undefined ? "design.fontScheme"
-    : slideDesign.theme !== undefined ? `slides.${index}.design.theme` : "design.theme";
-  const { scheme: fontScheme, diagnostic: fontSchemeDiagnostic } = resolveFontSchemeRecord(
-    slideDesign.fontScheme ?? deckDesign.fontScheme ?? theme.fontScheme ?? DEFAULT_FONT_SCHEME,
-    context,
-    fontPath
-  );
-  const dimensions = resolveDimensions(slideDesign.dimensions ?? deckDesign.dimensions ?? theme.dimensions);
+  const { options: composeOptions, diagnostics, resolved } = slideContext;
+  const theme = cloneWithSortedKeys(resolved.theme);
+  const colorScheme = cloneWithSortedKeys(resolved.colorScheme);
+  const fontScheme = cloneWithSortedKeys(resolved.fontScheme);
+  const dimensions = { width: composeOptions.width, height: composeOptions.height };
   const backgroundDefinition = slideDesign.background ?? deckDesign.background ?? theme.background;
-  const { primary, secondary, accent } = opfCore.resolveColorRoles(colorScheme);
+  const { primary, secondary, accent } = resolveColorRoles(colorScheme);
   const variables = presentation.variables ?? {};
   // background/surface/text roles depend on the background itself, so a background reference sees only the scheme and the three accent roles.
   const backgroundColor = resolveBackground(backgroundDefinition, colorScheme, { colorScheme, colors: { primary, secondary, accent }, variables });
-  // One resolution for every role (core resolveColorRoles), shared with the PPTX export and the audit.
-  const roles = opfCore.resolveColorRoles(colorScheme, { background: backgroundColor });
-  const darkBackground = roles.dark;
+  // One resolution for every role (core resolveColorRoles), shared with the PPTX export and the validator. Whether the background is dark
+  // (relative luminance under 0.179) is core's decision in the slide context, the one composition uses for logos and bullets.
+  const roles = resolveColorRoles(colorScheme, { background: backgroundColor });
+  const darkBackground = composeOptions.darkBackground === true;
 
   return {
     ...deckDesign,
@@ -517,9 +454,9 @@ function resolveDesign(presentation, slide, context, index) {
       followedHyperlink: roles.followedHyperlink,
       border: colorFromScheme(colorScheme, "accent5", "#CBD5E1")
     },
-    fonts: resolveFontFamilies(fontScheme),
+    fonts: { ...composeOptions.fontFamilies },
     darkBackground,
-    diagnostics: fontSchemeDiagnostic ? [fontSchemeDiagnostic] : []
+    diagnostics: diagnostics.map((entry) => ({ ...entry }))
   };
 }
 
@@ -527,23 +464,14 @@ function resolveDesign(presentation, slide, context, index) {
  * Script font slots, language tags and direction for one slide from core
  * `resolveScriptFonts` (FF-18). The latin slot is always the renderer's design
  * font; a script slot that core fills from the latin family follows it too.
- * Without core support every slot repeats the latin family.
+ * A language core cannot resolve is reported (`language-preview-unresolved`) and every slot repeats the latin family.
  */
 function scriptProfile(presentation, index, design, context, language) {
   let resolved;
-  if (typeof opfCore.resolveScriptFonts === "function") {
-    try { resolved = opfCore.resolveScriptFonts(presentation, { slideIndex: index, ...(language === undefined ? {} : { language }) }); }
-    catch (error) {
-      reportLanguageDiagnostic(context, { code: "language-preview-unresolved", path: "language",
-        message: "Script fonts could not be resolved (" + (error instanceof Error ? error.message : String(error)) + "), so the preview uses the design font for every script, sets no lang and lays out every paragraph left to right." });
-    }
-  } else if (presentation.language !== undefined) {
-    reportLanguageDiagnostic(context, { code: "language-preview-unavailable", path: "language",
-      message: "The installed @openpresentation/opf has no resolveScriptFonts (FF-18), so the preview uses the design font for every script, sets no lang and lays out every paragraph left to right. Use a core release with the language model." });
-  }
-  if (resolved?.rtl === true && typeof opfCore.paragraphDirection !== "function") {
-    reportLanguageDiagnostic(context, { code: "paragraph-direction-unavailable", path: "language",
-      message: "The installed @openpresentation/opf has no paragraphDirection, so the preview lays out every paragraph of this right-to-left deck left to right, as the PPTX export does. Use a core release that exports it." });
+  try { resolved = resolveScriptFonts(presentation, { slideIndex: index, ...(language === undefined ? {} : { language }) }); }
+  catch (error) {
+    reportLanguageDiagnostic(context, { code: "language-preview-unresolved", path: "language",
+      message: "Script fonts could not be resolved (" + (error instanceof Error ? error.message : String(error)) + "), so the preview uses the design font for every script, sets no lang and lays out every paragraph left to right." });
   }
   const slots = role => {
     const latin = design.fonts[role];
@@ -598,33 +526,6 @@ function reportGlyphFallback(context, note) {
     characters: [...note.characters],
     ...(symbol ? { codes: [...note.codes], ...(note.placeholder ? { placeholder: note.placeholder } : {}) } : {})
   });
-}
-
-function inferLayoutId(slide) {
-  if (slide.layout) return slide.layout;
-  if (slide.blocks?.length) return "blank";
-  if (PROMOTED_REGION_KEYS.some((key) => key in slide)) return "blank";
-  if (slide.chart) return "chart-1x";
-  if (slide.table) return "table-1x";
-  if (slide.image) return "image-1x";
-  if (slide.video) return "media-1x";
-  // Unspecified code layout uses the same automatic flow as core pagination
-  // and PPTX export. An explicit code-1x preset still reserves its own slots.
-  if (slide.code !== undefined) return "blank";
-  if (slide.items || slide.bullets) return "list-1x";
-  if (slide.text || slide.metric || slide.quote || slide.timeline) return "text-1x";
-  if (slide.subtitle) return "title-subtitle";
-  return "title";
-}
-
-function resolveLayout(slide, context, index) {
-  const layoutId = inferLayoutId(slide);
-  try {
-    return resolveCatalogRecord("layouts", layoutId, context, `slides.${index}.layout`);
-  } catch (error) {
-    if (error instanceof OPFRenderError && isPlainObject(slide.layout)) return slide.layout;
-    throw error;
-  }
 }
 
 function contentPayloadFromHost(host, path, slot) {
@@ -693,9 +594,18 @@ function normalizeFutureContent(slide, slidePath) {
   });
 }
 
-function bindSlide(presentation, slide, layout, index, context) {
+function bindSlide(presentation, slide, index, context) {
   const slidePath = `slides.${index}`;
-  const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders : [];
+  // Core resolves the slide's canvas, layout, theme, colour scheme, font scheme and family names the one way every engine must
+  // (slide design, deck design, theme, default); `fonts` carries the measurement the host loaded. A slide with no `layout`, or one
+  // that names an id no catalog has, composes with no layout record.
+  const slideContext = resolveSlideContext(presentation, index, {
+    fonts: { textMeasurement: context.options.textMeasurement },
+    catalogs: contextCatalogs(context),
+    date: context.options.date
+  });
+  const layout = slideContext.options.layout;
+  const placeholders = Array.isArray(layout?.placeholders) ? layout.placeholders : [];
   const titleBindings = [];
 
   for (let i = 0; i < placeholders.length; i += 1) {
@@ -721,7 +631,7 @@ function bindSlide(presentation, slide, layout, index, context) {
   ];
   const blocks = blockContent(slide, slidePath);
 
-  const design = resolveDesign(presentation, slide, context, index);
+  const design = resolveDesign(presentation, slide, slideContext);
   // Script fonts (FF-19): each text run is measured and drawn with its script
   // slot's face; the latin slot stays the design font scheme's family.
   const scriptFonts = createScriptFonts(scriptProfile(presentation, index, design, context), context.options.textMeasurement, {
@@ -732,7 +642,7 @@ function bindSlide(presentation, slide, layout, index, context) {
   // script fonts of that language (the Japanese or the Simplified Chinese face for Han text); every other run uses the deck's.
   const languageScripts = new Map();
   const scriptFontsFor = lang => {
-    if (typeof lang !== "string" || !lang || typeof opfCore.resolveScriptFonts !== "function") return undefined;
+    if (typeof lang !== "string" || !lang) return undefined;
     if (!languageScripts.has(lang)) {
       let own;
       try {
@@ -752,7 +662,7 @@ function bindSlide(presentation, slide, layout, index, context) {
     textMeasurement = { ...deckMeasurement, measure: (text, size, style) => pick(style).measure(text, size, style) };
     if (typeof deckMeasurement.outlineBounds === "function") textMeasurement.outlineBounds = (text, size, style) => (pick(style).outlineBounds ?? deckMeasurement.outlineBounds)(text, size, style);
   }
-  // fontScheme.accent (the tag and quote text) exists only with a core that resolves it; it takes the same look-alike policy.
+  // fontScheme.accent (the tag and quote text) takes the same look-alike policy.
   // RR-17 (FF-41): a family that names its weight (Arial Black, Segoe UI Semibold and Light) keeps its own name through composition, so each run
   // resolves it again and draws the replacement's encoded weight (Montserrat 900, Red Hat Display 600 and 300); resolving the role to the
   // replacement family first would draw every run at 400 or 700 and measure it that way. Every other family resolves once, here.
@@ -760,7 +670,7 @@ function bindSlide(presentation, slide, layout, index, context) {
     const named = design.fonts[role], resolved = resolveTextStyle({fontFamily:named,fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
     design.fonts[role] = fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
   }
-  const geometry = composeSlide(slide, { ...design.dimensions, layout, presentation, slideIndex: index, fonts: design.fonts, textRasterPadding:context.options.textRasterPadding, darkBackground: design.darkBackground, textMeasurement, date: context.options.date, socialPlatforms: socialPlatformRecords(context) });
+  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement, socialPlatforms: socialPlatformRecords(context, slideContext.options.socialPlatforms) });
   return {
     scriptFonts,
     scriptFontsFor,
@@ -780,17 +690,29 @@ function bindSlide(presentation, slide, layout, index, context) {
   };
 }
 
+// `options.fonts` is the handle `loadFonts()` returns (or any object with a `textMeasurement` and, to embed faces in the SVG, an
+// `embeddedFonts` list). The renderer reads the two as plain options from here on.
+function normalizeOptions(options) {
+  const { fonts, ...rest } = options ?? {};
+  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: fonts?.embeddedFonts };
+}
+
+/**
+ * Resolve a presentation for drawing: template variables filled, the boundary check passed, and every slide bound to its
+ * layout, design, script fonts and composed geometry. `renderSvg` and `renderSlideSvg` draw from this.
+ */
 export function resolvePresentation(input, options = {}) {
+  return resolveDeck(input, normalizeOptions(options));
+}
+
+function resolveDeck(input, options) {
   const presentation = resolveTemplateInput(parseInput(input), options);
   if (options.validate !== false) {
     assertValidBoundary(presentation);
   }
 
   const context = { presentation, options };
-  const slides = presentation.slides.map((slide, index) => {
-    const layout = resolveLayout(slide, context, index);
-    return bindSlide(presentation, slide, layout, index, context);
-  });
+  const slides = presentation.slides.map((slide, index) => bindSlide(presentation, slide, index, context));
 
   return {
     presentation,
@@ -799,24 +721,28 @@ export function resolvePresentation(input, options = {}) {
   };
 }
 
+/**
+ * The SVG of every slide of the deck, in order. `skipHidden: true` leaves out slides marked `hidden` (the sequence the player
+ * presents); the result is then shorter than the deck, so an index no longer names the slide at that index.
+ */
 export function renderSvg(input, options = {}) {
-  const resolved = resolvePresentation(input, options);
-  const slideIndex = options.slideIndex ?? 0;
-  if (!Number.isInteger(slideIndex) || slideIndex < 0 || slideIndex >= resolved.slides.length) {
-    throw new OPFRenderError("slide-index-out-of-range", `Slide index ${slideIndex} is out of range.`, {
-      slideIndex,
+  const drawn = normalizeOptions(options);
+  const resolved = resolveDeck(input, drawn);
+  const indexes = resolved.slides.map((_, index) => index).filter(index => !(options.skipHidden === true && resolved.presentation.slides[index]?.hidden === true));
+  return indexes.map(index => renderResolvedSlide(resolved, index, drawn));
+}
+
+/** The SVG of one slide of the deck (a zero-based index). */
+export function renderSlideSvg(input, index, options = {}) {
+  const drawn = normalizeOptions(options);
+  const resolved = resolveDeck(input, drawn);
+  if (!Number.isInteger(index) || index < 0 || index >= resolved.slides.length) {
+    throw new OPFRenderError("slide-index-out-of-range", `Slide index ${index} is out of range.`, {
+      slideIndex: index,
       slideCount: resolved.slides.length
     });
   }
-  return renderResolvedSlide(resolved, slideIndex, options);
-}
-
-// One SVG per slide, in slide order. `skipHidden: true` leaves out slides marked `hidden` (the sequence the player presents);
-// the result is then shorter than `slides`, so an index no longer names the slide at that index.
-export function renderSvgDeck(input, options = {}) {
-  const resolved = resolvePresentation(input, options);
-  const indexes = resolved.slides.map((_, index) => index).filter(index => !(options.skipHidden === true && resolved.presentation.slides[index]?.hidden === true));
-  return indexes.map(index => renderResolvedSlide(resolved, index, options));
+  return renderResolvedSlide(resolved, index, drawn);
 }
 
 function renderResolvedSlide(resolved, slideIndex, options) {
@@ -906,14 +832,10 @@ function renderBackground(bound, width, height, options) {
   }
   if(isPlainObject(background) && background.type==='pattern'){
     const pattern=background.pattern??{},id=`opf-s${bound.index+1}-pattern`,color=resolveBackgroundColor(pattern.foregroundColor,bound.design,bound.design.colors.text),preset=pattern.preset;
-    // Without core's pattern table (an older core) five presets keep their hand-drawn approximation. diagStripe is the
-    // engine id that PPTX export writes as wdUpDiag, so both draw the same rising stripe.
-    const stroke=(d,width=1)=>tag('path',{d,fill:'none',stroke:color,'stroke-width':width});
     // RR-07: every DrawingML preset (core PATTERN_PRESETS) is an 8x8 bitmap, one unit per 1/96 inch, anchored at the slide origin.
-    const runs=typeof opfCore.patternRuns==='function'?opfCore.patternRuns(preset):undefined;
-    const bitmap=runs?tag('path',{d:runs.map(run=>`M${run.x} ${run.y}h${run.width}v1h-${run.width}z`).join(''),fill:color,'shape-rendering':'crispEdges'}):'';
-    const legacy=preset==='ltHorz'?tag('path',{d:'M0 4H8',stroke:color,'stroke-width':1}):preset==='diagStripe'||preset==='wdUpDiag'?tag('path',{d:'M-2 2L2 -2M0 8L8 0M6 10L10 6',stroke:color,'stroke-width':2}):preset==='pct5'?tag('circle',{cx:2,cy:2,r:.8,fill:color}):preset==='openDmnd'?stroke('M0 4L4 0L8 4L4 8Z'):preset==='wave'?stroke('M0 4C2 1 2 1 4 4S6 7 8 4'):'';
-    const mark=bitmap||legacy;
+    // diagStripe is the engine id that PPTX export writes as wdUpDiag, so both draw the same rising stripe.
+    const runs=patternRuns(preset);
+    const mark=runs?tag('path',{d:runs.map(run=>`M${run.x} ${run.y}h${run.width}v1h-${run.width}z`).join(''),fill:color,'shape-rendering':'crispEdges'}):'';
     if(!mark)reportDiagnostic({code:'unsupported-pattern',path:`${bound.path}.design.background.pattern.preset`,message:`Pattern ${preset} is not implemented by the SVG preview.`},options);
     return tag('g',{opacity:background.opacity??1},tag('rect',{width,height,fill:bound.design.backgroundColor??'#FFFFFF'})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
   }
@@ -1377,7 +1299,7 @@ function renderCode(item, box, bound, options) {
     }
   }
   for (const part of layout.parts) {
-    if (!part.fit) throw new OPFRenderError('layout-overflow', 'Code content has no usable internal space; increase its cell size before rendering.', {path:part.path,issues:layout.diagnostics});
+    if (!part.fit) throw new OPFRenderError('layout-overflow', 'Code content has no usable internal space; increase its cell size before rendering.', {path:part.path,diagnostics:layout.diagnostics});
     const lines=part.fit.sourceLines.map((line,index)=>{
     const lineColors=highlight&&part.role==='body'?(highlight.marked.has(highlight.numbers[index])?highlight.colors.lit:highlight.colors.dim):undefined;
     return tag('text',{
@@ -1413,7 +1335,7 @@ function renderMetric(item, box, bound, options) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
     if (!part.visible) continue;
-    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,issues:layout.diagnostics});
+    if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,diagnostics:layout.diagnostics});
     const partRtl=paragraphRtl(bound,part.text);
     // Anchor untabbed lines at the accepted alignment edge, as PPTX export does,
     // so a shaper whose advance differs from the accepted width keeps the edge.
@@ -1449,17 +1371,16 @@ function renderMetric(item, box, bound, options) {
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-metric-container':'true'}:{})},children.join('\n'));
 }
 
-// The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend or without core support.
+// The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
 function metricTrendMark(layout,bound,options) {
-  if (typeof opfCore.metricTrendMark!=='function') return undefined;
-  return opfCore.metricTrendMark(layout,{background:bound.design.backgroundColor??bound.design.colors.background});
+  return coreMetricTrendMark(layout,{background:bound.design.backgroundColor??bound.design.colors.background});
 }
 
 function renderQuote(item, box, bound, options) {
   const layout = item.quoteLayout;
   if (!layout) throw new OPFRenderError('missing-quote-layout', 'Quote rendering requires a coordinated core build with shared quote geometry.', {path:item.path});
   const children = layout.parts.map(part => {
-    if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,issues:layout.diagnostics});
+    if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,diagnostics:layout.diagnostics});
     const fill=part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text;
     // FA-10: a TextRun[] quote body is laid out by core's rich-text layouter; its runs (quotation marks joined to the first and last) draw like body runs.
     if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:-1,options});
@@ -1487,21 +1408,21 @@ function renderTimeline(item, box, bound, options) {
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const children=[tag('line',{...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
-  // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); an older core draws plain markers.
+  // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
   const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
   for(const marker of layout.markers){
-    if(typeof opfCore.timelineMarkerShapes!=='function'||!marker.status){
+    if(!marker.status){
       children.push(tag('circle',{cx:marker.x,cy:marker.y,r:marker.radius,fill:bound.design.colors.primary,...traceAttrs(options,marker.path)}));
       continue;
     }
-    for(const shape of opfCore.timelineMarkerShapes(marker,statusColors))children.push(tag('circle',{cx:shape.cx,cy:shape.cy,r:shape.radius,fill:shape.fill??'none',...(shape.stroke?{stroke:shape.stroke.color,'stroke-width':shape.stroke.width}:{}),...traceAttrs(options,marker.path),...(options.trace?{'data-opf-timeline-status':marker.status,'data-opf-timeline-shape':shape.role}:{})}));
+    for(const shape of timelineMarkerShapes(marker,statusColors))children.push(tag('circle',{cx:shape.cx,cy:shape.cy,r:shape.radius,fill:shape.fill??'none',...(shape.stroke?{stroke:shape.stroke.color,'stroke-width':shape.stroke.width}:{}),...traceAttrs(options,marker.path),...(options.trace?{'data-opf-timeline-status':marker.status,'data-opf-timeline-shape':shape.role}:{})}));
   }
   for(const part of layout.parts){
-    if(!part.fit)throw new OPFRenderError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,issues:layout.diagnostics});
+    if(!part.fit)throw new OPFRenderError('layout-overflow','Timeline field has no usable space; change the arrangement or paginate events.',{path:part.path,diagnostics:layout.diagnostics});
     children.push(tag('g',options.trace?{'data-opf-timeline-role':part.role}:{},renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,align:part.alignment,
-      fill:part.status&&typeof opfCore.timelineTextColor==='function'?opfCore.timelineTextColor(part,statusColors):bound.design.colors.text,diagnosticsHandled:true,options,
+      fill:part.status?timelineTextColor(part,statusColors):bound.design.colors.text,diagnosticsHandled:true,options,
     })));
   }
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));
@@ -1689,10 +1610,9 @@ function renderChart(item, box, bound, options) {
 }
 
 // RR-54: the legacy sketch reads the same resolved rows as the catalog charts (mapping, datasets and strict numbers). Data that does
-// not resolve, or a core without the resolver, is read as authored.
+// not resolve is read as authored.
 function legacyChartData(chart, bound) {
-  if (typeof opfCore.resolveChartData !== "function") return chart.data;
-  const resolved = opfCore.resolveChartData(chart, bound.presentation);
+  const resolved = resolveChartData(chart, bound.presentation);
   return resolved.ok ? { rows: resolved.rows, resolved: true } : chart.data;
 }
 
@@ -1728,7 +1648,7 @@ function renderBranding(bound,presentation,width,height,options) {
   const rootFor=key=>bound.slide.design?.[key]!==undefined?`${bound.path}.design.${key}`:`design.${key}`;
   // FA-13: a text watermark is one line of the heading font in the theme text colour, centered and rotated as core's layoutWatermark says.
   if(design.watermark&&typeof design.watermark==='object'&&typeof design.watermark.text==='string'){
-    const mark=typeof opfCore.layoutWatermark==='function'?opfCore.layoutWatermark(design.watermark.text,{width,height},{fontFamily:bound.design.fonts.heading,fontWeight:700,textMeasurement:options.textMeasurement}):undefined;
+    const mark=layoutWatermark(design.watermark.text,{width,height},{fontFamily:bound.design.fonts.heading,fontWeight:700,textMeasurement:options.textMeasurement});
     if(mark){
       const opacity=typeof design.watermark.opacity==='number'&&Number.isFinite(design.watermark.opacity)?Math.min(1,Math.max(0,design.watermark.opacity)):.08;
       const cx=width/2,cy=height/2;
@@ -1763,20 +1683,16 @@ function fontStack(family, type) {
 // alignment and measured advances are unchanged.
 const RIGHT_TO_LEFT_ISOLATE = "\u2067", POP_DIRECTIONAL_ISOLATE = "\u2069";
 // Core owns the rule (paragraphDirection, core #134), so preview and export agree.
-// Without it (published core 0.11.0) every paragraph is left to right, as in export.
-const coreParagraphDirection = typeof opfCore.paragraphDirection === "function" ? opfCore.paragraphDirection : null;
 // RR-05: authored alignment is logical for right-to-left text, so `left` is the start edge (drawn at the right of a
-// right-to-left line) and `right` the end edge. Core owns the rule; the fallback only serves a core without it, which
-// also reports no line directions, so it never flips.
-const physicalAlignment = typeof opfCore.physicalAlignment === "function" ? opfCore.physicalAlignment : alignment => alignment;
+// right-to-left line) and `right` the end edge. Core owns that rule too (physicalAlignment, imported above).
 /** Maps a source offset of the text to whether its paragraph is right to left. */
 function paragraphRtl(bound, text) {
-  if (bound.scriptFonts?.rtl !== true || !coreParagraphDirection) return () => false;
+  if (bound.scriptFonts?.rtl !== true) return () => false;
   const source = String(text ?? ""), spans = [];
   let start = 0;
   for (const match of source.matchAll(/\r\n|\r|\n/g)) { spans.push([start, match.index]); start = match.index + match[0].length; }
   spans.push([start, source.length]);
-  const rtl = spans.map(([from, to]) => coreParagraphDirection(source.slice(from, to), "rtl") === "rtl");
+  const rtl = spans.map(([from, to]) => paragraphDirection(source.slice(from, to), "rtl") === "rtl");
   return offset => { for (let index = spans.length - 1; index >= 0; index--) if (offset >= spans[index][0]) return rtl[index]; return rtl[0]; };
 }
 
@@ -1847,7 +1763,7 @@ function segmentSpan(attrs, segment, text, style, bound, type, options, syntax) 
   // Syntax highlighting (RR-07): a coloured text segment becomes consecutive sibling tspans, one per run, each a
   // traced segment of its own source range holding one text node (the editor's caret mapping reads that), the first
   // keeping the accepted x and the rest flowing after it. Plain code keeps one tspan per accepted segment.
-  const runs = syntax && segment.kind !== "tab" ? opfCore.codeLineRuns(syntax.tokens, segment.start, segment.end) : undefined;
+  const runs = syntax && segment.kind !== "tab" ? codeLineRuns(syntax.tokens, segment.start, segment.end) : undefined;
   if (runs?.some(run => run.kind)) {
     return runs.map((run, index) => {
       const sizeOf = line => line.sizeAdjust && options?.fontSize > 0 ? stableNumber(adjustedFontSize(options.fontSize, line.sizeAdjust)) : undefined;
@@ -1862,27 +1778,26 @@ function segmentSpan(attrs, segment, text, style, bound, type, options, syntax) 
 }
 
 // FA-13: the marked lines of code.highlight, their bands (runs of displayed lines) and the lit/dimmed colours, from core (the PPTX
-// export calls the same functions); undefined when the code marks no line or core has no highlight helpers.
+// export calls the same functions); undefined when the code marks no line.
 function codeHighlight(item, layout, bound) {
   const highlight = item.value?.highlight;
-  if (!Array.isArray(highlight) || typeof opfCore.codeHighlightLines !== "function") return undefined;
+  if (!Array.isArray(highlight)) return undefined;
   const body = layout.parts.find(part => part.role === "body");
   if (!body?.fit) return undefined;
-  const lines = opfCore.codeHighlightLines(highlight, body.text).lines;
+  const lines = codeHighlightLines(highlight, body.text).lines;
   if (!lines.length) return undefined;
-  return { marked: new Set(lines), numbers: opfCore.codeLineNumbers(body.fit.sourceLines), bands: opfCore.codeHighlightBands(body.fit.sourceLines, lines), colors: opfCore.codeHighlightColors(bound.design.colorScheme) };
+  return { marked: new Set(lines), numbers: codeLineNumbers(body.fit.sourceLines), bands: codeHighlightBands(body.fit.sourceLines, lines), colors: codeHighlightColors(bound.design.colorScheme) };
 }
 
 // Token ranges of the code body and the palette to paint them with; undefined for plain code (an unknown language,
-// no language, or a core without the shared highlighter). The preview and the PPTX export read the same tables.
+// no language). The preview and the PPTX export read the same tables.
 function codeSyntax(item, layout, bound, options) {
   const body = layout.parts.find(part => part.role === "body");
   const language = typeof item.value?.language === "string" ? item.value.language : layout.parts.find(part => part.role === "language")?.text;
   if (!body || !language) return undefined;
-  if (typeof opfCore.tokenizeCode !== "function") return undefined;
-  const tokens = opfCore.tokenizeCode(body.text, language);
+  const tokens = tokenizeCode(body.text, language);
   if (!tokens.length) return undefined;
-  return { tokens, palette: opfCore.codeSyntaxPaletteForScheme(bound.design.colorScheme) };
+  return { tokens, palette: codeSyntaxPaletteForScheme(bound.design.colorScheme) };
 }
 
 // Faces flagged embed:"used" (the vendored open, Intos and script-pack faces) are embedded only when the slide's own markup draws
@@ -1941,7 +1856,7 @@ function renderEmbeddedFonts(fonts = []) {
 function renderRichTextBox(value, box, bound, config) {
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const fit=config.fit??fitRichText(value,box,config.fontSize*scale,((bound.composition??bound.geometry.composition).minFontSize??16)*scale,{style:{fontFamily:config.fontFamily,fontWeight:config.fontWeight??400,path:config.path},...(bound.design.fonts.code?{codeFontFamily:bound.design.fonts.code}:{}),textMeasurement:config.options.textMeasurement});
-  if(fit.overflow&&!config.diagnosticsHandled){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{issues:[diagnostic]});}
+  if(fit.overflow&&!config.diagnosticsHandled){const diagnostic={code:'text-overflow',path:config.path,message:'Mixed-style text exceeds its cell at the minimum font size.'};reportDiagnostic(diagnostic,config.options);if((bound.composition??bound.geometry.composition).overflow==='error')throw new OPFRenderError('layout-overflow',diagnostic.message,{diagnostics:[diagnostic]});}
   return renderRichLines(value,fit,box,bound,config);
 }
 
@@ -2063,7 +1978,7 @@ function renderTextBox(text, box, bound, config) {
     const diagnostic = { code: "text-overflow", path: config.path,
       message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." };
     reportDiagnostic(diagnostic, config.options);
-    if ((bound.composition ?? bound.geometry.composition).overflow === "error") throw new OPFRenderError("layout-overflow", diagnostic.message, { path: diagnostic.path, issues: [diagnostic] });
+    if ((bound.composition ?? bound.geometry.composition).overflow === "error") throw new OPFRenderError("layout-overflow", diagnostic.message, { path: diagnostic.path, diagnostics: [diagnostic] });
   }
   const size = fit.fontSize;
   const totalHeight = fit.lines.length * fit.lineHeight;

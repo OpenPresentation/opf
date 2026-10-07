@@ -4,13 +4,12 @@
 // drawing, deterministically, reported as a `font-glyph-fallback` note. Strict faces (`glyphFallback: "none"`)
 // still raise `missing-glyph`. Offline and deterministic.
 import assert from 'node:assert/strict';
-import * as core from '@openpresentation/opf';
-import {renderSvg, renderSvgDeck, svgToPng} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import * as core from '@openpresentation/opf/composition';
+import {renderSvg, svgToPng, renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {createScriptFonts, createScriptTextMeasurement, glyphFallbackFamilies, designatedFamilies} from '../dist/fonts.js';
 
-assert.equal(typeof core.resolveScriptFonts, 'function', 'the linked core exports resolveScriptFonts');
-const fonts = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
+const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
 const raw = fonts.registry.textMeasurement;
 
 const TEXT = {
@@ -28,9 +27,9 @@ const drawnRuns = (svg) => [...svg.matchAll(/<text\b([^>]*)>(.*?)<\/text>/gs)].f
   return [...content.matchAll(/<tspan\b([^>]*)>([^<]*)<\/tspan>/g)].map(([, own, text]) => [/font-family="([^",]*)/.exec(own)?.[1] ?? inherited, text]);
 });
 /** Every planned run must be drawn by a face that has all of its glyphs. */
-function assertDrawable(label, document, options = fonts.options) {
+function assertDrawable(label, document, base = fonts) {
   const diagnostics = [];
-  const svg = renderSvg(document, {...options, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document)), onDiagnostic: (item) => diagnostics.push(item)});
+  const svg = renderSlideSvg(document, 0, { fonts: {...base, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}, onDiagnostic: (item) => diagnostics.push(item)});
   for (const [family, text] of drawnRuns(svg)) assert.ok(strictCovers(family, text.replace(/&[a-z]+;/g, ' ')), `${label}: ${family} has every glyph of ${JSON.stringify(text)}`);
   return {svg, diagnostics: diagnostics.filter((item) => item.code === 'font-glyph-fallback')};
 }
@@ -55,12 +54,12 @@ for (const [scheme, languages] of Object.entries(latinGaps)) {
       covered.push(label);
       continue;
     }
-    assert.throws(() => renderSvg(document, {...fonts.options, glyphFallback: 'none', textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document), {glyphFallback: 'none'})}), {code: 'missing-glyph'}, `${label}: strict faces still raise missing-glyph`);
+    assert.throws(() => renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document), {glyphFallback: 'none'})}, glyphFallback: 'none'}), {code: 'missing-glyph'}, `${label}: strict faces still raise missing-glyph`);
     // Preview: renders, draws every glyph with a face that has it, notes the substitution.
     const {svg, diagnostics} = assertDrawable(label, document);
     assert.ok(diagnostics.length > 0 && diagnostics.every((item) => item.fallbackFamily === 'Noto Sans' && item.fontFamily === face && item.path), `${label}: reports the Noto Sans fallback: ${JSON.stringify(diagnostics.map((item) => [item.fontFamily, item.fallbackFamily]))}`);
     assert.ok(drawnRuns(svg).some(([family]) => family === 'Noto Sans'), `${label}: draws with Noto Sans`);
-    assert.equal(renderSvg(document, {...fonts.options, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}), assertDrawable(label, document).svg, `${label}: deterministic`);
+    assert.equal(renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}}), assertDrawable(label, document).svg, `${label}: deterministic`);
     // Measurement alone (what the PPTX export and pagination use) succeeds with the same wrapper.
     const measurement = createScriptTextMeasurement(raw, core.resolveScriptFonts(document));
     const width = measurement.measure(TEXT[language].body, 25, {fontFamily: face, fontWeight: 400, path: 'slides.0.text'});
@@ -101,7 +100,7 @@ for (const [scheme, language] of [['calibri', 'russian'], ['calibri', 'greek'], 
   assert.ok(title.some(([family, text]) => family === 'Noto Sans JP' && text.includes('収')), 'the kanji is drawn with the Japanese face');
   assert.ok(title.some(([family, text]) => family === 'Noto Sans KR' && text.includes('성장')), 'the Hangul keeps the Korean face');
   assert.ok(diagnostics.some((item) => item.fallbackFamily === 'Noto Sans JP' && item.characters.includes('収') && item.scripts.includes('Hani')), 'the substitution is reported');
-  assert.throws(() => renderSvg(document, {...fonts.options, glyphFallback: 'none', textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document), {glyphFallback: 'none'})}), {code: 'missing-glyph'});
+  assert.throws(() => renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document), {glyphFallback: 'none'})}, glyphFallback: 'none'}), {code: 'missing-glyph'});
   // Simplified-only hanzi U+53D8 in a Japanese deck.
   const japanese = deck('japanese', 'meiryo', '季度回顾 变', '四半期は 变 わった');
   assert.throws(() => raw.measure('变', 20, {fontFamily: 'Noto Sans JP', fontWeight: 400}), {code: 'missing-glyph'}, 'the Japanese face lacks the hanzi');
@@ -147,18 +146,18 @@ function designatedFamiliesAll() {
   const none = createScriptFonts(core.resolveScriptFonts(document), raw, {glyphFallback: 'none'});
   assert.equal(none.plan('Τριμηνιαία', {fontFamily: 'Gelasio', fontWeight: 400}).every((run) => run.own), true, 'strict faces plan the chosen face');
   // Without a registry the renderer names the fallback in the stack, and the browser picks glyphs.
-  const estimated = renderSvg(document);
+  const estimated = renderSlideSvg(document, 0);
   assert.match(estimated, /font-family="Georgia, Noto Sans, serif"/);
-  assert.doesNotMatch(renderSvg(deck('english', 'georgia', 'Quarterly review', 'Body')), /Noto Sans/);
+  assert.doesNotMatch(renderSlideSvg(deck('english', 'georgia', 'Quarterly review', 'Body'), 0), /Noto Sans/);
 }
 
 // 7. The raster draws the fallback faces.
 {
   const document = deck('greek', 'georgia', 'Τριμηνιαία', 'Revenue');
-  const measured = {...fonts.options, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))};
-  const png = await svgToPng(renderSvg(document, measured), {...measured, scale: 0.25});
-  assert.deepEqual(png, await svgToPng(renderSvg(document, measured), {...measured, scale: 0.25}), 'deterministic raster');
-  const without = await svgToPng(renderSvg(document, measured), {...measured, fontFiles: measured.fontFiles.filter((file) => !/NotoSans_/.test(file)), scale: 0.25});
+  const measured = { fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}};
+  const png = await svgToPng(renderSlideSvg(document, 0, measured), {...measured, scale: 0.25});
+  assert.deepEqual(png, await svgToPng(renderSlideSvg(document, 0, measured), {...measured, scale: 0.25}), 'deterministic raster');
+  const without = await svgToPng(renderSlideSvg(document, 0, measured), {fonts: {...measured.fonts, fontFiles: measured.fonts.fontFiles.filter((file) => !/NotoSans_/.test(file))}, scale: 0.25});
   assert.notDeepEqual(png, without, 'the raster uses the Noto Sans face');
 }
 
@@ -166,10 +165,10 @@ function designatedFamiliesAll() {
 {
   const document = deck('greek', 'georgia', TEXT.greek.title, TEXT.greek.body);
   const strict = createScriptTextMeasurement(raw, core.resolveScriptFonts(document), {glyphFallback: 'none'});
-  assert.throws(() => renderSvg(document, {...fonts.options, textMeasurement: strict}), {code: 'missing-glyph'}, 'the wrapper strict mode holds');
-  assert.throws(() => renderSvg(document, {...fonts.options, textMeasurement: strict, glyphFallback: undefined}), {code: 'missing-glyph'});
-  assert.doesNotThrow(() => renderSvg(document, {...fonts.options, textMeasurement: strict, glyphFallback: 'chain'}), 'an explicit render option overrides');
-  assert.throws(() => renderSvg(document, {...fonts.options, textMeasurement: strict, glyphFallback: 'none'}), {code: 'missing-glyph'});
+  assert.throws(() => renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: strict}}), {code: 'missing-glyph'}, 'the wrapper strict mode holds');
+  assert.throws(() => renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: strict}, glyphFallback: undefined}), {code: 'missing-glyph'});
+  assert.doesNotThrow(() => renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: strict}, glyphFallback: 'chain'}), 'an explicit render option overrides');
+  assert.throws(() => renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: strict}, glyphFallback: 'none'}), {code: 'missing-glyph'});
 }
 
 // 8b. Combining marks: coverage is checked per grapheme cluster, so a base and a mark the chosen face lacks move together.
@@ -202,37 +201,37 @@ function designatedFamiliesAll() {
 // 8c. Default registry: Noto Sans is bundled with the office pack as the Latin, Cyrillic and Greek fallback, so Georgia with
 // Russian text previews without the scripts option; CJK fallback faces come from the scripts a document needs.
 {
-  const bare = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+  const bare = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
   const bareMeasurement = bare.registry.textMeasurement;
   for (const [scheme, language] of [['georgia', 'russian'], ['georgia', 'greek']]) {
     const document = deck(language, scheme, TEXT[language].title, TEXT[language].body);
     const notes = [];
-    const svg = renderSvg(document, {...bare.options, textMeasurement: createScriptTextMeasurement(bareMeasurement, core.resolveScriptFonts(document)), onDiagnostic: (item) => notes.push(item)});
+    const svg = renderSlideSvg(document, 0, { fonts: {...bare, textMeasurement: createScriptTextMeasurement(bareMeasurement, core.resolveScriptFonts(document))}, onDiagnostic: (item) => notes.push(item)});
     assert.ok(notes.some((note) => note.code === 'font-glyph-fallback' && note.fallbackFamily === 'Noto Sans'), `${scheme} + ${language} previews with the default registry`);
     assert.ok(drawnRuns(svg).some(([family]) => family === 'Noto Sans'));
     // Noto Sans is embed "used": offered to the renderer, embedded only in an SVG whose text draws it.
-    const notoSans = bare.options.embeddedFonts.filter((face) => face.family === 'Noto Sans');
+    const notoSans = bare.embeddedFonts.filter((face) => face.family === 'Noto Sans');
     assert.ok(notoSans.length === 4 && notoSans.every((face) => face.embed === 'used'), 'the fallback faces are offered as embed "used"');
     assert.ok(svg.includes('@font-face{font-family:"Noto Sans"'), `${scheme} + ${language}: the standalone SVG embeds the Noto Sans it draws`);
     assert.ok(bare.registry.embeddedFonts.every((face) => face.family !== 'Noto Sans'), 'the eager embedded list stays the 33 office and base faces');
     const english = deck('english', scheme, 'Quarterly review', 'Revenue grew');
-    assert.ok(!renderSvg(english, {...bare.options, textMeasurement: createScriptTextMeasurement(bareMeasurement, core.resolveScriptFonts(english))}).includes('font-family:"Noto Sans"'), 'a slide that does not draw Noto Sans does not embed it');
-    assert.ok(bare.options.fontFiles.some((file) => /NotoSans_400Regular\.ttf$/.test(file)), 'the raster reads it from fontFiles');
+    assert.ok(!renderSlideSvg(english, 0, { fonts: {...bare, textMeasurement: createScriptTextMeasurement(bareMeasurement, core.resolveScriptFonts(english))}}).includes('font-family:"Noto Sans"'), 'a slide that does not draw Noto Sans does not embed it');
+    assert.ok(bare.fontFiles.some((file) => /NotoSans_400Regular\.ttf$/.test(file)), 'the raster reads it from fontFiles');
   }
   // Italic and bold styles exist for the fallback, and other families preview exactly as before.
   const italic = bare.registry.resolveFont({fontFamily: 'Noto Sans', fontWeight: 700, italic: true});
   assert.deepEqual([italic.resolvedFamily, italic.resolvedWeight, italic.italic], ['Noto Sans', 700, true]);
   // With the script pack requested explicitly, Noto Sans is loaded once.
-  const all = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: ['Latn', 'Jpan']});
+  const all = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: ['Latn', 'Jpan']});
   assert.equal(all.registry.describeFaces().filter((face) => face.family === 'Noto Sans').length, 4);
   // Auto script selection (scripts: 'auto') owns fallback packages: kanji beside Hangul loads the language face plus at most
   // one CJK fallback face, and Greek needs no package because Noto Sans is always loaded.
   const cjk = {language: 'english', design: {fontScheme: 'calibri'}, slides: [{title: 'Revenue 収益 성장', text: 'Revenue grew'}]};
-  const auto = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: cjk});
+  const auto = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: cjk});
   assert.equal(auto.registry.describeFaces().filter((face) => face.family === 'Noto Sans').length, 4, 'Noto Sans is loaded once under auto');
   assert.ok(auto.registry.scriptSelection.packages.length <= 2, `${auto.registry.scriptSelection.packages}`);
-  assert.doesNotThrow(() => renderSvg(deck('english', 'calibri', 'Revenue 収益 성장', 'Revenue grew'), {...auto.options, textMeasurement: createScriptTextMeasurement(auto.registry.textMeasurement, core.resolveScriptFonts(cjk))}));
-  const greek = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: {language: 'greek', design: {fontScheme: 'georgia'}, slides: [{title: TEXT.greek.title}]}});
+  assert.doesNotThrow(() => renderSlideSvg(deck('english', 'calibri', 'Revenue 収益 성장', 'Revenue grew'), 0, { fonts: {...auto, textMeasurement: createScriptTextMeasurement(auto.registry.textMeasurement, core.resolveScriptFonts(cjk))}}));
+  const greek = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: {language: 'greek', design: {fontScheme: 'georgia'}, slides: [{title: TEXT.greek.title}]}});
   assert.deepEqual(greek.registry.scriptSelection.packages, []);
 }
 
@@ -255,18 +254,18 @@ function designatedFamiliesAll() {
   wrapper.measure('Τριμηνιαία', 20, {fontFamily: 'Gelasio', fontWeight: 400, path: 'slides.1.title'});
   assert.deepEqual([fromWrapper, fromPlanner], [['Noto Sans', 'Noto Sans'], ['Noto Sans']], 'both callbacks are notified');
   const diagnostics = [];
-  renderSvg(document, {...fonts.options, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document)), onDiagnostic: (item) => diagnostics.push(item)});
+  renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}, onDiagnostic: (item) => diagnostics.push(item)});
   const first = diagnostics.find((item) => item.code === 'font-glyph-fallback');
   const characters = [...first.characters];
   first.characters.push('#'); first.scripts.push('#');
   const again = [];
-  renderSvg(document, {...fonts.options, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document)), onDiagnostic: (item) => again.push(item)});
+  renderSlideSvg(document, 0, { fonts: {...fonts, textMeasurement: createScriptTextMeasurement(raw, core.resolveScriptFonts(document))}, onDiagnostic: (item) => again.push(item)});
   assert.deepEqual(again.find((item) => item.code === 'font-glyph-fallback').characters, characters, 'diagnostic arrays are copies');
 }
 
 // 8. Without a fallback face loaded, the error is unchanged.
 {
-  const base = await prepareNodeFonts({pack: 'base'});
-  assert.throws(() => renderSvgDeck(deck('japanese', 'roboto', '四半期', 'Body'), base.options), {code: 'missing-glyph'});
+  const base = await loadFonts({pack: 'base'});
+  assert.throws(() => renderSvg(deck('japanese', 'roboto', '四半期', 'Body'), {fonts: base}), {code: 'missing-glyph'});
 }
 console.log(`Glyph fallback passed: ${cases} scheme and script cases, CJK Han fallback, strict faces, chain order, notes, estimated stacks and raster.`);

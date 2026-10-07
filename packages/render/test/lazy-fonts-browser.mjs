@@ -15,19 +15,19 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import {layouts} from '@openpresentation/opf/catalogs';
-import {BUNDLED_FONT_MANIFEST, loadBundledFontRegistry} from '../dist/fonts-node.js';
+import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/lazy-fonts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadBrowserFontRegistry} from './dist/fonts-browser.js';import {renderSvg} from './dist/svg.js';window.opf={loadBrowserFontRegistry,renderSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true,
 });
 const script = bundle.outputFiles[0].text;
 assert.ok(!Object.keys(bundle.metafile.inputs).some(input => /sharp|raster|resvg|fonts-node/.test(input)), 'the browser bundle must not pull in native raster or Node font modules');
 
-const eager = (await loadBundledFontRegistry()).embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
+const eager = ((await loadFonts({pack: 'base'})).registry).embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 const ORIGIN = 'https://app.test';
 const fontRequests = [];
 // FF-43: the open replacement families that policy rows route to. Each pair is a font scheme (heading, body); the browser loads the
@@ -77,16 +77,16 @@ try {
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
   await page.evaluate(async ({eager, decks, catalogs}) => {
-    const {loadBrowserFontRegistry} = window.opf;
+    const {loadBrowserFonts} = window.opf;
     window.decks = decks;
     // The host's catalogs (a layout id the bundled catalogs do not have) reach the loader as its default render options.
-    window.registry = await loadBrowserFontRegistry(eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), {substitutionPolicy: 'visual', lazyFontsBaseUrl: `${location.origin}/`, renderOptions: {catalogs}});
+    window.registry = (await loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', lazyFontsBaseUrl: `${location.origin}/`, renderOptions: {catalogs}})).registry;
     window.catalogs = catalogs;
   }, {eager: eager.map(({bytes, ...rest}) => rest), decks, catalogs: hostCatalogs});
 
   const observe = async name => page.evaluate(async name => {
-    const registry = window.registry, {renderSvg} = window.opf;
-    const svg = renderSvg(window.decks[name], {textMeasurement: registry.textMeasurement, catalogs: window.catalogs});
+    const registry = window.registry, {renderSlideSvg} = window.opf;
+    const svg = renderSlideSvg(window.decks[name], 0, { fonts: {textMeasurement: registry.textMeasurement}, catalogs: window.catalogs});
     const host = document.querySelector('main'); host.innerHTML = svg;
     await document.fonts.ready;
     const family = value => value.split(',')[0].trim().replace(/^"|"$/g, '');
@@ -144,10 +144,10 @@ try {
   assert.deepEqual(italic.pending, []);
   assert.deepEqual(italic.registryFaces, italic.documentFaces, 'the registry and the document hold the same faces after the edit');
   for (const run of italic.runs) { assert.ok(run.painted, `${run.family} is loaded`); assert.ok(Math.abs(run.natural - run.accepted) < 0.1, `italic: ${run.family} advance ${run.natural} differs from accepted ${run.accepted}`); }
-  // FF-41: a layout id that only the host's catalogs know resolves through renderOptions, and without them the loader throws what renderSvg throws.
+  // FF-41: a layout id that only the host's catalogs know resolves through renderOptions; without them the slide composes with no layout and the same faces are needed.
   assert.deepEqual(await page.evaluate(name => window.registry.pendingLazyFonts(window.decks[name]).map(face => face.file), 'hostLayout'), [], 'the Intos faces the host-layout deck draws are already loaded');
-  const withoutCatalogs = await page.evaluate(name => { try { window.registry.pendingLazyFonts(window.decks[name], {catalogs: {}}); return 'no error'; } catch (error) { return error.code; } }, 'hostLayout');
-  assert.equal(withoutCatalogs, 'catalog-resolution-failed', 'without the host catalogs the document does not resolve, and the loader says so instead of reporting nothing');
+  const withoutCatalogs = await page.evaluate(name => { try { return window.registry.pendingLazyFonts(window.decks[name], {catalogs: {}}).map(face => face.file); } catch (error) { return error.code; } }, 'hostLayout');
+  assert.deepEqual(withoutCatalogs, [], 'without the host catalogs the slide composes with no layout and nothing more is pending');
   // FF-43: each replacement pair loads exactly its vendored families' files, and the document paints what the registry measured.
   const pairReport = [];
   for (const pair of REPLACEMENT_PAIRS) {

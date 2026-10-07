@@ -3,14 +3,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  OPFRenderError,
-  renderSvg,
-  renderSvgDeck,
-  resolvePresentation,
-  svgToPdf,
-  svgToPng
-} from "../dist/index.js";
+import {OPFRenderError, renderSvg, resolvePresentation, svgToPdf, svgToPng, renderSlideSvg} from "../dist/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesCorpus = resolveExamplesCorpus();
@@ -30,21 +23,21 @@ const minimalDeck = {
   ]
 };
 
-const first = renderSvg(minimalDeck, { trace: true });
-const second = renderSvg(minimalDeck, { trace: true });
+const first = renderSlideSvg(minimalDeck, 0, { trace: true });
+const second = renderSlideSvg(minimalDeck, 0, { trace: true });
 assert.equal(first, second, "renderSvg must be byte-stable for the same input");
 assert.match(first, /^<svg /);
 assert.match(first, /data-opf-path="slides\.0"/);
 assert.match(first, /Minimal OPF Deck/);
-assert.equal(renderSvg(minimalDeck).includes("data-opf-path"), false, "trace output must be optional");
-assert.equal(renderSvgDeck(minimalDeck).length, 3);
+assert.equal(renderSlideSvg(minimalDeck, 0).includes("data-opf-path"), false, "trace output must be optional");
+assert.equal(renderSvg(minimalDeck).length, 3);
 
 const png = await svgToPng(first, { scale: 0.5 });
 const repeatPng = await svgToPng(first, { scale: 0.5 });
 assert.deepEqual(png, repeatPng, "svgToPng must be byte-stable for the same input and scale");
 assert.equal(Buffer.from(png.subarray(0, 8)).toString("hex"), "89504e470d0a1a0a");
 
-const pdfSlides = renderSvgDeck(minimalDeck).slice(0, 2);
+const pdfSlides = renderSvg(minimalDeck).slice(0, 2);
 const pdf = await svgToPdf(pdfSlides, { scale: 0.25 });
 const repeatPdf = await svgToPdf(pdfSlides, { scale: 0.25 });
 assert.deepEqual(pdf, repeatPdf, "svgToPdf must be byte-stable for the same input and scale");
@@ -55,7 +48,8 @@ assert.equal(loadedPdf.getPageCount(), 2, "svgToPdf must emit one page per SVG")
 
 const resolved = resolvePresentation(minimalDeck);
 assert.equal(resolved.slides.length, 3);
-assert.equal(resolved.slides[1].layout.id, "list-1x");
+// A slide with no layout composes with no layout record (core resolveSlideContext), whatever its content.
+assert.equal(resolved.slides[1].layout, undefined);
 
 const inlineCatalogDeck = {
   name: "Inline Catalog Resolution",
@@ -79,15 +73,15 @@ const inlineCatalogDeck = {
     }
   ]
 };
-assert.match(renderSvg(inlineCatalogDeck, { trace: true }), /custom-title-text|Custom layout/);
+assert.match(renderSlideSvg(inlineCatalogDeck, 0, { trace: true }), /custom-title-text|Custom layout/);
 
 assert.throws(
-  () => renderSvg({ slides: "not an array" }),
+  () => renderSlideSvg({ slides: "not an array" }, 0),
   (error) => {
     assert.ok(error instanceof OPFRenderError);
     assert.equal(error.code, "invalid-opf");
-    assert.ok(Array.isArray(error.issues));
-    assert.ok(error.issues.length > 0);
+    assert.ok(Array.isArray(error.findings));
+    assert.ok(error.findings.length > 0);
     return true;
   }
 );
@@ -101,8 +95,8 @@ if (examplesCorpus) {
 
   for (const file of files) {
     const deck = JSON.parse(readFileSync(file, "utf8"));
-    const svgs = renderSvgDeck(deck, { trace: true });
-    const repeat = renderSvgDeck(deck, { trace: true });
+    const svgs = renderSvg(deck, { trace: true });
+    const repeat = renderSvg(deck, { trace: true });
     assert.deepEqual(svgs, repeat, `${path.relative(examplesCorpus.dir, file)} must render deterministically`);
     assert.equal(svgs.length, deck.slides.length, `${file} must emit one SVG per slide`);
     for (const svg of svgs) {
@@ -146,19 +140,19 @@ const dynamic = { slides: [{ title: "Visible title", layout: "text-2x", blocks: 
 ] }] };
 const geometry = resolvePresentation(dynamic).slides[0].geometry;
 assert.equal(geometry.items.length, 5);
-assert.match(renderSvg(dynamic), /Visible title/);
+assert.match(renderSlideSvg(dynamic, 0), /Visible title/);
 assert.equal(resolvePresentation({ slides: [{ text: "Contrast" }], design: { background: "#000" } }).slides[0].design.colors.text, "#FFFFFF");
 assert.deepEqual(resolvePresentation({ slides: [{ text: "Portrait" }], design: { dimensions: { widthInches: 7.5, heightInches: 40 / 3 } } }).slides[0].design.dimensions, { width: 720, height: 1280 });
 const overflowMessages = [];
-const overflowing = renderSvg({ slides: [{ text: "Preserve this sentence. ".repeat(1000) }] }, { onDiagnostic: value => overflowMessages.push(value) });
+const overflowing = renderSlideSvg({ slides: [{ text: "Preserve this sentence. ".repeat(1000) }] }, 0, { onDiagnostic: value => overflowMessages.push(value) });
 assert.match(overflowing, /data-opf-overflow="true"/);
 assert.equal(overflowMessages.filter(value => value.code === "text-overflow").length, 1);
-assert.throws(() => renderSvg({ slides: [{ image: "https://example.com/image.png" }] }, { strictAssets: true }));
+assert.throws(() => renderSlideSvg({ slides: [{ image: "https://example.com/image.png" }] }, 0, { strictAssets: true }));
 
-assert.match(renderSvg(minimalDeck), /font-family="[^"]*, sans-serif"/);
+assert.match(renderSlideSvg(minimalDeck, 0), /font-family="[^"]*, sans-serif"/);
 
 const nestedDiagnostics = [];
-const nestedSvg = renderSvg({ slides: [{ blocks: [{ composition: {minFontSize: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
+const nestedSvg = renderSlideSvg({ slides: [{ blocks: [{ composition: {minFontSize: 24}, blocks: [{text: 'Nested overflow text. '.repeat(1000)}] }] }] }, 0, { trace: true, onDiagnostic: issue => nestedDiagnostics.push(issue) });
 assert.match(nestedSvg, /slides.0.blocks.0.blocks.0.text/);
 assert.match(nestedSvg, /font-size="24"/);
 assert.ok(nestedDiagnostics.some(issue => issue.path === 'slides.0.blocks.0.blocks.0.text'));

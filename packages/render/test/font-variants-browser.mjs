@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-const {registry,options}=await prepareNodeFonts(),sample='Office AVATAR 0123 — typography';
-const cases=options.embeddedFonts.map(face=>{
+import {loadFonts} from '../dist/fonts-node.js';
+const prepared = await loadFonts(), {registry} = prepared,sample='Office AVATAR 0123 — typography';
+const cases=prepared.embeddedFonts.map(face=>{
   const fontFamily=face.family.startsWith('Roboto ')&&face.family!=='Roboto Mono'?'Roboto':face.family;
   const requested={fontFamily,fontWeight:face.weight,italic:!!face.italic};
   const resolved=registry.textMeasurement.resolveStyle(requested);
@@ -27,7 +27,7 @@ try{
       observations.push({...value,actual:text.getComputedTextLength(),text:text.textContent});
     }
     return observations;
-  },{fonts:options.embeddedFonts,cases,sample});
+  },{fonts:prepared.embeddedFonts,cases,sample});
   const output=path.resolve(process.argv[2]??'artifacts/font-variants-browser.json');
   await mkdir(path.dirname(output),{recursive:true});await writeFile(output,JSON.stringify({node:process.version,browser:browser.version(),observed,errors,requests,scope:'Actual offline browser painting selects all nine resolved physical styles; native paint and other scripts remain separate.'},null,2)+'\n');
   for(const value of observed){assert.equal(value.text,sample);assert.ok(Math.abs(value.actual-value.expected)<.1,`Resolved ${value.resolved.fontFamily} advance differs`);}

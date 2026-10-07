@@ -8,7 +8,7 @@
 // `copyPreviewFonts` (the `/fonts-node` side of this layout, `preview-fonts-node.js`) fills it from the installed packages.
 // Every file is verified against its pinned SHA-256 by the registry before use, and only the faces a deck draws are fetched.
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
-import { lazyFontList, loadBrowserFontRegistry, splitStartupFaces } from "./fonts-browser.js";
+import { lazyFontList, loadFonts, splitStartupFaces } from "./fonts-browser.js";
 
 /** The directory a package's files sit in under its kind: a vendored family's own name, or the npm package name without its scope. */
 export function previewFontDirectory(pkg) {
@@ -47,9 +47,9 @@ const absolute = (root, document) => {
 const shared = new Map();
 
 /**
- * A browser font registry over a font root. It starts with Roboto Regular (the renderer's fallback family) and loads the rest
- * only when a deck draws it, face by face: vendored faces from `<root>/lazy/`, script faces from `<root>/scripts/`, the other
- * eager faces as the registry's extra lazy faces. One registry is shared by every deck on the page that names the same root.
+ * A browser fonts handle (`loadFonts`) over a font root. It starts with Roboto Regular (the renderer's fallback family) and loads
+ * the rest only when a deck draws it, face by face: vendored faces from `<root>/lazy/`, script faces from `<root>/scripts/`, the
+ * other eager faces as the registry's extra lazy faces. One handle is shared by every deck on the page that names the same root.
  */
 export function loadPreviewFonts(root, options = {}) {
   if (typeof root !== "string" || !root) return Promise.reject(new TypeError("loadPreviewFonts needs the URL of the font root."));
@@ -59,7 +59,8 @@ export function loadPreviewFonts(root, options = {}) {
   const faces = previewBaseFaces();
   const { startup, rest } = splitStartupFaces(faces, { startup: (face) => face.family === "Roboto" && face.weight === 400 && !face.italic });
   const entry = (face) => ({ url: base + face.file, family: face.family, weight: face.weight, italic: face.italic, license: face.license, sha256: face.sha256 });
-  const promise = loadBrowserFontRegistry(startup.map(entry), {
+  const promise = loadFonts({
+    faces: startup.map(entry),
     substitutionPolicy: "visual",
     fallbackFamily: "Roboto",
     scriptBaseUrl: `${base}scripts/`,

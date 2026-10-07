@@ -6,10 +6,10 @@
 // widths a browser (Chromium/HarfBuzz via Edge on Windows) measures for the same face at 100 px: the Latin sample and four Mongolian
 // samples are equal within 0.05 px; the fifth (with a variation selector) is 0.9% narrower, a known limit of skipping the lookup.
 import assert from 'node:assert/strict';
-import {renderSvgDeck} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {renderSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 
-const {registry, options} = await prepareNodeFonts({pack: 'office', scripts: ['Mong']});
+const prepared = await loadFonts({pack: 'office', scripts: ['Mong']}), {registry} = prepared;
 const style = {fontFamily: 'Noto Sans Mongolian', fontWeight: 400};
 const at100 = text => registry.textMeasurement.measure(text, 100, style);
 const samples = [
@@ -29,7 +29,7 @@ assert.equal(at100(samples[1][0]), at100(samples[1][0]));
 // The gallery's Noto Sans Mongolian font scheme draws end to end: heading, body and the Mongolian sample text, with the strict registry.
 const deck = title => ({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Mongolian', design: {fontScheme: 'noto-sans-mongolian'}, slides: [{title, text: 'Body'}]});
 for (const title of ['Font scheme preview', 'ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ']) {
-  const svgs = renderSvgDeck(deck(title), {...options, textMeasurement: registry.textMeasurement});
+  const svgs = renderSvg(deck(title), { fonts: {...prepared, textMeasurement: registry.textMeasurement}});
   assert.equal(svgs.length, 1, title);
   assert.ok(svgs[0].includes('Noto Sans Mongolian'), `${title}: drawn in Noto Sans Mongolian`);
 }

@@ -632,7 +632,7 @@ async function readSource(source, signal) {
  * player covers the page at once (and asks for full screen), then resolves with the running session when the first slide is
  * drawn. Call it from a click or key handler: full screen and the speaker view both need a user gesture.
  *
- * Options: `fonts` (the self-hosted font root URL, or a browser font registry), `renderOptions` (extra `renderSvg` options),
+ * Options: `fonts` (the self-hosted font root URL, or a browser fonts handle from `loadFonts`), `renderOptions` (extra `renderSlideSvg` options),
  * `startSlide` (1-based), `includeHidden`, `fullscreen` (default true), `presenterView` (open the speaker view too),
  * `role: "presenter"` (this window is the speaker view: for a second tab or window of your page), `channel` (name, or `false`
  * for no sync), `container`, `signal` and `now` (an injectable clock).
@@ -666,12 +666,12 @@ export async function present(source, options = {}) {
     deck = await readSource(source, abort.signal);
     const sequence = presentableIndexes(deck, { includeHidden: options.includeHidden });
     if (!sequence.length) throw new DeckError("no-slides", "The deck has no slides to present: every slide is hidden.");
-    let registry = options.fonts;
-    if (typeof registry === "string") { try { registry = await loadPreviewFonts(registry, { signal: abort.signal }); } catch { registry = undefined; } }
+    let fonts = options.fonts;
+    if (typeof fonts === "string") { try { fonts = await loadPreviewFonts(fonts, { signal: abort.signal }); } catch { fonts = undefined; } }
     const date = options.renderOptions?.date ?? localIsoDate();
-    store = options.store ?? createDeckStore({ document: deck, fonts: registry, renderOptions: options.renderOptions ?? {}, date });
+    store = options.store ?? createDeckStore({ document: deck, fonts, renderOptions: options.renderOptions ?? {}, date });
     try { await store.ready(abort.signal); } catch (error) {
-      if (!registry || options.store) throw error;
+      if (!fonts || options.store) throw error;
       store = createDeckStore({ document: deck, renderOptions: options.renderOptions ?? {}, date });
     }
     abort.signal.throwIfAborted?.();

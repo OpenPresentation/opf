@@ -1,25 +1,18 @@
 // FF-19: `scripts: 'auto'` loads only the script faces a presentation draws.
 import assert from 'node:assert/strict';
-import * as core from '@openpresentation/opf';
+import * as core from '@openpresentation/opf/composition';
 import {cp,mkdir,readFile,mkdtemp,readdir,rm,symlink,writeFile} from 'node:fs/promises';
 import {spawnSync} from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {renderSvgDeck,svgToPng} from '../dist/index.js';
-import {loadBundledFontRegistry,loadOfficeFontRegistry,prepareNodeFonts,detectPresentationScripts,autoScriptSelection,scriptFontPackages} from '../dist/fonts-node.js';
+import {svgToPng, renderSvg} from '../dist/index.js';
+import {loadFonts, detectPresentationScripts, autoScriptSelection, scriptFontPackages} from '../dist/fonts-node.js';
 import {detectScripts} from '../dist/fonts.js';
-import {loadBrowserFontRegistry} from '../dist/fonts-browser.js';
-import * as fontsModule from '../dist/fonts.js';
+import {loadFonts as loadBrowserFonts} from '../dist/fonts-browser.js';
 
 const deck=(title,text='Body',extra={})=>({$schema:'https://openpresentation.org/schema/opf/v1',name:'Auto script fonts',slides:[{title,text}],...extra});
 const short=name=>name.replace('@expo-google-fonts/','');
-// The document language decides Han text only when the installed core resolves it (resolveScriptFonts, as the renderer does);
-// otherwise the renderer ignores the language and so does detection: Han is Simplified Chinese.
-const hasCore=typeof core.resolveScriptFonts==='function';
-// A renderer with per-character glyph fallback draws Greek and Cyrillic a Latin face lacks with Noto Sans, so auto loads it then.
-const hasFallback=typeof fontsModule.glyphFallbackFamilies==='function';
-const han=(withCore,without='Hans')=>hasCore?withCore:without;
 
 // Detection: text decides. Latin, Greek and Cyrillic need no script face.
 for(const title of ['Quarterly review 12%','Café Übersicht, naïve — “quotes” …',''])assert.deepEqual(detectPresentationScripts(deck(title)),[],title);
@@ -27,7 +20,7 @@ for(const title of ['Ελληνικά Τριμηνιαία','Квартальн�
 assert.deepEqual(detectPresentationScripts(deck('Review',['Q1','Q2'])),[]);
 // Languages name the script only where text is ambiguous (Han).
 const expected=[
-  ['ja','四半期レビュー 12%','Jpan'],['ja','漢字',han('Jpan')],['zh-Hans','季度回顾','Hans'],['zh-Hant','季度回顧',han('Hant')],['zh-TW','季度回顧',han('Hant')],
+  ['ja','四半期レビュー 12%','Jpan'],['ja','漢字','Jpan'],['zh-Hans','季度回顾','Hans'],['zh-Hant','季度回顧','Hant'],['zh-TW','季度回顧','Hant'],
   ['ko','분기별 검토 12%','Kore'],['ar','مراجعة ربع سنوية.','Arab'],['he','סקירה רבעונית.','Hebr'],['hi','तिमाही समीक्षा','Deva'],
   ['th','การทบทวนรายไตรมาส','Thai'],['km','ខ្មែរ','Khmr'],['ta','தமிழ்','Taml'],['bn','বাংলা','Beng'],['am','አማርኛ','Ethi'],['ka','ქართული','Geor'],['hy','հայերեն','Armn'],
 ];
@@ -37,10 +30,10 @@ assert.deepEqual(detectPresentationScripts(deck('概要とまとめ')),['Jpan'])
 assert.deepEqual(detectPresentationScripts(deck('개요 요약')),['Kore']);
 // Han without language or kana defaults to Simplified Chinese; a language decides otherwise.
 assert.deepEqual(detectPresentationScripts(deck('概要')),['Hans']);
-assert.deepEqual(detectPresentationScripts(deck('概要','Body',{language:'ja-JP'})),[han('Jpan')]);
-assert.deepEqual(detectPresentationScripts(deck('概要','Body',{language:{bcp47:'zh-Hant'}})),[han('Hant')]);
+assert.deepEqual(detectPresentationScripts(deck('概要','Body',{language:'ja-JP'})),['Jpan']);
+assert.deepEqual(detectPresentationScripts(deck('概要','Body',{language:{bcp47:'zh-Hant'}})),['Hant']);
 // CJK inside Latin text (mixed runs) and mixed-script decks load exactly their scripts.
-assert.deepEqual(detectPresentationScripts(deck('Review 四半期 2026','Body',{language:'ja'})),[han('Jpan')]);
+assert.deepEqual(detectPresentationScripts(deck('Review 四半期 2026','Body',{language:'ja'})),['Jpan']);
 assert.deepEqual(detectPresentationScripts(deck('Roadmap','Ship 日本語 and مرحبا and שלום')),['Arab','Hans','Hebr']);
 // A document language alone needs no face: nothing non-Latin is drawn.
 assert.deepEqual(detectPresentationScripts(deck('Review','Body',{language:'ja'})),[]);
@@ -54,7 +47,7 @@ assert.deepEqual(detectPresentationScripts({slides:[{title:'T',blocks:[{table:{c
 assert.deepEqual(detectScripts({},{script:'Jpan'}),['Jpan']);
 assert.deepEqual(detectScripts({},{script:'Jpan'},{includeLanguage:false}),[]);
 // Scripts no pinned font serves are reported, not loaded.
-assert.deepEqual(autoScriptSelection(deck('ᏣᎳᎩ 日本語','Body',{language:'ja'})),{detected:['Cher',han('Jpan')].sort(),scripts:[han('Jpan')],unavailable:['Cher']});
+assert.deepEqual(autoScriptSelection(deck('ᏣᎳᎩ 日本語','Body',{language:'ja'})),{detected:['Cher','Jpan'].sort(),scripts:['Jpan'],unavailable:['Cher']});
 // Kana or Hangul in the text pins Japanese or Korean whatever the language.
 assert.deepEqual(detectPresentationScripts(deck('概要とまとめ','Body',{language:'zh-Hant'})),['Jpan']);
 
@@ -63,7 +56,7 @@ const families=registry=>[...new Set(registry.describeFaces().filter(face=>face.
 const scriptFaces=registry=>registry.describeFaces().filter(face=>face.scripts&&!face.fallbackOnly).length;
 
 // Latin-only deck: no script face is loaded or read.
-for(const load of [loadBundledFontRegistry,loadOfficeFontRegistry]){
+for(const load of [options=>loadFonts({pack:'base',...options}).then(fonts=>fonts.registry),options=>loadFonts({pack:'office',...options}).then(fonts=>fonts.registry)]){
   const latin=await load({scripts:'auto',presentation:deck('Quarterly review','Only Latin text, café and naïve')});
   assert.equal(scriptFaces(latin),0);
   assert.deepEqual(latin.scriptSelection,{detected:[],scripts:[],unavailable:[],packages:[],notInstalled:[]});
@@ -80,49 +73,49 @@ const wanted={
 };
 for(const [language,title,script] of expected.filter(([,,value])=>wanted[value])){
   const [packages,proprietary,designated]=wanted[script];
-  const registry=await loadBundledFontRegistry({scripts:'auto',presentation:deck(title,'Body',{language})});
+  const registry=(await loadFonts({pack: 'base', scripts:'auto',presentation:deck(title,'Body',{language})})).registry;
   assert.deepEqual(registry.scriptSelection.scripts,[script],language);
   assert.deepEqual(registry.scriptSelection.packages.map(short),packages,language);
   assert.ok(families(registry).length>=1&&registry.describeFaces().every(face=>!face.scripts||face.scripts.includes(script)),`${language} loads only ${script} faces`);
   assert.equal(registry.resolveFont({fontFamily:proprietary,fontWeight:400}).resolvedFamily,designated,`${proprietary} -> ${designated}`);
 }
 // A CJK deck does not pull in another script, and a mixed deck loads both.
-const mixed=await loadBundledFontRegistry({scripts:'auto',presentation:deck('Ship 日本語 かな','שלום',{language:'ja'})});
+const mixed=(await loadFonts({pack: 'base', scripts:'auto',presentation:deck('Ship 日本語 かな','שלום',{language:'ja'})})).registry;
 assert.deepEqual(mixed.scriptSelection.scripts,['Hebr','Jpan']);
 assert.deepEqual(new Set(families(mixed)),new Set(['Noto Sans JP','Noto Sans Hebrew','Noto Serif Hebrew']));
 
 // Explicit lists keep their behavior; auto needs a presentation; a presentation alone loads nothing.
-assert.equal(scriptFaces(await loadBundledFontRegistry({scripts:['Thai']})),2);
-await assert.rejects(()=>loadBundledFontRegistry({scripts:'auto'}),{code:'invalid-font-scripts'});
-await assert.rejects(()=>prepareNodeFonts({scripts:'auto'}),{code:'invalid-font-scripts'});
-assert.equal(scriptFaces(await loadBundledFontRegistry({presentation:deck('日本語')})),0);
+assert.equal(scriptFaces((await loadFonts({pack: 'base', scripts:['Thai']})).registry),2);
+await assert.rejects(()=>loadFonts({pack:'base',scripts:'auto'}),{code:'invalid-font-scripts'});
+await assert.rejects(()=>loadFonts({pack:'office',scripts:'auto'}),{code:'invalid-font-scripts'});
+assert.equal(scriptFaces((await loadFonts({pack: 'base', presentation:deck('日本語')})).registry),0);
 
 // A script no pinned font serves is reported and does not stop the others.
 const diagnostics=[];
-const partial=await loadBundledFontRegistry({scripts:'auto',presentation:deck('ᏣᎳᎩ 日本語'),onDiagnostic:value=>diagnostics.push(value)});
+const partial=(await loadFonts({pack: 'base', scripts:'auto',presentation:deck('ᏣᎳᎩ 日本語'),onDiagnostic:value=>diagnostics.push(value)})).registry;
 assert.deepEqual(diagnostics.map(value=>[value.code,value.script]),[['script-font-unavailable','Cher']]);
 assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
 
-// prepareNodeFonts: layout, SVG and PNG agree, script faces stay out of embedded SVG, and raster reads them from fontFiles.
+// loadFonts: layout, SVG and PNG agree, script faces stay out of embedded SVG, and raster reads them from fontFiles.
 {
   const presentation=deck('四半期レビュー 12%','Body text',{language:'ja',design:{fontScheme:'meiryo'}});
-  const prepared=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation});
+  const prepared=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation});
   assert.deepEqual(prepared.registry.scriptSelection.scripts,['Jpan']);
-  assert.equal(prepared.options.fontFiles.filter(file=>/noto-sans-jp/.test(file)).length,2);
-  assert.equal(prepared.options.fontFiles.some(file=>/noto-sans-(sc|tc|kr|arabic)/.test(file)),false);
-  assert.equal(prepared.options.embeddedFonts.some(face=>/Noto/.test(face.family)&&face.family!=='Noto Sans'),false,'only the default Noto Sans fallback (embed used) is offered');
-  const [svg]=renderSvgDeck(presentation,prepared.options);
-  if(hasCore)assert.match(svg,/lang="ja/);
+  assert.equal(prepared.fontFiles.filter(file=>/noto-sans-jp/.test(file)).length,2);
+  assert.equal(prepared.fontFiles.some(file=>/noto-sans-(sc|tc|kr|arabic)/.test(file)),false);
+  assert.equal(prepared.embeddedFonts.some(face=>/Noto/.test(face.family)&&face.family!=='Noto Sans'),false,'only the default Noto Sans fallback (embed used) is offered');
+  const [svg]=renderSvg(presentation, {fonts: prepared});
+  assert.match(svg,/lang="ja/);
   assert.ok(svg.includes('Noto Sans JP'),'the SVG names the designated family');
-  const png=await svgToPng(svg,prepared.options);
+  const png=await svgToPng(svg, {fonts: prepared});
   assert.equal(Buffer.from(png.subarray(1,4)).toString(),'PNG');
   if(process.env.OPF_AUTO_FONTS_OUT){await mkdir(process.env.OPF_AUTO_FONTS_OUT,{recursive:true});await writeFile(path.join(process.env.OPF_AUTO_FONTS_OUT,'auto-ja.png'),png);}
 }
 
 // Registry growth: addFaces registers faces atomically and updates the script aliases.
 {
-  const base=await loadBundledFontRegistry();
-  const jp=await loadBundledFontRegistry({scripts:['Jpan']});
+  const base=(await loadFonts({pack: 'base'})).registry;
+  const jp=(await loadFonts({pack: 'base', scripts:['Jpan']})).registry;
   const entries=jp.selectEmbeddedFonts(face=>face.scripts).map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64')),scripts:['Jpan']}));
   assert.equal(entries.length,2);
   assert.throws(()=>base.resolveFont({fontFamily:'Meiryo'}),{code:'font-unavailable'});
@@ -155,20 +148,20 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
       }
     }
     const probe=`
-      import {loadBundledFontRegistry} from ${JSON.stringify(pathToFileURL(path.join(temp,'dist/fonts-node.js')).href)};
+      import {loadFonts} from ${JSON.stringify(pathToFileURL(path.join(temp,'dist/fonts-node.js')).href)};
       const diagnostics=[];
-      const registry=await loadBundledFontRegistry({scripts:'auto',presentation:{language:'ja',slides:[{title:'日本語です שלום'}]},onDiagnostic:value=>diagnostics.push(value)});
-      let explicit;try{await loadBundledFontRegistry({scripts:['Jpan']});}catch(error){explicit=error.code;}
+      const registry=(await loadFonts({pack: 'base', scripts:'auto',presentation:{language:'ja',slides:[{title:'日本語です שלום'}]},onDiagnostic:value=>diagnostics.push(value)})).registry;
+      let explicit;try{(await loadFonts({pack: 'base', scripts:['Jpan']})).registry;}catch(error){explicit=error.code;}
       console.log(JSON.stringify({selection:registry.scriptSelection,diagnostics,explicit,scripts:[...new Set(registry.describeFaces().filter(face=>face.scripts).flatMap(face=>face.scripts))]}));`;
     const run=spawnSync(process.execPath,['--input-type=module','-e',probe],{cwd:temp,encoding:'utf8'});
     assert.equal(run.status,0,run.stderr);
     const result=JSON.parse(run.stdout);
     assert.deepEqual(result.selection.notInstalled,['@expo-google-fonts/noto-sans-jp']);
     // Without the Japanese package, a renderer with glyph fallback draws the kanji and kana with the next CJK face, so auto loads it.
-    assert.deepEqual(result.selection.packages.map(short),hasFallback?['noto-sans-hebrew','noto-serif-hebrew','noto-sans-sc']:['noto-sans-hebrew','noto-serif-hebrew']);
+    assert.deepEqual(result.selection.packages.map(short),['noto-sans-hebrew','noto-serif-hebrew','noto-sans-sc']);
     assert.deepEqual(result.diagnostics.map(value=>value.code),['script-font-not-installed']);
     assert.match(result.diagnostics[0].message,/Install @expo-google-fonts\/noto-sans-jp@\d+\.\d+\.\d+/);
-    assert.deepEqual(result.scripts,hasFallback?['Hebr','Hans']:['Hebr']);
+    assert.deepEqual(result.scripts,['Hebr','Hans']);
     assert.equal(result.explicit,'font-resource-unavailable','an explicit request for a missing package still fails');
   } finally { await rm(temp,{recursive:true,force:true}); }
 }
@@ -177,7 +170,7 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
   const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
   class Face{constructor(family,bytes,descriptors){this.family=family;this.bytes=bytes;this.descriptors=descriptors;}async load(){return this;}}
   const makeDocument=()=>{const fonts=new Set();fonts.ready=Promise.resolve();return {fonts,defaultView:{FontFace:Face}};};
-  const base=(await loadBundledFontRegistry()).selectEmbeddedFonts(face=>!face.scripts).filter(face=>face.family==='Roboto'&&face.weight===400&&!face.italic).map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
+  const base=((await loadFonts({pack: 'base'})).registry).selectEmbeddedFonts(face=>!face.scripts).filter(face=>face.family==='Roboto'&&face.weight===400&&!face.italic).map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
   assert.equal(base.length,1);
   const requests=[];
   let tamper;
@@ -192,7 +185,7 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
     }catch{return {ok:false,status:404};}
   };
   const scriptRequests=()=>requests.filter(url=>url.startsWith('https://fonts.test/pack/'));
-  const fresh=(options={})=>{const document=makeDocument();return loadBrowserFontRegistry(base,{document,fetch,substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'https://fonts.test/pack/',...options}).then(registry=>({registry,document}));};
+  const fresh=(options={})=>{const document=makeDocument();return loadBrowserFonts({faces:base,document,fetch,substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'https://fonts.test/pack/',...options}).then(fonts=>({registry:fonts.registry,document}));};
 
   // Latin-only deck: nothing is fetched beyond the supplied faces.
   let {registry,document}=await fresh({scripts:'auto',presentation:deck('Quarterly review','Latin only, café')});
@@ -237,7 +230,7 @@ assert.deepEqual(partial.scriptSelection.scripts,['Hans']);
   assert.deepEqual(registry.loadedScriptPackages.map(short),['noto-sans-hebrew','noto-serif-hebrew']);
   await assert.rejects(()=>fresh({scripts:'auto'}),{code:'invalid-font-scripts'});
   ({registry}=await fresh());
-  await assert.rejects(()=>registry.ensureScripts(japanese).then(()=>loadBrowserFontRegistry(base,{document:makeDocument(),fetch}).then(other=>other.ensureScripts(japanese))),{code:'invalid-font-source'});
+  await assert.rejects(()=>registry.ensureScripts(japanese).then(()=>loadBrowserFonts({faces:base,document:makeDocument(),fetch}).then(other=>other.registry.ensureScripts(japanese))),{code:'invalid-font-source'});
   // A missing or tampered file is never used, and a later call can retry.
   tamper=new RegExp('noto-sans-jp/700Bold');
   ({registry,document}=await fresh());

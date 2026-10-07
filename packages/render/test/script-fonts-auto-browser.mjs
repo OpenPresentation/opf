@@ -8,7 +8,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {loadBundledFontRegistry,scriptFontPackages} from '../dist/fonts-node.js';
+import {loadFonts,scriptFontPackages} from '../dist/fonts-node.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const outputDirectory=path.resolve(root,process.argv[2]??'artifacts/script-fonts-auto');
@@ -16,13 +16,13 @@ await mkdir(outputDirectory,{recursive:true});
 
 // One entry: the loader (with the lazy script API) and the renderer, bundled for the browser.
 const bundle=await build({
-  stdin:{contents:`import {loadBrowserFontRegistry} from './dist/fonts-browser.js';import {renderSvg} from './dist/svg.js';window.opf={loadBrowserFontRegistry,renderSvg};`,resolveDir:root,sourcefile:'page.js'},
+  stdin:{contents:`import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};`,resolveDir:root,sourcefile:'page.js'},
   bundle:true,platform:'browser',format:'iife',write:false,minify:true,metafile:true,
 });
 const script=bundle.outputFiles[0].text;
 assert.ok(!Object.keys(bundle.metafile.inputs).some(input=>/sharp|raster|resvg|fonts-node/.test(input)),'the browser bundle must not pull in native raster or Node font modules');
 
-const roboto=(await loadBundledFontRegistry()).selectEmbeddedFonts(face=>face.family==='Roboto'&&face.weight===400&&!face.italic);
+const roboto=((await loadFonts({pack: 'base'})).registry).selectEmbeddedFonts(face=>face.family==='Roboto'&&face.weight===400&&!face.italic);
 const robotoBytes=Buffer.from(roboto[0].dataUrl.split(',')[1],'base64');
 const packRoot=path.join(root,'node_modules/@expo-google-fonts');
 const ORIGIN='https://app.test',PACK=`${ORIGIN}/pack/`;
@@ -57,17 +57,17 @@ try{
   const step=async(name,source)=>{
     const before=requests.length;
     const result=await page.evaluate(async ({name,source,packRoot})=>{
-      const {loadBrowserFontRegistry,renderSvg}=window.opf;
+      const {loadBrowserFonts,renderSlideSvg}=window.opf;
       if(name==='latin'||!window.registry){
         if(window.registry)window.registry.dispose();
         const data=new Uint8Array(await (await fetch('/roboto.ttf')).arrayBuffer());
-        window.registry=await loadBrowserFontRegistry([{data,family:'Roboto'}],{substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:packRoot,scripts:'auto',presentation:source.latin});
+        window.registry=(await loadBrowserFonts({faces: [{data,family:'Roboto'}], substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:packRoot,scripts:'auto',presentation:source.latin})).registry;
       }
       const registry=window.registry;
       const document=source[name];
       const ensured=await registry.ensureScripts(document);
       const diagnostics=[];
-      const svg=renderSvg(document,{textMeasurement:registry.textMeasurement,onDiagnostic:value=>diagnostics.push(value.code)});
+      const svg=renderSlideSvg(document, 0,{ fonts: {textMeasurement:registry.textMeasurement},onDiagnostic:value=>diagnostics.push(value.code)});
       const host=window.document.querySelector('main');host.innerHTML=svg;
       await window.document.fonts.ready;
       // RR-38: an Arabic Typesetting title is drawn at 0.64 of the composed size (54 px), so its advance is checked at 34.5.

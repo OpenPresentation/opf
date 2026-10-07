@@ -3,9 +3,9 @@ import {createHash} from 'node:crypto';
 import {mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-const prepared=await prepareNodeFonts(),text='Office AVATAR 0123 — typography';
-const cases=prepared.options.embeddedFonts.map(face=>({
+import {loadFonts} from '../dist/fonts-node.js';
+const prepared=await loadFonts(),text='Office AVATAR 0123 — typography';
+const cases=prepared.embeddedFonts.map(face=>({
   ...face,expected:prepared.registry.textMeasurement.measure(text,42,{fontFamily:face.family,fontWeight:face.weight,italic:face.italic}),
   fontSha256:createHash('sha256').update(Buffer.from(face.dataUrl.split(',')[1],'base64')).digest('hex'),
 }));

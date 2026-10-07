@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { loadBrowserFontRegistry, scriptFontEntries } from "../dist/fonts-browser.js";
-import { loadBundledFontRegistry } from "../dist/fonts-node.js";
-const bundled = await loadBundledFontRegistry();
+import { loadFonts as loadBrowserFonts, scriptFontEntries } from "../dist/fonts-browser.js";
+import { loadFonts } from "../dist/fonts-node.js";
+const bundled = (await loadFonts({pack: 'base'})).registry;
 const source = bundled.embeddedFonts[0];
 const data = new Uint8Array(
   Buffer.from(source.dataUrl.split(",")[1], "base64"),
@@ -20,7 +20,7 @@ class Face {
 const fonts = new Set();
 fonts.ready = Promise.resolve();
 const document = { fonts, defaultView: { FontFace: Face } };
-const registry = await loadBrowserFontRegistry([{ data }], { document });
+const handle = await loadBrowserFonts({ faces: [{ data }], document }), registry = handle.registry;
 assert.equal(fonts.size, 1);
 assert.equal([...fonts][0].family, registry.embeddedFonts[0].family);
 assert.deepEqual(new Uint8Array([...fonts][0].bytes), data);
@@ -30,17 +30,27 @@ assert.ok(
     fontWeight: source.weight,
   }) > 0,
 );
-registry.dispose();
+// The handle: measurement and faces of the registry, ensure and pending, and dispose that removes the faces it added.
+assert.equal(handle.textMeasurement, registry.textMeasurement);
+assert.deepEqual(handle.embeddedFonts, registry.embeddedFonts);
+assert.equal(handle.embeddedFonts, handle.embeddedFonts, 'the embedded list is computed once');
+assert.deepEqual(handle.substitutions, registry.substitutions);
+assert.equal(handle.fontFiles, undefined, 'a browser handle has no files');
+assert.deepEqual(handle.registry.exportFaces().map((face) => face.family), [registry.embeddedFonts[0].family]);
+const empty = { slides: [{}] };
+assert.deepEqual(handle.pending(empty), []);
+assert.deepEqual(await handle.ensure(empty), { scripts: [], lazy: [], uncovered: [] });
+handle.dispose();
+assert.equal(fonts.size, 0);
+await assert.rejects(handle.ensure({ slides: [{ title: '日本語' }] }), { code: 'font-registry-disposed' });
 registry.dispose();
 assert.equal(fonts.size, 0);
 await assert.rejects(
-  loadBrowserFontRegistry([{ url: "https://fonts.example/test.ttf" }], {
-    document,
-    fetch: async () => ({ ok: false, status: 404 }),
-  }),
+  loadBrowserFonts({faces: [{ url: "https://fonts.example/test.ttf" }], document,
+    fetch: async () => ({ ok: false, status: 404 }),}),
   { code: "font-fetch-failed" },
 );
-await assert.rejects(loadBrowserFontRegistry([{}], { document }), {
+await assert.rejects(loadBrowserFonts({faces: [{}], document}), {
   code: "invalid-font-source",
 });
 class FailedFace extends Face {
@@ -49,30 +59,26 @@ class FailedFace extends Face {
   }
 }
 await assert.rejects(
-  loadBrowserFontRegistry([{ data }], {
-    document: { fonts, defaultView: { FontFace: FailedFace } },
-  }),
+  loadBrowserFonts({faces: [{ data }], document: { fonts, defaultView: { FontFace: FailedFace } },}),
   { code: "font-load-failed" },
 );
 assert.equal(fonts.size, 0);
 const controller = new AbortController();
 controller.abort();
 await assert.rejects(
-  loadBrowserFontRegistry([{ url: "https://fonts.example/test.ttf" }], {
-    document,
+  loadBrowserFonts({faces: [{ url: "https://fonts.example/test.ttf" }], document,
     signal: controller.signal,
     fetch: async (url, { signal }) => {
       signal.throwIfAborted();
-    },
-  }),
+    },}),
   { name: "AbortError" },
 );
 // FF-19: script-pack entries carry reviewed hashes; the loader verifies them.
 const digest = createHash("sha256").update(data).digest("hex");
-const verified = await loadBrowserFontRegistry([{ data, sha256: digest }], { document });
+const verified = (await loadBrowserFonts({faces: [{ data, sha256: digest }], document})).registry;
 verified.dispose();
 await assert.rejects(
-  loadBrowserFontRegistry([{ data, sha256: "0".repeat(64) }], { document }),
+  loadBrowserFonts({faces: [{ data, sha256: "0".repeat(64) }], document}),
   { code: "font-integrity-mismatch" },
 );
 const entries = scriptFontEntries(["Jpan"], { baseUrl: "/fonts" });

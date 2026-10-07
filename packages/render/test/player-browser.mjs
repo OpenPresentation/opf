@@ -36,7 +36,7 @@ const hiddenFirst = {name: 'Hidden first', slides: [{id: 'h', title: 'Hidden', h
 const arabicDeck = {name: 'عرض تجريبي', language: 'ar', slides: [{id: 'one', title: 'مرحبا بالعالم', text: 'هذا اختبار للعرض'}, {id: 'two', title: 'الشريحة الثانية', items: ['الأول', 'الثاني']}]};
 
 // --- the bundle: the element (registered), the player, and the renderer, as a page would import them ---------------
-const entry = "import '../dist/element-define.js'; import {present} from '../dist/player.js'; import {renderSvg} from '../dist/svg.js'; import {loadPreviewFonts} from '../dist/preview-fonts.js'; import {prepareSlideSvg} from '../dist/deck-runtime.js'; import {defineOpfDeck} from '../dist/element.js'; window.opf = {present, renderSvg, loadPreviewFonts, prepareSlideSvg, defineOpfDeck};";
+const entry = "import '../dist/element-define.js'; import {present} from '../dist/player.js'; import {renderSlideSvg} from '../dist/svg.js'; import {loadPreviewFonts} from '../dist/preview-fonts.js'; import {prepareSlideSvg} from '../dist/deck-runtime.js'; import {defineOpfDeck} from '../dist/element.js'; window.opf = {present, renderSlideSvg, loadPreviewFonts, prepareSlideSvg, defineOpfDeck};";
 const bundle = await build({stdin: {contents: entry, resolveDir: path.join(root, 'test'), sourcefile: 'page-entry.js', loader: 'js'}, bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, metafile: true});
 const script = bundle.outputFiles[0].text;
 assert.ok(!Object.keys(bundle.metafile.inputs).some(input => /sharp|resvg|raster|fonts-node|preview-fonts-node/.test(input)), 'the browser bundle must not pull in native raster or Node modules');
@@ -135,7 +135,7 @@ try {
     for (let slide = 1; slide <= element.total; slide++) {
       element.goto(slide);
       const index = element.currentSlide.index;
-      const reference = window.opf.renderSvg(deck, {textMeasurement: registry.textMeasurement, slideIndex: index, date: new Date().toISOString().slice(0, 10)});
+      const reference = window.opf.renderSlideSvg(deck, index, {fonts: {textMeasurement: registry.textMeasurement}, date: new Date().toISOString().slice(0, 10)});
       const prepared = window.opf.prepareSlideSvg(reference);
       const shownSvg = element.shadowRoot.querySelector('.slide svg');
       const template = document.createElement('template'); template.innerHTML = prepared;

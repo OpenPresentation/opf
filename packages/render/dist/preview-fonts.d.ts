@@ -1,4 +1,4 @@
-import type { BrowserFontRegistry } from "./fonts-browser.js";
+import type { BrowserFontsHandle } from "./fonts-browser.js";
 
 /** One face of the self-hosted font root: where it sits under the root, and its pinned hash. */
 export interface PreviewBaseFace { family: string; weight: number; italic: boolean; file: string; sha256: string; license: string }
@@ -16,8 +16,8 @@ export declare function previewFontLayout(manifest?: unknown, lazyFiles?: readon
 export declare function previewBaseFaces(manifest?: unknown): PreviewBaseFace[];
 
 /**
- * A browser font registry over a self-hosted font root: `<root>/base/<package>/<file>`, `<root>/lazy/fonts/<family>/<file>` and
+ * A browser fonts handle (`loadFonts`) over a self-hosted font root: `<root>/base/<package>/<file>`, `<root>/lazy/fonts/<family>/<file>` and
  * `<root>/scripts/<package>/<file>`. It starts with Roboto Regular and loads other faces on demand, hash-verified, only when a
- * deck draws them. Registries are shared per root on a page.
+ * deck draws them. Handles are shared per root on a page.
  */
-export declare function loadPreviewFonts(root: string, options?: { document?: Document; fetch?: typeof fetch; signal?: AbortSignal; registryOptions?: Record<string, unknown> }): Promise<BrowserFontRegistry>;
+export declare function loadPreviewFonts(root: string, options?: { document?: Document; fetch?: typeof fetch; signal?: AbortSignal; registryOptions?: Record<string, unknown> }): Promise<BrowserFontsHandle>;

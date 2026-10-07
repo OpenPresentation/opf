@@ -5,16 +5,16 @@ import {createRequire} from 'node:module';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {create} from 'fontkit';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {toPptx} from '../../opf-pptx/dist/index.js';
 
 const output=path.resolve(process.argv[2]??'artifacts/font-variants');
 await mkdir(output,{recursive:true});
-const {registry,options}=await prepareNodeFonts(),faces=[];
-for(const [index,file]of options.fontFiles.entries()){
+const fonts=await loadFonts(),{registry}=fonts,faces=[];
+for(const [index,file]of fonts.fontFiles.entries()){
   const data=await readFile(file),font=create(data);
   faces.push({family:font.familyName,preferredFamily:font.getName('preferredFamily','en')??font.familyName,
-    weight:options.embeddedFonts[index].weight,italic:!!options.embeddedFonts[index].italic,
+    weight:fonts.embeddedFonts[index].weight,italic:!!fonts.embeddedFonts[index].italic,
     styleLink:{bold:font['OS/2'].fsSelection.bold,italic:font['OS/2'].fsSelection.italic},
     sha256:createHash('sha256').update(data).digest('hex')});
 }
@@ -31,7 +31,7 @@ for(const weight of [400,500,600,700,800]){
 // independently of a future change to preferred-family lookup.
 const source={design:{fontScheme:{id:'variant-audit',major:'Roboto ExtraBold',minor:'Roboto SemiBold'}},
   slides:[{metric:{value:123,label:'Exact weight metadata',description:'Existing explicit family request'}}]};
-const original=JSON.stringify(source),bytes=await toPptx(source,options);
+const original=JSON.stringify(source),bytes=await toPptx(source,{fonts});
 assert.equal(JSON.stringify(source),original);
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');

@@ -17,7 +17,7 @@
 import {readdirSync, statSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import {patternBitmap} from '@openpresentation/opf';
+import {patternBitmap} from '@openpresentation/opf/composition';
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => { const index = args.indexOf(`--${name}`); return index < 0 ? fallback : args.splice(index, 2)[1]; };

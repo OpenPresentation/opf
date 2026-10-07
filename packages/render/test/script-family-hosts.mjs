@@ -16,9 +16,9 @@ import assert from 'node:assert/strict';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-import * as core from '@openpresentation/opf';
-import {renderSvg, svgToPng} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import * as core from '@openpresentation/opf/composition';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {createScriptTextMeasurement} from '../dist/fonts.js';
 import {monochromeColorFonts, rasterFontFiles} from '../dist/color-fonts.js';
 import {PROBE_SIZE, directAdvance, drawnRuns, expectedWeight, packageBytes, root, scriptDeck, scriptFamilies} from './script-family-fixture.mjs';
@@ -30,13 +30,13 @@ assert.equal(families.length, 35, `the fixture covers ${families.length} script 
 for (const name of ['Noto Sans', 'Noto Sans Hebrew', 'Noto Serif Hebrew', 'Noto Naskh Arabic', 'Noto Sans JP', 'Noto Sans Devanagari', 'Noto Serif Tibetan', 'Noto Color Emoji', 'Noto Emoji', 'STIX Two Math', 'Noto Sans Math']) assert.ok(families.some(entry => entry.family === name), `${name} is in the fixture`);
 for (const entry of families) assert.ok(entry.samples.length >= 2, `${entry.family}: ${entry.samples.length} samples that every face covers`);
 
-const rasterOptions = fontFiles => ({fontFiles, useBundledFonts: false, loadSystemFonts: false, scale: 0.5});
+const rasterOptions = fontFiles => ({ fonts: {fontFiles, useBundledFonts: false}, scale: 0.5});
 const report = [];
 let styleChecks = 0, runChecks = 0, paintChecks = 0;
 
 for (const entry of families) {
   const decks = entry.samples.map(sample => ({sample, deck: scriptDeck(entry, sample)}));
-  const {registry, options} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scripts: 'auto', presentation: decks[0].deck});
+  const prepared = await loadFonts({pack: 'office', substitutionPolicy: 'visual', fallbackFamily: 'Roboto', scripts: 'auto', presentation: decks[0].deck}), {registry} = prepared;
   const where = entry.family;
   // Loading: the family's package is among the selected script packages (Noto Sans is the office pack's own fallback face).
   const held = registry.describeFaces().filter(face => face.family === entry.family);
@@ -76,7 +76,7 @@ for (const entry of families) {
     }
     const notes = [];
     const strict = createScriptTextMeasurement(registry.textMeasurement, core.resolveScriptFonts(deck), {glyphFallback: 'none', onFallback: note => notes.push(note)});
-    const svg = renderSvg(deck, {...options, embeddedFonts: [], glyphFallback: 'none', textMeasurement: strict, onDiagnostic: value => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); }});
+    const svg = renderSlideSvg(deck, 0, { fonts: {...prepared, embeddedFonts: [], textMeasurement: strict}, glyphFallback: 'none', onDiagnostic: value => { if (/glyph-fallback|missing-glyph/.test(value.code)) notes.push(value); }});
     assert.deepEqual(notes, [], `${where} ${sample.id}: no glyph fallback`);
     const runs = drawnRuns(svg);
     assert.ok(runs.length >= 3, `${where} ${sample.id}: the deck draws its title and two body runs (${runs.length})`);
@@ -101,9 +101,9 @@ for (const entry of families) {
     const drawn = colourFace ? monochromeColorFonts(text) : text;
     if (colourFace) {
       assert.ok(drawn.includes(`font-family="${target}"`), `${where}: the raster path names ${target}`);
-      assert.ok(rasterFontFiles(options.fontFiles).length === options.fontFiles.length - 1, `${where}: the colour file never reaches resvg`);
+      assert.ok(rasterFontFiles(prepared.fontFiles).length === prepared.fontFiles.length - 1, `${where}: the colour file never reaches resvg`);
     }
-    const loaded = rasterFontFiles(options.fontFiles);
+    const loaded = rasterFontFiles(prepared.fontFiles);
     const own = loaded.find(file => slash(file).endsWith(colourFace ? '/noto-emoji/400Regular/NotoEmoji_400Regular.ttf' : `/${face.served}`));
     assert.ok(own, `${where}: ${colourFace ? 'the Noto Emoji stand-in' : face.served} is among the registry's font files`);
     const everything = sha(await svgToPng(drawn, rasterOptions(loaded)));

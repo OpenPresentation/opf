@@ -1,23 +1,19 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import * as core from '@openpresentation/opf/composition';
-import { renderSvg } from '../dist/svg.js';
+import {renderSlideSvg} from '../dist/svg.js';
 import { chartNumber, formatTick } from '../dist/charts.js';
 
 // RR-54: chart and table data in the preview. Strict chart numbers, number formats on data labels, value-axis ticks and table
 // cells, shared datasets, series mapping by column name, DataColumn headers, and trace paths. Core owns the resolution
 // (resolveChartData, tableCellDisplayValue); these tests assert what the preview draws from it.
-if (typeof core.resolveChartData !== 'function') {
-  console.log('Chart and table data skipped: the installed @openpresentation/opf has no resolveChartData (core RR-54, opf#376).');
-  process.exit(0);
-}
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const plain = (html) => html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
 // The text of every drawn <text> element (tags stripped), in document order.
 const words = (svg) => [...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, body]) => plain(body));
 const paths = (svg) => [...svg.matchAll(/data-opf-path="([^"]*)"/g)].map(([, path]) => path);
-const render = (document, options = {}) => renderSvg(document, options);
+const render = (document, options = {}) => renderSlideSvg(document, 0, options);
 const doc = (slide, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: [slide], ...extra });
 const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 
@@ -175,8 +171,8 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
   assert.ok(paths(sharedSvg).includes('slides.0.blocks.0.chart') && paths(sharedSvg).includes('slides.0.blocks.1.chart'), 'both charts report their own paths');
   assert.ok(words(sharedSvg).includes('Revenue'), 'dataset column names label the series');
   // An unknown dataset is a validation error (dataset-unknown), as an unknown mapping column is.
-  assert.throws(() => render(chartDoc({ type: 'column', data: { dataset: 'missing' } }, { datasets: { revenue: dataset } })), (error) => error.code === 'invalid-opf' && error.details.issues.some((issue) => issue.params?.code === 'dataset-unknown'), 'an unknown dataset is rejected at the boundary');
-  assert.throws(() => render(chartDoc({ type: 'column', mapping: { series: ['Nope'] }, data: { columns: ['A', 'B'], rows: [['x', 1]] } })), (error) => error.details.issues.some((issue) => issue.params?.code === 'chart-mapping-unknown-column'), 'an unknown mapping column is rejected at the boundary');
+  assert.throws(() => render(chartDoc({ type: 'column', data: { dataset: 'missing' } }, { datasets: { revenue: dataset } })), (error) => error.code === 'invalid-opf' && error.details.findings.some((finding) => finding.ruleId === 'opf/dataset-unknown'), 'an unknown dataset is rejected at the boundary');
+  assert.throws(() => render(chartDoc({ type: 'column', mapping: { series: ['Nope'] }, data: { columns: ['A', 'B'], rows: [['x', 1]] } })), (error) => error.details.findings.some((finding) => finding.ruleId === 'opf/chart-mapping-unknown-column'), 'an unknown mapping column is rejected at the boundary');
 }
 {
   // ChartDataSource is removed from the format (opf#240, descoped): a data source by file is rejected at the boundary.

@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {writeFile,readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const fonts=await loadOfficeFontRegistry(),faces=fonts.embeddedFonts.filter(face=>face.family==='Cousine'&&[400,700].includes(face.weight)&&!face.italic);
+const fonts=(await loadFonts({pack: 'office'})).registry,faces=fonts.embeddedFonts.filter(face=>face.family==='Cousine'&&[400,700].includes(face.weight)&&!face.italic);
 assert.equal(faces.length,2);
 const cases=[];
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (const [name,code] of Object.entries({
@@ -18,9 +18,9 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (
   wrapped:{source:'  meaningful indentation '+ 'longtoken'.repeat(30)+'\r\n\treturn value;  \n',language:'ts'},
 })) {
   const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:{id:'calibri',code: 'Courier New'}},slides:[{composition:{minFontSize:24},code}]};
-  const options={trace:true,textMeasurement:fonts.textMeasurement},bound=resolvePresentation(deck,options).slides[0];
+  const options={trace:true,fonts:{textMeasurement:fonts.textMeasurement}},bound=resolvePresentation(deck,options).slides[0];
   assert.deepEqual(bound.geometry.diagnostics,[]);
-  const svg=renderSvg(deck,options),item=bound.geometry.items[0];
+  const svg=renderSlideSvg(deck, 0,options),item=bound.geometry.items[0];
   assert.ok(item.codeLayout.parts.every(part=>part.style.fontFamily==='Cousine'));
   cases.push({id:name+'-'+dimensions.width,...dimensions,svg,svgSha256:hash(svg),cell:item.box,parts:item.codeLayout.parts});
 }

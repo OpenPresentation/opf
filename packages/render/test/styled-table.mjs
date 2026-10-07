@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg, svgToPng} from '../dist/index.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
 import {composeSlide, layoutTable} from '@openpresentation/opf/composition';
 
 const table = {rows: [
@@ -11,7 +11,7 @@ const table = {rows: [
 ]};
 const document = {design:{theme:'classic', fontScheme:'roboto'}, slides:[{table}]};
 const before = structuredClone(document);
-const svg = renderSvg(document, {trace:true});
+const svg = renderSlideSvg(document, 0, {trace:true});
 assert.equal((svg.match(/>Styled <\/tspan>/g) ?? []).length, 1);
 assert.equal((svg.match(/>red<\/tspan>/g) ?? []).length, 1);
 assert.ok(/<tspan(?=[^>]*fill="#00ff00")[^>]*>Styled <\/tspan>/i.test(svg));
@@ -38,9 +38,9 @@ for (const rich of [false,true]) {
   const baselines = [];
   for (const verticalAlign of ['top','middle','bottom']) {
     const value = rich ? [{text:'Align',bold:true}] : 'Align';
-    const aligned = renderSvg({design:{theme:'classic',fontScheme:'roboto'},slides:[{table:{rows:[
+    const aligned = renderSlideSvg({design:{theme:'classic',fontScheme:'roboto'},slides:[{table:{rows:[
       [{value,rowSpan:2,style:{verticalAlign}},'B'],[null,'C']
-    ]}}]});
+    ]}}]}, 0);
     const match = rich ? aligned.match(/<text([^>]*)><tspan[^>]*>Align<\/tspan><\/text>/) : aligned.match(/<text([^>]*)>Align<\/text>/);
     assert.ok(match);
     baselines.push(Number(match[1].match(/\by="([^"]+)"/)[1]));
@@ -61,7 +61,7 @@ for(const [fill,headerColor,bodyColor,explicit] of [
 ]){
   const style={fill,...(explicit?{color:explicit}:{})};
   const input={design:{background:'#FFFFFF',colorScheme:{id:'cool-horizon',dark1:'#000000'}},slides:[{table:{columns:[{value:'Header',style},{value:['Inherited',{text:'Explicit',color:'#FF0000'}],style}],rows:[[{value:'Body',style},{value:['BodyInherited',{text:'BodyExplicit',color:'#FF0000'}],style}]]}}]};
-  const original=structuredClone(input),output=renderSvg(input);
+  const original=structuredClone(input),output=renderSlideSvg(input, 0);
   for(const [text,color] of [['Header',headerColor],['Inherited',headerColor],['Body',bodyColor],['BodyInherited',bodyColor],['Explicit','#FF0000'],['BodyExplicit','#FF0000']]){
     const attributes=output.match(new RegExp(`<(?:text|tspan)([^>]*)>${text}</(?:text|tspan)>`))?.[1];assert.ok(attributes,text);
     assert.ok(attributes.includes(`fill="${color}"`),`${fill} ${text}: ${attributes}`);
@@ -73,7 +73,7 @@ const edgeTable = {rows:[
   [{value:'Merged',rowSpan:2,style:{borders:{right:{color:'#a100a1',width:2,dash:'dot'}}}}, {value:'B',style:{borders:{top:{color:'#111111',width:1}}}}],
   [null,{value:'C',style:{borders:{bottom:{color:'#111111',width:1}}}}]
 ]};
-const edgeSvg = renderSvg({slides:[{table:edgeTable}]},{trace:true});
+const edgeSvg = renderSlideSvg({slides:[{table:edgeTable}]}, 0,{trace:true});
 const custom = lines(edgeSvg).find(line => line.stroke?.toLowerCase() === '#a100a1');
 assert.ok(custom);
 const shared = lines(edgeSvg).filter(line => line.x1 === custom.x1 && line.x2 === custom.x2);
@@ -81,11 +81,11 @@ assert.equal(shared.length,1,'neighbor defaults leave dotted gaps empty');
 // A short explicit neighbor only removes its portion of a long merged edge.
 // Include zero width: suppression must not depend on a visible stroke.
 for (const width of [0,2]) {
-  const split = renderSvg({slides:[{table:{rows:[
+  const split = renderSlideSvg({slides:[{table:{rows:[
     [{value:'Merge',rowSpan:3},'B'],
     [null,{value:'C',style:{borders:{left:{color:'#a100a1',width}}}}],
     [null,'D']
-  ]}}]},{trace:true});
+  ]}}]}, 0,{trace:true});
   const mergeEdges = lines(split).filter(line => line['data-opf-path'] === 'slides.0.table.rows.0.0.style.borders.right');
   assert.equal(mergeEdges.length,2,'long implicit edge split above and below explicit neighbor');
   assert.equal(Number(mergeEdges[1].y1)-Number(mergeEdges[0].y2),54);

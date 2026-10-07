@@ -2,11 +2,9 @@
 // stand in for proprietary script fonts in previews. The packages are optional
 // peers, so the renderer install stays small; hosts install only what they use.
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
-import { OPFFontError } from "./fonts.js";
-import * as scriptFontModule from "./script-fonts.js";
-import { scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
-// Optional core exports are read from the namespace so an older published core still loads.
-import * as opfCore from "@openpresentation/opf";
+import { OPFFontError } from "./font-registry.js";
+import { SCRIPT_FONT_REPLACEMENTS, glyphFallbackFamilies, scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
+import { resolveScriptFonts } from "@openpresentation/opf/composition";
 import { presentationFamilies } from "./lazy-fonts.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily } from "./symbol-fonts.js";
 
@@ -33,7 +31,7 @@ export function scriptFontPackages(scripts) {
  * Browser entries for the script pack. `baseUrl` is where the host serves the
  * installed `@expo-google-fonts/*` packages (for example a copy of
  * `node_modules/@expo-google-fonts`). Each entry carries the reviewed SHA-256,
- * which `loadBrowserFontRegistry` verifies before use.
+ * which `loadFonts` (browser) verifies before use.
  */
 export function scriptFontEntries(scripts, {baseUrl}) {
   return scriptPackageEntries(scriptFontPackages(scripts), {baseUrl});
@@ -93,21 +91,17 @@ export function* drawnStrings(presentation) {
 
 /**
  * The script profile of a presentation: core `resolveScriptFonts` output, exactly what the renderer plans
- * with. When the installed core has none (published core 0.11.0 and earlier) or it throws, the renderer
- * ignores the document language, so the profile is empty and Han text is Simplified Chinese, as drawn.
+ * with. When it throws, the renderer ignores the document language, so the profile is empty and Han text is
+ * Simplified Chinese, as drawn.
  */
 export function presentationScriptProfile(presentation) {
-  if (typeof opfCore.resolveScriptFonts === "function") {
-    try { return opfCore.resolveScriptFonts(presentation); } catch { /* the renderer falls back the same way */ }
-  }
+  try { return resolveScriptFonts(presentation); } catch { /* the renderer falls back the same way */ }
   return {};
 }
 
 const servedScripts = () => new Set(BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === "scripts").flatMap(item => item.scripts));
 const cjkKeys = ["Jpan", "Hans", "Hant", "Kore"];
 const cjkCharacters = new Set(["Hani", "Hira", "Kana", "Hang", "Bopo"]);
-/** True when the renderer has per-character glyph fallback (FF-19 glyphFallbackFamilies). */
-const hasGlyphFallback = () => typeof scriptFontModule.glyphFallbackFamilies === "function";
 
 /**
  * ISO 15924 script whose pinned face a family resolves to: a proprietary script font (Yu Gothic: Jpan), a pinned face itself
@@ -117,7 +111,7 @@ function scriptOfFamily(family) {
   const name = String(family ?? "").toLowerCase();
   if (!name) return undefined;
   if (isSymbolEncodedFamily(name)) return SYMBOL_SCRIPT;
-  const rule = scriptFontModule.SCRIPT_FONT_REPLACEMENTS.find(item => item.requestedFamily.toLowerCase() === name);
+  const rule = SCRIPT_FONT_REPLACEMENTS.find(item => item.requestedFamily.toLowerCase() === name);
   if (rule) return rule.script;
   return BUNDLED_FONT_MANIFEST.packages.find(item => item.pack === "scripts" && item.faces.some(face => face.family.toLowerCase() === name))?.scripts[0];
 }
@@ -145,10 +139,10 @@ function designScripts(presentation, profile, renderOptions) {
     }
   };
   note(profile);
-  if (typeof opfCore.resolveScriptFonts === "function" && Array.isArray(presentation?.slides)) {
+  if (Array.isArray(presentation?.slides)) {
     presentation.slides.forEach((slide, slideIndex) => {
       if (!slide || typeof slide !== "object" || !slide.design || typeof slide.design !== "object") return;
-      try { note(opfCore.resolveScriptFonts(presentation, { slideIndex })); } catch { /* the renderer reports it when it draws the slide */ }
+      try { note(resolveScriptFonts(presentation, { slideIndex })); } catch { /* the renderer reports it when it draws the slide */ }
     });
   }
   if (renderOptions?.catalogs) {
@@ -231,13 +225,12 @@ export function autoScriptSelection(presentation, options) {
  * renderer reports `missing-glyph` for them.
  */
 export function nextFallbackPackage(analysis, { covers, loaded }) {
-  if (!hasGlyphFallback()) return undefined;
   const packages = BUNDLED_FONT_MANIFEST.packages.filter(item => item.pack === "scripts" && item.scripts.some(script => cjkKeys.includes(script)));
   const primary = new Set([...analysis.detected, ...(analysis.design ?? [])].filter(script => cjkKeys.includes(script))).size;
   if (packages.filter(item => loaded.has(item.name)).length >= primary + 1) return undefined;
   for (const character of analysis.cjk) {
     if (covers(character)) continue;
-    for (const family of scriptFontModule.glyphFallbackFamilies(character, analysis.profile, analysis.profile?.serif === true)) {
+    for (const family of glyphFallbackFamilies(character, analysis.profile, analysis.profile?.serif === true)) {
       const pkg = packages.find(item => !loaded.has(item.name) && item.faces.some(face => face.family === family));
       if (pkg) return pkg;
     }
@@ -245,8 +238,7 @@ export function nextFallbackPackage(analysis, { covers, loaded }) {
   return undefined;
 }
 
-/** Drawn Han, kana or Hangul characters (at most `limit`) that no loaded script face covers. Empty without glyph fallback (nothing else would draw them). */
+/** Drawn Han, kana or Hangul characters (at most `limit`) that no loaded script face covers. */
 export function uncoveredCjkCharacters(analysis, { covers, limit = 16 }) {
-  if (!hasGlyphFallback()) return [];
   return [...analysis.cjk].filter(character => !covers(character)).slice(0, limit);
 }

@@ -7,16 +7,18 @@ import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-import {SYMBOL_ENCODINGS,SYMBOL_SCRIPT,createScriptFonts,mapSymbolText} from '../dist/fonts.js';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
+import {SYMBOL_FONT_ENCODINGS} from '@openpresentation/opf/symbol-font-encodings';
+import {SYMBOL_SCRIPT,createScriptFonts} from '../dist/fonts.js';
+import {mapSymbolAdvances} from '../dist/symbol-fonts.js';
 
-const {registry,options}=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual',scripts:[SYMBOL_SCRIPT]});
+const prepared = await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:[SYMBOL_SCRIPT]}), {registry} = prepared;
 const SIZE=40;
 // Every code of every family: the glyph the planner draws, its face and the accepted natural advance.
 const scripts=createScriptFonts({},registry.textMeasurement);
 const glyphs=[];
-for(const entry of SYMBOL_ENCODINGS){
+for(const entry of SYMBOL_FONT_ENCODINGS.families){
   const style=registry.textMeasurement.resolveStyle({fontFamily:entry.family,fontWeight:400});
   for(let code=0x20;code<=0xFF;code++){
     const [run]=scripts.plan(String.fromCharCode(0xF000+code),style);
@@ -25,10 +27,10 @@ for(const entry of SYMBOL_ENCODINGS){
   }
 }
 const deck={$schema:'https://openpresentation.org/schema/opf/v1',name:'FF-45 browser',slides:[{id:'a',title:'Symbols',text:[{text:'Check: '},{text:' l',fontFamily:'Wingdings'},{text:' alpha '},{text:'abg ∑',fontFamily:'Symbol'},{text:' web '},{text:'',fontFamily:'Webdings'}]}]};
-const svg=renderSvg(deck,options);
-const expectedAdvances=mapSymbolText('Wingdings',' l').map(item=>item.advance);
+const svg=renderSlideSvg(deck, 0, {fonts: prepared});
+const expectedAdvances=mapSymbolAdvances('Wingdings',' l').map(item=>item.advance);
 
-const faces=registry.describeFaces(),files=options.fontFiles;
+const faces=registry.describeFaces(),files=prepared.fontFiles;
 assert.equal(faces.length,files.length);
 const served=new Map(faces.map((face,index)=>[`https://fonts.test/${index}.ttf`,{...face,file:files[index]}]));
 const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined}),errors=[],requests=[];

@@ -1,7 +1,7 @@
 // FA-10: rich headline text in the preview. `title`, `subtitle`, `tag` and `quote.text` accept TextRun[]; the SVG draws core's
 // rich lines (run colors, bold, links, citation markers) and a string heading draws exactly as before.
 import assert from 'node:assert/strict';
-import { renderSvg, svgToPdf } from '../dist/index.js';
+import { svgToPdf, renderSlideSvg } from '../dist/index.js';
 
 const deck = {
   references: [{ id: 'r1', text: 'Annual report' }],
@@ -19,9 +19,9 @@ const deck = {
 delete deck.slides[2].quote;
 
 const opts = { trace: true };
-const first = renderSvg(deck, { ...opts, slideIndex: 0 });
-const second = renderSvg(deck, { ...opts, slideIndex: 1 });
-const third = renderSvg(deck, { ...opts, slideIndex: 2 });
+const first = renderSlideSvg(deck, 0, { ...opts });
+const second = renderSlideSvg(deck, 1, { ...opts });
+const third = renderSlideSvg(deck, 2, { ...opts });
 
 // Title: one colored run, the other runs in the heading fill, bold weight from the heading default.
 assert.match(first, /data-opf-rich-text="true"/);

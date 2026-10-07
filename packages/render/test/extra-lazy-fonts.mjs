@@ -13,10 +13,10 @@ import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {examples} from '@openpresentation/opf/examples';
-import {createFontRegistry} from '../dist/fonts.js';
-import {renderSvg} from '../dist/svg.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-import {lazyFacesNeeded, loadBrowserFontRegistry, presentationFaces, splitStartupFaces} from '../dist/fonts-browser.js';
+import {createFontRegistry} from '../dist/font-registry.js';
+import {renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
+import {lazyFacesNeeded, loadFonts as loadBrowserFonts, presentationFaces, splitStartupFaces} from '../dist/fonts-browser.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -31,7 +31,7 @@ assert.deepEqual(splitStartupFaces([]), {startup: [], rest: []});
 assert.throws(() => splitStartupFaces(sample, {startup: 'Roboto'}), {code: 'invalid-font-source'});
 
 // ---- the fake browser ----
-const {registry: node} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+const {registry: node} = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
 const eager = node.embeddedFonts.map(face => ({family: face.family, weight: face.weight, italic: !!face.italic, license: face.license, data: decode(face)}));
 const {startup, rest} = splitStartupFaces(eager);
 assert.equal(startup.length, 1);
@@ -57,7 +57,7 @@ function fake() {
   };
   return {fonts, served, tampered, missing, document: {fonts, defaultView: {FontFace: Face}}, fetch: fetcher};
 }
-const load = (host, options = {}) => loadBrowserFontRegistry(startup.map(face => ({...face, data: face.data.slice()})), {document: host.document, fetch: host.fetch, substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: 'https://fonts.example/', extraLazyFonts: extras, ...options});
+const load = (host, options = {}) => loadBrowserFonts({faces: startup.map(face => ({...face, data: face.data.slice()})), document: host.document, fetch: host.fetch, substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: 'https://fonts.example/', extraLazyFonts: extras, ...options}).then(fonts => fonts.registry);
 const deck = (slides, design = {fontScheme: 'roboto'}) => ({name: 'extra faces', design, slides: slides.map((slide, index) => ({id: `s${index}`, ...slide}))});
 const faceNames = registry => registry.describeFaces().map(face => `${face.family} ${face.weight}${face.italic ? 'i' : ''}`).sort();
 
@@ -119,7 +119,7 @@ await invalid({extraLazyFonts: [extras[0], extras[0]]}, /repeats url/);
   // Host faces are embed "used" like the vendored ones: registry.embeddedFonts holds the startup face only, and an SVG embeds a host face
   // only when it is passed explicitly and the slide's text uses its family.
   assert.deepEqual(registry.embeddedFonts.map(face => `${face.family} ${face.weight}`), ['Roboto 400']);
-  const svg = renderSvg(plain, {textMeasurement: registry.textMeasurement, embeddedFonts: registry.selectEmbeddedFonts(() => true)});
+  const svg = renderSlideSvg(plain, 0, { fonts: {textMeasurement: registry.textMeasurement, embeddedFonts: registry.selectEmbeddedFonts(() => true)}});
   assert.deepEqual([...svg.matchAll(/@font-face\{font-family:"([^"]+)";font-weight:(\d+)/g)].map(match => `${match[1]} ${match[2]}`).sort(), ['Roboto 400', 'Roboto 700'], 'Roboto Bold embeds because the title uses it; the other loaded faces do not exist yet');
 
   // The vendored loader still needs lazyFontsBaseUrl, the host's faces do not.
@@ -173,7 +173,7 @@ const vendored = node.lazyFonts;
 const hostList = extras.map(face => ({...face, package: 'host', file: face.url}));
 let decks = 0, planned = 0;
 for (const policy of ['metric', 'visual']) {
-  const {registry: real} = await prepareNodeFonts({pack: 'office', substitutionPolicy: policy});
+  const {registry: real} = await loadFonts({pack: 'office', substitutionPolicy: policy});
   for (const {file, deck: example} of examples) {
     const drawn = presentationFaces(example, {}, {faces: real.describeFaces(), policy});
     const partial = createFontRegistry(startup.map(face => ({...face, data: face.data.slice()})), {substitutionPolicy: policy});

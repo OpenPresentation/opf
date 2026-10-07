@@ -1,4 +1,4 @@
-import {renderSvg} from '@openpresentation/opf-render';
+import {renderSlideSvg} from '@openpresentation/opf-render';
 
 const out = document.querySelector('pre');
 const report = {passed: false, cases: 0, decoded: [], measurements: [], controls: [], preOrientedPngMeasurements: []};
@@ -62,7 +62,7 @@ try {
     report.decoded.push({orientation, ...decoded});
     if (decoded.max > 2) throw new Error(`Orientation ${orientation}: decoded pixels differ from Pillow`);
     for (const imageFill of ['fit', 'crop']) {
-      const svg = renderSvg({design: {imageFill}, slides: [{image: jpeg}]});
+      const svg = renderSlideSvg({design: {imageFill}, slides: [{image: jpeg}]}, 0);
       const actual = await pixels(svg);
       const expected = await pixels(referenceSvg(svg, orientation, imageFill, originalPng));
       const metric = difference(actual, expected);

@@ -10,11 +10,24 @@ const DEFAULT_RASTER_BACKGROUND = "#FFFFFF";
 const DEFAULT_PDF_MODE = "vector";
 let bundledFontFilesCache=null;
 
+// The faces a raster or PDF conversion draws with, from the fonts handle (`loadFonts()` from `/fonts-node`): its `fontFiles`, and
+// whether the bundled base faces are added (`useBundledFonts`, default true; a Node handle already holds its own, so it says false) and
+// whether system fonts load (`loadSystemFonts`, default false). Without a handle the bundled base faces draw.
+function fontSettings(options) {
+  const fonts = options.fonts ?? {};
+  return { fontFiles: stringArray(fonts.fontFiles), useBundledFonts: fonts.useBundledFonts !== false, loadSystemFonts: fonts.loadSystemFonts === true };
+}
+
+/**
+ * Convert one SVG (the output of `renderSvg` or `renderSlideSvg`) to PNG bytes. `fonts` is the handle `loadFonts()` returns: the raster draws
+ * with its font files, so the preview and the PNG use the same faces. Without it the bundled base faces draw.
+ */
 export async function svgToPng(svg, options = {}) {
   const rendered = await rasterizeSvg(svg, options);
   return rendered.png;
 }
 
+/** Convert SVG slides (the output of `renderSvg`) to a PDF, one page each. `fonts` is as for `svgToPng`; `mode` is `"vector"` (default) or `"raster"`. */
 export async function svgToPdf(svgs, options = {}) {
   const pdfInputs = normalizeSvgList(svgs);
   if (!pdfInputs.length) {
@@ -49,13 +62,14 @@ export async function svgToPdf(svgs, options = {}) {
 }
 
 async function vectorPdf(inputs, options) {
-  if (options.loadSystemFonts === true) {
-    throw new OPFRenderError("pdf-system-fonts-unsupported", 'Vector PDF output embeds only the font files you supply: loadSystemFonts is not supported with mode "vector". Pass fontFiles/fontDirs, or use mode "raster".', { option: "loadSystemFonts" });
+  const settings = fontSettings(options);
+  if (settings.loadSystemFonts) {
+    throw new OPFRenderError("pdf-system-fonts-unsupported", 'Vector PDF output embeds only the font files you supply: fonts.loadSystemFonts is not supported with mode "vector". Pass a fonts handle with fontFiles (and fontDirs), or use mode "raster".', { option: "fonts.loadSystemFonts" });
   }
   const scale = positiveNumber(options.rasterFallbackScale, "rasterFallbackScale", 2);
   const fontFiles = [
-    ...(options.useBundledFonts === false ? [] : await bundledFontFiles()),
-    ...stringArray(options.fontFiles)
+    ...(settings.useBundledFonts ? await bundledFontFiles() : []),
+    ...settings.fontFiles
   ];
   const svgs = [];
   for (const input of inputs) svgs.push(await prepareRasterImages(normalizeSvgInput(input)));
@@ -100,12 +114,13 @@ async function rasterizeSvg(svgInput, options) {
   const { Resvg } = await loadResvg();
   const scale = positiveNumber(options.scale, "scale", DEFAULT_RASTER_SCALE);
   // FF-45: resvg draws no COLRv1 or OT-SVG colour glyphs; the colour faces stay out of its font list (see color-fonts.js).
+  const settings = fontSettings(options);
   const fontFiles = rasterFontFiles([
-    ...(options.useBundledFonts === false ? [] : await bundledFontFiles()),
-    ...stringArray(options.fontFiles)
+    ...(settings.useBundledFonts ? await bundledFontFiles() : []),
+    ...settings.fontFiles
   ]);
   const font = {
-    loadSystemFonts: options.loadSystemFonts === true,
+    loadSystemFonts: settings.loadSystemFonts,
     fontFiles,
     fontDirs: stringArray(options.fontDirs),
     defaultFontFamily: options.defaultFontFamily ?? "Roboto",
@@ -178,8 +193,8 @@ async function bundledFontFiles() {
 }
 
 async function resolveBundledFontFiles() {
-  const {loadBundledFontRegistry} = await import('./fonts-node.js');
-  return (await loadBundledFontRegistry()).fontFiles;
+  const {loadFonts} = await import('./fonts-node.js');
+  return (await loadFonts()).fontFiles;
 }
 
 function normalizeSvgList(value) {

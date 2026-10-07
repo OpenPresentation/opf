@@ -6,10 +6,10 @@ import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 
-const {registry,options}=await prepareNodeFonts({pack:'base',scripts:'all'});
+const prepared = await loadFonts({pack:'base',scripts:'all'}), {registry} = prepared;
 const deck=(language,fontScheme,title)=>({$schema:'https://openpresentation.org/schema/opf/v1',name:`FF-19 ${language}`,language,design:{fontScheme},slides:[{title,text:'Body'}]});
 const cases=[
   ['cyrillic','russian','roboto','Квартальный обзор 12%'],
@@ -32,10 +32,10 @@ const cases=[
   ['ka','georgian','sylfaen','ქართული'],['fa','persian','arabic-typesetting','فارسی'],['ur','urdu','arabic-typesetting','اردو'],['mr','marathi','mangal','मराठी'],
   // Noto Sans Mongolian: fontkit cannot decode its GSUB type 8 lookup; the skipped lookup keeps Node advances equal to the browser's (FF-44).
   ['mn-Mong','mongolian','noto-sans-mongolian','ᠮᠣᠩᠭᠣᠯ ᠤᠯᠤᠰ'],
-].map(([id,language,scheme,title])=>({id,language,title,svg:renderSvg(deck(language,scheme,title),options)}));
+].map(([id,language,scheme,title])=>({id,language,title,svg:renderSlideSvg(deck(language,scheme,title), 0, {fonts: prepared})}));
 
 // Serve every loaded face from a local route; nothing else may load.
-const faces=registry.describeFaces(),files=options.fontFiles;
+const faces=registry.describeFaces(),files=prepared.fontFiles;
 assert.equal(faces.length,files.length);
 const served=new Map(faces.map((face,index)=>[`https://fonts.test/${index}.ttf`,{...face,file:files[index]}]));
 const browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined}),errors=[],requests=[];

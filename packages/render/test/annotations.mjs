@@ -2,8 +2,8 @@
 // without source offsets, the footnote area and caption bands draw at core's geometry, and a deck
 // without the fields renders exactly as before.
 import assert from 'node:assert/strict';
-import { composeSlide } from '@openpresentation/opf';
-import { renderSvg } from '../dist/index.js';
+import { composeSlide } from '@openpresentation/opf/composition';
+import {renderSlideSvg} from '../dist/index.js';
 
 const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=';
 const deck = () => ({
@@ -23,7 +23,7 @@ const ok = (condition, message) => { assert.ok(condition, message); checks += 1;
 
 const document = deck();
 const diagnostics = [];
-const svg = index => renderSvg(document, { slideIndex: index, trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
+const svg = index => renderSlideSvg(document, index, { trace: true, onDiagnostic: diagnostic => diagnostics.push(diagnostic) });
 const geometry = index => composeSlide(document.slides[index], { presentation: document, slideIndex: index, layout: { id: 'blank' } });
 
 // Markers: superscript marker segments after their run, no source offsets, no link.
@@ -84,7 +84,7 @@ const geometry = index => composeSlide(document.slides[index], { presentation: d
   const plain = svg(2);
   ok(!plain.includes('data-opf-footnotes') && !plain.includes('data-opf-caption') && !plain.includes('data-opf-segment="marker"'), 'nothing drawn without markers');
   const without = { ...document, references: undefined, slides: [document.slides[2]] };
-  assert.equal(renderSvg(without, { slideIndex: 0, trace: true }).replace(/slides\.0/g, 'slides.2'), plain.replace(/slides\.2/g, 'slides.2'));
+  assert.equal(renderSlideSvg(without, 0, { trace: true }).replace(/slides\.0/g, 'slides.2'), plain.replace(/slides\.2/g, 'slides.2'));
   assert.deepEqual(diagnostics, []);
 }
 

@@ -3,12 +3,16 @@
 // declared alternate that opf-render already bundles; never silently, and never by downloading.
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
-import {BUNDLED_FONT_MANIFEST, prepareNodeFonts} from '../dist/fonts-node.js';
-import {createFontRegistry, EXPERIMENTAL_FONT_CANDIDATES, FONT_COMPATIBILITY, FONT_POLICY, FONT_POLICY_DECISIONS, FONT_POLICY_SOURCE, disabledFeaturesFor, fontPolicyFor} from '../dist/fonts.js';
+import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
+import * as corePolicy from '@openpresentation/opf/font-policy';
+import {createFontRegistry} from '../dist/font-registry.js';
+import {EXPERIMENTAL_FONT_CANDIDATES, FONT_COMPATIBILITY, FONT_POLICY, disabledFeaturesFor, fontPolicyFor} from '../dist/fonts.js';
 
-// Snapshot shape and the provisional owner decisions (provisional, owner may revise).
-assert.ok(FONT_POLICY.length >= 150 && Object.isFrozen(FONT_POLICY) && /^[0-9a-f]{64}$/.test(FONT_POLICY_SOURCE.sha256));
-assert.match(FONT_POLICY_DECISIONS.status, /provisional, owner may revise/);
+// The policy table and its lookup are core's own (not a snapshot): `/fonts` re-exports them, so the renderer cannot drift from core.
+assert.equal(FONT_POLICY, corePolicy.FONT_POLICY);
+assert.equal(fontPolicyFor, corePolicy.fontPolicyFor);
+assert.ok(FONT_POLICY.families.length >= 150 && Object.isFrozen(FONT_POLICY.families));
+assert.match(FONT_POLICY.provisionalDecisions.status, /provisional, owner may revise/);
 // Owner policy 2026-09-29: Aptos previews with the metric-compatible Intos (office pack); Roboto and Carlito are the fallbacks.
 assert.deepEqual([fontPolicyFor('aptos').replacement.family, fontPolicyFor('aptos').replacement.compatibility], ['Intos', 'metric']);
 assert.deepEqual(fontPolicyFor('aptos').alternates, ['Roboto', 'Carlito']);
@@ -19,7 +23,7 @@ for (const [family, replacement] of [['Aptos Display', 'Intos Display'], ['Aptos
   assert.match(row.replacement.source, /^https:\/\/github\.com\/muglug\/intos\/tree\/[0-9a-f]{40}$/, family);
 }
 // Every metric claim clears the bar in all four styles (mean < 0.1%, max <= 0.3%).
-for (const row of FONT_POLICY) if (row.replacement?.compatibility === 'metric') assert.ok(row.replacement.measured.meanAbsWidthDelta < 0.001 && row.replacement.measured.maxAbsWidthDelta <= 0.003 && row.replacement.measured.styles === 4, row.family);
+for (const row of FONT_POLICY.families) if (row.replacement?.compatibility === 'metric') assert.ok(row.replacement.measured.meanAbsWidthDelta < 0.001 && row.replacement.measured.maxAbsWidthDelta <= 0.003 && row.replacement.measured.styles === 4, row.family);
 // Selawik was measured for Segoe UI and rejected; Red Hat Display stays.
 assert.equal(fontPolicyFor('Segoe UI').replacement.compatibility, 'visual');
 assert.ok(EXPERIMENTAL_FONT_CANDIDATES.every(item => item.requestedFamily === 'Segoe UI' && item.substitute === 'Selawik') && !JSON.stringify(EXPERIMENTAL_FONT_CANDIDATES).includes('Akasia'));
@@ -29,13 +33,13 @@ assert.deepEqual([fontPolicyFor('Cambria').replacement.family, fontPolicyFor('Ca
 assert.equal(fontPolicyFor('Georgia').replacement.compatibility, 'metric');
 assert.deepEqual(fontPolicyFor('Georgia').replacement.disabledFeatures, ['liga', 'clig']);
 assert.ok(fontPolicyFor('Georgia').replacement.measured.maxAbsWidthDelta <= 0.003);
-assert.deepEqual(FONT_POLICY.filter(row => row.replacement?.disabledFeatures).map(row => row.family), ['Georgia']);
+assert.deepEqual(FONT_POLICY.families.filter(row => row.replacement?.disabledFeatures).map(row => row.family), ['Georgia']);
 assert.deepEqual([...FONT_COMPATIBILITY.find(entry => entry.requestedFamily === 'Georgia').disabledFeatures], ['liga', 'clig']);
 assert.deepEqual([...disabledFeaturesFor('gelasio')], ['liga', 'clig']);
 assert.equal(disabledFeaturesFor('Carlito'), undefined);
 assert.equal(fontPolicyFor('Cambria').replacement.metricModeFallback, true);
 assert.equal(fontPolicyFor('Consolas').replacement.family, 'Cousine');
-for (const row of FONT_POLICY) {
+for (const row of FONT_POLICY.families) {
   if (row.licenseClass !== 'open') assert.equal(row.embeddableByOpf, false, `${row.family} is never embeddable`);
   if (!row.replacement) continue;
   const rule = FONT_COMPATIBILITY.find(entry => entry.requestedFamily === row.family);
@@ -49,9 +53,9 @@ for (const row of FONT_POLICY) {
 // FF-19 script pack and are covered by test/script-fonts.mjs.
 const bundled = new Set(BUNDLED_FONT_MANIFEST.packages.filter(pkg => ['base', 'office', 'open'].includes(pkg.pack)).flatMap(pkg => pkg.faces.map(face => face.family.toLowerCase())));
 const isBundled = family => bundled.has(family.toLowerCase());
-const {registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+const {registry} = await loadFonts({pack: 'office', substitutionPolicy: 'visual'});
 const counts = {latin: 0, declared: 0, alternate: 0, unavailable: []};
-for (const row of FONT_POLICY) {
+for (const row of FONT_POLICY.families) {
   if (row.licenseClass === 'open' || !row.replacement) continue;
   const candidates = [row.replacement.family, ...(row.alternates ?? [])];
   if (!candidates.some(isBundled)) { counts.unavailable.push(row.family); continue; }
@@ -89,9 +93,9 @@ assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Light', fontWeight: 400
 assert.equal(registry.resolveFont({fontFamily: 'Segoe UI Semibold', fontWeight: 700}).resolvedWeight, 700);
 
 // Strict mode never falls back silently: the error names the replacement, its tier and the hook.
-const strict = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'metric'});
+const strict = await loadFonts({pack: 'office', substitutionPolicy: 'metric'});
 // Strict metric mode resolves the Aptos family with the office pack; with only the base pack it names the pack.
-const strictBase = await prepareNodeFonts({pack: 'base', substitutionPolicy: 'metric'});
+const strictBase = await loadFonts({pack: 'base', substitutionPolicy: 'metric'});
 assert.throws(() => strictBase.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.replacement === 'Intos' && error.details.replacementCompatibility === 'metric' && error.details.packs.includes('office') && /load the 'office'/.test(error.message));
 const strictAptos = strict;
 for (const [family, resolved] of [['Aptos', 'Intos'], ['Aptos Display', 'Intos Display'], ['Aptos Narrow', 'Intos Narrow'], ['Aptos Serif', 'Intos Serif']]) for (const weight of [400, 700]) for (const italic of [false, true]) {
@@ -102,7 +106,7 @@ for (const [family, resolved] of [['Aptos', 'Intos'], ['Aptos Display', 'Intos D
 assert.throws(() => strictAptos.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 600}), {code: 'font-unavailable'});
 assert.equal(registry.resolveFont({fontFamily: 'Aptos', fontWeight: 600}).compatibility, 'visual');
 // A decision id and the caller hook reach the error, and the PPTX still names Aptos.
-assert.throws(() => strictBase.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400}), error => error.details.decision === 'aptos-preview' && /prepareNodeFonts\(\{faces\}\)/.test(error.message) && /PPTX names 'Aptos'/.test(error.message));
+assert.throws(() => strictBase.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400}), error => error.details.decision === 'aptos-preview' && /loadFonts\(\{faces\}\)/.test(error.message) && /PPTX names 'Aptos'/.test(error.message));
 assert.equal(strict.registry.resolveFont({fontFamily: 'Calibri', fontWeight: 700}).compatibility, 'metric');
 assert.equal(strict.registry.resolveFont({fontFamily: 'Cambria', fontWeight: 400}).compatibility, 'visual');
 assert.equal(strict.registry.resolveFont({fontFamily: 'Georgia', fontWeight: 400}).compatibility, 'metric');
@@ -115,7 +119,7 @@ for (const [family, replacement] of [['Liberation Sans', 'Arimo'], ['Liberation 
 // An open family the office pack ships (Montserrat, FF-31; Raleway and Playfair Display, FF-43) points at that pack when only the base pack is loaded.
 assert.equal(strict.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}).compatibility, 'exact');
 for (const family of ['Raleway', 'Playfair Display']) assert.equal(strict.registry.resolveFont({fontFamily: family, fontWeight: 700, italic: true}).compatibility, 'exact', family);
-const baseOnly = await prepareNodeFonts({pack: 'base'});
+const baseOnly = await loadFonts({pack: 'base'});
 assert.throws(() => baseOnly.registry.resolveFont({fontFamily: 'Montserrat', fontWeight: 400}), error => error.code === 'font-unavailable' && error.details.pack === 'office' && /load the 'office' font pack/.test(error.message));
 assert.throws(() => strict.registry.resolveFont({fontFamily: 'Brand Sans', fontWeight: 400}), error => error.details.licenseClass === 'unknown' && /not in the OPF font policy table/.test(error.message));
 
@@ -123,9 +127,9 @@ assert.throws(() => strict.registry.resolveFont({fontFamily: 'Brand Sans', fontW
 // FF-31: Carlito is vendored in this package (fonts/carlito), not an npm dependency.
 const carlito = BUNDLED_FONT_MANIFEST.packages.find(pkg => pkg.vendored && pkg.faces.some(face => face.family === 'Carlito'));
 const file = fileURLToPath(new URL(`../${carlito.vendored}/${carlito.faces[0].file}`, import.meta.url));
-const supplied = await prepareNodeFonts({pack: 'base', substitutionPolicy: 'visual', faces: [{path: file, family: 'Aptos', weight: 400}]});
+const supplied = await loadFonts({pack: 'base', substitutionPolicy: 'visual', faces: [{path: file, family: 'Aptos', weight: 400}]});
 const exact = supplied.registry.resolveFont({fontFamily: 'Aptos', fontWeight: 400});
 assert.deepEqual([exact.resolvedFamily, exact.compatibility, exact.substitute], ['Aptos', 'exact', false]);
-assert.ok(supplied.options.fontFiles.includes(file));
+assert.ok(supplied.fontFiles.includes(file));
 
-console.log(JSON.stringify({test: 'font-policy', rows: FONT_POLICY.length, decisions: Object.keys(FONT_POLICY_DECISIONS).filter(key => key !== 'status'), bundledPreview: counts}));
+console.log(JSON.stringify({test: 'font-policy', rows: FONT_POLICY.families.length, decisions: Object.keys(FONT_POLICY.provisionalDecisions.decisions), bundledPreview: counts}));

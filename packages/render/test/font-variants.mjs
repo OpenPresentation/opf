@@ -3,14 +3,14 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {create} from 'fontkit';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-import {createFontRegistry} from '../dist/fonts.js';
+import {loadFonts} from '../dist/fonts-node.js';
+import {createFontRegistry} from '../dist/font-registry.js';
 
-const {registry,options}=await prepareNodeFonts();
-const entries=options.embeddedFonts.map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
+const prepared = await loadFonts(), {registry} = prepared;
+const entries=prepared.embeddedFonts.map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
 const report={node:process.version,faces:[],guards:[]},text='Office AVATAR 0123 — typography';
 for(const [index,entry]of entries.entries()){
-  const bytes=await readFile(options.fontFiles[index]),font=create(bytes);
+  const bytes=await readFile(prepared.fontFiles[index]),font=create(bytes);
   const group=font.getName('preferredFamily','en')??font.familyName;
   const requested={fontFamily:group,fontWeight:entry.weight,italic:!!entry.italic,path:`faces.${index}`};
   const resolution=registry.resolveFont(requested),style=registry.textMeasurement.resolveStyle(requested);

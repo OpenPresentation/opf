@@ -14,7 +14,7 @@ import {present} from '../dist/player.js';
 import {copyPreviewFonts} from '../dist/preview-fonts-node.js';
 import {previewBaseFaces, previewFontLayout} from '../dist/preview-fonts.js';
 import {BUNDLED_FONT_MANIFEST} from '../dist/fonts-node.js';
-import {renderSvg} from '../dist/svg.js';
+import {renderSlideSvg} from '../dist/svg.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const deck = JSON.parse(await readFile(path.join(root, 'test/fixtures/player-deck.opf.json'), 'utf8'));
@@ -90,7 +90,7 @@ assert.equal(formatDuration(-5000), '-0:05');
 
 // --- svg preparation ---------------------------------------------------------------------------------------------
 {
-  const svg = renderSvg(deck, {slideIndex: 0});
+  const svg = renderSlideSvg(deck, 0);
   assert.match(svg, /^<svg aria-label="Quarterly review" height="720" [^>]*role="img"/);
   const prepared = prepareSlideSvg(svg);
   const rootTag = /^<svg\b[^>]*>/.exec(prepared)[0];
@@ -236,7 +236,7 @@ assert.ok((await readFile(path.join(root, 'dist/preview-fonts-cli.js'), 'utf8'))
 {
   const store = createDeckStore({document: deck});
   assert.equal(store.svg(0), store.svg(0), 'a slide is drawn once and kept');
-  assert.equal(store.svg(0), renderSvg(deck, {slideIndex: 0, date: undefined}), 'the store draws exactly what renderSvg draws');
+  assert.equal(store.svg(0), renderSlideSvg(deck, 0, {date: undefined}), 'the store draws exactly what renderSvg draws');
   assert.equal(store.info(3).title, 'Revenue grew 18 percent');
   await store.ready();
   const broken = createDeckStore({document: {slides: [{id: 'a', title: 'x'}, {id: 'a', title: 'y'}]}});

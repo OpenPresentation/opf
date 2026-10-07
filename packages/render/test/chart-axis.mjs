@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import { validatePresentation } from '@openpresentation/opf';
-import { renderSvg } from '../dist/svg.js';
+import { validate } from '@openpresentation/opf';
+import {renderSlideSvg} from '../dist/svg.js';
 
 // Public-API axis invariants for ordinary values. The pinned core packed-ecosystem
 // harness (scripts/test-packed-ecosystem.mjs) runs this file by name against the
@@ -32,9 +32,9 @@ for (const [name, values] of ordinary) {
     const horizontal = type === "bar";
     const input = { slides: [{ title: name, chart: { type, data: { columns: ["Category", "Value"], rows: values.map((v, i) => [`Item ${i + 1}`, v]) } } }] };
     const before = JSON.stringify(input);
-    assert.equal(validatePresentation(input).valid, true, `${label}: valid source`);
-    const svg = renderSvg(input, { trace: true });
-    assert.equal(renderSvg(input, { trace: true }), svg, `${label}: deterministic bytes`);
+    assert.equal(validate(input, { only: ['format'] }).valid, true, `${label}: valid source`);
+    const svg = renderSlideSvg(input, 0, { trace: true });
+    assert.equal(renderSlideSvg(input, 0, { trace: true }), svg, `${label}: deterministic bytes`);
     assert.equal(JSON.stringify(input), before, `${label}: unchanged authored source`);
     assert.doesNotMatch(svg, /NaN|Infinity/, `${label}: finite output`);
     const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a));
@@ -99,8 +99,8 @@ for (const [name, values, dropsZero, edge] of autoZero) {
     const label = `${name}/${type}`;
     const horizontal = type === "bar";
     const input = { slides: [{ title: name, chart: { type, data: { columns: ["Category", "Value"], rows: values.map((v, i) => [`Item ${i + 1}`, v]) } } }] };
-    const svg = renderSvg(input, { trace: true });
-    assert.equal(renderSvg(input, { trace: true }), svg, `${label}: deterministic bytes`);
+    const svg = renderSlideSvg(input, 0, { trace: true });
+    assert.equal(renderSlideSvg(input, 0, { trace: true }), svg, `${label}: deterministic bytes`);
     const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a));
     const labels = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
@@ -159,7 +159,7 @@ for (const [name, values, dropsZero, edge] of autoZero) {
 // Stacked and percentage groupings plot from a base, so their totals keep zero on the axis.
 for (const type of ["stacked-column", "stacked-area"]) {
   const input = { slides: [{ chart: { type, data: { columns: ["Category", "A", "B"], rows: [["x", 100, 5], ["y", 104, 6], ["z", 102, 7]] } } }] };
-  const svg = renderSvg(input, { trace: true });
+  const svg = renderSlideSvg(input, 0, { trace: true });
   const first = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
     .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
     .map(([, , body]) => Number([...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join("")));

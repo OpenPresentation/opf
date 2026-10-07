@@ -1,5 +1,5 @@
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
-import { OPFFontError } from "./fonts.js";
+import { OPFFontError } from "./font-registry.js";
 
 // FF-31: the vendored faces (the open families and Intos) are not in a registry's eager list. Browser hosts load them
 // on demand from separate hash-pinned files; Node hosts and build scripts list them to copy the files.

@@ -1,6 +1,7 @@
-import { createFontRegistry, OPFFontError } from "./fonts.js";
+import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { lazyFacesNeeded } from "./lazy-fonts.js";
+import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
 export { lazyFontEntries, lazyFontList, splitStartupFaces } from "./lazy-font-list.js";
@@ -20,8 +21,8 @@ async function verifyDigest(entry, data, subtle) {
     );
 }
 
-/** Fetch only host-selected font files, then use those exact bytes for shaping and CSS. */
-export async function loadBrowserFontRegistry(entries, options = {}) {
+// The registry behind `loadFonts`: fetch only host-selected font files, then use those exact bytes for shaping and CSS.
+async function loadRegistry(entries, options = {}) {
   // Validate the host's extra faces first: a bad list must not leave startup faces registered in the document with no registry to dispose.
   const extraLazy = normalizeExtraLazyFonts(options.extraLazyFonts);
   const documentRef = options.document ?? globalThis.document;
@@ -266,4 +267,54 @@ export async function loadBrowserFontRegistry(entries, options = {}) {
       for (const face of loaded) documentRef.fonts.delete(face);
     },
   });
+}
+
+const MAX_ENSURE_ROUNDS = 4;
+
+/**
+ * The fonts handle for a browser: the faces you list (`faces`, each `{ url | data, family, weight, italic, sha256 }`, fetched and
+ * hash-verified, then registered with the document) and, on demand, the script and vendored faces a deck draws. Pass it as `{ fonts }` to
+ * `renderSvg`, `renderSlideSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor. `scripts`, `scriptBaseUrl`,
+ * `lazyFontsBaseUrl`, `extraLazyFonts`, `renderOptions`, `signal`, `document`, `fetch`, `crypto` and the registry options
+ * (`substitutionPolicy`, `aliases`, `fallbackFamily`, `themeFonts`, `strictGlyphs`) are as for the registry (see `fonts-browser.d.ts`).
+ * `dispose()` removes every face from the document.
+ */
+export async function loadFonts({ faces = [], ...options } = {}) {
+  const registry = await loadRegistry(faces, options);
+  // The embedded list is base64 of every eager face: compute it once, and again only when faces were added.
+  let embedded, stale = true;
+  const addFaces = registry.addFaces;
+  registry.addFaces = (added) => { const result = addFaces(added); stale = true; return result; };
+  const pending = (presentation, renderOptions) => [
+    ...registry.pendingLazyFonts(presentation, renderOptions).map((face) => face.file),
+    ...registry.pendingScripts(presentation, renderOptions),
+  ];
+  return {
+    textMeasurement: registry.textMeasurement,
+    get embeddedFonts() { if (stale) { embedded = registry.embeddedFonts; stale = false; } return embedded; },
+    registry,
+    manifest: BUNDLED_FONT_MANIFEST,
+    get substitutions() { return registry.substitutions; },
+    /**
+     * Load the vendored and script faces the presentation draws, each hash-verified, all or nothing, and repeat while loading
+     * changes what is needed (a script face can need a vendored one). Cheap when nothing is needed. Besides `signal`, the call
+     * takes the `renderSvg` options the document resolves with (`catalogs`, ...) over the loader's `renderOptions`. A document that
+     * does not resolve rejects with what `renderSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
+     */
+    async ensure(presentation, callOptions = {}) {
+      const lazy = [], scripts = [];
+      let uncovered = [];
+      for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {
+        const needLazy = registry.pendingLazyFonts(presentation, callOptions).length > 0, needScripts = registry.pendingScripts(presentation, callOptions).length > 0;
+        if (!needLazy && !needScripts) break;
+        callOptions.signal?.throwIfAborted?.();
+        if (needLazy) lazy.push(...(await registry.ensureLazyFonts(presentation, callOptions)));
+        if (needScripts) { const result = await registry.ensureScripts(presentation, callOptions); scripts.push(...result.loaded); uncovered = result.uncovered; }
+      }
+      return { scripts, lazy, uncovered };
+    },
+    /** Synchronous: the files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `renderSvg` throws for a document that does not resolve. */
+    pending,
+    dispose: () => registry.dispose(),
+  };
 }

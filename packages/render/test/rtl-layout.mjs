@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg, resolvePresentation} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 
 // RR-05: right-to-left layout in the preview. Authored alignment is logical (`left` is the start edge), so a right-to-left
 // paragraph is drawn against the right edge; the composition mirrors (the `left` region is drawn at the right, tables run right
@@ -17,7 +17,7 @@ const slides = [
   {title: 'نص طويل', text: `${arabic} ${arabic} ${arabic} ${'abc '.repeat(40)}`.trim()},
 ];
 const rtlDeck = {language: 'arabic', slides}, ltrDeck = {language: 'english', slides};
-const render = (deck, index) => texts(renderSvg(deck, {slideIndex: index, trace: true}));
+const render = (deck, index) => texts(renderSlideSvg(deck, index, {trace: true}));
 const find = (list, text, from = 0) => list.find(item => item.body.includes(text) && list.indexOf(item) >= from);
 
 // Titles and body text start at the right edge.

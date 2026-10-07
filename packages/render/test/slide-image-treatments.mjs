@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { renderSvg, svgToPng } from '../dist/index.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
 
 // This suite runs against the linked coordinated core; a core without treatment
 // geometry is a pinning error, not a reason to skip.
@@ -26,20 +26,20 @@ let checked = 0;
 for (const shape of ['rounded', 'circle', 'hexagon']) {
   const deck = deckFor({ position: 'right', inset: true, shape });
   const geometry = composeSlide(deck.slides[0], { width: 1280, height: 720, presentation: deck });
-  const svg = renderSvg(deck);
+  const svg = renderSlideSvg(deck, 0);
   const clip = svg.match(/<clipPath id="opf-s1-slide-image-clip"><path d="([^"]+)"\/><\/clipPath>/);
   assert.equal(clip?.[1], geometry.slideImage.shape.path, shape);
   assert.match(svg, /<g clip-path="url\(#opf-s1-slide-image-clip\)"><image /);
   checked++;
 }
 // Rectangle frames need no mask.
-assert.doesNotMatch(renderSvg(deckFor({ position: 'left' })), /clipPath/);
+assert.doesNotMatch(renderSlideSvg(deckFor({ position: 'left' }), 0), /clipPath/);
 
 // Border: centered stroke on the same outline, width scaled with the canvas; alpha as stroke-opacity.
 {
   const deck = deckFor({ position: 'left', inset: true, shape: 'rounded', border: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
   const geometry = composeSlide(deck.slides[0], { width: 1920, height: 1080, presentation: deck });
-  const stroke = element(renderSvg(deck), 'path', 'stroke=');
+  const stroke = element(renderSlideSvg(deck, 0), 'path', 'stroke=');
   assert.equal(attr(stroke, 'd'), geometry.slideImage.shape.path);
   assert.equal(attr(stroke, 'stroke'), '#101820');
   assert.equal(Number(attr(stroke, 'stroke-opacity')), Math.round(0x80 / 255 * 1e6) / 1e6);
@@ -50,7 +50,7 @@ assert.doesNotMatch(renderSvg(deckFor({ position: 'left' })), /clipPath/);
 
 // Recolor matrices and pixel-only opacity, checked on raster output.
 async function centerPixel(deck) {
-  const { data, info } = await sharp(await svgToPng(renderSvg(deck), { scale: 0.25, loadSystemFonts: false })).raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(await svgToPng(renderSlideSvg(deck, 0), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
   const at = ((info.height >> 1) * info.width + (info.width >> 1)) * info.channels;
   return [...data.subarray(at, at + 3)];
 }
@@ -64,7 +64,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
   // Opacity blends the pixels over the slide background; the matrix keeps 1e-6 precision.
   const faint = await centerPixel(deckFor({ position: 'background', opacity: 0.25 }, { background: '#FFFFFF' }));
   faint.forEach((channel, i) => assert.ok(Math.abs(channel - (255 + (orange[i] - 255) * 0.25)) <= 1, `opacity ${i}: ${channel}`));
-  const svg = renderSvg(deckFor({ position: 'background', recolor: 'grayscale', opacity: 0.12345 }));
+  const svg = renderSlideSvg(deckFor({ position: 'background', recolor: 'grayscale', opacity: 0.12345 }), 0);
   assert.match(svg, /<g filter="url\(#opf-s1-slide-image-recolor\)" opacity="0\.12345"><image /);
   assert.match(svg, /<filter color-interpolation-filters="sRGB" id="opf-s1-slide-image-recolor"><feColorMatrix type="matrix" values="0\.299 0\.587 0\.114 0 0 0\.299 0\.587 0\.114 0 0 0\.299 0\.587 0\.114 0 0 0 0 0 1 0"\/>/);
   checked += 4;
@@ -74,7 +74,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 {
   const deck = deckFor({ position: 'background', inset: true, border: { color: 'dark1', width: 2 }, overlay: { color: '#00000080', opacity: 0.5, edge: 'bottom', size: 0.25 } });
   const geometry = composeSlide(deck.slides[0], { width: 1280, height: 720, presentation: deck });
-  const svg = renderSvg(deck, { trace: true });
+  const svg = renderSlideSvg(deck, 0, { trace: true });
   const overlay = element(svg, 'path', 'data-opf-slide-image-overlay');
   assert.equal(attr(overlay, 'd'), geometry.slideImage.overlay.shape.path);
   assert.equal(Number(attr(overlay, 'fill-opacity')), Math.round(0x80 / 255 * 0.5 * 1e6) / 1e6);
@@ -86,8 +86,8 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 
 // Alt text override and unresolved sources without treatments.
 {
-  assert.match(renderSvg(deckFor({ position: 'left', alt: 'Harbor at dusk' })), /aria-label="Harbor at dusk"/);
-  const svg = renderSvg({ slides: [{ title: 'Missing', design: { slideImage: { src: 'asset:missing', position: 'left', shape: 'circle', overlay: { color: '#000000', opacity: 0.5 } } } }] });
+  assert.match(renderSlideSvg(deckFor({ position: 'left', alt: 'Harbor at dusk' }), 0), /aria-label="Harbor at dusk"/);
+  const svg = renderSlideSvg({ slides: [{ title: 'Missing', design: { slideImage: { src: 'asset:missing', position: 'left', shape: 'circle', overlay: { color: '#000000', opacity: 0.5 } } } }] }, 0);
   assert.doesNotMatch(svg, /clipPath|fill-opacity/);
   checked += 2;
 }

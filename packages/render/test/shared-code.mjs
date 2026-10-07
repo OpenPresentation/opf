@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
-import {resolvePresentation,renderSvg} from '../dist/svg.js';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
-import {validatePresentation} from '@openpresentation/opf';
-const fonts=await loadOfficeFontRegistry();
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
+import {validate} from '@openpresentation/opf';
+const fonts=(await loadFonts({pack: 'office'})).registry;
 const escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 let cases=0;
 for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
@@ -11,9 +11,9 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{composition:{mode:'column',minFontSize:24},blocks:[{blocks:[{code}]}]}]};
     const before=structuredClone(deck);let calls=0,styles=0;
     const textMeasurement={measure:(...args)=>{calls++;return fonts.textMeasurement.measure(...args);},resolveStyle:style=>{styles++;return fonts.textMeasurement.resolveStyle(style);}};
-    const bound=resolvePresentation(deck,{textMeasurement}).slides[0],expectedCalls=calls,expectedStyles=styles;
+    const bound=resolvePresentation(deck,{ fonts: {textMeasurement}}).slides[0],expectedCalls=calls,expectedStyles=styles;
     calls=0;styles=0;
-    const diagnostics=[],svg=renderSvg(deck,{textMeasurement,trace:true,onDiagnostic:item=>diagnostics.push(item)});
+    const diagnostics=[],svg=renderSlideSvg(deck, 0,{ fonts: {textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item)});
     assert.equal(calls,expectedCalls,'No code measurement after acceptance');assert.equal(styles,expectedStyles,'No repeated style resolution');
     assert.deepEqual(diagnostics,[]);assert.deepEqual(deck,before);
     const parts=bound.geometry.items[0].codeLayout.parts,groups=[...svg.matchAll(/<g\b([^>]*data-opf-code-role[^>]*)>/g)];
@@ -55,25 +55,25 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
   }
 }
 const overflow={design:{fontScheme:'roboto'},slides:[{code:{source:'Unabridged body\n'.repeat(100),language:'Keep case'}}]},diagnostics=[];
-renderSvg(overflow,{textMeasurement:fonts.textMeasurement,onDiagnostic:item=>diagnostics.push(item)});
+renderSlideSvg(overflow, 0,{ fonts: {textMeasurement:fonts.textMeasurement},onDiagnostic:item=>diagnostics.push(item)});
 assert.ok(diagnostics.some(item=>item.path==='slides.0.code.source'&&item.reason==='text-fit'));
 overflow.slides[0].composition={overflow:'error'};
-assert.throws(()=>renderSvg(overflow,{textMeasurement:fonts.textMeasurement}),{code:'layout-overflow'});
+assert.throws(()=>renderSlideSvg(overflow, 0,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const tiny={design:{fontScheme:'roboto',dimensions:{widthInches:40/96,heightInches:40/96}},slides:[{composition:{padding:0},code:'Keep all text'}]};
-assert.throws(()=>renderSvg(tiny,{textMeasurement:fonts.textMeasurement}),{code:'layout-overflow'});
+assert.throws(()=>renderSlideSvg(tiny, 0,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const forbidden=[...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF];
 let invalidCases=0;
 for (const point of forbidden) for (const field of ['shorthand','source','filename','language']) {
   const value='A😀B'+String.fromCodePoint(point)+'Z',code=field==='shorthand'?value:{source:'Keep source',filename:'Keep.ts',language:'TypeScript',[field]:value};
   const deck={slides:[{blocks:[{code}]}]},before=structuredClone(deck);
-  assert.equal(validatePresentation(deck).valid,true,'Schema validity is separate from XML representability');
+  assert.equal(validate(deck,{only:['format']}).valid,true,'Schema validity is separate from XML representability');
   const path='slides.0.blocks.0.code'+(field==='shorthand'?'':'.'+field);
-  assert.throws(()=>renderSvg(deck),error=>error.code==='invalid-code-text'&&error.path===path&&error.message.includes('UTF-16 offset 4'));
+  assert.throws(()=>renderSlideSvg(deck, 0),error=>error.code==='invalid-code-text'&&error.path===path&&error.message.includes('UTF-16 offset 4'));
   assert.deepEqual(deck,before);invalidCases++;
 }
 // XML character boundaries, not a glyph-coverage or shaping claim.
 const representable='\t\n\r\n\r <&>" \uD7FF\uE000\uFFFD\u{10000}\u{10FFFF}';
-const accepted=renderSvg({slides:[{code:representable}]});
+const accepted=renderSlideSvg({slides:[{code:representable}]}, 0);
 for (const character of ['\uD7FF','\uE000','\uFFFD','\u{10000}','\u{10FFFF}']) assert.ok(accepted.includes(character));
 assert.ok(accepted.includes('&lt;&amp;&gt;'));
 console.log(`Shared code SVG: ${cases} accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, ${invalidCases} XML-boundary rejections and valid character boundaries.`);

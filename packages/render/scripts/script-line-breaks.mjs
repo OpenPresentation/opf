@@ -7,12 +7,12 @@
 // Information only: nothing gates on it (it records the current limit; the native probe deck shows what PowerPoint does).
 //   node scripts/script-line-breaks.mjs [report.json]
 import {writeFile} from 'node:fs/promises';
-import {wrapText} from '@openpresentation/opf';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {wrapText} from '@openpresentation/opf/composition';
+import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora} from './script-corpora.mjs';
 
 const corpora = await loadCorpora();
-const {registry} = await prepareNodeFonts({pack: 'office', scripts: 'all'});
+const {registry} = await loadFonts({pack: 'office', scripts: 'all'});
 const closing = /^[、。，．！？；：」』）］｝〉》】〕”’]/u, opening = /[「『（［｛〈《【〔“‘]$/u;
 const family = {Thai: 'Noto Sans Thai', Laoo: 'Noto Sans Lao', Khmr: 'Noto Sans Khmer', Mymr: 'Noto Sans Myanmar', Jpan: 'Noto Sans JP', Hans: 'Noto Sans SC', Hant: 'Noto Sans TC'};
 const rows = [];

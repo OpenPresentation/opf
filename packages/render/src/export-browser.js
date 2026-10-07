@@ -5,8 +5,9 @@ import { OPFRenderError, packageName } from "./svg.js";
 // has the same two names for a page. It uses the same vector PDF converter as Node (fontkit, bidi-js and pako, all pure
 // JavaScript) over the SVG the preview draws, so the text stays real text in the same embedded subsets. What differs from
 // Node is only how pixels are made: a canvas decodes pictures and draws PNGs. No system font is read (a browser has no way
-// to hand one over) and nothing is fetched: faces come from the SVG's own @font-face data (renderSvg's `embeddedFonts`) or
-// from `fontData`.
+// to hand one over) and nothing is fetched: faces come from the SVG's own @font-face data (the `embeddedFonts` of the fonts handle
+// `renderSvg` was given), from the faces the `fonts` handle holds (`loadFonts` from `/fonts-browser`, so script faces the SVG does not
+// embed reach the PDF too), or from `fontData`.
 
 const DEFAULT_DIMENSIONS = { width: 1280, height: 720 };
 const MAX_PIXELS = 40_000_000;
@@ -31,21 +32,21 @@ export async function svgToPng(svg, options = {}) {
  * Convert SVG slides to a PDF, one slide per page (1 SVG pixel is 1 PDF point, as in Node). `mode: "vector"` (default) writes
  * real text, paths, gradients and images; `"raster"` draws each slide as an image (`scale`, default 2). Takes the options of
  * the Node `svgToPdf` that make sense here (`metadata`, `tagged`, `strict`, `compress`, `onDiagnostic`, the generic family
- * names, `rasterFallbackScale`) and `fontData` (`[{ data, family? }]`, extra face bytes), `signal` (an AbortSignal, checked between
- * pages) and `onProgress({ page, pages })`.
+ * names, `rasterFallbackScale`), `fonts` (the handle `loadFonts()` returns: every face it holds can be embedded), `fontData`
+ * (`[{ data, family? }]`, extra face bytes without a handle), `signal` (an AbortSignal, checked between pages) and
+ * `onProgress({ page, pages })`.
  */
 export async function svgToPdf(svgs, options = {}) {
   const inputs = (Array.isArray(svgs) ? svgs : [svgs]).map(svgText);
   if (!inputs.length) throw new OPFRenderError("empty-pdf", "svgToPdf requires at least one SVG slide.");
   const mode = options.mode ?? "vector";
   if (mode !== "vector" && mode !== "raster") throw new OPFRenderError("invalid-conversion-option", 'mode must be "vector" or "raster".', { option: "mode", value: mode });
-  if (options.loadSystemFonts === true) throw new OPFRenderError("pdf-system-fonts-unsupported", "A browser cannot hand system fonts to the PDF export: supply faces as @font-face data or `fontData`.", { option: "loadSystemFonts" });
   if (mode === "raster") return rasterPdf(inputs, options);
   const scale = positive(options.rasterFallbackScale, "rasterFallbackScale", 2);
   const fontCss = fontFaceCss(inputs);
   return svgsToVectorPdf(inputs, {
     fontFiles: [], fontDirs: [],
-    fontData: Array.isArray(options.fontData) ? options.fontData : [],
+    fontData: [...(options.fonts?.registry?.exportFaces?.() ?? []), ...(Array.isArray(options.fontData) ? options.fontData : [])],
     imageCodec: canvasImageCodec(),
     defaultFontFamily: options.defaultFontFamily ?? "Roboto",
     sansSerifFamily: options.sansSerifFamily ?? options.defaultFontFamily ?? "Roboto",

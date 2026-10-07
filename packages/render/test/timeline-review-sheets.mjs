@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import sharp from 'sharp';
 import {examples} from '@openpresentation/opf/examples';
-import {renderSvgDeck,svgToPng} from '../dist/index.js';
+import {renderSvg, svgToPng} from '../dist/index.js';
 import {renderSvgDeck as renderBefore} from '../artifacts/timeline-before-runtime/dist/index.js';
 const before=path.resolve(process.argv[2]??'artifacts/readability-golden-after'),after=path.resolve(process.argv[3]??'artifacts/timeline-golden-after'),out=path.resolve(process.argv[4]??'docs/evidence/timeline-corpus-review');
 const original=JSON.parse(await readFile(path.join(before,'candidate.json'))),candidate=JSON.parse(await readFile(path.join(after,'candidate.json')));
@@ -29,8 +29,8 @@ const full=[];
 for(const key of [0,.2,.4,.6,.8,1].map(fraction=>changed[Math.round(fraction*(changed.length-1))])){
   const [file,index]=key.split('#'),deck=examples.find(example=>example.file.replace(/^examples\//,'')===file).deck;
   const files=[];
-  for(const [side,render]of [['before',renderBefore],['after',renderSvgDeck]]){
-    const svg=render(deck,{trace:true})[Number(index)],png=await svgToPng(svg,{loadSystemFonts:false}),name=`full-${full.length}-${side}`;
+  for(const [side,render]of [['before',renderBefore],['after',renderSvg]]){
+    const svg=render(deck,{trace:true})[Number(index)],png=await svgToPng(svg),name=`full-${full.length}-${side}`;
     await writeFile(path.join(out,`${name}.svg`),svg);await writeFile(path.join(out,`${name}.png`),png);
     files.push({side,svg:`${name}.svg`,svgSha256:hash(svg),png:`${name}.png`,pngSha256:hash(png)});
   }

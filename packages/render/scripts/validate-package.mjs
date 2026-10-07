@@ -28,7 +28,7 @@ assert.ok(pkg.name.startsWith("@openpresentation/"));
 assert.ok(pkg.repository?.url?.includes("github.com/OpenPresentation/"));
 assert.ok(deps["@openpresentation/opf"], "Must declare compatibility with @openpresentation/opf");
 assert.equal(typeof api.renderSvg, "function");
-assert.equal(typeof api.renderSvgDeck, "function");
+assert.equal(typeof api.renderSlideSvg, "function");
 assert.equal(typeof api.resolvePresentation, "function");
 assert.equal(typeof api.svgToPng, "function");
 assert.equal(typeof api.svgToPdf, "function");

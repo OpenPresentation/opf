@@ -56,7 +56,7 @@ for (const face of faces) {
       const startX = rtl ? x : 40;
       const reference = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}"><rect width="100%" height="100%" fill="#fff"/><g fill="#000">${paths}</g></svg>`;
       const drawn = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}"><rect width="100%" height="100%" fill="#fff"/><text x="${startX}" y="100" font-family="${face.family}" font-size="${SIZE}" ${rtl ? 'direction="rtl" ' : ''}xml:lang="${sample.lang}" xml:space="preserve" fill="#000">${escape(sample.text)}</text></svg>`;
-      const options = {fontFiles: [face.file], useBundledFonts: false};
+      const options = { fonts: {fontFiles: [face.file], useBundledFonts: false}};
       const [a, b] = await Promise.all([svgToPng(reference, options), svgToPng(drawn, options)]);
       const boxA = await ink(a), boxB = await ink(b);
       assert.ok(boxA && boxB, `${face.family} ${sample.id}: both renderings have ink`);

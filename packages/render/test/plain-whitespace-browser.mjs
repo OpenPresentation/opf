@@ -3,9 +3,9 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {chromium} from 'playwright';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
-const {registry,options:fontOptions}=await prepareNodeFonts(),output=path.resolve(process.argv[2]??'artifacts/plain-whitespace-browser');
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
+import {loadFonts} from '../dist/fonts-node.js';
+const prepared = await loadFonts(), {registry} = prepared,output=path.resolve(process.argv[2]??'artifacts/plain-whitespace-browser');
 await mkdir(output,{recursive:true});
 const fixtures=['  Keep  repeated spaces and a nonbreaking pair A\u00a0B.  \r\n\r\nFinal e\u0301 accent  \r','\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t'];
 const browser=await chromium.launch({channel:process.platform==='win32'&&!process.env.CI?'msedge':undefined}),errors=[],requests=[],results=[];
@@ -13,8 +13,8 @@ try {
  const page=await browser.newPage();page.on('pageerror',error=>errors.push(error.message));await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});await page.setContent('<style>body{margin:0}</style><main></main>');
  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
  for(const mode of ['estimated','measured'])for(const align of ['left','center','right'])for(const [width,height]of [[1280,720],[720,1280]])for(const [fixture,text]of fixtures.entries()) {
-  const document={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,titleAlignment:align},slides:[{title:'  Exact  title\tend  ',text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{textMeasurement:fontOptions.textMeasurement}:{})};
-  const bound=resolvePresentation(document,options).slides[0],svg=renderSvg(document,options);assert.deepEqual(document,before);assert.deepEqual(bound.geometry.diagnostics,[]);
+  const document={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},contentAlignment:align,titleAlignment:align},slides:[{title:'  Exact  title\tend  ',text}]},before=structuredClone(document),options={trace:true,...(mode==='measured'?{fonts:{textMeasurement:prepared.textMeasurement}}:{})};
+  const bound=resolvePresentation(document,options).slides[0],svg=renderSlideSvg(document, 0,options);assert.deepEqual(document,before);assert.deepEqual(bound.geometry.diagnostics,[]);
   await page.setViewportSize({width,height});
   const actual=await page.evaluate(async({svg,items,mode,align})=>{
    document.querySelector('main').innerHTML=svg;await document.fonts.ready;

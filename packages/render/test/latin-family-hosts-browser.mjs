@@ -15,18 +15,18 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {STYLES, expectedFace, familyDeck, label, latinFamilies, neededFaces} from './latin-family-fixture.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/latin-family-hosts');
 await mkdir(outputDirectory, {recursive: true});
 const bundle = await build({
-  stdin: {contents: "import {loadBrowserFontRegistry} from './dist/fonts-browser.js';import {renderSvg} from './dist/svg.js';window.opf={loadBrowserFontRegistry,renderSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
+  stdin: {contents: "import {loadFonts as loadBrowserFonts} from './dist/fonts-browser.js';import {renderSlideSvg} from './dist/svg.js';window.opf={loadBrowserFonts,renderSlideSvg};", resolveDir: root, sourcefile: 'entry.js', loader: 'js'},
   bundle: true, platform: 'browser', format: 'iife', write: false, minify: true,
 });
 const script = bundle.outputFiles[0].text;
-const eager = (await prepareNodeFonts({pack: 'office'})).registry.embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
+const eager = (await loadFonts({pack: 'office'})).registry.embeddedFonts.map((face, index) => ({index, family: face.family, weight: face.weight, italic: !!face.italic, bytes: Buffer.from(face.dataUrl.split(',')[1], 'base64')}));
 assert.equal(eager.length, 33, 'the eager list is the 33 office and base faces');
 const ORIGIN = 'https://app.test';
 const fontRequests = [];
@@ -57,7 +57,7 @@ try {
   await page.goto(`${ORIGIN}/`);
   await page.addScriptTag({content: script});
   await page.evaluate(async ({eager}) => {
-    window.registry = await window.opf.loadBrowserFontRegistry(eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), {substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: `${location.origin}/`});
+    window.registry = (await window.opf.loadBrowserFonts({faces: eager.map(face => ({url: `/eager/${face.index}.ttf`, family: face.family, weight: face.weight, italic: face.italic})), substitutionPolicy: 'visual', fallbackFamily: 'Roboto', lazyFontsBaseUrl: `${location.origin}/`})).registry;
   }, {eager: eager.map(({bytes, ...rest}) => rest)});
 
   const loaded = new Set();
@@ -72,10 +72,10 @@ try {
     assert.deepEqual(fontRequests.slice(before).sort(), expectedPending, `${where}: exactly those files are fetched`);
     for (const file of ensured) loaded.add(file);
     const observed = await page.evaluate(async ({deck, styles, family}) => {
-      const registry = window.registry, {renderSvg} = window.opf;
+      const registry = window.registry, {renderSlideSvg} = window.opf;
       const resolved = styles.map(style => { const r = registry.resolveFont({fontFamily: family, fontWeight: style.weight, italic: style.italic}); return {label: style.label, family: r.resolvedFamily, weight: r.resolvedWeight, italic: r.italic, compatibility: r.compatibility}; });
       const host = document.querySelector('main');
-      host.innerHTML = renderSvg(deck, {textMeasurement: registry.textMeasurement});
+      host.innerHTML = renderSlideSvg(deck, 0, { fonts: {textMeasurement: registry.textMeasurement}});
       await document.fonts.ready;
       const clean = value => value.split(',')[0].trim().replace(/^["']|["']$/g, '');
       const faces = [...document.fonts].map(face => ({family: clean(face.family), weight: Number(face.weight), style: face.style, status: face.status}));

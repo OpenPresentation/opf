@@ -8,9 +8,18 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 import sharp from 'sharp';
-import {renderSvg,svgToPng} from '../dist/index.js';
-import {BUNDLED_FONT_MANIFEST,autoScriptSelection,detectPresentationScripts,prepareNodeFonts} from '../dist/fonts-node.js';
-import {SYMBOL_ENCODINGS,SYMBOL_ENCODINGS_SOURCE,SYMBOL_FACE_FAMILIES,SYMBOL_PLACEHOLDER,SYMBOL_PREVIEW_FACES,SYMBOL_SCRIPT,createFontRegistry,createScriptFonts,createScriptTextMeasurement,glyphFallbackFamilies,isSymbolEncodedFamily,mapSymbolText,symbolCodeOf,symbolEncodingFor} from '../dist/fonts.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
+import {BUNDLED_FONT_MANIFEST,autoScriptSelection,detectPresentationScripts,loadFonts} from '../dist/fonts-node.js';
+import * as coreSymbols from '@openpresentation/opf/symbol-font-encodings';
+import {createFontRegistry} from '../dist/font-registry.js';
+import {SYMBOL_FACE_FAMILIES,SYMBOL_PLACEHOLDER,SYMBOL_PREVIEW_FACES,SYMBOL_SCRIPT,createScriptFonts,createScriptTextMeasurement,glyphFallbackFamilies,isSymbolEncodedFamily,mapSymbolText,symbolCodeOf} from '../dist/fonts.js';
+import {mapSymbolAdvances,symbolEncodingFamily} from '../dist/symbol-fonts.js';
+// The code table is core's (`/symbol-font-encodings`, not a copy); this view has the shape the checks below read: per family
+// `[unicode, advance in font units, reason]` for codes 0x20..0xFF.
+const SYMBOL_ENCODINGS=coreSymbols.SYMBOL_FONT_ENCODINGS.families.map(family=>({family:family.family,version:family.verifiedAgainst.version,unitsPerEm:family.verifiedAgainst.unitsPerEm,mapped:family.summary.mapped,
+  codes:family.codes.map(code=>[code.unicode,code.installed?code.installed.advance:null,code.reason])}));
+// `/fonts` re-exports core's own functions, not copies.
+assert.equal(isSymbolEncodedFamily,coreSymbols.isSymbolEncodedFamily);assert.equal(symbolCodeOf,coreSymbols.symbolCodeOf);assert.equal(mapSymbolText,coreSymbols.mapSymbolText);
 
 const FAMILIES=['Symbol','Wingdings','Wingdings 2','Wingdings 3','Webdings'];
 const PROPRIETARY=/^(symbol|wingdings|wingdings 2|wingdings 3|webdings)$/i;
@@ -23,8 +32,6 @@ const decodeUnicode=value=>String.fromCodePoint(...value.split('+').map(part=>pa
 
 // ---- the snapshot ----
 assert.deepEqual(SYMBOL_ENCODINGS.map(entry=>entry.family),FAMILIES);
-assert.equal(SYMBOL_ENCODINGS_SOURCE.path,'spec/reference/symbol-font-encodings.json');
-assert.match(SYMBOL_ENCODINGS_SOURCE.sha256,/^[0-9a-f]{64}$/);
 assert.deepEqual(SYMBOL_ENCODINGS.map(entry=>entry.mapped),[189,222,217,208,223],'codes mapped per family (2026-10-01 tables)');
 for(const entry of SYMBOL_ENCODINGS){
   assert.equal(entry.codes.length,224);
@@ -41,7 +48,7 @@ for(const entry of SYMBOL_ENCODINGS){
   entry.codes.forEach(([unicode],index)=>{if(unicode===null)return;if(seen.has(unicode))duplicates.push(`${hex(0x20+index)}->${hex(seen.get(unicode))}`);else seen.set(unicode,0x20+index);});
   assert.deepEqual(duplicates,entry.family==='Symbol'?['E2->D2','E3->D3','E4->D4']:[],entry.family);
 }
-for(const family of FAMILIES){assert.ok(isSymbolEncodedFamily(family.toUpperCase()));assert.equal(symbolEncodingFor(family).family,family);assert.ok(symbolEncodingFor(family)===SYMBOL_ENCODINGS.find(entry=>entry.family===family));}
+for(const family of FAMILIES){assert.ok(isSymbolEncodedFamily(family.toUpperCase()));assert.equal(symbolEncodingFamily(family),family);}
 for(const name of ['Calibri','Noto Sans Symbols 2','Wingdings 4',''])assert.ok(!isSymbolEncodedFamily(name),name);
 assert.equal(SYMBOL_SCRIPT,'Zsym');
 assert.equal(SYMBOL_PLACEHOLDER,'□');
@@ -59,7 +66,7 @@ for(const entry of SYMBOL_ENCODINGS){
     const [unicode,advance]=entry.codes[code-0x20];
     const forms=[pua(code),...(plainForms.has(code)?[plainForms.get(code)]:[])];
     for(const form of forms){
-      const [item]=mapSymbolText(entry.family,form);
+      const [item]=mapSymbolAdvances(entry.family,form);
       assert.equal(item.code,code,`${entry.family} ${hex(code)} from ${JSON.stringify(form)}`);
       assert.equal(item.unicode,unicode===null?null:decodeUnicode(unicode));
       assert.equal(item.advance,advance===null?null:advance/entry.unitsPerEm);
@@ -67,8 +74,8 @@ for(const entry of SYMBOL_ENCODINGS){
     }
   }
 }
-assert.deepEqual(mapSymbolText('Wingdings','あ'),[{source:'あ',code:null,unicode:null,advance:null}]);
-assert.deepEqual(mapSymbolText('Calibri','ab').map(item=>item.code),[null,null]);
+assert.deepEqual(mapSymbolAdvances('Wingdings','あ'),[{source:'あ',code:null,unicode:null,advance:null}]);
+assert.deepEqual(mapSymbolAdvances('Calibri','ab').map(item=>item.code),[null,null]);
 
 // ---- the pinned faces: OFL, no proprietary family anywhere ----
 const symbolPackages=BUNDLED_FONT_MANIFEST.packages.filter(pkg=>pkg.scripts?.includes(SYMBOL_SCRIPT));
@@ -81,9 +88,9 @@ for(const pkg of BUNDLED_FONT_MANIFEST.packages){
 
 // ---- every code resolves to a loaded face, at the verified font's advance, with ink ----
 const diagnostics=[];
-const {registry,options}=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual',scripts:[SYMBOL_SCRIPT],onDiagnostic:diagnostic=>diagnostics.push(diagnostic)});
+const prepared = await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:[SYMBOL_SCRIPT],onDiagnostic:diagnostic=>diagnostics.push(diagnostic)}), {registry} = prepared;
 assert.ok(!registry.describeFaces().some(face=>PROPRIETARY.test(face.family)),'no proprietary symbol face is loaded');
-assert.ok(!options.fontFiles.some(file=>/symbol\.ttf|wingding|webdings/i.test(file)),'no proprietary font file is read');
+assert.ok(!prepared.fontFiles.some(file=>/symbol\.ttf|wingding|webdings/i.test(file)),'no proprietary font file is read');
 assert.ok(['Noto Sans Symbols 2','Noto Sans Symbols','Noto Sans Math','Noto Sans'].every(family=>registry.describeFaces().some(face=>face.family===family)));
 const SIZE=20;
 const coverage={};
@@ -156,13 +163,13 @@ assert.equal(registry.resolveFont({fontFamily:'Symbol',fontWeight:700,italic:tru
   const symbolStyle=registry.textMeasurement.resolveStyle({fontFamily:'Symbol',fontWeight:400});
   assert.deepEqual(scripts.plan('ab',symbolStyle).map(run=>[run.text,run.family]),[['α','Noto Sans'],['β','Noto Sans']]);
   const wrapped=createScriptTextMeasurement(registry.textMeasurement,{});
-  assert.equal(wrapped.measure('',SIZE,style),(symbolEncodingFor('Wingdings').codes[0xFC-0x20][1]+symbolEncodingFor('Wingdings').codes[0x6C-0x20][1])/2048*SIZE);
+  assert.equal(wrapped.measure('',SIZE,style),(SYMBOL_ENCODINGS[1].codes[0xFC-0x20][1]+SYMBOL_ENCODINGS[1].codes[0x6C-0x20][1])/2048*SIZE);
   assert.equal(wrapped.measure('',SIZE,style),0);
 }
 
 // ---- without the symbol pack: Symbol's Greek letters still draw (Noto Sans), dingbats become placeholders ----
 {
-  const bare=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual'});
+  const bare=await loadFonts({pack:'office',substitutionPolicy:'visual'});
   assert.equal(bare.registry.resolveFont({fontFamily:'Symbol'}).resolvedFamily,'Noto Sans');
   assert.equal(bare.registry.resolveFont({fontFamily:'Wingdings'}).resolvedFamily,'Noto Sans','the office pack has only Noto Sans of the chain');
   const scripts=createScriptFonts({},bare.registry.textMeasurement);
@@ -172,7 +179,7 @@ assert.equal(registry.resolveFont({fontFamily:'Symbol',fontWeight:700,italic:tru
   const symbol=scripts.plan('a',bare.registry.textMeasurement.resolveStyle({fontFamily:'Symbol'}));
   assert.deepEqual([symbol[0].text,symbol[0].family,symbol[0].symbol.placeholder],['α','Noto Sans',undefined]);
   // The base pack (Roboto only) has no chain face: the request fails as before, naming the pack, unless a fallback family applies.
-  const base=await prepareNodeFonts({pack:'base'});
+  const base=await loadFonts({pack:'base'});
   assert.throws(()=>base.registry.resolveFont({fontFamily:'Wingdings'}),error=>error.code==='font-encoding-required'&&error.details.scripts[0]==='Zsym'&&error.details.faces.includes('Noto Sans Symbols 2'));
   const eager=base.registry.embeddedFonts.map(face=>({family:face.family,weight:face.weight,italic:face.italic,data:new Uint8Array(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
   const withFallback=createFontRegistry(eager,{fallbackFamily:'Roboto'});
@@ -188,21 +195,21 @@ assert.deepEqual(autoScriptSelection(deck('Plain text')).scripts,[]);
 assert.deepEqual(autoScriptSelection({...deck('Plain'),design:{fonts:{body:'Wingdings'}}}).scripts,[SYMBOL_SCRIPT]);
 assert.deepEqual(autoScriptSelection(deck([{text:'Plain'}],{design:{fonts:{heading:'Symbol'}}})).scripts,[SYMBOL_SCRIPT]);
 {
-  const auto=await prepareNodeFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:runDeck});
+  const auto=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:runDeck});
   assert.deepEqual(auto.registry.scriptSelection.scripts,[SYMBOL_SCRIPT]);
   assert.deepEqual(auto.registry.scriptSelection.packages,symbolPackages.map(pkg=>pkg.name));
 }
 
 // ---- SVG: mapped characters, open families, positioned glyphs, no private-use text, identical for both input forms ----
 const svgDiagnostics=[];
-const svg=renderSvg(runDeck,{...options,onDiagnostic:diagnostic=>svgDiagnostics.push(diagnostic)});
+const svg=renderSlideSvg(runDeck, 0,{fonts: prepared, onDiagnostic:diagnostic=>svgDiagnostics.push(diagnostic)});
 assert.ok(!/[-]/.test(svg),'no private-use character reaches the SVG');
 assert.ok(!/font-family="[^"]*(Wingdings|Webdings|Symbol\b)/.test(svg),'no proprietary family is named in the SVG');
 for(const character of ['✓','⚫','α','β','γ','\u{1F3D7}'])assert.ok(svg.includes(character),`the SVG draws ${character}`);
 assert.ok(/<tspan font-family="'Noto Sans Symbols 2', sans-serif"[^>]*>✓<\/tspan>/.test(svg),'the Wingdings check mark is a positioned Noto Sans Symbols 2 tspan (the name quoted: a digit-leading word is invalid unquoted CSS)');
 assert.ok(!/font-family="[^"']*Noto Sans Symbols 2/.test(svg),'a family with a digit-leading word is never written unquoted');
 const plainDeck=deck([{text:'Check: '},{text:'ül l',fontFamily:'Wingdings'},{text:' alpha '},{text:'abg',fontFamily:'Symbol'},{text:' web '},{text:'A',fontFamily:'Webdings'}]);
-assert.equal(renderSvg(plainDeck,options),svg,'the Windows-1252 form renders byte-identically to the private-use form');
+assert.equal(renderSlideSvg(plainDeck, 0, {fonts: prepared}),svg,'the Windows-1252 form renders byte-identically to the private-use form');
 const symbolNotes=svgDiagnostics.filter(diagnostic=>diagnostic.code==='font-glyph-fallback'&&diagnostic.scripts.includes(SYMBOL_SCRIPT));
 assert.deepEqual(symbolNotes.map(note=>[note.fontFamily,note.fallbackFamily,note.codes]),[['Wingdings','Noto Sans Symbols 2',['FC','6C']],['Symbol','Noto Sans',['61','62','67']],['Webdings','Noto Sans Symbols 2',['41']]]);
 assert.match(symbolNotes[0].message,/symbol-encoded and not bundled; the preview draws codes such as 0xFC, 0x6C as their Unicode equivalents with 'Noto Sans Symbols 2'\. The PPTX keeps the chosen font and the original codes\./);
@@ -212,14 +219,14 @@ assert.match(symbolNotes[0].message,/symbol-encoded and not bundled; the preview
   assert.ok(match,'the Wingdings run is one positioned text element');
   const xs=[...match[2].matchAll(/x="([\d.]+)"/g)].map(item=>Number(item[1]));
   const size=Number(svg.match(/font-family="'Noto Sans Symbols 2', sans-serif" font-size="([\d.]+)"/)[1]);
-  const advances=mapSymbolText('Wingdings',' l').map(item=>item.advance*size);
+  const advances=mapSymbolAdvances('Wingdings',' l').map(item=>item.advance*size);
   for(let index=1;index<xs.length;index++)assert.ok(Math.abs(xs[index]-xs[index-1]-advances[index-1])<0.01,`tspan ${index} sits at the verified advance`);
   assert.equal(advances[2],size,'the Wingdings space is 1 em');
 }
 // A placeholder code (Wingdings 0xFF, the Windows logo) draws U+25A1 and is reported with its code.
 {
   const logoDiagnostics=[];
-  const logo=renderSvg(deck([{text:'',fontFamily:'Wingdings'}]),{...options,onDiagnostic:diagnostic=>logoDiagnostics.push(diagnostic)});
+  const logo=renderSlideSvg(deck([{text:'',fontFamily:'Wingdings'}]), 0,{fonts: prepared, onDiagnostic:diagnostic=>logoDiagnostics.push(diagnostic)});
   assert.ok(logo.includes(SYMBOL_PLACEHOLDER));
   const note=logoDiagnostics.find(diagnostic=>diagnostic.code==='font-glyph-fallback'&&diagnostic.placeholder);
   assert.deepEqual([note.fontFamily,note.codes,note.placeholder],['Wingdings',['FF'],SYMBOL_PLACEHOLDER]);
@@ -228,19 +235,13 @@ assert.match(symbolNotes[0].message,/symbol-encoded and not bundled; the preview
 
 // ---- raster: the glyphs leave ink where the text sits ----
 {
-  const png=await svgToPng(svg,{fontFiles:options.fontFiles,loadSystemFonts:false,useBundledFonts:false});
-  const blank=await svgToPng(renderSvg(deck([{text:'Check: '},{text:'   ',fontFamily:'Roboto'},{text:' alpha '},{text:'   '},{text:' web '},{text:' '}]),options),{fontFiles:options.fontFiles,loadSystemFonts:false,useBundledFonts:false});
+  const png=await svgToPng(svg,{fonts:prepared});
+  const blank=await svgToPng(renderSlideSvg(deck([{text:'Check: '},{text:'   ',fontFamily:'Roboto'},{text:' alpha '},{text:'   '},{text:' web '},{text:' '}]), 0, {fonts: prepared}),{fonts:prepared});
   const a=await sharp(png).raw().toBuffer({resolveWithObject:true}),b=await sharp(blank).raw().toBuffer({resolveWithObject:true});
   assert.deepEqual(a.info,b.info);
   let differing=0;for(let index=0;index<a.data.length;index+=a.info.channels){if(a.data[index]!==b.data[index]||a.data[index+1]!==b.data[index+1]||a.data[index+2]!==b.data[index+2])differing++;}
   assert.ok(differing>200,`the symbol glyphs leave ink (${differing} pixels differ from the blank slide)`);
   assert.equal(createHash('sha256').update(png).digest('hex').length,64);
 }
-
-// ---- the snapshot is the core table: when a core checkout sits beside this repository, the pinned sha256 must match it ----
-try{
-  const core=await readFile(new URL('../../opf/spec/reference/symbol-font-encodings.json',import.meta.url),'utf8');
-  assert.equal(createHash('sha256').update(core.replace(/\r\n/g,'\n')).digest('hex'),SYMBOL_ENCODINGS_SOURCE.sha256,'src/symbol-encodings.js is behind opf spec/reference/symbol-font-encodings.json; run scripts/update-symbol-encodings.mjs');
-}catch(error){if(error.code!=='ENOENT')throw error;}
 
 console.log(`Symbol fonts: ${FAMILIES.length} families, ${Object.values(coverage).reduce((total,value)=>total+value.drawn,0)} of 1120 codes drawn with a real glyph (${Object.entries(coverage).map(([family,value])=>`${family} ${value.drawn}`).join(', ')}), ${Object.values(coverage).reduce((total,value)=>total+value.placeholders,0)} placeholders; both input forms render identically; raster ink verified.`);

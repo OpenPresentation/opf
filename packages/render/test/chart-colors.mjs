@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 import {colorContrast,chartPaletteForFill} from '@openpresentation/opf/composition';
 import {CHART_SERIES_COLORS} from '../dist/charts.js';
 const cases=[
@@ -14,7 +14,7 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
  const circular=['pie','donut'].includes(type);
  const chart={type,data:{columns:circular?['Quarter','Current']:['Quarter','Current','Baseline'],rows:circular?[['Q1',2],['Q2',3]]:[['Q1',2,1],['Q2',3,2]]}};
  const input={design:{background:fixture.background,colorScheme:{id:'cool-horizon',dark1:fixture.text,light1:fixture.text,dark2:fixture.surface,light2:fixture.surface}},slides:[{chart}]},original=structuredClone(input);
- const svg=renderSvg(input,{trace:true}),bound=resolvePresentation(input).slides[0];
+ const svg=renderSlideSvg(input, 0,{trace:true}),bound=resolvePresentation(input).slides[0];
  assert.equal(bound.design.colors.surface,fixture.surface);
  const chartPath='slides.0.chart';
  const panel=[...svg.matchAll(/<rect\b([^>]*)>/g)].find(([,a])=>a.includes(`data-opf-path="${chartPath}"`));assert.ok(panel);assert.ok(panel[1].includes(`fill="${fixture.surface}"`));
@@ -32,7 +32,7 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
  const lightness=hex=>{const c=[1,3,5].map(i=>Number.parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);const y=.2126729*c[0]+.7151522*c[1]+.072175*c[2];return 116*(y>216/24389?Math.cbrt(y):(24389/27*y+16)/116)-16;};
  const seriesFills=(surface,type)=>{
   const input={design:{background:'#000000',colorScheme:{id:'cool-horizon',dark1:'#FFFFFF',light1:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type,data:{columns:['Quarter','Current','Baseline','Third'],rows:[['Q1',2,1,3],['Q2',3,2,1]]}}}]};
-  const svg=renderSvg(input,{trace:true});
+  const svg=renderSlideSvg(input, 0,{trace:true});
   const byColumn=new Map();
   for(const [,a] of svg.matchAll(/<rect\b([^>]*)>/g)){const path=a.match(/data-opf-path="slides\.0\.chart\.data\.rows\.\d+\.(\d+)"/);const fill=a.match(/\bfill="(#[0-9a-f]{6})"/i);if(path&&fill)byColumn.set(Number(path[1]),fill[1].toUpperCase());}
   return [...byColumn.entries()].sort((x,y)=>x[0]-y[0]).map(([,color])=>color);
@@ -49,5 +49,5 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
 }
 // Unresolved data (a data source by asset, which the format no longer has, drawn with validation off) uses the same themed panel without inventing chart data.
 const missing={design:{background:'#000000',colorScheme:{id:'cool-horizon',dark2:'#334155',light1:'#FFFFFF'}},slides:[{chart:{type:'column',data:{src:'asset:missing'}}}]};
-const svg=renderSvg(missing,{validate:false});assert.ok(svg.includes('No chart data'));assert.ok(/<text[^>]*fill="#FFFFFF"[^>]*>No chart data<\/text>/.test(svg));
+const svg=renderSlideSvg(missing, 0, {validate:false});assert.ok(svg.includes('No chart data'));assert.ok(/<text[^>]*fill="#FFFFFF"[^>]*>No chart data<\/text>/.test(svg));
 console.log(`Chart colors passed: ${checked} simple/catalog paths, light/dark/opposite surfaces, retained alpha and unresolved data; no source mutation.`);

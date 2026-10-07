@@ -1,5 +1,5 @@
 import { create } from "fontkit";
-import { skipUndecodableLookups } from "./fonts.js";
+import { skipUndecodableLookups } from "./font-registry.js";
 import { isTrueTypeOutlines, subsetTrueType } from "./pdf-subset.js";
 import { hex, name, num, sha256, textString, utf16Hex } from "./pdf-writer.js";
 

@@ -1,4 +1,13 @@
-import type { TextMeasurement, TextStyle } from "@openpresentation/opf/composition";
+import type { TextMeasurement, TextStyle, ScriptRole } from "@openpresentation/opf/composition";
+import type { FontPolicyEntry } from "@openpresentation/opf/font-policy";
+import type { LazyFont } from "./fonts-node.js";
+// Core owns these: the font policy table and lookup, the symbol-font code rules and the script slot of a script. They are core's own
+// exports (the same objects), not copies.
+export { FONT_POLICY, fontPolicyFor } from "@openpresentation/opf/font-policy";
+export type { FontPolicyEntry } from "@openpresentation/opf/font-policy";
+export { isSymbolEncodedFamily, mapSymbolText, symbolCodeOf } from "@openpresentation/opf/symbol-font-encodings";
+export { scriptFontRole } from "@openpresentation/opf/composition";
+export type { ScriptRole } from "@openpresentation/opf/composition";
 export interface FontFaceInput { data: Uint8Array; family?: string; weight?: number; italic?: boolean; postscriptName?: string; license?: string; /** Serves glyph fallback and requests by its own family only; never a replacement for another family. */ fallbackOnly?: boolean; /** "used" embeds the face in an SVG only when the slide's text names its family (the open pack, FF-31). Default "always". */ embed?: "always" | "used"; /** ISO 15924 scripts a designated script replacement face serves (FF-19). */ scripts?: string[] }
 export interface EmbeddedFont { family: string; weight: number; italic?: boolean; dataUrl: string; license?: string; embed?: "used" }
 export type FontCompatibility = "exact" | "metric" | "visual" | "generic";
@@ -17,18 +26,6 @@ export interface FontResolution {
   measured?:FontReplacementMeasurement;
   licenseClass?:FontPolicyEntry['licenseClass']; availability?:FontPolicyEntry['availability'];
 }
-/** One OPF font policy row (snapshot of opf spec/reference/font-policy.json, decisions applied). */
-export interface FontPolicyEntry {
-  family:string; licenseClass:"open"|"proprietary-standard"|"proprietary-nonstandard"; license:string;
-  availability:("windows"|"windows-optional"|"macos"|"office"|"office-cloud")[]; embeddableByOpf:boolean;
-  replacement:{family:string; compatibility:"metric"|"visual"; decision?:string; metricModeFallback?:true; weight?:number; measured:FontReplacementMeasurement|null; source?:string}|null;
-  alternates?:string[];
-}
-export declare const FONT_POLICY: readonly Readonly<FontPolicyEntry>[];
-export declare const FONT_POLICY_SOURCE: Readonly<{version:number; path:string; sha256:string}>;
-/** Provisional owner decisions applied to the snapshot (owner may revise). */
-export declare const FONT_POLICY_DECISIONS: Readonly<Record<string, unknown>>;
-export declare function fontPolicyFor(family:string): Readonly<FontPolicyEntry>|undefined;
 export interface FontRegistryOptions {
   aliases?: Record<string,string>; fallbackFamily?: string; strictGlyphs?: boolean;
   substitutionPolicy?: "none" | "metric" | "visual";
@@ -36,6 +33,42 @@ export interface FontRegistryOptions {
 }
 export declare const FONT_COMPATIBILITY: readonly Readonly<{requestedFamily:string;substitutes:readonly string[];compatibility:"metric"|"visual";weights?:readonly number[];weight?:number;source?:string;measured?:FontReplacementMeasurement;decision?:string;metricModeFallback?:true;licenseClass?:FontPolicyEntry['licenseClass'];note:string}>[];
 export declare const EXPERIMENTAL_FONT_CANDIDATES: readonly Readonly<{requestedFamily:string;substitute:string;source:string;note:string}>[];
+/**
+ * What the deck-level functions read from their `fonts` option: `renderSvg`, `renderSlideSvg` and `<opf-deck>` take the measurement and
+ * the faces to embed; `svgToPng` and `svgToPdf` (Node) take the font files; core `paginate`, `validate` and `resolveSlideContext` take the
+ * measurement. The object `loadFonts()` returns is a `FontsHandle`, which extends this; any object with these fields works.
+ */
+export interface RenderFonts {
+  /** Measures text with the real faces. Without it layout uses core's portable estimate. */
+  textMeasurement?: TextMeasurement;
+  /** Faces `renderSvg` writes into each SVG as @font-face data; a face flagged `embed: "used"` only when a slide draws its family. */
+  embeddedFonts?: readonly EmbeddedFont[];
+  /** Font files the Node raster and PDF conversions draw with. */
+  fontFiles?: readonly string[];
+  /** Whether a conversion adds the bundled base faces to `fontFiles`. Default true; a handle that already holds them says false. */
+  useBundledFonts?: boolean;
+  /** Whether the raster conversion loads system fonts. Default false (the output never depends on the machine). */
+  loadSystemFonts?: boolean;
+}
+/** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
+export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[] }
+/** The fonts handle `loadFonts()` returns from `/fonts-node` and `/fonts-browser`: pass it as `{ fonts }` to every deck-level function. */
+export interface FontsHandle extends RenderFonts {
+  readonly textMeasurement: FontRegistry["textMeasurement"];
+  readonly embeddedFonts: EmbeddedFont[];
+  /** The face registry behind the handle (shaping, resolution, lazy and script loading). */
+  readonly registry: FontRegistry;
+  /** The pinned manifest of the bundled font packages. */
+  readonly manifest: { readonly version: number; readonly packages: readonly object[] };
+  /** The substitutions made so far (a requested family drawn with another face), as `registry.substitutions`. */
+  readonly substitutions: FontResolution[];
+  /** Load the script (and, in a browser, vendored) faces the presentation's text needs. Cheap when nothing is missing. */
+  ensure(presentation: unknown, options?: object): Promise<EnsureResult>;
+  /** Synchronous: the files and script packages `ensure` would load. Empty means a render can start now. */
+  pending(presentation: unknown, renderOptions?: object): string[];
+  /** Remove the faces this handle added to the document (a browser handle). */
+  dispose?(): void;
+}
 export interface FaceDescription { family:string; weight:number; italic:boolean; scripts?:string[] }
 export interface FontRegistry {
   textMeasurement: TextMeasurement & {outlineBounds: NonNullable<TextMeasurement['outlineBounds']>; resolveFont(style: TextStyle): FontResolution};
@@ -46,6 +79,8 @@ export interface FontRegistry {
   selectEmbeddedFonts(predicate: (face: FaceDescription) => boolean): EmbeddedFont[];
   /** Parsed face metadata in entry order, without encoding font bytes. */
   describeFaces(): FaceDescription[];
+  /** Every face as `{ family, data }`, the bytes the registry measures with. */
+  exportFaces(): { family: string; data: Uint8Array }[];
   readonly substitutions: FontResolution[];
   /** True when a loaded script-pack face has a glyph for the character. */
   scriptFacesCover(character: string): boolean;
@@ -53,10 +88,7 @@ export interface FontRegistry {
   addFaces(entries: FontFaceInput[]): { family: string; weight: number; italic: boolean; scripts?: string[] }[];
 }
 export declare class OPFFontError extends Error { code:string; details:Record<string,unknown>; constructor(code:string,message:string,details?:Record<string,unknown>) }
-export declare function createFontRegistry(entries: FontFaceInput[], options?: FontRegistryOptions): FontRegistry;
 
-/** OOXML script slot. */
-export type ScriptRole = "latin" | "eastAsian" | "complexScript";
 export interface ScriptFontSlots { latin: string; eastAsian: string; complexScript: string }
 /** Core `resolveScriptFonts` output, or the same shape. `serif` prefers serif replacements. */
 export interface ScriptFontProfile {
@@ -81,7 +113,6 @@ export interface ScriptFonts {
 export declare const SCRIPT_FONT_FAMILIES: Readonly<Record<string, Readonly<{ sans?: string; serif?: string }>>>;
 export declare const SCRIPT_FONT_REPLACEMENTS: readonly Readonly<{requestedFamily:string;script:string;substitutes:readonly string[];compatibility:"visual";note:string}>[];
 export declare function scriptOfCharacter(character: string): string;
-export declare function scriptFontRole(script: string): ScriptRole;
 export declare function itemizeScripts(text: string, profile?: ScriptFontProfile): ScriptRun[];
 /** Script keys in the strings of a JSON value. The profile's own script counts unless `includeLanguage` is false; `ignoreKeys` are not visited. */
 export declare function detectScripts(value: unknown, profile?: ScriptFontProfile, options?: { includeLanguage?: boolean; ignoreKeys?: readonly string[] }): string[];
@@ -107,17 +138,7 @@ export declare const SYMBOL_PLACEHOLDER: string;
 export declare const SYMBOL_PREVIEW_FACES: Readonly<Record<SymbolFontFamily, readonly string[]>>;
 /** Every open face a symbol preview may draw with. */
 export declare const SYMBOL_FACE_FAMILIES: readonly string[];
-/** Per family: the verified font version and, for codes 0x20..0xFF in order, `[unicode, advance, reason?]` (hex code points joined with '+', font units). */
-export declare const SYMBOL_ENCODINGS: readonly Readonly<{ family: SymbolFontFamily; version: string; unitsPerEm: number; mapped: number; codes: readonly (readonly [string | null, number | null, string?])[] }>[];
-/** Which core table (spec/reference/symbol-font-encodings.json) the snapshot came from. */
-export declare const SYMBOL_ENCODINGS_SOURCE: Readonly<{ version: number; path: string; sha256: string }>;
-export declare function isSymbolEncodedFamily(family: string): boolean;
-export declare function symbolEncodingFor(family: string): (typeof SYMBOL_ENCODINGS)[number] | undefined;
 export declare function symbolPreviewFaces(family: string): readonly string[];
-/** The symbol code (0x20..0xFF) of one character: a private-use U+F0xx, an ASCII or Latin-1 character, or a Windows-1252 character at 0x80..0x9F; null for anything else. */
-export declare function symbolCodeOf(character: string): number | null;
-/** Normalise text in a symbol-encoded family: per character its code (null when not a code), the Unicode equivalent to draw (or null with a reason) and the verified font's advance in em. */
-export declare function mapSymbolText(family: string, text: string): { source: string; code: number | null; unicode: string | null; advance: number | null; reason?: string }[];
 /** Wrap a measurement so pagination, the renderer and the editor itemize script runs identically. */
 export declare function createScriptTextMeasurement(measurement: TextMeasurement, profile: ScriptFontProfile, options?: ScriptFontsOptions): TextMeasurement;
 export declare function openTypeLanguage(tag: string | undefined): string | undefined;

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg,resolvePresentation} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 import {CHART_TYPES,CHART_SERIES_COLORS,chartSeriesPalette,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
 
 // FF-22: every kept catalog chart type previews its native construct.
@@ -15,7 +15,7 @@ for(const id of ['mystery-chart','gantt','',undefined])assert.equal(resolveChart
 
 const PATH='slides.0.chart';
 const categoryData={columns:['Quarter','North','South','East'],rows:[['Q1',12,8,-3],['Q2',16,10,5],['Q3',21,-4,null],['Q4',18,13,9]]};
-const render=(type,data=categoryData,design)=>renderSvg({...(design?{design}:{}),slides:[{chart:{type,data}}]},{trace:true});
+const render=(type,data=categoryData,design)=>renderSlideSvg({...(design?{design}:{}),slides:[{chart:{type,data}}]}, 0,{trace:true});
 const elements=(svg,name)=>[...svg.matchAll(new RegExp(`<${name}\\b([^>]*)/?>`,'g'))].map(([,attrs])=>Object.fromEntries([...attrs.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([,k,v])=>[k,v])));
 const marks=(svg,name,pattern)=>elements(svg,name).filter(a=>pattern.test(a['data-opf-path']??''));
 const texts=svg=>[...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([,t])=>t.replace(/<[^>]+>/g,''));

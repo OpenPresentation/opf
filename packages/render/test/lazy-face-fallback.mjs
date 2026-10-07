@@ -12,11 +12,10 @@
 //     deck uses that scheme's CJK face instead of pulling in a second one.
 // Offline and deterministic. The PPTX keeps the selected font names (checked in test/script-fonts.mjs and opf-pptx).
 import assert from 'node:assert/strict';
-import * as core from '@openpresentation/opf';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
+import * as core from '@openpresentation/opf/composition';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts, autoScriptSelection, detectPresentationScripts} from '../dist/fonts-node.js';
 
-assert.equal(typeof core.resolveScriptFonts, 'function', 'the linked core exports resolveScriptFonts');
 const short = name => name.replace('@expo-google-fonts/', '');
 const deck = ({title, text = title, scheme, language, slides}) => ({
   $schema: 'https://openpresentation.org/schema/opf/v1', name: 'lazy face fallback', ...(language ? {language} : {}),
@@ -34,9 +33,9 @@ const unescape = text => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replac
 let checked = 0;
 /** Render one slide of `document` with a `scripts` registry; every run's face must have every glyph of its text. */
 async function render(label, document, {scripts = 'auto', policy = 'metric', slideIndex = 0} = {}) {
-  const fonts = await prepareNodeFonts({pack: 'office', substitutionPolicy: policy, scripts, presentation: document});
+  const fonts = await loadFonts({pack: 'office', substitutionPolicy: policy, scripts, presentation: document});
   const strict = fonts.registry.textMeasurement;
-  const svg = renderSvg(document, {...fonts.options, slideIndex});
+  const svg = renderSlideSvg(document, slideIndex, {fonts});
   const runs = drawnRuns(svg);
   assert.ok(runs.length > 0, `${label}: draws text`);
   for (const [family, text] of runs) {
@@ -91,19 +90,19 @@ for (const scripts of [['Jpan'], 'all']) await render(`aptos + japanese with scr
 // Sans all raise missing-glyph, and the error names what to load.
 for (const [scheme, family] of [[undefined, 'Intos Display'], ['calibri', 'Carlito'], ['open-sans', 'Open Sans']]) {
   const document = deck({title: '日本語', scheme});
-  const fonts = await prepareNodeFonts({pack: 'office'});
-  assert.throws(() => renderSvg(document, fonts.options), error => {
+  const fonts = await loadFonts({pack: 'office'});
+  assert.throws(() => renderSlideSvg(document, 0, {fonts: fonts}), error => {
     assert.equal(error.code, 'missing-glyph');
     assert.equal(error.details.fontFamily, family);
     assert.equal(error.details.loadedFaceHasGlyph, false);
-    assert.match(error.message, /cannot display U\+65E5\..*scripts: 'auto'.*ensureScripts/, error.message);
+    assert.match(error.message, /cannot display U\+65E5\..*scripts: 'auto'.*fonts\.ensure\(presentation\)/, error.message);
     return true;
   }, `${scheme ?? 'aptos'}: no script face is loaded`);
 }
 // A glyph another loaded face has is not reported as missing everywhere.
 {
-  const fonts = await prepareNodeFonts({pack: 'base', scripts: ['Jpan']});
-  assert.throws(() => fonts.registry.textMeasurement.measure('日本語', 20, {fontFamily: 'Roboto', fontWeight: 400}), error => error.code === 'missing-glyph' && !('loadedFaceHasGlyph' in error.details) && !/ensureScripts/.test(error.message));
+  const fonts = await loadFonts({pack: 'base', scripts: ['Jpan']});
+  assert.throws(() => fonts.registry.textMeasurement.measure('日本語', 20, {fontFamily: 'Roboto', fontWeight: 400}), error => error.code === 'missing-glyph' && !('loadedFaceHasGlyph' in error.details) && !/fonts\.ensure/.test(error.message));
 }
 
 // 4. A font scheme that names a script font needs that font's face, whatever the text: `scripts: 'auto'` loads it.
@@ -154,7 +153,7 @@ for (const [label, document] of [
 assert.deepEqual(autoScriptSelection(deck({title: 'Quarterly review', scheme: 'sylfaen'})), {detected: [], scripts: ['Latn'], unavailable: []});
 // Every other deck keeps Noto Sans fallback-only (glyph fallback and its own name, no replacement for another family).
 {
-  const fonts = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: deck({title: 'Quarterly review', scheme: 'georgia'})});
+  const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'auto', presentation: deck({title: 'Quarterly review', scheme: 'georgia'})});
   assert.throws(() => fonts.registry.resolveFont({fontFamily: 'Sylfaen', fontWeight: 400, italic: false}), error => error.code === 'font-unavailable', 'a deck that does not select Latn keeps Noto Sans fallback-only');
   assert.equal(fonts.registry.resolveFont({fontFamily: 'Noto Sans', fontWeight: 400, italic: false}).resolvedFamily, 'Noto Sans', 'and it still answers to its own name');
 }

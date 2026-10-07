@@ -3,17 +3,16 @@
 // Core owns the normalisation and the per-type support table (`resolveChartOptions`); this module owns the drawing.
 // A chart that carries none of the three fields resolves to `active: false` and never reaches any code here, so
 // its SVG is exactly what it was before.
-import * as core from "@openpresentation/opf/composition";
+import { chartLabelText, formatChartLabelNumber, formatChartLabelPercent, formatDataNumber, resolveChartOptions, textColorForFill } from "@openpresentation/opf/composition";
 
 const INACTIVE = Object.freeze({ active: false, axisTitles: {}, diagnostics: [] });
 
 /**
- * The resolved options of a chart. An older core without `resolveChartOptions` ignores the fields, like any other
- * field it does not know. `spec` is the catalog spec this module's charts.js resolved (`kind`, `grouping`).
+ * The resolved options of a chart. `spec` is the catalog spec this module's charts.js resolved (`kind`, `grouping`).
  */
 export function resolveOptions(chart, spec) {
-  if (typeof core.resolveChartOptions !== "function" || !chart || typeof chart !== "object") return INACTIVE;
-  return core.resolveChartOptions(chart, { kind: spec.kind, stacked: spec.grouping === "stacked" || spec.grouping === "percentStacked" });
+  if (!chart || typeof chart !== "object") return INACTIVE;
+  return resolveChartOptions(chart, { kind: spec.kind, stacked: spec.grouping === "stacked" || spec.grouping === "percentStacked" });
 }
 
 export function reportOptionDiagnostics(c, resolved) {
@@ -91,9 +90,9 @@ export function labelString(c, { category, value, share, format }) {
   const labels = c.dataLabels;
   const parts = {};
   if (category !== undefined && category !== null) parts.category = String(category);
-  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined && typeof core.formatDataNumber === "function" ? core.formatDataNumber(value, format) : core.formatChartLabelNumber(value);
-  if (typeof share === "number" && Number.isFinite(share)) parts.percent = core.formatChartLabelPercent(share);
-  return core.chartLabelText(parts, labels.content, labels.separator);
+  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value);
+  if (typeof share === "number" && Number.isFinite(share)) parts.percent = formatChartLabelPercent(share);
+  return chartLabelText(parts, labels.content, labels.separator);
 }
 
 const labelSize = (c, text) => ({ width: c.width(text) + c.fontPx * 0.5, height: c.lineHeight });
@@ -106,7 +105,7 @@ function drawLabel(c, text, rect, path, fill) {
 
 /** The text colour for a label placed inside a mark of colour `fill`: the contrasting one; outside marks keep the chart text colour. */
 export function labelFill(c, position, fill) {
-  return INSIDE.has(position) && fill ? core.textColorForFill?.(fill, c.labelColor) ?? c.labelColor : c.labelColor;
+  return INSIDE.has(position) && fill ? textColorForFill(fill, c.labelColor) : c.labelColor;
 }
 
 /**

@@ -7,13 +7,16 @@ await mkdir(output,{recursive:true});
 const result=await build({entryPoints:[fileURLToPath(new URL('../test/jpeg-browser.js',import.meta.url))],bundle:true,platform:'browser',format:'esm',outfile:fileURLToPath(new URL('bundle.js',output)),metafile:true});
 assert.ok(!Object.keys(result.metafile.inputs).some(path=>path.includes('sharp')||path.includes('raster-images.js')||path.endsWith('/raster.js')),'Native raster code must not enter the browser bundle');
 // FF-19: the browser preview must call core's paragraphDirection (the export's RTL rule), not compile it away.
-if(typeof (await import('@openpresentation/opf')).paragraphDirection==='function')assert.ok((await readFile(new URL('bundle.js',output),'utf8')).includes('function paragraphDirection('),'The browser bundle must include core paragraphDirection');
+assert.equal(typeof (await import('@openpresentation/opf/composition')).paragraphDirection,'function','Core must export paragraphDirection from /composition');
+// The renderer must keep the rule in a browser bundle that draws a slide (a bundle that never draws one tree-shakes it away).
+const drawing=await build({stdin:{contents:"import {renderSlideSvg} from './dist/svg.js';globalThis.draw=renderSlideSvg;",resolveDir:fileURLToPath(new URL('../',import.meta.url)),loader:'js'},bundle:true,platform:'browser',format:'esm',write:false,logLevel:'error'});
+assert.ok(drawing.outputFiles[0].text.includes('function paragraphDirection('),'The browser bundle must include core paragraphDirection');
 await writeFile(new URL('index.html',output),'<!doctype html><meta charset="utf-8"><title>JPEG browser orientation</title><h1>JPEG browser orientation</h1><pre>Running…</pre><script type="module" src="bundle.js"></script>');
 console.log('Browser bundle passed: no native raster modules. Serve /artifacts/jpeg/browser/index.html to run the JPEG orientation comparisons.');
 
-const {loadBundledFontRegistry}=await import('../dist/fonts-node.js');
-const {renderSvg,resolvePresentation}=await import('../dist/svg.js');
-const fonts=await loadBundledFontRegistry();
+const {loadFonts}=await import('../dist/fonts-node.js');
+const {renderSlideSvg,resolvePresentation}=await import('../dist/svg.js');
+const fonts=await loadFonts();
 const quoteDirectory=new URL('../artifacts/quote-footer/browser/',import.meta.url);
 await mkdir(quoteDirectory,{recursive:true});
 const fontManifest=[];
@@ -28,12 +31,12 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const expanded=repeats==='expanded-footer';
   const deck={design:{dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96},fontScheme:'roboto'},slides:[{title:'A quote and its source',quote:{text:expanded?'Keep the complete source visible.':'A shared layout keeps the evidence readable when the words change. '.repeat(repeats),attribution:expanded?'Long attribution '.repeat(60):'A reviewer',source:'Recorded interview'}}]};
   const diagnostics=[];
-  const svg=renderSvg(deck,{trace:true,textMeasurement:fonts.textMeasurement,onDiagnostic:value=>diagnostics.push(value)});
+  const svg=renderSlideSvg(deck,0,{trace:true,fonts:{textMeasurement:fonts.textMeasurement},onDiagnostic:value=>diagnostics.push(value)});
   assert.equal(diagnostics.length,0);
   const id=`${dimensions.width}-${repeats}`,filename=id+'.svg';
   await writeFile(new URL(filename,quoteDirectory),svg);
   assert.ok(svg.includes(`viewBox="0 0 ${dimensions.width} ${dimensions.height}"`));
-  const item=resolvePresentation(deck,{textMeasurement:fonts.textMeasurement}).slides[0].geometry.items.find(item=>item.field==='quote');
+  const item=resolvePresentation(deck,{fonts:{textMeasurement:fonts.textMeasurement}}).slides[0].geometry.items.find(item=>item.field==='quote');
   const parts=item.quoteLayout.parts;
   cases.push({id,url:'./'+filename,...dimensions,cellBox:item.box,bodyBox:parts[0].box,footerBox:parts[1].box,body:parts[0].text,footer:parts[1].text});
 }

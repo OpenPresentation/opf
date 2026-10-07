@@ -5,9 +5,7 @@
 // self-contained; test/chart-catalog.mjs checks it against the installed core
 // catalog. Catalog ids render the construct PowerPoint shows for the exported
 // chart; any other id returns null so the caller keeps its legacy single-series preview.
-import { chartColorForFill, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
-// chartPaletteForFill ships with core RR-29 (opf#270); an older published core still loads and clamps each colour on its own.
-import * as opfComposition from "@openpresentation/opf/composition";
+import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, formatDataNumber, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // Ordered series palette written by opf-pptx (`CHART_COLORS`), before the same
@@ -17,22 +15,19 @@ export const CHART_SERIES_COLORS = Object.freeze([
   "#F59E0B", "#EF4444", "#8B5CF6", "#14B8A6", "#0F172A", "#64748B"
 ]);
 
-// The series colours for a chart panel: core's `chartPaletteForFill` (contrast against the panel without letting two series merge)
-// when the installed core has it, else each colour clamped on its own.
+// The series colours for a chart panel: core's `chartPaletteForFill` (contrast against the panel without letting two series merge).
 export function chartSeriesPalette(surface) {
-  return typeof opfComposition.chartPaletteForFill === "function"
-    ? opfComposition.chartPaletteForFill(surface, CHART_SERIES_COLORS)
-    : CHART_SERIES_COLORS.map((color) => chartColorForFill(surface, color));
+  return chartPaletteForFill(surface, CHART_SERIES_COLORS);
 }
 
 // FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
 // (chartHighlightColors); a highlighted mark takes the accent, every other mark the muted neutral. A chart without a
 // highlight has no `c.highlight`, and every colour below is the palette colour it always was.
 function highlightFor(c, resolved, spec, data) {
-  if (!resolved.highlight || typeof opfComposition.chartHighlightMarks !== "function" || typeof opfComposition.chartHighlightColors !== "function") return undefined;
-  const marks = opfComposition.chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.columns.length > 2, rows: data.rows });
+  if (!resolved.highlight) return undefined;
+  const marks = chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.columns.length > 2, rows: data.rows });
   if (!marks) return undefined;
-  return { ...marks, ...opfComposition.chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
+  return { ...marks, ...chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
 }
 
 /** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
@@ -152,20 +147,13 @@ export function renderCatalogChart(item, box, bound, options, svg) {
 // RR-54: the chart's data as the renderers plot it, from core's resolveChartData: inline columns (names or DataColumn objects),
 // a dataset reference and chart.mapping all resolve to one positional table, [category, (x,) ...series], with each column's number
 // format. Series cells have already gone through core's strict chartNumber. Returns null when the data does not resolve (an
-// external data source, an unknown dataset, no rows or columns), so the caller keeps its placeholder. A core without the resolver
-// reads the inline data as before.
+// external data source, an unknown dataset, no rows or columns), so the caller keeps its placeholder.
 export function chartData(item, bound) {
   const chart = item.value;
-  if (typeof opfComposition.resolveChartData === "function") {
-    const resolved = opfComposition.resolveChartData(chart, bound?.presentation, { path: item.path });
-    if (!resolved.ok) return null;
-    const formats = resolved.formats.map((format) => typeof format === "string" && format !== "" && !opfComposition.numberFormatError?.(format) ? format : undefined);
-    return { columns: resolved.columns, rows: resolved.rows, formats, trace: tracePaths(item, bound, resolved), ...(resolved.combo ? { combo: resolved.combo } : {}) };
-  }
-  const data = chart?.data;
-  const rows = Array.isArray(data?.rows) ? data.rows.map((row) => Array.isArray(row) ? row : [row]) : [];
-  const columns = Array.isArray(data?.columns) ? data.columns : [];
-  return { columns, rows, formats: [], trace: null };
+  const resolved = resolveChartData(chart, bound?.presentation, { path: item.path });
+  if (!resolved.ok) return null;
+  const formats = resolved.formats.map((format) => typeof format === "string" && format !== "" && !numberFormatError(format) ? format : undefined);
+  return { columns: resolved.columns, rows: resolved.rows, formats, trace: tracePaths(item, bound, resolved), ...(resolved.combo ? { combo: resolved.combo } : {}) };
 }
 
 // The authored object at a composed path ("slides.0.blocks.1.chart"), or undefined.
@@ -266,21 +254,13 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
 }
 
 // RR-54: core's strict chart number (finite numbers and strict decimal strings; everything else is a gap), so the preview, the PPTX
-// export and the validator agree on which cells are numbers. A core without it keeps the previous lenient read.
-export function chartNumber(value) {
-  if (typeof opfComposition.chartNumber === "function") return opfComposition.chartNumber(value);
-  if (typeof value === "number") return Number.isFinite(value) ? value : null;
-  if (typeof value === "string" && value.trim()) {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-  return null;
-}
+// export and the validator agree on which cells are numbers.
+export { chartNumber };
 
 /** A number as its column's format shows it (core's formatDataNumber); without a format, the General form the preview always drew. */
 export function formatChartValue(value, format) {
-  if (format === undefined || typeof opfComposition.formatDataNumber !== "function") return String(clean(value));
-  return opfComposition.formatDataNumber(clean(value), format);
+  if (format === undefined) return String(clean(value));
+  return formatDataNumber(clean(value), format);
 }
 
 // ---------------------------------------------------------------------------

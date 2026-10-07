@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {renderSvg} from '../dist/svg.js';
-import {colorContrast, metricTrendColor} from '@openpresentation/opf';
+import { renderSlideSvg } from '../dist/svg.js';
+import {colorContrast, metricTrendColor} from '@openpresentation/opf/composition';
 
 // FA-06: metric.sentiment says whether a change is good news. The preview draws the arrow in the trend's
 // direction and colours the arrow, the trend word and the delta text by the sentiment (core metricTrendMark).
@@ -17,14 +17,14 @@ const designs = [{colorScheme: 'cool-horizon', background: '#FFFFFF'}, {backgrou
 let checked = 0;
 for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
   const background = design.background;
-  const absent = renderSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend}, design), {trace: true});
+  const absent = renderSlideSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend}, design), 0, {trace: true});
   const base = arrows(absent);
   assert.equal(base.length, 1, `${trend}: one arrow`);
   assert.equal(base[0].fill, BEFORE[trend][background], `${trend} on ${background}: the colour drawn before sentiment existed`);
   // An explicit sentiment equal to the trend's default is the absent one, byte for byte.
-  assert.equal(renderSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend, sentiment: DEFAULT[trend]}, design), {trace: true}), absent, `${trend}: the default sentiment changes nothing`);
+  assert.equal(renderSlideSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend, sentiment: DEFAULT[trend]}, design), 0, {trace: true}), absent, `${trend}: the default sentiment changes nothing`);
   for (const sentiment of ['positive', 'negative', 'neutral']) {
-    const svg = renderSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend, sentiment}, design), {trace: true});
+    const svg = renderSlideSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend, sentiment}, design), 0, {trace: true});
     const found = arrows(svg);
     assert.equal(found.length, 1, `${trend}/${sentiment}: one arrow`);
     assert.equal(found[0].label, `Trend: ${trend}`);
@@ -41,14 +41,14 @@ for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
 }
 // Falling churn that is good news: a downward arrow in green.
 {
-  const svg = renderSvg(metricDeck({value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down', sentiment: 'positive'}, designs[0]), {trace: true});
+  const svg = renderSlideSvg(metricDeck({value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down', sentiment: 'positive'}, designs[0]), 0, {trace: true});
   assert.equal(arrows(svg)[0].fill, '#15803D');
-  assert.equal(arrows(svg)[0].points, arrows(renderSvg(metricDeck({value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down'}, designs[0]), {trace: true}))[0].points);
+  assert.equal(arrows(svg)[0].points, arrows(renderSlideSvg(metricDeck({value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down'}, designs[0]), 0, {trace: true}))[0].points);
 }
 // Without a trend sentiment draws nothing and colours nothing.
 {
-  const plain = renderSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%'}), {trace: true});
-  assert.equal(renderSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%', sentiment: 'positive'}), {trace: true}), plain);
+  const plain = renderSlideSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%'}), 0, {trace: true});
+  assert.equal(renderSlideSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%', sentiment: 'positive'}), 0, {trace: true}), plain);
   assert.equal(arrows(plain).length, 0);
 }
 console.log(`FA-06 metric sentiment: ${checked} trend/sentiment/background combinations drawn with the trend's arrow and the sentiment's colour; default sentiment and absent sentiment are byte-identical.`);

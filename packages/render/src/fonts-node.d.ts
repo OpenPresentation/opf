@@ -1,4 +1,4 @@
-import type {FontRegistry,FontRegistryOptions,EmbeddedFont,FontFaceInput,ScriptFontProfile} from "./fonts.js";
+import type {FontRegistry,FontRegistryOptions,FontFaceInput,FontsHandle,EnsureResult,ScriptFontProfile} from "./fonts.js";
 import type {RenderSvgOptions} from "./svg.js";
 /** A caller-supplied face (FF-31), for example a licensed copy of the real font. Node callers may pass a file path. */
 export type CallerFontFace = FontFaceInput | (Omit<FontFaceInput, "data"> & {path: string});
@@ -39,10 +39,6 @@ export interface ScriptPackOptions {
 export interface LazyFont { readonly package: string; readonly family: string; readonly weight: number; readonly italic: boolean; /** Path relative to the package root, for example fonts/intos/Intos-Regular.ttf. */ readonly file: string; readonly sha256: string; readonly license: string; readonly renamedFrom?: string; /** Set on a host's extra lazy face (`extraLazyFonts`, `package: "host"`): where the host serves the file from. */ readonly url?: string }
 export type ScriptFontRegistry = FontRegistry & {fontFiles:string[]; /** Set for `scripts: "auto"`. */ scriptSelection?: AppliedScriptSelection};
 export type NodeFontRegistry = ScriptFontRegistry & {/** The embed "used" faces this registry holds, with the files a host copies to serve them itself. */ lazyFonts: readonly LazyFont[]};
-export declare function loadBundledFontRegistry(options?: FontRegistryOptions & ScriptPackOptions): Promise<NodeFontRegistry>;
-
-export declare function loadOfficeFontRegistry(options?: FontRegistryOptions & ScriptPackOptions & {includeBaseFonts?:boolean; /** Leave out the open families font schemes select (FF-31); default true. */ includeOpenFonts?:boolean}): Promise<NodeFontRegistry>;
-
 export type BundledFontPackage = Readonly<{
   /** An npm package name, or a plain id for a vendored entry of a git upstream. */
   name:string;
@@ -74,15 +70,35 @@ export interface BundledFontManifest {
 }
 export declare const BUNDLED_FONT_MANIFEST: BundledFontManifest;
 export declare function scriptFontPackages(scripts: ScriptSelection): BundledFontPackage[];
-export interface PreparedNodeFonts {
-  registry: NodeFontRegistry;
-  manifest: BundledFontManifest;
-  options: {
-    textMeasurement: FontRegistry["textMeasurement"];
-    embeddedFonts: EmbeddedFont[];
-    fontFiles: string[];
-    useBundledFonts: false;
-    loadSystemFonts: false;
-  };
+/** The fonts handle of Node: the verified bundled faces (and any you supply) for layout, SVG, editor, PPTX and Node raster export. */
+export interface NodeFontsHandle extends FontsHandle {
+  readonly registry: NodeFontRegistry;
+  readonly manifest: BundledFontManifest;
+  /** Every font file the handle holds, for `svgToPng` and `svgToPdf`; includes the script faces `ensure` loaded. */
+  readonly fontFiles: string[];
+  /** The files are already in `fontFiles`, so a conversion adds no bundled faces. */
+  readonly useBundledFonts: false;
+  /** System fonts never load: the output does not depend on the machine. */
+  readonly loadSystemFonts: false;
+  /**
+   * Load the script faces the presentation's text needs that this handle does not hold (what `scripts: "auto"` does at load, for another
+   * presentation), including the CJK face a glyph fallback needs. Cheap when nothing is missing; `embeddedFonts` and `fontFiles` then include
+   * the new faces. A package that is not installed or a script no pinned font serves is reported once through `onDiagnostic`.
+   * Resolves with the packages this call added (`scripts`; `lazy` is empty: Node loads every vendored face with its pack).
+   */
+  ensure(presentation: unknown, options?: { onDiagnostic?: ScriptPackOptions["onDiagnostic"]; renderOptions?: Partial<RenderSvgOptions> }): Promise<EnsureResult>;
+  /** Synchronous: the script packages the presentation needs that are not loaded yet. */
+  pending(presentation: unknown, renderOptions?: Partial<RenderSvgOptions>): string[];
 }
-export declare function prepareNodeFonts(options?: FontRegistryOptions & ScriptPackOptions & {pack?:"base"|"office"; includeBaseFonts?:boolean; /** With pack "office": leave out the open families (FF-31); default true. */ includeOpenFonts?:boolean; /** Embed script faces in SVG (large); default false. */ embedScriptFonts?:boolean;}): Promise<PreparedNodeFonts>;
+export interface LoadFontsOptions extends FontRegistryOptions, ScriptPackOptions {
+  /** `base` (default): the bundled Roboto faces. `office`: the metric and visual substitutes for the Office families plus the open families font schemes select. `none`: only the `faces` you supply. */
+  pack?: "base" | "office" | "none";
+  /** With pack "office": add the base Roboto faces too; default true. */
+  includeBaseFonts?: boolean;
+  /** With pack "office": leave out the open families (FF-31); default true. */
+  includeOpenFonts?: boolean;
+  /** Embed script faces in SVG (large); default false. */
+  embedScriptFonts?: boolean;
+}
+/** Load verified, bundled, openly licensed fonts: no system font discovery, no network. Pass the handle as `{ fonts }` to every deck-level function. */
+export declare function loadFonts(options?: LoadFontsOptions): Promise<NodeFontsHandle>;

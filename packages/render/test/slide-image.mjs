@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { renderSvg, svgToPng } from '../dist/index.js';
+import {svgToPng, renderSlideSvg} from '../dist/index.js';
 
 // This suite runs against the linked coordinated core. A core without
 // geometry.slideImage is a pinning error, not a reason to skip.
@@ -22,7 +22,7 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
   for (const fill of ['crop', 'fit']) {
     const deck = { design: { theme: 'classic' }, slides: [{ title: 'Slide image', text: 'Body copy.', design: { imageFill: fill, slideImage: { src: uri, position } } }] };
     const geometry = composeSlide(deck.slides[0], { width: 1280, height: 720, presentation: deck });
-    const svg = renderSvg(deck, { trace: true });
+    const svg = renderSlideSvg(deck, 0, { trace: true });
     const image = imageTag(svg);
     assert.ok(image, `${position} ${fill}: image`);
     const box = geometry.slideImage.box;
@@ -38,7 +38,7 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
 // Raster check: the left band shows the cropped image center; content keeps the other half.
 {
   const deck = { design: { theme: 'classic' }, slides: [{ title: 'Left band', design: { slideImage: { src: uri, position: 'left' } } }] };
-  const { data, info } = await sharp(await svgToPng(renderSvg(deck), { scale: 0.25, loadSystemFonts: false })).raw().toBuffer({ resolveWithObject: true });
+  const { data, info } = await sharp(await svgToPng(renderSlideSvg(deck, 0), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
   const pixel = (x, y) => [...data.subarray((y * info.width + x) * info.channels, (y * info.width + x) * info.channels + 3)];
   // Cover crop of a 2:1 image into a 640x720 band shows the middle 16% of the source.
   const left = pixel(Math.round(info.width * 0.24), info.height >> 1), right = pixel(Math.round(info.width * 0.26), info.height >> 1);
@@ -54,15 +54,15 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
   const deck = { design: { theme: 'classic', slideImage: { src: uri, position: 'right' } },
     catalogs: { layouts: { records: [{ id: 'hero-right', name: 'Hero right', design: { slideImage: { position: 'background' } }, placeholders: [{ type: 'title' }] }] } },
     slides: [{ title: 'Uses the deck image', layout: 'hero-right' }, { title: 'Default layout, no image' }] };
-  assert.ok(imageTag(renderSvg(deck, { slideIndex: 0 })));
-  assert.equal(imageTag(renderSvg(deck, { slideIndex: 1 })), undefined);
+  assert.ok(imageTag(renderSlideSvg(deck, 0)));
+  assert.equal(imageTag(renderSlideSvg(deck, 1)), undefined);
   checked++;
 }
 
 // A root image with the same source renders once, as the slide image.
 {
   const deck = { design: { theme: 'classic' }, slides: [{ title: 'Once', image: { src: uri, alt: 'Split' }, design: { slideImage: { src: uri, position: 'left' } } }] };
-  const svg = renderSvg(deck, { trace: true });
+  const svg = renderSlideSvg(deck, 0, { trace: true });
   assert.equal((svg.match(/<image\b/g) ?? []).length, 1);
   assert.match(imageTag(svg), /aria-label="Split"/);
   assert.match(imageTag(svg), /data-opf-path="slides\.0\.image"/);
@@ -72,7 +72,7 @@ for (const position of ['background', 'left', 'right', 'top', 'bottom']) {
 // Unresolved sources use the ordinary placeholder and diagnostic.
 {
   const diagnostics = [];
-  renderSvg({ slides: [{ title: 'Missing', design: { slideImage: { src: 'asset:missing', position: 'left' } } }] }, { onDiagnostic: d => diagnostics.push(d) });
+  renderSlideSvg({ slides: [{ title: 'Missing', design: { slideImage: { src: 'asset:missing', position: 'left' } } }] }, 0, { onDiagnostic: d => diagnostics.push(d) });
   assert.ok(diagnostics.some(d => d.code === 'unresolved-asset' && d.path === 'slides.0.design.slideImage'));
   checked++;
 }

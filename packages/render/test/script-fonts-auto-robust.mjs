@@ -5,17 +5,14 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import * as core from '@openpresentation/opf';
+import * as core from '@openpresentation/opf/composition';
 import {examples} from '@openpresentation/opf/examples';
-import {renderSvg,renderSvgDeck} from '../dist/index.js';
-import {loadBundledFontRegistry,detectPresentationScripts,scriptFontPackages} from '../dist/fonts-node.js';
-import {loadBrowserFontRegistry} from '../dist/fonts-browser.js';
-import * as fontsModule from '../dist/fonts.js';
+import {renderSvg, renderSlideSvg} from '../dist/index.js';
+import {loadFonts,detectPresentationScripts,scriptFontPackages} from '../dist/fonts-node.js';
+import {loadFonts as loadBrowserFonts} from '../dist/fonts-browser.js';
 import {scriptsOfText} from '../dist/script-fonts.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const hasCore=typeof core.resolveScriptFonts==='function';
-const hasFallback=typeof fontsModule.glyphFallbackFamilies==='function';
 const short=name=>name.replace('@expo-google-fonts/','');
 const deck=(title,text='Body',extra={})=>({$schema:'https://openpresentation.org/schema/opf/v1',name:'Robust',slides:[{title,text}],...extra});
 
@@ -46,8 +43,8 @@ assert.deepEqual(detectPresentationScripts({slides:[{title:'T',text:'https://例
 // Language-dependent punctuation: with an East Asian language the renderer itemizes curly quotes, dashes and the ellipsis as
 // East Asian, so the script is detected exactly where drawing plans it.
 const quoted=deck('“Hello” — world…','Body',{language:'ja'});
-assert.deepEqual(detectPresentationScripts(quoted),hasCore?['Jpan']:[]);
-assert.deepEqual(detectPresentationScripts(deck('“Hello”','Body',{language:'ko'})),hasCore?['Kore']:[]);
+assert.deepEqual(detectPresentationScripts(quoted),['Jpan']);
+assert.deepEqual(detectPresentationScripts(deck('“Hello”','Body',{language:'ko'})),['Kore']);
 assert.deepEqual(detectPresentationScripts(deck('“Hello”','Body',{language:'en'})),[]);
 assert.deepEqual([...new Set(scriptsOfText('“Hello”',{scriptRole:'eastAsian',bcp47:'ja',script:'Jpan'}))],['Jpan']);
 assert.deepEqual(scriptsOfText('“Hello”',{}),[]);
@@ -56,7 +53,7 @@ assert.deepEqual(scriptsOfText('“Hello”',{}),[]);
 // and every deck of the installed core's example corpus.
 const decode=text=>text.replace(/<[^>]+>/g,'').replace(/&(?:#x([0-9a-f]+)|#(\d+)|amp|lt|gt|quot|apos);/gi,(match,hex,decimal)=>hex?String.fromCodePoint(parseInt(hex,16)):decimal?String.fromCodePoint(Number(decimal)):{'&amp;':'&','&lt;':'<','&gt;':'>','&quot;':'"','&apos;':"'"}[match.toLowerCase()]);
 const drawnScripts=(presentation,svgs)=>{
-  const profile=hasCore?core.resolveScriptFonts(presentation):{};
+  const profile=core.resolveScriptFonts(presentation);
   const found=new Set();
   for(const svg of svgs)for(const [,content] of svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)){const text=decode(content);if(/^[•\u2022\d.\s]*$/.test(text))continue;for(const script of scriptsOfText(text,profile))found.add(script);}
   return [...found];
@@ -64,20 +61,20 @@ const drawnScripts=(presentation,svgs)=>{
 const mixed={$schema:'https://openpresentation.org/schema/opf/v1',name:'Parity',language:'ja',design:{footer:{center:{text:'フッターです “x”'}}},
   slides:[{title:'四半期レビューです',subtitle:'مرحبا',blocks:[{quote:{text:'引用です — x',attribution:'שלום'}},{metric:{value:98,label:'指標です',unit:'%'}},{table:{columns:['名前です','Owner'],rows:[['はい','B']]}},{timeline:[{when:'今です',what:'試作です'}]}]},
     {title:'Chart',chart:{type:'column',data:{columns:['四半期です','値です'],rows:[['Q1',1],['Q2',2]]}}},{title:'Items',items:['項目です','한국어','ไทย']},{title:'Code',code:{source:'// コメントです',language:'javascript'}}]};
-const rendered=renderSvgDeck(mixed);
+const rendered=renderSvg(mixed);
 const found=drawnScripts(mixed,rendered);
 assert.ok(found.length>=4,`the parity deck draws several scripts: ${found}`);
 for(const script of found)assert.ok(detectPresentationScripts(mixed).includes(script),`drawn script ${script} is detected`);
 let corpus=0;
 for(const {deck:example} of examples){
-  const drawnHere=drawnScripts(example,renderSvgDeck(example));
+  const drawnHere=drawnScripts(example,renderSvg(example));
   for(const script of drawnHere)assert.ok(detectPresentationScripts(example).includes(script),`${script} drawn in an example deck is detected`);
   corpus++;
 }
 assert.ok(corpus>=100,'the example corpus ran');
 
 // ---- Browser loader: all-or-nothing, dispose, abort ----
-const base=(await loadBundledFontRegistry()).selectEmbeddedFonts(face=>face.family==='Roboto'&&face.weight===400&&!face.italic).map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
+const base=((await loadFonts({pack: 'base'})).registry).selectEmbeddedFonts(face=>face.family==='Roboto'&&face.weight===400&&!face.italic).map(face=>({...face,data:Uint8Array.from(Buffer.from(face.dataUrl.split(',')[1],'base64'))}));
 const packRoot=path.join(root,'node_modules/@expo-google-fonts');
 const japanese=deck('四半期レビュー','Body',{language:'ja'});
 class Face{constructor(family,bytes,descriptors){this.family=family;this.bytes=bytes;this.descriptors=descriptors;}async load(){if(Face.failing?.test(this.family))throw new Error('FontFace rejected');return this;}}
@@ -93,7 +90,7 @@ const fetch=async(url,init={})=>{
     return {ok:true,status:200,arrayBuffer:async()=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength)};
   }catch{return {ok:false,status:404};}
 };
-const fresh=(options={})=>{const document=makeDocument();return loadBrowserFontRegistry(base,{document,fetch,substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'https://fonts.test/pack/',...options}).then(registry=>({registry,document}));};
+const fresh=(options={})=>{const document=makeDocument();return loadBrowserFonts({faces:base,document,fetch,substitutionPolicy:'visual',fallbackFamily:'Roboto',scriptBaseUrl:'https://fonts.test/pack/',...options}).then(fonts=>({registry:fonts.registry,document}));};
 
 // A FontFace that fails to load leaves the registry, the document and the loaded set untouched, and the next call retries.
 {
@@ -175,15 +172,15 @@ const fresh=(options={})=>{const document=makeDocument();return loadBrowserFontR
 
 // ---- Script faces embed only when the slide uses them ----
 {
-  const registry=await loadBundledFontRegistry({scripts:['Jpan','Arab']});
+  const registry=(await loadFonts({pack: 'base', scripts:['Jpan','Arab']})).registry;
   // The eager list leaves "used" faces out (like the open families); select them explicitly to embed them per slide.
   assert.equal(registry.embeddedFonts.some(face=>/Noto/.test(face.family)),false,'script faces are not in the eager embeddedFonts');
   const scriptFaces=registry.selectEmbeddedFonts(face=>face.scripts);
   assert.ok(scriptFaces.length>=4&&scriptFaces.every(face=>face.embed==='used'),'script faces are flagged used');
-  const options={textMeasurement:registry.textMeasurement,embeddedFonts:[...registry.embeddedFonts,...scriptFaces]};
-  const latin=renderSvg({slides:[{title:'Plain title',text:'Body'}],design:{fontScheme:'roboto'}},options);
+  const options={fonts:{textMeasurement:registry.textMeasurement,embeddedFonts:[...registry.embeddedFonts,...scriptFaces]}};
+  const latin=renderSlideSvg({slides:[{title:'Plain title',text:'Body'}],design:{fontScheme:'roboto'}}, 0,options);
   assert.equal(/font-family:"Noto/.test(latin),false,'a Latin slide embeds no script face');
-  const japaneseSvg=renderSvg({language:'ja',design:{fontScheme:'roboto'},slides:[{title:'四半期レビュー',text:'Body'}]},options);
+  const japaneseSvg=renderSlideSvg({language:'ja',design:{fontScheme:'roboto'},slides:[{title:'四半期レビュー',text:'Body'}]}, 0,options);
   assert.ok(japaneseSvg.includes('font-family:"Noto Sans JP"'),'a Japanese slide embeds Noto Sans JP');
   assert.equal(japaneseSvg.includes('font-family:"Noto Naskh Arabic"'),false,'and not the unused Arabic faces');
   assert.ok(latin.length<japaneseSvg.length/3,'the Latin slide is much smaller');
@@ -194,28 +191,24 @@ const fresh=(options={})=>{const document=makeDocument();return loadBrowserFontR
   assert.equal(browser.embeddedFonts.some(face=>/Noto/.test(face.family)),false);
 }
 
-// ---- Glyph fallback faces (renderer with glyphFallbackFamilies, FF-19 per-character fallback) ----
+// ---- Glyph fallback faces (FF-19 per-character fallback) ----
 const cappedDiagnostics=[];
-if(!hasFallback){
-  console.log('Glyph fallback loading skipped: this renderer has no glyphFallbackFamilies; detection then adds no fallback faces.');
-  assert.deepEqual(detectPresentationScripts(deck('Ελληνικά Кириллица')),[]);
-}else{
   // Greek and Cyrillic add no package: the office registry always carries Noto Sans as the fallback face, and Roboto covers them.
   for(const title of ['Ελληνικά','Кириллица'])assert.deepEqual(detectPresentationScripts(deck(title)),[],title);
   assert.deepEqual(detectPresentationScripts(deck('Quarterly review')),[]);
-  const greek=await loadBundledFontRegistry({scripts:'auto',presentation:deck('Ελληνικά')});
+  const greek=(await loadFonts({pack: 'base', scripts:'auto',presentation:deck('Ελληνικά')})).registry;
   assert.deepEqual(greek.scriptSelection.packages.map(short),[]);
   // A Simplified-only hanzi inside Japanese text is not in Noto Sans JP; the next CJK face of the chain is loaded.
   const japaneseText=deck('これは啰です','Body',{language:'ja'});
-  const registry=await loadBundledFontRegistry({scripts:'auto',presentation:japaneseText});
+  const registry=(await loadFonts({pack: 'base', scripts:'auto',presentation:japaneseText})).registry;
   assert.deepEqual(registry.scriptSelection.packages.map(short),['noto-sans-jp','noto-sans-sc']);
   assert.ok(registry.scriptFacesCover('啰'));
   assert.equal(registry.fontFiles.filter(file=>/noto-sans-sc/.test(file)).length,2,'the raster font files include the fallback face');
   // Only characters the loaded faces lack trigger more faces: plain Japanese needs only Noto Sans JP.
-  assert.deepEqual((await loadBundledFontRegistry({scripts:'auto',presentation:deck('これは日本語です','Body',{language:'ja'})})).scriptSelection.packages.map(short),['noto-sans-jp']);
+  assert.deepEqual(((await loadFonts({pack: 'base', scripts:'auto',presentation:deck('これは日本語です','Body',{language:'ja'})})).registry).scriptSelection.packages.map(short),['noto-sans-jp']);
   // The fallback is capped: a Han character no CJK face covers loads the language's face plus ONE fallback, not all four, and is reported.
   const nowhere=deck('これは\u{20000}です','Body',{language:'ja'});
-  const capped=await loadBundledFontRegistry({scripts:'auto',presentation:nowhere,onDiagnostic:value=>cappedDiagnostics.push(value)});
+  const capped=(await loadFonts({pack: 'base', scripts:'auto',presentation:nowhere,onDiagnostic:value=>cappedDiagnostics.push(value)})).registry;
   assert.equal(capped.scriptSelection.packages.length,2,'the language face and one fallback');
   assert.ok(capped.scriptSelection.packages.map(short).includes('noto-sans-jp'));
   assert.deepEqual(capped.scriptSelection.uncovered,['\u{20000}']);
@@ -231,7 +224,7 @@ if(!hasFallback){
   const ensured=await browser.ensureScripts(japaneseText);
   assert.deepEqual(ensured.loaded.map(short),['noto-sans-jp','noto-sans-sc']);
   assert.deepEqual(browser.pendingScripts(japaneseText),[]);
-  const drawnText=renderSvg({...japaneseText,design:{fontScheme:'roboto'}},{textMeasurement:browser.textMeasurement});
+  const drawnText=renderSlideSvg({...japaneseText,design:{fontScheme:'roboto'}}, 0,{fonts:{textMeasurement:browser.textMeasurement}});
   assert.ok(drawnText.includes('啰'));
-}
-console.log(`Auto script fonts robustness: drawn-text detection, ${corpus}-deck parity corpus, all-or-nothing browser loads, dispose and abort, stale substitutions, used-only embedding${hasFallback?', glyph fallback faces':''}.`);
+
+console.log(`Auto script fonts robustness: drawn-text detection, ${corpus}-deck parity corpus, all-or-nothing browser loads, dispose and abort, stale substitutions, used-only embedding, glyph fallback faces.`);

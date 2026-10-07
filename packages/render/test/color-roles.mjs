@@ -1,8 +1,9 @@
 // FA-05: the preview resolves the color-scheme roles and link colors through core resolveColorRoles, the definition opf-pptx
 // and the audit share (the cross-engine comparison is test/color-roles.mjs in opf-pptx).
 import assert from 'node:assert/strict';
-import { catalogs, resolveColorRoles } from '@openpresentation/opf';
-import { renderSvg } from '../dist/index.js';
+import { catalogs } from '@openpresentation/opf';
+import { resolveColorRoles } from '@openpresentation/opf/composition';
+import { renderSlideSvg } from '../dist/index.js';
 
 const cool = catalogs.colorSchemes.find(record => record.id === 'cool-horizon');
 const fillOf = (svg, label) => {
@@ -10,7 +11,7 @@ const fillOf = (svg, label) => {
   assert.ok(found, `${label} run in the SVG`);
   return found[1].toUpperCase();
 };
-const one = (design, run) => renderSvg({ design, slides: [{ title: 'T', text: [run] }] }, { slideIndex: 0 });
+const one = (design, run) => renderSlideSvg({ design, slides: [{ title: 'T', text: [run] }] }, 0);
 
 // Role overrides on a light slide: every role ColorRef and the default text.
 const light = { theme: 'classic', colorScheme: { id: 'cool-horizon', surface: '#EEEEDD', text: '#334455', textSecondary: '#556677', background: '#FFF8E7', accent: '#FF00AA' } };

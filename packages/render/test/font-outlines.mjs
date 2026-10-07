@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import {loadOfficeFontRegistry} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {measureTextOutline} from '@openpresentation/opf/composition';
-const fonts=await loadOfficeFontRegistry({substitutionPolicy:'visual'});
+const fonts=(await loadFonts({pack: 'office', substitutionPolicy:'visual'})).registry;
 const measure=fonts.textMeasurement;
 const bold={fontFamily:'Carlito',fontWeight:700},italic={fontFamily:'Carlito',fontWeight:400,italic:true};
 assert.deepEqual(measure.outlineBounds('narrow',40.5,bold),{x:2.4521484375,y:-20.0126953125,width:119.304931640625,height:20.309326171875});

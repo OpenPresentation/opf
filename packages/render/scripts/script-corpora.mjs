@@ -12,7 +12,7 @@ import {readFile, writeFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import * as fontkit from 'fontkit';
 import * as hb from 'harfbuzzjs';
-import {prepareNodeFonts} from '../dist/fonts-node.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {openTypeLanguage} from '../dist/script-fonts.js';
 
 const corpusPath = new URL('../test/fixtures/script-corpora.json', import.meta.url);
@@ -58,8 +58,8 @@ export function fontkitRun(font, text, lang) {
 
 /** The faces a corpus run loads: the whole script pack plus Noto Sans, from the pinned installed packages. */
 export async function loadFaces() {
-  const {registry, options} = await prepareNodeFonts({pack: 'office', scripts: 'all'});
-  const described = registry.describeFaces(), files = options.fontFiles;
+  const {registry, fontFiles: files} = await loadFonts({pack: 'office', scripts: 'all'});
+  const described = registry.describeFaces();
   const faces = [];
   for (const [index, face] of described.entries()) {
     if (!face.scripts) continue; // vendored open families are not script faces
@@ -218,8 +218,8 @@ export async function qualify({faces, registry, corpora, files}) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const {faces, registry} = await loadFaces();
-  const {options} = await prepareNodeFonts({pack: 'office', scripts: 'all'});
-  const report = await qualify({faces, registry, corpora: await loadCorpora(), files: options.fontFiles});
+  const {fontFiles} = await loadFonts({pack: 'office', scripts: 'all'});
+  const report = await qualify({faces, registry, corpora: await loadCorpora(), files: fontFiles});
   if (process.argv[2]) await writeFile(process.argv[2], `${JSON.stringify(report, null, 2)}\n`);
   else console.log(JSON.stringify(report, null, 2));
 }

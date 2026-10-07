@@ -2,22 +2,22 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
-import {renderSvg,resolvePresentation} from '../dist/index.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/index.js';
 import {layoutTable} from '@openpresentation/opf/composition';
-import {prepareNodeFonts} from '../src/fonts-node.js';
+import {loadFonts} from '../src/fonts-node.js';
 
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const fixtureRuns=[{text:'Lead\t',fontSize:18},{text:'Large evidence phrase ',fontSize:30,bold:true},{text:'continues in smaller text across the same editable table cell so natural layout must wrap this sentence without authored line breaks or inserted offsets. ',fontSize:18},{text:'Second large phrase ',fontSize:30},{text:'finishes the control with exact source runs.',fontSize:18}];
 const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{table:{rows:[[fixtureRuns]]}}]};
 const sourceBytes=Buffer.from(JSON.stringify(deck)),sourceText=fixtureRuns.map(run=>run.text).join('');
-const prepared=await prepareNodeFonts({pack:'office'}),options={trace:true,...prepared.options};
+const prepared=await loadFonts({pack:'office'}),options={trace:true, fonts: prepared};
 const bound=resolvePresentation(deck,options).slides[0],item=bound.geometry.items.find(value=>value.field==='table');
 const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
-const layout=layoutTable(item.value,item.box,{scale,minFontSize:(bound.composition??bound.geometry.composition).minFontSize,fontFamily:bound.design.fonts.body,textMeasurement:options.textMeasurement,path:item.path});
+const layout=layoutTable(item.value,item.box,{scale,minFontSize:(bound.composition??bound.geometry.composition).minFontSize,fontFamily:bound.design.fonts.body,textMeasurement:prepared.textMeasurement,path:item.path});
 const cell=layout.rows[0].cells[0],fragments=cell.fit.richLines.flatMap(line=>line.fragments),tab=fragments.find(fragment=>fragment.kind==='tab'),following=fragments[fragments.indexOf(tab)+1];
 assert.ok(tab&&following);
 const expected={tabX:cell.textBox.x+tab.x,tabWidth:tab.width,followingX:cell.textBox.x+following.x};
-const svg=renderSvg(deck,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
+const svg=renderSlideSvg(deck, 0,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
 const errors=[],requests=[];let actual;
 try {
   const page=await browser.newPage({viewport:{width:1280,height:720}});

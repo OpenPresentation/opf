@@ -42,11 +42,11 @@ try{
   await writeFile(path.join(consumer,'vendored-fonts.mjs'),`import assert from 'node:assert/strict';
 import {realpathSync} from 'node:fs';
 import path from 'node:path';
-import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
-const {registry,manifest,options}=await prepareNodeFonts({pack:'office'});
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+const fonts=await loadFonts({pack:'office'}),{registry,manifest}=fonts;
 const installed=realpathSync(path.resolve('node_modules/@openpresentation/opf-render'));
 for(const pkg of manifest.packages.filter(item=>item.vendored))for(const face of pkg.faces){
-  assert.ok(options.fontFiles.some(file=>realpathSync(file)===path.join(installed,pkg.vendored,face.file)),'vendored face loads from the installed package: '+face.file);
+  assert.ok(fonts.fontFiles.some(file=>realpathSync(file)===path.join(installed,pkg.vendored,face.file)),'vendored face loads from the installed package: '+face.file);
   assert.equal(registry.resolveFont({fontFamily:face.family,fontWeight:face.weight,italic:face.italic}).compatibility,'exact');
 }
 assert.equal(registry.resolveFont({fontFamily:'Calibri',fontWeight:400}).resolvedFamily,'Carlito');

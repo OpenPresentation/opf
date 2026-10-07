@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { chartHighlightColors, textColorForFill } from '@openpresentation/opf/composition';
-import { renderSvg } from '../dist/svg.js';
+import { renderSlideSvg } from '../dist/svg.js';
 import { CHART_TYPES } from '../src/charts.js';
 
 // FA-14: chart.highlight in the preview. Core resolves the marks (chartHighlightMarks) and the two colours
@@ -10,7 +10,7 @@ const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]] };
 const scheme = { id: 'cool-horizon', primary: '#C0392B' };
 const deck = (chart, design = { colorScheme: scheme }) => ({ design: { fontScheme: 'roboto', ...design }, slides: [{ title: 'Chart', chart: { type: 'column', data, ...chart } }] });
-const render = (chart, options = {}, design) => renderSvg(deck(chart, design), { trace: true, ...options });
+const render = (chart, options = {}, design) => renderSlideSvg(deck(chart, design), 0, { trace: true, ...options });
 
 // Every drawn mark of the chart, by trace path: its element name and fill (or stroke for an unfilled line).
 function marks(svg) {
@@ -20,10 +20,10 @@ function marks(svg) {
     .map((mark) => ({ name: mark.name, path: mark['data-opf-path'], color: mark.fill && mark.fill !== 'none' ? mark.fill : mark.stroke, fill: mark.fill, stroke: mark.stroke }));
 }
 const colorsOf = (svg, pattern) => marks(svg).filter((mark) => pattern.test(mark.path)).map((mark) => mark.color);
-const plainFor = (chart) => renderSvg(deck(chart), { trace: true });
+const plainFor = (chart) => renderSlideSvg(deck(chart), 0, { trace: true });
 
 // The chart panel and text colours the preview computes, so the expected colours come from the same core function.
-const surface = renderSvg(deck({}), { trace: true }).match(/<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/)?.[0].match(/fill="([^"]+)"/)?.[1];
+const surface = renderSlideSvg(deck({}), 0, { trace: true }).match(/<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/)?.[0].match(/fill="([^"]+)"/)?.[1];
 assert.match(surface, /^#[0-9A-Fa-f]{6}$/, 'the chart panel fill');
 const expected = chartHighlightColors(surface, '#C0392B', textColorForFill(surface, '#0F172A'));
 
@@ -33,7 +33,7 @@ const HIGHLIGHTABLE = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatte
 for (const id of Object.keys(CHART_TYPES)) {
   const plain = plainFor({ type: id });
   assert.doesNotMatch(plain, /highlight/, `${id}: no highlight paths in a plain chart`);
-  if (!HIGHLIGHTABLE.has(CHART_TYPES[id].kind)) assert.equal(renderSvg(deck({ type: id, highlight: { series: ['North'], categories: ['Q2'] } }), { trace: true }), plain, `${id}: a construct that cannot highlight draws as it always did`);
+  if (!HIGHLIGHTABLE.has(CHART_TYPES[id].kind)) assert.equal(renderSlideSvg(deck({ type: id, highlight: { series: ['North'], categories: ['Q2'] } }), 0, { trace: true }), plain, `${id}: a construct that cannot highlight draws as it always did`);
 }
 
 // 2. Column: series highlight. North is accent, South muted; the legend keys follow.

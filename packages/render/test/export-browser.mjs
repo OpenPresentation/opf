@@ -14,8 +14,8 @@ import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium} from 'playwright';
 import sharp from 'sharp';
-import {renderSvgDeck, svgToPdf as nodeSvgToPdf, svgToPng as nodeSvgToPng} from '../dist/index.js';
-import {loadBundledFontRegistry} from '../dist/fonts-node.js';
+import {svgToPdf as nodeSvgToPdf, svgToPng as nodeSvgToPng, renderSvg} from '../dist/index.js';
+import {loadFonts} from '../dist/fonts-node.js';
 import {compareImages, openPdf, pageItems, pageText, renderPdfPage} from './pdf-helpers.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -30,7 +30,7 @@ assert.ok(!inputs.some(input => /sharp|resvg|fonts-node|node:/.test(input)), 'th
 assert.ok(!inputs.some(input => /raster\.js|raster-images\.js/.test(input)), 'the browser export bundle must not include the Node raster entry');
 const script = bundle.outputFiles[0].text;
 
-const fonts = await loadBundledFontRegistry();
+const fonts = (await loadFonts({pack: 'base'})).registry;
 const SCHEMA = 'https://openpresentation.org/schema/opf/v1';
 const png = await sharp({create: {width: 40, height: 30, channels: 4, background: {r: 224, g: 48, b: 48, alpha: 0.5}}}).png().toBuffer();
 const upright = await readFile(path.join(root, 'test/fixtures/jpeg/orientation-1.jpg'));
@@ -44,7 +44,7 @@ const deck = {
     {id: 'three', title: 'Data', table: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 12], ['Q2', 18]]}},
   ],
 };
-const svgs = renderSvgDeck(deck, {trace: true, textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts});
+const svgs = renderSvg(deck, { fonts: {textMeasurement: fonts.textMeasurement, embeddedFonts: fonts.embeddedFonts},trace: true});
 assert.equal(svgs.length, 3);
 const imageSvg = (width, height, uri, extra = '') => `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="#ffffff"/><image aria-label="Specimen" x="0" y="0" width="${width}" height="${height}" href="${uri}" ${extra}/></svg>`;
 const uri = (type, bytes) => `data:${type};base64,${Buffer.from(bytes).toString('base64')}`;

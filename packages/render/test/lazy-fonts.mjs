@@ -8,24 +8,24 @@ import {readFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {fontSchemes} from '@openpresentation/opf';
-import {BUNDLED_FONT_MANIFEST, loadBundledFontRegistry, prepareNodeFonts} from '../dist/fonts-node.js';
-import {createFontRegistry} from '../dist/fonts.js';
-import {loadBrowserFontRegistry, lazyFontEntries, lazyFontList, lazyFontsFor, presentationFamilies} from '../dist/fonts-browser.js';
+import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
+import {createFontRegistry} from '../dist/font-registry.js';
+import {loadFonts as loadBrowserFonts, lazyFontEntries, lazyFontList, lazyFontsFor, presentationFamilies} from '../dist/fonts-browser.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const decode = face => new Uint8Array(Buffer.from(face.dataUrl.split(',')[1], 'base64'));
 
 // ---- the lazy set ----
-const {registry: office, options} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual'});
+const prepared = await loadFonts({pack: 'office', substitutionPolicy: 'visual'}), {registry: office} = prepared;
 const vendored = BUNDLED_FONT_MANIFEST.packages.filter(pkg => pkg.vendored && (pkg.pack === 'open' || pkg.embed === 'used'));
 const lazyCount = vendored.reduce((sum, pkg) => sum + pkg.faces.length, 0);
 assert.ok(vendored.some(pkg => pkg.name === 'intos'));
 assert.equal(office.lazyFonts.length, lazyCount, 'the office registry lists every vendored face');
 assert.equal(office.embeddedFonts.length, 33, 'the eager list is the npm office and base faces only');
 assert.ok(!office.embeddedFonts.some(face => /^Intos/.test(face.family)));
-const usedFaces = options.embeddedFonts.filter(face => face.embed === 'used');
-assert.equal(usedFaces.filter(face => face.family !== 'Noto Sans').length, lazyCount, 'options.embeddedFonts carries the vendored faces, flagged used');
+const usedFaces = prepared.embeddedFonts.filter(face => face.embed === 'used');
+assert.equal(usedFaces.filter(face => face.family !== 'Noto Sans').length, lazyCount, 'prepared.embeddedFonts carries the vendored faces, flagged used');
 assert.equal(usedFaces.length, lazyCount + 4, 'plus the four Noto Sans glyph-fallback faces (opf-render#57), which are npm files, not lazy');
 assert.equal(office.lazyFonts.filter(face => /^Intos/.test(face.family)).length, 16);
 for (const face of office.lazyFonts) {
@@ -33,7 +33,7 @@ for (const face of office.lazyFonts) {
   assert.equal(hash(await readFile(path.join(root, face.file))), face.sha256, `${face.file} is the pinned file`);
 }
 assert.deepEqual(lazyFontList().map(face => face.file), office.lazyFonts.map(face => face.file));
-assert.equal((await loadBundledFontRegistry()).lazyFonts.length, 0, 'the base pack has no vendored faces');
+assert.equal(((await loadFonts({pack: 'base'})).registry).lazyFonts.length, 0, 'the base pack has no vendored faces');
 const entries = lazyFontEntries({baseUrl: 'https://cdn.example/app'});
 assert.equal(entries[0].url, `https://cdn.example/app/${office.lazyFonts[0].file}`);
 assert.throws(() => lazyFontEntries({}), {code: 'invalid-font-source'});
@@ -105,12 +105,12 @@ const fetchLazy = async (url) => {
   if (corrupt.has(file)) bytes[bytes.length - 1] ^= 1;
   return {ok: true, arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength)};
 };
-const browser = await loadBrowserFontRegistry(eager.map(face => ({...face})), {document, fetch: fetchLazy, substitutionPolicy: 'visual', lazyFontsBaseUrl: 'https://fonts.example/'});
+const browser = (await loadBrowserFonts({faces: eager.map(face => ({...face})), document, fetch: fetchLazy, substitutionPolicy: 'visual', lazyFontsBaseUrl: 'https://fonts.example/'})).registry;
 const eagerFaces = fonts.size;
 assert.equal(browser.lazyFonts.length, lazyCount);
 const aptosDeck = deckWith();
 assert.equal(browser.pendingLazyFonts(aptosDeck).length, 2, 'FF-41: the title (Intos Display 700) and the text (Intos 400), not the eight Intos faces of the two families');
-const none = await loadBrowserFontRegistry(eager.map(face => ({...face})), {document, fetch: fetchLazy, lazyFontsBaseUrl: 'https://fonts.example/'});
+const none = (await loadBrowserFonts({faces: eager.map(face => ({...face})), document, fetch: fetchLazy, lazyFontsBaseUrl: 'https://fonts.example/'})).registry;
 assert.deepEqual(none.pendingLazyFonts(aptosDeck), [], 'the default policy (none) would not resolve Aptos, so Intos is not downloaded');
 served.length = 0;
 assert.deepEqual(await none.ensureLazyFonts(aptosDeck), []);
@@ -138,12 +138,12 @@ served.length = 0;
 assert.deepEqual(await browser.ensureLazyFonts(aptosDeck), [], 'nothing is fetched twice');
 assert.equal(served.length, 0);
 // Options: the base URL is required, an aborted call fetches nothing, a disposed registry rejects.
-const noBase = await loadBrowserFontRegistry(eager.map(face => ({...face})), {document, fetch: fetchLazy, substitutionPolicy: 'visual'});
+const noBase = (await loadBrowserFonts({faces: eager.map(face => ({...face})), document, fetch: fetchLazy, substitutionPolicy: 'visual'})).registry;
 await assert.rejects(noBase.ensureLazyFonts(aptosDeck), {code: 'invalid-font-source'});
 noBase.dispose();
 const controller = new AbortController(); controller.abort();
 served.length = 0;
-const second = await loadBrowserFontRegistry(eager.map(face => ({...face})), {document, fetch: fetchLazy, substitutionPolicy: 'visual', lazyFontsBaseUrl: 'https://fonts.example/'});
+const second = (await loadBrowserFonts({faces: eager.map(face => ({...face})), document, fetch: fetchLazy, substitutionPolicy: 'visual', lazyFontsBaseUrl: 'https://fonts.example/'})).registry;
 await assert.rejects(second.ensureLazyFonts(aptosDeck, {signal: controller.signal}));
 assert.equal(served.length, 0);
 second.dispose();

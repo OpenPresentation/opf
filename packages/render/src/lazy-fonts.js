@@ -1,6 +1,6 @@
-import { fontPolicyFor } from "./font-policy.js";
-import { pickFace } from "./fonts.js";
-import { renderSvgDeck, resolvePresentation } from "./svg.js";
+import { fontPolicyFor } from "@openpresentation/opf/font-policy";
+import { pickFace } from "./font-registry.js";
+import { renderSvg, resolvePresentation } from "./svg.js";
 export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
 
 /**
@@ -17,10 +17,10 @@ const lc = value => String(value).trim().toLowerCase();
 
 /**
  * Render options that decide how a document resolves (catalogs, validate, date, ...) are forwarded from the host's
- * `renderSvg` options. The analysis supplies its own measurement and reports nothing: callbacks, the host's registry
- * measurement, embedded fonts, asset resolution and tracing are dropped.
+ * `renderSvg` options. The analysis supplies its own measurement and reports nothing: callbacks, the host's fonts handle
+ * (measurement and embedded fonts), asset resolution and tracing are dropped.
  */
-const NOT_RESOLVE_OPTIONS = new Set(["textMeasurement", "embeddedFonts", "fontFiles", "useBundledFonts", "loadSystemFonts", "onDiagnostic", "trace", "glyphFallback", "imageResolver", "strictAssets", "slideIndex", "signal"]);
+const NOT_RESOLVE_OPTIONS = new Set(["fonts", "onDiagnostic", "trace", "glyphFallback", "imageResolver", "strictAssets", "signal"]);
 function resolveOptionsOf(options) {
   return Object.fromEntries(Object.entries(options ?? {}).filter(([key]) => !NOT_RESOLVE_OPTIONS.has(key)));
 }
@@ -98,7 +98,7 @@ export function presentationFaces(presentation, options = {}, registry) {
     measure(text, size, style) { if (text !== "") record(settle(style)); return String(text).length * size * RECORDED_EM; },
     resolveStyle: settle,
   };
-  renderSvgDeck(presentation, { ...resolveOptionsOf(options), textMeasurement });
+  renderSvg(presentation, { ...resolveOptionsOf(options), fonts: { textMeasurement } });
   return [...seen.values()].sort((a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Number(a.italic) - Number(b.italic) || a.weight - b.weight);
 }
 

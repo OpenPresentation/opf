@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {renderSvg, resolvePresentation} from '../dist/svg.js';
+import {resolvePresentation, renderSlideSvg} from '../dist/svg.js';
 
 // Core composition resolves one alignment per composed item. The preview must
 // anchor text to it, because PPTX export reads the same value. This test runs
@@ -18,7 +18,7 @@ let checked = 0;
 for (const input of [deck, deckDesign]) {
   const resolved = resolvePresentation(input);
   for (const bound of resolved.slides) {
-    const svg = renderSvg(input, {slideIndex: bound.index, trace: true});
+    const svg = renderSlideSvg(input, bound.index, {trace: true});
     const slide = input.slides[bound.index];
     for (const item of bound.geometry.items) {
       // Independent statement of the rule: the title follows titleAlignment only,
@@ -47,7 +47,7 @@ const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', conten
   {...coverText, text: 'Body copy'},
 ]};
 const coverAnchors = index => {
-  const svg = renderSvg(coverDeck, {slideIndex: index, trace: true});
+  const svg = renderSlideSvg(coverDeck, index, {trace: true});
   return ['tag', 'title', 'subtitle'].map(field => {
     const text = [...svg.matchAll(/<text\b([^>]*)>/g)].map(match => match[1]).find(attrs => attrs.includes(`data-opf-path="slides.${index}.${field}"`));
     assert.ok(text, `slide ${index}: ${field} drawn`);
@@ -67,7 +67,7 @@ assert.deepEqual(coverAnchors(2), ['middle', 'start', 'middle'], 'slides with bo
 let metricLines = 0, tabbedAligned = 0;
 for (const align of ['left', 'center', 'right']) {
   const metricDeck = {design: {fontScheme: 'roboto', contentAlignment: align}, slides: [{title: 'KPI', blocks: [{metric: {value: '$48B', label: 'TAM'}}, {metric: {value: 42, label: 'Left\tRight'}}]}]};
-  const bound = resolvePresentation(metricDeck).slides[0], svg = renderSvg(metricDeck, {trace: true});
+  const bound = resolvePresentation(metricDeck).slides[0], svg = renderSlideSvg(metricDeck, 0, {trace: true});
   const factor = {left: 0, center: .5, right: 1}[align];
   for (const item of bound.geometry.items.filter(entry => entry.field === 'metric')) {
     assert.equal(item.alignment, align);
@@ -88,8 +88,8 @@ assert.ok(metricLines >= 12);
 assert.ok(tabbedAligned >= 2, "tabbed centered/right lines keep their accepted origins");
 
 // Content cards belong to their item: traced previews attribute the card to the item path.
-const carded = renderSvg({design: {contentBox: true}, slides: [{title: 'Cards', blocks: [{text: 'One'}, {text: 'Two'}]}]}, {trace: true});
+const carded = renderSlideSvg({design: {contentBox: true}, slides: [{title: 'Cards', blocks: [{text: 'One'}, {text: 'Two'}]}]}, 0, {trace: true});
 for (const path of ['slides.0.blocks.0.text', 'slides.0.blocks.1.text']) assert.match(carded, new RegExp(`<rect\\b[^>]*data-opf-path="${path.replace(/\./g, '\\.')}"[^>]*rx=`), `${path}: traced card`);
-assert.ok(!renderSvg({design: {contentBox: true}, slides: [{text: 'Untraced'}]}).includes('data-opf-path'), 'Untraced output stays unchanged');
+assert.ok(!renderSlideSvg({design: {contentBox: true}, slides: [{text: 'Untraced'}]}, 0).includes('data-opf-path'), 'Untraced output stays unchanged');
 
 console.log(`Item alignment passed: ${checked} preview anchors follow core item.alignment; ${metricLines} metric lines anchor at their alignment edge; traced content cards carry their item path.`);

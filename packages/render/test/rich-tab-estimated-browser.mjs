@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
-import {renderSvg} from '../dist/index.js';
-import {prepareNodeFonts} from '../src/fonts-node.js';
+import {renderSlideSvg} from '../dist/index.js';
+import {loadFonts} from '../src/fonts-node.js';
 
 const runs=[{text:'A',fontSize:18},{text:'B',fontSize:30,bold:true},{text:'\t',fontSize:18},{text:'C',fontSize:18},{text:'D',fontSize:30,italic:true}];
 const deck={design:{fontScheme:{major:'Carlito',minor:'Carlito',type:'sans-serif',heading: 'Carlito',body: 'Carlito',accent: 'Carlito',code: 'Cousine'}},slides:[{table:{rows:[[runs]]}}]};
-const prepared=await prepareNodeFonts({pack:'office'}),options={trace:true,embeddedFonts:prepared.options.embeddedFonts};
-assert.equal(options.textMeasurement,undefined);
-const svg=renderSvg(deck,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
+const prepared=await loadFonts({pack:'office'}),options={trace:true,fonts:{embeddedFonts:prepared.embeddedFonts}};
+assert.equal(options.fonts.textMeasurement,undefined);
+const svg=renderSlideSvg(deck, 0,options),browser=await chromium.launch({channel:process.platform==='win32'?'msedge':undefined});
 const errors=[],requests=[];let actual;
 try {
   const page=await browser.newPage({viewport:{width:1280,height:720}});

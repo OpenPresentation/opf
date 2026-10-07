@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {examples} from '@openpresentation/opf/examples';
-import {renderSvg,resolvePresentation,svgToPng} from '../dist/index.js';
+import {resolvePresentation, svgToPng, renderSlideSvg} from '../dist/index.js';
 const root=fileURLToPath(new URL('../',import.meta.url)),[previousDir,currentDir,output]=process.argv.slice(2).map(value=>path.resolve(value));
 assert.ok(previousDir&&currentDir&&output,'Pass previous/current corpus and new output directories.');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),ref='053edb1797fd367ae401885fc1d2a8667f212e2d';
@@ -27,12 +27,12 @@ const texts=svg=>{
 };
 for(const [key,entry]of Object.entries(after.entries)) {
   if(entry.sha256===before.entries[key].sha256)continue;
-  const [file,index]=key.split('#'),deck=corpus.get(file),options={trace:true,slideIndex:Number(index)};
+  const [file,index]=key.split('#'),deck=corpus.get(file),options={trace:true};
   const oldBound=previous.resolvePresentation(deck,options).slides[Number(index)],bound=resolvePresentation(deck,options).slides[Number(index)];
   assert.deepEqual(bound.geometry,oldBound.geometry,`${key}: composition changed`);
-  const oldSvg=previous.renderSvg(deck,options),svg=renderSvg(deck,options);
-  assert.equal(hash(await svgToPng(oldSvg,{scale:.25,loadSystemFonts:false})),before.entries[key].sha256,key);
-  assert.equal(hash(await svgToPng(svg,{scale:.25,loadSystemFonts:false})),entry.sha256,key);
+  const oldSvg=previous.renderSvg(deck,{...options,slideIndex:Number(index)}),svg=renderSlideSvg(deck,Number(index),options);
+  assert.equal(hash(await svgToPng(oldSvg,{scale:.25})),before.entries[key].sha256,key);
+  assert.equal(hash(await svgToPng(svg,{scale:.25})),entry.sha256,key);
   const oldTexts=texts(oldSvg),newTexts=texts(svg),changes=[];
   for(const sourcePath of new Set([...oldTexts.keys(),...newTexts.keys()])) {
     const oldLines=oldTexts.get(sourcePath),newLines=newTexts.get(sourcePath);

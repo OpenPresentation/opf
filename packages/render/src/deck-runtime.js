@@ -1,8 +1,8 @@
 // RR-28: the part of the slideshow player and the <opf-deck> element that has no DOM of its own. It reads an OPF document,
-// decides which slides play (hidden ones do not), renders each slide once with the renderer's own SVG output (renderSvg:
+// decides which slides play (hidden ones do not), renders each slide once with the renderer's own SVG output (renderSlideSvg:
 // there is no second layout engine) behind a face-level font gate, and synchronizes windows over a BroadcastChannel.
 // Nothing here fetches anything but the font files the host's font root serves.
-import { renderSvg } from "./svg.js";
+import { renderSlideSvg } from "./svg.js";
 
 /** Error raised for a deck that cannot be read, rendered or loaded. */
 export class DeckError extends Error {
@@ -173,38 +173,24 @@ export function localIsoDate(now = new Date()) {
 
 // --- font gate -----------------------------------------------------------------------------------------------------
 
-const MAX_FONT_ROUNDS = 4;
-
 /**
- * The gate every render goes through: nothing draws a document before the faces it needs are loaded. `registry` is a browser
- * font registry (`loadBrowserFontRegistry`); one without the lazy loaders gates nothing. Face level: only the vendored and
- * script faces the document draws are fetched, each hash-verified by the registry.
+ * The gate every render goes through: nothing draws a document before the faces it needs are loaded. `fonts` is a browser
+ * fonts handle (`loadFonts` from `/fonts-browser`); one without `pending` and `ensure` gates nothing. Face level: only the
+ * vendored and script faces the document draws are fetched, each hash-verified by the registry behind the handle.
  */
-export function createFontGate(registry) {
-  const sources = (document, options) => {
-    let lazy = [], scripts = [];
-    try { scripts = registry?.pendingScripts?.(document, options) ?? []; } catch { /* the renderer reports the document itself */ }
-    try { lazy = (registry?.pendingLazyFonts?.(document, options) ?? []).map((face) => face?.file ?? String(face)); } catch { /* likewise */ }
-    return { lazy, scripts };
-  };
+export function createFontGate(fonts) {
+  // A document that does not resolve has nothing to load here: the renderer reports it when it draws.
+  const pending = (document, options) => { try { return fonts?.pending?.(document, options) ?? []; } catch { return []; } };
   return {
-    pending(document, options) { const { lazy, scripts } = sources(document, options); return [...lazy, ...scripts]; },
+    pending,
     async ensure(document, { signal, renderOptions } = {}) {
-      const call = { ...renderOptions, signal };
-      try {
-        for (let round = 0; round < MAX_FONT_ROUNDS; round++) {
-          const { lazy, scripts } = sources(document, renderOptions);
-          if (!lazy.length && !scripts.length) return;
-          signal?.throwIfAborted?.();
-          if (lazy.length) await registry.ensureLazyFonts?.(document, call);
-          if (scripts.length) await registry.ensureScripts?.(document, call);
-        }
-      } catch (cause) {
+      if (!pending(document, renderOptions).length) return;
+      try { await fonts.ensure(document, { ...renderOptions, signal }); } catch (cause) {
         if (signal?.aborted) throw cause;
         throw new DeckError("fonts-unavailable", `Fonts for this deck could not be loaded: ${cause?.message ?? cause}`, { cause });
       }
-      const left = sources(document, renderOptions);
-      if (left.lazy.length || left.scripts.length) throw new DeckError("fonts-unavailable", `Fonts for this deck did not finish loading: ${[...left.lazy, ...left.scripts].join(", ")}.`);
+      const left = pending(document, renderOptions);
+      if (left.length) throw new DeckError("fonts-unavailable", `Fonts for this deck did not finish loading: ${left.join(", ")}.`);
     },
   };
 }
@@ -213,9 +199,9 @@ export function createFontGate(registry) {
 
 /**
  * One deck's rendering, shared by the element, the full-screen player and the speaker view: font loading once, each slide
- * rendered once by `renderSvg` and kept, so moving between slides never draws twice and every surface shows the same markup.
+ * rendered once by `renderSlideSvg` and kept, so moving between slides never draws twice and every surface shows the same markup.
  *
- * `fonts` is a browser font registry (or nothing: layout then uses estimated widths and the visitor's system sans-serif).
+ * `fonts` is a browser fonts handle (or nothing: layout then uses estimated widths and the visitor's system sans-serif).
  */
 export function createDeckStore({ document, fonts, renderOptions = {}, date } = {}) {
   const deck = parseDeckDocument(document);
@@ -224,7 +210,8 @@ export function createDeckStore({ document, fonts, renderOptions = {}, date } = 
   const diagnostics = [];
   const options = () => ({
     ...renderOptions,
-    ...(fonts?.textMeasurement ? { textMeasurement: fonts.textMeasurement } : {}),
+    // Inline slides use the page's own faces (the registry added them to the document), so only the measurement is passed: nothing is embedded.
+    ...(fonts?.textMeasurement ? { fonts: { textMeasurement: fonts.textMeasurement } } : {}),
     ...(renderOptions.date === undefined && date !== undefined ? { date } : {}),
     onDiagnostic(diagnostic) { diagnostics.push(diagnostic); renderOptions.onDiagnostic?.(diagnostic); },
   });
@@ -243,12 +230,12 @@ export function createDeckStore({ document, fonts, renderOptions = {}, date } = 
       let svg = cache.get(index);
       if (svg === undefined) {
         try {
-          svg = renderSvg(deck, { ...options(), slideIndex: index, validate: !validated });
+          svg = renderSlideSvg(deck, index, { ...options(), validate: !validated });
         } catch (cause) {
           if (cause instanceof DeckError) throw cause;
-          // A document the schema rejects says where: the first issue's path and message.
-          const issue = cause?.code === "invalid-opf" ? (cause.details?.issues ?? cause.issues)?.[0] : undefined;
-          const where = issue ? ` (${issue.path || "/"}: ${issue.message})` : "";
+          // A document the schema rejects says where: the first finding's path and message.
+          const finding = cause?.code === "invalid-opf" ? cause.findings?.[0] : undefined;
+          const where = finding ? ` (${finding.path || "/"}: ${finding.message})` : "";
           throw new DeckError(cause?.code === "invalid-opf" ? "invalid-document" : "render-failed", `${cause?.message ?? "The slide could not be drawn."}${where}`, { cause });
         }
         validated = true;
