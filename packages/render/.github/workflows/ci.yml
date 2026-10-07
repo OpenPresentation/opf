@@ -60,7 +60,7 @@ jobs:
           # Empty selects the lock's golden. The roller makes a non-empty value the lock's golden, so set it only for a
           # baseline that records core main's examples: core's registry run selects a reviewed core golden (or a retained
           # one, scripts/registry-golden.mjs) only while the lock's golden lives in core.
-          golden-override: 'opf/scripts/fixtures/opf-examples-png.fa-0-14.sha256.json'
+          golden-override: ''
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
@@ -223,7 +223,7 @@ jobs:
           consumer: opf-render
           export-golden: 'true'
           # Keep equal to the package job's golden-override (scripts/ecosystem-pins.mjs reads the first one).
-          golden-override: 'opf/scripts/fixtures/opf-examples-png.fa-0-14.sha256.json'
+          golden-override: ''
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OpenPresentation/opf
