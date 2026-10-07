@@ -17,8 +17,8 @@ const geometryBytes=await readFile(geometryFile),geometry=JSON.parse(geometryByt
 for (const item of [...geometry.sourceHashes,...geometry.runtimeHashes]) assert.equal(hash(await readFile(item.file)),item.sha256,`Stale evidence: ${item.file}`);
 for (const item of geometry.fontHashes) assert.equal(hash(await readFile(path.join(consumer,'node_modules',item.file))),item.sha256,`Changed measured font: ${item.file}`);
 const require=createRequire(path.resolve(consumer,'package.json')),browserRequire=createRequire(path.resolve(renderer,'package.json'));
-const {loadOfficeFontRegistry}=await import(pathToFileURL(require.resolve('@openpresentation/opf-render/fonts-node')));
-const registry=await loadOfficeFontRegistry(),fixtures=metricLayoutFixtures();
+const {loadFonts}=await import(pathToFileURL(require.resolve('@openpresentation/opf-render/fonts-node')));
+const registry=await loadFonts({pack:'office'}),fixtures=metricLayoutFixtures();
 assert.equal(fixtures.length,geometry.results.length);
 const cases=fixtures.flatMap((fixture,index)=>{
   const recorded=geometry.results[index];assert.equal(fixture.id,recorded.id);assert.equal(fixture.family,recorded.family);assert.deepEqual(fixture.dimensions,recorded.dimensions);

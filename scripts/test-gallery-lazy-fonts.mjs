@@ -45,8 +45,8 @@ assert.throws(() => verifyGalleryLazyFontManifest({ ...manifest, baseUrl: 'https
 const fake = renderFonts([pkg('intos')]);
 assert.equal(galleryLazyFontManifestForExample({}, version, 'fetch("./fonts.json")'), undefined);
 assert.equal(galleryLazyFontManifestForExample(fake, version, 'fetch("./fonts.json")'), undefined);
-assert.equal(galleryLazyFontManifestForExample(fake, version, 'await registry.ensureLazyFonts(deck)').packages.length, 1);
-assert.throws(() => galleryLazyFontManifestForExample({}, version, 'await registry.ensureLazyFonts(deck)'), /calls ensureLazyFonts but the pinned @openpresentation\/opf-render vendors no lazy fonts/);
+assert.equal(galleryLazyFontManifestForExample(fake, version, 'await browserFonts.loadFonts({lazyFontsBaseUrl: "./"})').packages.length, 1);
+assert.throws(() => galleryLazyFontManifestForExample({}, version, 'await browserFonts.loadFonts({lazyFontsBaseUrl: "./"})'), /sets lazyFontsBaseUrl but the pinned @openpresentation\/opf-render vendors no lazy fonts/);
 
 // The renderer checked out beside this repository (when built) yields a manifest that passes the same checks.
 const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../opf-render/dist/fonts-node.js');

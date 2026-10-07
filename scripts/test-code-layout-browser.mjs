@@ -16,8 +16,8 @@ const geometryBytes=await readFile(geometryFile),geometry=JSON.parse(geometryByt
 for (const item of [...geometry.sourceHashes,...geometry.runtimeHashes]) assert.equal(hash(await readFile(item.file)),item.sha256,`Stale candidate evidence: ${item.file}`);
 const require=createRequire(path.resolve(consumer,'package.json'));
 const browserRequire=createRequire(path.resolve(renderer,'package.json'));
-const {loadOfficeFontRegistry}=await import(pathToFileURL(require.resolve('@openpresentation/opf-render/fonts-node')));
-const registry=await loadOfficeFontRegistry();
+const {loadFonts}=await import(pathToFileURL(require.resolve('@openpresentation/opf-render/fonts-node')));
+const registry=await loadFonts({pack:'office'});
 const faces=registry.embeddedFonts.filter(face=>face.family==='Cousine'&&[400,700].includes(face.weight)&&!face.italic);
 assert.equal(faces.length,2);
 const fontHashes=faces.map(face=>({family:face.family,weight:face.weight,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64')),license:face.license}));

@@ -74,6 +74,14 @@ export class Reporter {
 		this.findings.push(entry);
 	}
 
+	/** Add a finding as the library made it (the `findings` of a thrown OPFRenderError, OPFPptxError or core validation error). Identical entries are kept once. */
+	addFinding(finding: Finding) {
+		const key = JSON.stringify([finding.ruleId, finding.path, finding.message]);
+		if (this.seen.has(key)) return;
+		this.seen.add(key);
+		this.findings.push(finding as ReportFinding);
+	}
+
 	error(source: Source, code: string, message: string, where = "", details: Record<string, unknown> = {}) {
 		this.add(source, { code, path: where, message, ...details }, "error");
 	}
@@ -89,9 +97,18 @@ export class Reporter {
 	}
 }
 
-/** Convert a thrown library error into a report diagnostic, keeping its code and the path it names. */
+/**
+ * Convert a thrown library error into the report. An error that carries `findings` (the error findings of the format check,
+ * on OPFRenderError, OPFPptxError and core's OPFValidationError) is reported as those findings; any other error becomes one
+ * diagnostic that keeps its code and the path it names.
+ */
 export function reportThrown(reporter: Reporter, source: Source, error: unknown) {
-	const failure = error as { code?: unknown; message?: string; details?: Record<string, unknown>; path?: unknown };
+	const failure = error as { code?: unknown; message?: string; details?: Record<string, unknown>; path?: unknown; findings?: unknown };
+	const thrown = Array.isArray(failure.findings) ? (failure.findings as Finding[]).filter((item) => typeof item?.ruleId === "string" && typeof item.message === "string") : [];
+	if (thrown.some((item) => item.severity === "error")) {
+		for (const item of thrown) reporter.addFinding(item);
+		return;
+	}
 	const code = typeof failure.code === "string" ? failure.code : "failed";
 	const details = failure.details ?? {};
 	const where = typeof details.path === "string" ? details.path : typeof failure.path === "string" ? failure.path : "";

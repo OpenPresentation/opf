@@ -32,9 +32,9 @@ async function installed(name) {
 }
 const renderer=await installed('@openpresentation/opf-render'),converter=await installed('@openpresentation/opf-pptx'),core=await installed('@openpresentation/opf');
 await installed('jszip');await installed('fontkit');
-const {createFontRegistry}=await import(pathToFileURL(path.join(renderer,'dist/fonts.js')));
+const {loadFonts}=await import(pathToFileURL(path.join(renderer,'dist/fonts-node.js')));
 const {fromPptx}=await import(pathToFileURL(path.join(converter,'dist/index.js')));
-const {validatePresentation}=await import(pathToFileURL(path.join(core,'dist/validator.js')));
+const {validate}=await import(pathToFileURL(path.join(core,'dist/validator.js')));
 const {default:PptxGenJS}=await import(pathToFileURL(path.join(converter,'vendor/pptxgenjs/pptxgen.es.js')));
 await mkdir(output,{recursive:true});
 if (mode==='generate') {
@@ -44,7 +44,7 @@ if (mode==='generate') {
     const data=await readFile(path.join(process.env.WINDIR??'C:/Windows','Fonts',file));
     faces.push({data,family:'Courier New',weight,italic:false});fontHashes.push({file,weight,sha256:hash(data)});
   }
-  const registry=createFontRegistry(faces,{substitutionPolicy:'none'}),pptx=new PptxGenJS(),cases=[];
+  const registry=await loadFonts({pack:'none',substitutionPolicy:'none',faces}),pptx=new PptxGenJS(),cases=[];
   pptx.layout='LAYOUT_WIDE';pptx.author='OpenPresentation native code compatibility probe';
   for (const source of ['a\tb','aaaa\tb','\tconst value = "two  spaces";','  indentation  ','a\t','\t\t',' \t \tkeep  ','src\tCaseSensitive.ts']) {
     const role=source.startsWith('src')?'filename':'body';
@@ -55,7 +55,7 @@ if (mode==='generate') {
     cases.push({source,role,fontSize:part.fit.fontSize,style:part.style,line,tabStops});
   }
   const bytes=await pptx.write({outputType:'nodebuffer'});await writeFile(path.join(output,'tabs.pptx'),bytes);
-  for (const root of [renderer,converter,core]) await fingerprint(path.join(root,'dist',root===renderer?'fonts.js':root===core?'validator.js':'index.js'),root);
+  for (const root of [renderer,converter,core]) await fingerprint(path.join(root,'dist',root===renderer?'fonts-node.js':root===core?'validator.js':'index.js'),root);
   await fingerprint(path.join(converter,'vendor/pptxgenjs/pptxgen.es.js'),converter);
   await fingerprint(path.resolve('packages/javascript/dist/composition.js'),path.resolve('packages/javascript/dist'));
   const sourceHashes=[];
@@ -74,7 +74,7 @@ if (mode==='generate') {
   for (const file of ['tabs.pptx','tabs-saved.pptx','tabs-edited.pptx']) {
     const bytes=await readFile(path.join(output,file));
     if (file!=='tabs.pptx') assert.equal(hash(bytes),native[file==='tabs-saved.pptx'?'savedSha256':'editedSha256']);
-    const presentation=await fromPptx(bytes);assert.ok(validatePresentation(presentation).valid);
+    const presentation=await fromPptx(bytes);assert.ok(validate(presentation,{only:['format']}).valid);
     const observed=presentation.slides.map((slide,index)=>({expected:generation.cases[index].source+(file==='tabs-edited.pptx'?' edited':''),actual:(slide.blocks??(slide.text!==undefined?[{text:slide.text}]:[])).map(block=>typeof block.text==='string'?block.text:JSON.stringify(block.text)).join('\n')}));
     imports.push({file,sha256:hash(bytes),schemaValid:true,exactText:observed.every(item=>item.expected===item.actual),observed});
   }

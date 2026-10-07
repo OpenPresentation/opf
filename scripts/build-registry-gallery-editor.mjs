@@ -108,10 +108,11 @@ for (const file of Object.keys(bundle.metafile.inputs)) {
     throw new Error(`Unpublished library leaked into gallery bundle: ${file}`);
   }
 }
-const { loadOfficeFontRegistry } = await registry.import('@openpresentation/opf-render/fonts-node');
+const { loadFonts } = await registry.import('@openpresentation/opf-render/fonts-node');
 // FF-41: an example that loads base-fonts.json starts with Roboto Regular and loads the other eager faces on demand from separate
-// hash-named files; an older example keeps every eager face in fonts.json.
-const eagerFonts = (await loadOfficeFontRegistry()).embeddedFonts;
+// hash-named files; an older example keeps every eager face in fonts.json. The eager faces are the registry's (the 33 npm faces); the
+// handle's own list also holds the vendored faces, which the editor loads from lazy-fonts.json.
+const eagerFonts = (await loadFonts({ pack: 'office' })).registry.embeddedFonts;
 const baseFonts = exampleUsesBaseFonts(await readFile(path.join(source, 'playground.js'), 'utf8')) ? splitBaseFonts(eagerFonts) : undefined;
 if (baseFonts) {
   for (const { file, bytes } of baseFonts.files) await writeFile(path.join(out, file), bytes);
@@ -125,7 +126,7 @@ await writeFile(path.join(out, 'fonts.json'), JSON.stringify(baseFonts ? baseFon
 const scriptFontManifest = galleryScriptFontManifestForExample(await registry.import('@openpresentation/opf-render/fonts-node'), await readFile(path.join(source, 'playground.js'), 'utf8'));
 if (scriptFontManifest) await writeFile(path.join(out, 'script-fonts.json'), JSON.stringify(scriptFontManifest, null, 2) + '\n');
 else await rm(path.join(out, 'script-fonts.json'), { force: true });
-// FF-31 vendored faces (Intos for the Aptos scheme, the open families): when the pinned editor example calls ensureLazyFonts, ship
+// FF-31 vendored faces (Intos for the Aptos scheme, the open families): when the pinned editor example sets lazyFontsBaseUrl, ship
 // the hash-pinned manifest only. The faces are binaries the gallery build copies from the pinned renderer package's fonts/ directory
 // into an untracked path, verifying every hash (see gallery-lazy-fonts.mjs); fonts.json stays the renderer's eager faces.
 const rendererVersion = registry.packages.find(item => item.name === '@openpresentation/opf-render')?.version;
@@ -143,13 +144,13 @@ await writeFile(path.join(out, 'index.html'), html);
 const result = spawnSync(process.execPath, ['scripts/build-gallery-snapshot.mjs', '--registry'], { cwd: root, stdio: 'inherit' });
 if (result.status !== 0) throw new Error('Gallery snapshot build failed');
 await copyFile(path.join(root, 'artifacts/editor/gallery.json'), path.join(out, 'gallery.json'));
-const { validatePresentation } = await registry.import('@openpresentation/opf');
-const { renderSvgDeck } = await registry.import('@openpresentation/opf-render');
+const { validate } = await registry.import('@openpresentation/opf');
+const { renderSvg } = await registry.import('@openpresentation/opf-render');
 const gallery = JSON.parse(await readFile(path.join(out, 'gallery.json'), 'utf8'));
 for (const { id, opf } of gallery.items) {
-  const result = validatePresentation(opf);
-  if (!result.valid) throw new Error(`Invalid gallery document ${id}: ${JSON.stringify(result.errors)}`);
-  renderSvgDeck(opf);
+  const result = validate(opf, { only: ['format'] });
+  if (!result.valid) throw new Error(`Invalid gallery document ${id}: ${JSON.stringify(result.findings)}`);
+  renderSvg(opf);
 }
 const { opfSchemas, listSchemaFields } = await registry.import('@openpresentation/opf-editor/schema');
 const fields = listSchemaFields();

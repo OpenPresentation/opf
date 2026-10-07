@@ -19,7 +19,7 @@ import {
 	deckStem,
 	writeFiles,
 } from "./io.js";
-import { type Diagnostic, type PptxModule, type Renderer, PPTX_PACKAGE, RENDER_PACKAGE, loadPptx, loadRenderer } from "./peers.js";
+import { type Diagnostic, PPTX_PACKAGE, RENDER_PACKAGE, loadPptx, loadRenderer } from "./peers.js";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn } from "./check.js";
 import { Reporter, finishReport, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
@@ -30,6 +30,8 @@ export interface Host {
 }
 
 type Format = "svg" | "png" | "pdf" | "pptx";
+/** A fonts object that loads nothing: an SVG picture without text needs no faces, so its PNG fallback skips the font files. */
+const NO_FONTS = { fontFiles: [], useBundledFonts: false, loadSystemFonts: false } as const;
 const RASTER_FORMATS = ["svg", "png"] as const;
 const SPEC = {
 	values: ["slides", "format", "scale", "out", "date", "asset-dir", "svg-fonts", "fail-on"],
@@ -66,20 +68,6 @@ const svgSize = (svg: string) => {
 	return Number.isFinite(width) && Number.isFinite(height) ? { width, height } : {};
 };
 const pngSize = (bytes: Uint8Array) => (bytes.length > 24 ? { width: new DataView(bytes.buffer, bytes.byteOffset).getUint32(16), height: new DataView(bytes.buffer, bytes.byteOffset).getUint32(20) } : {});
-
-const TINY = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 40 30"><rect width="40" height="30" fill="#000"/></svg>';
-/** Does the installed renderer write vector PDF, and what does it write by default? A page-sized image in the file means raster. */
-async function probePdf(renderer: Renderer) {
-	const isRaster = async (options: Record<string, unknown>) => {
-		try {
-			return Buffer.from(await renderer.render.module.svgToPdf(TINY, options)).includes("/Subtype /Image");
-		} catch {
-			return undefined;
-		}
-	};
-	const vector = await isRaster({ mode: "vector" });
-	return { supportsVector: vector === false, defaultMode: (await isRaster({})) === false ? "vector" : "raster" } as const;
-}
 
 interface Prepared {
 	deck: Record<string, unknown>;
@@ -168,14 +156,14 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		pack: "office",
 		substitutionPolicy: "visual",
 		userFonts: fonts.userFonts,
-		substitutions: substitutionRows(fonts.registry),
-		...(fonts.registry.scriptSelection ? { scripts: fonts.registry.scriptSelection } : {}),
+		substitutions: substitutionRows(fonts.handle),
+		...(fonts.handle.registry.scriptSelection ? { scripts: fonts.handle.registry.scriptSelection } : {}),
 	});
 
 	let pagination: Record<string, unknown> | undefined;
 	if (options.paginate) {
 		try {
-			const result = paginate(deck, { fonts: fonts.options as Fonts });
+			const result = paginate(deck, { fonts: fonts.handle as Fonts });
 			deck = result.presentation;
 			pagination = { pages: result.pages };
 		} catch (error) {
@@ -220,11 +208,9 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 	};
 
 	const stem = deckStem(prepared.deck, input);
-	const rasterOptions = { fontFiles: fonts.options.fontFiles, useBundledFonts: false, loadSystemFonts: false };
-	const svgOptions = (embedded: unknown[], index: number) => ({
-		textMeasurement: fonts.options.textMeasurement,
-		embeddedFonts: embedded,
-		slideIndex: index,
+	// One fonts handle for every call: layout and SVG read its measurement and the faces to embed, PNG and PDF its font files.
+	const svgOptions = (embedded: unknown[]) => ({
+		fonts: { textMeasurement: fonts.handle.textMeasurement, embeddedFonts: embedded },
 		imageResolver: resolver.forSvg,
 		onDiagnostic: onRender,
 		...(date ? { date } : {}),
@@ -232,22 +218,14 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 
 	const generate = async (): Promise<Record<string, unknown>> => {
 		if (format === "pptx") {
-			const module = (pptx as { module: PptxModule }).module;
+			const module = (pptx as NonNullable<typeof pptx>).module;
 			const bytes = await module.toPptx(deck, {
-				textMeasurement: fonts.options.textMeasurement,
+				fonts: fonts.handle,
 				imageResolver: resolver.forPptx,
-				// The PNG fallback of an SVG picture is drawn by the same renderer the preview uses, so SVG pictures export
-				// whichever way opf-pptx would find opf-render. Without text it needs no fonts; with text it uses the bundled pack.
-				svgRasterizer: async (svg: string, size: { scale: number; text?: boolean }) =>
-					new Uint8Array(
-						await renderer.render.module.svgToPng(svg, {
-							scale: size.scale,
-							background: "rgba(0, 0, 0, 0)",
-							useBundledFonts: size.text === true,
-							loadSystemFonts: false,
-							...(fonts.userFonts.length ? { fontFiles: fonts.userFonts } : {}),
-						}),
-					),
+				// The PNG fallback of an SVG picture is drawn by the same renderer the preview uses, with the same fonts handle,
+				// so SVG pictures export whichever way opf-pptx would find opf-render. A picture without text needs no faces.
+				svgRasterizer: async (svg: string, size: { scale: number; text: boolean }) =>
+					new Uint8Array(await renderer.render.module.svgToPng(svg, { scale: size.scale, background: "rgba(0, 0, 0, 0)", fonts: size.text ? fonts.handle : NO_FONTS })),
 				onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pptx", diagnostic),
 				...(chartex ? { chartex } : {}),
 				...(provenance ? { provenance: provenance === "none" ? false : provenance } : {}),
@@ -259,26 +237,23 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 		}
 
 		const svgs: { slide: number; id: unknown; svg: string }[] = [];
-		const embedded = format === "svg" ? embeddedFor(fonts.options, svgFonts) : [];
+		const embedded = format === "svg" ? embeddedFor(fonts.handle, svgFonts) : [];
 		for (const number of selected) {
-			const svg = renderer.render.module.renderSvg(deck, svgOptions(embedded, number - 1));
+			const svg = renderer.render.module.renderSlideSvg(deck, number - 1, svgOptions(embedded));
 			svgs.push({ slide: number, id: (deck as { slides: { id?: unknown }[] }).slides[number - 1]?.id, svg });
 		}
 		const width = Math.max(3, String(slideCount).length);
 		const name = (slide: number, extension: string) => `${stem}-${String(slide).padStart(width, "0")}.${extension}`;
 
 		if (format === "pdf") {
-			const probe = await probePdf(renderer);
-			if (pdfMode === "vector" && !probe.supportsVector)
-				throw new FileCommandError(`--pdf-mode vector needs an @openpresentation/opf-render that writes vector PDF; the installed ${renderer.render.version} writes one image per page. Update ${RENDER_PACKAGE}.`, 2, { code: "peer-too-old", package: RENDER_PACKAGE });
-			const mode = pdfMode ?? probe.defaultMode;
+			const mode = pdfMode ?? "vector";
 			const title = typeof prepared.deck.name === "string" ? prepared.deck.name : undefined;
 			const bytes = await renderer.render.module.svgToPdf(
 				svgs.map((item) => item.svg),
-				{ ...rasterOptions, scale, ...(pdfMode ? { mode: pdfMode } : {}), ...(mode === "vector" && title ? { metadata: { title } } : {}), onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pdf", diagnostic) },
+				{ fonts: fonts.handle, scale, ...(pdfMode ? { mode: pdfMode } : {}), ...(mode === "vector" && title ? { metadata: { title } } : {}), onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pdf", diagnostic) },
 			);
 			planned.push({ file: out ?? `${stem}.pdf`, bytes, entry: { mediaType: "application/pdf", pages: svgs.length, slides: selected } });
-			return { pdf: { mode, vectorSupported: probe.supportsVector }, skippedHidden };
+			return { pdf: { mode }, skippedHidden };
 		}
 
 		// svg or png: one file per slide in a directory, a single file, or a zip.
@@ -290,7 +265,7 @@ async function run(command: "render" | "export", args: string[], host: Host) {
 				const bytes = new TextEncoder().encode(item.svg);
 				items.push({ slide: item.slide, id: item.id, bytes, entry: { slide: item.slide, id: item.id, mediaType, ...svgSize(item.svg) } });
 			} else {
-				const bytes = await renderer.render.module.svgToPng(item.svg, { ...rasterOptions, scale });
+				const bytes = await renderer.render.module.svgToPng(item.svg, { fonts: fonts.handle, scale });
 				items.push({ slide: item.slide, id: item.id, bytes, entry: { slide: item.slide, id: item.id, mediaType, ...pngSize(bytes) } });
 			}
 		}

@@ -65,13 +65,13 @@ export function resolveDrawnFamily(host, family) {
  * The host must draw the value: its font gate finished, and the strict measured render with the host registry (what the editor's gate
  * hands the canvas) does not throw. A resolved family is not enough when the face cannot measure or shape its text (font-shaping-failed),
  * lacks a glyph the text needs (missing-glyph) or a family the value names still has no face (font-unavailable).
- * @param {{gate:{ok:boolean, code?:string, message?:string}, options:object}} host from font-host.mjs hostFor
- * @param {{renderSvgDeck:Function}} render the opf-render module that built the host
+ * @param {{gate:{ok:boolean, code?:string, message?:string}, fonts:object}} host from font-host.mjs hostFor (`fonts` is what `renderSvg` takes as `{ fonts }`)
+ * @param {{renderSvg:Function}} render the opf-render module that built the host
  * @returns {{ok:true}|{ok:false, code:string, family:string|null, cause:string}}
  */
 export function hostRenderOutcome(host, render, doc) {
   if (!host.gate.ok) return {ok: false, code: host.gate.code, family: null, cause: host.gate.message};
-  try { render.renderSvgDeck(structuredClone(doc), {...host.options}); return {ok: true}; }
+  try { render.renderSvg(structuredClone(doc), {fonts: host.fonts}); return {ok: true}; }
   catch (e) { return {ok: false, code: e.code ?? e.name, family: e.details?.fontFamily ?? null, cause: String(e.details?.cause ?? e.message).slice(0, 120)}; }
 }
 /** The one-line reason for a host render that failed. */

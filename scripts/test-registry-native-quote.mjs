@@ -28,18 +28,19 @@ const load=async name=>{
  return import(pathToFileURL(path.resolve(path.dirname(file),typeof entry==='string'?entry:entry.import??entry.default)).href);
 };
 const {toPptx,fromPptx}=await load('@openpresentation/opf-pptx');
-const {createFontRegistry}=await load('@openpresentation/opf-render/fonts');
-const {validatePresentation}=await load('@openpresentation/opf');
+const {loadFonts}=await load('@openpresentation/opf-render/fonts-node');
+const {validate}=await load('@openpresentation/opf');
+const valid=value=>validate(value,{only:['format']}).valid;
 const generation=await json(path.join(evidence,'generation.json')),native=await json(path.join(evidence,'native.json'));
 assert.equal(generation.decks.length,2,'Expected the controlled wide and portrait fixture decks');
 const sharedQuotes=generation.decks.every(record=>record.layouts?.every(layout=>Array.isArray(layout.parts)));
 const expectedSlides=sharedQuotes?12:8;
 const faces=[['calibri.ttf',400,false],['calibrib.ttf',700,false],['calibrii.ttf',400,true],['calibriz.ttf',700,true]];
-const fonts=createFontRegistry(await Promise.all(faces.map(async([file,weight,italic])=>{
+const fonts=await loadFonts({pack:'none',substitutionPolicy:'none',faces:await Promise.all(faces.map(async([file,weight,italic])=>{
  const data=await readFile(path.join(process.env.WINDIR??'C:/Windows','Fonts',file));
  assert.equal(hash(data),generation.fontHashes[file],'The original font bytes are required');
  return {data:new Uint8Array(data),family:'Calibri',weight,italic};
-})),{substitutionPolicy:'none'});
+}))});
 const results=[];
 for(const record of generation.decks) {
  assert.match(record.id,/^quote-\d+$/);
@@ -47,8 +48,8 @@ for(const record of generation.decks) {
  const source=await readFile(path.join(evidence,documentFile));
  assert.equal(hash(source),record.hashes[documentFile]);
  const document=JSON.parse(source);
- assert.ok(validatePresentation(document).valid);
- const bytes=await toPptx(document,{textMeasurement:fonts.textMeasurement});
+ assert.ok(valid(document));
+ const bytes=await toPptx(document,{fonts});
  assert.equal(hash(bytes),record.hashes[sourceFile],'Registry export must match the actual native-tested PPTX bytes');
  assert.equal(hash(await readFile(path.join(evidence,sourceFile))),hash(bytes));
  const observation=native.decks.find(item=>item.id===record.id);
@@ -64,7 +65,7 @@ for(const record of generation.decks) {
   const bytes=await readFile(path.join(evidence,record.id+suffix+'.pptx'));
   if(suffix)assert.equal(hash(bytes),suffix==='-native-saved'?observation.savedSha256:observation.editedSha256);
   const restored=await fromPptx(bytes);
-  assert.ok(validatePresentation(restored).valid);assert.equal(restored.slides.length,record.slides);
+  assert.ok(valid(restored));assert.equal(restored.slides.length,record.slides);
   for(const [index,slide] of restored.slides.entries()) {
    if(sharedQuotes){
     const expectedLines=record.layouts[index].parts.flatMap(part=>part.fit.lines.filter(line=>line!==''));

@@ -66,18 +66,19 @@ console.log(validate(source));     // JSON text: the same findings with line and
 ```js
 import { paginate, resolveSlideContext } from '@openpresentation/opf';
 import { composeSlide } from '@openpresentation/opf/composition';
-import { prepareNodeFonts } from '@openpresentation/opf-render/fonts-node';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 
-const { options: fonts } = await prepareNodeFonts({ pack: 'base' });
+const fonts = await loadFonts({ pack: 'base' });
 const { options } = resolveSlideContext(document, 0, { fonts });
 const geometry = composeSlide(document.slides[0], options);
 const { presentation, pages } = paginate(document, { fonts });
 ```
 
-`prepareNodeFonts({ pack: 'base' })` loads the bundled Roboto faces for
-`design.fontScheme: 'roboto'`. Its `options` is the fonts handle: deck-level
-verbs such as `paginate` take it as `{ fonts }` and read its
-`textMeasurement`. `resolveSlideContext(document, index, { fonts })` resolves
+`loadFonts({ pack: 'base' })` loads the bundled Roboto faces for
+`design.fontScheme: 'roboto'`. It returns the fonts handle: every deck-level
+verb (`paginate`, `renderSvg`, `svgToPng`, `svgToPdf`, `toPptx`) takes it as
+`{ fonts }` and reads what it needs from it (the `textMeasurement`, the faces
+to embed, the font files). `resolveSlideContext(document, index, { fonts })` resolves
 one slide's layout, canvas, theme and font families (slide design, then deck
 design, then theme, then the default font scheme) into the options `composeSlide`
 takes, so you never look up a font scheme yourself; an unknown font-scheme id
@@ -103,7 +104,7 @@ npx --no-install opf paginate deck.opf.json paginated.opf.json
 import { createEditorSession } from '@openpresentation/opf-editor';
 
 const editor = createEditorSession(document, { rejectInvalid: true });
-const original = editor.document.slides[0].title;
+const original = editor.presentation.slides[0].title;
 editor.set('slides.0.title', 'Edited title');
 editor.undo();
 // original title, including whitespace, is restored
@@ -115,21 +116,21 @@ history. Use the editor session or version control for undo.
 ## Preview and export
 
 ```js
-import { renderSvgDeck, svgToPng, svgToPdf } from '@openpresentation/opf-render';
+import { renderSvg, svgToPng, svgToPdf } from '@openpresentation/opf-render';
 import { toPptx } from '@openpresentation/opf-pptx';
 
-const svgs = renderSvgDeck(presentation, options);
-const png = await svgToPng(svgs[0], options);
-const pdf = await svgToPdf(svgs, options);
-const pptx = await toPptx(presentation, options);
+const svgs = renderSvg(presentation, { fonts });   // one SVG per slide
+const png = await svgToPng(svgs[0], { fonts });
+const pdf = await svgToPdf(svgs, { fonts });
+const pptx = await toPptx(presentation, { fonts });
 ```
 
-`renderSvg` / `renderSvgDeck` are the local preview. PNG rasterizes that SVG.
+`renderSvg` is the local preview of every slide (`renderSlideSvg` draws one). PNG rasterizes that SVG.
 PDF (opf-render 0.12.0 and later) converts the same SVG to **vector paths with
 selectable, searchable text** in embedded font subsets, with no second layout pass;
 pass `{ mode: 'raster' }` for the image-per-slide output that renderers up to 0.11.9
-always wrote. Supply the same font files as for PNG (`fontFiles`); vector PDF never
-uses system fonts.
+always wrote. Pass the same fonts handle as for PNG; vector PDF never uses system
+fonts.
 `toPptx` is the supported editable PowerPoint export from OPF. Shared
 headers/footers in that file are tagged slide shapes (`OPF_FURNITURE_V1`), not
 native Office Header/Footer objects (`p:hf` / notes master). Opening the file

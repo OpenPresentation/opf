@@ -56,7 +56,7 @@ import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads'
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
 // packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
 const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
-const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, renderSvg, svgToPng, checkTypefaces, fromPptx, toPptx, createEditorSession, presentationOf, catalogs, resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts, validate, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, renderSvg, svgToPng, checkTypefaces, fromPptx, toPptx, createEditorSession, catalogs, resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts, validate, strToU8, unzipSync, zipSync, XMLValidator} = engines;
 
 const started = Date.now();
 const MAX_SECONDS = 420;
@@ -690,12 +690,12 @@ async function verifyState(label, presentation, {png = false} = {}) {
 async function runSwitch(name, deck, steps, options = {}) {
   const editor = createEditorSession(deck, {rejectInvalid: true});
   const original = structuredClone(deck);
-  const first = await verifyState(`${name} A`, presentationOf(editor), options);
+  const first = await verifyState(`${name} A`, editor.presentation, options);
   let previous = first;
   const visited = [first];
   for (const [index, step] of steps.entries()) {
     step.apply(editor);
-    const next = await verifyState(`${name} ${step.label}`, presentationOf(editor));
+    const next = await verifyState(`${name} ${step.label}`, editor.presentation);
     assert.notEqual(Buffer.compare(next.bytes, previous.bytes), 0, `${name} ${step.label}: the export changed`);
     // The preview draws the registry's replacement, so two chosen fonts that share one (Tahoma and Verdana) preview alike.
     if (step.payload || next.faces !== previous.faces) assert.notDeepEqual(next.svgs, previous.svgs, `${name} ${step.label}: the preview re-rendered`);
@@ -704,7 +704,7 @@ async function runSwitch(name, deck, steps, options = {}) {
     for (const family of step.expectUsed ?? []) assert.ok(next.fonts.used.includes(family), `${name} ${step.label}: the package uses ${family}`);
     for (const family of step.expectUnused ?? []) assert.ok(!next.fonts.used.includes(family), `${name} ${step.label}: the package no longer uses ${family}`);
     if (index === steps.length - 1 && step.returnsToStart) {
-      assert.deepEqual(presentationOf(editor), original, `${name}: switching back restores the document`);
+      assert.deepEqual(editor.presentation, original, `${name}: switching back restores the document`);
       assert.equal(Buffer.compare(next.bytes, first.bytes), 0, `${name}: switching back restores the PPTX bytes`);
       assert.deepEqual(next.svgs, first.svgs, `${name}: switching back restores the preview`);
     }
@@ -713,7 +713,7 @@ async function runSwitch(name, deck, steps, options = {}) {
   }
   // The editor's history returns to the original document too.
   while (editor.canUndo) editor.undo();
-  assert.deepEqual(presentationOf(editor), original, `${name}: undo restores the document`);
+  assert.deepEqual(editor.presentation, original, `${name}: undo restores the document`);
   return visited;
 }
 const setScheme = (path, id) => (editor) => editor.setCatalog(path, 'fontSchemes', id);

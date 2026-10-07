@@ -1,15 +1,9 @@
 {
   "design": {
     "fontScheme": {
-      "heading": {
-        "family": "Carlito"
-      },
-      "body": {
-        "family": "Carlito"
-      },
-      "code": {
-        "family": "Cousine"
-      }
+      "heading": "Carlito",
+      "body": "Carlito",
+      "code": "Cousine"
     }
   },
   "slides": [

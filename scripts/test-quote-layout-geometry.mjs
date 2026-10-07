@@ -35,9 +35,10 @@ for (const name of ['@openpresentation/opf','@openpresentation/opf-render']) {
   assert.equal((await packageManifest(name)).manifest.version,plan.packages.find(item=>item.name===name)?.version);
 }
 const {resolvePresentation}=await load('@openpresentation/opf-render','./svg');
-const {validatePresentation}=await load('@openpresentation/opf','.');
-const {loadOfficeFontRegistry}=await load('@openpresentation/opf-render','./fonts-node');
-const registry=await loadOfficeFontRegistry();
+const {validate}=await load('@openpresentation/opf','.');
+const valid=value=>validate(value,{only:['format']}).valid;
+const {loadFonts}=await load('@openpresentation/opf-render','./fonts-node');
+const registry=await loadFonts({pack:'office'});
 const fixtureBytes=await readFile('docs/evidence/payload-fit-gaps-2026-09-09.opf.json');
 const fixture=JSON.parse(fixtureBytes);
 const results=[];
@@ -47,8 +48,8 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     const quote={...fixture.slides[0].quote,...(scenario==='short'?{attribution:'Preserved author',source:'Preserved source'}:
       overflowing?{attribution:fixture.slides[0].quote.attribution.repeat(10)}:{})};
     const deck={...fixture,design:{...fixture.design,dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{quote}]};
-    assert.ok(validatePresentation(deck).valid,'Probe inputs must use actual schema-valid dimensions');
-    const bound=resolvePresentation(deck,{textMeasurement:registry.textMeasurement}).slides[0];
+    assert.ok(valid(deck),'Probe inputs must use actual schema-valid dimensions');
+    const bound=resolvePresentation(deck,{fonts:registry}).slides[0];
     assert.deepEqual(bound.design.dimensions,dimensions);
     const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.quote',scale:Math.min(dimensions.width,dimensions.height)/720};
     const layout=layoutQuote(quote,bound.geometry.items[0].box,options);

@@ -31,10 +31,11 @@ const load = async (name, subpath = '.') => {
   const manifest = await json(manifestPath), entry = manifest.exports[subpath];
   return import(pathToFileURL(path.resolve(path.dirname(manifestPath), typeof entry === 'string' ? entry : entry.import ?? entry.default)).href);
 };
-const { validatePresentation } = await load('opf');
+const { validate } = await load('opf');
+const valid = value => validate(value, {only: ['format']}).valid;
 const { examples } = await load('opf', './examples');
-const { renderSvgDeck, svgToPng } = await load('opf-render');
-const { createFontRegistry } = await load('opf-render', './fonts');
+const { renderSvg, svgToPng } = await load('opf-render');
+const { loadFonts } = await load('opf-render', './fonts-node');
 const candidateEntry = process.argv[5] ? await realpath(path.resolve(process.argv[5])) : null;
 let candidate = null;
 if (candidateEntry) {
@@ -82,7 +83,7 @@ if (mode === 'generate') {
   const faces = [['calibri.ttf', 400, false], ['calibrib.ttf', 700, false], ['calibrii.ttf', 400, true], ['calibriz.ttf', 700, true]];
   const fontFiles = faces.map(([file]) => path.join(fontDirectory, file));
   const fontHashes = Object.fromEntries(await Promise.all(faces.map(async ([file]) => [file, hash(await readFile(path.join(fontDirectory, file)))])));
-  const fonts = createFontRegistry(await Promise.all(faces.map(async ([file, weight, italic]) => ({data: new Uint8Array(await readFile(path.join(fontDirectory, file))), family: 'Calibri', weight, italic}))), {substitutionPolicy: 'none'});
+  const fonts = await loadFonts({pack: 'none', substitutionPolicy: 'none', faces: await Promise.all(faces.map(async ([file, weight, italic]) => ({data: new Uint8Array(await readFile(path.join(fontDirectory, file))), family: 'Calibri', weight, italic})))});
   const records = [];
   const cases = selected.map(id => {
     const source = examples.find(item => item.file.endsWith('/' + id + '.opf.json'));
@@ -107,12 +108,12 @@ if (mode === 'generate') {
     };
     normalizeFonts(document);
     document.design = {...document.design, fontScheme: {id: 'calibri', code: 'Calibri'}, dimensions: {widthInches: 1280 / 96, heightInches: 720 / 96}};
-    assert.equal(validatePresentation(document).valid, true, id);
-    const diagnostics = [], options = {textMeasurement: fonts.textMeasurement, strictAssets: true, onDiagnostic: issue => diagnostics.push(issue)};
-    const svgs = renderSvgDeck(document, options), hashes = {};
+    assert.equal(valid(document), true, id);
+    const diagnostics = [], options = {fonts, strictAssets: true, onDiagnostic: issue => diagnostics.push(issue)};
+    const svgs = renderSvg(document, options), hashes = {};
     const save = async (file, bytes) => {await writeFile(path.join(output, file), bytes); hashes[file] = hash(bytes);};
     for (const [index, svg] of svgs.entries()) {
-      await save(`${id}-renderer-${index + 1}.png`, await svgToPng(svg, {fontFiles, useBundledFonts: false, loadSystemFonts: false}));
+      await save(`${id}-renderer-${index + 1}.png`, await svgToPng(svg, {fonts: {fontFiles, useBundledFonts: false, loadSystemFonts: false}}));
     }
     await save(id + '.pptx', await toPptx(document, options));
     await save(id + '.opf.json', JSON.stringify(document, null, 2) + '\n');
@@ -161,7 +162,7 @@ if (mode === 'generate') {
     for (const suffix of ['', '-native-saved', '-native-edited']) {
       const diagnostics = [];
       const imported = await fromPptx(await readFile(path.join(output, id + suffix + '.pptx')), {onDiagnostic: issue => diagnostics.push(issue)});
-      assert.equal(validatePresentation(imported).valid, true, id + suffix);
+      assert.equal(valid(imported), true, id + suffix);
       assert.equal(imported.slides.length, record.slides);
       if (suffix === '-native-edited') for (let index = 1; index <= record.slides; index++) assert.ok(JSON.stringify(imported.slides[index - 1]).includes(`Native edit ${id} slide ${index}`), 'Native text edit missing from reimport');
       await writeJson(id + suffix + '.reimport.json', imported);

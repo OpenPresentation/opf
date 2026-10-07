@@ -64,12 +64,12 @@ test('resolveFamily caches on the host', () => {
 });
 
 test('hostRenderOutcome: a finished gate and a render that does not throw is ok; the failures keep their code, family and cause', () => {
-  const ok = {gate: {ok: true}, options: {a: 1}};
-  assert.deepEqual(hostRenderOutcome(ok, {renderSvgDeck: (d, o) => { assert.deepEqual(o, {a: 1}); return []; }}, {}), {ok: true});
-  const bad = hostRenderOutcome(ok, {renderSvgDeck: () => { throw Object.assign(new Error('boom'), {code: 'font-shaping-failed', details: {fontFamily: 'Noto Sans Mongolian', cause: 'Not a fixed size'}}); }}, {});
+  const ok = {gate: {ok: true}, fonts: {a: 1}};
+  assert.deepEqual(hostRenderOutcome(ok, {renderSvg: (d, o) => { assert.deepEqual(o, {fonts: {a: 1}}); return []; }}, {}), {ok: true});
+  const bad = hostRenderOutcome(ok, {renderSvg: () => { throw Object.assign(new Error('boom'), {code: 'font-shaping-failed', details: {fontFamily: 'Noto Sans Mongolian', cause: 'Not a fixed size'}}); }}, {});
   assert.deepEqual(bad, {ok: false, code: 'font-shaping-failed', family: 'Noto Sans Mongolian', cause: 'Not a fixed size'});
   assert.equal(hostRenderReason(bad), 'the modelled host cannot draw this value: font-shaping-failed (Noto Sans Mongolian), Not a fixed size');
-  const gate = hostRenderOutcome({gate: {ok: false, code: 'fonts-unavailable', message: 'x.woff2 did not finish loading'}, options: {}}, {renderSvgDeck: () => assert.fail('the gate failed, nothing is rendered')}, {});
+  const gate = hostRenderOutcome({gate: {ok: false, code: 'fonts-unavailable', message: 'x.woff2 did not finish loading'}, fonts: {}}, {renderSvg: () => assert.fail('the gate failed, nothing is rendered')}, {});
   assert.deepEqual(gate, {ok: false, code: 'fonts-unavailable', family: null, cause: 'x.woff2 did not finish loading'});
 });
 

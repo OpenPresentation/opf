@@ -4,12 +4,12 @@
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { FileCommandError } from "./io.js";
-import type { Diagnostic, FontOptions, FontRegistry, Renderer } from "./peers.js";
+import type { Diagnostic, EmbeddedFace, FontsHandle, Renderer } from "./peers.js";
 import type { Reporter } from "./reporter.js";
 
 export interface PreparedFonts {
-	options: FontOptions;
-	registry: FontRegistry;
+	/** The fonts handle of opf-render `loadFonts()`: passed as `{ fonts }` to every deck-level call. */
+	handle: FontsHandle;
 	/** Absolute paths of the --font-dir files, in load order. */
 	userFonts: string[];
 }
@@ -43,7 +43,7 @@ export async function listFontDirectories(directories: string[]): Promise<string
  */
 export async function prepareFonts(renderer: Renderer, presentation: unknown, userFonts: string[], reporter: Reporter): Promise<PreparedFonts> {
 	try {
-		const prepared = await renderer.fonts.prepareNodeFonts({
+		const handle = await renderer.fonts.loadFonts({
 			pack: "office",
 			substitutionPolicy: "visual",
 			scripts: "auto",
@@ -51,7 +51,7 @@ export async function prepareFonts(renderer: Renderer, presentation: unknown, us
 			faces: userFonts.map((file) => ({ path: file })),
 			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("fonts", scriptDiagnostic(diagnostic)),
 		});
-		return { ...prepared, userFonts };
+		return { handle, userFonts };
 	} catch (error) {
 		const failure = error as { code?: string; message?: string; details?: Record<string, unknown> };
 		throw new FileCommandError(failure.message ?? String(error), 2, {
@@ -71,14 +71,14 @@ function scriptDiagnostic(diagnostic: Diagnostic): Diagnostic {
  * Faces an SVG should carry. Marking every face `embed: "used"` makes the renderer embed a face only when the slide's
  * text names its family, so a slide in one family ships kilobytes of font rather than the whole pack.
  */
-export function embeddedFor(options: FontOptions, mode: "used" | "none") {
-	return mode === "none" ? [] : options.embeddedFonts.map((face) => ({ ...face, embed: "used" as const }));
+export function embeddedFor(handle: FontsHandle, mode: "used" | "none"): (EmbeddedFace & { embed?: "used" })[] {
+	return mode === "none" ? [] : handle.embeddedFonts.map((face) => ({ ...face, embed: "used" as const }));
 }
 
 /** The substitutions made while rendering, one row per requested family and the face that stood in for it. */
-export function substitutionRows(registry: FontRegistry) {
+export function substitutionRows(handle: FontsHandle) {
 	const rows = new Map<string, { requested: string; resolved: string; compatibility: string }>();
-	for (const item of registry.substitutions ?? []) {
+	for (const item of handle.substitutions) {
 		if (!item.substitute) continue;
 		rows.set(`${item.requestedFamily}\u0000${item.resolvedFamily}`, { requested: item.requestedFamily, resolved: item.resolvedFamily, compatibility: item.compatibility });
 	}
