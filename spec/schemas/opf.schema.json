@@ -1209,7 +1209,7 @@
           "enum": [
             "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
             "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
-            "primary", "secondary", "accent", "background", "surface", "text", "textSecondary"
+            "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary"
           ]
         },
         {
@@ -1217,7 +1217,7 @@
           "pattern": "^var:[a-z][a-z0-9-]*$"
         }
       ],
-      "description": "A color value or reference, enforced on styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes.\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
+      "description": "A color value or reference, enforced on styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes. 'surfaceAlt' has no slot: it is the alternate surface of banded table rows, derived from 'surface' and 'text' (the surface mixed a tenth of the way towards the text color, further when needed, so it always differs visibly from 'surface' and keeps 4.5:1 text contrast; core surfaceAltColor).\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
       "examples": ["#0F4C81", "accent2", "text", "var:risk"]
     },
     "Variables": {

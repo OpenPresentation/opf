@@ -38,7 +38,7 @@ Pick `bullets` for plain talking points and `items` as soon as an entry has a de
 Every content color field — `TextRun.color`, styled table cell `style.fill` and `style.color`, and table cell border `color` — accepts three forms:
 
 - A literal hex color: `"#0F172A"`, `"#B42318CC"`.
-- A color-scheme slot or role name, resolved through the effective color scheme after design resolution: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`; roles `primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`.
+- A color-scheme slot or role name, resolved through the effective color scheme after design resolution: slots `accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`; roles `primary`, `secondary`, `accent`, `background`, `surface`, `surfaceAlt`, `text`, `textSecondary`. `surfaceAlt` is the alternate surface for banded table rows: core derives it from `surface` and `text` (`surfaceAltColor`), so it always differs visibly from the `surface` of the plain rows, on light and dark slides, and body text keeps 4.5:1 on it.
 - A variable reference `var:<id>` into the top-level `variables` map.
 
 ```json

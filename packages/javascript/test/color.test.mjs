@@ -132,7 +132,7 @@ test('isDarkColor: WCAG luminance under 0.179, so saturated mid-tones take dark 
 test('resolveColorRoles: slot defaults, role overrides, and the dark background rules',()=>{
   const scheme={dark1:'#101010',light1:'#FAFAFA',dark2:'#223344',light2:'#EEEEEE',accent1:'#2874A6',accent2:'#1B4F72',accent3:'#5499C7',hyperlink:'#0033CC',followedHyperlink:'#660099'};
   const light=resolveColorRoles(scheme);
-  assert.deepEqual(light,{primary:'#2874A6',secondary:'#1B4F72',accent:'#5499C7',background:'#FAFAFA',surface:'#EEEEEE',text:'#101010',textSecondary:'#223344',hyperlink:'#0033CC',followedHyperlink:'#660099',dark:false});
+  assert.deepEqual(light,{primary:'#2874A6',secondary:'#1B4F72',accent:'#5499C7',background:'#FAFAFA',surface:'#EEEEEE',surfaceAlt:'#D8D8D8',text:'#101010',textSecondary:'#223344',hyperlink:'#0033CC',followedHyperlink:'#660099',dark:false});
   const dark=resolveColorRoles(scheme,{background:'#0B1220'});
   assert.deepEqual([dark.background,dark.surface,dark.text,dark.textSecondary,dark.dark],['#0B1220','#223344','#FAFAFA','#EEEEEE',true]);
   // Overrides: primary/secondary/accent/surface/textSecondary apply on any background; text only on a light one.

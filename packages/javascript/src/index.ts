@@ -163,6 +163,9 @@ export {
   normalizeHexColor,
   resolveColorRef,
   resolveColorRoles,
+  SURFACE_ALT_MIN_CONTRAST,
+  SURFACE_ALT_MIX,
+  surfaceAltColor,
   textColorForFill,
 } from './color.js';
 export type { ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles } from './color.js';

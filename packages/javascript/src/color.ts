@@ -4,7 +4,7 @@ const schemeColorSlots = new Set([
 ]);
 
 const schemeColorRoles = new Set([
-  'primary', 'secondary', 'accent', 'background', 'surface', 'text', 'textSecondary',
+  'primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary',
 ]);
 
 const defaultRoleSlots: Record<string, string> = {
@@ -27,7 +27,7 @@ export function normalizeHexColor(value: unknown): string | undefined {
 }
 
 export type ResolveColorRefRoles = Partial<Record<
-  'primary' | 'secondary' | 'accent' | 'background' | 'surface' | 'text' | 'textSecondary',
+  'primary' | 'secondary' | 'accent' | 'background' | 'surface' | 'surfaceAlt' | 'text' | 'textSecondary',
   string
 >>;
 
@@ -71,6 +71,12 @@ export function resolveColorRef(reference: string, options: ResolveColorRefOptio
     const roleKey = reference as keyof ResolveColorRefRoles;
     const fromRoles = roles?.[roleKey];
     if (fromRoles) return normalizeHexColor(fromRoles) ?? fallback;
+    // surfaceAlt has no slot or scheme override: it is derived from the surface and text roles (see surfaceAltColor).
+    if (reference === 'surfaceAlt') {
+      const surface = resolveColorRef('surface', { colorScheme, roles, variables, fallback: '#FFFFFF' });
+      const text = resolveColorRef('text', { colorScheme, roles, variables, fallback: textColorForFill(surface, '#000000') });
+      return surfaceAltColor(surface, text);
+    }
     const fromScheme = normalizeHexColor(colorScheme[reference]);
     if (fromScheme) return fromScheme;
     const slot = defaultRoleSlots[reference];
@@ -135,6 +141,8 @@ export interface ResolvedColorRoles {
   background: string;
   /** Role override, else dark2 on a dark background and light2 on a light one. */
   surface: string;
+  /** The alternate surface of banded table rows: {@link surfaceAltColor} of `surface` and `text`, always distinguishable from `surface`. */
+  surfaceAlt: string;
   /** Default text. On a dark background light1. On a light background the `text` role override, else dark1. */
   text: string;
   /** Role override, else light2 on a dark background and dark2 on a light one. */
@@ -165,12 +173,14 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
   const background = keepAlpha(options.background) ?? defaultSlideBackground(colorScheme);
   const dark = isDarkColor(background);
   const text = dark ? slot('light1', '#FFFFFF') : (keepAlpha(colorScheme.text) ?? slot('dark1', '#111827'));
+  const surface = keepAlpha(colorScheme.surface) ?? (dark ? slot('dark2', '#1E293B') : slot('light2', '#F8FAFC'));
   return {
     primary: keepAlpha(colorScheme.primary) ?? slot('accent1', '#2563EB'),
     secondary: keepAlpha(colorScheme.secondary) ?? slot('accent2', '#0F766E'),
     accent: keepAlpha(colorScheme.accent) ?? slot('accent3', '#F59E0B'),
     background,
-    surface: keepAlpha(colorScheme.surface) ?? (dark ? slot('dark2', '#1E293B') : slot('light2', '#F8FAFC')),
+    surface,
+    surfaceAlt: surfaceAltColor(surface, text),
     text,
     textSecondary: keepAlpha(colorScheme.textSecondary) ?? (dark ? slot('light2', '#E2E8F0') : slot('dark2', '#334155')),
     hyperlink: readableLink(slot('hyperlink', DEFAULT_HYPERLINK), background, text),
@@ -400,4 +410,40 @@ export function chartHighlightColors(surface: string, primary: string, text: str
     muted = mixChannels(from, to, amount);
   }
   return { accent, muted };
+}
+
+// --------------------------------------------------------------- alternate surface (banded table rows)
+
+/** Share of the text colour mixed into the surface for the `surfaceAlt` role. */
+export const SURFACE_ALT_MIX = 0.1;
+/** Smallest contrast `surfaceAlt` keeps against `surface`, so a band is visible next to a plain row. */
+export const SURFACE_ALT_MIN_CONTRAST = 1.1;
+
+/**
+ * The `surfaceAlt` colour role: the fill of the banded rows of a table whose other body rows take `surface`. It is the surface
+ * mixed {@link SURFACE_ALT_MIX} of the way towards the text colour (a slightly darker band on a light table, a slightly lighter one
+ * on a dark table), moved further until it differs from the surface by {@link SURFACE_ALT_MIN_CONTRAST}, while the text keeps
+ * 4.5:1 on it. When mixing towards the text cannot keep both (a surface and text that are close together), the band moves the
+ * other way, away from the text, which only raises the text contrast. Pure arithmetic on opaque colours, so the preview and
+ * the PPTX export, which both resolve the `surfaceAlt` ColorRef from their own `surface` and `text` roles, draw and write the
+ * same colour. An unresolved surface is white; an unresolved text colour is the surface's best contrast partner.
+ */
+export function surfaceAltColor(surface: string, text: string): string {
+  const fill = normalizeHexColor(surface) ?? '#FFFFFF';
+  const ink = normalizeHexColor(text) ?? textColorForFill(fill, '#000000');
+  const from = opaqueChannels(fill)!, toText = opaqueChannels(ink)!;
+  const step = (color: string) => (colorContrast(color, fill) ?? 1) >= SURFACE_ALT_MIN_CONTRAST;
+  const readable = (color: string) => (colorContrast(ink, color) ?? 0) >= 4.5 || (colorContrast(ink, color) ?? 0) >= (colorContrast(ink, fill) ?? 0);
+  for (let amount = SURFACE_ALT_MIX; amount <= 0.5 + 1e-9; amount += 0.02) {
+    const band = mixChannels(from, toText, amount);
+    if (!readable(band)) break;
+    if (step(band)) return band;
+  }
+  // Away from the text: towards black under light text, towards white under dark text.
+  const away = (luminance(ink) ?? 0) > (luminance(fill) ?? 0) ? [0, 0, 0] : [255, 255, 255];
+  for (let amount = SURFACE_ALT_MIX; amount <= 1 + 1e-9; amount += 0.02) {
+    const band = mixChannels(from, away, Math.min(1, amount));
+    if (step(band)) return band;
+  }
+  return mixChannels(from, toText, SURFACE_ALT_MIX);
 }
