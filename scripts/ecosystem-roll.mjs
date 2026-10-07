@@ -25,7 +25,7 @@
 // the lock's golden. That override names a renderer baseline directory or, for a coordinated release, a reviewed core
 // fixture (`opf/scripts/fixtures/<name>.sha256.json`, which must exist at the core SHA being rolled). If the coordinated checks fail on the four mains (a renderer change that moved pixels, a broken
 // main, a coupling), nothing is proposed and the run fails with the links: a human fixes main or the golden.
-import { appendFileSync } from "node:fs";
+import { appendFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { githubApi, isSafeRelativePath, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
@@ -90,17 +90,29 @@ async function fileAt(api, repository, file, ref) {
   return { sha: data.sha, text: Buffer.from(data.content, data.encoding === "base64" ? "base64" : "utf8").toString("utf8") };
 }
 
-/** Reads the four mains and builds the candidate from core main's lock. */
-export async function plan(api, { at = new Date().toISOString().replace(/\.\d{3}Z$/, "Z"), run, lock: localLock } = {}) {
+/**
+ * Reads the four mains and builds the candidate from core main's lock (or `lock`, a local lock: the plan-only check of
+ * a pull request). The candidate's golden must exist where it comes from: a golden adopted from opf-render's
+ * `golden-override` at the rolled SHA of its repository; the lock's own golden at the rolled core SHA, or, for a
+ * local lock whose golden lives in core, in that local checkout (`root`), since a pull request adds its fixture
+ * before main has it.
+ */
+export async function plan(api, { at = new Date().toISOString().replace(/\.\d{3}Z$/, "Z"), run, lock: localLock, root: localRoot, exists = existsSync } = {}) {
   const mains = await mainShas(api);
   const lock = localLock ?? parseLock((await fileAt(api, "opf", LOCK_FILE, mains.opf)).text, `${CORE}@${mains.opf.slice(0, 12)}:${LOCK_FILE}`);
   const renderOverride = goldenOverrideOf((await fileAt(api, "opf-render", ".github/workflows/ci.yml", mains["opf-render"])).text);
   const result = candidateLock(lock, mains, { renderOverride, at, run });
-  const goldenRef = mains[result.candidate.golden.repository];
-  try {
-    await api(`/repos/${OWNER}/${result.candidate.golden.repository}/contents/${result.candidate.golden.path}?ref=${goldenRef}`);
-  } catch (error) {
-    throw new Error(`the golden ${result.candidate.golden.repository}:${result.candidate.golden.path} does not exist at ${goldenRef.slice(0, 12)} (${error.message})`);
+  const { repository, path: goldenPath } = result.candidate.golden;
+  const adopted = Boolean(renderOverride);
+  if (!adopted && localLock && localRoot && repository === "opf") {
+    if (!exists(path.join(localRoot, goldenPath))) throw new Error(`the lock's golden opf:${goldenPath} does not exist in the checkout ${localRoot}`);
+  } else {
+    const goldenRef = mains[repository];
+    try {
+      await api(`/repos/${OWNER}/${repository}/contents/${goldenPath}?ref=${goldenRef}`);
+    } catch (error) {
+      throw new Error(`the golden ${repository}:${goldenPath} does not exist at ${goldenRef.slice(0, 12)} (${error.message})`);
+    }
   }
   return { mains, lock, ...result };
 }
@@ -223,7 +235,7 @@ async function main(argv) {
   const api = githubApi();
   if (command === "plan") {
     const lockFile = option(args, "--lock");
-    const planned = await plan(api, { lock: lockFile ? readLock(path.resolve(lockFile)) : undefined });
+    const planned = await plan(api, lockFile ? { lock: readLock(path.resolve(lockFile)), root: path.dirname(path.resolve(lockFile)) } : {});
     console.log(serializeLock(planned.candidate));
     console.log(planned.changed ? `Would roll: ${planned.moved.join(", ") || "golden only"}.` : "Nothing to roll.");
     return 0;
