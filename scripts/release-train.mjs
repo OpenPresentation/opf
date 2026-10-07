@@ -15,9 +15,10 @@
 //       the release-prep PR of one package once its upstream is on npm: version bump, `changelog-fragments.mjs
 //       assemble`, dependency floors, lockfile refresh. Dry run: prepares a scratch clone and prints the diff.
 //   node scripts/release-train.mjs tag <package>[@X.Y.Z] [versions] [--execute] [--wait-minutes 90] [--poll-seconds 120]
-//                                   [--attest-wait-minutes 15] [--attest-poll-seconds 30]
+//                                   [--attest-wait-minutes 15] [--attest-poll-seconds 30] [--checks-wait-minutes 0]
 //       creates refs/tags/<prefix>X.Y.Z on the release commit (re-verified), waits for the publish run, then verifies,
-//       waiting up to --attest-wait-minutes for npm to serve the attestation bundle and the install (RR-51)
+//       waiting up to --attest-wait-minutes for npm to serve the attestation bundle and the install (RR-51); with
+//       --checks-wait-minutes N it first waits up to N min for pending checks on the release commit instead of stopping
 //   node scripts/release-train.mjs verify <npm name or package>@X.Y.Z [--json] [--wait <minutes>]
 //       npm version, gitHead = tagged commit, SLSA provenance (bundle and `npm audit signatures`), GitHub release.
 //       Fails fast by default; --wait retries only the two propagation-sensitive checks (404 bundle, notarget install)
@@ -786,7 +787,7 @@ async function publishRun(deps, pkg, tag, sha) {
  * Tags the release commit of pkg@version, waits for its publish run and the registry, then verifies. Re-verifies
  * everything first; skips what is done. Returns { status, ... }; throws TrainStop when it cannot go on.
  */
-export async function tagRelease(deps, pkg, version, train, { execute = false, waitMinutes = 90, pollSeconds = 120, npmPollSeconds = 30, attestWaitMinutes = ATTEST_WAIT_MINUTES, attestPollSeconds = 30 } = {}) {
+export async function tagRelease(deps, pkg, version, train, { execute = false, waitMinutes = 90, pollSeconds = 120, npmPollSeconds = 30, attestWaitMinutes = ATTEST_WAIT_MINUTES, attestPollSeconds = 30, checksWaitMinutes = 0 } = {}) {
   const tag = tagOf(pkg, version);
   const state = await packageState(deps, pkg, version, { ...train, [pkg.key]: version });
   if (state.step === "published") {
@@ -805,10 +806,25 @@ export async function tagRelease(deps, pkg, version, train, { execute = false, w
   if (atCommit.version !== version) throw new TrainStop(`${pkg.manifest} at ${sha.slice(0, 12)} carries ${atCommit.version}, not ${version}`);
   const onMain = await ancestry(deps.api, pkg.repo, sha);
   if (!onMain.onBranch) throw new TrainStop(`${sha.slice(0, 12)} is not on ${pkg.repo} main (${onMain.status})`);
-  if (state.checks.state !== "green") throw new TrainStop(`checks on ${pkg.repo}@${sha.slice(0, 12)} are ${checksLine(state.checks)}; tag once they are green`);
+  let checks = state.checks;
+  // RR-20: with --execute and --checks-wait-minutes, wait for pending checks on the release commit (right after the merge
+  // none are reported yet) instead of stopping, so a caller needs no separate wait. A red check still stops at once.
+  if (checks.state === "pending" && execute && checksWaitMinutes > 0) {
+    const settled = await pollUntil(
+      deps,
+      `the checks on ${pkg.repo}@${sha.slice(0, 12)}`,
+      async () => {
+        const now = await commitChecks(deps, pkg.repo, sha);
+        return { done: now.state !== "pending", detail: checksLine(now), checks: now };
+      },
+      { waitMinutes: checksWaitMinutes, pollSeconds },
+    );
+    checks = settled.checks;
+  }
+  if (checks.state !== "green") throw new TrainStop(`checks on ${pkg.repo}@${sha.slice(0, 12)} are ${checksLine(checks)}; tag once they are green`);
   if (!state.tagCommit) {
     if (!execute) {
-      deps.log(`dry run: would create refs/tags/${tag} on ${OWNER}/${pkg.repo}@${sha} (${pkg.manifest} carries ${version}; checks ${checksLine(state.checks)}), then wait for ${pkg.workflow}. Pass --execute.`);
+      deps.log(`dry run: would create refs/tags/${tag} on ${OWNER}/${pkg.repo}@${sha} (${pkg.manifest} carries ${version}; checks ${checksLine(checks)}), then wait for ${pkg.workflow}. Pass --execute.`);
       return { status: "dry-run", sha, tag };
     }
     await deps.api(`/repos/${OWNER}/${pkg.repo}/git/refs`, { method: "POST", body: { ref: `refs/tags/${tag}`, sha } });
@@ -1076,7 +1092,7 @@ export function defaultDeps(overrides = {}) {
 const USAGE = `Usage: node scripts/release-train.mjs <command> [--core X.Y.Z] [--render X.Y.Z] [--pptx X.Y.Z] [--editor X.Y.Z] [--cli X.Y.Z]
   plan [--json]                         read-only state of the train and what is missing
   prep <package> [--execute] [--item RR-nn] [--branch b] [--summary s] [--date YYYY-MM-DD]
-  tag <package>[@X.Y.Z] [--execute] [--wait-minutes 90] [--poll-seconds 120] [--attest-wait-minutes 15] [--attest-poll-seconds 30]
+  tag <package>[@X.Y.Z] [--execute] [--checks-wait-minutes 0] [--wait-minutes 90] [--poll-seconds 120] [--attest-wait-minutes 15] [--attest-poll-seconds 30]
   verify <package>@X.Y.Z [--json] [--wait <minutes>] [--attest-poll-seconds 30]   e.g. @openpresentation/opf-pptx@0.12.2
   run [--execute] [--item RR-nn]        the whole train in lockstep order (same wait options as tag)
 Packages: ${PACKAGE_KEYS.join(", ")} (or the repository or npm name). Without --execute nothing is written.`;
@@ -1091,6 +1107,7 @@ export async function main(argv, deps = defaultDeps()) {
     waitMinutes: Number(option(args, "--wait-minutes") ?? 90),
     pollSeconds: Number(option(args, "--poll-seconds") ?? 120),
     attestWaitMinutes: Number(option(args, "--attest-wait-minutes") ?? ATTEST_WAIT_MINUTES),
+    checksWaitMinutes: Number(option(args, "--checks-wait-minutes") ?? 0),
     attestPollSeconds,
   };
   for (const [name, value] of Object.entries(waits)) if (!Number.isFinite(value) || value < 0) throw new Error(`${name} must be a non-negative number`);
