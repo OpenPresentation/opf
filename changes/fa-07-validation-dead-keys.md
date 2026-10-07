@@ -1,6 +1,6 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 FA-07 (breaking, pre-v1: removed outright, no aliases; format audit, lockstep with the renderer, PPTX and editor): validation tightening and dead keys. Every description now states what core, opf-render and opf-pptx do.
     - **Tighter validation:** color-scheme slots (`accent1`-`accent6`, `dark1/2`, `light1/2`, `hyperlink`, `followedHyperlink`) and roles (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) are `HexColor`, inline and in the color-scheme record schema; `SolidBackground.color`, gradient stop colors and pattern `foregroundColor`/`backgroundColor` are `ColorRef` (a name or `var:` reference there now warns when the variable is undeclared, and `validate`'s contrast rules resolve them like the preview); `TextRun.link` matches `^(https?://|mailto:|tel:)\S+$`; a gradient needs at least two stops; `Watermark` requires `src` (the object form keeps `opacity` required) and its description states the fixed frame and the default opacity; `slides[].design` cannot set `dimensions` (new `SlideDesign` definition), and a slide-level theme whose dimensions differ from the deck's is the new `validate` warning `opf/slide-theme-dimensions` (category `references`).

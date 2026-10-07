@@ -1,6 +1,6 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 FA-03 (breaking catalog and schema change, pre-v1, no aliases; needs a minor bump): the chart-type and audience catalogs are clean. The 50 deprecated chart-type records and the 6 deprecated plural audience records are deleted, so the bundled catalog holds no deprecated record and a retired id (`clustered-column`, `sparkline`, `dot-plot`, `australia`, `executives`, ...) is an `unknown <kind> catalog id` warning. The `deprecation` field and the `opf/deprecated-catalog-id` warning of `validate` stay for after v1.
     - **Ids:** every active chart-type id loses its `-3x` suffix: `stacked-column`, `stacked-bar`, `stacked-line`, `stacked-line-with-markers`, `stacked-area`, `100pct-stacked-column`, `100pct-stacked-bar` and `100pct-stacked-area`. There is no alias for the old ids. The bundled examples, `spec/reference/engine-defaults.json` and `chartOptionTarget` use the new ids (`chartOptionTarget` no longer resolves deprecated ids).
