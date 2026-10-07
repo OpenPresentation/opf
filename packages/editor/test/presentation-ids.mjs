@@ -11,7 +11,7 @@ import {
 import { prepareOpfImport, parseOpfTransfer } from "../dist/transfer.js";
 import { isAuthoringColorRef } from "../dist/color-authoring.js";
 
-const fixturePath = new URL("../../opf/docs/fixtures/color-references.opf.json", import.meta.url);
+const fixturePath = new URL("./fixtures/color-references.opf.json", import.meta.url);
 const fixture = JSON.parse(readFileSync(fixturePath, "utf8"));
 
 const payloadSlide = {
