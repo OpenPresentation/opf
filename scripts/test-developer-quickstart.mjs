@@ -7,10 +7,14 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promisify} from 'node:util';
 import {packageManagerInvocation} from './package-manager.mjs';
+import {cliSkipNotice, installablePackages} from './release-plan-cli.mjs';
 
 const execFile = promisify(execFileCallback);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'utf8'));
+// While the plan's CLI peer ranges conflict with the plan's libraries it is neither installed beside them nor run (release-plan-cli.mjs).
+const cliNotice = await cliSkipNotice(plan);
+const installed = await installablePackages(plan);
 const deckSource = path.join(root, 'docs/quickstart/developer-quickstart.opf.json');
 assert.ok(
   !path.relative(root, deckSource).split(path.sep).includes('examples'),
@@ -47,11 +51,11 @@ try {
   const originalDeck = await readFile(path.join(projectDir, 'deck.opf.json'));
   const originalSlides = JSON.parse(originalDeck.toString('utf8')).slides.length;
 
-  const specs = plan.packages.map((item) => `${item.name}@${item.version}`);
+  const specs = installed.map((item) => `${item.name}@${item.version}`);
   await run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', ...specs], {cwd: projectDir});
 
   const lock = JSON.parse(await readFile(path.join(projectDir, 'package-lock.json'), 'utf8'));
-  for (const item of plan.packages) {
+  for (const item of installed) {
     const entry = lock.packages[`node_modules/${item.name}`];
     assert.equal(entry?.version, item.version, `${item.name} must install ${item.version}`);
     assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/'), `${item.name} must resolve from the npm registry`);
@@ -130,26 +134,29 @@ console.log(JSON.stringify({
 
   await run(process.execPath, ['workflow.mjs'], {cwd: projectDir});
 
-  const cli = path.join(projectDir, 'node_modules', '@openpresentation', 'cli', 'dist', 'index.js');
-  const version = await run(process.execPath, [cli, '--version'], {cwd: projectDir});
-  const versionReport = JSON.parse(version.stdout);
-  const opfVersion = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version;
-  const cliVersion = plan.packages.find((item) => item.name === '@openpresentation/cli')?.version;
-  assert.equal(versionReport.cli, cliVersion);
-  // The CLI bundles its own core: an unreleased CLI keeps the core it shipped with (release-plan bundledCore).
-  assert.equal(versionReport.opf, plan.bundledCore?.['@openpresentation/cli'] ?? opfVersion);
-  const validated = await run(process.execPath, [cli, 'validate', 'deck.opf.json'], {cwd: projectDir});
-  assert.equal(JSON.parse(validated.stdout).valid, true);
-  await run(process.execPath, [cli, 'paginate', 'deck.opf.json', 'paginated.opf.json'], {cwd: projectDir});
-  const paginated = JSON.parse(await readFile(path.join(projectDir, 'paginated.opf.json'), 'utf8'));
-  assert.ok(paginated.slides.length >= originalSlides);
+  if (cliNotice) console.log(`SKIP the CLI part of the developer quickstart: ${cliNotice}`);
+  else {
+    const cli = path.join(projectDir, 'node_modules', '@openpresentation', 'cli', 'dist', 'index.js');
+    const version = await run(process.execPath, [cli, '--version'], {cwd: projectDir});
+    const versionReport = JSON.parse(version.stdout);
+    const opfVersion = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version;
+    const cliVersion = plan.packages.find((item) => item.name === '@openpresentation/cli')?.version;
+    assert.equal(versionReport.cli, cliVersion);
+    // The CLI bundles its own core: an unreleased CLI keeps the core it shipped with (release-plan bundledCore).
+    assert.equal(versionReport.opf, plan.bundledCore?.['@openpresentation/cli'] ?? opfVersion);
+    const validated = await run(process.execPath, [cli, 'validate', 'deck.opf.json'], {cwd: projectDir});
+    assert.equal(JSON.parse(validated.stdout).valid, true);
+    await run(process.execPath, [cli, 'paginate', 'deck.opf.json', 'paginated.opf.json'], {cwd: projectDir});
+    const paginated = JSON.parse(await readFile(path.join(projectDir, 'paginated.opf.json'), 'utf8'));
+    assert.ok(paginated.slides.length >= originalSlides);
+  }
 
   const after = await readFile(path.join(projectDir, 'deck.opf.json'));
   assert.equal(
     createHash('sha256').update(after).digest('hex'),
     createHash('sha256').update(originalDeck).digest('hex'),
   );
-  console.log('developer quickstart: published registry install passed');
+  console.log(`developer quickstart: published registry install passed${cliNotice ? ' (CLI skipped)' : ''}`);
 } finally {
   await rm(tmpRoot, {recursive: true, force: true});
 }

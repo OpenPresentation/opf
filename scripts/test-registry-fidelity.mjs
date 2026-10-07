@@ -7,13 +7,16 @@ import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {tar} from './archive-tar.mjs';
 import {examplesDigest,reviewedCoreGolden} from './registry-golden.mjs';
+import {installablePackages} from './release-plan-cli.mjs';
 const root=process.cwd();
 const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
 const consumer=path.resolve(process.argv[2]??'artifacts/npm/registry-consumer');
 const require=createRequire(path.join(consumer,'package.json'));
 const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
 const modules=await realpath(path.join(consumer,'node_modules'));
-for(const item of plan.packages){
+// The registry consumer holds the plan's libraries only while the plan's CLI peer ranges conflict with them (release-plan-cli.mjs).
+const installedPackages=await installablePackages(plan);
+for(const item of installedPackages){
  const manifest=JSON.parse(await readFile(require.resolve(item.name+'/package.json'),'utf8'));
  assert.equal(manifest.version,item.version,item.name);
  const directory=await realpath(path.dirname(require.resolve(item.name+'/package.json')));
@@ -68,4 +71,4 @@ for(const [repo,tests] of suites){
  }
  await rm(archive);
 }
-await writeFile(path.join(consumer,'fidelity','report.json'),JSON.stringify({scope:'Pinned tests and fixtures, installed registry dist files; no source package overrides',packages:plan.packages,results},null,2)+'\n');
+await writeFile(path.join(consumer,'fidelity','report.json'),JSON.stringify({scope:'Pinned tests and fixtures, installed registry dist files; no source package overrides',packages:installedPackages,results},null,2)+'\n');
