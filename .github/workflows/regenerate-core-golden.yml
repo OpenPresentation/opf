@@ -169,7 +169,7 @@ jobs:
             --out-dir out/report --branch "$BRANCH" --head "$HEAD" --base-sha "$GITHUB_SHA" --golden-path "$BRANCH_GOLDEN" \
             --renderer "$RENDERER" --image "$OPF_PLAYWRIGHT_IMAGE" \
             --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
-            --note "Reproducibility guard passed: main @ ${GITHUB_SHA:0:12} rendered with the locked renderer wrote $MAIN_GOLDEN byte for byte." \
+            --note "Reproducibility guard passed: main @ $(printf '%.12s' "$GITHUB_SHA") rendered with the locked renderer wrote $MAIN_GOLDEN byte for byte." \
             --note "Branch is $BEHIND commit(s) behind main (no golden-affecting change missing)." \
             --github-output
           cp out/branch/candidate.json out/report/fixture.json
@@ -216,7 +216,7 @@ jobs:
           node tools/scripts/core-golden.mjs check-branch --branch "$BRANCH" --default-branch "${{ github.event.repository.default_branch }}"
           tip="$(git ls-remote "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/heads/$BRANCH" | cut -f1)"
           if [ "$tip" != "$HEAD" ]; then
-            echo "::error title=regenerate-core-golden::$BRANCH moved from ${HEAD:0:12} to ${tip:0:12} while rendering. Dispatch again."
+            echo "::error title=regenerate-core-golden::$BRANCH moved from $(printf '%.12s' "$HEAD") to $(printf '%.12s' "$tip") while rendering. Dispatch again."
             exit 1
           fi
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
