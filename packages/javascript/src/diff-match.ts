@@ -1,5 +1,5 @@
-// Deterministic element matching shared by `diffPresentations` and
-// `mergePresentations`. Given two arrays it decides which element of A is
+// Deterministic element matching shared by `diff` and
+// `merge`. Given two arrays it decides which element of A is
 // "the same" element as which element of B, in this order:
 //
 //   1. a shared string `id`,

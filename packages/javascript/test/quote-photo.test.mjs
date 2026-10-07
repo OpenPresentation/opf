@@ -1,21 +1,22 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide,layoutQuote,OPFCompositionError} from '../dist/composition.js';
-import {auditPresentation} from '../dist/audit.js';
-import {validatePresentation} from '../dist/index.js';
-import {markdownToOpf,opfToMarkdown} from '../dist/markdown.js';
+
+import {fromMarkdown,toMarkdown} from '../dist/markdown.js';
 import {paginateSlide} from '../dist/pagination.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
+import { validate } from '../dist/index.js';
 
 // FA-12: Quote.role and Quote.photo. The footer gains a role line; a photo is a circle beside it.
 const cell = {x:40,y:60,width:800,height:400};
 const quote = {text:'We would rather spend a week on capacity than a month on an outage.',attribution:'Priya Raman',role:'Head of Platform, Acme',source:'Interview, March 2026'};
 
 test('schema accepts role and photo and rejects other keys', () => {
-  const ok = validatePresentation({slides:[{quote:{...quote,photo:{src:'./priya.jpg',alt:'Priya Raman'}}}]});
-  assert.equal(ok.valid,true,JSON.stringify(ok.errors));
-  assert.equal(validatePresentation({assets:{priya:'./p.jpg'},slides:[{quote:{...quote,photo:'asset:priya'}}]}).valid,true);
-  assert.equal(validatePresentation({slides:[{quote:{text:'x',headshot:'a.png'}}]}).valid,false);
-  assert.equal(validatePresentation({slides:[{quote:{text:'x',role:3}}]}).valid,false);
+  const ok = check({slides:[{quote:{...quote,photo:{src:'./priya.jpg',alt:'Priya Raman'}}}]});
+  assert.equal(ok.valid,true,JSON.stringify(errorsOf(ok)));
+  assert.equal(check({assets:{priya:'./p.jpg'},slides:[{quote:{...quote,photo:'asset:priya'}}]}).valid,true);
+  assert.equal(check({slides:[{quote:{text:'x',headshot:'a.png'}}]}).valid,false);
+  assert.equal(check({slides:[{quote:{text:'x',role:3}}]}).valid,false);
 });
 
 test('role is its own footer line and the source follows the last line', () => {
@@ -124,7 +125,7 @@ test('pagination repeats the role and the photo with each page of a split quote'
 
 test('audit: a quote photo without alt text is reported, with alt text it is not', () => {
   const deck = (photo, extra = {}) => ({name:'Deck',language:'en-US',...extra,slides:[{title:'Customers',quote:{...quote,photo}}]});
-  const alt = document => auditPresentation(document,{only:['missing-alt-text']}).diagnostics.filter(item=>item.path.endsWith('/quote/photo'));
+  const alt = document => validate(document,{only:['missing-alt-text']}).findings.filter(item=>item.path.endsWith('/quote/photo'));
   const missing = alt(deck('./priya.jpg'));
   assert.equal(missing.length,1);
   assert.equal(missing[0].path,'/slides/0/quote/photo');
@@ -137,10 +138,10 @@ test('audit: a quote photo without alt text is reported, with alt text it is not
 
 test('markdown keeps role and photo losslessly in an opf block', () => {
   const document = {name:'Deck',slides:[{title:'Customers',quote:{...quote,photo:{src:'./priya.jpg',alt:'Priya Raman'}}}]};
-  const {markdown} = opfToMarkdown(document);
-  const back = markdownToOpf(markdown);
-  assert.deepEqual(back.diagnostics.filter(item=>item.severity==='error'),[]);
-  assert.deepEqual(back.document.slides[0].quote,document.slides[0].quote);
+  const {markdown} = toMarkdown(document);
+  const back = fromMarkdown(markdown);
+  assert.deepEqual(back.findings.filter(item=>item.severity==='error'),[]);
+  assert.deepEqual(back.presentation.slides[0].quote,document.slides[0].quote);
 });
 
 test('quote to text keeps the role on the attribution line and reports the lost photo', async () => {
@@ -157,9 +158,9 @@ test('quote to text keeps the role on the attribution line and reports the lost 
 test('the testimonial reference deck validates, audits clean of alt findings and composes without overflow', async () => {
   const {readFile} = await import('node:fs/promises');
   const deck = JSON.parse(await readFile(new URL('../../../docs/fixtures/testimonial-quotes.opf.json',import.meta.url),'utf8'));
-  assert.equal(validatePresentation(deck).valid,true);
-  assert.equal(auditPresentation(deck,{only:['missing-alt-text','poor-alt-text']}).diagnostics.length,0);
-  const options = {width:1280,height:720,presentation:deck,fonts:{heading:'Georgia',body:'Arial'}};
+  assert.equal(check(deck).valid,true);
+  assert.equal(validate(deck,{only:['missing-alt-text','poor-alt-text']}).findings.length,0);
+  const options = {width:1280,height:720,presentation:deck,fontFamilies:{heading:'Georgia',body:'Arial'}};
   const [testimonial,roleOnly,long,plain] = deck.slides.map((slide,index)=>composeSlide(slide,{...options,slideIndex:index}));
   for (const composed of [testimonial,roleOnly,long,plain]) assert.deepEqual(composed.diagnostics,[]);
   assert.equal(testimonial.items.find(item=>item.field==='quote').quoteLayout.parts[1].fit.lines.length,2);

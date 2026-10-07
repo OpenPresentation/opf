@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
-import {layoutContent, layouts, validateCatalogRecord} from '../dist/index.js';
+import { layouts, validateCatalogRecord } from '../dist/index.js';
+import { layoutContent } from '../dist/composition.js';
 
 const HEAD = ['title', 'subtitle', 'tag'];
 const KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'];

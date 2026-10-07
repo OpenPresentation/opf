@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFileSync } from 'node:fs';
-import { lintPresentation, lintSource } from '../dist/lint.js';
-import { validateCatalogRecord } from '../dist/validator.js';
+import { validate, validateCatalogRecord } from '../dist/index.js';
+
+// The format, references and policy categories: syntax, schema, catalogs, assets and host contracts.
+const checkAll = (input, options) => validate(input, { only: ['format', 'references', 'policy'], ...options });
 
 const layout = (id, name = id) => ({
 	id,
@@ -17,16 +19,18 @@ const freeze = (value) => {
 	return value;
 };
 
-test('lint preserves valid source bytes and separates unchecked fidelity gates', () => {
+test('text input is read, never rewritten, and the report separates what was not checked', () => {
 	const source =
 		'\uFEFF{\r\n "name"  : "e\u0302  two spaces",\r "slides": [{"title":"Keep","layout":"text-1x"}]\n}';
 	const before = Buffer.from(source),
-		result = lintSource(source);
+		result = checkAll(source);
 	assert.equal(result.valid, true);
 	assert.equal(result.schemaValid, true);
-	assert.deepEqual(result.diagnostics, []);
-	assert.equal(result.checks.layout, 'not-checked');
-	assert.equal(result.checks.fonts, 'not-checked');
+	assert.deepEqual(result.findings, []);
+	assert.equal(result.checks.syntax, 'checked');
+	assert.equal(result.checks.layout, 'not-run');
+	assert.equal(result.checks.accessibility, 'not-run');
+	assert.equal(result.checks.backgroundPixels, 'not-read');
 	assert.equal(result.checks.nativeExport, 'not-checked');
 	assert.deepEqual(Buffer.from(source), before);
 });
@@ -38,14 +42,14 @@ test('syntax errors include exact source ranges and never claim schema acceptanc
 		'{"slides":[],}',
 		'// comment\n{"slides":[]}',
 	]) {
-		const result = lintSource(source);
+		const result = checkAll(source);
 		assert.equal(result.valid, false);
 		assert.equal(result.schemaValid, null);
 		assert.equal(result.checks.schema, 'not-run');
 		assert.ok(
-			result.diagnostics.every(
+			result.findings.every(
 				(issue) =>
-					issue.ruleId === 'json/syntax' &&
+					issue.ruleId === 'opf/json-syntax' &&
 					issue.location.offset >= 0 &&
 					issue.location.line >= 1,
 			),
@@ -54,9 +58,9 @@ test('syntax errors include exact source ranges and never claim schema acceptanc
 });
 test('duplicate escaped keys remain errors even when JSON.parse would hide them', () => {
 	const source = '{"slides":[],"extensions":{"a\\u002fb":1,"a/b":2}}',
-		result = lintSource(source);
-	const issue = result.diagnostics.find(
-		(issue) => issue.ruleId === 'json/duplicate-key',
+		result = checkAll(source);
+	const issue = result.findings.find(
+		(issue) => issue.ruleId === 'opf/duplicate-key',
 	);
 	assert.equal(result.valid, false);
 	assert.equal(issue.path, '/extensions/a~1b');
@@ -65,8 +69,8 @@ test('duplicate escaped keys remain errors even when JSON.parse would hide them'
 });
 test('schema diagnostics retain complete constraints and array source locations', () => {
 	const source = '{\r\n"name":"😀",\r"slides":[{"type":"tabel","table":{}}]\n}',
-		result = lintSource(source);
-	const issue = result.diagnostics.find(
+		result = checkAll(source);
+	const issue = result.findings.find(
 		(issue) =>
 			issue.path === '/slides/0/type' && issue.validation?.keyword === 'enum',
 	);
@@ -95,8 +99,8 @@ test('reference diagnostics use supplied catalogs and exact definition files', (
 			},
 		}),
 		before = JSON.stringify({ document, options });
-	const result = lintPresentation(document, options),
-		issue = result.diagnostics.find(
+	const result = checkAll(document, options),
+		issue = result.findings.find(
 			(issue) => issue.ruleId === 'opf/catalog-reference',
 		);
 	assert.equal(result.valid, true);
@@ -105,14 +109,14 @@ test('reference diagnostics use supplied catalogs and exact definition files', (
 	assert.equal(issue.suggestions[0].label, 'Document label');
 	assert.equal(issue.suggestions[0].origin, 'document');
 	assert.ok(
-		result.diagnostics.some((issue) => issue.ruleId === 'opf/catalog-source'),
+		result.findings.some((issue) => issue.ruleId === 'opf/catalog-source'),
 	);
 	assert.equal(JSON.stringify({ document, options }), before);
-	assert.deepEqual(lintPresentation(document, options), result);
-	for (const suggestion of lintPresentation({
+	assert.deepEqual(checkAll(document, options), result);
+	for (const suggestion of checkAll({
 		design: { fontScheme: 'robtoo' },
 		slides: [],
-	}).diagnostics.flatMap((issue) => issue.suggestions ?? []))
+	}).findings.flatMap((issue) => issue.suggestions ?? []))
 		if (suggestion.origin === 'built-in')
 			assert.equal(
 				JSON.parse(
@@ -124,13 +128,13 @@ test('reference diagnostics use supplied catalogs and exact definition files', (
 				suggestion.value,
 			);
 	assert.equal(
-		lintPresentation({ slides: [{ layout: 'loaded' }] }, options).diagnostics
+		checkAll({ slides: [{ layout: 'loaded' }] }, options).findings
 			.length,
 		0,
 	);
 });
 test('unknown engine layouts warn without forbidding custom names or free-form prose', () => {
-	const result = lintPresentation({
+	const result = checkAll({
 		audience: 'Series B investors',
 		purpose: 'winning',
 		tone: { name: 'Warm' },
@@ -141,7 +145,7 @@ test('unknown engine layouts warn without forbidding custom names or free-form p
 			contracts: [{ path: '/slides/*/layout', allowedValues: [] }],
 		},
 	});
-	const references = result.diagnostics.filter(
+	const references = result.findings.filter(
 		(issue) => issue.ruleId === 'opf/catalog-reference',
 	);
 	assert.deepEqual(
@@ -151,7 +155,7 @@ test('unknown engine layouts warn without forbidding custom names or free-form p
 	assert.equal(result.valid, true);
 });
 test('schema traversal finds nested chart and design references without scanning arbitrary data', () => {
-	const result = lintPresentation({
+	const result = checkAll({
 		design: { theme: { id: 'missing-theme' }, fontScheme: 'missing-font' },
 		slides: [
 			{
@@ -164,7 +168,7 @@ test('schema traversal finds nested chart and design references without scanning
 			},
 		],
 	});
-	const paths = result.diagnostics
+	const paths = result.findings
 		.filter((issue) => issue.ruleId === 'opf/catalog-reference')
 		.map((issue) => issue.path)
 		.sort();
@@ -175,7 +179,7 @@ test('schema traversal finds nested chart and design references without scanning
 	]);
 });
 test('invalid and duplicate catalog definitions stay visible and cannot silently fall back', () => {
-	const result = lintPresentation({
+	const result = checkAll({
 		slides: [{ layout: 'text-1x' }],
 		catalogs: {
 			layouts: {
@@ -189,25 +193,25 @@ test('invalid and duplicate catalog definitions stay visible and cannot silently
 	});
 	assert.equal(result.valid, false);
 	assert.ok(
-		result.diagnostics.some(
+		result.findings.some(
 			(issue) =>
 				issue.ruleId === 'opf/catalog-record' &&
 				issue.message.includes('Duplicate'),
 		),
 	);
 	assert.ok(
-		result.diagnostics.some(
+		result.findings.some(
 			(issue) =>
 				issue.ruleId === 'opf/catalog-record' &&
 				issue.path.startsWith('/catalogs/layouts/records/2'),
 		),
 	);
-	const loaded = lintPresentation(
+	const loaded = checkAll(
 		{ slides: [{ title: 'Valid' }] },
 		{ catalogs: { layouts: [{ id: 'bad', placeholders: 42 }] } },
 	);
 	assert.equal(loaded.valid, false);
-	assert.ok(loaded.diagnostics.every((issue) => issue.scope === 'context'));
+	assert.ok(loaded.findings.every((issue) => issue.scope === 'context'));
 });
 test('explicit contracts provide policy fixes while metadata never supplies policy', () => {
 	const document = freeze({
@@ -225,19 +229,24 @@ test('explicit contracts provide policy fixes while metadata never supplies poli
 				{ path: '/extensions/a~1b~0', allowedValues: [2], severity: 'warning' },
 			],
 		});
-	const result = lintPresentation(document, options);
+	const result = checkAll(document, options);
 	assert.equal(result.valid, false);
 	assert.equal(result.schemaValid, true);
 	assert.equal(result.counts.error, 1);
 	assert.equal(result.counts.warning, 1);
+	// Findings are ordered by slide, so the finding about the extension (no slide) comes first.
+	const layoutFinding = result.findings.find((entry) => entry.path === '/slides/0/layout');
 	assert.match(
-		result.diagnostics[0].message,
+		layoutFinding.message,
 		/text-1x.*\/slides\/0\/layout.*brand.json/,
 	);
-	assert.equal(result.diagnostics[0].suggestions[0].origin, 'contract');
-	assert.equal(lintPresentation(document).valid, true);
+	assert.equal(layoutFinding.suggestions[0].origin, 'contract');
+	assert.equal(layoutFinding.category, 'policy');
+	assert.equal(layoutFinding.severity, 'error');
+	assert.equal(result.findings.find((entry) => entry.path === '/extensions/a~1b~0').severity, 'warning');
+	assert.equal(checkAll(document).valid, true);
 });
-test('invalid lint options fail clearly instead of ignoring misspelled policies', () => {
+test('invalid options fail clearly instead of ignoring misspelled policies', () => {
 	for (const options of [
 		null,
 		{ rules: {} },
@@ -247,36 +256,36 @@ test('invalid lint options fail clearly instead of ignoring misspelled policies'
 		{ contracts: [{ path: '/slides', allowedValues: [{}] }] },
 		{ contracts: [{ path: '/slides', allowedValues: [], severity: 'warn' }] },
 	])
-		assert.throws(() => lintPresentation({ slides: [] }, options), TypeError);
+		assert.throws(() => validate({ slides: [] }, options), TypeError);
 });
 test('asset references diagnose missing registry entries and cycles without fetching sources', () => {
 	const source =
 		'{"assets":{"logo":"https://example.invalid/logo.png"},"slides":[{"image":"asset:lgog"}],"extensions":{"image":"asset:ignore"}}';
-	const result = lintSource(source),
-		issue = result.diagnostics.find(
+	const result = checkAll(source),
+		issue = result.findings.find(
 			(issue) => issue.ruleId === 'opf/asset-reference',
 		);
 	assert.equal(result.valid, false);
 	assert.equal(issue.path, '/slides/0/image');
 	assert.equal(issue.location.offset, source.indexOf('"asset:lgog"'));
 	assert.equal(issue.suggestions[0].value, 'asset:logo');
-	const valid = lintPresentation({
+	const valid = checkAll({
 		assets: { logo: 'https://example.invalid/logo.png' },
 		slides: [{ image: 'asset:logo' }],
 	});
 	assert.equal(valid.valid, true);
-	assert.equal(valid.checks.assetReferences, 'registry-only');
-	const cyclic = lintPresentation({
+	assert.equal(valid.checks.references, 'checked');
+	const cyclic = checkAll({
 		assets: { a: 'asset:b', b: { src: 'asset:a', alt: 'Keep' } },
 		slides: [{ image: 'asset:a' }],
 	});
 	assert.equal(
-		cyclic.diagnostics.filter((issue) => issue.ruleId === 'opf/asset-cycle')
+		cyclic.findings.filter((issue) => issue.ruleId === 'opf/asset-cycle')
 			.length,
 		1,
 	);
 	assert.equal(cyclic.valid, false);
-	const nested = lintPresentation({
+	const nested = checkAll({
 		assets: { alias: { src: 'asset:missing-registry' } },
 		design: {
 			logo: 'asset:missing-logo',
@@ -289,7 +298,7 @@ test('asset references diagnose missing registry entries and cycles without fetc
 		slides: [{ title: 'asset:literal-text', video: 'asset:missing-video' }],
 	});
 	assert.deepEqual(
-		nested.diagnostics
+		nested.findings
 			.filter((issue) => issue.ruleId === 'opf/asset-reference')
 			.map((issue) => issue.path)
 			.sort(),
@@ -305,39 +314,39 @@ test('asset references diagnose missing registry entries and cycles without fetc
 });
 
 test('unknown bare-id audiences warn like narratives; gallery audience ids resolve', () => {
-	const result = lintPresentation({
+	const result = checkAll({
 		audience: ['no-such-audience', 'Series B investors', 'executive'],
 		slides: [{ title: 'Keep' }],
 	});
 	assert.equal(result.valid, true);
 	assert.deepEqual(
-		result.diagnostics
+		result.findings
 			.filter((issue) => issue.ruleId === 'opf/catalog-reference')
 			.map((issue) => [issue.path, issue.severity]),
 		[['/audience/0', 'warning']],
 	);
 	assert.deepEqual(
-		lintPresentation({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] })
-			.diagnostics,
+		checkAll({ audience: 'general-public', narrative: 'pyramid-principle', slides: [{ title: 'Keep' }] })
+			.findings,
 		[],
 	);
 });
 
 test('a custom narrative is an inline catalog record; the narrative field is a string', () => {
 	const inline = (records) =>
-		lintPresentation({
+		checkAll({
 			narrative: 'custom-arc',
 			catalogs: { narratives: { records } },
 			slides: [{ title: 'Keep' }],
 		});
-	assert.deepEqual(inline([{ id: 'custom-arc', name: 'Custom', beats: [{ id: 'a', name: 'A' }] }]).diagnostics, []);
+	assert.deepEqual(inline([{ id: 'custom-arc', name: 'Custom', beats: [{ id: 'a', name: 'A' }] }]).findings, []);
 	assert.ok(
-		lintPresentation({
+		checkAll({
 			narrative: 'custom-arc',
 			slides: [{ title: 'Keep' }],
-		}).diagnostics.some((issue) => issue.ruleId === 'opf/catalog-reference'),
+		}).findings.some((issue) => issue.ruleId === 'opf/catalog-reference'),
 	);
-	assert.equal(lintPresentation({ narrative: { id: 'custom-arc' }, slides: [{ title: 'Keep' }] }).valid, false);
+	assert.equal(checkAll({ narrative: { id: 'custom-arc' }, slides: [{ title: 'Keep' }] }).valid, false);
 });
 
 test('catalog diagnostics locate referenced schema constraints without changing validator reports', () => {
@@ -353,7 +362,7 @@ test('catalog diagnostics locate referenced schema constraints without changing 
 		catalogs: { themes: { records: [record] } },
 		slides: [{ title: 'Keep' }],
 	});
-	const diagnostic = lintSource(source).diagnostics.find(
+	const diagnostic = checkAll(source).findings.find(
 		(issue) => issue.ruleId === 'opf/catalog-record',
 	);
 	assert.equal(diagnostic.path, '/catalogs/themes/records/0/background');
@@ -368,14 +377,16 @@ test('catalog diagnostics locate referenced schema constraints without changing 
 		'/$defs/ThemeBackground/type',
 	]);
 	assert.equal(diagnostic.location.offset, source.indexOf('"light1"'));
-	assert.deepEqual(Object.keys(validation.errors[0]).sort(), [
+	const raw = validation.findings[0].validation;
+	assert.equal(validation.findings[0].ruleId, 'opf/schema');
+	assert.deepEqual(Object.keys(raw).sort(), [
 		'keyword',
 		'message',
 		'params',
 		'path',
 		'schemaPath',
 	]);
-	assert.deepEqual(diagnostic.validation, validation.errors[0]);
+	assert.deepEqual(diagnostic.validation, raw);
 });
 
 test('language tags preserve regional, extended, private and grandfathered forms', () => {
@@ -396,41 +407,41 @@ test('language tags preserve regional, extended, private and grandfathered forms
 		'en-GB-oed',
 	]) {
 		const source = JSON.stringify({ language, slides: [{ title: 'Keep' }] });
-		const result = lintSource(source);
+		const result = checkAll(source);
 		assert.equal(result.valid, true, language);
-		assert.deepEqual(result.diagnostics, [], language);
+		assert.deepEqual(result.findings, [], language);
 	}
 	assert.equal(
-		lintPresentation({ language: 'en-UK', slides: [{ title: 'Keep' }] }).valid,
+		checkAll({ language: 'en-UK', slides: [{ title: 'Keep' }] }).valid,
 		false,
 	);
-	const explicitId = lintPresentation({
+	const explicitId = checkAll({
 		language: { id: 'custom-language-id', bcp47: 'en-US' },
 		slides: [{ title: 'Keep' }],
 	});
 	assert.ok(
-		explicitId.diagnostics.some(
+		explicitId.findings.some(
 			(issue) =>
 				issue.path === '/language/id' &&
 				issue.ruleId === 'opf/catalog-reference',
 		),
 	);
-	const nested = lintPresentation({
+	const nested = checkAll({
 		language: { bcp47: 'en-US', fontScheme: 'missing-font' },
 		slides: [{ title: 'Keep' }],
 	});
 	assert.deepEqual(
-		nested.diagnostics.map((issue) => issue.path),
+		nested.findings.map((issue) => issue.path),
 		['/language/fontScheme'],
 	);
 	assert.equal(
-		nested.diagnostics[0].definition,
+		nested.findings[0].definition,
 		'https://openpresentation.org/schema/opf/v1#/$defs/Language/properties/fontScheme',
 	);
 });
 
-test('lint flags deprecated catalog aliases with the canonical id as the suggestion', () => {
-	const result = lintPresentation({
+test('deprecated catalog aliases are flagged with the canonical id as the suggestion', () => {
+	const result = checkAll({
 		name: 'Deprecated alias',
 		design: { theme: 'legacy-look' },
 		catalogs: {
@@ -447,11 +458,11 @@ test('lint flags deprecated catalog aliases with the canonical id as the suggest
 		},
 		slides: [{ title: 'Deck' }],
 	});
-	const issue = result.diagnostics.find((entry) => entry.ruleId === 'opf/deprecated-catalog-id');
-	assert.ok(issue, JSON.stringify(result.diagnostics, null, 2));
+	const issue = result.findings.find((entry) => entry.ruleId === 'opf/deprecated-catalog-id');
+	assert.ok(issue, JSON.stringify(result.findings, null, 2));
 	assert.equal(issue.severity, 'warning');
 	assert.equal(issue.path, '/design/theme');
 	assert.equal(issue.suggestions?.[0]?.value, 'minimal');
-	assert.equal(result.diagnostics.filter((entry) => entry.ruleId === 'opf/catalog-reference').length, 0);
+	assert.equal(result.findings.filter((entry) => entry.ruleId === 'opf/catalog-reference').length, 0);
 	assert.equal(result.valid, true);
 });

@@ -1,26 +1,26 @@
 // Copied into the isolated installed-tarball consumer by test-packed-ecosystem.
 import assert from 'node:assert/strict';
 import {createEditorSession} from '@openpresentation/opf-editor';
-import {loadBundledFontRegistry} from '@openpresentation/opf-render/fonts-node';
-import {resolvePresentation,renderSvg} from '@openpresentation/opf-render/svg';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {resolvePresentation,renderSlideSvg} from '@openpresentation/opf-render/svg';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
-const {textMeasurement}=await loadBundledFontRegistry();
-const options={textMeasurement};
+const fonts=await loadFonts();
+const options={fonts};
 const source={design:{fontScheme:'roboto'},slides:[{title:'Installed quote',quote:{text:'Retain the selected source.',attribution:'Reviewer',source:'Recorded interview'}}]};
 const editor=createEditorSession(source);
-const before=editor.document;
+const before=editor.presentation;
 assert.ok(editor.paginateSlide(0,options).change,'A single-page readability policy must be committed');
-const accepted=editor.document;
+const accepted=editor.presentation;
 assert.equal(accepted.slides.length,1);
 assert.equal(accepted.slides[0].composition.minFontSize,24);
 assert.deepEqual(accepted.slides[0].quote,before.slides[0].quote);
 const item=resolvePresentation(accepted,options).slides[0].geometry.items.find(item=>item.field==='quote');
 assert.ok(item.quoteLayout.parts.every(part=>part.fit.fontSize>=24));
 assert.equal(item.text,item.quoteLayout.parts[0].fit);
-assert.match(renderSvg(accepted,options),/Reviewer - Recorded interview/);
+assert.match(renderSlideSvg(accepted,0,options),/Reviewer - Recorded interview/);
 assert.equal(editor.paginateSlide(0,options).change,null);
-editor.undo();assert.deepEqual(editor.document,before);
-editor.redo();assert.deepEqual(editor.document,accepted);
+editor.undo();assert.deepEqual(editor.presentation,before);
+editor.redo();assert.deepEqual(editor.presentation,accepted);
 const imported=await fromPptx(await toPptx(accepted,options));
 assert.equal(imported.slides.length,1);
 // opf-pptx imports current native body lines as schema-valid TextRun[] (FF-32 keeps their font, size and

@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { bundlePresentation, validatePresentation } from "../dist/index.js";
+import { bundle } from "../dist/index.js";
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const deck = () => ({
   name: "Bundle Fixture",
@@ -19,40 +20,40 @@ const deck = () => ({
   ],
 });
 
-describe("bundlePresentation", () => {
+describe("bundle", () => {
   test("inlines every referenced bundled record and stays schema-valid", () => {
-    const { presentation, report } = bundlePresentation(deck());
+    const { presentation, report } = bundle(deck());
     for (const kind of ["narratives", "tones", "audiences", "themes", "layouts", "chartTypes", "socialPlatforms"]) {
       assert.ok(report.added[kind]?.length, `expected ${kind} to be inlined: ${JSON.stringify(report.added)}`);
     }
-    const validation = validatePresentation(presentation);
-    assert.equal(validation.valid, true, JSON.stringify(validation.errors));
+    const validation = check(presentation);
+    assert.equal(validation.valid, true, JSON.stringify(errorsOf(validation)));
     const catalogs = presentation.catalogs;
     assert.ok(catalogs.themes.records.some((record) => record.id === "classic"));
     assert.ok(catalogs.themes.records.every((record) => record.$schema === undefined));
   });
 
   test("resolves transitive references from inlined records", () => {
-    const { report } = bundlePresentation(deck());
+    const { report } = bundle(deck());
     assert.ok(report.added.colorSchemes?.length, "theme should pull its color scheme");
     assert.ok(report.added.fontSchemes?.length, "theme should pull its font scheme");
   });
 
   test("is idempotent", () => {
-    const first = bundlePresentation(deck());
-    const second = bundlePresentation(first.presentation);
+    const first = bundle(deck());
+    const second = bundle(first.presentation);
     assert.deepEqual(second.report.added, {});
     assert.deepEqual(second.presentation, first.presentation);
   });
 
   test("does not mutate the input document", () => {
     const input = deck();
-    bundlePresentation(input);
+    bundle(input);
     assert.equal(input.catalogs, undefined);
   });
 
   test("keeps kinds with a custom source untouched", () => {
-    const { presentation, report } = bundlePresentation({
+    const { presentation, report } = bundle({
       name: "Custom Source",
       design: { colorScheme: "acme-brand" },
       catalogs: { colorSchemes: { source: "https://catalogs.example.com/color-schemes" } },
@@ -66,7 +67,7 @@ describe("bundlePresentation", () => {
 
   test("keeps records the document already inlines and reports them", () => {
     const inline = { id: "acme-brand", accent1: "#0F4C81", light1: "#FFFFFF", dark1: "#0B1B2B" };
-    const { presentation, report } = bundlePresentation({
+    const { presentation, report } = bundle({
       name: "Inline Records",
       design: { colorScheme: "acme-brand" },
       catalogs: { colorSchemes: { records: [inline] } },
@@ -78,7 +79,7 @@ describe("bundlePresentation", () => {
   });
 
   test("reports bare ids that resolve nowhere locally", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Unresolved",
       design: { colorScheme: "no-such-scheme" },
       slides: [{ title: "x" }],
@@ -87,7 +88,7 @@ describe("bundlePresentation", () => {
   });
 
   test("leaves URL and pkg references alone", () => {
-    const { presentation, report } = bundlePresentation({
+    const { presentation, report } = bundle({
       name: "Direct References",
       narrative: "https://acme.com/decks/narratives/founder-pitch.json",
       design: { colorScheme: "pkg:@acme/decks/color-schemes/brand" },
@@ -98,7 +99,7 @@ describe("bundlePresentation", () => {
   });
 
   test("chases the references of a record the document already inlines", () => {
-    const { presentation, report } = bundlePresentation({
+    const { presentation, report } = bundle({
       name: "Inline Theme",
       design: { theme: "my-theme" },
       catalogs: {
@@ -114,7 +115,7 @@ describe("bundlePresentation", () => {
   });
 
   test("chases cross-kind references of an inline record under a custom-source kind", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Inline Under Source",
       design: { theme: "acme-theme" },
       catalogs: {
@@ -132,7 +133,7 @@ describe("bundlePresentation", () => {
   });
 
   test("resolves the transitive beat layouts an inline narrative record carries", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Inline Narrative Record",
       narrative: "my-arc",
       catalogs: { narratives: { records: [{ id: "my-arc", name: "My Arc", beats: [{ id: "open", name: "Open", layout: "title" }] }] } },
@@ -143,7 +144,7 @@ describe("bundlePresentation", () => {
   });
 
   test("collects the font schemes a document-level language object names", () => {
-    const { presentation, report } = bundlePresentation({
+    const { presentation, report } = bundle({
       name: "Inline Language",
       language: { bcp47: "de-DE", fontScheme: "aptos" },
       slides: [{ title: "x" }],
@@ -154,7 +155,7 @@ describe("bundlePresentation", () => {
   });
 
   test("resolves a language override alongside the base record's own schemes", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Language Override",
       language: { id: "japanese", fontScheme: "aptos" },
       slides: [{ title: "x" }],
@@ -165,7 +166,7 @@ describe("bundlePresentation", () => {
   });
 
   test("never reports a custom narrative record the document defines", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Custom Narrative",
       narrative: "my-own-arc",
       catalogs: { narratives: { records: [{ id: "my-own-arc", name: "My Own Arc", beats: [{ id: "open", name: "Opening" }] }] } },
@@ -177,7 +178,7 @@ describe("bundlePresentation", () => {
   });
 
   test("never reports schema-blessed non-catalog shorthands", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Shorthands",
       language: "fr",
       tone: "upbeat",
@@ -190,7 +191,7 @@ describe("bundlePresentation", () => {
   });
 
   test("reports design and chart-type references the validator would warn about", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Reportable",
       narrative: "no-such-arc",
       design: { colorScheme: "no-such-scheme", theme: { id: "no-such-theme", fontScheme: "no-such-font" } },
@@ -207,7 +208,7 @@ describe("bundlePresentation", () => {
   });
 
   test("reports bare-id audiences the validator would warn about and inlines known ones", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Audiences",
       audience: ["executive", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }, "Channel partners"],
       slides: [{ title: "x" }],
@@ -217,7 +218,7 @@ describe("bundlePresentation", () => {
   });
 
   test("reports a chart type nested in blocks and promoted regions", () => {
-    const { report } = bundlePresentation({
+    const { report } = bundle({
       name: "Nested Charts",
       slides: [
         { left: { chart: { type: "no-such-left", data: { columns: ["a"], rows: [["b"]] } } }, title: "x" },
@@ -228,7 +229,7 @@ describe("bundlePresentation", () => {
   });
 
   test("inlines resolved stock narrative layout hints without reporting them as unresolved", () => {
-    const { report } = bundlePresentation(deck());
+    const { report } = bundle(deck());
     assert.equal(report.unresolved.layouts, undefined, JSON.stringify(report.unresolved));
     assert.deepEqual(report.unresolved, {});
     // Slide layout plus narrative beat hints from classic-story resolve and inline.
@@ -241,14 +242,14 @@ describe("bundlePresentation", () => {
 
   test("bundles nothing when 'catalogs' is not an object", () => {
     const input = { name: "Broken Catalogs", narrative: "classic-story", catalogs: ["junk"], slides: [{ title: "x" }] };
-    const { presentation, report } = bundlePresentation(input);
+    const { presentation, report } = bundle(input);
     assert.deepEqual(presentation, input);
     assert.deepEqual(report, { added: {}, alreadyInline: {}, keptSources: [], unresolved: {} });
     assert.deepEqual(input.catalogs, ["junk"]);
   });
 
   test("returns non-objects untouched", () => {
-    const { presentation, report } = bundlePresentation("not a deck");
+    const { presentation, report } = bundle("not a deck");
     assert.equal(presentation, "not a deck");
     assert.deepEqual(report, { added: {}, alreadyInline: {}, keptSources: [], unresolved: {} });
   });
@@ -292,14 +293,17 @@ describe("bundlePresentation", () => {
 
     for (const [label, presentation] of Object.entries(cases)) {
       const warned = {};
-      for (const warning of validatePresentation(presentation).warnings) {
-        const { kind, id } = warning.params ?? {};
-        if (!warning.message.includes(" catalog id ") || !kind || !id) continue;
+      for (const warning of warningsOf(check(presentation, { only: ['opf/catalog-reference'] }))) {
+        const kind = warning.lookup?.[2];
+        const id = /catalog id ['"]([^'"]+)['"]/i.exec(warning.message)?.[1];
+        // The bundler resolves design references, chart types and string narratives and audiences; a layout, tone or
+        // language it does not inline is not "unresolved" to it.
+        if (!kind || !id || ["layouts", "tones", "languages", "purposes", "socialPlatforms"].includes(kind)) continue;
         if (!warned[kind]) warned[kind] = [];
         if (!warned[kind].includes(id)) warned[kind].push(id);
       }
       for (const ids of Object.values(warned)) ids.sort();
-      assert.deepEqual(bundlePresentation(presentation).report.unresolved, warned, label);
+      assert.deepEqual(bundle(presentation).report.unresolved, warned, label);
     }
   });
 });

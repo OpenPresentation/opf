@@ -1,6 +1,6 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {renderSvg} from '../../opf-render/src/svg.js';
+import {renderSlideSvg} from '../../opf-render/src/svg.js';
 const out=document.querySelector('#results'),host=document.querySelector('#canvas');let checks=0;
 const check=(truth,message)=>{if(!truth)throw new Error(message);checks++;out.textContent+=`PASS ${message}\n`;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
@@ -17,10 +17,10 @@ try{
  check(editor.get('slides.0.composition.weights.0')>2,'arrow key widens the leading track');
  check(editor.get('slides.0.title')===title&&JSON.stringify(editor.get('slides.0.blocks'))===JSON.stringify(original.slides[0].blocks),'resizing preserves all content');
  check(drafts.length===1&&commits===1,'keyboard resize previews and commits once');
- const reference=document.createElement('div');reference.innerHTML=renderSvg(editor.document,{trace:true});
+ const reference=document.createElement('div');reference.innerHTML=renderSlideSvg(editor.presentation,0,{trace:true});
  const glyphs=container=>[...container.querySelectorAll('text')].map(n=>[n.textContent,n.getAttribute('x'),n.getAttribute('y'),n.getAttribute('font-size')]);
  check(JSON.stringify(glyphs(host))===JSON.stringify(glyphs(reference)),'resized canvas uses standalone renderer geometry');
- editor.undo();check(JSON.stringify(editor.document)===JSON.stringify(original)&&!editor.canUndo,'one undo restores the resize');
+ editor.undo();check(JSON.stringify(editor.presentation)===JSON.stringify(original)&&!editor.canUndo,'one undo restores the resize');
  key(handle('slides.0.blocks.0'),'ArrowDown',true);check(editor.get('slides.0.blocks.0.composition.weights.0')===1.1,'nested row sizing uses its own container');
  check(JSON.stringify(editor.get('slides.0.composition'))===JSON.stringify(original.slides[0].composition),'nested resize preserves parent weights');editor.undo();
  const auto={slides:[{composition:{mode:'auto'},blocks:[{text:'A'},{text:'B'},{text:'C'},{text:'D'}]}]};editor.applyPatch([{op:'replace',path:'',value:auto}]);
@@ -30,17 +30,17 @@ try{
  check(host.querySelectorAll('[role=separator]').length===2,'leaving inline editing restores layout handles');
  check(canvas.setLayoutEditing(false)&&!host.querySelector('[role=separator]'),'layout handles can be hidden');canvas.setLayoutEditing(true);
  const strict=structuredClone(original);strict.slides[0].composition.overflow='error';editor.applyPatch([{op:'replace',path:'',value:strict}]);
- const beforeInvalid=JSON.stringify(editor.document);key(handle(),'End');check(JSON.stringify(editor.document)===beforeInvalid,'strict overflow rejects a resize without changing the document');check(errors.length===1,'strict overflow reports why the resize failed');errors=[];
+ const beforeInvalid=JSON.stringify(editor.presentation);key(handle(),'End');check(JSON.stringify(editor.presentation)===beforeInvalid,'strict overflow rejects a resize without changing the document');check(errors.length===1,'strict overflow reports why the resize failed');errors=[];
  canvas.destroy();check(!host.children.length,'destroy removes layout controls');check(errors.length===0,'keyboard layout interactions have no errors');
  document.title=`PASS ${checks} layout browser checks`;out.textContent+=`\n${checks} checks passed\n`;
 }catch(error){out.textContent+=`FAIL ${error.stack}`;document.title='FAIL layout browser checks';throw error;}
 // Interactive, trusted-pointer specimen. Its controls verify the actual CUA drag separately.
 let demoEditor, demo, pointerDrafts, before, triggered=false;
 const reset=()=>{
- demo?.destroy();pointerDrafts=[];triggered=false;demoEditor=createEditorSession(original,{rejectInvalid:true});before=JSON.stringify(demoEditor.document);
- demo=createCanvasEditor(host,{editor:demoEditor,layoutEditing:true,onDraft:event=>{pointerDrafts.push(event);document.querySelector('#pointer-state').textContent=JSON.stringify({phase:'draft',unchanged:JSON.stringify(demoEditor.document)===before,weights:event.value.weights});
+ demo?.destroy();pointerDrafts=[];triggered=false;demoEditor=createEditorSession(original,{rejectInvalid:true});before=JSON.stringify(demoEditor.presentation);
+ demo=createCanvasEditor(host,{editor:demoEditor,layoutEditing:true,onDraft:event=>{pointerDrafts.push(event);document.querySelector('#pointer-state').textContent=JSON.stringify({phase:'draft',unchanged:JSON.stringify(demoEditor.presentation)===before,weights:event.value.weights});
   if(!triggered){triggered=true;const mode=document.querySelector('#pointer-mode').value;
-   if(mode==='cancel'){demo.cancel();check(JSON.stringify(demoEditor.document)===before&&!demoEditor.canUndo,'cancelling a trusted drag discards its draft');document.querySelector('#pointer-state').textContent='PASS cancelled pointer draft';}
+   if(mode==='cancel'){demo.cancel();check(JSON.stringify(demoEditor.presentation)===before&&!demoEditor.canUndo,'cancelling a trusted drag discards its draft');document.querySelector('#pointer-state').textContent='PASS cancelled pointer draft';}
    if(mode==='conflict'){demoEditor.set('slides.0.title','Newer external title');check(demoEditor.get('slides.0.title')==='Newer external title'&&JSON.stringify(demoEditor.get('slides.0.composition.weights'))==='[2,1]','concurrent container edits cancel the trusted drag');}
    if(mode==='independent')demoEditor.set('name','Independent edit');
   }
@@ -49,7 +49,7 @@ const reset=()=>{
 reset();document.querySelector('#reset').onclick=reset;
 document.querySelector('#verify').onclick=()=>{
  try{if(document.querySelector('#pointer-mode').value==='independent'){check(demoEditor.get('name')==='Independent edit'&&demoEditor.get('slides.0.composition.weights.0')!==2,'unrelated edits survive a trusted drag');demoEditor.undo();check(demoEditor.get('name')==='Independent edit'&&JSON.stringify(demoEditor.get('slides.0.composition.weights'))==='[2,1]','undo only reverts the resize after an unrelated edit');document.querySelector('#pointer-state').textContent='PASS independent update';return;}
- check(pointerDrafts.length>0,'trusted pointer movement created live drafts');check(JSON.stringify(demoEditor.document)!==before,'trusted pointer drag committed a resize');demoEditor.undo();check(JSON.stringify(demoEditor.document)===before&&!demoEditor.canUndo,'entire trusted pointer drag is one undo step');document.querySelector('#pointer-state').textContent='PASS trusted pointer resize';}catch(error){document.querySelector('#pointer-state').textContent='FAIL '+error.message;}
+ check(pointerDrafts.length>0,'trusted pointer movement created live drafts');check(JSON.stringify(demoEditor.presentation)!==before,'trusted pointer drag committed a resize');demoEditor.undo();check(JSON.stringify(demoEditor.presentation)===before&&!demoEditor.canUndo,'entire trusted pointer drag is one undo step');document.querySelector('#pointer-state').textContent='PASS trusted pointer resize';}catch(error){document.querySelector('#pointer-state').textContent='FAIL '+error.message;}
 };
 document.querySelector('#external').onclick=()=>demoEditor.set('slides.0.title','Newer external title');
 document.querySelector('#independent').onclick=()=>demoEditor.set('name','Independent edit');

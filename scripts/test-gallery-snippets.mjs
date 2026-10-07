@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
-import { validatePresentation } from '../packages/javascript/dist/index.js';
+import { validate } from '../packages/javascript/dist/index.js';
 const require = createRequire(new URL('../packages/javascript/package.json',import.meta.url));
 const { build } = createRequire(require.resolve('tsup'))('esbuild');
 const root = fileURLToPath(new URL('../../pptx-gallery/',import.meta.url));
@@ -34,13 +34,13 @@ for(const [name,builder] of [
  for(const record of records){
   try {
    const document=JSON.parse(builder(record));
-   const result=validatePresentation(document);
-   assert.equal(result.valid,true,JSON.stringify(result.errors));
+   const result=validate(document,{only:['format']});
+   assert.equal(result.valid,true,JSON.stringify(result.findings));
    assert.ok(document.slides.length>0);
    assert.ok(!document.meta && !document.version);
    assert.ok(document.slides.every(slide=>!slide.elements));
    count++;
-   if(renderer) { try { renderer.renderSvgDeck(document); } catch(error) { renderFailures.push({name:`${name}/${record.id??record.slug}`,code:error.code,message:error.message}); } }
+   if(renderer) { try { renderer.renderSvg(document); } catch(error) { renderFailures.push({name:`${name}/${record.id??record.slug}`,code:error.code,message:error.message}); } }
   }catch(error){throw new Error(`${name}/${record.id??record.slug}: ${error.message}`,{cause:error});}
  }
  console.log(`${name}: ${records.length} canonical OPF examples`);

@@ -161,6 +161,6 @@ export async function readBytes(file: string): Promise<{ bytes: Uint8Array; name
 
 export function pointerOf(location: string): string {
 	if (location === "" || location.startsWith("/")) return location;
-	// Renderer and importer paths are dotted (`slides.0.title`); lint uses JSON Pointers.
+	// Renderer and importer paths are dotted (`slides.0.title`); validate uses JSON Pointers.
 	return /^[A-Za-z_$][\w$-]*(\.[\w$-]+)*$/.test(location) ? `/${location.split(".").join("/")}` : location;
 }

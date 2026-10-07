@@ -1,13 +1,13 @@
 // Three-way merge of OPF documents.
 //
-// `mergePresentations(base, ours, theirs)` combines two independently edited
+// `merge(base, ours, theirs)` combines two independently edited
 // copies of `base`. Changes that touch different places merge automatically;
 // changes that collide are reported as conflict objects and are never dropped
 // without a record: the merged document carries one side's value (ours unless
 // `prefer: "theirs"`), and the conflict holds both sides and the base.
 //
 // Arrays (slides, blocks, list items, table rows) are merged element-wise
-// using the same matching as `diffPresentations`: by `id`, then identical
+// using the same matching as `diff`: by `id`, then identical
 // content, then similarity. Insertions from both sides are kept (ours first at
 // the same position), a deletion beats an untouched element, and a move on
 // one side is applied unless the other side moved the same element elsewhere.
@@ -234,7 +234,7 @@ function mergeArray(base: unknown[], ours: unknown[], theirs: unknown[], path: (
  * collision is listed in `conflicts` with the base, our value and their value.
  * The merged document is not validated; callers validate it before saving.
  */
-export function mergePresentations(base: unknown, ours: unknown, theirs: unknown, options: MergeOptions = {}): MergeResult {
+export function merge(base: unknown, ours: unknown, theirs: unknown, options: MergeOptions = {}): MergeResult {
   const ctx: Context = {
     prefer: options.prefer === "theirs" ? "theirs" : "ours",
     match: { threshold: options.threshold ?? DEFAULT_MATCH_THRESHOLD },

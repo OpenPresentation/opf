@@ -35,7 +35,7 @@ import {
   tones,
   catalogs,
   validate,
-  validatePresentation,
+  validateCatalogRecord,
 } from "@openpresentation/opf";
 
 import type { Presentation } from "@openpresentation/opf";
@@ -46,8 +46,8 @@ const deck: Presentation = {
 };
 
 console.log(presentation.$id);
-console.log(validatePresentation(deck).valid);
-console.log(validate(tones[0], "tones").valid);
+console.log(validate(deck).valid);
+console.log(validateCatalogRecord("tones", tones[0]).valid);
 console.log(audiences.map((audience) => audience.id));
 console.log(Object.keys(catalogs));
 ```
@@ -58,7 +58,7 @@ Use focused imports when you only need one surface:
 import { presentation, audience } from "@openpresentation/opf/schemas";
 import { audiences, tones } from "@openpresentation/opf/catalogs";
 import { specFileEntries } from "@openpresentation/opf/spec-files";
-import { validate, assertValid } from "@openpresentation/opf/validator";
+import { validate, assertValid, validationRules } from "@openpresentation/opf/validator";
 import {
   layoutPreviews,
   getLayoutPreview,
@@ -67,7 +67,13 @@ import {
 import type { Presentation, Audience, Tone } from "@openpresentation/opf/types";
 ```
 
-The root entry exports every schema, catalog, and validation helper for convenience. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+The root entry holds the application-level API: schemas, catalogs, validation, variables, pagination, data helpers, font policy, `stats` and `resolveSlideContext`. Prefer the focused subpaths above when a package consumer only needs one surface, so the root bundle's full catalog/schema payload is not loaded unnecessarily.
+
+The layout engine's names are not on the root. `composeSlide`, `fitText`, `layoutQuote` and the other `layoutX`/`fitX` functions, numbering, footnotes and citations, colour contrast, code syntax, pattern fills, metric trends, chart options, script fonts and text direction come from `@openpresentation/opf/composition`; the symbol-font tables come from `@openpresentation/opf/symbol-font-encodings`.
+
+### Facts, slide context and the fonts handle
+
+`stats(presentation, options?)` reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets, citations, variables, assets, fonts) without composing, measuring or validating; see [the stats guide](../../docs/stats.md). `resolveSlideContext(presentation, index, { fonts })` resolves one slide's canvas, layout, theme and font families (slide design, then deck design, then theme, then the default font scheme) into the `ComposeSlideOptions` that `composeSlide` takes, with `unresolved-font-scheme`, `unresolved-layout` and `unresolved-theme` diagnostics. Deck-level verbs take `{ fonts }`, a handle whose `textMeasurement` is how wide the host's real fonts draw text (`paginate(deck, { fonts })`); the renderer's font loader returns a richer handle that extends it. `composeSlide` itself is engine-level and takes `textMeasurement` and `fontFamilies` (`{ heading, body, code, accent? }`) directly.
 
 ### Content conversions
 
@@ -75,25 +81,19 @@ The root entry exports every schema, catalog, and validation helper for convenie
 
 ### Markdown and outlines
 
-`@openpresentation/opf/markdown` reads and writes a deck as Markdown in a small documented dialect (YAML front matter, `---` between slides, `#` title, `##` subtitle, lists, quotes, tables, images, `chart`, `metric` and `timeline` fences, `Note:` speaker notes). `markdownToOpf(markdown, { split, defaults, validate })` returns `{ document, valid, diagnostics, counts }` with lint-shaped diagnostics that carry the line and column of the Markdown; `opfToMarkdown(document, { unsupported })` writes any valid deck, embedding what the dialect has no syntax for as YAML (or dropping it into `report.loss`), and the Markdown it writes converts back to the same deck. Deterministic and offline. Reads front matter with the `yaml` package. See the [Markdown guide](../../docs/markdown.md). Not in releases before the one that lists it in the changelog.
+`@openpresentation/opf/markdown` reads and writes a deck as Markdown in a small documented dialect (YAML front matter, `---` between slides, `#` title, `##` subtitle, lists, quotes, tables, images, `chart`, `metric` and `timeline` fences, `Note:` speaker notes). `fromMarkdown(markdown, { split, defaults, validate })` returns `{ presentation, valid, findings, counts }` with findings (the shared `Finding` format) that carry the line and column of the Markdown; `toMarkdown(presentation, { unsupported })` writes any valid deck, embedding what the dialect has no syntax for as YAML (or dropping it into `report.loss`), and the Markdown it writes converts back to the same deck. Deterministic and offline. Reads front matter with the `yaml` package. See the [Markdown guide](../../docs/markdown.md). Not in releases before the one that lists it in the changelog.
 
 ### OPF as YAML
 
-`@openpresentation/opf/yaml` reads and writes a deck as YAML, the authoring form of the same data (JSON stays canonical). `fromYaml(text, { aliases, validate })` reads strict JSON-compatible YAML 1.2 (one document, a mapping at the root, no custom tags, duplicate keys or non-finite numbers; anchors, aliases and merge keys only with `aliases: true`) and returns `{ document, valid, diagnostics, counts }` with lint-shaped diagnostics that carry the line and column of the YAML, OPF lint findings included; `toYaml(document, { schemaComment })` writes canonical YAML (schema key order, block style, ambiguous strings quoted) that reads back to the same deck, and throws `OPFYamlError` for an invalid one. `lintYamlSource`, `parseYamlData`, `yamlLocator` and `scanYamlComments` are the helpers. See [the YAML guide](../../docs/yaml.md).
+`@openpresentation/opf/yaml` reads and writes a deck as YAML, the authoring form of the same data (JSON stays canonical). `fromYaml(text, { aliases, validate })` reads strict JSON-compatible YAML 1.2 (one document, a mapping at the root, no custom tags, duplicate keys or non-finite numbers; anchors, aliases and merge keys only with `aliases: true`) and returns `{ presentation, valid, findings, counts, schemaValid, checks }`: the `validate` report of the deck, with every finding (the shared `Finding` format, YAML syntax errors as `yaml/<rule>` findings) located at the line and column of the YAML. `toYaml(presentation, { schemaComment })` writes canonical YAML (schema key order, block style, ambiguous strings quoted) that reads back to the same deck, and throws `OPFYamlError` for an invalid one. `parseYamlData` and `scanYamlComments` are the helpers. See [the YAML guide](../../docs/yaml.md).
 
-### Design and accessibility audit
+### Validate (0.14.0)
 
-`@openpresentation/opf/audit` exports `auditPresentation(document, options)`, `auditSource(source, options)` and `auditRules`: contrast, overflow, type size, alt text, reading order, fonts, links, charts and more, with stable `audit/<rule>` ids in lint's report shape. Read-only and deterministic; see [the audit guide](../../docs/audit.md).
-
-### Contextual lint (0.10.0)
-
-Version 0.10.0 adds `lintSource(source, options)` and `lintPresentation(document, options)` from `@openpresentation/opf/lint` and the root API. They report strict JSON syntax, duplicate keys, schema constraints, local catalog alternatives, asset registry errors, and explicit host contracts. Source diagnostics retain original UTF-16 ranges without rewriting the document. Options accept already loaded `catalogs` and `contracts`; no remote resources are fetched.
-
-Earlier versions do not include these APIs. See the [lint guide](../../docs/lint.md) for configuration and the source CLI. Passing lint does not certify layout, fonts, or native export fidelity.
+`validate(input, options?)` is the one checker, from the root and from `@openpresentation/opf/validator`. `input` is a parsed presentation or strict JSON text; the result is a `ValidationReport` whose `findings` (the shared `Finding` format, `spec/schemas/finding.schema.json`) each have a stable `opf/<rule>` id, a severity and one of six categories: `format` (JSON syntax, duplicate keys, schema), `references` (catalog ids, assets, citations, datasets), `policy` (host `contracts`), `accessibility` (contrast, alt text, reading order, links), `layout` (overflow, type size, image resolution, fonts) and `content` (placeholders, empty slides, non-numeric chart cells). `valid` means no finding has severity `error`, which by default only `format`, `references` and `policy` findings can have. Text input adds line and column; `only`, `ignore` and `severity` pick and promote rules or categories; composition is lazy, so `validate(deck, { only: ["format"] })` costs what a schema check costs. Read-only and deterministic: no remote resources are fetched. See [the validate guide](../../docs/validate.md). A clean report does not certify layout, fonts, or native export fidelity.
 
 ### Patch, diff, merge and format (0.12.0)
 
-Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the one RFC 6902 implementation the CLI and the editor share (`applyPatch`, `applyPatchWithInverse`, `invertPatch`, strict pointer helpers, optional schema validation of the result); `@openpresentation/opf/diff` has `diffPresentations` (slide matching by id, content and similarity, moves, a readable report and a JSON Patch) and `mergePresentations` (three-way merge with conflict objects that never drop a side); `@openpresentation/opf/format` has `formatPresentation` (canonical key order and layout, idempotent). See [the guide](../../docs/patch-diff-merge-format.md).
+Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the one RFC 6902 implementation the CLI and the editor share (`applyPatch`, `applyPatchWithInverse`, `invertPatch`, strict pointer helpers, optional schema validation of the result); `@openpresentation/opf/diff` has `diff` (slide matching by id, content and similarity, moves, a readable report and a JSON Patch) and `merge` (three-way merge with conflict objects that never drop a side); `@openpresentation/opf/format` has `format` (canonical key order and layout, idempotent). See [the guide](../../docs/patch-diff-merge-format.md).
 
 ### Layout previews
 
@@ -177,17 +177,18 @@ import { repoReadme } from "@openpresentation/opf/repo-readme";
 console.log(repoReadme.split("\n").slice(0, 3).join("\n"));
 ```
 
-Validation results carry `errors` (structural problems that make `valid`
-false) and `warnings` (advisory issues such as unknown catalog ids in
-`narrative`, `design`, or chart `type` references — these never affect
-`valid`). Documents that declare matching inline `catalogs.<kind>.records[]`
-or a custom `catalogs.<kind>.source` are exempt from unknown-id warnings for
-that kind.
+Validation reports carry `findings`. A finding with severity `error` is a
+structural problem that makes `valid` false; `warning` and `info` findings are
+advisory, such as an unknown catalog id in `narrative`, `design`, or a chart
+`type` reference (`opf/catalog-reference`) or a missing alt text. An id that a
+matching inline `catalogs.<kind>.records[]` entry defines is known, and a custom
+`catalogs.<kind>.source` exempts that kind's ids from unknown-id warnings
+unless the host loads the source's records and passes them as `catalogs`.
 
 ```ts
-const result = validatePresentation(deck);
-if (!result.valid) console.error(result.errors);
-for (const warning of result.warnings) console.warn(warning.path, warning.message);
+const report = validate(deck);
+if (!report.valid) console.error(report.findings.filter((finding) => finding.severity === "error"));
+for (const finding of report.findings) console.warn(finding.ruleId, finding.path, finding.message);
 ```
 
 Validate catalog records locally:
@@ -198,7 +199,7 @@ import { audiences, validateCatalogRecord } from "@openpresentation/opf";
 for (const record of audiences) {
   const result = validateCatalogRecord("audiences", record);
   if (!result.valid) {
-    console.error(result.errors);
+    console.error(result.findings);
   }
 }
 ```

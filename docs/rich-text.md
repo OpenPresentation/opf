@@ -38,7 +38,7 @@ Verification: `node packages/javascript/test/rich-text.mjs`, composition/paginat
 - **Citations.** A marked heading run draws its marker after the run, and its note joins the slide's footnote area. Numbering follows reading order, with the heading group first: `tag`, `title`, `subtitle`, then regions, blocks and the root payload (see [footnotes-citations-captions.md](footnotes-citations-captions.md)).
 - **Variables.** A whole-field `var:<id>` whose text variable holds `TextRun[]` keeps the runs in a heading; `{{id}}` inside a run's text resolves as in body text.
 - **Markdown.** `# Title`, `## Subtitle` and the quote text keep [inline formatting](markdown.md#inline-text) both ways.
-- **Audit.** Contrast is checked for each run color; a title of runs counts as a title (`missing-slide-title`, `duplicate-slide-title` compare plain text); link text in a heading is checked like body link text.
+- **Validate.** Contrast is checked for each run color; a title of runs counts as a title (`missing-slide-title`, `duplicate-slide-title` compare plain text); link text in a heading is checked like body link text.
 - **Pagination.** A long rich quote splits by text offset like body text, each piece keeping its run formatting; the heading group repeats on every page.
 
 ```json

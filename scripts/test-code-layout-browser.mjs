@@ -27,7 +27,7 @@ const samples=['a\tb','aaaa\tb','\tconst value = "two  spaces";','  indentation 
 samples.push({source:'src\tCaseSensitive.ts',role:'filename'});
 const cases=samples.map(({source,role})=>{
   const value=role==='filename'?{source:'body',filename:source}:source;
-  const part=layoutCode(value,{x:0,y:0,width:1000,height:500},{fonts:{code:'Cousine'},textMeasurement:registry.textMeasurement}).parts.find(part=>part.role===role);
+  const part=layoutCode(value,{x:0,y:0,width:1000,height:500},{fontFamilies:{code:'Cousine'},textMeasurement:registry.textMeasurement}).parts.find(part=>part.role===role);
   assert.ok(part?.fit&&!part.fit.overflow);assert.equal(part.fit.lines.length,1);
   return {source,role,fontSize:part.fit.fontSize,style:part.style,expected:part.fit.sourceLines[0].width,segments:part.fit.sourceLines[0].segments};
 });

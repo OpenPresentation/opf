@@ -56,7 +56,7 @@ import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads'
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
 // packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
 const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
-const {BUNDLED_FONT_MANIFEST, prepareNodeFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, renderSvgDeck, svgToPng, checkPptxTypefaces, fromPptx, toPptx, createEditorSession, catalogs, resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts, validatePresentation, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, renderSvg, svgToPng, checkTypefaces, fromPptx, toPptx, createEditorSession, presentationOf, catalogs, resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts, validate, strToU8, unzipSync, zipSync, XMLValidator} = engines;
 
 const started = Date.now();
 const MAX_SECONDS = 420;
@@ -82,7 +82,7 @@ const decoder = new TextDecoder();
 // substitution a state triggers must appear here, exactly, and every entry must
 // be exercised.
 // ---------------------------------------------------------------------------
-const {registry} = await prepareNodeFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
+const {registry} = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
 // A renderer that vendors Intos previews the Aptos scheme with it (FF-31); an earlier pinned renderer uses Carlito and Roboto.
 const previewsAptosWithIntos = BUNDLED_FONT_MANIFEST.packages.some((pkg) => pkg.name === 'intos');
 const EXPECTED_SUBSTITUTIONS = Object.freeze({
@@ -587,7 +587,7 @@ function packageProblems(entries, prefix = '') {
 const GENERIC = new Set(['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy', 'system-ui']);
 const svgFamilies = (svgs) => [...new Set(svgs.flatMap((svg) => [...svg.matchAll(/font-family="([^"]*)"/g)].flatMap((match) => match[1].split(',').map((family) => family.trim().replace(/^&quot;|&quot;$|^["']|["']$/g, '')))))].filter((family) => family && !GENERIC.has(family)).sort(compareNames);
 const textOf = (value) => (typeof value === 'string' ? value : Array.isArray(value) ? value.map(textOf).join(' ') : value && typeof value === 'object' ? Object.values(value).map(textOf).join(' ') : '');
-const engineOptions = (presentation) => ({textMeasurement: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(presentation))});
+const engineOptions = (presentation) => ({fonts: {textMeasurement: createScriptTextMeasurement(registry.textMeasurement, resolveScriptFonts(presentation))}});
 // Every face the preview may draw for a chosen family: its own weights, or the pinned registry's replacement.
 const WEIGHTS = [300, 400, 500, 600, 700, 800, 900];
 function previewFaces(family) {
@@ -613,14 +613,14 @@ const overlaps = (faces, drawn) => drawn.some((family) => faces.has(family));
 
 async function verifyState(label, presentation, {png = false} = {}) {
   const document = structuredClone(presentation);
-  assert.equal(validatePresentation(document).valid, true, `${label}: valid OPF`);
+  assert.equal(validate(document).valid, true, `${label}: valid OPF`);
   const fonts = chosenFonts(document);
   const measured = engineOptions(document);
 
   // Preview and export share one registry, so both record what they resolved.
   registry.clearSubstitutions();
   const diagnostics = [];
-  const svgs = renderSvgDeck(document, {...measured, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
+  const svgs = renderSvg(document, {...measured, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
   // A face that lacks the text's glyphs is drawn per character with a bundled fallback face and reported as a note.
   const fallbackNotes = diagnostics.filter((diagnostic) => diagnostic.code === 'font-glyph-fallback');
   assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code !== 'font-glyph-fallback'), [], `${label}: preview diagnostics`);
@@ -658,7 +658,7 @@ async function verifyState(label, presentation, {png = false} = {}) {
   }
 
   // FF-08 typeface inventory, theme fonts against the catalog literals, package structure and re-import.
-  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...selectors, ...fonts.contentEastAsian], monospace: fonts.monospace});
+  const check = checkTypefaces(bytes, {families: [...fonts.chosen, ...selectors, ...fonts.contentEastAsian], monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${label}: typeface inventory`);
   assert.deepEqual(check.fontsUsed.filter((family) => !selectors.includes(family) && !fonts.contentEastAsian.includes(family)), fonts.used, `${label}: exported fonts equal the chosen fonts`);
   const entries = unzipSync(bytes);
@@ -673,13 +673,13 @@ async function verifyState(label, presentation, {png = false} = {}) {
   assert.equal(slideParts.length, document.slides.length, `${label}: one slide part per slide`);
   const reimported = await fromPptx(bytes);
   assert.equal(reimported.slides.length, document.slides.length, `${label}: re-import keeps every slide`);
-  assert.equal(validatePresentation(reimported).valid, true, `${label}: re-imported OPF validates`);
+  assert.equal(validate(reimported).valid, true, `${label}: re-imported OPF validates`);
 
   stateReports.push({label, chosen: [...fonts.chosen].sort(compareNames), exported: check.fontsUsed, weightSelectors: check.fontsUsed.filter((family) => selectors.includes(family)), preview: drawn, scripts, substitutions: substitutions.map((entry) => `${entry.requested}>${entry.family}`)});
   assert.equal(digests[label], undefined, `${label}: state labels are unique`);
   digests[label] = {pptx: sha256(bytes), svg: sha256(svgs.join('\0')), slides: svgs.map((svg) => sha256(svg).slice(0, 16))};
   // The pairwise decks also record a PNG of the first and last slide (resvg with the registry's own font files only unless asked for host fonts).
-  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await svgToPng(svg, {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS, fontDirs: HOST_FONT_DIRS}))));
+  if (png && WITH_PNG) digests[label].png = await Promise.all([svgs[0], svgs.at(-1)].map(async (svg) => sha256(await svgToPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false, loadSystemFonts: LOAD_SYSTEM_FONTS}, fontDirs: HOST_FONT_DIRS}))));
   return {bytes: new Uint8Array(bytes), svgs, drawn, fonts, faces: [...chosenFaces].sort(compareNames).join('|')};
 }
 
@@ -690,12 +690,12 @@ async function verifyState(label, presentation, {png = false} = {}) {
 async function runSwitch(name, deck, steps, options = {}) {
   const editor = createEditorSession(deck, {rejectInvalid: true});
   const original = structuredClone(deck);
-  const first = await verifyState(`${name} A`, editor.document, options);
+  const first = await verifyState(`${name} A`, presentationOf(editor), options);
   let previous = first;
   const visited = [first];
   for (const [index, step] of steps.entries()) {
     step.apply(editor);
-    const next = await verifyState(`${name} ${step.label}`, editor.document);
+    const next = await verifyState(`${name} ${step.label}`, presentationOf(editor));
     assert.notEqual(Buffer.compare(next.bytes, previous.bytes), 0, `${name} ${step.label}: the export changed`);
     // The preview draws the registry's replacement, so two chosen fonts that share one (Tahoma and Verdana) preview alike.
     if (step.payload || next.faces !== previous.faces) assert.notDeepEqual(next.svgs, previous.svgs, `${name} ${step.label}: the preview re-rendered`);
@@ -704,7 +704,7 @@ async function runSwitch(name, deck, steps, options = {}) {
     for (const family of step.expectUsed ?? []) assert.ok(next.fonts.used.includes(family), `${name} ${step.label}: the package uses ${family}`);
     for (const family of step.expectUnused ?? []) assert.ok(!next.fonts.used.includes(family), `${name} ${step.label}: the package no longer uses ${family}`);
     if (index === steps.length - 1 && step.returnsToStart) {
-      assert.deepEqual(editor.document, original, `${name}: switching back restores the document`);
+      assert.deepEqual(presentationOf(editor), original, `${name}: switching back restores the document`);
       assert.equal(Buffer.compare(next.bytes, first.bytes), 0, `${name}: switching back restores the PPTX bytes`);
       assert.deepEqual(next.svgs, first.svgs, `${name}: switching back restores the preview`);
     }
@@ -713,7 +713,7 @@ async function runSwitch(name, deck, steps, options = {}) {
   }
   // The editor's history returns to the original document too.
   while (editor.canUndo) editor.undo();
-  assert.deepEqual(editor.document, original, `${name}: undo restores the document`);
+  assert.deepEqual(presentationOf(editor), original, `${name}: undo restores the document`);
   return visited;
 }
 const setScheme = (path, id) => (editor) => editor.setCatalog(path, 'fontSchemes', id);
@@ -978,8 +978,8 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
   const bare = {...deck, slides: [{...slide, chart: undefined}]};
   delete bare.slides[0].chart;
   const measured = engineOptions(deck);
-  const withChart = marks(renderSvgDeck(deck, measured)[0]);
-  const without = marks(renderSvgDeck(bare, measured)[0]);
+  const withChart = marks(renderSvg(deck, measured)[0]);
+  const without = marks(renderSvg(bare, measured)[0]);
   const native = withChart.text - without.text > 1;
   assert.equal(native, PREVIEW_NATIVE.includes(chart.id), `${chart.id}: the preview ${native ? 'now draws this chart natively: limitation resolved, add it to PREVIEW_NATIVE' : 'no longer draws it natively, though PREVIEW_NATIVE lists it'}`);
   const exportedBytes = await toPptx(deck, measured);
@@ -996,8 +996,8 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
     assert.ok(decoder.decode(exported[chartEx]).includes(`<cx:series layoutId="${CHARTEX_NATIVE[chart.id]}"`), `${chart.id}: the chartEx series is the ${CHARTEX_NATIVE[chart.id]} construct`);
     assert.ok(decoder.decode(exported['ppt/slides/slide1.xml']).includes('<mc:AlternateContent'), `${chart.id}: the chartEx frame is an AlternateContent with the classic chart as Fallback`);
   } else assert.equal(chartEx, undefined, `${chart.id}: no chartEx part (a classic type, or the map, which stays the clustered column)`);
-  assert.deepEqual(checkPptxTypefaces(exported, {fonts: ['Calibri', 'Roboto Mono'], monospace: ['Roboto Mono']}).violations, [], `${chart.id}: chart parts name only the chosen fonts`);
-  digests[`chart:${chart.id}`] = {pptx: sha256(exportedBytes), svg: sha256(renderSvgDeck(deck, measured).join('\0'))};
+  assert.deepEqual(checkTypefaces(exported, {families: ['Calibri', 'Roboto Mono'], monospace: ['Roboto Mono']}).violations, [], `${chart.id}: chart parts name only the chosen fonts`);
+  digests[`chart:${chart.id}`] = {pptx: sha256(exportedBytes), svg: sha256(renderSvg(deck, measured).join('\0'))};
   chartPaths.push({id: chart.id, nominal, exported: element, previewNative: native});
 }
 
@@ -1013,7 +1013,7 @@ if (FULL) {
   const audit = (edit) => {
     const entries = {...original};
     edit(entries);
-    return {check: checkPptxTypefaces(zipSync(entries), {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}), problems: packageProblems(entries)};
+    return {check: checkTypefaces(zipSync(entries), {families: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}), problems: packageProblems(entries)};
   };
   const edited = (entries, part, pattern, replacement) => {
     const before = decoder.decode(entries[part]);
@@ -1080,11 +1080,11 @@ const EXPECTED_FAILURES = [
 ];
 for (const failure of EXPECTED_FAILURES) {
   const measured = engineOptions(failure.deck);
-  await expectLimitation(failure.id, 'the preview', () => renderSvgDeck(failure.deck, measured), failure.preview);
+  await expectLimitation(failure.id, 'the preview', () => renderSvg(failure.deck, measured), failure.preview);
   await expectLimitation(failure.id, 'the measured export', () => toPptx(failure.deck, measured), failure.measuredExport);
   const fonts = chosenFonts(failure.deck);
   const bytes = await toPptx(failure.deck);
-  const check = checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace});
+  const check = checkTypefaces(bytes, {families: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace});
   assert.deepEqual(check.violations, [], `${failure.id}: an unmeasured export still names only the chosen fonts`);
 }
 // Formerly named expected failures, now positive: the preview falls back per character to a bundled face that has the
@@ -1100,15 +1100,15 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   const deck = {name: fallback.id, language: fallback.language, design: {fontScheme: fallback.scheme}, slides: [{id: 'a', title: fallback.title, text: fallback.body}]};
   const measured = engineOptions(deck);
   const notes = [];
-  const svgs = renderSvgDeck(deck, {...measured, onDiagnostic: (diagnostic) => notes.push(diagnostic)});
+  const svgs = renderSvg(deck, {...measured, onDiagnostic: (diagnostic) => notes.push(diagnostic)});
   assert.ok(notes.length > 0 && notes.every((note) => note.code === 'font-glyph-fallback'), `${fallback.id}: the preview reports only glyph fallback notes: ${JSON.stringify(notes.map((note) => note.code))}`);
   assert.ok(notes.every((note) => fallback.from.has(note.fontFamily) && (fallback.allowed ?? fallback.to).includes(note.fallbackFamily)), `${fallback.id}: falls back from the scheme face to ${fallback.allowed ?? fallback.to}: ${JSON.stringify(notes.map((note) => [note.fontFamily, note.fallbackFamily]))}`);
   for (const character of fallback.characters ?? []) assert.ok(notes.some((note) => note.characters.includes(character)), `${fallback.id}: reports U+${character.codePointAt(0).toString(16)}`);
   assert.ok(fallback.to.every((family) => svgFamilies(svgs).includes(family)), `${fallback.id}: draws ${fallback.to}`);
-  assert.deepEqual(renderSvgDeck(deck, measured), svgs, `${fallback.id}: deterministic`);
+  assert.deepEqual(renderSvg(deck, measured), svgs, `${fallback.id}: deterministic`);
   const exportBytes = await toPptx(deck, measured);
   const fonts = chosenFonts(deck);
-  assert.deepEqual(checkPptxTypefaces(exportBytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
+  assert.deepEqual(checkTypefaces(exportBytes, {families: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${fallback.id}: the measured export names only the chosen fonts`);
 }
 // A one-column histogram used to lose its chart silently: no chart part, no graphic frame and no diagnostic.
 {
@@ -1129,7 +1129,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   assert.deepEqual(fallbackDiagnostics.map((diagnostic) => [diagnostic.code, diagnostic.adaptation, diagnostic.path]), [['chart-data-adapted', 'histogram-binned', 'slides.0.chart']], `${id}: the fallback mode reports the binning`);
   assert.deepEqual(packageProblems(exported), [], `${id}: package structure, nested workbook included`);
   const fonts = chosenFonts(deck);
-  assert.deepEqual(checkPptxTypefaces(bytes, {fonts: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
+  assert.deepEqual(checkTypefaces(bytes, {families: [...fonts.chosen, ...fonts.contentEastAsian], monospace: fonts.monospace}).violations, [], `${id}: the chart and its workbook name only the chosen fonts`);
   assert.equal((await fromPptx(bytes)).slides.length, 1, `${id}: re-imports`);
 }
 
@@ -1143,9 +1143,9 @@ if (FULL) assert.deepEqual(unusedExpectations, [], 'every pinned substitution is
 // must not shadow the bundled faces (the PNG digests above equal the baseline run's, which the determinism grid asserts).
 if (HOST_FONT_DIRS.length) {
   const deck = {name: 'decoy', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: TEXT.english.title, text: TEXT.english.body}]};
-  const [svg] = renderSvgDeck(deck, engineOptions(deck));
+  const [svg] = renderSvg(deck, engineOptions(deck));
   const decoyOnly = sha256(await svgToPng(svg, {useBundledFonts: false, fontDirs: HOST_FONT_DIRS}));
-  const bundledOnly = sha256(await svgToPng(svg, {fontFiles: registry.fontFiles, useBundledFonts: false}));
+  const bundledOnly = sha256(await svgToPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}}));
   assert.notEqual(decoyOnly, bundledOnly, 'the decoy host faces draw differently when they are the only faces');
 }
 const seconds = (Date.now() - started) / 1000;

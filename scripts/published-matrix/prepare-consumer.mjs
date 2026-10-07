@@ -85,14 +85,32 @@ for (const name of PACKAGES) {
 await writeFile(path.join(target, 'installed.json'), `${JSON.stringify({node: process.version, platform: process.platform, arch: process.arch, packages: installed}, null, 2)}\n`);
 
 // The same entry points as engines-source.mjs, resolved from this consumer's node_modules.
-await writeFile(path.join(target, 'engines-installed.mjs'), `export {BUNDLED_FONT_MANIFEST, prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+await writeFile(path.join(target, 'engines-installed.mjs'), `import {prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
+import {renderSvgDeck, svgToPng as publishedSvgToPng} from '@openpresentation/opf-render';
+import {checkPptxTypefaces, toPptx as publishedToPptx} from '@openpresentation/opf-pptx';
+import {validatePresentation} from '@openpresentation/opf';
+export {BUNDLED_FONT_MANIFEST, prepareNodeFonts} from '@openpresentation/opf-render/fonts-node';
 export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '@openpresentation/opf-render/fonts';
-export {renderSvgDeck, svgToPng} from '@openpresentation/opf-render';
-export {checkPptxTypefaces, fromPptx, toPptx} from '@openpresentation/opf-pptx';
+export {renderSvgDeck} from '@openpresentation/opf-render';
+export {fromPptx} from '@openpresentation/opf-pptx';
 export {createEditorSession} from '@openpresentation/opf-editor';
+// The 0.14 shapes of the font-switch matrix (scripts/published-matrix/engines-source.mjs) over the published packages: the
+// fonts object is the old option bag, a whole deck renders with renderSvgDeck, and the published editor calls its deck "document".
+// Browser and determinism checks keep the published names above.
+export const loadFonts = async (options) => { const {registry, options: prepared} = await prepareNodeFonts(options); return {...prepared, registry, get substitutions() { return registry.substitutions; }}; };
+export const renderSvg = (presentation, {fonts, ...rest} = {}) => renderSvgDeck(presentation, {...fonts, ...rest});
+export const toPptx = (presentation, {fonts, ...rest} = {}) => publishedToPptx(presentation, {...fonts, ...rest});
+export const svgToPng = (svg, {fonts, ...rest} = {}) => publishedSvgToPng(svg, {...fonts, ...rest});
+export const checkTypefaces = (input, {families, ...rest}) => checkPptxTypefaces(input, {fonts: families, ...rest});
+export const validate = (presentation) => validatePresentation(presentation);
+export const presentationOf = (editor) => editor.document;
+// CI-only scaffolding while the published core is 0.13 (RR-55): the published-matrix workflow runs the font-switch harness of
+// the release tag (opf-v0.13.0), which calls these 0.13 names (its toPptx and svgToPng calls pass the option bag, which the
+// wrappers above forward unchanged). The 0.14 release-prep deletes them together with the 0.14 wrappers.
+export {checkPptxTypefaces, validatePresentation};
 export {catalogs} from '@openpresentation/opf/catalogs';
 export {resolveFontFamilies, resolveFontSchemeReference} from '@openpresentation/opf/composition';
-export {resolveScriptFonts, validatePresentation} from '@openpresentation/opf';
+export {resolveScriptFonts} from '@openpresentation/opf';
 // The package versions' own dependencies, as installed beside them.
 export {strToU8, unzipSync, zipSync} from 'fflate';
 export {XMLValidator} from 'fast-xml-parser';

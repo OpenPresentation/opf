@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide, OPFCompositionError} from '../dist/composition.js';
-import {validatePresentation} from '../dist/index.js';
+import { check } from './support/validation.mjs';
+
 
 const blocks = count => Array.from({length:count},(_,i)=>({text:`Observation ${i+1}. `.repeat(i+1)}));
 
@@ -91,7 +92,7 @@ test('unsupported internal fit stays visible and strict failures retain their ex
     {value:42,label:'Metric'},{text:'Body',attribution:'Footer'},{events:[{when:'Q1',what:'Launch'}]},
     {source:'const value = 42;',language:'Language label'}];
   const slide={blocks:fields.map((field,i)=>({[field]:values[i]}))};
-  assert.equal(validatePresentation({slides:[slide]}).valid,true);
+  assert.equal(check({slides:[slide]}).valid,true);
   const result=composeSlide(slide,{explain:true});
   assert.deepEqual(result.explanation.unmeasuredPayloads,fields.flatMap((field,i)=>['quote','code','metric','timeline'].includes(field)?[]:[`slides.0.blocks.${i}.${field}`]));
   const overflow={text:'All original content. '.repeat(1000),composition:{overflow:'error'}};

@@ -1,7 +1,7 @@
-// Shared plumbing of the Markdown converter: source lines and locations, diagnostics in the lint report shape,
+// Shared plumbing of the Markdown converter: source lines and locations, findings in the shared Finding format,
 // YAML reading and writing for front matter and embedded blocks, CSV for chart data. Internal module.
 import { type ParsedNode, Scalar, YAMLMap, parseDocument, stringify } from "yaml";
-import type { LintDiagnostic, LintLocation, LintSeverity } from "../lint.js";
+import type { Finding, FindingLocation, FindingSeverity } from "../generated/types/finding.js";
 import { type Obj, isRecord, same } from "../convert/shared.js";
 
 /** A half-open range of UTF-16 offsets in the Markdown source. */
@@ -38,11 +38,11 @@ export function splitLines(source: string): Line[] {
   return lines;
 }
 
-/** A diagnostic in the shape of `@openpresentation/opf/lint`, with the source range always present. */
-export type MarkdownDiagnostic = LintDiagnostic & { location: LintLocation };
+/** A finding of the Markdown converter (`markdown/<rule>`), with the source range always present. */
+export type MarkdownFinding = Finding & { location: FindingLocation };
 
 export class Ctx {
-  readonly diagnostics: MarkdownDiagnostic[] = [];
+  readonly findings: MarkdownFinding[] = [];
   /** JSON Pointer in the converted document to the source range that produced it. */
   readonly ranges = new Map<string, Range>();
   private readonly lineStarts: number[] = [0];
@@ -56,7 +56,7 @@ export class Ctx {
     }
   }
 
-  location(range: Range): LintLocation {
+  location(range: Range): FindingLocation {
     let lo = 0;
     let hi = this.lineStarts.length;
     while (lo + 1 < hi) {
@@ -67,8 +67,8 @@ export class Ctx {
     return { offset: range.start, length: Math.max(0, range.end - range.start), line: lo + 1, column: range.start - (this.lineStarts[lo] ?? 0) + 1 };
   }
 
-  report(ruleId: string, severity: LintSeverity, message: string, help: string, range: Range, path = ""): void {
-    this.diagnostics.push({ ruleId, severity, scope: "document", path, message, help, location: this.location(range) });
+  report(ruleId: string, severity: FindingSeverity, message: string, help: string, range: Range, path = ""): void {
+    this.findings.push({ ruleId, severity, category: "format", scope: "document", path, message, help, location: this.location(range) });
   }
   error(rule: string, message: string, help: string, range: Range, path = ""): void {
     this.report(`markdown/${rule}`, "error", message, help, range, path);
@@ -77,7 +77,7 @@ export class Ctx {
     this.report(`markdown/${rule}`, "warning", message, help, range, path);
   }
   get errors(): number {
-    return this.diagnostics.filter((d) => d.severity === "error").length;
+    return this.findings.filter((d) => d.severity === "error").length;
   }
 
   /** The source range of a JSON Pointer, falling back to the nearest ancestor that has one. */
@@ -233,7 +233,7 @@ export function csvField(cell: unknown, header = false): string {
   return needsQuotes(text) || ambiguous ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
-/** Raised by `opfToMarkdown` for a document it cannot convert: `invalid-document` (does not validate as OPF) or `not-representable` (a value that no Markdown or YAML form can carry exactly). */
+/** Raised by `toMarkdown` for a document it cannot convert: `invalid-document` (does not validate as OPF) or `not-representable` (a value that no Markdown or YAML form can carry exactly). */
 export class OPFMarkdownError extends Error {
   readonly code: "invalid-document" | "not-representable";
   readonly details: Record<string, unknown>;

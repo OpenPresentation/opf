@@ -43,11 +43,11 @@ Use `--format csv|tsv|json` to override format detection, `--delimiter ';'` for 
 ## Package API
 
 ```js
-import {parseTabularData, createDataContent} from '@openpresentation/opf/data';
+import {parseTabularData, importData} from '@openpresentation/opf/data';
 
 const csv = 'Quarter,Revenue,Costs\nQ1,12,8\nQ2,18,10';
-const table = createDataContent(csv, {as: 'table', format: 'csv'});
-const chart = createDataContent(csv, {
+const table = importData(csv, {as: 'table', format: 'csv'});
+const chart = importData(csv, {
   as: 'chart', format: 'csv', chartType: 'line',
   category: 'Quarter', series: ['Revenue', 'Costs'],
 });
@@ -59,7 +59,7 @@ The functions also accept already-parsed JSON and are re-exported by `@openprese
 
 This is an embedded data snapshot, not a live file link. Record the origin with `source` (see above). OPF has no chart data source by file or asset (`"data": { "src": ... }`); it was removed because no engine loaded it ([opf#240](https://github.com/OpenPresentation/opf/issues/240) is descoped), and the validator rejects it. Tables use inline `columns`/`rows` or a dataset; there is no `table.src` field. Re-import after a source changes.
 
-`parseTabularData` and `createDataContent` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `excelNumberFormat`, `numberFormatFromExcel`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
+`parseTabularData` and `importData` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `toExcelNumberFormat`, `fromExcelNumberFormat`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
 
 These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 and later include `import-data`. Use the coordinated Node 24 train with core 0.13.0, renderer 0.13.1, editor 0.12.1 and PPTX 0.13.2 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
 

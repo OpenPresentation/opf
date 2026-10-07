@@ -3,9 +3,10 @@
 // schema <-> embedded opf.schema.json $def parity, preview index <-> on-disk
 // HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
 // reduction (one non-deprecated record per Aspose.Slides ChartType), the
-// default-catalog snapshot's manifest hashes (spec/catalogs/manifest.json), and
-// deprecation links in every other kind, and layout-record design hints against
-// the deck's Design.
+// default-catalog snapshot's manifest hashes (spec/catalogs/manifest.json),
+// deprecation links in every other kind, layout-record design hints against
+// the deck's Design, font-scheme languages against the languages catalog, and the
+// finding schema (the report format every OPF tool shares).
 //
 // Zero external dependencies by design. Run via `pnpm check:spec` (root) or
 // `node scripts/check-spec-integrity.mjs` directly. Exits non-zero with a
@@ -508,6 +509,43 @@ async function checkFontSchemeLanguages() {
   }
 }
 
+// (k) The finding schema (spec/schemas/finding.schema.json, the report format every OPF tool shares) is published and
+// typed (RR-55): its id, the definitions the generated types and validate's findings rely on, the closed severity enum,
+// the six core categories, the required fields of a finding, and every local $ref resolving to a definition.
+const FINDING_SCHEMA_ID = "https://openpresentation.org/schema/opf-finding/v1";
+async function checkFindingSchema() {
+  const where = "[k] schemas/finding.schema.json";
+  const schema = await readJson(path.join(schemasRoot, "finding.schema.json"));
+  if (schema.$id !== FINDING_SCHEMA_ID) fail(`${where}: $id is '${schema.$id}', expected '${FINDING_SCHEMA_ID}'`);
+  const defs = schema.$defs ?? {};
+  for (const name of ["Finding", "FindingFix", "FindingLocation", "FindingSeverity", "FindingCategory", "JsonPatchOperation", "ValidationIssue"]) {
+    if (!defs[name]) fail(`${where}: missing $defs/${name}`);
+  }
+  const sameList = (a, b) => Array.isArray(a) && a.length === b.length && a.every((value, index) => value === b[index]);
+  if (!sameList(defs.FindingSeverity?.enum, ["error", "warning", "info"])) fail(`${where}: FindingSeverity must be exactly error, warning, info`);
+  const categories = defs.FindingCategory?.anyOf?.[0]?.enum;
+  if (!sameList(categories, ["format", "references", "policy", "accessibility", "layout", "content"])) fail(`${where}: FindingCategory must list the six core categories first`);
+  for (const field of ["ruleId", "severity", "category", "path", "message"]) {
+    if (!defs.Finding?.required?.includes(field)) fail(`${where}: Finding must require '${field}'`);
+  }
+  if (!sameList(schema.required, ["valid", "findings", "counts"])) fail(`${where}: the report must require valid, findings and counts`);
+  const walk = (node, trail) => {
+    if (Array.isArray(node)) {
+      node.forEach((entry, index) => {
+        walk(entry, `${trail}/${index}`);
+      });
+      return;
+    }
+    if (!node || typeof node !== "object") return;
+    if (typeof node.$ref === "string") {
+      const match = /^#\/\$defs\/(.+)$/.exec(node.$ref);
+      if (!match || !defs[match[1]]) fail(`${where}: ${trail}: $ref '${node.$ref}' does not resolve to a $defs entry`);
+    }
+    for (const [key, value] of Object.entries(node)) walk(value, `${trail}/${key}`);
+  };
+  walk(schema, "");
+}
+
 async function main() {
   const opfSchema = await readJson(path.join(schemasRoot, "opf.schema.json"));
 
@@ -521,6 +559,7 @@ async function main() {
   await checkDeprecationLinks();
   await checkLayoutDesignHints(opfSchema);
   await checkFontSchemeLanguages();
+  await checkFindingSchema();
 
   if (failures.length > 0) {
     process.stderr.write(`spec integrity check failed: ${failures.length} problem(s) found\n\n`);

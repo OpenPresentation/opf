@@ -105,13 +105,12 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
 | Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
-| Validate | `validatePresentation` / `opf validate` | Schema and semantic checks |
+| Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
-| Offline catalog bundle | `bundlePresentation` / `opf bundle` | Inlines resolved catalog records; remote media/data and custom catalog sources remain explicit host concerns. |
-| Lint | `lintSource` / `opf lint` | Read-only; no network catalog fetch |
+| Offline catalog bundle | `bundle` / `opf bundle` | Inlines resolved catalog records; remote media/data and custom catalog sources remain explicit host concerns. |
 | Offline fonts | `prepareNodeFonts` (`/fonts-node`) | Bundled Roboto pack; hashed files |
 | Composition | `composeSlide` | Includes shared headers/footers |
-| Pagination | `paginatePresentation` / `opf paginate` | Returns mappings; preserves source |
+| Pagination | `paginate` / `opf paginate` | Returns mappings; preserves source |
 | Edit + undo | `@openpresentation/opf-editor` `createEditorSession` | JSON Patch undo/redo |
 | JSON Patch CLI | `opf edit` | No persistent CLI undo history |
 | SVG preview | `renderSvg` / `renderSvgDeck` | Local; same options as layout |

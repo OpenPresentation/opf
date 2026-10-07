@@ -4,7 +4,8 @@
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { colorContrast, resolveColorRef, resolveColorRoles, SURFACE_ALT_MIN_CONTRAST, surfaceAltColor } from '../dist/index.js';
+import { colorContrast, resolveColorRef, resolveColorRoles, SURFACE_ALT_MIN_CONTRAST, surfaceAltColor } from '../dist/composition.js';
+
 
 const catalog = new URL('../../../spec/catalogs/', import.meta.url);
 const read = (path) => JSON.parse(readFileSync(new URL(path, catalog), 'utf8'));

@@ -12,8 +12,8 @@ const coreAliases={};
 for(const [key,value] of Object.entries(pkg.exports)){if(key.includes('*'))continue;const target=typeof value==='string'?value:value.import;if(target)coreAliases['@openpresentation/opf'+(key==='.'?'':key.slice(1))]=path.join(core,target);}
 const require = createRequire(new URL('../packages/javascript/package.json', import.meta.url));
 const {build} = createRequire(require.resolve('tsup'))('esbuild');
-const {loadOfficeFontRegistry} = await import(pathToFileURL(path.join(renderer, 'dist/fonts-node.js')));
-const {embeddedFonts} = await loadOfficeFontRegistry();
+const {loadFonts} = await import(pathToFileURL(path.join(renderer, 'dist/fonts-node.js')));
+const {embeddedFonts} = await loadFonts({pack: 'office'});
 for(const kind of ['rich','styled']){
   const output = path.join(root, `artifacts/${kind}-table-browser`);
   await mkdir(output, {recursive: true});

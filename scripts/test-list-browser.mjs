@@ -1,6 +1,6 @@
 import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
 import {createEditorSession} from '../../opf-editor/src/index.js';
-import {loadBrowserFontRegistry} from '../../opf-render/src/fonts-browser.js';
+import {loadFonts} from '../../opf-render/src/fonts-browser.js';
 const host=document.querySelector('#canvas'),out=document.querySelector('#results');let checks=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);out.textContent+=`PASS ${message}\n`;checks++;};
 const original={design:{fontScheme:'roboto'},slides:[{title:'Edit every list entry',composition:{mode:'row'},blocks:[{items:[
@@ -8,9 +8,9 @@ const original={design:{fontScheme:'roboto'},slides:[{title:'Edit every list ent
  {text:'Plain entry with enough words to wrap in this column.',description:'A plain description.',level:1},
  {text:[{text:'Deeper nesting',color:'#2563EB'}],level:4}
  ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Rich bullet',bold:true}],level:1}]}]}]};
-const fonts=await loadBrowserFontRegistry((await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family)&&[400,700].includes(f.weight)).map(f=>({...f,data:Uint8Array.from(atob(f.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})));
+const fonts=await loadFonts({faces:(await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family)&&[400,700].includes(f.weight)).map(f=>({...f,data:Uint8Array.from(atob(f.dataUrl.split(',')[1]),c=>c.charCodeAt(0))}))});
 let errors=[];const editor=createEditorSession(original,{rejectInvalid:true});
-const canvas=createCanvasEditor(host,{editor,renderOptions:{textMeasurement:fonts.textMeasurement},onError:error=>errors.push(error.message)});
+const canvas=createCanvasEditor(host,{editor,fonts,onError:error=>errors.push(error.message)});
 const target=path=>host.querySelector(`[data-opf-path="${path}"]`),button=label=>[...host.querySelectorAll('button')].find(b=>b.textContent===label);
 try {
  await canvas.ready;
@@ -22,7 +22,7 @@ try {
  button('Italic').click();check(editor.get(rich).every(r=>r.italic),'list text formats without flattening');
  check(editor.get(rich).some(r=>r.bold),'format preserves existing emphasis');
  check(editor.get(description)[1].link==='https://openpresentation.org','body formatting preserves description link');
- editor.undo();check(JSON.stringify(editor.document)===JSON.stringify(original),'one undo restores rich list content');
+ editor.undo();check(JSON.stringify(editor.presentation)===JSON.stringify(original),'one undo restores rich list content');
  canvas.beginEdit(description);button('Format selection').click();button('Underline').click();
  check(editor.get(description).every(r=>r.underline),'description formats on the slide');
  check(editor.get(description)[1].link==='https://openpresentation.org','description formatting preserves its link');editor.undo();
@@ -38,9 +38,9 @@ try {
  canvas.beginEdit('slides.0.blocks.0.items');check(!!host.querySelector('form[aria-label="Content properties"]'),'list container opens structural properties');canvas.cancel();
  canvas.beginEdit('slides.0.blocks.1.bullets.1.text');button('Format selection').click();button('Italic').click();
  check(editor.get('slides.0.blocks.1.bullets.1.text')[0].italic,'explicit text-type bullets support rich editing');editor.undo();
- check(JSON.stringify(editor.document)===JSON.stringify(original),'all list edits undo without losing structure');
+ check(JSON.stringify(editor.presentation)===JSON.stringify(original),'all list edits undo without losing structure');
  check(errors.length===0,'no unexpected canvas errors');
  canvas.destroy();
  out.textContent+=`\n${checks} checks passed`;document.title=`PASS ${checks} list canvas checks`;
- await createCanvasEditor(host,{document:original,renderOptions:{textMeasurement:fonts.textMeasurement}}).ready;
+ await createCanvasEditor(host,{presentation:original,fonts}).ready;
 }catch(error){out.textContent+=`FAIL ${error.stack}`;document.title='FAIL list canvas checks';throw error;}

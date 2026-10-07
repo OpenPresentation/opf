@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openpresentation.org/schema/opf-finding/v1",
+  "title": "Finding Report",
+  "description": "The report format every OPF tool shares. A finding is one thing a checker found at one place in a presentation: a stable rule id, a severity, a category, a JSON Pointer path, a message, and optionally source positions, the measured numbers behind it and suggested fixes as JSON Patch. `validate` in `@openpresentation/opf`, the Markdown and YAML converters, the editor's Review panel and hosted reviewers such as pptx.dev's AI review all produce this shape, so a host shows and applies findings from any of them the same way. A report lists findings, tells whether any has severity `error` (`valid`) and counts them by severity; `validate` adds `schemaValid`, `checks` and variable fields on top of it. Core's checks are deterministic and run locally; findings from other producers use their own rule-id prefix and say so in `source`.",
+  "type": "object",
+  "required": ["valid", "findings", "counts"],
+  "properties": {
+    "valid": {
+      "type": "boolean",
+      "description": "True when no finding has severity `error`."
+    },
+    "findings": {
+      "type": "array",
+      "description": "Every finding, in report order.",
+      "items": { "$ref": "#/$defs/Finding" }
+    },
+    "counts": {
+      "type": "object",
+      "description": "How many findings each severity has.",
+      "required": ["error", "warning", "info"],
+      "additionalProperties": false,
+      "properties": {
+        "error": { "type": "integer", "minimum": 0 },
+        "warning": { "type": "integer", "minimum": 0 },
+        "info": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "FindingSeverity": {
+      "type": "string",
+      "enum": ["error", "warning", "info"],
+      "description": "`error` makes a report invalid. `warning` is a problem the author should fix. `info` is advisory."
+    },
+    "FindingCategory": {
+      "description": "What kind of question the finding answers. Core uses `format` (is it well-formed OPF), `references` (does everything it points at resolve), `policy` (host house rules), `accessibility`, `layout` (will it present as authored) and `content` (is anything left unfinished). Other producers may use their own category names, such as `narrative` or `audience-fit`.",
+      "anyOf": [
+        { "type": "string", "enum": ["format", "references", "policy", "accessibility", "layout", "content"] },
+        { "type": "string", "minLength": 1 }
+      ]
+    },
+    "FindingLocation": {
+      "type": "object",
+      "description": "A range in the checked text: UTF-16 offset and length from the start, and the one-based line and column of the start. Present when the finding was produced from text (JSON, Markdown or YAML).",
+      "required": ["offset", "length", "line", "column"],
+      "additionalProperties": false,
+      "properties": {
+        "offset": { "type": "integer", "minimum": 0 },
+        "length": { "type": "integer", "minimum": 0 },
+        "line": { "type": "integer", "minimum": 1 },
+        "column": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "JsonPatchOperation": {
+      "description": "One RFC 6902 JSON Patch operation. Paths are JSON Pointers into the checked presentation.",
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["op", "path", "value"],
+          "additionalProperties": false,
+          "properties": {
+            "op": { "type": "string", "enum": ["add", "replace", "test"] },
+            "path": { "type": "string" },
+            "value": {}
+          }
+        },
+        {
+          "type": "object",
+          "required": ["op", "path"],
+          "additionalProperties": false,
+          "properties": {
+            "op": { "type": "string", "const": "remove" },
+            "path": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["op", "from", "path"],
+          "additionalProperties": false,
+          "properties": {
+            "op": { "type": "string", "enum": ["move", "copy"] },
+            "from": { "type": "string" },
+            "path": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "FindingFocus": {
+      "type": "object",
+      "description": "The field an author has to fill in, for a fix that cannot be written as a patch.",
+      "required": ["path", "field"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "description": "JSON Pointer of the field to edit." },
+        "field": { "type": "string", "description": "What the field is, such as `alt`, `title`, `text`, `link`, `language` or `fontSize`." },
+        "value": { "type": ["string", "number", "boolean", "null", "array", "object"], "description": "The field's current value, when it has one." }
+      }
+    },
+    "FindingFix": {
+      "type": "object",
+      "description": "A suggested repair. Core never applies it: the host shows it and applies it through its own undoable edit path. A `patch` fix carries JSON Patch operations; a `focus` fix only names the field the author has to fill in.",
+      "required": ["title"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "description": "What applying the fix does, in a few words." },
+        "id": { "type": "string", "description": "Stable id within one finding, such as `focus-alt` or `use-readable-color`." },
+        "kind": { "type": "string", "enum": ["patch", "focus"], "default": "patch", "description": "`patch` fixes carry `patch`; `focus` fixes carry `focus`." },
+        "safe": { "type": "boolean", "description": "True when applying the fix cannot change what the content says or how it looks beyond the repair, such as switching a failing colour to the one the theme chose. False fixes need a deliberate choice." },
+        "patch": {
+          "type": "array",
+          "description": "RFC 6902 JSON Patch operations that apply the fix to the checked presentation.",
+          "items": { "$ref": "#/$defs/JsonPatchOperation" }
+        },
+        "focus": { "$ref": "#/$defs/FindingFocus" }
+      }
+    },
+    "FindingSuggestion": {
+      "type": "object",
+      "description": "A value the author could use instead, such as a catalog record that exists. Suggestions name records actually present in the checked context and never replace authored values silently.",
+      "required": ["value", "label", "origin"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": ["string", "number", "boolean", "null"] },
+        "label": { "type": "string" },
+        "origin": { "type": "string", "description": "Where the suggestion comes from: `schema`, `built-in`, `loaded`, `document` or `contract`." },
+        "definition": { "type": "string", "description": "Where the suggested record or constraint is defined." }
+      }
+    },
+    "ValidationIssue": {
+      "type": "object",
+      "description": "The raw schema or semantic issue behind a finding, kept with every union alternative so a host can inspect the exact constraint.",
+      "required": ["path", "message", "keyword", "schemaPath", "params"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" },
+        "message": { "type": "string" },
+        "keyword": { "type": "string", "description": "The JSON Schema keyword that failed, or `opf` for a rule the schema cannot express." },
+        "schemaPath": { "type": "string" },
+        "params": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "Finding": {
+      "type": "object",
+      "description": "One thing a checker found at one place in a presentation.",
+      "required": ["ruleId", "severity", "category", "path", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "description": "Stable `<producer>/<rule>` id, such as `opf/text-contrast` for core or `pptx.dev/narrative-gap` for a hosted reviewer. Ids do not change between releases."
+        },
+        "source": {
+          "type": "string",
+          "description": "The producer: `opf` (the default) for core, or the name of another tool such as `pptx.dev/review`."
+        },
+        "severity": { "$ref": "#/$defs/FindingSeverity" },
+        "category": { "$ref": "#/$defs/FindingCategory" },
+        "path": {
+          "type": "string",
+          "description": "JSON Pointer to the value the finding is about, such as `/slides/4/title`. Empty for the whole document, or for a value in a supplied context such as a loaded catalog."
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["document", "context"],
+          "description": "`document` (the default) when `path` points into the checked presentation, `context` when it points into host-supplied context such as loaded catalog records."
+        },
+        "message": { "type": "string", "minLength": 1, "description": "What is wrong, in a sentence." },
+        "help": { "type": "string", "description": "What to do about it." },
+        "slide": { "type": "integer", "minimum": 0, "description": "Zero-based index of the slide the finding belongs to." },
+        "slideId": { "type": "string", "description": "The id of that slide, when it has one." },
+        "location": { "$ref": "#/$defs/FindingLocation" },
+        "definition": { "type": "string", "description": "A link to the rule's documentation or to the schema constraint or catalog record the finding is about." },
+        "lookup": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Arguments for the `opf schema` or `opf catalog` command that shows the definition, as an argument list rather than a shell string."
+        },
+        "suggestions": { "type": "array", "items": { "$ref": "#/$defs/FindingSuggestion" } },
+        "measured": {
+          "type": "object",
+          "description": "The numbers behind the finding, such as `{ \"ratio\": 2.1, \"needed\": 4.5 }`.",
+          "additionalProperties": { "type": ["number", "string", "boolean", "null"] }
+        },
+        "fixes": { "type": "array", "items": { "$ref": "#/$defs/FindingFix" } },
+        "validation": { "$ref": "#/$defs/ValidationIssue" }
+      }
+    }
+  }
+}

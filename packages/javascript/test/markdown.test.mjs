@@ -6,25 +6,26 @@ import { describe, test } from "node:test";
 
 import { composeSlide } from "../dist/composition.js";
 import { examples } from "../dist/examples.js";
-import { validatePresentation } from "../dist/index.js";
-import { OPFMarkdownError, markdownToOpf, opfToMarkdown } from "../dist/markdown.js";
-import { paginatePresentation } from "../dist/pagination.js";
+
+import { OPFMarkdownError, fromMarkdown, toMarkdown } from "../dist/markdown.js";
+import { paginate } from "../dist/pagination.js";
+import { check } from './support/validation.mjs';
 
 const markdownExamples = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../examples/markdown");
 
-const convert = (source, options) => markdownToOpf(source, options);
+const convert = (source, options) => fromMarkdown(source, options);
 const slides = (source, options) => {
   const result = convert(source, options);
   assert.deepEqual(
-    result.diagnostics.filter((d) => d.severity === "error"),
+    result.findings.filter((d) => d.severity === "error"),
     [],
     source,
   );
-  return result.document.slides;
+  return result.presentation.slides;
 };
 const one = (source, options) => slides(source, options)[0];
-const errors = (source, options) => convert(source, options).diagnostics.filter((d) => d.severity === "error");
-const rule = (source, id, options) => convert(source, options).diagnostics.find((d) => d.ruleId === id);
+const errors = (source, options) => convert(source, options).findings.filter((d) => d.severity === "error");
+const rule = (source, id, options) => convert(source, options).findings.find((d) => d.ruleId === id);
 /** Text of the source at a diagnostic location. */
 const at = (source, diagnostic) => source.slice(diagnostic.location.offset, diagnostic.location.offset + diagnostic.location.length);
 
@@ -32,7 +33,7 @@ describe("deck structure", () => {
   test("front matter is the deck, --- separates slides, # and ## are title and subtitle", () => {
     const result = convert("---\nname: Demo\nlanguage: en-US\ndesign:\n  theme: classic\nvariables:\n  risk: \"#B42318\"\n---\n\n# One\n\n## First\n\nHello\n\n---\n\n# Two\n");
     assert.equal(result.valid, true);
-    assert.deepEqual(result.document, {
+    assert.deepEqual(result.presentation, {
       name: "Demo",
       language: "en-US",
       design: { theme: "classic" },
@@ -58,8 +59,8 @@ describe("deck structure", () => {
 
   test("empty segments are skipped; an empty slide in the middle warns, <!-- slide --> keeps one", () => {
     const result = convert("# One\n\n---\n\n---\n\n# Three\n\n---\n");
-    assert.deepEqual(result.document.slides.map((s) => s.title), ["One", "Three"]);
-    assert.equal(result.diagnostics.find((d) => d.ruleId === "markdown/empty-slide")?.severity, "warning");
+    assert.deepEqual(result.presentation.slides.map((s) => s.title), ["One", "Three"]);
+    assert.equal(result.findings.find((d) => d.ruleId === "markdown/empty-slide")?.severity, "warning");
     assert.deepEqual(slides("<!-- slide -->\n\n---\n\n# B"), [{}, { title: "B" }]);
   });
 
@@ -74,12 +75,12 @@ describe("deck structure", () => {
   });
 
   test("defaults fill deck properties the front matter does not set", () => {
-    assert.equal(convert("# A", { defaults: { name: "Fallback" } }).document.name, "Fallback");
-    assert.equal(convert("---\nname: Mine\n---\n# A", { defaults: { name: "Fallback" } }).document.name, "Mine");
+    assert.equal(convert("# A", { defaults: { name: "Fallback" } }).presentation.name, "Fallback");
+    assert.equal(convert("---\nname: Mine\n---\n# A", { defaults: { name: "Fallback" } }).presentation.name, "Mine");
   });
 
   test("the result carries only what the Markdown says (no $schema or name is added)", () => {
-    assert.deepEqual(convert("# A").document, { slides: [{ title: "A" }] });
+    assert.deepEqual(convert("# A").presentation, { slides: [{ title: "A" }] });
   });
 });
 
@@ -99,8 +100,8 @@ describe("blocks", () => {
 
   test("numbers in a list are dropped with a warning", () => {
     const result = convert("1. one\n2. two");
-    assert.deepEqual(result.document.slides[0], { items: ["one", "two"] });
-    assert.equal(result.diagnostics[0].ruleId, "markdown/numbered-list");
+    assert.deepEqual(result.presentation.slides[0], { items: ["one", "two"] });
+    assert.equal(result.findings[0].ruleId, "markdown/numbered-list");
     assert.equal(result.valid, true);
   });
 
@@ -131,8 +132,8 @@ describe("blocks", () => {
 
   test("a short or long table row warns and is padded", () => {
     const result = convert("| a | b |\n| - | - |\n| 1 |\n| 1 | 2 | 3 |");
-    assert.deepEqual(result.document.slides[0].table.rows, [["1", null], ["1", "2", "3"]]);
-    assert.equal(result.diagnostics.filter((d) => d.ruleId === "markdown/table-ragged").length, 2);
+    assert.deepEqual(result.presentation.slides[0].table.rows, [["1", null], ["1", "2", "3"]]);
+    assert.equal(result.findings.filter((d) => d.ruleId === "markdown/table-ragged").length, 2);
   });
 
   test("images take alt text and title; video is an image line with as=video", () => {
@@ -173,8 +174,8 @@ describe("blocks", () => {
 
   test("a level 3 or deeper heading becomes a bold paragraph with a warning", () => {
     const result = convert("### Side note");
-    assert.deepEqual(result.document.slides[0], { text: [{ text: "Side note", bold: true }] });
-    assert.equal(result.diagnostics[0].ruleId, "markdown/heading-demoted");
+    assert.deepEqual(result.presentation.slides[0], { text: [{ text: "Side note", bold: true }] });
+    assert.equal(result.findings[0].ruleId, "markdown/heading-demoted");
   });
 
   test("slide and block options come from HTML comments; ordinary comments are ignored", () => {
@@ -232,16 +233,16 @@ describe("inline text", () => {
 
   test("title, subtitle and quote text keep inline formatting; attribution and source are plain and drop it with a warning", () => {
     const result = convert("# **Big** news\n\n## a [b]{color=accent1} c\n\n> *quoted* words\n> — **Ada**");
-    assert.deepEqual(result.document.slides[0], {
+    assert.deepEqual(result.presentation.slides[0], {
       title: [{ text: "Big", bold: true }, " news"],
       subtitle: ["a ", { text: "b", color: "accent1" }, " c"],
       quote: { text: [{ text: "quoted", italic: true }, " words"], attribution: "Ada" },
     });
-    assert.deepEqual(result.diagnostics.map((d) => d.ruleId), ["markdown/formatting-dropped"]);
+    assert.deepEqual(result.findings.map((d) => d.ruleId), ["markdown/formatting-dropped"]);
     // A plain title or quote still reads as strings, and the quote shorthand stays a string.
-    assert.deepEqual(convert("# Plain\n\n> just text").document.slides[0], { title: "Plain", quote: "just text" });
+    assert.deepEqual(convert("# Plain\n\n> just text").presentation.slides[0], { title: "Plain", quote: "just text" });
     // A formatted quote with no attribution stays in its { text } object: the shorthand is for a plain string.
-    assert.deepEqual(convert("> *quoted*").document.slides[0], { quote: { text: [{ text: "quoted", italic: true }] } });
+    assert.deepEqual(convert("> *quoted*").presentation.slides[0], { quote: { text: [{ text: "quoted", italic: true }] } });
   });
 
   test("rich titles and quotes write back natively and round-trip; a cite has no Markdown form and is embedded", () => {
@@ -252,26 +253,26 @@ describe("inline text", () => {
         { title: ["Cited", { text: " claim", cite: "r1" }], text: "x" },
       ],
     };
-    const first = opfToMarkdown(deck);
+    const first = toMarkdown(deck);
     assert.match(first.markdown, /^# Revenue grew \*\*\[28%\]\{color=accent1\}\*\*$/m);
     assert.match(first.markdown, /^> One \*two\*$/m);
     assert.equal(first.report.embedded.length, 1);
     assert.equal(first.report.embedded[0].path, "/slides/1/title");
-    const back = convert(first.markdown).document;
+    const back = convert(first.markdown).presentation;
     assert.deepEqual(back.slides[0], deck.slides[0]);
     assert.deepEqual(back.slides[1], deck.slides[1]);
-    assert.equal(opfToMarkdown(back).markdown, first.markdown);
+    assert.equal(toMarkdown(back).markdown, first.markdown);
   });
 });
 
-describe("errors carry line and column in the lint shape", () => {
-  test("every diagnostic has the lint fields and a location that points at the source", () => {
+describe("findings carry line and column in the shared Finding format", () => {
+  test("every finding has the Finding fields and a location that points at the source", () => {
     const source = "# One\n\n<!-- slide: bogus=1 -->\n\n```chart\nA\n```\n";
     const result = convert(source);
     assert.equal(result.valid, false);
     assert.ok(result.counts.error >= 2);
-    for (const d of result.diagnostics) {
-      for (const key of ["ruleId", "severity", "path", "scope", "message", "help", "location"]) assert.ok(key in d, `${key} in ${JSON.stringify(d)}`);
+    for (const d of result.findings) {
+      for (const key of ["ruleId", "severity", "category", "path", "scope", "message", "help", "location"]) assert.ok(key in d, `${key} in ${JSON.stringify(d)}`);
       assert.deepEqual(Object.keys(d.location).sort(), ["column", "length", "line", "offset"]);
     }
     const options = rule(source, "markdown/options-unknown-key");
@@ -279,7 +280,7 @@ describe("errors carry line and column in the lint shape", () => {
     assert.equal(at(source, options), "<!-- slide: bogus=1 -->");
     const chart = rule(source, "markdown/chart-type");
     assert.deepEqual([chart.location.line, chart.location.column], [5, 1]);
-    assert.ok(result.diagnostics.every((d, i, all) => i === 0 || all[i - 1].location.offset <= d.location.offset));
+    assert.ok(result.findings.every((d, i, all) => i === 0 || all[i - 1].location.offset <= d.location.offset));
   });
 
   test("front matter errors point inside the YAML", () => {
@@ -311,24 +312,30 @@ describe("errors carry line and column in the lint shape", () => {
 
   test("OPF validation errors are mapped back to the Markdown that produced them", () => {
     const source = "# A\n\n---\n\n<!-- slide: type=bogus -->\n# B\n";
-    const bad = convert(source).diagnostics.find((d) => d.ruleId.startsWith("opf/") && d.severity === "error");
-    assert.ok(bad, "lint error present");
+    const bad = convert(source).findings.find((d) => d.ruleId.startsWith("opf/") && d.severity === "error");
+    assert.ok(bad, "an OPF validation error is present");
     assert.equal(bad.path, "/slides/1/type");
     assert.equal(bad.location.line, 5);
     assert.equal(at(source, bad), "<!-- slide: type=bogus -->");
-    const image = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n![alt](asset:missing)").diagnostics.find((d) => d.ruleId === "opf/asset-reference");
+    const image = convert("# A\n\n| a | b |\n| - | - |\n| 1 | 2 |\n\n![alt](asset:missing)").findings.find((d) => d.ruleId === "opf/asset-reference");
     assert.equal(image.location.line, 7);
   });
 
-  test("validate:false skips the OPF lint, a non-string input throws", () => {
+  test("validate:false skips the OPF check, validate options pick other rules, a non-string input throws", () => {
     assert.equal(convert("<!-- slide: type=bogus -->\n# A", { validate: false }).valid, true);
-    assert.throws(() => markdownToOpf(42), TypeError);
+    // The default checks format and references; a ValidateOptions object picks others, here the content rules.
+    const placeholder = "# A\n\nLorem ipsum";
+    assert.deepEqual(convert(placeholder).findings, []);
+    const more = convert(placeholder, { validate: { only: ["content"] } });
+    assert.deepEqual(more.findings.map((d) => [d.ruleId, d.category, d.location.line]), [["opf/placeholder-text", "content", 3]]);
+    assert.equal(more.valid, true);
+    assert.throws(() => fromMarkdown(42), TypeError);
   });
 });
 
 describe("OPF to Markdown", () => {
   test("writes front matter, slides and blocks in the canonical form", () => {
-    const { markdown, report } = opfToMarkdown({
+    const { markdown, report } = toMarkdown({
       name: "Deck",
       slides: [
         { id: "a", layout: "title", title: "One", subtitle: "Sub", text: ["Some ", { text: "bold", bold: true }, " and ", { text: "red", color: "#FF0000" }], notes: "n1\nn2" },
@@ -345,17 +352,17 @@ describe("OPF to Markdown", () => {
   test("text that looks like Markdown is escaped and reads back unchanged", () => {
     const awkward = ["# not a heading", "- not a bullet", "1. not a number", "> not a quote", "| not a table", "Note: not notes", "---", "```", "![not](image)", "<!-- not a comment -->", "*a* _b_ ~~c~~ [d](e) <u>f</u>", "back\\slash and trail\\", "two\nlines", "snake_case"];
     for (const text of awkward) {
-      const { markdown, report } = opfToMarkdown({ slides: [{ text }] });
+      const { markdown, report } = toMarkdown({ slides: [{ text }] });
       assert.equal(report.native, true, `${JSON.stringify(text)} should stay native`);
-      assert.deepEqual(markdownToOpf(markdown).document.slides[0].text, text, markdown);
+      assert.deepEqual(fromMarkdown(markdown).presentation.slides[0].text, text, markdown);
     }
   });
 
   test("two lists in a row alternate markers so they stay two blocks", () => {
     const deck = { slides: [{ blocks: [{ items: ["a"] }, { items: ["b"] }, { bullets: ["c"] }] }] };
-    const { markdown } = opfToMarkdown(deck);
+    const { markdown } = toMarkdown(deck);
     assert.equal(markdown, "- a\n\n* b\n\n<!-- block: as=bullets -->\n- c\n");
-    assert.deepEqual(markdownToOpf(markdown).document, deck);
+    assert.deepEqual(fromMarkdown(markdown).presentation, deck);
   });
 
   test("what the dialect cannot express natively is embedded as YAML and survives", () => {
@@ -366,19 +373,19 @@ describe("OPF to Markdown", () => {
         { text: "x", extensions: { owner: "ops" } },
       ],
     };
-    const { markdown, report } = opfToMarkdown(deck);
+    const { markdown, report } = toMarkdown(deck);
     assert.equal(report.lossless, true);
     assert.equal(report.native, false);
     assert.deepEqual(report.embedded.map((e) => e.path).sort(), ["/slides/0/blocks/0", "/slides/0/blocks/1", "/slides/0/composition", "/slides/0/design", "/slides/1/extensions"]);
     assert.match(markdown, /```opf-block/);
     assert.match(markdown, /```opf-slide/);
-    const back = markdownToOpf(markdown);
+    const back = fromMarkdown(markdown);
     assert.equal(back.valid, true);
-    assert.deepEqual(back.document, deck);
+    assert.deepEqual(back.presentation, deck);
   });
 
   test("unsupported: drop leaves those parts out and reports them as loss", () => {
-    const { markdown, report } = opfToMarkdown({ slides: [{ title: "T", design: { background: "light2" }, blocks: [{ blocks: [{ text: "a" }] }, { text: "keep" }] }] }, { unsupported: "drop" });
+    const { markdown, report } = toMarkdown({ slides: [{ title: "T", design: { background: "light2" }, blocks: [{ blocks: [{ text: "a" }] }, { text: "keep" }] }] }, { unsupported: "drop" });
     assert.equal(markdown, "# T\n\nkeep\n");
     assert.equal(report.lossless, false);
     assert.deepEqual(report.loss.map((entry) => entry.split(":")[0]).sort(), ["/slides/0/blocks/0", "/slides/0/design"]);
@@ -387,14 +394,14 @@ describe("OPF to Markdown", () => {
 
   test("a chart whose first column is not text is written as JSON and stays a chart block", () => {
     const deck = { slides: [{ chart: { type: "scatter", data: { columns: ["x", "y"], rows: [[1, 2], [3, 4]] } } }] };
-    const { markdown, report } = opfToMarkdown(deck);
+    const { markdown, report } = toMarkdown(deck);
     assert.equal(report.native, true);
     assert.match(markdown, /```chart scatter\n\{/);
-    assert.deepEqual(markdownToOpf(markdown).document, deck);
+    assert.deepEqual(fromMarkdown(markdown).presentation, deck);
     // With text categories the CSV form is used, and a category that looks like a number is not quoted.
     const years = { slides: [{ chart: { type: "line", data: { columns: ["Year", "Sales"], rows: [["2024", 5], ["2025", 6.5]] } } }] };
-    assert.equal(opfToMarkdown(years).markdown, "```chart line\nYear,Sales\n2024,5\n2025,6.5\n```\n");
-    assert.deepEqual(markdownToOpf(opfToMarkdown(years).markdown).document, years);
+    assert.equal(toMarkdown(years).markdown, "```chart line\nYear,Sales\n2024,5\n2025,6.5\n```\n");
+    assert.deepEqual(fromMarkdown(toMarkdown(years).markdown).presentation, years);
   });
 
   test("a chart fence takes alt after the type, and the writer puts it back (FA-09)", () => {
@@ -402,36 +409,36 @@ describe("OPF to Markdown", () => {
     assert.deepEqual(one('```chart bar alt=""\n{"columns":["a"],"rows":[[1]]}\n```').chart, { type: "bar", alt: "", data: { columns: ["a"], rows: [[1]] } });
     assert.ok(rule('```chart bar colour="red"\nA,B\nx,1\n```', "markdown/chart-attributes"));
     const deck = { slides: [{ chart: { type: "line", alt: 'Sales: "up" 2024 to 2025', data: { columns: ["Year", "Sales"], rows: [["2024", 5], ["2025", 6.5]] } } }] };
-    const { markdown, report } = opfToMarkdown(deck);
+    const { markdown, report } = toMarkdown(deck);
     assert.equal(report.native, true);
     assert.equal(markdown, '```chart line alt="Sales: \\"up\\" 2024 to 2025"\nYear,Sales\n2024,5\n2025,6.5\n```\n');
-    assert.deepEqual(markdownToOpf(markdown).document, deck);
+    assert.deepEqual(fromMarkdown(markdown).presentation, deck);
     // An alt with a backtick cannot sit in a backtick fence's info string: the chart is embedded and still round-trips.
     const ticks = { slides: [{ chart: { type: "line", alt: "Uses `code`", data: { columns: ["Year", "Sales"], rows: [["2024", 5]] } } }] };
-    assert.deepEqual(markdownToOpf(opfToMarkdown(ticks).markdown).document, ticks);
+    assert.deepEqual(fromMarkdown(toMarkdown(ticks).markdown).presentation, ticks);
   });
 
   test("a leading --- line whose block holds only comments warns that the slide was not read", () => {
     const result = convert("---\n# Not a deck property\n---\n# Real title\n");
-    assert.deepEqual(result.document.slides, [{ title: "Real title" }]);
-    assert.equal(result.diagnostics.find((d) => d.ruleId === "markdown/front-matter-comments")?.severity, "warning");
+    assert.deepEqual(result.presentation.slides, [{ title: "Real title" }]);
+    assert.equal(result.findings.find((d) => d.ruleId === "markdown/front-matter-comments")?.severity, "warning");
   });
 
   test("an empty slide keeps a slide marker, and content that cannot be written natively falls back one part at a time", () => {
-    assert.equal(opfToMarkdown({ slides: [{}] }).markdown, "<!-- slide -->\n");
-    const { report } = opfToMarkdown({ slides: [{ title: "multi\nline", text: " padded", notes: "a\n---\nb" }] });
+    assert.equal(toMarkdown({ slides: [{}] }).markdown, "<!-- slide -->\n");
+    const { report } = toMarkdown({ slides: [{ title: "multi\nline", text: " padded", notes: "a\n---\nb" }] });
     assert.deepEqual(report.embedded.map((e) => e.path).sort(), ["/slides/0/notes", "/slides/0/text", "/slides/0/title"]);
   });
 
   test("a document that is not valid OPF is refused with OPFMarkdownError", () => {
-    assert.throws(() => opfToMarkdown({ slides: "no" }), (error) => error instanceof OPFMarkdownError && error.code === "invalid-document" && error.details.issues.length > 0);
+    assert.throws(() => toMarkdown({ slides: "no" }), (error) => error instanceof OPFMarkdownError && error.code === "invalid-document" && error.details.issues.length > 0);
   });
 
   test("the front matter keeps every deck property, in order, as plain YAML", () => {
     const deck = { $schema: "https://openpresentation.org/schema/opf/v1", name: "N: with colon", description: "line one\nline two", tags: ["a", "b"], duration: 5, language: { id: "english-us" }, slides: [{ title: "x" }] };
-    const { markdown } = opfToMarkdown(deck);
-    assert.deepEqual(markdownToOpf(markdown).document, deck);
-    assert.deepEqual(Object.keys(markdownToOpf(markdown).document), Object.keys(deck));
+    const { markdown } = toMarkdown(deck);
+    assert.deepEqual(fromMarkdown(markdown).presentation, deck);
+    assert.deepEqual(Object.keys(fromMarkdown(markdown).presentation), Object.keys(deck));
   });
 });
 
@@ -443,17 +450,17 @@ describe("round trips", () => {
       const source = readFileSync(path.join(markdownExamples, name), "utf8");
       const split = name.startsWith("outline") ? "headings" : "rules";
       const result = convert(source, { split });
-      assert.deepEqual(result.diagnostics, [], name);
-      assert.equal(validatePresentation(result.document).valid, true, name);
-      const pages = paginatePresentation(result.document).presentation.slides;
-      assert.ok(pages.length >= result.document.slides.length, name);
+      assert.deepEqual(result.findings, [], name);
+      assert.equal(check(result.presentation).valid, true, name);
+      const pages = paginate(result.presentation).presentation.slides;
+      assert.ok(pages.length >= result.presentation.slides.length, name);
       for (const slide of pages) assert.ok(composeSlide(slide).items.length > 0, `${name}: ${slide.title}`);
-      const again = opfToMarkdown(result.document);
+      const again = toMarkdown(result.presentation);
       assert.equal(again.report.native, true, name);
       if (split === "rules") assert.equal(again.markdown, source, `${name} is canonical`);
       // Whatever the input, the canonical form converts back to the same deck and to itself.
-      assert.deepEqual(convert(again.markdown).document, result.document, name);
-      assert.equal(opfToMarkdown(convert(again.markdown).document).markdown, again.markdown, name);
+      assert.deepEqual(convert(again.markdown).presentation, result.presentation, name);
+      assert.equal(toMarkdown(convert(again.markdown).presentation).markdown, again.markdown, name);
     }
   });
 
@@ -463,21 +470,21 @@ describe("round trips", () => {
     const expected = JSON.parse(readFileSync(path.join(fixtures, "kitchen-sink.opf.json"), "utf8"));
     const canonical = readFileSync(path.join(fixtures, "kitchen-sink.canonical.md"), "utf8");
     const result = convert(source);
-    assert.deepEqual(result.document, expected);
-    assert.equal(validatePresentation(expected).valid, true);
-    assert.deepEqual(result.diagnostics.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
+    assert.deepEqual(result.presentation, expected);
+    assert.equal(check(expected).valid, true);
+    assert.deepEqual(result.findings.map((d) => [d.ruleId, d.severity, d.location.line, d.location.column]), [
       ["markdown/numbered-list", "warning", 23, 1],
       ["markdown/heading-demoted", "warning", 70, 1],
     ]);
-    assert.equal(opfToMarkdown(result.document).markdown, canonical);
-    assert.deepEqual(convert(canonical).document, expected);
-    assert.equal(opfToMarkdown(convert(canonical).document).markdown, canonical);
+    assert.equal(toMarkdown(result.presentation).markdown, canonical);
+    assert.deepEqual(convert(canonical).presentation, expected);
+    assert.equal(toMarkdown(convert(canonical).presentation).markdown, canonical);
     // Line endings do not change the deck, only the offsets.
-    assert.deepEqual(convert(source.replaceAll("\n", "\r\n")).document, expected);
+    assert.deepEqual(convert(source.replaceAll("\n", "\r\n")).presentation, expected);
   });
 
   test("the quarterly review maps to the deck its Markdown says", () => {
-    const deck = convert(readFileSync(path.join(markdownExamples, "quarterly-review.md"), "utf8")).document;
+    const deck = convert(readFileSync(path.join(markdownExamples, "quarterly-review.md"), "utf8")).presentation;
     assert.equal(deck.name, "Q3 Business Review");
     assert.deepEqual(deck.slides.map((s) => s.id), ["cover", "highlights", "revenue", "kpis", "risk", "decisions", "roadmap", "compare", "gate", "appendix"]);
     assert.deepEqual(deck.slides[2].blocks.map((block) => Object.keys(block)[0]), ["chart", "text"]);
@@ -490,11 +497,11 @@ describe("round trips", () => {
     const repo = path.resolve(markdownExamples, "../..");
     const guide = readFileSync(path.join(repo, "docs/markdown.md"), "utf8");
     const shown = JSON.parse(/```json\n([\s\S]*?)\n```/.exec(guide)[1]);
-    assert.deepEqual(convert(/````md\n([\s\S]*?)\n````/.exec(guide)[1]).document, shown);
+    assert.deepEqual(convert(/````md\n([\s\S]*?)\n````/.exec(guide)[1]).presentation, shown);
     const skill = readFileSync(path.join(repo, "skills/opf-author/references/markdown.md"), "utf8");
     const result = convert(/````md\n([\s\S]*?)\n````/.exec(skill)[1]);
-    assert.deepEqual(result.diagnostics, []);
-    assert.equal(result.document.slides.length, 2);
+    assert.deepEqual(result.findings, []);
+    assert.equal(result.presentation.slides.length, 2);
   });
 
   // Every text, number and block kind of a deck, independent of how the content is arranged on the slide.
@@ -534,15 +541,15 @@ describe("round trips", () => {
     let total = 0;
     const reasons = new Map();
     for (const { slug, deck } of examples) {
-      const { markdown, report } = opfToMarkdown(deck);
+      const { markdown, report } = toMarkdown(deck);
       const back = convert(markdown);
-      assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), [], slug);
-      assert.equal(validatePresentation(back.document).valid, true, slug);
-      assert.deepEqual(facts(back.document), facts(deck), `${slug}: text and block kinds`);
-      assert.deepEqual({ ...back.document, slides: undefined }, { ...deck, slides: undefined }, `${slug}: deck properties`);
-      assert.equal(back.document.slides.length, deck.slides.length, slug);
+      assert.deepEqual(back.findings.filter((d) => d.severity === "error"), [], slug);
+      assert.equal(check(back.presentation).valid, true, slug);
+      assert.deepEqual(facts(back.presentation), facts(deck), `${slug}: text and block kinds`);
+      assert.deepEqual({ ...back.presentation, slides: undefined }, { ...deck, slides: undefined }, `${slug}: deck properties`);
+      assert.equal(back.presentation.slides.length, deck.slides.length, slug);
       // The Markdown is a fixed point of the conversion.
-      assert.equal(opfToMarkdown(back.document).markdown, markdown, `${slug}: canonical`);
+      assert.equal(toMarkdown(back.presentation).markdown, markdown, `${slug}: canonical`);
       assert.equal(report.lossless, true);
       const embeddedSlides = new Set(report.embedded.map((entry) => entry.path.split("/").slice(0, 3).join("/")));
       nativeSlides += deck.slides.length - embeddedSlides.size;
@@ -558,7 +565,7 @@ describe("round trips", () => {
   test("for slides with nothing embedded the round trip returns the same slide, apart from shorthand collapsed to one form", () => {
     let exact = 0;
     for (const { slug, deck } of examples) {
-      const back = convert(opfToMarkdown(deck).markdown).document;
+      const back = convert(toMarkdown(deck).markdown).presentation;
       deck.slides.forEach((slide, index) => {
         const got = back.slides[index];
         if (JSON.stringify(Object.keys(got).sort()) === JSON.stringify(Object.keys(slide).sort())) {
@@ -576,14 +583,14 @@ describe("round trips", () => {
 
   test("a template round trips: placeholders and var: fields are ordinary text, template and variables are front matter", () => {
     const template = JSON.parse(readFileSync(path.resolve(markdownExamples, "../../docs/fixtures/template-quarterly-review.opf.json"), "utf8"));
-    const { markdown, report } = opfToMarkdown(template);
+    const { markdown, report } = toMarkdown(template);
     assert.match(markdown, /^---\n(?:.*\n)*?template: true\n/);
     assert.match(markdown, /\{\{client\}\}/);
     const back = convert(markdown);
-    assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), []);
-    assert.equal(back.document.template, true);
-    assert.deepEqual(back.document.variables, template.variables);
-    assert.deepEqual(facts(back.document), facts(template));
+    assert.deepEqual(back.findings.filter((d) => d.severity === "error"), []);
+    assert.equal(back.presentation.template, true);
+    assert.deepEqual(back.presentation.variables, template.variables);
+    assert.deepEqual(facts(back.presentation), facts(template));
     assert.equal(report.lossless, true);
   });
 
@@ -595,8 +602,8 @@ describe("round trips", () => {
     try {
       const source = readFileSync(path.join(markdownExamples, "quarterly-review.md"), "utf8");
       assert.deepEqual(convert(source), convert(source));
-      const deck = convert(source).document;
-      assert.equal(opfToMarkdown(deck).markdown, opfToMarkdown(structuredClone(deck)).markdown);
+      const deck = convert(source).presentation;
+      assert.equal(toMarkdown(deck).markdown, toMarkdown(structuredClone(deck)).markdown);
     } finally {
       globalThis.fetch = original;
     }
@@ -605,7 +612,7 @@ describe("round trips", () => {
   test("the input document is never changed", () => {
     const deck = structuredClone(examples.find((example) => example.slug.includes("full-feature-tour")).deck);
     const before = structuredClone(deck);
-    opfToMarkdown(deck);
+    toMarkdown(deck);
     assert.deepEqual(deck, before);
   });
 });
@@ -640,13 +647,13 @@ describe("robustness", () => {
         { text: `${s}\n${t}` },
         { metric: { value: s, label: t } },
       ][i % 8];
-      const { markdown, report } = opfToMarkdown({ slides: [slide] });
+      const { markdown, report } = toMarkdown({ slides: [slide] });
       const back = convert(markdown);
-      assert.deepEqual(back.diagnostics.filter((d) => d.severity === "error"), [], markdown);
+      assert.deepEqual(back.findings.filter((d) => d.severity === "error"), [], markdown);
       total++;
       if (!report.native) embedded++;
       // Whether native or embedded, the text is the text that went in.
-      const got = back.document.slides[0];
+      const got = back.presentation.slides[0];
       for (const key of Object.keys(slide)) assert.deepEqual(got[key], slide[key], markdown);
     }
     // Only strings the dialect cannot carry (cells that read as numbers, "a : b" timeline events, a trailing "#") fall back to YAML.
@@ -657,7 +664,7 @@ describe("robustness", () => {
     const started = performance.now();
     for (const source of ["*".repeat(20000), "[".repeat(5000), "**a ".repeat(3000), "_a ".repeat(3000), `${"- x\n".repeat(5000)}`, "| a |\n| - |\n" + "| x |\n".repeat(5000), "<!--".repeat(2000), "```".repeat(3000), "[a](".repeat(2000), "> ".repeat(5000), `${"[".repeat(3000)}x${"](y)".repeat(3000)}`]) {
       const result = convert(source);
-      assert.ok(Array.isArray(result.diagnostics));
+      assert.ok(Array.isArray(result.findings));
     }
     assert.ok(performance.now() - started < 5000, "bounded time");
   });

@@ -21,33 +21,35 @@ try {
   assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
   assert.equal(run(['create','copy.json','--from','-'],{input:'\uFEFF'+original}).json.valid,true);
   run(['create','never.json','--from','-'],{input:'{"slides":"bad"}',status:1});
-  const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);
+  const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);assert.equal(validated.schemaValid,true);
   const warning=JSON.stringify({design:{theme:'not-a-bundled-theme'},slides:[{title:'Warning'}]});
-  assert.ok(run(['validate','-'],{input:warning}).json.warnings.length);
-  assert.equal(run(['validate','-','--strict'],{input:warning,status:1}).json.valid,true);
+  assert.ok(run(['validate','-','--only','format,references'],{input:warning}).json.findings.some(item=>item.ruleId==='opf/catalog-reference'&&item.severity==='warning'));
+  assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:warning,status:1}).json.valid,true);
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
   // CLI 0.9.1 bundles core 0.11.3: the 70 legacy gallery layout ids are bundled, so none is an unknown id.
   {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.ok(layouts.length>=100);
    for(const id of ['title-slide','two-column','action-plan','swot-analysis','data-visualization','executive-summary'])assert.ok(layouts.includes(id),id);
-   const legacy=run(['validate','-'],{input:JSON.stringify({name:'Legacy layouts',slides:layouts.map((layout,index)=>({title:`Slide ${index+1}`,layout}))})}).json;
-   assert.equal(legacy.valid,true);assert.deepEqual(legacy.warnings,[]);
-   assert.equal(run(['validate','-','--strict'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'swot-analysis'}]})}).json.valid,true);
-   assert.equal(run(['lint','-','--strict'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'two-column'}]})}).json.counts.warning,0);}
-  run(['validate','-'],{input:'{',status:2});run(['validate','missing.json'],{status:2});run(['validate','deck.opf.json','extra'],{status:2});run(['create','--oops'],{status:2});
-  const lintRaw='\uFEFF{\r\n  "name" : "Keep  spacing",\r  "slides": [{"title":"Lint target","layout":"pratner"}]\n}';
-  await writeFile(path.join(temp,'lint.opf.json'),lintRaw);
-  const linted=run(['lint','lint.opf.json']).json;assert.equal(linted.valid,true);assert.equal(linted.counts.warning,1);assert.equal(linted.diagnostics[0].location.offset,lintRaw.indexOf('"pratner"'));
-  assert.equal(run(['lint','lint.opf.json','--strict'],{status:1}).json.valid,true);
-  assert.equal(run(['lint','-','--strict'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
-  assert.equal(run(['lint','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
-  assert.ok(run(['lint','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.diagnostics.some(issue=>issue.ruleId==='json/duplicate-key'));
+   const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Legacy layouts',slides:layouts.map((layout,index)=>({title:'Slide '+(index+1),layout}))})}).json;
+   assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);
+   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'swot-analysis'}]})}).json.valid,true);
+   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'two-column'}]})}).json.counts.warning,0);}
+  // Invalid JSON is an invalid document (exit 1); a missing file or an unknown option is a usage error (exit 2).
+  run(['validate','-'],{input:'{',status:1});run(['validate','missing.json'],{status:2});run(['validate','deck.opf.json','extra'],{status:2});run(['create','--oops'],{status:2});
+  const lintRaw='﻿{\r\n  "name" : "Keep  spacing",\r  "slides": [{"title":"Target","layout":"pratner"}]\n}';
+  await writeFile(path.join(temp,'target.opf.json'),lintRaw);
+  const linted=run(['validate','target.opf.json','--only','format,references']).json;assert.equal(linted.valid,true);assert.equal(linted.counts.warning,1);assert.equal(linted.findings[0].location.offset,lintRaw.indexOf('"pratner"'));
+  assert.equal(run(['validate','target.opf.json','--only','format,references','--fail-on','warning'],{status:1}).json.valid,true);
+  assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
+  assert.equal(run(['validate','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
+  assert.ok(run(['validate','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.findings.some(issue=>issue.ruleId==='opf/duplicate-key'));
   const config={catalogs:{layouts:[{id:'pratner',name:'Authoritative custom spelling',placeholders:[{type:'title'}]}]}},configRaw=JSON.stringify(config);
-  await writeFile(path.join(temp,'lint-config.json'),configRaw);
-  const configured=run(['lint','lint.opf.json','--config','lint-config.json','--strict']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
-  config.contracts=[{path:'/slides/*/layout',allowedValues:['text-1x'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'lint-config.json'),JSON.stringify(config));
-  const policy=run(['lint','lint.opf.json','--config','lint-config.json'],{status:1}).json;assert.ok(policy.diagnostics.some(issue=>issue.ruleId==='opf/contract'&&issue.message.includes('text-1x')));
-  await writeFile(path.join(temp,'bad-lint-config.json'),'{"contract":[]}');run(['lint','lint.opf.json','--config','bad-lint-config.json'],{status:2});run(['lint','lint.opf.json','--config','-'],{status:2});run(['lint','missing.opf.json'],{status:2});run(['lint','lint.opf.json','--fix'],{status:2});
-  assert.equal(await readFile(path.join(temp,'lint.opf.json'),'utf8'),lintRaw,'Lint never rewrites source, including BOM and mixed line endings');
+  await writeFile(path.join(temp,'house-config.json'),configRaw);
+  const configured=run(['validate','target.opf.json','--only','format,references','--config','house-config.json','--fail-on','warning']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
+  config.contracts=[{path:'/slides/*/layout',allowedValues:['text-1x'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'house-config.json'),JSON.stringify(config));
+  const policy=run(['validate','target.opf.json','--config','house-config.json'],{status:1}).json;assert.ok(policy.findings.some(issue=>issue.ruleId==='opf/contract'&&issue.message.includes('text-1x')));
+  await writeFile(path.join(temp,'bad-config.json'),'{"contract":[]}');run(['validate','target.opf.json','--config','bad-config.json'],{status:2});run(['validate','target.opf.json','--config','-'],{status:2});run(['validate','missing.opf.json'],{status:2});run(['validate','target.opf.json','--fix'],{status:2});run(['validate','target.opf.json','--strict'],{status:2});
+  for(const gone of ['lint','audit'])run([gone,'target.opf.json'],{status:2});
+  assert.equal(await readFile(path.join(temp,'target.opf.json'),'utf8'),lintRaw,'Validate never rewrites source, including BOM and mixed line endings');
   await patch([{op:'test',path:'/slides/0/id',value:'slide-1'},{op:'replace',path:'/slides/0/title',value:'Updated'},{op:'add',path:'/slides/-',value:{id:'two',text:'Preserve me',notes:'Source note'}}]);
   assert.equal(run(['edit','deck.opf.json','--patch','patch.json']).json.slides.length,2);
   assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
@@ -152,5 +154,5 @@ try {
   const resized=JSON.parse(await readFile(path.join(temp,'styled.json'),'utf8')).slides[0].table.rows;
   assert.equal(resized.length,1);assert.equal(resized[0][0].rowSpan,1);assert.equal(resized[0][0].colSpan,2);
   assert.equal((await (await import('node:fs/promises')).readdir(temp)).some(name=>name.endsWith('.tmp')),false);
-  console.log(`CLI passed ${checks} command checks: file preservation, patch operations, validation, lint diagnostics/contracts, pipes, schema lookup, pagination.`);
+  console.log(`CLI passed ${checks} command checks: file preservation, patch operations, validation findings/contracts, pipes, schema lookup, pagination.`);
 } finally {await rm(temp,{recursive:true,force:true});}

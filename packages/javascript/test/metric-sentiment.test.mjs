@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {composeSlide} from '../dist/composition.js';
+import { composeSlide, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, colorContrast, layoutMetric, metricTrendColor, metricTrendMark } from '../dist/composition.js';
 import {convertContent as convert} from '../dist/convert.js';
-import {METRIC_TREND_MIN_CONTRAST,METRIC_TREND_SHAPES,colorContrast,colorSchemes,layoutMetric,metricTrendColor,metricTrendMark,validatePresentation} from '../dist/index.js';
-import {markdownToOpf,opfToMarkdown} from '../dist/markdown.js';
+import { colorSchemes } from '../dist/index.js';
+import {fromMarkdown,toMarkdown} from '../dist/markdown.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 // FA-06: metric.sentiment says whether a change is good news. The arrow follows the trend; the colour follows the sentiment.
 const box={x:40,y:60,width:600,height:400};
@@ -75,21 +76,21 @@ test('composition passes the sentiment through to the metric layout',()=>{
 });
 
 test('sentiment is validated: only positive, negative and neutral',()=>{
-  for(const sentiment of SENTIMENTS) assert.equal(validatePresentation({slides:[{metric:{value:1,trend:'down',sentiment}}]}).valid,true,sentiment);
+  for(const sentiment of SENTIMENTS) assert.equal(check({slides:[{metric:{value:1,trend:'down',sentiment}}]}).valid,true,sentiment);
   for(const sentiment of ['good','Positive','',1,null,['positive']]) {
-    assert.equal(validatePresentation({slides:[{metric:{value:1,sentiment}}]}).valid,false,JSON.stringify(sentiment));
+    assert.equal(check({slides:[{metric:{value:1,sentiment}}]}).valid,false,JSON.stringify(sentiment));
     assert.throws(()=>layoutMetric({value:1,sentiment},box),TypeError);
   }
 });
 
 test('markdown reads and writes the sentiment key of a metric fence',()=>{
-  const result=markdownToOpf('```metric\nvalue: 3.1\nunit: %\nlabel: Churn\ndelta: -0.6 pts\ntrend: down\nsentiment: positive\n```\n');
-  assert.deepEqual(result.diagnostics.filter(item=>item.severity==='error'),[]);
+  const result=fromMarkdown('```metric\nvalue: 3.1\nunit: %\nlabel: Churn\ndelta: -0.6 pts\ntrend: down\nsentiment: positive\n```\n');
+  assert.deepEqual(result.findings.filter(item=>item.severity==='error'),[]);
   const metric={value:3.1,label:'Churn',unit:'%',delta:'-0.6 pts',trend:'down',sentiment:'positive'};
-  assert.deepEqual(result.document.slides[0].metric,{value:3.1,label:'Churn',unit:'%',delta:'-0.6 pts',trend:'down',sentiment:'positive'});
-  const {markdown}=opfToMarkdown({slides:[{metric}]});
+  assert.deepEqual(result.presentation.slides[0].metric,{value:3.1,label:'Churn',unit:'%',delta:'-0.6 pts',trend:'down',sentiment:'positive'});
+  const {markdown}=toMarkdown({slides:[{metric}]});
   assert.match(markdown,/trend: down\nsentiment: positive\n/);
-  assert.deepEqual(markdownToOpf(markdown).document.slides[0].metric,metric);
+  assert.deepEqual(fromMarkdown(markdown).presentation.slides[0].metric,metric);
 });
 
 test('metric tables carry a Sentiment column and read it back; metric to text reports the loss',()=>{

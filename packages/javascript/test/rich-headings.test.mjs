@@ -2,9 +2,11 @@
 // citation numbering (heading group first), variables, audit and pagination. A string keeps its exact geometry.
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import { collectCitations, composeSlide, fitRichText, layoutQuote, resolveVariables, validatePresentation } from '../dist/index.js';
-import { auditPresentation } from '../dist/audit.js';
+import { resolveVariables } from '../dist/index.js';
+import { collectCitations, composeSlide, fitRichText, layoutQuote } from '../dist/composition.js';
 import { paginateSlide } from '../dist/pagination.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
+import { validate } from '../dist/index.js';
 
 const references = [{ id: 'r1', text: 'Annual report' }, { id: 'r2', text: 'Survey' }];
 const accent = (text, extra = {}) => ({ text, color: 'accent1', ...extra });
@@ -14,18 +16,18 @@ const item = (composition, field) => composition.items.find(entry => entry.field
 describe('schema', () => {
   test('title, subtitle, tag and quote text accept strings and TextRun[]', () => {
     const slide = { title: ['Revenue grew ', accent('28%')], subtitle: [{ text: 'bold', bold: true }], tag: ['Q3 ', { text: 'review', italic: true }], quote: { text: ['A ', { text: 'quote', cite: 'r1' }] } };
-    const result = validatePresentation({ references, slides: [slide] });
-    assert.deepEqual(result.errors, []);
-    assert.equal(validatePresentation({ slides: [{ title: 'Plain', subtitle: 'Plain', tag: 'Plain', quote: { text: 'Plain' } }] }).valid, true);
+    const result = check({ references, slides: [slide] });
+    assert.deepEqual(errorsOf(result), []);
+    assert.equal(check({ slides: [{ title: 'Plain', subtitle: 'Plain', tag: 'Plain', quote: { text: 'Plain' } }] }).valid, true);
   });
   test('a heading that is neither a string nor runs is rejected', () => {
-    assert.equal(validatePresentation({ slides: [{ title: 5 }] }).valid, false);
-    assert.equal(validatePresentation({ slides: [{ title: [5] }] }).valid, false);
-    assert.equal(validatePresentation({ slides: [{ quote: { text: { text: 'x' } } }] }).valid, false);
+    assert.equal(check({ slides: [{ title: 5 }] }).valid, false);
+    assert.equal(check({ slides: [{ title: [5] }] }).valid, false);
+    assert.equal(check({ slides: [{ quote: { text: { text: 'x' } } }] }).valid, false);
   });
   test('cite ids in headings and quotes are checked against the references', () => {
-    const result = validatePresentation({ references, slides: [{ title: [{ text: 'x', cite: 'nope' }], quote: { text: [{ text: 'y', cite: 'nope2' }] } }] });
-    assert.deepEqual(result.errors.map(error => `${error.params.code} ${error.path}`).sort(), ['cite-unknown-reference /slides/0/quote/text/0/cite', 'cite-unknown-reference /slides/0/title/0/cite']);
+    const result = check({ references, slides: [{ title: [{ text: 'x', cite: 'nope' }], quote: { text: [{ text: 'y', cite: 'nope2' }] } }] });
+    assert.deepEqual(errorsOf(result).map(error => `${error.ruleId} ${error.path}`).sort(), ['opf/cite-unknown-reference /slides/0/quote/text/0/cite', 'opf/cite-unknown-reference /slides/0/title/0/cite']);
   });
 });
 
@@ -124,7 +126,7 @@ describe('quote text', () => {
   });
   test('a rich quote in a block validates and composes', () => {
     const slide = { blocks: [{ quote: { text: [accent('Hi')] } }, { text: 'x' }] };
-    assert.equal(validatePresentation({ slides: [slide] }).valid, true);
+    assert.equal(check({ slides: [slide] }).valid, true);
     assert.ok(item(compose(slide), 'quote').quoteLayout.parts[0].runs);
   });
 });
@@ -137,13 +139,13 @@ describe('variables', () => {
     assert.deepEqual(presentation.slides[0].title, runs);
     assert.deepEqual(presentation.slides[0].subtitle, [{ text: 'For Acme', italic: true }]);
     assert.deepEqual(presentation.slides[0].quote.text, runs);
-    assert.equal(validatePresentation(presentation).valid, true);
+    assert.equal(check(presentation).valid, true);
   });
 });
 
 describe('audit', () => {
   const white = { background: { type: 'solid', color: '#FFFFFF' } };
-  const only = (slides, rule) => auditPresentation({ name: 'x', language: 'en-US', design: white, slides }, { only: [rule] }).diagnostics;
+  const only = (slides, rule) => validate({ name: 'x', language: 'en-US', design: white, slides }, { only: [rule] }).findings;
   test('text-contrast checks each heading run color', () => {
     const found = only([{ title: ['Readable ', { text: 'pale', color: '#EEEEEE' }] }], 'text-contrast');
     assert.ok(found.some(diagnostic => diagnostic.path === '/slides/0/title/1/color'), JSON.stringify(found.map(d => d.path)));

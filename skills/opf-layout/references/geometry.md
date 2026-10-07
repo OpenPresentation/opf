@@ -25,31 +25,30 @@ A two-level arrangement:
 }
 ```
 
-For raw geometry, `composeSlide(slide, options)` expects validated input and caller-resolved design:
+For raw geometry, `composeSlide(slide, options)` expects validated input. `resolveSlideContext(document, index, { fonts })` builds its options from the document: canvas size, layout, theme, the font families of the slide's effective font scheme, alignment and the fonts handle's `textMeasurement`.
 
 ```js
-import { composeSlide, resolveCanvasDimensions } from '@openpresentation/opf/composition';
-const dimensions = resolveCanvasDimensions(effectiveDesign.dimensions);
-const geometry = composeSlide(slide, {
-  ...dimensions,
-  slideIndex,
-  layout: resolvedLayout,
-  fonts: resolvedFontFamilies,
-  textMeasurement,
-});
+import { resolveSlideContext } from '@openpresentation/opf';
+import { composeSlide } from '@openpresentation/opf/composition';
+const { options, diagnostics } = resolveSlideContext(document, slideIndex, { fonts: { textMeasurement } });
+const geometry = composeSlide(document.slides[slideIndex], options);
 // geometry.items: leaf paths and boxes; geometry.groups: nested group bounds.
+// diagnostics reports unresolved-font-scheme, unresolved-layout, unresolved-theme and unresolved-color-scheme references;
+// each falls back (no layout record, minimal, cool-horizon, the default font scheme) and none throws.
 console.log(geometry.diagnostics);
 ```
 
+Below that level, `composeSlide(slide, { width, height, layout, fontFamilies, textMeasurement, ... })` takes every input explicitly; `fontFamilies` is the `{ heading, body, code, accent? }` family names.
+
 Core 0.8.0 adds opt-in `explain: true` to these options. `geometry.explanation` reports versioned automatic candidate scores, selected columns, reasons for preserving explicit modes/regions, and paths whose complete internal fit is unmeasured. `textMeasurement: "provided"` means a width provider was supplied, not that shaping or native fidelity was verified. Core 0.7.0 does not include this option. Costs add cell-aspect deviation, font reduction, 1,000 per overflowing text/table/quote leaf, 100 per small cell, and 2 per unused final-row position. Lower is preferred; costs are not quality percentages. Parent scores use geometric seeds for automatic descendants; final child optimization can differ. Explanations do not apply repairs or change content.
 
-Variables named `effectiveDesign`, `resolvedLayout`, `resolvedFontFamilies`, and `textMeasurement` above are host inputs, not automatic globals. In the editor, `editor.composeSlide(index, {textMeasurement})` performs its design resolution. In the renderer, use `resolvePresentation(document, options).slides[index].geometry`.
+`textMeasurement` above is a host input, not an automatic global. In the editor, `editor.composeSlide(index, {textMeasurement})` performs its design resolution. In the renderer, use `resolvePresentation(document, options).slides[index].geometry`.
 
 For explicit page splitting:
 
 ```js
-import { paginatePresentation } from '@openpresentation/opf/pagination';
-const result = paginatePresentation(document, {textMeasurement});
+import { paginate } from '@openpresentation/opf/pagination';
+const result = paginate(document, {fonts: {textMeasurement}});
 const paginatedDocument = result.presentation;
 // result.pages contains source/output mappings; preserve it if revisions need provenance.
 ```

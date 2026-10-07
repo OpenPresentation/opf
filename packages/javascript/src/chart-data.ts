@@ -197,7 +197,7 @@ function excelInteger(integer: string): string {
 }
 
 /** NumberFormat -> Excel format code ("General" when absent or invalid). Literal prefix/suffix text is quoted or escaped; placeholders are written '#' before '0' ("0#" -> "#0"). */
-export function excelNumberFormat(format?: string): string {
+export function toExcelNumberFormat(format?: string): string {
   if (format === undefined || format === '') return 'General';
   const parts = formatParts(format);
   if (!parts) return 'General';
@@ -242,7 +242,7 @@ function excelTokens(code: string): ExcelToken[] | undefined {
 }
 
 /** Excel format code -> NumberFormat, or undefined when the code has no exact NumberFormat equivalent (General, sections, scaling commas, and placeholder orders Excel reads by position such as "0#" or "0.#0"). */
-export function numberFormatFromExcel(code: string): string | undefined {
+export function fromExcelNumberFormat(code: string): string | undefined {
   if (typeof code !== 'string') return undefined;
   const trimmed = code.trim();
   if (trimmed === '' || /^general$/i.test(trimmed)) return undefined;
@@ -764,7 +764,7 @@ export function suggestChartNumberFix(chart: unknown, document?: unknown, option
   return undefined;
 }
 
-/** Every column fix of one chart, by the path of each text cell it rewrites (for lint). */
+/** Every column fix of one chart, by the path of each text cell it rewrites (for the migration fix of opf/chart-value-not-numeric). */
 export function chartNumberFixesByCell(chart: unknown, document: unknown, options: DataResolveOptions): Map<string, ChartNumberFix> {
   const byCell = new Map<string, ChartNumberFix>();
   for (const fix of chartNumberFixes(chart, document, options).values()) for (const patch of fix.patches.slice(0, -1)) byCell.set(patch.path, fix);

@@ -6,25 +6,25 @@ import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {build}=require('esbuild'),{chromium}=require('playwright');
-import {prepareNodeFonts} from '../../opf-render/dist/fonts-node.js';
+import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 const output=path.resolve(process.argv[2]??'artifacts/timeline-workflow');await mkdir(output,{recursive:true});
 const installed=process.argv[3]==='installed',consumer=path.resolve('artifacts/npm/consumer');
 const installedRequire=installed?createRequire(path.join(consumer,'package.json')):null;
-const prepare=installed?(await import(pathToFileURL(installedRequire.resolve('@openpresentation/opf-render/fonts-node')).href)).prepareNodeFonts:prepareNodeFonts;
+const prepare=installed?(await import(pathToFileURL(installedRequire.resolve('@openpresentation/opf-render/fonts-node')).href)).loadFonts:loadFonts;
 const {registry}=await prepare(),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let contents=`
  import {createEditorSession} from '../opf-editor/dist/index.js';
  import {createCanvasEditor} from '../opf-editor/dist/canvas.js';
- import {loadBrowserFontRegistry} from '../opf-render/dist/fonts-browser.js';
+ import {loadFonts} from '../opf-render/dist/fonts-browser.js';
  import {toPptx,fromPptx} from '../opf-pptx/dist/index.js';
  window.mount=async({deck,faces,measured})=>{
   window.plainCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;
-  window.fonts=await loadBrowserFontRegistry(faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})),{substitutionPolicy:'visual',fallbackFamily:'Roboto'});
-  window.editor=createEditorSession(deck,{rejectInvalid:true});window.renderOptions=measured?{textMeasurement:fonts.textMeasurement}:{};
-  window.plainCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,renderOptions,onError:e=>failures.push(e.message)});await plainCanvas.ready;
+  window.fonts=await loadFonts({faces:faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})),substitutionPolicy:'visual',fallbackFamily:'Roboto'});
+  window.editor=createEditorSession(deck,{rejectInvalid:true});window.renderOptions=measured?{fonts}:{};
+  window.plainCanvas=createCanvasEditor(document.querySelector('#canvas'),{editor,...renderOptions,onError:e=>failures.push(e.message)});await plainCanvas.ready;
   const action=(id,run)=>document.getElementById(id).onclick=async()=>{try{await run();}catch(e){failures.push(e.message);}};
   action('undo',()=>editor.undo());action('redo',()=>editor.redo());
-  action('export',async()=>{plainCanvas.commit();window.accepted=editor.document;window.lastExport=await toPptx(accepted,renderOptions);window.lastImport=await fromPptx(lastExport);});
+  action('export',async()=>{plainCanvas.commit();window.accepted=editor.presentation;window.lastExport=await toPptx(accepted,renderOptions);window.lastImport=await fromPptx(lastExport);});
  };`;
 if(installed)contents=contents.replaceAll('../opf-editor/dist/index.js','@openpresentation/opf-editor').replaceAll('../opf-editor/dist/canvas.js','@openpresentation/opf-editor/canvas').replaceAll('../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser').replaceAll('../opf-pptx/dist/index.js','@openpresentation/opf-pptx');
 const built=await build({stdin:{resolveDir:installed?consumer:process.cwd(),contents},bundle:true,platform:'browser',format:'iife',write:false});
@@ -81,12 +81,12 @@ try {
   await target.dblclick();let input=page.getByRole('textbox',{name:`Edit ${fieldPath.split('.').at(-1)} inline`,exact:true});await input.press('Control+Enter');assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),actualOriginal);assert.equal(await page.evaluate(()=>editor.canUndo),false);
   await target.dblclick();input=page.getByRole('textbox',{name:`Edit ${fieldPath.split('.').at(-1)} inline`,exact:true});
   const edit=fixture===3?'Edited pilot':actualOriginal?actualOriginal.replace('A','Edited'):'  New\tlabel  \r\n';await input.fill(edit);await input.press('Control+Enter');
-  const accepted=await page.evaluate(()=>editor.document),expected=actualOriginal?edit:edit.replace(/\r\n/g,'\n');assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),expected);
-  await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.document),deck);await page.getByRole('button',{name:'Redo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.document),accepted);
+  const accepted=await page.evaluate(()=>editor.presentation),expected=actualOriginal?edit:edit.replace(/\r\n/g,'\n');assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),expected);
+  await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),deck);await page.getByRole('button',{name:'Redo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),accepted);
   await page.getByRole('button',{name:'Export',exact:true}).click();await page.waitForFunction(()=>lastImport||failures.length);assert.deepEqual(await page.evaluate(()=>failures),[]);
   const imported=await page.evaluate(()=>lastImport),findTimeline=value=>value.timeline??value.blocks?.map(findTimeline).find(Boolean);
   assert.deepEqual(findTimeline(imported.slides[0]),findTimeline(accepted.slides[0]));assert.equal(imported.slides[0].title,accepted.slides[0].title);
-  if(fixture===0){await target.dblclick();input=page.getByRole('textbox',{name:'Edit what inline',exact:true});await input.evaluate(n=>n.setSelectionRange(n.value.length,n.value.length));await input.pressSequentially(' added');await input.press('Control+Enter');assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),expected+' added');await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.document),accepted);}
+  if(fixture===0){await target.dblclick();input=page.getByRole('textbox',{name:'Edit what inline',exact:true});await input.evaluate(n=>n.setSelectionRange(n.value.length,n.value.length));await input.pressSequentially(' added');await input.press('Control+Enter');assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),expected+' added');await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await page.evaluate(()=>editor.presentation),accepted);}
   if(measured&&(fixture===0||fixture===3))await page.screenshot({path:path.join(output,`fixture-${fixture}-${width}.png`),fullPage:true});
   results.push({measured,width,height,fixture,path:fieldPath,original:actualOriginal,accepted:expected,arrangement:selected.arrangement,part:selected.part,geometry,exportSha256:hash(new Uint8Array(await page.evaluate(()=>Array.from(lastExport))))});
  }

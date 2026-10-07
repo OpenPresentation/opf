@@ -1,7 +1,7 @@
 # Developer quickstart
 
 A new developer can install the **published** OPF packages into a fresh Node 24
-project and author, lint, compose, paginate, edit with undo, preview and export
+project and author, validate, compose, paginate, edit with undo, preview and export
 a representative deck. No account, model call, or sibling repository checkout
 is required.
 
@@ -35,15 +35,15 @@ current source contract. `opf bundle` can inline resolved catalog records for
 portable offline authoring; it does not download remote assets. Keep the
 ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
 
-## Author, validate and lint
+## Author and validate
 
 ```sh
 npx --no-install opf --version
 npx --no-install opf validate deck.opf.json
-npx --no-install opf lint deck.opf.json
+npx --no-install opf validate deck.opf.json --format text
 ```
 
-The CLI bundles schema, catalogs and lint. Validation and lint never render; `opf render`, `opf export` and
+The CLI bundles schema, catalogs and the checker. Validation never renders; `opf render`, `opf export` and
 `opf import` produce and read files through the optional peers `@openpresentation/opf-render` and
 `@openpresentation/opf-pptx` (see [the CLI reference](cli.md)).
 `opf --version` reports the CLI and bundled core. Successful validation is not
@@ -53,33 +53,38 @@ Library equivalents:
 
 ```js
 import { readFile } from 'node:fs/promises';
-import { validatePresentation, lintSource } from '@openpresentation/opf';
+import { validate } from '@openpresentation/opf';
 
 const source = await readFile('deck.opf.json', 'utf8');
 const document = JSON.parse(source);
-console.log(validatePresentation(document));
-console.log(lintSource(source));
+console.log(validate(document));   // a parsed document: findings of every category
+console.log(validate(source));     // JSON text: the same findings with line and column
 ```
 
 ## Offline fonts, composition, pagination
 
 ```js
-import { composeSlide, paginatePresentation, fontSchemes, resolveFontFamilies } from '@openpresentation/opf';
+import { paginate, resolveSlideContext } from '@openpresentation/opf';
+import { composeSlide } from '@openpresentation/opf/composition';
 import { prepareNodeFonts } from '@openpresentation/opf-render/fonts-node';
 
-const { options } = await prepareNodeFonts({ pack: 'base' });
-const fonts = resolveFontFamilies(fontSchemes.find(scheme => scheme.id === 'roboto'));
-const geometry = composeSlide(document.slides[0], { presentation: document, fonts, ...options });
-const { presentation, pages } = paginatePresentation(document, options);
+const { options: fonts } = await prepareNodeFonts({ pack: 'base' });
+const { options } = resolveSlideContext(document, 0, { fonts });
+const geometry = composeSlide(document.slides[0], options);
+const { presentation, pages } = paginate(document, { fonts });
 ```
 
 `prepareNodeFonts({ pack: 'base' })` loads the bundled Roboto faces for
-`design.fontScheme: 'roboto'`. Pass `fonts` from that scheme into `composeSlide`
-when you also pass `textMeasurement`; otherwise furniture falls back to
-`sans-serif` and the registry has no matching face. `paginatePresentation`
-resolves catalog font schemes itself. The helper does not install system fonts
-or change the authored scheme. Reuse the same `options` for SVG preview and
-PPTX export.
+`design.fontScheme: 'roboto'`. Its `options` is the fonts handle: deck-level
+verbs such as `paginate` take it as `{ fonts }` and read its
+`textMeasurement`. `resolveSlideContext(document, index, { fonts })` resolves
+one slide's layout, canvas, theme and font families (slide design, then deck
+design, then theme, then the default font scheme) into the options `composeSlide`
+takes, so you never look up a font scheme yourself; an unknown font-scheme id
+comes back as an `unresolved-font-scheme` diagnostic. `paginate`
+does the same for every slide. The helper does not install system fonts or
+change the authored scheme. Reuse the same `fonts` for SVG preview and PPTX
+export.
 
 Shared headers and footers use `furniture-flow-v2`. Body content stays between
 `geometry.furniture.headerBottom` and `geometry.furniture.footerTop`.
@@ -147,7 +152,7 @@ node scripts/test-developer-quickstart.mjs
 ```
 
 That script creates an empty temp project, installs the published versions from
-the npm registry, copies this example, and asserts validate, lint, offline
+the npm registry, copies this example, and asserts validate, offline
 fonts, furniture composition, pagination, undo, SVG, PNG, PDF and PPTX.
 It fails if any package is a `file:` or workspace link.
 

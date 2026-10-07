@@ -1,19 +1,21 @@
 import { readFile, writeFile, lstat, link, rename, unlink, mkdir } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { createDataContent, OPFDataImportError, paginatePresentation, bundlePresentation, catalogEntries, schemaEntries, validatePresentation, type LintOptions } from "@openpresentation/opf";
-import { applyPatch, getAtPointer, parsePointer, PatchError } from "@openpresentation/opf/patch";
+import { importData, OPFDataImportError, paginate, bundle, catalogEntries, schemaEntries, validate, type FindingSeverity } from "@openpresentation/opf";
+import { applyPatch, getAtPointer, parsePointer, OPFPatchError } from "@openpresentation/opf/patch";
 import { diffCommand } from "./diff.js";
 import { mergeCommand } from "./merge.js";
 import { formatCommand } from "./format.js";
+import { statsCommand } from "./stats.js";
 import type { CliContext } from "./context.js";
 import {manageSkills, SkillsError, type SkillBundle} from './skills.js';
 import {markdownCommand, MARKDOWN_USAGE, MARKDOWN_HELP} from './markdown.js';
 import {yamlCommand, YAML_USAGE, YAML_HELP} from './yaml.js';
-import {DeckReadError, commentWarning, decode, inputFormatOf, lintText, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
+import {DeckReadError, commentWarning, decode, inputFormatOf, outputFormatOf, serialize, setInputFormat, type DeckFormat, type DeckSource} from './deck.js';
 import {runRenderCommand} from './render.js';
 import {runImportCommand} from './import.js';
-import {runAudit} from './audit.js';
+import {runValidate, VALIDATE_USAGE} from './validate.js';
+import {FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches} from './check.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
 
 declare const CLI_VERSION: string;
@@ -21,36 +23,34 @@ declare const OPF_VERSION: string;
 declare const OPF_SKILLS: SkillBundle;
 const usage = `OPF — local presentation files for agents (Node 24)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--format <json|yaml>] [--schema-comment] [--force]
-  opf validate <file|-> [--strict]
-  opf lint <file|-> [--config <local-json-file>] [--strict]
-  opf audit <file|-> [--json] [--rule <id>] [--ignore <id>] [--fail-on <error|warning|info|never>] [--config <file>]
-           (design and accessibility checks; opf audit --help, --list-rules)
+${VALIDATE_USAGE}
   opf edit <file|-> --patch <patch.json|-> [--output <file|-> | --in-place]
-           [--dry-run] [--expect-sha256 <hash>] [--format <json|yaml>] [--force] [--strict]
+           [--dry-run] [--expect-sha256 <hash>] [--format <json|yaml>] [--force] [--fail-on <level>]
   opf diff <a|-> <b|-> [--format <text|json|patch>] [--exit-code] [--threshold <0-1>]
   opf merge <base> <ours> <theirs> [--output <file|-> | --in-place] [--force] [--prefer <ours|theirs>]
-           [--report <file>] [--dry-run] [--threshold <0-1>] [--format <json|yaml>] [--strict]
+           [--report <file>] [--dry-run] [--threshold <0-1>] [--format <json|yaml>] [--fail-on <level>]
   opf format <file|->... [--check | --in-place | --output <file|->]
            [--indent <0-8>] [--eol <lf|crlf|preserve>] [--format <json|yaml>]
+  opf stats <file|-> [--format <json|text>] [--per-slide]
   opf import-data <data.csv|data.json|-> --as <table|chart> [--format <csv|tsv|json>]
            [--into <deck>] [--path </slides/0/table>] [--output <file|-> | --in-place]
            [--category <column>] [--series <JSON-array>] [--columns <JSON-array>]
            [--chart-type <id>] [--no-header] [--delimiter <character>] [--title <text>]
-           [--dataset <id>] [--format yaml] [--force] [--strict]
+           [--dataset <id>] [--format yaml] [--force] [--fail-on <level>]
   opf fill <template.opf.json|-> [--data <values.json|data.csv|data.tsv|->] [--format <csv|tsv|json>]
            [--delimiter <character>] [--no-header] [--output <file|-> | --out-dir <dir> [--name <pattern>]
-           | --combine --output <file|->] [--partial] [--examples] [--format yaml] [--force] [--strict]
-  opf paginate <input|-> <output|-> [--format <json|yaml>] [--force] [--strict]
-  opf bundle <input|-> <output|-> [--format <json|yaml>] [--force] [--strict]
+           | --combine --output <file|->] [--partial] [--examples] [--format yaml] [--force] [--fail-on <level>]
+  opf paginate <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
+  opf bundle <input|-> <output|-> [--format <json|yaml>] [--force] [--fail-on <level>]
 ${MARKDOWN_USAGE}
 ${YAML_USAGE}
   opf render <file|-> [--slides <1,3-5>] [--format <svg|png>] [--scale <0.1-8>] [--out <directory|file|->]
-           [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
+           [--paginate] [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
   opf export <file|-> [--format <pptx|pdf|png|svg>] [--out <file|directory|.zip|->] [--slides <1,3-5>]
            [--pdf-mode <vector|raster>] [--chartex <auto|native|fallback>] [--provenance <full|references-only|none>]
            [--image-format <compatible|preserve>] [--scale <0.1-8>] [--svg-fonts <used|none>] [--paginate]
-           [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--strict] [--json]
-  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml>] [--force] [--strict] [--json]
+           [--include-hidden] [--date <YYYY-MM-DD>] [--font-dir <directory>]... [--asset-dir <directory>] [--force] [--fail-on <level>] [--json]
+  opf import <deck.pptx|-> [--out <file|->] [--signals <signals.json>] [--format <json|yaml>] [--force] [--fail-on <level>] [--json]
   opf schemas
   opf schema [name] [JSON-Pointer]
   opf catalogs
@@ -67,13 +67,18 @@ stdout documents go to stderr. Existing files require --force or --in-place.
 Edits apply JSON Patch (add/remove/replace/move/copy/test), validate the whole
 result, and save atomically. --dry-run emits the result without saving.
 Exit codes: 0 success, 1 invalid document/patch/conflict, 2 usage/JSON/I/O error.
-Validation checks structure and references, not visual fidelity.
+Commands that write a document check its format and references first and fail on findings at
+or above --fail-on <error|warning|info> (default error); a contrast or layout warning never
+blocks a write. opf validate is the one checker and covers the rest (accessibility, layout, content).
 Diff matches slides by id, then content, and reports adds, removes, moves and
 field/design/metadata changes plus a JSON Patch from A to B (--exit-code exits 1
 when they differ). Merge combines two edits of a base; non-overlapping changes
 merge, conflicts are listed (exit 1, nothing written) unless --prefer picks a
 side. Format rewrites a file with canonical key order and layout; --check
 exits 1 if any file would change.
+Stats reports neutral facts about a deck (structure, words, notes, images, charts, tables, datasets,
+citations, variables, assets, fonts, an estimated speaking time) without validating, composing or loading
+fonts; it never rates anything. --per-slide adds a row per slide.
 Bundle inlines the bundled catalog records a document references (kinds with a
 custom source are left untouched) so the file resolves every catalog reference
 offline. Remote media and data assets are not inlined.
@@ -83,17 +88,13 @@ with --out-dir (names from --name, default deck-{n}; {n} is the index and {colum
 a slug of that column's value), one combined deck with --combine, or a single deck.
 Blank cells use the variable's declared value. An unfilled required variable fails
 unless --partial; --examples fills unfilled variables from their example.
-Lint adds source locations, contextual suggestions and explicit host contracts.
-Lint syntax/schema/policy errors exit 1; --strict also rejects warnings.
 Render, export and import write files through the optional peers @openpresentation/opf-render
 and @openpresentation/opf-pptx (install them next to the CLI; the error names the command to run).
-They lint the document first, print the lint report shape (diagnostics, counts) plus the written
-files with SHA-256 digests, never load system fonts and never fetch URLs; --strict writes nothing
-when there are warnings. Existing outputs require --force. Per-slide images and PDF skip hidden
-slides unless --include-hidden (slides named with --slides are always written); files are named by the
-deck's filename, else its name (slugified), else the input file name.
-Audit reports design and accessibility findings (contrast, overflow, alt text, reading order,
-fonts, ...) with stable rule ids; it exits 1 for findings at or above --fail-on (default error).
+They check the document's format and references first, print the finding report (findings, counts)
+plus the written files with SHA-256 digests, never load system fonts and never fetch URLs; findings
+at or above --fail-on write nothing. Existing outputs require --force. Per-slide images and PDF skip
+hidden slides unless --include-hidden (slides named with --slides are always written); files are named by
+the deck's filename, else its name (slugified), else the input file name.
 
 ${MARKDOWN_HELP}
 
@@ -110,7 +111,7 @@ const isDeprecated = (record: object) => "deprecation" in record && !!(record as
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 const print = (value: unknown) => process.stdout.write(json(value));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
-const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory", "config", "data", "out-dir", "name"]);
+const valueOptions = new Set(["title", "from", "patch", "output", "expect-sha256", "as", "format", "into", "path", "category", "series", "columns", "chart-type", "delimiter", "agent", "directory", "config", "data", "out-dir", "name", "fail-on"]);
 const extraValueOptions = new Set(["prefer", "threshold", "report", "indent", "eol", "dataset"]);
 function parse(args: string[], allowed: string[]) {
   const positional: string[] = [], options: Record<string, string | boolean> = Object.create(null);
@@ -151,10 +152,17 @@ async function readDeck(file: string, rewrite = false, kind: "deck" | "patch" = 
   if (warning) process.stderr.write(warning);
   return source;
 }
-function checked(value: unknown, strict = false) {
-  const result = validatePresentation(value);
-  if (!result.valid || (strict && result.warnings.length)) throw new CliError("Document validation failed.", 1, result);
-  return result;
+/** The `--fail-on` level of a command's options: findings at or above it fail the command (default error). */
+function failOnOf(options: Record<string, string | boolean>): FindingSeverity {
+  const level = parseFailOn(options["fail-on"]);
+  if (!level) throw new CliError(FAIL_ON_MESSAGE);
+  return level;
+}
+/** The format and references check every command that writes a document runs first. */
+function checked(value: unknown, failOn: FindingSeverity = "error") {
+  const report = validate(value, WRITE_CHECK);
+  if (reaches(report.findings, failOn)) throw new CliError("Document validation failed.", 1, report);
+  return report;
 }
 /** The text a deck is written as: the `--format` flag, else the output name, else the format of the deck that was read. */
 /** `flag` is the output format option; `null` means the command has none to give (its `--format` names input data). */
@@ -183,14 +191,14 @@ async function saveText(file: string, text: string, overwrite: boolean, original
   } finally { await unlink(temporary).catch(error => { if (error.code !== "ENOENT") throw error; }); }
 }
 async function emit(document: unknown, output: string, options: Record<string, string | boolean>, original?: { file: string; raw: string }, extra = {}, source?: DeckSource, flag: string | boolean | null | undefined = options.format) {
-  const validation = checked(document, !!options.strict);
+  const validation = checked(document, failOnOf(options));
   const { text } = render(document, output, options, source, flag);
   if (output === "-" || options["dry-run"]) {
     process.stdout.write(text);
-    process.stderr.write(json({ valid: true, warnings: validation.warnings, dryRun: !!options["dry-run"], ...extra }));
+    process.stderr.write(json({ valid: true, findings: validation.findings, dryRun: !!options["dry-run"], ...extra }));
   } else {
     await saveText(output, text, !!options.force || !!options["in-place"], original);
-    print({ valid: true, output: path.resolve(output), sha256: hash(text), warnings: validation.warnings, ...extra });
+    print({ valid: true, output: path.resolve(output), sha256: hash(text), findings: validation.findings, ...extra });
   }
 }
 const cli: CliContext = { parse, arity, readJson, readDeck, stdin, emit, saveText, print, hash, json, fail: (message, code = 2, details, key) => new CliError(message, code, details, key) };
@@ -215,7 +223,7 @@ async function main(args0: string[]) {
   if (!argv.length || (argv.length === 1 && ["help", "--help", "-h"].includes(argv[0]))) { console.log(usage); return; }
   if (argv.length === 1 && argv[0] === "--version") { print({ cli: CLI_VERSION, opf: OPF_VERSION }); return; }
   const [command, ...args] = argv;
-  if (command === 'audit') { await runAudit(args); return; }
+  if (command === 'validate') { await runValidate(args); return; }
   if (args.length === 1 && args[0] === "--help") { console.log(usage); return; }
   if (command === 'from-md' || command === 'to-md') { await markdownCommand(command, args); return; }
   if (command === 'from-yaml' || command === 'to-yaml') { await yamlCommand(command, args, cli); return; }
@@ -226,7 +234,7 @@ async function main(args0: string[]) {
   if (command === 'render' || command === 'export') { await runRenderCommand(command, args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === 'import') { await runImportCommand(args, {cliVersion: CLI_VERSION, opfVersion: OPF_VERSION}); return; }
   if (command === "create") {
-    const { positional, options } = parse(args, ["title", "from", "format", "schema-comment", "force", "strict"]); arity(positional, 0, 1);
+    const { positional, options } = parse(args, ["title", "from", "format", "schema-comment", "force", "fail-on"]); arity(positional, 0, 1);
     if (options.from && options.title !== undefined) throw new CliError("Use --from or --title, not both.");
     const from = options.from ? await readDeck(String(options.from)) : undefined;
     const document = from ? from.value : {
@@ -235,31 +243,8 @@ async function main(args0: string[]) {
     };
     await emit(document, positional[0] ?? "-", options, undefined, {agentSkills:'npx @openpresentation/cli@latest skills install'}, from); return;
   }
-  if (command === "validate") {
-    const { positional, options } = parse(args, ["strict"]); arity(positional, 1);
-    const { raw, value } = await readDeck(positional[0]), result = validatePresentation(value);
-    print({ ...result, sha256: hash(raw) });
-    if (!result.valid || (options.strict && result.warnings.length)) process.exitCode = 1;
-    return;
-  }
-  if (command === 'lint') {
-    const { positional, options } = parse(args, ['config', 'strict']);
-    arity(positional, 1);
-    const input = positional[0];
-    if (!input) throw new CliError('Lint requires a file or stdin (-).');
-    if (options.config === '-') throw new CliError('Lint configuration must be an explicit local JSON file.');
-    const raw = input === '-' ? await stdin() : await readFile(input, 'utf8');
-    const config = options.config ? await readJson(String(options.config)) : undefined;
-    const result = lintText(raw, inputFormatOf(input), config?.value as LintOptions | undefined);
-    print({
-      ...result, sha256: hash(raw), opfVersion: OPF_VERSION,
-      ...(config ? { context: { file: path.resolve(String(options.config)), sha256: hash(config.raw) } } : {}),
-    });
-    if (!result.valid || (options.strict && result.counts.warning)) process.exitCode = 1;
-    return;
-  }
   if (command === "edit") {
-    const { positional, options } = parse(args, ["patch", "output", "in-place", "dry-run", "expect-sha256", "format", "force", "strict"]); arity(positional, 1);
+    const { positional, options } = parse(args, ["patch", "output", "in-place", "dry-run", "expect-sha256", "format", "force", "fail-on"]); arity(positional, 1);
     const input = positional[0];
     if (!options.patch) throw new CliError("edit requires --patch <file|->.");
     if (input === "-" && (options.patch === "-" || options["in-place"])) throw new CliError("stdin can supply only one input and cannot be edited in place.");
@@ -277,8 +262,9 @@ async function main(args0: string[]) {
   if (command === "diff") { await diffCommand(args, cli); return; }
   if (command === "merge") { await mergeCommand(args, cli); return; }
   if (command === "format") { await formatCommand(args, cli); return; }
+  if (command === "stats") { await statsCommand(args, cli); return; }
   if (command === "import-data") {
-    const { positional, options } = parse(args, ["as", "format", "into", "path", "output", "in-place", "category", "series", "columns", "chart-type", "no-header", "delimiter", "title", "dataset", "force", "strict"]); arity(positional, 1);
+    const { positional, options } = parse(args, ["as", "format", "into", "path", "output", "in-place", "category", "series", "columns", "chart-type", "no-header", "delimiter", "title", "dataset", "force", "fail-on"]); arity(positional, 1);
     if (options.as !== 'table' && options.as !== 'chart') throw new CliError('import-data requires --as table or --as chart.');
     if (options.path && !options.into) throw new CliError('--path requires --into <deck>.');
     if (options["in-place"] && (!options.into || options.into === '-' || options.output !== undefined || options.force)) throw new CliError('--in-place requires a file --into and cannot combine with --output or --force.');
@@ -294,7 +280,7 @@ async function main(args0: string[]) {
     const format = (outFlag ? undefined : options.format) ?? (positional[0].endsWith('.json') ? 'json' : positional[0].endsWith('.tsv') ? 'tsv' : undefined);
     if (format !== undefined && !['csv','tsv','json'].includes(String(format))) throw new CliError('Unknown data format.');
     const raw = positional[0] === '-' ? await stdin() : await readFile(positional[0], 'utf8');
-    const imported = createDataContent(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:options['chart-type'] as string|undefined});
+    const imported = importData(raw, {as: options.as, format: format as 'csv'|'tsv'|'json'|undefined, header: !options['no-header'], delimiter: options.delimiter as string|undefined, columns:list('columns'), category:options.category as string|undefined, series:list('series'), chartType:options['chart-type'] as string|undefined});
     // RR-54: --dataset <id> writes the data into the top-level datasets map (replacing that dataset's columns and rows,
     // keeping its title, description and source) and references it from the table or chart.
     const datasetId = options.dataset === undefined ? undefined : String(options.dataset);
@@ -330,7 +316,7 @@ async function main(args0: string[]) {
     await emit(document, output, options, sameFile ? {file:String(options.into),raw:source.raw} : undefined, {}, source, outFlag ?? null); return;
   }
   if (command === "fill") {
-    const { positional, options } = parse(args, ["data", "format", "delimiter", "no-header", "output", "out-dir", "name", "combine", "partial", "examples", "force", "strict"]); arity(positional, 1);
+    const { positional, options } = parse(args, ["data", "format", "delimiter", "no-header", "output", "out-dir", "name", "combine", "partial", "examples", "force", "fail-on"]); arity(positional, 1);
     if (options["out-dir"] !== undefined && (options.output !== undefined || options.combine)) throw new CliError("--out-dir cannot be combined with --output or --combine.");
     if (options.name !== undefined && options["out-dir"] === undefined) throw new CliError("--name requires --out-dir.");
     if (options.combine && options.output === undefined) throw new CliError("--combine requires --output <file|->.");
@@ -350,7 +336,7 @@ async function main(args0: string[]) {
     const fill = { records: decks.length, complete: decks.every(deck => deck.complete), unfilled: [...new Set(decks.flatMap(deck => deck.unfilled))], diagnostics: summarizeDiagnostics(decks) };
     if (options["out-dir"] !== undefined) {
       const dir = path.resolve(String(options["out-dir"])), names = deckNames(decks, options.name as string | undefined);
-      const checks = decks.map(deck => checked(deck.presentation, !!options.strict));
+      const failOn = failOnOf(options), checks = decks.map(deck => checked(deck.presentation, failOn));
       await mkdir(dir, { recursive: true });
       const outputs = [];
       for (const [offset, deck] of decks.entries()) {
@@ -358,7 +344,7 @@ async function main(args0: string[]) {
         const output = path.join(dir, `${names[offset]}.opf.${kind}`);
         const { text } = render(deck.presentation, output, options, templateSource, outFlag ?? null);
         await saveText(output, text, !!options.force);
-        outputs.push({ record: deck.index, output, sha256: hash(text), warnings: checks[offset]!.warnings });
+        outputs.push({ record: deck.index, output, sha256: hash(text), findings: checks[offset]!.findings });
       }
       print({ valid: true, outputs, ...fill }); return;
     }
@@ -366,15 +352,15 @@ async function main(args0: string[]) {
     await emit(options.combine ? combineDecks(decks) : decks[0]!.presentation, String(options.output ?? "-"), options, undefined, { fill }, templateSource, outFlag ?? null); return;
   }
   if (command === "paginate") {
-    const { positional, options } = parse(args, ["format", "force", "strict"]); arity(positional, 2);
-    const source = await readDeck(positional[0], true); checked(source.value, !!options.strict);
-    const result = paginatePresentation(source.value);
+    const { positional, options } = parse(args, ["format", "force", "fail-on"]); arity(positional, 2);
+    const source = await readDeck(positional[0], true); checked(source.value, failOnOf(options));
+    const result = paginate(source.value);
     await emit(result.presentation, positional[1], options, undefined, { pages: result.pages }, source); return;
   }
   if (command === "bundle") {
-    const { positional, options } = parse(args, ["format", "force", "strict"]); arity(positional, 2);
-    const source = await readDeck(positional[0], true); checked(source.value, !!options.strict);
-    const result = bundlePresentation(source.value);
+    const { positional, options } = parse(args, ["format", "force", "fail-on"]); arity(positional, 2);
+    const source = await readDeck(positional[0], true); checked(source.value, failOnOf(options));
+    const result = bundle(source.value);
     await emit(result.presentation, positional[1], options, undefined, { bundle: result.report }, source); return;
   }
   if (command === "schemas") { arity(args, 0); print(schemaEntries.map(entry => ({ name: entry.name, file: entry.file, id: entry.schema.$id }))); return; }
@@ -407,7 +393,7 @@ async function main(args0: string[]) {
   throw new CliError(`Unknown command: ${command}. Run opf --help.`);
 }
 main(process.argv.slice(2)).catch((error: unknown) => {
-  const code = error instanceof PatchError || error instanceof OPFDataImportError ? 1 : error instanceof CliError || error instanceof SkillsError ? error.code : 2;
+  const code = error instanceof OPFPatchError || error instanceof OPFDataImportError ? 1 : error instanceof CliError || error instanceof SkillsError ? error.code : 2;
   process.stderr.write(json({ error: error instanceof Error ? error.message : String(error), ...(error instanceof CliError && error.details ? { [error.key]: error.details } : {}), ...(error instanceof DeckReadError && error.details ? { yaml: error.details } : {}) }));
   process.exitCode = code;
 });

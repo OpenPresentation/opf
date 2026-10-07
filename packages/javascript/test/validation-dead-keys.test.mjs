@@ -1,29 +1,23 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
-import {
-  bundlePresentation,
-  colorSchemes,
-  fontSchemes,
-  lintPresentation,
-  normalizeLanguageFamily,
-  validateCatalogRecord,
-  validatePresentation,
-} from '../dist/index.js';
-import { auditPresentation } from '../dist/audit.js';
+import { bundle, colorSchemes, fontSchemes, normalizeLanguageFamily, validate, validateCatalogRecord } from '../dist/index.js';
 import { resolveFontFamilies } from '../dist/composition.js';
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
+// The format, references and policy findings: the checks that decide whether a deck is correct OPF.
+const checkAll = (input, options = {}) => validate(input, { only: ['format', 'references', 'policy'], ...options });
 
 // FA-07 (format audit): validation tightening and dead keys. Each newly invalid form is rejected and the valid
 // forms still validate.
 const deck = (extra = {}, slide = {}) => ({ name: 'FA-07', slides: [{ title: 'Slide', ...slide }], ...extra });
 const valid = (document) => {
-  const result = validatePresentation(document);
-  assert.equal(result.valid, true, JSON.stringify(result.errors));
+  const result = check(document);
+  assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
   return result;
 };
 const invalid = (document, ...parts) => {
-  const result = validatePresentation(document);
+  const result = check(document);
   assert.equal(result.valid, false, 'expected the document to be invalid');
-  for (const part of parts) assert.ok(result.errors.some((error) => `${error.path} ${error.message}`.includes(part)), `${part} in ${JSON.stringify(result.errors.map((e) => [e.path, e.message]))}`);
+  for (const part of parts) assert.ok(errorsOf(result).some((error) => `${error.path} ${error.message}`.includes(part)), `${part} in ${JSON.stringify(errorsOf(result).map((e) => [e.path, e.message]))}`);
   return result;
 };
 
@@ -40,7 +34,7 @@ describe('color-scheme slots and roles are hex colors', () => {
     assert.equal(colorSchemes.length, 14);
     for (const record of colorSchemes) {
       const result = validateCatalogRecord('colorSchemes', record);
-      assert.equal(result.valid, true, `${record.id}: ${JSON.stringify(result.errors)}`);
+      assert.equal(result.valid, true, `${record.id}: ${JSON.stringify(errorsOf(result))}`);
     }
     const base = { $schema: 'https://openpresentation.org/schema/opf-color-scheme/v1', id: 'x', name: 'X' };
     assert.equal(validateCatalogRecord('colorSchemes', { ...base, accent1: '#2874A6' }).valid, true);
@@ -80,7 +74,7 @@ describe('solid, gradient and pattern background colors are ColorRef', () => {
     invalid(gradient([]), '/design/background/gradient/stops');
   });
   test('an undeclared var: reference in a background warns, a declared one does not', () => {
-    const warnings = (document) => validatePresentation(document).warnings.filter((w) => w.message.includes('variable')).map((w) => w.path);
+    const warnings = (document) => warningsOf(check(document, { only: ['format', 'references'] })).filter((w) => w.ruleId === 'opf/variable-reference-unknown').map((w) => w.path);
     assert.deepEqual(warnings(solid('var:brand')), ['/design/background/color']);
     assert.deepEqual(warnings(stop('var:brand')), ['/design/background/gradient/stops/0/color']);
     assert.deepEqual(warnings(pattern('backgroundColor', 'var:brand')), ['/design/background/pattern/backgroundColor']);
@@ -89,7 +83,7 @@ describe('solid, gradient and pattern background colors are ColorRef', () => {
   test('the audit reads names and variables in a background like the preview', () => {
     // dark1 in the default scheme is a near-black: white text on it passes, dark text fails. Before FA-07 a name fell back to white.
     const slide = (text) => ({ title: 'Contrast', text: [{ text: 'Body copy for contrast', color: text, fontSize: 24 }] });
-    const findings = (document) => auditPresentation(document, { only: ['text-contrast'] }).diagnostics.length;
+    const findings = (document) => validate(document, { only: ['text-contrast'] }).findings.length;
     const dark = { design: { background: { type: 'solid', color: 'dark1' } } };
     assert.equal(findings({ name: 'a', language: 'en-US', ...dark, slides: [slide('#FFFFFF')] }), 0);
     assert.equal(findings({ name: 'a', language: 'en-US', ...dark, slides: [slide('#111111')] }), 1);
@@ -129,29 +123,30 @@ describe("a slide's design cannot set dimensions", () => {
     valid(deck({ design: { dimensions: '4:3' } }));
     valid(deck({}, { design: { background: 'dark1', titleAlignment: 'left' } }));
     const result = invalid(deck({}, { design: { dimensions: 'a4' } }), '/slides/0/design');
-    assert.ok(result.errors.some((error) => /cannot set 'dimensions'/.test(error.message)), JSON.stringify(result.errors));
+    assert.ok(errorsOf(result).some((error) => /cannot set 'dimensions'/.test(error.message)), JSON.stringify(errorsOf(result)));
     invalid(deck({}, { design: { dimensions: { preset: '16:9' } } }), '/slides/0/design');
     invalid(deck({}, { design: { dimensions: { widthInches: 10, heightInches: 5 } } }), '/slides/0/design');
   });
-  test('a slide-level theme whose dimensions differ from the deck warns in validation and lint', () => {
+  test('a slide-level theme whose dimensions differ from the deck is a references warning', () => {
     const catalogs = { themes: { records: [{ $schema: 'https://openpresentation.org/schema/opf-theme/v1', id: 'wide-a4', name: 'A4', dimensions: 'a4' }] } };
     const mixed = deck({ design: { theme: 'minimal' }, catalogs }, { design: { theme: 'wide-a4' } });
-    const result = valid(mixed);
-    const warning = result.warnings.find((issue) => issue.params.code === 'slide-theme-dimensions');
-    assert.ok(warning, JSON.stringify(result.warnings));
+    const result = checkAll(mixed);
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    const warning = warningsOf(result).find((issue) => issue.ruleId === 'opf/slide-theme-dimensions');
+    assert.ok(warning, JSON.stringify(warningsOf(result)));
     assert.equal(warning.path, '/slides/0/design/theme');
-    const lint = lintPresentation(mixed);
-    const finding = lint.diagnostics.find((entry) => entry.ruleId === 'opf/slide-theme-dimensions');
-    assert.ok(finding, JSON.stringify(lint.diagnostics.map((d) => d.ruleId)));
+    const lint = checkAll(mixed);
+    const finding = lint.findings.find((entry) => entry.ruleId === 'opf/slide-theme-dimensions');
+    assert.ok(finding, JSON.stringify(lint.findings.map((d) => d.ruleId)));
     assert.equal(finding.severity, 'warning');
     assert.equal(finding.path, '/slides/0/design/theme');
     // The object form of a slide theme counts too.
     const objectForm = deck({ design: { theme: 'minimal' } }, { design: { theme: { id: 'minimal', dimensions: '4:3' } } });
-    assert.ok(valid(objectForm).warnings.some((issue) => issue.params.code === 'slide-theme-dimensions'));
+    assert.ok(warningsOf(checkAll(objectForm)).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'));
     // Same size: nothing to say. A deck-level dimensions override is reported as ignored.
-    assert.equal(valid(deck({ design: { theme: 'wide-a4' }, catalogs }, { design: { theme: 'wide-a4' } })).warnings.some((issue) => issue.params.code === 'slide-theme-dimensions'), false);
-    assert.equal(valid(deck({ design: { theme: 'minimal' } }, { design: { theme: 'classic' } })).warnings.some((issue) => issue.params.code === 'slide-theme-dimensions'), false);
-    assert.ok(valid(deck({ design: { dimensions: '4:3' }, catalogs }, { design: { theme: 'wide-a4' } })).warnings.some((issue) => /deck's size is used/.test(issue.message)));
+    assert.equal(warningsOf(checkAll(deck({ design: { theme: 'wide-a4' }, catalogs }, { design: { theme: 'wide-a4' } }))).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'), false);
+    assert.equal(warningsOf(checkAll(deck({ design: { theme: 'minimal' } }, { design: { theme: 'classic' } }))).some((issue) => issue.ruleId === 'opf/slide-theme-dimensions'), false);
+    assert.ok(warningsOf(checkAll(deck({ design: { dimensions: '4:3' }, catalogs }, { design: { theme: 'wide-a4' } }))).some((issue) => /deck's size is used/.test(issue.message)));
   });
 });
 
@@ -165,14 +160,14 @@ describe('root audience accepts one inline Audience object', () => {
     invalid(deck({ audience: 7 }), '/audience');
   });
   test('an object id is checked against the audiences catalog like an array entry', () => {
-    const unknown = (audience) => validatePresentation(deck({ audience })).warnings.filter((w) => w.params.kind === 'audiences').map((w) => w.path);
+    const unknown = (audience) => warningsOf(checkAll(deck({ audience }))).filter((w) => w.ruleId === 'opf/catalog-reference' && w.path.startsWith('/audience')).map((w) => w.path);
     assert.deepEqual(unknown({ id: 'no-such-audience' }), ['/audience/id']);
     assert.deepEqual(unknown([{ id: 'no-such-audience' }]), ['/audience/0/id']);
     assert.deepEqual(unknown({ id: 'executive' }), []);
     assert.deepEqual(unknown({ name: 'Custom' }), []);
   });
   test('bundle inlines the catalog record a single audience object names', () => {
-    const bundled = bundlePresentation(deck({ audience: { id: 'executive' } }));
+    const bundled = bundle(deck({ audience: { id: 'executive' } }));
     assert.ok(bundled.presentation.catalogs?.audiences?.records?.some((record) => record.id === 'executive'), JSON.stringify(bundled.report));
   });
 });
@@ -195,8 +190,8 @@ describe('ChartDataSource is removed', () => {
   });
   test('no chart-data-source-unresolved warning exists any more', () => {
     const document = deck({}, { chart: { type: 'column', data: { src: 'asset:revenue' } } });
-    assert.equal(validatePresentation(document).warnings.some((issue) => issue.params.code === 'chart-data-source-unresolved'), false);
-    assert.equal(lintPresentation(document).diagnostics.some((entry) => entry.ruleId === 'opf/chart-data-source-unresolved'), false);
+    assert.equal(warningsOf(check(document)).some((issue) => issue.ruleId === 'opf/chart-data-source-unresolved'), false);
+    assert.equal(checkAll(document).findings.some((entry) => entry.ruleId === 'opf/chart-data-source-unresolved'), false);
   });
 });
 
@@ -237,7 +232,7 @@ describe('FontScheme.app and languageFamily', () => {
     for (const record of fontSchemes) {
       assert.ok(['powerpoint', 'google-slides'].includes(record.app), `${record.id}: ${record.app}`);
       const result = validateCatalogRecord('fontSchemes', record);
-      assert.equal(result.valid, true, `${record.id}: ${JSON.stringify(result.errors)}`);
+      assert.equal(result.valid, true, `${record.id}: ${JSON.stringify(errorsOf(result))}`);
     }
   });
   test('languageFamily accepts latin, ea, cs, eastAsian and complexScript', () => {

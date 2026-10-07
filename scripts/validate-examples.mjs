@@ -2,7 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { validatePresentation } from "../packages/javascript/dist/index.js";
+import { validate } from "../packages/javascript/dist/index.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = path.join(repoRoot, "examples");
@@ -31,9 +31,9 @@ async function main() {
 
   for (const file of files) {
     const data = JSON.parse(await readFile(file, "utf8"));
-    const result = validatePresentation(data);
+    const result = validate(data, { only: ["format"] });
     if (!result.valid) {
-      failures.push({ file, errors: result.errors });
+      failures.push({ file, errors: result.findings.filter((finding) => finding.severity === "error") });
     }
   }
 

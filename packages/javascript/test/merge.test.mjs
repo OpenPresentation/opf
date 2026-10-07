@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { mergePresentations } from "../dist/diff.js";
-import { validatePresentation } from "../dist/validator.js";
+import { merge } from "../dist/diff.js";
+
 import { loadExamples, mutate } from "./diff-support.mjs";
+import { check } from './support/validation.mjs';
 
 const slide = (id, title, extra = {}) => ({ id, title, ...extra });
 const deck = (slides, extra = {}) => ({ $schema: "https://openpresentation.org/schema/opf/v1", name: "Deck", slides, ...extra });
@@ -20,7 +21,7 @@ describe("clean merges", () => {
     theirs.slides[2].notes = "added by them";
     theirs.name = "Renamed by them";
     delete theirs.description;
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.clean, true);
     assert.deepEqual(result.conflicts, []);
     const expected = base();
@@ -37,7 +38,7 @@ describe("clean merges", () => {
   test("the same edit on both sides is not a conflict", () => {
     const ours = base(), theirs = base();
     ours.slides[1].title = theirs.slides[1].title = "B2";
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.clean, true);
     assert.equal(result.merged.slides[1].title, "B2");
     assert.equal(result.applied.both, 1);
@@ -45,11 +46,11 @@ describe("clean merges", () => {
 
   test("identical inputs and one-sided changes", () => {
     const b = base();
-    assert.deepEqual(mergePresentations(b, b, b).merged, b);
+    assert.deepEqual(merge(b, b, b).merged, b);
     const edited = mutate(b, 11);
-    assert.deepEqual(mergePresentations(b, edited, b).merged, edited);
-    assert.deepEqual(mergePresentations(b, b, edited).merged, edited);
-    assert.deepEqual(mergePresentations(b, edited, edited).merged, edited);
+    assert.deepEqual(merge(b, edited, b).merged, edited);
+    assert.deepEqual(merge(b, b, edited).merged, edited);
+    assert.deepEqual(merge(b, edited, edited).merged, edited);
   });
 
   test("slides added on both sides are all kept, ours first at the same position", () => {
@@ -57,7 +58,7 @@ describe("clean merges", () => {
     ours.slides.splice(1, 0, slide("o1", "Ours one"));
     theirs.slides.splice(1, 0, slide("t1", "Theirs one"));
     theirs.slides.push(slide("t2", "Theirs end"));
-    const { merged, clean } = mergePresentations(base(), ours, theirs);
+    const { merged, clean } = merge(base(), ours, theirs);
     assert.equal(clean, true);
     assert.deepEqual(ids(merged), ["a", "o1", "t1", "b", "c", "d", "t2"]);
   });
@@ -66,7 +67,7 @@ describe("clean merges", () => {
     const ours = base(), theirs = base();
     ours.slides.push(slide("n", "New"));
     theirs.slides.push(slide("n", "New"));
-    const { merged, clean } = mergePresentations(base(), ours, theirs);
+    const { merged, clean } = merge(base(), ours, theirs);
     assert.equal(clean, true);
     assert.deepEqual(ids(merged), ["a", "b", "c", "d", "n"]);
   });
@@ -75,7 +76,7 @@ describe("clean merges", () => {
     const ours = base(), theirs = base();
     ours.slides.push(ours.slides.shift());
     theirs.slides[0].title = "A edited";
-    const { merged, clean } = mergePresentations(base(), ours, theirs);
+    const { merged, clean } = merge(base(), ours, theirs);
     assert.equal(clean, true);
     assert.deepEqual(ids(merged), ["b", "c", "d", "a"]);
     assert.equal(merged.slides[3].title, "A edited");
@@ -85,7 +86,7 @@ describe("clean merges", () => {
     const ours = base(), theirs = base();
     ours.slides[1].title = "B edited";
     theirs.slides.unshift(theirs.slides.splice(2, 1)[0]);
-    const { merged, clean } = mergePresentations(base(), ours, theirs);
+    const { merged, clean } = merge(base(), ours, theirs);
     assert.equal(clean, true);
     assert.deepEqual(ids(merged), ["c", "a", "b", "d"]);
     assert.equal(merged.slides[2].title, "B edited");
@@ -94,7 +95,7 @@ describe("clean merges", () => {
   test("both sides making the same move agree", () => {
     const ours = base(), theirs = base();
     for (const side of [ours, theirs]) side.slides.splice(3, 0, side.slides.splice(0, 1)[0]);
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.clean, true);
     assert.deepEqual(ids(result.merged), ["b", "c", "d", "a"]);
   });
@@ -103,7 +104,7 @@ describe("clean merges", () => {
     const ours = base(), theirs = base();
     ours.slides.splice(1, 1);
     theirs.slides[3].title = "D edited";
-    const { merged, clean } = mergePresentations(base(), ours, theirs);
+    const { merged, clean } = merge(base(), ours, theirs);
     assert.equal(clean, true);
     assert.deepEqual(ids(merged), ["a", "c", "d"]);
     assert.equal(merged.slides[2].title, "D edited");
@@ -116,7 +117,7 @@ describe("clean merges", () => {
     ours.slides[0].blocks.push({ text: "three" });
     theirs.slides[0].bullets.push("w");
     theirs.slides[0].blocks[1] = { text: "two!" };
-    const { merged, clean } = mergePresentations(start, ours, theirs);
+    const { merged, clean } = merge(start, ours, theirs);
     assert.equal(clean, true);
     assert.deepEqual(merged.slides[0].bullets, ["X", "y", "z", "w"]);
     assert.deepEqual(merged.slides[0].blocks, [{ text: "one" }, { text: "two!" }, { text: "three" }]);
@@ -125,7 +126,7 @@ describe("clean merges", () => {
   test("inputs are never mutated", () => {
     const b = base(), o = mutate(b, 3), t = mutate(b, 4);
     const copies = [structuredClone(b), structuredClone(o), structuredClone(t)];
-    mergePresentations(b, o, t);
+    merge(b, o, t);
     assert.deepEqual([b, o, t], copies);
   });
 });
@@ -136,7 +137,7 @@ describe("conflicts", () => {
     ours.slides[1].title = "B ours";
     theirs.slides[1].title = "B theirs";
     ours.slides[3].title = "D ours";
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.clean, false);
     assert.equal(result.conflicts.length, 1);
     assert.deepEqual(result.conflicts[0], {
@@ -157,7 +158,7 @@ describe("conflicts", () => {
     const ours = base(), theirs = base();
     ours.name = "ours";
     theirs.name = "theirs";
-    const result = mergePresentations(base(), ours, theirs, { prefer: "theirs" });
+    const result = merge(base(), ours, theirs, { prefer: "theirs" });
     assert.equal(result.merged.name, "theirs");
     assert.equal(result.conflicts[0].resolution, "theirs");
     assert.equal(result.conflicts[0].ours, "ours");
@@ -170,7 +171,7 @@ describe("conflicts", () => {
     theirs.design = { theme: "editorial" };
     ours.slides[0].notes = "ours";
     theirs.slides.splice(0, 1);
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.deepEqual(result.conflicts.map(conflict => conflict.kind).sort(), ["modify-delete", "modify-modify"]);
     const design = result.conflicts.find(conflict => conflict.path === "/design/theme");
     assert.deepEqual([design.base, design.ours, design.theirs], ["bold", "minimal", "editorial"]);
@@ -182,7 +183,7 @@ describe("conflicts", () => {
     // Ours is kept, so the edited slide survives.
     assert.deepEqual(ids(result.merged), ["a", "b", "c", "d"]);
     // Taking theirs removes the slide, and the conflict still shows what was lost.
-    const taken = mergePresentations(base(), ours, theirs, { prefer: "theirs" });
+    const taken = merge(base(), ours, theirs, { prefer: "theirs" });
     assert.deepEqual(ids(taken.merged), ["b", "c", "d"]);
     assert.equal(taken.conflicts.find(conflict => conflict.kind === "modify-delete").ours.notes, "ours");
   });
@@ -191,20 +192,20 @@ describe("conflicts", () => {
     const ours = base(), theirs = base();
     ours.slides.splice(2, 1);
     theirs.slides[2].title = "C edited";
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.conflicts.length, 1);
     assert.equal(result.conflicts[0].kind, "delete-modify");
     assert.equal(result.conflicts[0].deletedBy, "ours");
     assert.equal(result.conflicts[0].theirs.title, "C edited");
     assert.deepEqual(ids(result.merged), ["a", "b", "d"]);
-    assert.deepEqual(ids(mergePresentations(base(), ours, theirs, { prefer: "theirs" }).merged), ["a", "b", "c", "d"]);
+    assert.deepEqual(ids(merge(base(), ours, theirs, { prefer: "theirs" }).merged), ["a", "b", "c", "d"]);
   });
 
   test("a field deleted by one side and changed by the other", () => {
     const ours = base(), theirs = base();
     delete ours.slides[0].notes;
     theirs.slides[0].notes = "changed";
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.conflicts[0].kind, "delete-modify");
     assert.equal(result.conflicts[0].path, "/slides/0/notes");
     assert.equal("notes" in result.merged.slides[0], false);
@@ -214,7 +215,7 @@ describe("conflicts", () => {
     const ours = base(), theirs = base();
     ours.language = "english-us";
     theirs.language = "english-gb";
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.conflicts[0].kind, "add-add");
     assert.equal(result.merged.language, "english-us");
   });
@@ -223,18 +224,18 @@ describe("conflicts", () => {
     const ours = base(), theirs = base();
     ours.organization = { name: "Acme", domain: "acme.example" };
     theirs.organization = { name: "Acme", tagline: "Hi" };
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.equal(result.clean, true);
     assert.deepEqual(result.merged.organization, { name: "Acme", domain: "acme.example", tagline: "Hi" });
     theirs.organization = { name: "Acme Inc", tagline: "Hi" };
-    const conflicted = mergePresentations(base(), ours, theirs);
+    const conflicted = merge(base(), ours, theirs);
     assert.deepEqual(conflicted.conflicts.map(conflict => conflict.path), ["/organization/name"]);
   });
 
   test("a type conflict is a modify-modify", () => {
     const ours = deck([slide("a", "A", { text: "plain" })]), theirs = deck([slide("a", "A", { text: [{ text: "rich", bold: true }] })]);
     const start = deck([slide("a", "A", { text: "start" })]);
-    const result = mergePresentations(start, ours, theirs);
+    const result = merge(start, ours, theirs);
     assert.equal(result.conflicts[0].kind, "modify-modify");
     assert.equal(result.conflicts[0].path, "/slides/0/text");
   });
@@ -243,17 +244,17 @@ describe("conflicts", () => {
     const ours = base(), theirs = base();
     ours.slides.splice(3, 0, ours.slides.splice(0, 1)[0]);
     theirs.slides.splice(2, 0, theirs.slides.splice(0, 1)[0]);
-    const result = mergePresentations(base(), ours, theirs);
+    const result = merge(base(), ours, theirs);
     assert.deepEqual(result.conflicts.map(conflict => conflict.kind), ["move-move"]);
     assert.deepEqual(ids(result.merged), ["b", "c", "d", "a"]);
-    assert.deepEqual(ids(mergePresentations(base(), ours, theirs, { prefer: "theirs" }).merged), ["b", "c", "a", "d"]);
+    assert.deepEqual(ids(merge(base(), ours, theirs, { prefer: "theirs" }).merged), ["b", "c", "a", "d"]);
   });
 
   test("conflicts inside a slide name the slide", () => {
     const ours = base(), theirs = base();
     ours.slides[2].notes = "n1";
     theirs.slides[2].notes = "n2";
-    const [conflict] = mergePresentations(base(), ours, theirs).conflicts;
+    const [conflict] = merge(base(), ours, theirs).conflicts;
     assert.deepEqual(conflict.slide, { index: 2, id: "c", title: "C" });
   });
 });
@@ -264,16 +265,16 @@ describe("merge laws over the example decks", () => {
     test(file, () => {
       const start = JSON.parse(raw);
       const ours = mutate(start, 101 + file.length), theirs = mutate(start, 977 + file.length);
-      assert.deepEqual(mergePresentations(start, ours, start).merged, ours);
-      assert.deepEqual(mergePresentations(start, start, theirs).merged, theirs);
-      assert.deepEqual(mergePresentations(start, ours, ours).merged, ours);
-      assert.deepEqual(mergePresentations(start, start, start).merged, start);
-      const merged = mergePresentations(start, ours, theirs);
+      assert.deepEqual(merge(start, ours, start).merged, ours);
+      assert.deepEqual(merge(start, start, theirs).merged, theirs);
+      assert.deepEqual(merge(start, ours, ours).merged, ours);
+      assert.deepEqual(merge(start, start, start).merged, start);
+      const merged = merge(start, ours, theirs);
       // Whatever collides is reported, so a clean merge means nothing was lost.
       assert.equal(merged.clean, merged.conflicts.length === 0);
       for (const conflict of merged.conflicts) assert.ok(conflict.path !== undefined && conflict.message && ["ours", "theirs"].includes(conflict.resolution));
       // Preferring either side yields a document with the same set of conflicts.
-      const other = mergePresentations(start, ours, theirs, { prefer: "theirs" });
+      const other = merge(start, ours, theirs, { prefer: "theirs" });
       assert.deepEqual(other.conflicts.map(conflict => conflict.kind), merged.conflicts.map(conflict => conflict.kind));
     });
   }
@@ -287,12 +288,12 @@ describe("merge laws over the example decks", () => {
       ours.slides[0].notes = `ours note ${file}`;
       theirs.slides.at(-1).notes = `theirs note ${file}`;
       theirs.name = `${start.name} (theirs)`;
-      const forward = mergePresentations(start, ours, theirs), backward = mergePresentations(start, theirs, ours);
+      const forward = merge(start, ours, theirs), backward = merge(start, theirs, ours);
       assert.equal(forward.clean, true, file);
       assert.deepEqual(forward.merged, backward.merged, file);
       assert.equal(forward.merged.slides[0].notes, `ours note ${file}`);
       assert.equal(forward.merged.slides.at(-1).notes, `theirs note ${file}`);
-      if (validatePresentation(start).valid) { assert.equal(validatePresentation(forward.merged).valid, true, file); validated++; }
+      if (check(start).valid) { assert.equal(check(forward.merged).valid, true, file); validated++; }
     }
     assert.ok(validated > 100, `validated ${validated} merged decks`);
   });
@@ -337,14 +338,14 @@ describe("merge fuzz", () => {
       const start = { slides: Array.from({ length: 1 + rand(6) }, () => generate(rand)), meta: generate(rand) };
       const ours = edit(rand, start), theirs = edit(rand, start);
       const context = `round ${round}: ${JSON.stringify([start, ours, theirs])}`;
-      assert.deepEqual(mergePresentations(start, ours, start).merged, ours, context);
-      assert.deepEqual(mergePresentations(start, start, theirs).merged, theirs, context);
-      assert.deepEqual(mergePresentations(start, ours, ours).merged, ours, context);
-      const result = mergePresentations(start, ours, theirs);
+      assert.deepEqual(merge(start, ours, start).merged, ours, context);
+      assert.deepEqual(merge(start, start, theirs).merged, theirs, context);
+      assert.deepEqual(merge(start, ours, ours).merged, ours, context);
+      const result = merge(start, ours, theirs);
       assert.equal(result.clean, result.conflicts.length === 0, context);
       for (const conflict of result.conflicts) assert.ok(typeof conflict.path === "string" && conflict.message && ["ours", "theirs"].includes(conflict.resolution), context);
       // The other preference still produces a document.
-      const other = mergePresentations(start, ours, theirs, { prefer: "theirs" });
+      const other = merge(start, ours, theirs, { prefer: "theirs" });
       assert.notEqual(other.merged, undefined, context);
     }
   });

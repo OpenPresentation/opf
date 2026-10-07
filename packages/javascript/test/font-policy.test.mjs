@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { describe, test } from "node:test";
 
-import { FONT_POLICY, applyFontPolicyDecisions, fontAvailabilityDiagnostics, fontPolicyFor, fontSchemes, resolveFontFamilies, DEFAULT_FONT_SCHEME } from "../dist/index.js";
+import { FONT_POLICY, applyFontPolicyDecisions, fontAvailabilityDiagnostics, fontPolicyFor, fontSchemes } from "../dist/index.js"; import { resolveFontFamilies, DEFAULT_FONT_SCHEME } from "../dist/composition.js";
 import * as subpath from "../dist/font-policy.js";
 
 // FF-31: one machine-readable font policy table. Renderers take replacements from it; exporters

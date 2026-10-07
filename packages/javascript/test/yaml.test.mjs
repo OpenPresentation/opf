@@ -4,8 +4,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, test } from "node:test";
 
-import { formatPresentation } from "../dist/format.js";
-import { OPFYamlError, YAML_SCHEMA_URL, fromYaml, lintYamlSource, parseYamlData, scanYamlComments, toYaml, yamlLocator } from "../dist/yaml.js";
+import { format } from "../dist/format.js";
+import { OPFYamlError, YAML_SCHEMA_URL, fromYaml, parseYamlData, scanYamlComments, toYaml } from "../dist/yaml.js";
 
 const examplesRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../examples");
 
@@ -18,8 +18,8 @@ function* exampleFiles(directory) {
 }
 
 const convert = (source, options) => fromYaml(source, options);
-const errors = (source, options) => convert(source, options).diagnostics.filter((d) => d.severity === "error");
-const rule = (source, id, options) => convert(source, options).diagnostics.find((d) => d.ruleId === id);
+const errors = (source, options) => convert(source, options).findings.filter((d) => d.severity === "error");
+const rule = (source, id, options) => convert(source, options).findings.find((d) => d.ruleId === id);
 /** Text of the source at a diagnostic location. */
 const at = (source, diagnostic) => source.slice(diagnostic.location.offset, diagnostic.location.offset + diagnostic.location.length);
 const where = (diagnostic) => [diagnostic.location.line, diagnostic.location.column];
@@ -38,14 +38,14 @@ describe("example decks", () => {
       const { yaml } = toYaml(deck);
       const back = fromYaml(yaml);
       assert.deepEqual(
-        back.diagnostics.filter((d) => d.severity === "error"),
+        back.findings.filter((d) => d.severity === "error"),
         [],
         label,
       );
-      assert.deepEqual(back.document, deck, label);
+      assert.deepEqual(back.presentation, deck, label);
       // The same data in the same canonical key order as the formatter writes.
-      assert.equal(JSON.stringify(back.document), formatPresentation(deck, { indent: 0 }).trimEnd(), label);
-      assert.equal(toYaml(back.document).yaml, yaml, label);
+      assert.equal(JSON.stringify(back.presentation), format(deck, { indent: 0 }).trimEnd(), label);
+      assert.equal(toYaml(back.presentation).yaml, yaml, label);
       assert.equal(toYaml(structuredClone(deck)).yaml, yaml, `${label}: the same deck always gives the same text`);
     }
   });
@@ -53,7 +53,7 @@ describe("example decks", () => {
   test("no example needs aliases, so the strict reader and the alias reader agree", () => {
     const file = files[0];
     const { yaml } = toYaml(JSON.parse(readFileSync(file, "utf8")));
-    assert.deepEqual(fromYaml(yaml, { aliases: true }).document, fromYaml(yaml).document);
+    assert.deepEqual(fromYaml(yaml, { aliases: true }).presentation, fromYaml(yaml).presentation);
   });
 });
 
@@ -61,7 +61,7 @@ describe("YAML to OPF", () => {
   test("a small deck converts and the result carries only what the YAML says", () => {
     const result = convert("name: Q3 Review\nslides:\n  - title: Hello\n    items:\n      - one\n      - two\n");
     assert.equal(result.valid, true);
-    assert.deepEqual(result.document, { name: "Q3 Review", slides: [{ title: "Hello", items: ["one", "two"] }] });
+    assert.deepEqual(result.presentation, { name: "Q3 Review", slides: [{ title: "Hello", items: ["one", "two"] }] });
     assert.deepEqual(result.counts, { error: 0, warning: 0, info: 0 });
   });
 
@@ -69,33 +69,35 @@ describe("YAML to OPF", () => {
     for (const source of ["", "a: [", "- a", "a: *x", "a: 1\n---\nb: 2\n"]) {
       const result = convert(source);
       assert.equal(result.valid, false, source);
-      assert.deepEqual(result.document, {});
+      assert.deepEqual(result.presentation, {});
     }
     assert.throws(() => fromYaml(42), TypeError);
   });
 
-  test("validate: false skips the OPF lint", () => {
+  test("validate: false skips the OPF check", () => {
     const source = "slides:\n  - title: 5\n";
     assert.equal(convert(source).valid, false);
     const result = convert(source, { validate: false });
     assert.equal(result.valid, true);
-    assert.deepEqual(result.diagnostics, []);
+    assert.deepEqual(result.findings, []);
+    assert.equal(result.schemaValid, null);
+    assert.equal(result.checks.schema, "not-run");
   });
 
   test("2026-10-01, yes, no, on and off stay strings, and so does 1_000", () => {
-    const { document } = convert("slides:\n  - title: 2026-10-01\n    notes: yes\n    text: on\n    subtitle: off\n    tag: no\n    section: 1_000\n");
-    assert.deepEqual(document.slides[0], { title: "2026-10-01", notes: "yes", text: "on", subtitle: "off", tag: "no", section: "1_000" });
-    assert.equal(convert("name: 12\nslides: []\n").document.name, 12, "a number stays a number (and the schema then rejects it)");
+    const { presentation } = convert("slides:\n  - title: 2026-10-01\n    notes: yes\n    text: on\n    subtitle: off\n    tag: no\n    section: 1_000\n");
+    assert.deepEqual(presentation.slides[0], { title: "2026-10-01", notes: "yes", text: "on", subtitle: "off", tag: "no", section: "1_000" });
+    assert.equal(convert("name: 12\nslides: []\n").presentation.name, 12, "a number stays a number (and the schema then rejects it)");
   });
 
   test("a leading BOM and CRLF line endings are tolerated, and locations skip the BOM", () => {
     const source = "﻿name: Deck\r\nslides:\r\n  - title: 7\r\n";
     const result = convert(source);
-    assert.equal(result.document.name, "Deck");
-    const found = result.diagnostics.find((d) => d.path === "/slides/0/title");
+    assert.equal(result.presentation.name, "Deck");
+    const found = result.findings.find((d) => d.path === "/slides/0/title");
     assert.deepEqual(where(found), [3, 12]);
     assert.equal(at(source, found), "7");
-    assert.deepEqual(convert("﻿name: Deck\nslides:\n  - title: A\n").diagnostics, []);
+    assert.deepEqual(convert("﻿name: Deck\nslides:\n  - title: A\n").findings, []);
   });
 });
 
@@ -141,7 +143,7 @@ describe("strict dialect", () => {
     assert.match(rule(custom, "yaml/tag").message, /The tag !custom is not allowed|Unresolved tag: !custom/);
     assert.ok(rule("slides:\n  - title: a\n    extensions: !!set {x}\n", "yaml/tag"));
     // The core schema's own tags are not custom.
-    assert.equal(convert("name: !!str 123\nslides: [{title: a}]\n").document.name, "123");
+    assert.equal(convert("name: !!str 123\nslides: [{title: a}]\n").presentation.name, "123");
   });
 
   test("anchors, aliases and merge keys are an error that points at aliases: true", () => {
@@ -175,10 +177,10 @@ describe("strict dialect", () => {
   });
 
   test("a __proto__ key is data, never a prototype", () => {
-    const { document } = convert("name: Deck\nslides:\n  - title: x\n    extensions:\n      __proto__:\n        polluted: true\n");
-    assert.equal(Object.hasOwn(document.slides[0].extensions, "__proto__"), true);
+    const { presentation } = convert("name: Deck\nslides:\n  - title: x\n    extensions:\n      __proto__:\n        polluted: true\n");
+    assert.equal(Object.hasOwn(presentation.slides[0].extensions, "__proto__"), true);
     assert.equal({}.polluted, undefined);
-    assert.equal(Object.getPrototypeOf(document.slides[0].extensions), Object.prototype);
+    assert.equal(Object.getPrototypeOf(presentation.slides[0].extensions), Object.prototype);
   });
 });
 
@@ -201,12 +203,12 @@ slides:
   test("anchors, aliases and merge keys expand to plain data", () => {
     const result = convert(deck, { aliases: true });
     assert.equal(result.valid, true);
-    const [one, two] = result.document.slides;
+    const [one, two] = result.presentation.slides;
     assert.deepEqual(one.extensions.shared, { owner: "ops", tags: ["a", "b"] });
     assert.deepEqual(two.extensions.shared, { owner: "ops", tags: ["a", "b"] });
     assert.deepEqual(two.extensions.other, { owner: "ops", tags: ["a", "b"], extra: 1 });
     // The expanded deck is plain data: it writes without any anchor, alias or merge key.
-    const { yaml } = toYaml(result.document);
+    const { yaml } = toYaml(result.presentation);
     assert.doesNotMatch(yaml, /[&*]|<</);
   });
 
@@ -227,7 +229,7 @@ slides:
     const found = rule(source, "yaml/alias-limit", { aliases: true });
     assert.ok(found, "the expansion is refused");
     assert.match(found.message, /limit of 100/);
-    assert.deepEqual(convert(source, { aliases: true }).document, {});
+    assert.deepEqual(convert(source, { aliases: true }).presentation, {});
   });
 
   test("the cap counts the nodes the aliases expand to: 99 aliases of a scalar pass, 100 do not", () => {
@@ -255,7 +257,7 @@ slides:
   });
 });
 
-describe("OPF lint findings are located in the YAML", () => {
+describe("OPF findings are located in the YAML", () => {
   const source = `name: Located
 slides:
   - title: Fine
@@ -271,45 +273,53 @@ slides:
   test("a schema error points at the value that is wrong", () => {
     const result = convert(source);
     assert.equal(result.valid, false);
-    const title = result.diagnostics.find((d) => d.path === "/slides/1/title");
+    const title = result.findings.find((d) => d.path === "/slides/1/title");
     assert.match(title.ruleId, /^opf\//);
     assert.deepEqual(where(title), [4, 12]);
     assert.equal(at(source, title), "5");
-    const extra = result.diagnostics.find((d) => d.path === "/slides/1/foo");
+    const extra = result.findings.find((d) => d.path === "/slides/1/foo");
     assert.equal(extra.location.line, 7);
     assert.equal(at(source, extra), "bar");
-    const nested = result.diagnostics.find((d) => d.path === "/slides/2/blocks/0/mystery");
+    const nested = result.findings.find((d) => d.path === "/slides/2/blocks/0/mystery");
     assert.equal(nested.location.line, 10);
   });
 
   test("a finding with no node of its own falls back to the nearest ancestor", () => {
     const result = convert("name: Empty\nslides: []\n");
-    const found = result.diagnostics.find((d) => d.path === "/slides");
+    const found = result.findings.find((d) => d.path === "/slides");
     assert.deepEqual(where(found), [2, 1]);
     const missing = convert("name: no slides\n");
-    const root = missing.diagnostics.find((d) => d.severity === "error");
+    const root = missing.findings.find((d) => d.severity === "error");
     assert.deepEqual(where(root), [1, 1]);
   });
 
-  test("diagnostics are in source order and use the lint shape", () => {
+  test("findings are in source order and use the shared Finding shape", () => {
     const result = convert(source);
-    const offsets = result.diagnostics.map((d) => d.location.offset);
+    const offsets = result.findings.map((d) => d.location.offset);
     assert.deepEqual(offsets, [...offsets].sort((a, b) => a - b));
-    for (const d of result.diagnostics) {
+    for (const d of result.findings) {
       assert.equal(typeof d.ruleId, "string");
       assert.ok(["error", "warning", "info"].includes(d.severity));
+      assert.equal(typeof d.category, "string");
       assert.equal(d.scope, "document");
       assert.equal(typeof d.help, "string");
       for (const key of ["offset", "length", "line", "column"]) assert.equal(Number.isInteger(d.location[key]), true);
     }
-    assert.equal(result.counts.error, result.diagnostics.filter((d) => d.severity === "error").length);
+    assert.equal(result.counts.error, result.findings.filter((d) => d.severity === "error").length);
   });
 
-  test("yamlLocator finds the same places for a tool's own findings", () => {
-    const locate = yamlLocator(source);
-    assert.deepEqual([locate("/slides/1/title").line, locate("/slides/1/title").column], [4, 12]);
-    assert.equal(locate("/slides/9/title").line, 2, "a missing path falls back to its nearest ancestor");
-    assert.equal(yamlLocator("a: [")("/a"), undefined);
+  test("validate options pick the rules, and every finding of the full run is located", () => {
+    const picture = "name: Picture\nlanguage: en-US\nslides:\n  - title: Picture\n    image:\n      src: https://example.com/a.png\n";
+    const full = convert(picture, { validate: {} });
+    assert.equal(full.schemaValid, true);
+    assert.equal(full.checks.accessibility, "checked");
+    for (const d of full.findings) assert.ok(d.location, d.ruleId);
+    const alt = full.findings.find((d) => d.ruleId === "opf/missing-alt-text");
+    assert.deepEqual(where(alt), [5, 5]);
+    assert.equal(convert(picture).findings.some((d) => d.ruleId === "opf/missing-alt-text"), false, "the default checks format and references");
+    const formatOnly = convert(source, { validate: { only: ["format"] } });
+    assert.ok(formatOnly.findings.every((d) => d.category === "format"));
+    assert.equal(formatOnly.checks.references, "not-run");
   });
 });
 
@@ -329,7 +339,7 @@ describe("OPF to YAML", () => {
     const strings = ["yes", "No", "on", "OFF", "y", "n", "2026-10-01", "2026-10-01T10:00:00Z", "123", "-1.5", "1e3", "0x1F", "0o17", "010", "1_000", "12:30", "null", "~", "true", "False", ".inf", ".nan", "=", "<<", "  leading", "trailing  ", "a #b", "# c", "a: b", "- dash", "'single'", '"double"', "", "multi\nline\n", "tab\there", "ünïcode ✓ 日本語", "emoji 🎉"];
     const deck = { name: "Deck", slides: [{ title: "T", items: strings }] };
     const { yaml } = toYaml(deck);
-    assert.deepEqual(fromYaml(yaml).document, deck);
+    assert.deepEqual(fromYaml(yaml).presentation, deck);
     for (const text of ["yes", "2026-10-01", "123", "null", "  leading", "trailing  "]) {
       const line = yaml.split("\n").find((l) => l.trim().replace(/^- /, "").startsWith(`"${text}`) || l.trim().replace(/^- /, "").startsWith(`'${text}`));
       assert.ok(line, `${JSON.stringify(text)} is quoted`);
@@ -342,7 +352,7 @@ describe("OPF to YAML", () => {
     assert.match(yaml, /- "a: b"/);
     assert.match(yaml, /- "  leading"/);
     assert.match(yaml, /- "trailing {2}"/);
-    assert.deepEqual(toYaml(fromYaml(yaml).document).yaml, yaml);
+    assert.deepEqual(toYaml(fromYaml(yaml).presentation).yaml, yaml);
   });
 
   test("keys that look like booleans are quoted too, and numbers stay numbers", () => {
@@ -351,14 +361,14 @@ describe("OPF to YAML", () => {
     assert.match(yaml, /"yes": 1/);
     assert.match(yaml, /"on": true/);
     assert.match(yaml, /plain: 12/);
-    assert.deepEqual(fromYaml(yaml).document, deck);
+    assert.deepEqual(fromYaml(yaml).presentation, deck);
   });
 
   test("an invalid deck throws OPFYamlError with code invalid-document", () => {
     for (const bad of [{ slides: "x" }, {}, { slides: [{ title: 5 }] }, null, 42]) {
       assert.throws(
         () => toYaml(bad),
-        (error) => error instanceof OPFYamlError && error.code === "invalid-document" && Array.isArray(error.details.issues) && error.name === "OPFYamlError",
+        (error) => error instanceof OPFYamlError && error.code === "invalid-document" && Array.isArray(error.details.findings) && error.name === "OPFYamlError",
       );
     }
   });
@@ -367,7 +377,7 @@ describe("OPF to YAML", () => {
     const deck = { name: "Deck", slides: [{ title: "T", extensions: { lone: "\uD800" } }] };
     try {
       const { yaml } = toYaml(deck);
-      assert.deepEqual(fromYaml(yaml).document, deck);
+      assert.deepEqual(fromYaml(yaml).presentation, deck);
     } catch (error) {
       assert.ok(error instanceof OPFYamlError);
       assert.equal(error.code, "not-representable");
@@ -384,7 +394,7 @@ describe("OPF to YAML", () => {
     assert.equal(own.split("\n")[0], `# yaml-language-server: $schema=${YAML_SCHEMA_URL}`);
     assert.equal(own.split("\n")[1], `$schema: ${YAML_SCHEMA_URL}`);
     // The comment is not data: both read back to the deck, and the modeline is found.
-    assert.deepEqual(fromYaml(withDefault).document, plain);
+    assert.deepEqual(fromYaml(withDefault).presentation, plain);
     assert.equal(scanYamlComments(withDefault).modeline, `# yaml-language-server: $schema=${YAML_SCHEMA_URL}`);
     assert.equal(scanYamlComments(withDefault).count, 0);
   });
@@ -408,34 +418,34 @@ slides:
 `;
     const first = fromYaml(handwritten);
     assert.equal(first.valid, true);
-    const canonical = toYaml(first.document).yaml;
-    assert.deepEqual(fromYaml(canonical).document, first.document);
-    assert.equal(toYaml(fromYaml(canonical).document).yaml, canonical);
+    const canonical = toYaml(first.presentation).yaml;
+    assert.deepEqual(fromYaml(canonical).presentation, first.presentation);
+    assert.equal(toYaml(fromYaml(canonical).presentation).yaml, canonical);
   });
 });
 
-describe("lintYamlSource and parseYamlData", () => {
-  test("lintYamlSource reports like lintSource, located in the YAML", () => {
-    const report = lintYamlSource("name: Lint\nslides:\n  - title: Target\n    layout: pratner\n");
+describe("the validate report of a YAML deck, and parseYamlData", () => {
+  test("fromYaml reports like validate does for JSON text, located in the YAML", () => {
+    const report = fromYaml("name: Check\nslides:\n  - title: Target\n    layout: pratner\n");
     assert.equal(report.valid, true);
     assert.equal(report.schemaValid, true);
     assert.equal(report.checks.syntax, "checked");
-    const warning = report.diagnostics.find((d) => d.severity === "warning");
+    const warning = report.findings.find((d) => d.severity === "warning");
     assert.deepEqual([warning.location.line, warning.location.column], [4, 13]);
-    const broken = lintYamlSource("name: a\nname: b\n");
+    const broken = fromYaml("name: a\nname: b\n");
     assert.equal(broken.valid, false);
     assert.equal(broken.schemaValid, null);
     assert.equal(broken.checks.schema, "not-run");
-    assert.equal(broken.diagnostics[0].ruleId, "yaml/duplicate-key");
-    assert.throws(() => lintYamlSource(1), TypeError);
+    assert.equal(broken.findings[0].ruleId, "yaml/duplicate-key");
+    assert.throws(() => fromYaml(1), TypeError);
   });
 
   test("parseYamlData reads any JSON-compatible root in the same dialect", () => {
-    assert.deepEqual(parseYamlData("- op: add\n  path: /name\n  value: x\n"), { value: [{ op: "add", path: "/name", value: "x" }], valid: true, diagnostics: [] });
+    assert.deepEqual(parseYamlData("- op: add\n  path: /name\n  value: x\n"), { value: [{ op: "add", path: "/name", value: "x" }], valid: true, findings: [] });
     assert.equal(parseYamlData("a: *x\n").valid, false);
     assert.equal(parseYamlData("a: *x\n").value, null);
     assert.equal(parseYamlData("a: &x 1\nb: *x\n", { aliases: true }).valid, true);
-    assert.equal(parseYamlData("").diagnostics[0].ruleId, "yaml/empty");
+    assert.equal(parseYamlData("").findings[0].ruleId, "yaml/empty");
     assert.equal(parseYamlData("5").valid, true);
   });
 });
@@ -447,18 +457,18 @@ describe("the guide", () => {
   test("the example deck is valid, canonical and reads back as shown", () => {
     const example = blocks[0];
     const result = fromYaml(example);
-    assert.equal(result.valid, true, JSON.stringify(result.diagnostics));
-    assert.equal(result.document.name, "Q3 Business Review");
-    assert.equal(result.document.slides[1].blocks[0].chart.data.rows[1][1], 18);
-    assert.equal(toYaml(result.document, { schemaComment: true }).yaml, example);
+    assert.equal(result.valid, true, JSON.stringify(result.findings));
+    assert.equal(result.presentation.name, "Q3 Business Review");
+    assert.equal(result.presentation.slides[1].blocks[0].chart.data.rows[1][1], 18);
+    assert.equal(toYaml(result.presentation, { schemaComment: true }).yaml, example);
   });
 
   test("the alias example expands as the guide says", () => {
     const aliased = blocks.find((block) => block.includes("&owner"));
     assert.equal(fromYaml(aliased).valid, false);
     const result = fromYaml(aliased, { aliases: true });
-    assert.equal(result.valid, true, JSON.stringify(result.diagnostics));
-    const [one, two] = result.document.slides;
+    assert.equal(result.valid, true, JSON.stringify(result.findings));
+    const [one, two] = result.presentation.slides;
     assert.deepEqual(one.extensions.owner, { team: "ops", oncall: true });
     assert.deepEqual(two.extensions.other, { team: "ops", oncall: true, extra: 1 });
   });

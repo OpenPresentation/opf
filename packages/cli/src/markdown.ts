@@ -3,24 +3,27 @@
 import { readFile, writeFile, lstat, link, rename, unlink } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
-import { markdownToOpf, opfToMarkdown, OPFMarkdownError } from "@openpresentation/opf/markdown";
+import { fromMarkdown, toMarkdown, OPFMarkdownError } from "@openpresentation/opf/markdown";
 import { OPFYamlError } from "@openpresentation/opf/yaml";
+import { FAIL_ON_MESSAGE, parseFailOn, reaches } from "./check.js";
 import { DeckReadError, decode, inputFormatOf, outputFormatOf, serialize } from "./deck.js";
 
 export const MARKDOWN_USAGE = `  opf from-md <deck.md|-> [output.opf.json|output.opf.yaml|-] [--split <rules|headings>] [--title <text>]
-              [--format <json|yaml>] [--force] [--strict]
-  opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--strict]`;
+              [--format <json|yaml>] [--force] [--fail-on <level>]
+  opf to-md <deck.opf.json|-> [output.md|-] [--drop-unsupported] [--force] [--fail-on <level>]`;
 
 export const MARKDOWN_HELP = `from-md converts Markdown in the OPF dialect (YAML front matter, '---' between slides,
 '#' title, '##' subtitle, lists, quotes, tables, images, chart/metric/timeline fences,
 'Note:' speaker notes, <!-- slide: ... --> options) to a validated OPF document. The output
 defaults to stdout; errors carry line and column and exit 1. --split headings starts a new
 slide at every '# ' heading (outlines). --title sets the deck name unless the front matter does.
---strict also fails on warnings. The document is written as YAML for an output ending .yaml/.yml or --format yaml.
+--fail-on <error|warning|info> picks the lowest finding severity that fails (default error). The document is
+written as YAML for an output ending .yaml/.yml or --format yaml.
 to-md writes an OPF document as Markdown that from-md reads back unchanged. A part with no
 Markdown syntax (a design, regions that are not blocks, a styled table cell) is embedded as
 YAML in an opf-slide or opf-block fence, so nothing is lost; --drop-unsupported leaves it out
-and lists it as loss. --strict fails when anything had to be embedded or dropped.`;
+and lists it as loss. For to-md, embedded and dropped parts count as warnings, so --fail-on warning
+fails when anything had to be embedded or dropped.`;
 
 class MarkdownCommandError extends Error {
   constructor(
@@ -41,7 +44,7 @@ const flags: Record<string, { value: boolean; commands: string[] }> = {
   format: { value: true, commands: ["from-md"] },
   "drop-unsupported": { value: false, commands: ["to-md"] },
   force: { value: false, commands: ["from-md", "to-md"] },
-  strict: { value: false, commands: ["from-md", "to-md"] },
+  "fail-on": { value: true, commands: ["from-md", "to-md"] },
 };
 
 function parseArgs(command: string, args: string[]) {
@@ -108,23 +111,24 @@ async function saveText(file: string, text: string, overwrite: boolean): Promise
   }
 }
 
-async function fromMarkdown(positional: string[], options: Record<string, string | boolean>): Promise<void> {
+async function fromMarkdownCommand(positional: string[], options: Record<string, string | boolean>): Promise<void> {
   const [input, output = "-"] = positional as [string, string?];
   const split = options.split ?? "rules";
   if (split !== "rules" && split !== "headings") throw new MarkdownCommandError("--split takes rules or headings.");
   const source = await readText(input);
-  const result = markdownToOpf(source, { split, ...(options.title !== undefined ? { defaults: { name: String(options.title) } } : {}) });
-  const failing = result.counts.error > 0 || (!!options.strict && result.counts.warning > 0);
-  if (failing) throw new MarkdownCommandError("Markdown conversion failed.", 1, { markdown: { sha256: hash(source), counts: result.counts, diagnostics: result.diagnostics } });
+  const result = fromMarkdown(source, { split, ...(options.title !== undefined ? { defaults: { name: String(options.title) } } : {}) });
+  const failOn = parseFailOn(options["fail-on"]);
+  if (!failOn) throw new MarkdownCommandError(FAIL_ON_MESSAGE);
+  if (reaches(result.findings, failOn)) throw new MarkdownCommandError("Markdown conversion failed.", 1, { markdown: { sha256: hash(source), counts: result.counts, findings: result.findings } });
   let text: string;
   try {
-    text = serialize(result.document, outputFormatOf(output, options.format));
+    text = serialize(result.presentation, outputFormatOf(output, options.format));
   } catch (error) {
     if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message);
     if (error instanceof OPFYamlError) throw new MarkdownCommandError(error.message, error.code === "invalid-document" ? 1 : 2, { validation: error.details });
     throw error;
   }
-  const summary = { valid: true, sha256: hash(text), slides: result.document.slides.length, counts: result.counts, diagnostics: result.diagnostics };
+  const summary = { valid: true, sha256: hash(text), slides: result.presentation.slides.length, counts: result.counts, findings: result.findings };
   if (output === "-") {
     process.stdout.write(text);
     process.stderr.write(json(summary));
@@ -134,7 +138,7 @@ async function fromMarkdown(positional: string[], options: Record<string, string
   }
 }
 
-async function toMarkdown(positional: string[], options: Record<string, string | boolean>): Promise<void> {
+async function toMarkdownCommand(positional: string[], options: Record<string, string | boolean>): Promise<void> {
   const [input, output = "-"] = positional as [string, string?];
   const raw = await readText(input);
   let document: unknown;
@@ -144,9 +148,12 @@ async function toMarkdown(positional: string[], options: Record<string, string |
     if (error instanceof DeckReadError) throw new MarkdownCommandError(error.message, 2, error.details ? { yaml: error.details } : undefined);
     throw error;
   }
-  const { markdown, report } = opfToMarkdown(document, { unsupported: options["drop-unsupported"] ? "drop" : "embed" });
+  const failOn = parseFailOn(options["fail-on"]);
+  if (!failOn) throw new MarkdownCommandError(FAIL_ON_MESSAGE);
+  const { markdown, report } = toMarkdown(document, { unsupported: options["drop-unsupported"] ? "drop" : "embed" });
   const summary = { sha256: hash(markdown), lossless: report.lossless, native: report.native, embedded: report.embedded, loss: report.loss };
-  if (options.strict && !report.native) throw new MarkdownCommandError("Some content has no Markdown syntax (--strict).", 1, { markdown: summary });
+  // A part the dialect has no syntax for is a warning here, not an error: the Markdown is complete, only less plain.
+  if (!report.native && reaches([{ severity: "warning" }], failOn)) throw new MarkdownCommandError(`Some content has no Markdown syntax (--fail-on ${failOn}).`, 1, { markdown: summary });
   if (output === "-") {
     process.stdout.write(markdown);
     process.stderr.write(json(summary));
@@ -160,8 +167,8 @@ async function toMarkdown(positional: string[], options: Record<string, string |
 export async function markdownCommand(command: "from-md" | "to-md", args: string[]): Promise<void> {
   try {
     const { positional, options } = parseArgs(command, args);
-    if (command === "from-md") await fromMarkdown(positional, options);
-    else await toMarkdown(positional, options);
+    if (command === "from-md") await fromMarkdownCommand(positional, options);
+    else await toMarkdownCommand(positional, options);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     const details = error instanceof MarkdownCommandError ? error.details : error instanceof OPFMarkdownError ? { validation: error.details } : undefined;

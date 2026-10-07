@@ -3,8 +3,9 @@ import { describe, test } from "node:test";
 
 import { OPFConversionError, mergeSlides, splitSlide, splitSlideOnOverflow, unpaginate } from "../dist/convert.js";
 import { composeSlide } from "../dist/composition.js";
-import { paginatePresentation } from "../dist/pagination.js";
-import { validatePresentation } from "../dist/index.js";
+import { paginate } from "../dist/pagination.js";
+import { check } from './support/validation.mjs';
+
 
 const refused = (action, pattern) =>
   assert.throws(
@@ -35,7 +36,7 @@ describe("split by blocks", () => {
     assert.deepEqual([second.title, second.subtitle, second.section, second.layout], ["Plan", "Sub", "Intro", "text-1x"]);
     assert.deepEqual(second.blocks.map((block) => block.id), ["y", "z"]);
     assert.equal(result.lossless, true);
-    assert.ok(validatePresentation(result.presentation).valid);
+    assert.ok(check(result.presentation).valid);
     assert.equal(deck.slides.length, 3, "the input is not changed");
   });
 
@@ -118,7 +119,7 @@ describe("split on overflow and un-paginate", () => {
     assert.equal(result.presentation.slides.length, deck.slides.length - 1 + result.slides.length);
     assert.equal(result.presentation.slides[0].id, "a");
     assert.equal(result.presentation.slides.at(-1).id, "c");
-    assert.ok(validatePresentation(result.presentation).valid);
+    assert.ok(check(result.presentation).valid);
     const bodies = result.slides.flatMap((slide) => slide.blocks);
     assert.equal(bodies.filter((block) => block.text !== undefined).map((block) => block.text).join(""), longText);
     assert.deepEqual(bodies.flatMap((block) => block.items ?? []), list);
@@ -170,7 +171,7 @@ describe("split on overflow and un-paginate", () => {
 
   test("un-paginate puts back several paginated slides of a whole presentation as one range", () => {
     const three = { slides: [{ id: "p", title: "One", text: longText }, { id: "q", title: "Middle", text: "Short" }, { id: "r", title: "Two", text: longText }] };
-    const paginated = paginatePresentation(three);
+    const paginated = paginate(three);
     assert.ok(paginated.presentation.slides.length > 4);
     const back = unpaginate(paginated.presentation, paginated.pages);
     assert.equal(back.range.start, 0);

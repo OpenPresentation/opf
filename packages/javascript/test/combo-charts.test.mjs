@@ -2,9 +2,10 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { chartOptionSupport, chartOptionTarget, resolveChartData, resolveChartOptions, validatePresentation } from "../dist/index.js";
-import { resolveChartData as fromComposition } from "../dist/composition.js";
+import { resolveChartData } from "../dist/index.js";
+import { resolveChartData as fromComposition, chartOptionSupport, chartOptionTarget, resolveChartOptions } from "../dist/composition.js";
 import { chartTypes } from "../dist/catalogs.js";
+import { check, errorsOf, warningsOf } from './support/validation.mjs';
 
 const columns = ["Quarter", { name: "Revenue", format: "$#,##0.0" }, "Cost", { name: "Margin", format: "0%" }];
 const rows = [["Q1", 12.4, 8.1, 0.31], ["Q2", 18.1, 11.9, 0.34]];
@@ -139,22 +140,22 @@ describe("combo options (resolveChartOptions)", () => {
 
 describe("combo validation", () => {
   test("a valid combo chart validates without issues", () => {
-    const result = validatePresentation(deck(combo({ line: ["Margin"], secondaryAxis: ["Margin"], axisTitles: { category: "Quarter", value: "Revenue ($M)", secondary: "Margin" }, legend: "bottom" })));
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
-    assert.deepEqual(result.warnings, []);
+    const result = check(deck(combo({ line: ["Margin"], secondaryAxis: ["Margin"], axisTitles: { category: "Quarter", value: "Revenue ($M)", secondary: "Margin" }, legend: "bottom" })), { only: ["format", "references", "layout", "content"] });
+    assert.equal(result.valid, true, JSON.stringify(errorsOf(result)));
+    assert.deepEqual(warningsOf(result), []);
   });
 
   test("an unknown series name is an error; line on another type is a warning", () => {
-    const unknown = validatePresentation(deck(combo({ line: ["Profit"] })));
+    const unknown = check(deck(combo({ line: ["Profit"] })));
     assert.equal(unknown.valid, false);
-    assert.deepEqual(unknown.errors.map((entry) => entry.path), ["/slides/0/chart/line/0"]);
-    const other = validatePresentation(deck({ ...combo({ line: ["Margin"] }), type: "column" }));
+    assert.deepEqual(errorsOf(unknown).map((entry) => entry.path), ["/slides/0/chart/line/0"]);
+    const other = check(deck({ ...combo({ line: ["Margin"] }), type: "column" }), { only: ["format", "layout"] });
     assert.equal(other.valid, true);
-    assert.deepEqual(other.warnings.map((entry) => `${entry.params.code} ${entry.path}`), ["chart-option-adapted /slides/0/chart/line"]);
+    assert.deepEqual(warningsOf(other).map((entry) => `${entry.ruleId} ${entry.path}`), ["opf/chart-option-adapted /slides/0/chart/line"]);
   });
 
   test("the schema rejects an empty or repeated list", () => {
-    assert.equal(validatePresentation(deck(combo({ line: [] }))).valid, false);
-    assert.equal(validatePresentation(deck(combo({ secondaryAxis: ["Margin", "Margin"] }))).valid, false);
+    assert.equal(check(deck(combo({ line: [] }))).valid, false);
+    assert.equal(check(deck(combo({ secondaryAxis: ["Margin", "Margin"] }))).valid, false);
   });
 });

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { composeSlide, slideImageShape } from '../dist/composition.js';
-import { validatePresentation } from '../dist/index.js';
+import { check } from './support/validation.mjs';
+
 
 const photo = 'data:image/png;base64,iVBORw0KGgo=';
 const compose = (treatment, options = {}) => composeSlide({ title: 'Heading', text: 'Body', design: { slideImage: { src: photo, ...treatment } } }, options);
@@ -73,9 +74,9 @@ test('edge overlays on masked frames are reported, not drawn, and never fail str
 
 test('the treatment vocabulary validates and rejects unsupported effects', () => {
   const deck = slideImage => ({ $schema: 'https://openpresentation.org/schema/opf/v1', name: 'Treatments', slides: [{ title: 'Heading', design: { slideImage } }] });
-  assert.equal(validatePresentation(deck({ src: photo, position: 'right', alt: 'Harbor', fill: 'fit', size: 0.46, inset: true, aspectRatio: 0.5, shape: 'rounded', cornerRadius: 0.12,
+  assert.equal(check(deck({ src: photo, position: 'right', alt: 'Harbor', fill: 'fit', size: 0.46, inset: true, aspectRatio: 0.5, shape: 'rounded', cornerRadius: 0.12,
     border: { color: 'dark1', width: 12 }, opacity: 0.8, recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: 'text', opacity: 0.2, edge: 'bottom', size: 0.3 } })).valid, true);
-  assert.equal(validatePresentation(deck({ src: photo, position: 'background', recolor: 'grayscale' })).valid, true);
+  assert.equal(check(deck({ src: photo, position: 'background', recolor: 'grayscale' })).valid, true);
   for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { size: 0.95 }, { opacity: 2 }, { border: { color: 'dark1' } }])
-    assert.equal(validatePresentation(deck({ src: photo, position: 'background', ...invalid })).valid, false, JSON.stringify(invalid));
+    assert.equal(check(deck({ src: photo, position: 'background', ...invalid })).valid, false, JSON.stringify(invalid));
 });

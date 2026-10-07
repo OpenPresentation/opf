@@ -118,7 +118,7 @@ async function main() {
   }
 
   // The renderer's own registry with every vendored face loaded, for resolution and measurement of the replacement.
-  const { registry } = await fonts.prepareNodeFonts({ pack: "office", substitutionPolicy: "visual" });
+  const { registry } = await fonts.loadFonts({ pack: "office", substitutionPolicy: "visual" });
   const manifest = fonts.BUNDLED_FONT_MANIFEST;
   const faceFile = (family, weight, italic) => {
     for (const pkg of manifest.packages) for (const face of pkg.faces) {

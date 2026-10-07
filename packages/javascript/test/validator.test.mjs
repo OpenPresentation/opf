@@ -1,8 +1,16 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { catalogs, validatePresentation } from "../dist/index.js";
-import { assertValid, validate, validateCatalogRecord } from "../dist/validator.js";
+import { catalogs } from "../dist/index.js";
+import { OPFValidationError, assertValid, assertValidCatalogRecord, validate, validateCatalogRecord } from "../dist/validator.js";
+
+// The format and references findings of a presentation, split by severity: what the schema and semantic checks and the
+// catalog, asset and dataset checks report. `errors` and `warnings` are findings; the raw schema issue of one that
+// came from the schema engine is in `validation`.
+const checked = (value, options = {}) => {
+  const report = validate(value, { only: ["format", "references"], ...options });
+  return { ...report, errors: report.findings.filter((entry) => entry.severity === "error"), warnings: report.findings.filter((entry) => entry.severity === "warning") };
+};
 
 const doc = {
   name: "Smoke Test",
@@ -17,27 +25,46 @@ const doc = {
 };
 
 describe("basic presentation validation entry points", () => {
-  test("well-formed presentation validates via validatePresentation", () => {
-    const docResult = validatePresentation(doc);
-    assert.equal(docResult.valid, true, JSON.stringify(docResult.errors, null, 2));
+  test("a well-formed presentation validates", () => {
+    const docResult = validate(doc);
+    assert.equal(docResult.valid, true, JSON.stringify(docResult.findings, null, 2));
+    assert.equal(docResult.schemaValid, true);
   });
 
-  test("well-formed presentation validates via validate(doc, 'presentation')", () => {
-    assert.equal(validate(doc, "presentation").valid, true);
-  });
-
-  test("well-formed presentation passes assertValid without throwing", () => {
+  test("a well-formed presentation passes assertValid without throwing", () => {
     assert.doesNotThrow(() => assertValid(doc));
+    assert.doesNotThrow(() => assertValid(doc, { only: ["format"] }));
+  });
+
+  test("assertValid throws OPFValidationError carrying the report, and refuses text", () => {
+    const bad = { name: "Bad", slides: [{ title: 5 }] };
+    assert.throws(
+      () => assertValid(bad, { only: ["format"] }),
+      (error) => error instanceof OPFValidationError && error.report.valid === false && error.findings.length > 0 && error.findings.every((entry) => entry.severity === "error") && /OPF validation failed at \/slides\/0\/title/.test(error.message),
+    );
+    assert.throws(() => assertValid("{}"), TypeError);
+  });
+
+  test("a catalog record is checked with validateCatalogRecord, and the report carries the findings", () => {
+    const record = { $schema: "https://openpresentation.org/schema/opf-theme/v1", id: "custom", name: "Custom" };
+    assert.equal(validateCatalogRecord("themes", record).valid, true);
+    const broken = validateCatalogRecord("themes", { ...record, background: "light1" });
+    assert.equal(broken.valid, false);
+    assert.equal(broken.schemaValid, false);
+    assert.ok(broken.findings.every((entry) => entry.category === "format" && entry.severity === "error"));
+    assert.throws(() => assertValidCatalogRecord("themes", { id: 3 }), OPFValidationError);
+    assert.doesNotThrow(() => assertValidCatalogRecord("themes", record));
+    assert.throws(() => validateCatalogRecord("nope", record), TypeError);
   });
 });
 
 function assertPresentationValid(value) {
-  const result = validatePresentation(value);
+  const result = checked(value, { only: ["format"] });
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
 }
 
 function assertPresentationInvalid(value, messageIncludes) {
-  const result = validatePresentation(value);
+  const result = checked(value, { only: ["format"] });
   assert.equal(result.valid, false, "expected presentation to be invalid");
   if (messageIncludes) {
     assert.ok(
@@ -826,20 +853,21 @@ describe("catalog-id warning behavior", () => {
       catalogs: { themes: { records: [record("legacy-look", { deprecation: { replacedBy: "minimal" } })] } },
       slides: [{ title: "Slide Title" }],
     };
-    const result = validatePresentation(doc);
+    const result = checked(doc);
     assert.equal(result.valid, true, "deprecated ids must warn, never error");
     assert.deepEqual(
-      result.warnings.map(({ path, message, params }) => ({ path, message, params })),
+      result.warnings.map(({ ruleId, path, message, validation }) => ({ ruleId, path, message, params: validation.params })),
       [
         {
+          ruleId: "opf/deprecated-catalog-id",
           path: "/design/theme",
-          message: "deprecated themes catalog id 'legacy-look'; use 'minimal'",
+          message: 'Deprecated themes catalog id "legacy-look"; use "minimal" instead.',
           params: { kind: "themes", id: "legacy-look", replacedBy: "minimal" },
         },
       ],
     );
     assert.equal(
-      validatePresentation({ ...doc, design: { theme: "minimal" } }).warnings.length,
+      checked({ ...doc, design: { theme: "minimal" } }).warnings.length,
       0,
       "the canonical id is quiet",
     );
@@ -854,11 +882,11 @@ describe("catalog-id warning behavior", () => {
       narrative: "definitely-not-a-narrative",
       slides: [{ title: "Slide Title" }],
     };
-    const unknownNarrativeResult = validatePresentation(unknownNarrativeDoc);
+    const unknownNarrativeResult = checked(unknownNarrativeDoc);
     assert.equal(unknownNarrativeResult.valid, true, "unknown catalog ids must warn, never error");
     assert.ok(
       unknownNarrativeResult.warnings.some(
-        (warning) => warning.path === "/narrative" && warning.message.includes("unknown narratives catalog id"),
+        (warning) => warning.path === "/narrative" && warning.message.includes('Unknown narratives catalog id "definitely-not-a-narrative"'),
       ),
       JSON.stringify(unknownNarrativeResult.warnings, null, 2),
     );
@@ -866,7 +894,7 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("known narrative id produces no warnings", () => {
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Known Narrative",
       narrative: "classic-story",
       slides: [{ title: "Slide Title" }],
@@ -874,13 +902,13 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("a custom narrative is an inline catalog record, and the narrative field is a string only", () => {
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Custom Inline Narrative",
       narrative: "my-own-arc",
       catalogs: { narratives: { records: [{ id: "my-own-arc", name: "My Own Arc", beats: [{ id: "hook", name: "Hook" }] }] } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
-    const object = validatePresentation({
+    const object = checked({
       name: "Inline Narrative Object",
       narrative: { id: "my-own-arc", beats: [{ id: "hook", name: "Hook" }] },
       slides: [{ title: "Slide Title" }],
@@ -898,7 +926,7 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("unknown design references warn at their respective paths", () => {
-    const unknownDesignResult = validatePresentation({
+    const unknownDesignResult = checked({
       name: "Unknown Design References",
       design: { theme: "no-such-theme", colorScheme: { id: "no-such-scheme", accent1: "#112233" } },
       slides: [
@@ -912,7 +940,7 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("unknown chart type id warns at the chart type path", () => {
-    const unknownChartTypeResult = validatePresentation({
+    const unknownChartTypeResult = checked({
       name: "Unknown Chart Type",
       slides: [{
         title: "Slide Title",
@@ -922,7 +950,7 @@ describe("catalog-id warning behavior", () => {
     assert.equal(unknownChartTypeResult.valid, true);
     assert.ok(
       unknownChartTypeResult.warnings.some(
-        (warning) => warning.path === "/slides/0/left/chart/type" && warning.message.includes("unknown chartTypes catalog id"),
+        (warning) => warning.path === "/slides/0/left/chart/type" && warning.message.includes('Unknown chartTypes catalog id "no-such-chart"'),
       ),
       JSON.stringify(unknownChartTypeResult.warnings, null, 2),
     );
@@ -933,7 +961,7 @@ describe("catalog-id warning behavior", () => {
       assert.deepEqual(records.filter((record) => record.deprecation).map((record) => record.id), [], `bundled ${kind} records carry no deprecation`);
     }
     const retired = ["bullet-column", "clustered-column", "sparkline", "dot-plot", "australia", "stacked-column-3x", "stacked-column-2x"];
-    const result = validatePresentation({
+    const result = checked({
       name: "Retired Ids",
       audience: ["executives", "sales-team", "executive"],
       slides: [
@@ -945,35 +973,35 @@ describe("catalog-id warning behavior", () => {
     assert.deepEqual(
       result.warnings.map((warning) => warning.message),
       [
-        "unknown audiences catalog id 'executives'",
-        "unknown audiences catalog id 'sales-team'",
-        ...retired.map((id) => `unknown chartTypes catalog id '${id}'`),
+        'Unknown audiences catalog id "executives" in the available local context.',
+        'Unknown audiences catalog id "sales-team" in the available local context.',
+        ...retired.map((id) => `Unknown chartTypes catalog id "${id}" in the available local context.`),
       ],
     );
   });
 
   test("an inline chart type record can still deprecate an id", () => {
-    const result = validatePresentation({
+    const result = checked({
       name: "Inline Deprecated Chart Type",
-      catalogs: { chartTypes: { records: [{ id: "my-column", name: "My column", deprecation: { replacedBy: "column" } }] } },
+      catalogs: { chartTypes: { records: [{ $schema: "https://openpresentation.org/schema/opf-chart-type/v1", id: "my-column", name: "My column", mappings: { openxml: { element: "barChart", barDir: "col", grouping: "clustered", composition: "single" } }, deprecation: { replacedBy: "column" } }] } },
       slides: [{ title: "Old", chart: { type: "my-column", data: { columns: ["A", "B"], rows: [["x", 1]] } } }],
     });
     assert.equal(result.valid, true);
-    assert.deepEqual(result.warnings.map((warning) => warning.message), ["deprecated chartTypes catalog id 'my-column'; use 'column'"]);
+    assert.deepEqual(result.warnings.map((warning) => warning.message), ['Deprecated chartTypes catalog id "my-column"; use "column" instead.']);
   });
 
   test("inline catalog record legitimizes an id the bundled catalogs don't know", () => {
     // Inline catalog records and custom sources legitimize ids the bundled catalogs don't know.
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Inline Catalog Record",
       design: { colorScheme: "my-brand" },
-      catalogs: { colorSchemes: { records: [{ id: "my-brand", accent1: "#0F4C81" }] } },
+      catalogs: { colorSchemes: { records: [{ id: "my-brand", name: "My brand", accent1: "#0F4C81" }] } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
   });
 
   test("custom catalog source legitimizes an id the bundled catalogs don't know", () => {
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Custom Catalog Source",
       narrative: "internal-arc",
       catalogs: { narratives: { source: "https://catalogs.example.com/narratives" } },
@@ -982,7 +1010,7 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("unknown audience ids warn like narratives; free-form audiences stay quiet", () => {
-    const single = validatePresentation({
+    const single = checked({
       name: "Unknown Audience",
       audience: "no-such-audience",
       slides: [{ title: "Slide Title" }],
@@ -990,12 +1018,12 @@ describe("catalog-id warning behavior", () => {
     assert.equal(single.valid, true, "unknown catalog ids must warn, never error");
     assert.ok(
       single.warnings.some(
-        (warning) => warning.path === "/audience" && warning.message.includes("unknown audiences catalog id 'no-such-audience'"),
+        (warning) => warning.path === "/audience" && warning.message.includes('Unknown audiences catalog id "no-such-audience"'),
       ),
       JSON.stringify(single.warnings, null, 2),
     );
 
-    const list = validatePresentation({
+    const list = checked({
       name: "Unknown Audience Entries",
       audience: ["executive", "no-such-audience", { id: "no-such-override", attentionBudgetMinutes: 20 }],
       slides: [{ title: "Slide Title" }],
@@ -1003,12 +1031,12 @@ describe("catalog-id warning behavior", () => {
     assert.deepEqual(list.warnings.map((warning) => warning.path).sort(), ["/audience/1", "/audience/2/id"]);
 
     // Free-form descriptions, URLs, and custom inline audiences are not catalog references.
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Free-form Audience",
       audience: ["Series B investors", "https://acme.com/decks/audiences/acme-board.json", { name: "Regional Sales Leaders" }],
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Free-form Audience String",
       audience: "Biology Students and Wildlife Enthusiasts",
       slides: [{ title: "Slide Title" }],
@@ -1016,13 +1044,13 @@ describe("catalog-id warning behavior", () => {
   });
 
   test("inline records and custom sources legitimize unknown audience ids", () => {
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Inline Audience Record",
       audience: ["acme-board"],
       catalogs: { audiences: { records: [{ id: "acme-board", name: "Acme Board" }] } },
       slides: [{ title: "Slide Title" }],
     }).warnings.length, 0);
-    assert.equal(validatePresentation({
+    assert.equal(checked({
       name: "Custom Audience Source",
       audience: "acme-board",
       catalogs: { audiences: { source: "https://catalogs.example.com/audiences" } },
@@ -1041,10 +1069,10 @@ describe("catalog-id warning behavior", () => {
       "internal-team", "customer", "general-public", "media", "partner", "regulatory", "all-hands",
     ];
     for (const narrative of galleryNarratives) {
-      const result = validatePresentation({ name: "Gallery Narrative", narrative, slides: [{ title: "Slide Title" }] });
+      const result = checked({ name: "Gallery Narrative", narrative, slides: [{ title: "Slide Title" }] });
       assert.deepEqual(result.warnings, [], narrative);
     }
-    const result = validatePresentation({ name: "Gallery Audiences", audience: galleryAudiences, slides: [{ title: "Slide Title" }] });
+    const result = checked({ name: "Gallery Audiences", audience: galleryAudiences, slides: [{ title: "Slide Title" }] });
     assert.deepEqual(result.warnings, []);
   });
 });

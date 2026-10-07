@@ -75,10 +75,12 @@ async function main(args) {
     print({version,kind,total:matches.length,truncated:matches.length>50,records:matches.slice(0,50).map(({id,name,summary,description})=>({id,name,summary:summary??description??''}))});return;
   }
   const file=path.resolve(rest[0]);if((await stat(file)).size>20*1024*1024)throw new Error('Input exceeds the 20 MB inspection limit.');
-  const value=JSON.parse((await readFile(file,'utf8')).replace(/^\uFEFF/,''));
+  const raw=await readFile(file,'utf8');
   const kind=rest[1];
   if(kind && !Object.prototype.hasOwnProperty.call(api.catalogs,kind))throw new Error(`Unknown catalog kind: ${kind}.`);
-  const result=kind?api.validateCatalogRecord(kind,value):api.validatePresentation(value);
+  if(typeof api.validationRules==='undefined')throw new Error(`validate needs @openpresentation/opf 0.14 or later (validate, one checker with findings); the resolved version is ${version}.`);
+  // A presentation file is read as strict JSON text, so findings carry line and column and invalid JSON is an invalid document (exit 1).
+  const result=kind?api.validateCatalogRecord(kind,JSON.parse(raw.replace(/^\uFEFF/,''))):api.validate(raw);
   print({version,file,...result});if(!result.valid)process.exitCode=1;
 }
 main(process.argv.slice(2)).catch(error=>{process.stderr.write(`OPF inspection failed: ${error.message}\n`);process.exitCode=2;});

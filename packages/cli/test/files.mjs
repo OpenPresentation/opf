@@ -58,11 +58,11 @@ try {
   const deck = {name: 'Files test', slides: [{id: 's1', title: 'Quarterly review', text: 'Revenue grew in every region.'}, {id: 's2', title: 'Priorities', items: ['Ship', 'Measure', 'Learn']}, {id: 's3', title: 'Thank you', text: 'Questions?'}]};
   await writeFile(path.join(temp, 'deck.opf.json'), JSON.stringify(deck));
 
-  // render: per-slide SVG, report shape shared with opf lint, digests match the files, repeat runs agree.
+  // render: per-slide SVG, report shape shared with opf validate, digests match the files, repeat runs agree.
   const first = run(['render', 'deck.opf.json', '--out', 'svg1']).report;
   assert.equal(first.ok, true); assert.equal(first.written, true); assert.equal(first.format, 'svg');
   assert.equal(first.valid, true); assert.equal(first.schemaValid, true); assert.deepEqual(Object.keys(first.counts), ['error', 'warning', 'info']);
-  assert.equal(first.sha256, sha(await read('deck.opf.json')), 'report digest equals the opf validate/lint digest of the input');
+  assert.equal(first.sha256, sha(await read('deck.opf.json')), 'report digest equals the opf validate digest of the input');
   assert.deepEqual((await readdir(path.join(temp, 'svg1'))).sort(), ['Files-test-001.svg', 'Files-test-002.svg', 'Files-test-003.svg']);
   assert.deepEqual(first.outputs.map(item => item.slide), [1, 2, 3]);
   for (const item of first.outputs) {assert.equal(item.sha256, sha(await readFile(item.file))); assert.equal(item.width, 1280); assert.equal(item.height, 720);}
@@ -106,20 +106,20 @@ try {
   const bom = run(['render', '-', '--slides', '1', '--out', 'bom.svg'], {input: `﻿${JSON.stringify(deck)}`}).report;
   assert.equal(bom.sha256, sha(Buffer.from(`﻿${JSON.stringify(deck)}`)), 'a BOM stays in the digest, as for opf validate');
 
-  // Lint-shaped diagnostics: invalid documents never render; warnings fail only under --strict and nothing is written then.
+  // Findings in the shared format: invalid documents never render; warnings fail only under --fail-on warning and nothing is written then.
   await writeFile(path.join(temp, 'bad.opf.json'), '{"slides":"bad"}');
   const bad = run(['render', 'bad.opf.json', '--out', 'bad-out'], {status: 1}).report;
-  assert.equal(bad.ok, false); assert.equal(bad.written, false); assert.ok(bad.diagnostics.some(item => item.severity === 'error' && item.ruleId.startsWith('opf/')));
+  assert.equal(bad.ok, false); assert.equal(bad.written, false); assert.ok(bad.findings.some(item => item.severity === 'error' && item.ruleId.startsWith('opf/')));
   assert.equal((await readdir(temp)).includes('bad-out'), false);
   run(['render', 'missing.opf.json'], {status: 2});
   const long = 'lorem ipsum dolor sit amet '.repeat(300);
   await writeFile(path.join(temp, 'over.opf.json'), JSON.stringify({name: 'Over', slides: [{title: 'Overflow', text: long}]}));
   const lax = run(['render', 'over.opf.json', '--out', 'over-lax']).report;
-  assert.equal(lax.ok, true); assert.ok(lax.diagnostics.some(item => item.ruleId === 'render/text-overflow' && item.severity === 'warning' && item.path === '/slides/0/text' && item.help));
-  const strict = run(['render', 'over.opf.json', '--out', 'over-strict', '--strict'], {status: 1}).report;
+  assert.equal(lax.ok, true); assert.ok(lax.findings.some(item => item.ruleId === 'render/text-overflow' && item.severity === 'warning' && item.path === '/slides/0/text' && item.help));
+  const strict = run(['render', 'over.opf.json', '--out', 'over-strict', '--fail-on', 'warning'], {status: 1}).report;
   assert.equal(strict.ok, false); assert.equal(strict.written, false); assert.equal(strict.valid, true);
-  assert.equal((await readdir(temp)).includes('over-strict'), false, '--strict writes nothing when there are warnings');
-  const paginated = run(['render', 'over.opf.json', '--out', 'over-pages', '--paginate', '--strict']).report;
+  assert.equal((await readdir(temp)).includes('over-strict'), false, '--fail-on warning writes nothing when there are warnings');
+  const paginated = run(['render', 'over.opf.json', '--out', 'over-pages', '--paginate', '--fail-on', 'warning']).report;
   assert.ok(paginated.outputs.length > 1 && paginated.pagination.pages.length > 1, '--paginate splits the slide with the preview fonts');
 
   // Images: relative files inside the deck folder are read; anything else is a placeholder plus a diagnostic.
@@ -137,14 +137,14 @@ try {
   // Output files are named by the deck's `name` ("Images"); readdir checks the exact case, also on case-insensitive file systems.
   assert.ok((await readdir(path.join(temp, 'media-out'))).includes('Images-001.svg'), 'the output file is named after the deck name, case kept');
   assert.ok((await read('media-out/Images-001.svg')).toString('utf8').includes('data:image/png;base64'), 'inside image embedded');
-  const found = new Set(imgReport.diagnostics.filter(item => /asset/.test(item.ruleId)).map(item => `${item.path} ${item.ruleId}`));
+  const found = new Set(imgReport.findings.filter(item => /asset/.test(item.ruleId)).map(item => `${item.path} ${item.ruleId}`));
   assert.ok(found.has('/slides/2/image cli/asset-blocked') && found.has('/slides/3/image cli/asset-blocked'), 'files outside the folder or not images are blocked');
   assert.ok(found.has('/slides/1/image render/unresolved-asset') && found.has('/slides/4/image render/unresolved-asset'));
   assert.ok(![...found].some(item => item.startsWith('/slides/0/')));
   const widened = run(['render', 'media/images.opf.json', '--out', 'media-out2', '--asset-dir', '.']).report;
-  assert.ok(!widened.diagnostics.some(item => item.path === '/slides/2/image' && item.ruleId === 'cli/asset-blocked'), '--asset-dir widens the readable folder');
+  assert.ok(!widened.findings.some(item => item.path === '/slides/2/image' && item.ruleId === 'cli/asset-blocked'), '--asset-dir widens the readable folder');
   const refused = run(['export', 'media/images.opf.json', '--format', 'pptx', '--out', 'bad-image.pptx'], {status: 1}).report;
-  assert.ok(refused.diagnostics.some(item => item.ruleId === 'pptx/asset-unresolved' && item.severity === 'error'));
+  assert.ok(refused.findings.some(item => item.ruleId === 'pptx/asset-unresolved' && item.severity === 'error'));
   assert.equal((await readdir(temp)).includes('bad-image.pptx'), false);
 
   // export: pptx (deterministic, structurally a package), pdf, zip, single files.
@@ -167,7 +167,7 @@ try {
   assert.equal(run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'raster', '--out', 'raster.pdf']).report.pdf.mode, 'raster');
   if (pdf.pdf.vectorSupported) {
     const vector = run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'vector', '--out', 'vector.pdf']).report;
-    assert.equal(vector.pdf.mode, 'vector'); assert.ok(vector.diagnostics.some(item => item.ruleId === 'pdf/pdf-font-embedded'));
+    assert.equal(vector.pdf.mode, 'vector'); assert.ok(vector.findings.some(item => item.ruleId === 'pdf/pdf-font-embedded'));
   } else {
     const tooOld = run(['export', 'deck.opf.json', '--format', 'pdf', '--pdf-mode', 'vector', '--out', 'vector.pdf'], {status: 2});
     assert.equal(tooOld.stderrJson.code, 'peer-too-old');
@@ -199,7 +199,7 @@ try {
   else console.log('NOTE the installed opf-pptx predates native SVG pictures; the SVG exports as a placeholder.');
 
   // import: PPTX back to OPF; text survives the round trip. Reflow notes are warnings the library reports for
-  // wrapped native text, so the round trip itself is not run under --strict.
+  // wrapped native text, so the round trip itself is not run under --fail-on warning.
   const same = async (actual, expected) => assert.equal(await realpath(path.dirname(actual)) + path.sep + path.basename(actual), await realpath(path.dirname(expected)) + path.sep + path.basename(expected)); // 8.3 and symlinked temp folders
   const imported = run(['import', 'deck.pptx', '--out', 'back.opf.json']).report;
   assert.equal(imported.ok, true); assert.equal(imported.written, true); assert.equal(imported.valid, true);
@@ -209,7 +209,6 @@ try {
   const back = JSON.parse(await read('back.opf.json'));
   assert.deepEqual(back.slides.map(slide => slide.title), ['Quarterly review', 'Priorities', 'Thank you']);
   assert.equal(run(['validate', 'back.opf.json']).report.valid, true);
-  assert.equal(run(['lint', 'back.opf.json']).report.valid, true);
   run(['import', 'deck.pptx', '--out', 'back.opf.json'], {status: 1});
   assert.equal(run(['import', 'deck.pptx', '--out', 'back.opf.json', '--force']).report.sha256, imported.sha256, 'deterministic import');
   await mkdir(path.join(temp, 'cwd'));
@@ -221,7 +220,7 @@ try {
   const broken = run(['import', 'not.pptx', '--out', 'broken.opf.json'], {status: 1}).report;
   assert.equal(broken.ok, false); assert.ok(broken.counts.error > 0); assert.equal((await readdir(temp)).includes('broken.opf.json'), false);
   run(['import', 'missing.pptx'], {status: 2}); run(['import'], {status: 2}); run(['import', 'deck.pptx', '--signals', 'both.json', '--out', '-'], {status: 2});
-  const strictImport = run(['import', 'deck.pptx', '--out', 'strict.opf.json', '--strict'], {status: imported.counts.warning ? 1 : 0}).report;
+  const strictImport = run(['import', 'deck.pptx', '--out', 'strict.opf.json', '--fail-on', 'warning'], {status: imported.counts.warning ? 1 : 0}).report;
   assert.equal(strictImport.written, imported.counts.warning === 0);
   // Raw signals need opf-pptx 0.11.9+: supported installs write them, older installs refuse before reading anything.
   const signalsRun = spawnSync(process.execPath, [executable, 'import', 'deck.pptx', '--out', 'signals.opf.json', '--signals', 'signals.json'], {cwd: temp, encoding: 'utf8'});
@@ -283,5 +282,5 @@ try {
     }
     assert.equal(run(['validate', path.join(temp, 'deck.opf.json')], {cwd: isolated, bin: lone}).report.valid, true);
   } finally {await rm(isolated, {recursive: true, force: true});}
-  console.log(`Render/export/import passed ${checks} command checks: SVG, PNG, PDF, PPTX, zip, import round trip, strict, assets, determinism.`);
+  console.log(`Render/export/import passed ${checks} command checks: SVG, PNG, PDF, PPTX, zip, import round trip, --fail-on, assets, determinism.`);
 } finally {await rm(temp, {recursive: true, force: true});}

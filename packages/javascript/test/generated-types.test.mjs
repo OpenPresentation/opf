@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 
 test('public generated payload declarations agree with closed schema fields', () => {
   const fixture=fileURLToPath(new URL('./generated-consumer-fixture.ts',import.meta.url));
-  const source=`import {composeSlide, layoutQuote, layoutCode, layoutMetric, type MetricLayout, type CodeLayout, type QuoteLayout, type Presentation, type CompositionExplanation} from '../dist/index.js';
+  const source=`import { type Presentation } from '../dist/index.js'; import { type MetricLayout, type CodeLayout, type QuoteLayout, type CompositionExplanation, composeSlide, layoutQuote, layoutCode, layoutMetric } from '../dist/composition.js';
 import type {MetricLayout as FocusedMetric, CodeLayout as FocusedCode, QuoteLayout as FocusedQuote, CompositionExplanation as FocusedExplanation} from '../dist/composition.js';
 type ContentPayload = NonNullable<Presentation['slides'][number]['blocks']>[number];
 const payload: ContentPayload = {text:[{text:'Preserved rich text',bold:true}]};

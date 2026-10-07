@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {composeSlide,layoutMetric,OPFCompositionError} from '../dist/composition.js';
-import {paginatePresentation} from '../dist/pagination.js';
+import {paginate} from '../dist/pagination.js';
 
 test('cards preserve outer tracks, regions and headings while measuring a rounded inner box',()=>{
   for(const dimensions of [{width:1280,height:720},{width:540,height:960},{width:731.2345678,height:1280}]){
@@ -46,9 +46,9 @@ test('card padding participates in automatic score, strict overflow and whole-do
   const auto={blocks:[{text:'Long content '.repeat(50)},{text:'More content '.repeat(20)}]};
   assert.notDeepEqual(composeSlide(auto,{...options,explain:true}).explanation.decisions,composeSlide(auto,{...options,contentBox:true,explain:true}).explanation.decisions);
   const document={design:{contentBox:true,dimensions:{widthInches:6.25,heightInches:1.875}},slides:[{text:'Exact content and spacing.\n'.repeat(30),notes:'Source notes'}]},before=structuredClone(document);
-  const result=paginatePresentation(document,{textMeasurement:measurement,minFontSize:25});
+  const result=paginate(document,{fonts:{textMeasurement:measurement},minFontSize:25});
   assert.ok(result.presentation.slides.length>1);assert.deepEqual(document,before);
   assert.equal(result.presentation.slides.map(s=>s.text).join(''),document.slides[0].text);
   for(const page of result.presentation.slides)assert.deepEqual(composeSlide(page,{...options,contentBox:true}).diagnostics,[]);
-  assert.deepEqual(paginatePresentation(result.presentation,{textMeasurement:measurement,minFontSize:25}).presentation,result.presentation);
+  assert.deepEqual(paginate(result.presentation,{fonts:{textMeasurement:measurement},minFontSize:25}).presentation,result.presentation);
 });

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {composeSlide,layoutFurniture,OPFCompositionError} from '../dist/composition.js';
-import {paginateSlide,paginatePresentation,OPFPaginationError} from '../dist/pagination.js';
+import {paginateSlide,paginate,OPFPaginationError} from '../dist/pagination.js';
 
 const measure=(text,size)=>{assert.ok(!/[\r\n\t]/u.test(text));return [...text].length*size/2;};
 // Ink excludes trailing spaces (a space that does not fit hangs at the end of its line, RR-17).
@@ -19,7 +19,7 @@ test('furniture preserves inherited/local sources, whitespace and generated meta
   for(const [width,height] of [[1280,720],[720,1280]])for(const minFontSize of [16,32])for(const textMeasurement of [undefined,outlined]){
     const presentation={organization:[{id:'secondary',name:'Secondary'},{id:'primary',name:' Primary ',role:'primary'}],design:{header:{left:{text:' A\t B \r\n\r\n'},center:{organization:true},right:{section:true}},footer:{left:{text:''},center:{date:' 2026-09-10 '},right:{slideNumber:true}}}};
     const slide={section:'Current section',composition:{minFontSize,overflow:'error'},text:'Body'};
-    const before=structuredClone({presentation,slide}),options={width,height,presentation,slideIndex:4,slideNumber:11,textMeasurement,fonts:{body:'Fixture'}};
+    const before=structuredClone({presentation,slide}),options={width,height,presentation,slideIndex:4,slideNumber:11,textMeasurement,fontFamilies:{body:'Fixture'}};
     const geometry=composeSlide(slide,options),layout=geometry.furniture;
     assert.deepEqual({presentation,slide},before);assert.deepEqual(geometry.diagnostics,[]);
     assert.deepEqual(geometry,composeSlide(slide,options));
@@ -91,7 +91,7 @@ test('pagination repeats furniture and retains exact body source and mappings',(
   const input={design:{header:{left:{text:'Repeated heading'}},footer:{right:{slideNumber:true}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
   const before=structuredClone(input),numbers=[];
   const textMeasurement={measure:(text,size,style)=>{if(style.path?.endsWith('.slideNumber'))numbers.push(text);return measure(text,size);}};
-  const result=paginatePresentation(input,{minFontSize:24,textMeasurement});
+  const result=paginate(input,{minFontSize:24,fonts:{textMeasurement}});
   assert.deepEqual(input,before);assert.ok(result.presentation.slides.length>2);
   assert.equal(result.presentation.slides.slice(0,-1).map(slide=>slide.text).join(''),source);
   assert.ok(numbers.includes(String(result.presentation.slides.length)),'The last source slide must use its actual output number.');
@@ -106,7 +106,7 @@ test('a continuation whose wider number cannot fit fails atomically',()=>{
   const slide={design:{footer:{right:{slideNumber:true}}},text:'Content with words. '.repeat(200)};
   const before=structuredClone(slide),seen=new Set();
   const textMeasurement={measure:(text,size,style)=>{if(style.path?.endsWith('.slideNumber')){seen.add(text);return text==='9'?size/2:2000;}return measure(text,size);}};
-  assert.throws(()=>paginateSlide(slide,{slideNumber:9,textMeasurement}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path==='slides.0.design.footer.right.slideNumber'));
+  assert.throws(()=>paginateSlide(slide,{slideNumber:9,fonts:{textMeasurement}}),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path==='slides.0.design.footer.right.slideNumber'));
   assert.ok(seen.has('9')&&seen.has('10'));assert.deepEqual(slide,before);
 });
 test('slide-number formats keep {current} live and resolve {total} from the displayed deck',()=>{
@@ -162,25 +162,25 @@ test('date and slide number in one zone stack; in separate zones each keeps one 
 test('whole-deck pagination resolves {total} to the final page count',()=>{
   const source='First sentence with enough detail. '.repeat(160);
   const input={design:{footer:{right:{slideNumber:true,slideNumberFormat:'{current} / {total}'},left:{date:true,dateFormat:'MMM d, yyyy'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
-  const before=structuredClone(input),result=paginatePresentation(input,{minFontSize:24,date:'2026-04-23'});
+  const before=structuredClone(input),result=paginate(input,{minFontSize:24,date:'2026-04-23'});
   assert.deepEqual(input,before);const total=result.presentation.slides.length;assert.ok(total>2);
   for(const [index,slide]of result.presentation.slides.entries()){
     const geometry=composeSlide(slide,{presentation:result.presentation,slideIndex:index,date:'2026-04-23'});assert.deepEqual(geometry.diagnostics,[]);
     assert.equal(geometry.furniture.parts.find(p=>p.field==='slideNumber').text,`${index+1} / ${total}`);
     assert.equal(geometry.furniture.parts.find(p=>p.field==='date').text,'Apr 23, 2026');
   }
-  assert.throws(()=>paginatePresentation(input,{minFontSize:24}),OPFPaginationError);
+  assert.throws(()=>paginate(input,{minFontSize:24}),OPFPaginationError);
 });
 test('a {total} retry reports each unknown font scheme once',()=>{
   const source='First sentence with enough detail. '.repeat(160),issues=[];
   const input={design:{fontScheme:'no-such-scheme',footer:{right:{slideNumber:true,slideNumberFormat:'{current} / {total}'}}},slides:[{title:'Title',text:source},{text:'Last slide'}]};
-  const result=paginatePresentation(input,{minFontSize:24,onDiagnostic:issue=>issues.push(issue)});
+  const result=paginate(input,{minFontSize:24,onDiagnostic:issue=>issues.push(issue)});
   assert.ok(result.presentation.slides.length>2,'The retry path runs: the page count differs from the source count.');
   assert.deepEqual(issues.map(issue=>[issue.code,issue.path]),[['unresolved-font-scheme','design.fontScheme']]);
 });
 test('generated socials format the primary organization profiles through platform records',async()=>{
   const {socialPlatforms}=await import('../dist/catalogs.js');
-  const {resolveSocialProfile}=await import('../dist/index.js');
+  const {resolveSocialProfile}=await import('../dist/composition.js');
   const organization={id:'acme',name:'Acme',socials:{linkedin:'acme',x:'@acme',github:'acme',mastodon:'@acme@hachyderm.io',bluesky:'https://bsky.app/profile/acme.bsky.social',custom:' Visit  us ',blank:'  '}};
   const presentation={organization:[{id:'other',name:'Other',socials:{x:'other'}},{...organization,role:'primary'}],design:{footer:{right:{organization:true,socials:true}}}};
   const before=structuredClone(presentation);
@@ -221,9 +221,9 @@ test('generated socials without organization socials diagnose their controlling 
 });
 test('whole-deck pagination accepts generated socials and rejects missing ones atomically',()=>{
   const input={$schema:'https://openpresentation.org/schema/opf/v1',organization:{id:'acme',name:'Acme',socials:{x:'@acme'}},design:{footer:{right:{socials:true}}},slides:[{text:'Body'}]};
-  const {pages}=paginatePresentation(input);
+  const {pages}=paginate(input);
   assert.equal(pages.length,1);
-  assert.throws(()=>paginatePresentation({...input,organization:{id:'acme',name:'Acme'}}),OPFPaginationError);
+  assert.throws(()=>paginate({...input,organization:{id:'acme',name:'Acme'}}),OPFPaginationError);
 });
 test('one footer carries FF-27 live slide-number fields and FF-34 social links without mixing them',async()=>{
   const {socialPlatforms}=await import('../dist/catalogs.js');

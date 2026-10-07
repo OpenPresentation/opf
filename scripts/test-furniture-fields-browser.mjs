@@ -13,8 +13,8 @@ const tools = createRequire(new URL('../../opf-render/package.json', import.meta
 const installed = createRequire(path.join(consumer, 'package.json'));
 const {build} = tools('esbuild'), {chromium} = tools('playwright');
 const {unzipSync} = installed('fflate');
-const {prepareNodeFonts} = await import(pathToFileURL(installed.resolve('@openpresentation/opf-render/fonts-node')));
-const {registry} = await prepareNodeFonts();
+const {loadFonts: loadNodeFonts} = await import(pathToFileURL(installed.resolve('@openpresentation/opf-render/fonts-node')));
+const {registry} = await loadNodeFonts();
 const hash = value => createHash('sha256').update(value).digest('hex');
 await mkdir(output, {recursive: true});
 const manifest = JSON.parse(await readFile(path.join(root, 'artifacts/npm/manifest.json'), 'utf8'));
@@ -25,32 +25,33 @@ for (const artifact of manifest.artifacts) {
   artifacts.push({...artifact, actualSha256: hash(bytes)});
 }
 const contents = `
-import {paginatePresentation} from '@openpresentation/opf/pagination';
+import {paginate} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {createCanvasEditor} from '@openpresentation/opf-editor/canvas';
-import {loadBrowserFontRegistry} from '@openpresentation/opf-render/fonts-browser';
+import {loadFonts} from '@openpresentation/opf-render/fonts-browser';
 import {resolvePresentation, renderSvg} from '@openpresentation/opf-render/svg';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
-window.mount = async ({deck, faces, date, paginate}) => {
+window.mount = async ({deck, faces, date, paginate: withPagination}) => {
   window.canvasEditor?.destroy(); window.fonts?.dispose(); window.unsubscribe?.();
   window.failures = []; window.events = []; window.lastExport = null; window.lastImport = null; window.exportDiagnostics = [];
   window.authored = deck;
-  window.fonts = await loadBrowserFontRegistry(faces.map(face => ({...face,
+  window.fonts = await loadFonts({faces: faces.map(face => ({...face,
     data: Uint8Array.from(atob(face.dataUrl.split(',')[1]), c => c.charCodeAt(0))
-  })), {substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
-  window.renderOptions = {textMeasurement: fonts.textMeasurement, trace: true, date};
-  window.pagination = paginate ? paginatePresentation(deck, {...renderOptions, minFontSize: 24}) : null;
+  })), substitutionPolicy: 'visual', fallbackFamily: 'Roboto'});
+  window.renderOptions = {trace: true, date};
+  window.withFonts = () => ({fonts, ...renderOptions});
+  window.pagination = withPagination ? paginate(deck, {fonts, date, minFontSize: 24}) : null;
   window.editor = createEditorSession(pagination?.presentation ?? deck, {rejectInvalid: true});
   window.unsubscribe = editor.subscribe(event => events.push({type: event.type, patches: event.patches}));
   window.canvasEditor = createCanvasEditor(document.querySelector('#canvas'), {
-    editor, renderOptions, onError: error => failures.push(error.message)
+    editor, fonts, renderOptions, onError: error => failures.push(error.message)
   });
   await canvasEditor.ready;
   const action = (id, callback) => document.getElementById(id).onclick = async () => {
     try { await callback(); } catch (error) { failures.push(error.message); }
   };
   action('undo', () => editor.undo()); action('redo', () => editor.redo());
-  action('next', () => canvasEditor.setSlide(Math.min(editor.document.slides.length - 1, canvasEditor.slideIndex + 1)));
+  action('next', () => canvasEditor.setSlide(Math.min(editor.presentation.slides.length - 1, canvasEditor.slideIndex + 1)));
   action('previous', () => canvasEditor.setSlide(Math.max(0, canvasEditor.slideIndex - 1)));
   action('date', () => {
     const next = {...renderOptions, date: '2026-09-23'};
@@ -60,18 +61,18 @@ window.mount = async ({deck, faces, date, paginate}) => {
   action('export', async () => {
     if (!canvasEditor.commit()) throw Error('Export refused an uncommitted draft.');
     window.lastExport = null; window.lastImport = null; window.exportDiagnostics = [];
-    const options = {...renderOptions, seed: 7, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z',
+    const options = {...withFonts(), seed: 7, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z',
       onDiagnostic: issue => exportDiagnostics.push(issue)};
-    window.lastExport = await toPptx(editor.document, options);
+    window.lastExport = await toPptx(editor.presentation, options);
     window.lastImport = await fromPptx(lastExport);
   });
 };
 window.snapshot = async () => {
   await document.fonts.ready;
-  const index = canvasEditor.slideIndex, geometry = editor.composeSlide(index, renderOptions);
-  const resolved = resolvePresentation(editor.document, renderOptions).slides[index].geometry;
+  const index = canvasEditor.slideIndex, geometry = editor.composeSlide(index, withFonts());
+  const resolved = resolvePresentation(editor.presentation, withFonts()).slides[index].geometry;
   const svg = document.querySelector('#canvas svg');
-  return {index, geometry, resolved, source: editor.document, authored, events,
+  return {index, geometry, resolved, source: editor.presentation, authored, events,
     canUndo: editor.canUndo, canRedo: editor.canRedo, pagination,
     svg: svg.outerHTML, fields: (geometry.furniture?.parts ?? []).map(part => {
       const group = [...svg.querySelectorAll('[data-opf-source-text]')]
@@ -192,7 +193,7 @@ async function exportAndCheck(name, date, hidden, source, wrapped = false) {
   await page.getByRole('button', {name: 'Export', exact: true}).click();
   await page.waitForFunction(() => lastImport !== null || failures.length > 0);
   assert.deepEqual(await page.evaluate(() => failures), []);
-  const result = await page.evaluate(() => ({bytes: Array.from(lastExport), imported: lastImport, source: editor.document, diagnostics: exportDiagnostics}));
+  const result = await page.evaluate(() => ({bytes: Array.from(lastExport), imported: lastImport, source: editor.presentation, diagnostics: exportDiagnostics}));
   assert.deepEqual(result.source, source);
   const bytes = Uint8Array.from(result.bytes), rows = cacheRows(bytes);
   latestExport = {file: `${name}.pptx`, sha256: hash(bytes), rows, imported: result.imported, diagnostics: result.diagnostics};
@@ -231,7 +232,7 @@ try {
     if (wrapped) for (const slide of deck.slides.slice(1)) slide.composition = {minFontSize: 32, overflow: 'error'};
     const original = structuredClone(deck);
     await page.evaluate(args => mount(args), {deck, faces: registry.embeddedFonts, date: '2026-09-22', paginate});
-    const mounted = await page.evaluate(() => ({source: editor.document, authored, pagination, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));
+    const mounted = await page.evaluate(() => ({source: editor.presentation, authored, pagination, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));
     assert.deepEqual(mounted.authored, original); assert.equal(mounted.canUndo, false); assert.equal(mounted.canRedo, false); assert.deepEqual(mounted.events, []);
     const total = mounted.source.slides.length;
     if (paginate) {assert.ok(total > deck.slides.length); verifyMappings(original, mounted.pagination);}
@@ -244,15 +245,15 @@ try {
     const target = page.locator('[data-canvas-target][data-opf-path="design.header.left.text"]');
     await target.dblclick(); const input = page.getByRole('textbox', {name: 'Edit text inline', exact: true});
     await input.fill('  Reviewed\tcopy  \r\n'); await input.press('Control+Enter');
-    const edited = await page.evaluate(() => editor.document);
+    const edited = await page.evaluate(() => editor.presentation);
     assert.equal(edited.design.header.left.text, '  Reviewed\tcopy  \r\n'); assert.deepEqual(edited.design.footer, footer);
-    await page.getByRole('button', {name: 'Undo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.document), mounted.source);
-    await page.getByRole('button', {name: 'Redo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.document), edited);
+    await page.getByRole('button', {name: 'Undo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.presentation), mounted.source);
+    await page.getByRole('button', {name: 'Redo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.presentation), edited);
     const exported = await exportAndCheck(`${name}-first-date`, '2026-09-22', !paginate, edited, wrapped);
     await page.getByRole('button', {name: 'Undo', exact: true}).click();
-    const historyBefore = await page.evaluate(() => {window.savedEditor = editor; return {source: editor.document, canUndo: editor.canUndo, canRedo: editor.canRedo, events};});
+    const historyBefore = await page.evaluate(() => {window.savedEditor = editor; return {source: editor.presentation, canUndo: editor.canUndo, canRedo: editor.canRedo, events};});
     await page.getByRole('button', {name: 'Next host date', exact: true}).click();
-    const historyAfter = await page.evaluate(() => ({sameSession: savedEditor === editor, source: editor.document, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));
+    const historyAfter = await page.evaluate(() => ({sameSession: savedEditor === editor, source: editor.presentation, canUndo: editor.canUndo, canRedo: editor.canRedo, events}));
     assert.equal(historyAfter.sameSession, true); delete historyAfter.sameSession; assert.deepEqual(historyAfter, historyBefore);
     const after = await inspectAll('2026-09-23', total, !paginate);
     if (wrapped) for (const state of after.slice(1)) {
@@ -266,8 +267,8 @@ try {
       assert.throws(() => assertFooter(fields, 0, deck.slides.length, '2026-09-23', false), assert.AssertionError);
       controls.push({case: name, staleSourceTotalRejected: true, sourceCount: deck.slides.length, finalCount: total});
     }
-    await page.getByRole('button', {name: 'Redo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.document), edited);
-    await page.getByRole('button', {name: 'Undo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.document), mounted.source);
+    await page.getByRole('button', {name: 'Redo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.presentation), edited);
+    await page.getByRole('button', {name: 'Undo', exact: true}).click(); assert.deepEqual(await page.evaluate(() => editor.presentation), mounted.source);
     assert.deepEqual(await page.evaluate(() => authored), original);
     await page.screenshot({path: path.join(output, `${name}.png`), fullPage: true});
     results.push({name, width, height, original, total, pagination: mounted.pagination, before, after, historyBefore, historyAfter, exported, updated});

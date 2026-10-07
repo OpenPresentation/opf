@@ -769,13 +769,13 @@ export function emptySegment(lines: Line[]): boolean {
   return lines.every((line) => BLANK.test(line.text));
 }
 
-/** Parse one slide from text with its own diagnostics: used to verify what the writer produced. */
+/** Parse one slide from text with its own findings: used to verify what the writer produced. */
 export function parseSlideText(text: string): { slide: Obj | undefined; clean: boolean } {
   const ctx = new Ctx(text);
   const segments = splitSegments(splitLines(text), "rules").filter((segment) => !emptySegment(segment));
   if (segments.length !== 1) return { slide: undefined, clean: false };
   const slide = parseSlide(ctx, segments[0]!, 0);
-  return { slide, clean: ctx.diagnostics.length === 0 };
+  return { slide, clean: ctx.findings.length === 0 };
 }
 
 /** The front matter block of a source, if it starts with one: its lines and the index of the first body line. */

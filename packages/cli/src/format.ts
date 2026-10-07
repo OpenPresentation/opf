@@ -1,5 +1,5 @@
 import path from "node:path";
-import { formatPresentation } from "@openpresentation/opf/format";
+import { format } from "@openpresentation/opf/format";
 import { OPFYamlError } from "@openpresentation/opf/yaml";
 import type { CliContext } from "./context.js";
 import { type DeckFormat, outputFormatOf, serialize } from "./deck.js";
@@ -28,10 +28,10 @@ export async function formatCommand(args: string[], cli: CliContext): Promise<vo
   for (const file of positional) {
     const source = await cli.readDeck(file, !options.check);
     // The written format: --format, else the --output name, else the format of the file being formatted.
-    const format = outputFormatOf(options.output === undefined ? "-" : String(options.output), options.format, source);
+    const outFormat = outputFormatOf(options.output === undefined ? "-" : String(options.output), options.format, source);
     const lineEnding = eol === "preserve" ? (source.raw.includes("\r\n") ? "crlf" : "lf") : (eol as "lf" | "crlf");
     let text: string;
-    if (format === "json") text = formatPresentation(source.value, { indent, eol: lineEnding });
+    if (outFormat === "json") text = format(source.value, { indent, eol: lineEnding });
     else {
       if (indent !== undefined) throw cli.fail("--indent applies to JSON; YAML is always written with two spaces.");
       try {
@@ -42,7 +42,7 @@ export async function formatCommand(args: string[], cli: CliContext): Promise<vo
       }
       if (lineEnding === "crlf") text = text.replaceAll("\n", "\r\n");
     }
-    results.push({ file, text, raw: source.raw, changed: text !== source.raw, format });
+    results.push({ file, text, raw: source.raw, changed: text !== source.raw, format: outFormat });
   }
   const changed = results.filter(result => result.changed).map(result => result.file);
   if (options.check) {

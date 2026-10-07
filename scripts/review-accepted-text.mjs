@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {renderSvg,svgToPng} from '../../opf-render/dist/index.js';
+import {renderSlideSvg,svgToPng} from '../../opf-render/dist/index.js';
 const [beforeDir,currentDir,secondDir,output]=process.argv.slice(2).map(value=>path.resolve(value));
 assert.ok(beforeDir&&currentDir&&secondDir&&output,'Pass previous/current/second-runtime corpus directories and a new output directory.');
 const hash=value=>createHash('sha256').update(value).digest('hex'),json=async file=>JSON.parse(await readFile(file,'utf8'));
@@ -36,7 +36,7 @@ const selected=[];
 for(const type of ['quote','code','table','chart']){
   const item=changed.find(({key})=>{const [file,slide]=key.split('#');return JSON.stringify(corpus.get(file).slides[Number(slide)]).includes(`"${type}":`);});
   if(!item)continue;
-  const [source,slide]=item.key.split('#'),svg=renderSvg(corpus.get(source),{slideIndex:Number(slide),trace:true}),png=await svgToPng(svg,{loadSystemFonts:false}),file=`full-${item.index}.png`;
+  const [source,slide]=item.key.split('#'),svg=renderSlideSvg(corpus.get(source),Number(slide),{trace:true}),png=await svgToPng(svg,{fonts:{loadSystemFonts:false}}),file=`full-${item.index}.png`;
   await writeFile(path.join(output,file),png);selected.push({...item,type,full:file,fullSha256:hash(png),svgSha256:hash(svg)});
 }
 const report={source:current.source,verifierSha256:hash(await readFile(new URL(import.meta.url))),verifiedImages:keys.length*3,changed,unchanged:keys.length-changed.length,sheets,selected,

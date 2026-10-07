@@ -17,7 +17,14 @@ const registry = process.argv.includes('--registry');
 const require = createRequire(import.meta.url);
 const nodeTypesVersion = require('@types/node/package.json').version;
 const plan = JSON.parse(await readFile(new URL('../../../release-plan.json', import.meta.url), 'utf8'));
-const downstream = registry ? [] : plan.packages.filter(item => ['@openpresentation/opf-render', '@openpresentation/opf-editor', '@openpresentation/opf-pptx'].includes(item.name));
+// The release plan's renderer, editor and PPTX were built for the plan's core. A candidate core of a later minor line (a
+// breaking pre-1.0 release, such as 0.14 over a 0.13 plan) cannot run them; test:packed-ecosystem checks it with the
+// candidate siblings instead, and the release-prep PR moves the plan to the new line, which turns this check back on.
+const line = (version) => String(version).split('.').slice(0, 2).join('.');
+const planCore = plan.packages.find(item => item.name === manifest.name)?.version;
+const sameLine = planCore !== undefined && line(planCore) === line(manifest.version);
+const downstream = registry || !sameLine ? [] : plan.packages.filter(item => ['@openpresentation/opf-render', '@openpresentation/opf-editor', '@openpresentation/opf-pptx'].includes(item.name));
+if (!registry && !sameLine) process.stdout.write(`core ${manifest.version} is on a newer minor than the release plan's published siblings (${line(planCore)}.x): skipping their install until the ${line(manifest.version)} siblings publish (test:packed-ecosystem covers the candidate siblings).\n`);
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Standalone package verification must not use source loaders or module aliases');
 const packageSource = registry ? `${manifest.name}@${manifest.version}` : packageRoot;
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), "opf-packed-smoke-"));
@@ -99,10 +106,10 @@ import assert from 'node:assert/strict';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {renderSvg} from '@openpresentation/opf-render';
 import {toPptx} from '@openpresentation/opf-pptx';
-import {validatePresentation} from '@openpresentation/opf';
+import {validate} from '@openpresentation/opf';
 const editor = createEditorSession({slides: [{title: 'Compiler compatibility'}]});
 editor.set('slides.0.title', 'Packed downstream');
-assert.equal(validatePresentation(editor.document).valid, true);
+assert.equal(validate(editor.document, {only: ['format']}).valid, true);
 assert.match(renderSvg(editor.document), /Packed downstream/);
 assert.ok((await toPptx(editor.document)).length > 1000);
 editor.undo();
@@ -123,7 +130,6 @@ import {
   catalogs,
   presentation,
   validate,
-  validatePresentation,
 } from "@openpresentation/opf";
 import { presentation as focusedPresentation } from "@openpresentation/opf/schemas";
 import { tones } from "@openpresentation/opf/catalogs";
@@ -134,7 +140,7 @@ import { layoutPreviews, getLayoutPreview } from "@openpresentation/opf/previews
 import { examples, getExample } from "@openpresentation/opf/examples";
 import { docs, getDoc } from "@openpresentation/opf/docs";
 import { repoReadme } from "@openpresentation/opf/repo-readme";
-import { paginatePresentation } from "@openpresentation/opf/pagination";
+import { paginate } from "@openpresentation/opf/pagination";
 import rawPresentation from "@openpresentation/opf/spec/schemas/opf.schema.json" with { type: "json" };
 import rawBoardAudience from "@openpresentation/opf/spec/catalogs/audiences/board.json" with { type: "json" };
 import installedManifest from "@openpresentation/opf/package.json" with { type: "json" };
@@ -165,15 +171,15 @@ const validDeck = {
   slides: [{ title: "Smoke Test", items: ["Root import", "Focused import", "Raw JSON import"] }],
 };
 
-assert.equal(validatePresentation(validDeck).valid, true);
-assert.equal(validate(validDeck, "presentation").valid, true);
-assert.equal(focusedValidate(validDeck, "presentation").valid, true);
+assert.equal(validate(validDeck).valid, true);
+assert.equal(focusedValidate(validDeck, { only: ["format"] }).valid, true);
+assert.equal(validate(validDeck).schemaValid, true);
 assert.doesNotThrow(() => assertValid(validDeck));
 
 const richTable = {columns: [['Rich ', {text:'header',bold:true}]], rows: Array.from({length:45}, (_,i) => [[{text:'Row '+i,bold:true}]])};
 const richDeck = {slides:[{table:richTable}]};
-assert.equal(validatePresentation(richDeck).valid,true,'Installed schema accepts rich cells and headers');
-const pages = paginatePresentation(richDeck);
+assert.equal(validate(richDeck,{only:['format']}).valid,true,'Installed schema accepts rich cells and headers');
+const pages = paginate(richDeck);
 assert.ok(pages.presentation.slides.length > 1,'Installed pagination splits rich tables');
 assert.deepEqual(pages.presentation.slides.flatMap(slide=>slide.table.rows),richTable.rows,'Installed pagination preserves rich runs');
 
@@ -181,44 +187,56 @@ const invalidDeck = {
   name: "Invalid Packed Package Smoke",
   slides: [{ type: "placeholder" }],
 };
-const invalidResult = validatePresentation(invalidDeck);
+const invalidResult = validate(invalidDeck);
 assert.equal(invalidResult.valid, false, "invalid deck should fail validation");
-assert.ok(invalidResult.errors.length > 0, "invalid deck should return validation errors");
+assert.ok(invalidResult.findings.some(finding => finding.severity === "error"), "invalid deck should return validation errors");
 `,
   );
   await run(process.execPath, ["smoke.mjs"], { cwd: projectDir });
   if(!registry){
-    assertTarIncludes(files,'package/dist/lint.js');assertTarIncludes(files,'package/dist/lint.d.ts');
-    await writeFile(path.join(projectDir,'lint.mjs'),`
+    assertTarIncludes(files,'package/dist/validator.js');assertTarIncludes(files,'package/dist/validator.d.ts');
+    assert.ok(!files.some(file=>/package\/dist\/(lint|audit)\.(js|d\.ts)$/.test(file)),'The lint and audit subpaths are gone');
+    await writeFile(path.join(projectDir,'validate.mjs'),`
 import assert from 'node:assert/strict';
-import {lintSource as rootLint} from '@openpresentation/opf';
-import {lintSource,lintPresentation} from '@openpresentation/opf/lint';
-globalThis.fetch=()=>{throw new Error('Offline lint must not fetch');};
-assert.equal(rootLint,lintSource);
+import {validate as rootValidate,validationRules as rootRules} from '@openpresentation/opf';
+import {validate,validationRules} from '@openpresentation/opf/validator';
+globalThis.fetch=()=>{throw new Error('Offline validate must not fetch');};
+assert.equal(rootValidate,validate);assert.equal(rootRules,validationRules);
+for(const gone of ['@openpresentation/opf/lint','@openpresentation/opf/audit'])await assert.rejects(import(gone));
 const source='{\\r\\n"slides":[{"layout":"partner","title":"Keep  spaces"}]\\n}';
 const options={catalogs:{layouts:[{id:'partner',name:'Partner',placeholders:[{type:'title'}]}]}};
-assert.equal(lintSource(source,options).valid,true);
-assert.equal(lintSource(source).diagnostics.find(issue=>issue.ruleId==='opf/catalog-reference').location.offset,source.indexOf('"partner"'));
-assert.equal(lintSource('{"slides":[{"title":"First","title":"Second"}]}').valid,false);
-const policy=lintPresentation(JSON.parse(source),{...options,contracts:[{path:'/slides/*/layout',allowedValues:['text-1x']}]});
-assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok(policy.diagnostics.some(issue=>issue.ruleId==='opf/contract'));
-console.log('Installed lint: public entrypoints, exact ranges, loaded records, duplicate keys and contracts pass offline.');
+assert.equal(validate(source,options).valid,true);
+assert.equal(validate(source,{only:['format','references']}).findings.find(issue=>issue.ruleId==='opf/catalog-reference').location.offset,source.indexOf('"partner"'));
+assert.equal(validate('{"slides":[{"title":"First","title":"Second"}]}').valid,false);
+const policy=validate(JSON.parse(source),{...options,contracts:[{path:'/slides/*/layout',allowedValues:['text-1x']}]});
+assert.equal(policy.valid,false);assert.equal(policy.schemaValid,true);assert.ok(policy.findings.some(issue=>issue.ruleId==='opf/contract'&&issue.category==='policy'));
+const deck={name:'Packed validate',language:'en-US',design:{background:{type:'solid',color:'#FFFFFF'}},slides:[{title:'Quarterly results',text:[{text:'faint',color:'#CCCCCC'}]},{text:'No title',image:'https://example.com/a.png'}]};
+const report=validate(deck);
+assert.equal(report.valid,true);
+assert.deepEqual(report.findings.map(issue=>issue.ruleId),['opf/text-contrast','opf/missing-alt-text','opf/missing-slide-title']);
+assert.equal(report.checks.backgroundPixels,'not-read');assert.equal(report.checks.layout,'estimated');
+assert.equal(validate(deck,{only:['format']}).checks.layout,'not-run');
+const text=JSON.stringify(deck,null,1);
+const located=validate(text,{only:['opf/missing-alt-text']}).findings[0];
+assert.equal(text.slice(located.location.offset,located.location.offset+located.location.length),'"https://example.com/a.png"');
+assert.equal(validate('{"slides":[}').schemaValid,null);
+console.log('Installed validate: root and subpath entrypoints, rule ids, categories, source ranges, loaded records, duplicate keys and contracts pass offline.');
 `);
-    const lint=await run(process.execPath,['lint.mjs'],{cwd:projectDir});process.stdout.write(lint.stdout);
+    const validation=await run(process.execPath,['validate.mjs'],{cwd:projectDir});process.stdout.write(validation.stdout);
     for(const entry of ['patch','diff','format'])assertTarIncludes(files,`package/dist/${entry}.js`);
     await writeFile(path.join(projectDir,'patch-diff-format.mjs'),`
 import assert from 'node:assert/strict';
 import {applyPatch,invertPatch} from '@openpresentation/opf/patch';
-import {diffPresentations,mergePresentations} from '@openpresentation/opf/diff';
-import {formatPresentation} from '@openpresentation/opf/format';
+import {diff,merge} from '@openpresentation/opf/diff';
+import {format} from '@openpresentation/opf/format';
 const a={name:'A',slides:[{id:'x',title:'X'},{id:'y',title:'Y'}]};
 const b={name:'B',slides:[{id:'y',title:'Y'},{id:'x',title:'X2'}]};
-const diff=diffPresentations(a,b);
-assert.deepEqual(applyPatch(a,diff.patch),b);
-assert.deepEqual(applyPatch(b,invertPatch(a,diff.patch)),a);
-assert.equal(mergePresentations(a,b,a).clean,true);
-assert.equal(mergePresentations(a,{...a,name:'1'},{...a,name:'2'}).conflicts.length,1);
-assert.equal(formatPresentation('{"slides":[],"name":"N"}'),'{\\n  "name": "N",\\n  "slides": []\\n}\\n');
+const changes=diff(a,b);
+assert.deepEqual(applyPatch(a,changes.patch),b);
+assert.deepEqual(applyPatch(b,invertPatch(a,changes.patch)),a);
+assert.equal(merge(a,b,a).clean,true);
+assert.equal(merge(a,{...a,name:'1'},{...a,name:'2'}).conflicts.length,1);
+assert.equal(format('{"slides":[],"name":"N"}'),'{\\n  "name": "N",\\n  "slides": []\\n}\\n');
 console.log('Installed patch, diff, merge and format entrypoints pass offline.');
 `);
     const pdf=await run(process.execPath,['patch-diff-format.mjs'],{cwd:projectDir});process.stdout.write(pdf.stdout);
@@ -238,17 +256,17 @@ console.log('Installed conversions: pure converters, loss reports and refusals w
     assertTarIncludes(files,'package/dist/markdown.js');assertTarIncludes(files,'package/dist/markdown.d.ts');
     await writeFile(path.join(projectDir,'markdown.mjs'),`
 import assert from 'node:assert/strict';
-import {markdownToOpf,opfToMarkdown,OPFMarkdownError} from '@openpresentation/opf/markdown';
+import {fromMarkdown,toMarkdown,OPFMarkdownError} from '@openpresentation/opf/markdown';
 globalThis.fetch=()=>{throw new Error('Offline Markdown conversion must not fetch');};
 const source='---\\nname: Installed\\n---\\n\\n<!-- slide: id=a -->\\n# One\\n\\n- x\\n- y\\n\\n---\\n\\n# Two\\n\\nNote: speaking\\n';
-const converted=markdownToOpf(source);
+const converted=fromMarkdown(source);
 assert.equal(converted.valid,true);
-assert.deepEqual(converted.document,{name:'Installed',slides:[{id:'a',title:'One',items:['x','y']},{title:'Two',notes:'speaking'}]});
-const written=opfToMarkdown(converted.document);
+assert.deepEqual(converted.presentation,{name:'Installed',slides:[{id:'a',title:'One',items:['x','y']},{title:'Two',notes:'speaking'}]});
+const written=toMarkdown(converted.presentation);
 assert.equal(written.markdown,source);assert.equal(written.report.native,true);
-const broken=markdownToOpf('# A\\n\\n<!-- slide: nope=1 -->');
-assert.equal(broken.valid,false);assert.deepEqual([broken.diagnostics[0].location.line,broken.diagnostics[0].location.column],[3,1]);
-assert.throws(()=>opfToMarkdown({slides:'x'}),OPFMarkdownError);
+const broken=fromMarkdown('# A\\n\\n<!-- slide: nope=1 -->');
+assert.equal(broken.valid,false);assert.deepEqual([broken.findings[0].location.line,broken.findings[0].location.column],[3,1]);
+assert.throws(()=>toMarkdown({slides:'x'}),OPFMarkdownError);
 console.log('Installed Markdown: dialect conversion, round trip and located errors work offline.');
 `);
     const markdown=await run(process.execPath,['markdown.mjs'],{cwd:projectDir});process.stdout.write(markdown.stdout);
@@ -260,33 +278,15 @@ globalThis.fetch=()=>{throw new Error('Offline YAML conversion must not fetch');
 const source='name: Installed\\nslides:\\n  - id: a\\n    title: "2026-10-01"\\n    items:\\n      - x\\n      - "yes"\\n';
 const converted=fromYaml(source);
 assert.equal(converted.valid,true);
-assert.deepEqual(converted.document,{name:'Installed',slides:[{id:'a',title:'2026-10-01',items:['x','yes']}]});
-assert.equal(toYaml(converted.document).yaml,source);
+assert.deepEqual(converted.presentation,{name:'Installed',slides:[{id:'a',title:'2026-10-01',items:['x','yes']}]});
+assert.equal(toYaml(converted.presentation).yaml,source);
 const broken=fromYaml('name: x\\nslides:\\n  - title: 5\\n');
-assert.equal(broken.valid,false);assert.deepEqual([broken.diagnostics[0].location.line,broken.diagnostics[0].location.column],[3,12]);
-assert.equal(fromYaml('a: &x 1\\nb: *x\\n').diagnostics[0].ruleId,'yaml/alias');
+assert.equal(broken.valid,false);assert.deepEqual([broken.findings[0].location.line,broken.findings[0].location.column],[3,12]);
+assert.equal(fromYaml('a: &x 1\\nb: *x\\n').findings[0].ruleId,'yaml/alias');
 assert.throws(()=>toYaml({slides:'x'}),OPFYamlError);
 console.log('Installed YAML: strict dialect, canonical writer and located errors work offline.');
 `);
     const yamlRun=await run(process.execPath,['yaml.mjs'],{cwd:projectDir});process.stdout.write(yamlRun.stdout);
-    assertTarIncludes(files,'package/dist/audit.js');assertTarIncludes(files,'package/dist/audit.d.ts');
-    await writeFile(path.join(projectDir,'audit.mjs'),`
-import assert from 'node:assert/strict';
-import {auditPresentation as rootAudit,auditRules as rootRules} from '@openpresentation/opf';
-import {auditPresentation,auditSource,auditRules} from '@openpresentation/opf/audit';
-globalThis.fetch=()=>{throw new Error('Offline audit must not fetch');};
-assert.equal(rootAudit,auditPresentation);assert.equal(rootRules,auditRules);
-const deck={name:'Packed audit',language:'en-US',design:{background:{type:'solid',color:'#FFFFFF'}},slides:[{title:'Quarterly results',text:[{text:'faint',color:'#CCCCCC'}]},{text:'No title',image:'https://example.com/a.png'}]};
-const report=auditPresentation(deck);
-assert.deepEqual(report.diagnostics.map(issue=>issue.ruleId),['audit/text-contrast','audit/missing-alt-text','audit/missing-slide-title']);
-assert.equal(report.checks.backgroundPixels,'not-read');
-const source=JSON.stringify(deck,null,1);
-const located=auditSource(source,{only:['missing-alt-text']}).diagnostics[0];
-assert.equal(source.slice(located.location.offset,located.location.offset+located.location.length),'"https://example.com/a.png"');
-assert.equal(auditSource('{"slides":[}').documentValid,false);
-console.log('Installed audit: root and subpath entrypoints, rule ids, source ranges and invalid input pass offline.');
-`);
-    const audit=await run(process.execPath,['audit.mjs'],{cwd:projectDir});process.stdout.write(audit.stdout);
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))
