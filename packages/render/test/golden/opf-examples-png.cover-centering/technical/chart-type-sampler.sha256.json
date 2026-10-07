@@ -8,6 +8,10 @@
     "technical/chart-type-sampler.opf.json#1": {
       "sha256": "0c3b8737832ecc09ca71663bea7ad9fcca78592602e0fca061112d9fa01fee6b",
       "bytes": 6858
+    },
+    "technical/chart-type-sampler.opf.json#2": {
+      "sha256": "4ed7b659fd4bfd6cc26259bbd671b3015bf80fd42b74dffd407ca7ebc510fe70",
+      "bytes": 7686
     }
   }
 }
