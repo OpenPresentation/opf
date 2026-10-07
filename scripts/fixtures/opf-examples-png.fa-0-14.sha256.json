@@ -3,7 +3,7 @@
   "source": {
     "repository": "OpenPresentation/opf",
     "path": "examples",
-    "sha256": "d414d352f6668bcad3c9184252eb0c9ef0fe02280c81b621c08e15f3b5a5cc78",
+    "sha256": "74ce3ad8703dee33f9507aa23f4b5e3a877833be49ec7c42d829e434c00da564",
     "decks": 127
   },
   "format": "png-sha256",
@@ -391,8 +391,8 @@
       "bytes": 11497
     },
     "gallery/business-functions/model-governance-review.opf.json#7": {
-      "sha256": "531ac5de36a6692dad720eb48c86204fc7785e825a65b687b7761ba6ef8baf91",
-      "bytes": 6328
+      "sha256": "a08d7729c81008ea9243c8f2fe4afecc1f03a2abbe4dc394e6c2e56a2df54bc7",
+      "bytes": 4749
     },
     "gallery/business-functions/model-governance-review.opf.json#8": {
       "sha256": "07f2f324860a44da579685039dcdb6722a9b6676e8689dd9e3bbdacf1b946e66",
@@ -567,8 +567,8 @@
       "bytes": 14964
     },
     "gallery/business-functions/revenue-forecast-inspection.opf.json#7": {
-      "sha256": "9e3c10c61772f274b52514239ffaf349ce2f94c3d1a7d33d3a2032ec8e2e501d",
-      "bytes": 7543
+      "sha256": "20f1aae0c25e6195154a114ad745cce02cd13b28edba0c22055d1ea98ba89c2a",
+      "bytes": 6181
     },
     "gallery/business-functions/revenue-forecast-inspection.opf.json#8": {
       "sha256": "b57d38e9a4da72b4feb9feeca56763395a5425b1487bd6e24f2a3e00e515140c",
@@ -1623,8 +1623,8 @@
       "bytes": 11707
     },
     "gallery/government/tax-portal-modernization.opf.json#7": {
-      "sha256": "a6703c8115c4f5b828d26b0b76950c8e7cfd2c60da4015c66ff2c7efc58bef4e",
-      "bytes": 6927
+      "sha256": "3b46e2864f72ad9c187ee088d4486727134321c483b2dd7bbca036d6ac695c74",
+      "bytes": 5770
     },
     "gallery/government/tax-portal-modernization.opf.json#8": {
       "sha256": "f2d74666edb8e4e07b0bac910ddfaf640771eb6789b30e622fba2ff899b3423a",
@@ -2247,8 +2247,8 @@
       "bytes": 12593
     },
     "gallery/industries/port-dwell-time-improvement-plan.opf.json#7": {
-      "sha256": "d69892225cfe7761e008254bd41f82606256dc4e8279e7f17b62abe22df1bde7",
-      "bytes": 6590
+      "sha256": "3a0c11e919543e9a5d26a98c52b8f636b73db2802b71c135d9f4510999e215f0",
+      "bytes": 5500
     },
     "gallery/industries/port-dwell-time-improvement-plan.opf.json#8": {
       "sha256": "4dcb8fef8e1f27a5370a81b9ac04399e7d37016c565bbac5c066e5f22f3aec1a",
@@ -2823,8 +2823,8 @@
       "bytes": 11465
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#7": {
-      "sha256": "63d0b8fb073f0c3c6db12f3c3803b55008dce910e78a9eb2f14f3b3ec8c9cc1f",
-      "bytes": 6343
+      "sha256": "48cc32a15e6b0cbf4e8551f00f3927e044d73cec3d4ceb9e28b51f33cafff00a",
+      "bytes": 4736
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#8": {
       "sha256": "2ad9ec244c9d51d62e245b40590acaaef4c9eff6b5bb16890816c5bc740d984d",
