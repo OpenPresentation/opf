@@ -170,7 +170,7 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
     const themed = structuredClone(before);
     themed.design.theme = theme;
     const drawn = svg(prepareTableStyle(themed, T, "banded").presentation);
-    const cells = [...drawn.matchAll(/<rect fill="(#[0-9A-Fa-f]{6})"[^>]*height="54"/g)].map((match) => match[1]);
+    const cells = [...drawn.matchAll(/<rect (?:aria-hidden="true" )?fill="(#[0-9A-Fa-f]{6})"[^>]*height="54"/g)].map((match) => match[1]);
     const bodyFills = cells.slice(themed.slides[0].blocks[0].table.columns.length); // drop the header row
     assert.ok(new Set(bodyFills).size >= 2, `${theme}: banded rows draw two different fills (${[...new Set(bodyFills)].join(", ")})`);
   }

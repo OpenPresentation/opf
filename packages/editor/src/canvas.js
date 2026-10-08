@@ -258,6 +258,9 @@ export function createCanvasEditor(container, options = {}) {
     const svg = preview.querySelector("svg");
     svg.setAttribute("role", "group");
     svg.setAttribute("aria-label", "Editable slide");
+    // FA-30: the renderer labels its slide root a "slide" group named by the title; the canvas is named for editing instead, so it drops
+    // the roledescription rather than announce "Editable slide, slide".
+    svg.removeAttribute("aria-roledescription");
     svg.removeAttribute("aria-labelledby");
     const geometry = resolvePresentation(presentation, drawOptions()).slides[
       slideIndex
@@ -288,6 +291,13 @@ export function createCanvasEditor(container, options = {}) {
         continue;
       seen.add(path);
       node.setAttribute("data-canvas-target", "");
+      // FA-30: the renderer hides decorative drawing and a picture or chart with an empty alt (aria-hidden), and names a chart with
+      // alt as an image group. An editing target is focusable, so neither it nor a group around it may be hidden or presentational:
+      // an ancestor image group (the chart's alt) stays named but becomes a plain group so the targets inside it are reachable.
+      for (let up = node; up && up !== svg; up = up.parentNode) {
+        up.removeAttribute("aria-hidden");
+        if (up !== node && up.getAttribute("role") === "img") up.setAttribute("role", "group");
+      }
       node.setAttribute("role", "button");
       node.setAttribute("tabindex", "0");
       node.setAttribute(

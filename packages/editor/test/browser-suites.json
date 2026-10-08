@@ -118,6 +118,10 @@
           "command": "npm run test:click-entry-browser"
         },
         {
+          "id": "browser:canvas-a11y",
+          "command": "npm run test:canvas-a11y-browser"
+        },
+        {
           "id": "browser:json-editor",
           "command": "npm run test:json-browser -- artifacts/json-editor-browser.json"
         },

@@ -226,6 +226,7 @@
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
     "test:click-entry-browser": "node test/click-entry-browser.mjs",
+    "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
     "test:metric-browser": "node test/metric-browser.mjs",
     "test:rich-input-browser": "node test/rich-input-browser.mjs",
     "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
