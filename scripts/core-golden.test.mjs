@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { branchErrors, changedPaths, commitMessage, deckCount, diffManifests, goldenInputs, isFixturePath, manifestErrors, pathErrors, resolveLock, slideCount, slideLines, splitKey, summaryMarkdown } from "./core-golden.mjs";
+import { RENDERER_REF_FILES, branchErrors, changedPaths, commitMessage, deckCount, diffManifests, fixturePathFor, goldenInputs, isFixturePath, lockWithGolden, manifestErrors, pathErrors, rendererPlan, rendererRefErrors, resolveLock, reviewRecord, slideCount, slideLines, splitKey, summaryMarkdown } from "./core-golden.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const script = path.join(root, "scripts/core-golden.mjs");
@@ -214,7 +214,8 @@ test("the workflow is valid YAML with the expected jobs", async () => {
   try { yaml = createRequire(path.join(root, "packages/javascript/package.json"))("yaml"); } catch { return; }
   const parsed = yaml.parse(workflowText);
   assert.deepEqual(Object.keys(parsed.jobs), ["regenerate", "push"]);
-  assert.deepEqual(Object.keys(parsed.on.workflow_dispatch.inputs), ["branch", "dry-run", "dispatch-ci"]);
+  assert.deepEqual(Object.keys(parsed.on.workflow_dispatch.inputs), ["branch", "dry-run", "dispatch-ci", "renderer-ref", "fixture-name"]);
+  for (const name of ["renderer-ref", "fixture-name"]) assert.equal(parsed.on.workflow_dispatch.inputs[name].required, false, name);
   assert.equal(parsed.jobs.push.needs, "regenerate");
   assert.deepEqual(parsed.jobs.push.permissions, { contents: "write", actions: "write" });
   assert.equal(parsed.jobs.regenerate.permissions, undefined);
@@ -224,4 +225,62 @@ test("run steps use only POSIX sh expansions (the container's default shell is s
   // `${VAR:0:12}` substrings, `[[ ]]`, here-strings and arrays are bash-only and fail under sh with "Bad substitution".
   assert.doesNotMatch(workflowText, /\$\{[A-Za-z_][A-Za-z0-9_]*:-?[0-9]/u);
   assert.doesNotMatch(workflowText, /\[\[|<<<|\bdeclare\b|\bset -o pipefail\b/u);
+});
+
+// FA wave C: renderer-ref renders the branch with an unmerged opf-render branch or commit into a NEW fixture.
+const MAIN_GOLDEN = "scripts/fixtures/opf-examples-png.fa-0-14.sha256.json";
+const NEW_FIXTURE = "scripts/fixtures/opf-examples-png.fa-0-15.sha256.json";
+const plan = (extra) => rendererPlan({ mainGolden: MAIN_GOLDEN, branchGolden: MAIN_GOLDEN, mainRenderer: "a".repeat(40), branchRenderer: "a".repeat(40), ...extra });
+
+test("renderer-ref parsing: a plain opf-render branch or a commit SHA, nothing else", () => {
+  for (const ok of ["codex/fa-23-render-0.15", "main", "abc1234", "f".repeat(40)]) assert.deepEqual(rendererRefErrors(ok), [], ok);
+  for (const bad of ["", "owner:branch", "refs/heads/x", "origin/x", "-x", "a..b", "x/", "x.lock", "with space"]) assert.ok(rendererRefErrors(bad).length > 0, bad);
+});
+
+test("renderer-ref path: a new fixture under scripts/fixtures, never main's, and the renderer check relaxed with a reason", () => {
+  assert.equal(fixturePathFor("fa-0-15"), NEW_FIXTURE);
+  for (const bad of ["", "Upper", "../x", "a/b", "-a", "a-"]) assert.throws(() => fixturePathFor(bad), /fixture-name/, bad);
+  // Without renderer-ref: the lock's golden, and the branch must lock main's renderer.
+  assert.deepEqual(plan({}), { override: false, fixturePath: MAIN_GOLDEN, errors: [], notes: [] });
+  assert.match(plan({ branchRenderer: "b".repeat(40) }).errors.join(), /Rebase onto main/);
+  assert.match(plan({ fixtureName: "x" }).errors.join(), /only for a renderer-ref run/);
+  // With renderer-ref: the new fixture; a different branch renderer is allowed and the log says why.
+  const moved = plan({ rendererRef: "codex/fa-23-render-0.15", fixtureName: "fa-0-15", branchRenderer: "b".repeat(40) });
+  assert.deepEqual([moved.override, moved.fixturePath, moved.errors], [true, NEW_FIXTURE, []]);
+  assert.match(moved.notes.join(), /check is relaxed/);
+  assert.match(plan({ rendererRef: "x" }).errors.join(), /needs fixture-name/);
+  assert.match(plan({ rendererRef: "x", fixtureName: "fa-0-14" }).errors.join(), /main's fixture/);
+  assert.match(plan({ rendererRef: "a:b", fixtureName: "n" }).errors.join(), /owner/);
+});
+
+test("renderer-ref commit: the lock selects the new fixture (roller formatting kept); only the lock and the review record may change besides it", () => {
+  const lock = readFileSync(path.join(root, "ecosystem.lock.json"), "utf8");
+  const next = lockWithGolden(lock, NEW_FIXTURE, "rendered with renderer-ref");
+  assert.equal(resolveLock(next).goldenPath, NEW_FIXTURE);
+  assert.equal(resolveLock(next).rendererSha, resolveLock(lock).rendererSha);
+  const before = lock.split("\n");
+  assert.equal(next.split("\n").filter((line, index) => line !== before[index]).length, 2, "golden.path and golden.note only");
+  assert.throws(() => lockWithGolden(lock, "docs/x.json"), /not scripts\/fixtures/);
+  assert.deepEqual(RENDERER_REF_FILES, ["ecosystem.lock.json", "scripts/fixtures/README.md"]);
+  assert.deepEqual(pathErrors([NEW_FIXTURE, "ecosystem.lock.json", "scripts/fixtures/README.md"], [NEW_FIXTURE, ...RENDERER_REF_FILES]), []);
+  assert.match(pathErrors([NEW_FIXTURE, "ecosystem.lock.json"], [NEW_FIXTURE]).join(), /unexpected change outside the fixture: ecosystem\.lock\.json/);
+  assert.match(pathErrors([NEW_FIXTURE], [NEW_FIXTURE, "package.json"]).join(), /package\.json may not change/);
+  const record = reviewRecord({ fixture: NEW_FIXTURE, branch: "codex/fa-wave-c-core", head: "c".repeat(40), renderer: "d".repeat(40), rendererRef: "codex/fa-23-render-0.15", baseSha: "e".repeat(40), changedSlides: 12, changedDecks: 3, runUrl: "https://example.test/run" });
+  for (const part of ["opf-examples-png.fa-0-15.sha256.json", "d".repeat(40), "renderer-ref `codex/fa-23-render-0.15`", "12 slides change in 3 decks"]) assert.ok(record.includes(part), part);
+  const message = commitMessage(diffManifests(base(), base()), { renderer: "d".repeat(40), rendererRef: "codex/fa-23-render-0.15" });
+  assert.ok(message.includes(`opf-render ${"d".repeat(40)} (renderer-ref codex/fa-23-render-0.15, not the locked renderer)`), message);
+});
+
+test("the plan command prints the override and the fixture path; the workflow passes the new inputs through env only", () => {
+  const run = (...args) => spawnSync("node", [script, "plan", "--main-golden", MAIN_GOLDEN, "--branch-golden", MAIN_GOLDEN, "--main-renderer", "a".repeat(40), "--branch-renderer", "b".repeat(40), ...args], { encoding: "utf8" });
+  const ok = run("--renderer-ref", "codex/fa-23-render-0.15", "--fixture-name", "fa-0-15");
+  assert.equal(ok.status, 0, ok.stderr);
+  assert.ok(ok.stdout.includes(`override=true\nfixture-path=${NEW_FIXTURE}`), ok.stdout);
+  assert.match(ok.stdout, /check is relaxed/);
+  assert.equal(run("--renderer-ref", "", "--fixture-name", "").status, 1, "without renderer-ref the renderers must match");
+  assert.ok(workflowText.includes("RENDERER_REF: ${{ inputs.renderer-ref }}"));
+  assert.ok(workflowText.includes('render opf out/branch "$BRANCH_RENDERER_DIR"'));
+  assert.ok(workflowText.includes("set-lock-golden --lock branch/ecosystem.lock.json"));
+  // The guard still renders main with the locked renderer (the default renderer dir).
+  assert.ok(workflowText.includes('renderer="${3:-opf-render}"') && workflowText.includes("render opf-base out/main\n"));
 });
