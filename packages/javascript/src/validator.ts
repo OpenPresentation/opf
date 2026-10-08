@@ -6,6 +6,7 @@ import {
 	issueFinding,
 	issueRuleId,
 	referenceFindings,
+	undeclaredCatalogFindings,
 	variableFindings,
 } from './check-document.js';
 import { parseSource, type ParsedSource } from './check-source.js';
@@ -242,6 +243,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 	// format: the engine's errors and the coded warnings of every category (cheap; the schema check runs in any case).
 	findings.push(...engineFindings(document, engine, (ruleId) => enabledRule(findValidationRule(ruleId))));
 	if (enabledRule(findValidationRule('opf/variable-unfilled'))) findings.push(...variableFindings(document, engine, schemaValid));
+	if (enabledRule(findValidationRule('opf/undeclared-catalog'))) findings.push(...undeclaredCatalogFindings(document));
 	if (parsed) {
 		findings.push(...parsed.duplicates.filter((entry) => enabledRule(findValidationRule(entry.ruleId))));
 	}

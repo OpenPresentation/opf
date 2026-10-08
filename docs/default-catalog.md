@@ -39,7 +39,7 @@ kind and then by id:
 ## References
 
 Every content reference is a bare `id` or `name:id`, and every prefix must name a group (`opf/undeclared-catalog`
-otherwise, an error). URLs and `pkg:` strings are not references; a named group replaces them. The references are
+otherwise, a format error that engines reject at their format check). URLs and `pkg:` strings are not references; a named group replaces them. The references are
 `Slide.layout`, `design.theme`, `design.colorScheme` (or its `id`), `design.fontScheme` (or its `id`), the same three on
 `Slide.design`, `narrative`, `audience`, `purpose` and `tone` (a string or an object's `id`), a theme record's
 `colorScheme` and `fontScheme`, and a `language` object's `fontScheme` and `googleFontScheme`. An `audience` or
@@ -88,9 +88,13 @@ paginate(document, { catalogs });
 A registered catalog has the shape of a document group with `source` required: `{ source, layouts?: { <id>: record },
 themes?, … }`. Records may keep their `x-*` display metadata there; embedding strips it. `resolveSlideContext`,
 `paginate`, `validate`, `stats`, `resolveScriptFonts` (`/composition`), `resolveReference`, `catalogRecords`, `embed`,
-`copySlides` and `updateFromCatalog` all take it, and opf-render, opf-pptx and opf-editor pass it through to core, so a
+`copySlides`, `moveToCustom` and `updateFromCatalog` all take it, and opf-render, opf-pptx and opf-editor pass it through to core, so a
 record a host registers resolves the same in preview, editor and export. Without it only what the document embeds
-resolves.
+resolves. A `catalogs` value that is not an array of registered catalogs throws `OPFCatalogsOptionError`
+(`code: "invalid-catalogs"`) at every entry point. `resolveSlideContext(...).resolved.provenance` (and
+`resolveDesignRecords(...).provenance`) says where each resolved layout, theme, colour scheme and font scheme came from
+(`{ kind, reference, id, group, source?, origin }`, origin `document` or `host`), so engines record provenance without
+resolving again.
 
 `@openpresentation/opf/catalog` exports:
 
@@ -120,6 +124,16 @@ budget.
   already has with the same content is reused. A `custom` id
   the target uses for different content is renamed `<id>-2`. A catalog record whose revision differs from the one the
   target resolves moves into `custom` as `<id>-2`, so the copied slides look the same, and is listed in `renamed`.
+  `renamed` lists only the records a call creates under a new id: a later copy that reuses one is not a rename.
+- **`moveToCustom(document, { kind, reference }, { catalogs })`** moves a record embedded under `default` or a named
+  group into `custom`: the fix `opf/catalog-record-not-in-source` suggests. Every reference that named it is rewritten
+  to name it in `custom`, and its own references keep naming what they named. It keeps its id unless `custom` holds a
+  different record under it (then `<id>-2` and up; an identical one is reused). It returns
+  `{ document, from, to, references, patch }`, where `patch` is RFC 6902 for review and undo, and throws
+  `OPFMoveToCustomError` (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`, `id-taken`). Fork:
+  `moveToCustom(document, ref, { id })` copies the record into `custom` under the new id and rewrites every reference to
+  the copy, so the original is removed from its group; an editor calls it on the first edit of a catalog record and
+  applies the edit to the copy.
 - **`updateFromCatalog(document, catalogs, refs?)`** compares the records embedded under `default` and the named groups
   with the registered catalogs' current ones and returns `{ changes, patch }`. Nothing changes until the author applies
   `patch` (`applyPatch`); `custom` records are never compared.

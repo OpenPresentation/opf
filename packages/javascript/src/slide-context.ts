@@ -1,4 +1,4 @@
-import { OPFUnresolvedReferenceError, resolveReference, unresolvedReference, type CatalogOptions, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
+import { OPFUnresolvedReferenceError, checkCatalogsOption, provenanceOf, resolveReference, unresolvedReference, type CatalogOptions, type RecordProvenance, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
 import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts } from './composition.js';
 import { resolveColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
@@ -44,6 +44,12 @@ export interface SlideContext {
     fontSchemePath: string;
     /** The layout record, when the slide names one that resolves. */
     layout?: Rec;
+    /**
+     * Where each resolved record came from: `{ kind, reference, id, group, source?, origin }` (origin `document` for an
+     * embedded record, `host` for a registered catalog's). A kind is absent when nothing resolved for it (the engine
+     * default, or automatic composition for a layout), so engines record provenance without resolving again.
+     */
+    provenance: { layout?: RecordProvenance; theme?: RecordProvenance; colorScheme?: RecordProvenance; fontScheme?: RecordProvenance };
   };
 }
 
@@ -58,16 +64,20 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   const slides = Array.isArray(deck.slides) ? deck.slides : [];
   if (!Number.isInteger(index) || index < 0 || index >= slides.length) throw new RangeError(`Slide index ${String(index)} is outside the presentation's ${slides.length} slides.`);
   const slide = rec(slides[index]);
-  const catalogs = { catalogs: options.catalogs ?? [] };
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'resolveSlideContext') };
   const records = resolveDesignRecords(presentation, index, catalogs);
   const diagnostics: SlideContextDiagnostic[] = [...records.diagnostics];
   const { theme, colorScheme, fontScheme } = records;
   const design = { ...rec(deck.design), ...rec(slide.design) };
 
   let layout: Rec | undefined;
+  let layoutProvenance: RecordProvenance | undefined;
   if (typeof slide.layout === 'string') {
     const found = resolveReference(presentation, 'layouts', slide.layout, catalogs);
-    if (found) layout = { ...found.record };
+    if (found) {
+      layout = { ...found.record };
+      layoutProvenance = provenanceOf(found);
+    }
     else diagnostics.push(unresolvedReference(presentation, 'layouts', slide.layout, `slides.${index}.layout`, catalogs));
   }
   if (options.strictReferences && diagnostics.length) throw new OPFUnresolvedReferenceError(diagnostics);
@@ -85,5 +95,5 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
     ...(options.date !== undefined ? { date: options.date } : {}),
   };
-  return { options: composeOptions, diagnostics, resolved: { theme, colorScheme, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}) } };
+  return { options: composeOptions, diagnostics, resolved: { theme, colorScheme, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

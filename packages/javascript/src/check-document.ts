@@ -5,6 +5,7 @@ import {
 	catalogKinds,
 	catalogRecords,
 	catalogReferenceSites,
+	checkCatalogsOption,
 	parseReference,
 	pointerPath,
 	resolveReference,
@@ -68,19 +69,7 @@ function at(value: unknown, path: string): unknown {
 }
 /** Check the shape of the options only this module reads. Unknown option keys are rejected by `validate` itself. */
 export function checkDocumentOptions(options: ValidateOptions) {
-	if (
-		options.catalogs !== undefined &&
-		(!Array.isArray(options.catalogs) ||
-			options.catalogs.some(
-				(catalog) =>
-					!object(catalog) ||
-					typeof catalog.source !== 'string' ||
-					Object.entries(catalog).some(([kind, records]) => kind !== 'source' && (!catalogKinds.includes(kind as CatalogKind) || !object(records))),
-			))
-	)
-		throw new TypeError(
-			'Validate catalogs must be an array of registered catalogs: { source, <kind>: { <id>: record } } with known catalog kinds.',
-		);
+	checkCatalogsOption(options.catalogs, 'validate');
 	if (options.contracts !== undefined && !Array.isArray(options.contracts))
 		throw new TypeError('Validate contracts must be an array.');
 	for (const contract of options.contracts ?? []) {
@@ -583,25 +572,38 @@ export function variableFindings(document: unknown, engine: SchemaCheckResult, s
 	return findings;
 }
 
-/** The unresolved and undeclared content references, one finding each, with the nearest records as suggestions. */
+/**
+ * A `name:id` reference whose prefix names no group of the document's `catalogs` (format, error): it can never
+ * resolve, whatever the host registers, so engines reject the document at their format check instead of drawing a
+ * fallback. Needs only the document.
+ */
+export function undeclaredCatalogFindings(document: unknown): Finding[] {
+	const findings: Finding[] = [];
+	for (const site of catalogReferenceSites(document)) {
+		const parsed = parseReference(site.reference);
+		if (parsed?.group === undefined || catalogGroupDeclared(document, parsed.group)) continue;
+		findings.push(
+			finding('opf/undeclared-catalog', {
+				path: pointerPath(site.path),
+				message: `Reference ${JSON.stringify(site.reference)} names catalog group ${JSON.stringify(parsed.group)}, which the document does not declare, so it can never resolve.`,
+				help: `Declare catalogs.${parsed.group} with the catalog's source (and embed the record), or write the reference without the prefix.`,
+				definition: `${schemas.presentation.$id}#/$defs/CatalogReference`,
+				lookup: ['opf', 'schema', 'presentation', '/$defs/CatalogReference'],
+			}),
+		);
+	}
+	return findings;
+}
+
+/** The unresolved content references, one finding each, with the nearest records as suggestions. */
 function contentReferenceFindings(document: unknown, options: CatalogOptions, findings: Finding[]): void {
 	const invalid = embeddedRecordFindings(document, options, findings);
 	const registeredChecked = new Set<string>();
 	for (const site of catalogReferenceSites(document)) {
 		const path = pointerPath(site.path);
 		const parsed = parseReference(site.reference);
-		if (parsed?.group !== undefined && !catalogGroupDeclared(document, parsed.group)) {
-			findings.push(
-				finding('opf/undeclared-catalog', {
-					path,
-					message: `Reference ${JSON.stringify(site.reference)} names catalog group ${JSON.stringify(parsed.group)}, which the document does not declare.`,
-					help: `Declare catalogs.${parsed.group} with the catalog's source (and embed the record), or write the reference without the prefix.`,
-					definition: `${schemas.presentation.$id}#/$defs/CatalogReference`,
-					lookup: ['opf', 'schema', 'presentation', '/$defs/CatalogReference'],
-				}),
-			);
-			continue;
-		}
+		// An undeclared prefix is the format error opf/undeclared-catalog (undeclaredCatalogFindings), never also unresolved.
+		if (parsed?.group !== undefined && !catalogGroupDeclared(document, parsed.group)) continue;
 		const found = resolveReference(document, site.kind, site.reference, { ...options, ...(site.group !== undefined ? { group: site.group } : {}) });
 		if (found?.origin === 'host' && !registeredChecked.has(recordKey(found.group, site.kind, found.id))) {
 			// A registered record the document uses is checked like an embedded one, once.

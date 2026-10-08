@@ -52,6 +52,18 @@ export interface ResolvedReference {
   record: Record<string, unknown>;
 }
 
+/**
+ * Where a resolved record came from, without the record itself: what an engine records as provenance
+ * (`resolveSlideContext().resolved.provenance`, `resolveDesignRecords().provenance`).
+ */
+export type RecordProvenance = Omit<ResolvedReference, 'record'>;
+
+/** The provenance of a resolved reference. */
+export function provenanceOf(found: ResolvedReference): RecordProvenance {
+  const { record: _record, ...provenance } = found;
+  return provenance;
+}
+
 /** Reported when a reference resolves nowhere. Never thrown, except under `strictReferences`. */
 export interface UnresolvedReferenceDiagnostic {
   code: 'unresolved-reference';
@@ -70,6 +82,33 @@ export interface UnresolvedReferenceDiagnostic {
 }
 
 /** Thrown by `resolveSlideContext` and `paginate` under `strictReferences` when a reference resolves nowhere. */
+/**
+ * Thrown by every entry point that takes the `catalogs` option when it is not an array of registered catalogs
+ * (`{ source: string, <kind>: { <id>: record } }` with known kinds). `code` is always `invalid-catalogs`.
+ */
+export class OPFCatalogsOptionError extends TypeError {
+  readonly code = 'invalid-catalogs';
+  constructor(entry: string, detail: string) {
+    super(`${entry}: the catalogs option must be an array of registered catalogs ({ source, <kind>: { <id>: record } } with known catalog kinds); ${detail}.`);
+    this.name = 'OPFCatalogsOptionError';
+  }
+}
+
+/** Check a `catalogs` option (undefined means none registered) and return the registered catalogs. Throws OPFCatalogsOptionError. */
+export function checkCatalogsOption(catalogs: unknown, entry: string): readonly Catalog[] {
+  if (catalogs === undefined) return [];
+  if (!Array.isArray(catalogs)) throw new OPFCatalogsOptionError(entry, `got ${catalogs === null ? 'null' : typeof catalogs}`);
+  catalogs.forEach((catalog, index) => {
+    if (!isRec(catalog) || typeof catalog.source !== 'string') throw new OPFCatalogsOptionError(entry, `catalogs[${index}] is not an object with a string source`);
+    for (const [kind, records] of Object.entries(catalog)) {
+      if (kind === 'source') continue;
+      if (!(catalogKinds as readonly string[]).includes(kind)) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].${kind} is not a catalog kind`);
+      if (!isRec(records)) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].${kind} is not an object of records keyed by id`);
+    }
+  });
+  return catalogs as readonly Catalog[];
+}
+
 export class OPFUnresolvedReferenceError extends Error {
   readonly diagnostics: UnresolvedReferenceDiagnostic[];
   constructor(diagnostics: UnresolvedReferenceDiagnostic[]) {
@@ -150,6 +189,7 @@ export function lookupInGroup(document: unknown, kind: CatalogKind, group: strin
  * Undefined when the reference is malformed, names an undeclared group or resolves nowhere.
  */
 export function resolveReference(document: unknown, kind: CatalogKind, reference: unknown, options: CatalogOptions & { group?: string } = {}): ResolvedReference | undefined {
+  checkCatalogsOption(options.catalogs, 'resolveReference');
   const parsed = parseReference(reference);
   if (!parsed) return undefined;
   const written = reference as string;
@@ -280,6 +320,7 @@ export const pointerPath = (path: readonly (string | number)[]) =>
 
 /** Records a picker can offer for `kind`: the document's embedded records, then those of the registered catalogs its groups name, with the reference to write for each. */
 export function catalogRecords(document: unknown, kind: CatalogKind, options: CatalogOptions = {}): ResolvedReference[] {
+  checkCatalogsOption(options.catalogs, 'catalogRecords');
   const result: ResolvedReference[] = [];
   const seen = new Set<string>();
   const add = (entry: ResolvedReference) => {

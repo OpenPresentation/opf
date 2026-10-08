@@ -1,4 +1,4 @@
-import { resolveReference, type CatalogOptions } from "./catalog-refs.js";
+import { checkCatalogsOption, resolveReference, type CatalogOptions } from "./catalog-refs.js";
 import { resolveFontFamilies } from "./composition.js";
 import { isRecord } from "./content-walk.js";
 import { resolveDesignRecords } from "./design-records.js";
@@ -325,7 +325,7 @@ export function resolveScriptFonts(input: unknown, options: ResolveScriptFontsOp
       throw new RangeError(`slideIndex must be an integer between 0 and ${slides.length - 1}.`);
     }
   }
-  const catalogs = { catalogs: options.catalogs ?? [] };
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'resolveScriptFonts') };
   const scheme = resolveDesignRecords(document, options.slideIndex, catalogs).fontScheme;
   const latin = resolveFontFamilies(scheme);
 

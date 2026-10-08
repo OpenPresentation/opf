@@ -1,4 +1,4 @@
-import { resolveReference, unresolvedReference, type CatalogKind, type CatalogOptions, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
+import { checkCatalogsOption, provenanceOf, resolveReference, unresolvedReference, type CatalogKind, type CatalogOptions, type RecordProvenance, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
 import { ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_THEME } from './engine-vocabularies.js';
 
 /**
@@ -23,6 +23,11 @@ export interface ResolvedDesignRecords {
   fontSchemePath: string;
   /** The font-scheme reference that applies (a string, or the `id` of an object reference), if any. */
   fontSchemeReference?: string;
+  /**
+   * Where each record came from (group, source, `document` or `host`), so an engine records provenance without
+   * resolving again. A kind is absent when its engine default applies (no reference, or one that resolves nowhere).
+   */
+  provenance: { theme?: RecordProvenance; colorScheme?: RecordProvenance; fontScheme?: RecordProvenance };
   /** Unresolved references, in the order theme, colour scheme, font scheme. */
   diagnostics: UnresolvedReferenceDiagnostic[];
 }
@@ -36,13 +41,13 @@ function resolveRecordReference(
   fallback: Readonly<Rec>,
   options: CatalogOptions & { group?: string },
   diagnostics: UnresolvedReferenceDiagnostic[],
-): Rec {
+): { record: Rec; provenance?: RecordProvenance } {
   const object = isRec(reference) ? reference : undefined;
   const id = typeof reference === 'string' ? reference : typeof object?.id === 'string' ? object.id : undefined;
-  if (id === undefined) return { ...fallback, ...object };
+  if (id === undefined) return { record: { ...fallback, ...object } };
   const found = resolveReference(document, kind, id, options);
   if (!found) diagnostics.push(unresolvedReference(document, kind, id, object ? `${path}.id` : path, options));
-  return { ...(found ? found.record : fallback), ...object };
+  return { record: { ...(found ? found.record : fallback), ...object }, ...(found ? { provenance: provenanceOf(found) } : {}) };
 }
 
 /**
@@ -50,6 +55,7 @@ function resolveRecordReference(
  * an unresolved reference: the engine default applies and `diagnostics` names the reference.
  */
 export function resolveDesignRecords(document: unknown, slideIndex: number | undefined, options: CatalogOptions = {}): ResolvedDesignRecords {
+  checkCatalogsOption(options.catalogs, 'resolveDesignRecords');
   const deck = rec(document);
   const slides = Array.isArray(deck.slides) ? deck.slides : [];
   const own = slideIndex === undefined ? {} : rec(rec(slides[slideIndex]).design);
@@ -69,20 +75,26 @@ export function resolveDesignRecords(document: unknown, slideIndex: number | und
 
   const colorFromDesign = design.colorScheme !== undefined;
   const colorSchemePath = own.colorScheme !== undefined ? `${slidePath}.colorScheme` : shared.colorScheme !== undefined ? 'design.colorScheme' : inThemePath('colorScheme');
-  const colorScheme = resolveRecordReference(document, 'colorSchemes', colorFromDesign ? design.colorScheme : theme.colorScheme, colorFromDesign ? colorSchemePath : inThemePath('colorScheme'), ENGINE_DEFAULT_COLOR_SCHEME, colorFromDesign ? options : inTheme, diagnostics);
+  const color = resolveRecordReference(document, 'colorSchemes', colorFromDesign ? design.colorScheme : theme.colorScheme, colorFromDesign ? colorSchemePath : inThemePath('colorScheme'), ENGINE_DEFAULT_COLOR_SCHEME, colorFromDesign ? options : inTheme, diagnostics);
 
   const fontFromDesign = design.fontScheme !== undefined;
   const fontSchemePath = own.fontScheme !== undefined ? `${slidePath}.fontScheme` : shared.fontScheme !== undefined ? 'design.fontScheme' : inThemePath('fontScheme');
-  const fontScheme = resolveRecordReference(document, 'fontSchemes', fontFromDesign ? design.fontScheme : theme.fontScheme, fontSchemePath, ENGINE_DEFAULT_FONT_SCHEME, fontFromDesign ? options : inTheme, diagnostics);
+  const font = resolveRecordReference(document, 'fontSchemes', fontFromDesign ? design.fontScheme : theme.fontScheme, fontSchemePath, ENGINE_DEFAULT_FONT_SCHEME, fontFromDesign ? options : inTheme, diagnostics);
 
   const fontReference = fontFromDesign ? design.fontScheme : theme.fontScheme;
   const fontSchemeReference = typeof fontReference === 'string' ? fontReference : isRec(fontReference) && typeof fontReference.id === 'string' ? fontReference.id : undefined;
-  return { theme, colorScheme, fontScheme, themePath, colorSchemePath, fontSchemePath, ...(fontSchemeReference !== undefined ? { fontSchemeReference } : {}), diagnostics };
+  const provenance = {
+    ...(themeFound ? { theme: provenanceOf(themeFound) } : {}),
+    ...(color.provenance ? { colorScheme: color.provenance } : {}),
+    ...(font.provenance ? { fontScheme: font.provenance } : {}),
+  };
+  return { theme, colorScheme: color.record, fontScheme: font.record, themePath, colorSchemePath, fontSchemePath, ...(fontSchemeReference !== undefined ? { fontSchemeReference } : {}), provenance, diagnostics };
 }
 
 /** Resolve a font-scheme reference (a string, or an object with an optional `id` plus overrides) on its own. */
 export function resolveFontScheme(document: unknown, reference: unknown, path: string, options: CatalogOptions & { group?: string } = {}): { scheme: Rec; diagnostics: UnresolvedReferenceDiagnostic[] } {
+  checkCatalogsOption(options.catalogs, 'resolveFontScheme');
   const diagnostics: UnresolvedReferenceDiagnostic[] = [];
-  const scheme = resolveRecordReference(document, 'fontSchemes', reference, path, ENGINE_DEFAULT_FONT_SCHEME, options, diagnostics);
+  const { record: scheme } = resolveRecordReference(document, 'fontSchemes', reference, path, ENGINE_DEFAULT_FONT_SCHEME, options, diagnostics);
   return { scheme, diagnostics };
 }

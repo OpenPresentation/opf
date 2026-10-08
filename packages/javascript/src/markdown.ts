@@ -7,7 +7,7 @@
  *
  * No renderer, fonts, DOM, network or model calls. The same input always gives the same output.
  */
-import type { Catalog } from "./catalog-refs.js";
+import { checkCatalogsOption, type Catalog } from "./catalog-refs.js";
 import { type Obj, same } from "./convert/shared.js";
 import type { Presentation } from "./types.js";
 import type { Finding, FindingLocation, FindingReport } from "./generated/types/finding.js";
@@ -44,6 +44,7 @@ export interface FromMarkdownResult {
 /** Convert Markdown in the OPF dialect to an OPF document. Never throws for malformed content; read `valid` and `findings`. */
 export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}): FromMarkdownResult {
   if (typeof markdown !== "string") throw new TypeError("fromMarkdown expects a string.");
+  checkCatalogsOption(options.catalogs, "fromMarkdown");
   const source = markdown;
   const ctx = new Ctx(source);
   let lines = splitLines(source);

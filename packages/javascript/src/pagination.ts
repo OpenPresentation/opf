@@ -1,7 +1,7 @@
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { composeSlide, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
-import type { CatalogOptions } from './catalog-refs.js';
+import { checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
@@ -293,6 +293,7 @@ const usesSlideTotal = (presentation: Record<string, any>): boolean => [presenta
 
 /** Resolve the slides' references (the document's catalogs groups, then the registered catalogs) and paginate a complete presentation without mutating it. */
 export function paginate(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
+  checkCatalogsOption(options.catalogs, 'paginate');
   assertValid(input, { only: ['format'] });
   const presentation = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;

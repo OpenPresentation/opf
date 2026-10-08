@@ -28,8 +28,8 @@ Every finding has one of six categories. They say what kind of question the find
 
 | Category | Asks | Errors by default | Examples |
 | --- | --- | --- | --- |
-| `format` | Is it well-formed OPF? | yes | JSON syntax, duplicate keys, schema, a citation of an unknown reference, an unknown dataset, a required variable with no value (a warning in a template) |
-| `references` | Does everything it points at resolve? | missing or circular asset, invalid catalog record, undeclared catalog prefix; a reference that resolves nowhere and an unused dataset are warnings | `asset:` references, catalog references, citations and datasets nobody uses |
+| `format` | Is it well-formed OPF? | yes | JSON syntax, duplicate keys, schema, a citation of an unknown reference, an unknown dataset, a required variable with no value (a warning in a template), a `name:id` prefix that names no catalog group |
+| `references` | Does everything it points at resolve? | missing or circular asset, invalid catalog record; a reference that resolves nowhere and an unused dataset are warnings | `asset:` references, catalog references, citations and datasets nobody uses |
 | `policy` | Does it follow the host's house rules? | the host sets it (default `error`) | "only these layouts", brand fonts: the `contracts` option |
 | `accessibility` | Can everyone read it? | no: warning and info | contrast, alt text, slide titles, reading order, link text, language |
 | `layout` | Will it present as authored? | no: warning | overflow, minimum type size, image resolution, fonts outside the scheme |
@@ -116,7 +116,7 @@ A fix is a suggestion that core never applies. A host such as the editor's Revie
 
 ## Catalog context and contracts
 
-Content references resolve the way every engine resolves them ([catalogs](default-catalog.md)): `catalogs.custom`, then the records embedded under `catalogs.default`, then the catalog the host registered (the `catalogs` option) for its source; `name:id` in `catalogs.<name>`, then the catalog registered for its source. A reference that resolves nowhere is a warning (`opf/unresolved-reference`), never an error; a prefix that names no group is an error (`opf/undeclared-catalog`). Nothing is fetched, and without the `catalogs` option only the records the document embeds resolve. Free-form audience and purpose descriptions (any string that is not a bare id or `name:id`) and arbitrary `extensions` data are never references; the `language` tag, `chart.type` and the `socials` keys are engine vocabularies the schema checks. Embedded records, and registered records the document uses, are validated against their companion schema (`opf/catalog-record`). A record under `catalogs.default` or a named group that the catalog registered for the group's source does not publish is `opf/catalog-record-not-in-source` (move it to `catalogs.custom`); with no catalog registered for that source the check is silent. Suggestions name records actually present in the checked context (`origin` `document` or `registered`).
+Content references resolve the way every engine resolves them ([catalogs](default-catalog.md)): `catalogs.custom`, then the records embedded under `catalogs.default`, then the catalog the host registered (the `catalogs` option) for its source; `name:id` in `catalogs.<name>`, then the catalog registered for its source. A reference that resolves nowhere is a warning (`opf/unresolved-reference`), never an error; a prefix that names no group is a format error (`opf/undeclared-catalog`): it can never resolve, so engines reject the document at their format check (`validate(document, { only: ["format"] })`) instead of drawing a fallback. A `catalogs` option that is not an array of registered catalogs throws `OPFCatalogsOptionError` (`code: "invalid-catalogs"`) at every entry point. Nothing is fetched, and without the `catalogs` option only the records the document embeds resolve. Free-form audience and purpose descriptions (any string that is not a bare id or `name:id`) and arbitrary `extensions` data are never references; the `language` tag, `chart.type` and the `socials` keys are engine vocabularies the schema checks. Embedded records, and registered records the document uses, are validated against their companion schema (`opf/catalog-record`). A record under `catalogs.default` or a named group that the catalog registered for the group's source does not publish is `opf/catalog-record-not-in-source` (move it to `catalogs.custom`); with no catalog registered for that source the check is silent. Suggestions name records actually present in the checked context (`origin` `document` or `registered`).
 
 An `asset:` reference that names no entry of the document's `assets` registry is an error (`opf/asset-reference`), and so is a cycle of `asset:` sources (`opf/asset-cycle`); resource bytes are never fetched. Chart and table data findings keep their code as the rule id (`opf/dataset-unknown`, `opf/chart-value-not-numeric`, ...), and a `opf/chart-value-not-numeric` cell whose column is written in one display style (`"12%"`, `"$1,234"`) carries `fixes` ([chart and table data](chart-table-data.md#migration-help)). Citation and caption errors keep theirs too (`opf/cite-unknown-reference`, `opf/reference-id-duplicate`, `opf/cite-unsupported-location`, `opf/caption-unsupported-payload`).
 
@@ -214,12 +214,12 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
 | [`opf/run-color-unrecognized`](#opfrun-color-unrecognized) | Format | warning | structure | A text run colour is none of the documented forms. |
 | [`opf/numbering-start-ignored`](#opfnumbering-start-ignored) | Format | warning | structure | A list entry sets `start` where nothing is numbered. |
+| [`opf/undeclared-catalog`](#opfundeclared-catalog) | Format | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
 | [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
 | [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
 | [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
-| [`opf/undeclared-catalog`](#opfundeclared-catalog) | References | error | structure | A reference names a catalog group the document does not declare. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
 | [`opf/unused-dataset`](#opfunused-dataset) | References | warning | structure | A dataset is never used. |
 | [`opf/unknown-beat`](#opfunknown-beat) | References | warning | structure | A slide names a beat its narrative does not define. |
@@ -436,6 +436,14 @@ Default severity: **warning**. Cost: structure. A list entry sets `start` where 
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
+### `opf/undeclared-catalog`
+
+Default severity: **error**. Cost: structure. A reference names a catalog group the document does not declare.
+
+**Why.** The prefix of a `name:id` reference names the group of `catalogs` it resolves in. A prefix with no group can never resolve, whatever the host registers, so it is a format error: engines reject the document at their format check instead of drawing a fallback.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
 
 ## References rules
 
@@ -484,14 +492,6 @@ Default severity: **warning**. Cost: structure. A record embedded under a catalo
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
 **Approximations.** Checked only against a catalog the host registered for the group's source (the first registered catalog for an omitted default.source); with none registered for it the check is silent. A record the catalog has with different content is an update difference (updateFromCatalog), not this finding. catalogs.custom is never checked.
-
-### `opf/undeclared-catalog`
-
-Default severity: **error**. Cost: structure. A reference names a catalog group the document does not declare.
-
-**Why.** The prefix of a `name:id` reference names the group of `catalogs` it resolves in. A prefix with no group can never resolve.
-
-**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
 ### `opf/unused-reference`
 

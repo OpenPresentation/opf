@@ -2,7 +2,9 @@ import {
   catalogGroupDeclared,
   catalogGroupSource,
   catalogKinds,
+  CATALOG_GROUP_PATTERN,
   catalogReferenceSites,
+  checkCatalogsOption,
   embeddedCopy,
   parseReference,
   recordReferenceSites,
@@ -14,6 +16,7 @@ import {
   type CatalogKind,
   type CatalogOptions,
   type CatalogReferenceSite,
+  type ResolvedReference,
   type UnresolvedReferenceDiagnostic,
 } from './catalog-refs.js';
 import type { Presentation } from './types.js';
@@ -78,8 +81,8 @@ export interface EmbedResult {
  * they are; catalog display metadata (`x-*`), `$schema` and `id` are stripped from the copies. Idempotent.
  */
 export function embed(document: unknown, options: CatalogOptions = {}): EmbedResult {
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'embed') };
   const out = structuredClone(rec(document)) as Rec;
-  const catalogs = { catalogs: options.catalogs ?? [] };
   const added: EmbeddedRecord[] = [];
   const unresolved: UnresolvedReferenceDiagnostic[] = [];
   const queue: CatalogReferenceSite[] = catalogReferenceSites(out);
@@ -136,7 +139,7 @@ export interface CopySlidesResult {
   document: Presentation;
   /** Indexes of the copied slides in the target. */
   slides: number[];
-  /** Every record that did not keep its reference, so an author can review it. */
+  /** Every record this call created under another id (`<id>-2` and up), so an author can review it. A reference rewritten to a record an earlier copy created, which this call reuses, is not a rename and is not listed. */
   renamed: CopiedRecordRename[];
   /** Catalog groups the target did not have, added for the copied records. */
   addedGroups: { name: string; source?: string }[];
@@ -170,9 +173,9 @@ function groupNameFor(source: string): string {
  * `renamed`.
  */
 export function copySlides(from: unknown, to: unknown, indexes: readonly number[], options: CatalogOptions & { at?: number } = {}): CopySlidesResult {
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'copySlides') };
   const source = rec(from);
   const target = structuredClone(rec(to)) as Rec;
-  const catalogs = { catalogs: options.catalogs ?? [] };
   const sourceSlides = Array.isArray(source.slides) ? source.slides : [];
   const targetSlides = Array.isArray(target.slides) ? (target.slides as unknown[]) : [];
   for (const index of indexes)
@@ -246,7 +249,8 @@ export function copySlides(from: unknown, to: unknown, indexes: readonly number[
     let placed: { group: string; id: string };
     if (group === 'custom') {
       const result = addCustom(kind, found.id, rewrite('custom'));
-      if (result.id !== found.id) renamed.push({ kind, from: reference, to: result.id, reason: 'custom-conflict' });
+      // A record an earlier copy already created (and this one reuses) is not a rename: only a record created under a new id is listed.
+      if (result.id !== found.id && !result.reused) renamed.push({ kind, from: reference, to: result.id, reason: 'custom-conflict' });
       placed = { group: 'custom', id: result.id };
     } else {
       const record = rewrite(group);
@@ -268,8 +272,8 @@ export function copySlides(from: unknown, to: unknown, indexes: readonly number[
         placed = { group, id: found.id };
       } else {
         // `<id>-2` and up: the target keeps its own revision under the plain id.
-        const { id } = addCustom(kind, found.id, rewrite('custom'), true);
-        renamed.push({ kind, from: reference, to: id, reason: 'catalog-revision' });
+        const { id, reused } = addCustom(kind, found.id, rewrite('custom'), true);
+        if (!reused) renamed.push({ kind, from: reference, to: id, reason: 'catalog-revision' });
         placed = { group: 'custom', id };
       }
     }
@@ -333,8 +337,8 @@ const pointerPart = (part: string) => part.replaceAll('~', '~0').replaceAll('/',
  * `refs` limits the check to those references. `custom` records belong to the document and are never compared.
  */
 export function updateFromCatalog(document: unknown, catalogs: readonly Catalog[], refs?: readonly CatalogRef[]): CatalogUpdate {
+  const options: CatalogOptions = { catalogs: checkCatalogsOption(catalogs, 'updateFromCatalog') };
   const groups = rec(rec(document).catalogs);
-  const options: CatalogOptions = { catalogs };
   const wanted = refs?.map((ref) => {
     const parsed = parseReference(ref.reference);
     return parsed ? { kind: ref.kind, group: parsed.group ?? 'default', id: parsed.id } : undefined;
@@ -356,5 +360,144 @@ export function updateFromCatalog(document: unknown, catalogs: readonly Catalog[
   return {
     changes,
     patch: changes.map((change) => ({ op: 'replace', path: `/catalogs/${pointerPart(change.group)}/${change.kind}/${pointerPart(change.id)}`, value: change.current })),
+  };
+}
+
+// ----------------------------------------------------------------------------------------------------- moveToCustom
+
+/** Where a moved record was and where it is now. */
+export interface MovedRecord {
+  kind: CatalogKind;
+  group: string;
+  id: string;
+  /** The reference that names it there: a bare id under `default` and `custom`, `name:id` in a named group. */
+  reference: string;
+}
+/** Error codes of OPFMoveToCustomError. */
+export type MoveToCustomErrorCode = 'invalid-reference' | 'already-custom' | 'not-embedded' | 'invalid-id' | 'id-taken';
+export class OPFMoveToCustomError extends Error {
+  readonly code: MoveToCustomErrorCode;
+  constructor(code: MoveToCustomErrorCode, message: string) {
+    super(message);
+    this.name = 'OPFMoveToCustomError';
+    this.code = code;
+  }
+}
+/** An RFC 6902 operation of `MoveToCustomResult.patch`. */
+export type MoveToCustomPatchOperation =
+  | { op: 'add'; path: string; value: unknown }
+  | { op: 'remove'; path: string }
+  | { op: 'replace'; path: string; value: string };
+export interface MoveToCustomResult {
+  /** The new document; the input is not mutated. */
+  document: Presentation;
+  from: MovedRecord;
+  to: MovedRecord;
+  /** The references rewritten to name the moved record, as JSON Pointers into the document. */
+  references: string[];
+  /** RFC 6902 operations that turn the input into `document` (apply with core `applyPatch`, for undo and review). */
+  patch: MoveToCustomPatchOperation[];
+}
+
+const pointerOf = (path: readonly (string | number)[]) => `/${path.map((part) => pointerPart(String(part))).join('/')}`;
+
+/**
+ * Move an embedded record from `catalogs.default` or a named group into `catalogs.custom`: the fix that
+ * `opf/catalog-record-not-in-source` suggests for a record the group's catalog does not publish. Every reference that
+ * resolved to the record (on slides, in the deck, inside other embedded records) is rewritten to name it in `custom`,
+ * and the record's own references keep naming the records they named. The record keeps its id unless `custom` already
+ * holds a different record under it, when it becomes `<id>-2` (and up); an identical custom record is reused.
+ *
+ * Fork: with `id`, the record is copied into `custom` under that id instead (an editor calls this on the first edit of a
+ * record under `default` or a named group, then applies the edit to the copy). Every reference is rewritten to the copy,
+ * so nothing references the original any more and it is removed from its group. An identical custom record under
+ * `id` is reused; a different one is `id-taken`.
+ *
+ * Throws OPFMoveToCustomError (`invalid-reference`, `already-custom`, `not-embedded`, `invalid-id`, `id-taken`).
+ * Registered catalogs only matter for how the surrounding references resolve, so pass the host's `catalogs` as for
+ * validate.
+ */
+export function moveToCustom(document: unknown, ref: CatalogRef, options: CatalogOptions & { id?: string } = {}): MoveToCustomResult {
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'moveToCustom') };
+  const parsed = parseReference(ref.reference);
+  if (!parsed || !(catalogKinds as readonly string[]).includes(ref.kind)) throw new OPFMoveToCustomError('invalid-reference', `moveToCustom: ${JSON.stringify(ref.reference)} is not a ${String(ref.kind)} reference (an id or name:id).`);
+  const { kind } = ref;
+  const fromGroup = parsed.group ?? 'default';
+  if (fromGroup === 'custom') throw new OPFMoveToCustomError('already-custom', `moveToCustom: ${ref.reference} already names a record of catalogs.custom.`);
+  const before = rec(document);
+  const records = rec(rec(rec(before.catalogs)[fromGroup])[kind]);
+  if (!Object.hasOwn(records, parsed.id)) throw new OPFMoveToCustomError('not-embedded', `moveToCustom: catalogs.${fromGroup}.${kind} does not embed ${JSON.stringify(parsed.id)}.`);
+  const fromId = parsed.id;
+  const record = rec(records[fromId]);
+
+  // What every reference resolves to now, read before anything moves.
+  const sites = catalogReferenceSites(before);
+  const targets = sites.map((site) => resolveReference(before, site.kind, site.reference, { ...catalogs, ...(site.group !== undefined ? { group: site.group } : {}) }));
+  const isMoved = (found: ResolvedReference | undefined) => found?.origin === 'document' && found.kind === kind && found.group === fromGroup && found.id === fromId;
+  const inMoved = (site: CatalogReferenceSite) => site.path.length >= 4 && site.path[0] === 'catalogs' && site.path[1] === fromGroup && site.path[2] === kind && site.path[3] === fromId;
+
+  const after = structuredClone(before) as Rec;
+  const groups = after.catalogs as Rec;
+  const custom = rec(groups.custom);
+  const existing = rec(custom[kind]);
+  // The moved record with its own references kept: each written so it names, from custom, what it named before.
+  const moved = structuredClone(record);
+  const ownSites = sites.map((site, index) => ({ site, found: targets[index] })).filter(({ site }) => inMoved(site));
+  let toId = fromId;
+  if (options.id !== undefined) {
+    if (typeof options.id !== 'string' || !CATALOG_GROUP_PATTERN.test(options.id)) throw new OPFMoveToCustomError('invalid-id', `moveToCustom: the new id ${JSON.stringify(options.id)} is not a lowercase kebab-case id.`);
+    toId = options.id;
+    if (Object.hasOwn(existing, toId) && !sameRecord(existing[toId], moved)) throw new OPFMoveToCustomError('id-taken', `moveToCustom: catalogs.custom.${kind} already holds a different record under ${JSON.stringify(toId)}.`);
+  } else for (let n = 2; Object.hasOwn(existing, toId) && !sameRecord(existing[toId], moved); n++) toId = `${fromId}-${n}`;
+  const reused = Object.hasOwn(existing, toId);
+
+  // Remove the record, then add it to custom (creating the containers the patch needs).
+  const patch: MoveToCustomPatchOperation[] = [];
+  const fromRecords = (groups[fromGroup] as Rec)[kind] as Rec;
+  delete fromRecords[fromId];
+  patch.push({ op: 'remove', path: pointerOf(['catalogs', fromGroup, kind, fromId]) });
+  if (Object.keys(fromRecords).length === 0) {
+    delete (groups[fromGroup] as Rec)[kind];
+    patch.push({ op: 'remove', path: pointerOf(['catalogs', fromGroup, kind]) });
+  }
+  if (!isRec(groups.custom)) {
+    groups.custom = {};
+    patch.push({ op: 'add', path: pointerOf(['catalogs', 'custom']), value: {} });
+  }
+  if (!isRec((groups.custom as Rec)[kind])) {
+    (groups.custom as Rec)[kind] = {};
+    patch.push({ op: 'add', path: pointerOf(['catalogs', 'custom', kind]), value: {} });
+  }
+  /** The shortest reference that names `group`/`id` in the new document, written in a record of `holder` (or a slide). */
+  const referenceTo = (targetKind: CatalogKind, group: string, id: string, holder?: string): string => {
+    const found = resolveReference(after, targetKind, id, { ...catalogs, ...(holder !== undefined ? { group: holder } : {}) });
+    return found && found.group === group && found.id === id ? id : `${group}:${id}`;
+  };
+  if (!reused) {
+    ((groups.custom as Rec)[kind] as Rec)[toId] = moved;
+    for (const { site, found } of ownSites) {
+      if (!found) continue;
+      const target = isMoved(found) ? { group: 'custom', id: toId } : { group: found.group, id: found.id };
+      setAt(moved, site.path.slice(4), referenceTo(site.kind, target.group, target.id, 'custom'));
+    }
+    patch.push({ op: 'add', path: pointerOf(['catalogs', 'custom', kind, toId]), value: structuredClone(moved) });
+  }
+
+  // Rewrite every other reference that named the moved record.
+  const references: string[] = [];
+  sites.forEach((site, index) => {
+    if (inMoved(site) || !isMoved(targets[index])) return;
+    const written = referenceTo(kind, 'custom', toId, site.group);
+    if (written === site.reference) return;
+    setAt(after, site.path, written);
+    references.push(pointerOf(site.path));
+    patch.push({ op: 'replace', path: pointerOf(site.path), value: written });
+  });
+  return {
+    document: after as unknown as Presentation,
+    from: { kind, group: fromGroup, id: fromId, reference: fromGroup === 'default' ? fromId : `${fromGroup}:${fromId}` },
+    to: { kind, group: 'custom', id: toId, reference: toId },
+    references,
+    patch,
   };
 }

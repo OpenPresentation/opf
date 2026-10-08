@@ -1,4 +1,4 @@
-import { catalogKinds, type CatalogOptions } from './catalog-refs.js';
+import { catalogKinds, checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
 import { imageBackground, resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
 import { resolveDesignRecords } from './design-records.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
@@ -321,7 +321,7 @@ interface Tally {
 }
 
 export function stats(presentation: unknown, options: StatsOptions = {}): PresentationStats {
-  const catalogs = { catalogs: options.catalogs ?? [] };
+  const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'stats') };
   if (!isRecord(presentation)) throw new TypeError('stats needs a presentation object.');
   const deck = presentation as Rec;
   const wordsPerMinute = options.wordsPerMinute ?? DEFAULT_WORDS_PER_MINUTE;

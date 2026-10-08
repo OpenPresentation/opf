@@ -10,7 +10,7 @@
  *
  * The same input always gives the same output.
  */
-import type { Catalog } from "./catalog-refs.js";
+import { checkCatalogsOption, type Catalog } from "./catalog-refs.js";
 import { same } from "./convert/shared.js";
 import { sortPresentationKeys } from "./format.js";
 import { presentation } from "./schemas.js";
@@ -64,6 +64,7 @@ const NOT_CHECKED: ValidationChecks = { syntax: "checked", schema: "not-run", re
  */
 export function fromYaml(yaml: string, options: FromYamlOptions = {}): FromYamlResult {
   if (typeof yaml !== "string") throw new TypeError("fromYaml expects a string.");
+  checkCatalogsOption(options.catalogs, "fromYaml");
   const parsed = readYamlDocument(yaml, options.aliases === true);
   const findings: YamlFinding[] = [...parsed.findings];
   let report: Omit<ValidationReport, "findings" | "counts" | "valid"> = { schemaValid: null, checks: NOT_CHECKED };
