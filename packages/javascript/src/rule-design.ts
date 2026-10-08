@@ -1,7 +1,7 @@
 import { catalogs as bundledCatalogs } from './catalogs.js';
 import type { CatalogKind } from './catalogs.js';
 import { defaultSlideBackground, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
-import type { FontFamilies } from './composition.js';
+import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
 /**
@@ -157,8 +157,8 @@ export interface ResolvedDesign {
 		accent: string;
 	};
 	variables: Rec;
-	/** A picture used as the slide background (the preview draws it behind everything), with the pointer of its `image` object. */
-	backgroundImage?: { source: unknown; fit: 'cover' | 'contain' | 'tile'; path: string };
+	/** A picture used as the slide background (the preview draws it behind everything), with the pointer of the background value. */
+	backgroundImage?: { source: unknown; fit: 'cover' | 'contain' | 'stretch' | 'tile'; path: string };
 	/** Where the font scheme reference is written, for diagnostics. */
 	fontSchemePath: string;
 	unresolvedFontScheme?: string;
@@ -177,6 +177,7 @@ function backdropOf(definition: unknown, scheme: Rec, text: string, variables: R
 	const resolve = (value: unknown, fallback: string) => backgroundColorRef(value, scheme, variables, fallback);
 	const canvas = defaultSlideBackground(scheme);
 	if (!definition) return { kind: 'solid', color: canvas };
+	if (imageBackground(definition)) return { kind: 'image', opacity: imageBackground(definition)?.opacity ?? 1, base: PAGE };
 	if (typeof definition === 'string') return { kind: 'solid', color: colorFrom(scheme, definition, canvas) };
 	const bg = rec(definition),
 		opacity = typeof bg.opacity === 'number' ? Math.max(0, Math.min(1, bg.opacity)) : 1;
@@ -240,6 +241,7 @@ export function decisionColor(definition: unknown, scheme: Rec, variables: Rec =
 	if (!definition) return undefined;
 	const canvas = defaultSlideBackground(scheme);
 	const reference = (value: unknown) => backgroundColorRef(value, scheme, variables, PAGE);
+	if (imageBackground(definition)) return undefined;
 	if (typeof definition === 'string') return colorFrom(scheme, definition, canvas);
 	const bg = rec(definition);
 	switch (bg.type) {
@@ -274,12 +276,12 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const dark = roles.dark;
 	const text = roles.text;
 	const backdrop = backdropOf(own.background ?? deck.background ?? theme.background, colorScheme, text, variables);
-	const definition = rec(own.background ?? deck.background ?? theme.background);
+	const picture = imageBackground(own.background ?? deck.background ?? theme.background);
 	const backgroundImage: ResolvedDesign['backgroundImage'] =
-		definition.type === 'image' && own.background !== undefined
-			? { source: rec(definition.image).src, fit: rec(definition.image).fit ?? 'cover', path: `/slides/${index}/design/background/image` }
-			: definition.type === 'image' && deck.background !== undefined
-				? { source: rec(definition.image).src, fit: rec(definition.image).fit ?? 'cover', path: '/design/background/image' }
+		picture && own.background !== undefined
+			? { source: picture.src, fit: picture.fit, path: `/slides/${index}/design/background` }
+			: picture && deck.background !== undefined
+				? { source: picture.src, fit: picture.fit, path: '/design/background' }
 				: undefined;
 	return {
 		theme,
@@ -335,8 +337,8 @@ export interface BackdropSample {
 	unknown: boolean;
 }
 
-export interface SlideImageLayer {
-	/** Overlay colour and opacity over the picture, when the slide image has a full-frame overlay. */
+export interface BackgroundImageLayer {
+	/** Overlay colour and opacity over the picture, when the background image has a full-frame overlay. */
 	overlay?: { color: string; opacity: number };
 	opacity?: number;
 }
@@ -352,7 +354,7 @@ export function backdropColors(
 	backdrop: Backdrop,
 	box: { x: number; y: number; width: number; height: number } | undefined,
 	size: { width: number; height: number },
-	layer?: SlideImageLayer,
+	layer?: BackgroundImageLayer,
 ): BackdropSample {
 	switch (backdrop.kind) {
 		case 'solid':

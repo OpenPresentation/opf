@@ -1,9 +1,11 @@
 // Slide structure conversions: wrap blocks in a group, unwrap a group, move content between `blocks` and the
-// named regions, and move an image between the content and the slide's design (slide image, background,
+// named regions, and move an image between the content and the slide's design (background or
 // watermark). They work on one slide object with paths relative to it and return the new slide; the host
 // turns the difference into a patch. Pure; every result is validated as OPF. Internal module.
 import { promotedRegionKeys } from "../content-walk.js";
 import { CONTENT_KEYS, type ConversionReport, type Json, Loss, type Obj, assertValidOutput, clone, contentKeysOf, isRecord, refuse, report } from "./shared.js";
+/** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
+const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 
 /** A path inside one slide: `["blocks", 1]` is its second block, `["left"]` the payload of its `left` region, `[]` the slide itself. */
 export type SlidePath = (string | number)[];
@@ -180,23 +182,25 @@ export function moveRegion(slide: unknown, from: string, to: string, options: { 
 
 // --- images between content and design ---------------------------------------------------------
 
-/** The design slot an image can move to or from. */
-export type ImageTarget = "slideImage" | "background" | "watermark";
-const IMAGE_POSITIONS = ["background", "top", "bottom", "left", "right"] as const;
+/** The design slot an image can move to or from. Placing an image beside the content is not a move: set the block's `placement`. */
+export type ImageTarget = "background" | "watermark";
 export interface PromoteImageOptions {
-  /** Slide image: where it sits (default `right`, an image band beside the content). Ignored for background and watermark. */
-  position?: (typeof IMAGE_POSITIONS)[number];
   /** Watermark: opacity from 0 to 1 (default 0.1). */
   opacity?: number;
   /** Replace the slide's existing design value for this slot instead of refusing. */
   replace?: boolean;
 }
 
-function imageAsset(payload: Json): Obj {
+/** Image block keys a background keeps (FA-22): the rest of the treatment vocabulary has no place on a background. */
+const BACKGROUND_KEYS = ["fit", "focus", "opacity", "overlay"] as const;
+const TREATMENT_KEYS = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"] as const;
+
+function imageBlock(payload: Json): { asset: Obj; treatments: Obj } {
   if (!isRecord(payload)) throw refuse("Choose an image block.");
-  const keys = Object.keys(payload).filter((key) => key !== "id" && key !== "extensions" && key !== "type");
+  const keys = Object.keys(payload).filter((key) => key !== "id" && key !== "extensions" && key !== "type" && !(TREATMENT_KEYS as readonly string[]).includes(key));
   if (keys.length !== 1 || keys[0] !== "image") throw refuse("Choose a block that holds only an image.");
-  return isRecord(payload.image) ? payload.image : { src: payload.image };
+  const treatments = Object.fromEntries(TREATMENT_KEYS.filter((key) => payload[key] !== undefined).map((key) => [key, payload[key]]));
+  return { asset: isRecord(payload.image) ? payload.image : { src: payload.image }, treatments };
 }
 
 /** Remove the payload at `path` from a slide, dropping any group or `blocks` array it leaves empty. */
@@ -222,37 +226,34 @@ function removePayload(slide: Obj, path: SlidePath): void {
 }
 
 /**
- * Move the image block at `path` out of the content and into the slide's design as its slide image,
- * background or watermark. The block is removed (and any group it leaves empty). Alt text, titles and other
- * asset details a design slot cannot hold are reported. Refuses when the slide already sets that slot,
- * unless `replace` is true.
+ * Move the image block at `path` out of the content and into the slide's design as its background or
+ * watermark. The block is removed (and any group it leaves empty). A background keeps the alt text and the
+ * block's fit, focus, opacity and overlay; asset details and treatments a design slot cannot hold are reported.
+ * Refuses when the slide already sets that slot, unless `replace` is true.
  */
 export function promoteImage(slide: unknown, path: SlidePath, to: ImageTarget, options: PromoteImageOptions = {}): StructureChange {
   const next = clone(slide as Obj);
   const holder = path.length ? at(next, path) : contentKeysOf(next).join() === "image" && !Array.isArray(next.blocks) ? { image: next.image } : undefined;
-  const asset = imageAsset(holder);
+  if (to !== "background" && to !== "watermark") throw refuse("Choose background or watermark.", { slot: to });
+  const { asset, treatments } = imageBlock(holder);
   if (typeof asset.src !== "string" || asset.src === "") throw refuse("This image has no source.");
   const design: Obj = isRecord(next.design) ? next.design : {};
-  if (design[to] !== undefined && design[to] !== false && !options.replace) throw refuse(`This slide already sets its ${to === "slideImage" ? "slide image" : to}. Choose to replace it, or remove it first.`, { slot: to });
+  if (design[to] !== undefined && design[to] !== false && !options.replace) throw refuse(`This slide already sets its ${to}. Choose to replace it, or remove it first.`, { slot: to });
   const loss = new Loss();
   const extras = ["title", "description", "mediaType", "format"].filter((key) => asset[key] !== undefined);
-  const position = options.position ?? "right";
-  if (!IMAGE_POSITIONS.includes(position)) throw refuse(`Choose a position: ${IMAGE_POSITIONS.join(", ")}.`, { position });
   const alt = typeof asset.alt === "string" && asset.alt !== "" ? asset.alt : undefined;
-  if (to === "slideImage") {
-    design.slideImage = { src: asset.src, position, ...(alt ? { alt } : {}) };
-    if (extras.length) loss.note(`image ${extras.join(", ")}`);
-  } else if (to === "background") {
-    design.background = { type: "image", image: { src: asset.src, fit: "cover" } };
-    if (alt) loss.note("image alt text");
-    if (extras.length) loss.note(`image ${extras.join(", ")}`);
+  const kept = to === "background" ? BACKGROUND_KEYS.filter((key) => treatments[key] !== undefined) : [];
+  const dropped = Object.keys(treatments).filter((key) => !(kept as readonly string[]).includes(key));
+  if (to === "background") {
+    design.background = { type: "image", src: asset.src, ...(alt ? { alt } : {}), ...Object.fromEntries(kept.map((key) => [key, treatments[key]])) };
   } else {
     const opacity = options.opacity ?? 0.1;
     if (typeof opacity !== "number" || !(opacity >= 0 && opacity <= 1)) throw refuse("Watermark opacity must be between 0 and 1.", { opacity });
     design.watermark = { src: asset.src, opacity };
     if (alt) loss.note("image alt text");
-    if (extras.length) loss.note(`image ${extras.join(", ")}`);
   }
+  if (extras.length) loss.note(`image ${extras.join(", ")}`);
+  if (dropped.length) loss.note(`image ${dropped.join(", ")}`);
   if (path.length) {
     const payload = at(next, path);
     if (payload.id !== undefined) loss.note("block id");
@@ -264,28 +265,26 @@ export function promoteImage(slide: unknown, path: SlidePath, to: ImageTarget, o
 }
 
 /**
- * Move a slide's slide image, background image or watermark back into its content as an image block, added
- * after the existing blocks (or at `index`, or in the free region named by `region` on a slide that uses
- * regions). Placement, framing, fit and opacity cannot be kept by a block and are reported.
+ * Move a slide's background image or watermark back into its content as an image block, added after the
+ * existing blocks (or at `index`, or in the free region named by `region` on a slide that uses regions). A
+ * background's alt text, fit, focus, opacity and overlay move onto the block; a tile fit and a watermark's
+ * opacity cannot be kept and are reported.
  */
 export function demoteImage(slide: unknown, from: ImageTarget, options: { index?: number; region?: string } = {}): StructureChange {
   const next = clone(slide as Obj);
   const design = next.design;
+  if (from !== "background" && from !== "watermark") throw refuse("Choose background or watermark.", { slot: from });
   const value = isRecord(design) ? design[from] : undefined;
-  if (value === undefined || value === false) throw refuse(`This slide does not set its own ${from === "slideImage" ? "slide image" : from}.`, { slot: from });
+  if (value === undefined || value === false) throw refuse(`This slide does not set its own ${from}.`, { slot: from });
   const loss = new Loss();
   let asset: Obj;
-  if (from === "slideImage") {
-    if (typeof value === "string") asset = { src: value };
-    else if (isRecord(value) && "position" in value) {
-      if (typeof value.src !== "string") throw refuse("This slide image only configures placement; it has no image of its own.");
-      asset = { src: value.src, ...(value.alt ? { alt: value.alt } : {}) };
-      loss.note("image position and framing");
-    } else asset = clone(value);
-  } else if (from === "background") {
-    if (!isRecord(value) || value.type !== "image" || typeof value.image?.src !== "string") throw refuse("This slide's background is not an image.");
-    asset = { src: value.image.src };
-    if (value.opacity !== undefined || (value.image.fit !== undefined && value.image.fit !== "cover")) loss.note("background fit and opacity");
+  let treatments: Obj = {};
+  if (from === "background") {
+    const picture = typeof value === "string" && IMAGE_SOURCE.test(value) ? { type: "image", src: value } : value;
+    if (!isRecord(picture) || picture.type !== "image" || typeof picture.src !== "string") throw refuse("This slide's background is not an image.");
+    asset = { src: picture.src, ...(typeof picture.alt === "string" ? { alt: picture.alt } : {}) };
+    treatments = Object.fromEntries(BACKGROUND_KEYS.filter((key) => picture[key] !== undefined && !(key === "fit" && picture.fit === "tile")).map((key) => [key, picture[key]]));
+    if (picture.fit === "tile") loss.note("background tile fit");
   } else {
     if (typeof value === "string") asset = { src: value };
     else if (isRecord(value) && typeof value.src === "string") {
@@ -294,7 +293,7 @@ export function demoteImage(slide: unknown, from: ImageTarget, options: { index?
       if (opacity !== undefined) loss.note("watermark opacity");
     } else throw refuse("This watermark has no image of its own.");
   }
-  const block: Obj = { image: Object.keys(asset).length === 1 ? asset.src : asset };
+  const block: Obj = { image: Object.keys(asset).length === 1 ? asset.src : asset, ...treatments };
   delete design[from];
   if (!Object.keys(design).length) delete next.design;
   const regions = regionKeysOf(next);
@@ -303,7 +302,7 @@ export function demoteImage(slide: unknown, from: ImageTarget, options: { index?
     if (!options.region || !isRegionKey(options.region) || regions.some((key) => overlaps(key, options.region!))) throw refuse("This slide places its content in regions. Choose a free region for the image.", { region: options.region });
     next[options.region] = block;
     path = [options.region];
-  } else if (Array.isArray(next.blocks) || contentKeysOf(next).length) {
+  } else if (Array.isArray(next.blocks) || contentKeysOf(next).length || Object.keys(treatments).length) {
     const blocks = explicitBlocks(next);
     const index = options.index ?? blocks.length;
     if (!Number.isInteger(index) || index < 0 || index > blocks.length) throw refuse("The position is outside the slide's blocks.", { index });

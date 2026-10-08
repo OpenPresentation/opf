@@ -724,7 +724,7 @@
             { "$ref": "#/$defs/BackgroundShortcut" },
             { "$ref": "#/$defs/Background" }
           ],
-          "description": "Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, image, or pattern fills.",
+          "description": "Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2'), hex colors, or an image source starting with 'asset:', 'https://', 'data:', './' or '../' (a cover image); object forms support theme, solid, gradient, image, or pattern fills.",
           "examples": ["dark1", "#ffff00", { "type": "theme", "slot": "light1" }]
         },
         "logo": {
@@ -780,108 +780,6 @@
           "type": "boolean",
           "description": "Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the layout record's design.contentBox, then the engine default."
         },
-        "slideImage": {
-          "oneOf": [
-            { "$ref": "#/$defs/Asset" },
-            {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["position"],
-              "properties": {
-                "src": {
-                  "type": "string",
-                  "description": "Source for the slide-level image. When omitted in a design override, the object only configures how a slide-level image should be placed when one is supplied by a content payload, asset, or renderer convention."
-                },
-                "position": {
-                  "type": "string",
-                  "enum": ["background", "top", "bottom", "left", "right"],
-                  "description": "Where the slide-level image sits relative to the content. 'background' is a full-bleed image behind the content. The other positions give the image a band along that edge (see size) and compose headings and content in the rest of the slide."
-                },
-                "alt": {
-                  "type": "string",
-                  "description": "Alternative text for the slide-level image. Overrides the alt text of a referenced asset."
-                },
-                "fill": {
-                  "type": "string",
-                  "enum": ["crop", "fit"],
-                  "description": "How the image fills its frame: 'crop' covers the frame from the center; 'fit' shows the whole image centered inside it. Overrides design.imageFill for this image. Default: design.imageFill, else 'crop'."
-                },
-                "size": {
-                  "type": "number",
-                  "minimum": 0.1,
-                  "maximum": 0.9,
-                  "description": "Share of the slide width (left/right) or height (top/bottom) given to the image band. Ignored for 'background'. Default 0.5."
-                },
-                "inset": {
-                  "type": "boolean",
-                  "description": "Place the frame inside the slide padding instead of edge to edge, like a card. Default false."
-                },
-                "aspectRatio": {
-                  "type": "number",
-                  "exclusiveMinimum": 0,
-                  "maximum": 10,
-                  "description": "Width-to-height ratio of the frame. The frame becomes the largest centered box with this ratio inside the band or slide, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame. 'circle' always uses 1."
-                },
-                "shape": {
-                  "type": "string",
-                  "enum": ["rectangle", "rounded", "circle", "hexagon"],
-                  "description": "Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'."
-                },
-                "cornerRadius": {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 0.5,
-                  "description": "Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default."
-                },
-                "border": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": ["color", "width"],
-                  "properties": {
-                    "color": { "$ref": "#/$defs/ColorRef", "description": "Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference." },
-                    "width": { "type": "number", "minimum": 0, "maximum": 64, "description": "Line width in reference pixels at a 720-pixel short edge, centered on the frame outline like a native picture line. 0 removes the line." }
-                  },
-                  "description": "Solid line along the frame's shape. A thick dark border on a rounded portrait frame gives a device bezel."
-                },
-                "opacity": {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1,
-                  "description": "Image opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1."
-                },
-                "recolor": {
-                  "oneOf": [
-                    { "type": "string", "const": "grayscale", "description": "Replace each pixel with its luminance, exported as native a:grayscl." },
-                    {
-                      "type": "object",
-                      "additionalProperties": false,
-                      "required": ["dark", "light"],
-                      "properties": {
-                        "dark": { "$ref": "#/$defs/ColorRef", "description": "Color at luminance 0." },
-                        "light": { "$ref": "#/$defs/ColorRef", "description": "Color at luminance 1." }
-                      },
-                      "description": "Duotone: map each pixel's luminance linearly from dark to light, exported as native a:duotone."
-                    }
-                  ],
-                  "description": "Color treatment for the image pixels. Luminance uses Rec. 601 weights (0.299, 0.587, 0.114) on sRGB values."
-                },
-                "overlay": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": ["color", "opacity"],
-                  "properties": {
-                    "color": { "$ref": "#/$defs/ColorRef", "description": "Overlay fill color." },
-                    "opacity": { "type": "number", "minimum": 0, "maximum": 1, "description": "Overlay fill opacity." },
-                    "edge": { "type": "string", "enum": ["top", "bottom", "left", "right"], "description": "Cover only a band along this edge of the frame, for example a caption strip. Rectangle frames only; other shapes report unsupported-image-treatment and draw no overlay. Omit to cover the whole frame." },
-                    "size": { "type": "number", "minimum": 0.05, "maximum": 1, "description": "Band share of the frame for an edge overlay. Default 0.3." }
-                  },
-                  "description": "Solid scrim drawn over the image in the frame's shape, beneath headings and content, for example to keep overlaid text readable. Exported as a native shape above the picture."
-                }
-              }
-            }
-          ],
-          "description": "Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout record sets design.slideImage or whose root image is the same source as a deck-level value. A root image with the same source becomes the slide image instead of a content item. Blur, shadows, soft edges, background removal and device artwork are not part of the treatment vocabulary; see docs/image-treatments.md."
-        },
         "contentDirection": {
           "type": "string",
           "enum": ["horizontal", "vertical"],
@@ -892,10 +790,10 @@
           "enum": ["none", "top", "bottom", "left", "right"],
           "description": "Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mode of its own, and its root nodes mix at least one chart with other content, the first chart becomes a primary track and the other nodes form one synthetic sub-grid: 'left'/'right' is a two-track row and 'top'/'bottom' a two-track column, weighted 3:2 in favor of the chart; explicit root columns and weights are ignored while it applies. 'none' (the default) keeps the ordinary automatic grid with equal weight."
         },
-        "imageFill": {
+        "imageFit": {
           "type": "string",
-          "enum": ["crop", "fit"],
-          "description": "How images fill their allocated region: crop covers the region, fit shows the whole image. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFill, then the engine default."
+          "enum": ["cover", "contain", "stretch"],
+          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch' scales it to the frame exactly. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFit, then 'cover'. Backgrounds set their own fit."
         },
         "listBullet": {
           "type": "string",
@@ -947,7 +845,7 @@
             { "$ref": "#/$defs/BackgroundShortcut" },
             { "$ref": "#/$defs/Background" }
           ],
-          "description": "Default background for this theme. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors.",
+          "description": "Default background for this theme, the fallback below the deck's and the slide's design.background. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2'), hex colors or an image source (a cover image).",
           "examples": ["dark1", "#ffff00", { "type": "theme", "slot": "dark2" }]
         },
         "dimensions": {
@@ -1616,10 +1514,17 @@
     "BackgroundShortcut": {
       "oneOf": [
         { "$ref": "#/$defs/ThemeBackgroundSlot" },
-        { "$ref": "#/$defs/HexColor" }
+        { "$ref": "#/$defs/HexColor" },
+        { "$ref": "#/$defs/ImageSource" }
       ],
-      "description": "String shorthand for a background. Theme slots ('light1', 'light2', 'dark1', 'dark2') are equivalent to { type: 'theme', slot: value }; hex colors are equivalent to { type: 'solid', color: value }.",
-      "examples": ["dark1", "light2", "#ffff00"]
+      "description": "String shorthand for a background. Theme slots ('light1', 'light2', 'dark1', 'dark2') are equivalent to { type: 'theme', slot: value }; hex colors are equivalent to { type: 'solid', color: value }; an image source (starting with 'asset:', 'https://', 'data:', './' or '../') is equivalent to { type: 'image', src: value }, a cover image. Any other string is invalid.",
+      "examples": ["dark1", "light2", "#ffff00", "asset:cover-photo", "./images/harbour.jpg"]
+    },
+    "ImageSource": {
+      "type": "string",
+      "pattern": "^(asset:|https://|data:|\\./|\\.\\./)",
+      "description": "An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).",
+      "examples": ["asset:cover-photo", "https://cdn.acme.com/backgrounds/cover.jpg", "./images/harbour.jpg"]
     },
     "Background": {
       "description": "Background fill applied to slides. Theme backgrounds preserve PowerPoint's color-scheme background choice; other variants represent fixed background fills.",
@@ -1722,43 +1627,165 @@
     },
     "ImageBackground": {
       "type": "object",
-      "description": "Fixed image slide background fill.",
-      "required": ["type", "image"],
+      "additionalProperties": false,
+      "description": "Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the colour scheme's default slide background, the picture, then the overlay, then furniture and content.",
+      "required": ["type", "src"],
       "properties": {
         "type": {
           "type": "string",
           "const": "image",
-          "description": "Fixed image background fill."
+          "description": "Picture background."
         },
-        "image": {
-          "type": "object",
-          "description": "Image fill definition.",
-          "required": ["src"],
-          "properties": {
-            "src": {
-              "type": "string",
-              "description": "Source for the background image.",
-              "examples": [
-                "https://cdn.acme.com/backgrounds/cover.jpg",
-                "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...",
-                "./backgrounds/cover.jpg",
-                "asset:bg-cover"
-              ]
-            },
-            "fit": {
-              "type": "string",
-              "enum": ["cover", "contain", "tile"],
-              "description": "How the image fills the slide background."
-            }
-          }
+        "src": {
+          "type": "string",
+          "description": "Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location.",
+          "examples": [
+            "https://cdn.acme.com/backgrounds/cover.jpg",
+            "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA...",
+            "./backgrounds/cover.jpg",
+            "asset:bg-cover"
+          ]
+        },
+        "alt": {
+          "type": "string",
+          "description": "Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the native slide background. Overrides the alt text of a referenced asset."
+        },
+        "fit": {
+          "type": "string",
+          "enum": ["cover", "contain", "stretch", "tile"],
+          "description": "How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exactly; 'tile' repeats it at its own size from the top-left corner. Default 'cover'."
+        },
+        "focus": {
+          "$ref": "#/$defs/ImageFocus",
+          "description": "Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits."
         },
         "opacity": {
           "type": "number",
           "minimum": 0,
           "maximum": 1,
-          "description": "Background opacity from 0 (fully transparent) to 1 (fully opaque)."
+          "description": "Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1."
+        },
+        "overlay": {
+          "$ref": "#/$defs/Overlay",
+          "description": "Scrim over the whole picture or along one edge, beneath furniture and content, for example to keep a title readable over a busy photo."
+        }
+      },
+      "examples": [
+        { "type": "image", "src": "asset:cover-photo" },
+        { "type": "image", "src": "./images/harbour.jpg", "alt": "Container ships at dawn", "focus": { "x": 0.5, "y": 0.7 }, "overlay": { "color": "dark1", "opacity": 0.4 } }
+      ]
+    },
+    "ImageFocus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "description": "A point of a picture as fractions of its width and height, from the top-left corner. A cover fit centers this point in the frame as far as the picture still covers the frame, so it always stays in view: { x: 0.5, y: 0.5 } (the default) is a center crop, { x: 0, y: 0 } keeps the top-left corner.",
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1, "description": "Horizontal position, 0 (left edge) to 1 (right edge)." },
+        "y": { "type": "number", "minimum": 0, "maximum": 1, "description": "Vertical position, 0 (top edge) to 1 (bottom edge)." }
+      },
+      "examples": [{ "x": 0.5, "y": 0.7 }]
+    },
+    "Overlay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color", "opacity"],
+      "description": "Solid scrim over a picture: the whole frame in the frame's shape, or a band along one edge. Shared by image backgrounds and image blocks. Drawn directly above its picture and beneath headings and content; PowerPoint export writes one native shape above the picture.",
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/ColorRef",
+          "description": "Overlay fill color: a hex color (eight-digit hex keeps its alpha), a color-scheme slot or role name, or a 'var:<id>' variable reference."
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Overlay fill opacity."
+        },
+        "edge": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right"],
+          "description": "Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment. Omit to cover the whole frame. In a right-to-left deck 'left' and 'right' are the start and end sides."
+        },
+        "size": {
+          "type": "number",
+          "minimum": 0.05,
+          "maximum": 1,
+          "description": "Band share of the frame for an edge overlay. Default 0.3. Ignored without edge."
+        }
+      },
+      "examples": [
+        { "color": "dark1", "opacity": 0.4 },
+        { "color": "#000000", "opacity": 0.75, "edge": "bottom", "size": 0.25 }
+      ]
+    },
+    "ImagePlacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge"],
+      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge; a layout's image placeholder may carry the same placement for the slide's image. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. In a right-to-left deck 'left' is the start side, drawn at the right.",
+      "properties": {
+        "edge": {
+          "type": "string",
+          "enum": ["left", "right", "top", "bottom"],
+          "description": "The slide edge the image bleeds to."
+        },
+        "size": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 0.9,
+          "description": "Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5."
+        },
+        "inset": {
+          "type": "boolean",
+          "description": "Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false."
+        }
+      },
+      "examples": [{ "edge": "left", "size": 0.45 }, { "edge": "right", "size": 0.4, "inset": true }]
+    },
+    "ImageBorder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color", "width"],
+      "description": "Solid line along the image frame's shape, centered on the outline with a miter join, like a native picture line. A thick dark border on a rounded portrait frame gives a device bezel.",
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/ColorRef",
+          "description": "Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference."
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 64,
+          "description": "Line width in reference pixels at a 720-pixel short edge. 0 removes the line."
         }
       }
+    },
+    "ImageRecolor": {
+      "oneOf": [
+        {
+          "type": "string",
+          "const": "grayscale",
+          "description": "Replace each pixel with its luminance, exported as native a:grayscl."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dark", "light"],
+          "properties": {
+            "dark": {
+              "$ref": "#/$defs/ColorRef",
+              "description": "Color at luminance 0."
+            },
+            "light": {
+              "$ref": "#/$defs/ColorRef",
+              "description": "Color at luminance 1."
+            }
+          },
+          "description": "Duotone: map each pixel's luminance linearly from dark to light, exported as native a:duotone."
+        }
+      ],
+      "description": "Color treatment for the image pixels. Luminance uses Rec. 601 weights (0.299, 0.587, 0.114) on sRGB values."
     },
     "PatternBackground": {
       "type": "object",
@@ -1857,7 +1884,7 @@
     },
     "Watermark": {
       "type": "object",
-      "description": "Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in a fixed frame (the middle 40% of the slide width and height, from 30% to 70% on each axis). A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and at most 30% of the shorter slide edge in height; it is drawn behind the slide content and above the background and slide image. There is no option to move, scale, rotate or tile either form. PPTX export writes one native picture (image) or one native text box (text) per slide with the opacity as alpha, and import restores the watermark. A string or Asset (no opacity) is the image watermark at opacity 0.08. A watermark object needs opacity and exactly one of src and text; use a plain string or Asset for an image at the default opacity. Use design.watermark = false to disable an inherited watermark.",
+      "description": "Decorative watermark: an image ('src') or a text stamp ('text'), exactly one of the two, with its opacity. An image is drawn once per slide, contained and centered in a fixed frame (the middle 40% of the slide width and height, from 30% to 70% on each axis). A text watermark is one line of text in the heading font and the theme text color at the given opacity, centered on the slide and rotated 30 degrees counterclockwise (rising to the right), sized to span at most 70% of the slide width and at most 30% of the shorter slide edge in height; it is drawn behind the slide content and above the background. There is no option to move, scale, rotate or tile either form. PPTX export writes one native picture (image) or one native text box (text) per slide with the opacity as alpha, and import restores the watermark. A string or Asset (no opacity) is the image watermark at opacity 0.08. A watermark object needs opacity and exactly one of src and text; use a plain string or Asset for an image at the default opacity. Use design.watermark = false to disable an inherited watermark.",
       "additionalProperties": false,
       "required": ["opacity"],
       "oneOf": [
@@ -2051,7 +2078,7 @@
         },
         "image": {
           "$ref": "#/$defs/Asset",
-          "description": "Full-slide image source. Presence of this field infers type 'image'."
+          "description": "Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A layout's image placeholder may place it along an edge (placement). For fit, focus, treatments or an explicit placement use an image block in blocks; for a full-slide picture behind the content use design.background. Presence of this field infers type 'image'."
         },
         "video": {
           "$ref": "#/$defs/Asset",
@@ -2342,6 +2369,54 @@
             "./images/diagram.png",
             "asset:img-diagram"
           ]
+        },
+        "fit": {
+          "type": "string",
+          "enum": ["cover", "contain", "stretch"],
+          "description": "Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered; 'stretch' scales it to the frame exactly. Default: the effective design.imageFit, else 'cover'."
+        },
+        "focus": {
+          "$ref": "#/$defs/ImageFocus",
+          "description": "Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits."
+        },
+        "aspectRatio": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10,
+          "description": "Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame. shape 'circle' always uses 1."
+        },
+        "shape": {
+          "type": "string",
+          "enum": ["rectangle", "rounded", "circle", "hexagon"],
+          "description": "Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'."
+        },
+        "cornerRadius": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.5,
+          "description": "Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default."
+        },
+        "border": {
+          "$ref": "#/$defs/ImageBorder",
+          "description": "Image payloads only. Line along the frame's shape."
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Image payloads only. Picture opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1."
+        },
+        "recolor": {
+          "$ref": "#/$defs/ImageRecolor",
+          "description": "Image payloads only. Grayscale or duotone treatment of the picture's pixels."
+        },
+        "overlay": {
+          "$ref": "#/$defs/Overlay",
+          "description": "Image payloads only. Scrim over the picture in the frame's shape, or a band along one edge of a rectangle frame."
+        },
+        "placement": {
+          "$ref": "#/$defs/ImagePlacement",
+          "description": "Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide."
         },
         "video": {
           "$ref": "#/$defs/Asset",

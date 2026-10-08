@@ -138,6 +138,8 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
 
 // RR-34: payload kinds whose blocks may carry a caption.
 const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video"]);
+// FA-22: fit, focus, the image treatments and placement belong to image payloads only.
+const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"] as const;
 
 const columnSpans: Record<string, readonly number[]> = {
   left: [0],
@@ -285,7 +287,7 @@ function isImplicitBlocksComposition(
 function validateContentPayload(
   value: Record<string, unknown>,
   path: string,
-  options: { slideRoot?: boolean } = {},
+  options: { slideRoot?: boolean; topLevel?: boolean } = {},
 ): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const explicitType = value.type;
@@ -293,15 +295,33 @@ function validateContentPayload(
   const hasBlocks = hasOwn(value, "blocks");
   // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
   const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
+  // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
+  const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}) => {
+    for (const field of imageOptionFields) if (hasOwn(value, field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
+  };
+  if (hasOwn(value, "placement") && !options.topLevel && !hasBlocks && explicitType !== "group" && inferredKinds(value).includes("image")) {
+    issues.push(semanticIssue(pathFor(path, "placement"), "placement is only valid on a top-level block (slides.N.blocks.I); a block inside a group or a promoted region cannot bleed to a slide edge", { code: "image-placement-invalid" }));
+  }
   if (hasBlocks || explicitType === "group") {
     if (hasOwn(value, "caption")) issues.push(captionIssue("a group cannot carry one"));
+    imageOptionIssues("a group cannot carry them");
     if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
     const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
     if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
     if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
     if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {
-      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`));
+      if (isRecord(block)) issues.push(...validateContentPayload(block, `${pathFor(path, "blocks")}/${index}`, { topLevel: options.slideRoot === true }));
     });
+    // FA-22: at most one placed block per slide edge.
+    if (options.slideRoot && Array.isArray(value.blocks)) {
+      const edges = new Map<unknown, number>();
+      value.blocks.forEach((block, index) => {
+        const edge = isRecord(block) && isRecord(block.placement) ? block.placement.edge : undefined;
+        if (edge === undefined) return;
+        if (edges.has(edge)) issues.push(semanticIssue(`${pathFor(path, "blocks")}/${index}/placement/edge`, `blocks ${edges.get(edge)} and ${index} are both placed on the ${String(edge)} edge; a slide edge takes at most one placed image`, { code: "image-placement-invalid", edge, blocks: [edges.get(edge), index] }));
+        else edges.set(edge, index);
+      });
+    }
     return issues;
   }
   if (hasOwn(value, "composition") && !options.slideRoot) issues.push(semanticIssue(pathFor(path, "composition"), "composition is only valid on a group containing blocks"));
@@ -340,6 +360,7 @@ function validateContentPayload(
   }
   const spec = contentKindSpecs[resolvedKind];
   if (hasOwn(value, "caption") && !captionableKinds.has(resolvedKind)) issues.push(captionIssue(`this payload is '${resolvedKind}'`, { type: resolvedKind }));
+  if (resolvedKind !== "image") imageOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind });
   const allowedFields = new Set<string>([
     "type",
     ...spec.fields,
