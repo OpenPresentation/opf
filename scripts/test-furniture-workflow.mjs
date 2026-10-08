@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {build}=require('esbuild'),{chromium}=require('playwright'),sharp=require('sharp');
 import {loadFonts} from '../../opf-render/dist/fonts-node.js';
+import {withRecords} from './ecosystem-records.mjs';
 const output=path.resolve(process.argv[2]??'artifacts/furniture-workflow');await mkdir(output,{recursive:true});
 const installed=process.argv[3]==='installed',consumer=path.resolve('artifacts/npm/consumer');
 const installedRequire=installed?createRequire(path.join(consumer,'package.json')):null;
@@ -53,7 +54,7 @@ try{
  for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,32])for(const local of [false,true]){
   const original=local?'':'  A  B\tC\u00a0D\r\n\r\ntrail  \r';
   const header={left:{text:original},center:{organization:true},right:{section:true}},footer={left:{date:' 2026-09-10 '},right:{slideNumber:true}};
-  const deck={organization:{id:'openpresentation',name:'OpenPresentation'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header,footer},slides:[{title:'Shared furniture',section:'Review',text:'Body content keeps its own space.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header}}:{})}]};
+  const deck = withRecords({organization:{id:'openpresentation',name:'OpenPresentation'},design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96},header,footer},slides:[{title:'Shared furniture',section:'Review',text:'Body content keeps its own space.',composition:{minFontSize:floor,overflow:'error'},...(local?{design:{header}}:{})}]});
   const fieldPath=local?'slides.0.design.header.left.text':'design.header.left.text';activeCase={measured,width,height,floor,local,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
   const geometry=await page.evaluate(async()=>{

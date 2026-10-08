@@ -407,7 +407,11 @@ jobs:
         run: |
           pnpm test:layout-contracts:registry
           pnpm test:packed-browser registry
-          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-registry.json artifacts/npm/registry-consumer
+          # RR-55: a Depends-On editor that needs an unreleased core skips only its own harness here (scripts/registry-sibling-gate.mjs).
+          editor_gate="$(node scripts/registry-sibling-gate.mjs ../opf-editor artifacts/npm/registry-consumer)"
+          if [ "$editor_gate" = run ]; then
+            node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-registry.json artifacts/npm/registry-consumer
+          fi
           node scripts/test-packed-browser-guards.mjs
           node scripts/test-installed-code-guards.mjs --registry
           pnpm test:registry-fidelity

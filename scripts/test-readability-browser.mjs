@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
+import {withRecords} from './ecosystem-records.mjs';
 const sourceRequire=createRequire(new URL('../../opf-render/package.json',import.meta.url)),{chromium}=sourceRequire('playwright');
 const output=path.resolve(process.argv[2]??'artifacts/readability-browser'),installed=process.argv[3]==='installed';
 const consumer=path.resolve('artifacts/npm/consumer'),require=installed?createRequire(path.join(consumer,'package.json')):sourceRequire;
@@ -22,7 +23,7 @@ try {
  const page=await browser.newPage();page.on('pageerror',error=>errors.push(error.message));await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});await page.setContent('<style>body{margin:0}</style><main></main>');
  await page.evaluate(async faces=>{for(const face of faces)document.fonts.add(await new FontFace(face.family,`url(${face.dataUrl})`,{weight:String(face.weight),style:face.italic?'italic':'normal'}).load());await document.fonts.ready;},registry.embeddedFonts);
  for(const measured of [false,true])for(const [width,height]of [[1280,720],[720,1280]])for(const floor of [16,24,32])for(const [fixture,payload]of fixtures.entries()) {
-  const deck={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{title:'Readable source',tag:'Floor test',composition:{minFontSize:floor,overflow:'error'},...structuredClone(payload)}]},before=structuredClone(deck),options={trace:true,...(measured?{fonts}:{})};
+  const deck = withRecords({design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[{title:'Readable source',tag:'Floor test',composition:{minFontSize:floor,overflow:'error'},...structuredClone(payload)}]}),before=structuredClone(deck),options={trace:true,...(measured?{fonts}:{})};
   const bound=resolvePresentation(deck,options).slides[0],svg=renderSlideSvg(deck,0,options);assert.deepEqual(deck,before);assert.deepEqual(bound.geometry.diagnostics,[]);
   await page.setViewportSize({width,height});
   const glyphs=await page.evaluate(async svg=>{

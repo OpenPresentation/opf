@@ -111,6 +111,19 @@ run("npm", [
   "--cache",
   path.join(out,'cache'),
 ]);
+// OPF 0.15 (FA-23): a library registers no catalog, so the siblings' harnesses that name gallery records import a small
+// helper that registers the default catalog the way a host does. Install those helpers next to the copied harnesses,
+// resolving the engine from the installed package; a harness ref older than the helpers has none and imports none.
+for (const [repo, file, target, from, to] of [
+  ['opf-render', 'test/catalog-harness.mjs', 'catalog-harness.mjs', "'../dist/index.js'", "'@openpresentation/opf-render'"],
+  ['opf-pptx', 'test/helpers/default-catalog.mjs', 'helpers/default-catalog.mjs', "'../../dist/index.js'", "'@openpresentation/opf-pptx'"],
+]) {
+  let source;
+  try { source = await readHarness(repo, file); } catch (error) { if (error.code === 'ENOENT' || /Cannot read/.test(error.message)) continue; throw error; }
+  if (!source.includes(from)) throw new Error(`${repo} ${file} no longer imports ${from}; update the installed rewrite`);
+  await mkdir(path.dirname(path.join(consumer, target)), {recursive: true});
+  await writeFile(path.join(consumer, target), source.replaceAll(from, to));
+}
 if (verifyColorRefs) {
   await mkdir(path.join(consumer, 'fixtures'), {recursive: true});
   await writeFile(path.join(consumer, 'fixtures/color-references.opf.json'),
@@ -306,7 +319,9 @@ assert.deepEqual(formatRichTextRange('Hello',0,5,{bold:true}),[{text:'Hello',bol
 assert.equal(richTextContent(replaceRichTextRange(['Hello'],1,4,'i')),'Hio');
 assert.ok(listSchemaFields().length>=604);assert.equal(typeof createSchemaInspector,'function');
 const fonts=await loadFonts();
-const editor=createEditorSession({design:{fontScheme:'roboto'},slides:[{title:'Packed consumer',composition:{mode:'row'},blocks:[{text:'One'},{text:'Two'}]}]});
+// OPF 0.15: a host registers the default catalog (the deck names the roboto font scheme); a 0.14 core has no /catalog and resolves it built in.
+const host=await import('@openpresentation/opf/catalog').then(module=>({catalogs:[module.defaultCatalog]}),()=>({}));
+const editor=createEditorSession({design:{fontScheme:'roboto'},slides:[{title:'Packed consumer',composition:{mode:'row'},blocks:[{text:'One'},{text:'Two'}]}]},host);
 editor.set('slides.0.title','Installed consumer');
 editor.applyPatch(prepareTrackResize(editor.presentation,editor.composeSlide(0).flows[0],0,.6).patches);
 assert.equal(editor.get('slides.0.composition.weights.0'),1.2);
@@ -317,20 +332,20 @@ editor.applyPatch(prepareBlockInsert(editor.presentation,'slides.0',createConten
 editor.applyPatch(prepareBlockDuplicate(editor.presentation,'slides.0.blocks.2').patches);
 editor.applyPatch(prepareBlockRemove(editor.presentation,'slides.0.blocks.2').patches);
 assert.equal(editor.get('slides.0.blocks.2.text'),'Add your text');
-const svg=renderSlideSvg(editor.presentation,0,{fonts});
+const svg=renderSlideSvg(editor.presentation,0,{...host,fonts});
 assert.match(svg,/Installed consumer/);
 assert.equal(typeof createCanvasEditor,'function');assert.equal(typeof loadBrowserFonts,'function');
-const richEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[['Cell']]}}]});
+const richEditor=createEditorSession({design:{fontScheme:'roboto'},slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[['Cell']]}}]},host);
 richEditor.set('slides.0.table.rows.0.0',formatRichTextRange('Cell',0,4,{bold:true,color:'#008800'}));
 assert.deepEqual(richEditor.get('slides.0.table.rows.0.0'),[{text:'Cell',bold:true,color:'#008800'}]);
-assert.match(renderSlideSvg(richEditor.presentation,0,{trace:true,fonts}),/data-opf-rich-text="true"/);
-assert.ok((await toPptx(richEditor.presentation,{fonts})).length>1000);
+assert.match(renderSlideSvg(richEditor.presentation,0,{...host,trace:true,fonts}),/data-opf-rich-text="true"/);
+assert.ok((await toPptx(richEditor.presentation,{...host,fonts})).length>1000);
 richEditor.undo();assert.equal(richEditor.get('slides.0.table.rows.0.0'),'Cell');
 const copied=parseOpfTransfer(serializeOpfTransfer(editor.presentation,{scope:'slide',format:'markdown'}));
 assert.equal(prepareOpfImport(editor.presentation,copied).presentation.slides.length,2);
 const gallery=await loadOpfGallery('https://gallery.example/registry.json',{fetch:async()=>new Response(JSON.stringify({items:[{name:'Example',opf:copied.presentation}]}))});
 assert.equal(gallery.items.length,1);
-const pptx=await toPptx(editor.presentation,{fonts});
+const pptx=await toPptx(editor.presentation,{...host,fonts});
 assert.ok(pptx.length>1000);
 console.log('Packed consumer: core, editor, SVG, measured fonts and PPTX passed.');\n`,
 );
@@ -445,11 +460,33 @@ await build({
 console.log(
   "Packed consumer: TypeScript declarations and browser bundle passed.",
 );
+// OPF 0.15: the browser harnesses below run as a host would, so the editor and renderer they import register the default
+// catalog (their decks name gallery records such as the roboto font scheme). Each harness imports the installed packages
+// through these host modules; a call's own `catalogs` wins. A 0.14 core (an older registry plan) has no /catalog and resolves
+// those records built in, so its host modules register nothing.
+{
+  const installedCore = JSON.parse(await readFile(path.join(consumer, 'node_modules/@openpresentation/opf/package.json'), 'utf8'));
+  const hasCatalog = Boolean(installedCore.exports?.['./catalog']);
+  await writeFile(path.join(consumer, 'host-catalogs.mjs'), hasCatalog
+    ? "import {defaultCatalog} from '@openpresentation/opf/catalog';\nexport const withCatalogs = (options = {}) => (options.catalogs === undefined ? {...options, catalogs: [defaultCatalog]} : options);\n"
+    : 'export const withCatalogs = (options = {}) => options;\n');
+  await writeFile(path.join(consumer, 'host-editor.mjs'), "import * as editor from '@openpresentation/opf-editor';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '@openpresentation/opf-editor';\nexport const createEditorSession = (input, options) => editor.createEditorSession(input, withCatalogs(options));\n");
+  await writeFile(path.join(consumer, 'host-editor-canvas.mjs'), "import * as canvas from '@openpresentation/opf-editor/canvas';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '@openpresentation/opf-editor/canvas';\nexport const createCanvasEditor = (host, options) => canvas.createCanvasEditor(host, withCatalogs(options));\n");
+  for (const [file, entry] of [['host-render.mjs', '@openpresentation/opf-render'], ['host-render-svg.mjs', '@openpresentation/opf-render/svg']]) {
+    await writeFile(path.join(consumer, file), `import * as render from '${entry}';\nimport {withCatalogs} from './host-catalogs.mjs';\nexport * from '${entry}';\nexport const renderSvg = (input, options) => render.renderSvg(input, withCatalogs(options));\nexport const renderSlideSvg = (input, index, options) => render.renderSlideSvg(input, index, withCatalogs(options));\nexport const resolvePresentation = (input, options) => render.resolvePresentation(input, withCatalogs(options));\n`);
+  }
+}
+/** A browser harness that imports the installed editor or renderer entry imports it through the host modules instead. */
+const hosted = (source) => source
+  .replace(/(['"])@openpresentation\/opf-editor\1/g, "'./host-editor.mjs'")
+  .replace(/(['"])@openpresentation\/opf-editor\/canvas\1/g, "'./host-editor-canvas.mjs'")
+  .replace(/(['"])@openpresentation\/opf-render\1/g, "'./host-render.mjs'")
+  .replace(/(['"])@openpresentation\/opf-render\/svg\1/g, "'./host-render-svg.mjs'");
 // Serve the same DOM regression harness using only the installed npm packages.
 const harness = (await readHarness('opf-editor', 'test/browser-canvas.mjs'))
   .replace('../src/canvas.js', '@openpresentation/opf-editor/canvas')
   .replace('../src/index.js', '@openpresentation/opf-editor');
-await writeFile(path.join(consumer, 'canvas-tests.mjs'), harness);
+await writeFile(path.join(consumer, 'canvas-tests.mjs'), hosted(harness));
 const browserOut=path.join(root,'artifacts/editor');
 await mkdir(browserOut,{recursive:true});
 // Build every required browser asset here; a clean registry check must not
@@ -472,7 +509,7 @@ const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
  .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
-await writeFile(path.join(consumer,'rich-tests.mjs'),richHarness);
+await writeFile(path.join(consumer,'rich-tests.mjs'),hosted(richHarness));
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
 if(verifyEstimatedRichText){
@@ -484,7 +521,7 @@ const layoutHarness=(await readHarness('opf','scripts/test-layout-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
-await writeFile(path.join(consumer,'layout-tests.mjs'),layoutHarness);
+await writeFile(path.join(consumer,'layout-tests.mjs'),hosted(layoutHarness));
 await build({entryPoints:[path.join(consumer,'layout-tests.mjs')],outfile:path.join(browserOut,'packed-layout-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-layout-tests.html'),browserHtml('layout','<select id="pointer-mode"><option value="normal">Normal</option><option value="cancel">Cancel</option><option value="conflict">Conflict</option><option value="independent">Independent</option></select><button id="reset">Reset</button><button id="verify">Verify</button><button id="external">External change</button><button id="independent">Independent change</button><div id="pointer-state"></div>'));
 
@@ -492,7 +529,7 @@ const blockHarness=(await readHarness('opf','scripts/test-block-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
-await writeFile(path.join(consumer,'block-tests.mjs'),blockHarness);
+await writeFile(path.join(consumer,'block-tests.mjs'),hosted(blockHarness));
 await build({entryPoints:[path.join(consumer,'block-tests.mjs')],outfile:path.join(browserOut,'packed-block-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-block-tests.html'),browserHtml('block','<button id="verify">Verify</button><div id="drag-status"></div>'));
 
@@ -500,7 +537,7 @@ const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
-await writeFile(path.join(consumer,'list-tests.mjs'),listHarness);
+await writeFile(path.join(consumer,'list-tests.mjs'),hosted(listHarness));
 await build({entryPoints:[path.join(consumer,'list-tests.mjs')],outfile:path.join(browserOut,'packed-list-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-list-tests.html'),browserHtml('list'));
 
@@ -508,7 +545,7 @@ const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'
  .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
  .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
  .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
-await writeFile(path.join(consumer,'create-tests.mjs'),creationHarness);
+await writeFile(path.join(consumer,'create-tests.mjs'),hosted(creationHarness));
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));
 
@@ -517,7 +554,7 @@ if (verifyStyledTables) {
     .replace('../src/canvas.js','@openpresentation/opf-editor/canvas')
     .replace('../src/index.js','@openpresentation/opf-editor')
     .replace('../src/rich-text.js','@openpresentation/opf-editor/rich-text');
-  await writeFile(path.join(consumer,'styled-table-tests.mjs'),styledHarness);
+  await writeFile(path.join(consumer,'styled-table-tests.mjs'),hosted(styledHarness));
   await build({entryPoints:[path.join(consumer,'styled-table-tests.mjs')],outfile:path.join(browserOut,'packed-styled-table-tests.js'),bundle:true,platform:'browser',format:'esm'});
   await writeFile(path.join(browserOut,'packed-styled-table-tests.html'),browserHtml('styled-table'));
   console.log('Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.');

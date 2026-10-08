@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
 const {build}=require('esbuild'),{chromium}=require('playwright');
 import {loadFonts} from '../../opf-render/dist/fonts-node.js';
+import {withRecords} from './ecosystem-records.mjs';
 const output=path.resolve(process.argv[2]??'artifacts/timeline-workflow');await mkdir(output,{recursive:true});
 const installed=process.argv[3]==='installed',consumer=path.resolve('artifacts/npm/consumer');
 const installedRequire=installed?createRequire(path.join(consumer,'package.json')):null;
@@ -41,7 +42,7 @@ try {
   if(fixture===3){timeline={events:[{when:'Q1',what:'Pilot',description:'Keep all source detail and enough readable space for this milestone.'},{when:'Q2',what:'Expand',description:'Keep all source detail and enough readable space for this milestone.'}]};fieldPath='slides.0.blocks.0.timeline.events.0.what';slide={blocks:[{timeline},{text:'Keep this neighboring source.'}],composition:{mode:'row',weights:[1,4]}};}
   const actualOriginal=fixture===3?'Pilot':original;
   slide={title:'Timeline editing',...slide,composition:{...slide.composition,minFontSize:24,overflow:'error'}};
-  const deck={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[slide]};
+  const deck = withRecords({design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[slide]});
   activeCase={measured,width,height,fixture,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
   const geometry=await page.evaluate(async()=>{

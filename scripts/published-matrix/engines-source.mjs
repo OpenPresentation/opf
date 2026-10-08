@@ -9,9 +9,9 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {renderSvg, svgToPng} from '../../../opf-render/dist/index.js';
 export {checkTypefaces, fromPptx, toPptx} from '../../../opf-pptx/dist/index.js';
 export {createEditorSession} from '../../../opf-editor/dist/index.js';
-export {defaultCatalog} from '@openpresentation/opf/catalog';
-export {resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts} from '@openpresentation/opf/composition';
-export {validate} from '@openpresentation/opf';
+export {catalogDisplay, defaultCatalog} from '@openpresentation/opf/catalog';
+export {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
+export {resolveFontScheme, resolveReference, validate} from '@openpresentation/opf';
 
 const require = createRequire(new URL('../../../opf-pptx/package.json', import.meta.url));
 export const {strToU8, unzipSync, zipSync} = require('fflate');

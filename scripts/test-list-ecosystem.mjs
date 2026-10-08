@@ -4,15 +4,18 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import {renderSlideSvg,resolvePresentation} from '../../opf-render/src/svg.js';
 import {loadFonts} from '../../opf-render/src/fonts-node.js';
 import {toPptx} from '../../opf-pptx/src/index.js';
+import {embed} from '../packages/javascript/dist/index.js';
+import {defaultCatalog} from '../packages/javascript/dist/catalog.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',trimValues:false,parseTagValue:false}),array=value=>Array.isArray(value)?value:value?[value]:[];
-const document={name:'Measured lists',design:{fontScheme:'roboto'},slides:[{title:'Lists keep their structure',composition:{mode:'row',weights:[3,2]},blocks:[{items:[
+// OPF 0.15: the deck embeds the font scheme it names (core registers no catalog).
+const document=embed({name:'Measured lists',design:{fontScheme:'roboto'},slides:[{title:'Lists keep their structure',composition:{mode:'row',weights:[3,2]},blocks:[{items:[
  {text:['A ',{text:'bold recommendation',bold:true},' that wraps with a hanging indent when space is limited.'],description:['With ',{text:'an italic explanation',italic:true},' and a ',{text:'source link',link:'https://openpresentation.org',underline:true}]},
  {text:'Supporting evidence',level:1},
  {text:[{text:'Color and emphasis',color:'#2563EB',fontSize:22}],description:'A smaller description shares the text indent.',level:2},
  {text:['H',{text:'2',subscript:true},'O and x',{text:'2',superscript:true}],level:4}
- ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Also editable',italic:true}],level:1},'A final point']}]}]};
+ ]},{type:'text',bullets:['Text-style bullets',{text:[{text:'Also editable',italic:true}],level:1},'A final point']}]}]},{catalogs:[defaultCatalog]}).document;
 const fonts=await loadFonts({pack:'office'}),options={fonts};
 const bound=resolvePresentation(document,options).slides[0],svg=renderSlideSvg(document,0,{...options,trace:true});
 assert.equal(bound.geometry.diagnostics.length,0);

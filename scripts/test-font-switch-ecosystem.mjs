@@ -56,7 +56,21 @@ import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads'
 // `engines-installed.mjs` (scripts/published-matrix/prepare-consumer.mjs), the same matrix runs against the published
 // packages installed from the npm registry in a standalone consumer project (RR-04, FF-10).
 const engines = await import(process.env.OPF_MATRIX_ENGINES ? pathToFileURL(path.resolve(process.env.OPF_MATRIX_ENGINES)).href : './published-matrix/engines-source.mjs');
-const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, renderSvg, svgToPng, checkTypefaces, fromPptx, toPptx, createEditorSession, catalogs, resolveFontFamilies, resolveFontSchemeReference, resolveScriptFonts, validate, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+const {BUNDLED_FONT_MANIFEST, loadFonts, createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor, svgToPng, checkTypefaces, fromPptx, defaultCatalog, catalogDisplay, resolveFontFamilies, resolveFontScheme, resolveReference, strToU8, unzipSync, zipSync, XMLValidator} = engines;
+// OPF 0.15: core registers no catalog. The matrix is a host: it registers the default catalog with every engine and core
+// call, as the CLI does, so its decks name gallery records by id without embedding them.
+const CATALOGS = [defaultCatalog];
+const withCatalogs = (options = {}) => ({catalogs: CATALOGS, ...options});
+const renderSvg = (deck, options) => engines.renderSvg(deck, withCatalogs(options));
+const toPptx = (deck, options) => engines.toPptx(deck, withCatalogs(options));
+const createEditorSession = (deck, options) => engines.createEditorSession(deck, withCatalogs(options));
+const resolveScriptFonts = (deck, options) => engines.resolveScriptFonts(deck, withCatalogs(options));
+const validate = (deck, options) => engines.validate(deck, withCatalogs(options));
+// The catalog records with their ids, by kind: the content kinds of the default catalog and the display kinds.
+const catalogs = Object.fromEntries([...Object.keys(defaultCatalog).filter((kind) => kind !== 'source'), ...Object.keys(catalogDisplay)]
+  .map((kind) => [kind, Object.entries(defaultCatalog[kind] ?? catalogDisplay[kind]).map(([id, record]) => ({id, ...record}))]));
+// A deck's language is a BCP-47 tag; the matrix names languages by their catalog record ids.
+const tag = (id) => catalogDisplay.languages[id].bcp47;
 
 const started = Date.now();
 const MAX_SECONDS = 420;
@@ -149,7 +163,7 @@ const chartClassKey = (record) => {
   const openxml = record.mappings.openxml;
   return [openxml.element, openxml.barDir, openxml.extension].filter(Boolean).join('/');
 };
-for (const record of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
+for (const record of catalogs.chartTypes) {
   const key = chartClassKey(record);
   CHART_CLASSES.set(key, [...(CHART_CLASSES.get(key) ?? []), record.id]);
 }
@@ -193,7 +207,7 @@ const TEXT = {
 // Scripts outside the pairwise array use the catalog's own text sample for their language.
 for (const id of CHAIN_LANGUAGES) {
   const language = byId('languages', id);
-  const scheme = catalogs.fontSchemes.find((entry) => entry.textSample && entry.languages?.includes(language.id));
+  const scheme = catalogs.fontSchemes.find((entry) => entry.textSample && entry.languages?.includes(language.bcp47));
   assert.ok(scheme, `the catalog has a text sample for ${language.name}`);
   const sample = scheme.textSample;
   TEXT[id] = {title: sample, subtitle: sample, body: `${sample} ${sample}`, items: [sample, sample, sample], cells: [sample, sample, sample, sample]};
@@ -465,7 +479,7 @@ function buildDeck(name, row, index) {
   withImage(slides[row.layout.length], IMAGES[row.image[1]]);
   const deck = {
     name: `Font switch matrix ${name}`,
-    language: row.language,
+    language: tag(row.language),
     narrative: row.narrative,
     tone: row.tone,
     audience: [row.audience],
@@ -481,6 +495,8 @@ function buildDeck(name, row, index) {
     slides
   };
   for (const slide of slides) if (slide.design && Object.keys(slide.design).length === 0) delete slide.design;
+  // A gallery layout with picture bullets (design.listBullet: image) draws the deck logo as the marker, so the deck has one.
+  if (slides.some((slide) => slide.layout && byId('layouts', slide.layout)?.design?.listBullet === 'image')) deck.design.logo = 'asset:hero';
   if (row.socials === 'profiles') {
     deck.organization = {id: 'acme', name: 'Acme', socials: {linkedin: 'https://linkedin.com/company/acme', x: '@acme'}};
     deck.speaker = {id: 'ava', name: 'Ava Chen', socials: {linkedin: 'https://linkedin.com/in/ava-chen', github: 'avachen'}};
@@ -491,12 +507,12 @@ function buildDeck(name, row, index) {
 // ---------------------------------------------------------------------------
 // Chosen fonts: what the document's design selects, resolved from the catalogs.
 // ---------------------------------------------------------------------------
-const record = (kind, id, presentation) => [...(presentation.catalogs?.[kind]?.records ?? []), ...catalogs[kind]].find((entry) => entry.id === id);
+const record = (kind, id, presentation) => (id === undefined ? undefined : resolveReference(presentation, kind, id, {catalogs: CATALOGS})?.record);
 const referenceId = (reference) => (typeof reference === 'string' ? reference : reference?.id);
 function schemeOf(presentation, design) {
   const theme = record('themes', referenceId(design.theme) ?? 'minimal', presentation);
   const reference = design.fontScheme ?? theme?.fontScheme;
-  return resolveFontSchemeReference(reference, (id) => record('fontSchemes', id, presentation)).scheme;
+  return resolveFontScheme(presentation, reference, 'design.fontScheme', {catalogs: CATALOGS}).scheme;
 }
 const runFamilies = (value) => (!value || typeof value !== 'object' ? [] : Object.entries(value).flatMap(([key, child]) => (key === 'fontFamily' && typeof child === 'string' ? [child] : runFamilies(child))));
 const hasCode = (slide) => Boolean(slide.code) || (slide.blocks ?? []).some((block) => block.code);
@@ -538,7 +554,7 @@ function chosenFonts(presentation) {
     const text = textOf(presentation.slides);
     const language = /[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(text) ? 'japanese' : /\p{Script=Hangul}/u.test(text) ? 'korean' : /\p{Script=Han}/u.test(text) ? 'chinese-simplified' : null;
     if (language) {
-      const resolved = resolveScriptFonts({...presentation, language});
+      const resolved = resolveScriptFonts({...presentation, language: tag(language)});
       if (resolved.sources.eastAsian !== 'latin') for (const font of [resolved.heading.eastAsian, resolved.body.eastAsian]) contentEastAsian.add(font);
     }
   }
@@ -734,7 +750,7 @@ async function runSwitch(name, deck, steps, options = {}) {
 }
 const setScheme = (path, id) => (editor) => editor.setCatalog(path, 'fontSchemes', id);
 const setTheme = (id) => (editor) => editor.setCatalog('design.theme', 'themes', id);
-const setLanguage = (id) => (editor) => editor.setCatalog('language', 'languages', id);
+const setLanguage = (id) => (editor) => editor.set('language', tag(id));
 const replaceSlide = (index, slide) => (editor) => editor.applyPatch([{op: 'replace', path: `/slides/${index}`, value: structuredClone(slide)}]);
 
 // ---------------------------------------------------------------------------
@@ -849,7 +865,7 @@ const MONO = 'consolas';
 // Every content type, proportional to monospace and back.
 for (const type of FULL ? Object.keys(contentBlocks) : []) {
   const text = TEXT.english;
-  const deck = {name: `content ${type}`, language: 'english', design: {theme: 'minimal', fontScheme: PROPORTIONAL}, slides: [{id: type, title: text.title, notes: text.body, ...contentBlocks[type](text)}]};
+  const deck = {name: `content ${type}`, language: tag('english'), design: {theme: 'minimal', fontScheme: PROPORTIONAL}, slides: [{id: type, title: text.title, notes: text.body, ...contentBlocks[type](text)}]};
   await runSwitch(`content-${type}`, deck, [
     {label: 'monospace', apply: setScheme('design.fontScheme', MONO), expectDrawn: ['Cousine'], expectAbsent: ['Carlito']},
     {label: 'proportional again', apply: setScheme('design.fontScheme', PROPORTIONAL), expectDrawn: ['Carlito'], expectAbsent: ['Cousine'], returnsToStart: true}
@@ -861,7 +877,7 @@ for (const scheme of FULL ? [PROPORTIONAL, MONO] : []) {
   const text = TEXT.english;
   const slideFor = (type) => ({id: 'swap', title: text.title, notes: text.body, ...contentBlocks[type](text)});
   const order = Object.keys(contentBlocks);
-  const deck = {name: `replace ${scheme}`, language: 'english', design: {theme: 'minimal', fontScheme: scheme}, slides: [slideFor(order[0])]};
+  const deck = {name: `replace ${scheme}`, language: tag('english'), design: {theme: 'minimal', fontScheme: scheme}, slides: [slideFor(order[0])]};
   const steps = order.slice(1).map((type) => ({label: `replace with ${type}`, apply: replaceSlide(0, slideFor(type)), payload: true}));
   steps.push({label: `replace back with ${order[0]}`, apply: replaceSlide(0, slideFor(order[0])), payload: true, returnsToStart: true});
   await runSwitch(`replace-${scheme}`, deck, steps);
@@ -871,7 +887,7 @@ for (const scheme of FULL ? [PROPORTIONAL, MONO] : []) {
 if (FULL) {
   const text = TEXT.english;
   const deck = {
-    name: 'per-slide override', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'},
+    name: 'per-slide override', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'},
     slides: [
       {id: 'deck', title: text.title, notes: text.body, bullets: text.items},
       {id: 'override', title: text.title, notes: text.body, design: {fontScheme: 'georgia'}, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body},
@@ -897,7 +913,7 @@ if (FULL) {
 if (FULL) {
   const text = TEXT.english;
   const deck = {
-    name: 'scheme overrides', language: 'english', design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: 'Georgia', code: 'Courier New'}},
+    name: 'scheme overrides', language: tag('english'), design: {theme: 'minimal', fontScheme: {id: 'calibri', heading: 'Georgia', code: 'Courier New'}},
     slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]
   };
   await runSwitch('scheme-overrides', deck, [
@@ -911,7 +927,7 @@ if (FULL) {
   const mixed = 'Revenue 収益 增长 grew across every region';
   const korean = 'Growth 성장 across regions';
   const deck = {
-    name: 'CJK in Latin', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'},
+    name: 'CJK in Latin', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'},
     slides: [{id: 'mixed', title: mixed, notes: mixed, bullets: [mixed, korean, 'Plain Latin point'], text: mixed}]
   };
   const states = await runSwitch('cjk-in-latin', deck, [
@@ -927,7 +943,7 @@ if (FULL) {
 // Indirect switches: theme (through its bundled scheme) and language (through script slots).
 {
   const text = TEXT.english;
-  const deck = {name: 'theme switch', language: 'english', design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]};
+  const deck = {name: 'theme switch', language: tag('english'), design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code-1x', code: {source: CODE, language: 'ts'}, text: text.body}]};
   await runSwitch('theme', deck, [
     {label: 'classic', apply: setTheme('classic'), expectUsed: ['Tenorite Display', 'Tenorite'], expectUnused: ['Aptos']},
     {label: 'dark', apply: setTheme('dark'), expectUsed: ['Seaford Display', 'Seaford']},
@@ -937,7 +953,7 @@ if (FULL) {
   // A language switch comes with the slide's text in that language (a block replacement); the script fonts follow.
   // The chain visits every script in the languages catalog: the pairwise languages first, then one language per other script.
   const languageSlide = (language) => ({id: 'all', title: TEXT[language].title, bullets: TEXT[language].items, text: TEXT[language].body, notes: TEXT[language].body});
-  const languages = {name: 'language switch', language: 'english', design: {theme: 'minimal', fontScheme: 'aptos'}, slides: [languageSlide('english')]};
+  const languages = {name: 'language switch', language: tag('english'), design: {theme: 'minimal', fontScheme: 'aptos'}, slides: [languageSlide('english')]};
   const change = (language) => (editor) => {
     setLanguage(language)(editor);
     replaceSlide(0, languageSlide(language))(editor);
@@ -959,7 +975,7 @@ if (FULL) {
   };
   const imageLayout = layoutMembers('image')[0];
   const deck = {
-    name: 'webp images', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri', background: {type: 'image', image: {src: 'asset:lossy', fit: 'cover'}}},
+    name: 'webp images', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri', background: {type: 'image', src: 'asset:lossy', fit: 'cover'}},
     assets: {lossless: {src: WEBP.lossless, alt: 'Lossless WebP'}, lossy: {src: WEBP.lossy, alt: 'Lossy WebP with alpha'}},
     slides: [layoutSlide('webp-1', imageLayout, text), {...layoutSlide('webp-2', imageLayout, text), blocks: [{image: 'asset:lossy'}]}, {id: 'webp-3', title: text.title, bullets: text.items}]
   };
@@ -980,7 +996,7 @@ if (FULL) {
 // ---------------------------------------------------------------------------
 // Renderer 0.11.3 previews every kept classic chart type natively and 0.11.4 the seven chartex types, so every non-deprecated type draws its own
 // construct (axes, legend, arcs or tiles). An older pinned renderer approximates the rest by a plain row of bars.
-const PREVIEW_NATIVE = catalogs.chartTypes.filter((entry) => !entry.deprecation).map((entry) => entry.id);
+const PREVIEW_NATIVE = catalogs.chartTypes.map((entry) => entry.id);
 // Types whose classic chart part (the Fallback of a chartex construct, or the whole export of `world`) is not the element the catalog names:
 // opf-pptx 0.11.6 exports the six confirmed chartex types as a native chartEx part with the clustered column as Fallback (chartex: 'auto').
 // FF-56: `world` stays the clustered column (PowerPoint's map needs online geodata) and has no chartEx part.
@@ -988,9 +1004,9 @@ const CHARTEX_NATIVE = {'box-and-whisker': 'boxWhisker', funnel: 'funnel', histo
 const EXPORT_FALLBACK = {'box-and-whisker': 'barChart', funnel: 'barChart', histogram: 'barChart', pareto: 'barChart', treemap: 'barChart', waterfall: 'barChart', world: 'barChart'};
 const marks = (svg) => ({text: (svg.match(/<text\b/g) ?? []).length, shapes: (svg.match(/<(?:path|rect|circle|line|polygon|polyline)\b/g) ?? []).length});
 const chartPaths = [];
-for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
+for (const chart of catalogs.chartTypes) {
   const slide = {id: 'chart', layout: 'chart-1x', title: 'Chart', chart: {type: chart.id, data: chartData(chart)}, text: 'Body'};
-  const deck = {name: chart.id, language: 'english', design: {fontScheme: 'calibri'}, slides: [slide]};
+  const deck = {name: chart.id, language: tag('english'), design: {fontScheme: 'calibri'}, slides: [slide]};
   const bare = {...deck, slides: [{...slide, chart: undefined}]};
   delete bare.slides[0].chart;
   const measured = engineOptions(deck);
@@ -1023,7 +1039,7 @@ for (const chart of catalogs.chartTypes.filter((entry) => !entry.deprecation)) {
 // ---------------------------------------------------------------------------
 if (FULL) {
   const text = TEXT.english;
-  const deck = {name: 'controls', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, chart: {type: 'column', data: CHART_DATA}, text: text.body}]};
+  const deck = {name: 'controls', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, chart: {type: 'column', data: CHART_DATA}, text: text.body}]};
   const fonts = chosenFonts(deck);
   const original = unzipSync(await toPptx(deck, engineOptions(deck)));
   const audit = (edit) => {
@@ -1089,7 +1105,7 @@ const EXPECTED_FAILURES = [
   ...GOOGLE_PENDING.map((scheme) => ({
     id: `open-google-font-without-pinned-preview-face:${scheme}`,
     reason: 'The office and base packs ship no face for this OFL family, so the preview reports font-unavailable. The PPTX still names the chosen family. The scheme is a member of the open-google class and is drawn in the matrix as soon as the registry bundles it.',
-    deck: {name: scheme, language: 'english', design: {fontScheme: scheme}, slides: [{id: 'a', title: providedSample(scheme), text: providedSample(scheme)}]},
+    deck: {name: scheme, language: tag('english'), design: {fontScheme: scheme}, slides: [{id: 'a', title: providedSample(scheme), text: providedSample(scheme)}]},
     preview: 'font-unavailable',
     measuredExport: 'font-unavailable'
   }))
@@ -1113,7 +1129,7 @@ const GLYPH_FALLBACK_CASES = [
   {id: 'simplified-hanzi-in-a-japanese-deck', language: 'japanese', scheme: 'meiryo', title: TEXT['chinese-simplified'].title, body: TEXT['chinese-simplified'].body, from: previewFaces('Meiryo'), to: ['Noto Sans SC'], characters: ['变']}
 ];
 for (const fallback of GLYPH_FALLBACK_CASES) {
-  const deck = {name: fallback.id, language: fallback.language, design: {fontScheme: fallback.scheme}, slides: [{id: 'a', title: fallback.title, text: fallback.body}]};
+  const deck = {name: fallback.id, language: tag(fallback.language), design: {fontScheme: fallback.scheme}, slides: [{id: 'a', title: fallback.title, text: fallback.body}]};
   const measured = engineOptions(deck);
   const notes = [];
   const svgs = renderSvg(deck, {...measured, onDiagnostic: (diagnostic) => notes.push(diagnostic)});
@@ -1131,7 +1147,7 @@ for (const fallback of GLYPH_FALLBACK_CASES) {
   const id = 'single-series-histogram-chart';
   const histogram = byId('chartTypes', 'histogram');
   assert.equal(histogram.series, 1, 'the catalog histogram expects one series');
-  const deck = {name: id, language: 'english', design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
+  const deck = {name: id, language: tag('english'), design: {fontScheme: 'calibri'}, slides: [{id: 'a', layout: 'chart-1x', title: 'Histogram', chart: {type: 'histogram', data: {columns: ['Value'], rows: [[3], [5], [8], [13]]}}, text: 'Body'}]};
   const exportDiagnostics = [];
   const bytes = await toPptx(deck, {...engineOptions(deck), onDiagnostic: (diagnostic) => exportDiagnostics.push(diagnostic)});
   const exported = unzipSync(bytes);
@@ -1158,7 +1174,7 @@ if (FULL) assert.deepEqual(unusedExpectations, [], 'every pinned substitution is
 // Decoy host faces named like bundled families must be effective (they draw differently when they are the only faces) and
 // must not shadow the bundled faces (the PNG digests above equal the baseline run's, which the determinism grid asserts).
 if (HOST_FONT_DIRS.length) {
-  const deck = {name: 'decoy', language: 'english', design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: TEXT.english.title, text: TEXT.english.body}]};
+  const deck = {name: 'decoy', language: tag('english'), design: {theme: 'minimal', fontScheme: 'calibri'}, slides: [{id: 'a', title: TEXT.english.title, text: TEXT.english.body}]};
   const [svg] = renderSvg(deck, engineOptions(deck));
   const decoyOnly = sha256(await svgToPng(svg, {useBundledFonts: false, fontDirs: HOST_FONT_DIRS}));
   const bundledOnly = sha256(await svgToPng(svg, {fonts: {fontFiles: registry.fontFiles, useBundledFonts: false}}));

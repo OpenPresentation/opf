@@ -92,8 +92,17 @@ for (const [index, slide] of deck.slides.entries()) {
     checked++;
   }
 
-  // Same OPF after an unchanged round trip (picture sources come back as data URIs).
-  const strip = (value) => JSON.parse(JSON.stringify(value, (key, entry) => (key === 'src' || key === 'image' && typeof entry === 'string' ? undefined : entry)));
+  // Same OPF after an unchanged round trip (picture sources come back as data URIs). An `asset:<id>` picture is compared
+  // as the asset it names: the importer writes the picture inline with the asset's alt text, which must survive.
+  const asset = (entry) => (typeof entry === 'string' && entry.startsWith('asset:') ? deck.assets?.[entry.slice(6)] : entry);
+  const strip = (value) => JSON.parse(JSON.stringify(value, (key, entry) => {
+    if (key === 'src') return undefined;
+    if (key !== 'image') return entry;
+    const picture = asset(entry);
+    if (typeof picture === 'string') return undefined;
+    // The source (and its media type, which a data URI carries) comes back re-encoded; the alt text must survive as is.
+    return picture?.alt === undefined ? undefined : { alt: picture.alt };
+  }));
   assert.deepEqual(strip({ background: imported.slides[index].design?.background, blocks: imported.slides[index].blocks }), strip({ background: slide.design?.background, blocks: slide.blocks }), `${slide.id}: round trip`);
 }
 assert.ok(checked >= 17, `${checked} pictures checked`);

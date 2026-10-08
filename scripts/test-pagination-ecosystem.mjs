@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {writeFile,mkdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
-import {paginate,validate} from '../packages/javascript/dist/index.js';
+import {embed,paginate,validate} from '../packages/javascript/dist/index.js';
+import {defaultCatalog} from '../packages/javascript/dist/catalog.js';
 import {renderSvg,svgToPng} from '../../opf-render/dist/index.js';
 import {toPptx} from '../../opf-pptx/dist/index.js';
 const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
@@ -11,7 +12,8 @@ const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:''});
 const list=value=>Array.isArray(value)?value:value?[value]:[];
 const text='Describe the evidence clearly. Keep related details together and preserve the original words. '.repeat(60);
 const rows=Array.from({length:55},(_,index)=>[`Checkpoint ${index+1}`,index%2?'Verified':'In review']);
-const source={name:'Pagination verification',design:{theme:'classic'},slides:[{id:'draft',title:'A draft that needs room to breathe',text},{id:'checkpoints',title:'Review every checkpoint',table:{columns:['Checkpoint','Status'],rows}}]};
+// OPF 0.15: core registers no catalog; the deck embeds the records it names (theme classic and its schemes), as a saved deck does.
+const source=embed({name:'Pagination verification',design:{theme:'classic'},slides:[{id:'draft',title:'A draft that needs room to breathe',text},{id:'checkpoints',title:'Review every checkpoint',table:{columns:['Checkpoint','Status'],rows}}]},{catalogs:[defaultCatalog]}).document;
 const result=paginate(source);
 assert.equal(validate(result.presentation,{ only: ['format'] }).valid,true);
 assert.equal(result.presentation.slides.filter(s=>s.text).map(s=>s.text).join(''),text);
