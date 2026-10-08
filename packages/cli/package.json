@@ -27,11 +27,22 @@
     "@openpresentation/opf": "^0.16.0"
   },
   "devDependencies": {
-    "@types/node": "^24.13.4",
-    "tsup": "^8.5.1",
-    "typescript": "~5.9.3",
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/noto-sans": "0.4.2",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/tinos": "0.4.2",
     "@openpresentation/opf-pptx": "0.15.0",
-    "@openpresentation/opf-render": "0.15.0"
+    "@openpresentation/opf-render": "0.15.0",
+    "@resvg/resvg-js": "2.6.2",
+    "@types/node": "^24.13.4",
+    "pdf-lib": "1.17.1",
+    "sharp": "0.35.5",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3"
   },
   "files": [
     "dist",

@@ -259,7 +259,7 @@ describe("the peers", () => {
 		import { exportDeck, importDeck } from "@openpresentation/cli/api-copy";
 		const out = {};
 		for (const [name, call] of [["export", () => exportDeck({ slides: [{ title: "x" }] }, { format: process.argv[2] ?? "svg" })], ["import", () => importDeck(new Uint8Array(4))]]) {
-			try { await call(); out[name] = "no error"; } catch (error) { out[name] = { name: error.name, code: error.code, package: error.details.package, range: error.details.range, message: error.message }; }
+			try { await call(); out[name] = "no error"; } catch (error) { out[name] = { name: error.name, code: error.code, package: error.details.package, range: error.details.range, message: error.message, details: error.details }; }
 		}
 		process.stdout.write(JSON.stringify(out));
 	`;
@@ -269,9 +269,10 @@ describe("the peers", () => {
 		await symlink(path.dirname(createRequire(path.join(dist, "api.js")).resolve("@openpresentation/opf/package.json")), path.join(isolated, "node_modules/@openpresentation/opf"), "junction");
 		await writeFile(path.join(isolated, "run.mjs"), script.replace('"@openpresentation/cli/api-copy"', JSON.stringify("./dist/api.js")));
 	})();
-	const attempt = async (...args) => {
+	const attempt = async (...args) => attemptWith({}, ...args);
+	const attemptWith = async (env, ...args) => {
 		await ready;
-		const result = spawnSync(process.execPath, [path.join(isolated, "run.mjs"), ...args], { cwd: isolated, encoding: "utf8" });
+		const result = spawnSync(process.execPath, [path.join(isolated, "run.mjs"), ...args], { cwd: isolated, encoding: "utf8", env: { ...process.env, ...env } });
 		assert.equal(result.status, 0, result.stderr);
 		return JSON.parse(result.stdout);
 	};
@@ -302,5 +303,53 @@ describe("the peers", () => {
 		const broken = await attempt("pdf");
 		assert.equal(broken.export.code, "peer-load-failed");
 		assert.match(broken.export.message, /boom/);
+	});
+
+	// RR-63: opf-render loads pdf-lib, @resvg/resvg-js, sharp and every font package lazily. Their absence is a missing peer, not a drawing failure.
+	test("a converter or font package the renderer needs is a missing peer, with the renderer's install command and the package", async () => {
+		const peer = path.join(isolated, "node_modules/@openpresentation/opf-render");
+		const missing = (name, range, purpose) =>
+			`Object.assign(new Error("${name} is not installed. It is an optional peer dependency of @openpresentation/opf-render, used for ${purpose}: run npm install ${name}@${range}."), { code: "converter-missing", details: { package: "${name}", range: "${range}", install: "npm install ${name}@${range}", purpose: "${purpose}", installed: false } })`;
+		await writeFile(path.join(peer, "package.json"), JSON.stringify({ name: "@openpresentation/opf-render", version: "0.16.0", type: "module", exports: { ".": "./index.js", "./fonts-node": "./fonts.js", "./package.json": "./package.json" } }));
+		await writeFile(
+			path.join(peer, "index.js"),
+			`export function renderSlideSvg() { return '<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720"></svg>'; }
+export async function svgToPng() { throw ${missing("@resvg/resvg-js", "^2.6.2", "PNG output")}; }
+export async function svgToPdf() { throw ${missing("pdf-lib", "^1.17.1", "raster-mode PDF output")}; }
+`,
+		);
+		await writeFile(
+			path.join(peer, "fonts.js"),
+			`export async function loadFonts() {
+  if (process.env.FAKE_FONTS_MISSING) throw Object.assign(new Error("The 'office' font pack needs font packages that are not installed (optional peer dependencies of @openpresentation/opf-render): run npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/tinos@0.4.2."), { code: "font-resource-unavailable", details: { packages: ["@expo-google-fonts/roboto", "@expo-google-fonts/tinos"], install: "npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/tinos@0.4.2" } });
+  return { textMeasurement: {}, embeddedFonts: [], fontFiles: [], registry: {}, substitutions: [] };
+}
+`,
+		);
+		const png = await attempt("png");
+		assert.equal(png.export.name, "OPFExportError");
+		assert.equal(png.export.code, "peer-not-installed");
+		assert.deepEqual(png.export.details.package, "@resvg/resvg-js");
+		assert.equal(png.export.details.range, "^2.6.2");
+		assert.equal(png.export.details.install, "npm install @resvg/resvg-js@^2.6.2");
+		assert.match(png.export.message, /npm install @resvg\/resvg-js@\^2\.6\.2/);
+		const pdf = await attemptWith({}, "pdf");
+		assert.equal(pdf.export.code, "peer-not-installed");
+		assert.equal(pdf.export.details.package, "pdf-lib");
+		const svg = await attempt("svg");
+		assert.equal(svg.export, "no error", "SVG needs no converter");
+		const fonts = await attemptWith({ FAKE_FONTS_MISSING: "1" }, "svg");
+		assert.equal(fonts.export.code, "peer-not-installed");
+		assert.deepEqual(fonts.export.details.packages, ["@expo-google-fonts/roboto", "@expo-google-fonts/tinos"]);
+		assert.match(fonts.export.message, /npm install @expo-google-fonts\/roboto@0\.4\.3/);
+		// The command reports the same error at exit 2, with the package named.
+		await writeFile(path.join(isolated, "deck.opf.json"), JSON.stringify({ slides: [{ title: "x" }] }));
+		const command = spawnSync(process.execPath, [path.join(isolated, "dist/index.js"), "export", "deck.opf.json", "--format", "png"], { cwd: isolated, encoding: "utf8" });
+		assert.equal(command.status, 2, command.stdout + command.stderr);
+		const reported = JSON.parse(command.stderr);
+		assert.equal(reported.code, "peer-not-installed");
+		assert.equal(reported.package, "@resvg/resvg-js");
+		assert.equal(reported.install, "npm install @resvg/resvg-js@^2.6.2");
+		assert.match(reported.error, /npm install @resvg\/resvg-js@\^2\.6\.2/);
 	});
 });

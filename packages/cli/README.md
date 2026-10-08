@@ -194,7 +194,7 @@ A deck can be written as YAML (`deck.opf.yaml`) and every command that reads a d
 `@openpresentation/cli/api` is the CLI's code as a library: the format-oriented functions an application calls instead of spawning `opf`. Core reads and writes the text formats; this entry reads and writes files. It is one package with the command, so the command and the API give the same bytes.
 
 ```sh
-npm install @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 ```
 
 ```ts
@@ -219,7 +219,7 @@ const { presentation: back } = await importDeck(pptx.files[0].bytes);           
 - **Fonts.** The renderer's bundled open pack plus the `.ttf` and `.otf` files in `fontDirs`. To reuse one prepared set across many calls, pass `fonts`: the handle `loadFonts()` of `@openpresentation/opf-render/fonts-node` returns.
 - **Catalogs.** `catalogs` defaults to core's default catalog, as the command does. Pass your own list (for example `[defaultCatalog, myCatalog]`) to change how references resolve.
 - **Images.** Local image paths are read only from `assetDir`; without it no local file is read. Data URIs work as they are, and URLs are never fetched.
-- **The engines are peers.** `@openpresentation/opf-render` (PDF, PNG, SVG) and `@openpresentation/opf-pptx` (PPTX, import) are optional peer dependencies, loaded the first time a function needs them. Install what you call.
+- **The engines are peers.** `@openpresentation/opf-render` (PDF, PNG, SVG) and `@openpresentation/opf-pptx` (PPTX, import) are optional peer dependencies, loaded the first time a function needs them. Install what you call: from opf-render 0.16 its converters (`@resvg/resvg-js` and `sharp` for PNG, `pdf-lib` for raster PDF, `sharp` for pictures in a PDF) and font packages are optional peers too, listed per output in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md#install); a missing one throws the same `peer-not-installed` error with `details.package` (or `details.packages`) and the install command.
 - **Errors.** `exportDeck` throws `OPFExportError` and `importDeck` `OPFImportError` (both extend `OPFApiError`), with a `code`, `details` and the located `findings`: `peer-not-installed` (the message carries the install command; `details` the package and its range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed` and `import-failed`. A presentation that fails the format and references check is rejected with `invalid-presentation`; warnings come back in `findings`.
 - **One core.** The package depends on `@openpresentation/opf` as a regular dependency and does not bundle a copy, so an application that also imports core runs a single core: `error instanceof OPFValidationError` holds across both imports.
 
@@ -228,7 +228,7 @@ The same engine runs `opf render`, `opf export` and `opf import`, whose reports 
 ## Render, export and import
 
 ```sh
-npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 opf render deck.opf.json --slides 1,3-5 --format png --scale 2 --out slides
 opf export deck.opf.json --format pptx            # deck.pptx
 opf export deck.opf.json --format pdf --pdf-mode vector

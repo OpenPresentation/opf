@@ -27,15 +27,48 @@ importers:
         specifier: workspace:*
         version: link:../javascript
     devDependencies:
+      '@expo-google-fonts/arimo':
+        specifier: 0.4.3
+        version: 0.4.3
+      '@expo-google-fonts/caladea':
+        specifier: 0.4.2
+        version: 0.4.2
+      '@expo-google-fonts/cousine':
+        specifier: 0.4.3
+        version: 0.4.3
+      '@expo-google-fonts/gelasio':
+        specifier: 0.4.1
+        version: 0.4.1
+      '@expo-google-fonts/noto-sans':
+        specifier: 0.4.2
+        version: 0.4.2
+      '@expo-google-fonts/roboto':
+        specifier: 0.4.3
+        version: 0.4.3
+      '@expo-google-fonts/roboto-mono':
+        specifier: 0.4.2
+        version: 0.4.2
+      '@expo-google-fonts/tinos':
+        specifier: 0.4.2
+        version: 0.4.2
       '@openpresentation/opf-pptx':
         specifier: 0.15.0
         version: 0.15.0(@openpresentation/opf-render@0.15.0(@types/node@24.13.6))(@types/node@24.13.6)
       '@openpresentation/opf-render':
         specifier: 0.15.0
         version: 0.15.0(@types/node@24.13.6)
+      '@resvg/resvg-js':
+        specifier: 2.6.2
+        version: 2.6.2
       '@types/node':
         specifier: ^24.13.4
         version: 24.13.6
+      pdf-lib:
+        specifier: 1.17.1
+        version: 1.17.1
+      sharp:
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@24.13.6)
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(typescript@5.9.3)(yaml@2.9.1)

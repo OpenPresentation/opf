@@ -66,11 +66,33 @@ export interface Peer<T> {
 	name: string;
 }
 
+/**
+ * What the renderer needs besides itself (RR-63): its converters and every font package are optional peers of opf-render, so a host
+ * installs only the ones its outputs use. The versions are the ones the renderer is tested with (its `peerDependencies`).
+ */
+export const RENDER_EXTRAS = {
+	/** The faces of the office pack, which the CLI and `exportDeck` always load (every format). */
+	fonts: ["@expo-google-fonts/roboto@0.4.3", "@expo-google-fonts/roboto-mono@0.4.2", "@expo-google-fonts/caladea@0.4.2", "@expo-google-fonts/arimo@0.4.3", "@expo-google-fonts/tinos@0.4.2", "@expo-google-fonts/cousine@0.4.3", "@expo-google-fonts/gelasio@0.4.1", "@expo-google-fonts/noto-sans@0.4.2"],
+	/** PNG output (and raster fallbacks): the SVG rasterizer, and sharp for WebP and rotated JPEG pictures. */
+	png: ["@resvg/resvg-js@^2.6.2", "sharp@^0.35.5"],
+	/** PDF: vector mode (the default) needs nothing for text; raster mode needs pdf-lib; pictures in a vector PDF need sharp. */
+	pdfRaster: ["pdf-lib@^1.17.1"],
+	pdfPictures: ["sharp@^0.35.5"],
+} as const;
+
+const renderHint = () =>
+	`  ${RENDER_PACKAGE} also needs its optional peers, by output:\n` +
+	`    every format (fonts):  npm install ${RENDER_EXTRAS.fonts.join(" ")}\n` +
+	`    png:                   npm install ${RENDER_EXTRAS.png.join(" ")}\n` +
+	`    pdf:                   npm install ${RENDER_EXTRAS.pdfRaster.join(" ")}  (raster mode), ${RENDER_EXTRAS.pdfPictures.join(" ")}  (when the deck has pictures)\n` +
+	`    svg:                   fonts only`;
+
 const hint = (name: string) =>
 	`${name} is not installed. It is an optional peer of @openpresentation/cli, loaded only by the commands (and by exportDeck and importDeck of @openpresentation/cli/api) that need it. Install it next to the CLI:\n` +
 	`  npm install -g ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (global CLI)\n` +
 	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that depends on the CLI or imports @openpresentation/cli/api)\n` +
-	`  npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf <command> ...      (one run)`;
+	`  npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf <command> ...      (one run)` +
+	(name === RENDER_PACKAGE ? `\n${renderHint()}` : "");
 
 function bases(): string[] {
 	// Resolution starts at the CLI's own file, then at the working directory.
@@ -115,6 +137,24 @@ function requireFeature(peer: Peer<unknown>, names: string[]) {
 	const missing = names.filter((name) => typeof (peer.module as Record<string, unknown>)[name] !== "function");
 	if (missing.length)
 		throw new OPFApiError(`${peer.name}@${peer.version} does not provide ${missing.join(", ")}. Install ${peer.name}@${PEER_RANGES[peer.name as keyof typeof PEER_RANGES]}.`, "peer-too-old", { details: { package: peer.name } });
+}
+
+/**
+ * The missing-peer error for a renderer failure that says a package it loads lazily is absent (RR-63): `converter-missing` (pdf-lib,
+ * @resvg/resvg-js, sharp) or `font-resource-unavailable` naming font packages. The renderer's message, with its install command, is kept;
+ * `details` has `package` (or `packages`), `range`, `install` and `purpose` where the renderer gave them. A converter that is installed but
+ * did not load is `peer-load-failed`. Undefined for any other error.
+ */
+export function missingPeerFrom(error: unknown): OPFApiError | undefined {
+	let current = error as { code?: unknown; message?: string; details?: Record<string, unknown>; cause?: unknown } | undefined;
+	for (let depth = 0; current && typeof current === "object" && depth < 4; depth++, current = current.cause as typeof current) {
+		const details = current.details ?? {};
+		const fontPackages = current.code === "font-resource-unavailable" && (Array.isArray(details.packages) || typeof details.package === "string");
+		if (current.code !== "converter-missing" && !fontPackages) continue;
+		const kept = Object.fromEntries(["package", "packages", "range", "install", "purpose"].filter((key) => details[key] !== undefined).map((key) => [key, details[key]]));
+		return new OPFApiError(current.message ?? String(current.code), details.installed === true ? "peer-load-failed" : "peer-not-installed", { details: kept, cause: error });
+	}
+	return undefined;
 }
 
 export interface Renderer {

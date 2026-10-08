@@ -4,7 +4,7 @@
 import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { OPFApiError } from "./errors.js";
-import type { Diagnostic, EmbeddedFace, FontsHandle, Renderer } from "./peers.js";
+import { type Diagnostic, type EmbeddedFace, type FontsHandle, type Renderer, missingPeerFrom } from "./peers.js";
 import type { Reporter } from "./reporter.js";
 
 export interface PreparedFonts {
@@ -53,6 +53,8 @@ export async function prepareFonts(renderer: Renderer, presentation: unknown, us
 		});
 		return { handle, userFonts };
 	} catch (error) {
+		const missing = missingPeerFrom(error);
+		if (missing) throw missing;
 		const failure = error as { code?: string; message?: string; details?: Record<string, unknown> };
 		throw new OPFApiError(failure.message ?? String(error), failure.code ?? "font-preparation-failed", {
 			details: failure.details?.package ? { package: failure.details.package } : {},

@@ -15,16 +15,32 @@ and installed package versions give the same bytes on every operating system.
 first time a command needs them. Install them next to the CLI:
 
 ```sh
-npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 # a project that depends on the CLI
-npm install -D @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install -D @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 # one run, nothing installed
-npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf export deck.opf.json --format pptx
+npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx -p @resvg/resvg-js -p sharp -p @expo-google-fonts/roboto@0.4.3 -p @expo-google-fonts/roboto-mono@0.4.2 -p @expo-google-fonts/caladea@0.4.2 -p @expo-google-fonts/arimo@0.4.3 -p @expo-google-fonts/tinos@0.4.2 -p @expo-google-fonts/cousine@0.4.3 -p @expo-google-fonts/gelasio@0.4.1 -p @expo-google-fonts/noto-sans@0.4.2 opf export deck.opf.json --format pptx
 ```
 
 The CLI looks for a peer beside itself first (a global install, an npx run, a project dependency) and in the working
 directory second. Without it the command exits 2 with `code: "peer-not-installed"` and the install command. The
 commands check the functions they call and name the version to install when an older peer lacks one.
+
+From opf-render 0.16 the renderer's own dependencies are optional peers too: the converters (`pdf-lib`, `@resvg/resvg-js`,
+`sharp`) and every `@expo-google-fonts/*` package, so a host installs only what its outputs use. The CLI and
+`exportDeck` always load the renderer's office font pack. What each output needs beside `@openpresentation/opf-render`:
+
+| Output | Also install |
+| --- | --- |
+| every format (the office font pack) | `@expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2` |
+| `png` | `@resvg/resvg-js@^2.6.2 sharp@^0.35.5` |
+| `pdf` | nothing for text in the default vector mode; `pdf-lib@^1.17.1` for `--pdf-mode raster`; `sharp@^0.35.5` when the deck has pictures |
+| `svg` | the fonts only |
+| `pptx`, `import` | `@openpresentation/opf-pptx` (an SVG picture in a PPTX is rasterized by the renderer, so `@resvg/resvg-js`) |
+
+A converter or font package that is missing is reported as the same missing-peer error as a missing renderer: the command
+exits 2 with `code: "peer-not-installed"` and the renderer's own install command in `error`, with `package` (or `packages`),
+`range`, `install` and `purpose` beside it; `exportDeck` throws `OPFExportError` with the same `code` and `details`.
 
 ## Library API
 

@@ -13,7 +13,7 @@ import { CLI_CATALOGS } from "./catalogs.js";
 import { OPFApiError } from "./errors.js";
 import { embeddedFor, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
 import { deckStem, parseSlideSelection } from "./io.js";
-import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer } from "./peers.js";
+import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./peers.js";
 import { Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
@@ -293,6 +293,9 @@ export async function runExport(presentation: unknown, options: ReturnType<typeo
 		return run({ files: items });
 	} catch (error) {
 		if (error instanceof OPFApiError) throw error;
+		// A converter or font package the renderer loads lazily is not installed: the same error as a missing peer, not a drawing failure.
+		const missing = missingPeerFrom(error);
+		if (missing) throw missing;
 		reportThrown(reporter, format === "pptx" ? "pptx" : "render", error);
 		return { files: [], fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden: [], failure: failureOf(error) };
 	}

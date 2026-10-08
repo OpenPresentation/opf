@@ -16,6 +16,8 @@ const root = fileURLToPath(new URL('../../../', import.meta.url));
 const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cli');
 const manifest = JSON.parse(await readFile(path.join(pkg, 'package.json'), 'utf8'));
 const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map(name => `${name}@${manifest.devDependencies[name]}`);
+// RR-63: the renderer's converters (pdf-lib, @resvg/resvg-js, sharp) and font packages are its optional peers; install the ones the CLI's outputs use beside it.
+const renderExtras = Object.keys(manifest.devDependencies).filter(name => name.startsWith('@expo-google-fonts/') || ['@resvg/resvg-js', 'sharp', 'pdf-lib'].includes(name)).map(name => `${name}@${manifest.devDependencies[name]}`);
 // RR-55: this test installs the published peers at the workspace's versions; while those do not satisfy the CLI's peer
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
@@ -53,7 +55,7 @@ try {
   assert.ok(packed.size < 3 * 1024 * 1024, `CLI tarball is ${packed.size} bytes`);
 
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
-  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers], temp);
+  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers, ...renderExtras], temp);
   const modules = path.join(temp, process.platform === 'win32' ? 'node_modules' : 'lib/node_modules');
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
   assert.deepEqual(Object.keys(installed.dependencies ?? {}), ['@openpresentation/opf']);
@@ -75,7 +77,7 @@ try {
   // npx-style: one run with the CLI and both peers in a single temporary install.
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
-  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
+  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers, ...renderExtras].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');
   assert.equal(rendered.ok, true);
   // FA-08: output files are named by the deck's `name` ("Npx"), not the input file's stem.
