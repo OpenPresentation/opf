@@ -63,6 +63,8 @@ const pages = {
   '/slide3.html': shell('<opf-deck id="d" src="/deck.opf.json" fonts="/opf-fonts/" slide="3"></opf-deck>'),
   '/missing.html': shell('<opf-deck id="d" src="/missing.json" fonts="/opf-fonts/"></opf-deck>'),
   '/broken.html': shell('<opf-deck id="d" src="/broken.json"></opf-deck>'),
+  '/fallback.html': shell('<opf-deck id="d" src="/fallback.json"></opf-deck>'),
+  '/wrongmime.html': shell('<opf-deck id="d" src="/wrongmime.json"></opf-deck>'),
   '/nofonts.html': shell('<opf-deck id="d" src="/deck.opf.json" fonts="/no-such-fonts/"></opf-deck>'),
   '/empty.html': shell('<div id="host"></div>'),
   '/arabic.html': shell('<opf-deck id="d" src="/arabic.opf.json" fonts="/opf-fonts/"></opf-deck>'),
@@ -80,6 +82,8 @@ const server = http.createServer(async (request, response) => {
   if (url.pathname === '/arabic.opf.json') return send(200, 'application/json', JSON.stringify(arabicDeck));
   if (url.pathname === '/slow.json') { await new Promise(resolve => setTimeout(resolve, 400)); return send(200, 'application/json', deckText); }
   if (url.pathname === '/broken.json') return send(200, 'application/json', '{"slides": 5');
+  if (url.pathname === '/fallback.json') return send(200, 'text/html', '<!doctype html><html><body>SPA fallback</body></html>');
+  if (url.pathname === '/wrongmime.json') return send(200, 'text/html', deckText);
   if (url.pathname === '/favicon.ico') return send(204, 'image/x-icon', '');
   if (url.pathname.startsWith('/opf-fonts/')) {
     const file = path.join(outputDirectory, url.pathname);
@@ -363,8 +367,35 @@ try {
   await page.keyboard.press('Escape');
   await page.locator('[data-opf-player]').waitFor({state: 'detached'});
   assert.equal(await page.evaluate(() => document.querySelector('main').inert), false, 'the page is live again');
-  assert.equal(await page.evaluate(() => document.getElementById('d').shadowRoot.activeElement?.className), 'viewport', 'focus returns to the deck');
+  assert.equal(await page.evaluate(() => document.getElementById('d').shadowRoot.activeElement?.className), 'present', 'keyboard invocation restores the Present button');
   assert.equal(await counter(page).innerText(), '2 / 5', 'the element shows the slide the show ended on');
+
+  await deckEl(page).locator('button.present').click();
+  await player.locator('.player').waitFor();
+  await page.keyboard.press('Escape');
+  await player.waitFor({state: 'detached'});
+  assert.equal(await page.evaluate(() => document.getElementById('d').shadowRoot.activeElement?.className), 'present', 'click invocation restores the Present button');
+  const explicitFocus = await page.evaluate(async () => {
+    const element = document.getElementById('d'), target = document.getElementById('after');
+    let focusAtEnd;
+    element.addEventListener('presentend', () => { focusAtEnd = document.activeElement.id; }, {once: true});
+    const session = await element.present({fullscreen: false, returnFocus: target});
+    session.close();
+    return {focusAtEnd, after: document.activeElement.id};
+  });
+  assert.deepEqual(explicitFocus, {focusAtEnd: 'after', after: 'after'}, 'explicit focus survives close and presentend');
+  assert.equal(await page.evaluate(async () => {
+    const target = document.createElement('button'); document.body.append(target); target.focus();
+    const element = document.getElementById('d');
+    const opening = element.present({fullscreen: false}); target.remove();
+    const session = await opening; session.close();
+    return element.shadowRoot.activeElement?.className;
+  }), 'viewport', 'a target removed during asynchronous startup falls back safely');
+  assert.equal(await page.evaluate(async deck => {
+    document.getElementById('before').focus();
+    const session = await window.opf.present(deck, {fullscreen: false}); session.close();
+    return document.activeElement.id;
+  }, deck), 'before', 'direct present still restores host focus');
 
   // ------------------------------------------------------------------------------------------------------------------
   // The speaker view in a second window (a second show, with an injected clock so the timer and the clock are exact).
@@ -630,11 +661,30 @@ try {
   const failure = await failing.evaluate(async () => { const element = document.getElementById('d'); try { await element.ready; return 'resolved'; } catch (error) { return `${error.code}`; } });
   assert.equal(failure, 'fetch-failed');
   assert.match(await failing.locator('opf-deck .error').innerText(), /could not be loaded \(404\)/);
+  assert.match(await failing.locator('opf-deck .error').innerText(), /\/missing.json/);
   assert.equal(await failing.locator('opf-deck .error').getAttribute('role'), 'alert');
   await failing.close();
   const broken = await open('/broken.html', {wait: false});
   assert.equal(await broken.evaluate(async () => { try { await document.getElementById('d').ready; } catch (error) { return error.code; } }), 'invalid-document');
   await broken.close();
+  const fallback = await open('/fallback.html', {wait: false});
+  const invalid = await fallback.evaluate(async () => { try { await document.getElementById('d').ready; } catch (error) { return {code: error.code, message: error.message, details: error.details}; } });
+  assert.equal(invalid.code, 'invalid-document');
+  assert.match(invalid.message, /fallback.json.*text\/html.*response is HTML.*SPA fallback/s);
+  assert.deepEqual(invalid.details, {source: `${origin}/fallback.json`, status: 200, contentType: 'text/html'});
+  const diagnostic = await fallback.evaluate(async () => {
+    const element = document.getElementById('d'); let detail;
+    element.addEventListener('error', event => { detail = event.detail; }, {once: true});
+    try { await element.reload(); } catch { /* inspect the public diagnostic */ }
+    return detail;
+  });
+  assert.deepEqual(diagnostic, {code: invalid.code, message: invalid.message, fatal: true, ...invalid.details}, 'public error event retains fetched response context');
+  await fallback.evaluate(async () => { const element = document.getElementById('d'); element.src = '/deck.opf.json'; await element.ready; });
+  assert.equal(await titleOf(fallback), 'Quarterly review', 'correcting src recovers from an HTML fallback');
+  await fallback.close();
+  const wrongmime = await open('/wrongmime.html');
+  assert.equal(await titleOf(wrongmime), 'Quarterly review', 'valid JSON is accepted even when the host sends text/html');
+  await wrongmime.close();
 
   const degraded = await open('/nofonts.html', {wait: false});
   const degradedEvents = await degraded.evaluate(async () => { const element = document.getElementById('d'); const seen = []; element.addEventListener('error', event => seen.push(event.detail)); await element.ready; await new Promise(resolve => setTimeout(resolve, 50)); return {seen, title: element.currentSlide.title}; });

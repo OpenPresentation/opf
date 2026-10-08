@@ -10,6 +10,7 @@ export class DeckError extends Error {
     super(message, options);
     this.name = "DeckError";
     this.code = code;
+    if (options?.source) this.details = {source: options.source, status: options.status, contentType: options.contentType};
   }
 }
 

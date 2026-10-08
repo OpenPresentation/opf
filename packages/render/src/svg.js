@@ -1805,7 +1805,8 @@ function codeSyntax(item, layout, bound, options) {
 // font-style some text of the slide takes (attributes are inherited down the element tree, as in SVG). A drawn family none of
 // whose faces matches a drawn weight and style keeps all its faces, so the browser can always choose. A face no font-family of
 // the SVG names is one the browser can never select, so leaving it out changes no pixel. Only a face flagged embed:"always" is
-// embedded in every SVG.
+// embedded in every SVG. RR-59: each drawn style is checked on its own, so a family keeps an exactly matched face and, for
+// a drawn style none of its faces matches (a weight the family lacks), every face the browser could choose from.
 function embeddedFontsFor(fonts = [], content) {
   if (!fonts.length) return fonts;
   fonts.forEach(assertEmbeddableFont);
@@ -1814,8 +1815,10 @@ function embeddedFontsFor(fonts = [], content) {
     const triples = drawn.get(String(font.family).toLowerCase());
     if (!triples) return false;
     const family = fonts.filter(other => String(other?.family).toLowerCase() === String(font.family).toLowerCase());
-    const matching = family.filter(other => triples.has(`${other.weight}|${other.italic ? "italic" : "normal"}`));
-    return matching.length ? matching.includes(font) : true;
+    return [...triples].some(triple => {
+      const matching = family.filter(other => triple === `${other.weight}|${other.italic ? "italic" : "normal"}`);
+      return matching.length ? matching.includes(font) : true;
+    });
   };
   return fonts.filter(font => font?.embed === "always" || wanted(font));
 }

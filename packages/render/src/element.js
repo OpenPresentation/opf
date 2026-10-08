@@ -168,19 +168,22 @@ function createElementClass() {
     /** Open the full-screen slideshow (needs a user gesture to enter full screen). Loads the player on first use. */
     async present(options = {}) {
       if (this.#session && !this.#session.closed) return this.#session;
+      // Capture before loading the player: activeElement in the document is the shadow host, not its invoking button.
+      let returnFocus = options.returnFocus ?? this.ownerDocument.activeElement;
+      if (!options.returnFocus) while (returnFocus?.shadowRoot?.activeElement) returnFocus = returnFocus.shadowRoot.activeElement;
       await this.#readyPromise;
       if (!this.#store || !this.#cursor) throw new DeckError("not-ready", "The deck is not loaded yet.");
       const { present } = await import("./player.js");
       const session = await present(this.#deck, {
         store: this.#store, fonts: this.#fonts ?? this.#resolvedFonts, renderOptions: this.#renderOptions,
-        includeHidden: this.includeHidden, startSlide: this.#cursor.number, returnFocus: this.#parts.viewport, ...options,
+        includeHidden: this.includeHidden, startSlide: this.#cursor.number, ...options, returnFocus,
       });
       this.#session = session;
       session.addEventListener("slidechange", (event) => { if (this.#cursor && event.detail?.index !== undefined && this.#cursor.gotoIndex(event.detail.index)) { this.#show({ announce: false }); this.#emitChange(); } });
       session.addEventListener("close", () => {
         if (this.#session === session) this.#session = undefined;
         this.#show({ announce: false });
-        this.#parts.viewport?.focus({ preventScroll: true });
+        if (!returnFocus?.isConnected) this.#parts.viewport?.focus({ preventScroll: true });
         this.dispatchEvent(new CustomEvent("presentend", { detail: { slide: this.#cursor?.number } }));
       });
       this.dispatchEvent(new CustomEvent("presentstart", { detail: { slide: this.#cursor?.number } }));
@@ -253,9 +256,15 @@ function createElementClass() {
       if (this.#documentValue !== undefined) return parseDeckDocument(this.#documentValue);
       const src = this.getAttribute("src");
       if (src) {
-        const response = await fetch(new URL(src, this.ownerDocument.baseURI), { signal, credentials: "same-origin" });
-        if (!response.ok) throw new DeckError("fetch-failed", `The deck could not be loaded (${response.status}).`);
-        return parseDeckDocument(await response.text());
+        const source = new URL(src, this.ownerDocument.baseURI).href;
+        const response = await fetch(source, { signal, credentials: "same-origin" });
+        const details = {source, status: response.status, contentType: response.headers.get("content-type") ?? ""};
+        if (!response.ok) throw new DeckError("fetch-failed", `The deck could not be loaded (${response.status}) from ${source}.`, details);
+        const text = await response.text();
+        try { return parseDeckDocument(text); } catch (cause) {
+          const hint = /^\s*(?:<!doctype\s+html|<html\b|<head\b|<body\b)/i.test(text) ? " The response is HTML; check the deck URL and the host's SPA fallback route." : "";
+          throw new DeckError("invalid-document", `Invalid OPF from ${source} (${details.contentType || "unknown content type"}): ${cause.message}${hint}`, {...details, cause});
+        }
       }
       const inline = this.querySelector(':scope > script[type="application/opf+json"], :scope > script[type="application/json"]');
       if (inline) return parseDeckDocument(inline.textContent ?? "");
@@ -263,7 +272,8 @@ function createElementClass() {
     }
 
     #report(error, fatal) {
-      this.dispatchEvent(new CustomEvent("error", { detail: { code: error.code, message: error.message, fatal } }));
+      const {source, status, contentType} = error.details ?? {};
+      this.dispatchEvent(new CustomEvent("error", { detail: { code: error.code, message: error.message, fatal, ...(source ? {source, status, contentType} : {}) } }));
     }
 
     #prefetch() {
@@ -504,6 +514,8 @@ const escapeHtml = (value) => String(value).replace(/&/g, "&amp;").replace(/</g,
  *
  * `slides`: `"first"` (default: the first slide plus a list of titles), `"all"` or a list of 1-based slide numbers.
  * `embed` puts the document in an `application/opf+json` script child, so the element upgrades without a request.
+ * `fontMode`: `"standalone"` (default, embeds per slide), `"shared"` (one set of font rules in the returned tag), or
+ * `"external"` (no font rules; the host must supply CSS with the exact pinned faces the handle measures).
  */
 export function renderDeckHtml(input, options = {}) {
   const deck = parseDeckDocument(input);
@@ -512,13 +524,23 @@ export function renderDeckHtml(input, options = {}) {
   const wanted = options.slides ?? "first";
   const shown = wanted === "all" ? sequence.map((_, position) => position) : wanted === "first" ? [0] : wanted.map((number) => number - 1).filter((position) => position >= 0 && position < sequence.length);
   const handle = options.fonts !== null && typeof options.fonts === "object" ? options.fonts : undefined;
+  const fontMode = options.fontMode ?? "standalone";
+  if (!["standalone", "shared", "external"].includes(fontMode)) throw new DeckError("invalid-font-mode", "Choose standalone, shared or external SSR fonts.");
+  // Every mode measures with the same handle; external writes no @font-face data (RR-61 `embedFonts: false`).
+  const renderFonts = handle ?? options.renderOptions?.fonts;
+  const sharedRules = new Set();
   const attributes = { src: options.src, slide: options.slide, fonts: handle ? undefined : options.fonts, label: options.label, ...options.attributes };
   const attributeText = Object.entries(attributes).filter(([, value]) => value !== undefined && value !== false).map(([name, value]) => (value === true ? ` ${name}` : ` ${name}="${escapeHtml(value)}"`)).join("")
     + (options.thumbnails ? " thumbnails" : "") + (options.present ? " present" : "") + (options.includeHidden ? " include-hidden" : "");
   const date = options.renderOptions?.date ?? options.date;
   const figures = shown.map((position) => {
     const index = sequence[position];
-    const svg = renderSlideSvg(deck, index, { ...options.renderOptions, ...(handle ? { fonts: handle } : {}), ...(date ? { date } : {}) });
+    let svg = renderSlideSvg(deck, index, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { embedFonts: false } : {}), ...(date ? { date } : {}) });
+    if (fontMode === "shared") svg = svg.replace(/<style>(@font-face[\s\S]*?)<\/style>/g, (_, css) => {
+      // These rules are produced by renderSlideSvg after its used-face selection and validation.
+      for (const rule of css.split("\n")) sharedRules.add(rule);
+      return "";
+    });
     const { width, height } = svgDimensions(svg);
     const prepared = prepareSlideSvg(svg).replace(/^<svg\b/, `<svg style="display:block;width:100%;height:auto;aspect-ratio:${width} / ${height}"`);
     const label = slideLabel(slideInfo(deck, index), position + 1, sequence.length);
@@ -527,5 +549,6 @@ export function renderDeckHtml(input, options = {}) {
   const titles = wanted === "first" && sequence.length > 1
     ? `<nav aria-label="Slides"><ol>${sequence.map((index) => `<li>${escapeHtml(slideInfo(deck, index).title)}</li>`).join("")}</ol></nav>` : "";
   const embedded = options.embed ? `<script type="application/opf+json">${JSON.stringify(deck).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029")}</script>` : "";
-  return `<${tag}${attributeText}>${figures.join("")}${titles}${embedded}</${tag}>`;
+  const shared = sharedRules.size ? `<style>${[...sharedRules].join("\n")}</style>` : "";
+  return `<${tag}${attributeText}>${shared}${figures.join("")}${titles}${embedded}</${tag}>`;
 }

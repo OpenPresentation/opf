@@ -13,6 +13,10 @@ export interface OpfDeckErrorDetail {
   message: string;
   /** False when the deck still shows (for example the fonts did not load and the layout is estimated). */
   fatal: boolean;
+  /** URL, HTTP status and response content type when a fetched deck fails. */
+  source?: string;
+  status?: number;
+  contentType?: string;
 }
 export interface OpfDeckEventMap {
   ready: CustomEvent<{ total: number; slide: number }>;
@@ -71,6 +75,8 @@ export interface RenderDeckHtmlOptions {
   slide?: number;
   /** A string is the font root URL written to the tag's `fonts` attribute; an object (a `loadFonts()` handle, or any `RenderFonts`) draws the markup with those fonts and writes no attribute. */
   fonts?: string | RenderFonts;
+  /** Font delivery for server markup: standalone embeds faces per slide (default); shared embeds each rule once; external omits rules and requires matching host CSS. All use the supplied handle for measurement. */
+  fontMode?: "standalone" | "shared" | "external";
   label?: string;
   thumbnails?: boolean;
   present?: boolean;

@@ -204,6 +204,8 @@ A slideshow player and an embeddable web component, both built on `renderSlideSv
 <opf-deck src="/deck.opf.json" fonts="/opf-fonts/" thumbnails present></opf-deck>
 ```
 
+This HTML must be processed by a bundler (for example Vite); ordinary static HTML cannot resolve a bare npm import. Serve your own `/deck.opf.json` and the font root copied below.
+
 ```js
 // A framework page: register on the client, when you choose.
 import { defineOpfDeck } from '@openpresentation/opf-render/element';
@@ -245,11 +247,64 @@ Accessibility: the element is a labelled region (the deck name) holding a focusa
 
 `renderDeckHtml(deck, options)` returns the tag with the deck's slides as inline SVG inside it. A visitor without JavaScript, a crawler or a reader sees the slides; when the element upgrades its shadow DOM replaces them. `slides: 'first'` (default: the first slide and a list of titles), `'all'` or slide numbers; `embed: true` adds the document as an `application/opf+json` child so the upgrade needs no request (it includes hidden slides and notes, as the `src` file does); `fonts` (an object) takes a handle, or any object with a `textMeasurement`, for exact widths; a string is the font root URL for the `fonts` attribute. In Next.js, render the string from a server component with `dangerouslySetInnerHTML` and call `defineOpfDeck()` from a client component. A strict `style-src` Content-Security-Policy needs `style-src-attr 'unsafe-inline'` for the renderer's `style="white-space:pre"` attributes; the element's own styles use constructable stylesheets.
 
+Each slide's SVG embeds only the resolved faces it draws (see `renderSvg` above), including bold, italic and glyph fallback, so loading a whole pack for measurement does not put that pack into every slide. `renderDeckHtml` accepts `fontMode: 'standalone' | 'shared' | 'external'`:
+
+- `standalone` (default) embeds fonts in each slide, so its SVG remains self-contained when extracted.
+- `shared` emits the drawn font rules once inside the returned tag, retaining license metadata in the SVGs. Keep the returned markup together; an extracted SVG needs those shared rules to travel with it.
+- `external` emits no font rules (the slides render with `embedFonts: false`). Supply page CSS with the exact pinned, licensed faces (including replacements and fallback faces) used by the handle, from your own origin. Keep the same handle for layout; omitting it changes layout to estimates. Copy license notices with the served files. An offline page needs those local files available too.
+
+Shared and external rules apply at page scope. A strict CSP must permit their inline style or self-hosted stylesheet and the matching `font-src` (`data:` for embedded fonts). These modes change delivery, while measurement, text positions and font selection stay the same. The Node loader's large script faces still require `embedScriptFonts: true` for self-contained SVG or shared SSR; otherwise supply them through external CSS.
+
+For a lightweight initial page, pre-render measured markup on the server and enable controls on demand. Here the server owns the fonts and the client owns the upgrade button:
+
+```js
+// Server/build step: write this HTML into your page, followed by the upgrade button.
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {renderDeckHtml} from '@openpresentation/opf-render/element';
+const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck, embedScriptFonts: true});
+const html = renderDeckHtml(deck, {
+  fonts, slides: 'all', fontMode: 'shared', embed: true,
+  attributes: {id: 'deck', fonts: '/opf-fonts/'},
+});
+// <button id="upgrade" type="button">Enable slide controls</button>
+```
+
+```js
+// Bundler-processed client entry; do not also import /element/define at startup.
+document.querySelector('#upgrade').addEventListener('click', async event => {
+  const button = event.currentTarget;
+  button.disabled = true;
+  try {
+    const {defineOpfDeck} = await import('@openpresentation/opf-render/element');
+    defineOpfDeck();
+    await document.querySelector('#deck').ready;
+    button.hidden = true;
+  } finally { button.disabled = false; }
+});
+```
+
+Copy the self-hosted font root as above, including any script packs the deck draws. No JavaScript is needed to read the pre-rendered slides; the upgrade loads the strict byte-matched measurement engine and fonts when requested. A page that only needs readable slides can omit the client entry and button entirely. A live element without a font handle/root uses estimated widths and system fonts; that is a different fidelity contract.
+
+The reproducible production fixture (`npm run build` then `node scripts/measure-web-delivery.mjs`) measures minified split ESM over local HTTP gzip, with actual font requests counted separately. On 2026-10-08 (Node 24, Playwright Chromium, OPF 0.15), its three-slide Roboto deck measured:
+
+| Delivery | HTML gzip | JavaScript gzip | External font requests |
+|---|---:|---:|---|
+| Standalone SSR, no scripts | 686,617 B | 0 B | None; fonts are in HTML |
+| Shared SSR, no scripts | 229,260 B | 0 B | None; fonts are in HTML |
+| External SSR, no scripts | 1,021 B | 0 B | Two faces, 191,628 B gzip, plus host CSS |
+| Shared SSR, immediate upgrade | 229,286 B | 500,021 B | Two faces, 191,628 B gzip |
+| Shared SSR, before deferred upgrade | 229,322 B | 199 B | None |
+| Shared SSR, after deferred upgrade | 229,322 B | 500,355 B total | Two faces, 191,628 B gzip |
+
+The base and Office pack standalone SVGs both contain two Roboto rules (430,764 B / 228,481 B gzip). All three SSR modes render identical pixels with JavaScript disabled, an extracted standalone SVG paints the same offline, and strict interactive upgrades preserve those pixels. These numbers describe this local candidate and fixture, vary with the deck and bundler, and are recorded in [the production delivery report](docs/evidence/rr-59-web-delivery.json). The measurement-enabled JavaScript cost remains about 500 KB gzip. Copying the approximately 34 MiB font root does not make the browser fetch it all: this fixture fetches only Roboto Regular and Bold; other documents fetch their own required faces.
+
 ### The slideshow
 
 `present(source, options)` takes an OPF document, its URL or an `<opf-deck>` element and covers the page with a full-screen player (call it from a click or key handler; full screen and the speaker view need a user gesture). It resolves with a `PlayerSession` (`slide`, `total`, `next()`, `previous()`, `first()`, `last()`, `goto(n)`, `blank('black' | 'white' | 'none')`, `openPresenterView()`, `close()`; events `slidechange`, `blank`, `presenterview`, `close`). One show per document: a second call returns the running one.
 
 Keys: Right, Down, Page Down, Space, Enter and `N` are next; Left, Up, Page Up, Backspace, Shift+Space and `P` are previous; Home and End; a slide number then Enter (Escape clears it); `B` and `W` toggle a black or white screen (any navigation key brings the slide back first); `S` opens the speaker view; `F` toggles full screen; Escape leaves (leaving full screen any other way ends the show too). Click or tap advances (the left third goes back) and a horizontal swipe navigates. The player is a modal dialog: the rest of the page is inert, focus stays inside it and returns to where it was when the show ends, and an element that started it follows the show and fires `slidechange`.
+
+`element.present({returnFocus: target})` honors the explicit target; otherwise it captures the invoking element before asynchronous loading (including the Present button in its shadow root). If that target is removed, focus falls back to the deck viewport. Fetched deck failures include the source URL, status and content type in the error detail; HTML responses explain likely SPA fallback routing. A valid JSON body is accepted even if the server labels it with another content type.
 
 The speaker view opens in a second window (`S`, the button, or `presenterView: true`): the current and next slide (the last slide says so), the speaker notes, the section, a timer (against the deck's `duration` in minutes, with pause and reset) and the clock, previous, next and blank buttons, the same keys, and a notes size control. Notes are the OPF `notes` string and are shown as plain text only (rich notes are deferred, opf#251). The windows follow each other over a `BroadcastChannel` named from the deck, so any number of windows of one deck on one origin stay in step (a logical clock settles two changes that cross), and `present(deck, { role: 'presenter' })` makes a second tab or window the speaker view. Pass `channel` to name the channel yourself or `false` for none. The audience window and the popup are driven by this page, so closing or navigating the page ends both.
 

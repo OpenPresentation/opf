@@ -97,12 +97,13 @@ console.log('Player and <opf-deck> entry points load from the installed package.
   // Helpers the copied tests import (FA-23: catalog-harness registers the default catalog the way a host does) are installed
   // next to them, rewritten to the installed package, and not run themselves.
   const helpers=['catalog-harness.mjs'];
-  for(const file of [...helpers,'shared-quote.mjs','quote-footer.mjs','shared-code.mjs','chart-axis.mjs','chart-scale.mjs','aptos-preview.mjs']){
+  for(const file of [...helpers,'shared-quote.mjs','quote-footer.mjs','shared-code.mjs','chart-axis.mjs','chart-scale.mjs','aptos-preview.mjs','web-delivery.mjs']){
     const source=(await readFile(path.join(root,'test',file),'utf8'))
       .replaceAll('new URL("../dist/svg.js", import.meta.url).href','import.meta.resolve("@openpresentation/opf-render/svg")')
       .replaceAll('"../dist/svg.js"','"@openpresentation/opf-render/svg"')
       .replaceAll("'../dist/svg.js'","'@openpresentation/opf-render/svg'")
       .replaceAll("'../dist/fonts-node.js'","'@openpresentation/opf-render/fonts-node'")
+      .replaceAll("'../dist/element.js'","'@openpresentation/opf-render/element'")
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-render'");
     await writeFile(path.join(consumer,file),source);
     if(helpers.includes(file))continue;

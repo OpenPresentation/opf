@@ -13,6 +13,10 @@
           "command": "npm run test:player-browser"
         },
         {
+          "id": "browser:web-delivery",
+          "command": "node scripts/measure-web-delivery.mjs"
+        },
+        {
           "id": "browser:export-browser",
           "command": "npm run test:export-browser"
         },

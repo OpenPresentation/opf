@@ -7,7 +7,8 @@ import type { RenderSvgOptions } from "./svg.js";
  */
 export declare class DeckError extends Error {
   readonly code: string;
-  constructor(code: string, message: string, options?: { cause?: unknown });
+  readonly details?: {source: string; status?: number; contentType?: string};
+  constructor(code: string, message: string, options?: { cause?: unknown; source?: string; status?: number; contentType?: string });
 }
 
 /** The slide that is showing, in the sequence that plays (hidden slides are not counted). `notes` is plain text. */
