@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.14.2",
+  "version": "0.15.0",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -257,11 +257,11 @@
     "@codemirror/state": "6.7.6",
     "@codemirror/view": "6.43.13",
     "@lezer/highlight": "1.2.4",
-    "@openpresentation/opf": "^0.14.0",
+    "@openpresentation/opf": "^0.15.1",
     "jsonc-parser": "3.3.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.14.0"
+    "@openpresentation/opf-render": "^0.15.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -303,8 +303,8 @@
     "@expo-google-fonts/noto-sans-thai": "0.4.2",
     "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
     "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
-    "@openpresentation/opf-pptx": "^0.14.0",
-    "@openpresentation/opf-render": "^0.14.0",
+    "@openpresentation/opf-pptx": "^0.15.0",
+    "@openpresentation/opf-render": "^0.15.0",
     "axe-core": "4.13.0",
     "esbuild": "0.28.2",
     "jszip": "3.10.2",
@@ -313,8 +313,5 @@
     "@expo-google-fonts/noto-color-emoji": "0.4.6",
     "@expo-google-fonts/noto-emoji": "0.4.7",
     "@expo-google-fonts/stix-two-math": "0.4.0"
-  },
-  "opf": {
-    "requiresUnreleasedCore": "0.15.0"
   }
 }
