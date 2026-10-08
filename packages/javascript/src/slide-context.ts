@@ -81,6 +81,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     slideCount: options.slideCount ?? slides.length,
     fontFamilies: resolveFontFamilies(fontScheme),
     darkBackground: resolveColorRoles(colorScheme, { background: decisionColor(design.background ?? theme.background, colorScheme, rec(deck.variables)) }).dark,
+    ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
     ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
     ...(options.date !== undefined ? { date: options.date } : {}),
   };

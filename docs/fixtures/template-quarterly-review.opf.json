@@ -5,7 +5,8 @@
   "design": {
     "theme": "classic",
     "colorScheme": "cool-horizon",
-    "fontScheme": "roboto"
+    "fontScheme": "roboto",
+    "imageFit": "contain"
   },
   "variables": {
     "client": {

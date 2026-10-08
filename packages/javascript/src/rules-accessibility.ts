@@ -56,13 +56,13 @@ const isLarge = (sizePx: number, bold: boolean) => {
 
 function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: number; height: number }): BackdropSample {
 	const { design, composition } = context;
-	const image = composition?.slideImage;
-	if (image?.position === 'background') {
+	const image = composition?.backgroundImage;
+	if (image) {
 		// A background picture is unknown pixels; a full-frame overlay bounds the colour underneath. An edge-banded overlay covers only part of the frame.
-		const overlay = image.overlay && image.overlay.box.width >= composition!.width * 0.99 && image.overlay.box.height >= composition!.height * 0.99
+		const overlay = image.overlay && !image.overlay.edge
 			? { color: resolveTextColor(image.overlay.color, design, '#000000') ?? '#000000', opacity: image.overlay.opacity }
 			: undefined;
-		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: design.backdrop.kind === 'solid' ? design.backdrop.color : '#FFFFFF' }, box, design.dimensions, { overlay });
+		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay });
 	}
 	return backdropColors(design.backdrop, box, design.dimensions);
 }
@@ -183,7 +183,7 @@ const onImageRule = rule(
 		thresholds: ['contrastNormal', 'contrastLarge'],
 		cost: 'composition',
 		approximations:
-			'Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.slideImage.overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
+			'Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.background overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
 	},
 );
 
@@ -208,7 +208,7 @@ const contrastRules: ValidationRule[] = [
 								path: sample.path,
 								slide,
 								message: `${sample.label} sits on a background picture. Contrast cannot be guaranteed from the document (against the lightest or darkest possible pixels it is as low as ${worst.ratio.toFixed(1)}:1; ${needed}:1 is needed at this size).`,
-								help: 'Add a full-frame overlay to design.slideImage (overlay colour and an opacity high enough that text passes on any picture), use a solid or gradient background behind text, or place text on a card.',
+								help: 'Add a full-frame overlay to the image background (design.background.overlay: a colour and an opacity high enough that text passes on any picture), use a solid or gradient background behind text, or place text on a card.',
 								measured: { ratio: round(worst.ratio), needed, textColor: sample.color },
 							});
 						}
@@ -264,7 +264,7 @@ const altRule = rule(
 	{
 		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
 		approximations:
-			'Checks the alt field of images, video, the slide image, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Background images and watermarks are decorative by definition and are not checked.',
+			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, logos (design.logo and each LogoSet variant, organization.logo), header/footer images, quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
 	},
 );
 const poorAltRule = rule(
@@ -280,7 +280,7 @@ const GENERIC_ALT = /^(image|picture|photo|photograph|graphic|img|icon|figure|sc
 const FILE_ALT = /(\.(png|jpe?g|gif|svg|webp|bmp|tiff?|heic|avif)$)|^(img|dsc|image|screenshot|screen shot|photo|pic)[ _-]?\d+/i;
 const GENERIC_CHART_ALT = /^((a|an|the)\s+)?([a-z-]+\s+){0,2}(chart|graph|plot|diagram|figure)$/i;
 const kindLabel = (kind: string) =>
-	({ chart: 'Chart', image: 'Image', video: 'Video', 'slide-image': 'Slide image', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', 'quote-photo': 'Quote photo', organization: 'Organization logo' })[kind] ?? 'Picture';
+	({ chart: 'Chart', image: 'Image', video: 'Video', logo: 'Logo', furniture: 'Header/footer image', speaker: 'Speaker photo', 'quote-photo': 'Quote photo', organization: 'Organization logo' })[kind] ?? 'Picture';
 
 function altFixes(path: string, value: unknown): FindingFix[] {
 	const decorative: FindingFix =

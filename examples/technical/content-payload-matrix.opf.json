@@ -2,6 +2,9 @@
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Content Payload Matrix",
   "description": "Focused technical fixture covering every concrete slide content payload shape.",
+  "design": {
+    "imageFit": "contain"
+  },
   "slides": [
     {
       "title": "Text Payload",

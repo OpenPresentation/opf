@@ -417,7 +417,7 @@ async function checkNoDeprecation() {
 // (i) Layout records share the deck's design vocabulary (FA-01). layout.schema.json's DesignHints repeats the
 // keys of opf.schema.json's Design that a layout can carry, and a cross-file $ref cannot express that subset,
 // so this rule keeps the two copies from drifting: every DesignHints key must exist in Design with the same
-// type and enum values (slideImage compares the position enum of its object form). Bundled layout records must
+// type and enum values. Bundled layout records must
 // carry only fields the layout schema defines, so a removed field (contentType, slideTitle, ...) cannot come back.
 async function checkLayoutDesignHints(opfSchema) {
   const layoutSchema = await readJson(path.join(schemasRoot, "layout.schema.json"));
@@ -432,13 +432,6 @@ async function checkLayoutDesignHints(opfSchema) {
     const counterpart = design[key];
     if (!counterpart) {
       fail(`[i] layout.schema.json DesignHints.${key} has no counterpart in opf.schema.json Design`);
-      continue;
-    }
-    if (key === "slideImage") {
-      const object = (counterpart.oneOf ?? []).find((option) => option.properties?.position);
-      if (!same(hint.properties?.position?.enum, object?.properties?.position?.enum)) {
-        fail("[i] DesignHints.slideImage.position values differ from Design.slideImage.position");
-      }
       continue;
     }
     if (hint.type !== counterpart.type || !same(hint.enum, counterpart.enum)) {

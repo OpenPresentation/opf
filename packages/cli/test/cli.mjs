@@ -27,7 +27,7 @@ try {
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:warning,status:1}).json.valid,true);
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
   // The CLI registers the default catalog (OPF 0.15, FA-21), so every gallery layout id of the snapshot resolves.
-  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.ok(layouts.length>=100);
+  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.ok(layouts.length>=99);
    for(const id of ['title-slide','two-column','action-plan','swot-analysis','data-visualization','executive-summary'])assert.ok(layouts.includes(id),id);
    const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Legacy layouts',slides:layouts.map((layout,index)=>({title:'Slide '+(index+1),layout}))})}).json;
    assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);

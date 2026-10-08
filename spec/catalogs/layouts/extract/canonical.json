@@ -544,15 +544,6 @@
     }
   },
   {
-    "id": "image-bleed",
-    "name": "Image Bleed",
-    "placeholders": [
-      {
-        "type": "image"
-      }
-    ]
-  },
-  {
     "id": "blank",
     "name": "Blank",
     "placeholders": []

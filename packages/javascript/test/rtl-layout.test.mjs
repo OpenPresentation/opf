@@ -63,13 +63,14 @@ describe('mirrored arrangement', () => {
     assert.ok(Math.abs((rtl.flows[0].box.x + track[0].offset) - right[0].x) < 1e-6, 'flow tracks mirror with the boxes');
   });
 
-  it('mirrors a banded slide image, the cover logo and header/footer zones', () => {
-    const presentation = {language: 'ar', design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}, logo: 'logo.png'}, slides: [{title: 'x', text: 'نص', design: {slideImage: {src: 'a.png', position: 'left'}}}]};
+  it('mirrors a placed image, the cover logo and header/footer zones', () => {
+    const presentation = {language: 'ar', design: {footer: {left: {text: 'يسار'}, right: {text: 'يمين'}}, logo: 'logo.png'}, slides: [{title: 'x', blocks: [{image: './a.png', placement: {edge: 'left'}}, {text: 'نص'}]}]};
     const composed = compose(presentation);
-    assert.equal(composed.slideImage.position, 'right');
-    assert.ok(composed.slideImage.region.x > 0);
+    const placed = composed.items.find(item => item.field === 'image');
+    assert.equal(placed.image.placement.edge, 'right');
+    assert.ok(placed.image.region.x > 0);
     const english = compose({...presentation, language: 'en'});
-    assert.equal(english.slideImage.position, 'left');
+    assert.equal(english.items.find(item => item.field === 'image').image.placement.edge, 'left');
     const parts = composed.furniture.parts.filter(part => part.type === 'text');
     const leftPart = parts.find(part => part.zone === 'left'), rightPart = parts.find(part => part.zone === 'right');
     assert.ok(leftPart.box.x > rightPart.box.x, 'the authored left zone is drawn at the right');

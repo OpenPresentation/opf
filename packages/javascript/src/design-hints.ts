@@ -1,5 +1,5 @@
 /** The `design` keys that a layout record, the deck and a slide all share and that composition resolves per key. */
-export const DESIGN_HINT_KEYS = ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'chartPrimary', 'imageFill', 'listBullet'] as const;
+export const DESIGN_HINT_KEYS = ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'chartPrimary', 'imageFit', 'listBullet'] as const;
 export type DesignHintKey = typeof DESIGN_HINT_KEYS[number];
 /** Where an effective design hint came from: the slide's own `design`, the deck's `design`, or the slide's layout record. */
 export type DesignHintSource = 'slide' | 'deck' | 'layout';
@@ -11,7 +11,7 @@ export interface DesignHints {
   contentBox?: boolean;
   contentDirection?: 'horizontal' | 'vertical';
   chartPrimary?: 'none' | 'top' | 'bottom' | 'left' | 'right';
-  imageFill?: 'crop' | 'fit';
+  imageFit?: 'cover' | 'contain' | 'stretch';
   listBullet?: 'character' | 'image';
 }
 
@@ -39,7 +39,7 @@ export interface ResolveDesignHintsOptions {
 const ALIGNMENTS = ['left', 'center', 'right'];
 const VALUES: { [K in DesignHintKey]: readonly unknown[] | 'boolean' } = {
   titleAlignment: ALIGNMENTS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', contentDirection: ['horizontal', 'vertical'],
-  chartPrimary: ['none', 'top', 'bottom', 'left', 'right'], imageFill: ['crop', 'fit'], listBullet: ['character', 'image'],
+  chartPrimary: ['none', 'top', 'bottom', 'left', 'right'], imageFit: ['cover', 'contain', 'stretch'], listBullet: ['character', 'image'],
 };
 /** A value the schema allows for the key; anything else is skipped, so the next level answers. */
 const accepts = (key: DesignHintKey, value: unknown) => VALUES[key] === 'boolean' ? typeof value === 'boolean' : (VALUES[key] as readonly unknown[]).includes(value);

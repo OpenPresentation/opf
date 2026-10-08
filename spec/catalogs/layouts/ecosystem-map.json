@@ -9,10 +9,7 @@
     "contentAlignment": "center",
     "contentBox": false,
     "contentDirection": "horizontal",
-    "imageFill": "crop",
-    "slideImage": {
-      "position": "background"
-    }
+    "imageFit": "cover"
   },
   "placeholders": [
     {

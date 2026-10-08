@@ -200,7 +200,7 @@ _No named properties._
 | `colorScheme` | no | `oneOf:string / ref:ColorScheme` | Color scheme for the presentation. Accepts two forms: - A colorSchemes reference: a bare id ('cool-horizon') or 'name:id' ('acme:ocean'). - Object form: a ColorScheme with an optional 'id' reference as the base plus s... |
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
-| `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2') or hex colors; object forms support theme, solid, gradient, im... |
+| `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content... |
 | `logo` | no | `oneOf:ref:Asset / ref:LogoSet` | Deck logo assets used by covers, section dividers, headers, footers and picture bullets. A string or Asset object is the default logo source; the LogoSet object form provides light/dark, stacked, icon, and wordmark va... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
@@ -208,10 +208,9 @@ _No named properties._
 | `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for title placeholders in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.titleAlignment, then the engine default. |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the layout record's design.contentAlignment, then the engine default. A cove... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the layout record's design.contentBox, then the engine default. |
-| `slideImage` | no | `oneOf:ref:Asset / object` | Optional slide-level image, separate from content images. It applies to a slide that sets its own design.slideImage, and to slides whose layout record sets design.slideImage or whose root image is the same source as a... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged. Sets the root arrangement mode of blocks and root payloads when no composition.mode is set on the slide or on its layout record: 'vertical' is column, 'horizontal' i... |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. When the slide has no promoted regions and no composition.mod... |
-| `imageFill` | no | `enum:crop \| fit` | How images fill their allocated region: crop covers the region, fit shows the whole image. Effective value: the slide's design, then the deck's design, then the layout record's design.imageFill, then the engine default. |
+| `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch'... |
 | `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'i... |
 
 
@@ -468,9 +467,18 @@ _No named properties._
 
 ### BackgroundShortcut
 
-- Type: `oneOf:ref:ThemeBackgroundSlot / ref:HexColor`
+- Type: `oneOf:ref:ThemeBackgroundSlot / ref:HexColor / ref:ImageSource`
 - Required fields: none
-- Purpose: String shorthand for a background. Theme slots ('light1', 'light2', 'dark1', 'dark2') are equivalent to { type: 'theme', slot: value }; hex colors are equivalent to { type: 'solid', color: value }.
+- Purpose: String shorthand for a background. Theme slots ('light1', 'light2', 'dark1', 'dark2') are equivalent to { type: 'theme', slot: value }; hex colors are equivalent to { type: 'solid', color: value }; an image source (starting with 'asset:', 'https://', 'data:', './' or '../') is equivalent to { type: 'image', src: value }, a cover image. Any other string is invalid.
+
+_No named properties._
+
+
+### ImageSource
+
+- Type: `string`
+- Required fields: none
+- Purpose: An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).
 
 _No named properties._
 
@@ -525,14 +533,79 @@ _No named properties._
 ### ImageBackground
 
 - Type: `object`
-- Required fields: `type`, `image`
-- Purpose: Fixed image slide background fill.
+- Required fields: `type`, `src`
+- Purpose: Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the colour scheme's default slide background, the picture, then the overlay, then furniture and content.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | `const:"image"` | Fixed image background fill. |
-| `image` | yes | `object` | Image fill definition. |
-| `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
+| `type` | yes | `const:"image"` | Picture background. |
+| `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
+| `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
+| `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exact... |
+| `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
+| `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
+| `overlay` | no | `ref:Overlay` | Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. |
+
+
+### ImageFocus
+
+- Type: `object`
+- Required fields: `x`, `y`
+- Purpose: A point of a picture as fractions of its width and height, from the top-left corner. A cover fit centers this point in the frame as far as the picture still covers the frame, so it always stays in view: { x: 0.5, y: 0.5 } (the default) is a center crop, { x: 0, y: 0 } keeps the top-left corner.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `x` | yes | `number` | Horizontal position, 0 (left edge) to 1 (right edge). |
+| `y` | yes | `number` | Vertical position, 0 (top edge) to 1 (bottom edge). |
+
+
+### Overlay
+
+- Type: `object`
+- Required fields: `color`, `opacity`
+- Purpose: Solid scrim over a picture: the whole frame in the frame's shape, or a band along one edge. Shared by image backgrounds and image blocks. Drawn directly above its picture and beneath headings and content; PowerPoint export writes one native shape above the picture.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `ref:ColorRef` | Overlay fill color: a hex color (eight-digit hex keeps its alpha), a color-scheme slot or role name, or a 'var:<id>' variable reference. |
+| `opacity` | yes | `number` | Overlay fill opacity. |
+| `edge` | no | `enum:top \| bottom \| left \| right` | Cover only a band along this edge of the frame, for example a caption strip. Backgrounds and rectangle image frames only; on another shape the overlay is not drawn and composition reports unsupported-image-treatment.... |
+| `size` | no | `number` | Band share of the frame for an edge overlay. Default 0.3. Ignored without edge. |
+
+
+### ImagePlacement
+
+- Type: `object`
+- Required fields: `edge`
+- Purpose: Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge; a layout's image placeholder may carry the same placement for the slide's image. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a ba...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `edge` | yes | `enum:left \| right \| top \| bottom` | The slide edge the image bleeds to. |
+| `size` | no | `number` | Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5. |
+| `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false. |
+
+
+### ImageBorder
+
+- Type: `object`
+- Required fields: `color`, `width`
+- Purpose: Solid line along the image frame's shape, centered on the outline with a miter join, like a native picture line. A thick dark border on a rounded portrait frame gives a device bezel.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `ref:ColorRef` | Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
+| `width` | yes | `number` | Line width in reference pixels at a 720-pixel short edge. 0 removes the line. |
+
+
+### ImageRecolor
+
+- Type: `oneOf:const:"grayscale" / object`
+- Required fields: none
+- Purpose: Color treatment for the image pixels. Luminance uses Rec. 601 weights (0.299, 0.587, 0.114) on sRGB values.
+
+_No named properties._
 
 
 ### PatternBackground
@@ -636,7 +709,7 @@ _No named properties._
 | `items` | no | `array<ref:ListItem>` | Full-slide generic list payload. Presence of this field infers type 'list'. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for layout-agnostic blocks. |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide text-style bullet payload. Presence of this field infers type 'text'. |
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
-| `image` | no | `ref:Asset` | Full-slide image source. Presence of this field infers type 'image'. |
+| `image` | no | `ref:Asset` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A layout's image placeholder may place it along an edge (placement). For f... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
@@ -718,6 +791,16 @@ _No named properties._
 | `bullets` | no | `array<ref:BulletItem>` | Text-style bullet payload. Presence of this field infers type 'text'. |
 | `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
 | `image` | no | `ref:Asset` | Source for an image item. |
+| `fit` | no | `enum:cover \| contain \| stretch` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered; 'stretch' scales it to the frame exactly. Default: the effectiv... |
+| `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
+| `shape` | no | `enum:rectangle \| rounded \| circle \| hexagon` | Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'. |
+| `cornerRadius` | no | `number` | Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default. |
+| `border` | no | `ref:ImageBorder` | Image payloads only. Line along the frame's shape. |
+| `opacity` | no | `number` | Image payloads only. Picture opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1. |
+| `recolor` | no | `ref:ImageRecolor` | Image payloads only. Grayscale or duotone treatment of the picture's pixels. |
+| `overlay` | no | `ref:Overlay` | Image payloads only. Scrim over the picture in the frame's shape, or a band along one edge of a rectangle frame. |
+| `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |
 | `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |

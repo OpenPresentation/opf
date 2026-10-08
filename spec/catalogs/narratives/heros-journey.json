@@ -26,7 +26,7 @@
       "description": "Establish the starting point. What was normal life like before the challenge?",
       "instructions": "Establish the starting world before change.",
       "type": "image",
-      "layout": "image-bleed"
+      "layout": "image-focus"
     },
     {
       "id": "challenge",

@@ -212,6 +212,8 @@ export interface ComposedItem {
    * the media box after the band is reserved; `caption.box` is the band inside the same region.
    */
   caption?: ComposedCaption;
+  /** Picture geometry and treatments of an image item (`field` image); absent on every other item. */
+  image?: ComposedImage;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
   /**
@@ -221,48 +223,106 @@ export interface ComposedItem {
    */
   alignment: 'left' | 'center' | 'right';
 }
-/**
- * Slide-level image resolved from design.slideImage. It is active when the slide sets its own
- * design.slideImage, or when the deck sets one and either the slide's layout record sets
- * design.slideImage, or the slide's root image is the same source.
- * Content composes in the part of the slide the image does not occupy; 'background' leaves the whole slide.
- */
-export interface ComposedSlideImage {
-  /** The design value that configured the image: 'design.slideImage' or 'slides.N.design.slideImage'. */
-  path: string;
-  /** Path of the drawn asset value: the design value, or the slide's root image payload it replaced. */
-  sourcePath: string;
-  /** Asset value (string or Asset object) that engines resolve like any other image. */
-  value: unknown;
-  position: 'background' | 'top' | 'bottom' | 'left' | 'right';
-  /** crop covers the frame (centered); fit shows the whole image centered inside it. */
-  fill: 'crop' | 'fit';
-  /** Band allocated to the image. */
-  region: LayoutBox;
-  /** Image frame inside the region. */
-  box: LayoutBox;
-  /** True when the slide's root image payload became this slide image instead of a content item. */
-  replacesContent: boolean;
-  /** Treatment alt text; engines fall back to the asset's own alt text. */
-  alt?: string;
-  /** Mask on the frame: a DrawingML preset with its guide values, and the same outline as an SVG path. */
-  shape: SlideImageShape;
-  /** Line centered on the shape outline; width in reference pixels (already scaled to the canvas). */
-  border?: { color: unknown; width: number };
-  /** Image opacity below 1; the border and overlay are not affected. */
-  opacity?: number;
-  /** Luminance-based recolor (Rec. 601 weights on sRGB values). */
-  recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
-  /** Scrim over the frame (same shape) or over an edge band of a rectangle frame. */
-  overlay?: { color: unknown; opacity: number; box: LayoutBox; shape: SlideImageShape };
-}
+/** How a picture fills its frame: cover crops around the focus, contain shows all of it, stretch scales it to the frame. */
+export type ImageFit = 'cover' | 'contain' | 'stretch';
+/** A background also tiles: the picture repeats at its own size from the canvas's top-left corner. */
+export type BackgroundImageFit = ImageFit | 'tile';
+/** A slide or frame edge, physical (already mirrored in a right-to-left deck). */
+export type ImageEdge = 'left' | 'right' | 'top' | 'bottom';
+/** A point of a picture as fractions of its width and height from the top-left corner; the default is { x: 0.5, y: 0.5 }. */
+export interface ImageFocus { x: number; y: number }
 /** A frame mask. path follows the ECMA-376 preset formula for preset/adjust exactly, in reference pixels. */
-export interface SlideImageShape {
+export interface ImageShape {
   kind: 'rectangle' | 'rounded' | 'circle' | 'hexagon';
   preset: 'rect' | 'roundRect' | 'ellipse' | 'hexagon';
   /** DrawingML avLst guide values (for example adj and vf), in 1/100000 units. */
   adjust: Record<string, number>;
   path: string;
+}
+/** One overlay, shared by image backgrounds and image blocks: drawn directly above its picture, beneath content. */
+export interface ComposedOverlay {
+  /** OPF path of the overlay value, for example `slides.3.design.background.overlay` or `slides.3.blocks.0.overlay`. */
+  path: string;
+  /** ColorRef as authored (hex, eight-digit hex alpha, scheme slot or role, `var:<id>`); engines resolve it. */
+  color: unknown;
+  /** Fill opacity, 0 to 1, multiplied with any eight-digit hex alpha. */
+  opacity: number;
+  /** Physical edge of a band overlay; absent when the overlay covers the whole frame. */
+  edge?: ImageEdge;
+  /** Area covered: the whole frame, or the edge band. */
+  box: LayoutBox;
+  /** Outline to fill: the frame's shape for a whole-frame overlay, a rectangle for a band. */
+  shape: ImageShape;
+}
+/** Where the whole picture lands for a fit, for a picture whose aspect ratio is known (see `fitImage`). */
+export interface ImageFitPlacement {
+  /** The whole picture's rectangle in slide coordinates: past the frame for cover, inside it for contain, the frame for stretch. */
+  image: LayoutBox;
+  /** DrawingML srcRect insets as fractions of the picture (positive crops, negative pads); all 0 for stretch. */
+  crop: { left: number; top: number; right: number; bottom: number };
+}
+/** A placed image block's band (FA-22): the image bleeds to `edge` and the rest of the slide composes beside it. */
+export interface ComposedPlacement {
+  /** Physical edge: in a right-to-left deck an authored `left` (the start side) is `right` here. */
+  edge: ImageEdge;
+  /** Share of the slide width (left, right) or height (top, bottom), 0.1 to 0.9. */
+  size: number;
+  /** True when the frame sits inside the slide padding instead of edge to edge. */
+  inset: boolean;
+  /** Where the placement is written: `slides.N.blocks.I.placement`, or `layout.placeholders.P.placement` for a layout image placeholder's. */
+  path: string;
+}
+/**
+ * Resolved picture geometry of an image item (FA-22): every composed item with `field` 'image' carries one. Engines
+ * draw the picture in `box` with `fit` and `focus`, clipped to `shape`, with `recolor` and `opacity` on its pixels
+ * only, then the `border` on the shape outline, then the `overlay`. This is the paint order and the treatment code
+ * 0.14's slide image used.
+ */
+export interface ComposedImage {
+  /** Allocated region, equal to the item's box: the flow cell (after any card padding and caption band) or the placement band. */
+  region: LayoutBox;
+  /** Picture frame inside the region: the band inside the slide padding for an inset placement, then the largest centered box with `aspectRatio` (a circle uses 1). */
+  box: LayoutBox;
+  /** The block's own fit, else the effective design.imageFit, else cover. */
+  fit: ImageFit;
+  focus: ImageFocus;
+  /** Mask on the frame: a DrawingML preset with its guide values, and the same outline as an SVG path. */
+  shape: ImageShape;
+  /** Line centered on the shape outline; width in reference pixels, already scaled to the canvas. */
+  border?: { color: unknown; width: number };
+  /** Picture opacity below 1; the border and overlay are not affected. */
+  opacity?: number;
+  /** Luminance-based recolor (Rec. 601 weights on sRGB values). */
+  recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
+  overlay?: ComposedOverlay;
+  /** Present on a placed block: the band along a slide edge that `region` is. */
+  placement?: ComposedPlacement;
+  /** Present when core reads the picture's aspect ratio (a data URI, or an `asset:` reference to one); otherwise call `fitImage` with the host's. */
+  picture?: ImageFitPlacement;
+}
+/**
+ * The slide's picture background (FA-22): the effective `design.background` (the slide's, then the deck's, then
+ * `ComposeSlideOptions.themeBackground`) when it is an image, in object form or as an image-source string. It fills
+ * the whole canvas behind everything and never moves content. Paint order: the colour scheme's default slide
+ * background, the picture (with `recolor` and `opacity` on its pixels), the overlay, then furniture and content.
+ */
+export interface ComposedBackgroundImage {
+  /** Where the background is written: `slides.N.design.background`, `design.background`, or `theme` (ComposeSlideOptions.themeBackground). */
+  path: string;
+  /** Image source as authored: `asset:<id>`, an https URL, a data URI or a relative path. */
+  src: string;
+  alt?: string;
+  fit: BackgroundImageFit;
+  focus: ImageFocus;
+  /** The whole canvas. */
+  box: LayoutBox;
+  /** Picture opacity below 1; the overlay keeps its own. */
+  opacity?: number;
+  /** Luminance-based recolor of the pixels (Rec. 601 weights on sRGB values), as on an image block. */
+  recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
+  overlay?: ComposedOverlay;
+  /** Present when core reads the picture's aspect ratio and the fit is not tile; otherwise call `fitImage` with the host's. */
+  picture?: ImageFitPlacement;
 }
 /** Which logo variant family a consumer asks for: the full lockup, a square mark, or a stacked lockup. */
 export type LogoSlot = 'lockup' | 'icon' | 'stacked';
@@ -338,12 +398,12 @@ export interface SlideComposition {
   furniture?: FurnitureLayout;
   /**
    * Effective shared design hints of this slide: slide design, then deck design, then the layout record's design,
-   * per key. Renderers and exporters read titleAlignment, contentAlignment, contentBox, imageFill and
-   * listBullet here instead of re-deriving them from the document.
+   * per key. Renderers and exporters read titleAlignment, contentAlignment, contentBox and
+   * listBullet here instead of re-deriving them from the document; image items carry their resolved fit in `image.fit`.
    */
   design: ResolvedDesignHints;
-  /** Active slide-level image; absent when design.slideImage does not apply to this slide. */
-  slideImage?: ComposedSlideImage;
+  /** Picture background of this slide; absent when the effective background is not an image. */
+  backgroundImage?: ComposedBackgroundImage;
   /** Deck logo on a cover or section slide; absent on content slides and when no logo resolves. */
   logo?: ComposedLogo;
   /**
@@ -357,12 +417,18 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; slideImage?: unknown; imageFill?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
   /**
    * Whether the slide background is dark, by the host's own luminance test. Selects the light logo
    * variants (cover logo, furniture `logo: true`, picture bullets). Core never inspects colors.
    */
   darkBackground?: boolean;
+  /**
+   * The resolved theme's `background`, the lowest level of the background chain (the slide's design.background, then
+   * the deck's, then this). Only an image background produces geometry (`SlideComposition.backgroundImage`).
+   * `resolveSlideContext` passes it.
+   */
+  themeBackground?: unknown;
   /** One-based displayed number; source paths still use slideIndex. */
   slideNumber?: number;
   /** Displayed slide count for `{total}` in slideNumberFormat. Defaults to `presentation.slides.length`. */
@@ -411,20 +477,36 @@ const columns = ["left", "center", "right"];
 const record = (value: unknown): Record<string, any> => value && typeof value === "object" && !Array.isArray(value) ? value : {};
 const kind = (field: string) => field === "items" ? "list" : field === "bullets" ? "text" : field;
 const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
-const SLIDE_IMAGE_POSITIONS = ['background', 'top', 'bottom', 'left', 'right'] as const;
-type SlideImagePosition = typeof SLIDE_IMAGE_POSITIONS[number];
-/** Default share of the slide width (left/right) or height (top/bottom) given to a banded slide image. */
-const SLIDE_IMAGE_BAND = 0.5;
+/** Default share of the slide width (left/right) or height (top/bottom) given to a placed image's band. */
+const PLACEMENT_BAND = 0.5;
+const IMAGE_EDGES = ['left', 'right', 'top', 'bottom'] as const;
+const IMAGE_FITS = ['cover', 'contain', 'stretch'] as const;
+const BACKGROUND_FITS = ['cover', 'contain', 'stretch', 'tile'] as const;
+/** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
+const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
+/** Image block keys a composed image item reports in its payload, beside `type` and `image`. */
+const IMAGE_OPTION_KEYS = ['fit', 'focus', 'aspectRatio', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'placement'] as const;
+const imagePayload = (host: Record<string, any>): Record<string, unknown> => {
+  const payload: Record<string, unknown> = { type: host.type ?? 'image', image: host.image };
+  for (const key of IMAGE_OPTION_KEYS) if (host[key] !== undefined) payload[key] = host[key];
+  return payload;
+};
 const assetSource = (value: unknown): unknown => typeof value === 'string' ? value : record(value).src;
 const finite = (value: unknown, min: number, max: number): number | undefined => typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max ? value : undefined;
 const pathNumber = (value: number) => String(round(value));
-const SLIDE_IMAGE_SHAPES = { rectangle: 'rect', rounded: 'roundRect', circle: 'ellipse', hexagon: 'hexagon' } as const;
+const IMAGE_SHAPES = { rectangle: 'rect', rounded: 'roundRect', circle: 'ellipse', hexagon: 'hexagon' } as const;
+const roundBox = (box: LayoutBox): LayoutBox => ({ x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) });
+/** A valid focus point, else the center. */
+const imageFocus = (value: unknown): ImageFocus => {
+  const focus = record(value), x = finite(focus.x, 0, 1), y = finite(focus.y, 0, 1);
+  return x !== undefined && y !== undefined ? { x, y } : { x: 0.5, y: 0.5 };
+};
 
 /**
  * Outline of a DrawingML preset in a box, following the ECMA-376 presetShapeDefinitions formulas:
  * roundRect (adj; ss = min(w,h), radius = ss*adj/100000), ellipse, and hexagon (adj, vf).
  */
-export function slideImageShape(kind: SlideImageShape['kind'], box: LayoutBox, cornerRadius = 1 / 6): SlideImageShape {
+export function imageShape(kind: ImageShape['kind'], box: LayoutBox, cornerRadius = 1 / 6): ImageShape {
   const { x, y, width: w, height: h } = box, r = x + w, b = y + h, ss = Math.min(w, h), n = pathNumber;
   const rect = `M${n(x)} ${n(y)}H${n(r)}V${n(b)}H${n(x)}Z`;
   if (kind === 'rounded') {
@@ -444,69 +526,116 @@ export function slideImageShape(kind: SlideImageShape['kind'], box: LayoutBox, c
   return { kind: 'rectangle', preset: 'rect', adjust: {}, path: rect };
 }
 
-function resolveSlideImage(slide: Record<string, any>, layout: Record<string, any>, presentation: unknown, width: number, height: number, path: string, padding: number, scale: number, diagnostics: LayoutDiagnostic[], rtl = false, imageFill?: ResolvedDesignHints['imageFill']): ComposedSlideImage | undefined {
-  const own = record(slide.design), deck = record(record(presentation).design);
-  const local = own.slideImage !== undefined;
-  const configured: unknown = local ? own.slideImage : deck.slideImage;
-  if (!configured || (typeof configured !== 'object' && typeof configured !== 'string')) return undefined;
-  const treatment = typeof configured === 'object' && !Array.isArray(configured) && 'position' in configured ? record(configured) : undefined;
-  const layoutImage = record(record(layout.design).slideImage), layoutPosition = layoutImage.position;
-  const authoredPosition = (treatment ? treatment.position : SLIDE_IMAGE_POSITIONS.find(value => value === layoutPosition) ?? 'background') as SlideImagePosition;
-  if (!SLIDE_IMAGE_POSITIONS.includes(authoredPosition)) return undefined;
-  // A right-to-left deck mirrors a banded image: `left` is the start side, drawn at the right.
-  const mirrorSide = <T extends string>(side: T): T => !rtl ? side : side === 'left' ? 'right' as T : side === 'right' ? 'left' as T : side;
-  const position = mirrorSide(authoredPosition);
-  const designSource = treatment ? treatment.src : configured;
-  // A root image with the same source (or one a source-less treatment places) is the slide image, not content.
-  const root = slide.image, sameSource = root !== undefined && designSource !== undefined && assetSource(root) === assetSource(designSource);
-  // A deck-wide slide image applies where the layout reserves one, or where the slide's own image is that
-  // same source. Other slides keep their geometry, so existing decks with an unused deck value are unchanged.
-  if (!local && record(layout.design).slideImage === undefined && !sameSource) return undefined;
-  const replacesContent = root !== undefined && (designSource === undefined || sameSource);
-  const value = replacesContent ? root : designSource;
-  const source = assetSource(value);
-  if (typeof source !== 'string' || !source) return undefined;
-  const t = treatment ?? {};
-  // The treatment's own fill, else the effective design.imageFill (slide, deck, then the layout record: FA-17), else crop.
-  const fill: 'crop' | 'fit' = t.fill === 'crop' || t.fill === 'fit' ? t.fill : imageFill === 'fit' ? 'fit' : 'crop';
-  const share = finite(t.size, 0.1, 0.9) ?? SLIDE_IMAGE_BAND;
-  const band = { width: round(width * share), height: round(height * share) };
-  const region: LayoutBox = position === 'left' ? { x: 0, y: 0, width: band.width, height }
-    : position === 'right' ? { x: round(width - band.width), y: 0, width: band.width, height }
-    : position === 'top' ? { x: 0, y: 0, width, height: band.height }
-    : position === 'bottom' ? { x: 0, y: round(height - band.height), width, height: band.height }
-    : { x: 0, y: 0, width, height };
-  const designPath = local ? `${path}.design.slideImage` : 'design.slideImage';
-  const kind: SlideImageShape['kind'] = Object.hasOwn(SLIDE_IMAGE_SHAPES, t.shape) ? t.shape : 'rectangle';
-  let box: LayoutBox = t.inset === true ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
-  const aspect = kind === 'circle' ? 1 : finite(t.aspectRatio, Number.MIN_VALUE, 10);
+/**
+ * The shared fit math every engine uses (FA-22). `aspect` is the picture's width / height. cover scales the picture
+ * to cover the frame and centers the focus point in the frame as far as the picture still covers it, so the focus
+ * point always stays in view ({0.5, 0.5} is a center crop, {0, 0} keeps the top-left corner). contain scales it to
+ * fit and centers it; stretch fills the frame exactly. Focus applies to cover only. `crop` holds the DrawingML
+ * srcRect insets as fractions of the picture: positive insets crop, negative insets pad.
+ */
+export function fitImage(frame: LayoutBox, fit: ImageFit, aspect: number, focus: ImageFocus = { x: 0.5, y: 0.5 }): ImageFitPlacement {
+  if (![frame.x, frame.y, frame.width, frame.height].every(Number.isFinite) || frame.width <= 0 || frame.height <= 0) throw new RangeError('An image frame needs finite coordinates and a positive size.');
+  if (fit === 'stretch' || !Number.isFinite(aspect) || aspect <= 0) return { image: roundBox(frame), crop: { left: 0, top: 0, right: 0, bottom: 0 } };
+  const wide = aspect > frame.width / frame.height, cover = fit === 'cover';
+  const width = wide === cover ? frame.height * aspect : frame.width, height = wide === cover ? frame.height : frame.width / aspect;
+  const point = imageFocus(focus);
+  const place = (start: number, span: number, size: number, at: number) => cover
+    ? Math.min(start, Math.max(start + span - size, start + span / 2 - at * size))
+    : start + (span - size) / 2;
+  const image = { x: place(frame.x, frame.width, width, point.x), y: place(frame.y, frame.height, height, point.y), width, height };
+  const crop = {
+    left: round((frame.x - image.x) / width), top: round((frame.y - image.y) / height),
+    right: round((image.x + width - frame.x - frame.width) / width), bottom: round((image.y + height - frame.y - frame.height) / height),
+  };
+  for (const key of ['left', 'top', 'right', 'bottom'] as const) if (Object.is(crop[key], -0)) crop[key] = 0;
+  return { image: roundBox(image), crop };
+}
+
+/** The background a value describes when it is an image: the object form, or an image-source string (a cover image). */
+export function imageBackground(value: unknown): { src: string; alt?: string; fit: BackgroundImageFit; focus: ImageFocus; opacity?: number; recolor?: unknown; overlay?: unknown } | undefined {
+  if (typeof value === 'string') return IMAGE_SOURCE.test(value) ? { src: value, fit: 'cover', focus: { x: 0.5, y: 0.5 } } : undefined;
+  const background = record(value);
+  if (background.type !== 'image' || typeof background.src !== 'string' || !background.src) return undefined;
+  const opacity = finite(background.opacity, 0, 1);
+  return {
+    src: background.src, ...(typeof background.alt === 'string' ? { alt: background.alt } : {}),
+    fit: (BACKGROUND_FITS as readonly unknown[]).includes(background.fit) ? background.fit : 'cover', focus: imageFocus(background.focus),
+    ...(opacity !== undefined ? { opacity } : {}), ...(background.recolor !== undefined ? { recolor: background.recolor } : {}), ...(background.overlay !== undefined ? { overlay: background.overlay } : {}),
+  };
+}
+
+/** Grayscale, or duotone from dark to light; anything else is no recolor. */
+function composeRecolor(value: unknown): ComposedImage['recolor'] {
+  if (value === 'grayscale') return { type: 'grayscale' };
+  const duotone = record(value);
+  return duotone.dark !== undefined && duotone.light !== undefined ? { type: 'duotone', dark: duotone.dark, light: duotone.light } : undefined;
+}
+
+/** Overlay geometry on a frame: the frame's shape, or an edge band of a rectangle frame (any other shape reports and draws none). */
+function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedOverlay | undefined {
+  const overlay = record(value), opacity = finite(overlay.opacity, 0, 1);
+  if (overlay.color === undefined || opacity === undefined) return undefined;
+  const edge = (IMAGE_EDGES as readonly unknown[]).includes(overlay.edge) ? mirrorSide(overlay.edge as string) as ImageEdge : undefined;
+  if (edge && shape.kind !== 'rectangle') {
+    diagnostics.push({ code: 'unsupported-image-treatment', path: `${path}.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow a rounded, circular or hexagonal mask as one native shape. Remove edge or use shape rectangle.' });
+    return undefined;
+  }
+  const part = finite(overlay.size, 0.05, 1) ?? 0.3;
+  const box = !edge ? frame : edge === 'top' ? { ...frame, height: round(frame.height * part) }
+    : edge === 'bottom' ? { ...frame, y: round(frame.y + frame.height * (1 - part)), height: round(frame.height * part) }
+    : edge === 'left' ? { ...frame, width: round(frame.width * part) }
+    : { ...frame, x: round(frame.x + frame.width * (1 - part)), width: round(frame.width * part) };
+  return { path, color: overlay.color, opacity, ...(edge ? { edge } : {}), box, shape: edge ? imageShape('rectangle', box) : shape };
+}
+
+/**
+ * Picture geometry of one image block in its region (FA-22): the frame (the frame area, then the aspect ratio), the mask,
+ * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
+ */
+function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFit; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement }): ComposedImage {
+  const kindName: ImageShape['kind'] = Object.hasOwn(IMAGE_SHAPES, host.shape) ? host.shape : 'rectangle';
+  const { scale } = context;
+  let box: LayoutBox = { ...frameArea };
+  const aspect = kindName === 'circle' ? 1 : finite(host.aspectRatio, Number.MIN_VALUE, 10);
   if (aspect) {
     const frameWidth = Math.min(box.width, box.height * aspect), frameHeight = frameWidth / aspect;
     box = { x: box.x + (box.width - frameWidth) / 2, y: box.y + (box.height - frameHeight) / 2, width: frameWidth, height: frameHeight };
   }
-  box = { x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) };
-  const result: ComposedSlideImage = { path: designPath, sourcePath: replacesContent ? `${path}.image` : designPath, value, position, fill, region, box, replacesContent,
-    shape: slideImageShape(kind, box, finite(t.cornerRadius, 0, 0.5)) };
-  if (typeof t.alt === 'string') result.alt = t.alt;
-  const border = record(t.border), borderWidth = finite(border.width, 0, 64);
+  box = roundBox(box);
+  const fit: ImageFit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
+  const focus = imageFocus(host.focus);
+  const shape = imageShape(kindName, box, finite(host.cornerRadius, 0, 0.5));
+  const result: ComposedImage = { region: roundBox(region), box, fit, focus, shape };
+  const border = record(host.border), borderWidth = finite(border.width, 0, 64);
   if (border.color !== undefined && borderWidth) result.border = { color: border.color, width: round(borderWidth * scale) };
-  const opacity = finite(t.opacity, 0, 1);
+  const opacity = finite(host.opacity, 0, 1);
   if (opacity !== undefined && opacity < 1) result.opacity = opacity;
-  if (t.recolor === 'grayscale') result.recolor = { type: 'grayscale' };
-  else if (record(t.recolor).dark !== undefined && record(t.recolor).light !== undefined) result.recolor = { type: 'duotone', dark: t.recolor.dark, light: t.recolor.light };
-  const overlay = record(t.overlay), overlayOpacity = finite(overlay.opacity, 0, 1);
-  if (overlay.color !== undefined && overlayOpacity !== undefined) {
-    const edge = ['top', 'bottom', 'left', 'right'].includes(overlay.edge) ? mirrorSide(overlay.edge as string) : undefined;
-    if (edge && kind !== 'rectangle') diagnostics.push({ code: 'unsupported-image-treatment', path: `${designPath}.overlay.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow a rounded, circular or hexagonal mask as one native shape. Remove edge or use shape rectangle.' });
-    else {
-      const part = finite(overlay.size, 0.05, 1) ?? 0.3;
-      const bandBox = !edge ? box : edge === 'top' ? { ...box, height: round(box.height * part) }
-        : edge === 'bottom' ? { ...box, y: round(box.y + box.height * (1 - part)), height: round(box.height * part) }
-        : edge === 'left' ? { ...box, width: round(box.width * part) }
-        : { ...box, x: round(box.x + box.width * (1 - part)), width: round(box.width * part) };
-      result.overlay = { color: overlay.color, opacity: overlayOpacity, box: bandBox, shape: edge ? slideImageShape('rectangle', bandBox) : result.shape };
-    }
-  }
+  const recolor = composeRecolor(host.recolor);
+  if (recolor) result.recolor = recolor;
+  const overlay = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
+  if (overlay) result.overlay = overlay;
+  if (context.placement) result.placement = context.placement;
+  const pictureAspect = intrinsicImageAspect(host.image, context.assets);
+  if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
+  return result;
+}
+
+/** The effective background (slide, deck, theme) when it is a picture; it fills the canvas and moves nothing. */
+function resolveBackgroundImage(slide: Record<string, any>, presentation: unknown, themeBackground: unknown, width: number, height: number, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedBackgroundImage | undefined {
+  const own = record(slide.design), deck = record(record(presentation).design);
+  const [value, at] = own.background !== undefined ? [own.background, `${path}.design.background`]
+    : deck.background !== undefined ? [deck.background, 'design.background'] : [themeBackground, 'theme'];
+  const background = imageBackground(value);
+  if (!background) return undefined;
+  const box: LayoutBox = { x: 0, y: 0, width, height };
+  const result: ComposedBackgroundImage = { path: at, src: background.src, ...(background.alt !== undefined ? { alt: background.alt } : {}), fit: background.fit, focus: background.focus, box };
+  if (background.opacity !== undefined && background.opacity < 1) result.opacity = background.opacity;
+  const recolor = composeRecolor(background.recolor);
+  if (recolor) result.recolor = recolor;
+  const overlay = composeOverlay(background.overlay, box, imageShape('rectangle', box), `${at}.overlay`, mirrorSide, diagnostics);
+  if (overlay) result.overlay = overlay;
+  const aspect = background.fit === 'tile' ? undefined : intrinsicImageAspect(background.src, record(presentation).assets);
+  if (aspect) result.picture = fitImage(box, background.fit as ImageFit, aspect, background.focus);
   return result;
 }
 
@@ -862,8 +991,8 @@ export interface QuotePhoto {
   value: unknown;
   /** Square frame, in reference pixels. */
   box: LayoutBox;
-  /** Circle mask: the `ellipse` DrawingML preset and the same outline as an SVG path, as design.slideImage shape 'circle'. */
-  shape: SlideImageShape;
+  /** Circle mask: the `ellipse` DrawingML preset and the same outline as an SVG path, as an image block's shape 'circle'. */
+  shape: ImageShape;
 }
 export interface QuoteLayout {
   algorithm: 'quote-flow-v1';
@@ -1005,7 +1134,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     if (selected) {
       body.box=selected.bodyBox;body.fit=selected.bodyFit;
       if (attribution) {attribution.box=selected.textBox ?? selected.footerBox;attribution.fit=selected.footerFit;}
-      if (selected.photoBox) photo={path:photoPath,value:photoValue,box:selected.photoBox,shape:slideImageShape('circle',selected.photoBox)};
+      if (selected.photoBox) photo={path:photoPath,value:photoValue,box:selected.photoBox,shape:imageShape('circle',selected.photoBox)};
       photoFits=selected.photoFits;
     }
   }
@@ -2133,14 +2262,45 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const annotationFit = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, fitPath: string, alignment: 'left'|'center'|'right') =>
     fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
   const annotationOptions = { scale, minFontSize: minSize, fit: annotationFit, textStyle: (fitPath: string) => styleFor('text', fitPath) };
-  const slideImageDiagnostics: LayoutDiagnostic[] = [];
-  const slideImage = resolveSlideImage(slide, layout, options.presentation, width, height, path, padding, scale, slideImageDiagnostics, rtl, hints.imageFill);
-  // Free area for headings and content: the whole slide unless a banded slide image takes one side.
+  const imageDiagnostics: LayoutDiagnostic[] = [];
+  // A right-to-left deck mirrors placements and edge overlays: `left` is the start side, drawn at the right.
+  const mirrorSide = (side: string): string => !rtl ? side : side === 'left' ? 'right' : side === 'right' ? 'left' : side;
+  const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, width, height, path, mirrorSide, imageDiagnostics);
+  const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
+  const assets = record(options.presentation).assets;
+  const imageContext = (placement?: ComposedPlacement) => ({ fit: hints.imageFit, scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}) });
+  // FA-22 placement. The top-level image nodes are the image blocks of `blocks` (not groups) or the root image; promoted
+  // regions have none. The n-th takes its own placement, else the n-th layout image placeholder's. Each band takes its
+  // share of the slide along its axis and the free area across it, in block order, at most one per edge (a second
+  // block on a used edge flows). Headings and the body compose in the free area that remains.
   const area = { left: 0, top: 0, right: width, bottom: height };
-  if (slideImage?.position === 'left') area.left = slideImage.region.width;
-  else if (slideImage?.position === 'right') area.right = slideImage.region.x;
-  else if (slideImage?.position === 'top') area.top = slideImage.region.height;
-  else if (slideImage?.position === 'bottom') area.bottom = slideImage.region.y;
+  const imagePlaceholders = (Array.isArray(layout.placeholders) ? layout.placeholders as unknown[] : []).flatMap((placeholder, index) => record(placeholder).type === 'image' ? [{ placeholder: record(placeholder), index }] : []);
+  const topImages: { host: Record<string, any>; hostPath: string; block?: number }[] = regions.length ? []
+    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => !Array.isArray(record(block).blocks) && record(block).image !== undefined ? [{ host: record(block), hostPath: `${path}.blocks.${index}`, block: index }] : [])
+    : slide.image !== undefined ? [{ host: { type: 'image', image: slide.image }, hostPath: path }] : [];
+  type Placed = { host: Record<string, any>; hostPath: string; block?: number; placement: ComposedPlacement; region: LayoutBox; slot: number };
+  const placed: Placed[] = [], usedEdges = new Set<string>();
+  topImages.forEach((node, order) => {
+    const slot = imagePlaceholders[order];
+    const own = node.block !== undefined && node.host.placement !== undefined ? record(node.host.placement) : undefined;
+    const value = own ?? (slot?.placeholder.placement !== undefined ? record(slot.placeholder.placement) : undefined);
+    if (!value || !(IMAGE_EDGES as readonly unknown[]).includes(value.edge)) return;
+    const edge = mirrorSide(value.edge) as ImageEdge;
+    if (usedEdges.has(edge)) return;
+    usedEdges.add(edge);
+    const size = finite(value.size, 0.1, 0.9) ?? PLACEMENT_BAND;
+    const across = edge === 'left' || edge === 'right' ? area.right - area.left : area.bottom - area.top;
+    const band = Math.max(0, Math.min(across, round((edge === 'left' || edge === 'right' ? width : height) * size)));
+    const region: LayoutBox = edge === 'left' ? { x: area.left, y: area.top, width: band, height: area.bottom - area.top }
+      : edge === 'right' ? { x: round(area.right - band), y: area.top, width: band, height: area.bottom - area.top }
+      : edge === 'top' ? { x: area.left, y: area.top, width: area.right - area.left, height: band }
+      : { x: area.left, y: round(area.bottom - band), width: area.right - area.left, height: band };
+    if (edge === 'left') area.left += band; else if (edge === 'right') area.right = region.x; else if (edge === 'top') area.top += band; else area.bottom = region.y;
+    const placement: ComposedPlacement = { edge, size, inset: value.inset === true, path: own ? `${node.hostPath}.placement` : `layout.placeholders.${slot!.index}.placement` };
+    placed.push({ ...node, placement, region, slot: order });
+  });
+  const placedBlocks = new Set(placed.flatMap(entry => entry.block !== undefined ? [entry.block] : []));
+  const placedRoot = placed.some(entry => entry.block === undefined);
   const items: ComposedItem[] = [], diagnostics: LayoutDiagnostic[] = [];
   const measuredFurniture=layoutFurniture(slide,options);
   const furniture=measuredFurniture.configured||measuredFurniture.diagnostics.length?measuredFurniture:undefined;
@@ -2159,16 +2319,18 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // independent of the picture-slot removal applied to the content placeholders below.
   const layoutPlaceholders: {type?: string}[] = Array.isArray(layout.placeholders) ? layout.placeholders : [];
   // The cover rule is a record rule, never a list of ids: a layout whose placeholders are all headings (title,
-  // subtitle, tag) is a heading-only layout, and a slide without a layout record has no placeholders at all.
+  // subtitle, tag) or placed images (an image placeholder with a placement takes no flow space) is a heading-only
+  // layout, and a slide without a layout record has no placeholders at all.
   const hasLayoutRecord = options.layout !== undefined && options.layout !== null && typeof options.layout === "object";
-  const headingOnlyLayout = layoutPlaceholders.length > 0 && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? ""));
-  const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
+  const headingOnlyLayout = layoutPlaceholders.length > 0
+    && layoutPlaceholders.every(placeholder => headings.has(placeholder.type ?? "") || (placeholder.type === "image" && typeof (placeholder as {placement?: unknown}).placement === "object" && (placeholder as {placement?: unknown}).placement !== null));
   // Empty payloads (`blocks: []`, `text: ""`, empty lists, regions with nothing in them) draw nothing, so they are not body.
   // Whitespace-only text stays body: callers that infer a layout from it (the renderer picks a text layout) must agree with callers that do not (the editor).
   const emptyPayload = (value: unknown) => value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0);
   const emptyHost = (host: Record<string, any>) => emptyPayload(host.blocks) && fields.every(field => emptyPayload(host[field]));
-  // A root image counts as body even when it is drawn as the slide image, so image slides keep the content origin.
-  const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(slide.blocks) || fields.some(field => !emptyPayload(slide[field]));
+  // Placed images are not body: a slide whose only body is placed images centers its headings in the free area like a cover.
+  const flowBlocks = Array.isArray(slide.blocks) ? slide.blocks.filter((_: unknown, index: number) => !placedBlocks.has(index)) : slide.blocks;
+  const hasBodyPayload = regions.some(key => !emptyHost(record(slide[key]))) || !emptyPayload(flowBlocks) || fields.some(field => !(placedRoot && field === 'image') && !emptyPayload(slide[field]));
   const isCover = !hasBodyPayload && (headingOnlyLayout || !hasLayoutRecord);
   coverGroup = isCover;
   // Cover and section slides draw the lockup logo at the top-left of the free area, below any header
@@ -2212,9 +2374,21 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       y = last.box.y + last.box.height + gap;
     } else y += gap * 0.5;
   }
-  const contentBox = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
+  // Placed images follow the headings and precede the flowed body. A caption sits inside the band (inside the slide
+  // padding for an inset placement), and the frame takes the rest of it.
+  for (const entry of placed) {
+    const { host, hostPath, region, placement } = entry;
+    let frameArea: LayoutBox = placement.inset ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
+    const caption = host.caption !== undefined && entry.block !== undefined ? layoutCaption(host.caption, roundBox(frameArea), `${hostPath}.caption`, annotationOptions) : undefined;
+    if (caption) { frameArea = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
+    const image = composeImage(host, hostPath, region, frameArea, imageContext(placement));
+    const type = host.type ?? 'image';
+    items.push({ path: `${hostPath}.image`, field: 'image', type, value: host.image, payload: imagePayload(host), box: { ...region }, image,
+      textStyle: styleFor('image', `${hostPath}.image`), composition, alignment: alignmentFor('image'), ...(caption ? { caption } : {}) });
+  }
+  const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // A synthetic container (chartPrimary) groups the non-primary nodes without an OPF path: it records no group, flow or decision.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -2227,7 +2401,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
+    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}) },
+      ...(field === 'image' ? { host, hostPath: basePath } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -2238,8 +2413,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const regionsInReadingOrder = visualReadingOrder(regions.map(key => ({ key, box: regionBox(regionParts(key)!, contentBox, gap) }))).map(entry => entry.key);
   const pending: Pending[] = regions.length
     ? regionsInReadingOrder.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
-    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${path}.blocks.${index}`))
-    : collect(slideImage?.replacesContent ? { ...slide, image: undefined } : slide, path);
+    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) ? [] : collect(record(block), `${path}.blocks.${index}`))
+    : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
   const decisions: CompositionDecision[] | undefined = options.explain ? [] : undefined;
   const inheritedSettings = (parent: Composition, own: Composition = {}): Composition => ({
@@ -2366,7 +2541,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
         const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
         const text = internal ? body?.fit : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
-        items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box,
+        const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
+        items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}),
           ...(frameBox ? {frameBox} : {}),
           text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
           ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}) });
@@ -2375,8 +2551,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     });
   };
   const placeholders = Array.isArray(layout.placeholders) ? layout.placeholders.filter((p: any) => !headings.has(p.type)) : [];
-  // The root image drawn as the slide image no longer needs its content slot.
-  if (slideImage?.replacesContent) { const picture = placeholders.findIndex((p: any) => p.type === 'image'); if (picture >= 0) placeholders.splice(picture, 1); }
+  // A placed image no longer needs its content slot: the image placeholder it corresponds to is not reserved in the flow.
+  const placedSlots = new Set(placed.flatMap(entry => imagePlaceholders[entry.slot] ? [imagePlaceholders[entry.slot]!.placeholder] : []));
+  if (placedSlots.size) for (let index = placeholders.length - 1; index >= 0; index--) if (placedSlots.has(placeholders[index])) placeholders.splice(index, 1);
   // Root arrangement mode: the explicit composition.mode (the slide's own, else the layout record's
   // geometry contract), then the effective design.contentDirection (slide, then deck, then the layout record's
   // own), then auto. The hint ranks with the layout's own direction, so it never flattens a layout's own grid.
@@ -2436,8 +2613,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  diagnostics.push(...slideImageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(slideImage?{slideImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
+  return { width, height, contentBox, items, groups, flows, diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */

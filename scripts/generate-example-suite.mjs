@@ -274,7 +274,8 @@ function backgroundFor(index) {
     },
     {
       type: "image",
-      image: { src: "asset:cover-bg", fit: "cover" },
+      src: "asset:cover-bg",
+      fit: "cover",
       opacity: 0.2,
     },
     {
@@ -375,7 +376,7 @@ function designFor(spec, index, catalogs, density) {
     contentBox: index % 3 === 0,
     contentDirection: pick(["horizontal", "vertical"], index),
     chartPrimary: pick(["none", "left", "right", "top", "bottom"], index),
-    imageFill: pick(["crop", "fit"], index),
+    imageFit: pick(["cover", "contain"], index),
     listBullet: pick(["character", "image"], index),
   };
 
@@ -404,10 +405,6 @@ function designFor(spec, index, catalogs, density) {
       left: { organization: true },
       center: { text: index % 2 === 0 ? "Internal planning draft" : "Decision review" },
       right: { slideNumber: true },
-    },
-    slideImage: {
-      src: "asset:cover-bg",
-      position: pick(["background", "top", "bottom", "left", "right"], index),
     },
   };
 }
@@ -528,8 +525,9 @@ function numberLayout(index) {
   return pick(["number-1x", "number-2x", "number-3x", "number-4x", "number-5x", "number-6x"], index);
 }
 
+/** An image layout, or undefined for a full-bleed photo, which is the slide's background rather than a layout (FA-22). */
 function imageLayout(index) {
-  return pick(["image-1x", "image-2x", "image-3x", "image-bleed"], index);
+  return pick(["image-1x", "image-2x", "image-3x", undefined], index);
 }
 
 function promotedRegionSlide(spec, index, catalogs) {
@@ -612,6 +610,15 @@ function codeSlide(spec, index, catalogs) {
 function mediaSlide(spec, index, catalogs) {
   if (index % 2 === 0) {
     const layout = imageLayout(Math.floor(index / 2));
+    const alt = `${spec.area} context photo for ${spec.org}`;
+    // A full-bleed photo is the slide's image background: it fills the slide behind the title and moves nothing.
+    if (layout === undefined) return {
+      id: `s${index + 1}-image`,
+      section: "Context",
+      title: "Field Context",
+      design: { background: { type: "image", src: "asset:supporting-photo", alt } },
+      notes: "Use the image as context, not decoration.",
+    };
     return {
       id: `s${index + 1}-image`,
       section: "Context",
@@ -620,12 +627,9 @@ function mediaSlide(spec, index, catalogs) {
       type: "image",
       image: {
         src: "asset:supporting-photo",
-        alt: `${spec.area} context photo for ${spec.org}`,
+        alt,
         title: `${spec.area} context`,
       },
-      // RR-58: image-bleed draws the slide's picture full-bleed behind the title. The slide names it as its slide image
-      // (same source), and the layout record places it at position background.
-      ...(layout === "image-bleed" ? { design: { slideImage: "asset:supporting-photo" } } : {}),
       notes: "Use the image as context, not decoration.",
     };
   }

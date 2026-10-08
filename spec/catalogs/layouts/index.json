@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "Catalog of slide layouts available in the openpresentation.org catalog. Each entry is a lightweight summary; full layout records live in the per-id JSON files alongside this index.",
-  "contentSha256": "e076dd737083e0daaba396f6033d19d196b483b01e957045002de018c8f97fa2",
+  "contentSha256": "74f4dc6dfa1f5d1047aca31f58f27088fa8edffd5dc02ed0b96313dd06bb45a7",
   "records": [
     {
       "id": "blank",
@@ -44,11 +44,6 @@
       "id": "image-3x",
       "name": "Image 3x",
       "file": "image-3x.json"
-    },
-    {
-      "id": "image-bleed",
-      "name": "Image Bleed",
-      "file": "image-bleed.json"
     },
     {
       "id": "list-1x",

@@ -12,10 +12,7 @@
       "src": "asset:watermark",
       "opacity": 0.08
     },
-    "slideImage": {
-      "src": "asset:cover-photo",
-      "position": "background"
-    }
+    "imageFit": "contain"
   },
   "assets": {
     "logo": "./assets/logo.svg",

@@ -1,5 +1,7 @@
 # OPF editor and site coverage
 
+> Superseded in part by [the 0.15 design](../programs/format-audit/0.15-design.md): the slide picture and `imageFill` rows describe 0.14 keys (0.15 has `design.background` images, image blocks with `placement`, and `design.imageFit`). Kept as history. fa-stale-refs: history
+
 Current September 15 status: see the [developer-adoption roadmap](developer-adoption-20260915.md) and [deferred shaping checkpoint](deferred-shaping-20260915.md). Older version labels and candidate descriptions below are historical; shipped package exports and the latest acceptance evidence govern current capabilities.
 
 The acceptance target is every aspect of the canonical OPF specification, with visual properties reflected faithfully in the browser and nonvisual properties editable without losing data. Field discovery is one dimension of coverage; rendering, interaction, and PPTX parity require separate evidence.

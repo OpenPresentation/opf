@@ -36,7 +36,7 @@
 //                waterfall, funnel, box-and-whisker, world.
 //   headerFooter off, slide number, date, text.
 //   background   theme slot, solid, gradient, pattern, image.
-//   image        none and the slide-image treatments by geometry: full-bleed
+//   image        none and the image treatments by geometry: full-bleed
 //                background, side, strip, circular crop, duotone recolor.
 //   colorScheme, narrative, tone, audience   the first and last catalog record; they
 //                take no font path, so the class is only "a distinct record".
@@ -257,13 +257,28 @@ const BACKGROUNDS = {
   solid: '#12355B',
   gradient: {type: 'gradient', gradient: {angle: 90, stops: [{color: '#12355B', position: 0}, {color: '#7FB2E5', position: 1}]}},
   pattern: {type: 'pattern', pattern: {preset: 'diagStripe', foregroundColor: '#12355B', backgroundColor: '#FFFFFF'}},
-  image: {type: 'image', image: {src: 'asset:hero', fit: 'cover'}}
+  image: {type: 'image', src: 'asset:hero', fit: 'cover'}
 };
 const imageTreatments = JSON.parse(await readFile(new URL('../docs/fixtures/image-treatments.opf.json', import.meta.url), 'utf8'));
+// A treatment is the fixture slide's image background, or its image block (FA-22: placed along an edge or in the content).
 const treatment = (id) => {
   const slide = imageTreatments.slides.find((entry) => entry.id === id);
-  assert.ok(slide?.design?.slideImage, `the image-treatment fixture has ${id}`);
-  return slide.design.slideImage;
+  const background = typeof slide?.design?.background === 'object' ? slide.design.background : undefined;
+  const block = slide?.blocks?.find((entry) => entry.image !== undefined);
+  assert.ok(background || block, `the image-treatment fixture has ${id}`);
+  return background ? {background} : {block};
+};
+const PAYLOAD_KEYS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'];
+/** Give a slide a treatment: an image background, or the image block first in its blocks (root payloads become blocks). */
+const withImage = (slide, image) => {
+  if (!image) return;
+  if (image.background) { slide.design = {...slide.design, background: image.background}; return; }
+  if (!Array.isArray(slide.blocks)) {
+    const keys = PAYLOAD_KEYS.filter((key) => slide[key] !== undefined);
+    slide.blocks = keys.map((key) => ({[key]: slide[key]}));
+    for (const key of [...keys, 'type']) delete slide[key];
+  }
+  slide.blocks.unshift(structuredClone(image.block));
 };
 const IMAGES = {
   none: null,
@@ -444,9 +459,10 @@ function buildDeck(name, row, index) {
   const perSlide = (slideIndex, extra) => {
     slides[slideIndex].design = {...slides[slideIndex].design, ...extra};
   };
-  const image = (level) => (IMAGES[level] ? {slideImage: IMAGES[level]} : {});
-  perSlide(0, image(row.image[0]));
-  perSlide(row.layout.length, {...image(row.image[1]), background: BACKGROUNDS[row.background[1]]});
+  perSlide(row.layout.length, {background: BACKGROUNDS[row.background[1]]});
+  withImage(slides[0], IMAGES[row.image[0]]);
+  // An image background replaces this slide's background slot; a block keeps it.
+  withImage(slides[row.layout.length], IMAGES[row.image[1]]);
   const deck = {
     name: `Font switch matrix ${name}`,
     language: row.language,

@@ -142,7 +142,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const initial = geometry(source);
   // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
   // notices such as unresolved-content for listBullet: "image" without a logo, or an unsupported
-  // slide-image treatment, never clear by splitting content; hosts report them from their own
+  // image treatment, never clear by splitting content; hosts report them from their own
   // composition and the pages keep the source design.
   const fit = (diagnostics: LayoutDiagnostic[]) => diagnostics.filter(issue => issue.code === 'text-overflow' || issue.code === 'small-cell' || !!initial.furniture?.diagnostics.includes(issue));
   const repeatedMappings = (pageIndex: number): PaginationMapping[] => {

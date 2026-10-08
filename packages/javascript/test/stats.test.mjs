@@ -31,7 +31,7 @@ const deck = () => ({
     dimensions: { widthInches: 10, heightInches: 5 },
     logo: { default: "https://cdn.example.com/logo.png", dark: "asset:dark-logo" },
     watermark: "asset:wm",
-    background: { type: "image", image: { src: "./bg.jpg" } },
+    background: { type: "image", src: "./bg.jpg" },
     header: { left: { logo: true }, right: { text: "Confidential" } },
     footer: { center: { slideNumber: true, date: true } },
   },
@@ -64,7 +64,7 @@ const deck = () => ({
       caption: "Figure 1",
     },
     {
-      id: "s3", section: "Main", design: { fontScheme: "aptos", header: false, footer: { left: { text: "x" } }, background: { type: "image", image: { src: "./s.jpg" } } },
+      id: "s3", section: "Main", design: { fontScheme: "aptos", header: false, footer: { left: { text: "x" } }, background: "./s.jpg" },
       blocks: [
         { image: "asset:pic" },
         { image: { src: "./decor.png", alt: "" } },

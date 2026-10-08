@@ -1,5 +1,5 @@
 import { catalogKinds, type CatalogOptions } from './catalog-refs.js';
-import { resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
+import { imageBackground, resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
 import { resolveDesignRecords } from './design-records.js';
 import { isRecord, visitContentPayloads } from './content-walk.js';
 import { listVariables, type VariableKind } from './variables.js';
@@ -155,7 +155,7 @@ export interface PresentationStats {
     declaredMinutes: number | null;
   };
   images: {
-    /** Image payloads and slide images (`design.slideImage`). */
+    /** Image payloads (image blocks and `Slide.image`). */
     content: { total: number; withAlt: number; decorative: number; missingAlt: number };
     /** Logo images: `design.logo` (every LogoSet variant), deck and slides, plus organization logos. */
     logos: number;
@@ -382,8 +382,9 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     return srcOf(value) !== undefined;
   };
   const backgroundImage = (value: unknown): boolean => {
-    if (!isRecord(value) || value.type !== 'image' || !isRecord(value.image)) return false;
-    useAsset(value.image);
+    const picture = imageBackground(value);
+    if (!picture) return false;
+    useAsset(picture.src);
     return true;
   };
   const furnitureImages = (value: unknown): void => {
@@ -393,15 +394,14 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
       if (isRecord(item) && srcOf(item.image) !== undefined) { useAsset(item.image); images.headerFooter++; }
     }
   };
-  /** Deck or slide design: the asset-bearing fields. Returns the number of content images (slide image) it adds. */
-  const designAssets = (value: unknown, scope: 'deck' | 'slide'): number => {
-    if (!isRecord(value)) return 0;
+  /** Deck or slide design: the asset-bearing fields (logo, watermark, background picture, header and footer images). */
+  const designAssets = (value: unknown, scope: 'deck' | 'slide'): void => {
+    if (!isRecord(value)) return;
     logoImages(value.logo);
     if (watermarkOf(value.watermark)) { if (scope === 'deck') images.watermarks.deck = true; else images.watermarks.slides++; }
     if (backgroundImage(value.background)) { if (scope === 'deck') images.backgrounds.deck = true; else images.backgrounds.slides++; }
     furnitureImages(value.header);
     furnitureImages(value.footer);
-    return contentImage(value.slideImage);
   };
 
   // ---- deck metadata -------------------------------------------------------------------------
@@ -561,7 +561,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     } else unsectioned++;
     if (slideDesign) {
       withOwnDesign++;
-      slideImages += designAssets(slideDesign, 'slide');
+      designAssets(slideDesign, 'slide');
       for (const kind of ['header', 'footer'] as const) {
         if (slideDesign[kind] === false) headerOverrides[`${kind}Suppressed`]++;
         else if (isRecord(slideDesign[kind])) headerOverrides[kind]++;

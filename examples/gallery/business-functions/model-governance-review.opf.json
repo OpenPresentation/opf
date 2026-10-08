@@ -62,10 +62,8 @@
     "dimensions": "4:3",
     "background": {
       "type": "image",
-      "image": {
-        "src": "asset:cover-bg",
-        "fit": "cover"
-      },
+      "src": "asset:cover-bg",
+      "fit": "cover",
       "opacity": 0.2
     },
     "titleAlignment": "right",
@@ -73,7 +71,7 @@
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "top",
-    "imageFill": "crop",
+    "imageFit": "cover",
     "listBullet": "character",
     "logo": "asset:brand-logo",
     "watermark": {
@@ -98,10 +96,6 @@
       "right": {
         "slideNumber": true
       }
-    },
-    "slideImage": {
-      "src": "asset:cover-bg",
-      "position": "left"
     }
   },
   "slides": [
@@ -359,16 +353,13 @@
     {
       "id": "s39-image",
       "section": "Context",
-      "layout": "image-bleed",
       "title": "Field Context",
-      "type": "image",
-      "image": {
-        "src": "asset:supporting-photo",
-        "alt": "Analytics context photo for ClearLake Data",
-        "title": "Analytics context"
-      },
       "design": {
-        "slideImage": "asset:supporting-photo"
+        "background": {
+          "type": "image",
+          "src": "asset:supporting-photo",
+          "alt": "Analytics context photo for ClearLake Data"
+        }
       },
       "notes": "Use the image as context, not decoration."
     },
@@ -990,32 +981,6 @@
           ],
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/number-4x.svg"
-          }
-        },
-        "image-bleed": {
-          "name": "Image Bleed",
-          "summary": "Reach for it when a single image should fill the slide edge to edge, behind an optional title.",
-          "description": "One image drawn full-bleed behind the slide, with an optional title that keeps the normal slide padding. A slide names its picture as its slide image (design.slideImage, the same source as its image) and the layout places it at position background. Use it for a photograph or illustration that carries a mood or a transition between sections.",
-          "design": {
-            "slideImage": {
-              "position": "background"
-            }
-          },
-          "placeholders": [
-            {
-              "type": "title"
-            },
-            {
-              "type": "image"
-            }
-          ],
-          "tags": [
-            "Visual",
-            "Emotional",
-            "Minimal"
-          ],
-          "preview": {
-            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-bleed.svg"
           }
         },
         "code-1x": {

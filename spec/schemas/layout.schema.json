@@ -23,7 +23,7 @@
         "title",
         "title-subtitle",
         "chart-1x",
-        "image-bleed"
+        "image-focus"
       ]
     },
     "name": {
@@ -53,7 +53,7 @@
     },
     "design": {
       "$ref": "#/$defs/DesignHints",
-      "description": "The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Every key is applied from the record as the lowest-precedence default, per key: the slide's design, then the deck's design, then this record's design, then the engine default, so a layout value nobody overrides is honored without copying it anywhere (a layout's composition.mode still ranks above contentDirection; slideImage.position is the fallback position of a slide image the layout reserves). Composition, the renderer and the PPTX exporter all read the one result."
+      "description": "The layout's design hints, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Every key is applied from the record as the lowest-precedence default, per key: the slide's design, then the deck's design, then this record's design, then the engine default, so a layout value nobody overrides is honored without copying it anywhere (a layout's composition.mode still ranks above contentDirection). Composition, the renderer and the PPTX exporter all read the one result."
     },
     "placeholders": {
       "type": "array",
@@ -122,6 +122,18 @@
         "type"
       ],
       "description": "A single region inside a slide layout. Title, subtitle, and tag placeholders bind to the corresponding Slide fields; every other placeholder describes the content kind that region holds. The array order in the surrounding 'placeholders' field preserves layout region order.",
+      "if": {
+        "required": [
+          "placement"
+        ]
+      },
+      "then": {
+        "properties": {
+          "type": {
+            "const": "image"
+          }
+        }
+      },
       "properties": {
         "type": {
           "type": "string",
@@ -141,6 +153,40 @@
             "timeline"
           ],
           "description": "The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' and 'tag' are the heading kinds and bind to Slide.title, Slide.subtitle and Slide.tag. 'text' holds text and bullets; 'list' holds items. 'image' is filled by an image payload and 'video' by a video payload. 'metric', 'quote', 'timeline', 'chart', 'table' and 'code' are filled by the payload of the same name; a metric region shows the metric payload with its optional label, description, unit, delta, trend and sentiment."
+        },
+        "placement": {
+          "$ref": "#/$defs/ImagePlacement",
+          "description": "Image placeholders only. Bleeds the slide's image for this region to one slide edge, as an image block's placement does: the n-th image placeholder places the slide's n-th top-level image (Slide.image or an image block in blocks) unless that block sets its own placement. The headings and the other content compose in the rest of the slide."
+        }
+      }
+    },
+    "ImagePlacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge"
+      ],
+      "description": "The same object as ImagePlacement in opf.schema.json: a band along one slide edge for the image, edge to edge, with the rest of the slide left to the headings and the other content.",
+      "properties": {
+        "edge": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right",
+            "top",
+            "bottom"
+          ],
+          "description": "The slide edge the image bleeds to. In a right-to-left deck 'left' is the start side, drawn at the right."
+        },
+        "size": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 0.9,
+          "description": "Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5."
+        },
+        "inset": {
+          "type": "boolean",
+          "description": "Draw the frame inside the slide padding on every side of the band instead of edge to edge. Default false."
         }
       }
     },
@@ -190,13 +236,14 @@
           ],
           "description": "Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there."
         },
-        "imageFill": {
+        "imageFit": {
           "type": "string",
           "enum": [
-            "crop",
-            "fit"
+            "cover",
+            "contain",
+            "stretch"
           ],
-          "description": "How images fill their region: 'crop' covers the region, 'fit' shows the whole image."
+          "description": "Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame."
         },
         "listBullet": {
           "type": "string",
@@ -205,27 +252,6 @@
             "image"
           ],
           "description": "Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet."
-        },
-        "slideImage": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "position"
-          ],
-          "description": "A slide-level image region the layout reserves, separate from any content image. Its presence is what lets a deck-wide design.slideImage apply to slides on this layout. The image itself comes from the slide or the deck design.",
-          "properties": {
-            "position": {
-              "type": "string",
-              "enum": [
-                "background",
-                "top",
-                "bottom",
-                "left",
-                "right"
-              ],
-              "description": "Where the slide-level image sits relative to the content. 'background' is a full-bleed image behind the content; the other positions give the image a band along that edge. Used when the slide's or deck's design.slideImage gives no position."
-            }
-          }
         }
       }
     },

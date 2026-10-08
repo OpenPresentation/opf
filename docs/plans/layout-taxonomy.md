@@ -1,5 +1,7 @@
 # Collapsing the OPF layout taxonomy
 
+> Superseded by [the 0.15 design](../programs/format-audit/0.15-design.md): a full-bleed photo is the slide's `design.background`, a positioned picture is an image block with `placement`, and image fit is `design.imageFit`. Kept as history. fa-stale-refs: history
+
 > **Status:** Shipped (April 2026, before the first npm release, so no published version ever carried the old 400-record catalog). Kept for historical context; details below may not match the final shipped schema.
 
 Plan for collapsing the 400 layout records in [`spec/catalogs/layouts/`](../../spec/catalogs/layouts/) to roughly 23 canonical layouts and removing the old master-derived records from the public catalog. Visual variations (`-left`, `-box`, `-slideimage`, `-vertical`, etc.) become design overrides rather than separate layout records.

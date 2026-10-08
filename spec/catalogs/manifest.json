@@ -55,8 +55,8 @@
     },
     "layouts": {
       "mode": "subset",
-      "records": 100,
-      "contentSha256": "e076dd737083e0daaba396f6033d19d196b483b01e957045002de018c8f97fa2",
+      "records": 99,
+      "contentSha256": "74f4dc6dfa1f5d1047aca31f58f27088fa8edffd5dc02ed0b96313dd06bb45a7",
       "gallery": {
         "records": 485,
         "contentSha256": "f245b0fbcc4197e5533dcb9453d30bbba88015ed1dbc02a43939aadc7cd0cf3e"
@@ -65,7 +65,7 @@
     "narratives": {
       "mode": "subset",
       "records": 48,
-      "contentSha256": "9222e36d1fb1a54f0811b9851c5359e05f570a0a931cceca31bdbe27a888d582",
+      "contentSha256": "2c34008d5b8d25cbc4150616783b3fc2f119193a4a541bd38ec47f5b255c0220",
       "gallery": {
         "records": 48,
         "contentSha256": "52f00dfdee8f0323d02171770520d7224de5582f2c73c0fb7ceba434fbea4029"

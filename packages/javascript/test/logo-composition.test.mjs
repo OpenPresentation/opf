@@ -105,13 +105,13 @@ test('cover and section slides draw the lockup logo above the centered heading g
   }
 });
 
-test('the cover logo respects header furniture and slide-image bands, and wrapped headings recenter below it', () => {
+test('the cover logo respects header furniture and placed image bands, and wrapped headings recenter below it', () => {
   const presentation = {design: {logo: asset('deck'), header: {left: {text: 'Header'}}}};
   const result = composeSlide({title: 'Cover'}, {layout: titleOnly, presentation});
   assert.ok(result.logo.box.y >= result.furniture.headerBottom, 'below the header band');
   assert.ok(byField(result, 'title').box.y >= result.logo.box.y + result.logo.box.height);
-  const banded = composeSlide({title: 'Cover', design: {slideImage: {src: asset('photo'), position: 'left'}}}, {layout: titleOnly, presentation: {design: {logo: asset('deck')}}});
-  assert.ok(Math.abs(banded.logo.box.x - (banded.slideImage.region.width + 0.08 * 720)) < 1e-6, 'inside the free area beside the band');
+  const banded = composeSlide({title: 'Cover', blocks: [{image: asset('photo'), placement: {edge: 'left'}}]}, {layout: titleOnly, presentation: {design: {logo: asset('deck')}}});
+  assert.ok(Math.abs(banded.logo.box.x - (banded.items.find(item => item.field === 'image').image.region.width + 0.08 * 720)) < 1e-6, 'inside the free area beside the band');
   assert.ok(banded.logo.box.width <= banded.contentBox.width + 1e-6);
   const tall = composeSlide({title: 'A very long cover title that wraps onto several lines of text to fill the whole safe area of the slide', subtitle: 'And a subtitle that is also long enough to wrap across the available width more than once on this canvas'}, {width: 400, height: 300, layout: titleSubtitle, presentation: {design: {logo: asset('deck')}}});
   assert.ok(tall.logo);
