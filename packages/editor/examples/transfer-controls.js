@@ -12,7 +12,7 @@ import {
   normalizeGalleryUrl,
 } from "../src/galleries.js";
 import { renderSlideSvg } from "@openpresentation/opf-render/svg";
-import { previewFonts, whenFontsReady } from "../src/font-gate.js";
+import { whenFontsReady } from "../src/font-gate.js";
 import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
 
 // FA-23: pasted slides bring their catalog records (core copySlides). Say which records did not keep their reference, so a renamed
@@ -119,7 +119,7 @@ export function installTransferControls({
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          const svg = renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts: previewFonts(fonts) });
+          const svg = renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts, embedFonts: false });
           $("import-preview").innerHTML = svg;
           prepared = result;
           error("");
@@ -493,7 +493,7 @@ export function installTransferControls({
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
-          renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts: previewFonts(fonts) });
+          renderSlideSvg(result.presentation, result.slideIndex, { catalogs: editor.catalogs, fonts, embedFonts: false });
           setSlideIndex(result.slideIndex);
           editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",

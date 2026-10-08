@@ -13,7 +13,7 @@ import { createEditorSession, saveDocument } from '../src/index.js';
 // snapshot core publishes as an opt-in subpath) and hands the session's one list to every render, check, embed and export.
 import { catalogDisplay, defaultCatalog } from '@openpresentation/opf/catalog';
 import {createCanvasEditor} from '../src/canvas.js';
-import { previewFonts, whenFontsReady } from '../src/font-gate.js';
+import { whenFontsReady } from '../src/font-gate.js';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
 import { renderSlideSvg } from '@openpresentation/opf-render/svg';
 import * as renderFontCore from '@openpresentation/opf-render/fonts';
@@ -150,7 +150,7 @@ const thumbnailKey = (deck, index) => JSON.stringify([index, deck.slides.length,
 function thumbnailHtml(deck, index) {
   const key = thumbnailKey(deck, index);
   if (!thumbnailCache.has(key)) {
-    try { thumbnailCache.set(key, renderSlideSvg(deck, index, {...renderOptions(), fonts: previewFonts(fonts), trace: false})); }
+    try { thumbnailCache.set(key, renderSlideSvg(deck, index, {...renderOptions(), fonts, embedFonts: false, trace: false})); }
     catch { thumbnailCache.set(key, 'Preview unavailable'); }
   }
   return thumbnailCache.get(key);
@@ -371,7 +371,7 @@ function previewSource() {
     // clicks it the moment the page is ready (the gallery handoff) must not hit a disabled button because the starting deck's faces are still loading.
     loading:()=>{element('json-error').textContent='Loading fonts for this document…';},
     ready:()=>{
-      const svg=renderSlideSvg(deck,Math.min(slideIndex,(deck.slides?.length ?? 1)-1),{...renderOptions(),fonts:previewFonts(fonts)});
+      const svg=renderSlideSvg(deck,Math.min(slideIndex,(deck.slides?.length ?? 1)-1),{...renderOptions(),fonts,embedFonts:false});
       element('source-preview').innerHTML=svg;element('json-error').textContent='';element('apply-json').disabled=false;
     },
     failed:fail,
@@ -436,7 +436,7 @@ element('open-properties').onclick=()=>{
  propertiesDialog.showModal();
  propertiesInspector?.destroy();
  propertiesInspector=createSchemaInspector(element('schema-properties'),{editor,path:`/slides/${slideIndex}`,
-  onDraft:({presentation:deck})=>{const token=++propertiesPreviewToken;whenFontsReady(fonts,deck,{renderOptions:renderOptions(),isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=renderSlideSvg(deck,Math.min(slideIndex,deck.slides.length-1),{...renderOptions(),fonts:previewFonts(fonts),trace:true});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
+  onDraft:({presentation:deck})=>{const token=++propertiesPreviewToken;whenFontsReady(fonts,deck,{renderOptions:renderOptions(),isCurrent:()=>token===propertiesPreviewToken,loading:()=>{element('properties-preview-status').textContent='Loading fonts for this document…';},ready:()=>{element('properties-preview').innerHTML=renderSlideSvg(deck,Math.min(slideIndex,deck.slides.length-1),{...renderOptions(),fonts,embedFonts:false,trace:true});element('properties-preview-status').textContent='Click slide content to find its field. Metadata is stored with the deck.';},failed:error=>{element('properties-preview-status').textContent='Preview unavailable: '+error.message;}});},
   onCommit:()=>status('Presentation properties updated'),onError:error=>status(error.message)
  });
 };

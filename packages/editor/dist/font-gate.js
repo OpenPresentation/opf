@@ -14,17 +14,6 @@ export const FONTS_UNAVAILABLE = "fonts-unavailable";
 const GATE = Symbol("opf-editor.fontGate");
 
 /**
- * The fonts a preview draws with: the handle's text measurement and nothing else. A full handle also lists `embeddedFonts`, which
- * the renderer writes into every SVG it returns (an export needs that, so the SVG carries its faces); a preview inside a page
- * that already loaded the faces would repeat megabytes of base64 in every canvas, thumbnail and panel preview. The measurement
- * is read from the handle at each use, so faces it loads later still measure.
- */
-export function previewFonts(fonts) {
-  if (!fonts || typeof fonts !== "object") return undefined;
-  return { get textMeasurement() { return fonts.textMeasurement; } };
-}
-
-/**
  * The gate over a fonts handle: the two calls the canvas and the export need, with the editor's error contract.
  *
  * - `pending(presentation, renderOptions?)` lists the faces (vendored files and script packages) the document needs that are

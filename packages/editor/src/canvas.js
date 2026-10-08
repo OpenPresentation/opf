@@ -23,7 +23,7 @@ import { createRichTextInput } from "./rich-text-input.js";
 import { textInputOffsetAtPoint } from "./text-pointer.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 import { createImageCropper } from "./image-cropper.js";
-import { FONTS_PENDING, fontGate, fontsPendingError, previewFonts, whenFontsReady } from "./font-gate.js";
+import { FONTS_PENDING, fontGate, fontsPendingError, whenFontsReady } from "./font-gate.js";
 import { checkFormat, firstErrorMessage } from "./checks.js";
 export { getEditableFields } from "./canvas-fields.js";
 export { whenFontsReady, FONTS_PENDING, FONTS_UNAVAILABLE } from "./font-gate.js";
@@ -75,7 +75,9 @@ export function createCanvasEditor(container, options = {}) {
   const handle = options.fonts, fonts = fontGate(handle);
   // The renderer draws with the session's registered catalogs (plus any `renderOptions.catalogs`): the same list core resolves with.
   const resolveOptions = () => ({ ...renderOptions, catalogs: mergeCatalogs(editor.catalogs, renderOptions.catalogs) });
-  const drawOptions = (extra) => ({ ...resolveOptions(), fonts: previewFonts(handle), ...extra });
+  // RR-61: the handle measures, and the canvas embeds no face: the browser handle already added its faces to the page, so
+  // `@font-face` data would repeat megabytes of base64 in every redraw. Exports keep the default and carry the faces they draw.
+  const drawOptions = (extra) => ({ ...resolveOptions(), fonts: handle, embedFonts: false, ...extra });
   let slideIndex = options.slideIndex ?? 0,
     // RR-32: the canvas edits the document as authored, so a template's {{tokens}} stay visible and an inline edit never
     // overwrites one with its resolved text. The Fill template panel previews the resolved deck. Pass `variables` to override.

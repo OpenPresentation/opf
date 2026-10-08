@@ -85,6 +85,9 @@ try {
   await tab.goto(`${base}/index.html`);
   await tab.locator('#canvas svg').waitFor();
   const run = (fn, arg) => tab.evaluate(fn, arg);
+  // RR-61: the canvas draws with the handle and `embedFonts: false`: the page holds the faces, so the SVG carries none.
+  const embedsNoFace = async (name) => assert.equal(await run(() => /@font-face/.test(document.querySelector('#canvas svg').outerHTML)), false, `${name}: the canvas SVG embeds no face`);
+  await embedsNoFace('first draw');
   const settle = () => tab.waitForFunction(() => document.querySelector('#canvas svg') && !document.querySelector('.opf-canvas-fonts') && window.harness.pending(window.harness.editor.presentation).length === 0, undefined, { timeout: 60000 });
   const state = () => run(() => ({
     runs: [...document.querySelectorAll('#canvas svg text')].map(node => ({ text: node.textContent, family: (node.getAttribute('font-family') ?? node.closest('[font-family]')?.getAttribute('font-family') ?? '').split(',').map(part => part.trim().replace(/^"|"$/g, '')) })),
@@ -151,6 +154,7 @@ try {
   assert.ok(pendingOpenSans.some(file => /open-sans/.test(file)), `Open Sans is pending: ${pendingOpenSans}`);
   await settle();
   now = await clean('font scheme Open Sans');
+  await embedsNoFace('lazily loaded Open Sans');
   assert.ok(now.runs.length > 0 && now.runs.every(run => run.family[0] === 'Open Sans'), JSON.stringify(now.runs.map(run => run.family[0])));
   const pendingBarlow = await run(() => { window.harness.switchDimension(window.harness.editor, 'font-schemes', 'barlow-preview', { record: { id: 'barlow-preview', name: 'Barlow', major: 'Barlow', minor: 'Barlow' } }); return window.harness.pending(window.harness.editor.presentation); });
   assert.ok(pendingBarlow.some(file => /barlow/.test(file)), `Barlow is pending: ${pendingBarlow}`);
