@@ -9,6 +9,24 @@ opf to-md deck.opf.json deck.md              # a deck as Markdown that reads bac
 opf to-md deck.opf.json deck.md --fail-on warning   # fail if anything needed YAML (stay in plain Markdown)
 ```
 
+## A Markdown deck in every command
+
+A file named `*.opf.md` is a Markdown deck, and every `opf` command that reads or writes a deck uses it directly, with no conversion step: JSON stays canonical, and YAML and Markdown are authoring forms of the same data.
+
+```sh
+opf validate deck.opf.md                                  # findings are located at Markdown lines (deck.opf.md:3:1)
+opf render deck.opf.md --out slides
+opf export deck.opf.md --format pptx --out deck.pptx
+opf edit deck.opf.md --patch changes.json --in-place     # the file stays Markdown
+opf format deck.opf.md                                    # canonical Markdown; --check exits 1 if it would change
+opf validate - --input-format markdown < deck.txt         # stdin and other names need --input-format markdown (md)
+```
+
+- Only `.opf.md` counts. A plain `.md` outline or README is not a deck; read it with `opf from-md` (`--split headings` for an outline).
+- A command writes Markdown for an output ending `.opf.md` or `--format markdown`, else the format it read. `opf format` rewrites to the canonical form, so hand layout the dialect treats as equivalent is normalized.
+- A Markdown syntax error exits 2 with `line:column` (`opf validate` reports a `markdown/<rule>` finding and exits 1). When a rewrite has to put content into an `opf-slide` or `opf-block` fence that was not there, the CLI warns on stderr; nothing is lost.
+- In code: `readDeck(text, { filename })` and `writeDeck(deck, { filename })` from `@openpresentation/opf` read and write JSON, YAML or Markdown by file name.
+
 ## The dialect in one screen
 
 ````md

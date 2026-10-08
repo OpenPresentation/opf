@@ -1,6 +1,6 @@
 // `opf validate`: the one checker (format, references, policy, accessibility, layout, content). It reads the file as strict
 // JSON text, so syntax errors and duplicate keys come back with line and column, or as YAML (a name ending .yaml/.yml, or
-// --input-format yaml), with every finding located in the YAML, and prints the `validate` report as JSON or as one line
+// --input-format yaml) or a Markdown deck (.opf.md, or --input-format markdown), with every finding located in the text, and prints the `validate` report as JSON or as one line
 // per finding. `--list-rules` lists what it can report.
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -26,9 +26,10 @@ keeps meaning correct OPF.
 --only runs just these rules or categories (full ids, bare names or category names, comma-separated); --ignore skips them.
 --fail-on picks the exit threshold (default error). A config file may hold {catalogs, contracts, severity, only, ignore,
 ignorePaths, thresholds, chartPalette}; --only replaces the file's only and --ignore adds to its ignore.
-Exit codes: 0 no finding at or above --fail-on, 1 findings at or above it (or a file that is not valid JSON or YAML), 2 usage,
+Exit codes: 0 no finding at or above --fail-on, 1 findings at or above it (or a file that is not valid JSON, YAML or Markdown), 2 usage,
 configuration or I/O error. Validate is read-only and local; it never fetches images, fonts or catalogs.
-A file ending .yaml or .yml (or stdin with --input-format yaml) is read as YAML; findings are located in it.`;
+A file ending .yaml or .yml (or stdin with --input-format yaml) is read as YAML, and one ending .opf.md (or stdin with
+--input-format markdown) as a Markdown deck; findings are located in it. A plain .md file is not a deck.`;
 
 class ValidateUsageError extends Error {}
 

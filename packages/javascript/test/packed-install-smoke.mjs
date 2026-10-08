@@ -327,6 +327,20 @@ assert.throws(()=>toYaml({slides:'x'}),OPFYamlError);
 console.log('Installed YAML: strict dialect, canonical writer and located errors work offline.');
 `);
     const yamlRun=await run(process.execPath,['yaml.mjs'],{cwd:projectDir});process.stdout.write(yamlRun.stdout);
+    assertTarIncludes(files,'package/dist/deck.js');assertTarIncludes(files,'package/dist/deck.d.ts');
+    await writeFile(path.join(projectDir,'deck.mjs'),`
+import assert from 'node:assert/strict';
+import {readDeck as rootReadDeck} from '@openpresentation/opf';
+import {readDeck,writeDeck,deckFormatOf} from '@openpresentation/opf/deck';
+globalThis.fetch=()=>{throw new Error('Offline deck reading must not fetch');};
+assert.equal(rootReadDeck,readDeck);
+const deck={name:'Installed',slides:[{id:'a',title:'One'}]};
+for(const format of ['json','yaml','markdown']){const back=readDeck(writeDeck(deck,{format}),{format});assert.equal(back.valid,true);assert.deepEqual(back.presentation,deck);}
+assert.equal(deckFormatOf('deck.opf.md'),'markdown');assert.equal(deckFormatOf('deck.md'),'json');
+assert.equal(readDeck('---',{filename:'x.opf.md'}).findings[0].ruleId.startsWith('markdown/'),true);
+console.log('Installed readDeck/writeDeck: JSON, YAML and Markdown decks read and write offline.');
+`);
+    const deckRun=await run(process.execPath,['deck.mjs'],{cwd:projectDir});process.stdout.write(deckRun.stdout);
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {
     const source=(await readFile(path.join(packageRoot,'test',file),'utf8'))

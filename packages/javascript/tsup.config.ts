@@ -2,6 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: {
+    deck: "src/deck.ts",
     markdown: "src/markdown.ts",
     yaml: "src/yaml.ts",
     patch: "src/patch.ts",

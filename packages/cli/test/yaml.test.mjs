@@ -421,8 +421,8 @@ describe("help", () => {
     const help = run(["--help"]).stdout;
     assert.match(help, /opf from-yaml <deck\.yaml\|->/);
     assert.match(help, /opf to-yaml <deck\.opf\.json\|->/);
-    assert.match(help, /--input-format <json\|yaml>/);
-    assert.match(help, /--format <json\|yaml>/);
+    assert.match(help, /--input-format <json\|yaml\|markdown>/);
+    assert.match(help, /--format <json\|yaml\|markdown>/);
     assert.match(help, /comments are not preserved|Rewriting a YAML file does not preserve its comments/);
   });
 });

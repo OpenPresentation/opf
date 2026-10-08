@@ -1,11 +1,14 @@
-// Reading and writing decks in the two serializations OPF has (RR-56): JSON, the canonical and interchange form, and
-// YAML (`.opf.yaml`), the authoring form of the same data. Every command that reads or writes a deck goes through
-// here, so a file ending `.yaml` or `.yml` works everywhere and `--input-format` / `--format` pick the form for stdin,
-// stdout and other names. The YAML dialect itself lives in core, `@openpresentation/opf/yaml`.
-import { type ValidateOptions, type ValidationReport, validate } from "@openpresentation/opf";
-import { type YamlFinding, toYaml, parseYamlData, scanYamlComments, fromYaml } from "@openpresentation/opf/yaml";
+// Reading and writing decks in the three serializations OPF has: JSON, the canonical and interchange form, YAML
+// (`.opf.yaml`, RR-56) and Markdown (`.opf.md`, RR-60), the authoring forms of the same data. Every command that reads or
+// writes a deck goes through here, so a file ending `.yaml`, `.yml` or `.opf.md` works everywhere and `--input-format` /
+// `--format` pick the form for stdin, stdout and other names. The dialects live in core, which also has the one reader and
+// the one writer used here (`readDeck`, `writeDeck`, `@openpresentation/opf/deck`); this file adds what a command needs on top:
+// the CLI's catalogs, the error messages with their positions, the YAML modeline and comment count, and the rewrite warnings.
+import { type DeckFormat, type Finding, type ValidateOptions, type ValidationReport, deckFormatOf, readDeck, writeDeck } from "@openpresentation/opf";
+import { CLI_CATALOGS } from "./catalogs.js";
+import { parseYamlData, scanYamlComments } from "@openpresentation/opf/yaml";
 
-export type DeckFormat = "json" | "yaml";
+export type { DeckFormat };
 
 /** A deck or patch read from a file or stdin. `raw` is the text as read; `value` the decoded data. */
 export interface DeckSource {
@@ -16,56 +19,87 @@ export interface DeckSource {
   yaml?: { comments: number; modeline?: string };
 }
 
-/** An input that is not valid JSON or YAML. `details` is the located findings, for the JSON error report. */
+/** An input that is not valid JSON, YAML or Markdown. `details` is the located findings, for the JSON error report under `key`. */
 export class DeckReadError extends Error {
   constructor(
     message: string,
     readonly details?: Record<string, unknown>,
+    readonly key: "json" | "yaml" | "markdown" = "yaml",
   ) {
     super(message);
   }
 }
 
-let forcedInput: DeckFormat | undefined;
-
-/** Set by the global `--input-format` option: the format of stdin and of files whose name does not end `.yaml`/`.yml`. */
-export function setInputFormat(value: string | undefined): void {
-  if (value !== undefined && value !== "json" && value !== "yaml") throw new DeckReadError("--input-format takes json or yaml.");
-  forcedInput = value;
+/** The names a format goes by in `--input-format` and `--format`: `md` is `markdown`. */
+export function formatNamed(value: unknown): DeckFormat | undefined {
+  return value === "json" || value === "yaml" ? value : value === "markdown" || value === "md" ? "markdown" : undefined;
 }
 
-const YAML_NAME = /\.ya?ml$/i;
-export const isYamlName = (file: string): boolean => file !== "-" && YAML_NAME.test(file);
+/** True when `--format` names an output deck format that is not JSON (`fill` and `import-data` use `--format csv|tsv|json` for their data). */
+export const isDeckFormatFlag = (value: unknown): boolean => value === "yaml" || value === "markdown" || value === "md";
 
-/** A file ending `.yaml` or `.yml` is YAML; stdin and other names follow `--input-format`, with JSON as the default. */
+const FORMAT_MESSAGE = "takes json, yaml or markdown (md).";
+let forcedInput: DeckFormat | undefined;
+
+/** Set by the global `--input-format` option: the format of stdin and of files whose name does not say one (`.yaml`, `.yml`, `.opf.md`). */
+export function setInputFormat(value: string | undefined): void {
+  if (value === undefined) forcedInput = undefined;
+  else {
+    const format = formatNamed(value);
+    if (!format) throw new DeckReadError(`--input-format ${FORMAT_MESSAGE}`);
+    forcedInput = format;
+  }
+}
+
+/** The format a file name stands for besides JSON: `.yaml`/`.yml` and `.opf.md`. A plain `.md` file is never a deck. */
+const nameFormatOf = (file: string): DeckFormat | undefined => (file === "-" ? undefined : deckFormatOf(file) === "json" ? undefined : deckFormatOf(file));
+export const isYamlName = (file: string): boolean => nameFormatOf(file) === "yaml";
+export const isMarkdownName = (file: string): boolean => nameFormatOf(file) === "markdown";
+
+/** A file ending `.yaml`, `.yml` or `.opf.md` has that format; stdin and other names follow `--input-format`, with JSON as the default. */
 export function inputFormatOf(file: string): DeckFormat {
-  return isYamlName(file) ? "yaml" : (forcedInput ?? "json");
+  return nameFormatOf(file) ?? forcedInput ?? "json";
 }
 
 export const nameOf = (file: string): string => (file === "-" ? "stdin" : file);
 
-function yamlFailure(name: string, findings: readonly YamlFinding[]): DeckReadError {
-  const first = findings[0]!;
+const LABEL: Record<DeckFormat, string> = { json: "JSON", yaml: "YAML", markdown: "Markdown" };
+
+function failure(name: string, format: DeckFormat, findings: readonly Finding[]): DeckReadError {
+  const first = findings[0] as Finding & { location?: { line: number; column: number } };
   const more = findings.length > 1 ? ` (and ${findings.length - 1} more)` : "";
-  return new DeckReadError(`Invalid YAML in ${name} at line ${first.location.line}, column ${first.location.column}: ${first.message.replace(/^YAML: /, "")} [${first.ruleId}]${more}`, { file: name, findings });
+  const where = first.location ? ` at line ${first.location.line}, column ${first.location.column}` : "";
+  return new DeckReadError(`Invalid ${LABEL[format]} in ${name}${where}: ${first.message.replace(/^YAML: /, "")} [${first.ruleId}]${more}`, { file: name, findings }, format);
 }
 
-/** Decode a deck (`kind: "deck"`: one mapping) or a patch (any JSON-compatible root) from text in `format`. Throws `DeckReadError`. */
+/**
+ * Decode a deck (`kind: "deck"`: one mapping) or a patch (any JSON-compatible root, JSON or YAML) from text in `format`,
+ * through core's `readDeck`. The syntax is checked here and nothing else: the commands check the OPF. Throws `DeckReadError`.
+ */
 export function decode(raw: string, file: string, format: DeckFormat, kind: "deck" | "patch" = "deck"): DeckSource {
   const name = nameOf(file);
-  if (format === "json") {
-    try {
-      return { raw, value: JSON.parse(raw.replace(/^﻿/, "")) as unknown, format };
-    } catch {
-      throw new DeckReadError(`Invalid JSON in ${name}.`);
+  if (kind === "patch") {
+    if (format === "markdown") throw new DeckReadError(`A JSON Patch is JSON or YAML, not Markdown (${name}).`);
+    if (format === "json") {
+      try {
+        return { raw, value: JSON.parse(raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw) as unknown, format };
+      } catch {
+        throw new DeckReadError(`Invalid JSON in ${name}.`, undefined, "json");
+      }
     }
+    const parsed = parseYamlData(raw);
+    if (parsed.findings.length) throw failure(name, "yaml", parsed.findings);
+    return { raw, value: parsed.value, format, yaml: yamlFacts(raw) };
   }
-  const parsed = kind === "deck" ? fromYaml(raw, { validate: false }) : parseYamlData(raw);
-  const errors = parsed.findings.filter((d) => d.severity === "error");
-  if (errors.length) throw yamlFailure(name, errors);
-  const value = kind === "deck" ? (parsed as ReturnType<typeof fromYaml>).presentation : (parsed as ReturnType<typeof parseYamlData>).value;
+  const read = readDeck(raw, { format, validate: false, catalogs: CLI_CATALOGS });
+  const errors = read.findings.filter((found) => found.severity === "error");
+  if (errors.length) throw failure(name, format, errors);
+  return { raw, value: read.presentation, format, ...(format === "yaml" ? { yaml: yamlFacts(raw) } : {}) };
+}
+
+function yamlFacts(raw: string): { comments: number; modeline?: string } {
   const comments = scanYamlComments(raw);
-  return { raw, value, format, yaml: { comments: comments.count, ...(comments.modeline === undefined ? {} : { modeline: comments.modeline }) } };
+  return { comments: comments.count, ...(comments.modeline === undefined ? {} : { modeline: comments.modeline }) };
 }
 
 /** The line printed on stderr when a command that rewrites a YAML file would lose its comments. */
@@ -74,16 +108,36 @@ export function commentWarning(source: DeckSource, file: string): string | undef
   return count > 0 ? `warning: ${nameOf(file)} has ${count} comment${count === 1 ? "" : "s"}; comments are not preserved when OPF rewrites a YAML file.\n` : undefined;
 }
 
-/** The output format: an explicit `--format`, else the output file name (`.yaml`, `.yml`, `.json`), else the format of the deck that was read, else JSON. */
+const FENCE = /^[ \t]*(?:`{3,}|~{3,})[ \t]*opf-(?:slide|block)\b/gm;
+const fencesIn = (text: string): number => text.match(FENCE)?.length ?? 0;
+
+/**
+ * The line printed on stderr when Markdown written for a deck holds more `opf-slide` and `opf-block` fences than the Markdown
+ * that was read (none, when the deck came from JSON or YAML): the dialect has no syntax for that content, so the writer
+ * carries it as YAML in a fence, which reads back losslessly but is less plain than the hand-written text.
+ */
+export function fenceWarning(text: string, source: DeckSource | undefined, file: string): string | undefined {
+  const added = fencesIn(text) - (source?.format === "markdown" ? fencesIn(source.raw) : 0);
+  return added > 0 ? `warning: ${nameOf(file)} has ${added} more opf-slide/opf-block fence${added === 1 ? "" : "s"} than before: the Markdown dialect has no syntax for that content, so it is written as YAML in a fence (nothing is lost).\n` : undefined;
+}
+
+/**
+ * The output format: an explicit `--format`, else the output file name (`.opf.md`, `.yaml`, `.yml`, `.json`), else the format of
+ * the deck that was read, else JSON.
+ */
 export function outputFormatOf(output: string, flag: string | boolean | undefined, source?: DeckSource): DeckFormat {
   if (flag !== undefined) {
-    if (flag !== "json" && flag !== "yaml") throw new DeckReadError("--format takes json or yaml.");
-    return flag;
+    const format = formatNamed(flag);
+    if (!format) throw new DeckReadError(`--format ${FORMAT_MESSAGE}`);
+    return format;
   }
-  if (output !== "-" && isYamlName(output)) return "yaml";
+  if (output !== "-" && nameFormatOf(output)) return nameFormatOf(output) as DeckFormat;
   if (output !== "-" && /\.json$/i.test(output)) return "json";
   return source?.format ?? "json";
 }
+
+/** The extension of a deck written in `format`: `deck.opf.json`, `deck.opf.yaml`, `deck.opf.md`. */
+export const deckExtension = (format: DeckFormat): string => `opf.${format === "markdown" ? "md" : format}`;
 
 export interface SerializeOptions {
   /** YAML: start with a generated `# yaml-language-server: $schema=...` line. */
@@ -92,22 +146,19 @@ export interface SerializeOptions {
   modeline?: string;
 }
 
-/** The text of a deck in `format`: JSON as the other commands write it, YAML in canonical form. */
+/** The text of a deck in `format`, through core's `writeDeck`: JSON as the other commands write it, YAML and Markdown in canonical form. */
 export function serialize(document: unknown, format: DeckFormat, options: SerializeOptions = {}): string {
-  if (format === "yaml" && options.modeline !== undefined) return `${options.modeline}
-${toYaml(document).yaml}`;
-  return format === "yaml" ? toYaml(document, { schemaComment: !!options.schemaComment }).yaml : `${JSON.stringify(document, null, 2)}\n`;
+  if (format === "yaml" && options.modeline !== undefined) return `${options.modeline}\n${writeDeck(document, { format })}`;
+  return writeDeck(document, { format, schemaComment: !!options.schemaComment });
 }
 
 /**
- * Check deck text as `opf validate` does: JSON text through `validate` (syntax errors and duplicate keys located), YAML
- * through `fromYaml` (every finding located in the YAML). `deck` is the decoded deck, undefined when the text does not parse.
+ * Check deck text as `opf validate` does, through core's `readDeck`: JSON text through `validate` (syntax errors and duplicate keys
+ * located), YAML and Markdown through their readers (every finding located in the text). `deck` is the decoded deck, undefined
+ * when the text does not parse.
  */
 export function checkText(raw: string, format: DeckFormat, options: ValidateOptions = {}): { report: ValidationReport; deck: Record<string, unknown> | undefined } {
-  if (format === "yaml") {
-    const { presentation, ...report } = fromYaml(raw, { validate: options });
-    return { report, deck: report.findings.some((found) => found.ruleId.startsWith("yaml/")) ? undefined : (presentation as unknown as Record<string, unknown>) };
-  }
-  const report = validate(raw, options);
-  return { report, deck: report.schemaValid === null ? undefined : (JSON.parse(raw.replace(/^﻿/, "")) as Record<string, unknown>) };
+  const { presentation, format: _format, ...report } = readDeck(raw, { format, validate: options });
+  const broken = format === "json" ? report.schemaValid === null : report.findings.some((found) => found.ruleId.startsWith(format === "yaml" ? "yaml/" : "markdown/") && found.severity === "error");
+  return { report, deck: broken ? undefined : (presentation as unknown as Record<string, unknown>) };
 }

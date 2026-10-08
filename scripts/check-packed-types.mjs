@@ -67,6 +67,7 @@ import {importData} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
 import {fromMarkdown, toMarkdown} from '@openpresentation/opf/markdown';
 import {fromYaml, toYaml, OPFYamlError, type YamlFinding} from '@openpresentation/opf/yaml';
+import {readDeck, writeDeck, type DeckFormat, type ReadDeckResult} from '@openpresentation/opf/deck';
 const deck: Presentation = {slides: [{title: 'Typed consumer'}]};
 const physicalFace: FontFaceSelection = {family: 'Roboto SemiBold', bold: false, italic: false};
 const measuredStyle: TextStyle = {fontFamily: 'Roboto SemiBold', fontWeight: 600, fontFace: physicalFace};
@@ -91,6 +92,13 @@ const markdown: string = toMarkdown(deck).markdown;
 // @ts-expect-error unsupported mode must be rejected
 toMarkdown(deck, {unsupported: 'maybe'});
 void slides; void firstMarkdownFinding; void firstFinding; void markdown;
+const deckFormat: DeckFormat = 'markdown';
+const readResult: ReadDeckResult = readDeck('# Typed', {format: deckFormat, filename: 'deck.opf.md', validate: {only: ['format']}});
+const readFormat: DeckFormat = readResult.format;
+const deckText: string = writeDeck(readResult.presentation, {filename: 'deck.opf.md'});
+// @ts-expect-error unknown deck format must be rejected
+readDeck('{}', {format: 'toml'});
+void readFormat; void deckText;
 const parsedYaml = fromYaml('slides:\\n  - title: Typed\\n', {aliases: false});
 const yamlSlides: Presentation['slides'] = parsedYaml.presentation.slides;
 const yamlFinding: YamlFinding | undefined = parsedYaml.findings[0];

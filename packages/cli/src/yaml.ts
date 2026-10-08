@@ -8,7 +8,7 @@ import path from "node:path";
 import { OPFYamlError, toYaml, fromYaml } from "@openpresentation/opf/yaml";
 import type { CliContext } from "./context.js";
 import { FAIL_ON_MESSAGE, parseFailOn, reaches } from "./check.js";
-import { commentWarning, decode, inputFormatOf, isYamlName } from "./deck.js";
+import { commentWarning, decode, inputFormatOf, isMarkdownName, isYamlName } from "./deck.js";
 
 export const YAML_USAGE = `  opf from-yaml <deck.yaml|-> [output.opf.json|-] [--aliases] [--force] [--fail-on <level>]
   opf to-yaml <deck.opf.json|-> [output.opf.yaml|-] [--schema-comment] [--force]`;
@@ -31,6 +31,7 @@ async function runFromYaml(cli: CliContext, args: string[]): Promise<void> {
   cli.arity(positional, 1, 2);
   const [input, output = "-"] = positional as [string, string?];
   if (output !== "-" && isYamlName(output)) throw cli.fail("from-yaml writes JSON. To write YAML use opf to-yaml, or opf format for a canonical YAML file.");
+  if (output !== "-" && isMarkdownName(output)) throw cli.fail("from-yaml writes JSON. To write Markdown use opf to-md, or opf format --format markdown.");
   const source = await readText(cli, input);
   const result = fromYaml(source, { aliases: !!options.aliases, catalogs: CLI_CATALOGS });
   const failOn = parseFailOn(options["fail-on"]);

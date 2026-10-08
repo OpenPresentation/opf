@@ -486,7 +486,7 @@ describe("round trips", () => {
   });
 
   test("the quarterly review maps to the deck its Markdown says", () => {
-    const deck = convert(readFileSync(path.join(markdownExamples, "quarterly-review.md"), "utf8")).presentation;
+    const deck = convert(readFileSync(path.join(markdownExamples, "quarterly-review.opf.md"), "utf8")).presentation;
     assert.equal(deck.name, "Q3 Business Review");
     assert.deepEqual(deck.slides.map((s) => s.id), ["cover", "highlights", "revenue", "kpis", "risk", "decisions", "roadmap", "compare", "gate", "appendix"]);
     assert.deepEqual(deck.slides[2].blocks.map((block) => Object.keys(block)[0]), ["chart", "text"]);
@@ -602,7 +602,7 @@ describe("round trips", () => {
       throw new Error("conversion must not fetch");
     };
     try {
-      const source = readFileSync(path.join(markdownExamples, "quarterly-review.md"), "utf8");
+      const source = readFileSync(path.join(markdownExamples, "quarterly-review.opf.md"), "utf8");
       assert.deepEqual(convert(source), convert(source));
       const deck = convert(source).presentation;
       assert.equal(toMarkdown(deck).markdown, toMarkdown(structuredClone(deck)).markdown);

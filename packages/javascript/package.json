@@ -88,6 +88,10 @@
       "types": "./dist/symbol-font-encodings.d.ts",
       "import": "./dist/symbol-font-encodings.js"
     },
+    "./deck": {
+      "types": "./dist/deck.d.ts",
+      "import": "./dist/deck.js"
+    },
     "./markdown": {
       "types": "./dist/markdown.d.ts",
       "import": "./dist/markdown.js"

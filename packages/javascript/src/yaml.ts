@@ -15,7 +15,8 @@ import { same } from "./convert/shared.js";
 import { sortPresentationKeys } from "./format.js";
 import { presentation } from "./schemas.js";
 import type { Presentation } from "./types.js";
-import { type ValidateOptions, type ValidationChecks, type ValidationReport, validate } from "./validator.js";
+import { NOT_CHECKED } from "./not-checked.js";
+import { type ValidateOptions, type ValidationReport, validate } from "./validator.js";
 import { type YamlFinding, readYamlDocument } from "./yaml/read.js";
 import { writeCanonicalYaml } from "./yaml/write.js";
 
@@ -54,8 +55,6 @@ export interface FromYamlResult extends ValidationReport {
   /** Findings (the shared Finding format), in source order, each with `location` (UTF-16 offset and length, one-based line and column). */
   findings: YamlFinding[];
 }
-
-const NOT_CHECKED: ValidationChecks = { syntax: "checked", schema: "not-run", references: "not-run", policy: "not-run", accessibility: "not-run", content: "not-run", layout: "not-run", backgroundPixels: "not-read", imageBytes: "embedded-only", nativeExport: "not-checked" };
 
 /**
  * Convert YAML text to an OPF document. Never throws for malformed content; read `valid` and `findings`. Rule ids

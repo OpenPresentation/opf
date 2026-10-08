@@ -1,6 +1,6 @@
 # OPF as YAML
 
-`@openpresentation/opf/yaml` (RR-56) reads and writes an OPF deck as YAML, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-yaml` and `opf to-yaml`, and every command that reads or writes a deck understands `.opf.yaml` files.
+`@openpresentation/opf/yaml` (RR-56) reads and writes an OPF deck as YAML, in both directions, with no renderer, fonts, network or model: the same input always gives the same output. The CLI exposes it as `opf from-yaml` and `opf to-yaml`, and every command that reads or writes a deck understands `.opf.yaml` files (and, the same way, [`.opf.md` Markdown decks](markdown.md#markdown-decks-in-every-command)); `readDeck` and `writeDeck` read and write a deck in JSON, YAML or Markdown with one call.
 
 - **JSON stays canonical.** The schema, the interchange form and every package describe the JSON. A `.opf.yaml` file is an authoring serialization of the same data: the parsed YAML is exactly the JSON document, and the [schema](../spec/schemas/opf.schema.json) validates that parsed data.
 - **Write a deck by hand.** YAML has no braces, no quotes around keys and no trailing-comma errors, and a block scalar (`text: |`) keeps a paragraph readable. Comments are allowed in the file (they are not data).
@@ -140,11 +140,11 @@ Both write to stdout by default and print a JSON report (on stderr when stdout c
 
 Every command that reads a deck or a JSON Patch reads YAML too, through one reader:
 
-1. A file whose name ends `.yaml` or `.yml` is YAML, parsed in the strict dialect (no aliases).
-2. Anything else (stdin and every other name) follows the global option `--input-format <json|yaml>`, with **JSON as the default**. The option may appear anywhere before `--`; it applies to every input read from stdin or from a name that does not end `.yaml`/`.yml`.
+1. A file whose name ends `.yaml` or `.yml` is YAML, parsed in the strict dialect (no aliases). A name ending `.opf.md` is a [Markdown deck](markdown.md#markdown-decks-in-every-command), read the same way.
+2. Anything else (stdin and every other name) follows the global option `--input-format <json|yaml|markdown>`, with **JSON as the default**. The option may appear anywhere before `--`; it applies to every input read from stdin or from a name that does not end `.yaml`, `.yml` or `.opf.md`.
 3. A YAML syntax or dialect error exits **2**, like invalid JSON, and the message carries the position: `Invalid YAML in deck.opf.yaml at line 5, column 5: Map keys must be unique [yaml/duplicate-key]`, with the located findings under `yaml` in the JSON error report. `opf validate` instead reports a YAML error as a `yaml/<rule>` finding and exits 1, as it does for JSON that does not parse. A deck with a syntax-valid but invalid OPF structure is reported by the command as it is for JSON (`validate`, `render`, `export`...; `validate`, `render` and `export` locate their findings in the YAML).
 
-A deck is written as YAML when the output name ends `.yaml`/`.yml` or `--format yaml` is given (`--format json` forces JSON). When the output is stdout or has another name, the format of the deck that was read is used (a YAML deck is edited, merged, formatted, filled, paginated and bundled back to YAML); commands with no deck input (`create`, `from-md`, `import`) default to JSON. `opf format` canonicalizes a YAML file and converts with `--format`; `--check` works for both.
+A deck is written as YAML when the output name ends `.yaml`/`.yml` or `--format yaml` is given (`--format json` forces JSON, `--format markdown` writes a Markdown deck). When the output is stdout or has another name, the format of the deck that was read is used (a YAML deck is edited, merged, formatted, filled, paginated and bundled back to YAML); commands with no deck input (`create`, `from-md`, `import`) default to JSON. `opf format` canonicalizes a YAML file and converts with `--format`; `--check` works for both.
 
 Left JSON-only on purpose: `validate --config` (a settings file), the `--data` values file of `fill` (CSV, TSV or JSON data, not a deck), the `import-data` source file, and `--signals` output. In `fill` and `import-data`, `--format csv|tsv|json` still names the data format; only `--format yaml` selects the output.
 

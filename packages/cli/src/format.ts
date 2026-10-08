@@ -1,12 +1,14 @@
 import path from "node:path";
 import { format } from "@openpresentation/opf/format";
+import { OPFMarkdownError } from "@openpresentation/opf/markdown";
 import { OPFYamlError } from "@openpresentation/opf/yaml";
 import type { CliContext } from "./context.js";
-import { type DeckFormat, outputFormatOf, serialize } from "./deck.js";
+import { type DeckFormat, fenceWarning, formatNamed, outputFormatOf, serialize } from "./deck.js";
 
 /**
  * `opf format <file|->...`: canonical key order and layout. JSON gets the formatter's layout; YAML gets the canonical YAML
- * (schema key order, two-space block style) and loses its comments. `--format` converts between the two.
+ * (schema key order, two-space block style) and loses its comments; Markdown gets the canonical Markdown of the dialect
+ * (`toMarkdown(fromMarkdown(text))`). `--format` converts between the three.
  */
 export async function formatCommand(args: string[], cli: CliContext): Promise<void> {
   const { positional, options } = cli.parse(args, ["check", "in-place", "output", "force", "indent", "eol", "format"]);
@@ -23,7 +25,7 @@ export async function formatCommand(args: string[], cli: CliContext): Promise<vo
   }
   const eol = options.eol === undefined ? "lf" : String(options.eol);
   if (!["lf", "crlf", "preserve"].includes(eol)) throw cli.fail("--eol must be lf, crlf or preserve.");
-  if (options.format !== undefined && options.format !== "json" && options.format !== "yaml") throw cli.fail("--format takes json or yaml.");
+  if (options.format !== undefined && !formatNamed(options.format)) throw cli.fail("--format takes json, yaml or markdown (md).");
   const results: Array<{ file: string; text: string; raw: string; changed: boolean; format: DeckFormat }> = [];
   for (const file of positional) {
     const source = await cli.readDeck(file, !options.check);
@@ -33,14 +35,16 @@ export async function formatCommand(args: string[], cli: CliContext): Promise<vo
     let text: string;
     if (outFormat === "json") text = format(source.value, { indent, eol: lineEnding });
     else {
-      if (indent !== undefined) throw cli.fail("--indent applies to JSON; YAML is always written with two spaces.");
+      if (indent !== undefined) throw cli.fail("--indent applies to JSON; YAML and Markdown are written in one layout.");
       try {
-        text = serialize(source.value, "yaml", { modeline: source.yaml?.modeline });
+        text = serialize(source.value, outFormat, { modeline: source.yaml?.modeline });
       } catch (error) {
-        if (error instanceof OPFYamlError) throw cli.fail(`Cannot format ${file === "-" ? "stdin" : file} as YAML: ${error.message}`, 1, error.details);
+        if (error instanceof OPFYamlError || error instanceof OPFMarkdownError) throw cli.fail(`Cannot format ${file === "-" ? "stdin" : file} as ${outFormat === "yaml" ? "YAML" : "Markdown"}: ${error.message}`, 1, error.details);
         throw error;
       }
       if (lineEnding === "crlf") text = text.replaceAll("\n", "\r\n");
+      const fences = outFormat === "markdown" && !options.check ? fenceWarning(text, source, file === "-" ? "the output" : file) : undefined;
+      if (fences) process.stderr.write(fences);
     }
     results.push({ file, text, raw: source.raw, changed: text !== source.raw, format: outFormat });
   }
