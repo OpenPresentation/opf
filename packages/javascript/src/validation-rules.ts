@@ -1,5 +1,6 @@
 import { rule, type ValidationRule } from './rule-context.js';
 import { accessibilityRules } from './rules-accessibility.js';
+import { languageTagRules } from './rules-language.js';
 import { layoutContentRules } from './rules-layout-content.js';
 import {
 	validationCategories,
@@ -153,7 +154,7 @@ const dataRules: ValidationRuleInfo[] = [
 	rule('narrative-duration-range', 'content', 'warning', 'An inline narrative duration range has min greater than max.', 'A range with its bounds swapped matches no duration, so the duration check cannot help.', { standard: 'spec/schemas/narrative.schema.json' }),
 ];
 
-const implementations: readonly ValidationRule[] = [...accessibilityRules, ...layoutContentRules];
+const implementations: readonly ValidationRule[] = [...accessibilityRules, ...layoutContentRules, ...languageTagRules];
 
 /** The rule implementations of the accessibility, layout and content categories, in report order. */
 export const ruleImplementations = implementations;

@@ -640,7 +640,7 @@ const languageRule = rule(
 	'info',
 	'The presentation does not declare its language.',
 	'Screen readers and text-to-speech choose pronunciation and hyphenation from the declared language; spell checkers and translation tools use it too.',
-	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (OPF has no per-run language).' },
+	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.lang`; opf/language-tag checks how those tags are written).' },
 );
 const languageRules: ValidationRule[] = [
 	{
