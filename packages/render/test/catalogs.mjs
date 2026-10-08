@@ -2,6 +2,7 @@
 // `catalogs` (core Catalog[]) unchanged to core resolution from every entry point; `strictReferences` maps to core's.
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { defaultCatalog } from '@openpresentation/opf/catalog';
 import { renderSlideSvg, renderSvg, resolvePresentation, engineDefaults, OPFRenderError } from '../dist/index.js';
 import { presentationFamilies } from '../dist/fonts-browser.js';
@@ -97,7 +98,7 @@ for (const bad of [{}, [{ layouts: {} }], 'https://www.pptx.gallery']) {
 // The browser bundle of the SVG entry carries no catalog records: no layout or narrative description from the gallery snapshot.
 {
   const { build } = await import('esbuild');
-  const result = await build({ stdin: { contents: "export { renderSlideSvg } from './dist/svg.js';", resolveDir: new URL('../', import.meta.url).pathname, loader: 'js' }, bundle: true, platform: 'browser', format: 'esm', write: false, logLevel: 'error' });
+  const result = await build({ stdin: { contents: "export { renderSlideSvg } from './dist/svg.js';", resolveDir: fileURLToPath(new URL('../', import.meta.url)), loader: 'js' }, bundle: true, platform: 'browser', format: 'esm', write: false, logLevel: 'error' });
   const code = result.outputFiles[0].text;
   const samples = [...Object.values(defaultCatalog.layouts), ...Object.values(defaultCatalog.narratives ?? {})].map(record => record.description).filter(text => typeof text === 'string' && text.length > 40).slice(0, 40);
   assert.ok(samples.length >= 10, 'enough catalog descriptions to probe');

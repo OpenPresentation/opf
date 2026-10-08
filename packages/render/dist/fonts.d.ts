@@ -8,8 +8,8 @@ export type { FontPolicyEntry } from "@openpresentation/opf/font-policy";
 export { isSymbolEncodedFamily, mapSymbolText, symbolCodeOf } from "@openpresentation/opf/symbol-font-encodings";
 export { scriptFontRole } from "@openpresentation/opf/composition";
 export type { ScriptRole } from "@openpresentation/opf/composition";
-export interface FontFaceInput { data: Uint8Array; family?: string; weight?: number; italic?: boolean; postscriptName?: string; license?: string; /** Serves glyph fallback and requests by its own family only; never a replacement for another family. */ fallbackOnly?: boolean; /** "used" embeds the face in an SVG only when the slide's text names its family (the open pack, FF-31). Default "always". */ embed?: "always" | "used"; /** ISO 15924 scripts a designated script replacement face serves (FF-19). */ scripts?: string[] }
-export interface EmbeddedFont { family: string; weight: number; italic?: boolean; dataUrl: string; license?: string; embed?: "used" }
+export interface FontFaceInput { data: Uint8Array; family?: string; weight?: number; italic?: boolean; postscriptName?: string; license?: string; /** Serves glyph fallback and requests by its own family only; never a replacement for another family. */ fallbackOnly?: boolean; /** Every face is embedded in an SVG only when the slide's text draws it (RR-61). "used" also leaves the face out of the eager `registry.embeddedFonts` list (the open pack, FF-31); "always" embeds it in every SVG. */ embed?: "always" | "used"; /** ISO 15924 scripts a designated script replacement face serves (FF-19). */ scripts?: string[] }
+export interface EmbeddedFont { family: string; weight: number; italic?: boolean; dataUrl: string; license?: string; /** "always": written into every SVG; otherwise only into an SVG whose text draws the face (RR-61). */ embed?: "always" | "used" }
 export type FontCompatibility = "exact" | "metric" | "visual" | "generic";
 export interface FontReplacementMeasurement { replacement:string; meanAbsWidthDelta:number; meanWidthDelta:number; maxAbsWidthDelta:number; styles:number; reference:string }
 export interface FontResolution {
@@ -41,7 +41,7 @@ export declare const EXPERIMENTAL_FONT_CANDIDATES: readonly Readonly<{requestedF
 export interface RenderFonts {
   /** Measures text with the real faces. Without it layout uses core's portable estimate. */
   textMeasurement?: TextMeasurement;
-  /** Faces `renderSvg` writes into each SVG as @font-face data; a face flagged `embed: "used"` only when a slide draws its family. */
+  /** Faces `renderSvg` may write into an SVG as @font-face data: each only into the SVGs whose text draws it (its family, weight and style), unless flagged `embed: "always"` (RR-61). */
   embeddedFonts?: readonly EmbeddedFont[];
   /** Font files the Node raster and PDF conversions draw with. */
   fontFiles?: readonly string[];

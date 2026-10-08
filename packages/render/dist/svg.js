@@ -635,10 +635,11 @@ function bindSlide(presentation, slide, index, context) {
 }
 
 // `options.fonts` is the handle `loadFonts()` returns (or any object with a `textMeasurement` and, to embed faces in the SVG, an
-// `embeddedFonts` list). The renderer reads the two as plain options from here on.
+// `embeddedFonts` list). The renderer reads the two as plain options from here on. `embedFonts: false` (RR-61) keeps the
+// measurement and drops the faces, for a host whose page already holds them.
 function normalizeOptions(options) {
-  const { fonts, ...rest } = options ?? {};
-  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: fonts?.embeddedFonts };
+  const { fonts, embedFonts, ...rest } = options ?? {};
+  return { ...rest, textMeasurement: fonts?.textMeasurement, embeddedFonts: embedFonts === false ? undefined : fonts?.embeddedFonts };
 }
 
 /**
@@ -1798,21 +1799,23 @@ function codeSyntax(item, layout, bound, options) {
   return { tokens, palette: codeSyntaxPaletteForScheme(bound.design.colorScheme) };
 }
 
-// Faces flagged embed:"used" (the vendored open, Intos and script-pack faces) are embedded only when the slide's own markup draws
-// them: the family in a font-family list, at a font-weight and font-style some text of the slide takes (attributes are
-// inherited down the element tree, as in SVG). A used family none of whose faces matches a drawn weight and style keeps all
-// its faces, so the browser can always choose. Every other face (the npm packs) is embedded as before.
+// RR-61: a face is embedded only when the slide's own markup draws it: the family in a font-family list, at a font-weight and
+// font-style some text of the slide takes (attributes are inherited down the element tree, as in SVG). A drawn family none of
+// whose faces matches a drawn weight and style keeps all its faces, so the browser can always choose. A face no font-family of
+// the SVG names is one the browser can never select, so leaving it out changes no pixel. Only a face flagged embed:"always" is
+// embedded in every SVG.
 function embeddedFontsFor(fonts = [], content) {
-  if (!fonts.some(font => font?.embed === "used")) return fonts;
+  if (!fonts.length) return fonts;
+  fonts.forEach(assertEmbeddableFont);
   const drawn = drawnFaces(content.join("\n"));
   const wanted = font => {
     const triples = drawn.get(String(font.family).toLowerCase());
     if (!triples) return false;
-    const family = fonts.filter(other => other?.embed === "used" && String(other.family).toLowerCase() === String(font.family).toLowerCase());
+    const family = fonts.filter(other => String(other?.family).toLowerCase() === String(font.family).toLowerCase());
     const matching = family.filter(other => triples.has(`${other.weight}|${other.italic ? "italic" : "normal"}`));
     return matching.length ? matching.includes(font) : true;
   };
-  return fonts.filter(font => font?.embed !== "used" || wanted(font));
+  return fonts.filter(font => font?.embed === "always" || wanted(font));
 }
 
 const FONT_WEIGHT_KEYWORDS = { normal: "400", bold: "700" };
@@ -1841,10 +1844,21 @@ function drawnFaces(markup) {
   return drawn;
 }
 
+// Every supplied face is checked, drawn or not, so a bad entry fails on any slide. The data URI check is remembered per face
+// object while its dataUrl is unchanged: the handle's list holds the same objects on every slide, and its URIs run to tens of
+// megabytes.
+const checkedDataUrls = new WeakMap();
+function assertEmbeddableFont(font) {
+  const valid = typeof font?.family === "string" && !/[\u0000-\u001f"'\\<>;]/.test(font.family) && Number.isInteger(font.weight) && font.weight >= 1 && font.weight <= 1000
+    && (checkedDataUrls.get(font) === font.dataUrl || /^data:font\/(ttf|otf|woff|woff2);base64,[A-Za-z0-9+/=]+$/.test(font.dataUrl));
+  if (!valid) throw new OPFRenderError("invalid-embedded-font", "Embedded fonts require a plain family name, valid weight, and a font data URI.");
+  checkedDataUrls.set(font, font.dataUrl);
+}
+
 function renderEmbeddedFonts(fonts = []) {
   if (!fonts.length) return "";
   const css = fonts.map(font => {
-    if (typeof font.family !== "string" || /[\u0000-\u001f"'\\<>;]/.test(font.family) || !/^data:font\/(ttf|otf|woff|woff2);base64,[A-Za-z0-9+/=]+$/.test(font.dataUrl) || !Number.isInteger(font.weight) || font.weight < 1 || font.weight > 1000) throw new OPFRenderError("invalid-embedded-font", "Embedded fonts require a plain family name, valid weight, and a font data URI.");
+    assertEmbeddableFont(font);
     return `@font-face{font-family:"${font.family}";font-weight:${font.weight};font-style:${font.italic ? "italic" : "normal"};src:url("${font.dataUrl}")}`;
   }).join("\n");
   const licenses = [...new Set(fonts.map(font=>font.license).filter(Boolean))];

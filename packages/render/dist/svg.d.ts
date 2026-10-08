@@ -54,10 +54,12 @@ export interface RenderSvgOptions {
   skipHidden?: boolean;
   /**
    * The fonts the deck is laid out and drawn with: the handle `loadFonts()` returns (from `@openpresentation/opf-render/fonts-node` or
-   * `/fonts-browser`), or any object with a `textMeasurement` and, to embed faces in each SVG, an `embeddedFonts` list. Without it layout uses
+   * `/fonts-browser`), or any object with a `textMeasurement` and, to embed faces, an `embeddedFonts` list (each SVG carries only the faces its text draws). Without it layout uses
    * core's portable width estimate and the SVG names the design fonts without embedding them.
    */
   fonts?: RenderFonts;
+  /** `false` writes no `@font-face` data into the SVG (RR-61): the fonts handle still measures and the SVG still names the families, for a host whose page already has the faces (a browser `loadFonts` handle adds them to the document). Default true: each SVG embeds the faces of `fonts.embeddedFonts` its own text draws. */
+  embedFonts?: boolean;
   /** `"chain"` (default): a character the resolved face lacks is drawn with the first bundled face that has it, and reported as `font-glyph-fallback`. `"none"`: exact faces, a missing glyph raises `missing-glyph`. */
   glyphFallback?: "chain" | "none";
   /** Unscaled reference-pixel clearance around supplied vector text outlines; default 1. */

@@ -295,8 +295,8 @@ export function createFontRegistry(entries, options = {}) {
     resolveFont(style) { return resolve(style).resolution; },
     clearSubstitutions() { substitutions.clear(); },
     get substitutions() { return [...substitutions.values()]; },
-    // Faces flagged embed:"used" (the open pack, FF-31) are not in this eager list: supplied with selectEmbeddedFonts (or
-    // the `loadFonts` handle's embeddedFonts) they are embedded only in SVGs whose text names their family.
+    // Faces flagged embed:"used" (the open pack, FF-31) are not in this eager list: they come with selectEmbeddedFonts (or the
+    // `loadFonts` handle's embeddedFonts). Whichever list it is given, the SVG writer embeds a face only where its text draws it (RR-61).
     get embeddedFonts() { return embedded(face=>face.embed!=="used"); },
     /** Parsed face metadata in entry order, without encoding font bytes. */
     describeFaces: ()=>faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{}),...(face.fallbackOnly?{fallbackOnly:true}:{})})),
@@ -320,5 +320,5 @@ export function createFontRegistry(entries, options = {}) {
       return made.map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.scripts?{scripts:[...face.scripts]}:{})}));
     },
   };
-  function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts,embed:face.embed,fallbackOnly:face.fallbackOnly})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),...(face.embed==="used" ? {embed:"used"} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
+  function embedded(predicate) { return faces.filter(face=>predicate({family:face.family,weight:face.weight,italic:face.italic,scripts:face.scripts,embed:face.embed,fallbackOnly:face.fallbackOnly})).map(face=>({family:face.family,weight:face.weight,italic:face.italic,...(face.license ? {license:face.license} : {}),...(face.embed ? {embed:face.embed} : {}),dataUrl:`data:font/${face.format};base64,${base64(face.data)}`})); }
 }

@@ -98,7 +98,7 @@ for (const family of ['Aptos Display', 'Aptos Narrow', 'Aptos Serif']) assert.eq
 
 // Rendering: the default (Aptos) scheme measures and draws with Intos, and a standalone SVG embeds only the Intos faces
 // its text draws (family, weight and style): Intos regular for the body and Intos Display bold for the title, not the other
-// six styles of those families and not the unused Narrow and Serif families. The eager npm faces are embedded as before.
+// six styles of those families and not the unused Narrow and Serif families. RR-61: nor any eager npm face the text does not draw.
 const deck = {name: 'Aptos preview', slides: [{id: 'a', title: 'Quarterly operating review', text: 'Revenue grew in every region.'}]};
 const source = JSON.stringify(deck);
 const svg = renderSlideSvg(deck, 0, options);
@@ -109,7 +109,7 @@ const faces = [...svg.matchAll(/@font-face\{font-family:"([^"]+)";font-weight:(\
 const embedded = faces.map(face => face.replace(/ \d+ \w+$/, ''));
 assert.deepEqual(faces.filter(face => /^Intos/.test(face)).sort(), ['Intos 400 normal', 'Intos Display 700 normal']);
 assert.ok(!embedded.includes('Intos Narrow') && !embedded.includes('Intos Serif'), 'unused Intos families stay out of the SVG');
-assert.ok(embedded.includes('Roboto') && embedded.includes('Carlito'), 'the eager npm faces are embedded in every SVG, as before');
+assert.deepEqual([...new Set(embedded)].sort(), ['Intos', 'Intos Display'], 'RR-61: no eager npm face (Roboto, Carlito, ...) the text does not draw');
 const baseSvg = renderSlideSvg({name: 'Roboto', design: {fontScheme: 'roboto'}, slides: [{id: 'r', title: 'Title', text: 'Body'}]}, 0, {fonts: (await loadFonts())});
 assert.ok(!/font-family:"Intos/.test(baseSvg), 'the base pack has no Intos');
 assert.equal(renderSlideSvg(deck, 0, {fonts: (await loadFonts({pack: 'office'}))}), svg, 'same bytes and input replay identically');
