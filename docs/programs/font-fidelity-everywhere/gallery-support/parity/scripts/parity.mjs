@@ -30,11 +30,16 @@ const render = await imp(path.join(RENDER, 'dist/index.js'));
 const {BUNDLED_FONT_MANIFEST} = await imp(path.join(RENDER, 'dist/fonts-node.js'));
 const {toPptx, fromPptx} = await imp(path.join(PPTX, 'dist/index.js'));
 // Core's default text measurement: the same estimate both engines use here (no host registry).
-const {measureText, fontPolicyFor, FONT_POLICY} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
+const {fontPolicyFor, FONT_POLICY} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
+const {measureText} = await imp(path.join(CORE, 'packages/javascript/dist/composition.js'));
 const {unzipSync} = createRequire(path.join(PPTX, 'package.json'))('fflate');
 // FF-56: the chartex constructs the catalog records, and the layoutIds of their cx:series (chartex.mjs).
-const {catalogs: CORE_CATALOGS} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
-const CX_EXPECT = chartexExpectations(CORE_CATALOGS.chartTypes);
+// OPF 0.15: chart types are an engine vocabulary (CHART_TYPES); their display records, with the OpenXML mappings, are
+// catalogDisplay.chartTypes of the opt-in /catalog subpath, keyed by id.
+const {CHART_TYPES} = await imp(path.join(CORE, 'packages/javascript/dist/index.js'));
+const {catalogDisplay} = await imp(path.join(CORE, 'packages/javascript/dist/catalog.js'));
+const CHART_TYPE_RECORDS = CHART_TYPES.map((id) => ({id, ...catalogDisplay.chartTypes[id]}));
+const CX_EXPECT = chartexExpectations(CHART_TYPE_RECORDS);
 // A published package is not a git checkout: its npm gitHead names the commit it was built from.
 const head = d => { try { return execFileSync('git', ['-C', d, 'rev-parse', 'HEAD'], {encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']}).trim(); } catch { try { return JSON.parse(fs.readFileSync(path.join(d, 'package.json'), 'utf8')).gitHead ?? null; } catch { return null; } } };
 
@@ -350,7 +355,7 @@ async function parity(doc) {
         else for (const f of pvFams) if (!chFams.includes(f)) add('text', 'fail', `chart font ${f} (preview) not in chart XML [${chFams.join('|')}]`, key);
         // FF-62: the size per text role (axis, data labels, legend, title), not "any size in the part": the preview line's role comes from its trace path and the chart's catalog element.
         const chartDoc = doc.slides?.[si]?.chart ?? (doc.slides?.[si]?.blocks ?? []).find(b => b.type === 'chart')?.chart;
-        const chartElement = CORE_CATALOGS.chartTypes.find(t => t.id === chartDoc?.type)?.mappings?.openxml?.element;
+        const chartElement = CHART_TYPE_RECORDS.find(t => t.id === chartDoc?.type)?.mappings?.openxml?.element;
         const pvRoleSizes = previewTextSizes(pvLines.map(l => ({path: l.path, sizes: l.runs.map(r => r.sizePt)})), chartElement);
         for (const message of chartTextSizeMismatches(pvRoleSizes, ch.roleSizes, TOL.sizePt)) add('text', 'near', message, key);
         // A line-kind series is compared on its stroke (the series polylines and paths, traced to data.columns; axes, rings and gridlines are not series), every other series on its fills.

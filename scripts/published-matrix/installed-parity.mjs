@@ -4,7 +4,7 @@
 //
 //   node scripts/published-matrix/installed-parity.mjs prepare   [--work <dir>]   install the packages, lay out the harness
 //                                                                (default work directory: OPF_PARITY_WORK, else installed-parity under RUNNER_TEMP or the temporary directory)
-//   node scripts/published-matrix/installed-parity.mjs snippets  [--work <dir>]   the 850 gallery value documents
+//   node scripts/published-matrix/installed-parity.mjs snippets  [--work <dir>]   the gallery value documents (684 at gallery de1ddff, OPF 0.15)
 //   node scripts/published-matrix/installed-parity.mjs parity    [--work <dir>]   parity.mjs + summarize.mjs (PARITY_FONT_HOST=gallery)
 //   node scripts/published-matrix/installed-parity.mjs all        [--work <dir>]
 //
