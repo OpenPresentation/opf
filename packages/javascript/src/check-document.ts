@@ -579,12 +579,17 @@ export function variableFindings(document: unknown, engine: SchemaCheckResult, s
  */
 export function undeclaredCatalogFindings(document: unknown): Finding[] {
 	const findings: Finding[] = [];
+	// One finding per reference path, however many ways the reference is reached.
+	const reported = new Set<string>();
 	for (const site of catalogReferenceSites(document)) {
 		const parsed = parseReference(site.reference);
 		if (parsed?.group === undefined || catalogGroupDeclared(document, parsed.group)) continue;
+		const path = pointerPath(site.path);
+		if (reported.has(path)) continue;
+		reported.add(path);
 		findings.push(
 			finding('opf/undeclared-catalog', {
-				path: pointerPath(site.path),
+				path,
 				message: `Reference ${JSON.stringify(site.reference)} names catalog group ${JSON.stringify(parsed.group)}, which the document does not declare, so it can never resolve.`,
 				help: `Declare catalogs.${parsed.group} with the catalog's source (and embed the record), or write the reference without the prefix.`,
 				definition: `${schemas.presentation.$id}#/$defs/CatalogReference`,

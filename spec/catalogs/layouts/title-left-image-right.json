@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-  "id": "title-left-slideimage-right",
+  "id": "title-left-image-right",
   "name": "Title_Left_Image_Right",
   "summary": "A left-aligned title and subtitle with an image that bleeds to the right edge.",
   "description": "A title slide with one image that bleeds to the right edge across half the slide; the left-aligned title and subtitle compose in the other half. The layout's image placeholder places the slide's image (Slide.image) at the right edge.",
@@ -29,6 +29,6 @@
     "Image"
   ],
   "preview": {
-    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-left-slideimage-right.svg"
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-left-image-right.svg"
   }
 }

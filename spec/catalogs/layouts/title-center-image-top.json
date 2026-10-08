@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-  "id": "title-center-slideimage-top",
+  "id": "title-center-image-top",
   "name": "Title_Center_Image_Top",
   "summary": "A center-aligned title and subtitle with an image that bleeds to the top edge.",
   "description": "A title slide with one image that bleeds to the top edge across half the slide; the centered title and subtitle compose in the other half. The layout's image placeholder places the slide's image (Slide.image) at the top edge.",
@@ -29,6 +29,6 @@
     "Image"
   ],
   "preview": {
-    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-center-slideimage-top.svg"
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-center-image-top.svg"
   }
 }

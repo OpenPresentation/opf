@@ -4,7 +4,7 @@
   "publisher": "https://www.pptx.gallery",
   "source": {
     "repository": "https://github.com/Data-Advantage/pptx-gallery",
-    "commit": "0c51ea8c8e99ea0cbbf65aa7e0a3c6307dd14197",
+    "commit": "5645db8e4e9e09d0dd819c39538b1c783ee91aa1",
     "path": "public"
   },
   "kinds": {
@@ -56,10 +56,10 @@
     "layouts": {
       "mode": "mirror",
       "records": 278,
-      "contentSha256": "c313c8348ba295a3a9bd2bb93fd66542090558c6bc17cf396706a5ddd5aa5b39",
+      "contentSha256": "f9121c466032011762d58ee27cd3e50f43a388cc75b841219f87b8001f7632a3",
       "gallery": {
         "records": 278,
-        "contentSha256": "c313c8348ba295a3a9bd2bb93fd66542090558c6bc17cf396706a5ddd5aa5b39"
+        "contentSha256": "f9121c466032011762d58ee27cd3e50f43a388cc75b841219f87b8001f7632a3"
       }
     },
     "narratives": {

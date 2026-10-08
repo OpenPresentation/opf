@@ -62,3 +62,18 @@ test('/composition exports the embedded-picture size reading', () => {
   assert.deepEqual(intrinsicImageSize(png), { width: 400, height: 100, svg: false });
   assert.equal(intrinsicImageAspect('https://example.com/a.png'), undefined);
 });
+
+test('an undeclared catalog group is reported once per reference path, in every mode', () => {
+  const document = {
+    ...deck,
+    design: { theme: 'foo:t', colorScheme: { id: 'foo:c' } },
+    catalogs: { custom: { themes: { mine: { name: 'Mine', fontScheme: 'foo:f' } } } },
+    slides: [{ title: 'One', layout: 'foo:a', design: { theme: 'foo:t' } }, { title: 'Two', design: { theme: 'mine' } }],
+  };
+  const expected = ['/catalogs/custom/themes/mine/fontScheme', '/design/colorScheme/id', '/design/theme', '/slides/0/design/theme', '/slides/0/layout'];
+  for (const options of [{}, { only: ['format'] }, { only: ['format', 'references'] }, { catalogs: [] }]) {
+    const paths = validate(document, options).findings.filter((finding) => finding.ruleId === 'opf/undeclared-catalog').map((finding) => finding.path);
+    assert.deepEqual([...paths].sort(), expected, JSON.stringify(options));
+  }
+  assert.deepEqual(fromYaml('name: x\ndesign:\n  theme: foo:t\nslides:\n  - title: t\n').findings.filter((finding) => finding.ruleId === 'opf/undeclared-catalog').map((finding) => finding.path), ['/design/theme']);
+});

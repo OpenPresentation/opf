@@ -1,6 +1,6 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-layout/v1",
-  "id": "title-left-slideimage-bottom",
+  "id": "title-left-image-bottom",
   "name": "Title_Left_Image_Bottom",
   "summary": "A left-aligned title and subtitle with an image that bleeds to the bottom edge.",
   "description": "A title slide with one image that bleeds to the bottom edge across half the slide; the left-aligned title and subtitle compose in the other half. The layout's image placeholder places the slide's image (Slide.image) at the bottom edge.",
@@ -29,6 +29,6 @@
     "Image"
   ],
   "preview": {
-    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-left-slideimage-bottom.svg"
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/title-left-image-bottom.svg"
   }
 }
