@@ -99,6 +99,49 @@ for (const [entry, target] of Object.entries(manifest.exports)) {
 }
 `);
   await run(process.execPath, ['exports.mjs'], {cwd: projectDir});
+  // FA wave C: the package declares "sideEffects": false, and its code-split entries import some chunks only for
+  // evaluation order (`import './chunk-X.js'`), which a consumer's bundler drops. Bundle a consumer of the packed
+  // package the way a host does (esbuild, sideEffects honoured, tree shaking on) and require the bundle to compute
+  // exactly what the installed package computes, so a chunk whose code is needed but only bare-imported fails here.
+  await writeFile(path.join(projectDir, 'bundle-probe.mjs'), `
+import {embed, paginate, resolveSlideContext, stats, toMarkdown, fromMarkdown, validate, validationRules, CHART_TYPES} from '@openpresentation/opf';
+import {defaultCatalog, catalogDisplay} from '@openpresentation/opf/catalog';
+import {composeSlide} from '@openpresentation/opf/composition';
+import {fromYaml, toYaml} from '@openpresentation/opf/yaml';
+import {applyPatch} from '@openpresentation/opf/patch';
+const catalogs = [defaultCatalog];
+const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Bundle probe', language: 'en-US',
+  design: {theme: 'classic', colorScheme: 'cool-horizon', fontScheme: 'roboto'},
+  slides: [
+    {title: 'Cover', subtitle: 'Probe'},
+    {layout: 'two-column', title: 'Two columns', left: {text: 'Left'}, right: {items: ['One', 'Two']}},
+    {title: 'Chart', chart: {type: 'bar', data: {columns: ['Q', 'A'], rows: [['Q1', 1], ['Q2', 3]]}}},
+    {title: 'Picture', design: {background: {type: 'image', src: './a.png', recolor: 'grayscale'}}},
+    {title: 'Missing', layout: 'not-a-layout', text: 'Body'},
+  ]};
+const embedded = embed(deck, {catalogs}).document;
+const composed = deck.slides.map((_, index) => { const context = resolveSlideContext(embedded, index, {catalogs: []}); return composeSlide(embedded.slides[index], context.options); });
+const markdown = toMarkdown(embedded).markdown;
+process.stdout.write(JSON.stringify({
+  rules: validationRules.length, chartTypes: CHART_TYPES.length, display: Object.keys(catalogDisplay).sort(),
+  findings: validate(deck, {catalogs}).findings.map(finding => finding.ruleId + ' ' + finding.path),
+  embedded, composed, pages: paginate(embedded).pages.length, stats: stats(embedded, {catalogs}),
+  markdown, back: fromMarkdown(markdown, {catalogs}).presentation, yaml: fromYaml(toYaml(embedded).yaml).presentation,
+  patched: applyPatch(embedded, [{op: 'replace', path: '/name', value: 'Patched'}]).name,
+}));
+`);
+  {
+    const esbuild = createRequire(createRequire(path.join(packageRoot, 'package.json')).resolve('tsup'))('esbuild');
+    const direct = (await run(process.execPath, ['bundle-probe.mjs'], {cwd: projectDir})).stdout;
+    const bundled = await esbuild.build({entryPoints: [path.join(projectDir, 'bundle-probe.mjs')], absWorkingDir: projectDir, bundle: true, write: false, format: 'esm', platform: 'node', mainFields: ['module', 'main'], treeShaking: true, minify: true, logLevel: 'silent', banner: {js: "import {createRequire as __cr} from 'node:module'; const require = __cr(import.meta.url);"}, outfile: path.join(projectDir, 'bundle-probe.bundle.mjs')});
+    assert.deepEqual(bundled.errors, []);
+    // The only expected warning is esbuild's note that it ignores those ordering imports (ignored-bare-import).
+    assert.deepEqual([...new Set(bundled.warnings.map(warning => warning.id))].filter(id => id !== 'ignored-bare-import'), [], JSON.stringify(bundled.warnings.map(warning => warning.text)));
+    await writeFile(path.join(projectDir, 'bundle-probe.bundle.mjs'), bundled.outputFiles[0].contents);
+    const fromBundle = (await run(process.execPath, ['bundle-probe.bundle.mjs'], {cwd: projectDir})).stdout;
+    assert.ok(direct.length > 1000, 'the probe computes something');
+    assert.equal(fromBundle, direct, 'a sideEffects-honouring bundle of the packed package computes what the package computes');
+  }
   if (downstream.length) {
     await writeFile(path.join(projectDir, 'downstream.mjs'), `
 import assert from 'node:assert/strict';
