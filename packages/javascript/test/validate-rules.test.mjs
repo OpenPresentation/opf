@@ -29,7 +29,7 @@ const png = (width, height) => {
 
 test('every rule has a stable id, a category, a cost, a rationale and an entry in docs/validate.md', () => {
 	const doc = readFileSync(new URL('../../../docs/validate.md', import.meta.url), 'utf8');
-	assert.equal(validationRules.length, 66);
+	assert.equal(validationRules.length, 67);
 	const seen = new Set();
 	for (const info of validationRules) {
 		assert.match(info.id, /^opf\/[a-z][a-z0-9-]*$/);
@@ -45,10 +45,10 @@ test('every rule has a stable id, a category, a cost, a rationale and an entry i
 		assert.equal(findValidationRule(info.id), info);
 	}
 	// The objective rules are the 21 that remain (20 here, plus opf/variable-unfilled, which is a format rule) and FA-02's
-	// opf/unused-beat; the four taste rules are gone. The rest of these categories are the engine's data, highlight, variable
+	// opf/unused-beat and FA-29's opf/language-tag; the four taste rules are gone. The rest of these categories are the engine's data, highlight, variable
 	// and narrative warnings.
 	const engineWarnings = ['opf/chart-option-adapted', 'opf/chart-value-not-numeric', 'opf/chart-mapping-adapted', 'opf/chart-highlight-adapted', 'opf/code-highlight-out-of-range', 'opf/code-highlight-range-reversed', 'opf/variable-builtin-missing', 'opf/duration-outside-narrative', 'opf/narrative-duration-range'];
-	assert.equal(validationRules.filter((info) => ['accessibility', 'layout', 'content'].includes(info.category) && !engineWarnings.includes(info.id)).length, 21);
+	assert.equal(validationRules.filter((info) => ['accessibility', 'layout', 'content'].includes(info.category) && !engineWarnings.includes(info.id)).length, 22);
 	assert.equal(findValidationRule('variable-unfilled').category, 'format');
 	for (const gone of ['font-family-count', 'slide-word-count', 'title-position', 'small-cell', 'unfilled-variable', 'invalid-document', 'catalog-reference', 'deprecated-catalog-id', 'catalog-source'])
 		assert.equal(findValidationRule(gone), undefined, gone);

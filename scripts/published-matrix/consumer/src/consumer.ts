@@ -2,7 +2,7 @@
 // and then run, so it proves the packages install, resolve, type-check and execute as a downstream project would use them.
 import {createHash} from 'node:crypto';
 import {validate} from '@openpresentation/opf';
-import {catalogs} from '@openpresentation/opf/catalogs';
+import {defaultCatalog} from '@openpresentation/opf/catalog';
 import {resolveScriptFonts} from '@openpresentation/opf/composition';
 import type {Presentation} from '@openpresentation/opf/types';
 import {createEditorSession} from '@openpresentation/opf-editor';
@@ -15,7 +15,7 @@ const sha256 = (value: string | Uint8Array): string => createHash('sha256').upda
 
 const deck: Presentation = {
   name: 'Published consumer',
-  language: 'english',
+  language: 'en',
   design: {theme: 'minimal', fontScheme: 'calibri'},
   slides: [
     {id: 'title', title: 'Quarterly review', subtitle: 'Results and next steps'},
@@ -27,11 +27,13 @@ const broken: Presentation = {slides: 42};
 void broken;
 
 if (!validate(deck, {only: ['format']}).valid) throw new Error('the consumer deck is not valid OPF');
-if (catalogs.fontSchemes.length === 0) throw new Error('the published catalogs are empty');
+if (Object.keys(defaultCatalog.fontSchemes ?? {}).length === 0) throw new Error('the published default catalog is empty');
 
 // The registry holds only the renderer's bundled faces: no host font is read.
 const fonts = await loadFonts({pack: 'office', substitutionPolicy: 'visual', scripts: 'all'});
-const measured = {fonts: {textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck))}};
+// OPF 0.15: this host registers the published default catalog with every call (the deck names gallery records by id).
+const catalogs = [defaultCatalog];
+const measured = {catalogs, fonts: {textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck, {catalogs}))}};
 const svgs: string[] = renderSvg(deck, measured);
 if (svgs.length !== deck.slides.length) throw new Error('one preview per slide expected');
 const png: Uint8Array = await svgToPng(svgs[0], {fonts});
@@ -42,7 +44,7 @@ if (inventory.violations.length > 0) throw new Error(`typeface violations: ${JSO
 const reimported = await fromPptx(pptx);
 if (!validate(reimported, {only: ['format']}).valid) throw new Error('the re-imported deck is not valid OPF');
 
-const editor = createEditorSession(deck, {rejectInvalid: true});
+const editor = createEditorSession(deck, {rejectInvalid: true, catalogs});
 editor.setCatalog('design.fontScheme', 'fontSchemes', 'georgia');
 const switched = await toPptx(editor.presentation, measured);
 if (sha256(switched) === sha256(pptx)) throw new Error('switching the font scheme must change the export');
