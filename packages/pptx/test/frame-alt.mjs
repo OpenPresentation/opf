@@ -1,10 +1,11 @@
 // FA-09: Chart.alt is the chart frame's alternative text (p:nvGraphicFramePr/p:cNvPr/@descr) on classic and chartex (Office 2016)
-// charts, "" is PowerPoint's decorative marker (adec:decorative), and fromPptx reads both back into chart.alt.
+// charts, "" is PowerPoint's decorative marker (adec:decorative), and fromPptx reads both back into chart.alt. FA-27 shares the
+// frame writer and reader with Table.alt (test/table-alt.mjs).
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {readFrameAlt, writeFrameAlt} from '../src/chart-alt.js';
+import {readFrameAlt, writeFrameAlt} from '../src/frame-alt.js';
 
 const decoder = new TextDecoder();
 const data = {columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12]]};

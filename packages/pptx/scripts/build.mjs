@@ -29,7 +29,7 @@ await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.j
 await copyFile(new URL('src/chart-types.js', root), new URL('chart-types.js', dist));
 await copyFile(new URL('src/chartex.js', root), new URL('chartex.js', dist));
 await copyFile(new URL('src/chart-options.js', root), new URL('chart-options.js', dist));
-await copyFile(new URL('src/chart-alt.js', root), new URL('chart-alt.js', dist));
+await copyFile(new URL('src/frame-alt.js', root), new URL('frame-alt.js', dist));
 await copyFile(new URL('src/chart-data.js', root), new URL('chart-data.js', dist));
 await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight.js', dist));
 await copyFile(new URL('src/data-provenance.js', root), new URL('data-provenance.js', dist));

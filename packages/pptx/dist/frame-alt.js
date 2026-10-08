@@ -1,5 +1,5 @@
-// FA-09: the text alternative of a chart (`Chart.alt`) is the chart frame's `p:nvGraphicFramePr/p:cNvPr/@descr`, the attribute a
-// picture's alt text uses. An empty `alt` marks the chart decorative, which PowerPoint stores as the `adec:decorative` extension of
+// FA-09, FA-27: the text alternative of a chart (`Chart.alt`) or a table (`Table.alt`) is its graphic frame's
+// `p:nvGraphicFramePr/p:cNvPr/@descr`, the attribute a picture's alt text uses. An empty `alt` marks the frame decorative, which PowerPoint stores as the `adec:decorative` extension of
 // the same `p:cNvPr` ("Mark as decorative"), not as an empty `descr`: PowerPoint writes `descr=""` for any shape without alt text.
 const DECORATIVE_URI = '{C183D7F6-B498-43B3-948B-1728B52AA6E4}';
 const DECORATIVE_NS = 'http://schemas.microsoft.com/office/drawing/2017/decorative';
@@ -34,8 +34,8 @@ export function writeFrameAlt(frame, alt) {
   return `${frame.slice(0, start.index)}${open}${body}${close}${frame.slice(tail)}`;
 }
 
-/** Apply every recorded chart alt to the frames (classic and chartex fallback) of a slide part's XML, matched by frame name. */
-export function applyChartAlt(xml, alts) {
+/** Apply every recorded chart and table alt to the frames (classic and chartex fallback charts, tables) of a slide part's XML, matched by frame name. */
+export function applyFrameAlt(xml, alts) {
   return xml.replace(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/g, frame => {
     const name = frame.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
     return alts.has(name) ? writeFrameAlt(frame, alts.get(name)) : frame;
