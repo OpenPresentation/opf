@@ -315,6 +315,19 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `type` | yes | `enum:title \| subtitle \| tag \| text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline` | The content kind of the region. This is the one OPF content-kind vocabulary: the same words name a slide's payload fields (text, items, image, video, chart, table, code, metric, quote, timeline). 'title', 'subtitle' a... |
+| `placement` | no | `ref:ImagePlacement` | Image placeholders only. Bleeds the slide's image for this region to one slide edge, as an image block's placement does: the n-th image placeholder places the slide's n-th top-level image (Slide.image or an image bloc... |
+
+#### ImagePlacement
+
+- Type: `object`
+- Required fields: `edge`
+- Purpose: The same object as ImagePlacement in opf.schema.json: a band along one slide edge for the image, edge to edge, with the rest of the slide left to the headings and the other content.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `edge` | yes | `enum:left \| right \| top \| bottom` | The slide edge the image bleeds to. In a right-to-left deck 'left' is the start side, drawn at the right. |
+| `size` | no | `number` | Share of the slide width (left, right) or height (top, bottom) given to the band. Default 0.5. |
+| `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band instead of edge to edge. Default false. |
 
 #### DesignHints
 
@@ -329,9 +342,8 @@ _No named properties._
 | `contentBox` | no | `boolean` | Whether the body regions are drawn inside a visible card or surface. |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Composition applies it when neither the slide nor this layout's composition sets a mode, below the slide's and the deck's... |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to the other body content. Composition applies it below the slide's and the deck's design.chartPrimary, with the semantics described there. |
-| `imageFill` | no | `enum:crop \| fit` | How images fill their region: 'crop' covers the region, 'fit' shows the whole image. |
+| `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
 | `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
-| `slideImage` | no | `object` | A slide-level image region the layout reserves, separate from any content image. Its presence is what lets a deck-wide design.slideImage apply to slides on this layout. The image itself comes from the slide or the dec... |
 
 #### Composition
 

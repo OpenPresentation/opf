@@ -17,7 +17,7 @@ const browser=await chromium.launch({channel:process.platform==='win32'?'msedge'
 try{
  const page=await browser.newPage();await page.route(/^https?:/,route=>{externalRequests.push(route.request().url());return route.abort();});page.on('pageerror',error=>errors.push(error.message));await page.setContent('<main></main>');
  for(const {file,deck:source}of examples.filter(({file,deck})=>file.startsWith('examples/gallery/')&&deck.assets)){
-  const assets=Object.fromEntries(names.map(name=>[name,source.assets[name]])),deck={assets,design:{imageFill:'fit'},slides:names.map(name=>({image:`asset:${name}`}))},before=structuredClone(deck),diagnostics=[];
+  const assets=Object.fromEntries(names.map(name=>[name,source.assets[name]])),deck={assets,design:{imageFit:'contain'},slides:names.map(name=>({image:`asset:${name}`}))},before=structuredClone(deck),diagnostics=[];
   const expected=names.map(name=>hash(Buffer.from(assets[name].src.split(',')[1],'base64')));
   const svgs=renderSvg(deck,{strictAssets:true,onDiagnostic:issue=>diagnostics.push(issue)});assert.equal(svgs.length,5);assert.deepEqual(diagnostics,[]);
   const decoded=[];

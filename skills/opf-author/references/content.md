@@ -51,6 +51,8 @@ Colour the one word that carries a headline, or cite a headline claim or a quote
 
 Cite a source from a heading, text, bullet, list item or quote run with `cite` (one id, or an array of ids, from the deck's top-level `references` list; unknown ids fail validation); add an inline note with `footnote`. Engines draw a superscript marker after the run and list `<n> <text>` in the slide's footnote area; markers are numbered per deck in order of first use, a reference keeps its number, every footnote takes a new one. Table cells, captions and reference texts cannot carry markers. A reference no run cites is a warning. `referencesSlide(presentation, {title})` from `@openpresentation/opf/composition` builds an ordinary list slide of the cited references for the end of the deck.
 
+An image block takes `fit` (`cover`, the default via `design.imageFit`; `contain`; `stretch`), `focus` (`{x, y}` kept in view by a cover crop), the treatments `shape` (`rectangle`, `rounded`, `circle`, `hexagon`), `cornerRadius`, `border`, `opacity`, `recolor` (`grayscale` or `{dark, light}`), `overlay` and `aspectRatio`, and on a top-level block `placement: {edge, size, inset}`, which bleeds it to one slide edge while the title and the other blocks compose beside it (one per edge). A full-slide photo behind the content is `design.background`, not an image block.
+
 An `image`, `chart`, `table` or `video` payload takes a `caption` (a string, `TextRun[]`, or `{text, position: "below" | "above", align: "left" | "center" | "right"}`), composed inside the block's region; only one captionable payload per block or slide root.
 
 ```json

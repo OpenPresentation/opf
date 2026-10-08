@@ -140,10 +140,10 @@ describe("planSnapshot", () => {
     const gallery = publishedFromSnapshot();
     const at = gallery.layouts.records.findIndex((record) => record.id === "chart-1x");
     gallery.layouts.records[at] = { ...gallery.layouts.records[at], name: "Chart_1x" };
-    const bleed = gallery.layouts.records.findIndex((record) => record.id === "image-bleed");
-    const { design, ...withoutDesign } = gallery.layouts.records[bleed];
-    assert.ok(design, "image-bleed carries its own design");
-    gallery.layouts.records[bleed] = withoutDesign;
+    const focus = gallery.layouts.records.findIndex((record) => record.id === "image-focus");
+    const { design, ...withoutDesign } = gallery.layouts.records[focus];
+    assert.ok(design, "image-focus carries its own design");
+    gallery.layouts.records[focus] = withoutDesign;
     gallery.layouts.index.contentSha256 = catalogContentSha256(gallery.layouts.records);
     const manifest = structuredClone(snapshot.manifest);
     manifest.kinds.layouts.mode = "subset";
@@ -152,7 +152,7 @@ describe("planSnapshot", () => {
     const owned = problems.filter((problem) => /core owns this bundled record/.test(problem));
     assert.equal(owned.length, 2, problems.join("\n"));
     assert.ok(owned.some((problem) => problem.startsWith("layouts/chart-1x.json:") && /\(name\)/.test(problem)), owned.join("\n"));
-    assert.ok(owned.some((problem) => problem.startsWith("layouts/image-bleed.json:") && /\(design\)/.test(problem)), owned.join("\n"));
+    assert.ok(owned.some((problem) => problem.startsWith("layouts/image-focus.json:") && /\(design\)/.test(problem)), owned.join("\n"));
   });
 });
 

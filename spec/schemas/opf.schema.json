@@ -1648,7 +1648,7 @@
         },
         "alt": {
           "type": "string",
-          "description": "Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the native slide background. Overrides the alt text of a referenced asset."
+          "description": "Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the native slide background; the alt text of a referenced asset does not count, so a background is decorative unless it says otherwise."
         },
         "fit": {
           "type": "string",
