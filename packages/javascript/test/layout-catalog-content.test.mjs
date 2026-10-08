@@ -6,7 +6,7 @@ import {layouts} from '../dist/catalogs.js';
 // points at the SVG the gallery publishes for it.
 describe('bundled layout records are described', () => {
   test('every record has a summary, a description, tags and a vector preview', () => {
-    assert.ok(layouts.length >= 100);
+    assert.ok(layouts.length >= 99);
     for (const record of layouts) {
       assert.ok(record.summary?.trim(), `${record.id}: summary`);
       assert.ok(record.description?.trim(), `${record.id}: description`);
@@ -22,7 +22,8 @@ describe('bundled layout records are described', () => {
       if (designed.has(record.id)) assert.equal(record.design?.contentAlignment, 'center', record.id);
       if (was.has(record.id)) assert.equal(record.design, undefined, record.id);
     }
-    // RR-58: image-bleed reserves a full-bleed background slide image; its title keeps the normal padding.
-    assert.deepEqual(layouts.find(record => record.id === 'image-bleed').design, {slideImage: {position: 'background'}});
+    // FA-22: a full-bleed photo is a background, not a layout; no record reserves a slide image any more.
+    assert.equal(layouts.find(record => record.id === 'image-bleed'), undefined);
+    assert.ok(layouts.every(record => record.design?.slideImage === undefined && record.design?.imageFill === undefined));
   });
 });

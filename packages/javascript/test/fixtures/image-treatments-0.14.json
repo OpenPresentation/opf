@@ -1,0 +1,625 @@
+{
+  "$comment": "Core 0.14 composition of docs/fixtures/image-treatments.opf.json (geometry.slideImage per slide at 1280x720, theme classic), frozen by FA-22 so 0.15 image blocks and backgrounds can be checked against the 0.14 frames.",
+  "treatments": {
+    "full-bleed": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 0H1280V720H0Z"
+      },
+      "overlay": {
+        "color": "dark1",
+        "opacity": 0.2,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": {
+          "kind": "rectangle",
+          "preset": "rect",
+          "adjust": {},
+          "path": "M0 0H1280V720H0Z"
+        }
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "text-overlay": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 0H1280V720H0Z"
+      },
+      "overlay": {
+        "color": "dark1",
+        "opacity": 0.55,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": {
+          "kind": "rectangle",
+          "preset": "rect",
+          "adjust": {},
+          "path": "M0 0H1280V720H0Z"
+        }
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "side-by-side": {
+      "position": "left",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 588.8,
+        "height": 720
+      },
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 588.8,
+        "height": 720
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 0H588.8V720H0Z"
+      },
+      "headings": [
+        {
+          "x": 646.4,
+          "y": 305.81,
+          "width": 576,
+          "height": 65.88
+        },
+        {
+          "x": 646.4,
+          "y": 383.69,
+          "width": 576,
+          "height": 30.5
+        }
+      ]
+    },
+    "caption-overlay": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M57.6 57.6H1222.4V662.4H57.6Z"
+      },
+      "overlay": {
+        "color": "dark1",
+        "opacity": 0.75,
+        "box": {
+          "x": 57.6,
+          "y": 511.2,
+          "width": 1164.8,
+          "height": 151.2
+        },
+        "shape": {
+          "kind": "rectangle",
+          "preset": "rect",
+          "adjust": {},
+          "path": "M57.6 511.2H1222.4V662.4H57.6Z"
+        }
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "masked-shape": {
+      "position": "right",
+      "fit": "cover",
+      "region": {
+        "x": 640,
+        "y": 0,
+        "width": 640,
+        "height": 720
+      },
+      "box": {
+        "x": 697.6,
+        "y": 132.754828,
+        "width": 524.8,
+        "height": 454.490344
+      },
+      "shape": {
+        "kind": "hexagon",
+        "preset": "hexagon",
+        "adjust": {
+          "adj": 25000,
+          "vf": 115470
+        },
+        "path": "M697.6 360L811.222586 132.754934L1108.777414 132.754934L1222.4 360L1108.777414 587.245066L811.222586 587.245066Z"
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 290.56,
+          "width": 524.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 368.44,
+          "width": 524.8,
+          "height": 61
+        }
+      ]
+    },
+    "circular-crop": {
+      "position": "left",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 512,
+        "height": 720
+      },
+      "box": {
+        "x": 57.6,
+        "y": 161.6,
+        "width": 396.8,
+        "height": 396.8
+      },
+      "shape": {
+        "kind": "circle",
+        "preset": "ellipse",
+        "adjust": {},
+        "path": "M57.6 360A198.4 198.4 0 1 1 454.4 360A198.4 198.4 0 1 1 57.6 360Z"
+      },
+      "headings": [
+        {
+          "x": 569.6,
+          "y": 305.81,
+          "width": 652.8,
+          "height": 65.88
+        },
+        {
+          "x": 569.6,
+          "y": 383.69,
+          "width": 652.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "rounded-card": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "shape": {
+        "kind": "rounded",
+        "preset": "roundRect",
+        "adjust": {
+          "adj": 5000
+        },
+        "path": "M57.6 87.84A30.24 30.24 0 0 1 87.84 57.6H1192.16A30.24 30.24 0 0 1 1222.4 87.84V632.16A30.24 30.24 0 0 1 1192.16 662.4H87.84A30.24 30.24 0 0 1 57.6 632.16Z"
+      },
+      "border": {
+        "color": "accent5",
+        "width": 1
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "duotone": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 0H1280V720H0Z"
+      },
+      "recolor": {
+        "type": "duotone",
+        "dark": "accent1",
+        "light": "light1"
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "background-blur": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 0H1280V720H0Z"
+      },
+      "overlay": {
+        "color": "light1",
+        "opacity": 0.4,
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": {
+          "kind": "rectangle",
+          "preset": "rect",
+          "adjust": {},
+          "path": "M0 0H1280V720H0Z"
+        }
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "image-strip": {
+      "position": "bottom",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 504,
+        "width": 1280,
+        "height": 216
+      },
+      "box": {
+        "x": 0,
+        "y": 504,
+        "width": 1280,
+        "height": 216
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 504H1280V720H0Z"
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 197.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 275.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "collage-grid": {
+      "items": [
+        {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 570.4,
+          "height": 245.46
+        },
+        {
+          "x": 652,
+          "y": 147.48,
+          "width": 570.4,
+          "height": 245.46
+        },
+        {
+          "x": 57.6,
+          "y": 416.94,
+          "width": 570.4,
+          "height": 245.46
+        },
+        {
+          "x": 652,
+          "y": 416.94,
+          "width": 570.4,
+          "height": 245.46
+        }
+      ]
+    },
+    "device-frame": {
+      "position": "right",
+      "fit": "cover",
+      "region": {
+        "x": 640,
+        "y": 0,
+        "width": 640,
+        "height": 720
+      },
+      "box": {
+        "x": 808.8,
+        "y": 57.6,
+        "width": 302.4,
+        "height": 604.8
+      },
+      "shape": {
+        "kind": "rounded",
+        "preset": "roundRect",
+        "adjust": {
+          "adj": 12000
+        },
+        "path": "M808.8 93.888A36.288 36.288 0 0 1 845.088 57.6H1074.912A36.288 36.288 0 0 1 1111.2 93.888V626.112A36.288 36.288 0 0 1 1074.912 662.4H845.088A36.288 36.288 0 0 1 808.8 626.112Z"
+      },
+      "border": {
+        "color": "dark1",
+        "width": 12
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 290.56,
+          "width": 524.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 368.44,
+          "width": 524.8,
+          "height": 61
+        }
+      ]
+    },
+    "cutout-subject": {
+      "position": "right",
+      "fit": "contain",
+      "region": {
+        "x": 640,
+        "y": 0,
+        "width": 640,
+        "height": 720
+      },
+      "box": {
+        "x": 640,
+        "y": 0,
+        "width": 640,
+        "height": 720
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M640 0H1280V720H640Z"
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 290.56,
+          "width": 524.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 368.44,
+          "width": 524.8,
+          "height": 61
+        }
+      ]
+    },
+    "watermark": {
+      "position": "background",
+      "fit": "contain",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M57.6 57.6H1222.4V662.4H57.6Z"
+      },
+      "opacity": 0.1,
+      "recolor": {
+        "type": "grayscale"
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    },
+    "cinematic-crop": {
+      "position": "background",
+      "fit": "cover",
+      "region": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 720
+      },
+      "box": {
+        "x": 0,
+        "y": 92.217573,
+        "width": 1280,
+        "height": 535.564854
+      },
+      "shape": {
+        "kind": "rectangle",
+        "preset": "rect",
+        "adjust": {},
+        "path": "M0 92.217573H1280V627.782427H0Z"
+      },
+      "headings": [
+        {
+          "x": 57.6,
+          "y": 305.81,
+          "width": 1164.8,
+          "height": 65.88
+        },
+        {
+          "x": 57.6,
+          "y": 383.69,
+          "width": 1164.8,
+          "height": 30.5
+        }
+      ]
+    }
+  }
+}

@@ -323,7 +323,7 @@ describe("presentation shapes that must validate", () => {
       design: {
         logo: { src: "asset:product-shot", alt: "Product screenshot" },
         watermark: { src: "asset:product-shot", opacity: 0.08 },
-        slideImage: { src: "asset:product-shot", position: "background" },
+        background: "asset:product-shot",
       },
       slides: [
         { title: "Image Asset Ref", type: "image", image: "asset:product-shot" },

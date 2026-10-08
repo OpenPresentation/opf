@@ -159,72 +159,73 @@ describe("blocks and regions", () => {
 describe("images between content and design", () => {
   const slide = { title: "T", blocks: [{ image: { src: "a.png", alt: "An A", title: "Cover" } }, { text: "Body" }] };
 
-  test("promote to slide image, background and watermark", () => {
-    const image = promoteImage(slide, ["blocks", 0], "slideImage", { position: "left" });
-    assert.deepEqual(image.slide.design.slideImage, { src: "a.png", position: "left", alt: "An A" });
-    assert.deepEqual(image.slide.blocks, [{ text: "Body" }]);
-    assert.deepEqual(image.loss, ["image title"]);
-    assert.equal(promoteImage(slide, ["blocks", 0], "slideImage").slide.design.slideImage.position, "right");
+  test("promote to background and watermark", () => {
     const background = promoteImage(slide, ["blocks", 0], "background");
-    assert.deepEqual(background.slide.design.background, { type: "image", image: { src: "a.png", fit: "cover" } });
-    assert.deepEqual(background.loss, ["image alt text", "image title"]);
+    assert.deepEqual(background.slide.design.background, { type: "image", src: "a.png", alt: "An A" });
+    assert.deepEqual(background.slide.blocks, [{ text: "Body" }]);
+    assert.deepEqual(background.loss, ["image title"]);
+    assert.ok(valid(background.slide));
+    // A background keeps the block's fit, focus, opacity and overlay; other treatments are reported.
+    const treated = promoteImage({ blocks: [{ image: "a.png", fit: "contain", focus: { x: 0.2, y: 0.3 }, opacity: 0.5, overlay: { color: "dark1", opacity: 0.4 }, shape: "circle", placement: { edge: "left" } }, { text: "x" }] }, ["blocks", 0], "background");
+    assert.deepEqual(treated.slide.design.background, { type: "image", src: "a.png", fit: "contain", focus: { x: 0.2, y: 0.3 }, opacity: 0.5, overlay: { color: "dark1", opacity: 0.4 } });
+    assert.deepEqual(treated.loss, ["image shape, placement"]);
     const watermark = promoteImage({ blocks: [{ image: "w.png" }, { text: "x" }] }, ["blocks", 0], "watermark", { opacity: 0.2 });
     assert.deepEqual(watermark.slide.design.watermark, { src: "w.png", opacity: 0.2 });
     assert.equal(watermark.lossless, true);
     assert.ok(valid(watermark.slide));
   });
 
-  test("promote handles a slide image, a region, a nested group and prunes what it empties", () => {
-    const root = promoteImage({ title: "T", image: "a.png", design: { theme: "minimal" } }, [], "slideImage");
-    assert.deepEqual(root.slide, { title: "T", design: { theme: "minimal", slideImage: { src: "a.png", position: "right" } } });
+  test("promote handles a root image, a region, a nested group and prunes what it empties", () => {
+    const root = promoteImage({ title: "T", image: "a.png", design: { theme: "minimal" } }, [], "background");
+    assert.deepEqual(root.slide, { title: "T", design: { theme: "minimal", background: { type: "image", src: "a.png" } } });
     const region = promoteImage({ left: { image: "a.png" }, right: { text: "R" } }, ["left"], "background");
     assert.deepEqual(Object.keys(region.slide), ["right", "design"]);
-    const nested = promoteImage({ blocks: [{ blocks: [{ image: "a.png" }] }, { text: "x" }] }, ["blocks", 0, "blocks", 0], "slideImage");
+    const nested = promoteImage({ blocks: [{ blocks: [{ image: "a.png" }] }, { text: "x" }] }, ["blocks", 0, "blocks", 0], "watermark");
     assert.deepEqual(nested.slide.blocks, [{ text: "x" }]);
-    const only = promoteImage({ blocks: [{ id: "i", image: "a.png" }] }, ["blocks", 0], "slideImage");
+    const only = promoteImage({ blocks: [{ id: "i", image: "a.png" }] }, ["blocks", 0], "background");
     assert.equal(only.slide.blocks, undefined);
     assert.deepEqual(only.loss, ["block id"]);
   });
 
   test("promote is refused for a non-image, an existing slot or a bad option", () => {
-    refused(() => promoteImage(slide, ["blocks", 1], "slideImage"), /only an image/);
-    refused(() => promoteImage({ ...slide, design: { background: { type: "image", image: { src: "b.png" } } } }, ["blocks", 0], "background"), /already sets/);
-    assert.equal(promoteImage({ ...slide, design: { background: { type: "image", image: { src: "b.png" } } } }, ["blocks", 0], "background", { replace: true }).changed, true);
+    refused(() => promoteImage(slide, ["blocks", 1], "background"), /only an image/);
+    refused(() => promoteImage({ ...slide, design: { background: { type: "image", src: "b.png" } } }, ["blocks", 0], "background"), /already sets/);
+    assert.equal(promoteImage({ ...slide, design: { background: { type: "image", src: "b.png" } } }, ["blocks", 0], "background", { replace: true }).changed, true);
     refused(() => promoteImage(slide, ["blocks", 0], "watermark", { opacity: 2 }), /between 0 and 1/);
-    refused(() => promoteImage(slide, ["blocks", 0], "slideImage", { position: "middle" }), /Choose a position/);
+    refused(() => promoteImage(slide, ["blocks", 0], "slideImage"), /background or watermark/);
   });
 
-  test("demote puts the image back as a block and reports the placement it cannot keep", () => {
-    const withDesign = { title: "T", text: "Body", design: { theme: "minimal", slideImage: { src: "a.png", position: "left", alt: "An A", fit: "fit" } } };
-    const result = demoteImage(withDesign, "slideImage");
-    assert.deepEqual(result.slide, { title: "T", design: { theme: "minimal" }, blocks: [{ text: "Body" }, { image: { src: "a.png", alt: "An A" } }] });
-    assert.deepEqual(result.loss, ["image position and framing"]);
+  test("demote puts the image back as a block with what the background held", () => {
+    const withDesign = { title: "T", text: "Body", design: { theme: "minimal", background: { type: "image", src: "a.png", alt: "An A", fit: "contain", overlay: { color: "dark1", opacity: 0.4 } } } };
+    const result = demoteImage(withDesign, "background");
+    assert.deepEqual(result.slide, { title: "T", design: { theme: "minimal" }, blocks: [{ text: "Body" }, { image: { src: "a.png", alt: "An A" }, fit: "contain", overlay: { color: "dark1", opacity: 0.4 } }] });
+    assert.equal(result.lossless, true);
     assert.deepEqual(result.path, ["blocks", 1]);
-    const first = demoteImage(withDesign, "slideImage", { index: 0 });
-    assert.deepEqual(first.slide.blocks[0], { image: { src: "a.png", alt: "An A" } });
-    const background = demoteImage({ text: "x", design: { background: { type: "image", image: { src: "b.png", fit: "tile" }, opacity: 0.5 } } }, "background");
-    assert.deepEqual(background.slide.blocks.at(-1), { image: "b.png" });
-    assert.deepEqual(background.loss, ["background fit and opacity"]);
-    assert.equal(background.slide.design, undefined);
+    const first = demoteImage(withDesign, "background", { index: 0 });
+    assert.deepEqual(first.slide.blocks[0].image, { src: "a.png", alt: "An A" });
+    const tiled = demoteImage({ text: "x", design: { background: { type: "image", src: "b.png", fit: "tile", opacity: 0.5 } } }, "background");
+    assert.deepEqual(tiled.slide.blocks.at(-1), { image: "b.png", opacity: 0.5 });
+    assert.deepEqual(tiled.loss, ["background tile fit"]);
+    assert.equal(tiled.slide.design, undefined);
+    assert.deepEqual(demoteImage({ text: "x", design: { background: "asset:hero" } }, "background").slide.blocks.at(-1), { image: "asset:hero" });
     const watermark = demoteImage({ design: { watermark: { src: "w.png", opacity: 0.1 } } }, "watermark");
     assert.deepEqual(watermark.slide, { image: "w.png" });
     assert.deepEqual(watermark.loss, ["watermark opacity"]);
-    assert.equal(demoteImage({ text: "x", design: { slideImage: "s.png" } }, "slideImage").lossless, true);
   });
 
   test("demote is refused when there is nothing to move or no room", () => {
-    refused(() => demoteImage({ text: "x" }, "slideImage"), /does not set/);
-    refused(() => demoteImage({ text: "x", design: { slideImage: { position: "left" } } }, "slideImage"), /only configures placement/);
+    refused(() => demoteImage({ text: "x" }, "background"), /does not set/);
     refused(() => demoteImage({ text: "x", design: { background: { type: "solid", color: "#fff" } } }, "background"), /not an image/);
-    refused(() => demoteImage({ left: { text: "x" }, design: { slideImage: "a.png" } }, "slideImage"), /free region/);
-    const region = demoteImage({ left: { text: "x" }, design: { slideImage: "a.png" } }, "slideImage", { region: "right" });
-    assert.deepEqual(region.slide, { left: { text: "x" }, right: { image: "a.png" } });
+    refused(() => demoteImage({ text: "x", design: { background: "dark1" } }, "background"), /not an image/);
+    refused(() => demoteImage({ left: { text: "x" }, design: { background: "asset:a" } }, "background"), /free region/);
+    const region = demoteImage({ left: { text: "x" }, design: { background: "asset:a" } }, "background", { region: "right" });
+    assert.deepEqual(region.slide, { left: { text: "x" }, right: { image: "asset:a" } });
   });
 
   test("promote then demote restores the slide when the image has only a source", () => {
     const original = { title: "T", blocks: [{ text: "Body" }, { image: "a.png" }] };
-    const promoted = promoteImage(original, ["blocks", 1], "slideImage");
-    const back = demoteImage(promoted.slide, "slideImage");
+    const promoted = promoteImage(original, ["blocks", 1], "background");
+    const back = demoteImage(promoted.slide, "background");
     assert.deepEqual(back.slide.blocks, original.blocks);
   });
 });

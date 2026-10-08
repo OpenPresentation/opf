@@ -22,7 +22,7 @@ test('the placeholder kinds are one vocabulary', () => {
 });
 
 test('every bundled layout record uses the new shape', () => {
-  assert.equal(layouts.length, 100);
+  assert.equal(layouts.length, 99);
   for (const record of layouts) {
     assert.equal(validateCatalogRecord('layouts', record).valid, true, record.id);
     for (const key of Object.keys(record)) assert.ok(key in layoutSchema.properties, `${record.id}: ${key}`);
