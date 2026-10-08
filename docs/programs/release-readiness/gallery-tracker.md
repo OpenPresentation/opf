@@ -8,17 +8,17 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 ## Summary
 
-1056 records; 1036 addressed, 20 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
+841 records; 823 addressed, 18 unaddressed. A record is addressed when it is done or deprecated, or when every gap is linked to an open RR item (todo, in-progress or review) or a pull request, or is descoped with an issue. A gap linked to a closed RR item is not addressed: the item claims a fix the measurement does not show yet (re-audit or reopen).
 
 | Type | Records | Statuses | Addressed | Unaddressed |
 | --- | ---: | --- | ---: | ---: |
-| layouts | 485 | done 100, descoped 385 | 485 | 0 |
+| layouts | 278 | done 272, unknown 6 | 272 | 6 |
 | color-schemes | 14 | done 14 | 14 | 0 |
 | font-schemes | 93 | done 35, descoped 3, parity-near 19, font-gap 36 | 93 | 0 |
 | languages | 93 | done 66, parity-near 2, font-gap 25 | 93 | 0 |
 | backgrounds | 6 | done 6 | 6 | 0 |
 | narratives | 48 | done 48 | 48 | 0 |
-| charts | 35 | done 17, descoped 1, missing-gallery 9, missing-spec 8 | 18 | 17 |
+| charts | 27 | done 17, descoped 1, unknown 9 | 18 | 9 |
 | themes | 4 | done 1, parity-near 3 | 4 | 0 |
 | audiences | 16 | done 16 | 16 | 0 |
 | tones | 7 | done 7 | 7 | 0 |
@@ -33,15 +33,15 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Status | Records | Severity | Meaning |
 | --- | ---: | ---: | --- |
-| `done` | 499 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
+| `done` | 671 | 0 | Every column passes: in the spec or catalog, composes, previews, exports and re-imports, parity perfect, switchable in the editor, shown on pptx.gallery, its fonts accepted, and a committed native PowerPoint evidence run names it. |
 | `deprecated` | 0 | 0 | A catalog record deprecated in favour of another id (its `deprecation.replacedBy`); kept so documents resolve, not shown on pptx.gallery and not measured by decision. |
-| `descoped` | 397 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
+| `descoped` | 12 | 0 | Every remaining gap is descoped by a decision, with an issue that states the current behaviour, what full support needs and the evidence. |
 | `works-unverified` | 0 | 1 | Every automated column passes, but no committed native PowerPoint evidence run names this value. |
-| `unknown` | 0 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
+| `unknown` | 15 | 1.5 | A column has no data source for this record (no audit, parity or probe measured it), so it is not known to work. |
 | `parity-near` | 32 | 2 | The preview and the PPTX agree only within the near tolerance on at least one parity check (latest parity run). |
 | `font-gap` | 108 | 2 | A font the value draws is not accepted in the font tracker (accepted means status qualified or documented-visual). |
-| `missing-gallery` | 12 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
-| `missing-spec` | 8 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
+| `missing-gallery` | 3 | 2 | Not shown on pptx.gallery: served only as catalog JSON, announced as coming, or without its card preview. |
+| `missing-spec` | 0 | 2 | Not in the bundled core catalog: published only by the pptx.gallery catalog, or not published in any catalog. |
 | `missing-editor` | 0 | 3 | The editor has no switch operation for this kind of value (FF-16, RR-06). |
 | `parity-mismatch` | 0 | 4 | The preview and the PPTX disagree beyond the near tolerance on at least one parity check. |
 | `native-mismatch` | 0 | 4 | Desktop PowerPoint reads the value differently from the exported file: a gated check of the RR-42 native run fails (opened, fonts, theme slots or colours, Presentation.Fonts, shape count or geometry, background, pictures, header/footer placeholders, fields, charts, notes or tags). |
@@ -68,10 +68,9 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Type | Gap | Records | Ids | Detail | Next action | Link |
 | --- | --- | ---: | --- | --- | --- | --- |
-| charts | `missing-gallery` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not shown on pptx.gallery | Give the value a gallery page and card, or record that it stays catalog-only. | - |
-| charts | `missing-spec` | 8 | `100pct-stacked-area-3x`, `100pct-stacked-bar-3x`, `100pct-stacked-column-3x`, `stacked-area-3x`, `stacked-bar-3x`, `stacked-column-3x`, `stacked-line-3x`, `stacked-line-with-markers-3x` | published by the pptx.gallery chart-types catalog but not bundled in core spec/catalogs (portable through an inline record) | Publish the value in the core catalog, or record that it stays gallery-only. | - |
 | slide-sizes | `missing-gallery` | 3 | `1:1`, `4:5`, `9:16` | pptx.gallery has no slide-size pages | Give the value a gallery page and card, or record that it stays catalog-only. | - |
 | charts | `unknown` | 9 | `100pct-stacked-area`, `100pct-stacked-bar`, `100pct-stacked-column`, `combo`, `stacked-area`, `stacked-bar`, `stacked-column`, `stacked-line`, `stacked-line-with-markers` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
+| layouts | `unknown` | 6 | `title-center-image-bottom`, `title-center-image-top`, `title-left-image-bottom`, `title-left-image-left`, `title-left-image-right`, `title-left-image-top` | not measured: compose, preview, export, roundTrip, parity (no gallery config in the audits or the parity run) | Measure the missing columns (audit or probe) and commit the result. | - |
 | slide-sizes | `unknown` | 3 | `1:1`, `4:5`, `9:16` | not measured: compose, preview, export, roundTrip, parity (no gallery config uses this preset) | Measure the missing columns (audit or probe) and commit the result. | - |
 
 ## Addressed gaps
@@ -88,7 +87,6 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | gallery-teasers | `missing-gallery` (descoped) | 1 | `transitions-and-motion` | pptx.gallery home lists "Transitions & motion" as coming: Per-slide transitions and element-level animation tokens. | Navigation and motion are deferred out of v1 by the owner (2026-10-01). | [opf#250](https://github.com/OpenPresentation/opf/issues/250) |
 | languages | `parity-near` | 27 | `amharic`, `arabic`, `armenian`, `bengali`, `chinese-simplified`, `chinese-traditional`, `chittagonian`, `georgian`, `gujarati`, `hebrew`, `hindi`, `japanese` and 15 more | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Nyala): Nyala -> Noto Sans Ethiopic) (and 20 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 | languages | `font-gap` | 25 | `amharic`, `arabic`, `armenian`, `bengali`, `chinese-simplified`, `chinese-traditional`, `chittagonian`, `georgian`, `gujarati`, `hebrew`, `hindi`, `japanese` and 13 more | Nyala script-gap (and 19 other details) | The font tracker's next action for the family (RR-17 font long tail: script corpora, native verification FF-46). | [RR-17](burndown.md) (in-progress) |
-| layouts | `missing-spec` (descoped) | 385 | `chart-1x-slideimage`, `chart-1x-title-center`, `chart-1x-title-center-slideimage`, `chart-1x-title-left`, `chart-1x-title-left-slideimage`, `chart-2x-slideimage`, `chart-2x-title-center`, `chart-2x-title-center-slideimage`, `chart-2x-vertical-title-left`, `chart-2x-vertical-title-left-slideimage`, `chart-3x-bottom-vertical-title-left`, `chart-3x-bottom-vertical-title-left-slideimage` and 373 more | published by the pptx.gallery layouts catalog but not bundled in core spec/catalogs (portable through an inline record) | Decided (RR-41, 2026-10-02): core keeps the 100 bundled layouts on purpose. Bundling the other 385 adds 54 KB to the packed core but 382 KB (19 KB gzipped) to every renderer, editor and exporter browser bundle, which never read a layout record. They resolve through the default catalog online or an inline record. Revisit after opf#318 splits the catalogs module per kind. | [opf#292](https://github.com/OpenPresentation/opf/issues/292) |
 | slide-sizes | `missing-gallery` (descoped) | 7 | `16:9`, `4:3`, `16:10`, `letter`, `a4`, `widescreen`, `standard` | pptx.gallery has no slide-size pages | A pptx.gallery aspect-ratio page with a card per preset. | [opf#293](https://github.com/OpenPresentation/opf/issues/293) |
 | themes | `parity-near` | 3 | `bold`, `classic`, `dark` | fontResolution near (fontResolution: visual-only replacement (no metric-compatible open font for Impact): Impact -> Anton; fontResolution: visual-only replac... (and 2 other details) | A visual look-alike route, intended by the owner decision of 2026-09-29 (the PPTX keeps the selected family); the font tracker carries the family's remaining work (FF-44, FF-46 native verification). | [RR-17](burndown.md) (in-progress) |
 
@@ -96,9 +94,9 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 
 | Input | Source |
 | --- | --- |
-| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `04792cc`) |
-| pptx.gallery pages | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (Data-Advantage/pptx-gallery `555c1a1`, captured 2026-10-05) |
-| Editor switches | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (OpenPresentation/opf-editor 0.11.2 `c7ac1d7`, `src/switches.js` SWITCH_DIMENSIONS, tested by `test/switches.mjs`) |
+| Catalogs | `spec/catalogs` (11 kinds, pinned to pptx-gallery `5645db8`) |
+| pptx.gallery pages | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (Data-Advantage/pptx-gallery `5645db8`, captured 2026-10-08) |
+| Editor switches | `docs/programs/release-readiness/gallery-tracker.snapshots.json` (OpenPresentation/opf-editor 0.14.2 `09f4ce2`, `src/switches.js` SWITCH_DIMENSIONS, tested by `test/switches.mjs`) |
 | Audits A and B | `docs/programs/font-fidelity-everywhere/gallery-support/audit-a/results.json`, `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results.json` (opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, pptx-gallery `c349a61`) |
 | Parity | `docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json` (850 values, 2026-10-03T00:22:04.269Z; opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, pptx-gallery `c349a61`). The latest committed parity run (RR-20 re-audit): the published 0.12 set (core 0.12.0, opf-render 0.12.0, opf-pptx 0.12.2, opf-editor 0.11.1) on pptx-gallery c349a61, with the RR-44 classifier for computed value-axis tick labels. It replaces the RR-16 candidate run (741 perfect, 109 near, 0 mismatch) and the published-package run before it (739 / 111 / 0); no value regressed. |
 | Audit B, later run | `docs/programs/font-fidelity-everywhere/gallery-support/audit-b/results-2026-10-02-published-0.12-catalog-only.json` (62 values; pptx-gallery `c349a61`, opf `5e1dda7`, opf-render `3b300a3`, opf-pptx `e4569ac`, opf-editor `f4779da`, node `26.7.0`) |
@@ -107,5 +105,5 @@ One record per item type and value: every catalog record in `spec/catalogs`, eve
 | Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
 | Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
 | Native run (RR-42) | `docs/evidence/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
-| Links | `docs/programs/release-readiness/burndown.md` (57 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
+| Links | `docs/programs/release-readiness/burndown.md` (57 items) and 7 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
 
