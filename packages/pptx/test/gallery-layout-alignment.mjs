@@ -20,6 +20,13 @@ const HOST = {catalogs: [defaultCatalog]};
 assert.equal(fixture.layouts.length, 57, 'the 50 partial and 7 gallery-only layouts audit A flagged');
 assert.equal(fixture.layouts.filter(layout => layout.status === 'partial').length, 50);
 
+// FA-26: chart-2x and chart-3x (named here, not embedded) now pair each chart with its note in a column placeholder group,
+// so their boxes move by design and they are no longer alignment-only layouts; test/placeholder-groups.mjs covers nested
+// records. Any other fixture layout whose host record gains groups must be reviewed the same way.
+const NESTED_RECORDS = ['chart-2x', 'chart-3x'];
+const nested = ({id, document}) => !document.catalogs?.default?.layouts?.[id] && (defaultCatalog.layouts[id]?.placeholders ?? []).some(entry => entry?.type === 'group');
+assert.deepEqual(fixture.layouts.filter(nested).map(layout => layout.id), NESTED_RECORDS);
+
 const decoder = new TextDecoder();
 const EXPORT = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z', ...HOST};
 const PT_PER_EMU = 1 / 12700, PT_PER_PX = 0.75, GATE_PT = 0.02;
@@ -53,6 +60,7 @@ const expectedAlignment = (slide, field) => (field === 'title' ? slide.design?.t
 
 let agreements = 0, layoutEffects = 0, chartFrames = 0;
 for (const {id, status, document} of fixture.layouts) {
+  if (NESTED_RECORDS.includes(id)) continue;
   const slide = document.slides[0];
   assert.equal(slide.layout, id);
   const base = withoutLayout(document);
@@ -123,4 +131,4 @@ for (const {id, status, document} of fixture.layouts) {
   for (const field of ['titleAlignment', 'contentAlignment']) if (slide.design[field] !== undefined) assert.equal(imported.slides[0].design?.[field], slide.design[field], `${id}: re-import keeps design.${field}`);
   assert.ok(status === 'partial' || status === 'gallery-only');
 }
-console.log(`Gallery layout alignment passed: ${fixture.layouts.length} flagged layouts (pptx-gallery ${fixture.gallery.slice(0, 7)}), ${agreements} native paragraphs at the preview's alignment, ${layoutEffects} layouts changing only alignment in both engines, ${chartFrames} chart frames within ${GATE_PT} pt, deterministic exports and round trips.`);
+console.log(`Gallery layout alignment passed: ${fixture.layouts.length - NESTED_RECORDS.length} flagged layouts (${NESTED_RECORDS.length} now nested) (pptx-gallery ${fixture.gallery.slice(0, 7)}), ${agreements} native paragraphs at the preview's alignment, ${layoutEffects} layouts changing only alignment in both engines, ${chartFrames} chart frames within ${GATE_PT} pt, deterministic exports and round trips.`);

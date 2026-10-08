@@ -93,5 +93,8 @@
       "browser": "./dist/image-fallback-browser.js",
       "default": "./dist/image-fallback-node.js"
     }
+  },
+  "opf": {
+    "requiresUnreleasedCore": "0.16.0"
   }
 }
