@@ -1,20 +1,23 @@
-// `opf import deck.pptx`: a PowerPoint file to an OPF document through opf-pptx `fromPptx`. Import is a conversion,
+// `opf import deck.pptx`: a PowerPoint file to an OPF document through the import engine (convert.ts, the one behind
+// `importDeck` of `@openpresentation/cli/api`, which calls opf-pptx `fromPptx`). Import is a conversion,
 // not a lossless round trip for arbitrary decks: what it cannot keep is reported as diagnostics. With --signals it also
 // writes the raw per-shape layout and style signals of the deck (`fromPptx(bytes, { signals: true })`), deterministic and local.
 import { type FindingSeverity, type ValidationReport, validate } from "@openpresentation/opf";
 import path from "node:path";
 import { FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches } from "./check.js";
 import { DeckReadError, checkText, deckExtension, fenceWarning, formatNamed, outputFormatOf, serialize, type DeckFormat } from "./deck.js";
-import { FileCommandError, arity, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
-import { type Diagnostic, PPTX_PACKAGE, loadPptx } from "./peers.js";
-import { Reporter, finishReport, reportThrown } from "./reporter.js";
+import { runImport } from "./convert.js";
+import { OPFApiError } from "./errors.js";
+import { FileCommandError, arity, commandError, json, parseOptions, readBytes, sha256, stemOf, writeFiles } from "./io.js";
+import { PPTX_PACKAGE, loadPptx } from "./peers.js";
+import { Reporter, finishReport } from "./reporter.js";
 import type { Host } from "./render.js";
 
 export async function runImportCommand(args: string[], host: Host) {
 	try {
 		await run(args, host);
 	} catch (error) {
-		const failure = error instanceof FileCommandError ? error : new FileCommandError(error instanceof Error ? error.message : String(error));
+		const failure = error instanceof FileCommandError ? error : error instanceof OPFApiError ? commandError(error) : new FileCommandError(error instanceof Error ? error.message : String(error));
 		process.stderr.write(json({ error: failure.message, ...failure.extra }));
 		process.exitCode = failure.code;
 	}
@@ -42,20 +45,13 @@ async function run(args: string[], host: Host) {
 
 	const source = await readBytes(input);
 	const reporter = new Reporter();
-	let imported: Record<string, unknown>;
-	let signals: { version?: number } | undefined;
-	try {
-		const onDiagnostic = (diagnostic: Diagnostic) => reporter.add("import", diagnostic);
-		if (signalsFile !== undefined) {
-			const result = (await pptx.module.fromPptx(source.bytes, { onDiagnostic, signals: true })) as unknown as { presentation: Record<string, unknown>; signals: { version?: number } };
-			imported = result.presentation;
-			signals = result.signals;
-		} else imported = await pptx.module.fromPptx(source.bytes, { onDiagnostic });
-	} catch (error) {
-		reportThrown(reporter, "import", error);
+	const run = await runImport(source.bytes, { signals: signalsFile !== undefined }, reporter, pptx);
+	if (run.failure || !run.presentation) {
 		finishAndPrint(host, pptx.version, input, source.bytes, reporter, undefined, undefined, undefined, failOn, false);
 		return;
 	}
+	const imported = run.presentation;
+	const signals = run.signals;
 
 	// An invalid deck is never written; its report is located in the JSON form, which every deck has.
 	const written: DeckFormat = outFormat !== "json" && validate(imported, { only: ["format"] }).valid ? outFormat : "json";

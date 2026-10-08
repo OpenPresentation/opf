@@ -1,14 +1,16 @@
 // Packed-install test for render, export and import: install the CLI tarball together with its optional peers
 // (opf-render and opf-pptx at the versions the workspace tests against, from the npm registry) into an isolated global
 // prefix, run the command tests against the installed binary, and repeat the main commands through an npx-style
-// `npm exec` with all three packages. Needs network access for the peers; test:cli:packed stays offline.
+// `npm exec` with all three packages. Needs network access for the peers and for core's own dependencies.
 import assert from 'node:assert/strict';
 import {mkdtemp, mkdir, readFile, rm, writeFile, realpath, readdir} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
+import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {cliPeerGate, report} from '../../../scripts/unreleased-gate.mjs';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 const pkg = path.join(root, 'packages/cli'), out = path.join(root, 'artifacts/cli');
@@ -18,7 +20,7 @@ const peers = ['@openpresentation/opf-render', '@openpresentation/opf-pptx'].map
 // ranges (a coordinated release not on npm yet), a pull request, merge-queue or roller-candidate run skips it with a notice (scripts/unreleased-gate.mjs).
 if (!report(cliPeerGate({cliRoot: pkg, executable: path.join(pkg, 'dist/index.js'), names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx'], installedVersions: manifest.devDependencies}))) process.exit(0);
 for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) assert.equal(manifest.peerDependenciesMeta[name].optional, true, `${name} must stay an optional peer`);
-assert.equal(manifest.dependencies, undefined, 'the CLI keeps no runtime dependencies');
+assert.deepEqual(Object.keys(manifest.dependencies ?? {}), ['@openpresentation/opf'], 'core is the only runtime dependency of the CLI');
 const temp = await mkdtemp(path.join(tmpdir(), 'opf-cli-peers-'));
 function run(command, args, cwd, env = {}) {
   if (process.platform === 'win32' && (command === 'npm' || command === 'pnpm')) {
@@ -44,25 +46,36 @@ try {
   // npm exec keeps its installs under <cache>/_npx, keyed by the package specs: the CLI tarball's path does not change
   // between runs, so a restored _npx could hold an earlier CLI. Only the content-addressed downloads are reused.
   if (sharedCache) await rm(path.join(sharedCache, '_npx'), {recursive: true, force: true});
-  const packed = JSON.parse(run('npm', ['pack', '--json', '--ignore-scripts', '--pack-destination', out, '--cache', cache], pkg))[0];
-  const tarball = path.join(out, packed.filename);
+  // RR-62: the CLI depends on core; the candidate core is packed with it and both are installed (scripts/pack-cli-candidate.mjs).
+  const candidate = await packCliCandidate({cliDirectory: pkg, coreDirectory: path.join(root, 'packages/javascript'), destination: out, run, npmArgs: ['--cache', cache]});
+  const packed = candidate.cli, tarball = candidate.cliTarball;
   // The published tarball stays small: no font packs, no native engines.
   assert.ok(packed.size < 3 * 1024 * 1024, `CLI tarball is ${packed.size} bytes`);
 
   // Install the CLI and its peers side by side, as `npm install -g @openpresentation/cli @openpresentation/opf-render ...` does.
-  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, ...peers], temp);
+  run('npm', ['install', '--global', '--prefix', temp, '--ignore-scripts', '--no-audit', '--no-fund', '--cache', cache, ...offline, tarball, candidate.coreTarball, ...peers], temp);
   const modules = path.join(temp, process.platform === 'win32' ? 'node_modules' : 'lib/node_modules');
   const installed = JSON.parse(await readFile(path.join(modules, '@openpresentation/cli/package.json'), 'utf8'));
-  assert.equal(Object.keys(installed.dependencies ?? {}).length, 0);
+  assert.deepEqual(Object.keys(installed.dependencies ?? {}), ['@openpresentation/opf']);
+  // One core for the command, @openpresentation/cli/api and both peers.
+  await assertOneCore(modules);
   assert.deepEqual(Object.keys(installed.peerDependenciesMeta).sort(), ['@openpresentation/opf-pptx', '@openpresentation/opf-render']);
   const bin = path.join(modules, '@openpresentation/cli', installed.bin.opf);
+  // RR-62: the library entry of the installed CLI draws and imports through the installed peers.
+  const apiProbe = path.join(temp, 'api-probe.mjs');
+  await writeFile(apiProbe, `import {exportDeck, importDeck, readDeck} from ${JSON.stringify(pathToFileURL(path.join(modules, '@openpresentation/cli/dist/api.js')).href)};
+    const {presentation} = readDeck('{"slides":[{"title":"Installed","text":"From the packed CLI"}]}');
+    const pdf = await exportDeck(presentation, {format: 'pdf'}), pptx = await exportDeck(presentation, {format: 'pptx'}), png = await exportDeck(presentation, {format: 'png'});
+    const back = await importDeck(pptx.files[0].bytes);
+    process.stdout.write(JSON.stringify({pdf: new TextDecoder().decode(pdf.files[0].bytes.subarray(0, 5)), png: png.files.length, slides: back.presentation.slides.length}));`);
+  assert.deepEqual(JSON.parse(run(process.execPath, [apiProbe], temp)), {pdf: '%PDF-', png: 1, slides: 1});
   const output = run(process.execPath, [path.join(pkg, 'test/files.mjs')], temp, {OPF_TEST_BIN: bin});
   console.log(output.trim());
 
   // npx-style: one run with the CLI and both peers in a single temporary install.
   const work = await realpath(await mkdtemp(path.join(temp, 'npx-')));
   await writeFile(path.join(work, 'deck.opf.json'), JSON.stringify({name: 'Npx', slides: [{title: 'Hello', text: 'From npx'}]}));
-  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, ...peers].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
+  const npx = (...args) => JSON.parse(run('npm', ['exec', '--yes', '--ignore-scripts', '--cache', cache, ...offline, ...[tarball, candidate.coreTarball, ...peers].flatMap(spec => ['--package', spec]), '--', 'opf', ...args], work));
   const rendered = npx('render', 'deck.opf.json', '--format', 'png', '--out', 'png');
   assert.equal(rendered.ok, true);
   // FA-08: output files are named by the deck's `name` ("Npx"), not the input file's stem.

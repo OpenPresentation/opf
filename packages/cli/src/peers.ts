@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { FileCommandError } from "./io.js";
+import { OPFApiError } from "./errors.js";
 
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
@@ -67,9 +67,9 @@ export interface Peer<T> {
 }
 
 const hint = (name: string) =>
-	`${name} is not installed. It is an optional peer of @openpresentation/cli, loaded only by the commands that need it. Install it next to the CLI:\n` +
+	`${name} is not installed. It is an optional peer of @openpresentation/cli, loaded only by the commands (and by exportDeck and importDeck of @openpresentation/cli/api) that need it. Install it next to the CLI:\n` +
 	`  npm install -g ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (global CLI)\n` +
-	`  npm install -D ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that depends on the CLI)\n` +
+	`  npm install ${name}@${PEER_RANGES[name as keyof typeof PEER_RANGES]}      (project that depends on the CLI or imports @openpresentation/cli/api)\n` +
 	`  npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentation/opf-pptx opf <command> ...      (one run)`;
 
 function bases(): string[] {
@@ -98,12 +98,12 @@ async function loadPeer<T>(name: string, subpath = ""): Promise<Peer<T>> {
 	if (cached) return cached as Peer<T>;
 	const manifestPath = locate(`${name}/package.json`);
 	const entry = locate(`${name}${subpath}`);
-	if (!manifestPath || !entry) throw new FileCommandError(hint(name), 2, { code: "peer-not-installed", package: name, range: PEER_RANGES[name as keyof typeof PEER_RANGES] });
+	if (!manifestPath || !entry) throw new OPFApiError(hint(name), "peer-not-installed", { details: { package: name, range: PEER_RANGES[name as keyof typeof PEER_RANGES] } });
 	let module: T;
 	try {
 		module = (await import(pathToFileURL(entry).href)) as T;
 	} catch (error) {
-		throw new FileCommandError(`${name} is installed at ${path.dirname(manifestPath)} but did not load: ${(error as Error).message}`, 2, { code: "peer-load-failed", package: name });
+		throw new OPFApiError(`${name} is installed at ${path.dirname(manifestPath)} but did not load: ${(error as Error).message}`, "peer-load-failed", { details: { package: name }, cause: error });
 	}
 	const version = (JSON.parse(readFileSync(manifestPath, "utf8")) as { version?: string }).version ?? "unknown";
 	const peer = { module, version, name };
@@ -114,7 +114,7 @@ async function loadPeer<T>(name: string, subpath = ""): Promise<Peer<T>> {
 function requireFeature(peer: Peer<unknown>, names: string[]) {
 	const missing = names.filter((name) => typeof (peer.module as Record<string, unknown>)[name] !== "function");
 	if (missing.length)
-		throw new FileCommandError(`${peer.name}@${peer.version} does not provide ${missing.join(", ")}. Install ${peer.name}@${PEER_RANGES[peer.name as keyof typeof PEER_RANGES]}.`, 2, { code: "peer-too-old", package: peer.name });
+		throw new OPFApiError(`${peer.name}@${peer.version} does not provide ${missing.join(", ")}. Install ${peer.name}@${PEER_RANGES[peer.name as keyof typeof PEER_RANGES]}.`, "peer-too-old", { details: { package: peer.name } });
 }
 
 export interface Renderer {

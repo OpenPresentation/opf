@@ -153,7 +153,7 @@ Contract paths are JSON Pointer patterns: `~0` escapes `~`, `~1` escapes `/`, an
 
 `opf validate <file|-> [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <error|warning|info>] [--format <json|text>] [--list-rules]`
 
-The JSON report (the default) is the `validate` report plus the source's SHA-256 (`sha256`), the bundled core version (`opfVersion`) and, with `--config`, the configuration file's path and hash (`context`). `--format text` prints one line per finding (`file:line:column  severity  rule  message`), the JSON Pointer path, a hint and any fix, then a summary. `--list-rules` prints every rule (`--format json` with its full metadata).
+The JSON report (the default) is the `validate` report plus the source's SHA-256 (`sha256`), the installed core version (`opfVersion`) and, with `--config`, the configuration file's path and hash (`context`). `--format text` prints one line per finding (`file:line:column  severity  rule  message`), the JSON Pointer path, a hint and any fix, then a summary. `--list-rules` prints every rule (`--format json` with its full metadata).
 
 A file ending `.yaml` or `.yml` (or stdin with `--input-format yaml`) is read as YAML through `fromYaml`, so the report is the same and every finding is located in the YAML; a YAML syntax or dialect error is a `yaml/<rule>` finding (`format`, exit 1). A file ending `.opf.md` (or stdin with `--input-format markdown`) is read as a [Markdown deck](markdown.md#markdown-decks-in-every-command) the same way, and a Markdown error is a `markdown/<rule>` finding. A plain `.md` file is not a deck.
 

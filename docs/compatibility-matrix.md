@@ -31,6 +31,10 @@ the versions below or established complete native compatibility.
 | `@openpresentation/opf-editor` | 0.12.1 | `@openpresentation/opf@^0.13.0`; optional peer `@openpresentation/opf-render@^0.13.1` |
 | `@openpresentation/opf-pptx` | 0.13.2 | `@openpresentation/opf@^0.13.0`; optional peer `@openpresentation/opf-render@^0.13.1` |
 
+From CLI 0.16.0 the CLI depends on core (`@openpresentation/opf`, a regular dependency, not a bundled copy) and
+exposes `@openpresentation/cli/api`; the renderer and PPTX stay optional peers. The row above describes the published
+0.11.0.
+
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
@@ -114,6 +118,8 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | Edit + undo | `@openpresentation/opf-editor` `createEditorSession` | JSON Patch undo/redo |
 | JSON Patch CLI | `opf edit` | No persistent CLI undo history |
 | SVG preview | `renderSvg` (every slide) / `renderSlideSvg` (one slide) | Local; the same `{ fonts }` as layout |
+| Export and import files from code | `exportDeck` / `importDeck` of `@openpresentation/cli/api` (CLI 0.16.0 and later) | PDF, PNG, SVG and PPTX out, PPTX in, with the bundled fonts, no network and no clock; calls opf-render and opf-pptx as optional peers and throws `OPFExportError` / `OPFImportError` with the install command when one is missing. `opf render`, `opf export` and `opf import` run the same engine ([CLI reference](cli.md#library-api)) |
+| Read and write a deck in JSON, YAML or Markdown | `readDeck` / `writeDeck` (core; re-exported by `cli/api`) | One entry point for the three text formats |
 | PNG | `svgToPng` | Node raster of SVG |
 | PDF | `svgToPdf` | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `mode: "raster"` keeps the image-per-slide output. Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
 | Editable PPTX export | `toPptx` | OPF → PPTX serialization. Furniture is tagged slide shapes (`OPF_FURNITURE_V1`), not native `p:hf` / notes-master Header/Footer objects |
@@ -338,6 +344,8 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 CLI 0.9.2 and earlier do not render or export PPTX; CLI 0.10.0 adds `opf render`, `opf export` and `opf import`
 through the optional peers opf-render and opf-pptx ([CLI reference](cli.md)). The Node `svgToPng` / `svgToPdf`
 APIs stay Node-only; renderer 0.12.0 adds the separate `@openpresentation/opf-render/export-browser` entry for browsers.
+`@openpresentation/cli/api` is Node-only too: it reads font files and the engines' native packages. In a browser, use the
+engines' browser entries.
 
 ## Predecessor notes
 

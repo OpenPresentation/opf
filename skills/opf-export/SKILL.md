@@ -10,7 +10,21 @@ Start with a validated OPF document and the output formats the user requested. P
 
 ## Use the CLI first for files
 
-When the `opf` CLI is available, `opf render`, `opf export` and `opf import` produce and read files with the pinned, deterministic pipeline and the `opf validate` report shape, with no code to write: `opf render deck.opf.json --format png`, `opf export deck.opf.json --format pptx|pdf|png|svg`, `opf import deck.pptx`. They need the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` installed beside the CLI (a missing peer exits 2 with the install command), never load system fonts or fetch URLs, and read images only from the deck's folder. Read the report: `findings` and `counts` are the evidence, and `--fail-on warning` fails on warnings. Reference: [CLI render, export and import](references/rendering.md#cli). Use the library APIs below when you need custom fonts in code, a browser preview or an option the CLI does not expose.
+When the `opf` CLI is available, `opf render`, `opf export` and `opf import` produce and read files with the pinned, deterministic pipeline and the `opf validate` report shape, with no code to write: `opf render deck.opf.json --format png`, `opf export deck.opf.json --format pptx|pdf|png|svg`, `opf import deck.pptx`. They need the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` installed beside the CLI (a missing peer exits 2 with the install command), never load system fonts or fetch URLs, and read images only from the deck's folder. Read the report: `findings` and `counts` are the evidence, and `--fail-on warning` fails on warnings. Reference: [CLI render, export and import](references/rendering.md#cli). From code, call the same engine as a library (next section). Use the engine APIs below when you need your own fonts handle, a browser preview or an option the library function does not expose.
+
+## From code: `@openpresentation/cli/api`
+
+In an application or script, `exportDeck` and `importDeck` of `@openpresentation/cli/api` do what the commands do and return bytes instead of writing files; `readDeck` and `writeDeck` (core's, re-exported) read and write the JSON, YAML or Markdown text. `opf render`, `opf export` and `opf import` are wrappers over them, so the output is the same.
+
+```js
+import { readDeck, exportDeck, importDeck } from '@openpresentation/cli/api';
+
+const { presentation } = readDeck(text, { filename: 'deck.opf.md' });
+const { files, findings } = await exportDeck(presentation, { format: 'pdf' }); // files: [{ name, type, bytes }]
+const { presentation: back } = await importDeck(pptxBytes);
+```
+
+`format` is `pdf`, `png`, `svg` or `pptx`; `png` and `svg` give one file per slide (or one zip with `zip: true`). Options: `slides`, `includeHidden`, `paginate`, `scale`, `pdfMode`, `svgFonts`, `chartex`, `provenance`, `imageFormat`, `date`, `catalogs` (core's default catalog when omitted), `fonts` (a prepared handle) or `fontDirs`, `assetDir` and `filename`. It is deterministic: bundled open fonts, no system fonts, no network, no clock (pass `date` for a date field), and local images only from `assetDir`. `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed; a missing one throws `OPFExportError` or `OPFImportError` with `code` `peer-not-installed` and the install command. Read `findings` as you read the command's report. An invalid presentation throws `invalid-presentation` with its error findings. Reference: [library API](references/rendering.md#library-api).
 
 ## Establish the rendering inputs
 

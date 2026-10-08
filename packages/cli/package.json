@@ -1,11 +1,18 @@
 {
   "name": "@openpresentation/cli",
   "version": "0.15.0",
-  "description": "Local OPF CLI for agents: create, validate, edit, paginate, render, export to PPTX/PDF, import PPTX, and inspect presentation JSON.",
+  "description": "Local OPF CLI for agents and the library API @openpresentation/cli/api: create, validate, edit, paginate, render, export to PPTX/PDF, import PPTX, and inspect presentation JSON.",
   "license": "MIT",
   "type": "module",
   "bin": {
     "opf": "./dist/index.js"
+  },
+  "exports": {
+    "./api": {
+      "types": "./dist/api.d.ts",
+      "import": "./dist/api.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "pnpm --filter @openpresentation/opf build && (node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp))",
@@ -16,11 +23,13 @@
     "test:packed:peers": "node test/packed-files.mjs",
     "prepack": "pnpm build"
   },
+  "dependencies": {
+    "@openpresentation/opf": "^0.16.0"
+  },
   "devDependencies": {
     "@types/node": "^24.13.4",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
-    "@openpresentation/opf": "workspace:*",
     "@openpresentation/opf-pptx": "0.15.0",
     "@openpresentation/opf-render": "0.15.0"
   },

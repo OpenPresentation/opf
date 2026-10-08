@@ -43,7 +43,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 ## Start in three steps
 
 1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the current pin set: core 0.14.0, renderer 0.14.0, editor 0.14.2, PPTX 0.14.0 and CLI 0.11.0.
-2. **Author, validate, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
+2. **Author, validate, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `exportDeck(presentation, { format: "pdf" })` of `@openpresentation/cli/api` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
 Your deck can live in git from the first commit. After installing dependencies and supplying referenced assets, these commands run locally without a model provider, account or hosted OPF API.
@@ -62,10 +62,11 @@ It does not render `.pptx`, parse `.pptx`, generate content with AI, fetch remot
 
 ## Toolkit libraries
 
-The local toolkit lives in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
+OPF is five packages. **Core** (`@openpresentation/opf`) reads and writes the text formats (JSON, YAML, Markdown) and validates. **The CLI package** (`@openpresentation/cli`) is the `opf` command and the library API `@openpresentation/cli/api`, which reads and writes files (`exportDeck`, `importDeck`). **Render** (`opf-render`) and **PPTX** (`opf-pptx`) are the engines behind them, installed as needed. **The editor** (`opf-editor`) is the headless editing layer. The engines and the editor live in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
 | Repo | Role | Boundary |
 |---|---|---|
+| `cli` (`@openpresentation/cli`, this repository) | `opf` command; `cli/api`: `exportDeck`, `importDeck`, `readDeck` | Reads and writes files; calls the engines below as optional peers |
 | `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
 | `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
 | `opf-pptx` | OPF to PPTX and PPTX to OPF | Pure local import/export library for browser and server use where supported |
@@ -107,6 +108,16 @@ console.log(report.findings); // every finding: rule id, severity, category, JSO
 // Core ships no catalog records in its main entry; a host registers the catalogs it trusts.
 console.log(validate({ ...deck, design: { theme: "classic" } }, { catalogs: [defaultCatalog] }).valid);
 console.log(Object.keys(defaultCatalog.audiences).length);
+```
+
+Export and import files from code with the CLI package's library API (the engines `@openpresentation/opf-render` and `@openpresentation/opf-pptx` are optional peers, installed as needed):
+
+```ts
+import { readDeck, exportDeck, importDeck } from "@openpresentation/cli/api";
+
+const { presentation } = readDeck(text, { filename: "deck.opf.md" }); // JSON, YAML or Markdown
+const { files } = await exportDeck(presentation, { format: "pdf" });    // [{ name, type, bytes }]
+const imported = await importDeck(pptxBytes);                          // PPTX to OPF
 ```
 
 Use focused imports when you only need one surface:

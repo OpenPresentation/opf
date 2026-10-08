@@ -5,6 +5,9 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
+import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
+import {assertOneCore} from '../../../scripts/check-one-core.mjs';
+import {satisfies} from '../../../scripts/unreleased-gate.mjs';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
 const registry=process.argv.includes('--registry');
@@ -35,8 +38,16 @@ try {
  await mkdir(out,{recursive:true});
  if(!registry)run('pnpm',['build'],pkg);
  const cache=path.join(temp,'npm-cache');
- const packed=JSON.parse(run('npm',['pack',...(registry?[registrySpec]:[]),'--json','--ignore-scripts','--pack-destination',out,'--cache',cache],pkg))[0];
- const tarball=path.join(out,packed.filename);
+ // RR-62: the CLI depends on core (one core for the command and for @openpresentation/cli/api). A local run packs the candidate core
+ // with it and installs both; a registry run installs the published CLI, which pulls the published core.
+ let packed,tarball,candidateCore=[];
+ if(registry){
+  packed=JSON.parse(run('npm',['pack',registrySpec,'--json','--ignore-scripts','--pack-destination',out,'--cache',cache],pkg))[0];
+  tarball=path.join(out,packed.filename);
+ } else {
+  const candidate=await packCliCandidate({cliDirectory:pkg,coreDirectory:path.join(root,'packages/javascript'),destination:out,run,npmArgs:['--cache',cache]});
+  packed=candidate.cli;tarball=candidate.cliTarball;candidateCore=[candidate.coreTarball];
+ }
  if(registry){
   // Install directly from npm as well as from the inspected tarball so npm can
   // authenticate the registry signature and provenance for this exact artifact.
@@ -50,30 +61,36 @@ try {
   assert.equal(entry.integrity,packed.integrity,'Registry install must match the inspected tarball');
   console.log(run('npm',['audit','signatures','--cache',cache],consumer).trim());
  }
- // Install globally into an isolated prefix, offline, with no workspace links or dependencies.
- run('npm',['install','--global','--prefix',temp,'--offline','--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball],temp);
+ // Install globally into an isolated prefix with no workspace links: the CLI, the core it depends on and core's own dependencies come from tarballs and the registry.
+ run('npm',['install','--global','--prefix',temp,'--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball,...candidateCore],temp);
  const installed=path.join(temp,process.platform==='win32'?'node_modules':'lib/node_modules','@openpresentation/cli');
  const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  assert.equal(manifest.version,expected.version);
- assert.ok(!manifest.private);assert.equal(Object.keys(manifest.dependencies??{}).length,0);
+ assert.ok(!manifest.private);
+ assert.deepEqual(Object.keys(manifest.dependencies??{}),['@openpresentation/opf'],'core is the only runtime dependency of the CLI');
+ assert.equal(manifest.exports['./api'].import,'./dist/api.js');assert.equal(manifest.exports['./api'].types,'./dist/api.d.ts');
+ for(const file of ['dist/api.js','dist/api.d.ts','dist/index.js'])assert.ok(existsSync(path.join(installed,file)),file+' ships');
+ // One core: the installation holds a single @openpresentation/opf, which the command and @openpresentation/cli/api both use.
+ const one=await assertOneCore(path.dirname(path.dirname(installed)));
  const bin=path.join(installed,manifest.bin.opf);
  const versions=JSON.parse(run(process.execPath,[bin,'--version'],temp));
  assert.equal(versions.cli,expected.version);
+ assert.equal(versions.opf,(await readFile(path.join(one.copy,'package.json'),'utf8').then(JSON.parse)).version,'opf --version reports the one installed core');
  if(registry){
   const ref=verificationRef??plan.verificationRefs.cli;
   assert.match(ref,/^[a-f0-9]{40}$/);
   const cliManifest=JSON.parse(run('git',['show',`${ref}:packages/cli/package.json`],root));
   assert.equal(cliManifest.version,expected.version,'Command tests must belong to the selected CLI version');
-  const coreManifest=JSON.parse(run('git',['show',`${ref}:packages/javascript/package.json`],root));
-  assert.equal(versions.opf,coreManifest.version,'Bundled core must match the immutable CLI source');
+   const sourceManifest=JSON.parse(run('git',['show',`${ref}:packages/cli/package.json`],root));
+  assert.ok(satisfies(one.version,sourceManifest.dependencies['@openpresentation/opf']),'The installed core must satisfy the CLI dependency range at the release commit');
  }
  assert.ok(JSON.parse(run(process.execPath,[bin,'create','-','--title','Installed binary'],temp)).slides.length);
  const richDeck={slides:[{table:{columns:[['Rich ',{text:'header',bold:true}]],rows:[[[{text:'Cell',italic:true}]]]}}]};
  const richFile=path.join(temp,'rich-table.opf.json');await writeFile(richFile,JSON.stringify(richDeck));
  run(process.execPath,[bin,'validate',richFile],temp);
  await writeFile(path.join(temp,'AGENTS.md'),'Keep existing project instructions.');
- const npxResult=JSON.parse(run('npm',['exec','--yes',registry?'--prefer-online':'--offline','--ignore-scripts','--cache',cache,'--package',registry?registrySpec:tarball,'--','opf','skills','install'],temp));
- assert.equal(npxResult.changed.length,6,'npx-style offline installation must install the bundled skills');
+ const npxResult=JSON.parse(run('npm',['exec','--yes','--prefer-online','--ignore-scripts','--cache',cache,'--package',registry?registrySpec:tarball,...candidateCore.flatMap(file=>['--package',file]),'--','opf','skills','install'],temp));
+ assert.equal(npxResult.changed.length,6,'npx-style installation must install the bundled skills');
  assert.equal(await readFile(path.join(temp,'AGENTS.md'),'utf8'),'Keep existing project instructions.');
  assert.deepEqual(JSON.parse(run(process.execPath,[bin,'skills','install'],temp)).changed,[]);
  assert.ok(JSON.parse(await readFile(path.join(temp,'.agents/skills/opf-author/assets/decision-brief.opf.json'),'utf8')).slides.length);

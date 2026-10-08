@@ -46,6 +46,7 @@ One format, every runtime:
 | JSON Schema | `https://openpresentation.org/schema/opf/v1` | Any JSON Schema validator, editor, or agent |
 | JavaScript/TypeScript OPF package | `@openpresentation/opf` (public npm package, pre-stable 0.x) | Schemas, catalogs, types, local validation |
 | Local OPF CLI | `opf` (local workspace source; distribution deferred) | Validate, format, and inspect OPF locally |
+| CLI library API | `@openpresentation/cli/api` | `exportDeck`, `importDeck` and core's `readDeck`/`writeDeck`: reads and writes files (PDF, PNG, SVG, PPTX); uses the render and PPTX engines as optional peers |
 | Future render toolkit | `opf-render` | Local and embeddable SVG, PNG, and PDF rendering |
 | Future editor toolkit | `opf-editor` | Headless bindings and optional embeddable editor components |
 | Future PPTX toolkit | `opf-pptx` | Local OPF-to-PPTX export and PPTX-to-OPF import |

@@ -3,7 +3,7 @@
 The CLI (`@openpresentation/cli`, binary `opf`, Node 24) validates, edits, paginates and bundles documents (see
 [its README](../packages/cli/README.md)). `opf validate` is the one checker ([validate](validate.md)). Three commands
 produce and read files: `opf render`, `opf export` and `opf import`. They are in the CLI after RR-27 of the [release readiness program](programs/release-readiness/README.md)
-and ship in CLI 0.10.0, the first CLI release after 0.9.2.
+and ship in CLI 0.10.0, the first CLI release after 0.9.2. The same code is a library: [`@openpresentation/cli/api`](#library-api) (`exportDeck`, `importDeck`, `readDeck`).
 
 All three are deterministic and local: no network, no model, no telemetry, no system fonts. The same document, options
 and installed package versions give the same bytes on every operating system.
@@ -25,6 +25,53 @@ npx -p @openpresentation/cli -p @openpresentation/opf-render -p @openpresentatio
 The CLI looks for a peer beside itself first (a global install, an npx run, a project dependency) and in the working
 directory second. Without it the command exits 2 with `code: "peer-not-installed"` and the install command. The
 commands check the functions they call and name the version to install when an older peer lacks one.
+
+## Library API
+
+`@openpresentation/cli/api` gives an application the engines of these commands without spawning a process. Core reads and
+writes the text formats (`readDeck`, `writeDeck`, `validate`); this entry reads and writes files (`exportDeck`,
+`importDeck`). `opf render`, `opf export` and `opf import` are thin wrappers over `exportDeck` and `importDeck`: they add
+reading the document, `--out`, atomic writes, the JSON report and the exit codes, and nothing else.
+
+```ts
+import { readDeck, exportDeck, importDeck } from "@openpresentation/cli/api";
+
+const { presentation, findings } = readDeck(text, { filename: "deck.opf.md" });  // JSON, YAML or .opf.md (core)
+const out = await exportDeck(presentation, { format: "pdf" });                    // { files: [{ name, type, bytes }], findings, ... }
+const { presentation: back } = await importDeck(pptxBytes, { catalogs });         // PPTX to OPF
+```
+
+| Command option | `exportDeck` option |
+| --- | --- |
+| `--format svg\|png\|pdf\|pptx` | `format` (required) |
+| `--slides 1,3-5`, `--include-hidden`, `--paginate` | `slides` (`"1,3-5"` or `[1, 3]`), `includeHidden`, `paginate` |
+| `--scale`, `--pdf-mode`, `--svg-fonts` | `scale`, `pdfMode`, `svgFonts` |
+| `--chartex`, `--provenance`, `--image-format` | `chartex`, `provenance`, `imageFormat` |
+| `--date YYYY-MM-DD` | `date` |
+| `--font-dir <dir>` (repeatable) | `fontDirs` (or `fonts`: a prepared `loadFonts()` handle, reused across calls) |
+| `--asset-dir <dir>` | `assetDir` (without it no local image file is read) |
+| `--out x.zip` | `zip: true` |
+| the input file name | `filename` (names the files when the presentation has no `filename` or `name`) |
+| the default catalog | `catalogs` (core's `defaultCatalog` when omitted) |
+
+What `exportDeck` returns, per format: `png` and `svg` one file per slide (`<name>-001.png`, with `slide`, `id`, `width`
+and `height`), or one `<name>.zip` with `zip: true` (`entries` lists the names); `pdf` one file with `pages` and `slides`;
+`pptx` one file. Also `findings` (the format and references check's warnings and notes, and the diagnostics of the fonts,
+layout, SVG, PDF and PPTX writers, each with a `render/`, `pptx/`, `pdf/`, `fonts/` or `cli/` rule prefix), `fonts` (the pack,
+the font files and the substitutions made), `skippedHidden` and the engines' packages and versions. `importDeck` returns
+`{ presentation, findings, pptx, signals? }`.
+
+The function does what the command does for a document it has already read: it checks format and references (an invalid
+presentation throws `invalid-presentation` with the error findings; the command prints the same findings as its report),
+draws with the bundled fonts, and returns bytes. It never writes a file, reads a clock or fetches anything. Errors are
+`OPFExportError` and `OPFImportError` (both extend `OPFApiError`) with `code`, `details` and `findings`. The codes are the
+command's: `peer-not-installed`, `peer-too-old` and `peer-load-failed` (command exit 2), `invalid-option` (2),
+`invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed` and `import-failed` (1).
+
+`@openpresentation/opf-render` and `@openpresentation/opf-pptx` are the same optional peers as for the command, loaded the
+first time a function needs them. Core (`@openpresentation/opf`) is a regular dependency of the CLI package, not a bundled
+copy, so the command, `/api` and an application that imports core directly run one core: the classes core throws
+(`OPFValidationError`) are the ones the application catches.
 
 ## `opf render`
 
@@ -166,7 +213,7 @@ same codes; text that is not valid JSON is an invalid document, exit `1`, with a
 - **Peers, not bundled.** opf-render and opf-pptx are optional peer dependencies loaded lazily. opf-pptx pulls the
   native `sharp` engine, opf-render `resvg`, `fontkit` and the font packs (about 135 MB installed); bundling them would
   turn a 1.6 MB, dependency-free CLI into one that cannot be installed offline or on a locked-down agent host, and
-  validating or editing a document would pay for it. The tarball stays small and `dependencies` stays empty.
+  validating or editing a document would pay for it. The tarball stays small and `dependencies` holds only core (`@openpresentation/opf`, shared with `@openpresentation/cli/api`).
 - **Reports are always JSON; `--json` is a no-op alias.** The CLI contract is JSON reports and JSON errors; a second
   text reporter would split every consumer.
 - **No clock.** `--date` is explicit so a rerun tomorrow gives the same bytes.

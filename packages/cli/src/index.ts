@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { readFile, writeFile, lstat, link, rename, unlink, mkdir } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
@@ -21,7 +22,7 @@ import {FAIL_ON_MESSAGE, WRITE_CHECK, parseFailOn, reaches} from './check.js';
 import {combineDecks, deckNames, fillRecords, recordsFromData, summarizeDiagnostics, type FillRecord} from './fill.js';
 
 declare const CLI_VERSION: string;
-declare const OPF_VERSION: string;
+import { OPF_VERSION } from "./version.js";
 declare const OPF_SKILLS: SkillBundle;
 const usage = `OPF — local presentation files for agents (Node 24)
   opf create [output.opf.json|-] [--title <text>] [--from <file|->] [--format <json|yaml|markdown>] [--schema-comment] [--force]

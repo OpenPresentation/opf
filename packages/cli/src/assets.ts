@@ -1,5 +1,5 @@
 // Local images for render and export. A deck's relative image paths resolve against the deck's folder (or
-// --asset-dir). Nothing outside that folder is read, nothing is fetched, and only image files are accepted, so a deck
+// --asset-dir; the assetDir option of exportDeck, which has no folder by default). Nothing outside that folder is read, nothing is fetched, and only image files are accepted, so a deck
 // cannot pull another file on the machine into an output. Data URIs need no resolver and are used as they are.
 import { readFileSync, realpathSync, statSync } from "node:fs";
 import path from "node:path";
@@ -42,13 +42,14 @@ export class AssetError extends Error {
 	}
 }
 
-export function createImageResolver(root: string, reporter: Reporter) {
-	const base = realpathSync(root);
+export function createImageResolver(root: string | undefined, reporter: Reporter, passDirectory = "pass --asset-dir") {
+	const base = root === undefined ? undefined : realpathSync(root);
 	const cache = new Map<string, Outcome>();
 	const shown = (source: string) => (source.length > 80 ? `${source.slice(0, 77)}...` : source);
 	function load(source: string): Outcome {
 		// Schemes (https:, data:, asset:) are never read here: opf-render and opf-pptx handle them, and nothing is fetched.
 		if (/^[a-z][a-z0-9+.-]*:/i.test(source) && !/^file:/i.test(source) && !/^[a-z]:[\\/]/i.test(source)) return { skipped: true };
+		if (base === undefined) return { problem: "blocked", reason: "no asset directory was given, so no local file is read." };
 		let file: string;
 		try {
 			file = /^file:/i.test(source) ? fileURLToPath(source) : path.resolve(base, source);
@@ -93,7 +94,7 @@ export function createImageResolver(root: string, reporter: Reporter) {
 			const outcome = read(source);
 			if ("image" in outcome) return { data: outcome.image.bytes, mediaType: outcome.image.mediaType };
 			if ("skipped" in outcome) return null;
-			throw new AssetError(`Image "${shown(source)}" was not read: ${outcome.reason} Fix the path, embed the image as a data URI, or pass --asset-dir.`, { path: context.path });
+			throw new AssetError(`Image "${shown(source)}" was not read: ${outcome.reason} Fix the path, embed the image as a data URI, or ${passDirectory}.`, { path: context.path });
 		},
 	};
 }
