@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { SKIP_EVENTS, cliPeerGate, gate, satisfies, mayWait, ROLLER_CANDIDATE_REF } from './unreleased-gate.mjs';
+import { SKIP_EVENTS, cliPeerGate, gate, satisfies, mayWait, ROLLER_CANDIDATE_REF, isCoreReleaseRef } from './unreleased-gate.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -62,6 +62,10 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
   assert.equal(skipped.run, false);
   assert.match(skipped.message, /opf-render@\^0\.15\.0 and @openpresentation\/opf-pptx@\^0\.15\.0/);
   assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push', ref: 'refs/heads/main' }), /only a pull request, merge-queue or roller-candidate run/);
+  const coreRelease = cliPeerGate({ cliRoot: cli, executable, names, event: 'push', ref: 'refs/tags/opf-v0.15.1' });
+  assert.equal(coreRelease.run, false);
+  assert.match(coreRelease.message, /opf-v0\.15\.1 publishes @openpresentation\/opf only/);
+  assert.throws(() => cliPeerGate({ cliRoot: cli, executable, names, event: 'push', ref: 'refs/tags/cli-v0.15.0' }), /only a pull request, merge-queue or roller-candidate run/);
   install('@openpresentation/opf-render', '0.15.0');
   install('@openpresentation/opf-pptx', '0.15.1');
   assert.equal(cliPeerGate({ cliRoot: cli, executable, names, event: 'push', ref: 'refs/heads/main' }).run, true);
@@ -78,4 +82,12 @@ test('the CLI peer tests use the gate, and the CLI peer ranges equal PEER_RANGES
     const constant = name.endsWith('opf-render') ? 'RENDER_PACKAGE' : 'PPTX_PACKAGE';
     assert.match(peers, new RegExp(`\\[${constant}\\]: "${range.replace(/[.^]/g, '\\$&')}"`), name);
   }
+});
+
+test('a core release tag skips only the CLI peer tests; the CLI release and other tags keep the hard gate', () => {
+  assert.equal(isCoreReleaseRef('refs/tags/opf-v0.15.1'), true);
+  assert.equal(isCoreReleaseRef('refs/tags/@openpresentation/opf@v0.15.1'), true);
+  for (const ref of ['refs/tags/cli-v0.15.0', 'refs/tags/opf-render-v0.15.0', 'refs/heads/main', '']) assert.equal(isCoreReleaseRef(ref), false, ref);
+  // A core release still fails the generic gate (only the CLI peer gate knows the core run does not ship the CLI).
+  assert.throws(() => gate({ subject: 'x', required: 'y', installed: '0.14.0', met: false, event: 'push', ref: 'refs/tags/opf-v0.15.1' }), /roller-candidate run may skip/);
 });
