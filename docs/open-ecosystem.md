@@ -8,6 +8,7 @@ OPF files are ordinary JSON. No AI model, provider account, hosted service, API 
 
 - `openpresentation.org` explains and showcases the format and ecosystem, with human-readable guides and raw files for agents.
 - `OpenPresentation/opf` owns the canonical schemas, catalogs, examples, agent skills, and core/CLI sources.
+- OPF is five packages: core reads and writes the text formats; `@openpresentation/cli` (`opf` and `@openpresentation/cli/api`) reads and writes files; `opf-render` and `opf-pptx` are the engines behind it, installed as needed; `opf-editor` is the headless editor.
 - `opf-editor`, `opf-render`, and `opf-pptx` expose reusable local libraries. Their browser and Node entrypoints have explicit runtime boundaries.
 - `pptx.gallery` provides reusable examples and preset discovery.
 

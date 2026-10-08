@@ -10,7 +10,7 @@ import { FAIL_ON_MESSAGE, parseFailOn, reaches } from "./check.js";
 import { cliCatalogs } from "./catalogs.js";
 import { checkText, inputFormatOf } from "./deck.js";
 
-declare const OPF_VERSION: string;
+import { OPF_VERSION } from "./version.js";
 
 export const VALIDATE_USAGE = `  opf validate <file|-> [--config <local-json-file>] [--only <list>] [--ignore <list>]
            [--fail-on <error|warning|info>] [--format <json|text>]

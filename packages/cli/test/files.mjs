@@ -2,7 +2,8 @@
 // in the workspace; installed beside the CLI in the packed-install test). OPF_TEST_BIN selects an installed binary.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {mkdtemp, mkdir, readFile, readdir, realpath, rm, writeFile, copyFile} from 'node:fs/promises';
+import {mkdtemp, mkdir, readFile, readdir, realpath, rm, writeFile, cp, symlink} from 'node:fs/promises';
+import {createRequire} from 'node:module';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -269,8 +270,11 @@ try {
   // Optional peers: without them the commands explain what to install and exit 2; everything else keeps working.
   const isolated = await mkdtemp(path.join(tmpdir(), 'opf-files-isolated-'));
   try {
-    const lone = path.join(isolated, 'index.js');
-    await copyFile(executable, lone);
+    // The CLI's own files and the one core it depends on, in a tree that has neither opf-render nor opf-pptx anywhere above it.
+    const lone = path.join(isolated, 'dist', path.basename(executable));
+    await cp(path.dirname(executable), path.join(isolated, 'dist'), {recursive: true});
+    await mkdir(path.join(isolated, 'node_modules/@openpresentation'), {recursive: true});
+    await symlink(path.dirname(createRequire(executable).resolve('@openpresentation/opf/package.json')), path.join(isolated, 'node_modules/@openpresentation/opf'), 'junction');
     for (const args of [['render', path.join(temp, 'deck.opf.json')], ['export', path.join(temp, 'deck.opf.json'), '--format', 'pdf'], ['import', path.join(temp, 'deck.pptx')]]) {
       const missing = run(args, {status: 2, cwd: isolated, bin: lone});
       assert.equal(missing.stderrJson.code, 'peer-not-installed'); assert.match(missing.stderrJson.error, /npm install -g @openpresentation\/opf-(render|pptx)@/);

@@ -1,8 +1,8 @@
 # @openpresentation/cli
 
-A local CLI for agents and people working with `.opf.json` presentations. Create documents, validate them, apply precise edits, paginate content, embed the catalog records a deck uses for offline use (`opf embed`), inspect the bundled schemas and the default catalog, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 22 or later on macOS, Linux, or Windows is required (`engines.node` `>=22` from the release after 0.10.0; 0.10.0 and earlier 24.x-only releases make npm on Node 22 or 26 silently install the 0.7.0 CLI, which has no `export` or `render` command).
+A local CLI for agents and people working with `.opf.json` presentations, and the library API `@openpresentation/cli/api` for applications that read, write, export and import them. Create documents, validate them, apply precise edits, paginate content, embed the catalog records a deck uses for offline use (`opf embed`), inspect the bundled schemas and the default catalog, and render, export (PPTX, PDF, PNG, SVG) and import (PPTX) files. Node 22 or later on macOS, Linux, or Windows is required (`engines.node` `>=22` from the release after 0.10.0; 0.10.0 and earlier 24.x-only releases make npm on Node 22 or 26 silently install the 0.7.0 CLI, which has no `export` or `render` command).
 
-The CLI bundles its OPF schema, catalogs, and validator. It needs no separate core package, API key, or network connection at runtime. `opf --version` reports the CLI and bundled core versions. Validation and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
+The CLI depends on `@openpresentation/opf` (core), which holds the OPF schema, catalogs and validator and reads and writes the text formats; the CLI adds files. It needs no API key or network connection at runtime. `opf --version` reports the CLI and the installed core versions. Validation and editing never render; successful validation is not visual verification. `opf render`, `opf export` and `opf import` use the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx` (see [Render, export and import](#render-export-and-import)).
 
 ## Install
 
@@ -13,9 +13,9 @@ npm install -g @openpresentation/cli
 opf --version
 ```
 
-Or install it as a development dependency and use `npx --no-install opf`. CLI 0.11.0 bundles OPF 0.13.0 (chart and table data: number formats, datasets and `chart.mapping`; plus templates and variables, numbered lists, footnotes and captions, chart options, the 0.01 pt font grid, the design fields, the 100-layout catalog and the pinned gallery default catalog), including the reference layer (`variables`, ColorRef, payload ids, and the command then named `opf bundle`, which is `opf embed` from OPF 0.15), complete code and quote composition, source-preserving pagination and readability floors, styled/merged table cells, shared headers/footers, `opf lint`, and the six OPF agent skills. Browser rendering and editable PowerPoint export require the coordinated library releases documented in [the compatibility matrix](../../docs/compatibility-matrix.md).
+Or install it as a development dependency and use `npx --no-install opf`. The command covers creating, validating, editing, paginating, embedding, linting, filling, rendering, exporting and importing; `opf --help` lists it, and [the compatibility matrix](../../docs/compatibility-matrix.md) names the library releases that go with each CLI. To use it from code, see [Library API](#library-api).
 
-To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-0.11.0.tgz`, which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
+To verify the standalone package from source, run `pnpm install` and `pnpm test:cli:packed`. This creates `artifacts/cli/openpresentation-cli-<version>.tgz` (with the core tarball it depends on), which can be installed using its absolute path. For source development, run `pnpm --filter @openpresentation/cli build` and `node packages/cli/dist/index.js --help`.
 
 ## Install agent skills
 
@@ -48,7 +48,7 @@ opf create - --title "Launch decision" | opf validate -
 opf create imported.opf.json --from - < authored.opf.json
 ```
 
-`opf validate` is the one checker: it reads the file as strict JSON text (or as YAML for a name ending `.yaml`/`.yml` or `--input-format yaml`, or as a Markdown deck for a name ending `.opf.md` or `--input-format markdown`) and prints the report (`valid`, `schemaValid`, `findings`, `counts`, `checks`), the input's SHA-256 digest and the bundled core version. Each finding has a stable `opf/<rule>` id, a severity, a category (`format`, `references`, `policy`, `accessibility`, `layout`, `content`), a JSON Pointer path, the source line and column, a hint and sometimes suggested fixes. Only format, references and policy findings are errors by default, so `valid` keeps meaning "correct OPF"; accessibility, layout and content findings are warnings and info. A content reference that resolves nowhere is the warning `opf/unresolved-reference`; a `name:id` prefix that names no catalog group is the error `opf/undeclared-catalog`.
+`opf validate` is the one checker: it reads the file as strict JSON text (or as YAML for a name ending `.yaml`/`.yml` or `--input-format yaml`, or as a Markdown deck for a name ending `.opf.md` or `--input-format markdown`) and prints the report (`valid`, `schemaValid`, `findings`, `counts`, `checks`), the input's SHA-256 digest and the core version. Each finding has a stable `opf/<rule>` id, a severity, a category (`format`, `references`, `policy`, `accessibility`, `layout`, `content`), a JSON Pointer path, the source line and column, a hint and sometimes suggested fixes. Only format, references and policy findings are errors by default, so `valid` keeps meaning "correct OPF"; accessibility, layout and content findings are warnings and info. A content reference that resolves nowhere is the warning `opf/unresolved-reference`; a `name:id` prefix that names no catalog group is the error `opf/undeclared-catalog`.
 
 ```sh
 opf validate deck.opf.json                                    # everything, JSON report
@@ -152,7 +152,7 @@ opf catalog layouts
 opf catalog fontSchemes roboto
 ```
 
-`schemas` and `catalogs` list available names/kinds. `schema` returns the whole schema or a branch addressed by a pointer into the schema. `catalog` returns the records in a kind, keyed by id, or one exact ID. They inspect the default catalog the CLI bundles (the full pptx.gallery catalog of its core) and do not fetch galleries.
+`schemas` and `catalogs` list available names/kinds. `schema` returns the whole schema or a branch addressed by a pointer into the schema. `catalog` returns the records in a kind, keyed by id, or one exact ID. They inspect the default catalog of the core it runs on (the full pptx.gallery catalog) and do not fetch galleries.
 
 ```sh
 opf paginate decision.opf.json paginated.opf.json
@@ -189,10 +189,46 @@ A deck can be written as YAML (`deck.opf.yaml`) and every command that reads a d
 
 `opf from-yaml <deck.yaml|-> [output.opf.json|-] [--aliases] [--force] [--fail-on <level>]` converts YAML to a validated JSON deck (`--aliases` expands anchors, aliases and merge keys, capped at 100 aliases), and `opf to-yaml <deck.opf.json|-> [output.opf.yaml|-] [--schema-comment] [--force]` writes canonical YAML that `from-yaml` reads back unchanged; `--schema-comment` adds the `# yaml-language-server: $schema=...` line that gives editors validation and completion. Both print JSON reports and follow the exit codes above; YAML findings carry `line` and `column`. Commands that rewrite a YAML file do not preserve its comments and print a warning on stderr. Settings files (`--config`), `fill --data` and `import-data` sources stay JSON, CSV or TSV. See the [YAML guide](../../docs/yaml.md).
 
+## Library API
+
+`@openpresentation/cli/api` is the CLI's code as a library: the format-oriented functions an application calls instead of spawning `opf`. Core reads and writes the text formats; this entry reads and writes files. It is one package with the command, so the command and the API give the same bytes.
+
+```sh
+npm install @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
+```
+
+```ts
+import { readDeck, exportDeck, importDeck } from "@openpresentation/cli/api";
+
+const { presentation, findings } = readDeck(text, { filename: "deck.opf.md" }); // JSON, YAML or .opf.md
+const pdf = await exportDeck(presentation, { format: "pdf" });                  // { files: [{ name, type, bytes }], findings }
+const slides = await exportDeck(presentation, { format: "png", scale: 2, slides: "1,3-5" });
+const pptx = await exportDeck(presentation, { format: "pptx" });
+const { presentation: back } = await importDeck(pptx.files[0].bytes);           // PPTX to OPF
+```
+
+| Function | Does |
+| --- | --- |
+| `readDeck(text, { format?, filename?, catalogs?, validate? })`, `writeDeck(presentation, { format? \| filename? })`, `validate`, `assertValid`, `OPFValidationError`, `defaultCatalog` | Core's own functions, re-exported: one import for an application that only has this package. They are the same functions and classes as `@openpresentation/opf` exports. |
+| `exportDeck(presentation, options)` | Draws a presentation as `pdf`, `png`, `svg` or `pptx`. `png` and `svg` give one file per slide (named `<name>-001.png`), or one zip with `zip: true`; `pdf` and `pptx` give one file. Returns `{ files, findings, fonts, skippedHidden, renderer, pptx? }`. |
+| `importDeck(bytes, { catalogs?, signals? })` | Reads a PowerPoint file into `{ presentation, findings, pptx, signals? }`. Import is a conversion, not a lossless round trip: what it cannot keep is in `findings`. |
+
+`exportDeck` options: `format` (required), `slides` (`"1,3-5"` or `[1, 3]`; not for `pptx`), `includeHidden`, `paginate`, `scale` (`png`, raster `pdf`), `pdfMode` (`vector` or `raster`), `svgFonts` (`used` or `none`), `chartex`, `provenance`, `imageFormat` (`pptx`), `date` (`YYYY-MM-DD`), `zip`, `filename` (the source name, for naming files), `catalogs`, `fonts`, `fontDirs` and `assetDir`. They are the options of `opf export` and `opf render` in camel case.
+
+- **Deterministic.** No network, no system fonts, no clock: a date field draws only the `date` you pass, and the same presentation gives the same bytes on every machine.
+- **Fonts.** The renderer's bundled open pack plus the `.ttf` and `.otf` files in `fontDirs`. To reuse one prepared set across many calls, pass `fonts`: the handle `loadFonts()` of `@openpresentation/opf-render/fonts-node` returns.
+- **Catalogs.** `catalogs` defaults to core's default catalog, as the command does. Pass your own list (for example `[defaultCatalog, myCatalog]`) to change how references resolve.
+- **Images.** Local image paths are read only from `assetDir`; without it no local file is read. Data URIs work as they are, and URLs are never fetched.
+- **The engines are peers.** `@openpresentation/opf-render` (PDF, PNG, SVG) and `@openpresentation/opf-pptx` (PPTX, import) are optional peer dependencies, loaded the first time a function needs them. Install what you call: from opf-render 0.16 its converters (`@resvg/resvg-js` and `sharp` for PNG, `pdf-lib` for raster PDF, `sharp` for pictures in a PDF) and font packages are optional peers too, listed per output in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md#install); a missing one throws the same `peer-not-installed` error with `details.package` (or `details.packages`) and the install command.
+- **Errors.** `exportDeck` throws `OPFExportError` and `importDeck` `OPFImportError` (both extend `OPFApiError`), with a `code`, `details` and the located `findings`: `peer-not-installed` (the message carries the install command; `details` the package and its range), `peer-too-old`, `peer-load-failed`, `invalid-option`, `invalid-presentation`, `no-slides`, `all-slides-hidden`, `export-failed` and `import-failed`. A presentation that fails the format and references check is rejected with `invalid-presentation`; warnings come back in `findings`.
+- **One core.** The package depends on `@openpresentation/opf` as a regular dependency and does not bundle a copy, so an application that also imports core runs a single core: `error instanceof OPFValidationError` holds across both imports.
+
+The same engine runs `opf render`, `opf export` and `opf import`, whose reports are described in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
+
 ## Render, export and import
 
 ```sh
-npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx
+npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentation/opf-pptx @resvg/resvg-js sharp pdf-lib @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 @expo-google-fonts/caladea@0.4.2 @expo-google-fonts/arimo@0.4.3 @expo-google-fonts/tinos@0.4.2 @expo-google-fonts/cousine@0.4.3 @expo-google-fonts/gelasio@0.4.1 @expo-google-fonts/noto-sans@0.4.2
 opf render deck.opf.json --slides 1,3-5 --format png --scale 2 --out slides
 opf export deck.opf.json --format pptx            # deck.pptx
 opf export deck.opf.json --format pdf --pdf-mode vector
@@ -202,8 +238,8 @@ opf import deck.pptx --out deck.opf.json --signals signals.json
 
 These commands write files; every other command only prints JSON. They check the document's format and references first and print the `opf validate` report (`findings`, `counts`, exit 1 on errors, or on findings at or above `--fail-on`, in which case nothing is written) plus an `outputs` list with each file's SHA-256. Output is deterministic: no network, no system fonts, no clock (`--date` supplies the date for `date: true` fields). Fonts are the renderer's bundled open pack plus the `.ttf`/`.otf` files in each `--font-dir`; relative images are read only from the document's folder (`--asset-dir`); URLs are never fetched. Existing outputs need `--force`.
 
-opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer, or one that lacks `loadFonts`, `renderSlideSvg` or the other names of its API, exits 2 (the declared range is `^0.15.0`) with the install command. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
+opf-render and opf-pptx are **optional peer dependencies**, loaded the first time a command needs them (beside the CLI first, then in the working directory), so the CLI stays small and dependency-free; a missing peer, or one that lacks `loadFonts`, `renderSlideSvg` or the other names of its API, exits 2 (the declared range is `^0.15.0`) with the install command. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages (the report names them). From code, the same engines are `exportDeck` and `importDeck` ([Library API](#library-api)). The full reference, the report fields and the decisions are in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
 
 ## Development checks
 
-`pnpm test:cli` runs command-level regression checks, including `test/files.mjs` for render, export and import against the workspace's pinned opf-render and opf-pptx (set `UPDATE_GOLDEN=1` to refresh the pinned SVG digests after a renderer or core bump). `pnpm test:cli:packed:peers` installs the packed CLI with both peers from the npm registry and repeats those checks against the installed binary and through `npm exec`. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball offline into an isolated global prefix, exercises the actual executable, and reruns the same checks against the installation. It does not change your global installation. Package builds bundle their current core dependency; rebuild after schema/catalog changes.
+`pnpm test:cli` runs command-level regression checks, including `test/files.mjs` for render, export and import against the workspace's pinned opf-render and opf-pptx (set `UPDATE_GOLDEN=1` to refresh the pinned SVG digests after a renderer or core bump). `pnpm test:cli:packed:peers` installs the packed CLI with both peers from the npm registry and repeats those checks against the installed binary and through `npm exec`. `pnpm test:cli:packed` builds and packs the CLI, installs the tarball and the core tarball it depends on into an isolated global prefix, exercises the actual executable, asserts that the installation holds one core, and reruns the same checks against the installation. It does not change your global installation. `test/api.test.mjs` covers the library API. Rebuild the CLI after a core change; the workspace links the CLI to the core in `packages/javascript`.

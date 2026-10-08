@@ -43,10 +43,10 @@ npx --no-install opf validate deck.opf.json
 npx --no-install opf validate deck.opf.json --format text
 ```
 
-The CLI bundles schema, catalogs and the checker. Validation never renders; `opf render`, `opf export` and
+The CLI depends on core, which holds the schema, catalogs and the checker. Validation never renders; `opf render`, `opf export` and
 `opf import` produce and read files through the optional peers `@openpresentation/opf-render` and
 `@openpresentation/opf-pptx` (see [the CLI reference](cli.md)).
-`opf --version` reports the CLI and bundled core. Successful validation is not
+`opf --version` reports the CLI and the installed core. Successful validation is not
 visual verification.
 
 Library equivalents:
@@ -114,6 +114,30 @@ The CLI can apply JSON Patch edits (`opf edit`) but has no persistent undo
 history. Use the editor session or version control for undo.
 
 ## Preview and export
+
+The simple path is the CLI package's library API (CLI 0.16.0 and later), which reads and writes files with the bundled
+fonts and loads the render and PPTX engines you installed:
+
+```js
+import { readDeck, exportDeck, importDeck } from '@openpresentation/cli/api';
+
+const { presentation } = readDeck(source, { filename: 'deck.opf.json' });   // JSON, YAML or .opf.md
+const pdf = await exportDeck(presentation, { format: 'pdf' });              // { files: [{ name, type, bytes }], findings }
+const png = await exportDeck(presentation, { format: 'png', scale: 2 });    // one file per slide
+const svg = await exportDeck(presentation, { format: 'svg' });
+const pptx = await exportDeck(presentation, { format: 'pptx' });
+const { presentation: back } = await importDeck(pptx.files[0].bytes);       // PowerPoint to OPF
+```
+
+`exportDeck` checks the presentation (format and references), draws with the renderer's bundled open fonts and no
+system fonts, never reads a clock (pass `date: 'YYYY-MM-DD'` for a date field) and returns the bytes; write them where
+you like. A missing engine throws `OPFExportError` with code `peer-not-installed` and the install command. The
+options and errors are in the [CLI reference](cli.md#library-api).
+
+### Advanced: the engines directly
+
+`exportDeck` calls these. Use them when you need the pieces: your own fonts handle, one SVG per slide in a browser,
+or options the function does not expose.
 
 ```js
 import { renderSvg, svgToPng, svgToPdf } from '@openpresentation/opf-render';
